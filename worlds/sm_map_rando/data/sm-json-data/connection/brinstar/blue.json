@@ -1,0 +1,130 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Morph Ball Room and Construction Zone",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Blue",
+          "roomid": 38,
+          "roomName": "Morph Ball Room",
+          "nodeid": 3,
+          "nodeName": "Morph Ball Room Right Door (to Construction Zone)",
+          "position": "left"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Blue",
+          "roomid": 39,
+          "roomName": "Construction Zone",
+          "nodeid": 1,
+          "nodeName": "Construction Zone Top Left Door (to Morph Ball)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Construction Zone and First Missile Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Blue",
+          "roomid": 39,
+          "roomName": "Construction Zone",
+          "nodeid": 3,
+          "nodeName": "Construction Zone Bottom Left Door (to Alpha Missiles)",
+          "position": "right"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Blue",
+          "roomid": 40,
+          "roomName": "First Missile Room",
+          "nodeid": 1,
+          "nodeName": "First Missiles Room Door (to Construction Zone)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Construction Zone and Blue Brinstar Energy Tank Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Blue",
+          "roomid": 39,
+          "roomName": "Construction Zone",
+          "nodeid": 2,
+          "nodeName": "Construction Zone Right Door (to Ceiling E-Tank)",
+          "position": "left"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Blue",
+          "roomid": 41,
+          "roomName": "Blue Brinstar Energy Tank Room",
+          "nodeid": 1,
+          "nodeName": "Ceiling E-Tank Bottom Left Door (to Construction Zone)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Blue Brinstar Energy Tank Room and Blue Brinstar Boulder Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Blue",
+          "roomid": 41,
+          "roomName": "Blue Brinstar Energy Tank Room",
+          "nodeid": 2,
+          "nodeName": "Ceiling E-Tank Top Left Door (to Boulder Room)",
+          "position": "right"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Blue",
+          "roomid": 42,
+          "roomName": "Blue Brinstar Boulder Room",
+          "nodeid": 2,
+          "nodeName": "Boulder Room Right Door (to Ceiling E-Tank)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Blue Brinstar Boulder Room and Billy Mays Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Blue",
+          "roomid": 42,
+          "roomName": "Blue Brinstar Boulder Room",
+          "nodeid": 1,
+          "nodeName": "Boulder Room Left Door (to Billy Mays)",
+          "position": "right"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Blue",
+          "roomid": 43,
+          "roomName": "Billy Mays Room",
+          "nodeid": 1,
+          "nodeName": "Billy Mays Room Door (to Boulder Room)",
+          "position": "left"
+        }
+      ]
+    }
+  ]
+}

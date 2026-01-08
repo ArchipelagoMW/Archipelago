@@ -1,0 +1,25 @@
+# allow calling animals on the west coast of crescent island.
+# this sets additional bits in a field indexed by room.
+0a/4c78/: db $00,$03,$00,$02,$00,$02,$00,$02
+
+# allow exiting moosh/ghost screen without killing the ghosts.
+0a/595a/: |
+  nop
+  nop
+  nop
+
+# don't delete companion when picking up cheval's invention.
+0c/7234/: |
+  db ormemory
+  dw wRememberedCompanionId
+  db $00
+3f/6d00/: db $00
+
+# vanilla bug(?): moosh appears on the screen south of cheval's grave after
+# visiting the cheval's grave screen, whether you've obtained him or not.
+12/5c5d/: db $ff
+
+# Set Icon & Text for treasures
+16/552c/: db $38 #,$3c Not the right ID ???
+16/5530/: db $39 #,$3d 
+16/5534/: db $3a #,$3e 

@@ -1,0 +1,355 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Business Center and Ice Beam Gate Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 86,
+          "roomName": "Business Center",
+          "nodeid": 1,
+          "nodeName": "Business Center Top Left Door (to Ice Beam Gate)",
+          "position": "right"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 106,
+          "roomName": "Ice Beam Gate Room",
+          "nodeid": 4,
+          "nodeName": "Ice Beam Gate Room Right Door (to Business Center)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Business Center and Norfair Map Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 86,
+          "roomName": "Business Center",
+          "nodeid": 2,
+          "nodeName": "Business Center Middle Left Door (to Map)",
+          "position": "right"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 87,
+          "roomName": "Norfair Map Room",
+          "nodeid": 1,
+          "nodeName": "Norfair Map Room Door (to Business Center)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Business Center and Hi Jump Energy Tank Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 86,
+          "roomName": "Business Center",
+          "nodeid": 3,
+          "nodeName": "Business Center Bottom Left Door (to HiJump E-Tank)",
+          "position": "right"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 88,
+          "roomName": "Hi Jump Energy Tank Room",
+          "nodeid": 2,
+          "nodeName": "HiJump E-Tank Right Door (to Business Center)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Business Center and Crocomire Escape",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 86,
+          "roomName": "Business Center",
+          "nodeid": 4,
+          "nodeName": "Business Center Bottom Right Door (to Crocomire Escape)",
+          "position": "left"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 121,
+          "roomName": "Crocomire Escape",
+          "nodeid": 1,
+          "nodeName": "Crocomire Escape Left Door (to Business Center)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Hi Jump Energy Tank Room and Hi Jump Boots Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 88,
+          "roomName": "Hi Jump Energy Tank Room",
+          "nodeid": 1,
+          "nodeName": "HiJump E-Tank Left Door (to HiJump)",
+          "position": "right"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 89,
+          "roomName": "Hi Jump Boots Room",
+          "nodeid": 1,
+          "nodeName": "HiJump Door (to E-Tank)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Ice Beam Gate Room and Ice Beam Tutorial Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 106,
+          "roomName": "Ice Beam Gate Room",
+          "nodeid": 1,
+          "nodeName": "Ice Beam Gate Room Top Left Door (to Ice Tutorial)",
+          "position": "right"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 110,
+          "roomName": "Ice Beam Tutorial Room",
+          "nodeid": 2,
+          "nodeName": "Ice Beam Tutorial Room Right Door (to Gate Room)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Ice Beam Gate Room and Ice Beam Acid Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 106,
+          "roomName": "Ice Beam Gate Room",
+          "nodeid": 2,
+          "nodeName": "Ice Beam Gate Room Center Left Door (to Ice Beam Acid Room)",
+          "position": "right"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 107,
+          "roomName": "Ice Beam Acid Room",
+          "nodeid": 2,
+          "nodeName": "Ice Beam Acid Room Right Door (to Gate Room)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Ice Beam Gate Room and Crumble Shaft",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 106,
+          "roomName": "Ice Beam Gate Room",
+          "nodeid": 3,
+          "nodeName": "Ice Beam Gate Room Bottom Left Door (to Crumble Shaft)",
+          "position": "right"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 111,
+          "roomName": "Crumble Shaft",
+          "nodeid": 1,
+          "nodeName": "Crumble Shaft Top Right Door (to Ice Beam Gate Room)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Ice Beam Acid Room and Ice Beam Snake Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 107,
+          "roomName": "Ice Beam Acid Room",
+          "nodeid": 1,
+          "nodeName": "Ice Beam Acid Room Left Door (to Snake Room)",
+          "position": "right"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 108,
+          "roomName": "Ice Beam Snake Room",
+          "nodeid": 3,
+          "nodeName": "Ice Beam Snake Room Bottom Right Door (to Acid Room)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Ice Beam Snake Room and Ice Beam Tutorial Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 108,
+          "roomName": "Ice Beam Snake Room",
+          "nodeid": 1,
+          "nodeName": "Ice Beam Snake Room Top Right Door (to Ice Tutorial)",
+          "position": "left"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 110,
+          "roomName": "Ice Beam Tutorial Room",
+          "nodeid": 1,
+          "nodeName": "Ice Beam Tutorial Room Left Door (to Snake Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Ice Beam Snake Room and Ice Beam Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 108,
+          "roomName": "Ice Beam Snake Room",
+          "nodeid": 2,
+          "nodeName": "Ice Beam Snake Room Center Right Door (to Ice)",
+          "position": "left"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 109,
+          "roomName": "Ice Beam Room",
+          "nodeid": 1,
+          "nodeName": "Ice Beam Room Door (to Snake Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Crumble Shaft and Crocomire Speedway",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 111,
+          "roomName": "Crumble Shaft",
+          "nodeid": 2,
+          "nodeName": "Crumble Shaft Bottom Right Door (to Crocomire Speedway)",
+          "position": "left"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 120,
+          "roomName": "Crocomire Speedway",
+          "nodeid": 2,
+          "nodeName": "Crocomire Speedway Far Left Door (to Crumble Shaft)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Crocomire Speedway and Crocomire Escape",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 120,
+          "roomName": "Crocomire Speedway",
+          "nodeid": 1,
+          "nodeName": "Crocomire Speedway Top Left Door (to Crocomire Escape)",
+          "position": "right"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 121,
+          "roomName": "Crocomire Escape",
+          "nodeid": 2,
+          "nodeName": "Crocomire Escape Right Door (to Crocomire Speedway)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Crocomire Speedway and Crocomire Save Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 120,
+          "roomName": "Crocomire Speedway",
+          "nodeid": 5,
+          "nodeName": "Crocomire Speedway Top Right Door (to Save)",
+          "position": "left"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 303,
+          "roomName": "Crocomire Save Room",
+          "nodeid": 1,
+          "nodeName": "Crocomire Save Room Door (to Crocomire Speedway)",
+          "position": "right"
+        }
+      ]
+    }
+  ]
+}

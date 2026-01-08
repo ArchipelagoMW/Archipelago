@@ -1,0 +1,80 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Terminator Room and Parlor and Alcatraz",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 20,
+          "roomName": "Terminator Room",
+          "nodeid": 2,
+          "nodeName": "Terminator Right Door (to Parlor)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 10,
+          "roomName": "Parlor and Alcatraz",
+          "nodeid": 1,
+          "nodeName": "Parlor Top Left Door (to Terminator)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Crateria Kihunter Room and Crateria Tube",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 24,
+          "roomName": "Crateria Kihunter Room",
+          "nodeid": 1,
+          "nodeName": "Crateria Kihunter Room Left Door (to Crateria Tube)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 9,
+          "roomName": "Crateria Tube",
+          "nodeid": 2,
+          "nodeName": "Crateria Tube Right Doorway (to Kihunters)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Gauntlet Entrance and Landing Site",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 30,
+          "roomName": "Gauntlet Entrance",
+          "nodeid": 2,
+          "nodeName": "Gauntlet Entrance Right Door (to Landing Site)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 8,
+          "roomName": "Landing Site",
+          "nodeid": 1,
+          "nodeName": "Landing Site Top Left Door (to Gauntlet)",
+          "position": "right"
+        }
+      ]
+    }
+  ]
+}

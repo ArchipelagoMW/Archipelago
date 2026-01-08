@@ -1,0 +1,118 @@
+{% extends 'randomizer/layouts/default.html' %}
+
+{% block content %}
+    <h1>How To Play</h1>
+    <div class="card border-info my-3">
+        <div class="card-body">
+            <p>First off, head on over to <a href="{% url 'randomizer:randomize' %}">Generate Randomize Game</a>
+                and provide your ROM.</p>
+            <p>If you'd like more detail on what the flags do, check out the
+                <a href="{% url 'randomizer:options' %}">Flag Explanations</a> page.</p>
+            <p>If you haven't played Super Mario RPG in a while, you should check out the
+                <a href="{% url 'randomizer:guide' %}">Player's Guide</a> page to jog your memory!</p>
+            <p>Once you've got a randomized ROM, you need a way to play. There's a couple
+                options for that...</p>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Option 1: Use an Emulator</h3>
+        </div>
+        <div class="card-body">
+            <p>An emulator is a program that closely replicates SNES hardware, allowing you to run SNES games on
+                your computer.</p>
+            <p>While you can play using only your keyboard, a controller makes for a better experience. While most
+                USB controllers will work, the most recommended ones include the
+                <a href="https://www.amazon.com/dp/B002B9XB0E" target="_blank">iBuffalo Classic USB Gamepad</a> or
+                the <a href="https://www.amazon.com/dp/B00Y0LUQFE" target="_blank">8Bitdo SFC30 Wireless Bluetooth
+                    Controller</a>.</p>
+            <p>Some emulators available:</p>
+            <ul>
+                <li>
+                    <a href="http://www.snes9x.com" target="_blank">Snes9x</a> <strong>*MOST RECOMMENDED*</strong>
+                    <ul>
+                        <li>Very popular, widely considered the overall best SNES emulator.</li>
+                        <li>Generally the easiest to set up and use compared to others.</li>
+                        <li>Use version <strong>1.56 or later only</strong>! Anything prior to version 1.56 does not
+                            emulate the SA-1 chip properly. Get the latest stable version for best results.
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="https://byuu.org/emulation/higan/" target="_blank">Higan/bsnes</a>
+                    <ul>
+                        <li>Very accurate, and supports multiple systems.</li>
+                        <li>More complicated to set up, and requires a more powerful CPU.</li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="https://www.retroarch.com" target="_blank">RetroArch</a>
+                    <ul>
+                        <li>Frontend for libretro library, supports many different systems.</li>
+                        <li>Snes9x cores are based on older versions, <strong>does not work</strong>.</li>
+                        <li>Has bsnes cores which should be okay for compatibility, use these instead.</li>
+                    </ul>
+                </li>
+                <li>
+                    <s>Bizhawk</s> <strong>*Not recommended*</strong>
+                    <ul>
+                        <li>Has more advanced memory searching and recording features geared towards tool-assisted runs.</li>
+                        <li>Has two different SNES cores available:</li>
+                        <li>Snes9x core based on the older Snes9x version 1.54.
+                            <strong>Does not work with SMRPG.</strong></li>
+                        <li>bsnes core based on v87 of bsnes compatibility mode (heavily modified).
+                            <strong>Only option that works with SMRPG.</strong></li>
+                        <li>In general, this emulator is not recommended unless you specifically need the advanced
+                            features it provides for something like a TAS.</li>
+                    </ul>
+                </li>
+                <li>
+                    <s>ZSNES</s> <strong>*DO NOT USE*</strong>
+                    <ul>
+                        <li>ZSNES is no longer under active development and has a long history of accuracy problems with
+                            its emulation.
+                        </li>
+                        <li>Uses various speed hacks that do not emulate the games properly.</li>
+                        <li>Has known issues with SA-1 games, generally does not work with SMRPG.</li>
+                        <li><strong>Do not use this emulator at all.</strong></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Option 2: Play on Original Hardware</h3>
+        </div>
+        <div class="card-body">
+            <p>Yes, you read that right! You can actually play this on your original SNES console now. Playing a
+                randomizer on original hardware requires a "flash cart", which is a special cartridge designed for that
+                hardware that allows you to put the randomized ROM on some kind of portable flash memory (usually an SD
+                or MicroSD card) which is inserted into the flash cart, which then goes in the original console.</p>
+            <p>The best SNES flash cart on the market right now (and the only one that currently supports Super Mario
+                RPG) is the SD2SNES.  You can learn more about it, download the firmware, and find a shop to buy one on
+                their website <a href="https://sd2snes.de/blog/about" target="_blank">here</a>.</p>
+            <p>Until very recently, no SNES flash cart on the market supported the SA-1 enhancement chip that SMRPG
+                uses.  However thanks to the insane work of
+                <a href="https://github.com/RedGuyyyy/" target="_blank">RedGuy</a>, SA-1 support has been added to the
+                latest SD2SNES firmware!</p>
+            <p><strong>Make sure you're on the latest official firmware!</strong></p>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Option 3: Play on Wii Virtual Console</h3>
+        </div>
+        <div class="card-body">
+            <p>If you don't have an SD2SNES and don't want to play on emulator, it is possible to play this on the Wii
+                Virtual Console.  Prior to RedGuy's recent work, this was the preferred way to play as close to original
+                hardware as possible.  This requires locating a WAD file of the North American release of SMRPG on the
+                Wii VC.  The randomizer can pack the generated ROM into the WAD file for you automatically.</p>
+            <p>Once you have the packed WAD file, you can install it on your Wii using the Homebrew Channel.  Setting
+                this up is beyong the scope of this site, but we do have some instructions on the community wiki that
+                can be found
+                <a href="https://sites.google.com/site/supermariorpgspeedruns/home/randomizer" target="_blank">here</a>.
+            </p>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,167 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 168,
+  "name": "Robot Assembly Line",
+  "area": "Wrecked Ship",
+  "subarea": "Main",
+  "roomAddress": "0x7CAAE",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a1ec",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x7C319",
+      "locks": [
+        {
+          "name": "Attic Missiles Spawn Lock",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                {"or": [
+                  "f_DefeatedPhantoon",
+                  "h_allItemsSpawned"
+                ]}
+              ],
+              "note": "The item doesn't spawn until Phantoon is defeated."
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [1, 1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Robot Assembly Line Workrobot",
+      "enemyName": "Workrobot",
+      "quantity": 3,
+      "homeNodes": [1, 2],
+      "spawn": ["f_DefeatedPhantoon"]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      },
+      "note": "The conveyor will push Samus towards the door reducing the effective runway length.",
+      "devNote": "FIXME: Represent coming in and using the conveyor for more effective runway."
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave with Runway, Conveyor Off",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 10,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Shinecharged, Conveyor Run",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 1}},
+        {"shineChargeFrames": 45}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Gain Flash Suit (Conveyor Run, Spikesuit)",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 1}},
+        {"thornHits": 1},
+        "h_spikeSuitThornHitLeniency",
+        "canSpikeSuit",
+        {"shinespark": {"frames": 6, "excessFrames": 6}}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: add a cross-room variation that doesn't require power to be on, as these spikes are still active."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "devNote": "The Workrobot projectiles aren't a problem."
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 6,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    }
+  ],
+  "notables": [],
+  "nextStratId": 8,
+  "nextNotableId": 1
+}

@@ -1,0 +1,305 @@
+{% extends 'randomizer/layouts/default.html' %}
+
+{% block content %}
+    <h1>Version History</h1>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h2 class="card-title">8.2 Updates</h2>
+        </div>
+        <div class="card-body">
+            <h4>Version 8.2.10</h4>
+            <ul>
+                <li>Don't put key items on curtain minigame with Tk flag since it's missable.</li>
+            </ul>
+            <h4>Version 8.2.9</h4>
+            <ul>
+                <li>Added "show equips" flag to show what characters can equip items even if they're not found yet.</li>
+                <li>A few more new wishes.</li>
+            </ul>
+            <h4>Version 8.2.8</h4>
+            <ul>
+                <li>Added no XP flags for boss fights and invincibility stars.</li>
+                <li>Minecart music added to boss music shuffle.</li>
+                <li>New wishes added.</li>
+            </ul>
+            <h4>Version 8.2.7</h4>
+            <ul>
+                <li>Fixed certain enemies break(er)ing the game with Breaker Beam.</li>
+            </ul>
+            <h4>Version 8.2.6</h4>
+            <ul>
+                <li>Fixed Johnny dying when he still has HP left.</li>
+            </ul>
+            <h4>Version 8.2.5</h4>
+            <ul>
+                <li>Dream Cushion can only reward consumables since it grants the item twice currently.</li>
+                <li>Bugged repleneshing chest in Box Boy room converted back to frog coin as in vanilla.</li>
+            </ul>
+            <h4>Version 8.2.4</h4>
+            <ul>
+                <li>Fixed shuffling Goomba Thumping first reward.</li>
+                <li>Certain non-depletable chests can now only contain coins or a recovery mushroom.</li>
+            </ul>
+            <h4>Version 8.2.3</h4>
+            <ul>
+                <li>Fixed issue with item prices going negative if stat shuffle is bad enough in rare cases.</li>
+            </ul>
+            <h4>Version 8.2.2</h4>
+            <ul>
+                <li>Stop trying to make Bowser's Keep wrong warp a thing, it's not going to be a thing.</li>
+            </ul>
+            <h4>Version 8.2.1</h4>
+            <ul>
+                <li>Fixed "You Missed!" item appearing at key item spots when mixing key items with chests.</li>
+            </ul>
+            <h4>Version 8.2.0</h4>
+            <ul>
+                <li>Added "No Free Characters" option to start with a single character in open mode.  You have to find
+                    all the others.</li>
+                <li>Added Choose Starting Character and Exclude Character options.</li>
+                <li>Added enemy spell shuffle flag.</li>
+                <li>Equipment shuffle rebalancing from AmazingAmpharos.</li>
+                <li>Palette shuffle flag is now available for Linear mode as well.</li>
+                <li>When shuffling bosses, overworld sprites for those bosses will now change as a preview/hint to show
+                    which boss is at that spot.</li>
+                <li>Fixed softlock issue with Machine Made Drill Bit enemies during formation shuffle.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h2 class="card-title">8.1 Updates</h2>
+        </div>
+        <div class="card-body">
+            <h4>Version 8.1.2</h4>
+            <ul>
+                <li>Added some more wishes and quiz questions from community submissions.</li>
+                <li>Fixed wrong character starting levels in linear mode.</li>
+            </ul>
+            <h4>Version 8.1.1</h4>
+            <ul>
+                <li>Fixed some typos and added more wishes and quiz questions.</li>
+                <li>Bundt has a 50% chance to be a chocolate cake with palette shuffle instead of 100%.</li>
+            </ul>
+            <h4>Version 8.1.0</h4>
+            <ul>
+                <li>Added warp to Smithy in Grate Guy's Casino available once the Bright Card is obtained.</li>
+                <li>Added community messages for Star Hill wish dialogs (more to be added in the future).</li>
+                <li>Added Dr. Topper quiz shuffle flag with community questions (more to be added in the future).
+                    Thanks to patcdr for help with these!</li>
+                <li>Fixed crash with some flag combinations.</li>
+                <li>Fixed dummy items appearing in NPC reward spots with some flag combinations.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h2 class="card-title">8.0 Updates</h2>
+        </div>
+        <div class="card-body">
+            <h4>Version 8.0.0</h4>
+            <ul>
+                <li>Revamped front end UI and flag selection, and include flag hash in the filename.</li>
+                <li>Added API for generating seeds with permalinks for race bots (ask for details in the Discord if
+                    you're a bot developer!)</li>
+                <li>Replaced seed number with version on name entry screen.  Hash values on file select should be used
+                    for verification instead.
+                </li>
+                <li>Added a brand new non-linear mode: <b>Open</b>.  Previous mode is now called <b>Linear</b>.  Changes
+                    for this are too numerous to list here, but some open-mode specific changes are as follows:
+                    <ul>
+                        <li>Key item shuffle available along with chest/reward shuffling.  There are a LOT of options
+                            available for chest/reward shuffling logic including mixing key items with them!
+                        </li>
+                        <li>Boss shuffle with stat scaling similar to Free Enterprise, plus music shuffle option.</li>
+                        <li>Star piece shuffle that randomizes where star pieces are located to access the endgame.</li>
+                        <li>Bowser's Keep minigame randomization, ex. Ball Solitaire and Magic Buttons.</li>
+                        <li>Geno can now use other's weapons, and they can use his.</li>
+                        <li>Fixed Hurly Gloves softlock issue in some situations, and also allow Mario to use them.</li>
+                        <li>Group Hug can now be learned by anyone.</li>
+                    </ul>
+                </li>
+                <li>The Seed, Fertilizer, and Bright Card items are now Special Items and no longer appear in shops.</li>
+                <li>Reworked character stat shuffle so stats should increase more evently as characters level up, and
+                    will always increase by at least 1 for each level.
+                </li>
+                <li>Complete revamp of shop shuffle logic and item pricing.</li>
+                <li>Fixed a data corruption bug that resulted in wrong Psychopath text for weaknesses.</li>
+                <li>Fixed issue with Smithy 2 having different HP for each head.</li>
+                <li>Added sanity check option for enemy shuffle for attack power multiplier and status effects.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h2 class="card-title">7.1 Updates</h2>
+        </div>
+        <div class="card-body">
+            <h4>Version 7.1.7</h4>
+            <ul>
+                <li>Healing spells no longer miss due to spell hitrate shuffling.</li>
+            </ul>
+            <h4>Version 7.1.6</h4>
+            <ul>
+                <li>Adjusted boss immunities and weaknesses to allow elemental attacks to be more useful in general.</li>
+            </ul>
+            <h4>Version 7.1.5</h4>
+            <ul>
+                <li>Removed Fireworks item from the shop shuffle because it doesn't do anything in a normal shop.</li>
+            </ul>
+            <h4>Version 7.1.4</h4>
+            <ul>
+                <li>Split equipment shuffle flag into separate flags for stats and which characters can equip them.</li>
+            </ul>
+            <h4>Version 7.1.3</h4>
+            <ul>
+                <li>Adjusted chances of special properties on equipment lower for balance.</li>
+            </ul>
+            <h4>Version 7.1.2</h4>
+            <ul>
+                <li>Fixed issue with custom flags being used in full randomize mode by mistake</li>
+            </ul>
+            <h4>Version 7.1.1</h4>
+            <ul>
+                <li>Fixed special property item descriptions still showing vanilla text</li>
+            </ul>
+            <h4>Version 7.1.0</h4>
+            <ul>
+                <li>Added option to shuffle elemental protections and status immunities of equipment</li>
+                <li>Updated descriptions of equipment to show special propery and stats info with custom icons</li>
+                <li>Enemy shuffle now allows a tiny (1/255) chance for bosses to be vulnerable to instant KO</li>
+                <li>Psychopath now reveals shuffled enemy immunities and weaknesses when perfectly timed</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h2 class="card-title">7.0 Updates</h2>
+        </div>
+        <div class="card-body">
+            <h4>Version 7.0.2</h4>
+            <ul>
+                <li>Fixed issue with coins still being capped at 999 when getting coins from a chest outside of battle</li>
+            </ul>
+            <h4>Version 7.0.1</h4>
+            <ul>
+                <li>Fixed a bug where instant KO attacks could bypass instant KO protection from equipment</li>
+                <li>Fixed softlock with some flying enemies on certain screen coordinates in battle</li>
+            </ul>
+            <h4>Version 7.0.0</h4>
+            <ul>
+                <li>Full rewrite of backend logic for future feature support, faster patch generation, and smaller patch
+                    size
+                </li>
+                <li>Switched to new version numbering with major/minor version</li>
+                <li>Added hash values for names on file select screen to verify seed</li>
+                <li>Updated cutscene skip patch for a few remaining cutscenes and bug fixes</li>
+                <li>Mario can now be swapped out of the active party members</li>
+                <li>Max coin amount has been increased to 9999</li>
+                <li>Because of max coin change, shop prices for items are now allowed to go beyond 999 when shuffled</li>
+                <li>Fixed issue where levels could progress beyond 30 leading to bad things happening</li>
+                <li>Fixed bad enemy battle screen coordinates that could cause softlocks in certain cases</li>
+                <li>Dodo solo fight now ends when Dodo is at 60% of his shuffled HP, not always 600 HP</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h2 class="card-title">V6 Updates</h2>
+        </div>
+        <div class="card-body">
+            <ul>
+                <li>Channel Title and Title ID are now changed for Wii Virtual Console WAD files when packing so the title
+                    includes the seed number to tell them apart, and the channel and save data will not conflict with other
+                    seeds or commercial VC games
+                </li>
+                <li>Added new option to randomize the order characters join the party (points at which they join are still
+                    the same)
+                </li>
+                <li>Cutscene skip patch is now mandatory due to party join shuffle (and other future features)</li>
+                <li>Dropped support for JP version due to cutscene skip patch modifications being mandatory</li>
+                <li>Starting FP is now shuffled as well when randomizing spell stats</li>
+                <li>Fixed issue with Bowyer's button lock attack doing damage or applying status effects</li>
+                <li>Removed damage numbers from attacks which have the instant death flag</li>
+                <li>Group Hug now guaranteed not to be the final spell learned by Peach</li>
+                <li>New algorithm for exp required to level up to smooth out progression curve</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h2 class="card-title">V5 Updates</h2>
+        </div>
+        <div class="card-body">
+            <ul>
+                <li>Move to new web-based front end</li>
+                <li>Added cutscene skip patch for US/EU ROM (thanks Alanim!)</li>
+                <li>Added ability to pack randomized ROM in corresponding Virtual Console WAD file to play on Wii VC</li>
+                <li>Seed number now appears on name entry screen in JP version as well</li>
+                <li>Debug Bomb no longer appears in shops</li>
+                <li>Excluded Apprentice enemy from formation shuffle to avoid battle event script problems</li>
+                <li>Fixed issue with some boss enemies mistakenly being shuffled with normal enemy groups</li>
+                <li>Exclude certain characters from equipping certain weapons that cause softlocks when used by them</li>
+                <li>Cap exp required for level up at 9999 for max level</li>
+                <li>Other debug status bombs no longer appear in shops</li>
+                <li>Fixed randomization of Geno Boost stats so it doesn't break the spell</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h2 class="card-title">V4 Updates</h2>
+        </div>
+        <div class="card-body">
+            <ul>
+                <li>Lower rate of high multiplier physical attacks</li>
+                <li>Disciple's shop only has 10 items</li>
+                <li>Change file select on Japanese version</li>
+                <li>Peach always gets Group Hug</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h2 class="card-title">V3 Updates</h2>
+        </div>
+        <div class="card-body">
+            <ul>
+                <li>Limit number of enemies to 6 (issues with spell animation/targeting)</li>
+                <li>Add Snifit to the list of boss enemies</li>
+                <li>Add Hangin' Shy to boss enemies</li>
+                <li>Yoshi's Cookie items can only be consumables</li>
+                <li>Don't randomize equippability of Geno's weapons (game freezes)</li>
+                <li>Don't randomize enemy attacks for early game mandatory battles</li>
+                <li>Misc tweaks to enemy attack randomization</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h2 class="card-title">V2 Updates</h2>
+        </div>
+        <div class="card-body">
+            <ul>
+                <li>Remove glitchy enemies from the intro</li>
+                <li>Limit randomization of monster exp</li>
+                <li>Ban a few more enemies from being shuffled</li>
+                <li>Make the experience curve a little more friendly early on</li>
+                <li>Don't randomize equippability of certain buggy weapons</li>
+                <li>Sanity checks for selecting frog coin items</li>
+                <li>More conservative buff randomization</li>
+                <li>Don't intershuffle attack and magic attack</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h2 class="card-title">V1 Updates</h2>
+        </div>
+        <div class="card-body">
+            <ul>
+                <li>Initial version</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

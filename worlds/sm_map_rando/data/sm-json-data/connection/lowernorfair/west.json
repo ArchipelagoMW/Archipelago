@@ -1,0 +1,105 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Acid Statue Room and Golden Torizo's Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Lower Norfair",
+          "subarea": "West",
+          "roomid": 149,
+          "roomName": "Acid Statue Room",
+          "nodeid": 2,
+          "nodeName": "Acid Statue Room Bottom Right Door (to Golden Torizo)",
+          "position": "left"
+        },
+        {
+          "area": "Lower Norfair",
+          "subarea": "West",
+          "roomid": 150,
+          "roomName": "Golden Torizo's Room",
+          "nodeid": 1,
+          "nodeName": "Golden Torizo Room Left Door (to Acid Statue)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Golden Torizo's Room and Screw Attack Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Lower Norfair",
+          "subarea": "West",
+          "roomid": 150,
+          "roomName": "Golden Torizo's Room",
+          "nodeid": 2,
+          "nodeName": "Golden Torizo Room Right Door (to Screw Attack)",
+          "position": "left"
+        },
+        {
+          "area": "Lower Norfair",
+          "subarea": "West",
+          "roomid": 151,
+          "roomName": "Screw Attack Room",
+          "nodeid": 1,
+          "nodeName": "Screw Attack Left Door (to Golden Torizo)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Screw Attack Room and Golden Torizo Energy Recharge",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Lower Norfair",
+          "subarea": "West",
+          "roomid": 151,
+          "roomName": "Screw Attack Room",
+          "nodeid": 2,
+          "nodeName": "Screw Attack Bottom Right Door (to Recharge)",
+          "position": "left"
+        },
+        {
+          "area": "Lower Norfair",
+          "subarea": "West",
+          "roomid": 152,
+          "roomName": "Golden Torizo Energy Recharge",
+          "nodeid": 1,
+          "nodeName": "Golden Torizo Energy Recharge Door (to Screw Attack)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Screw Attack Room and Fast Ripper Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Lower Norfair",
+          "subarea": "West",
+          "roomid": 151,
+          "roomName": "Screw Attack Room",
+          "nodeid": 3,
+          "nodeName": "Screw Attack Top Right Door (to Fast Rippers)",
+          "position": "left"
+        },
+        {
+          "area": "Lower Norfair",
+          "subarea": "West",
+          "roomid": 153,
+          "roomName": "Fast Ripper Room",
+          "nodeid": 1,
+          "nodeName": "Fast Rippers Left Door (to Screw Attack)",
+          "position": "right"
+        }
+      ]
+    }
+  ]
+}

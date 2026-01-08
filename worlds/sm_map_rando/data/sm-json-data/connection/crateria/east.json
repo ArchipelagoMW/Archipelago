@@ -1,0 +1,255 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Lake aka The Moat and Crateria Kihunter Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 7,
+          "roomName": "The Moat",
+          "nodeid": 1,
+          "nodeName": "Moat Left Door (to Kihunters)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 24,
+          "roomName": "Crateria Kihunter Room",
+          "nodeid": 2,
+          "nodeName": "Crateria Kihunter Room Right Door (to Moat)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Lake aka The Moat and West Ocean",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 7,
+          "roomName": "The Moat",
+          "nodeid": 2,
+          "nodeName": "Moat Right Door (to West Ocean)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 32,
+          "roomName": "West Ocean",
+          "nodeid": 1,
+          "nodeName": "West Ocean Left Door (to Moat)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between West Ocean Bridge and Lake aka The Moat",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 32,
+          "roomName": "West Ocean",
+          "nodeid": 7,
+          "nodeName": "Bridge Left Door (Same Connection as Lower Section - Bottom Left Door)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 7,
+          "roomName": "The Moat",
+          "nodeid": 2,
+          "nodeName": "Moat Right Door (to West Ocean)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between West Ocean and Bowling Alley Path",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 32,
+          "roomName": "West Ocean",
+          "nodeid": 6,
+          "nodeName": "West Ocean Center Right Door (to Bowling Alley Path)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 33,
+          "roomName": "Bowling Alley Path",
+          "nodeid": 1,
+          "nodeName": "Bowling Alley Path Left Door (to West Ocean)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Bowling Alley Path and Homing Geemer Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 33,
+          "roomName": "Bowling Alley Path",
+          "nodeid": 2,
+          "nodeName": "Bowling Alley Path Right Door (to Homing Geemer)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 313,
+          "roomName": "Homing Geemer Room",
+          "nodeid": 1,
+          "nodeName": "Homing Geemer Room Left Door (to Bowling Alley Path)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Crateria Kihunter Room and Red Brinstar Elevator Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 24,
+          "roomName": "Crateria Kihunter Room",
+          "nodeid": 3,
+          "nodeName": "Crateria Kihunter Room Bottom Door (to Elevator)",
+          "position": "top"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 25,
+          "roomName": "Red Brinstar Elevator Room",
+          "nodeid": 1,
+          "nodeName": "Red Brinstar Elevator Room Top Door (to Kihunters)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between East Ocean and Forgotten Highway Kago Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 34,
+          "roomName": "East Ocean",
+          "nodeid": 2,
+          "nodeName": "East Ocean Right Door (to Kago Room)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 35,
+          "roomName": "Forgotten Highway Kago Room",
+          "nodeid": 1,
+          "nodeName": "Forgotten Highway Kago Room Left Door (to East Ocean)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Forgotten Highway Kago Room and Crab Maze",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 35,
+          "roomName": "Forgotten Highway Kago Room",
+          "nodeid": 2,
+          "nodeName": "Forgotten Highway Kago Room Bottom Door (to Crab Maze)",
+          "position": "top"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 36,
+          "roomName": "Crab Maze",
+          "nodeid": 1,
+          "nodeName": "Crab Maze Top Door (to Kago Room)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Crab Maze and Forgotten Highway Elbow",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 36,
+          "roomName": "Crab Maze",
+          "nodeid": 2,
+          "nodeName": "Crab Maze Left Door (to Forgotten Highway Elbow)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 305,
+          "roomName": "Forgotten Highway Elbow",
+          "nodeid": 1,
+          "nodeName": "Forgotten Highway Elbow Right Door (to Crab Maze)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Forgotten Highway Elbow and Forgotten Highway Elevator",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 305,
+          "roomName": "Forgotten Highway Elbow",
+          "nodeid": 2,
+          "nodeName": "Forgotten Highway Elbow Bottom Door (to Elevator)",
+          "position": "top"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 37,
+          "roomName": "Forgotten Highway Elevator",
+          "nodeid": 1,
+          "nodeName": "Forgotten Highway Elevator Door (to Forgotten Highway Elbow)",
+          "position": "bottom"
+        }
+      ]
+    }
+  ]
+}

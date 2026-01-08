@@ -1,0 +1,156 @@
+# calls lookupCollectMode_body in another bank.
+00//lookupCollectMode: |
+    push bc
+    push de
+    push hl
+    ld e,$06
+    ld hl,lookupCollectMode_body
+    call interBankCall
+    ld a,e
+    pop hl
+    cp $ff
+    jr nz,@next
+    dec hl
+    ldi a,(hl)
+    @next:
+    pop de
+    pop bc
+    ret
+
+# return a spawning item's collection mode in a and e, based on current room.
+# the table format is (group, room, mode), and modes 80+ are used to index a
+# jump table for special cases. if no match is found, it returns the regular,
+# non-overriden mode. does nothing if the item's collect mode is already set.
+06//collectPropertiesTable: /include collectPropertiesTable
+06//lookupCollectMode_body: |
+    ld e,$71
+    ld a,(de)
+    ld e,a
+    and a
+    ret nz
+    ld a,(wActiveGroup)
+    ld b,a
+    ld a,(wActiveRoom)
+    ld c,a
+    ld e,$01
+    ld hl,collectPropertiesTable
+    call searchDoubleKey
+    ld a,$00  ; Don't use "xor a" here since it would affect C flag! 
+    ld e,$02
+    ret nc
+    
+    ld a,(hl)
+    ld e,a
+    cp $80
+    ret c
+    
+    ld hl,collectSpecialJumpTable
+    and $7f
+    add a,a
+    rst 10
+    ldi a,(hl)
+    ld h,(hl)
+    ld l,a
+    jp (hl)
+
+# Add a special bypass to not show textboxes for Small Keys dropping from ceiling
+09//bypassKeydropsTextbox: |
+    ; Don't bypass anything if keysanity is on, since we want the textbox to indicate for which dungeon 
+    ; that key was for.
+    ld a,option.keysanity_small_keys
+    or a
+    jr nz,@regularText
+    
+    ld e,$72            ; var32, containing grab mode
+    ld a,(de)
+    or a
+    jr nz,@regularText  ; jump if grab triggers an animation change
+    
+    ld e,$71            ; var31, containing spawn mode
+    ld a,(de)
+    cp $02
+    jr z,@skipText  ; jump if not a drop from ceiling
+    cp $04
+    jr z,@skipText  ; or dive
+    
+    ; return regular text ID
+    @regularText:
+    ld e,$75            ; var35, containing text id
+    ld a,(de)
+    ret
+    
+    @skipText:
+    ; It's a drop not triggering an animation change ==> it's a keydrop, so skip its textbox (0xFF)
+    ld a,$ff
+    ret
+
+09/42ef/: call bypassKeydropsTextbox
+
+# collect modes starting at 80 index this jump table to determine the actual
+# mode.
+06//collectSpecialJumpTable: |
+    dw collectDiverRoom
+    dw collectPoeSkipRoom
+    dw collectMakuTree
+    dw collectD5Armos
+    dw collectD4ScrubRoom
+
+# master diver's room has chest on the left and reward on the right.
+06//collectDiverRoom: |
+    ld e,$4d
+    ld a,(de)     ; object x position
+    cp $80
+    ld e,COLLECT_CHEST
+    ret c
+    ld e,COLLECT_PICKUP_NOFLAG
+    ret
+
+# bombed wall chest in d7 has an item drop on the left side.
+06//collectPoeSkipRoom: |
+    ld e,$4d
+    ld a,(de)     ; object x position
+    cp $80
+    ld e,COLLECT_FALL_KEY
+    ret c
+    ld e,COLLECT_CHEST
+    ret
+
+# maku tree item drops at a specific script pos, otherwise use regular mode.
+06//collectMakuTree: |
+    ld a,($d258)    ; script position
+    cp $8e
+    ld e,COLLECT_FALL
+    ret z
+    ld e,COLLECT_PICKUP
+    ret
+
+# room in D4 before miniboss with chest + scrub
+06//collectD4ScrubRoom: |
+    ld e,$4d
+    ld a,(de)     ; object x position
+    cp $40
+    ld e,COLLECT_CHEST
+    ret c
+    ld e,COLLECT_PICKUP_NOFLAG
+    ret
+
+# when the falling item hits the water, it creates a new item interaction.
+# that one should have the mode that requires diving to get the item.
+# 06//collectD4Pool: |
+#     ld e,$54
+#     ld a,(de)     ; object z position
+#     sub a,$01
+#     ld e,COLLECT_FALL_KEY
+#     ret c
+#     ld e,COLLECT_DIVE
+#     ret
+
+# the first three chests opened in the d5 armos room shouldn't set the room's
+# "item obtained" flag.
+06//collectD5Armos: |
+    ld a,($cfd8)
+    cp $04
+    ld e,COLLECT_CHEST
+    ret z
+    ld e,COLLECT_CHEST_NOFLAG
+    ret

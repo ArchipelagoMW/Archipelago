@@ -1,0 +1,225 @@
+{% load static %}
+
+<script>
+    // Size of SMRPG ROM is 4MB
+    const ROM_SIZE = 1024 * 1024 * 4;
+
+    // Checksums for different regions.
+    const ROM_CHECKSUMS = {
+        "US": "d0b68d68d9efc0558242f5476d1c5b81",
+        {#"JP": "59483feb9eb20207e3241e005fbdde7e",#}
+        "EU": "107f383682bea1cef45b0b3f5baef3f4"
+    };
+
+    const WAD_CHECKSUMS = {
+        "US": "492591e14675b1bf66767c38c4b84c1d",
+        {#"JP": "b4309cfcb60394bae6eca452be6bb69f",#}
+        "EU": "6f6862bbc5c5cad8bd44d34ae38b0612"
+    };
+
+    class ROM {
+        constructor (blob, loaded_callback) {
+            this.u_array = null;
+            this.arrayBuffer = null;
+            this.fileReader = new FileReader();
+
+            // Data fields
+            this.valid = false;
+            this.debug_mode = false;
+            this.region = null;
+            this.logic = null;
+            this.mode = null;
+            this.seed = null;
+            this.hash = null;
+            this.flags = {};
+
+            this.fileReader.onload = (event) => {
+                this.arrayBuffer = event.target.result;
+            };
+
+            this.fileReader.onloadend = () => {
+                // Fill out ROM if it's less than the standard size.
+                if (this.arrayBuffer.byteLength < ROM_SIZE) {
+                    this.arrayBuffer = ROM.resizeUint8(this.arrayBuffer, ROM_SIZE);
+                }
+
+                this.u_array = new Uint8Array(this.arrayBuffer);
+
+                // Figure out which region this file is for.
+                for (let [region, checksum] of Object.entries(ROM_CHECKSUMS)) {
+                    if (this.checkMD5() === checksum) {
+                        this.region = region;
+                        break;
+                    }
+                }
+                if (this.region && this.region !== 'JP') {
+                    this.valid = true;
+                }
+
+                if (loaded_callback) {
+                    loaded_callback(this);
+                }
+            };
+
+            if (blob)
+                this.fileReader.readAsArrayBuffer(blob);
+            else
+                this.fileReader.readAsArrayBuffer(new Blob());
+        }
+
+        checkMD5() {
+            return SparkMD5.ArrayBuffer.hash(this.arrayBuffer);
+        }
+
+        getArrayBuffer() {
+            return this.arrayBuffer;
+        }
+
+        write(seek, bytes) {
+            if (!bytes.length) {
+                this.u_array[seek] = bytes;
+            } else {
+                this.u_array.set(bytes, seek);
+            }
+        }
+
+        updateChecksum() {
+            return new Promise((resolve) => {
+                let sum = this.u_array.reduce((sum, mbyte) => {
+                    return sum + mbyte;
+                });
+                let checksum = sum & 0xFFFF;
+                let inverse = checksum ^ 0xFFFF;
+                this.write(0x7FDC, [inverse & 0xFF, inverse >> 8, checksum & 0xFF, checksum >> 8]);
+                resolve(this);
+            });
+        }
+
+        save(filename) {
+            this.updateChecksum().then(() => {
+                saveAs(new Blob([this.u_array]), filename);
+            });
+        };
+
+        parsePatch(patch, progressCallback) {
+            return new Promise((resolve) => {
+                patch.forEach((value, index) => {
+                    if (progressCallback) {
+                        progressCallback(index / patch.length, this);
+                    }
+                    for (let [address, data] of Object.entries(value)) {
+                        this.write(Number(address), data);
+                    }
+                });
+                resolve(this);
+            });
+        }
+
+        static resizeUint8(baseArrayBuffer, newByteSize) {
+            let resizedArrayBuffer = new ArrayBuffer(newByteSize),
+                len = baseArrayBuffer.byteLength,
+                resizeLen = (len > newByteSize) ? newByteSize : len;
+
+            (new Uint8Array(resizedArrayBuffer, 0, resizeLen)).set(new Uint8Array(baseArrayBuffer, 0, resizeLen));
+
+            return resizedArrayBuffer;
+        }
+
+        // For file upload for WAD packing.
+        toBlob() {
+            return new Blob([this.u_array], {type: "application/octet-stream"});
+        }
+
+        // Parse extra info from patch for modes, seed, flags, etc.
+        parseInfoFromPatch(patch) {
+            this.logic = patch.logic;
+            this.mode = patch.mode;
+            this.debug_mode = patch.debug_mode;
+            this.seed = patch.seed;
+            this.hash = patch.hash;
+            this.flags = patch.custom_flags;
+        }
+
+        // Get generated filename based on current settings and provided extension.
+        makeFilename(ext) {
+            let name = "SMRPG_" + this.region
+                + "_" + this.logic
+                + "_" + this.mode
+                + "_" + this.hash
+                + "_" + this.seed;
+            if (this.debug_mode) {
+                name = name + "_DEBUG";
+            }
+            name = name + "." + ext;
+            return name;
+        }
+
+        // Patch for each mode.
+        applyModeChanges(mode) {
+            return new Promise((resolve) => {
+                if (mode === "linear") {
+                    $.getJSON("{% static 'randomizer/patches/linear_mode.json' %}", {}, (patch) => {
+                        this.parsePatch(patch);
+                        resolve(this);
+                    });
+                } else if (mode === "open") {
+                    $.getJSON("{% static 'randomizer/patches/open_mode.json' %}", {}, (patch) => {
+                        this.parsePatch(patch);
+                        resolve(this);
+                    });
+                } else {
+                    // Mode not recognized, shouldn't happen but just resolve doing nothing if so.
+                    console.warn(`Mode '${mode}' not recognized`);
+                    resolve(this);
+                }
+            });
+        }
+    }
+
+    class WAD {
+        constructor(blob, loaded_callback) {
+            this.u_array = null;
+            this.arrayBuffer = null;
+            this.fileReader = new FileReader();
+
+            // Region holder
+            this.region = null;
+            this.valid = false;
+
+            this.fileReader.onload = (event) => {
+                this.arrayBuffer = event.target.result;
+            };
+
+            this.fileReader.onloadend = () => {
+                this.u_array = new Uint8Array(this.arrayBuffer);
+
+                // Figure out which region this file is for.
+                for (let [region, checksum] of Object.entries(WAD_CHECKSUMS)) {
+                    if (this.checkMD5() === checksum) {
+                        this.region = region;
+                        break;
+                    }
+                }
+
+                if (loaded_callback) {
+                    loaded_callback(this);
+                }
+            };
+
+            this.fileReader.readAsArrayBuffer(blob);
+        }
+
+        checkMD5() {
+            return SparkMD5.ArrayBuffer.hash(this.arrayBuffer);
+        }
+
+        getArrayBuffer() {
+            return this.arrayBuffer;
+        }
+
+        // For file upload for WAD packing.
+        toBlob() {
+            return new Blob([this.u_array], {type: "application/octet-stream"});
+        }
+    }
+</script>

@@ -1,0 +1,128 @@
+{
+    "00": {
+        "readable_name": "Walse Tower Key",
+        "valid": true,
+        "writeable_name": "WalseTower<Key>",
+        "text_location": "E73500"
+    },
+    "01": {
+        "readable_name": "Steamship Key",
+        "valid": true,
+        "writeable_name": "Steamship <Key>",
+        "text_location": "E7350D"
+    },
+    "02": {
+        "readable_name": "Ifrit's Fire",
+        "valid": true,
+        "writeable_name": "Ifrits Fire",
+        "text_location": "E7351A"
+    },
+    "03": {
+        "readable_name": "Sandworm Bait",
+        "valid": true,
+        "writeable_name": "SandWormBait",
+        "text_location": "E73527"
+    },
+    "04": {
+        "readable_name": "Big Bridge Key",
+        "valid": true,
+        "writeable_name": "Big Bridge<Key>",
+        "text_location": "E73534"
+    },
+    "05": {
+        "readable_name": "Hiryuu Call",
+        "valid": true,
+        "writeable_name": "Hiryuu Call",
+        "text_location": "E73541"
+    },
+    "06": {
+        "readable_name": "Submarine Key",
+        "valid": true,
+        "writeable_name": "Submarine <Key>",
+        "text_location": "E7354E"
+    },
+    "07": {
+        "readable_name": "Anti Barrier",
+        "valid": true,
+        "writeable_name": "Anti Barrier",
+        "text_location": "E7355B"
+    },
+    "08": {
+        "readable_name": "Bracelet",
+        "valid": true,
+        "writeable_name": "Bracelet",
+        "text_location": "E73568"
+    },
+    "0B": {
+        "readable_name": "Pyramid Page",
+        "valid": true,
+        "writeable_name": "PyramidPage",
+        "text_location": "E7358F"
+    },
+    "0C": {
+        "readable_name": "Shrine Page",
+        "valid": true,
+        "writeable_name": "Shrine Page",
+        "text_location": "E7359C"
+    },
+    "0D": {
+        "readable_name": "Trench Page",
+        "valid": true,
+        "writeable_name": "Trench Page",
+        "text_location": "E735A9"
+    },
+    "0E": {
+        "readable_name": "Falls Page",
+        "valid": true,
+        "writeable_name": "Falls Page",
+        "text_location": "E735B6"
+    },
+    "12": {
+        "readable_name": "Mirage Radar",
+        "valid": true,
+        "writeable_name": "Mirage Radar",
+        "text_location": "E735EA"
+    },
+    "15": {
+        "readable_name": "Adamantite",
+        "valid": true,
+        "writeable_name": "Adamantite",
+        "text_location": "E73611"
+    },
+    "16": {
+        "readable_name": "Moogle Suit",
+        "valid": true,
+        "writeable_name": "Moogle Suit",
+        "text_location": "E7361E"
+    },
+    "18": {
+        "readable_name": "Elder Branch",
+        "valid": true,
+        "writeable_name": "Elder Branch",
+        "text_location": "E73638"
+    },
+    "1A": {
+        "readable_name": "1st Tablet",
+        "valid": true,
+        "writeable_name": "1st Tablet",
+        "text_location": "E73652"
+    },
+    "1B": {
+        "readable_name": "2nd Tablet",
+        "valid": true,
+        "writeable_name": "2nd Tablet",
+        "text_location": "E7365F"
+    },
+    "1C": {
+        "readable_name": "3rd Tablet",
+        "valid": true,
+        "writeable_name": "3rd Tablet",
+        "text_location": "E7366C"
+    },
+    "1D": {
+        "readable_name": "4th Tablet",
+        "valid": true,
+        "writeable_name": "4th Tablet",
+        "text_location": "E73679"
+    }
+}

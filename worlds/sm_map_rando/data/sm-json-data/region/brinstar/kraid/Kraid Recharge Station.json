@@ -1,0 +1,142 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 301,
+  "name": "Kraid Recharge Station",
+  "area": "Brinstar",
+  "subarea": "Kraid",
+  "roomAddress": "0x7A641",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001920a",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Energy Refill",
+      "nodeType": "utility",
+      "nodeSubType": "energy",
+      "utility": ["energy"],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Missile Refill",
+      "nodeType": "utility",
+      "nodeSubType": "missile",
+      "utility": ["missile"],
+      "mapTileMask": [
+        [2]
+      ]
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 3,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 4,
+      "link": [2, 2],
+      "name": "Refill",
+      "requires": [
+        "h_useEnergyRefillStation"
+      ]
+    },
+    {
+      "id": 5,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 6,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 7,
+      "link": [3, 3],
+      "name": "Refill",
+      "requires": [
+        "h_useMissileRefillStation"
+      ]
+    },
+    {
+      "id": 8,
+      "link": [3, 3],
+      "name": "10 Power Bomb Crystal Flash",
+      "requires": [
+        "h_useMissileRefillAllAmmoCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": "In quick succession, place a Power Bomb, refill at the refill station, then morph and Crystal Flash.",
+      "devNote": [
+        "This strat does not work in vanilla, and only works if Missile refill stations also refill Supers and Power Bombs.",
+        "This is applicable in this room because this also refills Reserve Tanks, unlike the Energy refill station."
+      ]
+    }
+  ],
+  "notables": [],
+  "nextStratId": 9,
+  "nextNotableId": 1
+}

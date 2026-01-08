@@ -1,0 +1,554 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 69,
+  "name": "Skree Boost Room",
+  "area": "Brinstar",
+  "subarea": "Red",
+  "roomAddress": "0x7A3DD",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00190f6",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019102",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Skree Boost Skrees",
+      "enemyName": "Skree",
+      "quantity": 2,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 24,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 1,
+          "runway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": "Max extra run speed $1.5"
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 4,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 4,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 4,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "any"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 4,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave Spinning (Gravity)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Gravity)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Gravity)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "any"
+        }
+      }
+    },
+    {
+      "id": 26,
+      "link": [1, 1],
+      "name": "X-Mode, Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        "canXMode",
+        "h_XModeThornHit",
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 145}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "note": [
+        "While in X-mode on the thorns, Samus' will be flashing as i-frames periodically refresh;",
+        "by timing the shinecharge and X-Ray release to happen soon after i-frames refresh,",
+        "a second thorn hit can be avoided."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Come in Shinecharged, Leave with Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 110},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 26}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump onto the platform in the middle of the room.",
+        "Fire a shot and activate the shinespark wind-up.",
+        "Wait until the shot hits the door before sparking."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Hero Shot Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 45},
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 38}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump, fire a shot mid-air, and activate the shinespark wind-up.",
+        "Wait until the shot is at a specific position before sparking.",
+        "Sparking too late will cause the shot to despawn before reaching the door.",
+        "Sparking too early will cause Samus to bonk the door as it will not yet be open.",
+        "A beam shot, Missile, or Super can be used."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave with Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 110},
+        "ScrewAttack",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 26}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump onto the platform in the middle of the room, using Screw Attack to avoid being knocked back by the Skrees.",
+        "Fire a shot and activate the shinespark wind-up.",
+        "Wait until the shot hits the door before sparking."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Hero Shot Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 45},
+        "canShinechargeMovementTricky",
+        {"enemyDamage": {"enemy": "Skree", "type": "contact", "hits": 1}},
+        {"shinespark": {"frames": 38}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump, fire a shot mid-air, and activate the shinespark wind-up.",
+        "Wait until the shot is at a specific position before sparking.",
+        "Sparking too late will cause the shot to despawn before reaching the door.",
+        "Sparking too early will cause Samus to bonk the door as it will not yet be open.",
+        "A beam shot, Missile, or Super can be used."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 28,
+      "link": [2, 2],
+      "name": "Skree Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 380}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 220}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Skree", "count": 2}]
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 25,
+      "link": [2, 2],
+      "name": "Leave With Side Platform",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 1,
+          "runway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": "Max extra run speed $1.5"
+    },
+    {
+      "id": 20,
+      "link": [2, 2],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 4,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "link": [2, 2],
+      "name": "Leave With Mockball (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 4,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 4,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "any"
+        }
+      }
+    },
+    {
+      "id": 23,
+      "link": [2, 2],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 4,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 27,
+      "link": [2, 2],
+      "name": "X-Mode, Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        "canXMode",
+        "h_XModeThornHit",
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 70}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "note": [
+        "While in X-mode on the thorns, Samus' will be flashing as i-frames periodically refresh;",
+        "by timing the shinecharge and X-Ray release to happen soon after i-frames refresh,",
+        "a second thorn hit can be avoided."
+      ]
+    }
+  ],
+  "notables": [],
+  "nextStratId": 29,
+  "nextNotableId": 1
+}

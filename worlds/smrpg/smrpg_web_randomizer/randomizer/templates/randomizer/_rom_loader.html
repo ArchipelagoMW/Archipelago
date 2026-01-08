@@ -1,0 +1,204 @@
+{% load static %}
+
+<div class="alert alert-danger alert-dismissible my-3" id="error-box" role="alert" style="display:none">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <span class="sr-only">Error:</span>
+    <span class="message" id="error-message">Cannot Read ROM file.</span>
+</div>
+
+<div id="rom-select" class="card border-success my-3" style="display:none">
+    <div class="card-header bg-success text-white">
+        <h4 class="card-title">Getting Started</h4>
+    </div>
+    <div class="card-body">
+        <p>
+            <label class="btn btn-outline-success">
+                Select ROM File <input type="file" accept=".sfc,.smc" name="rom-file" id="rom-file"
+                                       style="display: none;">
+            </label>
+        </p>
+        <p>Getting started is simple!</p>
+        <ol>
+            <li>Select your ROM file and load it into the browser. Only US/EU regions are supported due to game
+                modifications.
+            </li>
+            <li>OPTIONAL: Provide the WAD file for the same region as the ROM. This is only needed if you're playing on
+                Wii Virtual Console!
+            </li>
+            <li>Select the options for how you would like your game randomized.</li>
+            <li>Click Generate.</li>
+            <li>Then Save your rom and get to playing, or save a WAD file to pack the randomized game for Wii Virtual
+                Console play.
+            </li>
+        </ol>
+        <p>You can check out the Help section of this site for more information on all the different ways you can
+            randomize the game.</p>
+        <p>If you're not familiar with the randomizer, you should check out the
+            <a href="{% url 'randomizer:resources' %}">Resources</a> page for some important info!</p>
+    </div>
+</div>
+
+<div id="currently-loaded" class="card border-info my-3" style="display:none">
+    <div class="card-header bg-info text-white">
+        <h4 class="card-title">Currently Loaded ROM</h4>
+    </div>
+    <div class="card-body">
+        <p>Region: <span class="region"></span></p>
+        <p>
+            <label class="btn btn-outline-info">
+                Change Region <input type="button" name="clear-rom" id="clear-rom" style="display: none;">
+            </label>
+        </p>
+        <div id="wad-select" style="display: none;">
+            <p>
+                <label class="btn btn-outline-success">
+                    Select WAD File (optional) <input type="file" accept=".wad" name="wad-file" id="wad-file"
+                                                      style="display: none;">
+                </label>
+            </p>
+            <p>If you're playing on Wii Virtual Console, you can load a WAD file for the same region as the currently
+                loaded
+                ROM. This will allow you to have the randomized ROM packed into the WAD as part of the randomizer
+                process
+                for easy installation on your system. This is NOT required if you're not playing on Virtual Console.</p>
+        </div>
+        <div id="wad-loaded" style="display: none;">
+            <p class="text-success">WAD file loaded successfully.</p>
+            <p>
+                <label class="btn btn-outline-info">
+                    Change WAD <input type="button" name="clear-wad" id="clear-wad" style="display: none;">
+                </label>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    let rom;
+    let wad;
+
+    function resetRom() {
+        return new Promise((resolve) => {
+            localforage.getItem("rom").then((blob) => {
+                rom = new ROM(new Blob([blob]), resolve);
+            });
+        });
+    }
+
+    function romOk(rom) {
+        $("#generate-btn").html("Generate ROM").prop("disabled", false);
+        checkWad();
+        $("#currently-loaded").show().find(".region").text(rom.region);
+        $("#seed-generate").show();
+    }
+
+    function clearRom() {
+        localforage.removeItem("rom");
+        localforage.removeItem("wad");
+        rom = new ROM(new Blob([]));
+        wad = new WAD(new Blob([]));
+        $("#error-box, #seed-details").hide();
+        $("#generate-btn").prop("disabled", true);
+        $("#currently-loaded").hide();
+        $("#seed-generate").hide();
+        $("#rom-select, #rom-select-warning").show();
+    }
+
+    function loadRom(blob, show_error) {
+        rom = new ROM(blob, (rom) => {
+            if (show_error) {
+                localforage.setItem("rom", rom.getArrayBuffer());
+            }
+            if (rom.valid) {
+                romOk(rom);
+            } else {
+                localforage.removeItem("rom");
+                if (show_error) {
+                    if (rom.region === 'JP') {
+                        $("#error-message").html("Only US/EU version is supported.");
+                    } else {
+                        $("#error-message").html("ROM not recognized. Please try another.");
+                    }
+                    $("#error-box").show().delay(2000).fadeOut("slow");
+                }
+                $("#rom-select, #rom-select-warning").show();
+            }
+        });
+    }
+
+    function checkWad() {
+        // Load WAD from local storage if it"s there
+        localforage.getItem("wad").then((blob) => {
+            loadWad(new Blob([blob]));
+        });
+    }
+
+    function wadOk() {
+        $("#btn-save-wad").prop("disabled", false);
+        $("#wad-select").hide();
+        $("#wad-loaded").show();
+    }
+
+    function loadWad(blob, show_error) {
+        wad = new WAD(blob, (wad) => {
+            if (show_error) {
+                localforage.setItem("wad", wad.getArrayBuffer());
+            }
+            if (wad.region && wad.region === rom.region) {
+                wad.valid = true;
+                wadOk();
+            } else {
+                localforage.removeItem("wad");
+                if (show_error) {
+                    if (wad.region) {
+                        $("#error-message").html("WAD region does not match ROM.");
+                    } else {
+                        $("#error-message").html("WAD not recognized. Please try another.");
+                    }
+                    $("#error-box").show().delay(2000).fadeOut("slow");
+                }
+                $("#wad-select").show();
+                $("#wad-loaded").hide();
+            }
+        });
+    }
+
+    function clearWad() {
+        localforage.removeItem("wad");
+        wad = new WAD(new Blob([]));
+        $("#error-box").hide();
+        $("#btn-save-wad").prop("disabled", true);
+        $("#wad-select").show();
+        $("#wad-loaded").hide();
+    }
+
+    // Page load
+    $(function () {
+        $("#error-box, .info").hide();
+
+        // Load ROM file when changed.
+        $("#rom-file").on("change", (event) => {
+            $("#rom-select, #rom-select-warning").hide();
+            $("#error-box").hide();
+            loadRom(event.target.files[0], true);
+        });
+
+        // Load ROM from local storage if it"s there
+        localforage.getItem("rom").then((blob) => {
+            loadRom(new Blob([blob]));
+        });
+
+        // Load WAD file when changed.
+        $("#wad-file").on("change", (event) => {
+            $("#wad-select").hide();
+            $("#error-box").hide();
+            loadWad(event.target.files[0], true);
+        });
+
+        // Clear rom when clicked.
+        $("#clear-rom").click(clearRom);
+        $("#clear-wad").click(clearWad);
+    });
+</script>

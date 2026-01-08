@@ -1,0 +1,32 @@
+# In "oldManScript_giveRupees", replace "wait 8; checkrupeedisplayupdated" by
+# two useless "disableinput" instructions
+0b/747e/: db $bd,$bd
+
+# Replace most of "oldMan_takeRupees" by a table of location contents for
+# each Old Man (in the same order as vanilla table)
+15/6212/oldManLocationTable: |
+    dwbe locations.oldManGoronMountain
+    dwbe locations.oldManNearBlaino
+    dwbe locations.oldManNearD1
+    dwbe locations.oldManWesternCoast
+    dwbe locations.oldManHoronVillage
+    dwbe locations.oldManTarmRuins
+    dwbe locations.oldManWoodsOfWinter
+    dwbe locations.oldManGhastlyStump
+
+# Replace "oldMan_giveRupees" by a function performing an item lookup inside
+# "oldManLocationTable" declared right above
+15/6226/oldMan_giveRupees: |
+    ld e,$42
+    ld a,(de)
+    ld hl,oldManLocationTable
+    add a,a
+    rst 10
+    ldi a,(hl)
+    ld b,a
+    ld c,(hl)
+    jp spawnTreasureOnLink
+
+# Replace "oldManScript_takeRupees" by a single jump to "oldManScript_giveRupees",
+# so that the function being called doesn't matter anymore
+0b/7488/: db $74,$72

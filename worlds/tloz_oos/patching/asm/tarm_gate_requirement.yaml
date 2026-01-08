@@ -1,0 +1,11 @@
+# Instead of testing a fixed value (0x0f) on a bitfield, we add a function
+# which counts the number of inserted jewels...
+0a//getInsertedJewelsCount: |
+  ld a,(wInsertedJewels)
+  jp getNumSetBits
+# ...then call it before comparing with the required amount to open the
+# gates
+0a/5092/: |
+  call getInsertedJewelsCount
+  cp option.tarmGateRequiredJewels
+

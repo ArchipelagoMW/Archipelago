@@ -1,0 +1,355 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Wrecked Ship Entrance and Wrecked Ship Main Shaft",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 154,
+          "roomName": "Wrecked Ship Entrance",
+          "nodeid": 2,
+          "nodeName": "Wrecked Ship Entrance Right Door (to Main Shaft)",
+          "position": "left"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 155,
+          "roomName": "Wrecked Ship Main Shaft",
+          "nodeid": 2,
+          "nodeName": "Wrecked Ship Main Shaft Top Left Door (to Entrance)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Wrecked Ship Save Room and Wrecked Ship Main Shaft",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 304,
+          "roomName": "Wrecked Ship Save Room",
+          "nodeid": 1,
+          "nodeName": "Wrecked Ship Save Room Door (to Main Shaft)",
+          "position": "right"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 155,
+          "roomName": "Wrecked Ship Main Shaft",
+          "nodeid": 4,
+          "nodeName": "Wrecked Ship Main Shaft Top Right Door (to Save)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Wrecked Ship Main Shaft and Basement",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 155,
+          "roomName": "Wrecked Ship Main Shaft",
+          "nodeid": 7,
+          "nodeName": "Wrecked Ship Main Shaft Bottom Door (to Basement)",
+          "position": "top"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 156,
+          "roomName": "Basement",
+          "nodeid": 2,
+          "nodeName": "Basement Top Door (to Main Shaft)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Basement and Wrecked Ship Map Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 156,
+          "roomName": "Basement",
+          "nodeid": 1,
+          "nodeName": "Basement Left Door (to Map)",
+          "position": "right"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 157,
+          "roomName": "Wrecked Ship Map Room",
+          "nodeid": 1,
+          "nodeName": "Wrecked Ship Map Room Door (to Basement)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Basement and Phantoon's Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 156,
+          "roomName": "Basement",
+          "nodeid": 3,
+          "nodeName": "Phantoon Eye Door",
+          "position": "left"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 158,
+          "roomName": "Phantoon's Room",
+          "nodeid": 1,
+          "nodeName": "Phantoon Room Door (to Basement)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Wrecked Ship Main Shaft and Wrecked Ship West Super Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 155,
+          "roomName": "Wrecked Ship Main Shaft",
+          "nodeid": 3,
+          "nodeName": "Wrecked Ship Main Shaft Bottom Left Door (to West Supers)",
+          "position": "right"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 159,
+          "roomName": "Wrecked Ship West Super Room",
+          "nodeid": 1,
+          "nodeName": "Wrecked Ship West Super Room Door (to Main Shaft)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Wrecked Ship Main Shaft and Attic",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 155,
+          "roomName": "Wrecked Ship Main Shaft",
+          "nodeid": 1,
+          "nodeName": "Wrecked Ship Main Shaft Top Door (to Attic)",
+          "position": "bottom"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 160,
+          "roomName": "Attic",
+          "nodeid": 2,
+          "nodeName": "Attic Bottom Door (to Main Shaft)",
+          "position": "top"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Bowling Alley and Gravity Suit Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 161,
+          "roomName": "Bowling Alley",
+          "nodeid": 3,
+          "nodeName": "Bowling Alley Bottom Left Door (to Gravity)",
+          "position": "right"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 162,
+          "roomName": "Gravity Suit Room",
+          "nodeid": 2,
+          "nodeName": "Gravity Suit Room Right Door (to Bowling Alley)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Wrecked Ship Main Shaft and Wrecked Ship East Super Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 155,
+          "roomName": "Wrecked Ship Main Shaft",
+          "nodeid": 6,
+          "nodeName": "Wrecked Ship Main Shaft Bottom Right Door (to East Supers)",
+          "position": "left"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 163,
+          "roomName": "Wrecked Ship East Super Room",
+          "nodeid": 1,
+          "nodeName": "Wrecked Ship East Super Room Door (to Main Shaft)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Wrecked Ship Main Shaft and Sponge Bath",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 155,
+          "roomName": "Wrecked Ship Main Shaft",
+          "nodeid": 5,
+          "nodeName": "Wrecked Ship Main Shaft Middle Right Door (to Sponge Bath)",
+          "position": "left"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 164,
+          "roomName": "Sponge Bath",
+          "nodeid": 1,
+          "nodeName": "Sponge Bath Left Door (to Main Shaft)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Sponge Bath and Spiky Death Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 164,
+          "roomName": "Sponge Bath",
+          "nodeid": 2,
+          "nodeName": "Sponge Bath Right Door (to Spiky Death Room)",
+          "position": "left"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 165,
+          "roomName": "Spiky Death Room",
+          "nodeid": 1,
+          "nodeName": "Spiky Death Room Left Door (to Sponge Bath)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Spiky Death Room and Electric Death Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 165,
+          "roomName": "Spiky Death Room",
+          "nodeid": 2,
+          "nodeName": "Spiky Death Room Right Door (to Electric Death Room)",
+          "position": "left"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 166,
+          "roomName": "Electric Death Room",
+          "nodeid": 3,
+          "nodeName": "Electric Death Room Bottom Left Door (to Spiky Death Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Electric Death Room and Wrecked Ship Energy Tank Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 166,
+          "roomName": "Electric Death Room",
+          "nodeid": 1,
+          "nodeName": "Electric Death Room Top Left Door (to E-Tank)",
+          "position": "right"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 167,
+          "roomName": "Wrecked Ship Energy Tank Room",
+          "nodeid": 1,
+          "nodeName": "Wrecked Ship E-Tank Door (to Electric Death Room)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Attic and Assembly Line",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 160,
+          "roomName": "Attic",
+          "nodeid": 3,
+          "nodeName": "Attic Right Door (to Assembly Line)",
+          "position": "left"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 168,
+          "roomName": "Assembly Line",
+          "nodeid": 1,
+          "nodeName": "Assembly Line Door (to Attic)",
+          "position": "right"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+
+# searches for an interaction with ID a and returns the ID address in de,
+# and z flag if found. this is here because it's currently only used by
+# handleSpecialCurrentsActions.
+06//findObjectWithId: |
+    push bc
+    ld b,a
+    ld de,$d041
+    @loop:
+    ld a,(de)
+    cp b
+    jr nz,@next
+    pop bc
+    ret
+    @next:
+    inc d
+    ld a,d
+    cp $e0
+    jr c,@loop
+    pop bc
+    or a
+    ret
+
+# display portal popup map icons for bridge builders' screen present and
+# symmetry city past.
+02//displayPortalPopups: |
+    ld a,(wMapMenu_mode)
+    and a
+    ld a,(wMapMenu_cursorIndex)
+    jr nz,@present
+    cp $25
+    jr nz,@ret
+    ld a,$aa
+    jr @gotIcon
+    @present:
+    cp $13
+    jr nz,@ret
+    ld a,$a3
+    @gotIcon:
+    jp $6255
+    @ret:
+    jp $6248
+# tree warp / map stuff
+02/6245/: jp displayPortalPopups
+
+# reenter a warp tile that link is standing on when playing the tune of
+# currents (useful if you warp into a patch of bushes). also activate the
+# west present crescent island portal, which won't respond to echoes.
+06//handleSpecialCurrentsActions: |
+    push bc
+    ld bc,$a900
+    call compareRoom
+    pop bc
+    jr nz,@notIsland
+    push de
+    ld a,$e1 # echoes portal
+    call findObjectWithId
+    jr nz,@noDormantPortal
+    ld e,$44
+    ld a,$02
+    ld (de),a
+    @noDormantPortal:
+    pop de
+    jp $4e08 # clear self
+    @notIsland:
+    ld a,(wAreaFlags)
+    push af
+    push de
+    ld a,$de # currents/ages return portal
+    call findObjectWithId
+    jr nz,@noReturnPortal
+    ld e,$44
+    ld a,$02
+    ld (de),a
+    @noReturnPortal:
+    pop de
+    pop af
+    jp $4e37 # tune echoes in vain
+06/4e34/: jp handleSpecialCurrentsActions
+
+# don't let the tune of echoes activate the special crescent island portal.
+10//checkActivateEchoesPortal: |
+    push bc
+    ld bc,$a900
+    call compareRoom
+    pop bc
+    ld a,(wPlayingInstrument1)
+    ret nz
+    dec a
+    ret
+10/7d88/: call checkActivateEchoesPortal
+
+# add a second dormant portal to the first dormant portal screen in talus
+# peaks past, to prevent a softlock if the player doesn't have flippers or
+# ages.
+12//talusPeaksStaticObjects: |
+    db f2
+    db e1,00,68,18
+    db f6
+    db 20,08,00
+    db fe
+12/5a62/: dw talusPeaksStaticObjects
+
+# and in nuun highlands, by the bridge.
+12//nuunWestPortalStaticObjects: |
+    db f2
+    db 9a,00,68,48 # all carpenter stuff
+    db 9a,01,58,58
+    db 9a,02,58,68
+    db 9a,03,48,58
+    db 9a,04,38,58
+    db fe
+12/5a7b/: |
+    db f2
+    db e1,00,38,78
+    db f3
+    dw nuunWestPortalStaticObjects
+    db ff
+
+# and in nuun highlands, southeast corner.
+12//nuunEastPortalStaticObjects: |
+    db f2
+    db d0,03,25,20
+    db e1,00,48,38
+    db fe
+12/5af0/: |
+    db f3
+    dw nuunEastPortalStaticObjects
+    db f3
+    dw 4383
+    db ff
+
+# and outside D2 present.
+12//d2PresentPortalStaticObjects: |
+    db f2
+    db dc,02,48,38
+    db e1,00,48,48
+    db fe
+12/5d42/: |
+    db f3
+    dw d2PresentPortalStaticObjects
+    db ff
+
+# and symmetry city past.
+12//symmetryPortalStaticObjects: |
+    db f1
+    db dc,05
+    db f2
+    db e1,00,68,18
+    db e1,00,68,88
+    db fe
+12/5e91/: |
+    db f3
+    dw symmetryPortalStaticObjects

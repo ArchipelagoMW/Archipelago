@@ -1,0 +1,273 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 25,
+  "name": "Red Brinstar Elevator Room",
+  "area": "Crateria",
+  "subarea": "East",
+  "roomAddress": "0x7962A",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1],
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Door",
+      "nodeType": "door",
+      "nodeSubType": "yellow",
+      "nodeAddress": "0x0018af6",
+      "doorOrientation": "up",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Elevator",
+      "nodeType": "door",
+      "nodeSubType": "elevator",
+      "nodeAddress": "0x0018b02",
+      "doorOrientation": "down",
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "mapTileMask": [
+        [1],
+        [2],
+        [2],
+        [2]
+      ]
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Door Frame Below",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithDoorFrameBelow": {
+          "height": 2
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Platform Below",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 6,
+          "leftPosition": -2.5,
+          "rightPosition": 2.5
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Carry G-Mode Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Carry G-Mode Morph Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphMovement"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 65},
+        "canShinechargeMovement"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Carry G-Mode Down Elevator",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 65},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 4, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true,
+      "devNote": [
+        "This can spark up through either the left or right side of the doorway.",
+        "Sparking up through the center would need slightly different requirements, but there's no known application where that would be needed."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Carry G-Mode Back Down the Elevator",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Elevator Crystal Flash for Flash Suit",
+      "requires": [
+        {"or": [
+          "canInsaneJump",
+          {"and": [
+            "h_fourTileJumpMorph",
+            "canStationarySpinJump"
+          ]}
+        ]},
+        "h_elevatorCrystalFlash"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "flashSuitChecked": true,
+      "note": "In order to align and place a Power Bomb at the correct pixel, perform a stationary spin jump and hit the ceiling before starting to morph."
+    }
+  ],
+  "notables": [],
+  "nextStratId": 14,
+  "nextNotableId": 1
+}

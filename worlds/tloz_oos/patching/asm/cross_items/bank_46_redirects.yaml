@@ -1,0 +1,40 @@
+46/441e/specialObjectAnimate_optimized: |
+  ld e,$06
+  ld hl,$4414
+  jp interBankCall
+
+46/4a42/clearParentItem_46: |
+  ld e,$06
+  ld hl,$49e7
+  jp interBankCall
+
+46/4f82/clearSelfIfNoSeeds: |
+  ld hl,wShooterSelectedSeeds
+  /copy s,$06,$4db8,$0c
+  jp clearParentItem_46
+
+46/5378/parentItemLoadAnimationAndIncState: |
+  ld e,$06
+  ld hl,$52e2
+  jp interBankCall
+
+# + itemCreateChildWithID
+46/53dd/itemCreateChild: /copy s,$06,$532f,$06
+46/53e3/itemCreateChildWithID: /copy s,$06,$5335,$33
+46/53ef/: call z,getFreeItemSlotWithObjectCap
+
+# This one has the seasons
+46/5416/getFreeItemSlotWithObjectCap: /copy s,$06,$5368,$1b
+
+# + andHlWithGameKeysPressed
+46/5496/parentItemCheckButtonPressed: /copy s,$06,$53e8,$08
+
+46/54d8/isLinkInHole: |
+  ld e,$06
+  ld hl,$5422
+  jp safeInterBankCall
+
+# Currently makes it so that Link uses items with a standing animation
+46/54d2/isLinkUnderwater : |
+  xor a
+  ret

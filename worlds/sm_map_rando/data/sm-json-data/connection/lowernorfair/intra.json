@@ -1,0 +1,55 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Acid Statue Room and Main Hall",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Lower Norfair",
+          "subarea": "West",
+          "roomid": 149,
+          "roomName": "Acid Statue Room",
+          "nodeid": 1,
+          "nodeName": "Acid Statue Room Top Right Door (to Main Hall)",
+          "position": "left"
+        },
+        {
+          "area": "Lower Norfair",
+          "subarea": "East",
+          "roomid": 132,
+          "roomName": "Main Hall",
+          "nodeid": 1,
+          "nodeName": "Main Hall Left Door (to Acid Statue)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Fast Ripper Room and Fast Pillars Setup Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Lower Norfair",
+          "subarea": "West",
+          "roomid": 153,
+          "roomName": "Fast Ripper Room",
+          "nodeid": 2,
+          "nodeName": "Fast Rippers Right Door (to Fast Pillars Setup Room)",
+          "position": "left"
+        },
+        {
+          "area": "Lower Norfair",
+          "subarea": "East",
+          "roomid": 133,
+          "roomName": "Fast Pillars Setup Room",
+          "nodeid": 2,
+          "nodeName": "Fast Pillars Setup Room Bottom Left Door (to Fast Rippers)",
+          "position": "right"
+        }
+      ]
+    }
+  ]
+}

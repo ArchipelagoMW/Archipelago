@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from Options import (PerGameCommonOptions, Toggle, Choice, Range, NamedRange, FreeText, TextChoice, DeathLink,
-                     ItemsAccessibility)
+                     ItemsAccessibility, OptionList, Visibility)
 
 
 class GameVersion(Choice):
@@ -27,13 +27,52 @@ class RivalName(TextChoice):
     default = -1
 
 
-class Goal(Choice):
-    """If Professor Oak is selected, your victory condition will require challenging and defeating Oak after becoming
-    Champion and defeating or capturing the Pokemon at the end of Cerulean Cave."""
-    display_name = "Goal"
-    option_pokemon_league = 0
-    option_professor_oak = 1
+class AutoRun(Choice):
+    """Whether Auto Run is enabled by default. Can be changed in the in-game Options menu.
+    When off, you can hold B to run. When on, you can hold B to slow down."""
+    display_name = "Auto Run"
+    default = 1
+    option_on = 0
+    option_off = 1
+
+
+class BattleAnimations(Choice):
+    """Whether Battle Animations is enabled by default. Can be changed in the in-game Options menu."""
+    display_name = "Battle Animations"
     default = 0
+    option_on = 0
+    option_off = 1
+
+
+class ArchipelagoItemText(Choice):
+    """Whether a text popup will display when receiving items from the multiworld.
+    Can be changed in the in-game Options menu."""
+    display_name = "Archipelago Item Text"
+    default = 0
+    option_on = 0
+    option_off = 1
+
+
+class BattleStyle(Choice):
+    """Choose battle style. CANNOT be changed in-game!"""
+    display_name = "Battle Style"
+    option_set = 1
+    option_shift = 0
+    default = 0
+
+
+class TextSpeed(NamedRange):
+    """Choose text speed. CANNOT be changed in-game!"""
+    display_name = "Text Speed"
+    default = 3
+    range_start = 0
+    range_end = 15
+    special_range_names = {
+        "instant": 0,
+        "fast": 1,
+        "medium": 3,
+        "slow": 5
+    }
 
 
 class EliteFourBadgesCondition(Range):
@@ -195,14 +234,6 @@ class RandomizePokedex(Choice):
     default = 0
 
 
-class KeyItemsOnly(Toggle):
-    """Shuffle only Key Items. This overrides Randomize Hidden Items, Trainersanity, and Dexsanity.
-    Sets all non-excluded locations in your game to Priority Locations.
-    May have high generation failure rates for solo games or small multiworlds, especially with Door Shuffle."""
-    display_name = "Key Items Only"
-    default = 0
-
-
 class Tea(Toggle):
     """Adds a Tea item to the item pool which the Saffron guards require instead of the vending machine drinks.
     Adds a location check to the Celadon Mansion 1F, where Tea is acquired in FireRed and LeafGreen."""
@@ -272,10 +303,10 @@ class TrainerSanity(NamedRange):
     display_name = "Trainersanity"
     default = 0
     range_start = 0
-    range_end = 317
+    range_end = 331
     special_range_names = {
         "disabled": 0,
-        "full": 317
+        "full": 331
     }
 
 
@@ -326,8 +357,7 @@ class DoorShuffle(Choice):
     """Simple: entrances are randomized together in groups: Pokemarts, Gyms, single exit dungeons, dual exit dungeons,
     single exit misc interiors, dual exit misc interiors are all shuffled separately. Safari Zone is not shuffled.
     On Simple only, the Town Map will be updated to show the new locations for each dungeon.
-    Interiors: Any outdoor entrance may lead to any interior, but intra-interior doors are not shuffled. Previously
-    named Full.
+    Interiors: Any outdoor entrance may lead to any interior, but intra-interior doors are not shuffled.
     Full: Exterior to interior entrances are shuffled, and interior to interior doors are shuffled, separately.
     Insanity: All doors in the game are shuffled.
     Decoupled: Doors may be decoupled from each other, so that leaving through an exit may not return you to the
@@ -359,8 +389,7 @@ class WarpTileShuffle(Choice):
 
 
 class RandomizeRockTunnel(Toggle):
-    """Randomize the layout of Rock Tunnel. If Full, Insanity, or Decoupled Door Shuffle is on, this will cause only the
-    main entrances to Rock Tunnel to be shuffled."""
+    """Randomize the layout of Rock Tunnel."""
     display_name = "Randomize Rock Tunnel"
     default = 0
 
@@ -441,8 +470,15 @@ class ExpModifier(NamedRange):
     }
 
 
-class RandomizeWildPokemon(Choice):
-    """Randomize all wild Pokemon and game corner prize Pokemon. match_types will select a Pokemon with at least one
+class SplitEXP(Toggle):
+    """Divide experience between Pokemon receiving experience, as in vanilla. If disabled, all Pokemon that fought,
+    or all Pokemon in your party if you have Exp. All, will receive the full amount of experience awarded."""
+    default = 1
+    display_name = "Split EXP"
+
+
+class RandomizePokemonLocations(Choice):
+    """Randomize all obtainable Pokemon locations. match_types will select a Pokemon with at least one
     type matching the original type of the original Pokemon. match_base_stats will prefer Pokemon with closer base stat
     totals. match_types_and_base_stats will match types and will weight towards similar base stats, but there may not be
     many to choose from."""
@@ -462,33 +498,11 @@ class Area1To1Mapping(Toggle):
     display_name = "Area 1-to-1 Mapping"
 
 
-class RandomizeStarterPokemon(Choice):
-    """Randomize the starter Pokemon choices."""
-    display_name = "Randomize Starter Pokemon"
-    default = 0
-    option_vanilla = 0
-    option_match_types = 1
-    option_match_base_stats = 2
-    option_match_types_and_base_stats = 3
-    option_completely_random = 4
-
-
-class RandomizeStaticPokemon(Choice):
-    """Randomize one-time gift and encountered Pokemon. These will always be first evolution stage Pokemon."""
-    display_name = "Randomize Static Pokemon"
-    default = 0
-    option_vanilla = 0
-    option_match_types = 1
-    option_match_base_stats = 2
-    option_match_types_and_base_stats = 3
-    option_completely_random = 4
-
-
 class RandomizeLegendaryPokemon(Choice):
     """Randomize Legendaries. Mew has been added as an encounter at the Vermilion dock truck.
-    Shuffle will shuffle the legendaries with each other. Static will shuffle them into other static Pokemon locations.
-    'Any' will allow legendaries to appear anywhere based on wild and static randomization options, and their locations
-    will be randomized according to static Pokemon randomization options."""
+    "Shuffle" will shuffle the legendaries with each other.
+    "Static" will shuffle them into any locations besides wild encounters.
+    "Any" will allow legendaries to appear anywhere. Same as Static if Randomize Pokemon Locations is turned off."""
     display_name = "Randomize Legendary Pokemon"
     default = 0
     option_vanilla = 0
@@ -499,7 +513,10 @@ class RandomizeLegendaryPokemon(Choice):
 
 class CatchEmAll(Choice):
     """Guarantee all first evolution stage Pokemon are available, or all Pokemon of all stages.
-    Currently only has an effect if wild Pokemon are randomized."""
+
+    When Pokemon locations are not randomized, "All Pokemon" is treated the same as "First Stage" and version exclusives
+    are available regardless of game, and starters + Eevee are shuffled randomly into Game Corner Prize slots,
+    in-game trades, or for sale at the Route 4 Pokemon Center."""
     display_name = "Catch 'Em All"
     default = 0
     option_off = 0
@@ -572,6 +589,13 @@ class MoveBalancing(Toggle):
     """All one-hit-KO moves and fixed-damage moves become normal damaging moves.
     Blizzard, and moves that cause sleep have their accuracy reduced."""
     display_name = "Move Balancing"
+    default = 0
+
+
+class NoTrappingMoves(Toggle):
+    """All trapping moves are changed to instead immediately deal damage 2 to 5 times, as with moves like Fury Attack
+    and Doubleslap."""
+    display_name = "No Trapping Moves"
     default = 0
 
 
@@ -878,13 +902,40 @@ class RandomizePokemonPalettes(Choice):
     option_completely_random = 3
 
 
+class RandomizeMapMusic(Choice):
+    """Randomize the music played in each map.
+    Vanilla: Unchanged.
+    Shuffle: All maps that have the same music in vanilla get shuffled to the same random music tracks.
+    Randomize: All maps have music independently randomized.
+    Chaos: A random music track is chosen every time you enter a new map."""
+    display_name = "Randomize Map Music"
+    option_vanilla = 0
+    option_shuffle = 1
+    option_randomize = 2
+    option_chaos = 3
+
+
+class DebugOptions(OptionList):
+    """Debug options.
+    SelectInvFull: Hold select to have AddItemToInventory fail and report inventory full when holding SELECT
+    (AddItemToInventory is not called when obtaining non-inventory items like AP_ITEM, badges, traps, etc.)
+    WTW: Walk through walls. Careful not to walk out of bounds and crash the game!
+    """
+    valid_keys = {"SelectInvFull", "WTW"}
+    visibility = Visibility.spoiler
+
+
 @dataclass
 class PokemonRBOptions(PerGameCommonOptions):
     accessibility: ItemsAccessibility
     game_version: GameVersion
     trainer_name: TrainerName
     rival_name: RivalName
-    # goal: Goal
+    battle_style: BattleStyle
+    text_speed: TextSpeed
+    auto_run: AutoRun
+    battle_animations: BattleAnimations
+    archipelago_item_text: ArchipelagoItemText
     elite_four_badges_condition: EliteFourBadgesCondition
     elite_four_key_items_condition: EliteFourKeyItemsCondition
     elite_four_pokedex_condition: EliteFourPokedexCondition
@@ -901,7 +952,6 @@ class PokemonRBOptions(PerGameCommonOptions):
     old_man: OldMan
     badgesanity: BadgeSanity
     badges_needed_for_hm_moves: BadgesNeededForHMMoves
-    key_items_only: KeyItemsOnly
     tea: Tea
     extra_key_items: ExtraKeyItems
     split_card_key: SplitCardKey
@@ -929,18 +979,18 @@ class PokemonRBOptions(PerGameCommonOptions):
     minimum_steps_between_encounters: MinimumStepsBetweenEncounters
     level_scaling: LevelScaling
     exp_modifier: ExpModifier
-    randomize_wild_pokemon: RandomizeWildPokemon
+    split_exp: SplitEXP
+    randomize_pokemon_locations: RandomizePokemonLocations
     area_1_to_1_mapping: Area1To1Mapping
-    randomize_starter_pokemon: RandomizeStarterPokemon
-    randomize_static_pokemon: RandomizeStaticPokemon
     randomize_legendary_pokemon: RandomizeLegendaryPokemon
     catch_em_all: CatchEmAll
+    randomize_trainer_parties: RandomizeTrainerParties
+    trainer_legendaries: TrainerLegendaries
     randomize_pokemon_stats: RandomizePokemonStats
     randomize_pokemon_catch_rates: RandomizePokemonCatchRates
     minimum_catch_rate: MinimumCatchRate
-    randomize_trainer_parties: RandomizeTrainerParties
-    trainer_legendaries: TrainerLegendaries
     move_balancing: MoveBalancing
+    no_trapping_moves: NoTrappingMoves
     fix_combat_bugs: FixCombatBugs
     randomize_pokemon_movesets: RandomizePokemonMovesets
     confine_transform_to_ditto: ConfineTranstormToDitto
@@ -979,4 +1029,6 @@ class PokemonRBOptions(PerGameCommonOptions):
     sleep_trap_weight: SleepTrapWeight
     ice_trap_weight: IceTrapWeight
     randomize_pokemon_palettes: RandomizePokemonPalettes
+    randomize_map_music: RandomizeMapMusic
     death_link: DeathLink
+    debug_options: DebugOptions

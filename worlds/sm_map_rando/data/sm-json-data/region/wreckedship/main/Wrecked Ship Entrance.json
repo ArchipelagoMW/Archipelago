@@ -1,0 +1,313 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 154,
+  "name": "Wrecked Ship Entrance",
+  "area": "Wrecked Ship",
+  "subarea": "Main",
+  "roomAddress": "0x7CA08",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a1b0",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a1bc",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 2, 2]
+      ]
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 40,
+          "openEnd": 0
+        }
+      },
+      "devNote": "With Phantoon defeated, entering from the opposite door will have the conveyors on and shortening the runway."
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave with Runway, Conveyor Assist",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 0
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": [
+        "With Phantoon defeated, entering from the same door will have the conveyors on and lengthening the runway.",
+        "Without Phantoon defeated, the runway is still 45+ tiles."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave with Runway, Phantoon Alive",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 40,
+          "openEnd": 0
+        }
+      },
+      "devNote": "With Phantoon defeated, entering from the opposite door will have the conveyors on and shortening the runway."
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Leave with Runway, Conveyor Assist",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 0
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": [
+        "With Phantoon defeated, entering from the same door will have the conveyors on and lengthening the runway.",
+        "Without Phantoon defeated, the runway is still 45+ tiles."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Leave with Runway, Phantoon Alive",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      }
+    }
+  ],
+  "notables": [],
+  "nextStratId": 17,
+  "nextNotableId": 1
+}

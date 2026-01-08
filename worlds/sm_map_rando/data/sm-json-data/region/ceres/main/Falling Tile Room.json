@@ -1,0 +1,394 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 2,
+  "name": "Falling Tile Room",
+  "area": "Ceres Station",
+  "subarea": "Ceres Station",
+  "roomAddress": "0x7DF8D",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001ab58",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001ab64",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Power Bombed the Left Door",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "B",
+      "name": "Power Bombed the Right Door",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 0,
+          "steepUpTiles": 1
+        }
+      },
+      "devNote": "Because of Ceres's slow opening doors, runways are at most 4 tiles with 0 open ends + 4 more pixels."
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Power Bombed the Door",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 10,
+          "openEnd": 0,
+          "steepUpTiles": 3
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Power Bomb the Doors",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "clearsObstacles": ["A", "B"],
+      "devNote": "Destroy both doors with a Power Bomb placed in the middle of the room."
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Carry G-Mode Back Through Door",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true,
+      "devNote": "Samus can open Ceres doors even while in indirect G-Mode."
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Carry G-Mode Morph Back Through Door",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true,
+      "devNote": "Samus can open Ceres doors even while in indirect G-Mode."
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "G-Mode Morph - Power Bomb the Left Door",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Destroy the left door with a Power Bomb."
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "G-Mode Morph - Power Bomb the Doors",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphMovement",
+          "h_artificialMorphBombThings"
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "flashSuitChecked": true,
+      "note": "Destroy both doors with a Power Bomb placed in the middle of the room."
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Carry G-Mode Through Room (Left to Right)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Carry G-Mode Morph Through Room (Left to Right)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphMovement",
+          "h_artificialMorphBombThings"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Carry G-Mode Through Room (Right to Left)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Carry G-Mode Morph Through Room (Right to Left)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphMovement",
+          "h_artificialMorphBombThings"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 0,
+          "steepUpTiles": 1
+        }
+      },
+      "devNote": "Because of Ceres's slow opening doors, runways are at most 4 tiles with 0 open ends + 4 more pixels."
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Leave With Runway - Power Bombed the Door",
+      "requires": [
+        {"obstaclesCleared": ["B"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 10,
+          "openEnd": 0,
+          "steepUpTiles": 3
+        }
+      }
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Carry G-Mode Back Through Door",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true,
+      "devNote": "Samus can open Ceres doors even while in indirect G-Mode."
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "Carry G-Mode Morph Back Through Door",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true,
+      "devNote": "Samus can open Ceres doors even while in indirect G-Mode."
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "G-Mode Morph - Power Bomb the Right Door",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": "Destroy the right door with a Power Bomb."
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "G-Mode Morph - Power Bomb the Doors",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphMovement",
+          "h_artificialMorphBombThings"
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "flashSuitChecked": true,
+      "note": "Destroy both doors with a Power Bomb placed in the middle of the room."
+    }
+  ],
+  "notables": [],
+  "nextStratId": 20,
+  "nextNotableId": 1
+}

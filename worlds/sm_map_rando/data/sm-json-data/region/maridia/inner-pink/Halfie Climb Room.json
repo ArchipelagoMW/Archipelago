@@ -1,0 +1,4564 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 187,
+  "name": "Halfie Climb Room",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Pink",
+  "roomAddress": "0x7D913",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0],
+    [1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001a900",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "locks": [
+        {
+          "name": "Halfie Climb Gray Lock (to East Cactus Alley)",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedDraygon"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [1, 0, 0, 0, 0],
+        [2, 0, 0, 0, 0],
+        [1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a8dc",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [2, 2, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a8f4",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [1, 1, 2, 2, 2]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a8e8",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "isDoorImmediatelyClosed": true,
+      "mapTileMask": [
+        [2, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "G-Mode Morph, In Morph Tunnel",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [1, 2, 1, 1, 1]
+      ],
+      "note": "Represents being in the Morph tunnel with Artificial Morph, likely moving off camera towards the opposite side of the room."
+    },
+    {
+      "id": 6,
+      "name": "Bottom Shinecharged",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0],
+        [2, 1, 1, 1, 1]
+      ],
+      "devNote": [
+        "This represents being shinecharged at the end of the runway opposite the bottom-left door."
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Halfie Climb Mochtroids",
+      "enemyName": "Mochtroid",
+      "quantity": 3,
+      "homeNodes": [1, 2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Halfie Climb Oums",
+      "enemyName": "Oum",
+      "quantity": 3,
+      "homeNodes": [3]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {
+          "id": 4,
+          "devNote": "This link is only for the shinespark, mochtroid climbing or cross room jump. Other strats should go 2 -> 1 -> 4."
+        },
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {
+          "id": 1,
+          "devNote": "This link is only for the shinespark. Other strats should go 3 -> 2 -> 1."
+        },
+        {"id": 2},
+        {"id": 3},
+        {
+          "id": 4,
+          "devNote": "This link is only for the shinespark. Other strats should go 3 -> 2 -> 1 -> 4."
+        },
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 2,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Mochtroid",
+      "requires": [
+        "h_navigateUnderwater",
+        "h_frozenEnemyRunway",
+        {"or": [
+          "canMochtroidIceClimb",
+          {"and": [
+            "Gravity",
+            {"or": [
+              "SpaceJump",
+              "canWalljump"
+            ]}
+          ]}
+        ]},
+        {"enemyDamage": {"enemy": "Mochtroid", "type": "contact", "hits": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Use a frozen Mochtroid to extend the length of the runway.",
+        "Positioning the Mochtroid can be done by dropping down below then climbing back up with the frozen Mochtroid as a platform.",
+        "Alternatively, freeze the Mochtroid with an angle-down shot while falling below then quickly climb back up."
+      ],
+      "devNote": "There are many other ways to get into position, but they would require manipulating the Mochtroid as much as canMochtroidIceClimb expects."
+    },
+    {
+      "id": 205,
+      "link": [1, 1],
+      "name": "Mochtroid Farm (1 Mochtroid)",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 75}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 75}
+          ]},
+          {"and": [
+            "Gravity",
+            "ScrewAttack",
+            {"cycleFrames": 75}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 85}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 90}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 135}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Mochtroid", "count": 1}]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Mochtroid",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Top Position)",
+      "requires": [
+        {"or": [
+          "HiJump",
+          "Gravity"
+        ]},
+        "canGrappleBombHang",
+        "h_bombThings"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "note": [
+        "Get a boost from a Bomb or Power Bomb while grappled to the first Grapple block above the door.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "If needing to stand up in the next room (e.g. for an X-Ray climb), then enter the transition while swinging slowly, e.g. after coming to a stop directly below the block.",
+        "If needing to transition at horiziontal position 21 (as far right as possible), then additionally roll from pressing left to pressing diagonally up-left just before the transition.",
+        "The game may lag heavily if Samus enters a retracted position; if this happens, hold down to extend Grapple again."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Bottom Position)",
+      "requires": [
+        "Gravity",
+        "canGrappleBombHang",
+        "h_bombThings"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "note": [
+        "Get a boost from a Bomb or Power Bomb while grappled to the second Grapple block below the door.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Press jump to get a good bounce off the wall at the bottom of the swing, making it possible to swing up to the door.",
+        "To avoid heavy lag, hold left while near the top of the swing, and hold angle down for the middle of the swing.",
+        "Continue holding Grapple through the transition to initiate a teleport in the next room.",
+        "If needing to stand up in the next room (e.g. for an X-Ray climb), then press up while approaching the door to retract Grapple and come to a stop; then roll from pressing left to diagonally down-left to trigger the transition.",
+        "This method will also transition at horizontal position 21 (as far right as possible).",
+        "If it is needed to transition further left (e.g. position 19 or 20), it can be done by instead rolling from pressing left to pressing down (with a brief diagonal input in between) and then left again if necessary."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Middle Position)",
+      "requires": [
+        "Gravity",
+        "canGrappleBombHang",
+        "h_bombThings"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "note": [
+        "Get a boost from a Bomb or Power Bomb while grappled to the top Grapple block below the door.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Press jump to get a good bounce off the wall at the bottom of the swing, making it possible to swing up to the door.",
+        "To avoid heavy lag, hold left while near the top of the swing, and hold angle down for the middle of the swing.",
+        "Press up while approaching the door to retract Grapple to avoid bonking the ceiling.",
+        "After Samus comes to a stop (at horiziontal position 25), roll from pressing left to diagonally down-left to trigger the transition.",
+        "This method will allow Samus to stand up in the next room (e.g. for an X-Ray climb) and will also transition at horizontal position 21 (as far right as possible).",
+        "If it is needed to transition further left (at position 20) while still being able to stand, it can be done with by rolling from pressing left to briefly pressing down (with a brief diagonal input in between), which should bring Samus to a stop at position 20; then press left to trigger the transition."
+      ]
+    },
+    {
+      "id": 176,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Frozen Mochtroid, Top Position)",
+      "requires": [
+        "canFrozenEnemyGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "note": [
+        "Freeze a Mochtroid near the bottom of the Grapple wall, stand on it, and fire Grapple horizontally while walking toward the wall.",
+        "If successful, Samus should clip slightly into the wall.",
+        "Crouch, and fire Grapple while angling up.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "If needing to stand up in the next room (e.g. for an X-Ray climb), then enter the transition while swinging slowly, e.g. after coming to a stop directly below the block (or without Gravity equipped).",
+        "If needing to transition at horiziontal position 21 (as far right as possible), then additionally roll from pressing left to pressing diagonally up-left just before the transition.",
+        "The game may lag heavily if Samus enters a retracted position; if this happens, hold down to extend Grapple again."
+      ]
+    },
+    {
+      "id": 177,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Frozen Mochtroid, Bottom Position)",
+      "requires": [
+        "Gravity",
+        "canFrozenEnemyGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "note": [
+        "Freeze a Mochtroid at a specific position, where its top is about at the midpoint of the fourth Grapple block below the door.",
+        "Stand on the frozen Mochtroid, and fire Grapple horizontally while walking toward the wall.",
+        "If successful, Samus should clip slightly into the wall.",
+        "Crouch, and fire Grapple while angling up.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Press jump to get a good bounce off the wall at the bottom of the swing, making it possible to swing up to the door.",
+        "To avoid heavy lag, hold down during the bottom part of the swing, and hold angle up during the top part.",
+        "Continue holding Grapple through the transition to initiate a teleport in the next room.",
+        "If needing to stand up in the next room (e.g. for an X-Ray climb), then press up while approaching the door to retract Grapple and come to a stop; then roll from pressing left to diagonally down-left to trigger the transition.",
+        "This method will also transition at horizontal position 21 (as far right as possible).",
+        "If it is needed to transition further left (e.g. position 19 or 20), it can be done by instead rolling from pressing left to pressing down (with a brief diagonal input in between) and then left again if necessary."
+      ]
+    },
+    {
+      "id": 178,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Frozen Mochtroid, Middle Position)",
+      "requires": [
+        "Gravity",
+        "canFrozenEnemyGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "note": [
+        "Freeze a Mochtroid at a specific position, where its top is about at the midpoint of the third Grapple block below the door.",
+        "Stand on the frozen Mochtroid, and fire Grapple horizontally while walking toward the wall.",
+        "If successful, Samus should clip slightly into the wall.",
+        "Crouch, and fire Grapple while angling up.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Press jump to get a good bounce off the wall at the bottom of the swing, making it possible to swing up to the door.",
+        "To avoid heavy lag, hold down during the bottom part of the swing, and hold angle up during the top part.",
+        "Press up while approaching the door to retract Grapple to avoid bonking the ceiling.",
+        "After Samus comes to a stop (at horiziontal position 25), roll from pressing left to diagonally down-left to trigger the transition.",
+        "This method will allow Samus to stand up in the next room (e.g. for an X-Ray climb) and will also transition at horizontal position 21 (as far right as possible).",
+        "If it is needed to transition further left (at position 20) while still being able to stand, it can be done with by rolling from pressing left to briefly pressing down (with a brief diagonal input in between), which should bring Samus to a stop at position 20; then press left to trigger the transition."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Unmorph, Top Position)",
+      "requires": [
+        "Gravity",
+        "canCrouchJump",
+        "canUnmorphGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "note": [
+        "Position near the edge of the ledge, crouch jump out into a mid-air morph, and press left against the wall.",
+        "Unmorph while approaching the peak of the jump (an 8-frame window), then use Grapple immediately (a 2-frame window) to get stuck standing a pixel or two inside the first Grapple block above the door.",
+        "Then jump (to force crouch), angle down, and grapple.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "To avoid heavy lag, hold down through the entire swing.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "If needing to stand up in the next room (e.g. for an X-Ray climb), then enter the transition while swinging slowly, e.g. after coming to a stop directly below the block.",
+        "If needing to transition at horiziontal position 21 (as far right as possible), then additionally roll from pressing left to pressing diagonally up-left just before the transition.",
+        "The game may lag heavily if Samus enters a retracted position; if this happens, hold down to extend Grapple again."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Unmorph, Bottom Position)",
+      "requires": [
+        "Gravity",
+        "canUnmorphGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "note": [
+        "Grapple to the second Grapple block from the bottom of the room, jump off from it, morph, and press against the Grapple wall to the left.",
+        "Unmorph slightly before the peak of the jump (an 8-frame window), then immediately use grapple (a 2-frame window) to get stuck standing a pixel or two inside the second Grapple block below the door.",
+        "Then jump (to force crouch), angle down, and grapple.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Press jump to get a good bounce off the wall at the bottom of the swing, making it possible to swing up to the door.",
+        "To avoid heavy lag, hold down during the bottom part of the swing, and hold angle up during the top part.",
+        "Continue holding Grapple through the transition to initiate a teleport in the next room.",
+        "If needing to stand up in the next room (e.g. for an X-Ray climb), then press up while approaching the door to retract Grapple and come to a stop; then roll from pressing left to diagonally down-left to trigger the transition.",
+        "This method will also transition at horizontal position 21 (as far right as possible).",
+        "If it is needed to transition further left (e.g. position 19 or 20), it can be done by instead rolling from pressing left to pressing down (with a brief diagonal input in between) and then left again if necessary."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Unmorph, Middle Position)",
+      "requires": [
+        "Gravity",
+        "canUnmorphGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "note": [
+        "Grapple to the second Grapple block from the bottom of the room, jump off from it, morph, and press against the Grapple wall to the left.",
+        "Unmorph slightly before the peak of the jump (an 8-frame window), then immediately use grapple (a 2-frame window) to get stuck standing a pixel or two inside the second Grapple block below the door.",
+        "Then jump (to force crouch), angle up, and grapple.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Press jump to get a good bounce off the wall at the bottom of the swing, making it possible to swing up to the door.",
+        "To avoid heavy lag, hold down during the bottom part of the swing, and hold angle up during the top part.",
+        "Press up while approaching the door to retract Grapple to avoid bonking the ceiling.",
+        "After Samus comes to a stop (at horiziontal position 25), roll from pressing left to diagonally down-left to trigger the transition.",
+        "This method will allow Samus to stand up in the next room (e.g. for an X-Ray climb) and will also transition at horizontal position 21 (as far right as possible).",
+        "If it is needed to transition further left (at position 20) while still being able to stand, it can be done with by rolling from pressing left to briefly pressing down (with a brief diagonal input in between), which should bring Samus to a stop at position 20; then press left to trigger the transition."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "Top Left Suitless Unmorph Leave With Grapple Teleport",
+      "requires": [
+        {"notable": "Top Left Suitless Unmorph Leave With Grapple Teleport"},
+        "canUnmorphGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "note": [
+        "Grapple to the top Grapple in the top-left corner of the room.",
+        "Hold left while waiting for the grapple wall jump check to expire, then quickly morph.",
+        "While falling, unmorph to reset fall speed and then quickly morph again.",
+        "unmorph at a precise time (typically a 2-frame window) then use Grapple immediately (another 2-frame window) to get stuck standing a pixel or two inside the first Grapple block above the door.",
+        "Then jump (to force crouch), angle down, and grapple.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "To avoid heavy lag, hold down through the entire swing.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "If needing to stand up in the next room (e.g. for an X-Ray climb), then enter the transition while swinging slowly, e.g. after coming to a stop directly below the block.",
+        "If needing to transition at horiziontal position 21 (as far right as possible), then additionally roll from pressing left to pressing diagonally up-left just before the transition.",
+        "The game may lag heavily if Samus enters a retracted position; if this happens, hold down to extend Grapple again."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 138,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 100}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 139,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 140,
+      "link": [1, 2],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 141,
+      "link": [1, 2],
+      "name": "Come in Shinecharged, Leave With Spark (Suitless, Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 130},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 4, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 142,
+      "link": [1, 2],
+      "name": "Come in Shinecharged, Leave With Spark (Suitless, Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 135},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 3, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 143,
+      "link": [1, 2],
+      "name": "Come in Shinecharged, Leave With Spark (Gravity, Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 70},
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 4, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 144,
+      "link": [1, 2],
+      "name": "Come in Shinecharged, Leave With Spark (Gravity, Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 75},
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 4, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canSuitlessMaridia",
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Stored Moonfall Grapple Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Stored Moonfall Grapple Door Lock Skip"},
+        {"doorUnlockedAtNode": 1},
+        "canGrappleClip"
+      ],
+      "bypassesDoorShell": true,
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["missiles", "super"], "requires": []},
+        {"nodeId": 1, "types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Perform a moonfall with stored fall speed to clip into the air space below the door at node 1.",
+        "Land, then grapple the nearest block and release.",
+        "Samus will fall into the door transition, bypassing any lock that may be on the door."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canSpringBallJumpMidAir",
+              "canWalljump"
+            ]}
+          ]},
+          "canConsecutiveWalljump"
+        ]}
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 4],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        "Gravity",
+        {"shinespark": {"frames": 20, "excessFrames": 3}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [1, 4],
+      "name": "Suitless Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 22, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 19,
+      "link": [1, 4],
+      "name": "Grapple",
+      "requires": [
+        "h_navigateUnderwater",
+        "Grapple"
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 4],
+      "name": "Mochtroid Climb",
+      "requires": [
+        "h_navigateUnderwater",
+        "canMochtroidIceClimb"
+      ]
+    },
+    {
+      "id": 21,
+      "link": [1, 4],
+      "name": "Gravity Jump",
+      "requires": [
+        "canGravityJump",
+        "HiJump",
+        "SpeedBooster",
+        "canCarefulJump"
+      ]
+    },
+    {
+      "id": 22,
+      "link": [1, 4],
+      "name": "Break Free",
+      "requires": [
+        "HiJump",
+        {"or": [
+          {"and": [
+            "canSpaceJumpWaterBounce",
+            "canWalljump"
+          ]},
+          "canSpaceJumpWaterEscape"
+        ]}
+      ],
+      "devNote": "FIXME: With a single underwaterwalljump you can break free here, without spacejump."
+    },
+    {
+      "id": 23,
+      "link": [1, 4],
+      "name": "Suitless SpringBall Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canTrickyJump",
+        "h_maxHeightSpringBallJump",
+        "canStationaryLateralMidAirMorph"
+      ],
+      "note": [
+        "SpringBall jump just as Samus exits the water to reach the distant ledge.",
+        "A Crouch jump makes the SpringBall jump easier, but at the cost of some horizontal movement."
+      ],
+      "devNote": "canStationaryLateralMidAirMorph is not strictly required but better describes the difficulty."
+    },
+    {
+      "id": 24,
+      "link": [1, 4],
+      "name": "Cross Room Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump",
+        {"or": [
+          "canWalljump",
+          "SpaceJump"
+        ]}
+      ],
+      "note": "Requires a runway of 1 tile in the adjacent room. Use Space Jump or a wall jump after getting out of the water."
+    },
+    {
+      "id": 25,
+      "link": [1, 4],
+      "name": "Cross Room Spring Ball Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump",
+        "canTrickySpringBallJump"
+      ],
+      "note": "Requires a runway of 1 tile in the adjacent room. Use a Spring Ball jump after getting out of the water."
+    },
+    {
+      "id": 26,
+      "link": [1, 4],
+      "name": "Cross Room Jump (Lenient)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        {"or": [
+          "canWalljump",
+          "SpaceJump"
+        ]}
+      ],
+      "note": "Assumes a runway of at least 4 tiles in the adjacent room. Use Space Jump or a wall jump after getting out of the water."
+    },
+    {
+      "id": 27,
+      "link": [1, 4],
+      "name": "Cross Room Speedy HiJump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump",
+        "HiJump"
+      ],
+      "note": "Requires a runway of 3 tiles in the adjacent room."
+    },
+    {
+      "id": 28,
+      "link": [1, 4],
+      "name": "Cross Room Speedy HiJump (Lenient)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 7
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump"
+      ],
+      "note": "Assumes a runway of 7 tiles in the adjacent room."
+    },
+    {
+      "id": 29,
+      "link": [1, 4],
+      "name": "Cross Room Speedy Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 21
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Requires a runway of approximately 21 tile in the adjacent room."
+    },
+    {
+      "id": 30,
+      "link": [1, 4],
+      "name": "Tricky Cross Room Speedy Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 18.4375
+        }
+      },
+      "requires": [
+        "canTrickyDashJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Requires a gaining a precise amount of run speed using 19 tiles before jumping in the adjacent room (with extra run speed $4.0 or $4.1)."
+    },
+    {
+      "id": 31,
+      "link": [1, 4],
+      "name": "Cross Room Jump with IBJ",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canJumpIntoIBJ",
+        {"or": [
+          {"ammo": {"type": "PowerBomb", "count": 1}},
+          {"and": [
+            "canCeilingBombJump",
+            {"enemyDamage": {"enemy": "Mochtroid", "type": "contact", "hits": 1}}
+          ]},
+          {"and": [
+            "canDoubleBombJump",
+            {"enemyDamage": {"enemy": "Mochtroid", "type": "contact", "hits": 2}}
+          ]}
+        ]},
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Only requires a runway of approximately 1 tile in the adjacent room.",
+        "Take two Mochtroid hits or kill it using a Power Bomb or 5 Bombs."
+      ],
+      "devNote": "The rhythm for placing 4 Bombs quickly is the main component of ceiling bomb jumps."
+    },
+    {
+      "id": 190,
+      "link": [1, 4],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 13,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "HiJump",
+                "canMomentumConservingTurnaround"
+              ],
+              "note": [
+                "This applies to Warehouse Entrance.",
+                "With Hi-Jump equipped, gain extra run speed of at least $3.1, jump, and aim-down before the transition.",
+                "Then hold down and backward through the transition."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canDownGrab",
+                "canTrickyJump"
+              ],
+              "note": [
+                "This applies to Dust Torizo Room and Halfie Climb Room.",
+                "Use the full runway, with a last-frame jump (extra run speed $5.0), and a down-grab."
+              ],
+              "devNote": [
+                "The jump could also be done with a shorter runway, with a tricky dash jump using run speed $4.0 or $4.1."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[2, 0]],
+              "requires": [
+                "canInsaneJump"
+              ],
+              "note": ["This applies to Waterway Energy Tank Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "note": [
+                "This applies to Metal Pirates Room.",
+                "Use the full runway, though there is no need to back into the corner;",
+                "jump on one of the last three possible frames (extra run speed between $6.6 and $6.8)"
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canInsaneJump",
+                {"or": [
+                  "canMomentumConservingMorph",
+                  {"and": [
+                    "canMomentumConservingTurnaround",
+                    "canBeVeryPatient"
+                  ]}
+                ]}
+              ],
+              "note": ["This applies to Statues Hallway."],
+              "devNote": [
+                "Using the full runway and single-pixel arm pump, with a momentum-conserving morph",
+                "this has a 4-frame window for the jump, and a 2-frame to 4-frame window for the morph (with later jumps giving a larger window for the morph).",
+                "With a momentum-conserving turnaround, it requires a last-frame jump and last-frame turnaround.",
+                "The arm pump doesn't really help with the turnaround.",
+                "There are 2 frames for the turnaround that allow Samus to make it past the overhang in the next room,",
+                "but only the last frame provides the horizontal momentum needed to reach the ledge."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 37.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump"
+              ],
+              "note": [
+                "This applies to Flyway.",
+                "Avoid backing into the corner of runway (instead press into it and turn around).",
+                "Using the full runway, this has a 2-frame window for the jump,",
+                "and either a 1-frame window or 2-frame window for the morph, depending on the jump timing (last-frame jump being better)."
+              ],
+              "devNote": ["This involves getting extra dash speed $6.0 or $6.1."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[4, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump",
+                "canInsaneMidAirMorph"
+              ],
+              "note": [
+                "This applies to Baby Kraid Room.",
+                "Using the full runway, this is double frame perfect:",
+                "it requires jumping on the last possible frame before Samus would bonk on the doorway ledge,",
+                "and morphing on the last possible frame before Samus would bonk the ceiling."
+              ]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ]
+    },
+    {
+      "id": 145,
+      "link": [1, 4],
+      "name": "Carry Shinecharge (Gravity, HiJump, Walljump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 125},
+        "Gravity",
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 146,
+      "link": [1, 4],
+      "name": "Come in Shinecharged, Leave With Spark (Gravity, HiJump, Right Wall Climb)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "Gravity",
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 7, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 147,
+      "link": [1, 4],
+      "name": "Come in Shinecharged, Leave With Spark (Gravity, HiJump, Left Wall Climb)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 75},
+        "Gravity",
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 18, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 148,
+      "link": [1, 4],
+      "name": "Come in Shinecharged, Leave With Spark (Gravity, Bootless, Walljump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 95},
+        "Gravity",
+        "canConsecutiveWalljump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 19, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 32,
+      "link": [1, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "HiJump",
+        "canTrickySpringBallJump",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 134,
+      "link": [1, 4],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 17, "excessFrames": 3}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 14, "excessFrames": 3}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 33,
+      "link": [1, 4],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "Gravity",
+        "h_artificialMorphLongIBJ"
+      ],
+      "flashSuitChecked": true,
+      "note": "To avoid the Mochtroids, it is possible to place bombs near them while in the Morph Tunnel below to the right.",
+      "devNote": "This strat is not starting from 5, because that would require canOffScreenMovement."
+    },
+    {
+      "id": 34,
+      "link": [1, 4],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 35,
+      "link": [1, 4],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 36,
+      "link": [1, 4],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 133,
+      "link": [1, 4],
+      "name": "Underwater Walljump Break Free",
+      "requires": [
+        "canUnderwaterWalljumpBreakFree"
+      ]
+    },
+    {
+      "id": 182,
+      "link": [1, 5],
+      "name": "Direct G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "Gravity",
+          "canInsaneJump",
+          "h_artificialMorphPowerBomb",
+          {"enemyDamage": {"enemy": "Mochtroid", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "After morphing, kill the Mochtroid with a Power Bomb, or roll off the edge. Stay to the left to avoid luring the second Mochtroid below."
+    },
+    {
+      "id": 15,
+      "link": [1, 5],
+      "name": "Indirect G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "Gravity",
+          {"and": [
+            "h_artificialMorphBombs",
+            "canInsaneJump"
+          ]},
+          "h_artificialMorphPowerBomb",
+          {"and": [
+            "h_artificialMorphSpringFling",
+            "canTrickyGMode"
+          ]},
+          {"enemyDamage": {"enemy": "Mochtroid", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter morphed and kill the Mochtroid with Bombs or a Power Bomb, or roll off the edge with Gravity to drop fast enough not to lure the Mochtroid.",
+        "It is also possible to Spring Fling by jumping from the ground immediately before the pause fully triggers to move right fast enough to avoid a hit."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "SpaceJump",
+          "canLongIBJ",
+          "canJumpIntoIBJ",
+          "canWalljump",
+          "canGravityJump",
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canSpringBallJumpMidAir",
+              "SpeedBooster"
+            ]}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 38,
+      "link": [2, 1],
+      "name": "Suitless Double Spring Ball Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "h_doubleSpringBallJumpWithHiJump"
+      ]
+    },
+    {
+      "id": 39,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 30},
+        {"shinespark": {"frames": 20, "excessFrames": 3}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 40,
+      "link": [2, 1],
+      "name": "Grapple",
+      "requires": [
+        "h_navigateUnderwater",
+        "Grapple"
+      ]
+    },
+    {
+      "id": 41,
+      "link": [2, 1],
+      "name": "Mochtroid Climb",
+      "requires": [
+        "h_navigateUnderwater",
+        "canMochtroidIceClimb",
+        {"or": [
+          "Gravity",
+          "canDodgeWhileShooting",
+          {"enemyDamage": {"enemy": "Mochtroid", "type": "contact", "hits": 2}},
+          "Wave",
+          "Spazer",
+          "Plasma",
+          {"and": [
+            "canPrepareForNextRoom",
+            "Charge"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 1],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 43,
+      "link": [2, 1],
+      "name": "Cross Room Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Only requires a runway of 1 tile in the adjacent room.",
+      "devNote": "This can be done with a shorter runway (closed end) and canMomentumConservingTurnaround, but that type of connection doesn't exist."
+    },
+    {
+      "id": 135,
+      "link": [2, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 17, "excessFrames": 3}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 13, "excessFrames": 3}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 48,
+      "link": [2, 1],
+      "name": "Very Long Underwater Walljump Climb",
+      "requires": [
+        "canLongUnderwaterWalljump"
+      ],
+      "note": "This underwater walljump is very long."
+    },
+    {
+      "id": 49,
+      "link": [2, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"notable": "Very Deep Stuck X-Ray Climb"},
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to exactly 8 pixels away from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up a little less than 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door.",
+        "Perform the spin-jump when Samus' feet are between about 0.5 and 2 tiles below the bottom of the door."
+      ],
+      "devNote": [
+        "Standing any closer to the door will cause Samus to no longer be stuck in the wall when reaching the air pocket above.",
+        "Standing any further from the door will make it impossible to get a wall-jump check from the transition tiles."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [2, 1],
+      "name": "X-Ray Climb Grapple Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb",
+        "canGrappleClip"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Perform an X-Ray Climb until you are just above the door into Cacatac Alley.",
+        "Walk left into the gap between pipes, behind the grapple blocks.",
+        "Walk to the left wall, turn around, crouch, grapple the block and release.",
+        "Samus will fall into the door transition.",
+        "The camera does not follow Samus but the pipes are still visually in the same position.  And the camera does not break after the transition."
+      ]
+    },
+    {
+      "id": 149,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged (Full Runway, HiJump, Walljump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 150,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged (Full Runway, Bootless, Walljump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canWalljump",
+        "canFastWalljumpClimb",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 145}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 151,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged (Full Runway, HiJump, Tricky Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "HiJump",
+        "canTrickyJump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 152,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged (Full Runway, Gravity Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canGravityJump",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 153,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Bootless)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 120},
+        "Gravity",
+        "canFastWalljumpClimb",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 154,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave With Spark (Bootless)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "Gravity",
+        "canFastWalljumpClimb",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 4}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 155,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 90},
+        "Gravity",
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 156,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 80},
+        "Gravity",
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 51,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 206,
+      "link": [2, 2],
+      "name": "Mochtroid Farm (1 Mochtroid)",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 80}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 80}
+          ]},
+          {"and": [
+            "Gravity",
+            "ScrewAttack",
+            {"cycleFrames": 80}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 85}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 90}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 135}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Mochtroid", "count": 1}]
+    },
+    {
+      "id": 53,
+      "link": [2, 2],
+      "name": "Mochtroid Farm (3 Mochtroids)",
+      "requires": [
+        "Gravity",
+        {"cycleFrames": 330},
+        {"or": [
+          {"resetRoom": {"nodes": [2]}},
+          {"and": [
+            {"resetRoom": {"nodes": [4]}},
+            {"cycleFrames": 70}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 90}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [3]}},
+            "Morph",
+            {"cycleFrames": 1210}
+          ]}
+        ]},
+        {"or": [
+          "canConsecutiveWalljump",
+          {"and": [
+            "SpaceJump",
+            {"cycleFrames": 40}
+          ]},
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "canGravityJump",
+            {"cycleFrames": 120},
+            "h_doubleEquipmentScreenCycleFrames"
+          ]}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 40}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 20}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 160}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 180}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 315}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Mochtroid", "count": 3}],
+      "devNote": ["FIXME: other options for this are possible (e.g. suitless)"]
+    },
+    {
+      "id": 54,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 193,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (5-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        "canTrickyDodgeEnemies",
+        {"shineChargeFrames": 130},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With a runway of 5 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 5 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 194,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (4-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        "canTrickyDodgeEnemies",
+        {"shineChargeFrames": 140},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 10}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 4 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 4 frames, and repress forward on the last possible frame before the transition.",
+        "It also works well to release forward for 3 frames and repress on the last possible frame.",
+        "Other timings can also work, but may gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 195,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (3-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        "canTrickyDodgeEnemies",
+        {"shineChargeFrames": 145},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 10}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 3 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 3 or 4 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "devNote": [
+        "The same shinecharge frames could be achieved with a closed end runway (effective length of 2.4375),",
+        "with a 3-frame stutter, but there doesn't appear to be any application."
+      ]
+    },
+    {
+      "id": 196,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (2-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        "canTrickyDodgeEnemies",
+        {"shineChargeFrames": 150},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 2 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 3 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "devNote": [
+        "FIXME: The canBeVeryPatient requirement is for difficulty placement of the boomerang method;",
+        "but the boomerang (or maybe specifically the moonwalk boomerang) should possibly be its own tech,",
+        "and the same with rapid arm pumping."
+      ]
+    },
+    {
+      "id": 55,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Mochtroid",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 56,
+      "link": [2, 2],
+      "name": "Leave With Grapple Teleport (Bomb Hang)",
+      "requires": [
+        "canGrappleBombHang",
+        "h_bombThings"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "note": [
+        "Get a boost from a Bomb or Power Bomb while grappled to the first Grapple block above the door.",
+        "Even without Gravity or HiJump, this can be done by standing about 5 tiles away from the door, jumping up into a mid-air morph, laying a bomb or Power Bomb, unmorphing, then grappling diagonally;",
+        "hold down immediately after the grapple attachment to prevent Grapple from retracting.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "If needing to stand up in the next room (e.g. for an X-Ray climb), then enter the transition while swinging slowly, e.g. after coming to a stop directly below the block (or without Gravity equipped).",
+        "If needing to transition at horiziontal position 21 (as far right as possible), then additionally roll from pressing left to pressing diagonally up-left just before the transition.",
+        "The game may lag heavily if Samus enters a retracted position; if this happens, hold down to extend Grapple again."
+      ]
+    },
+    {
+      "id": 57,
+      "link": [2, 2],
+      "name": "Leave With Grapple Teleport (Unmorph)",
+      "requires": [
+        "Gravity",
+        "canCrouchJump",
+        "canUnmorphGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "note": [
+        "Align against the wall, then crouch jump into a mid-air morph.",
+        "Unmorph while approaching the peak of the jump (an 8-frame window), then use Grapple immediately (a 2-frame window) to get stuck standing a pixel or two inside the first Grapple block above the door.",
+        "Then jump (to force crouch), angle down, and grapple.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "To avoid heavy lag, hold down through the entire swing.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "If needing to stand up in the next room (e.g. for an X-Ray climb), then enter the transition while swinging slowly, e.g. after coming to a stop directly below the block.",
+        "If needing to transition at horiziontal position 21 (as far right as possible), then additionally roll from pressing left to pressing diagonally up-left just before the transition.",
+        "The game may lag heavily if Samus enters a retracted position; if this happens, hold down to extend Grapple again."
+      ]
+    },
+    {
+      "id": 179,
+      "link": [2, 2],
+      "name": "Leave With Grapple Teleport (Frozen Mochtroid)",
+      "requires": [
+        "canFrozenEnemyGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "note": [
+        "Freeze a Mochtroid near the bottom of the Grapple wall.",
+        "Stand on it, and fire Grapple horizontally while walking toward the wall.",
+        "If successful, Samus should clip slightly into the wall.",
+        "Crouch, and fire Grapple while angling up.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "If needing to stand up in the next room (e.g. for an X-Ray climb), then enter the transition while swinging slowly, e.g. after coming to a stop directly below the block (or without Gravity equipped).",
+        "If needing to transition at horiziontal position 21 (as far right as possible), then additionally roll from pressing left to pressing diagonally up-left just before the transition.",
+        "The game may lag heavily if Samus enters a retracted position; if this happens, hold down to extend Grapple again."
+      ]
+    },
+    {
+      "id": 58,
+      "link": [2, 2],
+      "name": "Leave With Grapple Teleport (Suitless, Unmorph)",
+      "requires": [
+        "canUnmorphGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "note": [
+        "Grapple to the sixth Grapple block above the door (the second below the ledge above).",
+        "Hold left while waiting for the grapple wall jump check to expire, then quickly morph.",
+        "unmorph at a precise time (a 3-frame window) then use Grapple immediately (a 2-frame window) to get stuck standing a pixel or two inside the first Grapple block above the door.",
+        "Then jump (to force crouch), angle down, and grapple.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "To avoid heavy lag, hold down through the entire swing.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "If needing to stand up in the next room (e.g. for an X-Ray climb), then enter the transition while swinging slowly, e.g. after coming to a stop directly below the block.",
+        "If needing to transition at horiziontal position 21 (as far right as possible), then additionally roll from pressing left to pressing diagonally up-left just before the transition.",
+        "The game may lag heavily if Samus enters a retracted position; if this happens, hold down to extend Grapple again."
+      ]
+    },
+    {
+      "id": 59,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        "Gravity"
+      ]
+    },
+    {
+      "id": 60,
+      "link": [2, 3],
+      "name": "Suitless",
+      "requires": [
+        "Morph",
+        "canSuitlessMaridia",
+        {"or": [
+          "canSpringBallJumpMidAir",
+          "HiJump",
+          "canSunkenTileWideWallClimb"
+        ]}
+      ],
+      "note": "Run away from the oums and reclimb after each if jumping over them is difficult."
+    },
+    {
+      "id": 62,
+      "link": [2, 4],
+      "name": "Come in Shinecharged, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 38, "excessFrames": 3}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 183,
+      "link": [2, 4],
+      "name": "Gravity Jump, Spring Ball Jump",
+      "requires": [
+        "canGravityJump",
+        "HiJump",
+        "canTrickySpringBallJump"
+      ],
+      "note": "Gravity jump, then quickly pause and turn on Spring Ball for a Spring Ball jump."
+    },
+    {
+      "id": 63,
+      "link": [2, 4],
+      "name": "Cross Room Speedy HiJump (Lenient)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 9
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Assumes a runway of 9 tiles in the adjacent room."
+    },
+    {
+      "id": 64,
+      "link": [2, 4],
+      "name": "Cross Room Speedy HiJump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 8
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canDownGrab",
+        "canTrickyJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Requires a runway of 8 tiles in the adjacent room (extra run speed at least $2.5)."
+    },
+    {
+      "id": 65,
+      "link": [2, 4],
+      "name": "Cross Room Speedy Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 38
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Requires a runway of at least 38 tiles in the adjacent room."
+    },
+    {
+      "id": 66,
+      "link": [2, 4],
+      "name": "Tricky Cross Room Speedy Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 34
+        }
+      },
+      "requires": [
+        "canTrickyDashJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Requires running a precise distance of 34 tiles (extra run speed $6.0 or $6.1)."
+    },
+    {
+      "id": 67,
+      "link": [2, 4],
+      "name": "Cross Room Speedy Jump into Spring Ball Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 16
+        }
+      },
+      "requires": [
+        "canTrickySpringBallJump",
+        "canCrossRoomJumpIntoWater"
+      ]
+    },
+    {
+      "id": 68,
+      "link": [2, 4],
+      "name": "Tricky Cross Room Speedy Jump into Spring Ball Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 6.4375
+        }
+      },
+      "requires": [
+        "canTrickyDashJump",
+        "canTrickySpringBallJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "This requires gaining speed by running a precise distance of 7 tiles (extra run speed of $2.0 or $2.1)."
+      ]
+    },
+    {
+      "id": 69,
+      "link": [2, 4],
+      "name": "Cross Room Speedy Jump into Space Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 10
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        "canCrossRoomJumpIntoWater"
+      ]
+    },
+    {
+      "id": 70,
+      "link": [2, 4],
+      "name": "Tricky Cross Room Speedy Jump into Space Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 6.4375
+        }
+      },
+      "requires": [
+        "canTrickyDashJump",
+        "SpaceJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "This requires gaining speed by running a precise distance of 7 tiles (extra run speed of $2.0 or $2.1)."
+      ]
+    },
+    {
+      "id": 71,
+      "link": [2, 4],
+      "name": "Cross Room Jump with Spring Ball, HiJump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canMomentumConservingTurnaround",
+        "canTrickySpringBallJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Requires a runway of 1 tile in the adjacent room."
+    },
+    {
+      "id": 72,
+      "link": [2, 4],
+      "name": "Cross Room Jump with Spring Ball and IBJ",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canTrickySpringBallJump",
+        "canJumpIntoIBJ",
+        "canTrickyJump",
+        {"or": [
+          "canDoubleBombJump",
+          {"enemyDamage": {"enemy": "Mochtroid", "type": "contact", "hits": 2}}
+        ]},
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "Requires a runway of 1 tile in the adjacent room.",
+        "Use a spring ball jump after breaking the water, then ibj.",
+        "Take two Mochtroid hits or use a double bomb jump."
+      ]
+    },
+    {
+      "id": 73,
+      "link": [2, 4],
+      "name": "Cross Room Jump with Wall Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canPreciseWalljump",
+        "canTrickyJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "Requires a runway of 1 tile in the adjacent room.",
+        "There is just enough room to wall jump after breaking the water."
+      ]
+    },
+    {
+      "id": 74,
+      "link": [2, 4],
+      "name": "Cross Room Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "any",
+          "remoteAndLandingMinTiles": [[39, 1]]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ]
+    },
+    {
+      "id": 75,
+      "link": [2, 4],
+      "name": "Tricky Cross Room Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "any",
+          "remoteAndLandingMinTiles": [[34, 1]]
+        }
+      },
+      "requires": [
+        "canTrickyDashJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "This requires gaining speed by running a precise distance of 34 tiles (extra run speed of $6.0 or $6.1)."
+      ]
+    },
+    {
+      "id": 76,
+      "link": [2, 4],
+      "name": "Tricky Cross Room Spring Ball Bounce into Spring Ball Jump",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "any",
+          "remoteAndLandingMinTiles": [[6.4375, 1]]
+        }
+      },
+      "requires": [
+        "canTrickyDashJump",
+        "canDoubleSpringBallJumpMidAir",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "This requires gaining speed by running a precise distance of 7 tiles (extra run speed of $2.0 or $2.1).",
+        "Immediately pause after the transition to unequip Spring Ball.",
+        "Then equip Spring Ball again and perform a mid-air spring ball jump."
+      ]
+    },
+    {
+      "id": 77,
+      "link": [2, 4],
+      "name": "Tricky Cross Room Spring Ball Bounce into Spring Ball Jump, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "any",
+          "minExtraRunSpeed": "$2.0",
+          "maxExtraRunSpeed": "$2.1"
+        }
+      },
+      "requires": [
+        "canTrickyDashJump",
+        "canCrossRoomJumpIntoWater",
+        "canPauseRemorphTemporaryBlue",
+        "canDoubleSpringBallJumpMidAir"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Gaining blue speed with a precise amount of run speed (extra run speed of $2.0 or $2.1), and bounce through the transition.",
+        "After the transition, press pause, unmorph, aim down, and unequip Spring Ball.",
+        "Buffer a morph out of the pause.",
+        "Pause again to equip Spring Ball and perform a mid-air spring ball jump, chaining temporary blue to the top of the room."
+      ]
+    },
+    {
+      "id": 78,
+      "link": [2, 4],
+      "name": "Cross Room Space Jump",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": true,
+          "minTiles": 10
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ]
+    },
+    {
+      "id": 79,
+      "link": [2, 4],
+      "name": "Tricky Cross Room Space Jump",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": true,
+          "minTiles": 6.4375
+        }
+      },
+      "requires": [
+        "canTrickyDashJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "This requires gaining speed by running a precise distance of 7 tiles (extra run speed of $2.0 or $2.1)."
+      ]
+    },
+    {
+      "id": 191,
+      "link": [2, 4],
+      "name": "Side Platform Cross Room Jump (Hi-Jump)",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [],
+              "note": ["This applies to Dust Torizo Room and Halfie Climb Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "requires": [
+                "canTrickyDashJump",
+                "canMomentumConservingTurnaround"
+              ],
+              "note": ["This applies to Metal Pirates Room."],
+              "devNote": [
+                "FIXME: canTrickyDashJump is for difficulty placement; it doesn't really have anything to do with the non-linearity of Speed Booster jump height."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "caneInsaneJump"
+              ],
+              "note": [
+                "This applies to Statues Hallway.",
+                "Using the full runway (backing into the corner, with or without a single-pixel arm jump),",
+                "this has a 3-frame window for the jump, and a 3-frame window for the morph."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 37.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump"
+              ],
+              "note": [
+                "This applies to Flyway.",
+                "Using the full runway, this has a 2-frame window for the jump,",
+                "and either a 1-frame window or 2-frame window for the morph, depending on the jump timing (last-frame jump being better)."
+              ]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "Gain run speed using a platform below the door in the other room.",
+        "Jump through the door, carrying upward momentum into this room;",
+        "if necessary, use a momentum-conserving morph or momentum-conserving turnaround through the transition."
+      ]
+    },
+    {
+      "id": 192,
+      "link": [2, 4],
+      "name": "Side Platform Cross Room Jump (Spring Ball Jump)",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [],
+              "note": ["This applies to Dust Torizo Room and Halfie Climb Room."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[2, 0]],
+              "requires": [
+                "canInsaneJump",
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Waterway Energy Tank Room."],
+              "detailNote": [
+                "Gain run speed, and time a pause to unequip Gravity after Samus jumps and aims down;",
+                "when the unpause black screen hits, press and hold down (and jump) to buffer a morph."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "note": ["This applies to Metal Pirates Room."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump"
+              ],
+              "note": [
+                "This applies to Statues Hallway.",
+                "Using the full runway with a single-pixel arm pump, this has a 4-frame window for the jump,",
+                "and between a 2-frame and 4-frame window for the morph (with later jumps giving a larger window)."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 37.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump"
+              ],
+              "note": [
+                "This applies to Flyway.",
+                "Using the full runway, this has a 2-frame window for the jump,",
+                "and either a 1-frame window and 2-frame window for the morph, depending on the jump timing (last-frame jump being better)."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[4, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump",
+                "canInsaneMidAirMorph"
+              ],
+              "note": [
+                "This applies to Baby Kraid Room.",
+                "Using the full runway, this is double frame perfect:",
+                "it requires jumping on the last possible frame before Samus would bonk on the doorway ledge,",
+                "and morphing on the last possible frame before Samus would bonk the ceiling."
+              ]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canSpringBallJumpMidAir",
+        "canCrossRoomJumpIntoWater"
+      ]
+    },
+    {
+      "id": 136,
+      "link": [2, 4],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 35, "excessFrames": 3}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 31, "excessFrames": 3}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 84,
+      "link": [2, 4],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "Gravity",
+        "h_artificialMorphLongIBJ"
+      ],
+      "flashSuitChecked": true,
+      "note": "To avoid the Mochtroids, it is possible to place bombs near them while in the Morph Tunnel below to the right.",
+      "devNote": "This strat is not starting from 5, because that would require canOffScreenMovement."
+    },
+    {
+      "id": 157,
+      "link": [2, 4],
+      "name": "Come in Shinecharging, Leave Shinecharged (Full Halfie)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "HiJump",
+        "canShinechargeMovementTricky",
+        "canFastWalljumpClimb",
+        {"shineChargeFrames": 165}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 158,
+      "link": [2, 4],
+      "name": "Come in Shinecharging, Leave With Spark (Halfie)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementTricky",
+        "canFastWalljumpClimb",
+        {"shineChargeFrames": 150},
+        {"or": [
+          "HiJump",
+          {"shineChargeFrames": 27}
+        ]},
+        {"shinespark": {"frames": 5, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 203,
+      "link": [2, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "HiJump",
+        {"or": [
+          {"and": [
+            "canGravityJump",
+            "canTrickySpringBallJump",
+            "canChainTemporaryBlue"
+          ]},
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            "canLongChainTemporaryBlue"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": [
+        "FIXME: Probably more of the runway could be used, but with increasing difficulty."
+      ]
+    },
+    {
+      "id": 85,
+      "link": [2, 4],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 86,
+      "link": [2, 4],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 87,
+      "link": [2, 4],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 61,
+      "link": [2, 5],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 197,
+      "link": [2, 6],
+      "name": "Come In Shinecharging (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"shineChargeFrames": 0}
+      ],
+      "endsWithShineCharge": true
+    },
+    {
+      "id": 44,
+      "link": [2, 6],
+      "name": "Suitless Water Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        {"shineChargeFrames": 0}
+      ],
+      "endsWithShineCharge": true
+    },
+    {
+      "id": 46,
+      "link": [2, 6],
+      "name": "Precise Stutter Water Shinecharge",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2.4375
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        {"or": [
+          {"enemyDamage": {"enemy": "Mochtroid", "type": "contact", "hits": 2}},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              "Wave",
+              "Spazer",
+              "Plasma",
+              {"ammo": {"type": "Missile", "count": 1}},
+              {"ammo": {"type": "Super", "count": 1}},
+              "canTrickyDodgeEnemies"
+            ]}
+          ]}
+        ]},
+        {"shineChargeFrames": 0}
+      ],
+      "endsWithShineCharge": true,
+      "note": [
+        "With only a runway length of 3 tiles (closed end) in the other room, this requires a precise setup:",
+        "release forward for 3 or 4 frames, then repress forward on the last possible frame before the transition;",
+        "alternatively, release forward for 2 frames and repress forward on the second-to-last possible frame before the transition.",
+        "It is possible to clear the Mochtroid with Power Beam without taking damage,",
+        "by first firing angle up shots and then switching to angle down shots once the Mochtroid is on top of Samus."
+      ],
+      "detailNote": [
+        "If a longer runway is available (4 tiles), the timing windows are a bit more lenient:",
+        "1. Release forward for 3, 4, or 5 frames, repress forward on the last possible frame;",
+        "2. Release forward for 2 or 3 frames, repress forward on the 2nd-to-last possible frame;",
+        "3. Release forward for 1 or 2 frames, repress forward on the 3rd-to-last possible frame."
+      ]
+    },
+    {
+      "id": 198,
+      "link": [2, 6],
+      "name": "Very Precise Stutter Water Shinecharge",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canInsaneJump",
+        {"or": [
+          {"enemyDamage": {"enemy": "Mochtroid", "type": "contact", "hits": 2}},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              "Wave",
+              "Spazer",
+              "Plasma",
+              {"ammo": {"type": "Missile", "count": 1}},
+              {"ammo": {"type": "Super", "count": 1}},
+              "canTrickyDodgeEnemies"
+            ]}
+          ]}
+        ]},
+        {"shineChargeFrames": 0}
+      ],
+      "endsWithShineCharge": true,
+      "note": [
+        "With only a runway of 2 tiles (open end) in the other room, this requires a double-frame-perfect setup:",
+        "release forward for exactly 3 frames, and repress forward on the last possible frame before the transition.",
+        "It is possible to clear the Mochtroid with Power Beam without taking damage,",
+        "by first firing angle up shots and then switching to angle down shots once the Mochtroid is on top of Samus."
+      ],
+      "devNote": [
+        "FIXME: canInsaneJump is for difficulty placement; replace with a more appropriate tech since no jump is involved."
+      ]
+    },
+    {
+      "id": 88,
+      "link": [3, 1],
+      "name": "Shinecharge through Morph Tunnel",
+      "requires": [
+        "Morph",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"shinespark": {"frames": 20, "excessFrames": 3}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 15, "excessFrames": 3}}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Charge a shinespark below the Oums, near the bottom right door, quickly move through the morph tunnel and spark up left to the middle door.",
+        "This is an alternative to wall jumping."
+      ],
+      "devNote": "Jumping into a diagonal spark saves a little energy from both the jump and hitting the slightly lower ceiling by the door."
+    },
+    {
+      "id": 169,
+      "link": [3, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [],
+      "note": ["After teleporting, allow Samus to swing right before releasing Grapple."]
+    },
+    {
+      "id": 89,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 170,
+      "link": [3, 1],
+      "name": "Grapple Teleport Into Grapple Clip (From Moat)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        "canGrappleClip"
+      ],
+      "bypassesDoorShell": true,
+      "note": [
+        "After teleporting, release Grapple and turn around repeatedly to wiggle out to the left and fall into the air space behind the Grapple blocks.",
+        "Press right against the wall, angle up, use Grapple, and release to clip into the door transition."
+      ]
+    },
+    {
+      "id": 171,
+      "link": [3, 1],
+      "name": "Grapple Teleport Into Grapple Clip (From Red Brinstar Firefleas)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3]]
+        }
+      },
+      "requires": [
+        "canInsaneJump",
+        "canGrappleClip"
+      ],
+      "bypassesDoorShell": true,
+      "note": [
+        "After teleporting, quickly press and hold down to extend Grapple to push Samus to the left.",
+        "Release Grapple, and turn around repeatedly to wiggle out to the left and fall into the air space behind the Grapple blocks.",
+        "Press right against the wall, angle up, use Grapple, and release to clip into the door transition."
+      ]
+    },
+    {
+      "id": 90,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 91,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Upper Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 92,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Lower Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 93,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 94,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        "Gravity"
+      ]
+    },
+    {
+      "id": 95,
+      "link": [3, 2],
+      "name": "Suitless With Jump Assist",
+      "requires": [
+        "Morph",
+        "canSuitlessMaridia",
+        {"or": [
+          "canSpringBallJumpMidAir",
+          "HiJump"
+        ]}
+      ]
+    },
+    {
+      "id": 96,
+      "link": [3, 2],
+      "name": "Enter with Shinespark from the Bottom Right",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        {"notable": "Enter with Shinespark from the Bottom Right"},
+        "Morph",
+        "canSuitlessMaridia",
+        "canUseEnemies",
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 91, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Quickly shoot out the 3 shot blocks then horizontal spark breaking the speed blocks.",
+        "Wait for the Oums to roll on their own to a place where they can be climbed.",
+        "Do not stand on the Oums when they begin to attack."
+      ]
+    },
+    {
+      "id": 97,
+      "link": [3, 2],
+      "name": "Enter with Shinespark from the Bottom Right (Conserve Health)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 125},
+        {"notable": "Enter with Shinespark from the Bottom Right"},
+        "Morph",
+        "canSuitlessMaridia",
+        "canUseEnemies",
+        "canHorizontalShinespark",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 70, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Quickly shoot out the 3 shot blocks then horizontal spark breaking the speed blocks.",
+        "Jump forward to save some health before Shinesparking",
+        "Wait for the Oums to roll on their own to a place where they can be climbed.",
+        "Do not stand on the Oums when they begin to attack."
+      ]
+    },
+    {
+      "id": 98,
+      "link": [3, 2],
+      "name": "Enter with Shinespark from the Bottom Right (Come In Blue Spinning)",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "maxExtraRunSpeed": "$3.0",
+          "unusableTiles": 0
+        }
+      },
+      "requires": [
+        {"notable": "Enter with Shinespark from the Bottom Right"},
+        "canLongChainTemporaryBlue",
+        "canStationaryLateralMidAirMorph",
+        "can4HighMidAirMorph",
+        "canUseEnemies"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use temporary blue to break the speed blocks.",
+        "Use stationary lateral mid-air morphs to move quickly while chaining temporary blue, in order to reach the last speed blocks before the Oums.",
+        "Climb on the Oums to reach the left side of the room.",
+        "Do not stand on the Oums when they begin to attack."
+      ],
+      "devNote": [
+        "FIXME: This strat name is not accurate since it doesn't involve a shinespark;",
+        "it's only this way because it shares the reusable notable."
+      ]
+    },
+    {
+      "id": 99,
+      "link": [3, 2],
+      "name": "Enter with Shinespark from the Bottom Right (Temporary Blue)",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        {"notable": "Enter with Shinespark from the Bottom Right"},
+        "canLongChainTemporaryBlue",
+        "canStationaryLateralMidAirMorph",
+        "can4HighMidAirMorph",
+        "canUseEnemies"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use temporary blue to break the speed blocks.",
+        "Use stationary lateral mid-air morphs to move quickly while chaining temporary blue, in order to reach the last speed blocks before the Oums.",
+        "Climb on the Oums to reach the left side of the room.",
+        "Do not stand on the Oums when they begin to attack."
+      ]
+    },
+    {
+      "id": 137,
+      "link": [3, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        "Morph",
+        "canUseEnemies",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 4, "excessFrames": 2}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Go under the Oums to lure one and use it to get to the left. Shinespark to get up the next ledge."
+    },
+    {
+      "id": 101,
+      "link": [3, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 102,
+      "link": [3, 2],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 103,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 184,
+      "link": [3, 3],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": "Max extra run speed $2.D with spin, or $2.E with a quick aim-down."
+    },
+    {
+      "id": 104,
+      "link": [3, 3],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovement",
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 30}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 105,
+      "link": [3, 3],
+      "name": "Leave Spinning",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          }
+        }
+      },
+      "note": [
+        "If needing high speed, try to prevent the Oums from falling to the floor, to prevent them from blocking the runway."
+      ]
+    },
+    {
+      "id": 106,
+      "link": [3, 3],
+      "name": "Leave With Mockball",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      },
+      "note": [
+        "If needing high speed, try to prevent the Oums from falling to the floor, to prevent them from blocking the runway."
+      ]
+    },
+    {
+      "id": 107,
+      "link": [3, 3],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      },
+      "note": [
+        "If needing high speed, try to prevent the Oums from falling to the floor, to prevent them from blocking the runway."
+      ]
+    },
+    {
+      "id": 108,
+      "link": [3, 3],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          }
+        }
+      },
+      "note": [
+        "If needing high speed, try to prevent the Oums from falling to the floor, to prevent them from blocking the runway."
+      ]
+    },
+    {
+      "id": 109,
+      "link": [3, 3],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "Gravity",
+        "h_shinechargeMaxRunway",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 110,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 111,
+      "link": [3, 4],
+      "name": "Shinecharge through Morph Tunnel",
+      "requires": [
+        "Morph",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"shinespark": {"frames": 39, "excessFrames": 4}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 33, "excessFrames": 3}}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Charge a shinespark below the Oums, near the bottom right door, quickly move through the morph tunnel and spark up to the top door.",
+        "This is an alternative to wall jumping."
+      ],
+      "devNote": "Jumping into a diagonal spark saves a little energy from both the jump and hitting the slightly lower ceiling by the door."
+    },
+    {
+      "id": 113,
+      "link": [3, 4],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 100,
+      "link": [3, 5],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            {"or": [
+              "Gravity",
+              "HiJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 185,
+      "link": [3, 5],
+      "name": "G-Mode Morph, Bomb Into Spring Ball Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphUnderwaterBombIntoSpringBallJump"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Pause and jump just before the fade out finishes. Turn off Spring Ball and place a Bomb just above where Samus' head would be if standing.",
+        "Pause again between 23-25 frames later and equip Spring Ball; Samus has a three frame window where she has upward momentum from the Bomb and can jump again.",
+        "The positioning of the Bomb is quite lenient, with an 11 frame window for where it can be placed.",
+        "This needs to be done twice to cross the room and get through the morph tunnel."
+      ]
+    },
+    {
+      "id": 114,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 159,
+      "link": [4, 1],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 110},
+        "Gravity",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 160,
+      "link": [4, 1],
+      "name": "Carry Shinecharge (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 115},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 161,
+      "link": [4, 1],
+      "name": "Come in Shinecharged, Leave With Spark (Bottom Position, Close Spark)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 95},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 4, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Run off the ledge, fire a shot horizontally to open the door, and spark after landing."
+      ]
+    },
+    {
+      "id": 162,
+      "link": [4, 1],
+      "name": "Come in Shinecharged, Leave With Spark (Bottom Position, Distant Spark)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 10, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": ["Spin jump, fire a shot diagonally down to open the door, and spark mid-air."]
+    },
+    {
+      "id": 163,
+      "link": [4, 1],
+      "name": "Come in Shinecharged, Leave With Spark (Top Position, Close Spark)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 4, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 164,
+      "link": [4, 1],
+      "name": "Come in Shinecharged, Leave With Spark (Top Position, Distant Spark)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 75},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 10, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 115,
+      "link": [4, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Spring Fling)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canSuitlessMaridia",
+        "canChainTemporaryBlue",
+        "canSpringFling"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 204,
+      "link": [4, 1],
+      "name": "Come in Blue Spinning, Leave With Temporary Blue (Low Speed)",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "maxExtraRunSpeed": "$1.8",
+          "unusableTiles": 1
+        }
+      },
+      "requires": [
+        "canSuitlessMaridia",
+        "canInsaneJump",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 116,
+      "link": [4, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 172,
+      "link": [4, 1],
+      "name": "Grapple Teleport Into Grapple Clip (From Moat)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        "canGrappleClip"
+      ],
+      "bypassesDoorShell": true,
+      "note": [
+        "After teleporting, release Grapple and turn around repeatedly to wiggle out to the left and fall into the air space behind the Grapple blocks.",
+        "Press right against the wall, angle up, use Grapple, and release to clip into the door transition."
+      ]
+    },
+    {
+      "id": 173,
+      "link": [4, 1],
+      "name": "Grapple Teleport Into Grapple Clip (From Red Brinstar Firefleas)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3]]
+        }
+      },
+      "requires": [
+        "canInsaneJump",
+        "canGrappleClip"
+      ],
+      "bypassesDoorShell": true,
+      "note": [
+        "After teleporting, quickly press and hold down to extend Grapple to push Samus to the left.",
+        "Release Grapple, and turn around repeatedly to wiggle out to the left and fall into the air space behind the Grapple blocks.",
+        "Press right against the wall, angle up, use Grapple, and release to clip into the door transition."
+      ]
+    },
+    {
+      "id": 117,
+      "link": [4, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 118,
+      "link": [4, 1],
+      "name": "Carry Grapple Teleport (Upper Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 119,
+      "link": [4, 1],
+      "name": "Carry Grapple Teleport (Lower Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 120,
+      "link": [4, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 165,
+      "link": [4, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 166,
+      "link": [4, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 155}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 167,
+      "link": [4, 2],
+      "name": "Come in Shinecharged, Leave With Spark (Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 130},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 4, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 168,
+      "link": [4, 2],
+      "name": "Come in Shinecharged, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 145},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 4, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 121,
+      "link": [4, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canSuitlessMaridia",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 122,
+      "link": [4, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 123,
+      "link": [4, 2],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 125,
+      "link": [4, 4],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 126,
+      "link": [4, 4],
+      "name": "Leave With Runway - Frozen Mochtroid",
+      "requires": [
+        "h_navigateUnderwater",
+        "h_frozenEnemyRunway",
+        {"or": [
+          "canMochtroidIceClimb",
+          {"and": [
+            "Gravity",
+            {"or": [
+              "SpaceJump",
+              "canWalljump"
+            ]}
+          ]}
+        ]},
+        {"enemyDamage": {"enemy": "Mochtroid", "type": "contact", "hits": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Use a frozen Mochtroid to extend the length of the runway.",
+        "Positioning the Mochtroid can be done by dropping down below then climbing back up with the frozen Mochtroid as a platform.",
+        "Alternatively, freeze the Mochtroid with an angle-down shot while falling below then quickly climb back up."
+      ],
+      "devNote": "There are many other ways to get into position, but they would require manipulating the Mochtroid as much as canMochtroidIceClimb expects."
+    },
+    {
+      "id": 207,
+      "link": [4, 4],
+      "name": "Mochtroid Farm (1 Mochtroid)",
+      "requires": [
+        {"resetRoom": {"nodes": [4]}},
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 80}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 80}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 80}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 85}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 90}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 120}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Mochtroid", "count": 1}]
+    },
+    {
+      "id": 127,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 128,
+      "link": [4, 4],
+      "name": "G-Mode Setup - Get Hit By Mochtroid",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 174,
+      "link": [4, 4],
+      "name": "Carry G-Mode Back through the Door",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_doorImmediatelyClosedFix"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 175,
+      "link": [4, 4],
+      "name": "Carry G-Mode Morph Back through the Door",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_doorImmediatelyClosedFix"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 129,
+      "link": [4, 4],
+      "name": "Leave With Grapple Teleport (Bottom Position)",
+      "requires": [
+        "Gravity",
+        "canGrappleBombHang",
+        "h_bombThings"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "note": [
+        "Get a boost from a Bomb or Power Bomb while grappled to the second Grapple block below the door;",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Press jump to get a good bounce off the wall at the bottom of the swing, making it possible to swing up to the door.",
+        "Heavy lag can typically be avoided by holding right during the bottom half of the swing.",
+        "Pressing right while inside the transition tiles will trigger the transition.",
+        "Continue holding Grapple through the transition to initiate a teleport in the next room.",
+        "If it is needed to trigger the transition further to the right (at position 238), then wait to come to a stop before pressing right.",
+        "If it is needed to trigger the transition further to the left (positions 235 or 237), then hold right while approaching the door.",
+        "Either way, Samus should automatically be able to stand in the next room (e.g. for an X-Ray climb)."
+      ]
+    },
+    {
+      "id": 130,
+      "link": [4, 4],
+      "name": "Leave With Grapple Teleport (Top Position)",
+      "requires": [
+        "Gravity",
+        "canGrappleBombHang",
+        "h_bombThings"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "note": [
+        "Get a boost from a Bomb or Power Bomb while grappled to the top Grapple block below the door;",
+        "alternatively, do a grapple wall jump instant morph from the third Grapple block, frame-perfect unmorph and grapple to clip a pixel inside the second Grapple block (at vertical position $CF = 207), then crouch and grapple to the second block.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Press jump to get a good bounce off the wall at the bottom of the swing, making it possible to swing up to the door.",
+        "Heavy lag can typically be avoided by holding right during the bottom half of the swing.",
+        "While swinging up, tap up to retract Grapple to avoid the ceiling (or tap up after after coming to rest against the ceiling if this happens).",
+        "Samus should usually come to a stop one tile in front of the door (at horizontal position 215).",
+        "Roll from pressing right to pressing diagonally down-right to enter the transition.",
+        "If it is needed for Samus to be able to stand in the next room, then only briefly press diagonally down-right and then press up, bringing Samus to a stop at position 225 or 227;",
+        "then roll from right to down-right to enter the transition (at horizontal positon 235)."
+      ]
+    },
+    {
+      "id": 131,
+      "link": [4, 4],
+      "name": "Leave With Grapple Teleport (Unmorph, Bottom Position)",
+      "requires": [
+        "Gravity",
+        "canUnmorphGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "note": [
+        "Grapple to the sixth Grapple block below the door (the second one fully above the water line), jump off from it, morph, and press against the wal to the right.",
+        "Unmorph slightly before the peak of the jump (a 3-frame window), then immediately use grapple (a 2-frame window) to get stuck standing a pixel inside the second Grapple block.",
+        "Then jump (to force crouch), angle down, and grapple.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Press jump to get a good bounce off the wall at the bottom of the swing, making it possible to swing up to the door.",
+        "To minimize lag, when grapple is extended horizontally release all inputs other than shot/grapple; there will still be a bit of unavoidable lag while Grapple is initially extending.",
+        "Try to get a good first bounce; otherwise heavy lag may be difficult to avoid, and it may be better to retry from the beginning.",
+        "Pressing right while inside the transition tiles will trigger the transition.",
+        "Continue holding Grapple through the transition to initiate a teleport in the next room.",
+        "If it is needed to trigger the transition further to the right (at position 238), then wait to come to a stop before pressing right.",
+        "If it is needed to trigger the transition further to the left (positions 235 or 237), then hold right while approaching the door.",
+        "Either way, Samus should automatically be able to stand in the next room (e.g. for an X-Ray climb)."
+      ]
+    },
+    {
+      "id": 132,
+      "link": [4, 4],
+      "name": "Leave With Grapple Teleport (Unmorph, Top Position)",
+      "requires": [
+        "Gravity",
+        "canUnmorphGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "note": [
+        "Grapple to the fifth Grapple block below the door (the third one fully above the water line), jump off from it, and morph.",
+        "Unmorph slightly before the peak of the jump (a 3-frame window), then immediately use grapple (a 2-frame window) to get stuck standing a pixel inside the second Grapple block.",
+        "Then jump (to force crouch), angle down, and grapple.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Press jump to get a good bounce off the wall at the bottom of the swing, making it possible to swing up to the door.",
+        "To minimize lag, when grapple is extended horizontally release all inputs other than shot/grapple; there will still be a bit of unavoidable lag while Grapple is initially extending.",
+        "Try to get a good first bounce; otherwise heavy lag may be difficult to avoid, and it may be better to retry from the beginning.",
+        "While swinging up, tap up to retract Grapple to avoid the ceiling (or tap up after after coming to rest against the ceiling if this happens).",
+        "Samus should usually come to a stop one tile in front of the door (at horizontal position 215).",
+        "Roll from pressing right to pressing diagonally down-right to enter the transition.",
+        "If it is needed for Samus to be able to stand in the next room, then only briefly press diagonally down-right and then press up, bringing Samus to a stop at position 225 or 227;",
+        "then roll from right to down-right to enter the transition (at horizontal positon 235)."
+      ]
+    },
+    {
+      "id": 180,
+      "link": [4, 4],
+      "name": "Leave With Grapple Teleport (Frozen Mochtroid, Bottom Position)",
+      "requires": [
+        "Gravity",
+        "canFrozenEnemyGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "note": [
+        "Freeze a Mochtroid at a specific position, aiming for its top to be slightly above the midpoint of the fourth Grapple block below the door.",
+        "Stand on the frozen Mochtroid, and fire Grapple horizontally while walking toward the wall.",
+        "If successful, Samus should clip slightly into the wall.",
+        "Crouch, and fire Grapple while angling up.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Press jump to get a good bounce off the wall at the bottom of the swing, making it possible to swing up to the door.",
+        "To minimize lag, when grapple is extended horizontally release all inputs other than shot/grapple; there will still be a bit of unavoidable lag while Grapple is initially extending.",
+        "Try to get a good first bounce; otherwise heavy lag may be difficult to avoid, and it may be better to retry from the beginning.",
+        "Pressing right while inside the transition tiles will trigger the transition.",
+        "Continue holding Grapple through the transition to initiate a teleport in the next room.",
+        "If it is needed to trigger the transition further to the right (at position 238), then wait to come to a stop before pressing right.",
+        "If it is needed to trigger the transition further to the left (positions 235 or 237), then hold right while approaching the door.",
+        "Either way, Samus should automatically be able to stand in the next room (e.g. for an X-Ray climb)."
+      ]
+    },
+    {
+      "id": 181,
+      "link": [4, 4],
+      "name": "Leave With Grapple Teleport (Frozen Mochtroid, Top Position)",
+      "requires": [
+        "Gravity",
+        "canFrozenEnemyGrappleHang"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "note": [
+        "Freeze a Mochtroid at a specific position, aiming for its top to be slightly above the midpoint of the third Grapple block below the door.",
+        "Stand on the frozen Mochtroid, and fire Grapple horizontally while walking toward the wall.",
+        "If successful, Samus should clip slightly into the wall.",
+        "Crouch, and fire Grapple while angling up.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Press jump to get a good bounce off the wall at the bottom of the swing, making it possible to swing up to the door.",
+        "To minimize lag, when grapple is extended horizontally release all inputs other than shot/grapple; there will still be a bit of unavoidable lag while Grapple is initially extending.",
+        "Try to get a good first bounce; otherwise heavy lag may be difficult to avoid, and it may be better to retry from the beginning.",
+        "While swinging up, tap up to retract Grapple to avoid the ceiling (or tap up after after coming to rest against the ceiling if this happens).",
+        "Samus should usually come to a stop one tile in front of the door (at horizontal position 215).",
+        "Roll from pressing right to pressing diagonally down-right to enter the transition.",
+        "If it is needed for Samus to be able to stand in the next room, then only briefly press diagonally down-right and then press up, bringing Samus to a stop at position 225 or 227;",
+        "then roll from right to down-right to enter the transition (at horizontal positon 235)."
+      ]
+    },
+    {
+      "id": 124,
+      "link": [4, 5],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "canTrickyDodgeEnemies",
+          "Gravity",
+          {"enemyDamage": {"enemy": "Mochtroid", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Kill the bottom Mochtroid with Bombs or a Power Bomb, roll into the tunnel with Gravity, or avoid it with nothing.",
+        "With no items, move left and cross about half way across the room before switching back to the right.",
+        "This will make the Mochtroid move left and give Samus enough time to get to the morph tunnel without taking a hit."
+      ]
+    },
+    {
+      "id": 186,
+      "link": [5, 3],
+      "name": "G-Mode Morph, Jump Assist",
+      "requires": [
+        "canGMode",
+        "canOffScreenMovement",
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canSunkenTileWideWallClimb"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Roll through the camera scroll blocks in the morph tunnel to overload PLMs then the speed blocks can be walked through.",
+        "Note that the Oums are still active and dangerous off screen. The right shot block wall can be broken with a wide beam, otherwise it is important to crouch to shoot the bottom block."
+      ]
+    },
+    {
+      "id": 187,
+      "link": [5, 3],
+      "name": "G-Mode, Blind Foosball",
+      "requires": [
+        "canGMode",
+        "canOffScreenMovement",
+        "canInsaneJump",
+        "h_artificialMorphSpringBall"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Roll through the camera scroll blocks in the morph tunnel to overload PLMs then the speed blocks can be walked through.",
+        "Perform a blind foosball - use the screen movement to be able to tell when Samus is in the morph tunnel and when she makes the jump.",
+        "Note that the Oums are still active and dangerous off screen. The right shot block wall can be broken with a wide beam, otherwise it is important to crouch to shoot the bottom block."
+      ]
+    },
+    {
+      "id": 188,
+      "link": [5, 4],
+      "name": "G-Mode Morph, Long Blind IBJ",
+      "requires": [
+        "canGMode",
+        "Gravity",
+        "h_artificialMorphLongIBJ",
+        "canOffScreenMovement"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 189,
+      "link": [5, 4],
+      "name": "G-Mode Morph, Gravity Jump, Spring Ball Jump",
+      "requires": [
+        "canComplexGMode",
+        "canGravityJump",
+        "HiJump",
+        {"tech": "canSpringBallJumpMidAir"},
+        "h_artificialMorphSpringBall"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Climb the room with a Gravity jump + Spring Ball jump. Turn off Spring Ball and Gravity at the same time, then repause after a short delay and turn Spring back on.",
+        "If coming from the right, Samus will be off camera."
+      ]
+    },
+    {
+      "id": 199,
+      "link": [6, 1],
+      "name": "Shinespark",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 70},
+        {"or": [
+          {"shinespark": {"frames": 20, "excessFrames": 3}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 17, "excessFrames": 3}}
+          ]},
+          {"and": [
+            "HiJump",
+            "canMidairShinespark",
+            {"shinespark": {"frames": 13, "excessFrames": 3}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 200,
+      "link": [6, 1],
+      "name": "Leave With Temporary Blue",
+      "startsWithShineCharge": true,
+      "requires": [
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 0},
+        "canXRayTurnaround",
+        "canChainTemporaryBlue",
+        {"or": [
+          "canGravityJump",
+          {"and": [
+            "HiJump",
+            "canTrickyUseFrozenEnemies",
+            "canLongChainTemporaryBlue"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 201,
+      "link": [6, 2],
+      "name": "Leave With Spark",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 50},
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"shinespark": {"frames": 12}},
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"shinespark": {"frames": 3}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 202,
+      "link": [6, 2],
+      "name": "Leave With Temporary Blue",
+      "startsWithShineCharge": true,
+      "requires": [
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 0},
+        "canXRayTurnaround",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 80,
+      "link": [6, 4],
+      "name": "Shinespark",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 60},
+        {"or": [
+          {"shinespark": {"frames": 38, "excessFrames": 3}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 35, "excessFrames": 3}}
+          ]},
+          {"and": [
+            "HiJump",
+            "canMidairShinespark",
+            {"shinespark": {"frames": 31, "excessFrames": 3}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 81,
+      "link": [6, 4],
+      "name": "Leave With Temporary Blue",
+      "startsWithShineCharge": true,
+      "requires": [
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 0},
+        "canXRayTurnaround",
+        "HiJump",
+        {"or": [
+          {"and": [
+            "canGravityJump",
+            "canTrickySpringBallJump",
+            "canChainTemporaryBlue"
+          ]},
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            "canLongChainTemporaryBlue"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Enter with Shinespark from the Bottom Right",
+      "note": [
+        "Quickly shoot out the 3 shot blocks then horizontal spark breaking the speed blocks.",
+        "Wait for the Oums to roll on their own to a place where they can be climbed.",
+        "Do not stand on the Oums when they begin to attack."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Top Left Suitless Unmorph Leave With Grapple Teleport",
+      "note": [
+        "Grapple to the top Grapple in the top-left corner of the room.",
+        "Hold left while waiting for the grapple wall jump check to expire, then quickly morph.",
+        "While falling, unmorph to reset fall speed and then quickly morph again.",
+        "unmorph at a precise time (typically a 2-frame window) then use Grapple immediately (another 2-frame window) to get stuck standing a pixel or two inside the first Grapple block above the door.",
+        "Then jump (to force crouch), angle down, and grapple.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "To avoid heavy lag, hold down through the entire swing.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "If needing to stand up in the next room (e.g. for an X-Ray climb), then enter the transition while swinging slowly, e.g. after coming to a stop directly below the block.",
+        "If needing to transition at horiziontal position 21 (as far right as possible), then additionally roll from pressing left to pressing diagonally up-left just before the transition.",
+        "The game may lag heavily if Samus enters a retracted position; if this happens, hold down to extend Grapple again."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Stored Moonfall Grapple Door Lock Skip",
+      "note": [
+        "Perform a moonfall with stored fall speed to clip into the air space below the door at node 1.",
+        "Land, then grapple the nearest block and release.",
+        "Samus will fall into the door transition, bypassing any lock that may be on the door."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Very Deep Stuck X-Ray Climb",
+      "note": [
+        "Enter with G-mode direct, back up to exactly 8 pixels away from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up a little less than 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door.",
+        "Perform the spin-jump when Samus' feet are between about 0.5 and 2 tiles below the bottom of the door."
+      ]
+    }
+  ],
+  "nextStratId": 208,
+  "nextNotableId": 6
+}

@@ -1,0 +1,347 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 19,
+  "name": "Bomb Torizo Room",
+  "area": "Crateria",
+  "subarea": "Central",
+  "roomAddress": "0x79804",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x0018baa",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Bomb Torizo Room Gray Lock (to Flyway)",
+          "lockType": "gameFlag",
+          "lock": ["Bombs"],
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedBombTorizo"
+              ]
+            }
+          ],
+          "note": "If no Bombs in inventory, door stays open"
+        },
+        {
+          "name": "Animal Escape Gray Lock (to Flyway)",
+          "lockType": "gameFlag",
+          "lock": ["f_ZebesSetAblaze"],
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_AnimalsSaved"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "chozo",
+      "nodeItem": "Bombs",
+      "nodeAddress": "0x78404",
+      "mapTileMask": [
+        [2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Bomb Torizo",
+      "enemyName": "Bomb Torizo",
+      "quantity": 1,
+      "homeNodes": [1],
+      "spawn": ["Bombs"],
+      "stopSpawn": [
+        {"or": [
+          "f_DefeatedBombTorizo",
+          "f_ZebesSetAblaze"
+        ]}
+      ]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 20,
+      "link": [1, 1],
+      "name": "Leave With Side Platform (Bomb Torizo Dead)",
+      "requires": [
+        "f_DefeatedBombTorizo"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 13,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $2.B with spin, or $2.C with a quick aim-down."]
+    },
+    {
+      "id": 21,
+      "link": [1, 1],
+      "name": "Leave With Side Platform (Bomb Torizo Alive)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 10,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $2.2 with spin, or $2.3 with a quick aim-down."]
+    },
+    {
+      "id": 18,
+      "link": [1, 1],
+      "name": "Fight Bomb Torizo",
+      "requires": [
+        "h_activateBombTorizo",
+        {"or": [
+          "canDodgeWhileShooting",
+          {"ammo": {"type": "Super", "count": 2}},
+          {"enemyDamage": {"enemy": "Bomb Torizo", "type": "contact", "hits": 3}}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedBombTorizo"]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "f_DefeatedBombTorizo",
+        {"canShineCharge": {"usedTiles": 13, "openEnd": 0}},
+        {"shineChargeFrames": 40}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Spinning (Bomb Torizo Intact)",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 7,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Bomb Torizo Intact)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Bomb Torizo Intact)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave Space Jumping (Bomb Torizo Intact)",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave Spinning (Bomb Torizo Dead)",
+      "requires": [
+        "f_DefeatedBombTorizo"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 10,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Bomb Torizo Dead)",
+      "requires": [
+        "f_DefeatedBombTorizo"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 9,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Bomb Torizo Dead)",
+      "requires": [
+        "f_DefeatedBombTorizo"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Leave Space Jumping (Bomb Torizo Dead)",
+      "requires": [
+        "f_DefeatedBombTorizo"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 19,
+      "link": [1, 1],
+      "name": "Save the Animals",
+      "requires": [
+        "f_ZebesSetAblaze"
+      ],
+      "setsFlags": ["f_AnimalsSaved"],
+      "devNote": "Technically this also requires opening the wall."
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    }
+  ],
+  "notables": [],
+  "nextStratId": 22,
+  "nextNotableId": 1
+}

@@ -1,0 +1,284 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 239,
+  "name": "Tourian Escape Room 1",
+  "area": "Tourian",
+  "subarea": "Main",
+  "roomAddress": "0x7DE4D",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Right Doorway",
+      "nodeType": "door",
+      "nodeSubType": "closedWall",
+      "nodeAddress": "0x001aae0",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "locks": [
+        {
+          "name": "Tourian Escape 1 Lock (to Mother Brain)",
+          "lockType": "permanent",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "h_openTourianEscape1RightDoor"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [1, 2]
+      ],
+      "note": "It's really just a wall. You can't go back."
+    },
+    {
+      "id": 2,
+      "name": "Bottom Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001aaec",
+      "doorOrientation": "down",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1]
+      ]
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 21,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "Carry Direct G-Mode Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_openTourianEscape1RightDoor"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "devNote": "In vanilla, the doorway remains open in indirect but not in direct G-mode."
+    },
+    {
+      "id": 12,
+      "link": [1, 1],
+      "name": "Carry Direct G-Mode Morph Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_openTourianEscape1RightDoor"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "devNote": "In vanilla, the doorway remains open in indirect but not in direct G-mode."
+    },
+    {
+      "id": 13,
+      "link": [1, 1],
+      "name": "Carry Indirect G-Mode Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "devNote": "In vanilla, the doorway remains open in indirect but not in direct G-mode."
+    },
+    {
+      "id": 14,
+      "link": [1, 1],
+      "name": "Carry Indirect G-Mode Morph Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "devNote": "In vanilla, the doorway remains open in indirect but not in direct G-mode."
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Stored Moonfall Clip",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        "canMoonfall"
+      ],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 5,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Indirect G-Mode, Carry G-Mode to the Right",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true,
+      "devNote": [
+        "Direct G-mode will have an open door and Samus will fall. Indirect will require a doorlock bypass in the room below.",
+        "If there is any type of door on the right, the strat won't work. In vanilla, the right doorway remains open when coming from below."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [2, 2],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 21, "openEnd": 1}},
+        {"shineChargeFrames": 10}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": [
+        "It is possible to run in from the right while shooting the first gate, then quickly leave charged through the bottom door,",
+        "but it's not really easier than a 21 tile Shinecharge."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 21, "openEnd": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "left"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [2, 2],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 9,
+      "link": [2, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shinespark": {"frames": 4, "excessFrames": 4}}
+      ],
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    }
+  ],
+  "notables": [],
+  "nextStratId": 15,
+  "nextNotableId": 1
+}

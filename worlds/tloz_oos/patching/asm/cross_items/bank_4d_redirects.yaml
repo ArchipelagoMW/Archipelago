@@ -1,0 +1,11 @@
+4d/4005/ecom_incSubstate: |
+  ld e,$0c
+  ld hl,$4005
+  jp interBankCall
+
+4d/44e0/ecom_fallToGroundAndSetState8: ld b,$08
+
+4d/44e2/ecom_fallToGroundAndSetState: |
+  ld e,$0c
+  ld hl,$4501
+  jp safeInterBankCall

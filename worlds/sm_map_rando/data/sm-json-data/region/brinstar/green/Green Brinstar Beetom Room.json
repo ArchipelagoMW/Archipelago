@@ -1,0 +1,1048 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 50,
+  "name": "Green Brinstar Beetom Room",
+  "area": "Brinstar",
+  "subarea": "Green",
+  "roomAddress": "0x79FE5",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018f22",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018f16",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Beetoms Dead or Frozen",
+      "obstacleType": "enemies"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Green Brinstar Beetoms",
+      "enemyName": "Beetom",
+      "quantity": 4,
+      "homeNodes": [1, 2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway (Beetoms Cleared)",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway (Tank the Damage)",
+      "requires": [
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Runway - Single Frozen Beetom",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "Let a Beetom attach to Samus, then freeze it by shooting upwards. Keep a half tile gap between the Beetom and ground to have as long of a runway as possible."
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Frozen Beetom Bridge (Left Door)",
+      "requires": [
+        {"notable": "Frozen Beetom Bridge"},
+        "canTrickyJump",
+        "h_frozenEnemyRunway",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Stand in the pit and freeze the Beetoms by shooting up. Keep them all separated and equally spaced apart to maximize the length of the runway.",
+        "Freeze the Beetoms that aren't currently in use to avoid them from attaching to Samus and stacking together."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Beetom Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1, 2]}},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 180}
+          ]},
+          {"and": [
+            "Ice",
+            "h_useMorphBombs",
+            {"cycleFrames": 300}
+          ]},
+          {"and": [
+            {"or": [
+              "Ice",
+              "canTrickyDodgeEnemies",
+              {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+            ]},
+            {"or": [
+              {"resourceAvailable": [{"type": "Energy", "count": 50}]},
+              {"resourceAvailable": [{"type": "PowerBomb", "count": 4}]}
+            ]},
+            "h_usePowerBomb",
+            {"cycleFrames": 210}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Beetom", "count": 4}],
+      "flashSuitChecked": true,
+      "note": "Kill the Beetoms with Screw Attack or by freezing them and using Bombs or Power Bombs.",
+      "devNote": [
+        "Using an adjacent 2-tile runway doesn't seem workable since heat frames may be too much to maintain energy.",
+        "We can't use Missiles for the farm since the Beetoms don't drop Missiles.",
+        "Potentially there could be some other way to dodge the Beetoms, to kill them without Ice or Screw",
+        "FIXME: Using a Missile, Super, or Power Bomb at the start could be added to the logic to get the first Power Bombs to use for further farming, but this needs a way to express that we're not in health-bomb energy range."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [1, 1],
+      "name": "Ice Moonfall Leave with Stored Fall Speed",
+      "requires": [
+        {"notable": "Ice Moonfall Leave with Stored Fall Speed"},
+        "canEnemyStuckMoonfall",
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "note": [
+        "Set up three frozen Beetoms, in a such a way that Samus can perform a moonfall between the two upper ones and land on the bottom one,",
+        "then leave the room with stored fall speed.",
+        "The bottom one should be frozen flush with the ledge, by shooting it while it is attached to Samus, standing on the lower floor.",
+        "The top one should be frozen close to the ceiling.",
+        "Because of an asymmetry in where Samus' shot spawns when facing left vs. right,",
+        "moonfalling to the left has an advantage in that it allows refreezing both the lower two Beetoms while building up speed.",
+        "Damage from attached Beetoms occurs once every 64 frames, based on the enemy's frame counter,",
+        "which increments whenever the enemy is active regardless of whether it is attached to Samus;",
+        "therefore, it is possible to avoid damage by not having a Beetom attached at these specific times."
+      ],
+      "devNote": ["The fall speed stored is between 1 and 2 tiles."]
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave with Moondance",
+      "requires": [
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+        {"or": [
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}},
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "note": "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing."
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Leave with Extended Moondance",
+      "requires": [
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+        "h_extendedMoondanceBeetomLeniency",
+        {"or": [
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 8}},
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "note": [
+        "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "After 195 moonfalls, reposition the Beetom to chest height, then continue dancing."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+        ]},
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "10 Power Bomb Crystal Flash",
+      "requires": [
+        {"resetRoom": {"nodes": [1, 2]}},
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+        ]},
+        "h_10PowerBombCrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "The resetRoom requirement is in case you need to farm a bit to get above health-bomb energy"
+    },
+    {
+      "id": 12,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Kill the Beetoms",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Beetom", "Beetom", "Beetom", "Beetom"]],
+          "excludedWeapons": ["Bombs", "PowerBomb"]
+        }}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "They are also possible to jump over with a small runway in the previous room."
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Bomb the Beetoms",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Beetom", "Beetom", "Beetom", "Beetom"]],
+          "explicitWeapons": ["Bombs", "PowerBomb"]
+        }},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "You typically need to place two bombs to kill them. Place the second shortly after the first and it will kill the Beetom on your way down.",
+        "The remaining Beetoms can be safely killed from the ledge."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Blue Speed",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [],
+      "note": "Run into the room and off the ledge with blue speed, killing any Beetoms in your path.",
+      "devNote": "This does not clear the obstacle since it does not kill all the Beetoms."
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Freeze the Beetoms",
+      "requires": [
+        "Ice"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "This doesn't kill the Beetoms, but clears them as an obstacle."
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "Tank the Damage",
+      "requires": [
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 5}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [1, 2],
+      "name": "Jump Through the Room",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canInsaneJump"
+      ],
+      "note": "Jump on the first possible frame.  Can be buffered to extend the window to 7 frames.  Or jump just before the transition."
+    },
+    {
+      "id": 19,
+      "link": [1, 2],
+      "name": "Space Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        "canPrepareForNextRoom"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 20,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}},
+          {"and": [
+            "ScrewAttack",
+            {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+          ]}
+        ]},
+        {"shineChargeFrames": 85}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [1, 2],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 90},
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 6}},
+          {"and": [
+            "ScrewAttack",
+            {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 3}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [1, 2],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 30},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 16}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Depending on Samus' momentum when entering the room, it may be necessary to make a small jump before shooting open the door, to avoid a Beetom from blocking the shot."
+      ]
+    },
+    {
+      "id": 23,
+      "link": [1, 2],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump across the room, destroying any Beetoms in the way with blue speed, morphing mid-air and unmorphing to chain temporary blue."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [1, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [1, 2],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [1, 2],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Kill the Beetoms",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Beetom", "Beetom", "Beetom", "Beetom"]],
+          "excludedWeapons": ["Bombs", "PowerBomb"]
+        }}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Bomb the Beetoms",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Beetom", "Beetom", "Beetom", "Beetom"]],
+          "explicitWeapons": ["Bombs", "PowerBomb"]
+        }},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "You typically need to place two bombs to kill them. Place the second shortly after the first and it will kill the Beetom on your way down.",
+        "The remaining Beetoms can be safely killed from the ledge."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Blue Speed",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [],
+      "note": "Run into the room and off the ledge with blue speed, killing any Beetoms in your path.",
+      "devNote": "This does not clear the obstacle since it does not kill all the Beetoms."
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "Freeze the Beetoms",
+      "requires": [
+        "Ice"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "This doesn't kill the Beetoms, but clears them as an obstacle."
+    },
+    {
+      "id": 31,
+      "link": [2, 1],
+      "name": "Tank the Damage",
+      "requires": [
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 5}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 32,
+      "link": [2, 1],
+      "name": "Jump Through the Room",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canInsaneJump"
+      ],
+      "note": "Jump on the first possible frame.  Can be buffered to extend the window to 7 frames.  Or jump just before the transition."
+    },
+    {
+      "id": 33,
+      "link": [2, 1],
+      "name": "Space Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        "canPrepareForNextRoom"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 34,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}},
+          {"and": [
+            "ScrewAttack",
+            {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+          ]}
+        ]},
+        {"shineChargeFrames": 80}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 35,
+      "link": [2, 1],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 90},
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 6}},
+          {"and": [
+            "ScrewAttack",
+            {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 3}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [2, 1],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 30},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 16}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Depending on Samus' momentum when entering the room, it may be necessary to make a small jump before shooting open the door, to avoid a Beetom from blocking the shot."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [2, 1],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump across the room, destroying any Beetoms in the way with blue speed, morphing mid-air and unmorphing to chain temporary blue."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 39,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 40,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 41,
+      "link": [2, 2],
+      "name": "Leave With Runway (Beetoms Cleared)",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 42,
+      "link": [2, 2],
+      "name": "Leave With Runway (Tank the Damage)",
+      "requires": [
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 43,
+      "link": [2, 2],
+      "name": "Leave With Runway - Single Frozen Beetom",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "Let a Beetom attach to Samus, then freeze it by shooting upwards. Keep a half tile gap between the Beetom and ground to have as long of a runway as possible."
+    },
+    {
+      "id": 44,
+      "link": [2, 2],
+      "name": "Frozen Beetom Bridge (Right Door)",
+      "requires": [
+        {"notable": "Frozen Beetom Bridge"},
+        "canTrickyJump",
+        "h_frozenEnemyRunway",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Stand in the pit and freeze the Beetoms by shooting up. Keep them all separated and equally spaced apart to maximize the length of the runway.",
+        "Freeze the Beetoms that aren't currently in use to avoid them from attaching to Samus and stacking together."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [2, 2],
+      "name": "Leave Spinning",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 46,
+      "link": [2, 2],
+      "name": "Leave With Mockball",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 51,
+      "link": [2, 2],
+      "name": "Ice Moonfall Leave with Stored Fall Speed",
+      "requires": [
+        {"notable": "Ice Moonfall Leave with Stored Fall Speed"},
+        "canEnemyStuckMoonfall",
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "note": [
+        "Set up three frozen Beetoms, in a such a way that Samus can perform a moonfall between the two upper ones and land on the bottom one,",
+        "then leave the room with stored fall speed.",
+        "The bottom one should be frozen flush with the ledge, by shooting it while it is attached to Samus, standing on the lower floor.",
+        "The top one should be frozen close to the ceiling.",
+        "Because of an asymmetry in where Samus' shot spawns when facing left vs. right,",
+        "moonfalling to the left has an advantage in that it allows refreezing both the lower two Beetoms while building up speed.",
+        "Damage from attached Beetoms occurs once every 64 frames, based on the enemy's frame counter,",
+        "which increments whenever the enemy is active regardless of whether it is attached to Samus;",
+        "therefore, it is possible to avoid damage by not having a Beetom attached at these specific times."
+      ],
+      "devNote": ["The fall speed stored is between 1 and 2 tiles."]
+    },
+    {
+      "id": 47,
+      "link": [2, 2],
+      "name": "Leave with Moondance",
+      "requires": [
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+        {"or": [
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}},
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "note": "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing."
+    },
+    {
+      "id": 48,
+      "link": [2, 2],
+      "name": "Leave with Extended Moondance",
+      "requires": [
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+        "h_extendedMoondanceBeetomLeniency",
+        {"or": [
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 8}},
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "note": [
+        "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "After 195 moonfalls, reposition the Beetom to chest height, then continue dancing."
+      ]
+    },
+    {
+      "id": 49,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Frozen Beetom Bridge",
+      "note": [
+        "Stand in the pit and freeze the Beetoms by shooting up. Keep them all separated and equally spaced apart to maximize the length of the runway.",
+        "Freeze the Beetoms that aren't currently in use to avoid them from attaching to Samus and stacking together."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Ice Moonfall Leave with Stored Fall Speed",
+      "note": [
+        "Set up three frozen Beetoms, in a such a way that Samus can perform a moonfall between the two upper ones and land on the bottom one,",
+        "then leave the room with stored fall speed."
+      ]
+    }
+  ],
+  "nextStratId": 52,
+  "nextNotableId": 3
+}

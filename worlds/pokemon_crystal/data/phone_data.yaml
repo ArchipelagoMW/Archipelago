@@ -1,0 +1,1429 @@
+ffxiv:
+  caller: withheld
+  script:
+    - |
+      Hi, <player>!
+    - |
+      Have you heard of
+      the critically
+    - |
+      acclaimed MMORPG
+      Final Fantasy XIV?
+    - |
+      With an expanded
+      free trial which
+    - |
+      you can play
+      through the
+    - |
+      entirety of A
+      Realm Reborn and
+    - |
+      the award-winning
+      Heavensward
+    - |
+      expansion
+      and also the
+    - |
+      award-winning
+      Stormblood
+    - |
+      expansion
+      up to Lv.70 for
+    - |
+      free with no
+      restrictions on
+    - |
+      playtime?
+    - |
+      Play today!
+
+
+brock_oven:
+  caller: brock
+  script:
+    - |
+      Why do they
+      call it OVEN…
+    - |
+      when you OF IN
+      the COLD FOOD…
+    - |
+      OF OUT hot eat
+      the FOOD?
+    - |
+      Really makes you
+      think…
+
+
+gura_call:
+  caller: withheld
+  script:
+    - |
+      H-Hello ma'am…
+    - |
+      Do you have a
+      moment to talk
+    - |
+      about our lord and
+      savior LIGHTNING
+      MCQUEEN?
+    - |
+      He's the star of
+      several feature
+      films, such as
+    - |
+      CARS, CARS 2,
+      CARS 3, PLANES:
+      FIRE & RESCUE,
+    - |
+      FINDING DORY, TOY
+      STORY 3, COCO,
+    - |
+      and RALPH BREAKS
+      THE INTERNET,
+    - |
+      as well as other
+      short films such
+      as-
+    - |
+      K-KINGDOM HEARTS?
+
+
+regi_call:
+  caller: withheld
+  script:
+    - |
+      REGIROCK: ÜN ÜN ÜN
+      $Ae▶&!→ ,♀é▷Ö
+    - |
+      ÜN ÜN ÜN ÜN ÜN ÜN
+      AAAAAAOOOOOOOORT
+    - |
+      REGISTEEL: 1001000
+      1000101 1001100
+      1001100 1001111
+
+
+eusine_call:
+  caller: eusine
+  script:
+    - |
+      Hiya, <player>!
+      It's EUSINE!
+    - |
+      I just wanted to
+      call you about
+    - |
+      a discovery I
+      made. A baby
+      SUICUNE!
+    - |
+      That's right, it's
+      small and blue,
+    - |
+      large head with
+      antennae of some
+      kind.
+    - |
+      It has no arms,
+      but somehow it
+      learned ICE PUNCH!
+
+
+slowpoke_call:
+  caller: withheld
+  script:
+    - |
+      Hi, hello?
+    - |
+      I'm calling about
+      an amazing invest-
+      ment opportunity:
+    - |
+      Just for you, a
+      delicious, mouth-
+    - |
+      watering, tender
+      SLOWPOKETAIL for
+    - |
+      the low low price
+      of ¥1000000!
+    - |
+      Hello? Are you
+      still there?
+
+
+elm_hacked_call:
+  caller: elm
+  script:
+    - |
+      <player>?
+      Oh it's terrible.
+    - |
+      I got a call from
+    - |
+      <POKE>GEAR tech-
+      nical support,
+    - |
+      or so they said!
+    - |
+      They took my
+      number, my
+    - |
+      <POKE>PAY account,
+    - |
+      Gosh, even all my
+      PRIMEAPES are gone
+    - |
+      <player> got ELM's
+      new phone number.
+    - |
+      Whatever will I
+      do…
+
+
+mom_password_call:
+  caller: mom
+  script:
+    - |
+      Hello?
+    - |
+      Hi <player>…
+      I was going to
+    - |
+      buy something
+      nice for you,
+    - |
+      but I accident-
+      ally spent the
+    - |
+      money on BLUE
+      CARD points.
+    - |
+      I promise I'll
+      make it up to you,
+    - |
+      but later,
+      PASSWORD is
+      starting now!
+
+
+warranty_call:
+  caller: withheld
+  script:
+    - |
+      Hello, we're
+      trying to reach
+    - |
+      you about your
+      BICYCLE's ex-
+      tended warranty-
+
+
+bill_id_call:
+  caller: bill
+  script:
+    - |
+      Gugyoo…
+      Guooh! Pijji!
+    - |
+      Ha! Fooled you!
+      Those aren't 
+    - |
+      <POKE>MON
+    - |
+      It's actually me,
+      BILL!
+    - |
+      Wh-You knew?
+      Caller ID?
+    - |
+      Rats, foiled by my
+      own invention
+      again
+
+
+elm_jsr_call:
+  caller: elm
+  script:
+    - |
+      <player>, how are
+      things going?
+    - |
+      I called because
+      something weird is
+    - |
+      happening with the
+      radio broadcasts.
+    - |
+      They were talking
+      about FUNKY FRESH
+      BEATS.
+    - |
+      TEAM ROCKET must
+      be running some
+    - |
+      kind of pirate
+      radio station…
+
+
+bike_loyalty_call:
+  caller: bikeshop
+  script:
+    - |
+      Hiya <player>!
+      We're calling
+      around
+    - |
+      to spread the word
+      about our new
+      loyalty program!
+    - |
+      On your 10th
+      purchase of any
+      BICYCLE, you get
+    - |
+      a BIKE VOUCHER,
+      free of charge!
+    - |
+      We're also
+      offering a 
+      discount!
+    - |
+      A brand new
+      BICYCLE for
+      ¥999999.99!
+
+
+ppip_call:
+  caller: withheld
+  script:
+    - |
+      THIS IS AN AUTO-
+      MATED MESSAGE
+    - |
+      FROM THE PORYGON
+      POLITICAL
+      INTERESTS PARTY,
+    - |
+      OR P P I P FOR
+      SHORT.
+    - |
+      WE CAMPAIGN FOR
+      PORYGON ISSUES,
+      PORYGON2 ISSUES
+    - |
+      AND ISSUES OF
+      ANY OTHER POT-
+      ENTIAL PORYGON
+    - |
+      ISSUES SUCH AS:
+    - |
+      PENSIONS FOR
+      VETERAN ELECTRIC
+      SOLDIERS,
+    - |
+      AND UNFAIR
+      MALIGNMENT FOR THE
+    - |
+      UNFORTUNATE
+      EVENTS OF 16. DEC
+      1997.
+    - |
+      PLEASE VOTE FOR
+      US IN THE UPCOMING
+    - |
+      JOHTO LOCAL
+      ELECTIONS.
+
+
+bill_eevee_call:
+  caller: bill
+  script:
+    - |
+      Hey <player>!
+    - |
+      I have just
+      completed some
+    - |
+      research into
+      EEVEE and its
+      evolutions!
+    - |
+      I have been able
+      to scientif-
+
+
+elm_kyogre_call:
+  caller: elm
+  script:
+    - |
+      Hi, Mr. <POKE>MON?
+      Just following up
+      on your email.
+    - |
+      The way I see it,
+      KYOGRE is the one
+      surrounded!
+    - |
+      What's under the
+      ocean? More
+      earth!
+    - |
+      Oh, <player>?!
+      I must have called
+      the wrong number…
+
+
+elm_mew_call:
+  caller: elm
+  script:
+    - |
+      Oh… <player>…
+    - |
+      That red-headed
+      kid came back
+      to the lab.
+    - |
+      He said he would
+      tell me where to
+    - |
+      find a rare <POKE>-
+      MON if I didn't
+      call the police.
+    - |
+      Long story short,
+      I've been pushing
+    - |
+      on this truck
+      for hours now,
+    - |
+      and still no
+      sight of the
+      thing…
+
+
+bank_of_mom_1:
+  caller: bank_of_mom
+  script:
+    - |
+      Hello, <player>.
+      We're calling to
+    - |
+      let you know that
+      your latest bank
+    - |
+      statement is now
+      available online.
+    - |
+      Thank you for
+      managing your
+      finances with
+    - |
+      BANK of MOM.
+
+
+bank_of_mom_2:
+  caller: bank_of_mom
+  script:
+    - |
+      Hello, <player>.
+      We're calling to
+    - |
+      ask you about
+      some suspicious
+    - |
+      transactions
+      made with your
+      bank account.
+    - |
+      Today there were
+      3 purchases of
+      SUPER POTIONs
+    - |
+      from an unknown
+      location.
+    - |
+      Okay, we can
+      unfreeze your
+      account.
+    - |
+      Thank you for
+      managing your
+      finances with
+    - |
+      BANK of MOM.
+
+
+diglett_call:
+  caller: elm
+  script:
+    - |
+      Hi, <player>!
+      I was doing some
+      research on
+    - |
+      DIGLETT and disc-
+      covered something
+      remarkable!
+    - |
+      For ages, the
+      underside of
+      DIGLETT and
+    - |
+      DUGTRIO have re-
+      mained a mystery,
+      but I've finally
+    - |
+      figured it out!
+      It took four
+      X-RAYS, twenty
+    - |
+      ultrasounds, a
+      seismograph,
+      3 well timed
+    - |
+      photos, 100 cups
+      of coffee,
+      and 2 assistants
+    - |
+      to finally find
+      out th-- --lly--
+    - |
+      --llo? Breaking--
+      --up? <player>?--
+
+
+team_rocket_call:
+  caller: withheld
+  script:
+    - |
+      Who are we, you
+      ask?
+    - |
+      Prepare for
+      trouble!
+    - |
+      Make it double!
+    - |
+      To protect the 
+      world from
+      devastation!
+    - |
+      To unite all
+      peoples within our
+      nation!
+    - |
+      To denounce the
+      evils of truth
+      and love!
+    - |
+      To extend our
+      reach to the stars
+      above!
+    - |
+      JESSIE…
+      JAMES…
+    - |
+      TEAM ROCKET blasts
+      off at the speed
+      of light!
+    - |
+      Surrender now or
+      prepare to fight!
+    - |
+      MEOWTH!
+      That's right!
+
+
+happy_birthday:
+  caller: mom
+  script:
+    - |
+      Hi, <player>!
+    - |
+      Happy Birthday
+      to you! Happy
+      Birthday to y-
+    - |
+      What do you mean
+      it's not your
+      birthday? Is today
+    - |
+      not March 23rd?
+      Oh, well,
+      nevermind then!
+
+
+lance_cape:
+  caller: withheld
+  script:
+    - |
+      Hello? LANCE?
+    - |
+      I wanted to let
+      you know that your
+      new champion
+    - |
+      outfit can't
+      include a cape,
+      dahling.
+    - |
+      Not convinced?
+      LEON! His cape
+    - |
+      gets so dirty, he
+      has to clean it
+    - |
+      every day! CLAIR!
+      Her DRAGONAIR
+    - |
+      sets it on fire
+      all the time!
+    - |
+      And don't get me
+      started on
+    - |
+      WALLACE! His
+      gets soaked and
+      drags him down!
+    - |
+      …Huh? Oh!
+      Wrong number!
+
+
+flareon_call:
+  caller: withheld
+  script:
+    - |
+      Hey, <player>!
+    - |
+      Did you know that
+      in terms of human
+    - |
+      companionship,
+      FLAREON is
+    - |
+      objectively the
+      most huggable
+    - |
+      <POKE>MON?
+    - |
+      While their max
+      temperature is--
+
+
+blender_call:
+  caller: mom
+  script:
+    - |
+      Hello?
+    - |
+      Hi <player>!
+      How have you been?
+    - |
+      Oh, wait! I should
+      tell you what
+      I had for lunch!
+    - |
+      Remember when we
+      got Subway last
+      week?
+    - |
+      Well, I put it in
+      a blender and
+      ate it!
+    - |
+      It was so good!
+    - |
+      Hello?
+      <player> are you
+      there?
+
+
+call_your_mother:
+  caller: withheld
+  script:
+    - |
+      Here's some
+      advice…
+    - |
+      Brush your teeth,
+      be kind to to one
+      another
+    - |
+      Take 10 minutes to
+      call your mother.
+    - |
+      It's been three
+      long weeks now,
+    - |
+      A text is not
+      enough. You gotta
+      get on the phone,
+    - |
+      and give your
+      mother a call!
+    - |
+      You gotta do what
+      I say--!
+
+
+fuzz_call:
+  caller: out_of_area
+  script:
+    - |
+      ..................
+      ..................
+      ..................
+    - |
+      ..................
+      ..................
+      ..................
+    - |
+      ..F...............
+      ..................
+      ..................
+    - |
+      ..................
+      ..................
+      ..................
+
+
+daily_wowers_call:
+  caller: out_of_area
+  script:
+    - |
+      It's time for
+      daily WOWers!
+    - |
+      chrisWOW chrisWOW
+      chrisWOW chrisWOW
+      chrisWOW chrisWOW
+    - |
+      chrisWOW chrisWOW
+      chrisWOW chrisWOW
+      chrisWOW chrisWOW
+    - |
+      WOWOWOWOWOWOWOWOW
+      OWOWOWOWOWOWOWOWO
+      WOWOWOWOWOWOWOWOW
+    - |
+      OWOWOWOWOWOWOWOWO
+      WOWOWOWOWOWOWOWOW
+      OWOW x247chWOW
+
+
+bill_box:
+  caller: bill
+  script:
+    - |
+      Hi, <player>!
+    - |
+      We're implementing
+      a 100 <POKE>MON
+      storage limit 
+    - |
+      for the <POKE>MON
+      Storage System.
+    - |
+      Starting April 19,
+      all BOXES will
+      count towards a
+    - |
+      single 100-<POKE>MON
+      limit.
+    - |
+      Accounts over the
+      storage limit will
+      risk having
+    - |
+      their <POKE>MON
+      automatically
+      released.
+    - |
+      Less than 0.5
+      percent of active
+      trainers are over
+    - |
+      the 100-<POKE>MON
+      storage limit
+      today.
+
+
+badge_call:
+  caller: withheld
+  script:
+    - |
+      Hi, <player>!
+    - |
+      I'm calling to
+      tell you about
+    - |
+      this awesome new
+      <POKE>MON game
+    - |
+      coming to
+      Archipelago soon!
+    - |
+      It's called
+      <POKE>MON GLASS!
+    - |
+      It's set in a new
+      region and has 16
+      gyms,
+    - |
+      with new badges
+      like the
+      Mush Badge,
+    - |
+      Moogle Badge,
+      Bros. Badge,
+      Bee Badge,
+    - |
+      Oarsman's Badge,
+      Postal Badge,
+      Rhythm Badge,
+    - |
+      Hookshot Badge,
+      Mushroom Badge,
+      Ribbon Badge,
+    - |
+      Omega Badge,
+      Friend Badge,
+      Compass Badge,
+    - |
+      Level Badge,
+      Franklin Badge,
+      and Blanche Badge!
+    - |
+      There's even
+      rumors of a secret
+    - |
+      legendary <POKE>MON
+      named PIKABLU!
+    - |
+      I just can't wait
+      to try it!
+
+
+blaine_riddle:
+  caller: out_of_area
+  script:
+    - |
+      BLAINE: You know,
+      <player>.
+    - |
+      Ever since my GYM
+      burned down I have
+    - |
+      been yearning to
+      quiz some young
+    - |
+      TRAINERS again
+      with my riddles.
+    - |
+      Will you indulge
+      me?
+    - |
+      Here is the
+      question:
+    - |
+      What walks on four
+      legs in the
+      morning,
+    - |
+      two legs in the
+      afternoon,
+    - |
+      and three legs in
+      the evening?
+    - |
+      … … …
+    - |
+      The answer:
+    - |
+      A surprising
+      number of <POKE>MON!
+
+
+weast_call:
+  caller: withheld
+  script:
+    - |
+      Hey <player>,
+      it's USELESS.
+    - |
+      I thought we
+      were meeting in
+      VIRIDIAN CITY.
+    - |
+      VERMILION CITY?
+    - |
+      No, I said WEAST
+      KANTO…
+    - |
+      You gotta head
+      WEAST out of
+      VERMILION,
+    - |
+      then SNORTH-
+      WEAST through
+      DIGLETT'S CAVE,
+    - |
+      then you need t--
+
+
+headbutt_call:
+  caller: withheld
+  script:
+    - |
+      Hey guys!
+      It's MR. <POKE>MON!
+    - |
+      I'm here at
+      Route 26 with
+      Team Headbuttrees
+    - |
+      to plant NEW
+      HEADBUTT TREES!
+    - |
+      That's right, we
+      want to help the
+    - |
+      local sleeping
+      <POKE>MON
+      population!
+    - |
+      So remember to
+      send money to your
+    - |
+      mother so we can
+      continue to help
+      the planet!
+    - |
+      Every donation
+      helps!
+    - |
+      Peace out.
+
+
+kurt_balls:
+  caller: withheld
+  script:
+    - |
+      Help Police!
+      Someone is try-
+      ing to take my
+    - |
+      balls! Saying
+      that they are
+      not GREAT BALLs.
+    - |
+      That they take
+      up too much
+      space.
+    - |
+      I do not want
+      to lose my balls:
+      My LOVE BALLs
+    - |
+      My FRIEND BALLs
+      My FAST BALLs
+      My HEAVY BALLS
+    - |
+      Oh no, I see
+      them coming
+      He--------
+
+
+black_friday_call:
+  caller: out_of_area
+  script:
+    - |
+      Hurry up! Black
+      Friday ends in 2 
+      hours! Don't miss
+    - |
+      out on 30 percent
+      off all items,
+      while stocks last.
+    - |
+      Use code <POKE>30 at
+      checkout in any
+      <POKE>MART store.
+    - |
+      For purchases 
+      above ¥1000 you
+      will receive a
+    - |
+      free SLOWPOKETAIL!
+      Thank you for
+      shopping with us.
+
+
+kurt_unwell:
+  caller: withheld
+  script:
+    - |
+      Hello? <player>?
+      My Grandpa Kurt
+      fell down the
+    - |
+      well again! He
+      left his <POKE>GEAR
+      and <POKE>ALERT
+    - |
+      behind. You
+      were the last
+      person he called.
+    - |
+      Please can you
+      go look for him?
+      Nurse Joy said
+    - |
+      she won't get
+      him up the ladder
+      again.
+
+mayor_ppg:
+  caller: out_of_area
+  script:
+    - |
+      POWERPUFF GIRLS!
+      POWERPUFF GIRLS!
+      I need your help!
+    - |
+      There is a
+      monster attacking
+      TOWNSVILLE!
+    - |
+      He took my jar
+      of pickles away
+      from me too!
+    - |
+      It's Horrible!
+      Please get here
+      QUICK!!!!!
+
+not_slot_data:
+  caller: out_of_area
+  script:
+    - |
+      Hey <player>,
+      it's <player>.
+      Yes, I am you
+    - |
+      from another
+      timeline. Some
+      eggheads in
+    - |
+      CELADON CITY
+      said something
+      about SAVERAM
+    - |
+      and SLOTDATA.
+      I don't know
+      what kind of
+    - |
+      <POKE>MON that
+      is but they said
+      they can get
+    - |
+      me home soon.
+      Bye me!
+
+# Vincent'sSin
+correct_tracker:
+  caller: out_of_area
+  script:
+    - |
+      Hello <player>.
+      I am returning
+      your call.
+    - |
+      You're concerned
+      about the tracker
+      being incorrect?
+    - |
+      I have spoken
+      to palex00 and he
+      assures me that
+    - |
+      the tracker is
+      right. It's never
+      wrong!
+    - |
+      He says good
+      luck figuring
+      your way out.
+
+rival_uwu:
+  caller: withheld
+  script:
+    - |
+      Hewwo <player>,
+      it's <rival>-chan,
+      youw supewiow!
+    - |
+      I saw youw
+      <POKE>MON
+      teawm, and
+    - |
+      uwu... it's su
+      weak! how awe
+      you even
+    - |
+      twyin' to be
+      a twainyaw??
+      nya :3
+    - |
+      My teawm is
+      stwong and
+      adowabwe!
+    - |
+      I wiww defeat
+      you evewy
+      singwe time!
+    - |
+      Nyehehe!
+      get weady
+      to wose, baka!
+
+2f_shop_ad:
+  caller: withheld
+  script:
+    - |
+      TODAY!!!
+      TOMORROW!!!
+      EVEN YESTERDAY!!!
+    - |
+      GET READY!!!
+      THE 2ND!!!!
+      FLOOR SHOP!!!
+    - |
+      POTIONS!!!
+      BALLS!?!
+      ROPES???
+    - |
+      ALL THE ITEMS
+      DON'T BE A <rival>
+      CHECK IT OUT!!!
+    - |
+      !!!!!!!!!!!!!!!!
+
+eusin_call:
+  caller: eusine
+  script:
+    - |
+      <player>, it's me,
+      EUSIN!
+    - |
+      I am going on a
+      hunt for SUICUN
+      together with my
+    - |
+      pals, BLAIN, JAS-
+      MIN, JANIN, BLU,
+      and LT. SURG.
+    - |
+      Oh, CLAIRE is also
+      coming.
+    - |
+      Are you in,
+      <player>?
+
+rick_and_morty:
+  caller: withheld
+  script:
+    - |
+      To be fair, you
+      have to have a
+      very high IQ to
+    - |
+      understand
+      mischief.
+    - |
+      The humour is ex-
+      tremely subtle,
+      and without a
+    - |
+      solid grasp of
+      game mechanics
+      most of the jokes
+    - |
+      will go over a
+      typical player's
+      head.
+    - |
+      There's also
+      JAMES' sadistic
+      outlook,
+    - |
+      which is deftly
+      woven int-
+
+the_player_parable:
+  caller: withheld
+  script:
+    - |
+      Picture this,
+      <player>: a true
+      Crystal sequel.
+    - |
+      Vast new routes.
+      Wilder stories.
+      Endless choice.
+    - |
+      Or at least, the
+      illusion of such
+      things, of course.
+    - |
+      You could skip
+      badges entirely.
+      Or not at all.
+    - |
+      LEGENDS may flee,
+      refusing capture,
+      mocking you.
+    - |
+      Rivals could stay,
+      or vanish before
+      you even care.
+    - |
+      And then-ah yes!
+      The grand idea!
+      A jump button!
+    - |
+      Imagine it now:
+      <player> leaping
+      joyfully upward.
+    - |
+      Except, no, that's
+      dreadful. <POKE>MON
+      don't jump.
+    - |
+      Well, perhaps they
+      do, but not you.
+      Not like that.
+    - |
+      Still, wouldn't a
+      Crystal sequel be
+      magnificent?
+    - |
+      Or terrible. Or
+      worse: ordinary.
+    - |
+      Yes, ordinary is
+      far worse than
+      dreadful.
+    - |
+      And so <player>,
+      this sequel will
+      never exist.
+    - |
+      Which of course,
+      makes it the most
+      perfect sequel.
+
+palex00_disinformation_campaign:
+  caller: out_of_area
+  script:
+    - |
+      GLOBAL
+      WARMING
+      isn't real.
+    - |
+      It.
+      Never.
+      Was.
+    - |
+      If it was, how do
+      you explain
+      ICE PATH!?
+    - |
+      Just a couple
+      years ago,
+      all brown.
+    - |
+      Now?
+      ICE! ARTICUNO?
+      PAH!
+    - |
+      You and your 
+      liberal 
+      <POKE>-DEGREE PAH!
+    - |
+      That FRUIT
+      ACADEMY changed
+      you.
+    - |
+      I should have
+      given you an
+      EVERSTONE!
+
+wrong_number_song:
+  caller: withheld
+  script:
+    - |
+      Hello! Can I speak
+      to G…
+    - |
+      Wait a second…
+      Is this the wrong
+      number…?
+    - |
+      Oh, it's the wrong
+      number! The wrong
+      number song!
+    - |
+      We're very very
+      sorry that we got
+      it wrong!
+    - |
+      Oh, it's the wrong
+      number! The wrong
+      number song!
+    - |
+      We're very very
+      sorry that we got
+      it wrong!
+
+bbbbb:
+  caller: withheld
+  script:
+    - |
+      Come on down to
+      Bunk Bunker's Big
+      Bug Bonanza!
+    - |
+      Bring your Bike to
+      Bational Bark and
+      catch bugs such as
+    - |
+      BEEDRILL, 
+      BUTTERFREE,
+      BINSIR,
+    - |
+      and beven a
+      BYTHER!
+      Biggest Brize bis
+    - |
+      a Bun Bone.
+      Bye Bye 
+      Beveryone
+
+vpn_call:
+  caller: withheld
+  script:
+    - |
+      Today's AP is
+      sponsored by
+      Reflect VPN!
+    - |
+      Use code
+      JAMESISCOOL69
+      for a 69 percent
+    - |
+      discount today!
+      Stay safe online
+      and protect
+    - |
+      yourself online
+      from Team Rocket
+      today with Reflect
+    - |
+      VPN! As
+      recommended by
+      Bill, Bebe and
+    - |
+      Lanette!
+
+sphere1:
+  caller: out_of_area
+  script:
+    - |
+      Hello? <player>?
+      Have you done your
+      SPHERE 1 checks?
+    - |
+      Did you know that
+      recent studies
+      showed that about
+    - |
+      TEN PERCENT of 
+      SPHERE 1 checks
+      aren't collected
+    - |
+      within 3 hours?
+      What? You don't
+      know what SPHERE 1
+    - |
+      is? You prefer 
+      CUBES? SPHERE 1 
+      contains every-
+    - |
+      thing you can get
+      with your START
+      INVENTORY! Such as
+    - |
+      LH: CHILD FISHING,
+      ITEM IN COMPUTER,
+      CELESTIAL RESORT B
+    - |
+      - ROOM BACK BINO-
+      CULARS, BEANBEAN
+      OUTSKIRTS SURF
+    - |
+      BEACH BLOCK,
+      DIRTMOUTH_STAG,
+      FS - SKULL RING -
+    - |
+      KILL LUDLETH, (AT)
+      UNDERSEA KINGDOM
+      MAP, OLDALE TOWN
+    - |
+      - GIFT FROM SHOP
+      TUTORIAL, and many
+      more!
+    - |
+      SPHERE 1 is more
+      likely to contain
+      PROGRESSION ITEMS!
+    - |
+      So, <player>, go
+      and pick up ALL
+      of your SPHERE 1
+    - |
+      NOW! Your players
+      may be waiting for
+      you!
+
+hm02_cut:
+  caller: withheld
+  script:
+    - |
+      <player> received
+      HM02 CUT!
+
+object_event:
+  caller: withheld
+  script:
+    - |
+      Object event
+
+image:
+  caller: withheld
+  script:
+    - |
+      chris image if you
+      were me for a day
+      and i was i would
+    - |
+      just run smg2 100
+      percent all day 
+      what about u 
+    - |
+      https://youtu.be
+      /dly9z-mPQ4Q

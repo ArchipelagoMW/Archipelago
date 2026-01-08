@@ -1,0 +1,154 @@
+# skip or abbreviate most potentially mandatory cutscenes.
+
+# skip the cutscene when throwing a bomb into the volcano.
+02//skipVolcanoCutscene: |
+    call getThisRoomFlags
+    set 6,(hl)
+    ld de,$d244
+    ld a,$02
+    ld (de),a
+    ld hl,$6314
+    call interactionSetScript
+    ld a,$15
+    call setGlobalFlag
+    ; Unset a room flag which changed the layout to ensure exiting Temple Remains cave didn't lead to a softlock 
+    ld hl,$c716
+    res 0,(hl)
+    ret
+
+# enable exit from volcano room after skipping cutscene.
+08/7cf5/: |
+    nop
+    nop
+    nop
+
+# set up for and call skipVolcanoCutscene.
+08/7d07/: |
+    ld a,($d244)
+    cp $01
+    ret nz
+    call interactionDelete
+    ld hl,skipVolcanoCutscene
+    jp callBank2
+
+# use a non-cutscene screen transition for exiting a dungeon via essence, so that overworld music plays.
+09/4b4d/: ld a,$81
+
+# end maku seed cutscene as soon as link gets the seed.
+0b/71ec/: |
+    db setglobalflag,$19
+    db enableinput
+    db scriptend
+
+# Make the barrier cutscene not display the essences Link did not get
+15/6b9c/: |
+    call skipEssence
+    jr nz,$15
+
+15//skipEssence: |
+    ld b,(hl)
+    ld a,b
+    xor $07 ; Go from 0->7 to 7->0
+    ld hl,wEssencesObtained
+    call checkFlag
+    jp nz,getFreeInteractionSlot
+    inc a ; unsets the z flag
+    ret
+
+# end northen peak cutscene as soon as the barrier is broken.
+0b/79f1/: |
+    db setglobalflag,$1d
+    db enableinput
+    db scriptend
+
+# skip linked cutscene when entering d8. cutscene warp will ignore dungeon
+# shuffle if not removed.
+0b/7a2a/: |
+    db writememory
+    dw wDisableWarpTiles
+    db $00
+0b/7a32/: |
+    db setglobalflag,$1e
+    db scriptend
+
+# skip the great furnace dance. for some reason jumpalways doesn't work here.
+14/4b15/: |
+    db jumpifc6xxset,$92,$ff
+    dw $c33f
+
+# set flags that are normally set during the pirate cutscene when skipping
+# it. the season value should be set to the western coast default at
+# randomization.
+15//setPirateCutsceneFlags: |
+    call setGlobalFlag
+    ; ???
+    ld a,$17
+    call setGlobalFlag
+    ; ???
+    ld a,$1b
+    call setGlobalFlag
+    ; Remove ship from desert
+    ld hl,$c7e2
+    set 6,(hl)
+    ; Set default season for Western Coast since the warp doesn't ensure it
+    ld a,defaultSeason.WESTERN_COAST
+    ld (wRoomStateModifier),a
+    ; Take Pirate's Bell from the inventory
+    ld a,TREASURE_PIRATES_BELL
+    call loseTreasure
+    ret
+15/5a0e/: call setPirateCutsceneFlags
+
+# change destination of initial transition in pirate cutscene.
+15/5a1c/: db $80,$e2,$00,$66   ; wWarpDestVariables, in order?
+
+# Remove the pirate captain from western coast map because it triggers an odd cutscene when coming
+# from the left in cases where D7 is replaced by D0 or D2 and alt entrances are enabled
+11/6b5a/: db $b1,$10,$18,$18,$ff
+
+# Remove floodgate's keeper behavior where he notices the key when it's owned while inside his
+# house (which could trigger right as you hit the lever in a randomized context)
+09/6289/: ret
+
+# skip "you got all four seasons" text from season spirts.
+15/57c2/: cp $05
+
+# remove D8 falling crystal cutscenes (INTERACID_D8_GRABBABLE_ICE @state3)
+09/5894/: |
+  ; Set a flag for this room
+  call getThisRoomFlags
+  set 6,(hl)
+
+  ; Store current active room
+  ld a,(wActiveRoom)
+  push af
+  
+  ; Change dungeon floor
+  ld hl,wDungeonFloor
+  ld a,(hl)
+  dec a
+  ld (hl),a
+  push hl
+  
+  ; Set active room to the one of the new dungeon floor
+  call $2d65  ; getActiveRoomFromDungeonMapPosition
+  ld (wActiveRoom),a
+  
+  ; Set a flag for this room
+  call getThisRoomFlags
+  set 6,(hl)
+  
+  ; Reset dungeon floor
+  pop hl
+  ld a,(hl)
+  inc a
+  ld (hl),a
+  
+  ; Reset active room
+  pop af
+  ld (wActiveRoom),a
+
+  ld a,SND_SOLVEPUZZLE_2
+  call playSound
+
+  jp interactionDelete

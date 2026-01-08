@@ -1,0 +1,977 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 176,
+  "name": "Crab Gate Room",
+  "area": "Maridia",
+  "subarea": "Outer",
+  "roomAddress": "0x7D08A",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a414",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [2, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a420",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 2, 2, 2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Green Gate",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Crab Gate Room Left Sciser",
+      "enemyName": "Sciser",
+      "quantity": 1,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Crab Gate Room Right Scisers",
+      "enemyName": "Sciser",
+      "quantity": 5,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0,
+          "gentleUpTiles": 2,
+          "steepUpTiles": 2,
+          "steepDownTiles": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave with Runway (Open Gate)",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Precise Stutter Shinecharge, Leave With Spark",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canPreciseStutterWaterShineCharge",
+        {"shinespark": {"frames": 3}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 37,
+      "link": [1, 1],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (5-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 130},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With a runway of 5 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 5 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [1, 1],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (4-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 140},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 10}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 4 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 4 frames, and repress forward on the last possible frame before the transition.",
+        "It also works well to release forward for 3 frames and repress on the last possible frame.",
+        "Other timings can also work, but may gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and shoot it open, making the Sciser fall;",
+        "spin jump over the Sciser to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [1, 1],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (3-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 145},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 10}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 3 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 3 or 4 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and shoot it open, making the Sciser fall;",
+        "spin jump over the Sciser to reach the transition with a shinecharge."
+      ],
+      "devNote": [
+        "The same shinecharge frames could be achieved with a closed end runway (effective length of 2.4375),",
+        "with a 3-frame stutter, but there doesn't appear to be any application."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [1, 1],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (2-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 150},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 2 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 3 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and shoot it open, making the Sciser fall;",
+        "spin jump over the Sciser to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [1, 1],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (1-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canInsaneJump",
+        "canBeVeryPatient",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only 1 tile of runway in the other room, Samus should ideally start on the last pixel of runway with X subpixels of $3FFF or less.",
+        "Run toward the door, releasing forward for exactly 1 frame and pressing it again on the last possible frame before the transition.",
+        "Starting with X subpixels of $7FFF can also work (e.g., by simply backing against the door ledge, then jumping and turning around mid-air);",
+        "in this case, Samus must advance 1 or 2 pixels with an arm pump before the transition (e.g., firing a shot or pressing and/or releasing an angle button),",
+        "and the shinecharge will be gained slightly further away from the door.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and shoot it open, making the Sciser fall;",
+        "spin jump over the Sciser to reach the transition with a shinecharge."
+      ],
+      "detailNote": [
+        "Ideal subpixels ($3FFF) can be achieved using one of several methods:",
+        "1) press forward against the door ledge (or a wall aligned with it);",
+        "jump, and while mid-air, tap forward for exactly 1 frame to land with subpixels $BFFF,",
+        "moonwalk back for exactly 1 frame to end with subpixels $3FFF.",
+        "2) press forward against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), and moonwalk back two pixels,",
+        "then jump and mid-air turnaround onto the ledge;",
+        "if Samus jumped from the correct pixel but does not land on the ledge, then it was needed to moonwalk back 1 more frame;",
+        "in this case it is possible to retry by doing a mid-air turnaround back onto the platform, and moonwalking back for 1 frame.",
+        "3) if X-Ray is available, press against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), then jump and mid-air turnaround toward the door,",
+        "and use X-Ray to turnaround in place away from the door;",
+        "repeat this sequence 3 more times: jump, mid-air turnaround, X-Ray turnaround;",
+        "then do one more jump and mid-air turnaround, high enough to land on the door ledge,",
+        "and Samus should be in the correct position with subpixels $3FFF."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [1, 1],
+      "name": "Precise Stutter Shinecharge, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canXRayTurnaround",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 43,
+      "link": [1, 1],
+      "name": "Very Precise Stutter Shinecharge, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canInsaneJump",
+        "canXRayTurnaround",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "With only 1 tile of runway in the other room, Samus should ideally start on the last pixel of runway with X subpixels of $3FFF or less.",
+        "Run toward the door, releasing forward for exactly 1 frame and pressing it again on the last possible frame before the transition.",
+        "Starting with X subpixels of $7FFF can also work (e.g., by simply backing against the door ledge, then jumping and turning around mid-air);",
+        "in this case, Samus must advance 1 or 2 pixels with an arm pump before the transition (e.g., firing a shot or pressing and/or releasing an angle button),"
+      ],
+      "devNote": [
+        "FIXME: The canInsaneJump requirement is for difficulty placement; use a more appropriate tech if possible."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Sciser Farm",
+      "requires": [
+        "h_navigateUnderwater",
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          "Gravity",
+          {"cycleFrames": 20}
+        ]},
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 110}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "Gravity",
+            "ScrewAttack",
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 170}
+          ]},
+          {"and": [
+            "Gravity",
+            "canPseudoScrew",
+            {"cycleFrames": 200}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 205}
+          ]},
+          {"cycleFrames": 250}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Sciser", "count": 1}]
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Sciser",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "G-Mode Indirect Despawn the Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "The gate will not spawn in indirect G-Mode, and can be freely passed.",
+        "Exit G-Mode while under the gate to open it without a Super."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Stutter Water Shinecharge Through The Gate, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 1.4375
+        }
+      },
+      "requires": [
+        {"notable": "Stutter Shinecharge Through The Gate"},
+        "canShinechargeMovementComplex",
+        "canPreciseStutterWaterShineCharge",
+        "canDodgeWhileShooting",
+        {"ammo": {"type": "Super", "count": 1}},
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 95}
+          ]},
+          {"shineChargeFrames": 110}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Requires a very precise stutter where Samus is moving slow enough while near the gate, so she can shoot it and it is fully open before she collides with it.",
+        "A runway in the adjacent room of 2 tiles works best - with a longer runway, Samus will be moving too fast."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [1, 2],
+      "name": "Stutter Water Shinecharge Through The Gate, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 1.4375
+        }
+      },
+      "requires": [
+        {"notable": "Stutter Shinecharge Through The Gate"},
+        "canShinechargeMovementComplex",
+        "canPreciseStutterWaterShineCharge",
+        "canDodgeWhileShooting",
+        {"ammo": {"type": "Super", "count": 1}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Requires a very precise stutter where Samus is moving slow enough while near the gate, so she can shoot it and it is fully open before she collides with it.",
+        "A runway in the adjacent room of 2 tiles works best - with a longer runway, Samus will be moving too fast."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["A"],
+      "note": ["Samus will teleport inside of the gate, causing it to open."]
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Green Gate Glitch",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_greenGateGlitch",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Suitless Green Gate Glitch",
+      "requires": [
+        {"notable": "Suitless Green Gate Glitch"},
+        {"or": [
+          "h_greenGateGlitch",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Perform the Gate Glitch by moving towards the gate and firing the super on the correct frame for it to pass through and reach the button on the other side.",
+        "Due to the water physics, many traditional setups for the glitch will not work."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "G-Mode Indirect Despawn the Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "The gate will not spawn in indirect G-Mode, and can be freely passed.",
+        "Exit G-Mode while under the gate to open it without a Super."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 20,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 21,
+      "link": [2, 2],
+      "name": "Leave With Runway - Frozen Sciser",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "Sciser Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          "Gravity",
+          {"cycleFrames": 500}
+        ]},
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 540}
+          ]},
+          {"and": [
+            "Gravity",
+            "ScrewAttack",
+            {"cycleFrames": 600}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 630}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 720}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 900}
+          ]},
+          {"and": [
+            "Gravity",
+            "canPseudoScrew",
+            {"cycleFrames": 840}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 1260}
+          ]},
+          {"cycleFrames": 1590}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Sciser", "count": 5}]
+    },
+    {
+      "id": 23,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 24,
+      "link": [2, 2],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovement",
+        {"or": [
+          {"canShineCharge": {"usedTiles": 42, "steepDownTiles": 1, "openEnd": 1}},
+          {"and": [
+            "h_shinechargeMaxRunway",
+            {"obstaclesCleared": ["A"]}
+          ]}
+        ]},
+        {"shineChargeFrames": 60}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [2, 2],
+      "name": "Leave Spinning",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 40,
+            "openEnd": 0
+          },
+          "minExtraRunSpeed": "$0.D"
+        }
+      }
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "Leave Spinning (Open Gate)",
+      "requires": [
+        "Gravity",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 43,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$0.D"
+        }
+      }
+    },
+    {
+      "id": 27,
+      "link": [2, 2],
+      "name": "Leave With Mockball",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 40,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 28,
+      "link": [2, 2],
+      "name": "Leave With Mockball (Open Gate)",
+      "requires": [
+        "Gravity",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 43,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 29,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 35,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce (Open Gate)",
+      "requires": [
+        "Gravity",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 43,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 34,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Leave Space Jumping (Open Gate)",
+      "requires": [
+        "Gravity",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 43,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {"usedTiles": 43, "steepDownTiles": 1, "openEnd": 0}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 34,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Sciser",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Stutter Shinecharge Through The Gate",
+      "note": [
+        "Requires a very precise stutter where Samus is moving slow enough while near the gate, so she can shoot it and it is fully open before she collides with it.",
+        "A runway in the adjacent room of 2 tiles works best - with a longer runway, Samus will be moving too fast."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Suitless Green Gate Glitch",
+      "note": [
+        "Perform the Gate Glitch by moving towards the gate and firing the super on the correct frame for it to pass through and reach the button on the other side.",
+        "Due to the water physics, many traditional setups for the glitch will not work."
+      ]
+    }
+  ],
+  "nextStratId": 44,
+  "nextNotableId": 3
+}

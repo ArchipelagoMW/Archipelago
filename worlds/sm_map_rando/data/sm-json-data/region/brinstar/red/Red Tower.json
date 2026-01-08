@@ -1,0 +1,2994 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 66,
+  "name": "Red Tower",
+  "area": "Brinstar",
+  "subarea": "Red",
+  "roomAddress": "0x7A253",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001902a",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [2],
+        [2],
+        [2],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Middle Left Door (Behind Power Bomb Blocks)",
+      "nodeType": "door",
+      "nodeSubType": "yellow",
+      "nodeAddress": "0x0019036",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [2],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x001904e",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019042",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001901e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Junction (Above Bottom Rippers)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [2],
+        [1],
+        [1]
+      ],
+      "note": "This is under the orange door, below the shot blocks, but above the bottom climb"
+    },
+    {
+      "id": 7,
+      "name": "Junction (Bottom of Room)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [2],
+        [2]
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Junction (Top Rippers)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [2],
+        [2],
+        [2],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1]
+      ],
+      "note": "This is meant to contain all Rippers in the top climb except the bottom one"
+    },
+    {
+      "id": 10,
+      "name": "Temporary Blue Junction (Top Left Door)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [2],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1]
+      ],
+      "note": "Just to the right of the door at node 1, with temporary blue, facing left."
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Power Bomb Blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "B",
+      "name": "Top of Tower Rippers",
+      "obstacleType": "enemies"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Red Tower Geegas",
+      "enemyName": "Geega",
+      "quantity": 2,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Red Tower Beetom",
+      "enemyName": "Beetom",
+      "quantity": 1,
+      "betweenNodes": [1, 2]
+    },
+    {
+      "id": "e3",
+      "groupName": "Red Tower Bottom Rippers",
+      "enemyName": "Ripper",
+      "quantity": 4,
+      "homeNodes": [7]
+    },
+    {
+      "id": "e4",
+      "groupName": "Red Tower Top rippers",
+      "enemyName": "Ripper",
+      "quantity": 4,
+      "homeNodes": [9]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {
+          "id": 5,
+          "note": "Direct link for shinespark. Other strats should go 1 -> 9 -> 5."
+        },
+        {"id": 6},
+        {"id": 9},
+        {"id": 10}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 10}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {
+          "id": 6,
+          "note": "This link is only for sparking. Other strats go 7 -> 6."
+        },
+        {"id": 7},
+        {"id": 10}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 2},
+        {"id": 5},
+        {"id": 9},
+        {"id": 10}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 1},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 9,
+      "to": [
+        {"id": 1},
+        {"id": 5},
+        {"id": 9}
+      ]
+    },
+    {
+      "from": 10,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Beetom Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 570}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            "ScrewAttack",
+            {"cycleFrames": 480}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [3, 4]}},
+            "HiJump",
+            "canWalljump",
+            {"cycleFrames": 800}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [5]}},
+            {"notable": "Hero Shot"},
+            {"or": [
+              {"and": [
+                "ScrewAttack",
+                "canConsecutiveWalljump",
+                {"cycleFrames": 1080}
+              ]},
+              {"and": [
+                "canTrickyWalljump",
+                {"cycleFrames": 1770}
+              ]}
+            ]}
+          ]}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          "h_useMorphBombs",
+          "h_usePowerBomb",
+          {"and": [
+            {"or": [
+              {"resourceCapacity": [{"type": "Missile", "count": 1}]},
+              {"resourceCapacity": [{"type": "Super", "count": 1}]}
+            ]},
+            {"cycleFrames": 500}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A", "B"],
+      "farmCycleDrops": [{"enemy": "Beetom", "count": 1}],
+      "devNote": [
+        "Using a Power Bomb to farm the Beetom is only useful if Power Bomb drops are modified to give more than 1.",
+        "FIXME: Other options for resetting the room at the top and bottom nodes are possible."
+      ]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Geega Farm",
+      "requires": [
+        {"cycleFrames": 140}
+      ],
+      "farmCycleDrops": [{"enemy": "Geega", "count": 1}],
+      "devNote": [
+        "We use `cycleFrames` here rather than `simpleCycleFrames` because it is non-trivial to avoid Geega damage while farming."
+      ]
+    },
+    {
+      "id": 131,
+      "link": [1, 1],
+      "name": "Double Geega Farm",
+      "requires": [
+        "canDodgeWhileShooting",
+        {"cycleFrames": 200}
+      ],
+      "farmCycleDrops": [{"enemy": "Geega", "count": 2}],
+      "devNote": [
+        "We use `cycleFrames` here rather than `simpleCycleFrames` because it is non-trivial to avoid Geega damage while farming."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 11,
+          "openEnd": 1
+        }
+      },
+      "devNote": "Assume no broken runway tiles since there is never a reason to break them."
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Beetom",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "Grab the Beetom and freeze it to extend the runway at the top left door; this is easiest with HiJump disabled.",
+        "It is optimal to leave a half-tile gap in order to extend the runway as much as possible.",
+        "After freezing the Beetom, it is possible to go down and farm, while returning to refreeze the Beetom."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave with Moondance",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "note": [
+        "Bring the Beetom close to the door and begin Moondancing.",
+        "Stop after exactly 175 moonfalls, so as not to fall through the floor."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Door Frame Extended Moondance",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 5}},
+        "h_extendedMoondanceBeetomLeniency"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "note": [
+        "Bring the Beetom close to the door and begin Moondancing.",
+        "Stop after exactly 175 moonfalls, so as not to fall through the floor.",
+        "Freeze the Beetom inside the door frame and Moondance such that Samus does not fall through the floor and does not touch the door transition."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 5}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "flashSuitChecked": true,
+      "devNote": "Some items may reduce the number of Beetom hits, but it's irrelevant since there is an accesible farm in-room."
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_usePowerBomb",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "h_usePowerBomb",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Either place a Power Bomb on the ledge with the Geega bug farms, to only break the top row of blocks and not kill the Beetom,",
+        "or move the Beetom to safety by shaking it off at a higher platform before breaking the Power Bomb blocks."
+      ],
+      "devNote": "Obstacle A cannot already be broken, because otherwise the Beetom will already be killed."
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "G-mode Morph Power Bomb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "R-Mode Frozen Beetom X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithRMode": {}
+      },
+      "requires": [
+        {"notable": "R-Mode Frozen Beetom X-Ray Climb"},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}},
+        {"enemyDamage": {"enemy": "Ripper", "type": "contact", "hits": 1}},
+        "canWallIceClip",
+        "canLongXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Gain R-mode while entering the room.",
+        "Use the respawning bugs to refill reserve energy.",
+        "Get grabbed by the Beetom and carry it to the 4-tile high gap one screen above the bottom-left door.",
+        "Position Samus one pixel to the right of being against the wall.",
+        "Jump and aim down, reaching the ceiling at the same time that reserves are triggered.",
+        "This will force Samus to stand up, briefly clipping into the wall above.",
+        "Immediately freeze the Beetom inside the wall, by buffering a shot during the reserve trigger.",
+        "Use a Ripper to get knocked back onto the frozen Beetom.",
+        "This will clip Samus one pixel left into the wall, making it possible to X-ray climb.",
+        "X-ray climb up 2 screens."
+      ],
+      "devNote": "Given the ability to freeze enemies, nodes 1 and 5 are freely connected, so lumping these into one strat is sound."
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Moondance Clip",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 3}},
+        "h_extendedMoondanceBeetomLeniency"
+      ],
+      "note": [
+        "Collect the Beetom and freeze it above and left of the Power Bomb Blocks in a way that Samus will be able to Moondance.",
+        "Moondance until Samus falls through two tiles, then Moonfall again to sink through the solid blocks and reach the door."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Leave with Moondance",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "h_usePowerBomb",
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": [], "useImplicitRequires": false}
+      ],
+      "note": [
+        "Break the Power Bomb Blocks without killing the Beetom",
+        "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "If needed, the Beetom can be left at the door while Samus moves to the farm bugs."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Leave with Extended Moondance",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "h_usePowerBomb",
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+        "h_extendedMoondanceBeetomLeniency"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": [], "useImplicitRequires": false}
+      ],
+      "note": [
+        "Break the Power Bomb Blocks without killing the Beetom",
+        "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "After 175 Moonfalls, reposition the Beetom to chest height.",
+        "If needed, the Beetom can be left at the door while Samus moves to the farm bugs."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 3],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 5}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [
+            {"or": [
+              "canWalljump",
+              "SpaceJump",
+              "canLongIBJ",
+              "canSpringBallJumpMidAir",
+              {"and": [
+                "HiJump",
+                "SpeedBooster"
+              ]}
+            ]}
+          ],
+          "note": [
+            "Using a Power Bomb here requires leaving the Beetom above and going back for it.",
+            "The Power Bomb will destroy the nearby Rippers, which is why there are additional requirements to get back up."
+          ]
+        }
+      ],
+      "flashSuitChecked": true,
+      "devNote": "Some tech may reduce the number of Beetom hits, but it's irrelevant since there is an accesible farm in-room."
+    },
+    {
+      "id": 16,
+      "link": [1, 3],
+      "name": "Leave with Moondance",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [
+            {"or": [
+              "canWalljump",
+              "SpaceJump",
+              "canLongIBJ",
+              "canSpringBallJumpMidAir",
+              {"and": [
+                "HiJump",
+                "SpeedBooster"
+              ]}
+            ]}
+          ],
+          "note": [
+            "Using a Power Bomb here requires leaving the Beetom above and going back for it.",
+            "The Power Bomb will destroy the nearby Rippers, which is why there are additional requirements to get back up."
+          ]
+        }
+      ],
+      "note": [
+        "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "If needed, the Beetom can be left at the door while Samus moves to the farm bugs."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 3],
+      "name": "Leave with Extended Moondance",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+        "h_extendedMoondanceBeetomLeniency"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [
+            {"or": [
+              "canWalljump",
+              "SpaceJump",
+              "canLongIBJ",
+              "canSpringBallJumpMidAir",
+              {"and": [
+                "HiJump",
+                "SpeedBooster"
+              ]}
+            ]}
+          ],
+          "note": [
+            "Using a Power Bomb here requires leaving the Beetom above and going back for it.",
+            "The Power Bomb will destroy the nearby Rippers, which is why there are additional requirements to get back up."
+          ]
+        }
+      ],
+      "note": [
+        "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "After 175 Moonfalls, reposition the Beetom to chest height.",
+        "If needed, the Beetom can be left at the door while Samus moves to the farm bugs."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [1, 4],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 5}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [
+            {"or": [
+              "canWalljump",
+              "SpaceJump",
+              "canLongIBJ",
+              "canSpringBallJumpMidAir",
+              {"and": [
+                "HiJump",
+                "SpeedBooster"
+              ]}
+            ]}
+          ],
+          "note": [
+            "Using a Power Bomb here requires leaving the Beetom above and going back for it.",
+            "The Power Bomb will destroy the nearby Rippers, which is why there are additional requirements to get back up."
+          ]
+        }
+      ],
+      "flashSuitChecked": true,
+      "devNote": "Some items may reduce the number of Beetom hits, but it's irrelevant since there is an accesible farm in-room."
+    },
+    {
+      "id": 19,
+      "link": [1, 4],
+      "name": "Leave with Moondance",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 6}}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [
+            {"or": [
+              "canWalljump",
+              "SpaceJump",
+              "canLongIBJ",
+              "canSpringBallJumpMidAir",
+              {"and": [
+                "HiJump",
+                "SpeedBooster"
+              ]}
+            ]}
+          ],
+          "note": [
+            "Using a Power Bomb here requires leaving the Beetom above and going back for it.",
+            "The Power Bomb will destroy the nearby Rippers, which is why there are additional requirements to get back up."
+          ]
+        }
+      ],
+      "note": [
+        "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "If needed, the Beetom can be left at the door while Samus moves to the farm bugs."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 4],
+      "name": "Leave with Extended Moondance",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 6}},
+        "h_extendedMoondanceBeetomLeniency"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [
+            {"or": [
+              "canWalljump",
+              "SpaceJump",
+              "canLongIBJ",
+              "canSpringBallJumpMidAir",
+              {"and": [
+                "HiJump",
+                "SpeedBooster"
+              ]}
+            ]}
+          ],
+          "note": [
+            "Using a Power Bomb here requires leaving the Beetom above and going back for it.",
+            "The Power Bomb will destroy the nearby Rippers, which is why there are additional requirements to get back up."
+          ]
+        }
+      ],
+      "note": [
+        "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "After 175 Moonfalls, reposition the Beetom to chest height.",
+        "If needed, the Beetom can be left at the door while Samus moves to the farm bugs."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [1, 5],
+      "name": "Leave with Moondance",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        {"or": [
+          "HiJump",
+          "SpaceJump",
+          "canWalljump"
+        ]},
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 6}}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "If needed, the Beetom can be left at the door while Samus moves to the farm bugs."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [1, 5],
+      "name": "Leave with Extended Moondance",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        {"or": [
+          "HiJump",
+          "SpaceJump",
+          "canWalljump"
+        ]},
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 6}},
+        "h_extendedMoondanceBeetomLeniency"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "After 175 Moonfalls, reposition the Beetom to chest height.",
+        "If needed, the Beetom can be left at the door while Samus moves to the farm bugs."
+      ]
+    },
+    {
+      "id": 23,
+      "link": [1, 5],
+      "name": "Instant Diagonal Shinespark (Come In Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 1},
+        {"shinespark": {"frames": 68, "excessFrames": 20}},
+        "canUseFrozenEnemies"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 24,
+      "link": [1, 5],
+      "name": "Vertical Shinespark (Come In Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 20},
+        {"shinespark": {"frames": 68, "excessFrames": 29}},
+        "canUseFrozenEnemies"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [1, 5],
+      "name": "Vertical Mid-Air Shinespark (Come In Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 50},
+        "canMidairShinespark",
+        {"shinespark": {"frames": 60, "excessFrames": 28}},
+        "canUseFrozenEnemies"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [1, 5],
+      "name": "Shinespark (Come In Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 10,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"or": [
+          {"shinespark": {"frames": 68, "excessFrames": 29}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 60, "excessFrames": 28}}
+          ]}
+        ]},
+        "canUseFrozenEnemies"
+      ]
+    },
+    {
+      "id": 27,
+      "link": [1, 5],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 60, "excessFrames": 28}},
+        "canUseFrozenEnemies"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 28,
+      "link": [1, 5],
+      "name": "Hero Shot Shinespark (Come In Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        {"notable": "Hero Shot Shinespark"},
+        "canHeroShot",
+        {"shinespark": {"frames": 77, "excessFrames": 3}},
+        {"ammo": {"type": "Missile", "count": 1}}
+      ],
+      "wallJumpAvoid": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Come in shinecharged from the top left door. With missiles selected, position Samus roughly in the horizontal center of the room.",
+        "Crouch, aim up, then in very quick succession, shoot a missile upwards then spark up.",
+        "If done correctly, Samus will pass the Missile, break the bomb block platforms, then be passed by the Missile which will break the shot blocks at the top."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [1, 5],
+      "name": "Hero Shot Shinespark (Come In Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 10,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"notable": "Hero Shot Shinespark"},
+        "canHeroShot",
+        {"shinespark": {"frames": 77, "excessFrames": 3}},
+        {"ammo": {"type": "Missile", "count": 1}}
+      ],
+      "wallJumpAvoid": true,
+      "note": [
+        "Come in shinecharging from the top left door. With missiles selected, position Samus roughly in the horizontal center of the room.",
+        "Crouch, aim up, then in very quick succession, shoot a missile upwards then spark up.",
+        "If done correctly, Samus will pass the Missile, break the bomb block platforms, then be passed by the Missile which will break the shot blocks at the top."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [1, 5],
+      "name": "Hero Shot Shinespark (Use Flash Suit)",
+      "requires": [
+        {"notable": "Hero Shot Shinespark"},
+        "canHeroShot",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 77, "excessFrames": 3}},
+        {"ammo": {"type": "Missile", "count": 1}}
+      ],
+      "wallJumpAvoid": true,
+      "flashSuitChecked": true,
+      "note": [
+        "With missiles selected, position Samus roughly in the horizontal center of the room.",
+        "Crouch, aim up, then in very quick succession, shoot a missile upwards then spark up.",
+        "If done correctly, Samus will pass the Missile, break the bomb block platforms, then be passed by the Missile which will break the shot blocks at the top."
+      ]
+    },
+    {
+      "id": 133,
+      "link": [1, 5],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 4 screens."
+    },
+    {
+      "id": 31,
+      "link": [1, 5],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 32,
+      "link": [1, 5],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 33,
+      "link": [1, 5],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 34,
+      "link": [1, 6],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 35,
+      "link": [1, 9],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "HiJump",
+          "SpaceJump",
+          "canIBJ",
+          "canWalljump"
+        ]}
+      ]
+    },
+    {
+      "id": 36,
+      "link": [1, 9],
+      "name": "Frozen Beetom Ice Climb",
+      "requires": [
+        {"notable": "Frozen Beetom Ice Climb"},
+        "canTrickyUseFrozenEnemies",
+        "canFlatleyJump",
+        {"or": [
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 9}},
+          {"and": [
+            "canInsaneJump",
+            {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}}
+          ]},
+          {"and": [
+            "canBeVeryPatient",
+            {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}},
+            {"refill": ["Energy"]}
+          ]}
+        ]}
+      ],
+      "wallJumpAvoid": true,
+      "note": [
+        "Freeze the Beetom and use it as a platform to climb the room without wall jumps.",
+        "This can be done with well-timed Flatley jumps on top of the frozen Beetom,",
+        "by turning around and spin jumping just as it unfreezes.",
+        "This can be made easier (at the cost of some additional Beetom hits) with a pause-buffer method:",
+        "Press pause, and begin a turn-around just before the pause hits;",
+        "unequip Ice to immediately unfreeze the Beetom;",
+        "unpause and press jump quickly after control resumes, but without buffering the input.",
+        "For the top two jumps, it is possible to reduce the risk of damage by freezing the Beetom against the wall:",
+        "in case of a failure due to an early (e.g. buffered) jump, the Beetom may stay stuck wiggling in the wall,",
+        "and then it can be refrozen without needing to take damage to reposition it."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [1, 10],
+      "name": "Come in Shinecharging, Gain Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ]
+    },
+    {
+      "id": 38,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_usePowerBomb",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 39,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        {"ammo": {"type": "PowerBomb", "count": 1}},
+        "can4HighMidAirMorph",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Lay the Power Bomb during a temporary blue chain immediately after morphing, placing it high enough that it does not boost Samus upward."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 1],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "This is a short climb of only a few tiles."
+    },
+    {
+      "id": 41,
+      "link": [2, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 2 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 132,
+      "link": [2, 2],
+      "name": "Beetom Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"cycleFrames": 300},
+        "h_usePowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "resetsObstacles": ["B"],
+      "farmCycleDrops": [{"enemy": "Beetom", "count": 1}],
+      "devNote": [
+        "This strat is only useful if Power Bomb drops are modified to give more than 1."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 44,
+      "link": [2, 2],
+      "name": "G-mode Morph Power Bomb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 134,
+      "link": [2, 5],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canLongXRayClimb",
+        "canBeVeryPatient"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 6 screens."
+    },
+    {
+      "id": 45,
+      "link": [2, 5],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 46,
+      "link": [2, 5],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 47,
+      "link": [2, 5],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 62,
+      "link": [3, 2],
+      "name": "G-mode Morph IBJ, Power Bomb the Rippers",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphLongIBJ",
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphStaggeredIBJ",
+          "h_artificialMorphPowerBomb"
+        ]},
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "canWalljump",
+          "HiJump"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Use two Power Bombs to kill the Rippers, or carefully pass the first two and place a single Power Bomb on the left ledge to kill them all.",
+        "Exit G-Mode before the Power Bomb explodes in order to break the wall."
+      ],
+      "devNote": "This will kill the Beetom, which could prevent using it to get up, so this needs to get all the way to 2. Anything with Morph can exit G-Mode at 6."
+    },
+    {
+      "id": 63,
+      "link": [3, 2],
+      "name": "G-Mode Morph IBJ Between the Bottom Rippers, Power Bomb the Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "IBJ Between the Bottom Rippers"},
+        "h_artificialMorphDoubleBombJump",
+        "h_artificialMorphStaggeredIBJ",
+        "h_artificialMorphPowerBomb",
+        "h_artificialMorphLongIBJ",
+        {"or": [
+          "canWalljump",
+          "HiJump"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Requires switching between single and double IBJs. While Doubles are not techincally necessary, they make the strat more bearable.",
+        "Exit G-Mode before the Power Bomb explodes in order to break the wall.",
+        "With an extra Power Bomb, it may be worthwhile to use it to kill some of the Rippers."
+      ],
+      "devNote": "This will kill the Beetom, which could prevent using it to get up, so this needs to get all the way to 2. Anything with Morph can exit G-Mode at 6."
+    },
+    {
+      "id": 48,
+      "link": [3, 2],
+      "name": "R-Mode Frozen Beetom X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithRMode": {}
+      },
+      "requires": [
+        {"notable": "R-Mode Frozen Beetom X-Ray Climb"},
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "canIBJ",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}},
+        {"enemyDamage": {"enemy": "Ripper", "type": "contact", "hits": 1}},
+        "canWallIceClip",
+        "canLongXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Gain R-mode while entering the room.",
+        "Use the respawning bugs to refill reserve energy.",
+        "Get grabbed by the Beetom and carry it to the 4-tile high gap one screen above the bottom-left door.",
+        "Position Samus one pixel to the right of being against the wall.",
+        "Jump and aim down, reaching the ceiling at the same time that reserves are triggered.",
+        "This will force Samus to stand up, briefly clipping into the wall above.",
+        "Immediately freeze the Beetom inside the wall, by buffering a shot during the reserve trigger.",
+        "Use a Ripper to get knocked back onto the frozen Beetom.",
+        "This will clip Samus one pixel left into the wall, making it possible to X-ray climb.",
+        "X-ray climb up 2 screens."
+      ]
+    },
+    {
+      "id": 49,
+      "link": [3, 3],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 50,
+      "link": [3, 3],
+      "name": "Leave With Runway, Both Doors Open",
+      "requires": [
+        {"doorUnlockedAtNode": 4}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"nodeId": 4, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 51,
+      "link": [3, 4],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shineChargeFrames": 20}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 52,
+      "link": [3, 4],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 55}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 53,
+      "link": [3, 4],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 54,
+      "link": [3, 4],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 55,
+      "link": [3, 4],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 56,
+      "link": [3, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 57,
+      "link": [3, 5],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 58,
+      "link": [3, 5],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 59,
+      "link": [3, 5],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 60,
+      "link": [3, 6],
+      "name": "Shinespark (Come in Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 45, "excessFrames": 5}}
+      ],
+      "devNote": [
+        "One tile longer runway could be used if the opposite door can be shot open while running.",
+        "This could be done if the door is blue (and run speed is low enough), or pink/green with a Super.",
+        "It's not obvious if this is worth modeling though."
+      ]
+    },
+    {
+      "id": 61,
+      "link": [3, 6],
+      "name": "Shinespark (Come in Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 40},
+        {"shinespark": {"frames": 45, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 123,
+      "link": [3, 6],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ]
+    },
+    {
+      "id": 124,
+      "link": [3, 6],
+      "name": "Absurd Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [7, 3], "note": "Colosseum"},
+            {"position": [6, 4], "note": "Grapple Tutorial Room 2"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump",
+        "canBeExtremelyPatient"
+      ],
+      "devNote": [
+        "FIXME: Setups from other rooms, such as Moat, are theoretically possible but appear to be even more difficult."
+      ]
+    },
+    {
+      "id": 127,
+      "link": [3, 6],
+      "name": "G-mode Morph IBJ, Power Bomb the Rippers",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphLongIBJ",
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphStaggeredIBJ",
+          "h_artificialMorphPowerBomb"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Use two Power Bombs to kill the Rippers, or carefully pass the first two and place a single Power Bomb on the left ledge to kill them all."
+    },
+    {
+      "id": 128,
+      "link": [3, 6],
+      "name": "G-Mode Morph IBJ Between the Bottom Rippers",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "IBJ Between the Bottom Rippers"},
+        "h_artificialMorphDoubleBombJump",
+        "h_artificialMorphStaggeredIBJ",
+        "h_artificialMorphPowerBomb",
+        "h_artificialMorphLongIBJ"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Requires switching between single and double IBJs. While Doubles are not techincally necessary, they make the strat more bearable.",
+        "With a Power Bomb, it can help to kill some of the Rippers."
+      ]
+    },
+    {
+      "id": 64,
+      "link": [3, 7],
+      "name": "Shinespark (Come in Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 34, "excessFrames": 10}},
+        {"enemyDamage": {"enemy": "Ripper", "type": "contact", "hits": 1}}
+      ],
+      "note": "Perform a diagonal spark up to the right ledge.",
+      "devNote": [
+        "Sparking vertically uses 2 more frames, but prevents the Ripper hit if Samus has enough energy to hit the ceiling.",
+        "One tile longer runway could be used if the opposite door can be shot open while running.",
+        "This could be done if the door is blue (and run speed is low enough), or pink/green with a Super.",
+        "It's not obvious if this is worth modeling though."
+      ]
+    },
+    {
+      "id": 65,
+      "link": [3, 7],
+      "name": "Shinespark (Come in Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 5},
+        {"shinespark": {"frames": 34, "excessFrames": 10}},
+        {"enemyDamage": {"enemy": "Ripper", "type": "contact", "hits": 1}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Immediately perform a diagonal spark up to the right ledge on entry.",
+      "devNote": "Sparking vertically uses 2 more frames, but prevents the Ripper hit if Samus has enough energy to hit the ceiling."
+    },
+    {
+      "id": 66,
+      "link": [3, 7],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 67,
+      "link": [3, 10],
+      "name": "Come in Shinecharging, Chain Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canTrickyUseFrozenEnemies",
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "canOffScreenMovement"
+      ],
+      "devNote": [
+        "FIXME: This might also be possible with Spring Ball instead of HiJump, but if so it seems really bad."
+      ]
+    },
+    {
+      "id": 81,
+      "link": [4, 2],
+      "name": "G-mode Morph IBJ, Power Bomb the Rippers",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphLongIBJ",
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphStaggeredIBJ",
+          "h_artificialMorphPowerBomb"
+        ]},
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "canWalljump",
+          "HiJump"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Use two Power Bombs to kill the Rippers, or carefully pass the first two and place a single Power Bomb on the left ledge to kill them all.",
+        "Exit G-Mode before the Power Bomb explodes in order to break the wall."
+      ],
+      "devNote": "This will kill the Beetom, which could prevent using it to get up, so this needs to get all the way to 2. Anything with Morph can exit G-Mode at 6."
+    },
+    {
+      "id": 82,
+      "link": [4, 2],
+      "name": "G-Mode Morph IBJ Between the Bottom Rippers, Power Bomb the Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "IBJ Between the Bottom Rippers"},
+        "h_artificialMorphDoubleBombJump",
+        "h_artificialMorphStaggeredIBJ",
+        "h_artificialMorphPowerBomb",
+        "h_artificialMorphLongIBJ",
+        {"or": [
+          "canWalljump",
+          "HiJump"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Requires switching between single and double IBJs. While Doubles are not techincally necessary, they make the strat more bearable.",
+        "Exit G-Mode before the Power Bomb explodes in order to break the wall.",
+        "With an extra Power Bomb, it may be worthwhile to use it to kill some of the Rippers."
+      ],
+      "devNote": "This will kill the Beetom, which could prevent using it to get up, so this needs to get all the way to 2. Anything with Morph can exit G-Mode at 6."
+    },
+    {
+      "id": 68,
+      "link": [4, 2],
+      "name": "R-Mode Frozen Beetom X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithRMode": {}
+      },
+      "requires": [
+        {"notable": "R-Mode Frozen Beetom X-Ray Climb"},
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "canIBJ",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}},
+        {"enemyDamage": {"enemy": "Ripper", "type": "contact", "hits": 1}},
+        "canWallIceClip",
+        "canLongXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Gain R-mode while entering the room.",
+        "Use the respawning bugs to refill reserve energy.",
+        "Get grabbed by the Beetom and carry it to the 4-tile high gap one screen above the bottom-left door.",
+        "Position Samus one pixel to the right of being against the wall.",
+        "Jump and aim down, reaching the ceiling at the same time that reserves are triggered.",
+        "This will force Samus to stand up, briefly clipping into the wall above.",
+        "Immediately freeze the Beetom inside the wall, by buffering a shot during the reserve trigger.",
+        "Use a Ripper to get knocked back onto the frozen Beetom.",
+        "This will clip Samus one pixel left into the wall, making it possible to X-ray climb.",
+        "X-ray climb up 2 screens."
+      ]
+    },
+    {
+      "id": 69,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shineChargeFrames": 20}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 70,
+      "link": [4, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 55}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 71,
+      "link": [4, 3],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 72,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 73,
+      "link": [4, 3],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 74,
+      "link": [4, 3],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 75,
+      "link": [4, 4],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 76,
+      "link": [4, 4],
+      "name": "Leave With Runway, Both Doors Open",
+      "requires": [
+        {"doorUnlockedAtNode": 3}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"nodeId": 3, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 77,
+      "link": [4, 5],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 78,
+      "link": [4, 5],
+      "name": "Grapple Teleport Inside Wall",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [
+        {"notable": "Grapple Teleport Inside Wall"},
+        "Morph"
+      ],
+      "note": [
+        "After teleporting, Samus should be standing inside the wall.",
+        "Retract Grapple by pressing up, which will pull Samus down and right.",
+        "Hold right, and release Grapple while still holding right.",
+        "Perform a turn-around spin jump (to the left).",
+        "Then morph and roll out to the right."
+      ]
+    },
+    {
+      "id": 79,
+      "link": [4, 6],
+      "name": "Shinespark (Come in Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 45, "excessFrames": 5}}
+      ],
+      "devNote": [
+        "One tile longer runway could be used if the opposite door can be shot open while running.",
+        "This could be done if the door is blue (and run speed is low enough), or pink/green with a Super.",
+        "It's not obvious if this is worth modeling though."
+      ]
+    },
+    {
+      "id": 80,
+      "link": [4, 6],
+      "name": "Shinespark (Come in Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 30},
+        {"shinespark": {"frames": 45, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 129,
+      "link": [4, 6],
+      "name": "G-mode Morph IBJ, Power Bomb the Rippers",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphLongIBJ",
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphStaggeredIBJ",
+          "h_artificialMorphPowerBomb"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Use two Power Bombs to kill the Rippers, or carefully pass the first two and place a single Power Bomb on the left ledge to kill them all."
+    },
+    {
+      "id": 130,
+      "link": [4, 6],
+      "name": "G-Mode Morph IBJ Between the Bottom Rippers",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "IBJ Between the Bottom Rippers"},
+        "h_artificialMorphDoubleBombJump",
+        "h_artificialMorphStaggeredIBJ",
+        "h_artificialMorphPowerBomb",
+        "h_artificialMorphLongIBJ"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Requires switching between single and double IBJs. While Doubles are not techincally necessary, they make the strat more bearable.",
+        "With a Power Bomb, it can help to kill some of the Rippers."
+      ]
+    },
+    {
+      "id": 83,
+      "link": [4, 7],
+      "name": "Shinespark (Come in Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 34, "excessFrames": 10}},
+        {"enemyDamage": {"enemy": "Ripper", "type": "contact", "hits": 1}}
+      ],
+      "note": "Perform a diagonal spark up to the right ledge.",
+      "devNote": [
+        "Sparking vertically uses 2 more frames, but prevents the Ripper hit if Samus has enough energy to hit the ceiling.",
+        "One tile longer runway could be used if the opposite door can be shot open while running.",
+        "This could be done if the door is blue (and run speed is low enough), or pink/green with a Super.",
+        "It's not obvious if this is worth modeling though."
+      ]
+    },
+    {
+      "id": 84,
+      "link": [4, 7],
+      "name": "Shinespark (Come in Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 5},
+        {"shinespark": {"frames": 34, "excessFrames": 10}},
+        {"enemyDamage": {"enemy": "Ripper", "type": "contact", "hits": 1}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Immediately perform a diagonal spark up to the right ledge on entry.",
+      "devNote": "Sparking vertically uses 2 more frames, but prevents the Ripper hit if Samus has enough energy to hit the ceiling."
+    },
+    {
+      "id": 85,
+      "link": [4, 7],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 86,
+      "link": [4, 10],
+      "name": "Come in Shinecharging, Chain Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canTrickyUseFrozenEnemies",
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "canOffScreenMovement"
+      ],
+      "devNote": [
+        "FIXME: This might also be possible with Spring Ball instead of HiJump, but if so it seems really bad."
+      ]
+    },
+    {
+      "id": 87,
+      "link": [5, 2],
+      "name": "R-Mode Frozen Beetom X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithRMode": {}
+      },
+      "requires": [
+        {"notable": "R-Mode Frozen Beetom X-Ray Climb"},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}},
+        {"enemyDamage": {"enemy": "Ripper", "type": "contact", "hits": 1}},
+        "canWallIceClip",
+        "canLongXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Gain R-mode while entering the room.",
+        "Use the respawning bugs to refill reserve energy.",
+        "Get grabbed by the Beetom and carry it to the 4-tile high gap one screen above the bottom-left door.",
+        "Position Samus one pixel to the right of being against the wall.",
+        "Jump and aim down, reaching the ceiling at the same time that reserves are triggered.",
+        "This will force Samus to stand up, briefly clipping into the wall above.",
+        "Immediately freeze the Beetom inside the wall, by buffering a shot during the reserve trigger.",
+        "Use a Ripper to get knocked back onto the frozen Beetom.",
+        "This will clip Samus one pixel left into the wall, making it possible to X-ray climb.",
+        "X-ray climb up 2 screens."
+      ],
+      "devNote": "Given the ability to freeze enemies, nodes 1 and 5 are freely connected, so lumping these into one strat is sound."
+    },
+    {
+      "id": 88,
+      "link": [5, 5],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 89,
+      "link": [5, 5],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 90,
+      "link": [5, 5],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "HiJump",
+        {"or": [
+          "canUseFrozenEnemies",
+          {"and": [
+            "SpaceJump",
+            {"obstaclesCleared": ["B"]}
+          ]},
+          {"and": [
+            "canConsecutiveWalljump",
+            {"obstaclesCleared": ["B"]}
+          ]}
+        ]},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 9}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Without any suits or tanks, Samus will need to move the Beetom part way up the room, shake it off, and go back and farm multiple times.",
+        "While the Beetom is near the top section, by the Rippers, shake the Beetom off, and re-grab it and ascend the shaft.",
+        "Either use frozen Rippers as platforms, while shooting diagonally to prevent freezing the Beetom, or kill the Rippers before ascending.",
+        "Be careful not to apply too many inputs after grabbing the Beetom in order to get to the top before it is shaken off."
+      ],
+      "devNote": [
+        "Some items may reduce the number of Beetom hits, but it's irrelevant since there is an accesible farm in-room.",
+        "FIXME: Add more options for how to ascend the shaft, either without HiJump, or without killing the Rippers. These may need to be notable."
+      ]
+    },
+    {
+      "id": 91,
+      "link": [5, 9],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 92,
+      "link": [5, 10],
+      "name": "Come in Shinecharging, Chain Temporary Blue (Partial Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ]
+    },
+    {
+      "id": 93,
+      "link": [5, 10],
+      "name": "Come in Shinecharging, Chain Temporary Blue (Full Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ]
+    },
+    {
+      "id": 94,
+      "link": [6, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "SpaceJump",
+          "canIBJ"
+        ]}
+      ]
+    },
+    {
+      "id": 95,
+      "link": [6, 1],
+      "name": "Frozen Beetom Lure",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        "h_crouchJumpDownGrab",
+        {"obstaclesNotCleared": ["A"]}
+      ],
+      "note": "Using a crouch jump, get the Beetom attach to Samus. Quickly freeze it before it deals damage, if Samus is at very low energy."
+    },
+    {
+      "id": 96,
+      "link": [6, 7],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 97,
+      "link": [7, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 98,
+      "link": [7, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 99,
+      "link": [7, 6],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster",
+            {"or": [
+              "canTrickyJump",
+              "canWalljump"
+            ]}
+          ]},
+          {"and": [
+            "HiJump",
+            "canConsecutiveWalljump"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 100,
+      "link": [7, 6],
+      "name": "Frozen Ripper Platforms",
+      "requires": [
+        "canTrivialUseFrozenEnemies",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          "canIBJ"
+        ]}
+      ]
+    },
+    {
+      "id": 101,
+      "link": [7, 6],
+      "name": "IBJ",
+      "requires": [
+        "canLongIBJ",
+        {"or": [
+          {"and": [
+            "canWalljump",
+            "ScrewAttack"
+          ]},
+          {"and": [
+            {"or": [
+              "canWalljump",
+              "canSpringBallJumpMidAir"
+            ]},
+            {"ammo": {"type": "PowerBomb", "count": 1}}
+          ]},
+          {"enemyKill": {
+            "enemies": [["Ripper", "Ripper", "Ripper"], ["Ripper"]],
+            "explicitWeapons": ["Super", "PowerBomb"]
+          }}
+        ]}
+      ]
+    },
+    {
+      "id": 102,
+      "link": [7, 6],
+      "name": "IBJ Between the Bottom Rippers",
+      "requires": [
+        {"notable": "IBJ Between the Bottom Rippers"},
+        "canDoubleBombJump",
+        "canStaggeredIBJ",
+        "canLongIBJ"
+      ],
+      "note": "Requires switching between single and double IBJs. While Doubles are not techincally necessary, they make the strat more bearable."
+    },
+    {
+      "id": 103,
+      "link": [7, 6],
+      "name": "SpringBall Jump",
+      "requires": [
+        "canTrickySpringBallJump",
+        {"or": [
+          "canConsecutiveWalljump",
+          "HiJump",
+          {"and": [
+            "canTrickyJump",
+            "canLateralMidAirMorph",
+            "canResetFallSpeed",
+            {"or": [
+              {"ammo": {"type": "PowerBomb", "count": 1}},
+              {"ammo": {"type": "Super", "count": 1}},
+              {"enemyDamage": {"enemy": "Ripper", "type": "contact", "hits": 1}},
+              "canTrickyDodgeEnemies"
+            ]}
+          ]},
+          "canSpringFling"
+        ]},
+        {"or": [
+          "canTrickyJump",
+          "canLateralMidAirMorph",
+          "canSpringwall"
+        ]}
+      ]
+    },
+    {
+      "id": 104,
+      "link": [7, 6],
+      "name": "Midair HBJ",
+      "requires": [
+        {"notable": "Midair HBJ"},
+        "canWallJumpBombBoost",
+        "canHBJ"
+      ],
+      "note": [
+        "Starting on the right ledge at the bottom of Red Tower, wall jump just below the middle plant, just above the top ripper.",
+        "Place two bombs out of the wall jump landing on the first bomb and getting boosted by both.",
+        "While rising, place two more bombs for a second HBJ. Colliding with the side of the ledge after the third bomb can help."
+      ]
+    },
+    {
+      "id": 105,
+      "link": [7, 6],
+      "name": "Diagonal Bomb Jump",
+      "requires": [
+        "canWalljump",
+        "canDiagonalBombJump"
+      ]
+    },
+    {
+      "id": 106,
+      "link": [7, 6],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 37, "excessFrames": 6}},
+          {"and": [
+            "canConsecutiveWalljump",
+            {"shinespark": {"frames": 13, "excessFrames": 6}}
+          ]},
+          {"and": [
+            "canTrivialUseFrozenEnemies",
+            {"shinespark": {"frames": 8, "excessFrames": 6}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 107,
+      "link": [7, 7],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 108,
+      "link": [9, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 109,
+      "link": [9, 5],
+      "name": "Wall Jump, No Rippers",
+      "requires": [
+        "canConsecutiveWalljump",
+        {"or": [
+          "canPreciseWalljump",
+          "canSpringwall",
+          "HiJump"
+        ]},
+        {"obstaclesCleared": ["B"]}
+      ],
+      "note": "Kill the Rippers then wall jump up.",
+      "devNote": "With these tech, it's not hard to get up "
+    },
+    {
+      "id": 110,
+      "link": [9, 5],
+      "name": "Frozen Ripper Platforms",
+      "requires": [
+        "canTrivialUseFrozenEnemies",
+        {"obstaclesNotCleared": ["B"]}
+      ]
+    },
+    {
+      "id": 111,
+      "link": [9, 5],
+      "name": "Hero Shot",
+      "requires": [
+        {"notable": "Hero Shot"},
+        "canHeroShot",
+        "canTrickyWalljump"
+      ],
+      "note": "Wall jump between the Rippers. Either shoot the block, fall, and quickly climb again, or shoot from the bottom and follow Samus's shot up the tower."
+    },
+    {
+      "id": 112,
+      "link": [9, 5],
+      "name": "Space Jump, No Rippers",
+      "requires": [
+        "SpaceJump",
+        {"or": [
+          "HiJump",
+          {"and": [
+            "canCarefulJump",
+            "canWalljump"
+          ]}
+        ]},
+        {"obstaclesCleared": ["B"]}
+      ],
+      "note": [
+        "This strat is for killing all of the Rippers and then using Space Jump to get up without consecutive wall jumps.",
+        "Space jump up near the shot block, then shoot it while falling right as it goes off screen, then space jump back up."
+      ]
+    },
+    {
+      "id": 113,
+      "link": [9, 5],
+      "name": "Fast Climb with Space Jump, No Rippers",
+      "requires": [
+        {"notable": "Fast Climb with Space Jump"},
+        "SpaceJump",
+        "canTrickyJump",
+        {"obstaclesCleared": ["B"]}
+      ],
+      "wallJumpAvoid": true,
+      "note": [
+        "Climb the top of Red Tower with just Space Jump.",
+        "This can be done by shooting the block as Samus is going upward, so she goes through the block as it breaks.",
+        "Alternatively, this can be done by shooting the block while falling right as it goes off screen,",
+        "then using well-timed short space jumps to go up as rapidly as possible before the block respawns."
+      ]
+    },
+    {
+      "id": 125,
+      "link": [9, 5],
+      "name": "HiJump, Space Jump Climb Between the Rippers",
+      "requires": [
+        "SpaceJump",
+        "HiJump",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Climb the top of Red Tower with just HiJump and Space Jump.",
+        "This can be done by dodging the Rippers and shooting the block as Samus is going upward, so she goes through the block as it breaks."
+      ]
+    },
+    {
+      "id": 126,
+      "link": [9, 5],
+      "name": "Bootless Space Jump Climb Between the Rippers",
+      "requires": [
+        "canPreciseSpaceJump",
+        "canTrickyDodgeEnemies"
+      ],
+      "note": [
+        "Climb the top of Red Tower with just Space Jump.",
+        "This can be done by dodging the Rippers and shooting the block as Samus is going upward, so she goes through the block as it breaks.",
+        "The positioning and timing of the final jump and shot is more precise without HiJump."
+      ]
+    },
+    {
+      "id": 114,
+      "link": [9, 5],
+      "name": "Jump Into IBJ",
+      "requires": [
+        "canJumpIntoIBJ",
+        "canLongIBJ",
+        {"or": [
+          "canBombAboveIBJ",
+          "canPowerBombMidIBJ"
+        ]},
+        {"obstaclesCleared": ["B"]}
+      ],
+      "note": [
+        "Jump into IBJ to avoid breaking the ledges. Place a Power Bomb on the ascent to break the block and continue the IBJ through it.",
+        "It is possible to do without a Power Bomb with canBombAboveIBJ."
+      ]
+    },
+    {
+      "id": 115,
+      "link": [9, 5],
+      "name": "Long IBJ With Broken Ledges",
+      "requires": [
+        "canBeVeryPatient",
+        "canPowerBombMidIBJ",
+        "canLongIBJ",
+        {"or": [
+          {"obstaclesCleared": ["B"]},
+          {"ammo": {"type": "PowerBomb", "count": 2}}
+        ]}
+      ],
+      "note": [
+        "Without canJumpIntoIBJ, Samus will need to kill the Rippers while breaking the bomb blocks then start from the platforms below.",
+        "Place a Power Bomb on the ascent to break the block and continue the IBJ through it."
+      ]
+    },
+    {
+      "id": 116,
+      "link": [9, 9],
+      "name": "Kill the Rippers - Power Bomb Without Breaking the Ledges",
+      "requires": [
+        "h_usePowerBomb",
+        "canCarefulJump",
+        {"or": [
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            "canTrickyDashJump"
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            {"or": [
+              "canStaggeredIBJ",
+              "canDoubleBombJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "note": "To kill the Rippers with a single Power Bomb without breaking the ledge, place the bomb just above the second Ripper."
+    },
+    {
+      "id": 117,
+      "link": [9, 9],
+      "name": "Kill the Rippers - Supers",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 4}},
+        {"or": [
+          "canWalljump",
+          "SpaceJump",
+          "canJumpIntoIBJ",
+          {"and": [
+            "canSpringBallJumpMidAir",
+            {"or": [
+              "HiJump",
+              "canTrickyJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "note": "Kill the Rippers with Supers."
+    },
+    {
+      "id": 118,
+      "link": [9, 9],
+      "name": "Kill the Rippers - Screw Attack",
+      "requires": [
+        "ScrewAttack",
+        {"or": [
+          "SpaceJump",
+          "canConsecutiveWalljump",
+          {"and": [
+            "canWalljump",
+            "HiJump"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "note": "Kill the Rippers with Screw Attack. Break spin before landing to prevent breaking the platform."
+    },
+    {
+      "id": 119,
+      "link": [10, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": [
+        "FIXME: The h_getBlueSpeedMaxRunway is to satisfy tests for now.",
+        "We should add a proper way to represent that the blue state carries over from the previous strat."
+      ]
+    },
+    {
+      "id": 120,
+      "link": [10, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "h_getBlueSpeedMaxRunway",
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "can4HighMidAirMorph",
+        {"ammo": {"type": "PowerBomb", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": [], "useImplicitRequires": false}
+      ],
+      "devNote": [
+        "FIXME: The h_getBlueSpeedMaxRunway is to satisfy tests for now.",
+        "We should add a proper way to represent that the blue state carries over from the previous strat."
+      ]
+    },
+    {
+      "id": 121,
+      "link": [10, 3],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "h_getBlueSpeedMaxRunway",
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "canOffScreenMovement"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": [
+        "FIXME: The h_getBlueSpeedMaxRunway is to satisfy tests for now.",
+        "We should add a proper way to represent that the blue state carries over from the previous strat."
+      ]
+    },
+    {
+      "id": 122,
+      "link": [10, 4],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "h_getBlueSpeedMaxRunway",
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "canOffScreenMovement"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": [
+        "FIXME: The h_getBlueSpeedMaxRunway is to satisfy tests for now.",
+        "We should add a proper way to represent that the blue state carries over from the previous strat."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "R-Mode Frozen Beetom X-Ray Climb",
+      "note": [
+        "Gain R-mode while entering the room.",
+        "Use the respawning bugs to refill reserve energy.",
+        "Get grabbed by the Beetom and carry it to the 4-tile high gap one screen above the bottom-left door.",
+        "Position Samus one pixel to the right of being against the wall.",
+        "Jump and aim down, reaching the ceiling at the same time that reserves are triggered.",
+        "This will force Samus to stand up, briefly clipping into the wall above.",
+        "Immediately freeze the Beetom inside the wall, by buffering a shot during the reserve trigger.",
+        "Use a Ripper to get knocked back onto the frozen Beetom.",
+        "This will clip Samus one pixel left into the wall, making it possible to X-ray climb.",
+        "X-ray climb up 2 screens."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Hero Shot Shinespark",
+      "wallJumpAvoid": true,
+      "note": [
+        "Come in shinecharged (or shinecharging) from the top left door. With missiles selected, position Samus roughly in the horizontal center of the room.",
+        "Crouch, aim up, then in very quick succession, shoot a missile upwards then spark up.",
+        "If done correctly, Samus will pass the Missile, break the bomb block platforms, then be passed by the Missile which will break the shot blocks at the top."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "IBJ Between the Bottom Rippers",
+      "note": "Requires switching between single and double IBJs. While Doubles are not techincally necessary, they make the strat more bearable."
+    },
+    {
+      "id": 5,
+      "name": "Frozen Beetom Ice Climb",
+      "wallJumpAvoid": true,
+      "note": [
+        "Freeze the Beetom and use it as a platform to climb the room without wall jumps.",
+        "This can be done with well-timed Flatley jumps on top of the frozen Beetom,",
+        "by turning around and spin jumping just as it unfreezes.",
+        "This can be made easier (at the cost of some additional Beetom hits) with a pause-buffer method:",
+        "Press pause, and begin a turn-around just before the pause hits;",
+        "unequip Ice to immediately unfreeze the Beetom;",
+        "unpause and press jump quickly after control resumes, but without buffering the input.",
+        "For the top two jumps, it is possible to reduce the risk of damage by freezing the Beetom against the wall:",
+        "in case of a failure due to an early (e.g. buffered) jump, the Beetom may stay stuck wiggling in the wall,",
+        "and then it can be refrozen without needing to take damage to reposition it."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Grapple Teleport Inside Wall",
+      "note": [
+        "After teleporting, Samus should be standing inside the wall.",
+        "Retract Grapple by pressing up, which will pull Samus down and right.",
+        "Hold right, and release Grapple while still holding right.",
+        "Perform a turn-around spin jump (to the left).",
+        "Then morph and roll out to the right."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Midair HBJ",
+      "note": [
+        "Starting on the right ledge at the bottom of Red Tower, wall jump just below the middle plant, just above the top ripper.",
+        "Place two bombs out of the wall jump landing on the first bomb and getting boosted by both.",
+        "While rising, place two more bombs for a second HBJ. Colliding with the side of the ledge after the third bomb can help."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Hero Shot",
+      "note": "Wall jump between the Rippers. Either shoot the block, fall, and quickly climb again, or shoot from the bottom and follow Samus's shot up the tower."
+    },
+    {
+      "id": 9,
+      "name": "Fast Climb with Space Jump",
+      "wallJumpAvoid": true,
+      "note": [
+        "Climb the top of Red Tower with just Space Jump.",
+        "This can be done by shooting the block as Samus is going upward, so she goes through the block as it breaks.",
+        "Alternatively, this can be done by shooting the block while falling right as it goes off screen,",
+        "then using well-timed short space jumps to go up as rapidly as possible before the block respawns."
+      ]
+    }
+  ],
+  "nextStratId": 135,
+  "nextNotableId": 10
+}

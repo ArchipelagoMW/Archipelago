@@ -1,0 +1,1135 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 140,
+  "name": "Plowerhouse Room",
+  "area": "Norfair",
+  "subarea": "Lower",
+  "subsubarea": "East",
+  "roomAddress": "0x7B482",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001995a",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019966",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Farm Junction Free of Holtzes",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 2, 2]
+      ],
+      "note": [
+        "This node indicates being at the farms, where the Holtzes are killed or trapped",
+        "Its boundary includes the three Zebbo farms and two middle Holtzes, but not the rightmost or leftmost Holtzes."
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Plowerhouse Room Middle Holtzes",
+      "enemyName": "Holtz",
+      "quantity": 2,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e2",
+      "groupName": "Plowerhouse Room Left Zebbo",
+      "enemyName": "Zebbo",
+      "quantity": 1,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e3",
+      "groupName": "Plowerhouse Room Middle Zebbo",
+      "enemyName": "Zebbo",
+      "quantity": 1,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e4",
+      "groupName": "Plowerhouse Room Right Zebbo",
+      "enemyName": "Zebbo",
+      "quantity": 1,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e5",
+      "groupName": "Plowerhouse Room Left Holtzes",
+      "enemyName": "Holtz",
+      "quantity": 2,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e6",
+      "groupName": "Plowerhouse Room Right Holtzes",
+      "enemyName": "Holtz",
+      "quantity": 2,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {
+          "id": 3,
+          "note": "Strats with weak beams and no canCarefulJump go 1 -> 2 -> 3, in order to take advantage of the safe spot at 2."
+        }
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {
+          "id": 1,
+          "devNote": "This node is strictly to farm. It is never worth going to this node without being able to farm."
+        },
+        {
+          "id": 2,
+          "devNote": "This node is strictly to farm. It is never worth going to this node without being able to farm."
+        },
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway (Short Runway)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "This partial runway does not require taking care of the Holtzes."
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Holtz", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 47,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Holtz",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: Could maybe reduce the heat frames if coming from the farm or the right.",
+        "FIXME: A Power Bomb can be used, but it's complex enough to be a separate strat."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 500},
+        {"enemyDamage": {"enemy": "Holtz", "type": "contact", "hits": 2}},
+        {"enemyDamage": {"enemy": "Zebbo", "type": "contact", "hits": 1}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [1, 2],
+      "name": "Acid run",
+      "requires": [
+        {"or": [
+          {"and": [
+            "SpeedBooster",
+            {"heatFrames": 265},
+            {"acidFrames": 112}
+          ]},
+          {"and": [
+            {"heatFrames": 300},
+            {"acidFrames": 145}
+          ]}
+        ]},
+        "Gravity",
+        "canSuitlessLavaDive"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 37,
+      "link": [1, 2],
+      "name": "Acid Leave Shinecharged",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 38, "openEnd": 0}},
+        {"heatFrames": 300},
+        {"acidFrames": 133},
+        "Gravity",
+        "canSuitlessLavaDive",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 75}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"nodeId": 2, "types": ["super"], "requires": []},
+        {"nodeId": 2, "types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Zebbo Damage Boost",
+      "requires": [
+        "canTrickyJump",
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Zebbo", "type": "contact", "hits": 1}},
+        {"heatFrames": 390}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Turn back to the left after entering the room then run under the Holtzes.",
+        "Damage from a Zebbo from the right farm to gain invulnerability frames, then jump through the last two Holtzes."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [1, 2],
+      "name": "Cross While Farming",
+      "requires": [
+        "canFarmWhileShooting",
+        {"or": [
+          {"and": [
+            {"heatFramesWithEnergyDrops": {
+              "frames": 120,
+              "drops": [{"enemy": "Zebbo", "count": 1}]
+            }},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 130,
+              "drops": [{"enemy": "Zebbo", "count": 1}]
+            }},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 140,
+              "drops": [{"enemy": "Zebbo", "count": 1}]
+            }},
+            {"heatFrames": 100}
+          ]},
+          {"and": [
+            {"or": [
+              "Spazer",
+              "Wave",
+              "Plasma"
+            ]},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 100,
+              "drops": [{"enemy": "Zebbo", "count": 1}]
+            }},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 100,
+              "drops": [{"enemy": "Zebbo", "count": 1}]
+            }},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 130,
+              "drops": [{"enemy": "Zebbo", "count": 1}]
+            }},
+            {"heatFrames": 100}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 38,
+      "link": [1, 2],
+      "name": "Screw Attack and SpaceJump",
+      "requires": [
+        "SpaceJump",
+        "ScrewAttack",
+        {"heatFrames": 340}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 39,
+      "link": [1, 2],
+      "name": "Screw Attack and SpaceJump Running Entry",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        "ScrewAttack",
+        {"heatFrames": 240}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 40,
+      "link": [1, 2],
+      "name": "SpaceJump with Blue Speed",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 190}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 41,
+      "link": [1, 2],
+      "name": "Come in Shinesparking",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"heatFrames": 65},
+        {"shinespark": {"frames": 61, "excessFrames": 4}},
+        {"heatFrames": 95}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 49,
+      "link": [1, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "ScrewAttack",
+          "canInsaneJump",
+          {"and": [
+            "canTrickyDodgeEnemies",
+            "Plasma"
+          ]},
+          {"enemyDamage": {"enemy": "Holtz", "type": "contact", "hits": 1}}
+        ]},
+        {"or": [
+          "h_heatedGModePauseAbuse",
+          "h_heatedGModeOpenDifferentDoor"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Kill or dodge the Holtz while crossing the room. With Plasma and Wave or Ice, it is possible to quickly kill the Holtz while at the left door.",
+        "Otherwise, in direct G-mode, jump immediately on entry while Samus still has i-frames to get to the left of the first Zebbo and kill it,",
+        "and in indirect G-mode, move to the left then run under the Holtzes.",
+        "Carefully cross the room while killing the Holtz without luring them, or dodge them.",
+        "It is possible to kill a Zebbo by the door and pause abuse to grab its Energy drop on G-mode exit, which requires not killing the right Zebbo until it is in location."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "Strong Beam Kill",
+      "requires": [
+        {"or": [
+          "Plasma",
+          {"and": [
+            "Ice",
+            "Wave",
+            "Spazer"
+          ]}
+        ]},
+        {"enemyDamage": {"enemy": "Holtz", "type": "contact", "hits": 1}},
+        {"heatFrames": 350}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Strong Beam Avoid Kill",
+      "requires": [
+        "canDodgeWhileShooting",
+        {"or": [
+          "Plasma",
+          {"and": [
+            "Ice",
+            "Wave",
+            "Spazer"
+          ]}
+        ]},
+        {"heatFrames": 550}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Turn back to the left after entering the room then run under the Holtzes.",
+        "Avoid the third Holtz, then kill the fourth to clear the middle Zebbo farm."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 3],
+      "name": "Quick Kill",
+      "requires": [
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            "Ice",
+            "Wave"
+          ]}
+        ]},
+        {"heatFrames": 100}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 3],
+      "name": "Super Kill",
+      "requires": [
+        {"or": [
+          "canDodgeWhileShooting",
+          {"enemyDamage": {"enemy": "Holtz", "type": "contact", "hits": 1}}
+        ]},
+        {"enemyKill": {
+          "enemies": [["Holtz", "Holtz"]],
+          "explicitWeapons": ["Super"]
+        }},
+        {"heatFrames": 300}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 3],
+      "name": "Power Bomb Kill",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Holtz", "Holtz"]],
+          "explicitWeapons": ["PowerBomb"]
+        }},
+        {"enemyDamage": {"enemy": "Holtz", "type": "contact", "hits": 2}},
+        {"heatFrames": 450}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 3],
+      "name": "Power Bomb Avoid Kill",
+      "requires": [
+        "canTrickyJump",
+        {"enemyKill": {
+          "enemies": [["Holtz", "Holtz"]],
+          "explicitWeapons": ["PowerBomb"]
+        }},
+        {"heatFrames": 600}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Place a power bomb near the door, then move right and jump under the Holtzes to the first platform.",
+        "Continue placing power bombs while avoiding the Holtzes and avoiding luring the third one to the right."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        {"enemyDamage": {"enemy": "Holtz", "type": "contact", "hits": 2}},
+        {"heatFrames": 420}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Zebbo Damage Boost",
+      "requires": [
+        "canTrickyJump",
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Zebbo", "type": "contact", "hits": 1}},
+        {"heatFrames": 315}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 53,
+      "link": [2, 1],
+      "name": "Tricky Dodge",
+      "requires": [
+        "canTrickyDodgeEnemies",
+        {"or": [
+          "canInsaneJump",
+          "canPreciseWalljump"
+        ]},
+        {"heatFrames": 310}
+      ]
+    },
+    {
+      "id": 54,
+      "link": [2, 1],
+      "name": "Cross While Farming",
+      "requires": [
+        "canFarmWhileShooting",
+        {"heatFramesWithEnergyDrops": {
+          "frames": 100,
+          "drops": [{"enemy": "Zebbo", "count": 1}]
+        }},
+        {"heatFramesWithEnergyDrops": {
+          "frames": 125,
+          "drops": [{"enemy": "Zebbo", "count": 1}]
+        }},
+        {"heatFramesWithEnergyDrops": {
+          "frames": 125,
+          "drops": [{"enemy": "Zebbo", "count": 1}]
+        }},
+        {"heatFrames": 130}
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 1],
+      "name": "Screw Attack and SpaceJump",
+      "requires": [
+        "SpaceJump",
+        "ScrewAttack",
+        {"heatFrames": 310}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 43,
+      "link": [2, 1],
+      "name": "Screw Attack and SpaceJump Running Entry",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        "ScrewAttack",
+        {"heatFrames": 230}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 44,
+      "link": [2, 1],
+      "name": "SpaceJump with Blue Speed",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 200}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 45,
+      "link": [2, 1],
+      "name": "Come in Shinesparking",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"heatFrames": 65},
+        {"shinespark": {"frames": 60, "excessFrames": 4}},
+        {"heatFrames": 95}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 46,
+      "link": [2, 1],
+      "name": "Acid Leave Shinecharged",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 38, "openEnd": 0}},
+        {"heatFrames": 390},
+        {"acidFrames": 133},
+        "Gravity",
+        "canSuitlessLavaDive",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 75}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["super"], "requires": []},
+        {"nodeId": 1, "types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 50,
+      "link": [2, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canTrickyDodgeEnemies",
+          "ScrewAttack",
+          "Plasma",
+          {"enemyDamage": {"enemy": "Zebbo", "type": "contact", "hits": 1}}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Kill or dodge the Holtz while crossing the room.",
+        "It's possible to kill the Holtz while staying safe; some of them can also be lured under platforms and out of the way."
+      ]
+    },
+    {
+      "id": 51,
+      "link": [2, 1],
+      "name": "G-Mode, With Zebbo Farm",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "ScrewAttack",
+          "canBeVeryPatient",
+          {"and": [
+            "canBePatient",
+            {"or": [
+              "Ice",
+              "Wave",
+              "Spazer"
+            ]}
+          ]},
+          "Plasma",
+          "canInsaneJump",
+          {"enemyDamage": {"enemy": "Zebbo", "type": "contact", "hits": 1}}
+        ]},
+        "h_heatedGModePauseAbuse"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Kill or dodge the Holtz while crossing the room. It's possible to kill the Holtz while staying safe; some of them can also be lured under platforms and out of the way.",
+        "It is possible to kill a Zebbo by the door and pause abuse to grab its Energy drop on G-mode exit,",
+        "which requires manipulating or killing the Holtz while not killing the left Zebbo until it is in location."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 45}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "Leave With Runway - Frozen Holtz",
+      "requires": [
+        "h_trickyFrozenEnemyRunway",
+        {"heatFrames": 800},
+        {"or": [
+          {"and": [
+            "Wave",
+            {"heatFrames": 500}
+          ]},
+          {"and": [
+            "Spazer",
+            {"heatFrames": 500}
+          ]},
+          {"and": [
+            "Plasma",
+            {"heatFrames": 200}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 0
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "On entry lure both Holtz. Kill one and freeze the other in position.",
+      "devNote": "FIXME: These heatFrames can likely be tightened."
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 48,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Zebbo",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 150},
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 225}]
+        },
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 650}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Immeidately jump over both Holtz and get back to the door quickly.",
+        "Alternatively it is possible to wait by the door then time the lure of the second Holtz to sync the two together."
+      ],
+      "devNote": "FIXME: Could probably reduce the heat frames if coming from the farm or the left."
+    },
+    {
+      "id": 20,
+      "link": [2, 3],
+      "name": "Power Beam Kill",
+      "requires": [
+        {"or": [
+          "canBePatient",
+          "canDodgeWhileShooting"
+        ]},
+        {"heatFrames": 2400}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "This strat is below the normal threshold for canBePatient, but it is particularly tedious."
+    },
+    {
+      "id": 21,
+      "link": [2, 3],
+      "name": "Intermediate Beam Kill",
+      "requires": [
+        {"or": [
+          "Wave",
+          "Spazer"
+        ]},
+        {"heatFrames": 950}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [2, 3],
+      "name": "Strong Beam Kill",
+      "requires": [
+        {"or": [
+          "Plasma",
+          {"and": [
+            "Ice",
+            "Wave",
+            "Spazer"
+          ]}
+        ]},
+        {"heatFrames": 500}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 23,
+      "link": [2, 3],
+      "name": "Quick Kill",
+      "requires": [
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            "Ice",
+            "Wave"
+          ]}
+        ]},
+        {"heatFrames": 100}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 24,
+      "link": [2, 3],
+      "name": "Ammo Kill",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Holtz", "Holtz"]],
+          "explicitWeapons": ["Super", "PowerBomb"]
+        }},
+        {"heatFrames": 550}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [2, 3],
+      "name": "Trap the Holtzes",
+      "requires": [
+        "canTrickyJump",
+        {"heatFrames": 400}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "One easy way to do this is by waiting for the first Holtz to go under the first platform.",
+        "Immediately when it hits the platform, move forward to lure the second Holtz.",
+        "When they start going down, jump over them and quickly get to the left side of the first Zebbo farm, trapping 3 Holtzes underneath."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 1],
+      "name": "Leave With Runway (Full Runway)",
+      "requires": [
+        "h_heatResistant",
+        {"heatFrames": 100}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 27,
+      "link": [3, 1],
+      "name": "Farm then Leave",
+      "requires": [
+        "h_heatResistant",
+        {"heatFrames": 100}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Leaving from the farm node assumes killing all the Holtzes and farming to full before exiting.",
+        "Gaining Energy from the farm requires some sort of heat reduction."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [3, 1],
+      "name": "Farm then Leave With Runway - Frozen Holtz",
+      "requires": [
+        "h_heatResistant",
+        "h_trickyFrozenEnemyRunway",
+        {"heatFrames": 300}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Assumes killing all the Holtzes except for one that can be frozen to extend the runway.",
+        "Get the Holtz stuck under the platform then farming to full before freezing it to extend the runway.",
+        "Gaining Energy from the farm requires some sort of heat reduction."
+      ],
+      "devNote": "FIXME: Another strat could be added without the farm or heat resistance."
+    },
+    {
+      "id": 29,
+      "link": [3, 1],
+      "name": "Farm then Leave With Runway - Frozen Zebbo",
+      "requires": [
+        "h_heatResistant",
+        "h_frozenEnemyRunway",
+        "Morph",
+        {"heatFrames": 500}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Assumes killing all the Holtzes then farming to full.",
+        "Morph on the ground near the Zebbo spawner then quickly unmorph and shoot as it starts to move horizontally.",
+        "While on the runway near the door, freeze the Zebbo again while maintaining a half-tile gap between it and the runway to extend it as much as possible.",
+        "Gaining Energy from the farm requires some sort of heat reduction."
+      ],
+      "devNote": "FIXME: Another strat could be added without the farm or heat resistance."
+    },
+    {
+      "id": 30,
+      "link": [3, 2],
+      "name": "Farm then Leave",
+      "requires": [
+        "h_heatResistant",
+        {"heatFrames": 100}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Leaving from the farm node assumes killing all the Holtzes and farming to full before exiting.",
+        "Gaining Energy from the farm requires some sort of heat reduction."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [3, 2],
+      "name": "Farm then Leave With Runway - Frozen Holtz",
+      "requires": [
+        "h_heatResistant",
+        "h_trickyFrozenEnemyRunway",
+        {"heatFrames": 300}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Assumes killing all the Holtzes except for one that can be frozen to extend the runway.",
+        "Get the Holtz stuck under the platform then farming to full before freezing it to extend the runway.",
+        "Gaining Energy from the farm requires some sort of heat reduction."
+      ],
+      "devNote": "FIXME: Another strat could be added without the farm or heat resistance."
+    },
+    {
+      "id": 32,
+      "link": [3, 2],
+      "name": "Farm then Leave With Runway - Frozen Zebbo",
+      "requires": [
+        "h_heatResistant",
+        "h_frozenEnemyRunway",
+        "Morph",
+        {"heatFrames": 500}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Assumes killing all the Holtzes then farming to full.",
+        "Morph on the ground near the Zebbo spawner then quickly unmorph and shoot as it starts to move horizontally.",
+        "While on the runway near the door, freeze the Zebbo again while maintaining a half-tile gap between it and the runway to extend it as much as possible.",
+        "Gaining Energy from the farm requires some sort of heat reduction."
+      ],
+      "devNote": "FIXME: Another strat could be added without the farm or heat resistance."
+    },
+    {
+      "id": 33,
+      "link": [3, 3],
+      "name": "Zebbo Farm",
+      "requires": [
+        "h_heatProof",
+        {"simpleCycleFrames": 100},
+        {"cycleFrames": 20}
+      ],
+      "farmCycleDrops": [{"enemy": "Zebbo", "count": 1}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 34,
+      "link": [3, 3],
+      "name": "Holtz Farm",
+      "requires": [
+        "h_heatProof",
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 260}
+          ]}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            "Wave",
+            {"cycleFrames": 60}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Holtz", "count": 2}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 35,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": "Crystal Flash to the left of the pipe to avoid the Holtzes."
+    }
+  ],
+  "notables": [],
+  "nextStratId": 55,
+  "nextNotableId": 1
+}

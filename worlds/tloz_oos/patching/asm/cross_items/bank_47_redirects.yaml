@@ -1,0 +1,78 @@
+47/498c/loadAttributesAndGraphicsAndIncState: /copy s,$07,$0974,$07
+
+47/4993/itemLoadAttributesAndGraphics: |
+  ld e,$07
+  ld hl,$497b
+  jp interBankCall
+
+47/49c8/itemUpdateDamageToApply: |
+  ld e,$07
+  ld hl,$49b0
+  jp safeInterBankCall
+
+47/49d9/itemAnimate: |
+  ld e,$07
+  ld hl,$49c1
+  jp interBankCall
+
+47/49e2/itemSetAnimation: |
+  ld e,$07
+  ld hl,$49ca
+  jp safeInterBankCall
+
+47/4a22/itemTransferKnockbackToLink: |
+  ld e,$07
+  ld hl,$4a0a
+  jp interBankCall
+
+47/4a36/applyOffsetTableHL: /copy a,$07,$4a36,$19
+
+47/4a4f/itemMergeZPositionIfSidescrollingArea: |
+  ld e,$07
+  ld hl,$4a37
+  jp interBankCall
+
+47/4b3c/itemUpdateThrowingVerticallyAndCheckHazards: |
+  ld e,$07
+  ld hl,$4b24
+  jp safeInterBankCall
+
+47/4b81/objectCreateClinkInteraction: |
+  ld b,$07 ; INTERAC_CLINK
+  jp $24af ; objectCreateInteractionWithSubid00
+
+47/4b86/cpRelatedObject1ID: |
+  ld e,$07
+  ld hl,$4b6e
+  jp safeInterBankCall
+
+47/4b95/itemCheckCanPassSolidTile: |
+  ld e,$07
+  ld hl,$4b7d
+  jp safeInterBankCall
+
+47/4bbf/checkTileIsPassableFromDirection: |
+  ld hl,$4ba7
+  
+  safeInterBankCall_07:
+  push af
+  ldh a,(hRomBank)
+  push af
+  ld a,$07
+  jp safeInterBankCallReady
+
+47/510f/seedItemClearKnockback: /copy a,$07,$510f,$05
+
+47/577e/itemCheckWithinRangeOfLink: /copy a,$07,$577e,$13
+
+47/60d6/itemInitializeFromLinkPosition: /copy s,$07,$5e5a,$1f
+
+47/628e/itemMimicBgTile: |
+  ld e,$07
+  ld hl,$6010
+  jp safeInterBankCall
+
+47/639c/bombUpdateThrowingLaterally: |
+  ld e,$07
+  ld hl,$613a
+  jp interBankCall

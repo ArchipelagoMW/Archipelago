@@ -1,0 +1,280 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Red Tower and Red Brinstar Fireflea Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 66,
+          "roomName": "Red Tower",
+          "nodeid": 2,
+          "nodeName": "Red Tower Center Left Door (to Firefleas)",
+          "position": "right"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 67,
+          "roomName": "Red Brinstar Fireflea Room",
+          "nodeid": 2,
+          "nodeName": "Red Firefleas Right Door (to Red Tower)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Red Tower and Sloaters Refill",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 66,
+          "roomName": "Red Tower",
+          "nodeid": 3,
+          "nodeName": "Red Tower Bottom Left Door (to Sloaters Refill)",
+          "position": "right"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 319,
+          "roomName": "Sloaters Refill",
+          "nodeid": 1,
+          "nodeName": "Sloaters Refill Door (to Red Tower)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Red Tower and Bat Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 66,
+          "roomName": "Red Tower",
+          "nodeid": 4,
+          "nodeName": "Red Tower Bottom Right Door (to Bat Room)",
+          "position": "left"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 69,
+          "roomName": "Bat Room",
+          "nodeid": 1,
+          "nodeName": "Bat Room Left Door (to Red Tower)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Red Tower and Hellway",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 66,
+          "roomName": "Red Tower",
+          "nodeid": 5,
+          "nodeName": "Red Tower Top Right Door (to Hellway)",
+          "position": "left"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 74,
+          "roomName": "Hellway",
+          "nodeid": 1,
+          "nodeName": "Hellway Left Door (to Red Tower)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Red Brinstar Fireflea Room and X-Ray Scope Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 67,
+          "roomName": "Red Brinstar Fireflea Room",
+          "nodeid": 1,
+          "nodeName": "Red Firefleas Left Door (to X-Ray)",
+          "position": "right"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 68,
+          "roomName": "X-Ray Scope Room",
+          "nodeid": 1,
+          "nodeName": "X-Ray Room Door (to Firefleas)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Bat Room and Below Spazer",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 69,
+          "roomName": "Bat Room",
+          "nodeid": 2,
+          "nodeName": "Bat Room Right Door (to Below Spazer)",
+          "position": "left"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 70,
+          "roomName": "Below Spazer",
+          "nodeid": 1,
+          "nodeName": "Below Spazer Left Door (to Bat Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Below Spazer and Spazer Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 70,
+          "roomName": "Below Spazer",
+          "nodeid": 3,
+          "nodeName": "Below Spazer Top Right Door (to Spazer)",
+          "position": "left"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 71,
+          "roomName": "Spazer Room",
+          "nodeid": 1,
+          "nodeName": "Spazer Door (to Below Spazer)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Hellway and Caterpillar Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 74,
+          "roomName": "Hellway",
+          "nodeid": 2,
+          "nodeName": "Hellway Right Door (to Caterpillar Room)",
+          "position": "left"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 75,
+          "roomName": "Caterpillar Room",
+          "nodeid": 2,
+          "nodeName": "Caterpillar Room Center Left Door (to Hellway)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Caterpillar Room and Beta Power Bomb Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 75,
+          "roomName": "Caterpillar Room",
+          "nodeid": 1,
+          "nodeName": "Caterpillar Room Top Left Door (to Beta Power Bombs)",
+          "position": "right"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 77,
+          "roomName": "Beta Power Bomb Room",
+          "nodeid": 1,
+          "nodeName": "Beta Power Bombs Door (to Caterpillar Room)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Caterpillar Room and Alpha Power Bomb Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 75,
+          "roomName": "Caterpillar Room",
+          "nodeid": 3,
+          "nodeName": "Caterpillar Room Bottom Left Door (to Alpha Power Bombs)",
+          "position": "right"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 76,
+          "roomName": "Alpha Power Bomb Room",
+          "nodeid": 1,
+          "nodeName": "Alpha Power Bombs Door (to Caterpillar Room)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Caterpillar Room and Caterpillar Save Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 75,
+          "roomName": "Caterpillar Room",
+          "nodeid": 4,
+          "nodeName": "Caterpillar Room Bottom Right Door (to Save)",
+          "position": "left"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 320,
+          "roomName": "Caterpillar Save Room",
+          "nodeid": 1,
+          "nodeName": "Caterpillar Save Door (to Caterpillar Room)",
+          "position": "right"
+        }
+      ]
+    }
+  ]
+}

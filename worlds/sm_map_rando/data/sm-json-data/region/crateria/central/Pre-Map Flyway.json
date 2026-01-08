@@ -1,0 +1,397 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 14,
+  "name": "Pre-Map Flyway",
+  "area": "Crateria",
+  "subarea": "Central",
+  "roomAddress": "0x798E2",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018bce",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018bda",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Pre-Map Flyway Mellows",
+      "enemyName": "Mellow",
+      "quantity": 3,
+      "homeNodes": [1, 2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Pre-Map Flyway Reo",
+      "enemyName": "Reo",
+      "quantity": 1,
+      "homeNodes": [1, 2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$1.5"
+        }
+      },
+      "devNote": "Leaving with lower speed (e.g. $1.2) is possible with SpeedBooster equipped; not sure if this matters for anything though."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 2,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      },
+      "devNote": [
+        "One tile of landing runway is unusable; it could be used with a shorter remoteRunway, but there's no application yet."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Mellow and Reo Farm",
+      "requires": [
+        {"or": [
+          {"resetRoom": {"nodes": [1]}},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 60}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 330}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 355}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 355}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 360}
+          ]},
+          {"cycleFrames": 390}
+        ]}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Reo", "count": 1},
+        {"enemy": "Mellow", "count": 3}
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Mellow",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "Leave Spinning",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$1.5"
+        }
+      }
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 20,
+      "link": [2, 2],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Mellow",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 22,
+  "nextNotableId": 1
+}

@@ -1,0 +1,4303 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 86,
+  "name": "Business Center",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "West",
+  "roomAddress": "0x7A7DE",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x00192be",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [2],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Middle Left Door",
+      "nodeType": "door",
+      "nodeSubType": "yellow",
+      "nodeAddress": "0x0019306",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [2],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "red",
+      "nodeAddress": "0x00192d6",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00192e2",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Middle Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00192fa",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00192ca",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [2],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Elevator",
+      "nodeType": "door",
+      "nodeSubType": "elevator",
+      "nodeAddress": "0x00192ee",
+      "doorOrientation": "up",
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "mapTileMask": [
+        [2],
+        [2],
+        [2],
+        [1],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Main Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [2],
+        [2],
+        [2],
+        [1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Business Center Top Sovas",
+      "enemyName": "Sova",
+      "quantity": 5,
+      "homeNodes": [8]
+    },
+    {
+      "id": "e2",
+      "groupName": "Business Center Bottom Sova",
+      "enemyName": "Sova",
+      "quantity": 1,
+      "homeNodes": [4]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 1},
+        {"id": 6},
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 8,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 8}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1,
+          "gentleUpTiles": 2
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Sova",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1,
+          "gentleUpTiles": 2
+        }
+      },
+      "note": "Use a Super to knock off a Sova and follow it to this door. The fastest Sova is just above the shot blocks, which takes 30 seconds."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Use a Super to knock off a Sova and follow it to this door. The fastest Sova is just above the shot blocks, which takes 30 seconds."
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Carry Shinecharge (Sova Kill)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 125},
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Sova"]],
+            "explicitWeapons": ["ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+          }},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Sova"]],
+              "explicitWeapons": ["PowerBeam"]
+            }},
+            "canDownBack"
+          ]}
+        ]},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Carry Shinecharge (Sova Damage)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 145},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1,
+          "gentleDownTiles": 2
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          "canDownBack",
+          {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+        ]},
+        {"shineChargeFrames": 95}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 162,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0,
+          "gentleDownTiles": 2
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1,
+          "gentleDownTiles": 2
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canDownBack",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 3],
+      "name": "Come in Shinecharging, Leave Shinesparking",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1,
+          "gentleDownTiles": 2
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"shinespark": {"frames": 10}},
+          {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+        ]},
+        {"shinespark": {"frames": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 163,
+      "link": [1, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0,
+          "gentleDownTiles": 2
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 164,
+      "link": [1, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0,
+          "gentleDownTiles": 2
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 5],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0,
+          "gentleDownTiles": 2
+        }
+      },
+      "requires": [
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Run off of the entry runway after storing the Shinespark to skip the platform with a Sova."
+    },
+    {
+      "id": 165,
+      "link": [1, 5],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0,
+          "gentleDownTiles": 2
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 6],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Shoot the door open while entering, then run and jump under the platform above to get to the right side quickly."
+    },
+    {
+      "id": 11,
+      "link": [1, 6],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1,
+          "gentleDownTiles": 2
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 95}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "There is a possibility of slipping on this runway when entering the room."
+    },
+    {
+      "id": 12,
+      "link": [1, 6],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 30},
+        "canMidairShinespark",
+        {"shinespark": {"frames": 18}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "After landing, do a small jump and spark mid-air.",
+        "Alternatively, if you can avoid tripping while entering the room, another option is to moonwalk back against the left door to get high enough to spark without bonking the platform on the right."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 6],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 75},
+        {"shinespark": {"frames": 6, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Shoot the door open while entering, land near the door, then run and jump under the platform above to get to the right side quickly."
+    },
+    {
+      "id": 166,
+      "link": [1, 6],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0,
+          "gentleDownTiles": 2
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [1, 7],
+      "name": "Carry Shinecharge (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "HiJump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [1, 7],
+      "name": "Carry Shinecharge (Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 110},
+        "canShinechargeMovementComplex",
+        "canWalljump"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [1, 7],
+      "name": "Carry Shinecharge (Ledge Grabs)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 140},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [1, 7],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0,
+          "gentleDownTiles": 2
+        }
+      },
+      "requires": [
+        "canShinechargeMovement",
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": "There is a possibility of slipping on this runway when entering the room."
+    },
+    {
+      "id": 18,
+      "link": [1, 7],
+      "name": "Carry G-Mode Up Elevator",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 19,
+      "link": [1, 8],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "HiJump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Carefully avoid hitting the Sova."
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Sova Kill)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 140},
+        "canShinechargeMovementComplex",
+        {"or": [
+          "ScrewAttack",
+          "canTrickyJump"
+        ]},
+        {"enemyKill": {
+          "enemies": [["Sova"]],
+          "explicitWeapons": ["ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+        }}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Spin-jump up and kill the Sova from the left just before landing on its platform."
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Sova Evade, Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 125},
+        "canShinechargeMovementTricky",
+        "canPreciseWalljump"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Wall jump off the side of the platform and weave around the Sova to get onto the ledge above."
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 90},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 6, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Carefully avoid hitting the Sova."
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump, Bottom)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 70},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 10, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Carefully avoid hitting the Sova."
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave With Spark (Sova Kill)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 115},
+        "canShinechargeMovementComplex",
+        {"or": [
+          "ScrewAttack",
+          "canTrickyJump"
+        ]},
+        {"enemyKill": {
+          "enemies": [["Sova"]],
+          "explicitWeapons": ["ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+        }},
+        {"shinespark": {"frames": 7, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Spin-jump up and kill the Sova from the left just before landing on its platform."
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave With Spark (Sova Kill, Bottom)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "canShinechargeMovementComplex",
+        {"or": [
+          "ScrewAttack",
+          "canTrickyJump"
+        ]},
+        {"enemyKill": {
+          "enemies": [["Sova"]],
+          "explicitWeapons": ["ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+        }},
+        {"shinespark": {"frames": 10, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Spin-jump up and kill the Sova from the left just before landing on its platform."
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged (Sova Kill)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          "ScrewAttack",
+          "canTrickyJump"
+        ]},
+        {"enemyKill": {
+          "enemies": [["Sova"]],
+          "explicitWeapons": ["ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+        }},
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Spin-jump up and kill the Sova from the left just before landing on its platform."
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "HiJump",
+        {"or": [
+          "ScrewAttack",
+          "canTrickyJump"
+        ]},
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 167,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Leave With Runway - Frozen Sova",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "note": "Use a Super to knock off the Sova while it is on the left side of the platform next to this door then quickly freeze it once it crawls into position."
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Use a Super to knock off a Sova and follow it to this door. The fastest Sova is just above the shot blocks, which takes 20 seconds."
+    },
+    {
+      "id": 33,
+      "link": [2, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 34,
+      "link": [2, 3],
+      "name": "Come in Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 90},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 2, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 35,
+      "link": [2, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"shineChargeFrames": 95}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 168,
+      "link": [2, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [2, 4],
+      "name": "Come in Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 12, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 169,
+      "link": [2, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 37,
+      "link": [2, 5],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 38,
+      "link": [2, 5],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 170,
+      "link": [2, 5],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 39,
+      "link": [2, 6],
+      "name": "Carry Shinecharge (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 110},
+        "HiJump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump over the platform with the Sova that would otherwise be in the way."
+    },
+    {
+      "id": 40,
+      "link": [2, 6],
+      "name": "Carry Shinecharge (Sova Kill)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 135},
+        "canShinechargeMovementComplex",
+        {"or": [
+          "ScrewAttack",
+          "canTrickyJump"
+        ]},
+        {"enemyKill": {
+          "enemies": [["Sova"]],
+          "explicitWeapons": ["ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+        }}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Spin-jump up and kill the Sova from the left just before landing on its platform."
+    },
+    {
+      "id": 41,
+      "link": [2, 6],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump, Bottom)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 80},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 10, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 42,
+      "link": [2, 6],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 7, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 43,
+      "link": [2, 6],
+      "name": "Come in Shinecharged, Leave With Spark (Sova Kill, Bottom)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "canShinechargeMovementComplex",
+        {"or": [
+          "ScrewAttack",
+          "canTrickyJump"
+        ]},
+        {"enemyKill": {
+          "enemies": [["Sova"]],
+          "explicitWeapons": ["ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+        }},
+        {"shinespark": {"frames": 10, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 44,
+      "link": [2, 6],
+      "name": "Come in Shinecharged, Leave With Spark (Sova Kill)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 125},
+        "canShinechargeMovementComplex",
+        {"or": [
+          "ScrewAttack",
+          "canTrickyJump"
+        ]},
+        {"enemyKill": {
+          "enemies": [["Sova"]],
+          "explicitWeapons": ["ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+        }},
+        {"shinespark": {"frames": 7, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Spin-jump up and kill the Sova from the left just before landing on its platform."
+    },
+    {
+      "id": 45,
+      "link": [2, 6],
+      "name": "Come in Shinecharging, Leave Shinecharged (Sova Kill)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          "ScrewAttack",
+          "canTrickyJump"
+        ]},
+        {"enemyKill": {
+          "enemies": [["Sova"]],
+          "explicitWeapons": ["ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+        }},
+        {"shineChargeFrames": 145}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Spin-jump up and kill the Sova from the left just before landing on its platform."
+    },
+    {
+      "id": 171,
+      "link": [2, 6],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 46,
+      "link": [2, 7],
+      "name": "Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canTrickyJump",
+        "HiJump",
+        {"shineChargeFrames": 155}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Requires very efficient movement.",
+      "devNote": "1 unusable tile."
+    },
+    {
+      "id": 47,
+      "link": [2, 7],
+      "name": "Carry G-Mode Up Elevator",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 48,
+      "link": [2, 8],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 49,
+      "link": [3, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 2 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [3, 1],
+      "name": "Come in Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 10}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 172,
+      "link": [3, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 51,
+      "link": [3, 2],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [3, 2],
+      "name": "Carry Shinecharge (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "HiJump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 53,
+      "link": [3, 2],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 130},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 54,
+      "link": [3, 2],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 8, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 55,
+      "link": [3, 2],
+      "name": "Come in Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 8, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 56,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Short Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 57,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Walljump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canWalljump",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 58,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "HiJump",
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 173,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 59,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 60,
+      "link": [3, 3],
+      "name": "Leave with Runway Both Doors Open",
+      "requires": [
+        {"doorUnlockedAtNode": 5}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"nodeId": 5, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 61,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Use a Super to knock off a nearby Sova."
+    },
+    {
+      "id": 62,
+      "link": [3, 3],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Use a Super to knock off the Sova to regain mobility."
+    },
+    {
+      "id": 63,
+      "link": [3, 4],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 135},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Fall around the floating platform with either a Downback or by jumping down with a Spinjump."
+    },
+    {
+      "id": 64,
+      "link": [3, 4],
+      "name": "Come in Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 11, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Fall around the floating platform with either a Downback or by jumping down with a Spinjump."
+    },
+    {
+      "id": 65,
+      "link": [3, 4],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canDownBack",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Fall around the floating platform with either a Downback or by jumping down with a Spinjump."
+    },
+    {
+      "id": 66,
+      "link": [3, 4],
+      "name": "Come in Shinecharging, Leave Shinecharged (Half Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 6,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canDownBack",
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Fall around the floating platform with either a Downback or by jumping down with a Spinjump."
+    },
+    {
+      "id": 174,
+      "link": [3, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Full Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 175,
+      "link": [3, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Short Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 67,
+      "link": [3, 5],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shineChargeFrames": 20}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 68,
+      "link": [3, 5],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 69,
+      "link": [3, 5],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 55}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 176,
+      "link": [3, 5],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 70,
+      "link": [3, 5],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 71,
+      "link": [3, 5],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 72,
+      "link": [3, 6],
+      "name": "Come in Shinecharging, Leave With Spark (Bottom)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 10}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 73,
+      "link": [3, 6],
+      "name": "Come in Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shinespark": {"frames": 6}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "devNote": "Sparking out in top position is very tight, hence the canInsaneJump requirement."
+    },
+    {
+      "id": 177,
+      "link": [3, 6],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 74,
+      "link": [3, 7],
+      "name": "Carry G-Mode Up Elevator",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true,
+      "devNote": "FIXME: There could be a 4->7 variant with an ice clip or CF clip through the shot blocks."
+    },
+    {
+      "id": 75,
+      "link": [3, 8],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 178,
+      "link": [4, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 179,
+      "link": [4, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 76,
+      "link": [4, 3],
+      "name": "Come in Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 140},
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 8, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 77,
+      "link": [4, 3],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 120},
+        "HiJump",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 9, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 78,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 79,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "HiJump",
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 180,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Full Runway, X-Ray)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 181,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Short Runway, Hi-Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 7,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "HiJump"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 80,
+      "link": [4, 4],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 9,
+          "openEnd": 0,
+          "gentleDownTiles": 4
+        }
+      }
+    },
+    {
+      "id": 81,
+      "link": [4, 4],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Use a Super to knock off the nearby Sova while it is on the right side of its platform."
+    },
+    {
+      "id": 82,
+      "link": [4, 5],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 83,
+      "link": [4, 5],
+      "name": "Come in Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 140},
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 8, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 84,
+      "link": [4, 5],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 115},
+        "HiJump",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 9, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 85,
+      "link": [4, 5],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 86,
+      "link": [4, 5],
+      "name": "Come in Shinecharging, Leave Shinecharged (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "HiJump",
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 182,
+      "link": [4, 5],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 87,
+      "link": [4, 6],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 3 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 183,
+      "link": [4, 6],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 88,
+      "link": [4, 8],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 89,
+      "link": [5, 1],
+      "name": "Come in Shinecharging, Leave With Spark (Short Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canMidairShinespark",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 6}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "Quickly climb the right side of the room to just have enough time to shinespark out the door."
+    },
+    {
+      "id": 90,
+      "link": [5, 1],
+      "name": "Come in Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canMidairShinespark",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shinespark": {"frames": 5}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Quickly climb the left side of the room to just have enough time to shinespark out the door.",
+        "Requires precise ledge grabs, but some precise walljumps can make it slightly easier."
+      ]
+    },
+    {
+      "id": 184,
+      "link": [5, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 91,
+      "link": [5, 2],
+      "name": "Carry Shinecharge (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 110},
+        "HiJump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 92,
+      "link": [5, 2],
+      "name": "Carry Shinecharge (Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 135},
+        "canShinechargeMovementComplex",
+        "canWalljump"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 93,
+      "link": [5, 2],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 75},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 11, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 94,
+      "link": [5, 2],
+      "name": "Come in Shinecharged, Leave With Spark (Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "canShinechargeMovementComplex",
+        "canWalljump",
+        {"shinespark": {"frames": 11, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 95,
+      "link": [5, 2],
+      "name": "Come in Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 135},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 7, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 96,
+      "link": [5, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Ledge Grabs)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 97,
+      "link": [5, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canWalljump",
+        {"shineChargeFrames": 135}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 98,
+      "link": [5, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "HiJump",
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 185,
+      "link": [5, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Full Runway, X-Ray)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 186,
+      "link": [5, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Short Runway, HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "HiJump"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 99,
+      "link": [5, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shineChargeFrames": 20}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 100,
+      "link": [5, 3],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 101,
+      "link": [5, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 55}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 187,
+      "link": [5, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 102,
+      "link": [5, 3],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 103,
+      "link": [5, 3],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 104,
+      "link": [5, 4],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 135},
+        "canShinechargeMovementComplex",
+        "canDownBack"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Fall around the floating platform with either a Downback or by jumping down with a Spinjump."
+    },
+    {
+      "id": 105,
+      "link": [5, 4],
+      "name": "Come in Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 11, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Fall around the floating platform with either a Downback or by jumping down with a Spinjump."
+    },
+    {
+      "id": 106,
+      "link": [5, 4],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canDownBack",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Fall around the floating platform with either a Downback or by jumping down with a Spinjump."
+    },
+    {
+      "id": 107,
+      "link": [5, 4],
+      "name": "Come in Shinecharging, Leave Shinecharged (Short Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canDownBack",
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Fall around the floating platform with either a Downback or by jumping down with a Spinjump."
+    },
+    {
+      "id": 188,
+      "link": [5, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 108,
+      "link": [5, 5],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 109,
+      "link": [5, 5],
+      "name": "Leave with Runway Both Doors Open",
+      "requires": [
+        {"doorUnlockedAtNode": 3}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"nodeId": 3, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 110,
+      "link": [5, 5],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Use a Super to knock off a nearby Sova."
+    },
+    {
+      "id": 111,
+      "link": [5, 5],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Use a Super to knock off the Sova to regain mobility."
+    },
+    {
+      "id": 112,
+      "link": [5, 6],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 2 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 113,
+      "link": [5, 6],
+      "name": "Come in Shinecharging, Leave With Spark (Bottom)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canMidairShinespark",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 10}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "Quickly climb the right side of the room to just have enough time to shinespark out the door."
+    },
+    {
+      "id": 114,
+      "link": [5, 6],
+      "name": "Come in Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canMidairShinespark",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shinespark": {"frames": 6}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "Quickly climb the right side of the room to just have enough time to shinespark out the door.",
+      "devNote": "Sparking out in top position is very tight, hence the canInsaneJump requirement."
+    },
+    {
+      "id": 189,
+      "link": [5, 6],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 115,
+      "link": [5, 7],
+      "name": "Carry G-Mode Up Elevator",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 116,
+      "link": [5, 8],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 117,
+      "link": [6, 1],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 70},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 118,
+      "link": [6, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 100}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 119,
+      "link": [6, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 120,
+      "link": [6, 1],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 65},
+        {"shinespark": {"frames": 5}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 190,
+      "link": [6, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 121,
+      "link": [6, 2],
+      "name": "Carry Shinecharge (Sova Evade or Kill)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 115},
+        {"or": [
+          "canShinechargeMovementTricky",
+          {"and": [
+            "canShinechargeMovementComplex",
+            "ScrewAttack"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "If Screw Attack is unavailable, do a low spin jump to make it over the Sova without taking a hit."
+    },
+    {
+      "id": 122,
+      "link": [6, 2],
+      "name": "Carry Shinecharge (Sova Damage)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 135},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 123,
+      "link": [6, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Sova Kill)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"enemyKill": {
+          "enemies": [["Sova"]],
+          "explicitWeapons": ["ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+        }},
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Shoot the top Sova while falling.",
+      "devNote": "1 unusable tile, since you need space to gain a little speed before falling."
+    },
+    {
+      "id": 124,
+      "link": [6, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Sova Evade)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canDownBack",
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Shoot the top Sova while falling to delay its movement.",
+      "devNote": "Closed end because this strat might not work if sliding off, depending on the run speed."
+    },
+    {
+      "id": 125,
+      "link": [6, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Sova Damage)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 191,
+      "link": [6, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 126,
+      "link": [6, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged (Left Side Weave)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "h_shinechargeSlideTemporaryBlue",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Slide off the ledge while gaining a shinecharge, and hold forward to clear both platforms, killing the Sova with temporary blue.",
+        "Weave down the left side of the room, avoiding landing on any platforms."
+      ]
+    },
+    {
+      "id": 127,
+      "link": [6, 3],
+      "name": "Come in Shinecharging, Leave With Spark (Right Side Weave)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 15}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 192,
+      "link": [6, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 193,
+      "link": [6, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 128,
+      "link": [6, 5],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 194,
+      "link": [6, 5],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 129,
+      "link": [6, 6],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 130,
+      "link": [6, 6],
+      "name": "Leave With Runway - Frozen Sova",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Use a Super to knock off a Sova and follow it to this door.",
+        "The fastest Sova is just above the middle left door, while it is on the left side of the platform, which takes 45 seconds."
+      ]
+    },
+    {
+      "id": 131,
+      "link": [6, 6],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Use a Super to knock off a Sova and follow it to this door.",
+        "The fastest Sova is just above the middle left door, while it is on the left side of the platform, which takes 45 seconds."
+      ]
+    },
+    {
+      "id": 132,
+      "link": [6, 6],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Use a Super to knock off the Sova to regain mobility."
+    },
+    {
+      "id": 133,
+      "link": [6, 7],
+      "name": "Carry Shinecharge (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "HiJump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 134,
+      "link": [6, 7],
+      "name": "Carry Shinecharge (Sova Kill)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 115},
+        {"enemyKill": {
+          "enemies": [["Sova"]],
+          "explicitWeapons": ["ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+        }},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 135,
+      "link": [6, 7],
+      "name": "Carry Shinecharge (Sova Evade)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 135},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 136,
+      "link": [6, 7],
+      "name": "Carry Shinecharge (Insane Sova Evade)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "canInsaneJump",
+        "canShinechargeMovementTricky"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Jump onto the Sova platform, and off again, without getting hit.",
+        "This requires a very clean ledge grab."
+      ]
+    },
+    {
+      "id": 137,
+      "link": [6, 7],
+      "name": "Come in Shinecharging, Leave Shinecharged (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 90}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "1 unusable tile, otherwise it is too slow."
+    },
+    {
+      "id": 138,
+      "link": [6, 7],
+      "name": "Come in Shinecharging, Leave Shinecharged (Sova Kill, Short Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Sova"]],
+          "explicitWeapons": ["ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+        }},
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Kill the Sova.",
+      "devNote": "1 unusable tile, to avoid needing to turn around."
+    },
+    {
+      "id": 139,
+      "link": [6, 7],
+      "name": "Come in Shinecharging, Leave Shinecharged (Sova Evade)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump over the Sova."
+    },
+    {
+      "id": 140,
+      "link": [6, 7],
+      "name": "Come in Shinecharging, Leave Shinecharged (Insane Sova Evade)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canInsaneJump",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 100}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Jump onto the Sova platform without getting hit.",
+        "This requires a very clean ledge grab."
+      ]
+    },
+    {
+      "id": 141,
+      "link": [6, 7],
+      "name": "Carry G-Mode Up Elevator",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 142,
+      "link": [6, 8],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 143,
+      "link": [7, 1],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 125},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 144,
+      "link": [7, 6],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 140},
+        "canShinechargeMovementComplex",
+        "canDownBack"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 161,
+      "link": [7, 7],
+      "name": "Carry G-Mode Back Up the Elevator",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 145,
+      "link": [7, 8],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 146,
+      "link": [8, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 147,
+      "link": [8, 1],
+      "name": "Leave With Spark",
+      "requires": [
+        "HiJump",
+        {"or": [
+          {"and": [
+            {"doorUnlockedAtNode": 3},
+            {"doorUnlockedAtNode": 5},
+            {"canShineCharge": {"usedTiles": 14, "openEnd": 0}}
+          ]},
+          {"and": [
+            {"or": [
+              {"doorUnlockedAtNode": 3},
+              {"doorUnlockedAtNode": 5}
+            ]},
+            {"canShineCharge": {"usedTiles": 13, "openEnd": 0}}
+          ]},
+          {"canShineCharge": {"usedTiles": 12, "openEnd": 0}}
+        ]},
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 10}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["ammo"], "requires": []},
+        {"nodeId": 3, "types": ["ammo"], "requires": []},
+        {"nodeId": 5, "types": ["ammo"], "requires": []}
+      ]
+    },
+    {
+      "id": 148,
+      "link": [8, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 149,
+      "link": [8, 2],
+      "name": "Leave Shinecharged (Walljump)",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"doorUnlockedAtNode": 3},
+            {"doorUnlockedAtNode": 5},
+            {"canShineCharge": {"usedTiles": 14, "openEnd": 0}}
+          ]},
+          {"and": [
+            {"or": [
+              {"doorUnlockedAtNode": 3},
+              {"doorUnlockedAtNode": 5}
+            ]},
+            {"canShineCharge": {"usedTiles": 13, "openEnd": 0}}
+          ]},
+          {"canShineCharge": {"usedTiles": 12, "openEnd": 0}}
+        ]},
+        "canShinechargeMovementComplex",
+        "canWalljump",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"nodeId": 2, "types": ["ammo"], "requires": []},
+        {"nodeId": 3, "types": ["ammo"], "requires": []},
+        {"nodeId": 5, "types": ["ammo"], "requires": []}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 150,
+      "link": [8, 2],
+      "name": "Leave Shinecharged (HiJump)",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"doorUnlockedAtNode": 3},
+            {"doorUnlockedAtNode": 5},
+            {"canShineCharge": {"usedTiles": 14, "openEnd": 0}}
+          ]},
+          {"and": [
+            {"or": [
+              {"doorUnlockedAtNode": 3},
+              {"doorUnlockedAtNode": 5}
+            ]},
+            {"canShineCharge": {"usedTiles": 13, "openEnd": 0}}
+          ]},
+          {"canShineCharge": {"usedTiles": 12, "openEnd": 0}}
+        ]},
+        "canShinechargeMovementComplex",
+        "HiJump",
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"nodeId": 2, "types": ["ammo"], "requires": []},
+        {"nodeId": 3, "types": ["ammo"], "requires": []},
+        {"nodeId": 5, "types": ["ammo"], "requires": []}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 151,
+      "link": [8, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 152,
+      "link": [8, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 153,
+      "link": [8, 4],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"doorUnlockedAtNode": 3},
+            {"doorUnlockedAtNode": 5},
+            {"canShineCharge": {"usedTiles": 14, "openEnd": 0}}
+          ]},
+          {"and": [
+            {"or": [
+              {"doorUnlockedAtNode": 3},
+              {"doorUnlockedAtNode": 5}
+            ]},
+            {"canShineCharge": {"usedTiles": 13, "openEnd": 0}}
+          ]},
+          {"canShineCharge": {"usedTiles": 12, "openEnd": 0}}
+        ]},
+        "canShinechargeMovementComplex",
+        "canDownBack",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"nodeId": 3, "types": ["ammo"], "requires": []},
+        {"nodeId": 4, "types": ["ammo"], "requires": []},
+        {"nodeId": 5, "types": ["ammo"], "requires": []}
+      ],
+      "flashSuitChecked": true,
+      "note": "Fall around the floating platform with either a Downback or by jumping down with a Spinjump."
+    },
+    {
+      "id": 154,
+      "link": [8, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 155,
+      "link": [8, 6],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 156,
+      "link": [8, 6],
+      "name": "Leave With Spark (Bottom)",
+      "requires": [
+        "HiJump",
+        {"or": [
+          {"and": [
+            {"doorUnlockedAtNode": 3},
+            {"doorUnlockedAtNode": 5},
+            {"canShineCharge": {"usedTiles": 14, "openEnd": 0}}
+          ]},
+          {"and": [
+            {"or": [
+              {"doorUnlockedAtNode": 3},
+              {"doorUnlockedAtNode": 5}
+            ]},
+            {"canShineCharge": {"usedTiles": 13, "openEnd": 0}}
+          ]},
+          {"canShineCharge": {"usedTiles": 12, "openEnd": 0}}
+        ]},
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 10}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"nodeId": 3, "types": ["ammo"], "requires": []},
+        {"nodeId": 5, "types": ["ammo"], "requires": []},
+        {"nodeId": 6, "types": ["ammo"], "requires": []}
+      ]
+    },
+    {
+      "id": 157,
+      "link": [8, 6],
+      "name": "Leave With Spark",
+      "requires": [
+        "HiJump",
+        {"or": [
+          {"and": [
+            {"doorUnlockedAtNode": 3},
+            {"doorUnlockedAtNode": 5},
+            {"canShineCharge": {"usedTiles": 14, "openEnd": 0}}
+          ]},
+          {"and": [
+            {"or": [
+              {"doorUnlockedAtNode": 3},
+              {"doorUnlockedAtNode": 5}
+            ]},
+            {"canShineCharge": {"usedTiles": 13, "openEnd": 0}}
+          ]},
+          {"canShineCharge": {"usedTiles": 12, "openEnd": 0}}
+        ]},
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shinespark": {"frames": 6}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"nodeId": 3, "types": ["ammo"], "requires": []},
+        {"nodeId": 5, "types": ["ammo"], "requires": []},
+        {"nodeId": 6, "types": ["ammo"], "requires": []}
+      ],
+      "devNote": "Sparking out in top position is very tight, hence the canInsaneJump requirement."
+    },
+    {
+      "id": 158,
+      "link": [8, 7],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 159,
+      "link": [8, 8],
+      "name": "Sova Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1, 6]}},
+            {"cycleFrames": 660}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 670}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [3, 5]}},
+            {"cycleFrames": 630}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [4]}},
+            {"cycleFrames": 750}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [7]}},
+            {"cycleFrames": 1700}
+          ]}
+        ]},
+        {"or": [
+          "Spazer",
+          "Wave",
+          "Plasma",
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 120}
+          ]},
+          {"cycleFrames": 150}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Sova", "count": 6}]
+    },
+    {
+      "id": 160,
+      "link": [8, 8],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 195,
+  "nextNotableId": 1
+}

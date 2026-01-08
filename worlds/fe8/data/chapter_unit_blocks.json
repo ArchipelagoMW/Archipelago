@@ -1,0 +1,1357 @@
+{
+    "Prologue": [
+        {
+            "name": "PlayerDeployment",
+            "base": 9124884,
+            "count": 2,
+            "logic": {"0": {"must_fight": true}}
+        },
+        {"name": "ONeillGroup", "base": 9124944, "count": 3, "logic": {}},
+        {
+            "name": "RenaisCastleGuards",
+            "base": 9125144,
+            "count": 8,
+            "logic": {"3": {"no_store": true}, "4": {"no_store": true}}
+        },
+        {
+            "name": "RenaisMessenger",
+            "base": 9125324, "count": 1,
+            "logic": {"0": {"no_store": true}}
+        },
+        {"name": "label32", "base": 9125364, "count": 2, "logic": {}},
+        {"name": "label30", "base": 9125424, "count": 4, "logic": {}},
+        {"name": "label31", "base": 9125524, "count": 6, "logic": {}},
+        {
+            "name": "EirikaFranzSeth",
+            "base": 9125736,
+            "count": 3,
+            "logic": {"0": {"must_fight": true}}
+        },
+        {
+            "name": "ValterGroup",
+            "base": 9125816,
+            "count": 3,
+            "logic": {"0": {"must_fight": true}}
+        }
+    ],
+    "Ch1": [
+        {"name": "PlayerDeployment", "base": 9126048, "count": 2, "logic": {}},
+        {
+            "name": "BreguetGroup",
+            "base": 9126108,
+            "count": 7,
+            "logic": {"0": {"must_fight": true}}
+        },
+        {"name": "label35", "base": 9126268, "count": 2, "logic": {}},
+        {"name": "label32", "base": 9126408, "count": 2, "logic": {}},
+        {"name": "EasternReinforcements", "base": 9126328, "count": 3, "logic": {}}
+    ],
+    "Ch2": [
+        {
+            "name": "VanessaMoulder",
+            "base": 9126864,
+            "count": 2,
+            "logic": {"0": {"must_fly": true}}
+        },
+        {"name": "PlayerDeployment", "base": 9126604, "count": 5, "logic": {}},
+        {"name": "StartingEnemies", "base": 9126724, "count": 6, "logic": {}},
+        {"name": "label28", "base": 9126924, "count": 1, "logic": {}},
+        {
+            "name": "RossGarcia",
+            "base": 9126964,
+            "count": 2,
+            "logic": {"1": {"must_fight": true}}
+        },
+        {"name": "label30", "base": 9127084, "count": 1, "logic": {}},
+        {"name": "Turn3Reinforcements", "base": 9127024, "count": 2, "logic": {}}
+    ],
+    "Ch3": [
+        {"name": "PlayerDeployment", "base": 9127284, "count": 9, "logic": {}},
+        {"name": "StartingEnemies", "base": 9127484, "count": 10, "logic": {}},
+        {"name": "label23", "base": 9127704, "count": 1, "logic": {}},
+        {"name": "label27", "base": 9127788, "count": 5, "logic": {}},
+        {"name": "label28", "base": 9127908, "count": 3, "logic": {}}
+    ],
+    "Ch4": [
+        {"name": "PlayerDeployment", "base": 9128196, "count": 9, "logic": {}},
+        {"name": "label33", "base": 9128396, "count": 8, "logic": {}},
+        {"name": "StartingEnemies", "base": 9128576, "count": 16, "logic": {}},
+        {"name": "label36", "base": 9128916, "count": 1, "logic": {}},
+        {"name": "label39", "base": 9128956, "count": 1, "logic": {}},
+        {
+            "name": "LArachelGroup",
+            "base": 9129176,
+            "count": 3,
+            "logic": {"must_fight": {"at_least": 2}}
+        },
+        {"name": "label40", "base": 9129256, "count": 2, "logic": {}},
+        {"name": "label41", "base": 9129316, "count": 3, "logic": {}},
+        {"name": "EasternSkeletons", "base": 9129096, "count": 3, "logic": {}},
+        {"name": "NorthernZombies", "base": 9128996, "count": 4, "logic": {}}
+    ],
+    "Ch5": [
+        {"name": "label38", "base": 9128196, "count": 9, "logic": {}},
+        {"name": "PlayerDeployment", "base": 9131568, "count": 9, "logic": {}},
+        {"name": "WesternStartingEnemies", "base": 9131768, "count": 7, "logic": {}},
+        {"name": "EasternStartingEnemies", "base": 9131928, "count": 9, "logic": {}},
+        {"name": "label40", "base": 9132308, "count": 1, "logic": {}},
+        {"name": "label31", "base": 9132348, "count": 2, "logic": {}},
+        {"name": "label33", "base": 9132408, "count": 3, "logic": {}},
+        {"name": "label34", "base": 9132488, "count": 1, "logic": {}},
+        {"name": "label37", "base": 9132528, "count": 2, "logic": {}},
+        {
+            "name": "label44",
+            "base": 9140284,
+            "count": 2,
+            "logic": {"1": {"no_store": true}}
+        },
+        {"name": "label45", "base": 9140364, "count": 1, "logic": {}},
+        {"name": "Turn2Brigands", "base": 9132128, "count": 2, "logic": {}},
+        {"name": "Turn6Brigands", "base": 9132188, "count": 2, "logic": {}},
+        {"name": "Turn8Brigands", "base": 9132248, "count": 2, "logic": {}}
+    ],
+    "Ch5x": [
+        {
+            "name": "PlayerDeployment",
+            "base": 9132644,
+            "count": 4,
+            "logic": {"must_fight": {"at_least": 3}}
+        },
+        {"name": "label22", "base": 9132744, "count": 31, "logic": {}},
+        {"name": "label23", "base": 9133384, "count": 3, "logic": {}},
+        {"name": "label18", "base": 9133484, "count": 3, "logic": {}},
+        {"name": "label19", "base": 9133564, "count": 3, "logic": {}},
+        {"name": "label20", "base": 9133716, "count": 4, "logic": {}},
+        {"name": "label25", "base": 9133948, "count": 3, "logic": {}},
+        {"name": "label24", "base": 9134028, "count": 10, "logic": {}},
+        {"name": "label26", "base": 9134248, "count": 5, "logic": {}},
+        {"name": "label27", "base": 9134368, "count": 1, "logic": {"must_fly": true}}
+    ],
+    "Ch6": [
+        {
+            "name": "StartingEnemies",
+            "base": 9134504,
+            "count": 27,
+            "logic": {
+                "6": {"no_flying": true},
+                "7": {"no_flying": true},
+                "9": {"no_flying": true},
+                "16": {
+                    "no_flying": true,
+                    "comment": "spider"
+                },
+                "24": {
+                    "no_flying": true,
+                    "nudges": {"start": [20, 13]},
+                    "comment": "armour knight"
+                },
+                "25": {"no_flying": true}
+            }
+        },
+        {"name": "PlayerDeployment", "base": 9135064, "count": 10, "logic": {}},
+        {"name": "label31", "base": 9135284, "count": 2, "logic": {}},
+        {"name": "CavalierReinforcements", "base": 9135344, "count": 3, "logic": {}}
+    ],
+    "Ch7": [
+        {"name": "PlayerDeployment", "base": 9137784, "count": 10, "logic": {}},
+        {"name": "StartingEnemies", "base": 9138004, "count": 19, "logic": {}},
+        {"name": "label25", "base": 9138444, "count": 2, "logic": {}},
+        {"name": "label26", "base": 9138504, "count": 1, "logic": {}}
+    ],
+    "Ch8": [
+        {"name": "PlayerDeployment", "base": 9138944, "count": 9, "logic": {}},
+        {"name": "StartingEnemies", "base": 9139144, "count": 27, "logic": {}},
+        {"name": "EphraimGroup", "base": 9139704, "count": 3, "logic": {}},
+        {"name": "EirikaIntro", "base": 9139964, "count": 3, "logic": {}},
+        {"name": "TiradoIntro", "base": 9140044, "count": 3, "logic": {}},
+        {"name": "CavaliersBehindEphraim", "base": 9139864, "count": 3, "logic": {}},
+        {"name": "MageThiefReinforcements", "base": 9139784, "count": 3, "logic": {}},
+        {"name": "StartingEnemies2", "base": 9140164, "count": 5, "logic": {}}
+    ],
+    "Ch9Eir": [
+        {"name": "PlayerDeployment", "base": 9141260, "count": 11, "logic": {}},
+        {
+            "name": "StartingEnemies",
+            "base": 9141500,
+            "count": 23,
+            "logic": {"22": {"nudges": {"start": [12, 8]}}}
+        },
+        {"name": "label40", "base": 9142620, "count": 3, "logic": {}},
+        {"name": "label41", "base": 9142700, "count": 5, "logic": {}},
+        {"name": "label42", "base": 9142820, "count": 1, "logic": {}},
+        {"name": "label49", "base": 9142860, "count": 3, "logic": {}},
+        {"name": "label50", "base": 9142940, "count": 1, "logic": {}},
+        {"name": "label48", "base": 9143000, "count": 8, "logic": {}},
+        {"name": "MessengerScene", "base": 9143188, "count": 7, "logic": {}},
+        {
+            "name": "TanaChat",
+            "base": 9143368,
+            "count": 1,
+            "logic": {
+                "0": {"nudges": {"start": [0, 5]}}
+            }
+        },
+        {
+            "name": "ExtraHardModeStartingEnemies",
+            "base": 9141980,
+            "count": 6,
+            "logic": {}
+        },
+        {"name": "Turn2Pirate", "base": 9142120, "count": 1, "logic": {}},
+        {"name": "Turn3NorthReinforcements", "base": 9142160, "count": 2, "logic": {}},
+        {"name": "Turn3SouthReinforcements", "base": 9142340, "count": 2, "logic": {}},
+        {"name": "Turn4NorthReinforcements", "base": 9142220, "count": 2, "logic": {}},
+        {"name": "Turn4SouthReinforcements", "base": 9142280, "count": 2, "logic": {}},
+        {"name": "Turn5NorthReinforcements", "base": 9142560, "count": 2, "logic": {}},
+        {"name": "Turn5SouthReinforcements", "base": 9142400, "count": 2, "logic": {}},
+        {"name": "AmeliaReinforcements", "base": 9142460, "count": 4, "logic": {}}
+    ],
+    "Ch9Eph": [
+        {"name": "label34", "base": 9143000, "count": 8, "logic": {}},
+        {"name": "PlayerDeployment", "base": 9183944, "count": 11, "logic": {}},
+        {
+            "name": "label37",
+            "base": 9184184,
+            "count": 29,
+            "logic": {"ai1_mod": {"from": 0, "to": 18}}
+        },
+        {
+            "name": "label42",
+            "base": 9184784,
+            "count": 6,
+            "logic": {"ai1_mod": {"from": 0, "to": 18}}
+        },
+        {
+            "name": "Amelia",
+            "base": 9184924,
+            "count": 2,
+            "logic": {"ai1_mod": {"from": 0, "to": 18}}
+        },
+        {
+            "name": "TanaGetsJailed",
+            "base": 9184984,
+            "count": 2,
+            "logic": {"ai1_mod": {"from": 0, "to": 18}}
+        },
+        {
+            "name": "TanaIntro",
+            "base": 9185324,
+            "count": 2,
+            "logic": {"ai1_mod": {"from": 0, "to": 18}}
+        },
+        {"name": "label40", "base": 9185384, "count": 1, "logic": {}},
+        {
+            "name": "AmeliaIntro",
+            "base": 9185424,
+            "count": 2,
+            "logic": {"ai1_mod": {"from": 0, "to": 18}}
+        },
+        {"name": "label47", "base": 9185484, "count": 3, "logic": {}},
+        {"name": "HallwayLyon", "base": 9185664, "count": 3, "logic": {}},
+        {"name": "label48", "base": 9185792, "count": 2, "logic": {}},
+        {"name": "label49", "base": 9185852, "count": 1, "logic": {}},
+        {
+            "name": "OutsideStairs",
+            "base": 9185124,
+            "count": 1,
+            "logic": {"ai1_mod": {"from": 0, "to": 18}}
+        },
+        {
+            "name": "NearTana",
+            "base": 9185164,
+            "count": 2,
+            "logic": {"ai1_mod": {"from": 0, "to": 18}}
+        },
+        {
+            "name": "RightSide",
+            "base": 9185224,
+            "count": 4,
+            "logic": {"ai1_mod": {"from": 0, "to": 18}}
+        },
+        {
+            "name": "BottomTrio",
+            "base": 9185044,
+            "count": 3,
+            "logic": {"ai1_mod": {"from": 0, "to": 18}}
+        }
+    ],
+    "Ch10Eir": [
+        {"name": "PlayerDeployment", "base": 9143616, "count": 12, "logic": {}},
+        {"name": "StartingEnemies", "base": 9143876, "count": 34, "logic": {}},
+        {"name": "InnesGroup", "base": 9144716, "count": 3, "logic": {}},
+        {"name": "label53", "base": 9145156, "count": 2, "logic": {}},
+        {"name": "label54", "base": 9145216, "count": 10, "logic": {}},
+        {"name": "label58", "base": 9145436, "count": 3, "logic": {}},
+        {"name": "label45", "base": 9147968, "count": 7, "logic": {}},
+        {"name": "label46", "base": 9148128, "count": 2, "logic": {}},
+        {"name": "label47", "base": 9148188, "count": 1, "logic": {}},
+        {"name": "label49", "base": 9148228, "count": 1, "logic": {}},
+        {
+            "name": "ExtraHardModeStartingEnemies",
+            "base": 9144576,
+            "count": 6,
+            "logic": {}
+        },
+        {"name": "BrigandReinforcements", "base": 9144796, "count": 2, "logic": {}},
+        {
+            "name": "NorthernPegasusReinforcements",
+            "base": 9145076,
+            "count": 3,
+            "logic": {}
+        },
+        {
+            "name": "SouthernPegasusReinforcements",
+            "base": 9144856,
+            "count": 5,
+            "logic": {}
+        },
+        {"name": "RangerReinforcements", "base": 9144976, "count": 4, "logic": {}}
+    ],
+    "Ch10Eph": [
+        {"name": "PlayerDeployment", "base": 9186388, "count": 11, "logic": {}},
+        {"name": "label51", "base": 9186628, "count": 1, "logic": {}},
+        {"name": "label50", "base": 9186668, "count": 6, "logic": {}},
+        {"name": "label60", "base": 9186808, "count": 1, "logic": {}},
+        {"name": "label45", "base": 9186848, "count": 14, "logic": {}},
+        {"name": "DuesselSquad2", "base": 9187248, "count": 4, "logic": {}},
+        {
+            "name": "CormagSquad2",
+            "base": 9187408,
+            "count": 3,
+            "logic": {
+                "0": {"nudges": {"start": [17, 14]}},
+                "1": {"must_fly": true},
+                "2": {"must_fly": true}
+            }
+        },
+        {"name": "DuesselSquad", "base": 9187688, "count": 4, "logic": {}},
+        {"name": "label47", "base": 9187788, "count": 1, "logic": {}},
+        {
+            "name": "CormagSquad",
+            "base": 9187828,
+            "count": 3,
+            "logic": {
+                "0": {"nudges": {"start": [17, 14], "0": [17, 14]}},
+                "1": {"must_fly": true},
+                "2": {"must_fly": true}
+            }
+        },
+        {"name": "label54", "base": 9187908, "count": 2, "logic": {}},
+        {"name": "label55", "base": 9187968, "count": 8, "logic": {}},
+        {"name": "ValterVisits", "base": 9188148, "count": 1, "logic": {}},
+        {"name": "RedBoatLeavesFort", "base": 9188188, "count": 1, "logic": {}},
+        {"name": "label59", "base": 9188228, "count": 1, "logic": {}},
+        {"name": "label63", "base": 9188268, "count": 5, "logic": {}},
+        {"name": "label64", "base": 9188388, "count": 1, "logic": {}},
+        {"name": "MessengerScene2", "base": 9190580, "count": 7, "logic": {}},
+        {
+            "name": "MessengerScene",
+            "base": 9190760,
+            "count": 3,
+            "logic": {"0": {"must_fly": true}}
+        },
+        {"name": "FromTheForts", "base": 9187348, "count": 2, "logic": {}},
+        {"name": "TopRight6", "base": 9187488, "count": 6, "logic": {}},
+        {"name": "TopRightHard", "base": 9187628, "count": 2, "logic": {}},
+        {"name": "VillageRaiders", "base": 9187148, "count": 4, "logic": {}}
+    ],
+    "Ch11Eir": [
+        {"name": "PlayerDeployment", "base": 9148564, "count": 11, "logic": {}},
+        {"name": "StartingEnemies", "base": 9148804, "count": 41, "logic": {}},
+        {
+            "name": "LArachelGroup",
+            "base": 9149644,
+            "count": 2,
+            "logic": {}
+        },
+        {"name": "label31", "base": 9149984, "count": 6, "logic": {}},
+        {
+            "name": "label38",
+            "base": 9150228,
+            "count": 8,
+            "logic": {"5": {"must_fight": true}}
+        },
+        {
+            "name": "ValterGroup",
+            "base": 9150408,
+            "count": 3,
+            "logic": {
+                "0": {"must_fight": true},
+                "1": {"must_fly": true},
+                "2": {"must_fly": true}
+            }
+        },
+        {"name": "label37", "base": 9150488, "count": 1, "logic": {}},
+        {"name": "NorthwesternZombies", "base": 9149744, "count": 3, "logic": {}},
+        {"name": "NortheasternSkeletons", "base": 9149824, "count": 3, "logic": {}},
+        {"name": "SouthwesternSkeletons", "base": 9149904, "count": 3, "logic": {}},
+        {"name": "ChestKeySkeleton", "base": 9149704, "count": 1, "logic": {}}
+    ],
+    "Ch11Eph": [
+        {"name": "PlayerDeployment", "base": 9190992, "count": 11, "logic": {}},
+        {"name": "label37", "base": 9191232, "count": 10, "logic": {"must_fly": true}},
+        {
+            "name": "LArachelGroup",
+            "base": 9191452,
+            "count": 2,
+            "logic": {}
+        },
+        {"name": "SecondShipCrew", "base": 9191512, "count": 12, "logic": {}},
+        {"name": "SecondShipCrew2", "base": 9191772, "count": 9, "logic": {}},
+        {"name": "MyrrhBoat", "base": 9192112, "count": 2, "logic": {}},
+        {"name": "MyrrhBoat2", "base": 9192172, "count": 2, "logic": {}},
+        {"name": "CastleCutscene", "base": 9192732, "count": 6, "logic": {}},
+        {"name": "SecondShipStairs", "base": 9191972, "count": 2, "logic": {}},
+        {"name": "BossSquad", "base": 9192032, "count": 3, "logic": {"must_fly": true}},
+        {
+            "name": "LeftSidePair",
+            "base": 9192232,
+            "count": 2,
+            "logic": {"must_fly": true}
+        },
+        {
+            "name": "TopMiddlePair",
+            "base": 9192292,
+            "count": 2,
+            "logic": {"must_fly": true}
+        },
+        {
+            "name": "BottomMidPair",
+            "base": 9192352,
+            "count": 2,
+            "logic": {"must_fly": true}
+        },
+        {
+            "name": "TopRightDuo",
+            "base": 9192432,
+            "count": 2,
+            "logic": {"must_fly": true}
+        },
+        {
+            "name": "BottomRightDuo",
+            "base": 9192492,
+            "count": 2,
+            "logic": {"must_fly": true}
+        },
+        {
+            "name": "TopLeftDuo",
+            "base": 9192592,
+            "count": 2,
+            "logic": {"must_fly": true}
+        },
+        {
+            "name": "BottomRightDuo",
+            "base": 9192652,
+            "count": 2,
+            "logic": {"must_fly": true}
+        }
+    ],
+    "Ch12Eir": [
+        {"name": "PlayerDeployment", "base": 9150832, "count": 12, "logic": {}},
+        {
+            "name": "StartingEnemies",
+            "base": 9151092,
+            "count": 31,
+            "logic": {
+                "1": {"must_fly": true},
+                "2": {"must_fly": true},
+                "3": {"must_fly": true},
+                "4": {"must_fly": true},
+                "5": {"must_fly": true},
+                "6": {"must_fly": true},
+                "7": {"must_fly": true},
+                "8": {"must_fly": true},
+                "9": {"must_fly": true},
+                "10": {"must_fly": true},
+                "11": {"must_fly": true},
+                "12": {"must_fly": true},
+                "16": {"must_fly": true},
+                "19": {"must_fly": true},
+                "20": {"must_fly": true},
+                "21": {"must_fly": true},
+                "28": {"must_fly": true},
+                "29": {"must_fly": true}
+            }
+        },
+        {"name": "label35", "base": 9151732, "count": 1, "logic": {}},
+        {"name": "label36", "base": 9151952, "count": 1, "logic": {}},
+        {"name": "label30", "base": 9151992, "count": 5, "logic": {}},
+        {"name": "label34", "base": 9152112, "count": 2, "logic": {}},
+        {
+            "name": "ExtraHardModeStartingEnemies",
+            "base": 9152172,
+            "count": 6,
+            "logic": {}
+        },
+        {
+            "name": "NorthwesternGargoyle1",
+            "base": 9151772,
+            "count": 4,
+            "logic": {"must_fly": true}
+        },
+        {
+            "name": "NorthwesternGargoyle2",
+            "base": 9152452,
+            "count": 1,
+            "logic": {"must_fly": true}
+        },
+        {"name": "SouthwesternDogs", "base": 9152312, "count": 3, "logic": {}},
+        {
+            "name": "SouthwesternGargoyle1",
+            "base": 9152492,
+            "count": 2,
+            "logic": {"must_fly": true}
+        },
+        {
+            "name": "SouthwesternGargoyle2",
+            "base": 9152392,
+            "count": 2,
+            "logic": {"must_fly": true}
+        },
+        {
+            "name": "SoutheasternGargoyle",
+            "base": 9151872,
+            "count": 3,
+            "logic": {"must_fly": true}
+        }
+    ],
+    "Ch12Eph": [
+        {"name": "PlayerDeployment", "base": 9193144, "count": 12, "logic": {}},
+        {"name": "label35", "base": 9193404, "count": 37, "logic": {}},
+        {"name": "label31", "base": 9194764, "count": 3, "logic": {}},
+        {"name": "label32", "base": 9194844, "count": 1, "logic": {}},
+        {"name": "label33", "base": 9194884, "count": 2, "logic": {}},
+        {"name": "label41", "base": 9194944, "count": 2, "logic": {}},
+        {"name": "label42", "base": 9195004, "count": 1, "logic": {}},
+        {"name": "EwanJoins", "base": 9194164, "count": 1, "logic": {}},
+        {"name": "MonstersTopRight", "base": 9194204, "count": 6, "logic": {}},
+        {"name": "MonstersTopLeft", "base": 9194344, "count": 3, "logic": {}},
+        {"name": "MonstersRight", "base": 9194424, "count": 2, "logic": {}},
+        {
+            "name": "MonstersBottom",
+            "base": 9194484,
+            "count": 3,
+            "logic": {
+                "1": {"nudges": {"start": [1, 27]}},
+                "2": {"nudges": {"start": [1, 29]}}
+            }
+        },
+        {"name": "RightBoat", "base": 9194564, "count": 2, "logic": {}},
+        {"name": "SingleLeft", "base": 9194624, "count": 1, "logic": {}},
+        {"name": "SingleRight", "base": 9194664, "count": 1, "logic": {}},
+        {"name": "TopPair", "base": 9194704, "count": 2, "logic": {}}
+    ],
+    "Ch13Eir": [
+        {"name": "PlayerDeployment", "base": 9152840, "count": 12, "logic": {}},
+        {"name": "label44", "base": 9153100, "count": 1, "logic": {}},
+        {"name": "StartingEnemies", "base": 9153140, "count": 20, "logic": {}},
+        {"name": "AmeliaGroup", "base": 9154320, "count": 1, "logic": {}},
+        {"name": "label43", "base": 9154360, "count": 1, "logic": {}},
+        {"name": "label45", "base": 9154400, "count": 4, "logic": {}},
+        {"name": "label46", "base": 9154500, "count": 8, "logic": {}},
+        {"name": "label48", "base": 9154680, "count": 7, "logic": {}},
+        {"name": "label37", "base": 9156976, "count": 1, "logic": {}},
+        {"name": "label38", "base": 9157060, "count": 5, "logic": {}},
+        {"name": "label49", "base": 9157208, "count": 1, "logic": {}},
+        {"name": "label50", "base": 9157248, "count": 1, "logic": {}},
+        {
+            "name": "ExtraHardModeStartingEnemies",
+            "base": 9153560,
+            "count": 6,
+            "logic": {}
+        },
+        {
+            "name": "NorthwesternFortReinforcements1",
+            "base": 9154120,
+            "count": 2,
+            "logic": {}
+        },
+        {
+            "name": "NorthwesternFortReinforcements2",
+            "base": 9154180,
+            "count": 2,
+            "logic": {}
+        },
+        {
+            "name": "NortheasternFortReinforcements",
+            "base": 9153980,
+            "count": 2,
+            "logic": {}
+        },
+        {
+            "name": "SoutheasternFortReinforcements",
+            "base": 9154040,
+            "count": 3,
+            "logic": {}
+        },
+        {
+            "name": "WestCavalierReinforcements",
+            "base": 9153920,
+            "count": 2,
+            "logic": {}
+        },
+        {"name": "PabloGroup", "base": 9153700, "count": 10, "logic": {}},
+        {
+            "name": "CormagGroup",
+            "base": 9154240,
+            "count": 3,
+            "logic": {
+                "0": {"must_fly": true},
+                "1": {"nudges": {"start": [6, 13]}},
+                "2": {"must_fly": true}
+            }
+        }
+    ],
+    "Ch13Eph": [
+        {"name": "PlayerDeployment", "base": 9195188, "count": 11, "logic": {}},
+        {"name": "SelenaBoss", "base": 9195428, "count": 1, "logic": {}},
+        {"name": "EnemyStart", "base": 9195468, "count": 34, "logic": {}},
+        {"name": "GerikGroup", "base": 9196168, "count": 2, "logic": {}},
+        {"name": "MyrrhMoving", "base": 9196408, "count": 1, "logic": {}},
+        {"name": "IntroLordSquad", "base": 9196448, "count": 3, "logic": {}},
+        {"name": "IntroBlueGroup", "base": 9196528, "count": 8, "logic": {}},
+        {"name": "MyrrhMoving2", "base": 9196708, "count": 1, "logic": {}},
+        {"name": "MyrrhAfterRout", "base": 9196748, "count": 2, "logic": {}},
+        {"name": "EnemyStart2", "base": 9196808, "count": 9, "logic": {}},
+        {"name": "WaterBandit", "base": 9196228, "count": 1, "logic": {}},
+        {"name": "LandBandit", "base": 9196268, "count": 1, "logic": {}},
+        {"name": "BottomBackup2", "base": 9196308, "count": 2, "logic": {}},
+        {"name": "BottomBackup1", "base": 9196368, "count": 1, "logic": {}}
+    ],
+    "Ch14Eir": [
+        {"name": "PlayerDeployment", "base": 9157544, "count": 12, "logic": {}},
+        {"name": "StartingEnemies", "base": 9157804, "count": 42, "logic": {}},
+        {"name": "label35", "base": 9158924, "count": 1, "logic": {}},
+        {"name": "label38", "base": 9158964, "count": 2, "logic": {}},
+        {"name": "ThroneGroup", "base": 9159024, "count": 6, "logic": {}},
+        {"name": "label43", "base": 9159164, "count": 3, "logic": {}},
+        {"name": "label46", "base": 9159244, "count": 1, "logic": {}},
+        {"name": "label47", "base": 9159284, "count": 2, "logic": {}},
+        {"name": "label48", "base": 9159344, "count": 5, "logic": {}},
+        {"name": "label33", "base": 9159504, "count": 4, "logic": {}},
+        {
+            "name": "CaellachVsIsmaire",
+            "base": 9159772,
+            "count": 3,
+            "logic": {"must_fight": true}
+        },
+        {"name": "label49", "base": 9159892, "count": 5, "logic": {}},
+        {"name": "StairsArcher", "base": 9158664, "count": 1, "logic": {}},
+        {"name": "SoutheasternCavaliers", "base": 9158844, "count": 3, "logic": {}},
+        {"name": "StairsShamans", "base": 9158784, "count": 2, "logic": {}},
+        {"name": "SouthwesternArmours", "base": 9158704, "count": 3, "logic": {}}
+    ],
+    "Ch14Eph": [
+        {"name": "PlayerDeployment", "base": 9199548, "count": 12, "logic": {}},
+        {"name": "IntroLyon", "base": 9199808, "count": 2, "logic": {}},
+        {"name": "EnemyStart", "base": 9199868, "count": 41, "logic": {}},
+        {
+            "name": "KnollLoad",
+            "base": 9200708,
+            "count": 1,
+            "logic": {"0": {"must_fight": true}}
+        },
+        {"name": "RennacLoad", "base": 9200748, "count": 1, "logic": {}},
+        {"name": "label37", "base": 9201248, "count": 1, "logic": {}},
+        {"name": "EndSceneThrone", "base": 9201288, "count": 3, "logic": {}},
+        {"name": "LordSquadThrone", "base": 9201368, "count": 7, "logic": {}},
+        {"name": "label59", "base": 9201528, "count": 1, "logic": {}},
+        {"name": "LordOutsideCastle", "base": 9201848, "count": 7, "logic": {}},
+        {"name": "LordGoesToJail", "base": 9202152, "count": 2, "logic": {}},
+        {"name": "OutroLyon", "base": 9202212, "count": 1, "logic": {}},
+        {"name": "JailMessenger", "base": 9202252, "count": 1, "logic": {}},
+        {"name": "LordInJail", "base": 9202292, "count": 3, "logic": {}},
+        {"name": "LordInJail2", "base": 9202372, "count": 4, "logic": {}},
+        {"name": "KnollJailcell", "base": 9202472, "count": 4, "logic": {}},
+        {"name": "FlashbackKnoll", "base": 9202652, "count": 1, "logic": {}},
+        {"name": "FlashbackKing", "base": 9202692, "count": 2, "logic": {}},
+        {"name": "FlashbackLyon", "base": 9202752, "count": 2, "logic": {}},
+        {"name": "FlashbackLyonOnly", "base": 9202812, "count": 1, "logic": {}},
+        {"name": "LordSWRoom", "base": 9202852, "count": 3, "logic": {}},
+        {"name": "LeftHallTurn2", "base": 9200788, "count": 2, "logic": {}},
+        {"name": "RightHallTurn2", "base": 9201568, "count": 2, "logic": {}},
+        {"name": "LeftHallTurn3", "base": 9200848, "count": 2, "logic": {}},
+        {"name": "RightHallTurn3", "base": 9201628, "count": 2, "logic": {}},
+        {"name": "LeftHallTurn4", "base": 9200908, "count": 2, "logic": {}},
+        {"name": "RightHallTurn4", "base": 9201688, "count": 2, "logic": {}},
+        {"name": "TopLeftDuo", "base": 9200968, "count": 2, "logic": {}},
+        {"name": "TopRightDuo", "base": 9201748, "count": 2, "logic": {}},
+        {"name": "ChestRoomStairs", "base": 9201028, "count": 2, "logic": {}},
+        {"name": "ThroneStairsL", "base": 9201088, "count": 3, "logic": {}},
+        {"name": "ThroneStairsR", "base": 9201168, "count": 3, "logic": {}}
+    ],
+    "Ch15Eir": [
+        {"name": "label47", "base": 9159892, "count": 5, "logic": {}},
+        {"name": "PlayerDeployment", "base": 9160208, "count": 12, "logic": {}},
+        {"name": "StartingEnemies", "base": 9160468, "count": 40, "logic": {}},
+        {"name": "label50", "base": 9161288, "count": 6, "logic": {}},
+        {
+            "name": "EphraimGroup",
+            "base": 9161428,
+            "count": 3,
+            "logic": {"0": {"must_fight": true}, "2": {"must_fight": true}}
+        },
+        {
+            "name": "NortheasternPegasi",
+            "base": 9161508,
+            "count": 2,
+            "logic": {"must_fly": true}
+        },
+        {
+            "name": "NorthPegasi",
+            "base": 9161568,
+            "count": 2,
+            "logic": {"must_fly": true}
+        },
+        {"name": "NortheasternShamans", "base": 9161628, "count": 2, "logic": {}},
+        {"name": "NorthwesternShaman", "base": 9161688, "count": 1, "logic": {}},
+        {
+            "name": "SouthwesternReinforcements",
+            "base": 9161728,
+            "count": 9,
+            "logic": {}
+        },
+        {"name": "SouthCavaliers", "base": 9161988, "count": 2, "logic": {}}
+    ],
+    "Ch15Eph": [
+        {"name": "PlayerDeployment", "base": 9203220, "count": 12, "logic": {}},
+        {"name": "EnemyStart", "base": 9203480, "count": 42, "logic": {}},
+        {"name": "label52", "base": 9204340, "count": 3, "logic": {}},
+        {
+            "name": "EirikaSquad",
+            "base": 9204420,
+            "count": 3,
+            "logic": {"1": {"must_fight": true}, "2": {"must_fight": true}}
+        },
+        {"name": "label47", "base": 9204960, "count": 2, "logic": {}},
+        {"name": "IntroBlueGroup", "base": 9205020, "count": 8, "logic": {}},
+        {"name": "label46", "base": 9205200, "count": 1, "logic": {}},
+        {
+            "name": "NortheastFliers",
+            "base": 9204500,
+            "count": 2,
+            "logic": {
+                "0": {"nudges": {"start": [23, 3]}},
+                "1": {"nudges": {"start": [21, 2]}}
+            }
+        },
+        {
+            "name": "NorthFliers",
+            "base": 9204560,
+            "count": 2,
+            "logic": {"1": {"must_fly": true}}
+        },
+        {"name": "NorthLandTrio", "base": 9204620, "count": 3, "logic": {}},
+        {"name": "BelowVillage", "base": 9204700, "count": 9, "logic": {}},
+        {"name": "SouthernForts", "base": 9204900, "count": 2, "logic": {}}
+    ],
+    "Ch16Eir": [
+        {"name": "PlayerDeployment", "base": 9162328, "count": 12, "logic": {}},
+        {"name": "StartingEnemies", "base": 9162588, "count": 29, "logic": {}},
+        {"name": "label45", "base": 9163728, "count": 3, "logic": {}},
+        {"name": "label48", "base": 9163808, "count": 6, "logic": {}},
+        {"name": "label54", "base": 9163948, "count": 3, "logic": {}},
+        {"name": "label55", "base": 9164028, "count": 3, "logic": {}},
+        {"name": "label56", "base": 9164108, "count": 6, "logic": {}},
+        {"name": "label31", "base": 9164360, "count": 9, "logic": {}},
+        {"name": "label32", "base": 9164816, "count": 2, "logic": {}},
+        {"name": "label33", "base": 9164876, "count": 1, "logic": {}},
+        {"name": "label34", "base": 9164916, "count": 2, "logic": {}},
+        {"name": "label35", "base": 9164976, "count": 4, "logic": {}},
+        {"name": "label38", "base": 9165076, "count": 2, "logic": {}},
+        {"name": "label39", "base": 9165136, "count": 2, "logic": {}},
+        {"name": "label40", "base": 9165196, "count": 2, "logic": {}},
+        {"name": "label43", "base": 9165320, "count": 1, "logic": {}},
+        {"name": "label44", "base": 9165380, "count": 4, "logic": {}},
+        {"name": "label47", "base": 9165560, "count": 3, "logic": {}},
+        {"name": "label46", "base": 9165660, "count": 3, "logic": {}},
+        {"name": "label49", "base": 9165860, "count": 3, "logic": {}},
+        {"name": "label51", "base": 9165960, "count": 1, "logic": {}},
+        {"name": "label52", "base": 9166000, "count": 1, "logic": {}},
+        {"name": "label53", "base": 9166040, "count": 1, "logic": {}},
+        {
+            "name": "ExtraHardModeStartingEnemies",
+            "base": 9163188,
+            "count": 6,
+            "logic": {}
+        },
+        {"name": "ThiefReinforcement", "base": 9163648, "count": 1, "logic": {}},
+        {
+            "name": "GreatKnightReinforcements1",
+            "base": 9163328,
+            "count": 4,
+            "logic": {}
+        },
+        {
+            "name": "GreatKnightReinforcements2",
+            "base": 9163448,
+            "count": 3,
+            "logic": {}
+        },
+        {"name": "CavalierReinforcements", "base": 9163528, "count": 3, "logic": {}},
+        {"name": "DruidReinforcements", "base": 9163688, "count": 1, "logic": {}}
+    ],
+    "Ch16Eph": [
+        {"name": "PlayerDeployment", "base": 9205320, "count": 12, "logic": {}},
+        {"name": "MyrrhJoins", "base": 9162328, "count": 12, "logic": {}},
+        {"name": "EnemyStart", "base": 9205580, "count": 37, "logic": {}},
+        {"name": "ExtraHardEnemies", "base": 9206780, "count": 5, "logic": {}},
+        {"name": "label41", "base": 9163728, "count": 3, "logic": {}},
+        {"name": "LordSquadThrone", "base": 9163808, "count": 6, "logic": {}},
+        {"name": "label50", "base": 9163948, "count": 3, "logic": {}},
+        {"name": "label51", "base": 9164028, "count": 3, "logic": {}},
+        {"name": "label52", "base": 9164108, "count": 6, "logic": {}},
+        {"name": "LordOutsideCastle", "base": 9164360, "count": 9, "logic": {}},
+        {"name": "label29", "base": 9164816, "count": 2, "logic": {}},
+        {"name": "IntroOrson", "base": 9164876, "count": 1, "logic": {}},
+        {"name": "IntroDarling", "base": 9164916, "count": 2, "logic": {}},
+        {"name": "label32", "base": 9164976, "count": 4, "logic": {}},
+        {"name": "label35", "base": 9165076, "count": 2, "logic": {}},
+        {"name": "label36", "base": 9165136, "count": 2, "logic": {}},
+        {"name": "label37", "base": 9165196, "count": 2, "logic": {}},
+        {"name": "label39", "base": 9165320, "count": 1, "logic": {}},
+        {"name": "OutroDarling", "base": 9165380, "count": 4, "logic": {}},
+        {"name": "label43", "base": 9165560, "count": 3, "logic": {}},
+        {"name": "label42", "base": 9165660, "count": 3, "logic": {}},
+        {"name": "LordsSacredRoom", "base": 9165860, "count": 3, "logic": {}},
+        {"name": "label47", "base": 9165960, "count": 1, "logic": {}},
+        {"name": "label48", "base": 9166000, "count": 1, "logic": {}},
+        {"name": "label49", "base": 9166040, "count": 1, "logic": {}},
+        {"name": "EastSideDuo", "base": 9206540, "count": 2, "logic": {}},
+        {"name": "SEReinforcements", "base": 9206600, "count": 4, "logic": {}},
+        {"name": "SWReinforcements", "base": 9206420, "count": 5, "logic": {}},
+        {"name": "SWReinforcements2", "base": 9206340, "count": 2, "logic": {}},
+        {"name": "EastCastleThief", "base": 9206740, "count": 1, "logic": {}},
+        {"name": "SouthStairsThief", "base": 9206700, "count": 1, "logic": {}}
+    ],
+    "Ch17Eir": [
+        {"name": "PlayerDeployment", "base": 9166424, "count": 12, "logic": {}},
+        {"name": "label41", "base": 9167204, "count": 5, "logic": {}},
+        {"name": "label47", "base": 9167644, "count": 8, "logic": {}},
+        {"name": "label48", "base": 9167824, "count": 4, "logic": {}},
+        {"name": "label49", "base": 9167924, "count": 6, "logic": {}},
+        {"name": "label43", "base": 9168064, "count": 5, "logic": {}},
+        {"name": "label52", "base": 9168184, "count": 5, "logic": {}},
+        {
+            "name": "StartingEnemies",
+            "base": 9166684,
+            "count": 25,
+            "logic": {
+                "2": {"no_flying": true},
+                "3": {"no_flying": true},
+                "6": {"no_flying": true},
+                "7": {"no_flying": true},
+                "8": {"no_flying": true},
+                "9": {"no_flying": true},
+                "10": {"no_flying": true},
+                "11": {"no_flying": true},
+                "12": {"no_flying": true},
+                "18": {"no_flying": true},
+                "19": {"no_flying": true},
+                "20": {"no_flying": true},
+                "21": {"no_flying": true}
+            }
+        },
+        {"name": "SoutheasternWarriors", "base": 9167404, "count": 2, "logic": {}},
+        {"name": "DruidsByLyon", "base": 9167324, "count": 3, "logic": {}},
+        {"name": "WesternCavaliers", "base": 9167524, "count": 2, "logic": {}},
+        {"name": "WesternPaladinGK", "base": 9167584, "count": 2, "logic": {}},
+        {"name": "NorthwesternDragons", "base": 9167464, "count": 2, "logic": {}}
+    ],
+    "Ch17Eph": [
+        {"name": "label40", "base": 9167204, "count": 5, "logic": {}},
+        {"name": "label46", "base": 9167644, "count": 8, "logic": {}},
+        {"name": "label47", "base": 9167824, "count": 4, "logic": {}},
+        {"name": "label48", "base": 9167924, "count": 6, "logic": {}},
+        {"name": "label42", "base": 9168064, "count": 5, "logic": {}},
+        {"name": "label50", "base": 9168184, "count": 5, "logic": {}},
+        {"name": "PlayerDeployment", "base": 9206940, "count": 12, "logic": {}},
+        {
+            "name": "StartingEnemies",
+            "base": 9207200,
+            "count": 25,
+            "logic": {
+                "2": {"no_flying": true},
+                "3": {"no_flying": true},
+                "6": {"no_flying": true},
+                "7": {"no_flying": true},
+                "8": {"no_flying": true},
+                "9": {"no_flying": true},
+                "10": {"no_flying": true},
+                "11": {"no_flying": true},
+                "12": {"no_flying": true},
+                "18": {"no_flying": true},
+                "19": {"no_flying": true},
+                "20": {"no_flying": true},
+                "21": {"no_flying": true}
+            }
+        },
+        {"name": "SoutheasternWarriors", "base": 9207800, "count": 2, "logic": {}},
+        {"name": "DruidsByLyon", "base": 9207720, "count": 3, "logic": {}},
+        {"name": "WesternCavaliers", "base": 9207920, "count": 2, "logic": {}},
+        {"name": "WesternPaladinGK", "base": 9207980, "count": 2, "logic": {}},
+        {"name": "NorthwesternDragons", "base": 9207860, "count": 2, "logic": {}}
+    ],
+    "Ch18Eir": [
+        {"name": "PlayerDeployment", "base": 9170920, "count": 12, "logic": {}},
+        {"name": "StartingEnemies", "base": 9171180, "count": 28, "logic": {}},
+        {"name": "label41", "base": 9171760, "count": 7, "logic": {}},
+        {"name": "label44", "base": 9171920, "count": 6, "logic": {}},
+        {"name": "label48", "base": 9172060, "count": 5, "logic": {}},
+        {
+            "name": "ExtraHardModeStartingEnemies",
+            "base": 9172180,
+            "count": 6,
+            "logic": {}
+        },
+        {"name": "SoutheasternSpiders", "base": 9172320, "count": 2, "logic": {}},
+        {"name": "EasternSpiders", "base": 9172380, "count": 2, "logic": {}},
+        {"name": "NorthernSpiders", "base": 9172440, "count": 3, "logic": {}},
+        {"name": "EasternGargoyle", "base": 9172520, "count": 1, "logic": {}},
+        {"name": "NorthernSpiders2", "base": 9172560, "count": 2, "logic": {}},
+        {"name": "NorthernGargoyle", "base": 9172620, "count": 1, "logic": {}}
+    ],
+    "Ch18Eph": [
+        {"name": "label38", "base": 9171760, "count": 7, "logic": {}},
+        {"name": "PlayerDeployment", "base": 9210584, "count": 12, "logic": {}},
+        {"name": "StartingEnemies", "base": 9210844, "count": 28, "logic": {}},
+        {"name": "label44", "base": 9211424, "count": 6, "logic": {}},
+        {"name": "label48", "base": 9211564, "count": 5, "logic": {}},
+        {
+            "name": "ExtraHardModeStartingEnemies",
+            "base": 9211684,
+            "count": 6,
+            "logic": {}
+        },
+        {"name": "SoutheasternSpiders", "base": 9211824, "count": 2, "logic": {}},
+        {"name": "EasternSpiders", "base": 9211884, "count": 2, "logic": {}},
+        {"name": "NorthernSpiders", "base": 9211944, "count": 3, "logic": {}},
+        {"name": "EasternGargoyle", "base": 9212024, "count": 1, "logic": {}},
+        {"name": "NorthernSpiders2", "base": 9212064, "count": 2, "logic": {}},
+        {"name": "NorthernGargoyle", "base": 9212124, "count": 1, "logic": {}}
+    ],
+    "Ch19Eir": [
+        {"name": "PlayerDeployment", "base": 9175696, "count": 17, "logic": {}},
+        {"name": "label31", "base": 9177316, "count": 5, "logic": {}},
+        {"name": "label32", "base": 9177436, "count": 1, "logic": {}},
+        {"name": "label33", "base": 9177476, "count": 2, "logic": {}},
+        {"name": "label35", "base": 9177536, "count": 4, "logic": {}},
+        {"name": "label36", "base": 9177636, "count": 1, "logic": {}},
+        {"name": "label43", "base": 9177676, "count": 7, "logic": {}},
+        {"name": "label44", "base": 9177836, "count": 4, "logic": {}},
+        {"name": "label40", "base": 9178000, "count": 1, "logic": {}},
+        {"name": "label41", "base": 9178060, "count": 5, "logic": {}},
+        {"name": "label42", "base": 9178180, "count": 1, "logic": {}},
+        {"name": "StartingEnemies", "base": 9176056, "count": 25, "logic": {}},
+        {"name": "RaustenArmours", "base": 9176636, "count": 8, "logic": {}},
+        {"name": "ManselGroup", "base": 9176576, "count": 2, "logic": {}},
+        {"name": "WesternThief", "base": 9176816, "count": 1, "logic": {}},
+        {"name": "EasternThief", "base": 9176856, "count": 1, "logic": {}},
+        {"name": "NortheasternWarriorSniper", "base": 9176896, "count": 2, "logic": {}},
+        {"name": "NortheasternHeroes", "base": 9176956, "count": 2, "logic": {}},
+        {"name": "EasternGenerals", "base": 9177016, "count": 2, "logic": {}},
+        {"name": "EasternWarriors", "base": 9177076, "count": 2, "logic": {}},
+        {"name": "RievAreaReinforcements", "base": 9177136, "count": 4, "logic": {}},
+        {"name": "SouthernSwordmastersGK", "base": 9177236, "count": 3, "logic": {}}
+    ],
+    "Ch19Eph": [
+        {"name": "label30", "base": 9177316, "count": 5, "logic": {}},
+        {"name": "label31", "base": 9177436, "count": 1, "logic": {}},
+        {"name": "label32", "base": 9177476, "count": 2, "logic": {}},
+        {"name": "label34", "base": 9177536, "count": 4, "logic": {}},
+        {"name": "label35", "base": 9177636, "count": 1, "logic": {}},
+        {"name": "label40", "base": 9177676, "count": 7, "logic": {}},
+        {"name": "label41", "base": 9177836, "count": 4, "logic": {}},
+        {"name": "label37", "base": 9178000, "count": 1, "logic": {}},
+        {"name": "label38", "base": 9178060, "count": 5, "logic": {}},
+        {"name": "label39", "base": 9178180, "count": 1, "logic": {}},
+        {"name": "PlayerDeployment", "base": 9215152, "count": 17, "logic": {}},
+        {"name": "StartingEnemies", "base": 9215512, "count": 25, "logic": {}},
+        {"name": "RaustenArmours", "base": 9217152, "count": 8, "logic": {}},
+        {"name": "ManselGroup", "base": 9216032, "count": 2, "logic": {}},
+        {"name": "WesternThief", "base": 9216032, "count": 1, "logic": {}},
+        {"name": "EasternThief", "base": 9216072, "count": 1, "logic": {}},
+        {"name": "NortheasternWarriorSniper", "base": 9216112, "count": 2, "logic": {}},
+        {"name": "NortheasternHeroes", "base": 9216172, "count": 2, "logic": {}},
+        {"name": "EasternGenerals", "base": 9216232, "count": 2, "logic": {}},
+        {"name": "EasternWarriors", "base": 9216292, "count": 2, "logic": {}},
+        {"name": "RievAreaReinforcements", "base": 9216352, "count": 4, "logic": {}},
+        {"name": "SouthernSwordmastersGK", "base": 9216452, "count": 3, "logic": {}}
+    ],
+    "Ch20Eir": [
+        {"name": "PlayerDeployment", "base": 9178484, "count": 18, "logic": {}},
+        {"name": "StartingEnemies", "base": 9178864, "count": 46, "logic": {}},
+        {"name": "MorvaGroup", "base": 9179804, "count": 1, "logic": {}},
+        {"name": "label41", "base": 9180724, "count": 1, "logic": {}},
+        {"name": "label42", "base": 9180764, "count": 6, "logic": {}},
+        {"name": "label45", "base": 9180904, "count": 1, "logic": {}},
+        {"name": "label46", "base": 9180972, "count": 1, "logic": {}},
+        {
+            "name": "ExtraHardModeStartingEnemies",
+            "base": 9179844,
+            "count": 3,
+            "logic": {}
+        },
+        {"name": "SouthwesternMaelduins", "base": 9179924, "count": 2, "logic": {}},
+        {"name": "SouthwesternMaelduinHard", "base": 9179984, "count": 1, "logic": {}},
+        {"name": "CentralDeathgoyles", "base": 9180024, "count": 2, "logic": {}},
+        {"name": "CentralDeathgoyleHard", "base": 9180084, "count": 1, "logic": {}},
+        {"name": "NorthernCyclopes", "base": 9180124, "count": 2, "logic": {}},
+        {"name": "NorthwesternDeathgoyles", "base": 9180184, "count": 3, "logic": {}},
+        {"name": "SouthwesternDeathgoyles", "base": 9180264, "count": 3, "logic": {}},
+        {"name": "EyeballsByMorva", "base": 9180344, "count": 3, "logic": {}},
+        {"name": "WesternSpiders", "base": 9180424, "count": 3, "logic": {}},
+        {"name": "DogAndSpider", "base": 9180504, "count": 2, "logic": {}},
+        {"name": "NorthernDog", "base": 9180564, "count": 1, "logic": {}},
+        {"name": "SouthernDog", "base": 9180604, "count": 1, "logic": {}},
+        {"name": "NortheasternDeathgoyles", "base": 9180644, "count": 3, "logic": {}}
+    ],
+    "Ch20Eph": [
+        {"name": "label38", "base": 9179804, "count": 1, "logic": {}},
+        {"name": "label36", "base": 9180724, "count": 1, "logic": {}},
+        {"name": "label37", "base": 9180764, "count": 6, "logic": {}},
+        {"name": "label40", "base": 9180904, "count": 1, "logic": {}},
+        {"name": "label41", "base": 9180972, "count": 1, "logic": {}},
+        {"name": "PlayerDeployment", "base": 9217596, "count": 18, "logic": {}},
+        {"name": "StartingEnemies", "base": 9217976, "count": 46, "logic": {}},
+        {"name": "label44", "base": 9218916, "count": 1, "logic": {}},
+        {
+            "name": "ExtraHardModeStartingEnemies",
+            "base": 9219976,
+            "count": 3,
+            "logic": {}
+        },
+        {"name": "SouthwesternMaelduins", "base": 9218956, "count": 2, "logic": {}},
+        {"name": "SouthwesternMaelduinHard", "base": 9219016, "count": 1, "logic": {}},
+        {"name": "CentralDeathgoyles", "base": 9219056, "count": 2, "logic": {}},
+        {"name": "CentralDeathgoyleHard", "base": 9219116, "count": 1, "logic": {}},
+        {"name": "NorthernCyclopes", "base": 9219156, "count": 2, "logic": {}},
+        {"name": "NorthwesternDeathgoyles", "base": 9219216, "count": 3, "logic": {}},
+        {"name": "SouthwesternDeathgoyles", "base": 9219296, "count": 3, "logic": {}},
+        {"name": "EyeballsByMorva", "base": 9219376, "count": 3, "logic": {}},
+        {"name": "WesternSpiders", "base": 9219456, "count": 3, "logic": {}},
+        {"name": "DogAndSpider", "base": 9219536, "count": 2, "logic": {}},
+        {"name": "NorthernDog", "base": 9219596, "count": 1, "logic": {}},
+        {"name": "SouthernDog", "base": 9219636, "count": 1, "logic": {}},
+        {"name": "NortheasternDeathgoyles", "base": 9219676, "count": 3, "logic": {}}
+    ],
+    "Final1Eir": [
+        {"name": "label30", "base": 9180972, "count": 1, "logic": {}},
+        {"name": "PlayerDeployment", "base": 9181212, "count": 12, "logic": {}},
+        {"name": "StartingEnemies", "base": 9181472, "count": 36, "logic": {}},
+        {"name": "label31", "base": 9182672, "count": 5, "logic": {}},
+        {"name": "label34", "base": 9182792, "count": 6, "logic": {}},
+        {
+            "name": "SkeletonsByLyon",
+            "base": 9182432,
+            "count": 3,
+            "logic": {"ignore": true}
+        },
+        {"name": "EasternEyeballs", "base": 9182212, "count": 5, "logic": {}},
+        {"name": "WesternDeathgoyles", "base": 9182332, "count": 4, "logic": {}}
+    ],
+    "Final1Eph": [
+        {"name": "label26", "base": 9180972, "count": 1, "logic": {}},
+        {"name": "label27", "base": 9182672, "count": 5, "logic": {}},
+        {"name": "PlayerDeployment", "base": 9220192, "count": 12, "logic": {}},
+        {"name": "StartingEnemies", "base": 9220452, "count": 36, "logic": {}},
+        {"name": "label34", "base": 9221652, "count": 6, "logic": {}},
+        {
+            "name": "SkeletonsByLyon",
+            "base": 9221412,
+            "count": 3,
+            "logic": {"ignore": true}
+        },
+        {"name": "WesternEyeballs", "base": 9221192, "count": 5, "logic": {}},
+        {"name": "EasternDeathgoyles", "base": 9221312, "count": 4, "logic": {}}
+    ],
+    "Final2Eir": [
+        {"name": "TwinsGroup", "base": 9183044, "count": 2, "logic": {}},
+        {"name": "CutsceneSethLarachel", "base": 9183104, "count": 2, "logic": {}},
+        {"name": "PlayerDeployment", "base": 9183164, "count": 10, "logic": {}},
+        {"name": "FomortiisGroup", "base": 9183384, "count": 1, "logic": {}},
+        {"name": "FomortiisSummons", "base": 9248596, "count": 12, "logic": {}}
+    ],
+    "Final2Eph": [
+        {"name": "TwinsGroup", "base": 9183044, "count": 2, "logic": {}},
+        {"name": "CutsceneSethLarachel", "base": 9183104, "count": 2, "logic": {}},
+        {"name": "PlayerDeployment", "base": 9183164, "count": 10, "logic": {}},
+        {"name": "FomortiisGroup", "base": 9183384, "count": 1, "logic": {}},
+        {"name": "EmptyGroup", "base": 9221792, "count": 0, "logic": {}},
+        {"name": "FomortiisSummons", "base": 9248596, "count": 12, "logic": {}}
+    ],
+	"Valni1": [
+		{"name": "PlayerDeployment", "base": 9221832, "count": 8, "logic": {"valni": true}},
+		{"name": "StartingEnemies", "base": 9222012, "count": 17, "logic": {
+			"valni": true,
+			"monster": true,
+			"0": {"monster": false}
+		}}
+	],
+	"Valni2": [
+		{"name": "PlayerDeployment", "base": 9222424, "count": 8, "logic": {"valni": true}},
+		{"name": "StartingEnemies", "base": 9222604, "count": 25, "logic": {
+			"valni": true,
+			"monster": true,
+			"0": {"monster": false},
+			"22": {"monster": false},
+			"23": {"monster": false}
+		}},
+		{"name": "RearReinforcements", "base": 9223124, "count": 4, "logic": {"valni": true, "monster": true}}
+	],
+	"Valni3": [
+		{"name": "PlayerDeployment", "base": 9223224, "count": 8, "logic": {"valni": true}},
+		{"name": "StartingEnemies", "base": 9223404, "count": 26, "logic": {
+			"valni": true,
+			"monster": true,
+			"0": {"monster": false}
+		}}
+	],
+	"Valni4": [
+		{"name": "PlayerDeployment", "base": 9223972, "count": 8, "logic": {"valni": true}},
+		{"name": "StartingEnemies", "base": 9224152, "count": 20, "logic": {
+			"valni": true,
+			"monster": true,
+			"0": {"monster": false}
+		}}
+	],
+	"Valni5": [
+		{"name": "PlayerDeployment", "base": 9224592, "count": 8, "logic": {"valni": true}},
+		{"name": "StartingEnemies", "base": 9224772, "count": 40, "logic": {
+			"valni": true,
+			"monster": true,
+			"0": {"monster": false},
+			"1": {"monster": false}
+		}},
+		{"name": "StairsReinforcements", "base": 9225612, "count": 2, "logic": {"valni": true, "monster": true}}
+	],
+	"Valni6": [
+		{"name": "PlayerDeployment", "base": 9225672, "count": 8, "logic": {"valni": true}},
+		{"name": "StartingEnemies", "base": 9225852, "count": 37, "logic": {
+			"valni": true,
+			"1":  {"monster": true},
+			"16": {"monster": true},
+			"17": {"monster": true},
+			"18": {"monster": true},
+			"20": {"monster": true},
+			"21": {"monster": true},
+			"22": {"monster": true},
+			"23": {"monster": true},
+			"24": {"monster": true},
+			"25": {"monster": true},
+			"26": {"monster": true},
+			"28": {"monster": true},
+			"29": {"monster": true},
+			"30": {"monster": true},
+			"31": {"monster": true},
+			"32": {"monster": true},
+			"33": {"monster": true},
+			"34": {"monster": true},
+			"35": {"monster": true},
+			"36": {"monster": true}
+		}}
+	],
+	"Valni7": [
+		{"name": "PlayerDeployment", "base": 9226680, "count": 8, "logic": {"valni": true}},
+		{"name": "StartingEnemies", "base": 9226860, "count": 31, "logic": {
+			"valni": true,
+			"monster": true,
+			"0": {"monster": false},
+			"1": {"monster": false},
+			"2": {"monster": false},
+			"4": {"monster": false},
+			"17": {"monster": false},
+			"19": {"monster": false},
+			"26": {"monster": false},
+			"29": {"monster": false}
+		}},
+		{"name": "WesternGargoyles", "base": 9227520, "count": 2, "logic": {"valni": true}},
+		{"name": "CentralGargoyles", "base": 9227580, "count": 2, "logic": {"valni": true}},
+		{"name": "EasternGargoyles", "base": 9227640, "count": 2, "logic": {"valni": true}}
+	],
+	"Valni8": [
+		{"name": "PlayerDeployment", "base": 9227700, "count": 8, "logic": {"valni": true}},
+		{"name": "StartingEnemies", "base": 9227880, "count": 28, "logic": {
+			"valni": true,
+			"monster": true,
+			"1": {"monster": false},
+			"2": {"monster": false},
+			"27": {"monster": false}
+		}}
+	],
+	"Lagdou1": [
+		{"name": "PlayerDeployment", "base": 9228480, "count": 8, "logic": {"lagdou": true}},
+		{"name": "StartingEnemies", "base": 9228660, "count": 40, "logic": {
+			"lagdou": true,
+			"monster": true,
+			"0": {"monster": false},
+			"1": {"monster": false},
+			"2": {"monster": false},
+			"3": {"monster": false},
+			"21": {"monster": false}
+		}},
+		{"name": "T6Reinforcements", "base": 9229500, "count": 2, "logic": {"lagdou": true, "monster": true}},
+		{"name": "T8Reinforcements", "base": 9229560, "count": 2, "logic": {"lagdou": true, "monster": true}}
+	],
+	"Lagdou2": [
+		{"name": "PlayerDeployment", "base": 9229620, "count": 8, "logic": {"lagdou": true}},
+		{"name": "StartingEnemies", "base": 9229800, "count": 50, "logic": {
+			"lagdou": true,
+			"monster": true,
+			"0": {"monster": false},
+			"1": {"monster": false},
+			"49": {"monster": false}
+		}}
+	],
+	"Lagdou3": [
+		{"name": "PlayerDeployment", "base": 9230840, "count": 8, "logic": {"lagdou": true}},
+		{"name": "StartingEnemies", "base": 9231020, "count": 45, "logic": {
+			"lagdou": true,
+			"monster": true,
+			"0": {"monster": false},
+			"1": {"monster": false},
+			"2": {"monster": false},
+			"3": {"monster": false},
+			"4": {"monster": false},
+			"5": {"monster": false},
+			"6": {"monster": false},
+			"7": {"monster": false},
+			"44": {"monster": false}
+		}},
+		{"name": "StairsReinforcement", "base": 9231960, "count": 1, "logic": {"lagdou": true, "monster": true}},
+		{"name": "NorthernReinforcement", "base": 9232000, "count": 2, "logic": {"lagdou": true, "monster": true}},
+		{"name": "WesternReinforcement", "base": 9232060, "count": 1, "logic": {"lagdou": true}},
+		{"name": "SouthwesternReinforcement", "base": 9232100, "count": 1, "logic": {"lagdou": true}},
+		{"name": "EasternReinforcement", "base": 9232140, "count": 1, "logic": {"lagdou": true}}
+	],
+	"Lagdou4": [
+		{"name": "PlayerDeployment", "base": 9232200, "count": 10, "logic": {"lagdou": true}},
+		{"name": "StartingEnemies", "base": 9232420, "count": 36, "logic": {
+			"lagdou": true,
+			"monster": true,
+			"0": {"monster": false},
+			"31": {"monster": false},
+			"32": {"monster": false},
+			"33": {"monster": false},
+			"34": {"monster": false},
+			"35": {"monster": false}
+		}},
+		{"name": "T4Thief", "base": 9233180, "count": 1, "logic": {"lagdou": true}},
+		{"name": "T6Thief", "base": 9233220, "count": 1, "logic": {"lagdou": true}}
+	],
+	"Lagdou5": [
+		{"name": "PlayerDeployment", "base": 9233260, "count": 9, "logic": {"lagdou": true}},
+		{"name": "StartingEnemies", "base": 9233460, "count": 31, "logic": {
+			"lagdou": true,
+			"monster": true,
+			"0": {"monster": false},
+			"1": {"monster": false},
+			"2": {"monster": false}
+		}},
+		{"name": "T8Thief", "base": 9234120, "count": 1, "logic": {"lagdou": true}},
+		{"name": "T2Thief", "base": 9234160, "count": 1, "logic": {"lagdou": true}},
+		{"name": "T4Thief", "base": 9234200, "count": 1, "logic": {"lagdou": true}}
+	],
+	"Lagdou6": [
+		{"name": "PlayerDeployment", "base": 9234240, "count": 10, "logic": {"lagdou": true}},
+		{"name": "StartingEnemies", "base": 9234460, "count": 42, "logic": {
+			"lagdou": true,
+			"11": {"monster": true},
+			"12": {"monster": true},
+			"13": {"monster": true},
+			"14": {"monster": true},
+			"15": {"monster": true},
+			"16": {"monster": true},
+			"17": {"monster": true},
+			"18": {"monster": true},
+			"19": {"monster": true},
+			"20": {"monster": true},
+			"21": {"monster": true},
+			"22": {"monster": true},
+			"23": {"monster": true},
+			"24": {"monster": true},
+			"25": {"monster": true},
+			"36": {"monster": true},
+			"37": {"monster": true},
+			"38": {"monster": true},
+			"39": {"monster": true},
+			"41": {"monster": true}
+		}},
+		{"name": "T4Reinforcements", "base": 9235340, "count": 2, "logic": {"lagdou": true, "monster": true}},
+		{"name": "T5Reinforcements", "base": 9235400, "count": 2, "logic": {"lagdou": true, "monster": true}},
+		{"name": "T7Reinforcements", "base": 9235460, "count": 2, "logic": {"lagdou": true, "monster": true}},
+		{"name": "T9Reinforcements", "base": 9235520, "count": 2, "logic": {"lagdou": true, "monster": true}}
+	],
+	"Lagdou7": [
+		{"name": "PlayerDeployment", "base": 9235588, "count": 11, "logic": {"lagdou": true}},
+		{"name": "StartingEnemies", "base": 9235828, "count": 27, "logic": {
+			"lagdou": true,
+			"monster": true,
+			"0": {"monster": false},
+			"1": {"monster": false},
+			"2": {"monster": false},
+			"3": {"monster": false},
+			"4": {"monster": false},
+			"5": {"monster": false},
+			"6": {"monster": false},
+			"7": {"monster": false},
+			"8": {"monster": false},
+			"9": {"monster": false},
+			"25": {"monster": false}
+		}},
+		{"name": "T3Reinforcement", "base": 9236408, "count": 1, "logic": {"lagdou": true, "monster": true}},
+		{"name": "T4EdgeReinforcements", "base": 9236448, "count": 2, "logic": {"lagdou": true, "monster": true}},
+		{"name": "T4ChestReinforcement", "base": 9236548, "count": 1, "logic": {"lagdou": true, "monster": true}},
+		{"name": "ChestRoomReinforcement", "base": 9236588, "count": 1, "logic": {"lagdou": true, "monster": true}},
+		{"name": "SoutheasternRoomReinforcement", "base": 9236628, "count": 1, "logic": {"lagdou": true, "monster": true}},
+		{"name": "SouthernCorridorReinforcement", "base": 9236668, "count": 1, "logic": {"lagdou": true, "monster": true}},
+		{"name": "T9Reinforcement", "base": 9236708, "count": 1, "logic": {"lagdou": true, "monster": true}}
+		],
+	"Lagdou8": [
+		{"name": "PlayerDeployment", "base": 9236748, "count": 9, "logic": {"lagdou": true}},
+		{"name": "StartingEnemies", "base": 9236948, "count": 40, "logic": {
+			"lagdou": true,
+			"monster": true,
+			"0": {"monster": false},
+			"1": {"monster": false},
+			"2": {"monster": false},
+			"3": {"monster": false},
+			"4": {"monster": false},
+			"5": {"monster": false},
+			"6": {"monster": false},
+			"7": {"monster": false}
+		}},
+		{"name": "CentralReinforcement", "base": 9237788, "count": 1, "logic": {"lagdou": true, "monster": true}},
+		{"name": "SoutheasternReinforcement", "base": 9237828, "count": 1, "logic": {"lagdou": true, "monster": true}},
+		{"name": "EasternReinforcement", "base": 9237868, "count": 2, "logic": {"lagdou": true, "monster": true}},
+		{"name": "NortheasternReinforcement", "base": 9237928, "count": 1, "logic": {"lagdou": true, "monster": true}}
+		],
+	"Lagdou9": [
+		{"name": "PlayerDeployment", "base": 9237968, "count": 8, "logic": {"lagdou": true}},
+		{"name": "StartingEnemies", "base": 9238148, "count": 43, "logic": {
+			"lagdou": true,
+			"monster": true,
+			"0": {"monster": false},
+			"1": {"monster": false},
+			"2": {"monster": false},
+			"3": {"monster": false},
+			"4": {"monster": false},
+			"5": {"monster": false},
+			"6": {"monster": false},
+			"7": {"monster": false},
+			"8": {"monster": false}
+		}},
+		{"name": "NorthwesternReinforcement", "base": 9239048, "count": 1, "logic": {"lagdou": true, "monster": true}}
+		],
+	"Lagdou10": [
+		{"name": "PlayerDeployment", "base": 9239088, "count": 8, "logic": {"lagdou": true}},
+		{"name": "StartingEnemies", "base": 9239268, "count": 10, "logic": {
+			"lagdou": true,
+			"2": {"monster": true},
+			"3": {"monster": true},
+			"5": {"monster": true},
+			"6": {"monster": true},
+			"7": {"monster": true}
+		}}
+	]
+}

@@ -1,0 +1,317 @@
+{
+    "1001": {
+        "address": "C0FB70",
+        "original_reward": "New Key Item",
+        "area": "Ancient Library",
+        "description": "Byblos",
+        "reward_style": "event"
+    },
+    "1002": {
+        "address": "C0FB72",
+        "original_reward": "New Key Item",
+        "area": "Wind Shrine",
+        "description": "WingRaptor",
+        "reward_style": "event"
+    },
+    "1003": {
+        "address": "C0FB74",
+        "original_reward": "New Key Item",
+        "area": "Torna Canal",
+        "description": "Karlabos",
+        "reward_style": "event"
+    },
+    "1004": {
+        "address": "C0FB76",
+        "original_reward": "New Key Item",
+        "area": "Ship Graveyard",
+        "description": "Siren",
+        "reward_style": "event"
+    },
+    "1005": {
+        "address": "C0FB78",
+        "original_reward": "New Key Item",
+        "area": "North Mountain",
+        "description": "Magisa & Forza",
+        "reward_style": "event"
+    },
+    "1006": {
+        "address": "C0FB7A",
+        "original_reward": "New Key Item",
+        "area": "Walse",
+        "description": "Galura",
+        "reward_style": "event"
+    },
+    "1007": {
+        "address": "C0FB7C",
+        "original_reward": "New Key Item",
+        "area": "Steamship",
+        "description": "LiquiFlame",
+        "reward_style": "event"
+    },
+    "1008": {
+        "address": "C0FB7E",
+        "original_reward": "New Key Item",
+        "area": "Karnak",
+        "description": "Sergeant & DeathClaw",
+        "reward_style": "event"
+    },
+    "1009": {
+        "address": "C0FB80",
+        "original_reward": "New Key Item",
+        "area": "Ruined City",
+        "description": "Sandworm",
+        "reward_style": "event"
+    },
+    "1010": {
+        "address": "C0FB82",
+        "original_reward": "New Key Item",
+        "area": "Meteor",
+        "description": "AdamanTiMi",
+        "reward_style": "event"
+    },
+    "1011": {
+        "address": "C0FB84",
+        "original_reward": "New Key Item",
+        "area": "Flying Lonka Ruins",
+        "description": "Sol Cannon",
+        "reward_style": "event"
+    },
+    "1012": {
+        "address": "C0FB86",
+        "original_reward": "New Key Item",
+        "area": "Flying Lonka Ruins",
+        "description": "ArchaeAvis",
+        "reward_style": "event"
+    },
+    "1013": {
+        "address": "C0FB88",
+        "original_reward": "New Key Item",
+        "area": "Meteor",
+        "description": "Chim.Brain",
+        "reward_style": "event"
+    },
+    "1014": {
+        "address": "C0FB8A",
+        "original_reward": "New Key Item",
+        "area": "Meteor",
+        "description": "Titan",
+        "reward_style": "event"
+    },
+    "1015": {
+        "address": "C0FB8C",
+        "original_reward": "New Key Item",
+        "area": "Meteor",
+        "description": "Puroboros",
+        "reward_style": "event"
+    },
+    "1016": {
+        "address": "C0FB8E",
+        "original_reward": "New Key Item",
+        "area": "Exdeath's Castle",
+        "description": "Gilgamesh 1",
+        "reward_style": "event"
+    },
+    "1017": {
+        "address": "C0FB90",
+        "original_reward": "New Key Item",
+        "area": "Exdeath's Castle",
+        "description": "Gilgamesh 2",
+        "reward_style": "event"
+    },
+    "1018": {
+        "address": "C0FB92",
+        "original_reward": "New Key Item",
+        "area": "Moogle Village",
+        "description": "Tyrasaurus",
+        "reward_style": "event"
+    },
+    "1019": {
+        "address": "C0FB94",
+        "original_reward": "New Key Item",
+        "area": "Bal Castle",
+        "description": "Abductor",
+        "reward_style": "event"
+    },
+    "1020": {
+        "address": "C0FB96",
+        "original_reward": "New Key Item",
+        "area": "Hiryuu Valley",
+        "description": "HiryuuPlant",
+        "reward_style": "event"
+    },
+    "1021": {
+        "address": "C0FB98",
+        "original_reward": "New Key Item",
+        "area": "Zeza Fleet",
+        "description": "Gilgamesh 3 & Enkidou",
+        "reward_style": "event"
+    },
+    "1022": {
+        "address": "C0FB9A",
+        "original_reward": "New Key Item",
+        "area": "Barrier Tower",
+        "description": "Atmos",
+        "reward_style": "event"
+    },
+    "1023": {
+        "address": "C0FB9C",
+        "original_reward": "New Key Item",
+        "area": "Mua Forest",
+        "description": "Guardians",
+        "reward_style": "event"
+    },
+    "1024": {
+        "address": "C0FB9E",
+        "original_reward": "New Key Item",
+        "area": "Exdeath's Castle",
+        "description": "Carbunkle",
+        "reward_style": "event"
+    },
+    "1025": {
+        "address": "C0FBA0",
+        "original_reward": "New Key Item",
+        "area": "Exdeath's Castle",
+        "description": "Gilgamesh 4",
+        "reward_style": "event"
+    },
+    "1026": {
+        "address": "C0FBA2",
+        "original_reward": "New Key Item",
+        "area": "Tule",
+        "description": "Antlion",
+        "reward_style": "event"
+    },
+    "1027": {
+        "address": "C0FBA4",
+        "original_reward": "New Key Item",
+        "area": "Desert",
+        "description": "Merugene",
+        "reward_style": "event"
+    },
+    "1028": {
+        "address": "C0FBA6",
+        "original_reward": "New Key Item",
+        "area": "Bal Castle",
+        "description": "Odin",
+        "reward_style": "event"
+    },
+    "1029": {
+        "address": "C0FBA8",
+        "original_reward": "New Key Item",
+        "area": "Great Trench",
+        "description": "Triton, Neregeid & Phobos",
+        "reward_style": "event"
+    },
+    "1030": {
+        "address": "C0FBAA",
+        "original_reward": "New Key Item",
+        "area": "Fork Tower",
+        "description": "Omniscient",
+        "reward_style": "event"
+    },
+    "1031": {
+        "address": "C0FBAC",
+        "original_reward": "New Key Item",
+        "area": "Fork Tower",
+        "description": "Minotauros",
+        "reward_style": "event"
+    },
+    "1032": {
+        "address": "C0FBAE",
+        "original_reward": "New Key Item",
+        "area": "Istory Falls",
+        "description": "Leviathan",
+        "reward_style": "event"
+    },
+    "1033": {
+        "address": "C0FBB0",
+        "original_reward": "New Key Item",
+        "area": "Solitary Island",
+        "description": "Stalker",
+        "reward_style": "event"
+    },
+    "1034": {
+        "address": "C0FBB2",
+        "original_reward": "New Key Item",
+        "area": "Walse",
+        "description": "GoGo",
+        "reward_style": "event"
+    },
+    "1035": {
+        "address": "C0FBB4",
+        "original_reward": "New Key Item",
+        "area": "North Mountain",
+        "description": "Bahamut",
+        "reward_style": "event"
+    },
+    "1036": {
+        "address": "C0FBB6",
+        "original_reward": "New Key Item",
+        "area": "Ancient Library",
+        "description": "Ifrit",
+        "reward_style": "event"
+    },
+    "1037": {
+        "address": "C0FBB8",
+        "original_reward": "New Key Item",
+        "area": "Walse",
+        "description": "Shiva",
+        "reward_style": "event"
+    },
+    "1038": {
+        "address": "C0FBBA",
+        "original_reward": "New Key Item",
+        "area": "Ruined City",
+        "description": "Crayclaw",
+        "reward_style": "event"
+    },
+    "1039": {
+        "address": "C0FBF0",
+        "original_reward": "New Key Item",
+        "area": "Rift (2 Tablets)",
+        "description": "Calofisteri",
+        "reward_style": "event"
+    },
+    "1040": {
+        "address": "C0FBF2",
+        "original_reward": "New Key Item",
+        "area": "Rift (3 Tablets)",
+        "description": "Apanda",
+        "reward_style": "event"
+    },
+    "1041": {
+        "address": "C0FBF4",
+        "original_reward": "New Key Item",
+        "area": "Rift (3 Tablets)",
+        "description": "Apocalypse",
+        "reward_style": "event"
+    },
+    "1042": {
+        "address": "C0FBF6",
+        "original_reward": "New Key Item",
+        "area": "Rift (3 Tablets)",
+        "description": "Catastroph",
+        "reward_style": "event"
+    },
+    "1043": {
+        "address": "C0FBF8",
+        "original_reward": "New Key Item",
+        "area": "Rift (4 Tablets)",
+        "description": "Halicarnaso",
+        "reward_style": "event"
+    },
+    "1044": {
+        "address": "C0FBFA",
+        "original_reward": "New Key Item",
+        "area": "Rift (4 Tablets)",
+        "description": "Twintania",
+        "reward_style": "event"
+    },
+    "1045": {
+        "address": "C0FBFC",
+        "original_reward": "New Key Item",
+        "area": "Void",
+        "description": "Necrofobia",
+        "reward_style": "event"
+    }
+}

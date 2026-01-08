@@ -1,0 +1,79 @@
+{
+  "Earth Temple - First Room": {
+    "hint_region": "Earth Temple",
+    "exits": {
+      "Dungeon Exit": "Nothing",
+      "Main Room": "Has Bow | Has Beetle"
+    },
+    "locations": {
+      "Vent Chest": "Has Digging Mitts",
+      "Rupee above Drawbridge": "Has Beetle"
+    }
+  },
+  "Earth Temple - Main Room": {
+    "hint_region": "Earth Temple",
+    "macros": {
+      "Can Dislodge ET Boulder": "Has Slingshot | Has Bow | Upgraded Skyward Strike | Clawshots | (Has Beetle & Can Defeat Lezalfos)",
+      "Can Pass ET Boulder Section": "Has Beetle & (Has Hook Beetle | Bomb Bag)"
+    },
+    "exits": {
+      "Dungeon Exit": "Nothing",
+      "First Room": "Nothing",
+      "Room with Slopes": "Can Dislodge ET Boulder & Can Pass ET Boulder Section"
+    },
+    "locations": {
+      "Chest behind Bombable Rock": "Can Dislodge ET Boulder",
+      "Chest Left of Main Room Bridge": "Can Dislodge ET Boulder",
+      "Chest in West Room": "Can Dislodge ET Boulder & (Has Hook Beetle | Bomb Bag)",
+      "Chest after Double Lizalfos Fight": "Can Dislodge ET Boulder & Can Defeat Lezalfos",
+      "Ledd's Gift": "Can Dislodge ET Boulder & Can Defeat Lezalfos",
+      "Rupee in Lava Tunnel": "Can Dislodge ET Boulder & Has Beetle & (Has Hook Beetle | Bomb Bag)",
+      "Chest Guarded by Lizalfos": "Can Dislodge ET Boulder & Can Pass ET Boulder Section"
+    }
+  },
+  "Earth Temple - Room with Slopes": {
+    "hint_region": "Earth Temple",
+    "exits": {
+      "Main Room": "Nothing",
+      "Boss Door Area": "Has Hook Beetle | (Has Digging Mitts & Bomb Bag)"
+    },
+    "locations": {}
+  },
+  "Earth Temple - Boss Door Area": {
+    "hint_region": "Earth Temple",
+    "exits": {
+      "Dungeon Exit": "Nothing",
+      "Room with Slopes": "Nothing",
+      "Boss Room": "Earth Temple Boss Key"
+    },
+    "locations": {
+      "Boss Key Chest": "Nothing"
+    }
+  },
+  "Earth Temple - Boss Room": {
+    "hint_region": "Earth Temple",
+    "macros": {
+      "Can Beat Scaldera": "Bomb Bag & Has Practice Sword"
+    },
+    "exits": {
+      "Boss Door Area": "Nothing",
+      "Earth Spring": "Can Beat Scaldera"
+    },
+    "locations": {
+      "Heart Container": "Can Beat Scaldera"
+    }
+  },
+  "Earth Temple - Earth Spring": {
+    "hint_region": "Earth Temple",
+    "macros": {
+      "Can Beat Earth Temple": "Has Goddess Sword"
+    },
+    "exits": {
+      "Boss Room": "Nothing",
+      "Strike Crest": "Can Beat Earth Temple"
+    },
+    "locations": {
+      "Strike Crest": "Can Beat Earth Temple"
+    }
+  }
+}

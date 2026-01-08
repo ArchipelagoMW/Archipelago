@@ -1,0 +1,245 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 223,
+  "name": "Spring Ball Room",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Green",
+  "roomAddress": "0x7D6D0",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 0],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a7c8",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 0],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "chozo",
+      "nodeItem": "SpringBall",
+      "nodeAddress": "0x7C6E5",
+      "mapTileMask": [
+        [1, 0],
+        [1, 2]
+      ]
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "h_bombThings",
+        "h_additionalBomb"
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Spring Ball",
+      "requires": [
+        "h_useSpringBall"
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "R Jump",
+      "requires": [
+        "canXRayStandUp",
+        "canPartialFloorClip",
+        "canRJump"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Roll all the way right before using Xray to stand up, aligned with the right side tiles.",
+        "Partially clip into the floor to enable the next jump.",
+        "Use an R-Jump to morph into the tunnel.",
+        "The second morph ball sized hole can be passed by simply jumping out of the floor clip position with diagonal held."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphBombs"
+          ]},
+          {"and": [
+            "Gravity",
+            "h_artificialMorphPowerBomb",
+            "h_additionalBomb"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "The item is inside of a Chozo Ball, so there is no way to use artificial morph on the return."
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canIBJ",
+          "canSpringBallBombJump",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "canMidAirMorph",
+            {"or": [
+              "canWalljump",
+              "HiJump",
+              "canGravityJump",
+              "SpaceJump",
+              {"and": [
+                "canUnmorphBombBoost",
+                "canTrickyJump"
+              ]}
+            ]}
+          ]},
+          {"and": [
+            "h_useSpringBall",
+            {"or": [
+              "HiJump",
+              "canGravityJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "note": "It may be necessary to turn off Gravity Suit in order have more time to jump and morph underwater."
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Suitless Springball Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Suitless Space Jump",
+      "requires": [
+        "HiJump",
+        "canSpaceJumpWaterBounce",
+        "can4HighMidAirMorph"
+      ],
+      "note": "Space jump while partially submerged for more time to mid-air morph."
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Suitless, Bootless, Bomb into Springball Jump",
+      "requires": [
+        "canSunkenTileWideWallClimb",
+        "canUnderwaterBombIntoSpringBallJump",
+        "canWallJumpInstantMorph"
+      ],
+      "note": [
+        "Wall jump until Samus is just below the water line and then morph and place a Bomb",
+        "Use the brief moment during the Bomb explosion that knocks Samus upwards to setup a Springball jump to jump out of the water."
+      ],
+      "devNote": [
+        "FIXME: This can also be done with a double Spring Ball jump (using Bombs) without wall jumping,",
+        "but it seems more difficult than Statues Room and West Cac Alley, because of the water tide."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Escape - Suitless, Bootless, Space Jump",
+      "requires": [
+        {"notable": "Escape - Suitless, Bootless, Space Jump"},
+        "canSpringBallJumpMidAir",
+        "canSunkenTileWideWallClimb",
+        "canTrickyJump",
+        "can4HighMidAirMorph",
+        "canSpaceJumpWaterBounce"
+      ],
+      "note": [
+        "Perform a canSunkenTileWideWallClimb to get to the water surface, then use space jump at the water surface.",
+        "Then either use space jump when the water is low then a spring ball jump to escape, or space jump when the water is high into a tight midair morph."
+      ],
+      "devNote": "The canSpringBallJumpMidAir is for the bottom left part of the room. The can4HighMidAirMorph is to represent the quick morph during the escape."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Escape - Suitless, Bootless, Space Jump",
+      "note": [
+        "Perform a canSunkenTileWideWallClimb to get to the water surface, then use space jump at the water surface.",
+        "Then either use space jump when the water is low then a spring ball jump to escape, or space jump when the water is high into a tight midair morph."
+      ]
+    }
+  ],
+  "nextStratId": 12,
+  "nextNotableId": 2
+}

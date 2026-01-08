@@ -1,0 +1,24 @@
+0c/60a8/dekuScrub_animate: ;
+
+# Make the enemy dekus set the flag 5 of their room when talked to
+0c/60d1/: |
+  ld h,d
+  ld l,$b2 ; Enemy.var32
+  srl (hl) ; Works because hl is 1 or 0
+  jr nc,dekuScrub_animate
+  
+  ; Show text
+  inc l
+  ld c,(hl)
+  ld b,$45 ; high byte of TX_45xx
+  call getThisRoomFlags
+  set 5,(hl)
+
+0b/6540/: |
+  dwbe setPhonographFlag
+  post_setPhonographFlag:
+
+0b//setPhonographFlag: |
+  db $b1,$20 ; orroomflag $20
+  db $98,$50 ; showtextlowindex <TX_0b50
+  dwbe post_setPhonographFlag

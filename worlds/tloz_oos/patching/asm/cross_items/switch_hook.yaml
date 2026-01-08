@@ -1,0 +1,194 @@
+# Note: in ages, INTERAC_DOOR_CONTROLLER checks the switch hook state to not close during switches,
+# this is not yet implemented (does it even impact the game?)
+# TODO: Graphics are corrupted when switching with a flower.
+# This could be fixed by adding the flower sprite to the switch hook (used) sprite,
+# then editing the bank 47 redirect to use that sprite
+
+46/4b16/parentItemCode_switchHook_46: |
+  /copy a,$06,$0b16,$51
+
+# itemCode0bPost from 07:5791 to 07:57db (switch hook chain)
+47/5791/itemCode0bPost_47: /copy a,$07,$1791,$4b
+
+# itemCode0b from 07:57dc to 07:57f1 (switch hook chain)
+47/57dc/itemCode0b_47: /copy a,$07,$17dc,$16
+
+# itemCode0aPost from 07:57f2 to 07:57ff (switch hook)
+47/57f2/itemCode0aPost_47: /copy a,$07,$17f2,$0e
+
+# itemCode0a from 07:5800 to 07:5abf (switch hook)
+47/5800/itemCode0a_47: /copy a,$07,$1800,$2bf
+
+# itemCode09 from 07:5ac0 to 07:5af4 (switch hook helper)
+47/5ac0/itemCode09_47: /copy a,$07,$1ac0,$35
+
+06//parentItemCode_switchHook: |
+  ld hl,parentItemCode_switchHook_46
+  jr call_bank_46
+07//itemCode09: |
+  ld hl,itemCode09_47
+  jr call_bank_47
+07//itemCode0a: |
+  ld hl,itemCode0a_47
+  jr call_bank_47
+07//itemCode0b: |
+  ld hl,itemCode0b_47
+  jr call_bank_47
+07//itemCode0aPost: |
+  ld hl,itemCode0aPost_47
+  jr call_bank_47
+07//itemCode0bPost: |
+  ld hl,itemCode0bPost_47
+  jr call_bank_47
+
+# parentItemCode_switchHook adjustments
+46/4b1e/: ld a,($cc48) ; (wLinkObjectIndex)
+46/4b25/: ld a,($cc77) ; (wLinkInAir)
+46/4b32/: |
+  call $2aab ; updateLinkDirectionFromAngle
+  call $2be2 ; clearVariousLinkVariables
+46/4b53/: ld ($ccb2),a ; (wDisallowMountingCompanion)
+# itemCode0bPost adjustments
+47/5796/: jp nz,$2c29 ; itemDelete
+47/579e/: jp nz,$2c29 ; itemDelete
+# itemCode0b adjustments
+47/57e4/: call $23a5 ; itemIncState
+47/57ef/: jp $1e30 ; objectSetVisible83
+# itemCode0aPost adjustments
+47/57f6/: ld a,(wSwitchHookState)
+47/57fa/: jp z,$2c29 ; itemDelete
+# itemCode0a adjustments
+47/5802/: ld ($cc71),a ; (wDisableRingTransformations)
+47/5807/: ld ($ccac),a ; (wcc92)
+47/5816/: ld a,$39; UNCMP_GFXH_AGES_1f > $39
+47/5818/: call $165b ; loadWeaponGfx
+47/5821/: call $1e27 ; objectSetVisible82
+47/582a/: ld a,(wSwitchHookLevel)
+47/583e/: call $2c37 ; itemUpdateAngle
+47/5864/: jp nz,$2c29 ; itemDelete
+47/5867/: call $2391 ; itemDecCounter1
+47/586c/: call $215d ; objectCheckWithinRoomBoundary
+47/5871/: call $14b5 ; objectCheckTileCollision_allowHoles
+47/5882/: call $2c40 ; getFreeItemSlot
+47/5893/: jp $1fdb ; objectApplySpeed
+47/589b/: call $2b36 ; itemTryToBreakTile
+47/58a7/: call $29c5 ; itemSetState
+47/58b5/: ld (wSwitchHookState),a
+47/58b8/: jp $2af0 ; resetLinkInvincibility
+47/58bf/: ld (wSwitchHookState),a
+47/58c9/: jp $29c5 ; itemSetState
+47/58d2/: call $2391 ; itemDecCounter1
+47/58d8/: call $1e5a ; objectGetAngleTowardLink
+47/58de/: call $1fdb ; objectApplySpeed
+47/58e8/: call $23aa ; itemIncSubstate
+47/58f2/: call objectSetInvisible
+47/58f8/: call $222f ; objectTakePosition
+47/58fb/: call $2391 ; itemDecCounter1
+47/58ff/: jp z,$2c29 ; itemDelete
+47/590b/: call $2122 ; objectGetRelatedObject2Var
+47/5914/: ld (wSwitchHookState),a
+47/5917/: jp $2c29 ; itemDelete
+47/593e/: call $2b36 ; itemTryToBreakTile
+47/5959/: call $2081 ; objectSetShortPosition
+47/595c/: call $1e03 ; objectSetVisiblec2
+47/596a/: call $2122 ; objectGetRelatedObject2Var
+47/5971/: ld hl,$5d74 ; checkPositionSurroundedByWalls
+47/597f/: call $2122 ; objectGetRelatedObject2Var
+47/5982/: call $222f ; objectTakePosition
+47/5985/: call objectSetInvisible
+47/598a/: ld (wSwitchHookState),a
+47/598f/: call playSound
+47/5992/: call $23aa ; itemIncSubstate
+47/59aa/: call objectCopyPosition
+47/59ad/: jp $2af0 ; resetLinkInvincibility
+47/59b2/: call $2122 ; objectGetRelatedObject2Var
+47/59c1/: call c,$23aa ; itemIncSubstate
+47/59f8/: call $2059 ; getShortPositionFromDE
+47/5a09/: call addAToBc
+47/5a18/: call $2077 ; setShortPosition_paramC
+47/5a22/: call $0462 ; copyMemory
+47/5a2c/: call $23aa ; itemIncSubstate
+47/5a41/: call nz,objectCopyPosition
+47/5a53/: call $045b ; copyMemoryReverse
+47/5a69/: call $149b ; objectGetTileCollisions
+# Skip the diamond tile handling
+47/5a71/: db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+47/5a7e/: ld hl,$47bb ; itemMakeInteractionForBreakableTile
+47/5a8b/: ld (wSwitchHookState),a
+47/5a91/: jp $2c29 ; itemDelete
+47/5a9c/: call $2122 ; objectGetRelatedObject2Var
+47/5ab2/: jp playSound
+# There is no diamond in OoS, so who cares
+47/5ab5/checkCanPlaceDiamondOnTile: |
+  xor a
+  ret
+47/5ad1/: call $23a5 ; itemIncState
+47/5adb/: call $0462 ; copyMemory
+47/5ae3/: call $0462 ; copyMemory
+47/5ae6/: call $12a3; setCameraFocusedObject
+47/5aef/: call $12ae; setCameraFocusedObjectToLink
+47/5af2/: jp $2c29 ; itemDelete
+
+# Update parentItemUpdate table
+06/49bb/: dw parentItemCode_switchHook
+
+07/48bc/: |
+  dw itemCode09
+  dw itemCode0a
+  dw itemCode0b
+
+07/4930/: |
+  dw itemCode0aPost
+  dw itemCode0bPost
+
+# Update item usage table
+06/551c/: db $73
+
+# treasureCollectionBehaviourTable
+3f/6c49/: db <wSwitchHookLevel,$08
+
+3f/6dca/: db text.hook1.treasure
+3f/6dd1/: db text.hook2.treasure
+
+# treasureObjectData
+15/5151/: |
+  db $80
+  dw treasureObjectData_switchHook
+
+# Change itemAttribute to move collision type from harmless to $0e (unused/now switch hook)
+07/6379/: db $8e
+
+# Overwrite snd_unknown_8e since it's unused anyway and happens to be where switch 2 sound is
+39/561e/sndSwitch2: /copy a,$39,$5720,$1
+3b/7f7c/sndSwitch2Channel2: /copy a,$3a,$7ada,17
+
+# replacing the standard dummy datas of sword and boomerang
+3f/6dc4/treasureDisplayData_switchHook: /copy a,$3f,$313e,$0e
+# gfx
+1b/7ae0/: /copy a,$19,$03e0,$20
+# Apply the sprite to the inventory item by changing the treasureDisplayData
+3f/6dc5/: db $a6
+
+# Add the gfx entry to the interactionData
+3f/6814/: db $61,$0c,$40 ; GFX_68
+
+07/6010/: call getMimicData
+07//getMimicData: |
+  call $3a25 ; getTileMappingData
+  ld a,c
+  cp $80
+  ret nc ; good graphic
+
+  ld c,$5e ; where we're loading the flower data
+  push bc
+  push de
+  cp $26 ; normal flower
+  ld a,$3b ; flower sprite
+  jr @end
+  inc a ; stone flower instead
+  
+  @end:
+  call $05b6 ; loadUncompressedGfxHeader
+  pop de
+  pop bc
+  ret

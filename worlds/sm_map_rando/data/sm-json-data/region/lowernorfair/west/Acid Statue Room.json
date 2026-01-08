@@ -1,0 +1,1068 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 149,
+  "name": "Acid Statue Room",
+  "area": "Norfair",
+  "subarea": "Lower",
+  "subsubarea": "West",
+  "roomAddress": "0x7B1E5",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 0],
+    [1, 1, 0],
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019846",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2, 0],
+        [1, 1, 0],
+        [1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001983a",
+      "doorOrientation": "right",
+      "doorEnvironments": [
+        {
+          "physics": "air",
+          "devNote": [
+            "Technically it is acid if entering from node 1 and the statue hasn't been cleared, but that doesn't seem worth modeling.",
+            "The acid is not there regardless when entering from node 2."
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [1, 1, 0],
+        [1, 1, 0],
+        [1, 2, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Acid Chozo Statue",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 1, 0],
+        [1, 1, 0],
+        [1, 1, 1]
+      ],
+      "devNote": "FIXME: This node can be eliminated."
+    },
+    {
+      "id": 4,
+      "name": "Junction Above Acid Plug, Without Acid",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 0],
+        [2, 2, 0],
+        [1, 1, 1]
+      ],
+      "note": "Because going here while there is acid is pointless unless traveling from 1 to 3, this node will be considered to only be visitable when the acid is gone"
+    },
+    {
+      "id": 5,
+      "name": "Bottom Junction Right of Morph Tunnel",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 0],
+        [1, 1, 0],
+        [2, 2, 1]
+      ]
+    }
+  ],
+  "obstacles": [],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Acid Statue Room Holtzes",
+      "enemyName": "Holtz",
+      "quantity": 3,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Acid Statue Room Magdollite",
+      "enemyName": "Magdollite",
+      "quantity": 1,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {
+          "id": 3,
+          "devNote": "4 requires that the acid is gone."
+        },
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 2},
+        {"id": 4},
+        {"id": 5}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 2,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 52,
+      "link": [1, 2],
+      "name": "Super Sink",
+      "entranceCondition": {
+        "comeInWithSuperSink": {}
+      },
+      "requires": [
+        "canOffScreenMovement",
+        {"heatFrames": 360},
+        {"acidFrames": 345},
+        {"enemyDamage": {"enemy": "Magdollite", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [
+            {"acidFrames": 75},
+            {"heatFrames": 75}
+          ]
+        },
+        {
+          "types": ["super"],
+          "requires": [
+            {"acidFrames": 25},
+            {"heatFrames": 25}
+          ]
+        },
+        {
+          "types": ["powerbomb"],
+          "requires": [
+            {"acidFrames": 90},
+            {"heatFrames": 90}
+          ]
+        }
+      ],
+      "note": [
+        "Enter the room with a super sink, in order to clip down to the bottom part of the room.",
+        "Blindly traverse to the right door.",
+        "It is recommended to open the door using Grapple if possible,",
+        "since it can reach the door from a distance even while off-camera whereas beams cannot."
+      ],
+      "devNote": [
+        "FIXME: With better off-camera movement, this can be done with significantly less damage",
+        "(and with Gravity the Magdollite hit can also be avoided);",
+        "but after the supersink setup it's not clear if it's reasonable to assume any more than this.",
+        "FIXME: If the acid is already drained, then the requirements here could be reduced",
+        "(though in that case there's not as much reason to do this strat)."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        "SpaceJump",
+        {"heatFrames": 180}
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 125},
+        {"shinespark": {"frames": 36}}
+      ]
+    },
+    {
+      "id": 46,
+      "link": [1, 3],
+      "name": "Speedy Jump Morph",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 19
+        }
+      },
+      "requires": [
+        "canMomentumConservingMorph",
+        {"heatFrames": 70}
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Spring Fling over the acid",
+      "requires": [
+        "canSpringFling",
+        "canDisableEquipment",
+        "SpeedBooster",
+        "canTrickyJump",
+        "canLateralMidAirMorph",
+        {"heatFrames": 210}
+      ],
+      "note": [
+        "Beginning with Speed Booster unequipped, run and jump over the acid into an airball.",
+        "Once Samus begins falling, equip Spring Ball and Speed Booster to safely land on the other side near the statue."
+      ]
+    },
+    {
+      "id": 47,
+      "link": [1, 3],
+      "name": "Cross Room Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInSpinning": {
+          "speedBooster": "any",
+          "unusableTiles": 0,
+          "minExtraRunSpeed": "$1.7"
+        }
+      },
+      "requires": [
+        "canSpringBallBounce",
+        {"heatFrames": 135}
+      ],
+      "note": [
+        "Enter the room with a spin jump, with enough speed to bounce across the acid pit.",
+        "If needed, a Spring fling near the end of Samus' descent can help."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 3],
+      "name": "Gravityless Acid Dive",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canSuitlessLavaDive",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"acidFrames": 116},
+        {"heatFrames": 285}
+      ],
+      "note": [
+        "Try to jump to the far left side raised ledges to reduce the time spent in acid.",
+        "This could mean turning off HiJump, or airballing to jump farther."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 3],
+      "name": "Gravity Acid Dive",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canSuitlessLavaDive",
+        "Gravity",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          "canGravityJump",
+          {"and": [
+            "canJumpIntoIBJ",
+            {"acidFrames": 1050},
+            {"heatFrames": 1050}
+          ]}
+        ]},
+        {"acidFrames": 100},
+        {"heatFrames": 255}
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 3],
+      "name": "Wall Pocket Acid Dive",
+      "requires": [
+        {"tech": "canPartialFloorClip"},
+        "canSuitlessLavaDive",
+        {"or": [
+          {"and": [
+            "canLateralMidAirMorph",
+            "canDownBack",
+            "canTrickyJump",
+            {"acidFrames": 108}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"heatFrames": 30},
+            {"acidFrames": 136}
+          ]},
+          {"and": [
+            {"heatFrames": 90},
+            {"acidFrames": 216}
+          ]}
+        ]},
+        {"heatFrames": 285}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "There is a hole in the left side wall that Samus can fit into by shrinking her hitbox.",
+        "Once in the wall, stand up if crouched then turnaround into a buffered spinjump to jump out of the acid."
+      ],
+      "devNote": "Not notable because it only skips a walljump."
+    },
+    {
+      "id": 10,
+      "link": [1, 3],
+      "name": "Ceiling Bomb Jump",
+      "requires": [
+        "h_heatProof",
+        "canCeilingBombJump"
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 3],
+      "name": "Grapple Teleport Crystal Flash (from Red Brinstar Firefleas)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 220},
+        "h_CrystalFlash",
+        {"heatFrames": 20},
+        "canOffScreenMovement"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Grapple teleporting here will spawn Samus inside the wall behind the Acid Chozo statue.",
+        "To escape, perform a Crystal Flash to stand up, then morph and roll out to the right.",
+        "Samus will be visible but off-camera, making the movement tricky."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 3],
+      "name": "Grapple Teleport Power Bomb (from Moat)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        "h_usePowerBomb",
+        {"heatFrames": 220},
+        "canOffScreenMovement"
+      ],
+      "note": [
+        "After teleporting, press down to retract Grapple.",
+        "Samus will be inside the Power Bomb blocks behind the Acid Chozo statue hand.",
+        "Use a Power Bomb, wait to begin falling, then hold right to roll out under the hand.",
+        "Samus will be visible but off-camera, making the movement tricky.",
+        "Holding right too early after laying the Power Bomb will cause Samus to get stuck inside the Chozo hand;",
+        "in this case, Samus can get out by unmorphing, remorphing, and rolling to the right on top of the hand."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        "f_UsedAcidChozoStatue",
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 45,
+      "link": [1, 5],
+      "name": "Direct G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "f_UsedAcidChozoStatue",
+        "h_artificialMorphMovement",
+        {"heatFrames": 200}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter the room in Direct G-mode, otherwise the acid will still be present.",
+        "Jump in the vertical shaft to touch the camera scroll block and overload PLMs, then roll through the bomb blocks.",
+        "Exit G-mode and jump multiple times to fix the camera before crossing the section with the Holtzes."
+      ],
+      "devNote": [
+        "It is possible but not expected to cross the lower section while completely blind.",
+        "The Holtz still damage Samus, and the middle one is low enough to make it difficult to bomb boost across.",
+        "Other strats in the room are ignored because Samus needs real Morph and Varia or a lot of Energy to use the statue,",
+        "and there is no way to overload PLMs to go through the bomb blocks from the bottom of the room."
+      ]
+    },
+    {
+      "id": 48,
+      "link": [2, 1],
+      "name": "Shinespark Slope Clip X-Ray Climb (Come in Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 35},
+        {"shinespark": {"frames": 33, "excessFrames": 0}},
+        "canShinesparkSlopeClip",
+        "canXRayClimb",
+        "canOffScreenMovement",
+        {"heatFrames": 1020}
+      ],
+      "note": [
+        "Gain a shinecharge and spark into the wall at the left side of the room to clip into it.",
+        "From there, X-Ray climb to the top portion of the room (about 0.75 screens).",
+        "Samus will be visible but off-camera, making the movement tricky."
+      ],
+      "detailNote": [
+        "Only certain horizontal positions for the spark will work.",
+        "There are periodic windows of approximately 4 good pixels followed by 8 bad pixels.",
+        "Moonwalking back against the ledge below the door will put Samus into a good position.",
+        "Being centered over this two-tile ledge is another position that works."
+      ]
+    },
+    {
+      "id": 49,
+      "link": [2, 1],
+      "name": "Shinespark Slope Clip X-Ray Climb (Come in Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 33, "excessFrames": 0}},
+        "canShinesparkSlopeClip",
+        "canXRayClimb",
+        "canOffScreenMovement",
+        {"heatFrames": 1020}
+      ],
+      "note": [
+        "Gain a shinecharge and spark into the wall at the left side of the room to clip into it.",
+        "From there, X-Ray climb to the top portion of the room (about 0.75 screens).",
+        "Samus will be visible but off-camera, making the movement tricky."
+      ],
+      "detailNote": [
+        "Only certain horizontal positions for the spark will work.",
+        "There are periodic windows of approximately 4 good pixels followed by 8 bad pixels.",
+        "Moonwalking back against the ledge below the door will put Samus into a good position.",
+        "Being centered over this two-tile ledge is another position that works."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 43,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Holtz",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 440}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [2, 3],
+      "name": "Grapple Teleport Crystal Flash (from Red Brinstar Firefleas)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 220},
+        "h_CrystalFlash",
+        {"heatFrames": 20},
+        "canOffScreenMovement"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Grapple teleporting here will spawn Samus inside the wall behind the Acid Chozo statue.",
+        "To escape, perform a Crystal Flash to stand up, then morph and roll out to the right.",
+        "Samus will be visible but off-camera, making the movement tricky."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 3],
+      "name": "Grapple Teleport Power Bomb (from Moat)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        "h_usePowerBomb",
+        {"heatFrames": 220},
+        "canOffScreenMovement"
+      ],
+      "note": [
+        "After teleporting, press down to retract Grapple.",
+        "Samus will be inside the Power Bomb blocks behind the Acid Chozo statue hand.",
+        "Use a Power Bomb, wait to begin falling, then hold right to roll out under the hand.",
+        "Samus will be visible but off-camera, making the movement tricky.",
+        "Holding right too early after laying the Power Bomb will cause Samus to get stuck inside the Chozo hand;",
+        "in this case, Samus can get out by unmorphing, remorphing, and rolling to the right on top of the hand."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [2, 3],
+      "name": "Shinespark Slope Clip X-Ray Climb (Come in Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 35},
+        {"shinespark": {"frames": 33, "excessFrames": 0}},
+        "canShinesparkSlopeClip",
+        "canXRayClimb",
+        "canOffScreenMovement",
+        {"or": [
+          "canPreciseWalljump",
+          "SpaceJump",
+          "HiJump",
+          "canTrickySpringBallJump"
+        ]},
+        {"heatFrames": 970}
+      ],
+      "note": [
+        "Gain a shinecharge and spark into the wall at the left side of the room to clip into it.",
+        "From there, X-Ray climb to the top portion of the room (about 0.75 screens).",
+        "Samus will be visible but off-camera, making the movement tricky."
+      ],
+      "detailNote": [
+        "Only certain horizontal positions for the spark will work.",
+        "There are periodic windows of approximately 4 good pixels followed by 8 bad pixels.",
+        "Moonwalking back against the ledge below the door will put Samus into a good position.",
+        "Being centered over this two-tile ledge is another position that works."
+      ]
+    },
+    {
+      "id": 51,
+      "link": [2, 3],
+      "name": "Shinespark Slope Clip X-Ray Climb (Come in Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 33, "excessFrames": 0}},
+        "canShinesparkSlopeClip",
+        "canXRayClimb",
+        "canOffScreenMovement",
+        {"or": [
+          "canPreciseWalljump",
+          "SpaceJump",
+          "HiJump",
+          "canTrickySpringBallJump"
+        ]},
+        {"heatFrames": 970}
+      ],
+      "note": [
+        "Gain a shinecharge and spark into the wall at the left side of the room to clip into it.",
+        "From there, X-Ray climb to the top portion of the room (about 0.75 screens).",
+        "Samus will be visible but off-camera, making the movement tricky."
+      ],
+      "detailNote": [
+        "Only certain horizontal positions for the spark will work.",
+        "There are periodic windows of approximately 4 good pixels followed by 8 bad pixels.",
+        "Moonwalking back against the ledge below the door will put Samus into a good position.",
+        "Being centered over this two-tile ledge is another position that works."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [2, 5],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        "ScrewAttack",
+        {"heatFrames": 270}
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 5],
+      "name": "Avoid Damage",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"or": [
+          "canTrickyJump",
+          {"and": [
+            "canHorizontalDamageBoost",
+            "canUseIFrames",
+            {"enemyDamage": {"enemy": "Magdollite", "type": "flame", "hits": 1}}
+          ]}
+        ]},
+        {"heatFrames": 330}
+      ],
+      "note": "Wait for the first Holtz to attack then either use the Magdollite for i-frames, or avoid the projectiles and continue dodging bats."
+    },
+    {
+      "id": 20,
+      "link": [2, 5],
+      "name": "Tank the Damage",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"enemyDamage": {"enemy": "Holtz", "type": "contact", "hits": 1}},
+        {"heatFrames": 375}
+      ],
+      "note": "Wait for the first Holtz before trying to cross."
+    },
+    {
+      "id": 21,
+      "link": [2, 5],
+      "name": "Full Beam Kill",
+      "requires": [
+        "h_navigateHeatRooms",
+        "Charge",
+        "Ice",
+        "Wave",
+        "Plasma",
+        {"heatFrames": 360}
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 5],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 125},
+        {"shinespark": {"frames": 41, "excessFrames": 6}}
+      ]
+    },
+    {
+      "id": 23,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        "SpaceJump",
+        {"heatFrames": 300}
+      ]
+    },
+    {
+      "id": 24,
+      "link": [3, 1],
+      "name": "Without Acid",
+      "requires": [
+        "h_navigateHeatRooms",
+        "f_UsedAcidChozoStatue",
+        {"heatFrames": 300}
+      ]
+    },
+    {
+      "id": 40,
+      "link": [3, 3],
+      "name": "Use Acid Statue",
+      "requires": [
+        "h_activateAcidChozo",
+        "h_usePowerBomb",
+        {"heatFrames": 1020}
+      ],
+      "setsFlags": ["f_UsedAcidChozoStatue"]
+    },
+    {
+      "id": 25,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 41,
+      "link": [3, 3],
+      "name": "Crystal Flash, Use Acid Statue",
+      "requires": [
+        "h_heatedCrystalFlash",
+        "h_activateAcidChozo",
+        {"heatFrames": 920}
+      ],
+      "setsFlags": ["f_UsedAcidChozoStatue"],
+      "flashSuitChecked": true,
+      "note": "Using the Crystal Flash Power Bomb to clear the statue can save some heat frames."
+    },
+    {
+      "id": 42,
+      "link": [3, 3],
+      "name": "Acid Statue with Reserve Trigger",
+      "requires": [
+        "h_activateAcidChozo",
+        "h_usePowerBomb",
+        {"heatFrames": 180},
+        "canManageReserves",
+        {"autoReserveTrigger": {}},
+        {"heatFrames": 50}
+      ],
+      "setsFlags": ["f_UsedAcidChozoStatue"]
+    },
+    {
+      "id": 26,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        "f_UsedAcidChozoStatue",
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 27,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 250}
+      ],
+      "devNote": "4 requires that the acid is gone."
+    },
+    {
+      "id": 28,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            {"or": [
+              "canLongIBJ",
+              "canJumpIntoIBJ"
+            ]},
+            {"heatFrames": 780}
+          ]}
+        ]},
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 29,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [4, 5],
+      "name": "Bombs",
+      "requires": [
+        "h_navigateHeatRooms",
+        "f_UsedAcidChozoStatue",
+        "h_useMorphBombs",
+        {"heatFrames": 400}
+      ]
+    },
+    {
+      "id": 31,
+      "link": [4, 5],
+      "name": "PowerBombs",
+      "requires": [
+        "h_navigateHeatRooms",
+        "f_UsedAcidChozoStatue",
+        "h_usePowerBomb",
+        {"heatFrames": 250}
+      ]
+    },
+    {
+      "id": 32,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        "ScrewAttack",
+        {"heatFrames": 240}
+      ]
+    },
+    {
+      "id": 33,
+      "link": [5, 2],
+      "name": "Avoid Damage",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"or": [
+          "canTrickyJump",
+          {"and": [
+            "canHorizontalDamageBoost",
+            "canUseIFrames",
+            {"enemyDamage": {"enemy": "Magdollite", "type": "flame", "hits": 1}}
+          ]}
+        ]},
+        {"heatFrames": 375}
+      ],
+      "note": "Wait for the Magdollite to attack then either use it for i-frames, or jump over the swooping Holtzes."
+    },
+    {
+      "id": 34,
+      "link": [5, 2],
+      "name": "Tank the Damage",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"enemyDamage": {"enemy": "Holtz", "type": "contact", "hits": 1}},
+        {"or": [
+          {"enemyDamage": {"enemy": "Holtz", "type": "contact", "hits": 1}},
+          "canCarefulJump"
+        ]},
+        {"heatFrames": 330}
+      ]
+    },
+    {
+      "id": 35,
+      "link": [5, 2],
+      "name": "Full Beam Kill",
+      "requires": [
+        "h_navigateHeatRooms",
+        "Charge",
+        "Ice",
+        "Wave",
+        "Plasma",
+        {"heatFrames": 375}
+      ]
+    },
+    {
+      "id": 44,
+      "link": [5, 2],
+      "name": "G-Mode Setup - Get Hit By Holtz",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canTrickyJump",
+            {"heatFrames": 820}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"heatFrames": 660}
+          ]},
+          {"and": [
+            "canHorizontalDamageBoost",
+            "canUseIFrames",
+            {"enemyDamage": {"enemy": "Magdollite", "type": "flame", "hits": 1}},
+            {"heatFrames": 660}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [5, 4],
+      "name": "Bombs",
+      "requires": [
+        "h_navigateHeatRooms",
+        "f_UsedAcidChozoStatue",
+        "h_useMorphBombs",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "canIBJ",
+            {"heatFrames": 1020}
+          ]}
+        ]},
+        {"heatFrames": 600}
+      ]
+    },
+    {
+      "id": 37,
+      "link": [5, 4],
+      "name": "Power Bombs",
+      "requires": [
+        "h_navigateHeatRooms",
+        "f_UsedAcidChozoStatue",
+        "h_usePowerBomb",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "canIBJ",
+            {"heatFrames": 1020}
+          ]}
+        ]},
+        {"heatFrames": 300}
+      ]
+    },
+    {
+      "id": 38,
+      "link": [5, 4],
+      "name": "CF Grapple Clip",
+      "requires": [
+        "h_heatProof",
+        "h_bombThings",
+        "h_jumpIntoCrystalFlashClip",
+        "HiJump",
+        "Grapple"
+      ],
+      "flashSuitChecked": true,
+      "note": "Menu to Grappling Beam before the crystal flash ends and mash shoot while holding down.",
+      "devNote": "The extra Power Bomb or bombs is to get through the bomb blocks."
+    },
+    {
+      "id": 53,
+      "link": [5, 5],
+      "name": "Magdollite Farm",
+      "requires": [
+        "h_heatProof",
+        {"cycleFrames": 330},
+        {"or": [
+          {"and": [
+            "canTrickyJump",
+            "canCameraManip"
+          ]},
+          "Plasma",
+          "ScrewAttack",
+          {"and": [
+            "Wave",
+            {"or": [
+              "Spazer",
+              "Ice"
+            ]}
+          ]}
+        ]},
+        {"or": [
+          "canTrickyJump",
+          {"cycleFrames": 200}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Magdollite", "count": 3}],
+      "flashSuitChecked": true,
+      "note": [
+        "The Magdollite can be farmed from the left without activating the Holtzes.",
+        "Or from the right by trapping the Holtz by quickly jumping past them."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [5, 5],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 54,
+  "nextNotableId": 1
+}

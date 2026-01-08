@@ -1,0 +1,1082 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 45,
+  "name": "Early Supers Room",
+  "area": "Brinstar",
+  "subarea": "Green",
+  "roomAddress": "0x79BC8",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1],
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018d4e",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1],
+        [2, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "red",
+      "nodeAddress": "0x0018d5a",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1],
+        [1, 1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Lower Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78518",
+      "mapTileMask": [
+        [1, 1, 1],
+        [1, 2, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Top Left Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Super",
+      "nodeAddress": "0x7851E",
+      "mapTileMask": [
+        [2, 2, 2],
+        [1, 1, 1]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Gates Have Closed",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "B",
+      "name": "Zeb Frozen Right of Pipe",
+      "obstacleType": "abstract"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Early Supers Zeb",
+      "enemyName": "Zeb",
+      "quantity": 1,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Early Supers Wavers",
+      "enemyName": "Waver",
+      "quantity": 4,
+      "homeNodes": [4]
+    },
+    {
+      "id": "e3",
+      "groupName": "Early Supers Top Small sidehoppers",
+      "enemyName": "Sm. Sidehopper",
+      "quantity": 3,
+      "homeNodes": [4]
+    },
+    {
+      "id": "e4",
+      "groupName": "Early Supers Bottom Small sidehoppers",
+      "enemyName": "Sm. Sidehopper",
+      "quantity": 2,
+      "homeNodes": [3]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Zeb",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"or": [
+          "Morph",
+          "canTwoTileSqueeze",
+          {"enemyDamage": {"enemy": "Zeb", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "Use a Frozen Zeb to extend the runway. The bug's height when standing next to the pipe is optimal."
+    },
+    {
+      "id": 43,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 6,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": "Max extra run speed $1.8."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Spark To The Left",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "h_crouchJumpDownGrab",
+        {"canShineCharge": {"usedTiles": 17, "openEnd": 0}},
+        "canShinechargeMovementTricky",
+        "canQuickDrop",
+        {"shineChargeFrames": 175},
+        {"shinespark": {"frames": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Gain a shinecharge on the long, lower platform in the screen above, then carry it left and down.",
+        "Use crumble quick drops, land on the floor at the bottom, spin jump left into the doorway, and activate the spark.",
+        "The required movement here is very precise, as the 180 shinecharge frames is only barely enough."
+      ],
+      "devNote": [
+        "This starts at node 1 to be able to unlock the door first if needed.",
+        "Getting up to the platform above is possible by running to the right and crouch-jumping up."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Zeb Farm",
+      "requires": [
+        {"simpleCycleFrames": 85},
+        {"cycleFrames": 20}
+      ],
+      "farmCycleDrops": [{"enemy": "Zeb", "count": 1}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Zeb",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Speed Through",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "SpeedBooster"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Mockball",
+      "requires": [
+        {"notable": "Mockball"},
+        {"obstaclesNotCleared": ["A"]},
+        "canMockball"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "failures": [
+        {
+          "name": "Crumble Fall",
+          "leadsToNode": 3,
+          "note": "Falls down into node 3 with no possiblity of quick crumble escape."
+        }
+      ],
+      "note": "Mockball to roll over the crumble blocks without falling down, and under the gate before it closes."
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Crouch Gate Clip Jump",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "canCrouchGateClip",
+        {"or": [
+          "canXRayTurnaround",
+          "canMoonwalk"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "failures": [
+        {
+          "name": "Crumble Fall",
+          "leadsToNode": 3,
+          "note": "Falls down into node 3 with no possiblity of quick crumble escape."
+        }
+      ],
+      "note": [
+        "Run then do a very small spin jump to clip into the left side of the first gate.",
+        "While inside the gate, back up to get the maximum run distance using either Moonwalk or X-Ray Turnaround and repeat for the next gate.",
+        "It is also possible to clip into the gates by aiming down while in the spin jump.",
+        "A down-back is also possible for clipping into the first gate, but it is generally harder."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Crouch Gate Clip Damage Boost",
+      "requires": [
+        {"notable": "Crouch Gate Clip Damage Boost"},
+        {"obstaclesNotCleared": ["A"]},
+        "canCrouchGateClip",
+        "canCameraManip",
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Zeb", "type": "contact", "hits": 2}}
+      ],
+      "clearsObstacles": ["A"],
+      "failures": [
+        {
+          "name": "Crumble Fall",
+          "leadsToNode": 3,
+          "note": "Falls down into node 3 with no possiblity of quick crumble escape."
+        }
+      ],
+      "note": [
+        "Spawn a Zeb then run and do a very small spin jump to clip into the first gate before the Zeb reaches you.",
+        "Do a damage boost off of the Zeb while inside the first gate to get enough speed to clip into the next gate.",
+        "It is also possible to clip into the gates by aiming down while in the spin jump."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Leave Shinecharged (Speed Through)",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 39, "openEnd": 2}},
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 35}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["missiles", "powerbomb"],
+          "requires": [
+            {"or": [
+              "canWalljump",
+              "HiJump",
+              "SpaceJump",
+              "canIBJ",
+              "canSpringBallJumpMidAir",
+              "h_crouchJumpDownGrab"
+            ]},
+            {"resetRoom": {"nodes": [1]}}
+          ]
+        }
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Leave With Runway - Frozen Zeb",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "h_trickyFrozenEnemyRunway",
+        "canMockball",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [
+            {"or": [
+              "canWalljump",
+              "HiJump",
+              "SpaceJump",
+              "canIBJ",
+              "canSpringBallJumpMidAir",
+              "h_crouchJumpDownGrab"
+            ]},
+            {"resetRoom": {"nodes": [1]}}
+          ]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Stand to the right of the Zeb farm and freeze the Zeb as it starts moving horizontally.",
+        "get onto the platform above the Zeb and wait for the Zeb to thaw and make it close to the right edge of the screen.",
+        "Use a mockball to get to the right side of the room, ending it as quickly as possible at the end to prevent the Zeb going off screen.",
+        "Freeze the Zeb adjacent to the right runway in order to extend it by a short distance."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 49, "excessFrames": 16}}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "This isn't useful because all known methods of obtaining a flash suit make this strat irrelevant.",
+        "The shinespark frames could be lowered by sparking from the crumble blocks, but there is a farm before and after."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "G-Mode Setup - Get Hit By Waver",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        {"or": [
+          "SpeedBooster",
+          "canMockball",
+          {"and": [
+            "canCrouchGateClip",
+            {"or": [
+              "canXRayTurnaround",
+              "canMoonwalk"
+            ]}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "The only way the Wavers will get to the door is if the right crumble blocks are all broken.",
+        "This assumes that Samus comes from the left with Speed, a mockball, or a crouch gate clip.",
+        "After the crumbles are broken, shoot the ceiling block and wait by the door for the Waver to come.",
+        "Note that if Samus takes more than 35 seconds after entering the room, before shooting the ceiling, the Waver will not come down."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "This has no requirements, but getting back out does."
+    },
+    {
+      "id": 19,
+      "link": [1, 3],
+      "name": "Prepare Frozen Zeb",
+      "requires": [
+        "canTrickyUseFrozenEnemies"
+      ],
+      "clearsObstacles": ["A", "B"],
+      "flashSuitChecked": true,
+      "note": [
+        "Crouch on top of the right side of the Zeb spawning pipe.",
+        "While holding down, let it hit Samus, then Freeze it immediately."
+      ],
+      "devNote": "This setup takes damage, but you can farm before and after."
+    },
+    {
+      "id": 20,
+      "link": [1, 4],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 41,
+      "link": [2, 1],
+      "name": "Speedball, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$0.E",
+          "maxExtraRunSpeed": "$1.D"
+        }
+      },
+      "requires": [
+        "canSpeedball",
+        "canChainTemporaryBlue",
+        "canInsaneJump"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Gain blue speed in the other room, jump through the transition, then speedball under the shutters.",
+      "devNote": [
+        "Slightly higher run speeds can work but with greater difficulty.",
+        "FIXME: comeInGettingBlueSpeed is not technically the right entrance condition, since the jump needs to happen in the other room;",
+        "we ignore this for now since it makes less than a tile of difference to the runway in the other room."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [2, 1],
+      "name": "Blue Space Jump Speedball, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInBlueSpaceJumping": {
+          "minExtraRunSpeed": "$0.E",
+          "maxExtraRunSpeed": "$2.1"
+        }
+      },
+      "requires": [
+        "canSpeedball",
+        "canChainTemporaryBlue",
+        "canInsaneJump"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Gain blue speed in the other room, Space Jump through the transition, then speedball under the shutters."
+    },
+    {
+      "id": 46,
+      "link": [2, 1],
+      "name": "Side Platform Speedball, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 16,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Lava Dive."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Dust Torizo Room and Noob Bridge."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 15.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "HiJump",
+                {"getBlueSpeed": {"usedTiles": 14, "openEnd": 1}}
+              ],
+              "note": ["This applies to Botwoon's Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 28.2472,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Double Chamber."]
+            }
+          ]
+        }
+      },
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 15, "openEnd": 1}},
+        "canSpeedball",
+        "canChainTemporaryBlue",
+        "canInsaneJump"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Gain blue speed in the other room, jump through the transition, then speedball under the shutters."
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "Leave Shinecharged (Run Above)",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "canIBJ",
+          "canSpringBallJumpMidAir",
+          "h_crouchJumpDownGrab"
+        ]},
+        {"canShineCharge": {"usedTiles": 25, "openEnd": 1}},
+        "canShinechargeMovement",
+        {"shineChargeFrames": 95}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Use the runway on the screen above to gain a shinecharge near the edge of the runway."
+    },
+    {
+      "id": 28,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 44,
+      "link": [2, 2],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "canTrickyJump",
+        {"or": [
+          "canLateralMidAirMorph",
+          {"and": [
+            "canMomentumConservingTurnaround",
+            "canInsaneJump"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 10,
+            "openEnd": 0
+          },
+          "obstruction": [2, 0]
+        }
+      },
+      "devNote": "Max extra run speed $2.5."
+    },
+    {
+      "id": 42,
+      "link": [2, 2],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 7,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 2,
+            "openEnd": 1
+          }
+        }
+      },
+      "note": "Use the runway below the crumbles at the right side of the room."
+    },
+    {
+      "id": 29,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"or": [
+          {"canShineCharge": {"usedTiles": 25, "openEnd": 1}},
+          {"getBlueSpeed": {"usedTiles": 17, "openEnd": 1}}
+        ]},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 47,
+      "link": [2, 2],
+      "name": "Waver and Sidehopper Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          "canWalljump",
+          "canCrouchJump"
+        ]},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 600}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 700}
+          ]},
+          {"and": [
+            {"or": [
+              "Wave",
+              "Spazer"
+            ]},
+            {"cycleFrames": 750}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 1050}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "resetsObstacles": ["B"],
+      "farmCycleDrops": [
+        {"enemy": "Waver", "count": 4},
+        {"enemy": "Sm. Sidehopper", "count": 3}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 48,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Waver (Come in Jumping)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canCrouchGateClip",
+        "canComplexGMode"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump into the room and aim down to get under the first shutter, then break the crumble blocks to the left.",
+        "This is the only way for the Wavers to reach the door.",
+        "After the crumbles are broken, shoot the ceiling block and wait by the door for the Waver to come."
+      ]
+    },
+    {
+      "id": 49,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Waver (Come in Jumping, Mockball)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "can4HighMidAirMorph",
+        "canMockball",
+        "canComplexGMode"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump into the room and mockball to get under the first shutter, to break the crumble blocks to the left.",
+        "Stop before passing under the second shutter.",
+        "Breaking these crumble blocks is the only way for the Wavers to reach the door.",
+        "After the crumbles are broken, shoot the ceiling block and wait by the door for the Waver to come."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Waver (Come in Space Jumping)",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": false,
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canCrouchGateClip",
+        "canComplexGMode"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Space Jump into the room and aim down to get under the first shutter, then break the crumble blocks to the left.",
+        "This is the only way for the Wavers to reach the door.",
+        "After the crumbles are broken, shoot the ceiling block and wait by the door for the Waver to come."
+      ]
+    },
+    {
+      "id": 51,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Waver (Come in With Side Platform)",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 2,
+              "minTiles": 4,
+              "speedBooster": false,
+              "obstructions": [[1, 0]],
+              "note": [
+                "Skree Boost Room and Butterfly Room are minimal-runway examples that this applies to."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 5,
+              "speedBooster": false,
+              "obstructions": [[1, 0]],
+              "note": ["Bomb Torizo Room is a minimal-runway example that this applies to."]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canCrouchGateClip",
+        "canComplexGMode"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump into the room and aim down to get under the first shutter, then break the crumble blocks to the left.",
+        "This is the only way for the Wavers to reach the door.",
+        "After the crumbles are broken, shoot the ceiling block and wait by the door for the Waver to come."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "canIBJ",
+          "canSpringBallJumpMidAir"
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 32,
+      "link": [2, 4],
+      "name": "Crouch Jump Down Grab",
+      "requires": [
+        "h_crouchJumpDownGrab"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 33,
+      "link": [2, 4],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 34,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        "h_bombThings"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 35,
+      "link": [3, 1],
+      "name": "Quick Crumble Escape",
+      "requires": [
+        "canQuickDrop"
+      ],
+      "flashSuitChecked": true,
+      "failures": [
+        {
+          "name": "Crumble Failure",
+          "note": "Failure leaves you in node 3 with solid crumble blocks above your head."
+        }
+      ],
+      "note": [
+        "It is possible to do a quick crumble escape twice, requiring no other items or tech.",
+        "It is easier to escape by doing a quick crumble escape, followed by a crumble block jump or using spring ball or space jump."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [3, 1],
+      "name": "Ice Clip",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        "h_XRayMorphIceClip"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Prepare a pipe bug to Ice clip through the crumble blocks, using Morph and X-Ray.",
+        "It can be tested on the solid blocks directly above the pipe spawner.",
+        "Climb onto the frozen bug by rolling under it and jumping while holding down."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [],
+      "collectsItems": [4],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 39,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": [],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 2,
+      "name": "Mockball",
+      "note": "Mockball to roll over the crumble blocks without falling down, and under the gate before it closes."
+    },
+    {
+      "id": 3,
+      "name": "Crouch Gate Clip Damage Boost",
+      "note": [
+        "Spawn a Zeb then run and do a very small spin jump to clip into the first gate before the Zeb reaches you.",
+        "Do a damage boost off of the Zeb while inside the first gate to get enough speed to clip into the next gate.",
+        "It is also possible to clip into the gates by aiming down while in the spin jump."
+      ]
+    }
+  ],
+  "nextStratId": 52,
+  "nextNotableId": 4
+}

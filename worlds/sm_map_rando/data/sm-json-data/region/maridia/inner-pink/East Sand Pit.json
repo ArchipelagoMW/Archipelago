@@ -1,0 +1,749 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 208,
+  "name": "East Sand Pit",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Pink",
+  "roomAddress": "0x7D51E",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Sand Entrance",
+      "nodeType": "entrance",
+      "nodeSubType": "sandpit",
+      "nodeAddress": "0x001a6c0",
+      "doorOrientation": "up",
+      "mapTileMask": [
+        [2, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Right Sand Exit",
+      "nodeType": "exit",
+      "nodeSubType": "sandpit",
+      "nodeAddress": "0x001a6cc",
+      "doorOrientation": "down",
+      "mapTileMask": [
+        [1, 1],
+        [1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Left Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x7C5EB",
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Right Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "PowerBomb",
+      "nodeAddress": "0x7C5F1",
+      "mapTileMask": [
+        [1, 2],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Junction Below Left Item",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ],
+      "note": "This indicates being on the upper-most ledge that is below the left item."
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 2,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canWallJumpInstantMorph",
+          {"and": [
+            "SpaceJump",
+            "Morph",
+            {"or": [
+              "canMidAirMorph",
+              "canDodgeWhileShooting",
+              {"enemyDamage": {"enemy": "Boulder", "type": "contact", "hits": 1}}
+            ]}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 4],
+      "name": "Gravity on Sand",
+      "requires": [
+        "Gravity",
+        "Morph",
+        "canPlayInSand",
+        {"or": [
+          {"and": [
+            {"or": [
+              "canWalljump",
+              "canGravityJump",
+              "HiJump"
+            ]},
+            {"or": [
+              "canMidAirMorph",
+              "canDodgeWhileShooting",
+              {"enemyDamage": {"enemy": "Boulder", "type": "contact", "hits": 1}}
+            ]}
+          ]},
+          {"and": [
+            "canSpringBallJumpMidAir",
+            "canTrickyJump"
+          ]},
+          {"and": [
+            "h_useSpringBall",
+            "canJumpIntoIBJ"
+          ]},
+          {"and": [
+            "canTrickyJump",
+            "can4HighMidAirMorph",
+            "canJumpIntoIBJ"
+          ]}
+        ]}
+      ],
+      "devNote": "FIXME: WallJump + canMidAirMorph is actually a canWallJumpInstantMorph."
+    },
+    {
+      "id": 12,
+      "link": [1, 4],
+      "name": "Suitless",
+      "requires": [
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "HiJump",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 4],
+      "name": "Double Springball Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        {"or": [
+          "canPrepareForNextRoom",
+          "canPlayInSand"
+        ]},
+        "h_doubleSpringBallJumpWithHiJump"
+      ],
+      "note": "Perform a double springball jump with the first jump being a bounce on the sand."
+    },
+    {
+      "id": 14,
+      "link": [1, 4],
+      "name": "Underwater Walljump",
+      "requires": [
+        {"notable": "Underwater Walljump"},
+        "Morph",
+        "canPlayInSand",
+        "canUnderwaterWalljump"
+      ],
+      "note": "Jump off the sand and use Underwater Walljumps to enter the maze leading to the Power Bomb location."
+    },
+    {
+      "id": 15,
+      "link": [1, 4],
+      "name": "Insane Walljump Morph",
+      "requires": [
+        {"notable": "Insane Walljump Morph"},
+        "canSuitlessMaridia",
+        "canConsecutiveWalljump",
+        "canPlayInSand",
+        "HiJump",
+        "canInsaneWalljump",
+        "can3HighWallMidAirMorph"
+      ],
+      "note": "Walljump up and instant morph with exact timing and positioning so as to enter the Power Bomb location through the maze's exit."
+    },
+    {
+      "id": 16,
+      "link": [1, 4],
+      "name": "Sandfall Bounce",
+      "requires": [
+        {"notable": "Sandfall Bounce"},
+        "canSandfallBounce",
+        "canTrickySpringBallJump",
+        "canTrickyJump"
+      ],
+      "note": [
+        "By using the sandfall physics, it is possible to Spring Ball jump to the Maridia Power Bomb location without Gravity or HiJump.",
+        "This requires a very precise spinjump into the sandfall which also exits the sandfall, after being pushed down, with more height than a regular jump.",
+        "It is very easy to fall into the sand and be unable to escape."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 4],
+      "name": "Shinespark From the Sand",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 90},
+        "Gravity",
+        "Morph",
+        "canPlayInSand",
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 12}},
+        {"or": [
+          "canCarefulJump",
+          {"ammo": {"type": "Super", "count": 1}},
+          {"enemyDamage": {"enemy": "Boulder", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Shinespark vertically from the sand to get onto the first ledge.",
+        "Carefully jump onto the second ledge and return to lure the Boulder, or shoot it with a Super."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [1, 4],
+      "name": "Shinespark - Enter Spinning, Midair Diagonal Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 60},
+        "Gravity",
+        "Morph",
+        "canMidairShinespark",
+        "canShinechargeMovement",
+        "canPrepareForNextRoom",
+        {"shinespark": {"frames": 18}}
+      ],
+      "flashSuitChecked": true,
+      "note": "The shinespark must be performed near the upper ledge, and not inside the sandfall."
+    },
+    {
+      "id": 19,
+      "link": [1, 4],
+      "name": "Suitless Shinespark - Sand Jump Into Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 140},
+        "canSuitlessMaridia",
+        "Morph",
+        "canPlayInSand",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 12}},
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "canSunkenTileWideWallClimb"
+        ]},
+        {"or": [
+          "canTrickyJump",
+          {"ammo": {"type": "Super", "count": 1}},
+          {"enemyDamage": {"enemy": "Boulder", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Shinespark vertically from the sand to get onto the first ledge.",
+        "Carefully get to the second ledge and return to lure the Boulder, or shoot it with a Super."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 4],
+      "name": "Suitless Shinespark - Enter Spinning, Midair Diagonal Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 70},
+        "canSuitlessMaridia",
+        "Morph",
+        "canMidairShinespark",
+        "canShinechargeMovementComplex",
+        "canPrepareForNextRoom",
+        {"shinespark": {"frames": 18}}
+      ],
+      "flashSuitChecked": true,
+      "note": "The shinespark must be performed near the upper ledge, and not inside the sandfall."
+    },
+    {
+      "id": 26,
+      "link": [1, 4],
+      "name": "Use Flash Suit",
+      "requires": [
+        "Morph",
+        "canPlayInSand",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 17, "excessFrames": 4}},
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "canSunkenTileWideWallClimb"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Shinespark to the first ledge. To use a flash suit in deep sand:",
+        "vertically - quickly roll the directional inputs from forward to up and jump.",
+        "diagonally, with minimal horizontal speed - while holding angle, quickly tap forward then press and hold jump."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [1, 4],
+      "name": "Diagonal Shinespark, Use Flash Suit",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "Morph",
+        "canPlayInSand",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 19, "excessFrames": 7}}
+      ],
+      "flashSuitChecked": true,
+      "note": "After landing on the sand, get a good jump off of it then spark diagonally up all the way out of the water."
+    },
+    {
+      "id": 36,
+      "link": [1, 4],
+      "name": "G-Mode Through Crumbles",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canTrickyJump",
+        "canConsecutiveWalljump",
+        "canWallJumpInstantMorph"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Wall jump up the middle column and Morph into the hole to get to the item.",
+        "This is easier in G-Mode because the crumbles above the tunnel will be air."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [1, 4],
+      "name": "G-Mode Morph Through Crumbles",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"or": [
+              "h_artificialMorphIBJ",
+              {"and": [
+                "h_artificialMorphSpringBallBombJump",
+                "h_additionalBomb"
+              ]},
+              {"and": [
+                "HiJump",
+                "h_artificialMorphSpringBall"
+              ]},
+              {"and": [
+                "canGravityJump",
+                "h_artificialMorphSpringBall"
+              ]}
+            ]}
+          ]},
+          "h_artificialMorphDoubleSpringBallJump"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "IBJ or Spring Ball Bomb Jump through two sets of Crumble Blocks.",
+      "devNote": "Without this being Morph, there is no way to escape. PLMs are already overloaded from the sand."
+    },
+    {
+      "id": 5,
+      "link": [1, 5],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 5],
+      "name": "Suitless HiJump",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        {"or": [
+          "canPlayInSand",
+          {"and": [
+            "canPrepareForNextRoom",
+            "h_useSpringBall"
+          ]}
+        ]},
+        {"or": [
+          "canDownGrab",
+          "canSunkenTileWideWallClimb",
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 5],
+      "name": "Suitless Bootless",
+      "requires": [
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "h_maxHeightSpringBallJump"
+      ],
+      "note": "It's possible to get out of the sand suitless and without HiJump after falling from the chute, by hugging the left side and moving quickly."
+    },
+    {
+      "id": 9,
+      "link": [1, 5],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "canPlayInSand",
+        "canSunkenTileWideWallClimb",
+        "canShinechargeMovementComplex",
+        {"or": [
+          "canMidairShinespark",
+          "canCarefulJump"
+        ]},
+        {"shinespark": {"frames": 11}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump out of the sand before Shinesparking."
+    },
+    {
+      "id": 28,
+      "link": [1, 5],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"or": [
+          "canCrouchJump",
+          "h_underwaterCrouchJumpWithFlashSuit"
+        ]},
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 13, "excessFrames": 3}},
+          {"and": [
+            "canSunkenTileWideWallClimb",
+            {"shinespark": {"frames": 13, "excessFrames": 9}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "While against the left wall, crouch jump and spark diagonally at the top of the jump.",
+        "The easiest way to crouch jump without using the flash suit is to hold shot."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 23,
+      "link": [3, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 35,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"or": [
+          "Gravity",
+          {"and": [
+            "canSuitlessMaridia",
+            "HiJump",
+            "h_useSpringBall"
+          ]},
+          {"and": [
+            "canSuitlessMaridia",
+            "HiJump",
+            "canPlayInSand"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 24,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ],
+      "devNote": [
+        "This does not require a mid-air morph, and Samus can roll from the ledge above to get into the morph tunnel."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [5, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 29,
+      "link": [5, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Gravity",
+          "canWalljump"
+        ]}
+      ]
+    },
+    {
+      "id": 30,
+      "link": [5, 3],
+      "name": "Spring Ball into IBJ",
+      "requires": [
+        "canSuitlessMaridia",
+        "h_useSpringBall",
+        "canJumpIntoIBJ"
+      ]
+    },
+    {
+      "id": 31,
+      "link": [5, 3],
+      "name": "Tricky Spring Ball Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallJump",
+        {"or": [
+          "HiJump",
+          "can4HighMidAirMorph"
+        ]}
+      ]
+    },
+    {
+      "id": 32,
+      "link": [5, 3],
+      "name": "HiJump Space Jump",
+      "requires": [
+        "HiJump",
+        "canSpaceJumpWaterEscape"
+      ]
+    },
+    {
+      "id": 33,
+      "link": [5, 3],
+      "name": "HiJump IBJ",
+      "requires": [
+        "HiJump",
+        "canCrouchJump",
+        "canBombJumpWaterEscape",
+        "canIBJ"
+      ]
+    },
+    {
+      "id": 7,
+      "link": [5, 3],
+      "name": "Suitless HiJump Perfect Bomb Boost",
+      "requires": [
+        {"notable": "Suitless HiJump Perfect Bomb Boost"},
+        "HiJump",
+        "canCrouchJump",
+        "canBombJumpWaterEscape"
+      ],
+      "wallJumpAvoid": true,
+      "note": [
+        "Reach the left side item using a single bomb explosion barely reach it.",
+        "Use HiJump to reach the water line and then use a Bomb Jump Water Escape motion to Bomb jump out of the water.",
+        "Do not Morph until fully out of the water to place the Bomb with the correct height.",
+        "And do not place the Bomb at the max possible height, but a little lower where it will bounce Samus higher."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [5, 3],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 8, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Suitless HiJump Perfect Bomb Boost",
+      "wallJumpAvoid": true,
+      "note": [
+        "Reach the left side item using a single bomb explosion barely reach it.",
+        "Use HiJump to reach the water line and then use a Bomb Jump Water Escape motion to Bomb jump out of the water.",
+        "Do not Morph until fully out of the water to place the Bomb with the correct height.",
+        "And do not place the Bomb at the max possible height, but a little lower where it will bounce Samus higher."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Underwater Walljump",
+      "note": "Jump off the sand and use Underwater Walljumps to enter the maze leading to the Power Bomb location."
+    },
+    {
+      "id": 3,
+      "name": "Insane Walljump Morph",
+      "note": "Walljump up and instant morph with exact timing and positioning so as to enter the Power Bomb location through the maze's exit."
+    },
+    {
+      "id": 4,
+      "name": "Sandfall Bounce",
+      "note": [
+        "By using the sandfall physics, it is possible to springballjump to the Maridia Power Bomb location without Gravity or HiJump.",
+        "This requires a very precise spinjump into the sandfall which also exits the sandfall, after being pushed down, with more height than a regular jump.",
+        "It is very easy to fall into the sand and be unable to escape."
+      ]
+    }
+  ],
+  "nextStratId": 37,
+  "nextNotableId": 5
+}

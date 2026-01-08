@@ -1,0 +1,3699 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 183,
+  "name": "Aqueduct",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Pink",
+  "roomAddress": "0x7D5A7",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Middle Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a708",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1],
+        [2, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "red",
+      "nodeAddress": "0x001a744",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1],
+        [2, 2, 2, 2, 2, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Left Sand Pit",
+      "nodeType": "exit",
+      "nodeSubType": "sandpit",
+      "nodeAddress": "0x001a714",
+      "doorOrientation": "down",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1],
+        [1, 2, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Right Sand Pit",
+      "nodeType": "exit",
+      "nodeSubType": "sandpit",
+      "nodeAddress": "0x001a720",
+      "doorOrientation": "down",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 2, 1, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a738",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 1, 1, 2, 1, 1],
+        [1, 1, 1, 2, 2, 2],
+        [1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Top Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a72c",
+      "doorOrientation": "up",
+      "doorEnvironments": [{"physics": "water"}],
+      "useImplicitComeInNormally": false,
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "mapTileMask": [
+        [2, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Top Right Left Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x7C603",
+      "mapTileMask": [
+        [1, 1, 1, 1, 2, 1],
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Top Right Right Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Super",
+      "nodeAddress": "0x7C609",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 2],
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Junction Below Top Door",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 2, 2, 1, 1, 1],
+        [1, 2, 2, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 10,
+      "name": "G-Mode Morph Junction (By Bottom Left Door)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1],
+        [2, 1, 1, 1, 1, 1]
+      ],
+      "note": "Represents being at the bottom left door with G-Mode and morph or artificial morph."
+    },
+    {
+      "id": 11,
+      "name": "G-Mode Overloaded PLMs Junction (By Bottom Left Door)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1],
+        [2, 1, 1, 1, 1, 1]
+      ],
+      "note": "Represents being at the bottom left door with G-Mode and PLMs overloaded."
+    },
+    {
+      "id": 12,
+      "name": "G-Mode Junction (By Bottom Left Door)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1],
+        [2, 1, 1, 1, 1, 1]
+      ],
+      "note": "Represents being at the bottom left door with G-Mode."
+    },
+    {
+      "id": 13,
+      "name": "Direct G-Mode Morph Junction (By Bottom Left Door)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1],
+        [2, 1, 1, 1, 1, 1]
+      ],
+      "note": "Represents being at the bottom left door with Direct G-Mode and Morph or artificial morph."
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Power Bomb Blocks",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Aqueduct Free-Roaming Yards",
+      "enemyName": "Yard",
+      "quantity": 3,
+      "homeNodes": [2, 5, 9],
+      "note": "They move around the external walls even when offscreen, and can be brought to any of their home nodes."
+    },
+    {
+      "id": "e2",
+      "groupName": "Aqueduct Middle Yard",
+      "enemyName": "Yard",
+      "quantity": 1,
+      "homeNodes": [2],
+      "note": "It circles around on one of the grapple panels."
+    },
+    {
+      "id": "e3",
+      "groupName": "Aqueduct Bottom Yard",
+      "enemyName": "Yard",
+      "quantity": 1,
+      "homeNodes": [4]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 7},
+        {"id": 9},
+        {"id": 10},
+        {"id": 11}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 7},
+        {"id": 9},
+        {"id": 10},
+        {"id": 11},
+        {"id": 12},
+        {"id": 13}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 5},
+        {"id": 7},
+        {"id": 8},
+        {"id": 9},
+        {"id": 10},
+        {"id": 11},
+        {"id": 12},
+        {"id": 13}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 1},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 9},
+        {"id": 10},
+        {"id": 11},
+        {"id": 12},
+        {"id": 13}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 8,
+      "to": [
+        {"id": 5},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 9,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {
+          "id": 5,
+          "devNote": "This link is only for strats that can't go from 9 -> 2 -> 5."
+        },
+        {"id": 6},
+        {"id": 9}
+      ]
+    },
+    {
+      "from": 10,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 7},
+        {"id": 10},
+        {"id": 11},
+        {"id": 12}
+      ]
+    },
+    {
+      "from": 11,
+      "to": [
+        {"id": 1},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 12,
+      "to": [
+        {"id": 3},
+        {"id": 4},
+        {"id": 11}
+      ]
+    },
+    {
+      "from": 13,
+      "to": [
+        {"id": 7},
+        {"id": 10},
+        {"id": 13}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Yard",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Morph Break the Power Bomb Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Place a Power Bomb then exit G-Mode."
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Stored Moonfall Clip",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        "canMoonfall"
+      ],
+      "note": [
+        "Moonfall twice into the wall adjacent the Power Bomb blocks and then wiggle out to the right.",
+        "Then moonfall again to clip through the Power Bomb Blocks",
+        "Without Gravity, break spin to avoid clipping down too far."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 7],
+      "name": "Suitless Temporary Blue To Items",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        {"notable": "Suitless Temporary Blue To Items"},
+        "canSuitlessMaridia",
+        "canLongChainTemporaryBlue",
+        {"ammo": {"type": "PowerBomb", "count": 1}},
+        "h_doubleSpringBallJumpWithHiJump",
+        {"or": [
+          "canXRayCeilingClip",
+          {"and": [
+            "h_jumpIntoCrystalFlashClip",
+            "Grapple"
+          ]}
+        ]},
+        "canBeExtremelyPatient"
+      ],
+      "note": [
+        "Use a double spring ball jump to reach the Speed blocks below the items while chaining temporary blue.",
+        "Perform a spring ball jump and immediately unmorph and continue holding up, to break some of the Speed blocks while passing up through them.",
+        "Leave one of the bottom Speed blocks unbroken to use as a platform.",
+        "The top speed blocks will respawn; clip through them either using a snail clip with X-Ray or a Crystal Flash clip;",
+        "In the case of a Crystal Flash clip, menu to Grapple before the Crystal Flash ends and mash shoot while holding down."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 9],
+      "name": "Left-Side X-Ray Climb (Upper)",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        {"notable": "Left-Side X-Ray Climb (Upper)"},
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Climb up 1 screen.",
+        "Aim to end this XRay climb when Samus is visually near but not above the top of the left side door.",
+        "Fall out of the wall by turning to the right, from a crouch if possible.",
+        "This XRay climb has a window of 4 crouches, but with a way to break bomb blocks it can be ended earlier."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 9],
+      "name": "G-Mode Morph Overload PLMs - Bomb the PB Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphBombs",
+        "h_navigateUnderwater",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"or": [
+              "h_artificialMorphLongIBJ",
+              "h_artificialMorphJumpIntoIBJ"
+            ]}
+          ]},
+          {"and": [
+            "canGravityJump",
+            "h_artificialMorphSpringBall"
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            "HiJump",
+            "canConsecutiveWalljump",
+            "canPreciseWalljump"
+          ]},
+          "h_artificialMorphDoubleSpringBallJump",
+          {"and": [
+            "Gravity",
+            "HiJump",
+            "h_artificialMorphSpringBallBombJump"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Bomb the Power Bomb blocks below to overload PLMs, then go up through the crumble blocks to escape.",
+      "devNote": "FIXME: Eventually a CF doorlock bypass should be added from this 1 or from 12 with a 1->12 option."
+    },
+    {
+      "id": 10,
+      "link": [1, 10],
+      "name": "G-Mode Morph Overload PLMs - Bomb the Power Bomb Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphBombs",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"or": [
+              "h_artificialMorphLongIBJ",
+              "h_artificialMorphJumpIntoIBJ"
+            ]}
+          ]},
+          {"and": [
+            "canGravityJump",
+            "h_artificialMorphSpringBall"
+          ]},
+          "h_artificialMorphDoubleSpringBallJump",
+          {"and": [
+            "Gravity",
+            "HiJump",
+            "h_artificialMorphSpringBallBombJump"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Bomb the Power Bomb blocks below to overload PLMs, then IBJ up through the crumble blocks to escape."
+    },
+    {
+      "id": 11,
+      "link": [1, 11],
+      "name": "G-Mode Morph Overload PLMs - Bomb the PB Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphBombs",
+        "h_navigateUnderwater",
+        {"or": [
+          "canGravityJump",
+          {"and": [
+            "Gravity",
+            {"or": [
+              "h_artificialMorphLongIBJ",
+              "h_artificialMorphJumpIntoIBJ"
+            ]}
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            "HiJump",
+            "canConsecutiveWalljump",
+            "canPreciseWalljump"
+          ]},
+          "h_artificialMorphDoubleSpringBallJump",
+          {"and": [
+            "Gravity",
+            "HiJump",
+            "h_artificialMorphSpringBallBombJump"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Bomb the PB blocks below to overload PLMs, then go up through the crumble blocks to escape."
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canWalljump",
+          "SpaceJump",
+          "canLongIBJ",
+          "canJumpIntoIBJ",
+          "SpeedBooster",
+          "canSpringBallJumpMidAir",
+          "canUseEnemies"
+        ]},
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Snail Clip to the Left Middle Door",
+      "requires": [
+        "Gravity",
+        "canUseEnemies",
+        {"or": [
+          "canPreciseCeilingClip",
+          "canXRayCeilingClip"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump on the Snail when it is at a precise location, and then crouch jump through the ceiling and jump again, without moving between jumps.",
+        "The Snail's positioning is very precise, but it is more lenient with Morph and an X-Ray Turn Around. X-Ray can also be useful for helping position the Snail."
+      ]
+    },
+    {
+      "id": 140,
+      "link": [2, 1],
+      "name": "Snail Clip with Morph to the Left Middle Door",
+      "requires": [
+        {"notable": "Snail Clip With Gravity and Morph"},
+        "Gravity",
+        "canUseEnemies",
+        "Morph",
+        "canCeilingClip"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump on the Snail when it is at a precise location, and then crouch jump through the ceiling and jump again, without moving between jumps.",
+        "The Snail's positioning is very precise. Morph can be used to help get onto the Snail and get off without taking a hit if it is in the wrong location."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Suitless Jump Assist",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canSpringBallJumpMidAir",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Suitless Sunken Dual Wall Climb",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canConsecutiveWalljump",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Snail Jump",
+      "requires": [
+        "canUseEnemies",
+        {"or": [
+          "Gravity",
+          {"and": [
+            "canSuitlessMaridia",
+            "HiJump"
+          ]}
+        ]},
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": "HJBless SpringBall jumps require less obvious snail positioning."
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Bootless Suitless Snail Climb (Crab Shaft Door)",
+      "requires": [
+        {"notable": "Bootless Suitless Snail Climb"},
+        "h_navigateUnderwater",
+        "canSnailClimb",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Stop the snail when it is on the lower part of the overhang (hug the snail to gain extra jump height).",
+        "Climb it by waiting until it is just about to become active to jump."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Suitless Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 130},
+        "canSuitlessMaridia",
+        "h_usePowerBomb",
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 25, "excessFrames": 11}}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Stutter Water Shinecharge",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "h_usePowerBomb",
+        "canStutterWaterShineCharge",
+        "canShinechargeMovementComplex",
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"shinespark": {"frames": 25, "excessFrames": 11}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 22, "excessFrames": 11}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 148,
+      "link": [2, 1],
+      "name": "Very Precise Stutter Water Shinecharge",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "h_usePowerBomb",
+        "canPreciseStutterWaterShineCharge",
+        "canInsaneJump",
+        "canShinechargeMovementTricky",
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"shinespark": {"frames": 25, "excessFrames": 11}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 22, "excessFrames": 11}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "With only 1 tile of runway, this requires a single-frame stutter (release forward then repress on the next frame), on the last possible frame."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]},
+        "h_shinechargeMaxRunway",
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "HiJump",
+            "canWalljump",
+            {"shineChargeFrames": 100}
+          ]},
+          {"and": [
+            "HiJump",
+            "SpaceJump",
+            {"shineChargeFrames": 105}
+          ]},
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 125}
+          ]},
+          {"and": [
+            "canWalljump",
+            {"shineChargeFrames": 125}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"shineChargeFrames": 130}
+          ]},
+          {"and": [
+            "canGravityJump",
+            "canShinechargeMovementTricky",
+            {"shineChargeFrames": 125}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Temporary Blue Chain (Come in With Temporary Blue)",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "HiJump",
+        "canLongChainTemporaryBlue",
+        "canBeExtremelyPatient",
+        "canXRayTurnaround",
+        "canDoubleSpringBallJumpMidAir",
+        "canTrickySpringBallJump",
+        {"or": [
+          "canStationaryLateralMidAirMorph",
+          "canSpringFling"
+        ]},
+        "can4HighMidAirMorph"
+      ],
+      "note": [
+        "Use double spring ball jumps to reach the top-right of the room with temporary blue.",
+        "To cross the two gaps at the top of the room to the left while chaining temporary blue, use spring ball jumps with HiJump disabled;",
+        "in each case, perform a stationary lateral mid-air morph or a spring fling (or both);"
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Temporary Blue Chain (Come in Running)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "h_waterGetBlueSpeed",
+        "HiJump",
+        "canLongChainTemporaryBlue",
+        "canBeExtremelyPatient",
+        "canXRayTurnaround",
+        "canDoubleSpringBallJumpMidAir",
+        "canTrickySpringBallJump",
+        {"or": [
+          "canStationaryLateralMidAirMorph",
+          "canSpringFling"
+        ]},
+        "can4HighMidAirMorph"
+      ],
+      "note": [
+        "Use double spring ball jumps to reach the top-right of the room with temporary blue.",
+        "To cross the two gaps at the top of the room to the left while chaining temporary blue, use spring ball jumps with HiJump disabled;",
+        "in each case, perform a stationary lateral mid-air morph or a spring fling (or both);"
+      ]
+    },
+    {
+      "id": 142,
+      "link": [2, 1],
+      "name": "High Pixel Suitless Snail Clip, Use Flash Suit",
+      "requires": [
+        "HiJump",
+        "canHighPixelCeilingClip",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 15, "excessFrames": 13}}
+      ],
+      "note": [
+        "Position the snail on the high pixel without using x-ray.",
+        "Ceiling clip then use the flash suit while in the crouched pose that Samus is already in to spark vertically and clip through the next block.",
+        "Changing pose will make it so Samus is no longer able to spark."
+      ]
+    },
+    {
+      "id": 143,
+      "link": [2, 1],
+      "name": "High Pixel Suitless Bootless Snail Clip, Use Flash Suit",
+      "requires": [
+        {"notable": "High Pixel Suitless Bootless Snail Clip, Use Flash Suit"},
+        "canHighPixelCeilingClip",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 15, "excessFrames": 13}}
+      ],
+      "note": [
+        "Position the snail low on the ceiling so that Samus can get onto it.",
+        "Wait for another snail and position it on the high pixel without using x-ray.",
+        "Ceiling clip then use the flash suit while in the crouched pose that Samus is already in to spark vertically and clip through the next block.",
+        "Changing pose will make it so Samus is no longer able to spark."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 27,
+      "link": [2, 2],
+      "name": "Stutter Shinecharge, Leave With Spark",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canStutterWaterShineCharge",
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"shinespark": {"frames": 12}},
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"shinespark": {"frames": 3}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 149,
+      "link": [2, 2],
+      "name": "Water Shinecharge, Hero Shot Leave With Spark",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canHeroShot",
+        {"shinespark": {"frames": 29}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": ["Start with low run speed by positioning exactly 2 pixels from the door."]
+    },
+    {
+      "id": 150,
+      "link": [2, 2],
+      "name": "Very Precise Stutter Shinecharge, Leave With Spark",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canPreciseStutterWaterShineCharge",
+        "canInsaneJump",
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"shinespark": {"frames": 12}},
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"shinespark": {"frames": 3}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only 1 tile of runway, this requires a single-frame stutter (release forward then repress on the next frame), on the last possible frame."
+      ]
+    },
+    {
+      "id": 151,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (5-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 130},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With a runway of 5 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 5 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 152,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (4-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 140},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 10}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 4 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 4 frames, and repress forward on the last possible frame before the transition.",
+        "It also works well to release forward for 3 frames and repress on the last possible frame.",
+        "Other timings can also work, but may gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 153,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (3-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 145},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 10}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 3 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 3 or 4 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "devNote": [
+        "The same shinecharge frames could be achieved with a closed end runway (effective length of 2.4375),",
+        "with a 3-frame stutter, but there doesn't appear to be any application."
+      ]
+    },
+    {
+      "id": 154,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (2-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 150},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 2 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 3 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "devNote": [
+        "FIXME: The canBeVeryPatient requirement is for difficulty placement of the boomerang method;",
+        "but the boomerang (or maybe specifically the moonwalk boomerang) should possibly be its own tech,",
+        "and the same with rapid arm pumping."
+      ]
+    },
+    {
+      "id": 155,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (1-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canInsaneJump",
+        "canBeVeryPatient",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only 1 tile of runway in the other room, Samus should ideally start on the last pixel of runway with X subpixels of $3FFF or less.",
+        "Run toward the door, releasing forward for exactly 1 frame and pressing it again on the last possible frame before the transition.",
+        "Starting with X subpixels of $7FFF can also work (e.g., by simply backing against the door ledge, then jumping and turning around mid-air);",
+        "in this case, Samus must advance 1 or 2 pixels with an arm pump before the transition (e.g., firing a shot or pressing and/or releasing an angle button),",
+        "and the shinecharge will be gained slightly further away from the door.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "detailNote": [
+        "Ideal subpixels ($3FFF) can be achieved using one of several methods:",
+        "1) press forward against the door ledge (or a wall aligned with it);",
+        "jump, and while mid-air, tap forward for exactly 1 frame to land with subpixels $BFFF,",
+        "moonwalk back for exactly 1 frame to end with subpixels $3FFF.",
+        "2) press forward against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), and moonwalk back two pixels,",
+        "then jump and mid-air turnaround onto the ledge;",
+        "if Samus jumped from the correct pixel but does not land on the ledge, then it was needed to moonwalk back 1 more frame;",
+        "in this case it is possible to retry by doing a mid-air turnaround back onto the platform, and moonwalking back for 1 frame.",
+        "3) if X-Ray is available, press against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), then jump and mid-air turnaround toward the door,",
+        "and use X-Ray to turnaround in place away from the door;",
+        "repeat this sequence 3 more times: jump, mid-air turnaround, X-Ray turnaround;",
+        "then do one more jump and mid-air turnaround, high enough to land on the door ledge,",
+        "and Samus should be in the correct position with subpixels $3FFF."
+      ]
+    },
+    {
+      "id": 156,
+      "link": [2, 2],
+      "name": "Water Shinecharge, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "canXRayCancelShinecharge",
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Start with low run speed by positioning exactly 2 pixels from the door.",
+        "Use X-Ray to cancel the shinecharge early, to avoid getting hit by the angry snail."
+      ],
+      "devNote": [
+        "This can also be done with a stutter shinecharge, which can shorten the temp blue chain,",
+        "but not by enough to remove the need for the canLongChainTemporaryBlue requirement."
+      ]
+    },
+    {
+      "id": 184,
+      "link": [2, 2],
+      "name": "Yard Farm (2 Yards)",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "h_useMorphBombs",
+        "canDodgeWhileShooting",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"cycleFrames": 430}
+          ]},
+          {"cycleFrames": 1045}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Yard", "count": 2}]
+    },
+    {
+      "id": 28,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 29,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Yard",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Yard", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 31,
+      "link": [2, 3],
+      "name": "Gravity",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "SpaceJump",
+          "canCarefulJump",
+          "h_getBlueSpeedMaxRunway",
+          "h_useSpringBall"
+        ]}
+      ]
+    },
+    {
+      "id": 32,
+      "link": [2, 3],
+      "name": "Suitless",
+      "requires": [
+        "canSuitlessMaridia",
+        {"or": [
+          {"and": [
+            "HiJump",
+            "h_useSpringBall"
+          ]},
+          "canPlayInSand"
+        ]}
+      ]
+    },
+    {
+      "id": 33,
+      "link": [2, 3],
+      "name": "Suitless Shinespark",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canWaterShineCharge",
+        "canHorizontalShinespark",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 139, "excessFrames": 66}}
+      ],
+      "note": [
+        "Enter this room while holding dash in the previous room, before the door transition.",
+        "Do not release dash in the water or Samus will not be able to get blue speed."
+      ],
+      "devNote": "This is obscure enough that it's assumed you can canShinechargeMovementComplex"
+    },
+    {
+      "id": 60,
+      "link": [2, 3],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {"usedTiles": 32, "openEnd": 0}},
+        {"shineChargeFrames": 30}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to run across the sand, using blue speed gained from the long runway on the bottom-right."
+      ],
+      "devNote": [
+        "FIXME: split into separate variants for with and without a momentum-conserving turnaround, since it affects Samus' state in the next room,",
+        "e.g. whether it will be possible to spark mid-air without landing first."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [2, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 35,
+      "link": [2, 5],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canWalljump",
+          "SpaceJump",
+          "canLongIBJ",
+          "canJumpIntoIBJ",
+          "SpeedBooster",
+          "Grapple",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            "HiJump",
+            "canUseEnemies"
+          ]}
+        ]}
+      ],
+      "devNote": "A very precise CrouchJumpDownGrab, or springball jumping to the snail is closer to canSnailClimb."
+    },
+    {
+      "id": 36,
+      "link": [2, 5],
+      "name": "Grapple Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canGrappleJump"
+      ]
+    },
+    {
+      "id": 37,
+      "link": [2, 5],
+      "name": "Snail Climb",
+      "requires": [
+        "canSnailClimb",
+        "h_useSpringBall",
+        {"or": [
+          "Gravity",
+          {"and": [
+            "canSuitlessMaridia",
+            "HiJump"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 38,
+      "link": [2, 5],
+      "name": "Bootless Suitless Snail Climb (Right Door)",
+      "requires": [
+        {"notable": "Bootless Suitless Snail Climb"},
+        "h_navigateUnderwater",
+        "canSnailClimb"
+      ],
+      "note": [
+        "Stop the snail when it is on the lower part of the overhang (hug the snail to gain extra jump height).",
+        "Climb it by waiting until it is just about to become active to jump."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [2, 5],
+      "name": "Suitless Shinespark",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 37, "excessFrames": 3}}
+      ],
+      "note": [
+        "Enter this room while holding dash in the previous room, before the door transition.",
+        "Do not release dash in the water or Samus will not be able to get blue speed."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 7],
+      "name": "Shinespark",
+      "requires": [
+        "Gravity",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 40, "excessFrames": 7}}
+      ]
+    },
+    {
+      "id": 41,
+      "link": [2, 7],
+      "name": "Suitless Shinespark",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 40, "excessFrames": 7}}
+      ],
+      "note": [
+        "Enter this room while holding dash in the previous room, before the door transition.",
+        "Do not release dash in the water or Samus will not be able to get blue speed."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 7],
+      "name": "Temporary Blue Gravity Jump",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        "canGravityJump",
+        "canTemporaryBlue",
+        {"or": [
+          "canChainTemporaryBlue",
+          "HiJump"
+        ]}
+      ],
+      "note": [
+        "Gain temporary blue using the long runway.",
+        "Chaining temporary blue, use two Gravity jumps to navigate the room and break the Speed blocks."
+      ],
+      "devNote": "This avoids the energy requirement of performing a shinespark."
+    },
+    {
+      "id": 43,
+      "link": [2, 7],
+      "name": "Suitless Temporary Blue To Items (Come in Running)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        {"notable": "Suitless Temporary Blue To Items"},
+        "canSuitlessMaridia",
+        "h_waterGetBlueSpeed",
+        "h_doubleSpringBallJumpWithHiJump",
+        "canChainTemporaryBlue",
+        {"or": [
+          "canXRayCeilingClip",
+          {"and": [
+            "h_jumpIntoCrystalFlashClip",
+            "Grapple"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Use a double spring ball jump to reach the Speed blocks below the items while chaining temporary blue.",
+        "Perform a spring ball jump and immediately unmorph and continue holding up, to break some of the Speed blocks while passing up through them.",
+        "Leave one of the bottom Speed blocks unbroken to use as a platform.",
+        "The top speed blocks will respawn; clip through them either using a snail clip with X-Ray or a Crystal Flash clip;",
+        "In the case of a Crystal Flash clip, menu to Grapple before the Crystal Flash ends and mash shoot while holding down."
+      ]
+    },
+    {
+      "id": 44,
+      "link": [2, 7],
+      "name": "Suitless Temporary Blue To Items (Come in With Temporary Blue)",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        {"notable": "Suitless Temporary Blue To Items"},
+        "canSuitlessMaridia",
+        "h_doubleSpringBallJumpWithHiJump",
+        "canChainTemporaryBlue",
+        {"or": [
+          "canXRayCeilingClip",
+          {"and": [
+            "h_jumpIntoCrystalFlashClip",
+            "Grapple"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Use a double spring ball jump to reach the Speed blocks below the items while chaining temporary blue.",
+        "Perform a spring ball jump and immediately unmorph and continue holding up, to break some of the Speed blocks while passing up through them.",
+        "Leave one of the bottom Speed blocks unbroken to use as a platform.",
+        "The top speed blocks will respawn; clip through them either using a snail clip with X-Ray or a Crystal Flash clip;",
+        "In the case of a Crystal Flash clip, menu to Grapple before the Crystal Flash ends and mash shoot while holding down."
+      ]
+    },
+    {
+      "id": 47,
+      "link": [2, 9],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "SpaceJump",
+          "Grapple",
+          "canConsecutiveWalljump"
+        ]}
+      ]
+    },
+    {
+      "id": 48,
+      "link": [2, 9],
+      "name": "Grapple Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canGrappleJump"
+      ]
+    },
+    {
+      "id": 49,
+      "link": [2, 9],
+      "name": "Snail Climb",
+      "requires": [
+        "canSnailClimb",
+        "h_useSpringBall",
+        {"or": [
+          "Gravity",
+          {"and": [
+            "canSuitlessMaridia",
+            "HiJump"
+          ]}
+        ]}
+      ],
+      "note": "Watch out for snails coming from above, or aggressive snails from below, who will either block or attack Samus."
+    },
+    {
+      "id": 50,
+      "link": [2, 9],
+      "name": "Bootless Suitless Snail Climb (Top Door)",
+      "requires": [
+        {"notable": "Bootless Suitless Snail Climb"},
+        "h_navigateUnderwater",
+        "canSnailClimb"
+      ],
+      "note": [
+        "Stop the snail when it is on the lower part of the overhang (hug the snail to gain extra jump height).",
+        "Climb it by waiting until it is just about to become active to jump.",
+        "Watch out for snails coming from above, or aggressive snails from below, who will either block or attack Samus."
+      ]
+    },
+    {
+      "id": 51,
+      "link": [2, 9],
+      "name": "Shinespark",
+      "requires": [
+        "Gravity",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 37, "excessFrames": 3}}
+      ]
+    },
+    {
+      "id": 145,
+      "link": [2, 9],
+      "name": "Suitless Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        {"shinespark": {"frames": 37, "excessFrames": 3}}
+      ],
+      "note": [
+        "Begin shinecharging in the previous room and continue through the door transition.",
+        "Do not release dash in the water or Samus will not be able to get blue speed."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [2, 9],
+      "name": "Suitless Shinespark (Short Runway)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "canShinechargeMovement",
+        {"canShineCharge": {"usedTiles": 25, "openEnd": 2}},
+        {"shinespark": {"frames": 37, "excessFrames": 3}}
+      ],
+      "note": [
+        "Enter this room while holding dash in the previous room, before the door transition.",
+        "Do not release dash in the water or Samus will not be able to get blue speed.",
+        "This is easiest by starting close to the transition (but at least 2 pixels away) so that Samus has very low run speed."
+      ],
+      "devNote": "In order for Samus to shinecharge without going too far to the right and without utilizing the low run speed, a one-tap or long adjacent runway is required."
+    },
+    {
+      "id": 54,
+      "link": [2, 10],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 165,
+      "link": [2, 12],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 166,
+      "link": [2, 13],
+      "name": "Direct G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 58,
+      "link": [3, 3],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 157,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit by Yard",
+      "requires": [
+        "h_navigateUnderwater",
+        "canPlayInSand",
+        "canDownwardGModeSetup"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Time a Yard's movement with entering the sand.",
+        "Crouch in the sand and press forward when near the transition to stand up and touch the transition on the first frame of standing.",
+        "If it is important to touch the transition near the middle of the sand, shoot a Yard so that it will move faster and quickly get into position."
+      ]
+    },
+    {
+      "id": 61,
+      "link": [4, 4],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 62,
+      "link": [4, 4],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {"usedTiles": 32, "openEnd": 0}},
+        {"shineChargeFrames": 30}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: split into separate variants for with and without a momentum-conserving turnaround, since it affects Samus' state in the next room,",
+        "e.g. whether it will be possible to spark mid-air without landing first."
+      ]
+    },
+    {
+      "id": 158,
+      "link": [4, 4],
+      "name": "G-Mode Setup - Get Hit by Yard",
+      "requires": [
+        "h_navigateUnderwater",
+        "canPlayInSand",
+        "canDownwardGModeSetup"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Time a Yard's movement with entering the sand.",
+        "Crouch in the sand and press forward when near the transition to stand up and touch the transition on the first frame of standing.",
+        "If it is important to touch the transition near the middle of the sand, shoot a Yard so that it will move faster and quickly get into position."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [5, 1],
+      "name": "Blue Space Jump",
+      "requires": [
+        {"notable": "Blue Space Jump"},
+        "Gravity",
+        "canPreciseSpaceJump",
+        {"or": [
+          {"and": [
+            "canDisableEquipment",
+            "h_stutterWaterGetBlueSpeed"
+          ]},
+          {"and": [
+            {"getBlueSpeed": {"usedTiles": 20, "openEnd": 2}},
+            {"or": [
+              "HiJump",
+              "canTrickyDashJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Gain blue speed by running right-to-left on the 20-tile runway below the items.",
+        "Then use Space Jump to carry it across the top of the room to break the bomb blocks.",
+        "To cross the room most easily, blue speed can be gained with low momentum by pressing pause, running a few tiles, stuttering just before the pause hits, disabling Gravity suit, continuing to run left, then re-enabling Gravity suit before jumping.",
+        "Alternatively, a regular shortcharge can be used in combination with either HiJump or a precise amount of extra run speed ($2.0 or $2.1), to cross the room at higher speed."
+      ]
+    },
+    {
+      "id": 64,
+      "link": [5, 1],
+      "name": "Temporary Blue Chain",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "HiJump",
+        "canLongChainTemporaryBlue",
+        "canDoubleSpringBallJumpMidAir",
+        "canTrickySpringBallJump",
+        {"or": [
+          "canStationaryLateralMidAirMorph",
+          "canSpringFling"
+        ]},
+        "canBeVeryPatient"
+      ],
+      "note": [
+        "Use a double spring ball jump to reach the top of the room with temporary blue.",
+        "To cross the two gaps at the top of the room while chaining temporary blue, use spring ball jumps with HiJump disabled;",
+        "in each case, perform a stationary lateral mid-air morph or a spring fling (or both);"
+      ]
+    },
+    {
+      "id": 65,
+      "link": [5, 1],
+      "name": "Grapple Teleport Below Bomb Blocks",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [],
+      "note": [
+        "Hold Grapple through the transition and then immediately release it to teleport below the Bomb blocks."
+      ]
+    },
+    {
+      "id": 66,
+      "link": [5, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled) with a horizontal position of 21 (as far right as possible).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb to get to the door transition above, without needing to open the door.",
+        "At the beginning of the climb, avoid pressing left without X-Ray being held, to prevent triggering the transition of the bottom door."
+      ]
+    },
+    {
+      "id": 67,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 68,
+      "link": [5, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 69,
+      "link": [5, 2],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 70,
+      "link": [5, 5],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 147,
+      "link": [5, 5],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 4,
+          "runway": {
+            "length": 12,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": [
+        "Max extra run speed $2.6.",
+        "This strat is included for completeness, though it apparently doesn't have any applications."
+      ]
+    },
+    {
+      "id": 71,
+      "link": [5, 5],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        {"or": [
+          {"canShineCharge": {"usedTiles": 20, "openEnd": 2}},
+          {"and": [
+            "canEnemyExtendRunway",
+            {"canShineCharge": {"usedTiles": 21, "openEnd": 2}}
+          ]}
+        ]},
+        {"shineChargeFrames": 90}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": "It is possible, although not overly useful, to extend the runway here using a snail."
+    },
+    {
+      "id": 72,
+      "link": [5, 5],
+      "name": "Leave Spinning (Close Runway)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 7,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 73,
+      "link": [5, 5],
+      "name": "Leave Spinning (Far Runway, Space Jump)",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 20,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 74,
+      "link": [5, 5],
+      "name": "Leave With Mockball (Close Runway)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 7,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 75,
+      "link": [5, 5],
+      "name": "Leave With Mockball (Far Runway)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 20,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$1.2"
+        }
+      }
+    },
+    {
+      "id": 76,
+      "link": [5, 5],
+      "name": "Leave With Spring Ball Bounce (Close Runway)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 77,
+      "link": [5, 5],
+      "name": "Leave With Spring Ball Bounce (Far Runway)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 20,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$0.F",
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 78,
+      "link": [5, 5],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 20,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 185,
+      "link": [5, 5],
+      "name": "Yard Farm (1 Yard)",
+      "requires": [
+        {"resetRoom": {"nodes": [5]}},
+        "h_useMorphBombs",
+        "canDodgeWhileShooting",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"cycleFrames": 220}
+          ]},
+          {"cycleFrames": 260}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Yard", "count": 1}]
+    },
+    {
+      "id": 79,
+      "link": [5, 5],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 80,
+      "link": [5, 5],
+      "name": "G-Mode Setup - Get Hit By Yard",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": [
+        "Requires no items or tech if you step on a Snail - canUseEnemies is necessary for G-Mode Setup."
+      ]
+    },
+    {
+      "id": 81,
+      "link": [5, 5],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Yard", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 82,
+      "link": [5, 7],
+      "name": "Snail Clip to the Items",
+      "requires": [
+        "Gravity",
+        "canUseEnemies",
+        {"or": [
+          "canPreciseCeilingClip",
+          "canXRayCeilingClip"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump on the Snail when it is at a precise location, and then crouch jump through the ceiling and jump again, without moving between jumps.",
+        "The Snail's positioning is very precise, but it is more lenient with Morph and an X-Ray Turn Around. X-Ray can also be useful for helping position the Snail."
+      ]
+    },
+    {
+      "id": 141,
+      "link": [5, 7],
+      "name": "Snail Clip with Morph to the Items",
+      "requires": [
+        {"notable": "Snail Clip With Gravity and Morph"},
+        "Gravity",
+        "canUseEnemies",
+        "Morph",
+        "canCeilingClip"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump on the Snail when it is at a precise location, and then crouch jump through the ceiling and jump again, without moving between jumps.",
+        "The Snail's positioning is very precise. Morph can be used to help get onto the Snail and get off without taking a hit if it is in the wrong location."
+      ]
+    },
+    {
+      "id": 83,
+      "link": [5, 7],
+      "name": "Shinespark",
+      "requires": [
+        "Gravity",
+        {"or": [
+          {"canShineCharge": {"usedTiles": 20, "openEnd": 2}},
+          {"and": [
+            "canEnemyExtendRunway",
+            {"canShineCharge": {"usedTiles": 21, "openEnd": 2}}
+          ]}
+        ]},
+        {"shinespark": {"frames": 25}}
+      ],
+      "devNote": [
+        "It is possible, although not overly useful, to extend the runway here using a snail.",
+        "FIXME: It is possible to use a snail here and in Shaktool's room to extend the runway at the door.",
+        "This can be useful when short charging, but can not be used to leave running, as running on the snail does not work."
+      ]
+    },
+    {
+      "id": 84,
+      "link": [5, 7],
+      "name": "Suitless Blue Bomber (HiJump, Come in Blue Spinning)",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "minExtraRunSpeed": "$3.4",
+          "maxExtraRunSpeed": "$4.C",
+          "unusableTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Suitless Blue Bomber"},
+        "canSuitlessMaridia",
+        "HiJump",
+        "canSpeedball",
+        "canTrickySpringBallBounce",
+        "canMomentumConservingMorph"
+      ],
+      "note": [
+        "Depending on Samus' speed and position, either perform a speedball or an uncontrolled bounce onto the platform below the Speed blocks.",
+        "Unmorph and continue holding up in order to break the Speed blocks while passing up through them.",
+        "The top Speed blocks will respawn; to get on top of them, it can help to press against the wall (to discard blue speed) and then aim down to reduce Samus' hitbox.",
+        "If available, using Grapple while aiming down can also help.",
+        "Alternatively, if Samus breaks only the right column of Speed blocks, Samus can use the center left Speed block as a stepping stone.",
+        "Be careful not to fall through the Speed blocks below as it will result in a softlock."
+      ],
+      "devNote": ["Slightly lower or higher speeds could work but with greater difficulty."]
+    },
+    {
+      "id": 85,
+      "link": [5, 7],
+      "name": "Suitless Blue Bomber (HiJump, Come in With Blue Spring Ball Bounce)",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled",
+          "minExtraRunSpeed": "$3.4",
+          "maxExtraRunSpeed": "$4.C"
+        }
+      },
+      "requires": [
+        {"notable": "Suitless Blue Bomber"},
+        "canSuitlessMaridia",
+        "HiJump",
+        "canTrickySpringBallBounce",
+        "canInsaneJump",
+        "canMomentumConservingMorph"
+      ],
+      "note": [
+        "Bounce onto the platform below the Speed blocks.",
+        "Unmorph and continue holding up in order to break the Speed blocks while passing up through them.",
+        "The top Speed blocks will respawn; to get on top of them, it can help to press against the wall (to discard blue speed) and then aim down to reduce Samus' hitbox.",
+        "If available, using Grapple while aiming down can also help.",
+        "Alternatively, if Samus breaks only the right column of Speed blocks, Samus can use the center left Speed block as a stepping stone.",
+        "Be careful not to fall through the Speed blocks below as it will result in a softlock."
+      ],
+      "devNote": ["Lower or higher speeds could work but with greater difficulty."]
+    },
+    {
+      "id": 86,
+      "link": [5, 7],
+      "name": "Suitless Blue Bomber (Tricky Dash Jump, Come in Blue Spinning)",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "minExtraRunSpeed": "$4.0",
+          "maxExtraRunSpeed": "$4.3",
+          "unusableTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Suitless Blue Bomber"},
+        "canSuitlessMaridia",
+        "canTrickyDashJump",
+        "canSpeedball",
+        "canTrickySpringBallBounce",
+        "canMomentumConservingMorph"
+      ],
+      "note": [
+        "In the previous room, perform a relatively precise 1-tap in order to gain blue speed with momentum in a specific range, then spin jump through the door transition.",
+        "Depending on Samus' speed and position, either perform a speedball or an uncontrolled bounce onto the platform below the Speed blocks.",
+        "Unmorph and continue holding up in order to break the Speed blocks while passing up through them.",
+        "The top Speed blocks will respawn; to get on top of them, it can help to press against the wall (to discard blue speed) and then aim down to reduce Samus' hitbox.",
+        "If available, using Grapple while aiming down can also help.",
+        "Alternatively, if Samus breaks only the right column of Speed blocks, Samus can use the center left Speed block as a stepping stone.",
+        "Be careful not to fall through the Speed blocks below as it will result in a softlock."
+      ]
+    },
+    {
+      "id": 87,
+      "link": [5, 7],
+      "name": "Suitless Blue Bomber (Tricky Dash Jump, Come in With Blue Spring Ball Bounce)",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled",
+          "minExtraRunSpeed": "$4.0",
+          "maxExtraRunSpeed": "$4.3"
+        }
+      },
+      "requires": [
+        {"notable": "Suitless Blue Bomber"},
+        "canSuitlessMaridia",
+        "canTrickyDashJump",
+        "canInsaneJump",
+        "canTrickySpringBallBounce",
+        "canMomentumConservingMorph"
+      ],
+      "note": [
+        "In the previous room, perform a relatively precise 1-tap in order to gain blue speed with momentum in a specific range, then use spring ball to bounce through the door transition.",
+        "Bounce onto the platform below the Speed blocks.",
+        "Unmorph and continue holding up in order to break the Speed blocks while passing up through them.",
+        "The top Speed blocks will respawn; to get on top of them, it can help to press against the wall (to discard blue speed) and then aim down to reduce Samus' hitbox.",
+        "If available, using Grapple while aiming down can also help.",
+        "Alternatively, if Samus breaks only the right column of Speed blocks, Samus can use the center left Speed block as a stepping stone.",
+        "Be careful not to fall through the Speed blocks below as it will result in a softlock."
+      ]
+    },
+    {
+      "id": 88,
+      "link": [5, 7],
+      "name": "Suitless Temporary Blue To Items",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        {"notable": "Suitless Temporary Blue To Items"},
+        "canSuitlessMaridia",
+        "HiJump",
+        "canChainTemporaryBlue",
+        "canTrickySpringBallJump",
+        {"or": [
+          "canXRayCeilingClip",
+          {"and": [
+            "h_jumpIntoCrystalFlashClip",
+            "Grapple"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Chain temporary blue to reach the Speed blocks below the items.",
+        "Perform a spring ball jump and immediately unmorph and continue holding up, to break some of the Speed blocks while passing up through them.",
+        "Leave one of the bottom Speed blocks unbroken to use as a platform.",
+        "The top speed blocks will respawn; clip through them either using a snail clip with X-Ray or a Crystal Flash clip;",
+        "In the case of a Crystal Flash clip, menu to Grapple before the Crystal Flash ends and mash shoot while holding down."
+      ]
+    },
+    {
+      "id": 144,
+      "link": [5, 7],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canUseEnemies",
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 13, "excessFrames": 4}},
+          {"and": [
+            {"shinespark": {"frames": 13, "excessFrames": 10}},
+            {"or": [
+              "canHighPixelCeilingClip",
+              {"and": [
+                "Gravity",
+                "canPreciseCeilingClip"
+              ]},
+              {"and": [
+                "Gravity",
+                "canXRayCeilingClip"
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Sparking up right from a snail can save some Energy.",
+        "With very little Energy, spark up the center of the speed blocks to clear both sides, then snail clip through the last one.",
+        "It may be helpful to turn around before sparking so the snail doesn't hit Samus."
+      ]
+    },
+    {
+      "id": 91,
+      "link": [5, 8],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 92,
+      "link": [5, 9],
+      "name": "Grapple Teleport (from Red Brinstar Firefleas)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 93,
+      "link": [5, 9],
+      "name": "Grapple Teleport (from Moat)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [],
+      "note": "Press down immediately after teleporting, in order to get above the bomb blocks."
+    },
+    {
+      "id": 94,
+      "link": [5, 10],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphSpringBall",
+          "Morph",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 95,
+      "link": [5, 11],
+      "name": "G-Mode Morph Overload PLMs - Bomb the Speed Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphBombs",
+        {"or": [
+          "h_artificialMorphSpringBall",
+          "Morph",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 167,
+      "link": [5, 11],
+      "name": "G-Mode Morph Overload PLMs - Power Bomb the Items",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canPowerBombItemOverloadPLMs",
+        {"notable": "G-Mode Overload PLMs - Power Bomb the Items"},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          {"itemNotCollectedAtNode": 7},
+          {"itemNotCollectedAtNode": 8}
+        ]},
+        "h_artificialMorphSpringBall",
+        "h_artificialMorphPowerBomb",
+        "h_artificialMorphPowerBomb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "PLMs can be overloaded in direct G-Mode with a single Power Bomb if both items are still there and 2 PBs if only one item is.",
+        "There is a row of tiles that works, just above and to the left of the right door.",
+        "The row is one tile higher than the horizontal pipe that is part of the door frame, spanning from the left to one tile away from the right wall."
+      ],
+      "devNote": [
+        "This canRiskPermanentLossOfAccess variant is only added from this door, as the only other place to use overloaded PLMs would be the top left bomb block,",
+        "and if you can get here artificially morphed, you can get to the top left and instead use the bomb on the block."
+      ]
+    },
+    {
+      "id": 168,
+      "link": [5, 12],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 169,
+      "link": [5, 13],
+      "name": "Direct G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphSpringBall",
+          "Morph"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "Strats that can go 5->13->7 will, others will go directly from 5->7.",
+        "Gravity + IBJ is not included, as there is no benefit of Direct G-mode with those items - it will go to 5->10 instead."
+      ]
+    },
+    {
+      "id": 97,
+      "link": [6, 1],
+      "name": "Temporary Blue Chain",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {
+          "direction": "left"
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ]
+    },
+    {
+      "id": 98,
+      "link": [6, 1],
+      "name": "Temporary Blue Chain (X-Ray Turnaround)",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {
+          "direction": "right"
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ]
+    },
+    {
+      "id": 99,
+      "link": [6, 1],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"and": [
+            "h_artificialMorphBombs",
+            {"or": [
+              "Gravity",
+              "h_artificialMorphSpringBall"
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: This is doable with just Bombs and entering on the left side."
+    },
+    {
+      "id": 100,
+      "link": [6, 5],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 35},
+        "Gravity",
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 78, "excessFrames": 16}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 101,
+      "link": [6, 5],
+      "name": "Suitless Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 55},
+        "canSuitlessMaridia",
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 99, "excessFrames": 29}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 146,
+      "link": [6, 6],
+      "name": "Leave With Grapple Jump",
+      "requires": [
+        "canPreciseGrappleJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "right"
+        }
+      },
+      "devNote": [
+        "FIXME: It's probably possible to leave in 'left' position, with an exceptionally precise swing and maybe a bit of arm pumping."
+      ]
+    },
+    {
+      "id": 102,
+      "link": [6, 6],
+      "name": "G-Mode Setup - Snail Platform",
+      "requires": [
+        "canUpwardGModeSetup",
+        "h_navigateUnderwater"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Use a clockwise or counter-clockwise snail to setup G-Mode on either side of the door."
+      ]
+    },
+    {
+      "id": 103,
+      "link": [6, 6],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Yard", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "devNote": "Requires entry on either side of the doorway, but not the center."
+    },
+    {
+      "id": 104,
+      "link": [6, 6],
+      "name": "Carry G-Mode Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "canUseEnemies",
+          {"and": [
+            "canCrouchJump",
+            "canTrickyJump"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 105,
+      "link": [6, 6],
+      "name": "Carry G-Mode Morph Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          {"and": [
+            "Gravity",
+            "h_artificialMorphSpringBall"
+          ]},
+          {"and": [
+            "HiJump",
+            "h_artificialMorphSpringBall"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 106,
+      "link": [6, 6],
+      "name": "Carry G-Mode Morph Back Up - Snail Platform",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphSpringBall",
+        "canUseEnemies",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "note": [
+        "It is easiest to use a single snail on the bottom of the ceiling to the right of the door.",
+        "Use at least a small amount of momentum before jumping over towards the snail."
+      ]
+    },
+    {
+      "id": 186,
+      "link": [6, 6],
+      "name": "Yard Farm (2 Yards)",
+      "requires": [
+        {"resetRoom": {"nodes": [6]}},
+        "h_useMorphBombs",
+        "canDodgeWhileShooting",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"cycleFrames": 2805}
+          ]},
+          {"and": [
+            "HiJump",
+            {"cycleFrames": 2870}
+          ]},
+          {"and": [
+            "canCrouchJump",
+            {"or": [
+              "canTrickyJump",
+              "canMorphTurnaround"
+            ]},
+            {"cycleFrames": 3405}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Yard", "count": 2}]
+    },
+    {
+      "id": 107,
+      "link": [6, 7],
+      "name": "Suitless Temporary Blue To Items",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {
+          "direction": "right"
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"notable": "Suitless Temporary Blue To Items"},
+        "canSuitlessMaridia",
+        "canChainTemporaryBlue",
+        {"ammo": {"type": "PowerBomb", "count": 1}},
+        "h_doubleSpringBallJumpWithHiJump",
+        {"or": [
+          "canXRayCeilingClip",
+          {"and": [
+            "h_jumpIntoCrystalFlashClip",
+            "Grapple"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Use a double spring ball jump to reach the Speed blocks below the items while chaining temporary blue.",
+        "Perform a spring ball jump and immediately unmorph and continue holding up, to break some of the Speed blocks while passing up through them.",
+        "Leave one of the bottom Speed blocks unbroken to use as a platform.",
+        "The top speed blocks will respawn; clip through them either using a snail clip with X-Ray or a Crystal Flash clip;",
+        "In the case of a Crystal Flash clip, menu to Grapple before the Crystal Flash ends and mash shoot while holding down."
+      ]
+    },
+    {
+      "id": 108,
+      "link": [6, 7],
+      "name": "Suitless Temporary Blue To Items (X-Ray Turnaround)",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {
+          "direction": "left"
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"notable": "Suitless Temporary Blue To Items"},
+        "canSuitlessMaridia",
+        "canChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"ammo": {"type": "PowerBomb", "count": 1}},
+        "h_doubleSpringBallJumpWithHiJump",
+        "canXRayCeilingClip"
+      ],
+      "note": [
+        "Use a double spring ball jump to reach the Speed blocks below the items while chaining temporary blue.",
+        "Perform a spring ball jump and immediately unmorph and continue holding up, to break some of the Speed blocks while passing up through them.",
+        "Leave one of the bottom Speed blocks unbroken to use as a platform.",
+        "The top speed blocks will respawn; clip through them either using a snail clip with X-Ray."
+      ]
+    },
+    {
+      "id": 111,
+      "link": [6, 9],
+      "name": "Base",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": []
+    },
+    {
+      "id": 112,
+      "link": [6, 10],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 170,
+      "link": [6, 12],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 171,
+      "link": [6, 13],
+      "name": "Direct G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 114,
+      "link": [7, 8],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 115,
+      "link": [8, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 116,
+      "link": [8, 7],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 117,
+      "link": [9, 1],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "h_destroyBombWalls"
+      ]
+    },
+    {
+      "id": 118,
+      "link": [9, 1],
+      "name": "Suitless",
+      "requires": [
+        "h_bombThings"
+      ]
+    },
+    {
+      "id": 119,
+      "link": [9, 1],
+      "name": "Snail Stuck Moonfall",
+      "requires": [
+        {"notable": "Snail Stuck Moonfall"},
+        "h_navigateUnderwater",
+        "canEnemyStuckMoonfall",
+        "canBePatient",
+        {"or": [
+          {"enemyDamage": {"enemy": "Yard", "type": "contact", "hits": 1}},
+          "canFreeFallClip"
+        ]}
+      ],
+      "note": [
+        "Use two snails to perform an 'Enemy Stuck Moonfall' to bypass the bomb blocks above the middle left door.",
+        "Position one snail on the above door shell, and the second above the corner of pipe below.",
+        "Samus will clip through the lower snail, taking damage, then continue through a segment of pipe where the crumble blocks can be reached.",
+        "Facing both snails during the moonfall while positioning Samus for the clip can be precise.",
+        "Depending on the exact heights of the snails, it may be necessary to pose change while clipping.",
+        "Damage from the snail can be avoided by shooting the snail at a precise time:",
+        "the water cycle or Samus' air bubbles can be used as a cue for the timing."
+      ]
+    },
+    {
+      "id": 120,
+      "link": [9, 1],
+      "name": "G-Mode Setup - Get Hit By Yard, from Above",
+      "requires": [
+        {"or": [
+          "h_useMorphBombs",
+          {"and": [
+            "Gravity",
+            "ScrewAttack"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "devNote": [
+        "It is probably possible to use a Power Bomb while the snail is far enough away and have it get here before the block respawns,",
+        "but it would make more sense to come through the Power Bomb blocks from below."
+      ]
+    },
+    {
+      "id": 121,
+      "link": [9, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 122,
+      "link": [9, 5],
+      "name": "Grapple",
+      "requires": [
+        "h_navigateUnderwater",
+        "Grapple"
+      ]
+    },
+    {
+      "id": 123,
+      "link": [9, 5],
+      "name": "Flatley Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canFlatleyJump",
+        "HiJump"
+      ]
+    },
+    {
+      "id": 124,
+      "link": [9, 5],
+      "name": "Air Ball",
+      "requires": [
+        "Gravity",
+        "canLateralMidAirMorph",
+        "canCarefulJump",
+        {"or": [
+          "canTrickyJump",
+          "canSpringBallBounce"
+        ]}
+      ]
+    },
+    {
+      "id": 125,
+      "link": [9, 5],
+      "name": "Tricky Spring Ball Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallJump",
+        {"or": [
+          "canSpringFling",
+          {"and": [
+            "canStationaryLateralMidAirMorph",
+            "canResetFallSpeed"
+          ]}
+        ]}
+      ],
+      "note": "Requires either a spring fling or a stationary lateral midair morph with an unmorph to reset fall speed."
+    },
+    {
+      "id": 126,
+      "link": [9, 5],
+      "name": "Spring Fling",
+      "requires": [
+        "canSuitlessMaridia",
+        "canSpringFling",
+        "canTrickySpringBallJump"
+      ]
+    },
+    {
+      "id": 127,
+      "link": [9, 6],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 128,
+      "link": [9, 6],
+      "name": "Top Door Snailstep",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseEnemies"
+      ],
+      "note": "Involves waiting around for a snail to come along, in order to reach the door by jumping while standing on it."
+    },
+    {
+      "id": 129,
+      "link": [9, 6],
+      "name": "Top Door Crouch Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canCrouchJump",
+        {"or": [
+          "canTrickyJump",
+          "canMorphTurnaround"
+        ]}
+      ],
+      "note": [
+        "Crouch on rightmost pixel of the ledge to the left of the door, jump then move over quickly without spin jumping.",
+        "The timing for the forward press needs to be between 0 and 5 frames after pressing jump (a 6-frame window).",
+        "Samus's subpixel position is important: X position needs to be at least $64.4000, this is the rightmost 75% of the rightmost pixel.",
+        "Morph provides an easier setup. From below the ledge, press left against the wall, jump, mid-air morph, and tap left to move slightly onto the ledge."
+      ]
+    },
+    {
+      "id": 130,
+      "link": [9, 9],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 131,
+      "link": [10, 1],
+      "name": "Overload PLMs - Bomb the Speed Blocks, To the Middle Left Door",
+      "requires": [
+        "canGMode",
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 172,
+      "link": [10, 1],
+      "name": "G-Mode Bomb the Block - Morphed Suitless Snail Climb",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphBombThings",
+        "h_artificialMorphSpringBall",
+        "canSnailClimb",
+        {"or": [
+          "HiJump",
+          "Gravity"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 173,
+      "link": [10, 1],
+      "name": "G-Mode Bomb the Block - Morphed Suitless Snail Climb, No Jump Assist",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphBombThings",
+        "h_artificialMorphSpringBall",
+        "canSnailClimb",
+        "canTrickyJump"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is barely possible to start a snail climb with just Spring Ball.",
+        "Get a snail positioned such that it is on the bottom of an overhang above, and sticking out a bit to be usable as a platform.",
+        "Use Spring Ball to jump and press against the snail for the maximum possible duration, in order to gain enough height to get onto it."
+      ]
+    },
+    {
+      "id": 132,
+      "link": [10, 2],
+      "name": "Break the Power Bomb Blocks",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Place a Power Bomb, then exit G-Mode to break the blocks."
+    },
+    {
+      "id": 174,
+      "link": [10, 10],
+      "name": "Power Bomb the Power Bomb Blocks - Break Later",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Place a Power Bomb by the blocks before overloading PLMs. If coming from the left door, this needs to be done before getting to this node.",
+      "devNote": "Obstacle A is not cleared until after exiting G-mode, but no strat in G-mode will use A and try to go through them."
+    },
+    {
+      "id": 134,
+      "link": [10, 11],
+      "name": "G-Mode Morph, Overload PLMs - Bomb the Speed Blocks",
+      "requires": [
+        "canGMode",
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 135,
+      "link": [10, 11],
+      "name": "G-Mode, Overload PLMs - Bomb the Speed Blocks",
+      "requires": [
+        "canGMode",
+        "h_useMorphBombs",
+        {"or": [
+          "canSnailClimb",
+          "Gravity",
+          "HiJump"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Bomb the Speed blocks by the right door."
+    },
+    {
+      "id": 136,
+      "link": [10, 11],
+      "name": "Overload PLMs - Morphed Suitless Snail Climb",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphBombs",
+        "HiJump",
+        "h_artificialMorphSpringBall",
+        "canSnailClimb"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 137,
+      "link": [10, 11],
+      "name": "Overload PLMs - Morphed Suitless Snail Climb, No Jump Assist",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphBombs",
+        "h_artificialMorphSpringBall",
+        "canSnailClimb",
+        "canTrickyJump"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is barely possible to start a snail climb with just Spring Ball.",
+        "Get a snail positioned such that it is on the bottom of an overhang above, and sticking out a bit to be usable as a platform.",
+        "Use Spring Ball to jump and press against the snail for the maximum possible duration, in order to gain enough height to get onto it."
+      ]
+    },
+    {
+      "id": 175,
+      "link": [10, 12],
+      "name": "G-Mode",
+      "requires": [
+        "canGMode"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 138,
+      "link": [11, 1],
+      "name": "G-Mode Overloaded PLMs Through the Bomb Blocks",
+      "requires": [
+        "canGMode",
+        {"or": [
+          "canSnailClimb",
+          {"and": [
+            "Gravity",
+            {"or": [
+              "SpaceJump",
+              "canConsecutiveWalljump"
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "After PLMs are overloaded, climb to the top left door and fall through the Bomb Blocks."
+    },
+    {
+      "id": 139,
+      "link": [11, 7],
+      "name": "G-Mode Overloaded PLMs Through the Speed Blocks",
+      "requires": [
+        "canGMode",
+        "canSnailClimb",
+        {"or": [
+          "Gravity",
+          "h_maxHeightSpringBallJump",
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canCrouchJump",
+              "canDownGrab"
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "After PLMs are overloaded, use a snail to help climb to the top right items."
+    },
+    {
+      "id": 164,
+      "link": [11, 7],
+      "name": "G-Mode Overloaded PLMs - Bootless UWJ",
+      "requires": [
+        "canGMode",
+        "canSnailClimb",
+        "canBootless2WideUWJ"
+      ],
+      "flashSuitChecked": true,
+      "note": "After PLMs are overloaded, use a snail to climb to the right then bootless UWJ to the items."
+    },
+    {
+      "id": 176,
+      "link": [12, 3],
+      "name": "Leave with G-Mode Snail Moonfall",
+      "requires": [
+        "canComplexGMode",
+        "h_navigateUnderwater",
+        "canEnemyStuckMoonfall",
+        {"or": [
+          "canFreeFallClip",
+          {"enemyDamage": {"enemy": "Yard", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Use two snails to moonfall down through the pipe to the section below.",
+        "The snails should be easy to align, with one on the floor and another on a ceiling 4 tiles higher.",
+        "Shoot the lower snail after Samus has enough fall speed in order to avoid taking a snail hit.",
+        "There is a small set of frames between these two, in which Samus will fall out of bounds.",
+        "With Gravity, there is approximately a 5 second fall, with a 15 frame window.",
+        "Suitless, there is approximately a 16 second fall, with almost a full second window - this is approximately 8 sets of bubbles out of Samus' arm."
+      ]
+    },
+    {
+      "id": 177,
+      "link": [12, 4],
+      "name": "Leave with G-Mode Snail Moonfall",
+      "requires": [
+        "canComplexGMode",
+        "h_navigateUnderwater",
+        "canEnemyStuckMoonfall",
+        {"or": [
+          "canFreeFallClip",
+          {"enemyDamage": {"enemy": "Yard", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Use two snails to moonfall down through the pipe to the section below.",
+        "The snails should be easy to align, with one on the floor and another on a ceiling 4 tiles higher.",
+        "Slide off or shoot the lower snail after Samus has enough fall speed in order to avoid taking a snail hit.",
+        "There is a small set of frames between these two, in which Samus will fall out of bounds.",
+        "With Gravity, there is approximately a 5 second fall, with a 15 frame window.",
+        "Suitless, there is approximately a 16 second fall, with almost a full second window - this is approximately 8 sets of bubbles out of Samus' arm."
+      ]
+    },
+    {
+      "id": 178,
+      "link": [12, 11],
+      "name": "G-Mode Overload PLMs with Grapple",
+      "requires": [
+        "canGMode",
+        "Grapple",
+        "h_navigateUnderwater"
+      ],
+      "flashSuitChecked": true,
+      "note": "Overload PLMs using the Grapple Blocks."
+    },
+    {
+      "id": 179,
+      "link": [12, 11],
+      "name": "G-Mode - Snail Moonfall, Touch the Sand, High Pixel Clip Return",
+      "requires": [
+        "canTrickyGMode",
+        "h_navigateUnderwater",
+        "canEnemyStuckMoonfall",
+        {"or": [
+          "canFreeFallClip",
+          {"enemyDamage": {"enemy": "Yard", "type": "contact", "hits": 1}}
+        ]},
+        "canHighPixelCeilingClip",
+        {"or": [
+          "canBeVeryPatient",
+          "h_useSpringBall",
+          {"and": [
+            "Gravity",
+            "SpaceJump"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use two snails to moonfall down through the pipe to the section below.",
+        "The snails should be easy to align, with one on the floor and another on a ceiling 4 tiles higher.",
+        "Slide off or shoot the lower snail after Samus has enough fall speed in order to avoid taking a snail hit.",
+        "There is a small set of frames between these two, in which Samus will fall out of bounds.",
+        "With Gravity, there is approximately a 5 second fall, with a 15 frame window.",
+        "Suitless, there is approximately a 16 second fall, with almost a full second window - this is approximately 8 sets of bubbles out of Samus' arm.",
+        "Clip down on the right side of the room without luring the snail underneath, or clip down in the center of the room with Spring Ball or Gravity and Space Jump and carefully cross the sand.",
+        "Stand partially on the sand's edge to quickly overload PLMs, then go to the right and set up a pixel-precise high ceiling snail clip first try."
+      ],
+      "devNote": [
+        "It is possible to try multiple times with Gravity+Space+patience by moving the snail around the bottom of the room.",
+        "It is also possible to use the gentle slopes in the middle of the room for a larger window ceiling clip, but the snails behave unusually",
+        "on slopes and it ends up not really being easier."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [13, 7],
+      "name": "G-Mode Overload PLMs - Power Bomb the Items (To the Items)",
+      "requires": [
+        "canPowerBombItemOverloadPLMs",
+        {"notable": "G-Mode Overload PLMs - Power Bomb the Items"},
+        {"or": [
+          {"itemNotCollectedAtNode": 7},
+          {"itemNotCollectedAtNode": 8}
+        ]},
+        "h_usePowerBomb",
+        "h_usePowerBomb",
+        "h_navigateUnderwater",
+        "canSnailClimb",
+        {"or": [
+          "Gravity",
+          "h_maxHeightSpringBallJump",
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canCrouchJump",
+              "canDownGrab"
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "PLMs can be overloaded in direct G-Mode with a single Power Bomb if both items are still there and 2 PBs if only one item is.",
+        "There is a row of tiles that works, just above and to the left of the right door.",
+        "The row is one tile higher than the horizontal pipe that is part of the door frame, spanning from the left to one tile away from the right wall."
+      ],
+      "devNote": "This does not include canRiskPermanentLossOfAccess, as it is only worth doing this strat if the items are there."
+    },
+    {
+      "id": 46,
+      "link": [13, 7],
+      "name": "G-Mode Morph Overload PLMs - Power Bomb the Items (To the Items)",
+      "requires": [
+        "canPowerBombItemOverloadPLMs",
+        {"notable": "G-Mode Overload PLMs - Power Bomb the Items"},
+        {"or": [
+          {"itemNotCollectedAtNode": 7},
+          {"itemNotCollectedAtNode": 8}
+        ]},
+        "h_artificialMorphSpringBall",
+        "h_artificialMorphPowerBomb",
+        "h_artificialMorphPowerBomb",
+        "h_navigateUnderwater",
+        "canSnailClimb",
+        {"or": [
+          "Gravity",
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canCrouchJump",
+              "canDownGrab"
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "PLMs can be overloaded in direct G-Mode with a single Power Bomb if both items are still there and 2 PBs if only one item is.",
+        "There is a row of tiles that works, just above and to the left of the right door.",
+        "The row is one tile higher than the horizontal pipe that is part of the door frame, spanning from the left to one tile away from the right wall."
+      ],
+      "devNote": "This does not include canRiskPermanentLossOfAccess, as it is only worth doing this strat if the items are there."
+    },
+    {
+      "id": 180,
+      "link": [13, 7],
+      "name": "G-Mode Overload PLMs - Power Bomb the Items, Bootless UWJ",
+      "requires": [
+        "canPowerBombItemOverloadPLMs",
+        {"notable": "G-Mode Overload PLMs - Power Bomb the Items"},
+        {"or": [
+          {"itemNotCollectedAtNode": 7},
+          {"itemNotCollectedAtNode": 8}
+        ]},
+        "h_usePowerBomb",
+        "h_usePowerBomb",
+        "canSnailClimb",
+        "canBootless2WideUWJ"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "PLMs can be overloaded in direct G-Mode with a single Power Bomb if both items are still there and 2 PBs if only one item is.",
+        "There is a row of tiles that works, just above and to the left of the right door.",
+        "The row is one tile higher than the horizontal pipe that is part of the door frame, spanning from the left to one tile away from the right wall.",
+        "Climb one snail to place the Power Bomb, then another to reduce the distance of the wall jump climb."
+      ],
+      "devNote": "This does not include canRiskPermanentLossOfAccess, as it is only worth doing this strat if the items are there."
+    },
+    {
+      "id": 181,
+      "link": [13, 7],
+      "name": "G-Mode Morph Overload PLMs - Power Bomb the Items, Bootless UWJ",
+      "requires": [
+        "canPowerBombItemOverloadPLMs",
+        {"notable": "G-Mode Overload PLMs - Power Bomb the Items"},
+        {"or": [
+          {"itemNotCollectedAtNode": 7},
+          {"itemNotCollectedAtNode": 8}
+        ]},
+        "h_artificialMorphSpringBall",
+        "h_artificialMorphPowerBomb",
+        "h_artificialMorphPowerBomb",
+        "canSnailClimb",
+        "canBootless2WideUWJ"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is barely possible to start a snail climb with just Spring Ball.",
+        "Get a snail positioned such that it is on the bottom of an overhang above, and sticking out a bit to be usable as a platform.",
+        "Use Spring Ball to jump and press against the snail for the maximum possible duration, in order to gain enough height to get onto it.",
+        "PLMs can be overloaded in direct G-Mode with a single Power Bomb if both items are still there and 2 PBs if only one item is.",
+        "There is a row of tiles that works, just above and to the left of the right door.",
+        "The row is one tile higher than the horizontal pipe that is part of the door frame, spanning from the left to one tile away from the right wall.",
+        "Climb one snail to place the Power Bomb, then another to reduce the distance of the wall jump climb."
+      ],
+      "devNote": "This does not include canRiskPermanentLossOfAccess, as it is only worth doing this strat if the items are there."
+    },
+    {
+      "id": 182,
+      "link": [13, 10],
+      "name": "G-Mode",
+      "requires": [
+        "canGMode"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 183,
+      "link": [13, 13],
+      "name": "Power Bomb the Power Bomb Blocks - Break Later",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Place a Power Bomb by the blocks before overloading PLMs.",
+      "devNote": "Obstacle A is not cleared until after exiting G-mode, but no strat in G-mode will use A and try to go through them."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Bootless Suitless Snail Climb",
+      "note": "Snail Climb without movement items by better coordinating the movements of both the snail and Samus."
+    },
+    {
+      "id": 2,
+      "name": "Snail Clip With Gravity and Morph",
+      "note": [
+        "Jump on the Snail when it is at a precise location, and then crouch jump through the ceiling and jump again, without moving between jumps.",
+        "The Snail's positioning is very precise. Morph can be used to help get onto the Snail and get off without taking a hit if it is in the wrong location.",
+        "This clip can be used to get to the middle left door and the items in the top right of the room."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "G-Mode Overload PLMs - Power Bomb the Items",
+      "note": [
+        "PLMs can be overloaded in direct G-Mode with a single Power Bomb if both items are still there and 2 PBs if only one item is.",
+        "There is a row of tiles that works, just above and to the left of the right door.",
+        "The row is one tile higher than the horizontal pipe that is part of the door frame, spanning from the left to one tile away from the right wall."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Suitless Blue Bomber",
+      "note": [
+        "Perform a speedball or an uncontrolled bounce onto the platform below the Speed blocks.",
+        "Unmorph and continue holding up in order to break the Speed blocks while passing up through them.",
+        "The top Speed blocks will respawn; to get on top of them, it can help to press against the wall (to discard blue speed) and then aim down to reduce Samus' hitbox.",
+        "If available, using Grapple while aiming down can also help.",
+        "Alternatively, if Samus breaks only the right column of Speed blocks, Samus can use the center left Speed block as a stepping stone.",
+        "Be careful not to fall through the Speed blocks below as it will result in a softlock."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Suitless Temporary Blue To Items",
+      "note": [
+        "Reach the Speed blocks below the items while chaining temporary blue.",
+        "Perform a spring ball jump and immediately unmorph and continue holding up, to break some of the Speed blocks while passing up through them.",
+        "Leave one of the bottom Speed blocks unbroken to use as a platform.",
+        "The top speed blocks will respawn; clip through them either using a snail clip with X-Ray or a Crystal Flash clip;",
+        "In the case of a Crystal Flash clip, menu to Grapple before the Crystal Flash ends and mash shoot while holding down."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Left-Side X-Ray Climb (Upper)",
+      "note": [
+        "Climb up 1 screen.",
+        "Aim to end this XRay climb when Samus is visually near but not above the top of the left side door.",
+        "Fall out of the wall by turning to the right, from a crouch if possible.",
+        "This XRay climb has a window of 4 crouches, but with a way to break bomb blocks it can be ended earlier."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "High Pixel Suitless Bootless Snail Clip, Use Flash Suit",
+      "note": [
+        "Position the snail low on the ceiling so that Samus can get onto it.",
+        "Wait for another snail and position it on the high pixel without using x-ray.",
+        "Ceiling clip then use the flash suit while in the crouched pose that Samus is already in to spark vertically and clip through the next block.",
+        "Changing pose will make it so Samus is no longer able to spark."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Blue Space Jump",
+      "note": [
+        "Gain blue speed by running right-to-left on the 20-tile runway below the items.",
+        "Then use Space Jump to carry it across the top of the room to break the bomb blocks.",
+        "To cross the room most easily, blue speed can be gained with low momentum by pressing pause, running a few tiles, stuttering just before the pause hits, disabling Gravity suit, continuing to run left, then re-enabling Gravity suit before jumping.",
+        "Alternatively, a regular shortcharge can be used in combination with either HiJump or a precise amount of extra run speed ($2.0 or $2.1), to cross the room at higher speed."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Snail Stuck Moonfall",
+      "note": [
+        "Use two snails to perform an 'Enemy Stuck Moonfall' to bypass the bomb blocks above the middle left door.",
+        "Position one snail on the above door shell, and the second above the corner of pipe below",
+        "Samus will clip through the lower snail, taking damage, then continue through a segment of pipe where the crumble blocks can be reached.",
+        "Facing both snails during the moonfall while positioning Samus for the clip can be precise",
+        "Depending on the exact heights of the snails, it may be necessary to pose change while clipping."
+      ]
+    }
+  ],
+  "nextStratId": 187,
+  "nextNotableId": 10,
+  "devNote": [
+    "FIXME: An obstacle or two could be added to represent the bomb blocks and crumble blocks, and simple 1->9 strats could be added;",
+    "this is complicated by the fact that the bomb blocks respawn, but there could still be time to unlock the door at 1 and return before they respawn, or they could be broken a second time."
+  ]
+}

@@ -1,0 +1,145 @@
+{% extends 'randomizer/layouts/default.html' %}
+
+{% block content %}
+    <h1>Flag & Mode Explanations</h1>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Mechanical changes to Super Mario RPG</h3>
+        </div>
+        <div class="card-body">
+            <h4>File Select Changes</h4>
+            <ul>
+                <li>The character that appears on the file select screen is randomized.</li>
+                <li>The names of the four save slots are randomized (no longer MARIO1, MARIO2, etc).</li>
+                <li>The combination of the character and save slot names serves as a verification hash value to
+                    confirm that racers all have the same seed.
+                </li>
+            </ul>
+            <h4>General Gameplay Changes</h4>
+            <ul>
+                <li>Mario is now swappable with other characters in the party.</li>
+                <li>The maximum number of coins you can hold is increased to 9999.  Item prices in shops can also go
+                    above 999 as a result of this.
+                </li>
+                <li>The Seed, Fertilizer, and Bright Card items are now Special Items that cannot be sold and do not
+                    take up normal inventory space.
+                </li>
+            </ul>
+            <h4>Cutscene Skip</h4>
+            <p>The randomizer applies a patch which skips most of the cutscenes and text in the game. This patch
+                only works on the US or EU version, since the EU version is based on the US one. Only these regions
+                are supported as a result.</p>
+            <h4>Equipment & Psychopath</h4>
+            <ul>
+            <li>Equipment descriptions as seen in game menus will explain what the equipment piece does. <a href="{% url 'randomizer:guide' %}#equipment">Here is an explanation on the symbols used to describe stats and buffs.</a></li>
+            <li>The Psychopath spell, when <a target="_blank" href="http://pidgezero.one/timings/index.html#Psychopath">properly timed</a>, will explain elements the enemy is weak to, elements it is immune to, and status effects that it is weak to. <a href="{% url 'randomizer:guide' %}#spells-yours">Here is an explanation on the symbols used.</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Progression Modes</h3>
+        </div>
+        <div class="card-body">
+            <h4>Open</h4>
+            <p>The primary open world mode of this randomizer!  Open mode significantly changes the base game in a
+                number of ways.  In general, this is a non-linear mode
+                where almost the entire map is open to you from the beginning.  You must recover the star pieces (in any
+                order) to open the way to the Factory and the endgame.  This means you can go into high level areas at a
+                comparitively low level, so save often!
+            </p>
+            <ul>
+                <li>The first star pieces must be collected in order to open the path to Bowser's Keep/Factory.</li>
+                <li>Those star pieces may not be on their vanilla bosses, depending on the flags used.</li>
+                <li>Smithy must still be defeated to finish the game as normal.</li>
+                <li>Dying to any of the bosses in Bowser's Keep after the doors (Magikoopa, Boomer, Exor) will return
+                    you to Mario's Pad like the beginning of the game.  This is to avoid the situation where the player
+                    goes through Bowser's Keep but is unable to defeat the bosses at the end to progress.  If you wish
+                    to retry a boss fight, you can reset to the save point manually.
+                </li>
+                <li>It is now possible to save in between the Boomer and Exor fights in Bowser's Keep.  After defeating
+                    Boomer, you are returned to the entrance of the throne room.  Approaching the throne a second time
+                    will begin the Exor fight.
+                </li>
+                <li>After defeating Exor, you will be placed back in the throne room instead of being transported to the
+                    factory.  You can leave the keep by entering the statue mouth behind the throne.
+                </li>
+                <li>Melody Bay songs 2 and 3 are unlocked by clearing the Moleville Mountain minecart ride and defeating
+                    Belome 2 respectively.  Song 1 is available to be played from the start.
+                </li>
+                <li>Melody Bay songs must still be played in order to get the items at those spots!</li>
+            </ul>
+            <h4>Linear</h4>
+            <p>The legacy mode from the original version of the randomizer. In Linear mode, while the most of the
+                cutscenes and text have been removed, the actual progression
+                of the plot and collection of the star pieces remains the same as the vanilla game. Story events will
+                occur where they are supposed to, characters will join your party at the expected points (although which
+                character it is can be randomized if desired), and stars will be awarded from the same bosses.
+            </p>
+            <p><strong>NOTE:</strong> This is a <strong>LEGACY</strong> mode!  Many flags are unavailable in this mode,
+                and new features are <strong>NOT</strong> being added to this as a general rule!  It is significantly
+                different from the main open world mode, and has only been kept intact to preserve some of the
+                experience of the original version of the randomizer made by abyssonym.
+            </p>
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Flags</h3>
+        </div>
+        <div class="card-body">
+            <p>The flags can significantly change the randomizer experience.  They are broken into categories:</p>
+            {% for category in categories %}
+                <div class="card border-info my-2">
+                    <div class="card-header">
+                        <h5 class="card-title">{{ category.name }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            {% for flag in category.flags %}
+                                <li>{{ flag.name }}</li>
+                                <ul>
+                                    {% if flag.description_as_markdown %}
+                                        <li>{{ flag.description_as_markdown }}</li>
+                                    {% endif %}
+
+                                    {% if flag.choices %}
+                                        {% for choice in flag.choices %}
+                                            <li>{{ choice.name }}</li>
+                                            {% if choice.description_as_markdown %}
+                                                <ul>
+                                                    <li>{{ choice.description_as_markdown }}</li>
+                                                </ul>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    {% if flag.options %}
+                                        {% for option in flag.options %}
+                                            <li>{{ option.name }}</li>
+                                            {% if option.description_as_markdown %}
+                                                <ul>
+                                                    <li>{{ option.description_as_markdown }}</li>
+                                                </ul>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="card border-info my-3">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Seed</h3>
+        </div>
+        <div class="card-body">
+            <p>Seed is a number used to randomize the game. If you want to generate the same game as somebody else
+                for racing, you can enter an exact seed here. If you just want a fresh experience, leave this blank
+                and the site will generate it automatically.</p>
+        </div>
+    </div>
+{% endblock %}

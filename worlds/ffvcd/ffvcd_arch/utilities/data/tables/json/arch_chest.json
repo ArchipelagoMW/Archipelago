@@ -1,0 +1,1766 @@
+{
+    "71": {
+        "address": "D13212",
+        "original_reward": "Broadsword",
+        "area": "Wind Shrine",
+        "description": "Wind Shrine Chest",
+        "reward_style": "chest"
+    },
+    "72": {
+        "address": "D13216",
+        "original_reward": "Ether",
+        "area": "Tule",
+        "description": "Beginner's House Chest",
+        "reward_style": "chest"
+    },
+    "73": {
+        "address": "D1321A",
+        "original_reward": "100",
+        "area": "Tule",
+        "description": "Beginner's House Chest",
+        "reward_style": "chest"
+    },
+    "74": {
+        "address": "D1321E",
+        "original_reward": "Potion",
+        "area": "Tule",
+        "description": "Beginner's House Chest",
+        "reward_style": "chest"
+    },
+    "75": {
+        "address": "D13222",
+        "original_reward": "Phoenix Down",
+        "area": "Tule",
+        "description": "Beginner's House Chest",
+        "reward_style": "chest"
+    },
+    "76": {
+        "address": "D13226",
+        "original_reward": "Tent",
+        "area": "Tule",
+        "description": "Beginner's House Chest",
+        "reward_style": "chest"
+    },
+    "77": {
+        "address": "D1322A",
+        "original_reward": "Leather Shoes",
+        "area": "Tule",
+        "description": "Beginner's House Chest MIB 1",
+        "reward_style": "mib_key"
+    },
+    "78": {
+        "address": "D1322E",
+        "original_reward": "Leather Cap",
+        "area": "Pirate's Cave",
+        "description": "Pirate's Cave Chest",
+        "reward_style": "chest"
+    },
+    "79": {
+        "address": "D13232",
+        "original_reward": "Tent",
+        "area": "Pirate's Cave",
+        "description": "Pirate's Cave Chest",
+        "reward_style": "chest"
+    },
+    "80": {
+        "address": "D13236",
+        "original_reward": "Ether",
+        "area": "Pirate's Cave",
+        "description": "Pirate's Cave Chest",
+        "reward_style": "chest"
+    },
+    "81": {
+        "address": "D1323A",
+        "original_reward": "300",
+        "area": "Pirate's Cave",
+        "description": "Pirate's Cave Chest",
+        "reward_style": "chest"
+    },
+    "82": {
+        "address": "D1323E",
+        "original_reward": "Tent",
+        "area": "Wind Shrine",
+        "description": "Wind Shrine Chest",
+        "reward_style": "chest"
+    },
+    "83": {
+        "address": "D13242",
+        "original_reward": "Leather Cap",
+        "area": "Wind Shrine",
+        "description": "Wind Shrine Chest",
+        "reward_style": "chest"
+    },
+    "84": {
+        "address": "D13246",
+        "original_reward": "Staff",
+        "area": "Wind Shrine",
+        "description": "Wind Shrine Chest",
+        "reward_style": "chest"
+    },
+    "85": {
+        "address": "D1324A",
+        "original_reward": "150",
+        "area": "Tule",
+        "description": "Tule Barrel",
+        "reward_style": "chest"
+    },
+    "86": {
+        "address": "D1324E",
+        "original_reward": "Leather Shoes",
+        "area": "Tule",
+        "description": "Tule Box",
+        "reward_style": "chest"
+    },
+    "87": {
+        "address": "D13252",
+        "original_reward": "Potion",
+        "area": "Tule",
+        "description": "Tule Barrel",
+        "reward_style": "chest"
+    },
+    "88": {
+        "address": "D13256",
+        "original_reward": "Tent",
+        "area": "Tule",
+        "description": "Tule Box",
+        "reward_style": "chest"
+    },
+    "89": {
+        "address": "D1325A",
+        "original_reward": "Phoenix Down",
+        "area": "Tule",
+        "description": "Tule Bush",
+        "reward_style": "chest"
+    },
+    "90": {
+        "address": "D1325E",
+        "original_reward": "Flail",
+        "area": "Ship Graveyard",
+        "description": "Ship Graveyard Chest",
+        "reward_style": "chest"
+    },
+    "91": {
+        "address": "D13262",
+        "original_reward": "Phoenix Down",
+        "area": "Ship Graveyard",
+        "description": "Ship Graveyard Chest",
+        "reward_style": "chest"
+    },
+    "92": {
+        "address": "D13266",
+        "original_reward": "Tent",
+        "area": "Ship Graveyard",
+        "description": "Ship Graveyard Chest",
+        "reward_style": "chest"
+    },
+    "93": {
+        "address": "D1326A",
+        "original_reward": "990",
+        "area": "Ship Graveyard",
+        "description": "Ship Graveyard Box",
+        "reward_style": "chest"
+    },
+    "94": {
+        "address": "D1326E",
+        "original_reward": "Potion",
+        "area": "Ship Graveyard",
+        "description": "Ship Graveyard Chest",
+        "reward_style": "chest"
+    },
+    "95": {
+        "address": "D13272",
+        "original_reward": "Antidote",
+        "area": "Ship Graveyard",
+        "description": "Ship Graveyard Chest",
+        "reward_style": "chest"
+    },
+    "96": {
+        "address": "D13276",
+        "original_reward": "Antidote",
+        "area": "Ship Graveyard",
+        "description": "Ship Graveyard Chest",
+        "reward_style": "chest"
+    },
+    "97": {
+        "address": "D1327A",
+        "original_reward": "Phoenix Down",
+        "area": "Ship Graveyard",
+        "description": "Ship Graveyard Chest",
+        "reward_style": "chest"
+    },
+    "98": {
+        "address": "D1327E",
+        "original_reward": "Antidote",
+        "area": "Carwen",
+        "description": "Carwen Barrel",
+        "reward_style": "chest"
+    },
+    "99": {
+        "address": "D13282",
+        "original_reward": "Ice Rod",
+        "area": "Carwen",
+        "description": "Carwen Box",
+        "reward_style": "chest"
+    },
+    "100": {
+        "address": "D13286",
+        "original_reward": "1000",
+        "area": "Carwen",
+        "description": "Carwen Pot",
+        "reward_style": "chest"
+    },
+    "101": {
+        "address": "D1328A",
+        "original_reward": "Soft",
+        "area": "North Mountain",
+        "description": "North Mountain Chest",
+        "reward_style": "chest"
+    },
+    "102": {
+        "address": "D1328E",
+        "original_reward": "Phoenix Down",
+        "area": "North Mountain",
+        "description": "North Mountain Chest",
+        "reward_style": "chest"
+    },
+    "103": {
+        "address": "D13292",
+        "original_reward": "Glasses",
+        "area": "Walse",
+        "description": "Walse Town Pot",
+        "reward_style": "chest"
+    },
+    "104": {
+        "address": "D13296",
+        "original_reward": "Hi-Potion",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Castle Pot",
+        "reward_style": "chest"
+    },
+    "105": {
+        "address": "D1329A",
+        "original_reward": "Ether",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Castle Pot",
+        "reward_style": "chest"
+    },
+    "106": {
+        "address": "D1329E",
+        "original_reward": "Elixir",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Castle Barrel",
+        "reward_style": "chest"
+    },
+    "107": {
+        "address": "D132A2",
+        "original_reward": "Phoenix Down",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Castle Barrel",
+        "reward_style": "chest"
+    },
+    "108": {
+        "address": "D132A6",
+        "original_reward": "Cabin",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Castle Barrel",
+        "reward_style": "chest"
+    },
+    "109": {
+        "address": "D132AA",
+        "original_reward": "Ether",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Castle Pot",
+        "reward_style": "chest"
+    },
+    "110": {
+        "address": "D132AE",
+        "original_reward": "Elixir",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Castle Pot",
+        "reward_style": "chest"
+    },
+    "111": {
+        "address": "D132B2",
+        "original_reward": "Phoenix Down",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Castle Pot",
+        "reward_style": "chest"
+    },
+    "112": {
+        "address": "D132B6",
+        "original_reward": "Maiden's Kiss",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Castle Pot",
+        "reward_style": "chest"
+    },
+    "113": {
+        "address": "D132BA",
+        "original_reward": "Shuriken",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Castle Chest",
+        "reward_style": "chest"
+    },
+    "114": {
+        "address": "D132BE",
+        "original_reward": "Giyaman",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Castle Chest",
+        "reward_style": "chest"
+    },
+    "115": {
+        "address": "D132C2",
+        "original_reward": "Katana",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Castle Chest",
+        "reward_style": "chest"
+    },
+    "116": {
+        "address": "D132C6",
+        "original_reward": "Elf Cape",
+        "area": "Walse",
+        "description": "Walse Castle Chest",
+        "reward_style": "chest"
+    },
+    "117": {
+        "address": "D132CA",
+        "original_reward": "1000",
+        "area": "Walse",
+        "description": "Walse Castle Pot",
+        "reward_style": "chest"
+    },
+    "118": {
+        "address": "D132CE",
+        "original_reward": "Drag",
+        "area": "Walse",
+        "description": "Walse Castle Pot",
+        "reward_style": "chest"
+    },
+    "119": {
+        "address": "D132D2",
+        "original_reward": "1000",
+        "area": "Walse",
+        "description": "Walse Castle Pot",
+        "reward_style": "chest"
+    },
+    "120": {
+        "address": "D132D6",
+        "original_reward": "490",
+        "area": "Walse",
+        "description": "Walse Castle Box",
+        "reward_style": "chest"
+    },
+    "121": {
+        "address": "D132DA",
+        "original_reward": "Tent",
+        "area": "Walse",
+        "description": "Walse Castle Barrel",
+        "reward_style": "chest"
+    },
+    "122": {
+        "address": "D132DE",
+        "original_reward": "Phoenix Down",
+        "area": "Walse",
+        "description": "Walse Castle Barrel",
+        "reward_style": "chest"
+    },
+    "123": {
+        "address": "D132E2",
+        "original_reward": "Silk robe",
+        "area": "Walse",
+        "description": "Walse Tower Chest",
+        "reward_style": "chest"
+    },
+    "124": {
+        "address": "D132E6",
+        "original_reward": "Maiden's Kiss",
+        "area": "Walse",
+        "description": "Walse Tower Chest",
+        "reward_style": "chest"
+    },
+    "125": {
+        "address": "D132EA",
+        "original_reward": "Silver Armlet",
+        "area": "Walse",
+        "description": "Walse Tower Chest",
+        "reward_style": "chest"
+    },
+    "126": {
+        "address": "D132EE",
+        "original_reward": "Ether",
+        "area": "Walse",
+        "description": "Walse Tower Chest",
+        "reward_style": "chest"
+    },
+    "127": {
+        "address": "D132F2",
+        "original_reward": "Phoenix Down",
+        "area": "Tycoon Castle",
+        "description": "Tycoon Meteor Chest",
+        "reward_style": "chest"
+    },
+    "128": {
+        "address": "D132F6",
+        "original_reward": "Heavy Spear",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest MIB 1",
+        "reward_style": "mib_key"
+    },
+    "129": {
+        "address": "D132FA",
+        "original_reward": "Thunder Scroll",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest MIB 2",
+        "reward_style": "mib_key"
+    },
+    "130": {
+        "address": "D132FE",
+        "original_reward": "2000",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest",
+        "reward_style": "chest"
+    },
+    "131": {
+        "address": "D13302",
+        "original_reward": "Elixir",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest MIB 3",
+        "reward_style": "mib_key"
+    },
+    "132": {
+        "address": "D13306",
+        "original_reward": "Elixir",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest",
+        "reward_style": "chest"
+    },
+    "133": {
+        "address": "D1330A",
+        "original_reward": "Elixir",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest",
+        "reward_style": "chest"
+    },
+    "134": {
+        "address": "D1330E",
+        "original_reward": "2000",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest",
+        "reward_style": "chest"
+    },
+    "135": {
+        "address": "D13312",
+        "original_reward": "Elixir",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest",
+        "reward_style": "chest"
+    },
+    "136": {
+        "address": "D13316",
+        "original_reward": "Elixir",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest",
+        "reward_style": "chest"
+    },
+    "137": {
+        "address": "D1331A",
+        "original_reward": "Ribbon",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest",
+        "reward_style": "chest"
+    },
+    "138": {
+        "address": "D1331E",
+        "original_reward": "Shuriken",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest",
+        "reward_style": "chest"
+    },
+    "139": {
+        "address": "D13322",
+        "original_reward": "2000",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest",
+        "reward_style": "chest"
+    },
+    "140": {
+        "address": "D13326",
+        "original_reward": "Elixir",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest",
+        "reward_style": "chest"
+    },
+    "141": {
+        "address": "D1332A",
+        "original_reward": "Elf Cape",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest",
+        "reward_style": "chest"
+    },
+    "142": {
+        "address": "D1332E",
+        "original_reward": "Guardian",
+        "area": "Karnak",
+        "description": "Karnak Castle Chest",
+        "reward_style": "chest"
+    },
+    "143": {
+        "address": "D13332",
+        "original_reward": "Fire Rod",
+        "area": "Steamship",
+        "description": "Karnak Town Barrel",
+        "reward_style": "chest"
+    },
+    "144": {
+        "address": "D13336",
+        "original_reward": "Cabin",
+        "area": "Steamship",
+        "description": "Steamship Chest",
+        "reward_style": "chest"
+    },
+    "145": {
+        "address": "D1333A",
+        "original_reward": "Phoenix Down",
+        "area": "Steamship",
+        "description": "Steamship Chest",
+        "reward_style": "chest"
+    },
+    "146": {
+        "address": "D1333E",
+        "original_reward": "Elixir",
+        "area": "Steamship",
+        "description": "Steamship Chest",
+        "reward_style": "chest"
+    },
+    "147": {
+        "address": "D13342",
+        "original_reward": "GrnBeret",
+        "area": "Steamship",
+        "description": "Steamship Chest",
+        "reward_style": "chest"
+    },
+    "148": {
+        "address": "D13346",
+        "original_reward": "Thief's Glove",
+        "area": "Steamship",
+        "description": "Steamship Chest",
+        "reward_style": "chest"
+    },
+    "149": {
+        "address": "D1334A",
+        "original_reward": "Elixir",
+        "area": "Steamship",
+        "description": "Steamship Chest",
+        "reward_style": "chest"
+    },
+    "150": {
+        "address": "D1334E",
+        "original_reward": "Ether",
+        "area": "Ancient Library",
+        "description": "Ancient Library Chest",
+        "reward_style": "chest"
+    },
+    "151": {
+        "address": "D13352",
+        "original_reward": "Phoenix Down",
+        "area": "Ancient Library",
+        "description": "Ancient Library Chest",
+        "reward_style": "chest"
+    },
+    "152": {
+        "address": "D13356",
+        "original_reward": "Stealth Suit",
+        "area": "Ancient Library",
+        "description": "Ancient Library Chest",
+        "reward_style": "chest"
+    },
+    "153": {
+        "address": "D1335A",
+        "original_reward": "Shuriken",
+        "area": "Jacole",
+        "description": "Jacole Cave Chest",
+        "reward_style": "chest"
+    },
+    "154": {
+        "address": "D1335E",
+        "original_reward": "Tent",
+        "area": "Jacole",
+        "description": "Jacole Cave Chest",
+        "reward_style": "chest"
+    },
+    "155": {
+        "address": "D13362",
+        "original_reward": "Shuriken",
+        "area": "Ruined City",
+        "description": "Ruined City Chest",
+        "reward_style": "chest"
+    },
+    "156": {
+        "address": "D13366",
+        "original_reward": "Shuriken",
+        "area": "Ruined City",
+        "description": "Ruined City Chest",
+        "reward_style": "chest"
+    },
+    "157": {
+        "address": "D1336A",
+        "original_reward": "Size",
+        "area": "Ruined City",
+        "description": "Ruined City Chest",
+        "reward_style": "chest"
+    },
+    "158": {
+        "address": "D1336E",
+        "original_reward": "Golden Armor",
+        "area": "Flying Lonka Ruins",
+        "description": "Flying Lonka Ruins Chest",
+        "reward_style": "chest"
+    },
+    "159": {
+        "address": "D13372",
+        "original_reward": "Elixir",
+        "area": "Flying Lonka Ruins",
+        "description": "Flying Lonka Ruins Chest",
+        "reward_style": "chest"
+    },
+    "160": {
+        "address": "D13376",
+        "original_reward": "Phoenix Down",
+        "area": "Flying Lonka Ruins",
+        "description": "Flying Lonka Ruins Chest",
+        "reward_style": "chest"
+    },
+    "161": {
+        "address": "D1337A",
+        "original_reward": "Golden Shield",
+        "area": "Flying Lonka Ruins",
+        "description": "Flying Lonka Ruins Chest",
+        "reward_style": "chest"
+    },
+    "162": {
+        "address": "D1337E",
+        "original_reward": "Mythril Glove",
+        "area": "Steamship",
+        "description": "Steamship Chest",
+        "reward_style": "chest"
+    },
+    "163": {
+        "address": "D13382",
+        "original_reward": "Elixir",
+        "area": "Steamship",
+        "description": "Steamship Chest",
+        "reward_style": "chest"
+    },
+    "164": {
+        "address": "D13386",
+        "original_reward": "Full Moon",
+        "area": "Steamship",
+        "description": "Steamship Chest",
+        "reward_style": "chest"
+    },
+    "165": {
+        "address": "D1338A",
+        "original_reward": "Hi-Potion",
+        "area": "Flying Lonka Ruins",
+        "description": "Flying Lonka Ruins Chest",
+        "reward_style": "chest"
+    },
+    "166": {
+        "address": "D1338E",
+        "original_reward": "5000",
+        "area": "Flying Lonka Ruins",
+        "description": "Flying Lonka Ruins Chest",
+        "reward_style": "chest"
+    },
+    "167": {
+        "address": "D13392",
+        "original_reward": "Shuriken",
+        "area": "Flying Lonka Ruins",
+        "description": "Flying Lonka Ruins Chest",
+        "reward_style": "chest"
+    },
+    "168": {
+        "address": "D13396",
+        "original_reward": "Ancient Sword",
+        "area": "Flying Lonka Ruins",
+        "description": "Flying Lonka Ruins Chest",
+        "reward_style": "chest"
+    },
+    "169": {
+        "address": "D1339A",
+        "original_reward": "Full Moon",
+        "area": "Flying Lonka Ruins",
+        "description": "Flying Lonka Ruins Chest",
+        "reward_style": "chest"
+    },
+    "170": {
+        "address": "D1339E",
+        "original_reward": "Power Wrist",
+        "area": "Flying Lonka Ruins",
+        "description": "Flying Lonka Ruins Chest",
+        "reward_style": "chest"
+    },
+    "171": {
+        "address": "D133A2",
+        "original_reward": "Ether",
+        "area": "Flying Lonka Ruins",
+        "description": "Flying Lonka Ruins Chest",
+        "reward_style": "chest"
+    },
+    "172": {
+        "address": "D133A6",
+        "original_reward": "Cabin",
+        "area": "Exdeath's Castle",
+        "description": "Flying Lonka Ruins Chest",
+        "reward_style": "chest"
+    },
+    "173": {
+        "address": "D133AA",
+        "original_reward": "Ether",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "174": {
+        "address": "D133AE",
+        "original_reward": "Diamond Shield",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "175": {
+        "address": "D133B2",
+        "original_reward": "Ice Shield",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "176": {
+        "address": "D133B6",
+        "original_reward": "Ether",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "177": {
+        "address": "D133BA",
+        "original_reward": "Elixir",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "178": {
+        "address": "D133BE",
+        "original_reward": "Gale Bow",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "179": {
+        "address": "D133C2",
+        "original_reward": "IceBrand",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "180": {
+        "address": "D133C6",
+        "original_reward": "Kotetsu",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "181": {
+        "address": "D133CA",
+        "original_reward": "9900",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "182": {
+        "address": "D133CE",
+        "original_reward": "Elixir",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "183": {
+        "address": "D133D2",
+        "original_reward": "8000",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "184": {
+        "address": "D133D6",
+        "original_reward": "DblLance",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "185": {
+        "address": "D133DA",
+        "original_reward": "Partisan",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "186": {
+        "address": "D133DE",
+        "original_reward": "Pinwheel",
+        "area": "Exdeath's Castle",
+        "description": "Exdeath's Castle Chest",
+        "reward_style": "chest"
+    },
+    "187": {
+        "address": "D133E2",
+        "original_reward": "4400",
+        "area": "Moogle Village",
+        "description": "Moogle Cave Chest",
+        "reward_style": "chest"
+    },
+    "188": {
+        "address": "D133E6",
+        "original_reward": "Phoenix Down",
+        "area": "Moogle Village",
+        "description": "Moogle Cave Chest",
+        "reward_style": "chest"
+    },
+    "189": {
+        "address": "D133EA",
+        "original_reward": "Cabin",
+        "area": "Moogle Village",
+        "description": "Moogle Village Chest",
+        "reward_style": "chest"
+    },
+    "190": {
+        "address": "D133EE",
+        "original_reward": "Dancing Dagger",
+        "area": "Moogle Village",
+        "description": "Moogle Village Chest",
+        "reward_style": "chest"
+    },
+    "191": {
+        "address": "D133F2",
+        "original_reward": "1",
+        "area": "Moogle Village",
+        "description": "Moogle Village Chest",
+        "reward_style": "chest"
+    },
+    "192": {
+        "address": "D133F6",
+        "original_reward": "10000",
+        "area": "Moogle Village",
+        "description": "Moogle Village Chest",
+        "reward_style": "chest"
+    },
+    "193": {
+        "address": "D133FA",
+        "original_reward": "Phoenix Down",
+        "area": "Moogle Village",
+        "description": "Moogle Village Chest",
+        "reward_style": "chest"
+    },
+    "194": {
+        "address": "D133FE",
+        "original_reward": "Ether",
+        "area": "Moogle Village",
+        "description": "Moogle Village Chest",
+        "reward_style": "chest"
+    },
+    "195": {
+        "address": "D13402",
+        "original_reward": "Elf Cape",
+        "area": "Moogle Village",
+        "description": "Moogle Village Chest",
+        "reward_style": "chest"
+    },
+    "196": {
+        "address": "D13406",
+        "original_reward": "Angel Gwn",
+        "area": "Bal Castle",
+        "description": "Bal Castle Chest",
+        "reward_style": "chest"
+    },
+    "197": {
+        "address": "D1340A",
+        "original_reward": "Hero Drink",
+        "area": "Bal Castle",
+        "description": "Bal Castle Chest",
+        "reward_style": "chest"
+    },
+    "198": {
+        "address": "D1340E",
+        "original_reward": "Exit",
+        "area": "Bal Castle",
+        "description": "Bal Castle Chest",
+        "reward_style": "chest"
+    },
+    "199": {
+        "address": "D13412",
+        "original_reward": "Bone Mail",
+        "area": "Hiryuu Valley",
+        "description": "Hiryuu Valley Skull",
+        "reward_style": "chest"
+    },
+    "200": {
+        "address": "D13416",
+        "original_reward": "5000",
+        "area": "Hiryuu Valley",
+        "description": "Hiryuu Valley Chest",
+        "reward_style": "chest"
+    },
+    "201": {
+        "address": "D1341A",
+        "original_reward": "Cabin",
+        "area": "Hiryuu Valley",
+        "description": "Hiryuu Valley Chest",
+        "reward_style": "chest"
+    },
+    "202": {
+        "address": "D1341E",
+        "original_reward": "7000",
+        "area": "Hiryuu Valley",
+        "description": "Hiryuu Valley Chest",
+        "reward_style": "chest"
+    },
+    "203": {
+        "address": "D13422",
+        "original_reward": "Hypno Helm",
+        "area": "Hiryuu Valley",
+        "description": "Hiryuu Valley Chest",
+        "reward_style": "chest"
+    },
+    "204": {
+        "address": "D13426",
+        "original_reward": "Air Blade",
+        "area": "Hiryuu Valley",
+        "description": "Hiryuu Valley Chest",
+        "reward_style": "chest"
+    },
+    "205": {
+        "address": "D1342A",
+        "original_reward": "Phoenix Down",
+        "area": "Hiryuu Valley",
+        "description": "Hiryuu Valley Chest",
+        "reward_style": "chest"
+    },
+    "206": {
+        "address": "D1342E",
+        "original_reward": "5000",
+        "area": "Surgate Castle",
+        "description": "Surgate Castle Chest",
+        "reward_style": "chest"
+    },
+    "207": {
+        "address": "D13432",
+        "original_reward": "Float",
+        "area": "Surgate Castle",
+        "description": "Surgate Castle Chest",
+        "reward_style": "chest"
+    },
+    "208": {
+        "address": "D13436",
+        "original_reward": "Drain Sword",
+        "area": "Barrier Tower",
+        "description": "Barrier Tower Chest MIB 1",
+        "reward_style": "mib_key"
+    },
+    "209": {
+        "address": "D1343A",
+        "original_reward": "9000",
+        "area": "Barrier Tower",
+        "description": "Barrier Tower Chest",
+        "reward_style": "chest"
+    },
+    "210": {
+        "address": "D1343E",
+        "original_reward": "18000",
+        "area": "Barrier Tower",
+        "description": "Barrier Tower Chest",
+        "reward_style": "chest"
+    },
+    "211": {
+        "address": "D13442",
+        "original_reward": "Gold Hairpin",
+        "area": "Barrier Tower",
+        "description": "Barrier Tower Chest MIB 2",
+        "reward_style": "mib_key"
+    },
+    "212": {
+        "address": "D13446",
+        "original_reward": "Guardian",
+        "area": "Mua",
+        "description": "Mua Town Barrel",
+        "reward_style": "chest"
+    },
+    "213": {
+        "address": "D1344A",
+        "original_reward": "2500",
+        "area": "Mua",
+        "description": "Mua Forest Chest",
+        "reward_style": "chest"
+    },
+    "214": {
+        "address": "D1344E",
+        "original_reward": "Ether",
+        "area": "Mua",
+        "description": "Mua Forest Chest",
+        "reward_style": "chest"
+    },
+    "215": {
+        "address": "D13452",
+        "original_reward": "4900",
+        "area": "Mua",
+        "description": "Mua Forest Chest",
+        "reward_style": "chest"
+    },
+    "216": {
+        "address": "D13456",
+        "original_reward": "Phoenix Down",
+        "area": "Mua",
+        "description": "Mua Forest Chest",
+        "reward_style": "chest"
+    },
+    "217": {
+        "address": "D1345A",
+        "original_reward": "9500",
+        "area": "Mua",
+        "description": "Mua Forest Chest",
+        "reward_style": "chest"
+    },
+    "218": {
+        "address": "D1345E",
+        "original_reward": "Soot",
+        "area": "Mua",
+        "description": "Mua Forest Chest",
+        "reward_style": "chest"
+    },
+    "219": {
+        "address": "D13462",
+        "original_reward": "Flametongue",
+        "area": "Mua",
+        "description": "Mua Forest Chest",
+        "reward_style": "chest"
+    },
+    "220": {
+        "address": "D13466",
+        "original_reward": "Cabin",
+        "area": "Mua",
+        "description": "Mua Forest Chest",
+        "reward_style": "chest"
+    },
+    "221": {
+        "address": "D1346A",
+        "original_reward": "Giant Drink",
+        "area": "Mua",
+        "description": "Mua Forest Chest",
+        "reward_style": "chest"
+    },
+    "222": {
+        "address": "D1346E",
+        "original_reward": "Elixir",
+        "area": "Mua",
+        "description": "Mua Forest Chest",
+        "reward_style": "chest"
+    },
+    "223": {
+        "address": "D13472",
+        "original_reward": "Morning Star",
+        "area": "Mua",
+        "description": "Mua Forest Chest",
+        "reward_style": "chest"
+    },
+    "224": {
+        "address": "D13476",
+        "original_reward": "Ether",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest",
+        "reward_style": "chest"
+    },
+    "225": {
+        "address": "D1347A",
+        "original_reward": "DragonFang",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest",
+        "reward_style": "chest"
+    },
+    "226": {
+        "address": "D1347E",
+        "original_reward": "Elixir",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "227": {
+        "address": "D13482",
+        "original_reward": "Elixir",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "228": {
+        "address": "D13486",
+        "original_reward": "Black Robe",
+        "area": "Pyramid",
+        "description": "Pyramid Chest MIB 1",
+        "reward_style": "mib_key"
+    },
+    "229": {
+        "address": "D1348A",
+        "original_reward": "Thornlet",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "230": {
+        "address": "D1348E",
+        "original_reward": "DarkMatter",
+        "area": "Pyramid",
+        "description": "Pyramid Chest MIB 2",
+        "reward_style": "mib_key"
+    },
+    "231": {
+        "address": "D13492",
+        "original_reward": "Crystal Armor",
+        "area": "Pyramid",
+        "description": "Pyramid Chest MIB 3",
+        "reward_style": "mib_key"
+    },
+    "232": {
+        "address": "D13496",
+        "original_reward": "Cursed Ring",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "233": {
+        "address": "D1349A",
+        "original_reward": "Ice Shield",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "234": {
+        "address": "D1349E",
+        "original_reward": "Flame Shield",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "235": {
+        "address": "D134A2",
+        "original_reward": "DarkMatter",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "236": {
+        "address": "D134A6",
+        "original_reward": "White Robe",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "237": {
+        "address": "D134AA",
+        "original_reward": "DarkSuit",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "238": {
+        "address": "D134AE",
+        "original_reward": "DarkMatter",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "239": {
+        "address": "D134B2",
+        "original_reward": "DarkMatter",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "240": {
+        "address": "D134B6",
+        "original_reward": "DarkMatter",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "241": {
+        "address": "D134BA",
+        "original_reward": "9000",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "242": {
+        "address": "D134BE",
+        "original_reward": "8000",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "243": {
+        "address": "D134C2",
+        "original_reward": "Earth Hammer",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "244": {
+        "address": "D134C6",
+        "original_reward": "10000",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "245": {
+        "address": "D134CA",
+        "original_reward": "Cabin",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "246": {
+        "address": "D134CE",
+        "original_reward": "Elixir",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "247": {
+        "address": "D134D2",
+        "original_reward": "12000",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "248": {
+        "address": "D134D6",
+        "original_reward": "DarkMatter",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "249": {
+        "address": "D134DA",
+        "original_reward": "Elixir",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "250": {
+        "address": "D134DE",
+        "original_reward": "DarkMatter",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "251": {
+        "address": "D134E2",
+        "original_reward": "Guard Ring",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "252": {
+        "address": "D134E6",
+        "original_reward": "Ribbon",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "253": {
+        "address": "D134EA",
+        "original_reward": "Gold Hairpin",
+        "area": "Pyramid",
+        "description": "Pyramid Chest",
+        "reward_style": "chest"
+    },
+    "254": {
+        "address": "D134EE",
+        "original_reward": "12000",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest",
+        "reward_style": "chest"
+    },
+    "255": {
+        "address": "D134F2",
+        "original_reward": "Hi-Potion",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest",
+        "reward_style": "chest"
+    },
+    "256": {
+        "address": "D134F6",
+        "original_reward": "Protect Drink",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest",
+        "reward_style": "chest"
+    },
+    "257": {
+        "address": "D134FA",
+        "original_reward": "BeastKiller",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest",
+        "reward_style": "chest"
+    },
+    "258": {
+        "address": "D134FE",
+        "original_reward": "RisingSun",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest MIB 1",
+        "reward_style": "mib_key"
+    },
+    "259": {
+        "address": "D13502",
+        "original_reward": "Ether",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest",
+        "reward_style": "chest"
+    },
+    "260": {
+        "address": "D13506",
+        "original_reward": "Guard Ring",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest MIB 2",
+        "reward_style": "mib_key"
+    },
+    "261": {
+        "address": "D1350A",
+        "original_reward": "Crystal Helm",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest",
+        "reward_style": "chest"
+    },
+    "262": {
+        "address": "D1350E",
+        "original_reward": "9000",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest",
+        "reward_style": "chest"
+    },
+    "263": {
+        "address": "D13512",
+        "original_reward": "Elixir",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest",
+        "reward_style": "chest"
+    },
+    "264": {
+        "address": "D13516",
+        "original_reward": "DarkMatter",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest",
+        "reward_style": "chest"
+    },
+    "265": {
+        "address": "D1351A",
+        "original_reward": "Circlet",
+        "area": "Solitary Island",
+        "description": "Solitary Island Chest",
+        "reward_style": "chest"
+    },
+    "266": {
+        "address": "D1351E",
+        "original_reward": "Ether",
+        "area": "Fork Tower",
+        "description": "Fork Tower L. Chest",
+        "reward_style": "chest"
+    },
+    "267": {
+        "address": "D13522",
+        "original_reward": "Wonder Wand",
+        "area": "Fork Tower",
+        "description": "Fork Tower L. Chest",
+        "reward_style": "chest"
+    },
+    "268": {
+        "address": "D13526",
+        "original_reward": "Hi-Potion",
+        "area": "Fork Tower",
+        "description": "Fork Tower R. Chest",
+        "reward_style": "chest"
+    },
+    "269": {
+        "address": "D1352A",
+        "original_reward": "Defender Sword",
+        "area": "Fork Tower",
+        "description": "Fork Tower R. Chest",
+        "reward_style": "chest"
+    },
+    "270": {
+        "address": "D1352E",
+        "original_reward": "Water Scroll",
+        "area": "Great Trench",
+        "description": "Great Trench Chest",
+        "reward_style": "chest"
+    },
+    "271": {
+        "address": "D13532",
+        "original_reward": "Flame Ring",
+        "area": "Great Trench",
+        "description": "Great Trench Chest",
+        "reward_style": "chest"
+    },
+    "272": {
+        "address": "D13536",
+        "original_reward": "DragonFang",
+        "area": "Great Trench",
+        "description": "Great Trench Chest",
+        "reward_style": "chest"
+    },
+    "273": {
+        "address": "D1353A",
+        "original_reward": "Ether",
+        "area": "Great Trench",
+        "description": "Great Trench Chest",
+        "reward_style": "chest"
+    },
+    "274": {
+        "address": "D1353E",
+        "original_reward": "Phoenix Down",
+        "area": "Great Trench",
+        "description": "Great Trench Chest",
+        "reward_style": "chest"
+    },
+    "275": {
+        "address": "D13542",
+        "original_reward": "Kaiser Knuckles",
+        "area": "Istory Falls",
+        "description": "Great Trench Chest",
+        "reward_style": "chest"
+    },
+    "276": {
+        "address": "D13546",
+        "original_reward": "Ether",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "277": {
+        "address": "D1354A",
+        "original_reward": "TurtleShell",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "278": {
+        "address": "D1354E",
+        "original_reward": "Air Knife",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "279": {
+        "address": "D13552",
+        "original_reward": "Giant Drink",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "280": {
+        "address": "D13556",
+        "original_reward": "RuneEdge",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "281": {
+        "address": "D1355A",
+        "original_reward": "Guard Ring",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "282": {
+        "address": "D1355E",
+        "original_reward": "Wall Ring",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "283": {
+        "address": "D13562",
+        "original_reward": "Phoenix Down",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "284": {
+        "address": "D13566",
+        "original_reward": "Enhancer",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "285": {
+        "address": "D1356A",
+        "original_reward": "12000",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "286": {
+        "address": "D1356E",
+        "original_reward": "Artemis Bow",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "287": {
+        "address": "D13572",
+        "original_reward": "Pinwheel",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "288": {
+        "address": "D13576",
+        "original_reward": "Aegis Shield",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "289": {
+        "address": "D1357A",
+        "original_reward": "Giant's Axe",
+        "area": "Istory Falls",
+        "description": "Istory Falls Chest",
+        "reward_style": "chest"
+    },
+    "290": {
+        "address": "D1357E",
+        "original_reward": "5000",
+        "area": "Phoenix Tower",
+        "description": "Phoenix Tower Pot",
+        "reward_style": "chest"
+    },
+    "291": {
+        "address": "D13582",
+        "original_reward": "Phoenix Down",
+        "area": "Phoenix Tower",
+        "description": "Phoenix Tower Pot",
+        "reward_style": "chest"
+    },
+    "292": {
+        "address": "D13586",
+        "original_reward": "10000",
+        "area": "Phoenix Tower",
+        "description": "Phoenix Tower Pot",
+        "reward_style": "chest"
+    },
+    "293": {
+        "address": "D1358A",
+        "original_reward": "Phoenix Down",
+        "area": "Phoenix Tower",
+        "description": "Phoenix Tower Pot",
+        "reward_style": "chest"
+    },
+    "294": {
+        "address": "D1358E",
+        "original_reward": "Phoenix Down",
+        "area": "Phoenix Tower",
+        "description": "Phoenix Tower Pot",
+        "reward_style": "chest"
+    },
+    "295": {
+        "address": "D13592",
+        "original_reward": "15000",
+        "area": "Phoenix Tower",
+        "description": "Phoenix Tower Pot",
+        "reward_style": "chest"
+    },
+    "296": {
+        "address": "D13596",
+        "original_reward": "20000",
+        "area": "Phoenix Tower",
+        "description": "Phoenix Tower Pot",
+        "reward_style": "chest"
+    },
+    "297": {
+        "address": "D1359A",
+        "original_reward": "Phoenix Down",
+        "area": "Phoenix Tower",
+        "description": "Phoenix Tower Pot",
+        "reward_style": "chest"
+    },
+    "298": {
+        "address": "D1359E",
+        "original_reward": "Avis Killer",
+        "area": "Phoenix Tower",
+        "description": "Phoenix Tower Pot",
+        "reward_style": "chest"
+    },
+    "299": {
+        "address": "D135A2",
+        "original_reward": "25000",
+        "area": "Phoenix Tower",
+        "description": "Phoenix Tower Pot",
+        "reward_style": "chest"
+    },
+    "300": {
+        "address": "D135A6",
+        "original_reward": "Thief Knife",
+        "area": "Mirage Village",
+        "description": "Mirage Village Barrel",
+        "reward_style": "chest"
+    },
+    "301": {
+        "address": "D135AA",
+        "original_reward": "Ether",
+        "area": "Rift",
+        "description": "Rift (Ruins) Chest",
+        "reward_style": "chest"
+    },
+    "302": {
+        "address": "D135AE",
+        "original_reward": "Cabin",
+        "area": "Rift",
+        "description": "Rift (Ruins) Chest",
+        "reward_style": "chest"
+    },
+    "303": {
+        "address": "D135B2",
+        "original_reward": "Elixir",
+        "area": "Rift",
+        "description": "Rift (Ruins) Chest",
+        "reward_style": "chest"
+    },
+    "304": {
+        "address": "D135B6",
+        "original_reward": "DarkMatter",
+        "area": "Rift",
+        "description": "Rift (Ruins) Chest",
+        "reward_style": "chest"
+    },
+    "305": {
+        "address": "D135BA",
+        "original_reward": "Elixir",
+        "area": "Rift",
+        "description": "Rift (Ruins) Chest",
+        "reward_style": "chest"
+    },
+    "306": {
+        "address": "D135BE",
+        "original_reward": "Drain Sword",
+        "area": "Rift",
+        "description": "Rift (Ruins) Chest",
+        "reward_style": "chest"
+    },
+    "307": {
+        "address": "D135C2",
+        "original_reward": "DragonFang",
+        "area": "Rift",
+        "description": "Rift (Forest) Chest",
+        "reward_style": "chest"
+    },
+    "308": {
+        "address": "D135C6",
+        "original_reward": "Ribbon",
+        "area": "Rift",
+        "description": "Rift (Forest) Chest",
+        "reward_style": "chest"
+    },
+    "309": {
+        "address": "D135CA",
+        "original_reward": "Enhancer",
+        "area": "Rift",
+        "description": "Rift (Forest) Chest",
+        "reward_style": "chest"
+    },
+    "310": {
+        "address": "D135CE",
+        "original_reward": "Lillith Rod",
+        "area": "Rift",
+        "description": "Rift (Forest) Chest",
+        "reward_style": "chest"
+    },
+    "311": {
+        "address": "D135D2",
+        "original_reward": "Angel Ring",
+        "area": "Rift",
+        "description": "Rift (Cave) Chest",
+        "reward_style": "chest"
+    },
+    "312": {
+        "address": "D135D6",
+        "original_reward": "Coral Ring",
+        "area": "Rift",
+        "description": "Rift (Cave) Chest",
+        "reward_style": "chest"
+    },
+    "313": {
+        "address": "D135DA",
+        "original_reward": "Thor Hammer",
+        "area": "Rift",
+        "description": "Rift (Castle) Chest",
+        "reward_style": "chest"
+    },
+    "314": {
+        "address": "D135DE",
+        "original_reward": "Running Shoes",
+        "area": "Rift",
+        "description": "Rift (Castle) Chest",
+        "reward_style": "chest"
+    },
+    "315": {
+        "address": "D135E2",
+        "original_reward": "Red Shoes",
+        "area": "Rift",
+        "description": "Rift (Castle) Chest",
+        "reward_style": "chest"
+    },
+    "316": {
+        "address": "D135E6",
+        "original_reward": "Rainbow Dress",
+        "area": "Rift",
+        "description": "Rift (Castle) Chest",
+        "reward_style": "chest"
+    },
+    "317": {
+        "address": "D135EA",
+        "original_reward": "ManEater",
+        "area": "Rift",
+        "description": "Rift (Castle) Chest",
+        "reward_style": "chest"
+    },
+    "318": {
+        "address": "D135EE",
+        "original_reward": "Pinwheel",
+        "area": "Void",
+        "description": "The Void Chest",
+        "reward_style": "chest"
+    },
+    "319": {
+        "address": "D135F2",
+        "original_reward": "Pinwheel",
+        "area": "Void",
+        "description": "The Void Chest",
+        "reward_style": "chest"
+    },
+    "320": {
+        "address": "D135F6",
+        "original_reward": "Elixir",
+        "area": "Void",
+        "description": "The Void Chest",
+        "reward_style": "chest"
+    },
+    "321": {
+        "address": "D135FA",
+        "original_reward": "Ragnarok",
+        "area": "Void",
+        "description": "The Void Chest",
+        "reward_style": "chest"
+    },
+    "322": {
+        "address": "D135FE",
+        "original_reward": "Pinwheel",
+        "area": "Void",
+        "description": "The Void Chest",
+        "reward_style": "chest"
+    }
+}

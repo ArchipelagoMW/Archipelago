@@ -1,0 +1,489 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 205,
+  "name": "Below Botwoon Energy Tank",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Pink",
+  "roomAddress": "0x7D6FD",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a7d4",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [2, 2, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Left Sand Entrance",
+      "nodeType": "entrance",
+      "nodeSubType": "sandpit",
+      "doorOrientation": "up",
+      "mapTileMask": [
+        [1, 1, 2, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Right Sand Entrance",
+      "nodeType": "entrance",
+      "nodeSubType": "sandpit",
+      "doorOrientation": "up",
+      "mapTileMask": [
+        [1, 1, 1, 2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Owtch",
+      "obstacleType": "enemies"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Below Botwoon E-Tank Left Zoas",
+      "enemyName": "Zoa",
+      "quantity": 3,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Below Botwoon E-Tank Middle Zoa",
+      "enemyName": "Zoa",
+      "quantity": 1,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e3",
+      "groupName": "Below Botwoon E-Tank Right Zoa",
+      "enemyName": "Zoa",
+      "quantity": 1,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e4",
+      "groupName": "Below Botwoon E-Tank Owtch",
+      "enemyName": "Owtch",
+      "quantity": 1,
+      "homeNodes": [1]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {
+          "id": 3,
+          "devNote": "This link refers specifically to crossing on frozen enemies."
+        }
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {
+          "id": 1,
+          "devNote": "This link refers specifically to crossing on frozen enemies."
+        },
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Zoa",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "The Zoa needs to be at least 3 pixels higher than when it is frozen at standing height.",
+        "It may help to freeze one while standing to the left of it before it starts moving horizontally,",
+        "then move to a specific point on the slope to the right of it to position it vertically.",
+        "Freeze the Zoa a half-tile away from the runway in order to extend it as much as possible."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Zoa Farm",
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          {"and": [
+            {"or": [
+              "Gravity",
+              "Grapple",
+              "canPlayInSand"
+            ]},
+            {"simpleCycleFrames": 85},
+            {"cycleFrames": 30}
+          ]},
+          {"cycleFrames": 200}
+        ]},
+        {"or": [
+          "Wave",
+          "Spazer",
+          "Plasma",
+          "Grapple",
+          {"cycleFrames": 25}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Zoa", "count": 3}]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Kill the Owtch",
+      "requires": [
+        {"or": [
+          "h_usePowerBomb",
+          "Plasma",
+          "Charge",
+          {"ammo": {"type": "Super", "count": 1}},
+          {"and": [
+            "Gravity",
+            {"getBlueSpeed": {
+              "usedTiles": 16,
+              "gentleUpTiles": 2,
+              "gentleDownTiles": 2,
+              "steepUpTiles": 1,
+              "openEnd": 1
+            }}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "The Owtch can be killed with a Power Bomb or blue speed, or while it is moving leftward with a Super, Charge, or Plasma.",
+      "devNote": [
+        "FIXME: Add alternatives that evade the Owtch rather than killing it (either here or on the strats that rely on obstacle 'A' cleared)."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "Gravity",
+        "canTrickyDashJump",
+        {"or": [
+          "canMomentumConservingMorph",
+          "canMomentumConservingTurnaround"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 1,
+          "runway": {
+            "length": 23,
+            "openEnd": 1,
+            "gentleUpTiles": 2,
+            "gentleDownTiles": 2,
+            "steepUpTiles": 1
+          },
+          "obstruction": [3, 0]
+        }
+      },
+      "devNote": [
+        "Max extra run speed $4.B.",
+        "FIXME: The canTrickyDashJump is for difficulty placement but could probably be replaced by a more fitting tech,",
+        "since this isn't actually relying on a spike in jump height based on gaining a specific speed."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "Gravity",
+        "canShinechargeMovement",
+        {"canShineCharge": {
+          "usedTiles": 23,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 2,
+          "steepUpTiles": 1,
+          "openEnd": 1
+        }},
+        {"shineChargeFrames": 35}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 22,
+            "openEnd": 1,
+            "gentleUpTiles": 2,
+            "gentleDownTiles": 2,
+            "steepUpTiles": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 21,
+            "openEnd": 1,
+            "gentleUpTiles": 2,
+            "gentleDownTiles": 2,
+            "steepUpTiles": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 18,
+            "openEnd": 1,
+            "gentleUpTiles": 2,
+            "gentleDownTiles": 2,
+            "steepUpTiles": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 20,
+            "openEnd": 1,
+            "gentleUpTiles": 2,
+            "gentleDownTiles": 2,
+            "steepUpTiles": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "Gravity",
+        {"canShineCharge": {
+          "usedTiles": 23,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 2,
+          "steepUpTiles": 1,
+          "openEnd": 1
+        }},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Zoa",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Lure the Zoas. Jump so that they start moving horizontally higher, use spin jumps to move horizontally faster while keeping them on screen."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 13,
+      "link": [1, 3],
+      "name": "Frozen Zoa Bridge",
+      "requires": [
+        "h_navigateUnderwater",
+        "canTrickyUseFrozenEnemies",
+        "canPlayInSand"
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 3],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "h_navigateUnderwater"
+      ],
+      "devNote": "The expectation is to fall down the left side of the sand entrance."
+    },
+    {
+      "id": 16,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 3],
+      "name": "Suitless",
+      "requires": [
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        {"or": [
+          "HiJump",
+          "canEscapeSand",
+          "h_useMorphBombs"
+        ]}
+      ]
+    },
+    {
+      "id": 18,
+      "link": [3, 1],
+      "name": "Frozen Zoa Bridge",
+      "requires": [
+        "h_navigateUnderwater",
+        "canTrickyUseFrozenEnemies",
+        "canPlayInSand"
+      ]
+    },
+    {
+      "id": 19,
+      "link": [3, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 20,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 21,
+      "link": [3, 2],
+      "name": "Suitless",
+      "requires": [
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        {"or": [
+          "HiJump",
+          "canEscapeSand",
+          "h_useMorphBombs"
+        ]}
+      ]
+    }
+  ],
+  "notables": [],
+  "nextStratId": 23,
+  "nextNotableId": 1
+}

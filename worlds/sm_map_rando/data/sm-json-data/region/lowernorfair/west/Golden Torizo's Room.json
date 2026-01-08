@@ -1,0 +1,2084 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 150,
+  "name": "Golden Torizo's Room",
+  "area": "Norfair",
+  "subarea": "Lower",
+  "subsubarea": "West",
+  "roomAddress": "0x7B283",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019876",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x0019882",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Golden Torizo Room Gray Lock (to Screw Attack)",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedGoldenTorizo"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [1, 1],
+        [1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Left Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78E6E",
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Hidden Right Item",
+      "nodeType": "item",
+      "nodeSubType": "hidden",
+      "nodeItem": "Super",
+      "nodeAddress": "0x78E74",
+      "mapTileMask": [
+        [1, 2],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Golden Torizo",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1],
+        [2, 2]
+      ],
+      "devNote": "FIXME: This node can be eliminated."
+    },
+    {
+      "id": 6,
+      "name": "Golden Torizo Arena Junction (Fight Not Started)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "viewableNodes": [
+        {
+          "id": 4,
+          "strats": [
+            {
+              "name": "Base",
+              "requires": [
+                "h_navigateHeatRooms",
+                {"or": [
+                  "Wave",
+                  {"and": [
+                    "h_usePowerBomb",
+                    {"or": [
+                      "canTrivialMidAirMorph",
+                      "h_useSpringBall"
+                    ]}
+                  ]}
+                ]},
+                {"or": [
+                  {"and": [
+                    "f_DefeatedGoldenTorizo",
+                    "canWalljump"
+                  ]},
+                  "HiJump",
+                  "SpaceJump",
+                  {"and": [
+                    "canJumpIntoIBJ",
+                    "canTrickyJump",
+                    {"heatFrames": 300}
+                  ]}
+                ]},
+                {"heatFrames": 180}
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [1, 1],
+        [2, 2]
+      ]
+    },
+    {
+      "id": 7,
+      "name": "G-Mode Junction (Bottom of Room)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1],
+        [2, 2]
+      ],
+      "note": "Represents being at the bottom of the room with G-Mode"
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Gold Torizo Trigger",
+      "obstacleType": "abstract"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Golden Torizo",
+      "enemyName": "Golden Torizo",
+      "quantity": 1,
+      "homeNodes": [5],
+      "stopSpawn": ["f_DefeatedGoldenTorizo"]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 4},
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 2},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {
+          "id": 2,
+          "devNote": "This link indicates passing below GT before the fight has time to begin."
+        },
+        {
+          "id": 4,
+          "devNote": [
+            "These links can collect the Super Item Location without starting the GT encounter.",
+            "There are more precise strats, but it is more reasonable to active GT before attempting them."
+          ]
+        },
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 64,
+      "link": [1, 1],
+      "name": "Direct G-Mode, Remote Acquire",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_heatedDirectGModeLeaveSameDoor"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 65,
+      "link": [1, 2],
+      "name": "G-Mode, Bomb Spread to Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "Charge",
+        "h_useMorphBombs",
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Avoid stepping on all three crumble blocks. Use many bomb spreads to place bombs on them and overload PLMs before going through.",
+        "After dropping below, move to the door quickly in order to prevent GT falling on Samus."
+      ],
+      "devNote": [
+        "This strat forces Samus to leave the room because the camera is stuck at the top left of the room.",
+        "FIXME: It is possible to get to the top right item, but its not easy or too useful. It is possible to use the item to break the Bomb blocks and escape.",
+        "Fighting GT while blind is unreasonable."
+      ]
+    },
+    {
+      "id": 66,
+      "link": [1, 2],
+      "name": "Direct G-Mode, Grab the Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          {"and": [
+            {"itemNotCollectedAtNode": 3},
+            "canRiskPermanentLossOfAccess"
+          ]},
+          {"and": [
+            "Charge",
+            "h_useMorphBombs"
+          ]}
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Avoid stepping on all three crumble blocks before moving through the item to overload PLMs, then go through the crumble blocks.",
+        "After dropping below, move to the door quickly in order to prevent GT falling on Samus.",
+        "Note that if the item is not there, it is still possible to overload PLMs by using bomb spreads on crumble blocks that have never been stepped on."
+      ],
+      "devNote": [
+        "This strat forces Samus to leave the room because the camera is stuck at the top left of the room.",
+        "FIXME: It is possible to get to the top right item, but its not easy or too useful. It is possible to use the item to break the Bomb blocks and escape.",
+        "Fighting GT while blind is unreasonable."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 3],
+      "name": "Crumble Jump to Left Item",
+      "requires": [
+        {"notable": "Crumble Jump"},
+        "h_navigateHeatRooms",
+        "canCrumbleJump",
+        {"heatFrames": 80}
+      ],
+      "note": "Jump on the crumble blocks before they break to reach the item, at the risk on falling through."
+    },
+    {
+      "id": 4,
+      "link": [1, 3],
+      "name": "Bomb Boost to Left Item",
+      "requires": [
+        {"notable": "Horizontal Bomb Jump"},
+        "h_navigateHeatRooms",
+        "canBombHorizontally",
+        {"heatFrames": 160}
+      ],
+      "note": "Uses a single bomb blast to just barely get propelled over the crumble pit."
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "Spring Ball",
+      "requires": [
+        "h_navigateHeatRooms",
+        "h_useSpringBall",
+        {"heatFrames": 140}
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Space Jump",
+      "requires": [
+        "h_navigateHeatRooms",
+        "SpaceJump",
+        {"heatFrames": 70}
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 3],
+      "name": "Shinespark (Bottom)",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "requires": [
+        "h_navigateHeatRooms",
+        {"shinespark": {"frames": 18, "excessFrames": 5}},
+        {"heatFrames": 100}
+      ],
+      "devNote": [
+        "Sparking in from the bottom position requires fewer heat frames, as you bonk the side of the item pedestal.",
+        "FIXME: The heat frames for the crash animation occur after the item collection, which could matter if the item is an ETank.",
+        "Likewise, one shinespark frame of damage occurs after the item collection (assuming not stopping early)."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 3],
+      "name": "Shinespark (Top)",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "top"
+        }
+      },
+      "requires": [
+        "h_navigateHeatRooms",
+        {"shinespark": {"frames": 19, "excessFrames": 8}},
+        {"heatFrames": 120}
+      ],
+      "devNote": [
+        "Sparking in from the top position requires more heat frames, because you end up on top of the item pedestal and need to move off of it.",
+        "FIXME: The heat frames for the crash animation (and for moving off the pedestal) occur after the item collection, which could matter if the item is an ETank.",
+        "Likewise, 3 shinespark frames of damage occur after the item collection (assuming not stopping early)."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 3],
+      "name": "Running Jump (Short Runway)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canInsaneJump",
+        {"heatFrames": 60}
+      ],
+      "note": "Using momentum from the previous room, run and jump over the crumble blocks to reach the item."
+    },
+    {
+      "id": 10,
+      "link": [1, 3],
+      "name": "Running Jump (Longer Runway)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        {"heatFrames": 50}
+      ],
+      "note": "Using momentum from the previous room, run and jump over the crumble blocks to reach the item."
+    },
+    {
+      "id": 67,
+      "link": [1, 3],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 6],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport ",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        {"heatFrames": 1600}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb to get up to the door transition, without needing to open the door.",
+        "Samus will not be visible during the climb.",
+        "If Golden Torizo is alive, the fight will be triggered but does not create any risk of damage."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [2, 1],
+      "name": "R-Mode Forced Standup Clip",
+      "entranceCondition": {
+        "comeInWithRMode": {}
+      },
+      "requires": [
+        {"notable": "R-Mode Forced Standup Clip"},
+        {"or": [
+          "f_DefeatedGoldenTorizo",
+          {"heatFrames": 100}
+        ]},
+        "h_heatedCrystalFlash",
+        {"or": [
+          {"and": [
+            "SpaceJump",
+            "can4HighMidAirMorph"
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster",
+            "canMidAirMorph",
+            "canCrumbleJump"
+          ]},
+          {"and": [
+            "h_trickySpringwall",
+            "canCrumbleJump"
+          ]}
+        ]},
+        {"resourceCapacity": [{"type": "RegularEnergy", "count": 99}]},
+        {"autoReserveTrigger": {}},
+        {"heatFrames": 100}
+      ],
+      "note": [
+        "Use a Crystal Flash to refill reserve energy.",
+        "If Golden Torizo is alive, perform the Crystal Flash in the left corner of the room; otherwise it can be done near the door.",
+        "Then use heat damage to trigger an R-mode forced standup near the crumble blocks with upward momentum, in order to clip up through them.",
+        "Several different combinations of items and techniques can make this possible:",
+        "1) Space Jump, with a mid-air morph (not required but makes it easier),",
+        "2) HiJump and a mid-air Spring Ball jump, most easily by equipping both HiJump and SpringBall during the pause,",
+        "3) A walljump into Spring Ball jump, equipping Spring Ball soon after the wall jump into order to gain horizontal speed before the mid-air jump.",
+        "4) HiJump and Speedbooster, running and jumping into a mid-air morph,",
+        "In every case, precise timing is needed to be in the correct location when reserves trigger, just below the crumbles but without bonking them.",
+        "Having less upward momentum can provide more lenience for timing the forced standup clip,",
+        "though if Samus' momentum is not enough to make it onto the ledge then a crumble jump may also be required."
+      ],
+      "devNote": [
+        "FIXME: A variant of this strat could go to the item node instead of the door, possibly with slightly different heat frames at the end.",
+        "FIXME: As an alternative to doing a Crystal Flash, Golden Torizo could be used as a farm, with canRiskPermanentLossOfAccess."
+      ]
+    },
+    {
+      "id": 68,
+      "link": [2, 1],
+      "name": "G-Mode Morph, IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphLongIBJ",
+        {"or": [
+          "f_DefeatedGoldenTorizo",
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"or": [
+              "h_artificialMorphJumpIntoIBJ",
+              "h_artificialMorphDoubleBombJump",
+              "canInsaneJump"
+            ]}
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Quickly roll to the left side of the room and IBJ through the crumble blocks before GT gets there, if it is alive.",
+        "Starting from a jump or with a double bomb jump can help speed this up and make it much easier,",
+        "but Samus needs to bomb slowly near the top to prevent hitting the crumble blocks before PLMs are overloaded.",
+        "Otherwise, it can help to IBJ through the left-most crumble block, as GT will often jump away when first reaching Samus.",
+        "The left-most crumble block is the 4th tile away from the wall.",
+        "With a failed IBJ start, GT often times won't touch Samus if she is Morphed on the ground, and can jump away, giving another chance to IBJ."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Leave With Runway (GT Dead)",
+      "requires": [
+        "f_DefeatedGoldenTorizo"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 29,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "Leave With Runway (GT Alive)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 415}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 29,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Wait to run under Golden Torizo as it jumps."
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        {"or": [
+          "canPrepareForNextRoom",
+          "f_DefeatedGoldenTorizo"
+        ]},
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "If entering from the right door with Golden Torizo not yet defeated, come in already morphed, Crystal Flash immediately, then morph and roll under Golden Torizo."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"not": "f_DefeatedGoldenTorizo"},
+        "canRiskPermanentLossOfAccess",
+        {"enemyDamage": {"enemy": "Golden Torizo", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 69,
+      "link": [2, 2],
+      "name": "Direct G-Mode, GT Kill, Leave Through Open Door",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"notable": "Safe Spot Kill"},
+        {"or": [
+          {"resourceAtMost": [{"type": "Missile", "count": 31}]},
+          "canComplexGMode"
+        ]},
+        {"or": [
+          {"ammo": {"type": "Super", "count": 30}},
+          {"and": [
+            "Charge",
+            {"or": [
+              "canBeVeryPatient",
+              {"and": [
+                "canBePatient",
+                "Wave"
+              ]},
+              {"and": [
+                "canBePatient",
+                "Spazer"
+              ]},
+              "Plasma",
+              {"and": [
+                "canBePatient",
+                {"ammo": {"type": "Super", "count": 15}}
+              ]}
+            ]}
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "flashSuitChecked": true,
+      "note": [
+        "Start the fight with 31 Missiles or fewer in order to prevent GT from using its laser attack, which will enable Samus to stand next to it.",
+        "With more than 31 Missiles, Samus will have a 2 pixel window in which she must quickly get into to prevent touching GT or his lasers.",
+        "Wait long enough for the flag to be set, then Samus can then leave the room without exiting G-mode."
+      ]
+    },
+    {
+      "id": 70,
+      "link": [2, 2],
+      "name": "Indirect G-Mode, GT Kill, 31 Missiles or Fewer",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        {"resourceAtMost": [{"type": "Missile", "count": 31}]},
+        {"or": [
+          {"ammo": {"type": "Super", "count": 30}},
+          {"and": [
+            "Charge",
+            {"or": [
+              "canBeVeryPatient",
+              {"and": [
+                "canBePatient",
+                "Wave"
+              ]},
+              {"and": [
+                "canBePatient",
+                "Spazer"
+              ]},
+              "Plasma",
+              {"and": [
+                "canBePatient",
+                {"ammo": {"type": "Super", "count": 15}}
+              ]}
+            ]}
+          ]}
+        ]},
+        {"or": [
+          "h_heatedIndirectGModeOpenSameDoor",
+          "h_heatedGModePauseAbuse"
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "flashSuitChecked": true,
+      "note": [
+        "Start the fight with 31 Missiles or fewer in order to prevent GT from using its laser attack, which will enable Samus to stand next to it.",
+        "Having GT start with his Chozo Ball attack also will make it so there are drops which can be collected at the end of the fight,",
+        "otherwise they will have been overloaded. Pause abuse and jump to collect the drops on G-mode exit."
+      ]
+    },
+    {
+      "id": 71,
+      "link": [2, 2],
+      "name": "Indirect G-Mode, GT Kill, Too Many Missiles",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        "canComplexGMode",
+        {"or": [
+          {"ammo": {"type": "Super", "count": 30}},
+          {"and": [
+            "Charge",
+            {"or": [
+              "canBeVeryPatient",
+              {"and": [
+                "canBePatient",
+                "Wave"
+              ]},
+              {"and": [
+                "canBePatient",
+                "Spazer"
+              ]},
+              "Plasma",
+              {"and": [
+                "canBePatient",
+                {"ammo": {"type": "Super", "count": 15}}
+              ]}
+            ]}
+          ]}
+        ]},
+        "h_heatedIndirectGModeOpenSameDoor"
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "flashSuitChecked": true,
+      "note": [
+        "With more than 31 Missiles, Samus will have a 2 pixel window in which she must quickly get into to prevent touching GT or his lasers.",
+        "Having GT start with his laser attack will also make it so there are no drops which can be collected at the end of the fight."
+      ]
+    },
+    {
+      "id": 72,
+      "link": [2, 3],
+      "name": "G-Mode Morph, IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "h_artificialMorphLongIBJ",
+        {"or": [
+          "f_DefeatedGoldenTorizo",
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"or": [
+              "h_artificialMorphJumpIntoIBJ",
+              "h_artificialMorphDoubleBombJump",
+              "canInsaneJump"
+            ]}
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Quickly roll to the left side of the room and IBJ through the crumble blocks before GT gets there, if it is alive.",
+        "Starting from a jump or with a double bomb jump can help speed this up and make it much easier,",
+        "but Samus needs to bomb slowly near the top to prevent hitting the crumble blocks before PLMs are overloaded.",
+        "Otherwise, it can help to IBJ through the left-most crumble block, as GT will often jump away when first reaching Samus.",
+        "The left-most crumble block is the 4th tile away from the wall.",
+        "With a failed IBJ start, GT often times won't touch Samus if she is Morphed on the ground, and can jump away, giving another chance to IBJ."
+      ]
+    },
+    {
+      "id": 79,
+      "link": [2, 4],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Dust Torizo Room and Noob Bridge."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 28.2472,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Double Chamber."]
+            },
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 28.2472,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "environment": "water",
+              "requires": [
+                "canGravityJump"
+              ],
+              "note": ["This applies to Below Botwoon Energy Tank and Botwoon Energy Tank Room."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 31,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canInsaneMidAirMorph"
+              ],
+              "note": ["This applies to Metroid Room 1, Statues Hallway, and Baby Kraid Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 41.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canInsaneMidAirMorph"
+              ],
+              "note": [
+                "This applies to Blue Brinstar Energy Tank Room (Power Bomb blocks broken), Bowling Alley (middle, power off), and Basement (power on)."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "note": ["This applies to Metal Pirates Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 37.4375,
+              "speedBooster": true,
+              "obstructions": [[5, 2]],
+              "requires": [
+                "canInsaneMidAirMorph"
+              ],
+              "note": ["This applies to Flyway."]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "f_DefeatedGoldenTorizo",
+        "HiJump",
+        "canMomentumConservingMorph",
+        "canInsaneJump",
+        {"heatFrames": 120}
+      ],
+      "note": [
+        "Perform a momentum conserving morph through the transition.",
+        "After the transition, quickly unmorph and continue holding up to retain temporary blue and break the bomb blocks."
+      ],
+      "detailNote": ["It may help (but is not required) to pause buffer the morph input."],
+      "devNote": [
+        "FIXME: This could maybe be possible without HiJump? If so, it would be significantly more difficult."
+      ]
+    },
+    {
+      "id": 73,
+      "link": [2, 4],
+      "name": "G-Mode Morph, IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "h_artificialMorphLongIBJ",
+        {"or": [
+          "f_DefeatedGoldenTorizo",
+          {"and": [
+            "canInsaneJump",
+            "h_artificialMorphJumpIntoIBJ"
+          ]},
+          {"and": [
+            "canTrickyGMode",
+            "h_artificialMorphDoubleBombJump"
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "h_artificialMorphPowerBomb",
+            {"heatFrames": 70}
+          ]},
+          {"and": [
+            "h_useMorphBombs",
+            {"heatFrames": 250}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"heatFrames": 50}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Quickly roll to the left side of the room and IBJ through the crumble blocks before GT gets there, if it is alive.",
+        "Starting from a jump or with a double bomb jump can help speed this up and make it much easier,",
+        "but Samus needs to bomb slowly near the top to prevent hitting the crumble blocks before PLMs are overloaded.",
+        "Get GT to jump away then again jump into IBJ and climb to the right item.",
+        "Note that Samus can roll under GT, but when it attacks, it places stationary invisible projectiles, which may block Samus' path.",
+        "Place a Power Bomb then quickly exit G-mode to quickly clear all of the bomb blocks, otherwise it is possible to get out with a few Bombs or Screw Attack."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 5],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 50}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 74,
+      "link": [2, 7],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 75,
+      "link": [2, 7],
+      "name": "G-Mode, GT Kill, Remain in G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        {"or": [
+          {"resourceAtMost": [{"type": "Missile", "count": 31}]},
+          "canComplexGMode"
+        ]},
+        {"or": [
+          {"ammo": {"type": "Super", "count": 30}},
+          {"and": [
+            "Charge",
+            {"or": [
+              "canBeVeryPatient",
+              {"and": [
+                "canBePatient",
+                "Wave"
+              ]},
+              {"and": [
+                "canBePatient",
+                "Spazer"
+              ]},
+              "Plasma",
+              {"and": [
+                "canBePatient",
+                {"ammo": {"type": "Super", "count": 15}}
+              ]}
+            ]}
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "flashSuitChecked": true,
+      "note": [
+        "Start the fight with 31 Missiles or fewer in order to prevent GT from using its laser attack, which will enable Samus to stand next to it.",
+        "Having GT start with his Chozo Ball attack also will make it so there are drops which can be collected at the end of the fight, otherwise they will have been overloaded.",
+        "With more than 31 Missiles, Samus will have a 2 pixel window in which she must quickly get into to prevent touching GT or his lasers.",
+        "If GT starts with his laser attack, be sure to carefully jump over them before doing something else in the room."
+      ],
+      "devNote": "This exists because Samus can kill GT and stay in G-mode to then do something else in the room."
+    },
+    {
+      "id": 21,
+      "link": [3, 1],
+      "name": "Crumble Jump from Left Item",
+      "requires": [
+        {"notable": "Crumble Jump"},
+        "h_navigateHeatRooms",
+        "canCrumbleJump",
+        {"heatFrames": 100}
+      ],
+      "note": "It takes a short hop to avoid hitting the ceiling to do this with only one crumble jump."
+    },
+    {
+      "id": 22,
+      "link": [3, 1],
+      "name": "Bomb Boost from Left Item",
+      "requires": [
+        {"notable": "Horizontal Bomb Jump"},
+        "h_navigateHeatRooms",
+        "canBombHorizontally",
+        {"heatFrames": 190}
+      ],
+      "note": "Use a single bomb blast to just barely get propelled over the crumble pit."
+    },
+    {
+      "id": 23,
+      "link": [3, 1],
+      "name": "Spring Ball",
+      "requires": [
+        "h_navigateHeatRooms",
+        "h_useSpringBall",
+        {"heatFrames": 140}
+      ]
+    },
+    {
+      "id": 24,
+      "link": [3, 1],
+      "name": "Space Jump",
+      "requires": [
+        "h_navigateHeatRooms",
+        "SpaceJump",
+        {"heatFrames": 90}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [3, 6],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 27,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 28,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 100}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 29,
+      "link": [4, 6],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"obstaclesNotCleared": ["A"]},
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 30,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 31,
+      "link": [5, 4],
+      "name": "Power Bombs",
+      "requires": [
+        "h_navigateHeatRooms",
+        "h_usePowerBomb",
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall"
+        ]},
+        {"heatFrames": 350},
+        {"or": [
+          "canPreciseWalljump",
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            {"or": [
+              "SpeedBooster",
+              "canWalljump",
+              "canSpringBallJumpMidAir"
+            ]}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 32,
+      "link": [5, 4],
+      "name": "Space Screw",
+      "requires": [
+        "h_navigateHeatRooms",
+        "SpaceJump",
+        "ScrewAttack",
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 33,
+      "link": [5, 4],
+      "name": "Speed HiJump Screw",
+      "requires": [
+        "h_navigateHeatRooms",
+        "HiJump",
+        "SpeedBooster",
+        "ScrewAttack",
+        {"heatFrames": 150}
+      ],
+      "note": "Build run speed for a jump straight into the destructible blocks."
+    },
+    {
+      "id": 34,
+      "link": [5, 4],
+      "name": "GT Supers Screw Walljump",
+      "requires": [
+        "h_navigateHeatRooms",
+        "ScrewAttack",
+        "canPreciseWalljump",
+        "canMidairWiggle",
+        {"heatFrames": 200}
+      ],
+      "note": "This is kind of tricky because Screw off a walljump can only break bomb blocks if you change directions before bonking."
+    },
+    {
+      "id": 35,
+      "link": [5, 4],
+      "name": "Right Item Walljump Into Double Shinespark",
+      "requires": [
+        {"notable": "Right Item Double Shinespark"},
+        "h_navigateHeatRooms",
+        "f_DefeatedGoldenTorizo",
+        "canShinechargeMovementComplex",
+        "canPreciseWalljump",
+        "canConsecutiveWalljump",
+        {"canShineCharge": {"usedTiles": 28, "openEnd": 0}},
+        {"heatFrames": 900},
+        {"shinespark": {"frames": 11}}
+      ],
+      "note": [
+        "One vertical spark is needed to open up the area directly above.",
+        "Then, a second horizontal spark is performed where those blocks were cleared.",
+        "Try to aim for the seam between tiles to break more blocks.  And the left side of the opening may be slightly easier."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [5, 4],
+      "name": "Right Item Double Shinespark With HiJump",
+      "requires": [
+        {"notable": "Right Item Double Shinespark"},
+        "h_navigateHeatRooms",
+        "f_DefeatedGoldenTorizo",
+        "canShinechargeMovementComplex",
+        "HiJump",
+        {"canShineCharge": {"usedTiles": 28, "openEnd": 0}},
+        {"heatFrames": 900},
+        {"shinespark": {"frames": 11}}
+      ],
+      "note": [
+        "One vertical spark is needed to open up the area directly above.",
+        "A running jump is used to jump high enough into the revealed hole for a horizontal spark."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [5, 4],
+      "name": "GT Supers IBJ",
+      "requires": [
+        "h_navigateHeatRooms",
+        "f_DefeatedGoldenTorizo",
+        {"or": [
+          "canLongIBJ",
+          "canJumpIntoIBJ"
+        ]},
+        {"heatFrames": 3000}
+      ],
+      "note": "Expects two IBJs; one to break a block, then another one to get back up.",
+      "devNote": "Needs strats for variations of IBJs, mainly for heatframe count."
+    },
+    {
+      "id": 38,
+      "link": [5, 4],
+      "name": "Instant Morph Bomb Placement.",
+      "requires": [
+        "h_navigateHeatRooms",
+        "h_useMorphBombs",
+        "can3HighWallMidAirMorph",
+        "canConsecutiveWalljump",
+        {"heatFrames": 1100}
+      ],
+      "note": [
+        "Walljump up to reach the left ledge below the bomb blocks then perform an instant morph to place a bomb.",
+        "Walljump up a second time and again instant morph off that left ledge to enter the 1 tile hole created by the bomb."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [5, 4],
+      "name": "Springwall with Bombs",
+      "requires": [
+        "h_navigateHeatRooms",
+        "h_useMorphBombs",
+        "h_heatedSpringwall",
+        {"heatFrames": 900}
+      ],
+      "note": [
+        "Uses a Springwall to put a bomb on the left corner bomb block, then a second one to get in there.",
+        "Then clears the rest of the bomb blocks normally.",
+        "It winds up costing less heat frames than IBJ, if you fall."
+      ]
+    },
+    {
+      "id": 46,
+      "link": [5, 5],
+      "name": "Safe Spot Heatproof Supers",
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        "h_heatProof",
+        "Super"
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": "Farm supers to use throughout the fight.",
+      "devNote": "Supers are farmable here, so no ammo requirement."
+    },
+    {
+      "id": 47,
+      "link": [5, 5],
+      "name": "Safe Spot Heatproof Charge",
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        "h_heatProof",
+        "Charge",
+        "canBeVeryPatient"
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": "Stand in the safe spot and fire Charge shots into GT."
+    },
+    {
+      "id": 48,
+      "link": [5, 5],
+      "name": "Safe Spot Supers",
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        "h_navigateHeatRooms",
+        {"heatFrames": 1200},
+        {"ammo": {"type": "Super", "count": 30}}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": [
+        "This strat is assuming no farming. It requires 30 supers, but can be done with 29.",
+        "This requires a very steady fire rate so that for every Super Missile caught by GT, the next 4 Supers do damage."
+      ],
+      "devNote": [
+        "No farming expected because that would change the heat frames.",
+        "Supers count hard-coded because of GT's inherent 'dodging' ability.",
+        "We could use an enemyKill if this were integrated into the enemy definition.",
+        "It actually takes 29 supers but giving 1 extra in leniency since it's easy to miss."
+      ]
+    },
+    {
+      "id": 49,
+      "link": [5, 5],
+      "name": "Safe Spot Supers (Farming)",
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        "h_navigateHeatRooms",
+        "canTrickyJump",
+        {"ammo": {"type": "Super", "count": 15}},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"heatFrames": 2700}
+          ]},
+          {"and": [
+            "canPreciseGrapple",
+            {"heatFrames": 2700}
+          ]},
+          {"heatFrames": 3200}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": [
+        "This strat requires some farming. It assumes starting with 15 supers for one session of farming.",
+        "A safe farming method is to face left while standing in the safe spot.  Then fire straight up to shoot the orbs as they appear.",
+        "Jump up while GT's beak is not open to collect the drops.",
+        "Plasma allows all of the orbs to be broken at once.",
+        "Grapple allows for more drops to be collected by shooting diagonally, and collecting the items using Grapple.",
+        "Keep the number of current Missiles below 31 so that GT will be guaranteed to use the attack which creates drops.",
+        "Firing Supers requires a very steady fire rate so that for every Super Missile caught by GT, the next 4 Supers do damage."
+      ],
+      "devNote": "Listed Heat frames have been reduced by accounting for health drops."
+    },
+    {
+      "id": 50,
+      "link": [5, 5],
+      "name": "Safe Spot Supers (Farming, Few Supers)",
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        "h_navigateHeatRooms",
+        "canTrickyJump",
+        "canBePatient",
+        {"ammo": {"type": "Super", "count": 5}},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"heatFrames": 3100}
+          ]},
+          {"and": [
+            "canPreciseGrapple",
+            {"heatFrames": 3200}
+          ]},
+          {"heatFrames": 4500}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": [
+        "This strat requires much farming. It assumes a capacity of and starting with only 5 supers for five sessions of farming.",
+        "A safe farming method is to face left while standing in the safe spot.  Then fire straight up to shoot the orbs as they appear.",
+        "Jump up while GT's beak is not open to collect the drops.",
+        "Plasma allows all of the orbs to be broken at once.",
+        "Grapple allows for more drops to be collected by shooting diagonally, and collecting the items using Grapple.",
+        "Keep the number of current Missiles below 31 so that GT will be guaranteed to use the attack which creates drops.",
+        "Firing Supers requires a very steady fire rate so that for every Super Missile caught by GT, the next 4 Supers do damage."
+      ],
+      "devNote": "Listed Heat frames have been reduced by accounting for health drops."
+    },
+    {
+      "id": 51,
+      "link": [5, 5],
+      "name": "Crystal Flash During Fight",
+      "requires": [
+        {"notable": "Crystal Flash During Fight"},
+        "h_navigateHeatRooms",
+        {"or": [
+          {"ammo": {"type": "Super", "count": 30}},
+          {"and": [
+            "Charge",
+            "Ice",
+            "Wave",
+            "Plasma"
+          ]}
+        ]},
+        {"heatFrames": 800},
+        "h_heatedCrystalFlash",
+        {"heatFrames": 800}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "flashSuitChecked": true,
+      "note": [
+        "Midway through the fight, use a Crystal Flash to refill Samus' energy.",
+        "Crystal Flashing while standing in the safe spot at GT's feet is safe."
+      ],
+      "devNote": [
+        "FIXME: Other resource combinations can work; fewer supers + farm, weaker beam + more health, 2nd crystal flash.",
+        "FIXME: Add heavy pause abuse strats for GT."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [5, 5],
+      "name": "Safe Spot Full Combo",
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        "h_navigateHeatRooms",
+        "Charge",
+        "Ice",
+        "Wave",
+        "Plasma",
+        {"heatFrames": 1250}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": "Stand in the safe spot and fire Charge shots into GT."
+    },
+    {
+      "id": 53,
+      "link": [5, 5],
+      "name": "Safe Spot Almost Full Combo",
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        "h_navigateHeatRooms",
+        "Charge",
+        "Wave",
+        "Plasma",
+        {"heatFrames": 1400}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": "Stand in the safe spot and fire Charge shots into GT."
+    },
+    {
+      "id": 54,
+      "link": [5, 5],
+      "name": "Safe Spot Charge Plasma",
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        "h_navigateHeatRooms",
+        "Charge",
+        "Plasma",
+        {"heatFrames": 2000}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": "Stand in the safe spot and fire Charge shots into GT."
+    },
+    {
+      "id": 55,
+      "link": [5, 5],
+      "name": "Safe Spot Full Spazer",
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        "h_navigateHeatRooms",
+        "Charge",
+        "Ice",
+        "Wave",
+        "Spazer",
+        {"heatFrames": 4000}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": "Stand in the safe spot and fire Charge shots into GT."
+    },
+    {
+      "id": 56,
+      "link": [5, 5],
+      "name": "Safe Spot Two Beam Charge",
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        "h_navigateHeatRooms",
+        "Charge",
+        {"heatFrames": 6500},
+        {"or": [
+          {"and": [
+            "Ice",
+            "Wave"
+          ]},
+          {"and": [
+            "Ice",
+            "Spazer"
+          ]},
+          {"and": [
+            "Wave",
+            "Spazer"
+          ]}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": "Stand in the safe spot and fire Charge shots into GT."
+    },
+    {
+      "id": 57,
+      "link": [5, 5],
+      "name": "Golden Torizo Fight (Supers)",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 1200},
+        {"ammo": {"type": "Super", "count": 30}},
+        {"enemyDamage": {"enemy": "Golden Torizo", "type": "super", "hits": 4}},
+        {"or": [
+          "canDodgeWhileShooting",
+          {"ammo": {"type": "Super", "count": 5}},
+          {"and": [
+            {"enemyDamage": {"enemy": "Golden Torizo", "type": "super", "hits": 2}},
+            {"heatFrames": 200}
+          ]}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "devNote": [
+        "No farming expected because that would change the heat frames.",
+        "Supers count hard-coded because of GT's inherent 'dodging' ability.",
+        "We could use an enemyKill if this were integrated into the enemy definition.",
+        "It actually takes 29 supers but giving 1 extra in leniency since it's easy to miss"
+      ]
+    },
+    {
+      "id": 58,
+      "link": [5, 5],
+      "name": "Missiles Only Kill",
+      "requires": [
+        {"notable": "Safe Spot Kill"},
+        {"notable": "Missiles Only Kill"},
+        "h_heatProof",
+        "Morph",
+        {"resourceCapacity": [{"type": "Missile", "count": 15}]},
+        {"or": [
+          {"resourceCapacity": [{"type": "RegularEnergy", "count": 199}]},
+          {"resourceCapacity": [{"type": "ReserveEnergy", "count": 100}]}
+        ]},
+        "canBeVeryPatient"
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": [
+        "Killing Golden Torizo only with missiles using enemy state manipulation to get missiles to connect.",
+        "This can be done by rolling under GT, triggering the sit attack, and then shooting missiles during the stand up animation.",
+        "By pushing GT to the door and rolling into the door during a jump back, the sit can reliably be manipulated.",
+        "But this setup is subpixel dependant and harder to setup again if GT moves unexpectidly.",
+        "Use of the safe spot is expected. Keep missiles below 31 to control the fight. This fight takes multiple minutes.",
+        "(A cheeky Missile can hit GT the moment it becomes active)"
+      ],
+      "devNote": "It is easy to make mistakes with this strat, so some capacity is given for leniency.  You can farm up resources readily enough."
+    },
+    {
+      "id": 59,
+      "link": [5, 5],
+      "name": "Golden Torizo Fight (Full Combo)",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 1800},
+        "Charge",
+        "Ice",
+        "Wave",
+        "Plasma",
+        {"enemyDamage": {"enemy": "Golden Torizo", "type": "contact", "hits": 1}},
+        {"or": [
+          {"enemyDamage": {"enemy": "Golden Torizo", "type": "contact", "hits": 3}},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              "ScrewAttack",
+              "Morph"
+            ]}
+          ]}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": "This is an estimate of the net damage taken, including farmed energy."
+    },
+    {
+      "id": 60,
+      "link": [5, 5],
+      "name": "Golden Torizo Fight (Almost Full Combo)",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 2150},
+        "Charge",
+        "Wave",
+        "Plasma",
+        {"enemyDamage": {"enemy": "Golden Torizo", "type": "contact", "hits": 2}},
+        {"or": [
+          {"enemyDamage": {"enemy": "Golden Torizo", "type": "contact", "hits": 3}},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              "ScrewAttack",
+              "Morph"
+            ]}
+          ]}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": "This is an estimate of the net damage taken, including farmed energy."
+    },
+    {
+      "id": 61,
+      "link": [5, 5],
+      "name": "Golden Torizo Fight (Charge Plasma)",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 3600},
+        "Charge",
+        "Plasma",
+        {"enemyDamage": {"enemy": "Golden Torizo", "type": "contact", "hits": 2}},
+        {"or": [
+          {"enemyDamage": {"enemy": "Golden Torizo", "type": "contact", "hits": 6}},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              "ScrewAttack",
+              "Morph"
+            ]}
+          ]}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": "This is an estimate of the net damage taken, including farmed energy."
+    },
+    {
+      "id": 62,
+      "link": [5, 5],
+      "name": "Golden Torizo Fight (Full Spazer)",
+      "requires": [
+        "h_heatProof",
+        "Charge",
+        "Ice",
+        "Wave",
+        "Spazer",
+        {"enemyDamage": {"enemy": "Golden Torizo", "type": "contact", "hits": 4}},
+        {"or": [
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              "Morph",
+              "ScrewAttack",
+              {"enemyDamage": {"enemy": "Golden Torizo", "type": "contact", "hits": 6}}
+            ]}
+          ]},
+          {"enemyDamage": {"enemy": "Golden Torizo", "type": "contact", "hits": 13}}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedGoldenTorizo"],
+      "note": "This is an estimate of the net damage taken, including farmed energy."
+    },
+    {
+      "id": 40,
+      "link": [6, 2],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 41,
+      "link": [6, 4],
+      "name": "SpaceJump",
+      "requires": [
+        "h_navigateHeatRooms",
+        "SpaceJump",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "h_usePowerBomb",
+            {"or": [
+              "canTrivialMidAirMorph",
+              "h_useSpringBall"
+            ]},
+            {"heatFrames": 100}
+          ]}
+        ]},
+        {"heatFrames": 200}
+      ],
+      "note": "Avoid touching the ground below GT.  Try not to touch GT without ScrewAttack active."
+    },
+    {
+      "id": 42,
+      "link": [6, 4],
+      "name": "HiJump and Speed",
+      "requires": [
+        "h_navigateHeatRooms",
+        "HiJump",
+        "SpeedBooster",
+        "canCarefulJump",
+        "ScrewAttack",
+        {"heatFrames": 200}
+      ],
+      "note": "Jump a before reaching the rightmost floor pillar."
+    },
+    {
+      "id": 43,
+      "link": [6, 4],
+      "name": "Walljump",
+      "requires": [
+        "h_navigateHeatRooms",
+        "ScrewAttack",
+        "canCarefulJump",
+        "canPreciseWalljump",
+        "h_usePowerBomb",
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall"
+        ]},
+        {"or": [
+          "HiJump",
+          "canTrickyJump"
+        ]},
+        {"heatFrames": 350}
+      ],
+      "note": [
+        "Jump over the space below GT that is between the door and first foreground pillar and walljump up.",
+        "Break the bomb blocks with a power bomb to make space.  Then use Screw Attack to pass through the inactive GT."
+      ]
+    },
+    {
+      "id": 44,
+      "link": [6, 4],
+      "name": "Springball Jump",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"not": "f_DefeatedGoldenTorizo"},
+        {"or": [
+          "canRiskPermanentLossOfAccess",
+          "HiJump",
+          {"and": [
+            "canTrickyJump",
+            "canSpringwall"
+          ]}
+        ]},
+        "canSpringBallJumpMidAir",
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Golden Torizo", "type": "contact", "hits": 1}},
+        {"ammo": {"type": "PowerBomb", "count": 1}},
+        {"heatFrames": 300}
+      ],
+      "note": "Springball jump into GT to bounce to the upper level.",
+      "devNote": "Strats can follow 6->5->4 if GT is defeated."
+    },
+    {
+      "id": 45,
+      "link": [6, 5],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 0}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 76,
+      "link": [7, 1],
+      "name": "G-Mode, Through the Crumble Blocks",
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "f_DefeatedGoldenTorizo",
+          "canTrickyDodgeEnemies"
+        ]},
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canTrickyWalljump",
+              "canSpringBallJumpMidAir",
+              "SpeedBooster"
+            ]}
+          ]},
+          {"and": [
+            "canSpringBallJumpMidAir",
+            "SpeedBooster",
+            {"or": [
+              "f_DefeatedGoldenTorizo",
+              "canInsaneJump"
+            ]}
+          ]},
+          {"and": [
+            "f_DefeatedGoldenTorizo",
+            {"canShineCharge": {"usedTiles": 28, "openEnd": 0}},
+            {"shinespark": {"frames": 29, "excessFrames": 5}}
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the camera scroll blocks below the crumble blocks to overload PLMs and go through the crumble blocks.",
+        "A good jumping through them a single time is enough to overload them for the next jump. This can be done while dodging GT.",
+        "With a speedy jump, it is possible to overload PLMs and run back to GT before it stands up, get into the safe spot location to get him to jump back, and use the runway again.",
+        "With shinesparks, diagonally spark into the crumble blocks and hold forward three times, then spark through.",
+        "Note that when GT attacks, it will place stationary invisible projectiles, so it is much more difficult if not getting up quickly."
+      ]
+    },
+    {
+      "id": 77,
+      "link": [7, 3],
+      "name": "G-Mode, Through the Crumble Blocks",
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "f_DefeatedGoldenTorizo",
+          "canTrickyDodgeEnemies"
+        ]},
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canTrickyWalljump",
+              "canSpringBallJumpMidAir",
+              "SpeedBooster"
+            ]}
+          ]},
+          {"and": [
+            "canSpringBallJumpMidAir",
+            "SpeedBooster",
+            {"or": [
+              "f_DefeatedGoldenTorizo",
+              "canInsaneJump"
+            ]}
+          ]},
+          {"and": [
+            "f_DefeatedGoldenTorizo",
+            {"canShineCharge": {"usedTiles": 28, "openEnd": 0}},
+            {"shinespark": {"frames": 29, "excessFrames": 5}}
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the camera scroll blocks below the crumble blocks to overload PLMs and go through the crumble blocks.",
+        "A good jumping through them a single time is enough to overload them for the next jump. This can be done while dodging GT.",
+        "With a speedy jump, it is possible to overload PLMs and run back to GT before it stands up, get into the safe spot location to get him to jump back, and use the runway again.",
+        "With shinesparks, diagonally spark into the crumble blocks and hold forward three times, then spark through.",
+        "Note that when GT attacks, it will place stationary invisible projectiles, so it is much more difficult if not getting up quickly."
+      ]
+    },
+    {
+      "id": 78,
+      "link": [7, 4],
+      "name": "G-Mode, Through the Crumble Blocks",
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "f_DefeatedGoldenTorizo",
+          "canTrickyDodgeEnemies"
+        ]},
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canWalljump",
+              "canSpringBallJumpMidAir",
+              "SpeedBooster"
+            ]}
+          ]},
+          {"and": [
+            "canSpringBallJumpMidAir",
+            "SpeedBooster",
+            {"or": [
+              "f_DefeatedGoldenTorizo",
+              "canInsaneJump"
+            ]}
+          ]},
+          {"and": [
+            "f_DefeatedGoldenTorizo",
+            {"canShineCharge": {"usedTiles": 28, "openEnd": 0}},
+            {"shinespark": {"frames": 28, "excessFrames": 5}}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "h_usePowerBomb",
+            {"heatFrames": 70}
+          ]},
+          {"and": [
+            "h_useMorphBombs",
+            {"heatFrames": 250}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"heatFrames": 50}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the camera scroll blocks below the crumble blocks to overload PLMs and go through the bomb blocks near the right item.",
+        "A good jumping through them a single time is enough to overload PLMs. This can be done while dodging GT.",
+        "With a speedy jump, it is possible to overload PLMs and run back to GT before it stands up, get into the safe spot location to get him to jump back, and use the runway again.",
+        "With shinesparks, diagonally spark into the crumble blocks and hold forward three times, to overload PLMs as much as possible.",
+        "Note that when GT attacks, it will place stationary invisible projectiles, so it is much more difficult if not getting up quickly.",
+        "Place a Power Bomb then quickly exit G-mode to quickly clear all of the bomb blocks, otherwise it is possible to get out with a few Bombs or Screw Attack."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Right Item Double Shinespark",
+      "note": [
+        "One vertical spark is needed to open up the breakable blocks on the right ceiling.",
+        "Then, a second horizontal spark is performed where those blocks were cleared to reveal the item."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Safe Spot Kill",
+      "note": [
+        "The ability to get into the safe spot in the Golden Torizo fight, where Samus can attack while being safe from GT's standard attacks.",
+        "To get into the safe spot near the door: Stand on the left side of the floor pillar for GT to jump back. Then stand to the right of the nearby background pillar.",
+        "Shoot Golden Torizo by facing right and firing up.  Farm drops by turning around to face left and firing up with no wide beams equipped."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Crumble Jump",
+      "note": "Jump on the crumble blocks to reach the Missile item location at the risk of falling through.",
+      "devNote": "It is possible to directly jump over the crumble blocks but the input timings and strat expectations resemble a crumble jump while just being harder."
+    },
+    {
+      "id": 4,
+      "name": "Horizontal Bomb Jump",
+      "note": "Use a bomb explosion to jump horizontally over the GT crumble blocks."
+    },
+    {
+      "id": 5,
+      "name": "Crystal Flash During Fight",
+      "note": [
+        "Midway through the fight, use a Crystal Flash to refill Samus' energy.",
+        "Crystal Flashing while standing in the safe spot at GT's feet is safe."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Missiles Only Kill",
+      "note": [
+        "Killing Golden Torizo only with missiles using enemy state manipulation to get missiles to connect.",
+        "This can be done by rolling under GT, triggering the sit attack, and then shooting missiles during the stand up animation.",
+        "By pushing GT to the door and rolling into the door during a jump back, the sit can reliably be manipulated.",
+        "But this setup is subpixel dependant and harder to setup again if GT moves unexpectidly.",
+        "Use of the safe spot is expected. Keep missiles below 31 to control the fight. This fight takes multiple minutes.",
+        "(A cheeky Missile can hit GT the moment it becomes active)"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "R-Mode Forced Standup Clip",
+      "note": [
+        "Use heat damage to trigger an R-mode forced standup while near the crumble blocks with upward momentum, in order to clip up through them.",
+        "This can be done with Space Jump, a mid-air Spring Ball jump with HiJump, a spring wall, or a speedy jump with HiJump.",
+        "All of these cases can be done with Golden Torizo either alive or dead."
+      ]
+    }
+  ],
+  "nextStratId": 80,
+  "nextNotableId": 8
+}

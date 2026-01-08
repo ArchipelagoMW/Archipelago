@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/vg-json-data/sm-json-data/master/schema/m3-tech.schema.json",
+  "type": "object",
+  "title": "Super Metroid Tech Schema",
+  "properties": {
+    "techCategories": {
+      "type": "array",
+      "title": "Tech Categories",
+      "description": "An array of broad tech categories, into which techs can be placed",
+      "items": {
+        "type": "object",
+        "title": "Tech Category",
+        "description": "A category of techs, that contains several techs",
+        "required": [
+          "name",
+          "description",
+          "techs"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Tech Category Name",
+            "description": "The name of this tech category",
+            "pattern": "^(.*)$"
+          },
+          "description": {
+            "type": "string",
+            "title": "Tech Category Description",
+            "description": "A description for this tech category",
+            "pattern": "^(.*)$"
+          },
+          "techs": {
+            "type": "array",
+            "title": "Super Metroid Techs",
+            "description": "An array of techs, each representing an in-game technique and the requirements for performing it. Any such technique could feasibly be turned off for randomizer logic.",
+            "items": {
+              "type": "object",
+              "title": "Tech",
+              "description": "A tech that represents an in-game technique and the requirements for performing it",
+              "required": [
+                "name",
+                "techRequires",
+                "otherRequires"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "title": "Tech ID",
+                  "description": "Identifier for this tech, unique across all tech."
+                },
+                "name": {
+                  "type": "string",
+                  "title": "Tech Name",
+                  "description": "The name of this tech, to be referenced in logical requirements",
+                  "pattern": "^(.*)$"
+                },
+                "techRequires": {
+                  "$ref": "m3-requirements.schema.json#/definitions/logicalRequirements",
+                  "title": "Tech Requirements",
+                  "description": "Dependent tech required for this tech."
+                },
+                "otherRequires": {
+                  "$ref": "m3-requirements.schema.json#/definitions/logicalRequirements",
+                  "title": "Other Requirements",
+                  "description": "Other requirements to perform this tech, such as items or ammo."
+                },
+                "extensionTechs": {
+                  "type": "array",
+                  "title": "Extension techs",
+                  "description": "An array of extension techs. An extension tech is a more complex version of its parent tech. Its requirements stand alone and explicitly require the parent tech, but it's positioned under the parent to provide hints for cleaning up a tech UI.",
+                  "items": {
+                    "$ref" : "#/properties/techCategories/items/properties/techs/items"
+                  }
+                },
+                "note": {
+                  "$ref" : "m3-note.schema.json#/definitions/note"
+                },
+                "detailNote": {
+                  "$ref" : "m3-note.schema.json#/definitions/detailNote"
+                },
+                "devNote": {
+                  "$ref" : "m3-note.schema.json#/definitions/devNote"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,2477 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 155,
+  "name": "Wrecked Ship Main Shaft",
+  "area": "Wrecked Ship",
+  "subarea": "Main",
+  "roomAddress": "0x7CAF6",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [0, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 1, 0],
+    [1, 1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 1, 1],
+    [0, 0, 0, 0, 1, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a228",
+      "doorOrientation": "up",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 0, 0, 0, 2, 0],
+        [0, 0, 0, 0, 2, 0],
+        [0, 0, 0, 0, 2, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 1, 1],
+        [0, 0, 0, 0, 1, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a1f8",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 2, 0],
+        [0, 0, 0, 0, 1, 0],
+        [1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 1, 1],
+        [0, 0, 0, 0, 1, 0]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001a210",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Wrecked Ship Main Shaft Bottom Left Gray Lock (to West Supers)",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedPhantoon"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [1, 1, 1, 1, 2, 0],
+        [0, 0, 0, 0, 2, 1],
+        [0, 0, 0, 0, 1, 0]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a240",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 2, 0],
+        [0, 0, 0, 0, 1, 0],
+        [1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 1, 1],
+        [0, 0, 0, 0, 1, 0]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Middle Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001a204",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Wrecked Ship Main Shaft Middle Right Gray Lock (to Sponge Bath)",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedPhantoon"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 2, 0],
+        [1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 1, 1],
+        [0, 0, 0, 0, 1, 0]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a234",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 1, 2],
+        [0, 0, 0, 0, 1, 0]
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Bottom Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x001a21c",
+      "doorOrientation": "down",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 1, 1],
+        [0, 0, 0, 0, 2, 0]
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x7C265",
+      "mapTileMask": [
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0],
+        [2, 2, 2, 2, 1, 0],
+        [0, 0, 0, 0, 1, 1],
+        [0, 0, 0, 0, 1, 0]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Right Bomb Blocks",
+      "obstacleType": "inanimate",
+      "note": "The bomb blocks that separate the bottom right door from the main shaft"
+    },
+    {
+      "id": "B",
+      "name": "Shot Blocks",
+      "obstacleType": "inanimate",
+      "note": "The shot blocks that separate the bottom door from the main shaft"
+    },
+    {
+      "id": "C",
+      "name": "Left Bomb Blocks",
+      "obstacleType": "inanimate",
+      "note": "The bomb blocks that separate the main shaft from the item on the left"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Wrecked Ship Main Shaft Covern",
+      "enemyName": "Covern",
+      "quantity": 1,
+      "homeNodes": [1, 3, 4, 7],
+      "stopSpawn": ["f_DefeatedPhantoon"]
+    },
+    {
+      "id": "e2",
+      "groupName": "Wrecked Ship Main Shaft Trapped Atomics",
+      "enemyName": "Trapped Atomic",
+      "quantity": 2,
+      "homeNodes": [7],
+      "stopSpawn": ["f_DefeatedPhantoon"]
+    },
+    {
+      "id": "e3",
+      "groupName": "Wrecked Ship Main Shaft Top Atomics",
+      "enemyName": "Atomic",
+      "quantity": 2,
+      "homeNodes": [4],
+      "spawn": ["f_DefeatedPhantoon"]
+    },
+    {
+      "id": "e4",
+      "groupName": "Wrecked Ship Main Shaft Bottom Atomics",
+      "enemyName": "Atomic",
+      "quantity": 2,
+      "homeNodes": [3],
+      "spawn": ["f_DefeatedPhantoon"]
+    },
+    {
+      "id": "e5",
+      "groupName": "Wrecked Ship Main Shaft Kzans",
+      "enemyName": "Kzan",
+      "quantity": 4,
+      "homeNodes": [8]
+    },
+    {
+      "id": "e6",
+      "groupName": "Wrecked Ship Main Shaft Custom Covern",
+      "enemyName": "Custom Covern (Atomic)",
+      "quantity": 1,
+      "homeNodes": [1, 3, 4, 7],
+      "stopSpawn": ["f_DefeatedPhantoon"]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 2},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 3},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 3},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 3},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 8,
+      "to": [
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Covern or Atomic Ice Clip Door Lock Skip",
+      "requires": [
+        "h_iceClip"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Freeze an Atomic at a precise distance below the door in order to crouch-jump up and clip through the door shell.",
+        "Freezing it while it is moving horizontally and Samus is standing works as a trivial setup.",
+        "If Phantoon is not defeated, stand on the stairs so that Samus is just a few pixels lower, then freeze the Covern low in its cycle.",
+        "Alternatively, freeze it high then perform a tight down grab to get onto it for a pixel perfect clip."
+      ]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Door Frame Below",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithDoorFrameBelow": {
+          "height": 3
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Platform Below",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 6,
+          "leftPosition": -4.5,
+          "rightPosition": 4.5
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Carry G-Mode Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Carry G-Mode Morph Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphMovement"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Frozen Atomic",
+      "requires": [
+        "canUpwardGModeSetup",
+        "canTrickyUseFrozenEnemies",
+        "f_DefeatedPhantoon",
+        {"enemyDamage": {"enemy": "Atomic", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Bring two atomics to the top of the room.",
+        "Stand on one frozen Atomic to freeze a second Atomic at the correct height to use as a platform."
+      ],
+      "devNote": [
+        "It doesn't seem possible with a Covern. Samus needs to be moving upwards 1+ pixel per frame for 16 frames to spawn the Covern.",
+        "Jumping or with Spring Ball are less than 16 before going through the door. If below the platform, the Covern cannot spawn high enough (it spawns 4 tiles above Samus's middle).",
+        "A bomb boost only gives 10 satisfactory frames. Moving diagonally resets the counter in a weird way."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Covern", "type": "contact", "hits": 1}},
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 107,
+      "link": [1, 1],
+      "name": "G-Mode Morph Atomic or Covern Ice Clip, Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]},
+        {"or": [
+          "h_preciseIceClip",
+          "h_highPixelIceClip"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Freeze an Atomic or Covern at a precise distance below the door in order to jump up and clip through the door shell.",
+        "If Phantoon is defeated, it is possible to lure the Atomic from below the shot blocks by placing a Power Bomb.",
+        "Freezing it while it is moving horizontally and Samus is standing works as a trivial setup.",
+        "If Phantoon is not defeated, stand on the stairs so that Samus is just a few pixels lower, then freeze the Covern low in its cycle.",
+        "Alternatively, freeze it high then perform a tight down grab to get onto it for a pixel perfect clip."
+      ],
+      "devNote": [
+        "This is only for indirect G-Mode, because it is trivial while in direct, and would use a different strat.",
+        "FIXME: If Phantoon is not defeated, this does not require Morph or artificial morph."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 9,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 10,
+      "link": [2, 2],
+      "name": "Leave With Runway - Frozen Atomic",
+      "requires": [
+        "f_DefeatedPhantoon",
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 0
+        }
+      },
+      "note": "Position and freeze an Atomic to extend the runway. Maintain a half-tile gap between the runway to extend it as far as possible.",
+      "devNote": "It could be possible to freeze a Covern in its place, but it seems very difficult to position."
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Covern or Atomic",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Covern", "type": "contact", "hits": 1}},
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [2, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 14,
+      "link": [2, 4],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 65}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [2, 4],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 70},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [2, 4],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 5],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 175}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [2, 6],
+      "name": "G-mode Morph Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true,
+      "note": "Use the camera scroll blocks just left of the bomb blocks, in order to overload PLMs and go through them."
+    },
+    {
+      "id": 19,
+      "link": [2, 8],
+      "name": "G-mode Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the camera scroll blocks just right of the bomb blocks, in order to overload PLMs and go through them.",
+        "Cancel g-mode, morph and move back towards the bomb blocks in order to fix the camera."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 8],
+      "name": "G-mode Morph to Item While Blind",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "canOffScreenMovement",
+            "canTrickyGMode"
+          ]},
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the camera scroll blocks just right of the bomb blocks, in order to overload PLMs and go through them.",
+        "Exit g-mode and travel to the item and back while off screen."
+      ],
+      "devNote": "This is only useful if the item is Morph. If Samus already has Morph, she can fix the camera, using another strat."
+    },
+    {
+      "id": 21,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [
+        {"obstaclesNotCleared": ["B"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "devNote": "FIXME: It may be possible to extend this runway with a frozen Atomic or Covern."
+    },
+    {
+      "id": 22,
+      "link": [3, 3],
+      "name": "Leave with Runway, Broken Blocks",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "devNote": "It is technically possible to reset at 7 and keep the top layer of obstacle B intact by clipping through the blocks"
+    },
+    {
+      "id": 24,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A", "B", "C"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit By Covern or Atomic",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [3, 3],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Covern", "type": "contact", "hits": 1}},
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 27,
+      "link": [3, 5],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "canIBJ",
+          "SpeedBooster",
+          "h_crouchJumpDownGrab",
+          "canSpringBallJumpMidAir",
+          "canSpringBallBombJump",
+          "canUseFrozenEnemies"
+        ]}
+      ]
+    },
+    {
+      "id": 28,
+      "link": [3, 6],
+      "name": "Blocks Already Broken",
+      "requires": [
+        "Morph",
+        {"obstaclesCleared": ["A"]}
+      ]
+    },
+    {
+      "id": 29,
+      "link": [3, 6],
+      "name": "Bombs",
+      "requires": [
+        "h_useMorphBombs"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 30,
+      "link": [3, 6],
+      "name": "Power Bombs",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 31,
+      "link": [3, 6],
+      "name": "Speedball",
+      "entranceCondition": {
+        "comeInSpeedballing": {
+          "runway": {
+            "length": 13,
+            "openEnd": 0
+          }
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 32,
+      "link": [3, 6],
+      "name": "Temporary Blue Bounce",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canTemporaryBlue",
+        "canSpringBallBounce"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "There is 1 unusable tile in this runway."
+    },
+    {
+      "id": 33,
+      "link": [3, 6],
+      "name": "Temporary Blue Bounce (In-Room)",
+      "requires": [
+        {"obstaclesNotCleared": ["B"]},
+        {"or": [
+          {"canShineCharge": {"usedTiles": 12, "openEnd": 1}},
+          {"and": [
+            {"doorUnlockedAtNode": 3},
+            {"canShineCharge": {"usedTiles": 13, "openEnd": 1}}
+          ]}
+        ]},
+        "canTemporaryBlue",
+        "canSpringBallBounce"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "There is 0.5 unusable tiles in this runway."
+    },
+    {
+      "id": 34,
+      "link": [3, 6],
+      "name": "G-mode Morph Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true,
+      "note": "Use the camera scroll blocks just left of the bomb blocks, in order to overload PLMs and go through them."
+    },
+    {
+      "id": 35,
+      "link": [3, 7],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ],
+      "clearsObstacles": ["B"],
+      "note": "From this direction, the shot blocks are fully breakable with Power Beam"
+    },
+    {
+      "id": 36,
+      "link": [3, 7],
+      "name": "Stored Moonfall Clip",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        "canMoonfall",
+        "canOffScreenMovement"
+      ],
+      "note": [
+        "Moonfall twice, on the right or left side of the shot blocks.",
+        "This will put Samus inside of shotblocks, which can be cleared by shooting.",
+        "If on the left side, perform two more moonfalls.",
+        "The camera will be misaligned after the door transition."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [3, 7],
+      "name": "Atomic Ice Moonfall Door Lock Skip",
+      "requires": [
+        "f_DefeatedPhantoon",
+        "Morph",
+        {"obstaclesCleared": ["B"]},
+        "canEnemyStuckMoonfall",
+        "canFreeFallClip",
+        "canTrickyUseFrozenEnemies"
+      ],
+      "bypassesDoorShell": true,
+      "note": [
+        "Lure two Atomics down to the bottom of the room, and freeze them to be able to moonfall between them and aim down.",
+        "After gaining enough speed, press forward to fall down and clip past the door shell below.",
+        "Falling with too much speed can cause Samus to go out of bounds."
+      ]
+    },
+    {
+      "id": 108,
+      "link": [3, 7],
+      "name": "G-Mode Setup - Get Hit by Thawing Atomic",
+      "requires": [
+        "f_DefeatedPhantoon",
+        "canWallIceClip",
+        "canDownwardGModeSetup",
+        "Morph"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Run from the ledge into the open doorway while hitting the frozen Atomic and the door transition simultaneously, just as the Atomic thaws and touches Samus during the transition.",
+        "Note that this requires a precise freeze (2 pixel window), a small pixel starting window (approximately 3 pixel window), precise thaw timing, and a 50% success rate due to collision oscillation.",
+        "The positioning of the Atomic is where its hitbox is one or two pixels away from the edge of the door frame, so that Samus can clip into the wall and stand as she touches the transition."
+      ],
+      "devNote": "This can not work with a Covern, as it only moves vertically and can't hit Samus in the transition."
+    },
+    {
+      "id": 38,
+      "link": [3, 8],
+      "name": "Blocks Already Broken",
+      "requires": [
+        "Morph",
+        {"obstaclesCleared": ["C"]}
+      ]
+    },
+    {
+      "id": 39,
+      "link": [3, 8],
+      "name": "Bombs",
+      "requires": [
+        "h_useMorphBombs"
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 40,
+      "link": [3, 8],
+      "name": "Power Bombs",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "clearsObstacles": ["A", "B", "C"],
+      "note": [
+        "It is possible to use a single Power Bomb to break the bomb blocks going left to the item, right to the door, and shot blocks going down.",
+        "Place the power bomb against the right wall at the top of the stairs between the three obstacles."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [3, 8],
+      "name": "Temporary Blue (In-Room)",
+      "requires": [
+        {"or": [
+          {"canShineCharge": {"usedTiles": 11, "steepUpTiles": 3, "openEnd": 2}},
+          {"and": [
+            "h_frozenEnemyRunway",
+            {"or": [
+              "f_DefeatedPhantoon",
+              {"and": [
+                "SpaceJump",
+                "h_trickyFrozenEnemyRunway"
+              ]}
+            ]},
+            {"canShineCharge": {"usedTiles": 13, "steepUpTiles": 3, "openEnd": 1}}
+          ]}
+        ]},
+        "canTemporaryBlue",
+        "canLateralMidAirMorph"
+      ],
+      "clearsObstacles": ["C"],
+      "flashSuitChecked": true,
+      "note": [
+        "Shinecharging up the stairs gives a longer effective runway than shinecharging down them.",
+        "A frozen Atomic (or Covern) can be used for more runway."
+      ],
+      "devNote": "There is 1/2 a unusable tile in this runway."
+    },
+    {
+      "id": 42,
+      "link": [3, 8],
+      "name": "Temporary Blue Chain (In-Room)",
+      "requires": [
+        {"obstaclesNotCleared": ["B"]},
+        {"doorUnlockedAtNode": 3},
+        {"canShineCharge": {"usedTiles": 13, "openEnd": 1}},
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "can4HighMidAirMorph"
+      ],
+      "unlocksDoors": [
+        {"nodeId": 3, "types": ["missiles", "super"], "requires": []},
+        {"nodeId": 3, "types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "clearsObstacles": ["C"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 104,
+      "link": [3, 8],
+      "name": "Atomic Ice Moonfall Screw Clip",
+      "requires": [
+        {"notable": "Atomic Ice Moonfall Screw Clip"},
+        "f_DefeatedPhantoon",
+        {"enemyDamage": {"enemy": "Atomic", "type": "contact", "hits": 1}},
+        "canUseIFrames",
+        "canTrickyUseFrozenEnemies",
+        "canEnemyStuckMoonfall",
+        "ScrewAttack",
+        "Morph"
+      ],
+      "clearsObstacles": ["C"],
+      "note": [
+        "Freeze an Atomic near the bottom of the stairs above the bomb block, so that it is barely off-camera when Samus drops down.",
+        "Below, prepare a second Atomic to be frozen.",
+        "As it approaches, jump up to cause the upper Atomic to come on-camera and descend.",
+        "Take a hit from the lower Atomic, and freeze it about 1.5 tiles above the floor;",
+        "use the i-frames to jump on top of the lower Atomic and freeze the upper Atomic while it is inside Samus' head.",
+        "Immediately moonfall to the left.",
+        "If successful, Samus will clip two tiles into the floor.",
+        "Turn to the right, and perform a turnaround spin jump to the left to break the bomb block using Screw Attack.",
+        "If Samus clips through the Atomics but does not clip into the floor, it means the bottom Atomic was frozen too low.",
+        "If Samus clips only one tile into the floor, it means the bottom Atomic was frozen too high."
+      ]
+    },
+    {
+      "id": 105,
+      "link": [3, 8],
+      "name": "Covern Wall Ice Screw Clip",
+      "requires": [
+        {"notable": "Covern Wall Ice Screw Clip"},
+        {"not": "f_DefeatedPhantoon"},
+        {"or": [
+          "canRiskPermanentLossOfAccess",
+          {"and": [
+            {"notable": "Atomic Ice Moonfall Screw Clip"},
+            {"enemyDamage": {"enemy": "Atomic", "type": "contact", "hits": 1}}
+          ]}
+        ]},
+        "canMidairWiggle",
+        "canWallIceClip",
+        "ScrewAttack",
+        "Morph"
+      ],
+      "clearsObstacles": ["C"],
+      "note": [
+        "Damage a Covern to prepare it to be frozen.",
+        "Stand a few tiles away from the bomb block, and walk toward it as the Covern is about to reappear.",
+        "If successful, the Covern will spawn inside the wall but close enough that Samus can clip into it.",
+        "Freeze the Covern by pressing against the wall, then jumping and shooting down.",
+        "Run into the wall with as much speed as possible to clip into it.",
+        "Once Samus is clipped into the wall, perform a low turnaround spin jump to the right and immediately turn back to the left while still spinning,",
+        "using Screw Attack to break the bomb block.",
+        "If Phantoon is already dead, a moonfall with two frozen Atomics can instead be used to clip into the floor to be able to break the bomb block."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [3, 8],
+      "name": "G-mode Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the camera scroll blocks just right of the bomb blocks, in order to overload PLMs and go through them.",
+        "Cancel g-mode, morph and move back towards the bomb blocks in order to fix the camera."
+      ]
+    },
+    {
+      "id": 44,
+      "link": [3, 8],
+      "name": "G-mode Morph to Item While Blind",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphIBJ",
+          "h_artificialMorphSpringBallBombJump",
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump"
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "canOffScreenMovement",
+            "canTrickyGMode"
+          ]},
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the camera scroll blocks just right of the bomb blocks, in order to overload PLMs and go through them.",
+        "Exit g-mode and travel to the item and back while off screen."
+      ],
+      "devNote": "This is only useful if the item is Morph. If Samus already has Morph, she can fix the camera, using another strat."
+    },
+    {
+      "id": 106,
+      "link": [3, 8],
+      "name": "Samus Eater Teleport, X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithSamusEaterTeleport": {
+          "floorPositions": [[1, 13], [2, 13]],
+          "ceilingPositions": []
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        {"or": [
+          "Morph",
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Fall into the first Samus Eater in Hellway or the second Samus Eater of Alpha Power Bomb Room.",
+        "After teleporting and passing through the transition, X-Ray climb to reach the space above (about 1 screen), to the left of the bomb blocks.",
+        "Samus will be off-camera, but the slopes at the top will push the camera up, indicating when the climb is done.",
+        "Equip Morph Ball and touch the scroll PLMs in the morph tunnel, to fix the camera to be able to see the way to the item."
+      ],
+      "devNote": [
+        "Other Samus Eaters can also probably work.",
+        "Blind navigation to the item with power on is theoretically possible but seems unreasonable, as a spike hit will cause death."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 46,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 47,
+      "link": [4, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Full Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0,
+          "steepDownTiles": 7
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 100}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 48,
+      "link": [4, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Short Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 1,
+          "steepDownTiles": 3
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 65}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 49,
+      "link": [4, 2],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 70},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 50,
+      "link": [4, 2],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 51,
+      "link": [4, 4],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 1,
+          "steepUpTiles": 7
+        }
+      }
+    },
+    {
+      "id": 52,
+      "link": [4, 4],
+      "name": "Leave With Runway - Frozen Atomic or Covern",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"or": [
+          "f_DefeatedPhantoon",
+          "h_trickyFrozenEnemyRunway"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0,
+          "steepUpTiles": 7
+        }
+      },
+      "note": [
+        "Lure an Atomic or get a Covern to spawn to slightly extend the runway.",
+        "Positioning a Covern is a bit tricky. Consecutive wall jump or Space Jump in place above the gap but not quite at the ceiling,",
+        "or perform full height jumps to sometimes get the Covern to spawn in position. A crouch shot may help freeze the Coven when it is in position."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [4, 4],
+      "name": "Atomic Farm",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 1740}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 1200}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [3]}},
+            {"cycleFrames": 1400}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [4]}},
+            {"cycleFrames": 1050}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [5]}},
+            {"cycleFrames": 1050}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [6]}},
+            {"cycleFrames": 1830},
+            "h_useMorphBombs"
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [7]}},
+            {"cycleFrames": 2000},
+            "Morph",
+            {"or": [
+              "Wave",
+              "Bombs",
+              "Spazer"
+            ]},
+            {"or": [
+              "Bombs",
+              "SpringBall",
+              {"and": [
+                "canMidAirMorph",
+                "canCrouchJump"
+              ]}
+            ]}
+          ]}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          "Plasma",
+          {"and": [
+            "Wave",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 330}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 900}
+          ]}
+        ]},
+        {"or": [
+          "canWalljump",
+          "h_crouchJumpDownGrab",
+          "HiJump",
+          "SpaceJump",
+          {"and": [
+            "canIBJ",
+            {"cycleFrames": 750}
+          ]},
+          {"and": [
+            "canSpringBallJumpMidAir",
+            {"cycleFrames": 30},
+            "h_doubleEquipmentScreenCycleFrames"
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A", "B", "C"],
+      "farmCycleDrops": [{"enemy": "Atomic", "count": 4}]
+    },
+    {
+      "id": 109,
+      "link": [4, 4],
+      "name": "Conservative Covern Farm",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1, 2, 3, 4, 5]}},
+            {"cycleFrames": 2000}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [6]}},
+            {"cycleFrames": 2000},
+            "h_useMorphBombs"
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [7]}},
+            {"cycleFrames": 2000},
+            "Morph",
+            {"or": [
+              "Wave",
+              "Bombs",
+              "Spazer"
+            ]},
+            {"or": [
+              "Bombs",
+              "SpringBall",
+              {"and": [
+                "canMidAirMorph",
+                "canCrouchJump"
+              ]}
+            ]}
+          ]}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          "Plasma",
+          {"and": [
+            "Wave",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "Ice",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 240}
+          ]}
+        ]},
+        {"or": [
+          "canWalljump",
+          "h_crouchJumpDownGrab",
+          "HiJump",
+          "SpaceJump",
+          {"and": [
+            "canIBJ",
+            {"cycleFrames": 750}
+          ]},
+          {"and": [
+            "canSpringBallJumpMidAir",
+            {"cycleFrames": 30},
+            "h_doubleEquipmentScreenCycleFrames"
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A", "B", "C"],
+      "farmCycleDrops": [{"enemy": "Custom Covern (Atomic)", "count": 4}],
+      "note": "There is additional movement expected to represent reaching the Atomics who appear when the power is on.",
+      "devNote": [
+        "This is Covern farm with a reduced drop chance so as to be applicable while powered off without breaking the powered on state.",
+        "Cycle frames represent the slower of killing 4 atomics or killing 4 coverns.",
+        "These Coverns have reduced Power Bomb and Super drop chance."
+      ]
+    },
+    {
+      "id": 110,
+      "link": [4, 4],
+      "name": "Covern Farm",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "Ice",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 240}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            "canFarmWhileShooting",
+            {"cycleFrames": 120}
+          ]},
+          {"cycleFrames": 540}
+        ]},
+        {"cycleFrames": 480}
+      ],
+      "farmCycleDrops": [{"enemy": "Covern", "count": 1}]
+    },
+    {
+      "id": 54,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A", "B", "C"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 55,
+      "link": [4, 4],
+      "name": "G-Mode Setup - Get Hit By Covern or Atomic",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 56,
+      "link": [4, 4],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Covern", "type": "contact", "hits": 1}},
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 57,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 58,
+      "link": [4, 5],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0,
+          "steepDownTiles": 7
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 105}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 59,
+      "link": [4, 5],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 150},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 60,
+      "link": [4, 6],
+      "name": "G-mode Morph Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true,
+      "note": "Use the camera scroll blocks just left of the bomb blocks, in order to overload PLMs and go through them."
+    },
+    {
+      "id": 61,
+      "link": [4, 8],
+      "name": "G-mode Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the camera scroll blocks just right of the bomb blocks, in order to overload PLMs and go through them.",
+        "Cancel g-mode, morph and move back towards the bomb blocks in order to fix the camera."
+      ]
+    },
+    {
+      "id": 62,
+      "link": [4, 8],
+      "name": "G-mode Morph to Item While Blind",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "canOffScreenMovement",
+            "canTrickyGMode"
+          ]},
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the camera scroll blocks just right of the bomb blocks, in order to overload PLMs and go through them.",
+        "Exit g-mode and travel to the item and back while off screen."
+      ],
+      "devNote": "This is only useful if the item is Morph. If Samus already has Morph, she can fix the camera, using another strat."
+    },
+    {
+      "id": 63,
+      "link": [5, 2],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 155},
+        {"shinespark": {"frames": 17}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 64,
+      "link": [5, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 65,
+      "link": [5, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 66,
+      "link": [5, 4],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 155},
+        {"shinespark": {"frames": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 67,
+      "link": [5, 4],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door.",
+        "If Phantoon is not defeated then you have to move quickly to prevent the Coverns from hitting you."
+      ]
+    },
+    {
+      "id": 68,
+      "link": [5, 5],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 12,
+          "openEnd": 1,
+          "steepUpTiles": 6
+        }
+      }
+    },
+    {
+      "id": 69,
+      "link": [5, 5],
+      "name": "Leave With Runway - Frozen Atomic or Covern",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"or": [
+          "f_DefeatedPhantoon",
+          {"and": [
+            "SpaceJump",
+            "h_trickyFrozenEnemyRunway"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0,
+          "steepUpTiles": 6
+        }
+      },
+      "note": [
+        "Lure an Atomic or get a Covern to spawn to extend the runway.",
+        "Position the enemy horizontally centered in the hole to extend the runway all the way to the wall.",
+        "Positioning a Covern is tricky. One way to set this up is with Space Jump.",
+        "Align Samus left against the tile in the ceiling to align the Covern horizontally, then perform short Space Jumps half way between",
+        "the desired Covern position and the ceiling until the Covern spawns in the correct position."
+      ],
+      "devNote": "FIXME: There may be other ways to set up the Covern positioning without Space Jump."
+    },
+    {
+      "id": 70,
+      "link": [5, 5],
+      "name": "G-Mode Setup - Get Hit By Covern or Atomic",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 71,
+      "link": [5, 5],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Covern", "type": "contact", "hits": 1}},
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 72,
+      "link": [5, 6],
+      "name": "G-mode Morph Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true,
+      "note": "Use the camera scroll blocks just left of the bomb blocks, in order to overload PLMs and go through them."
+    },
+    {
+      "id": 73,
+      "link": [5, 8],
+      "name": "Come In With Temporary Blue",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 74,
+      "link": [5, 8],
+      "name": "Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 11,
+          "openEnd": 1,
+          "steepDownTiles": 7
+        }
+      },
+      "requires": [
+        "canTemporaryBlue",
+        "canLateralMidAirMorph"
+      ],
+      "clearsObstacles": ["C"],
+      "flashSuitChecked": true,
+      "devNote": "There is 1 unusable tile in this runway."
+    },
+    {
+      "id": 75,
+      "link": [5, 8],
+      "name": "Temporary Blue Chain (In-Room)",
+      "requires": [
+        {"or": [
+          {"and": [
+            "can4HighMidAirMorph",
+            {"doorUnlockedAtNode": 5},
+            {"canShineCharge": {"usedTiles": 11, "steepUpTiles": 7, "openEnd": 2}}
+          ]},
+          {"and": [
+            "h_frozenEnemyRunway",
+            {"or": [
+              "f_DefeatedPhantoon",
+              {"and": [
+                "SpaceJump",
+                "h_trickyFrozenEnemyRunway"
+              ]}
+            ]},
+            "can4HighMidAirMorph",
+            {"doorUnlockedAtNode": 5},
+            {"canShineCharge": {"usedTiles": 13, "steepUpTiles": 7, "openEnd": 1}}
+          ]},
+          {"canShineCharge": {"usedTiles": 10, "steepUpTiles": 7, "openEnd": 2}},
+          {"and": [
+            "h_frozenEnemyRunway",
+            {"or": [
+              "f_DefeatedPhantoon",
+              {"and": [
+                "SpaceJump",
+                "h_trickyFrozenEnemyRunway"
+              ]}
+            ]},
+            {"canShineCharge": {"usedTiles": 12, "steepUpTiles": 7, "openEnd": 1}}
+          ]}
+        ]},
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "clearsObstacles": ["C"],
+      "flashSuitChecked": true,
+      "note": [
+        "Shinecharging up the stairs gives a longer effective runway than shinecharging down them.",
+        "Bounce down the stairs to make movement simpler.",
+        "A frozen Atomic (or Covern) can be used for more runway."
+      ],
+      "devNote": "There is 1/2 a unusable tile in this runway."
+    },
+    {
+      "id": 76,
+      "link": [5, 8],
+      "name": "G-mode Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the camera scroll blocks just right of the bomb blocks, in order to overload PLMs and go through them.",
+        "Cancel g-mode, morph and move back towards the bomb blocks in order to fix the camera."
+      ]
+    },
+    {
+      "id": 77,
+      "link": [5, 8],
+      "name": "G-mode Morph to Item While Blind",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "canOffScreenMovement",
+            "canTrickyGMode"
+          ]},
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the camera scroll blocks just right of the bomb blocks, in order to overload PLMs and go through them.",
+        "Exit g-mode and travel to the item and back while off screen."
+      ],
+      "devNote": "This is only useful if the item is Morph. If Samus already has Morph, she can fix the camera, using another strat."
+    },
+    {
+      "id": 78,
+      "link": [6, 3],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"or": [
+          "h_bombThings",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 79,
+      "link": [6, 3],
+      "name": "Speedball",
+      "entranceCondition": {
+        "comeInSpeedballing": {
+          "runway": {
+            "length": 3,
+            "openEnd": 0
+          }
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 80,
+      "link": [6, 3],
+      "name": "Temporary Blue Bounce (Come In Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canTemporaryBlue",
+        "canSpringBallBounce"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "There is 1 unusable tile in this runway."
+    },
+    {
+      "id": 81,
+      "link": [6, 3],
+      "name": "Temporary Blue Bounce (Come In With Temporary Blue)",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "canSpringBallBounce"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "A comeInWithBlueSpringBallBounce strat would also be possible, but there's so little space available that we would need to more carefully define the matching requirements."
+    },
+    {
+      "id": 82,
+      "link": [6, 6],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 111,
+      "link": [6, 6],
+      "name": "Covern Farm",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "Ice",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 240}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            "canFarmWhileShooting",
+            {"cycleFrames": 120}
+          ]},
+          {"cycleFrames": 540}
+        ]},
+        {"cycleFrames": 480}
+      ],
+      "farmCycleDrops": [{"enemy": "Covern", "count": 1}]
+    },
+    {
+      "id": 83,
+      "link": [6, 6],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 84,
+      "link": [6, 6],
+      "name": "G-Mode Setup - Get Hit By Covern or Atomic",
+      "requires": [
+        {"or": [
+          "h_bombThings",
+          {"obstaclesCleared": ["A"]},
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 85,
+      "link": [6, 6],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Covern", "type": "contact", "hits": 1}},
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 86,
+      "link": [7, 3],
+      "name": "Blocks Already Broken",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        {"or": [
+          {"and": [
+            "canCarefulJump",
+            "canMidAirMorph",
+            "canDisableEquipment"
+          ]},
+          "h_useSpringBall"
+        ]}
+      ],
+      "note": [
+        "If Spring Ball is unavailable, then either crouch jump and morph from the stairs, or run and jump into morph from the right of the stairs.",
+        "If you have HiJump, it must be disabled."
+      ]
+    },
+    {
+      "id": 87,
+      "link": [7, 3],
+      "name": "Bombs",
+      "requires": [
+        "h_useMorphBombs"
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 88,
+      "link": [7, 3],
+      "name": "Shoot the Blocks",
+      "requires": [
+        {"or": [
+          "Wave",
+          "Spazer"
+        ]},
+        {"or": [
+          {"and": [
+            "canCarefulJump",
+            "canMidAirMorph",
+            "canDisableEquipment"
+          ]},
+          "h_useSpringBall"
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "note": [
+        "If Spring Ball is unavailable, then either crouch jump and morph from the stairs, or run and jump into morph from the right of the stairs.",
+        "If you have HiJump, it must be disabled."
+      ]
+    },
+    {
+      "id": 89,
+      "link": [7, 3],
+      "name": "Power Bomb",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "clearsObstacles": ["A", "B"],
+      "note": [
+        "Use a Power Bomb to bounce into the morph tunnel.",
+        "This will break the shot blocks and the Bomb Blocks going to the door to the right."
+      ]
+    },
+    {
+      "id": 90,
+      "link": [7, 3],
+      "name": "Partial Covern Ice Clip",
+      "requires": [
+        {"notable": "Partial Covern Ice Clip"},
+        "canTrickyUseFrozenEnemies",
+        "canCeilingClip",
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          {"and": [
+            "canCarefulJump",
+            "canMidAirMorph",
+            "canDisableEquipment"
+          ]},
+          "h_useSpringBall"
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "note": [
+        "Use the Covern to partial ceiling clip so your beam can reach the shot block of the ceiling at the end of the Morph tunnel to the left.",
+        "It is possible to mid-air morph to get into the morph tunnel with nothing, from the Covern, the ground, or the stairs below."
+      ]
+    },
+    {
+      "id": 91,
+      "link": [7, 3],
+      "name": "R-Mode Standup to Shoot the Shot Blocks",
+      "entranceCondition": {
+        "comeInWithRMode": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          "canBePatient",
+          "Plasma"
+        ]},
+        {"or": [
+          {"and": [
+            "canCarefulJump",
+            "canMidAirMorph",
+            "canDisableEquipment"
+          ]},
+          "h_useSpringBall"
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": [
+        "In R-Mode, kill the Coverns until there is Energy in Samus's Reserves. Get into the Morph tunnel and go to the far left.",
+        "Wait for Coverns to damage Samus down until Reserves trigger, forcing a stand up and enabling her to shoot the shot blocks and escape."
+      ]
+    },
+    {
+      "id": 92,
+      "link": [7, 7],
+      "name": "Atomics Farm (Power Off)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          {"and": [
+            "Plasma",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 360}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 330}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 450}
+          ]},
+          {"and": [
+            "h_useMorphBombs",
+            {"cycleFrames": 840}
+          ]},
+          {"and": [
+            "Ice",
+            "canFarmWhileShooting",
+            {"cycleFrames": 840}
+          ]}
+        ]},
+        {"resetRoom": {"nodes": [7]}}
+      ],
+      "resetsObstacles": ["A", "B", "C"],
+      "farmCycleDrops": [{"enemy": "Trapped Atomic", "count": 2}],
+      "note": [
+        "To shoot the Atomics with Ice or Plasma, crouch near the edge of the glass and shoot forward;",
+        "angled shots downwards also work but from a tile further back."
+      ],
+      "devNote": [
+        "Killing the Coverns with any of these options can be done on a single cycle.",
+        "Screw Attack can kill the Coverns quickly, but can't kill the Atomics. Bombs can kill the Atimics easily, but not the Coverns.",
+        "FIXME: Should this require another tech? canRiskPermanentLossOfAccess is a pretty high-level requirement."
+      ]
+    },
+    {
+      "id": 112,
+      "link": [7, 7],
+      "name": "Covern Farm",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "Ice",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 240}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            "canFarmWhileShooting",
+            {"cycleFrames": 120}
+          ]},
+          {"cycleFrames": 540}
+        ]},
+        {"cycleFrames": 480}
+      ],
+      "farmCycleDrops": [{"enemy": "Covern", "count": 1}]
+    },
+    {
+      "id": 93,
+      "link": [7, 7],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 94,
+      "link": [7, 7],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        {"shinespark": {"frames": 2, "excessFrames": 2}}
+      ],
+      "note": "Enter on the left side of the doorway to reduce the amount of energy used.",
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 95,
+      "link": [7, 7],
+      "name": "Shinespark (through Toilet)",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "yes"
+      },
+      "requires": [
+        {"shinespark": {"frames": 9, "excessFrames": 9}}
+      ],
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 96,
+      "link": [7, 7],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A", "B"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 97,
+      "link": [7, 7],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Covern", "type": "contact", "hits": 1}},
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": [
+        "Line up with the far right or left side of doorframe in the room below, to be able to not fall back through after entry, as the door remains open.",
+        "Be careful not to fall into the door while being hit by the Covern."
+      ]
+    },
+    {
+      "id": 98,
+      "link": [8, 3],
+      "name": "Blocks Already Broken",
+      "requires": [
+        "Morph",
+        {"obstaclesCleared": ["C"]}
+      ]
+    },
+    {
+      "id": 99,
+      "link": [8, 3],
+      "name": "Base",
+      "requires": [
+        "h_bombThings"
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 100,
+      "link": [8, 3],
+      "name": "Temporary Blue Bounce (Phantoon Dead)",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"canShineCharge": {"usedTiles": 20, "steepDownTiles": 4, "openEnd": 1}},
+        "canTemporaryBlue",
+        "canXRayTurnaround",
+        "canSpringBallBounce",
+        {"or": [
+          "HiJump",
+          "canChainTemporaryBlue"
+        ]}
+      ],
+      "clearsObstacles": ["C"],
+      "flashSuitChecked": true,
+      "note": [
+        "Run towards the conveyor to more easily build the ShineCharge, and for an easier bounce into the morph tunnel.",
+        "Neutral bounce into the Morph tunnel, and SpringBall bounce to continue all the way through."
+      ],
+      "devNote": "16 tiles plus conveyor pushback."
+    },
+    {
+      "id": 101,
+      "link": [8, 3],
+      "name": "Chain Temporary Blue Bounce (Phantoon Alive)",
+      "requires": [
+        "Morph",
+        {"canShineCharge": {"usedTiles": 16, "steepDownTiles": 4, "openEnd": 1}},
+        "canChainTemporaryBlue",
+        "canXRayTurnaround",
+        "canSpringBallBounce"
+      ],
+      "clearsObstacles": ["C"],
+      "flashSuitChecked": true,
+      "note": "Neutral bounce into the Morph tunnel, and SpringBall bounce to continue all the way through.",
+      "devNote": "Defeating Phantoon makes this strat easier."
+    },
+    {
+      "id": 102,
+      "link": [8, 3],
+      "name": "Temporary Blue Bounce (Phantoon Alive)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"canShineCharge": {"usedTiles": 16, "steepUpTiles": 4, "openEnd": 0}},
+        "canTemporaryBlue",
+        "can4HighMidAirMorph",
+        "canSpringBallBounce"
+      ],
+      "clearsObstacles": ["C"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 103,
+      "link": [8, 3],
+      "name": "SpeedBall Out (Phantoon Alive)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"getBlueSpeed": {"usedTiles": 14, "steepUpTiles": 3, "openEnd": 0}},
+        "canSpeedball"
+      ],
+      "clearsObstacles": ["C"]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Partial Covern Ice Clip",
+      "note": [
+        "Use the Covern to partial ceiling clip so your beam can reach the shot block of the ceiling at the end of the Morph tunnel to the left.",
+        "It is possible to mid-air morph to get into the morph tunnel with nothing, from the Covern, the ground, or the stairs below."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Atomic Ice Moonfall Screw Clip",
+      "note": [
+        "Use a stuck moonfall inside two frozen Atomics to clip two tiles into the floor.",
+        "Face right, then do a turn-around spin jump to the left to break the bomb block using Screw Attack."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Covern Wall Ice Screw Clip",
+      "note": [
+        "Walk toward the wall to cause a Covern to spawn inside it.",
+        "Jump and shoot down to freeze it.",
+        "Run against the wall to clip inside it.",
+        "Perform a turnaround spin jump to the right, then immediately turn back to the left, to break the bomb block with Screw Attack."
+      ]
+    }
+  ],
+  "nextStratId": 113,
+  "nextNotableId": 4
+}

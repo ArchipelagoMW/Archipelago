@@ -1,0 +1,473 @@
+{
+  "$schema": "../schema/m3-weapons.schema.json",
+  "weapons": [
+    {
+      "id": 1,
+      "name": "PowerBeam",
+      "damage": 20,
+      "cooldownFrames": 15,
+      "useRequires": ["PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "UnchargedBeam", "BeamNoPlasma", "UnchargedBeamNoPlasma"]
+    },
+    {
+      "id": 2,
+      "name": "Charge",
+      "damage": 60,
+      "cooldownFrames": 60,
+      "useRequires": ["Charge", "PowerBeam"],
+      "categories": ["All", "Beam", "ChargedBeam", "BeamNoPlasma"],
+      "situational": false,
+      "hitsGroup": false,
+      "note": "A charged Power Beam attack"
+    },
+    {
+      "id": 3,
+      "name": "Ice",
+      "damage": 30,
+      "cooldownFrames": 15,
+      "useRequires": ["Ice"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "UnchargedBeam", "UnchargedIceBeam", "BeamNoPlasma", "UnchargedBeamNoPlasma"]
+    },
+    {
+      "id": 4,
+      "name": "Charge+Ice",
+      "damage": 90,
+      "cooldownFrames": 60,
+      "useRequires": ["Ice", "Charge"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "ChargedBeam", "BeamNoPlasma"]
+    },
+    {
+      "id": 5,
+      "name": "Spazer",
+      "damage": 40,
+      "cooldownFrames": 15,
+      "useRequires": ["Spazer"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "UnchargedBeam", "UnchargedSpazerBeam", "BeamNoPlasma", "UnchargedBeamNoPlasma"]
+    },
+    {
+      "id": 6,
+      "name": "Charge+Spazer",
+      "damage": 120,
+      "cooldownFrames": 60,
+      "useRequires": ["Spazer", "Charge"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "ChargedBeam", "BeamNoPlasma"]
+    },
+    {
+      "id": 7,
+      "name": "Wave",
+      "damage": 50,
+      "cooldownFrames": 15,
+      "useRequires": ["Wave"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "UnchargedBeam", "BeamNoPlasma", "UnchargedBeamNoPlasma"]
+    },
+    {
+      "id": 8,
+      "name": "Charge+Wave",
+      "damage": 150,
+      "cooldownFrames": 60,
+      "useRequires": ["Wave", "Charge"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "ChargedBeam", "BeamNoPlasma"]
+    },
+    {
+      "id": 9,
+      "name": "Plasma",
+      "damage": 150,
+      "cooldownFrames": 15,
+      "useRequires": ["Plasma"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "UnchargedBeam"]
+    },
+    {
+      "id": 10,
+      "name": "Charge+Plasma",
+      "damage": 450,
+      "cooldownFrames": 60,
+      "useRequires": ["Plasma", "Charge"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "ChargedBeam", "Beam"]
+    },
+    {
+      "id": 11,
+      "name": "Ice+Spazer",
+      "damage": 60,
+      "cooldownFrames": 15,
+      "useRequires": ["Ice", "Spazer", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "UnchargedBeam", "UnchargedIceBeam", "UnchargedSpazerBeam", "BeamNoPlasma", "UnchargedBeamNoPlasma"]
+    },
+    {
+      "id": 12,
+      "name": "Charge+Ice+Spazer",
+      "damage": 180,
+      "cooldownFrames": 60,
+      "useRequires": ["Charge", "Ice", "Spazer", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "ChargedBeam", "BeamNoPlasma"]
+    },
+    {
+      "id": 13,
+      "name": "Ice+Wave",
+      "damage": 60,
+      "cooldownFrames": 15,
+      "useRequires": ["Ice", "Wave", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "UnchargedBeam", "UnchargedIceBeam", "BeamNoPlasma", "UnchargedBeamNoPlasma"]
+    },
+    {
+      "id": 14,
+      "name": "Charge+Ice+Wave",
+      "damage": 180,
+      "cooldownFrames": 60,
+      "useRequires": ["Charge", "Ice", "Wave", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "ChargedBeam", "BeamNoPlasma"]
+    },
+    {
+      "id": 15,
+      "name": "Wave+Spazer",
+      "damage": 70,
+      "cooldownFrames": 15,
+      "useRequires": ["Wave", "Spazer", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "UnchargedBeam", "UnchargedSpazerBeam", "BeamNoPlasma", "UnchargedBeamNoPlasma"]
+    },
+    {
+      "id": 16,
+      "name": "Charge+Wave+Spazer",
+      "damage": 210,
+      "cooldownFrames": 60,
+      "useRequires": ["Charge", "Wave", "Spazer", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "ChargedBeam", "BeamNoPlasma"]
+    },
+    {
+      "id": 17,
+      "name": "Ice+Wave+Spazer",
+      "damage": 100,
+      "cooldownFrames": 15,
+      "useRequires": ["Ice", "Wave", "Spazer", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "UnchargedBeam", "UnchargedIceBeam", "UnchargedSpazerBeam", "BeamNoPlasma", "UnchargedBeamNoPlasma"]
+    },
+    {
+      "id": 18,
+      "name": "Charge+Ice+Wave+Spazer",
+      "damage": 300,
+      "cooldownFrames": 60,
+      "useRequires": ["Charge", "Ice", "Wave", "Spazer", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "ChargedBeam", "BeamNoPlasma"]
+    },
+    {
+      "id": 19,
+      "name": "Ice+Plasma",
+      "damage": 200,
+      "cooldownFrames": 12,
+      "useRequires": ["Ice", "Plasma", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "UnchargedIceBeam", "UnchargedBeam"],
+      "note": "Special case of extra fast cooldown"
+    },
+    {
+      "id": 20,
+      "name": "Charge+Ice+Plasma",
+      "damage": 600,
+      "cooldownFrames": 60,
+      "useRequires": ["Charge", "Ice", "Plasma", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "ChargedBeam" ]
+    },
+    {
+      "id": 21,
+      "name": "Wave+Plasma",
+      "damage": 250,
+      "cooldownFrames": 15,
+      "useRequires": ["Wave", "Plasma", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "UnchargedBeam"]
+    },
+    {
+      "id": 22,
+      "name": "Charge+Wave+Plasma",
+      "damage": 750,
+      "cooldownFrames": 60,
+      "useRequires": ["Charge", "Wave", "Plasma", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "ChargedBeam" ]
+    },
+    {
+      "id": 23,
+      "name": "Ice+Wave+Plasma",
+      "damage": 300,
+      "cooldownFrames": 15,
+      "useRequires": ["Ice", "Wave", "Plasma", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "UnchargedIceBeam", "UnchargedBeam"]
+    },
+    {
+      "id": 24,
+      "name": "Charge+Ice+Wave+Plasma",
+      "damage": 900,
+      "cooldownFrames": 60,
+      "useRequires": ["Charge", "Ice", "Wave", "Plasma", "PowerBeam"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "Beam", "ChargedBeam" ]
+    },
+    {
+      "id": 25,
+      "name": "Missile",
+      "damage": 100,
+      "cooldownFrames": 10,
+      "useRequires": ["Missile"],
+      "shotRequires": [
+        {"ammo": {
+          "type": "Missile",
+          "count": 1
+        }}
+      ],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All"]
+    },
+    {
+      "id": 26,
+      "name": "Super",
+      "damage": 300,
+      "cooldownFrames": 20,
+      "useRequires": ["Super"],
+      "shotRequires": [
+        {"ammo": {
+          "type": "Super",
+          "count": 1
+        }}
+      ],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All"]
+    },
+    {
+      "id": 27,
+      "name": "Bombs",
+      "damage": 30,
+      "cooldownFrames": 16,
+      "useRequires": ["Morph", "Bombs"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All"]
+    },
+    {
+      "id": 28,
+      "name": "PowerBomb",
+      "damage": 400,
+      "cooldownFrames": 160,
+      "useRequires": ["Morph", "PowerBomb"],
+      "shotRequires": [
+        {"ammo": {
+          "type": "PowerBomb",
+          "count": 1
+        }}
+      ],
+      "situational": false,
+      "hitsGroup": true,
+      "categories": ["All", "PowerBombBlast"],
+      "note": "The regular Power Bomb weapon assumes the enemy is near the center of the blast and gets hit twice per Power Bomb, hence the 400 damage"
+    },
+    {
+      "id": 29,
+      "name": "PowerBombPeriphery",
+      "damage": 200,
+      "cooldownFrames": 160,
+      "useRequires": ["Morph", "PowerBomb"],
+      "shotRequires": [
+        {"ammo": {
+          "type": "PowerBomb",
+          "count": 1
+        }}
+      ],
+      "situational": true,
+      "hitsGroup": true,
+      "categories": ["All", "PowerBombBlast"],
+      "note": [
+        "This weapon assumes the enemy is far from the center of the blast and gets hit only once per Power Bomb, hence the 200 damage.",
+        "This weapon is situational because it's assumed PBs will hit twice under normal circumstances."
+      ]
+    },
+    {
+      "id": 30,
+      "name": "ScrewAttack",
+      "damage": 2000,
+      "cooldownFrames": 1,
+      "useRequires": ["ScrewAttack"],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All"],
+      "note": "Damage is per frame"
+    },
+    {
+      "id": 31,
+      "name": "PseudoScrew",
+      "damage": 200,
+      "cooldownFrames": 60,
+      "useRequires": ["canPseudoScrew", "Charge", "PowerBeam"],
+      "categories": ["All"],
+      "situational": true,
+      "hitsGroup": false,
+      "note": "This is situational because it also causes contact damage for every time it is used without killing the enemy"
+    },
+    {
+      "id": 32,
+      "name": "Shinespark",
+      "damage": 300,
+      "cooldownFrames": 1,
+      "useRequires": ["SpeedBooster"],
+      "categories": ["All"],
+      "situational": true,
+      "hitsGroup": false,
+      "note": "Damage is per frame. This is situational because charging Speed Booster is situational"
+    },
+    {
+      "id": 33,
+      "name": "BlueSuit",
+      "damage": 500,
+      "cooldownFrames": 1,
+      "useRequires": ["SpeedBooster"],
+      "categories": ["All"],
+      "situational": true,
+      "hitsGroup": false,
+      "note": "Damage is per frame. This is situational because charging Speed Booster is situational"
+    },
+    {
+      "id": 34,
+      "name": "SpeedEchoes",
+      "damage": 4096,
+      "cooldownFrames": 1,
+      "useRequires": ["SpeedBooster"],
+      "categories": ["All"],
+      "situational": true,
+      "hitsGroup": false,
+      "note": "Damage is per frame. This is situational because charging Speed Booster is situational"
+    },
+    {
+      "id": 35,
+      "name": "Grapple",
+      "damage": 200,
+      "cooldownFrames": 15,
+      "useRequires": [ "canUseGrapple", "Grapple" ],
+      "categories": ["All"],
+      "situational": false,
+      "hitsGroup": false,
+      "note": "The damage of 200 is a pure guess. It's the most HP an enemy vulnerable to it has (Scizer)."
+    },
+    {
+      "id": 36,
+      "name": "Wave Shield",
+      "damage": 1200,
+      "cooldownFrames": 400,
+      "useRequires": ["canSpecialBeamAttack", "Wave", "PowerBomb", "Charge"],
+      "shotRequires": [
+        {"ammo": {
+          "type": "PowerBomb",
+          "count": 1
+        }}
+      ],
+      "situational": true,
+      "hitsGroup": false,
+      "categories": ["All", "SpecialBeamAttack"],
+      "note": "4 particles that under optimal conditions can be fired once per roughly 170 frames but it's unconcievable to be able to line it up that perfectly"
+    },
+    {
+      "id": 37,
+      "name": "Ice Shield",
+      "damage": 360,
+      "cooldownFrames": 200,
+      "useRequires": ["canSpecialBeamAttack", "Ice", "PowerBomb", "Charge"],
+      "shotRequires": [
+        {"ammo": {
+          "type": "PowerBomb",
+          "count": 1
+        }}
+      ],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "SpecialBeamAttack"]
+    },
+    {
+      "id": 38,
+      "name": "Spazer Shield",
+      "damage": 600,
+      "cooldownFrames": 230,
+      "useRequires": ["canSpecialBeamAttack", "Spazer", "PowerBomb", "Charge"],
+      "shotRequires": [
+        {"ammo": {
+          "type": "PowerBomb",
+          "count": 1
+        }}
+      ],
+      "situational": false,
+      "hitsGroup": false,
+      "categories": ["All", "SpecialBeamAttack"]
+    },
+    {
+      "id": 39,
+      "name": "Plasma Shield",
+      "damage": 600,
+      "cooldownFrames": 400,
+      "useRequires": ["canSpecialBeamAttack", "Plasma", "PowerBomb", "Charge"],
+      "shotRequires": [
+        {"ammo": {
+          "type": "PowerBomb",
+          "count": 1
+        }}
+      ],
+      "situational": false,
+      "hitsGroup": true,
+      "categories": ["All", "SpecialBeamAttack"],
+      "note": [
+        "4 particles that under optimal conditions can be fired once per roughly 230 frames but it's unconcievable to be able to line it up that perfectly",
+        "4 particles are fired but only 2 are expected to hit any individual enemy for 300 damage each."
+      ]
+    }
+  ],
+  "categories": [
+    "All",
+    "Beam",
+    "BeamNoPlasma",
+    "ChargedBeam",
+    "PowerBombBlast",
+    "SpecialBeamAttack",
+    "UnchargedBeam",
+    "UnchargedBeamNoPlasma",
+    "UnchargedIceBeam",
+    "UnchargedSpazerBeam"
+  ]
+}

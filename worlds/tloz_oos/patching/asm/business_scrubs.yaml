@@ -1,0 +1,170 @@
+# Change the subID of business scrubs in maps to make it a bit more compact,
+# removing the need to inject new tables.
+# Original IDs:
+#	$00-$02 => Mt. Cucco (currently unreachable)
+#   $03-$05 => Samasa cave
+#   $06-$08 => Spool Swamp
+#   $09 => D2
+#   $0a => D4
+# New IDs:
+#   $00 => Spool Swamp
+#   $01 => Samasa Cave
+#   $02 => D2
+#   $03 => D4
+#   $04 => Generic refill scrub (infinitely re-buyable)
+11/4537/: db var.spoolSwampScrubSubid  # option.randomizeScrubs ? $00 : $04
+11/4188/: db var.samasaCaveScrubSubid  # option.randomizeScrubs ? $01 : $04
+11/72b7/: db var.d2ScrubSubid          # option.randomizeScrubs ? $02 : $04
+11/7480/: db var.d4ScrubSubid          # option.randomizeScrubs ? $03 : $04
+
+# In vanilla, falling into a Samasa Desert quicksand has 1/2 chance of leading you into a Business Scrub cave or in
+# a cave filled with Like-Likes. Going to that cave through stairs always gives the Like-Like variant.
+# This patch makes it mandatory to fall in the scrub variant from quicksands (while stairs still lead to Like-Likes)
+09/4c86/: db $d1
+
+# Adapt @treasuresToSell to match new subids
+0f/75a7/: |
+    dwbe locations.spoolSwampScrub
+    dwbe locations.samasaCaveScrub
+    dwbe locations.d2Scrub
+    dwbe locations.d4Scrub
+    dwbe $0000
+# Replace the second half of @treasuresToSell by a new table used to determine
+# which flag is set when item is bought
+0f/75b1/boughtScrubItemFlags: |
+    db $3f,$04  ; bit 2 of wBoughtShopItems1
+    db $3f,$10  ; bit 4 of wBoughtShopItems1
+    db $42,$20  ; bit 5 of wBoughtSubrosianShopItems
+    db $42,$40  ; bit 6 of wBoughtSubrosianShopItems
+    db $00,$00  ; not saved
+
+# Adapt @offerItemTextIndices to match new subids
+0f/758e/scrubTextIndices: |
+    db $45,$09
+    db $45,$0b
+    db $45,$0d
+    db $45,$0c
+    db $45,$0a   ; generic refill scrub text
+
+# Adapt @rupeeValues to match new subids
+0f/759c/rupeeEnumCosts: |
+    db shopPrices.spoolSwampScrub
+    db shopPrices.samasaCaveScrub
+    db shopPrices.d2Scrub
+    db shopPrices.d4Scrub
+    db $07      ; 30 Rupees
+
+# Adapt @itemPrices to match new subids
+0f/75bd/scrubPricesAsText: |
+    ; dw text.spoolSwampScrubPrice
+    ; dw text.samasaCaveScrubPrice
+    ; dw text.d2ScrubPrice
+    ; dw text.d4ScrubPrice
+    dw $0030
+
+
+# Get information relative to the "bought flag" for scrub with subid [a]
+# Input
+#   - a: scrub subid
+# Output
+#   - hl: flag address
+#   - c: bitmask
+#   - a: flag value
+0f//getScrubItemFlag: |
+    ld hl,boughtScrubItemFlags
+    rst 18     ; rst_addDoubleIndex
+    ld a,(hl)   ; flag addr lsb -> a
+    inc hl
+    ld c,(hl)   ; bitmask -> c
+    ld h,$c6
+    ld l,a
+    ld a,(hl)   ; flag value -> a
+    ret
+
+# Mark the item sold by scrub of subid [a] as bought
+0f//setScrubItemFlag: |
+    # push bc
+    # push hl
+    call getScrubItemFlag
+    or c
+    ld (hl),a
+    # pop hl
+    # pop bc
+    ld a,(de)
+    ret
+
+
+# Replace all init code specific to shield to init price text
+0f/7434/: jr @scrubInitEnd
+0f/7455/@scrubInitEnd: ; # Label to mark end of empty block
+
+# Read the item flag for scrub of subid [a], and if set, permanently turn it into
+# a generic inventory refill scrub.
+# Then, return the ID of the string to display when talking to that scrub in [bc].
+0f//updateScrubSubidAndGetText: |
+    jr z,@notBought
+    
+    @bought:
+    ; Scrub item was already bought, turn it into a reusable refill scrub
+    ld a,$04
+    ld (de),a
+    
+    @notBought:
+    ; Load the price as text into wTextNumberSubstitution
+    ld a,(de)
+    ld hl,scrubPricesAsText
+    rst 18       ; addDoubleIndex
+    ldi a,(hl)
+    ld b,(hl)
+    ld hl,wTextNumberSubstitution
+    ldi (hl),a
+    ld (hl),b
+    
+    ; Load the actual text ID that is going to be read into [bc]
+    ld a,(de)
+    ld hl,scrubTextIndices
+    rst 18        ; rst_addDoubleIndex
+    ld b,(hl)      
+    inc hl
+    ld c,(hl)     ; TX_bbcc
+    ret
+# Call the above function at the end of @linkIsClose
+0f/74d3/: |
+    call getScrubItemFlag
+    and c
+    call updateScrubSubidAndGetText
+
+# Replace all special cases from vanilla scrubs by a generic "spawnTreasureOnLink", and set a permanent item flag
+# when buying the item to avoid doing it several times
+0f/7544/: |
+    or a
+    jr z,@refill
+    ld b,(hl)
+    inc hl
+    ld c,(hl)
+    call spawnTreasureOnLink
+    jr nz,@scrubBuyEnd
+    ; Set forced collect mode in var31 to avoid setting the item flag
+    ld l,$71  
+    ld (hl),COLLECT_PICKUP_NOFLAG
+    ld a,(de)
+    call setScrubItemFlag
+    jr @scrubBuyEnd
+    
+    ; If item ID is $00, refill player inventory like Impa instead 
+    @refill:
+    push hl
+    push de
+    ld c,$99
+    ld e,$3f
+    ld hl,refillInventory
+    call interBankCall
+    pop de
+    pop hl
+    jr @scrubBuyEnd
+0f/757a/@scrubBuyEnd: ; # Label to mark end of empty block
+
+
+
+
+

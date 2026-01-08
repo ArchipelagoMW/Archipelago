@@ -1,0 +1,8 @@
+[
+    {
+        "name": "seamap",
+        "img": "images/seamap.png",
+        "location_size": 14,
+        "location_border_thickness": 2
+    }
+]

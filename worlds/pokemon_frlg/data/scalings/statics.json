@@ -1,0 +1,227 @@
+{
+  "STATIC_SCALING_ROUTE4_POKEMON_CENTER_1F/MAIN": {
+    "region": "Route 4 Pokemon Center 1F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Gift Magikarp Scaling": [
+        "GIFT_POKEMON_MAGIKARP"
+      ]
+    }
+  },
+  "STATIC_SCALING_POWER_PLANT/MAIN": {
+    "region": "Power Plant",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Static Electrode 1 Scaling": [
+        "STATIC_POKEMON_ELECTRODE_1"
+      ],
+      "Static Electrode 2 Scaling": [
+        "STATIC_POKEMON_ELECTRODE_2"
+      ],
+      "Legendary Zapdos Scaling": [
+        "LEGENDARY_POKEMON_ZAPDOS"
+      ]
+    }
+  },
+  "STATIC_SCALING_POKEMON_TOWER_1F/MAIN": {
+    "region": "Pokemon Tower 1F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Static Marowak Scaling": [
+        "STATIC_POKEMON_MAROWAK"
+      ]
+    }
+  },
+  "STATIC_SCALING_POKEMON_TOWER_6F/MAIN": {
+    "region": "Pokemon Tower 6F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Static Marowak Scaling": [
+        "STATIC_POKEMON_MAROWAK"
+      ]
+    }
+  },
+  "STATIC_SCALING_CELADON_CITY_GAME_CORNER_PRIZE_ROOM/MAIN": {
+    "region": "Celadon Game Corner Prize Room",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Prize Pokemon 1 Scaling": [
+        "CELADON_PRIZE_POKEMON_1"
+      ],
+      "Prize Pokemon 2 Scaling": [
+        "CELADON_PRIZE_POKEMON_2"
+      ],
+      "Prize Pokemon 3 Scaling": [
+        "CELADON_PRIZE_POKEMON_3"
+      ],
+      "Prize Pokemon 4 Scaling": [
+        "CELADON_PRIZE_POKEMON_4"
+      ],
+      "Prize Pokemon 5 Scaling": [
+        "CELADON_PRIZE_POKEMON_5"
+      ]
+    }
+  },
+  "STATIC_SCALING_CELADON_CITY_CONDOMINIUMS_ROOF_ROOM/MAIN": {
+    "region": "Celadon Condominiums Roof Room",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Gift Eevee Scaling": [
+        "GIFT_POKEMON_EEVEE"
+      ]
+    }
+  },
+  "STATIC_SCALING_ROUTE12/SNORLAX_AREA": {
+    "region": "Route 12 (Snorlax Area)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Static Snorlax 1 Scaling": [
+        "STATIC_POKEMON_ROUTE12_SNORLAX"
+      ]
+    }
+  },
+  "STATIC_SCALING_ROUTE16/SNORLAX_AREA": {
+    "region": "Route 16 (Snorlax Area)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Static Snorlax 2 Scaling": [
+        "STATIC_POKEMON_ROUTE16_SNORLAX"
+      ]
+    }
+  },
+  "STATIC_SCALING_SAFFRON_CITY_DOJO/MAIN": {
+    "region": "Saffron Dojo",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Gift Hitmonchan Scaling": [
+        "GIFT_POKEMON_HITMONCHAN"
+      ],
+      "Gift Hitmonlee Scaling": [
+        "GIFT_POKEMON_HITMONLEE"
+      ]
+    }
+  },
+  "STATIC_SCALING_SILPH_CO_7F/NORTHWEST": {
+    "region": "Silph Co. 7F (Northwest Room)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Gift Lapras Scaling": [
+        "GIFT_POKEMON_LAPRAS"
+      ]
+    }
+  },
+  "STATIC_SCALING_SEAFOAM_ISLANDS_B4F/NEAR_ARTICUNO": {
+    "region": "Seafoam Islands B4F (Near Articuno)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Legendary Articuno Scaling": [
+        "LEGENDARY_POKEMON_ARTICUNO"
+      ]
+    }
+  },
+  "STATIC_SCALING_CINNABAR_ISLAND_POKEMON_LAB_EXPERIMENT_ROOM/MAIN": {
+    "region": "Pokemon Lab Experiment Room",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Gift Omanyte Scaling": [
+        "GIFT_POKEMON_OMANYTE"
+      ],
+      "Gift Kabuto Scaling": [
+        "GIFT_POKEMON_KABUTO"
+      ],
+      "Gift Aerodactyl Scaling": [
+        "GIFT_POKEMON_AERODACTYL"
+      ]
+    }
+  },
+  "STATIC_SCALING_CERULEAN_CAVE_B1F/WATER": {
+    "region": "Cerulean Cave B1F (Water)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Legendary Mewtwo Scaling": [
+        "LEGENDARY_POKEMON_MEWTWO"
+      ]
+    }
+  },
+  "STATIC_SCALING_NAVEL_ROCK_SUMMIT/MAIN": {
+    "region": "Navel Rock Summit",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Legendary Ho-Oh Scaling": [
+        "LEGENDARY_POKEMON_HO_OH"
+      ]
+    }
+  },
+  "STATIC_SCALING_NAVEL_ROCK_BASE/MAIN": {
+    "region": "Navel Rock Base",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Legendary Lugia Scaling": [
+        "LEGENDARY_POKEMON_LUGIA"
+      ]
+    }
+  },
+  "STATIC_SCALING_BIRTH_ISLAND_EXTERIOR/MAIN": {
+    "region": "Birth Island Exterior",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Legendary Deoxys Scaling": [
+        "LEGENDARY_POKEMON_DEOXYS"
+      ]
+    }
+  },
+  "STATIC_SCALING_MT_EMBER_SUMMIT/MAIN": {
+    "region": "Mt. Ember Summit",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Legendary Moltres Scaling": [
+        "LEGENDARY_POKEMON_MOLTRES"
+      ]
+    }
+  },
+  "STATIC_SCALING_THREE_ISLAND_BERRY_FOREST/MAIN": {
+    "region": "Berry Forest",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_STATIC_POKEMON_SCALING",
+    "locations": {
+      "Static Hypno Scaling": [
+        "STATIC_POKEMON_HYPNO"
+      ]
+    }
+  }
+}

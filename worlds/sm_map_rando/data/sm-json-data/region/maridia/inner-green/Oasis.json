@@ -1,0 +1,2684 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 198,
+  "name": "Oasis",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Green",
+  "roomAddress": "0x7D48E",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a660",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a66c",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x001a678",
+      "doorOrientation": "up",
+      "doorEnvironments": [{"physics": "water"}],
+      "useImplicitComeInNormally": false,
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "mapTileMask": [
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Junction Below Top Door",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Bottom Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Junction Above Bomb Blocks",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Bottom Left Shinecharged",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [2]
+      ],
+      "note": "This represents being at the bottom left door, facing left, having just gained a shinecharge."
+    },
+    {
+      "id": 8,
+      "name": "Bottom Right Shinecharged",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [2]
+      ],
+      "note": "This represents being at the bottom right door, facing right, having just gained a shinecharge."
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Bomb Blocks",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 3},
+        {"id": 4},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {
+          "id": 4,
+          "note": "One-way link for shinesparks and cross room gravity jumps. Other strats should go 5 -> 6 -> 4."
+        },
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 8,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave with Runway, Open Both Doors",
+      "requires": [
+        {"doorUnlockedAtNode": 2}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"nodeId": 2, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Cross Room Jump with Screw Attack (From the Left)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 4.4375
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump with Screw Attack"},
+        "canTrickyJump",
+        "canCrossRoomJumpIntoWater",
+        "ScrewAttack"
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Use Screw Attack to break the bomb block by entering from a non-water room with a spin jump.",
+        "It helps to enter as low as possible and with as much horizontal speed as possible and with HiJump turned off.",
+        "Even if executed correctly, the trick can fail with 50% probability due to collision oscillation."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Cross Room Jump with Screw Attack and Speed (From the Left)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump with Screw Attack"},
+        "canTrickyJump",
+        "canCrossRoomJumpIntoWater",
+        "ScrewAttack"
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Use Screw Attack to break the bomb block by entering from a non-water room with a spin jump.",
+        "It helps to enter as low as possible and with as much horizontal speed as possible and with HiJump turned off.",
+        "Even if executed correctly, the trick can fail with 50% probability due to collision oscillation."
+      ]
+    },
+    {
+      "id": 70,
+      "link": [1, 1],
+      "name": "Side Platform Cross Room Jump with Screw Attack",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 2,
+              "minTiles": 13.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyDashJump"
+              ],
+              "note": [
+                "Applies to Warehouse Entrance and Dust Torizo Room.",
+                "Gain extra run speed between $3.2 and $3.5, at a position where Samus just barely clears the obstruction."
+              ],
+              "devNote": [
+                "It is technically also possible from Ridley Tank Room, using exact run speed $1.8 and subpixels in a narrow range.",
+                "But without a normalized setup it doesn't seem reasonable."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 8.4375,
+              "speedBooster": "any",
+              "obstructions": [[1, 0], [3, 2]],
+              "note": ["Applies to Big Boy Room, Mickey Mouse Room, and Metal Pirates."]
+            },
+            {
+              "minHeight": 6,
+              "maxHeight": 6,
+              "minTiles": 2.5625,
+              "speedBooster": true,
+              "obstructions": [[5, 6]],
+              "requires": [
+                "canTrickyDashJump"
+              ],
+              "note": ["Applies to Fast Pillars Setup Room.", "Gain extra run speed exactly $1.1."]
+            },
+            {
+              "minHeight": 8,
+              "maxHeight": 8,
+              "minTiles": 6,
+              "speedBooster": false,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "HiJump"
+              ],
+              "note": [
+                "Applies to Screw Attack Room.",
+                "With extra run speed exactly $1.E, it works without collision oscillation.",
+                "Extra run speed $1.D also works, but with collision oscillation giving a 50% failure rate, as with most other setups."
+              ]
+            }
+          ]
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump with Screw Attack"},
+        "ScrewAttack",
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Use Screw Attack to break the bomb block by entering from a non-water room with a spin jump.",
+        "It generally helps to enter as low as possible and with as much horizontal speed as possible,",
+        "and with HiJump turned off except if jumping from a very low platform.",
+        "Even if executed correctly, in most cases the trick can fail with 50% probability due to collision oscillation."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Temporary Blue (Come In With Temporary Blue)",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 74,
+      "link": [1, 1],
+      "name": "Blue Speed (Come In Getting Blue Speed, Gravity)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 9,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Blue Speed (Come In Getting Blue Speed, Water Shinecharge)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "h_waterGetBlueSpeed"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Blue Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled"
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 99,
+      "link": [1, 1],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (5-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 130},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With a runway of 5 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 5 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 100,
+      "link": [1, 1],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (4-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 140},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 10}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 4 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 4 frames, and repress forward on the last possible frame before the transition.",
+        "It also works well to release forward for 3 frames and repress on the last possible frame.",
+        "Other timings can also work, but may gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 101,
+      "link": [1, 1],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (3-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 145},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 10}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 3 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 3 or 4 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "devNote": [
+        "The same shinecharge frames could be achieved with a closed end runway (effective length of 2.4375),",
+        "with a 3-frame stutter, but there doesn't appear to be any application."
+      ]
+    },
+    {
+      "id": 102,
+      "link": [1, 1],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (2-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 150},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 2 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 3 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "devNote": [
+        "FIXME: The canBeVeryPatient requirement is for difficulty placement of the boomerang method;",
+        "but the boomerang (or maybe specifically the moonwalk boomerang) should possibly be its own tech,",
+        "and the same with rapid arm pumping."
+      ]
+    },
+    {
+      "id": 103,
+      "link": [1, 1],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (1-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        {"doorUnlockedAtNode": 2},
+        "canPreciseStutterWaterShineCharge",
+        "canInsaneJump",
+        "canBeVeryPatient",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"nodeId": 2, "types": ["missiles", "super"], "requires": []},
+        {"nodeId": 2, "types": ["powerbomb"], "requires": ["never"]},
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only 1 tile of runway in the other room, Samus should ideally start on the last pixel of runway with X subpixels of $3FFF or less.",
+        "Run toward the door, releasing forward for exactly 1 frame and pressing it again on the last possible frame before the transition.",
+        "Starting with X subpixels of $7FFF can also work (e.g., by simply backing against the door ledge, then jumping and turning around mid-air);",
+        "in this case, Samus must advance 1 or 2 pixels with an arm pump before the transition (e.g., firing a shot or pressing and/or releasing an angle button),",
+        "and the shinecharge will be gained slightly further away from the door.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "detailNote": [
+        "Ideal subpixels ($3FFF) can be achieved using one of several methods:",
+        "1) press forward against the door ledge (or a wall aligned with it);",
+        "jump, and while mid-air, tap forward for exactly 1 frame to land with subpixels $BFFF,",
+        "moonwalk back for exactly 1 frame to end with subpixels $3FFF.",
+        "2) press forward against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), and moonwalk back two pixels,",
+        "then jump and mid-air turnaround onto the ledge;",
+        "if Samus jumped from the correct pixel but does not land on the ledge, then it was needed to moonwalk back 1 more frame;",
+        "in this case it is possible to retry by doing a mid-air turnaround back onto the platform, and moonwalking back for 1 frame.",
+        "3) if X-Ray is available, press against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), then jump and mid-air turnaround toward the door,",
+        "and use X-Ray to turnaround in place away from the door;",
+        "repeat this sequence 3 more times: jump, mid-air turnaround, X-Ray turnaround;",
+        "then do one more jump and mid-air turnaround, high enough to land on the door ledge,",
+        "and Samus should be in the correct position with subpixels $3FFF."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "G-Mode Morph Bomb Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"and": [
+            "h_artificialMorphIBJ",
+            "Gravity"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "h_artificialMorphBombs"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 75,
+      "link": [1, 2],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 5}
+          ]},
+          {"shineChargeFrames": 10}
+        ]},
+        {"shinespark": {"frames": 23}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 76,
+      "link": [1, 2],
+      "name": "Come In Shinecharged, Leave With Spark (Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 10}
+          ]},
+          {"shineChargeFrames": 20}
+        ]},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 77,
+      "link": [1, 2],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 55}
+          ]},
+          {"and": [
+            "canSuitlessMaridia",
+            {"shineChargeFrames": 150}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [1, 3],
+      "name": "Cross Room Jump Through Top Door (Screw Attack)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 13
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Through Top Door"},
+        "canInsaneJump",
+        "canCrossRoomJumpIntoWater",
+        "ScrewAttack",
+        "canMomentumConservingTurnaround"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Use Screw Attack to break the bomb block by entering from a non-water room with a spin jump, and make it all the way through the top door.",
+        "Ideally, gain speed using between 13 and 13.5 tiles of runway (with an open end).",
+        "Longer runway lengths can also work, up to 17 tiles, but will make the trick somewhat more precise.",
+        "Use angle to break spin, and do a momentum conserving turnaround either on the same frame or one frame later;",
+        "this first turnaround should be done early enough that the turnaround is complete by the time Samus clears the two-tile passage in the middle of the room.",
+        "Do a second momentum conserving turnaround must be done somewhat late, and by switching from holding left to holding right one frame later (a perfect 'boomerang').",
+        "Shoot open the door, and use a third momentum conserving turnaround on it as it opens."
+      ],
+      "detailNote": [
+        "The optimal amount of extra run speed is $3.4 or $3.5, by using 13 tiles of runway or about a half tile more;",
+        "this gives a 7-frame window for the first turnaround, and typically a 4-frame window for the second turnaround if the first turnaround is done early enough.",
+        "Extra run speeds between $3.6 and $3.F can also work, but with shorter windows.",
+        "A perfect boomerang is always required for the second turnaround, regardless of where in the window it is done.",
+        "It is recommended to buffer the spin break, by holding angle (up or down), jump, and forward through the transition,",
+        "then switching from forward to backward, with at most 1 frame of neutral in between, while still holding jump and angle."
+      ],
+      "devNote": "This does not have collision oscillation."
+    },
+    {
+      "id": 72,
+      "link": [1, 3],
+      "name": "Cross Room Jump Through Top Door (Blue Speed)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$3.4",
+          "maxExtraRunSpeed": "$3.F"
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Through Top Door"},
+        "canInsaneJump",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Use a 2-tap shortcharge and jump into the room with a last-frame jump, breaking the bomb block with blue speed, and making it all the way through the top door.",
+        "Use angle to break spin, and do a momentum conserving turnaround either on the same frame or one frame later;",
+        "this first turnaround should be done early enough that the turnaround is complete by the time Samus clears the two-tile passage in the middle of the room.",
+        "Do a second momentum conserving turnaround must be done somewhat late, and by switching from holding left to holding right one frame later (a perfect 'boomerang').",
+        "Shoot open the door, and use a third momentum conserving turnaround on it as it opens."
+      ],
+      "detailNote": [
+        "Lower run speeds are generally better, as long as the extra run speed is at least $3.4.",
+        "this gives up to a 7-frame window for the first turnaround, and typically a 4-frame window for the second turnaround if the first turnaround is done early enough.",
+        "A perfect boomerang is always required for the second turnaround, regardless of where in the window it is done.",
+        "It is recommended to buffer the spin break, by holding angle (up or down), jump, and forward through the transition,",
+        "then switching from forward to backward, with at most 1 frame of neutral in between, while still holding jump and angle."
+      ]
+    },
+    {
+      "id": 66,
+      "link": [1, 3],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity, Screw Attack)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "ScrewAttack",
+        "canShinechargeMovementTricky",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 130}
+          ]},
+          {"shineChargeFrames": 145}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: It can be possible to use a longer runway, or a stutter shinecharge with Gravity re-equip, with a cost of some shinecharge frames."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 4],
+      "name": "Come In Shinecharged, Diagonal Suitless Shinespark to the Top",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        "h_navigateUnderwater",
+        {"shinespark": {"frames": 23, "excessFrames": 10}}
+      ],
+      "flashSuitChecked": true,
+      "note": "The spark takes Samus directly to the top platform.",
+      "devNote": ["With Gravity 1 -> 6 -> 4 would be used."]
+    },
+    {
+      "id": 19,
+      "link": [1, 4],
+      "name": "Cross Room Jump with Screw Attack and Speed to the Top (From the Left)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 12.4375
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump with Screw Attack"},
+        "canInsaneJump",
+        "canCrossRoomJumpIntoWater",
+        "ScrewAttack",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": [
+        "Use Screw Attack to break the bomb block by entering from a non-water room with a spin jump, and make it to the top.",
+        "It helps to enter as low as possible and with as much horizontal speed as possible and with HiJump turned off."
+      ],
+      "devNote": [
+        "This does not have collision oscillation",
+        "FIXME: It is possible to use a flash suit to get from 4 through the top door, but either requires a diagonal spark,",
+        "or using this strat to get onto the top platform, which is more than this strat expects."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 21,
+      "link": [1, 6],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "This is a short climb, only a few tiles."
+    },
+    {
+      "id": 22,
+      "link": [1, 6],
+      "name": "Come In Shinecharged, Shinespark to Break the Blocks",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 25},
+        "h_navigateUnderwater",
+        {"or": [
+          {"shinespark": {"frames": 10, "excessFrames": 8}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 7, "excessFrames": 7}}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"shinespark": {"frames": 1, "excessFrames": 1}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Spark vertically through the bomb blocks. It is still possible to break the blocks while below 30 Energy by jumping before sparking.",
+      "devNote": [
+        "This does not require canWaterShineCharge, as you can store the shinecharge before entering the room.",
+        "Note that it is possible to spark into the ceiling to break the blocks without energy loss, but it has collision oscillation.",
+        "FIXME: Add temporary blue strats."
+      ]
+    },
+    {
+      "id": 78,
+      "link": [1, 8],
+      "name": "Come In Shinecharging (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"shineChargeFrames": 0}
+      ],
+      "endsWithShineCharge": true
+    },
+    {
+      "id": 79,
+      "link": [1, 8],
+      "name": "Water Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        {"shineChargeFrames": 0}
+      ],
+      "endsWithShineCharge": true
+    },
+    {
+      "id": 80,
+      "link": [1, 8],
+      "name": "Precise Stutter Water Shinecharge",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2.4375
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        {"shineChargeFrames": 0}
+      ],
+      "endsWithShineCharge": true
+    },
+    {
+      "id": 81,
+      "link": [1, 8],
+      "name": "Precise Stutter Water Shinecharge (Shorter Runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        {"or": [
+          {"doorUnlockedAtNode": 2},
+          "canInsaneJump"
+        ]},
+        {"shineChargeFrames": 0}
+      ],
+      "unlocksDoors": [
+        {"nodeId": 2, "types": ["super", "missiles"], "requires": []},
+        {"nodeId": 2, "types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "endsWithShineCharge": true,
+      "note": [
+        "If only 2 tiles of runway are available and it is not possible to unlock the opposite door, then this requires a double frame-perfect stutter:",
+        "run toward the door, release forward for exactly 3 frames, pressing forward again on the last possible frame before the transition."
+      ],
+      "devNote": [
+        "FIXME: canInsaneJump is for difficulty placement; replace with a more appropriate tech since no jump is involved."
+      ]
+    },
+    {
+      "id": 82,
+      "link": [1, 8],
+      "name": "Precise Stutter Water Shinecharge (Very Short Runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canInsaneJump",
+        "canBeVeryPatient",
+        {"doorUnlockedAtNode": 2},
+        {"shineChargeFrames": 0}
+      ],
+      "unlocksDoors": [
+        {"nodeId": 2, "types": ["super", "missiles"], "requires": []},
+        {"nodeId": 2, "types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "endsWithShineCharge": true,
+      "note": [
+        "With only 1 tile of runway in the other room, Samus should ideally start on the last pixel of runway with X subpixels of $3FFF or less.",
+        "Run toward the door, releasing forward for exactly 1 frame and pressing it again on the last possible frame before the transition.",
+        "Starting with X subpixels of $7FFF can also work (e.g., by simply backing against the door ledge, then jumping and turning around mid-air);",
+        "in this case, Samus must advance 1 or 2 pixels with an arm pump before the transition (e.g., firing a shot or pressing and/or releasing an angle button),",
+        "and the shinecharge will be gained slightly further away.",
+        "After the transition, shoot open the opposite door while running, to extend the runway by a tile."
+      ],
+      "detailNote": [
+        "Correct subpixels can be achieved using one of several methods:",
+        "1) press against the door ledge (or a wall aligned with it);",
+        "jump, and while mid-air, tap forward for exactly 1 frame to land with subpixels $BFFF,",
+        "moonwalk back for exactly 1 frame to end with subpixels $3FFF.",
+        "2) press against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), and moonwalk back two pixels,",
+        "then jump and mid-air turnaround onto the ledge;",
+        "if Samus jumped from the correct pixel but does not land on the ledge, then it was needed to moonwalk back 1 more frame;",
+        "in this case it is possible to retry by doing a mid-air turnaround back onto the platform, and moonwalking back for 1 frame.",
+        "3) if X-Ray is available, press against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), then jump and mid-air turnaround toward the door,",
+        "and use X-Ray to turnaround in place away from the door;",
+        "repeat this sequence 3 more times: jump, mid-air turnaround, X-Ray turnaround;",
+        "then do one more jump and mid-air turnaround, high enough to land on the door ledge,",
+        "and Samus should be in the correct position with subpixels $3FFF."
+      ],
+      "devNote": [
+        "The `canBeVeryPatient` is for difficulty placement; this could be improved with a more specific tech later,",
+        "since it does not actually take a long time to execute."
+      ]
+    },
+    {
+      "id": 83,
+      "link": [2, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 5}
+          ]},
+          {"shineChargeFrames": 10}
+        ]},
+        {"shinespark": {"frames": 23}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 84,
+      "link": [2, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 10}
+          ]},
+          {"shineChargeFrames": 20}
+        ]},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 85,
+      "link": [2, 1],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 55}
+          ]},
+          {"and": [
+            "canSuitlessMaridia",
+            {"shineChargeFrames": 150}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Leave with Runway, Open Both Doors",
+      "requires": [
+        {"doorUnlockedAtNode": 1}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"nodeId": 1, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "Cross Room Jump with Screw Attack (From the Right)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 4.4375
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump with Screw Attack"},
+        "canTrickyJump",
+        "canCrossRoomJumpIntoWater",
+        "ScrewAttack"
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Use Screw Attack to break the bomb block by entering from a non-water room with a spin jump.",
+        "It helps to enter as low as possible and with as much horizontal speed as possible and with HiJump turned off.",
+        "Even if executed correctly, the trick can fail with 50% probability due to collision oscillation."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [2, 2],
+      "name": "Cross Room Jump with Screw Attack and Speed (From the Right)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump with Screw Attack"},
+        "canTrickyJump",
+        "canCrossRoomJumpIntoWater",
+        "ScrewAttack"
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Use Screw Attack to break the bomb block by entering from a non-water room with a spin jump.",
+        "It helps to enter as low as possible and with as much horizontal speed as possible and with HiJump turned off.",
+        "Even if executed correctly, the trick can fail with 50% probability due to collision oscillation."
+      ]
+    },
+    {
+      "id": 71,
+      "link": [2, 2],
+      "name": "Side Platform Cross Room Jump with Screw Attack",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 13.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyDashJump"
+              ],
+              "note": [
+                "Applies to Lava Dive.",
+                "Gain extra run speed of $3.5, at a position where Samus just barely clears the obstruction:",
+                "Starting at a horizontal position of $110 (272) or $111 (273) works at any subpixels;",
+                "parts of the neighboring pixels on either side also work."
+              ],
+              "devNote": [
+                "Run speed $3.2 works, at a pixel position of $F7 (247) with any subpixel, or on parts of the neighboring pixel on either side;",
+                "run speed $3.8 is possible but does not have an entire pixel that works."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 5.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "note": [
+                "Applies to Early Super Room, Bowling Alley (Bottom), Tourian Hopper Room, Dust Torizo Room, and Noob Bridge."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 8.4375,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canInsaneJump"
+              ],
+              "note": [
+                "Applies to Bowling Alley (Bottom), Tourian Hopper Room, Dust Torizo Room, and Noob Bridge.",
+                "Without Speed Booster, this requires specific positioning to align Samus to just barely clear the door ledge."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 8.4375,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "note": [
+                "Applies to Bomb Torizo Room, Pink Brinstar Wave Gate Room, Phantoon's Room, Big Boy Room, Double Chamber."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 5,
+              "speedBooster": true,
+              "obstructions": [[1, 0], [3, 2]],
+              "note": [
+                "Applies to Bomb Torizo Room, Pink Brinstar Wave Gate Room, Phantoon's Room, Big Boy Room, Double Chamber, and Metal Pirates Room.",
+                "With extra run speed exactly $1.2, this works without collision oscillation.",
+                "Extra run speed up through $1.8 also work but with collision oscillation giving a 50% failure rate, as with most other setups."
+              ]
+            },
+            {
+              "minHeight": 4,
+              "maxHeight": 4,
+              "minTiles": 4.5625,
+              "speedBooster": true,
+              "obstructions": [[5, 4]],
+              "note": ["Applies to Tourian Escape Room 4."]
+            }
+          ]
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump with Screw Attack"},
+        "ScrewAttack",
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Use Screw Attack to break the bomb block by entering from a non-water room with a spin jump.",
+        "It generally helps to enter as low as possible and with as much horizontal speed as possible, and with HiJump turned off.",
+        "Even if executed correctly, the trick can fail with 50% probability due to collision oscillation."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "Temporary Blue (Come In With Temporary Blue)",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 86,
+      "link": [2, 2],
+      "name": "Blue Speed (Come In Getting Blue Speed, Gravity)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 9,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 36,
+      "link": [2, 2],
+      "name": "Blue Speed (Come In Getting Blue Speed, Water Shinecharge)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "h_waterGetBlueSpeed"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 37,
+      "link": [2, 2],
+      "name": "Blue Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled"
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 104,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (5-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 130},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With a runway of 5 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 5 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 105,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (4-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 140},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 10}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 4 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 4 frames, and repress forward on the last possible frame before the transition.",
+        "It also works well to release forward for 3 frames and repress on the last possible frame.",
+        "Other timings can also work, but may gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 106,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (3-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 145},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 10}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 3 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 3 or 4 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "devNote": [
+        "The same shinecharge frames could be achieved with a closed end runway (effective length of 2.4375),",
+        "with a 3-frame stutter, but there doesn't appear to be any application."
+      ]
+    },
+    {
+      "id": 107,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (2-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 150},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 2 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 3 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "devNote": [
+        "FIXME: The canBeVeryPatient requirement is for difficulty placement of the boomerang method;",
+        "but the boomerang (or maybe specifically the moonwalk boomerang) should possibly be its own tech,",
+        "and the same with rapid arm pumping."
+      ]
+    },
+    {
+      "id": 108,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (1-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        {"doorUnlockedAtNode": 1},
+        "canPreciseStutterWaterShineCharge",
+        "canInsaneJump",
+        "canBeVeryPatient",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["missiles", "super"], "requires": []},
+        {"nodeId": 1, "types": ["powerbomb"], "requires": ["never"]},
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only 1 tile of runway in the other room, Samus should ideally start on the last pixel of runway with X subpixels of $3FFF or less.",
+        "Run toward the door, releasing forward for exactly 1 frame and pressing it again on the last possible frame before the transition.",
+        "Starting with X subpixels of $7FFF can also work (e.g., by simply backing against the door ledge, then jumping and turning around mid-air);",
+        "in this case, Samus must advance 1 or 2 pixels with an arm pump before the transition (e.g., firing a shot or pressing and/or releasing an angle button),",
+        "and the shinecharge will be gained slightly further away from the door.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "detailNote": [
+        "Ideal subpixels ($3FFF) can be achieved using one of several methods:",
+        "1) press forward against the door ledge (or a wall aligned with it);",
+        "jump, and while mid-air, tap forward for exactly 1 frame to land with subpixels $BFFF,",
+        "moonwalk back for exactly 1 frame to end with subpixels $3FFF.",
+        "2) press forward against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), and moonwalk back two pixels,",
+        "then jump and mid-air turnaround onto the ledge;",
+        "if Samus jumped from the correct pixel but does not land on the ledge, then it was needed to moonwalk back 1 more frame;",
+        "in this case it is possible to retry by doing a mid-air turnaround back onto the platform, and moonwalking back for 1 frame.",
+        "3) if X-Ray is available, press against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), then jump and mid-air turnaround toward the door,",
+        "and use X-Ray to turnaround in place away from the door;",
+        "repeat this sequence 3 more times: jump, mid-air turnaround, X-Ray turnaround;",
+        "then do one more jump and mid-air turnaround, high enough to land on the door ledge,",
+        "and Samus should be in the correct position with subpixels $3FFF."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [2, 2],
+      "name": "G-Mode Morph Bomb Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"and": [
+            "h_artificialMorphIBJ",
+            "Gravity"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "h_artificialMorphBombs"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 39,
+      "link": [2, 3],
+      "name": "Cross Room Jump Through Top Door (Screw Attack)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 13
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Through Top Door"},
+        "canInsaneJump",
+        "canCrossRoomJumpIntoWater",
+        "ScrewAttack",
+        "canMomentumConservingTurnaround"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Use Screw Attack to break the bomb block by entering from a non-water room with a spin jump, and make it all the way through the top door.",
+        "Ideally, gain speed using between 13 and 13.5 tiles of runway (with an open end).",
+        "Longer runway lengths can also work, up to 17 tiles, but will make the trick somewhat more precise.",
+        "Use angle to break spin, and do a momentum conserving turnaround either on the same frame or one frame later;",
+        "this first turnaround should be done early enough that the turnaround is complete by the time Samus clears the two-tile passage in the middle of the room.",
+        "The second momentum conserving turnaround must be done somewhat late, and by switching from holding forward to holding backward one frame later (a perfect 'boomerang').",
+        "Shoot open the door, and use a third momentum conserving turnaround on it as it opens."
+      ],
+      "detailNote": [
+        "The optimal amount of extra run speed is $3.4 or $3.5, by using 13 tiles of runway or about a half tile more;",
+        "this gives a 7-frame window for the first turnaround, and typically a 4-frame window for the second turnaround if the first turnaround is done early enough.",
+        "Extra run speeds between $3.6 and $3.F can also work, but with shorter windows.",
+        "A perfect boomerang is always required for the second turnaround, regardless of where in the window it is done.",
+        "It is recommended to buffer the spin break, by holding angle (up or down), jump, and forward through the transition,",
+        "then switching from forward to backward, with at most 1 frame of neutral in between, while still holding jump and angle."
+      ],
+      "devNote": "This does not have collision oscillation."
+    },
+    {
+      "id": 73,
+      "link": [2, 3],
+      "name": "Cross Room Jump Through Top Door (Blue Speed)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$3.4",
+          "maxExtraRunSpeed": "$3.F"
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Through Top Door"},
+        "canInsaneJump",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Use a 2-tap shortcharge and jump into the room with a last-frame jump, breaking the bomb block with blue speed, and making it all the way through the top door.",
+        "Use angle to break spin, and do a momentum conserving turnaround either on the same frame or one frame later;",
+        "this first turnaround should be done early enough that the turnaround is complete by the time Samus clears the two-tile passage in the middle of the room.",
+        "The second momentum conserving turnaround must be done somewhat late, and by switching from holding forward to holding backward one frame later (a perfect 'boomerang').",
+        "Shoot open the door, and use a third momentum conserving turnaround on it as it opens."
+      ],
+      "detailNote": [
+        "Lower run speeds are generally better, as long as the extra run speed is at least $3.4.",
+        "this gives up to a 7-frame window for the first turnaround, and typically a 4-frame window for the second turnaround if the first turnaround is done early enough.",
+        "A perfect boomerang is always required for the second turnaround, regardless of where in the window it is done.",
+        "It is recommended to buffer the spin break, by holding angle (up or down), jump, and forward through the transition,",
+        "then switching from forward to backward, with at most 1 frame of neutral in between, while still holding jump and angle."
+      ]
+    },
+    {
+      "id": 67,
+      "link": [2, 3],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity, Screw Attack)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "ScrewAttack",
+        "canShinechargeMovementTricky",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 130}
+          ]},
+          {"shineChargeFrames": 145}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: It can be possible to use a longer runway, or a stutter shinecharge with Gravity re-equip, with a cost of some shinecharge frames."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 4],
+      "name": "Come In Shinecharged, Diagonal Suitless Shinespark to the Top",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        "h_navigateUnderwater",
+        {"shinespark": {"frames": 23, "excessFrames": 10}}
+      ],
+      "flashSuitChecked": true,
+      "note": "The spark takes Samus directly to the top platform.",
+      "devNote": ["With Gravity 2 -> 6 -> 4 would be used."]
+    },
+    {
+      "id": 42,
+      "link": [2, 4],
+      "name": "Cross Room Jump with Screw Attack and Speed to the Top (From the Right)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 12.4375
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump with Screw Attack"},
+        "canInsaneJump",
+        "canCrossRoomJumpIntoWater",
+        "ScrewAttack",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": [
+        "Use Screw Attack to break the bomb block by entering from a non-water room with a spin jump, and make it to the top.",
+        "It helps to enter as low as possible and with as much horizontal speed as possible and with HiJump turned off."
+      ],
+      "devNote": [
+        "This does not have collision oscillation",
+        "FIXME: It is possible to use a flash suit to get from 4 through the top door, but either requires a diagonal spark,",
+        "or using this strat to get onto the top platform, which is more than this strat expects."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [2, 4],
+      "name": "Grapple Teleport (from Moat)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        "canOffScreenMovement"
+      ],
+      "note": [
+        "Immediately after teleporting, press down to retract Grapple to avoid getting stuck inside the wall (in case the top door is blue, causing it to open with Grapple on entry)."
+      ]
+    },
+    {
+      "id": 44,
+      "link": [2, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 45,
+      "link": [2, 6],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "This is a short climb, only a few tiles."
+    },
+    {
+      "id": 47,
+      "link": [2, 6],
+      "name": "Come In Shinecharged, Spark to Break the Blocks",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 25},
+        "h_navigateUnderwater",
+        {"or": [
+          {"shinespark": {"frames": 10, "excessFrames": 8}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 7, "excessFrames": 7}}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"shinespark": {"frames": 1, "excessFrames": 1}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Spark vertically through the bomb blocks. It is still possible to break the blocks while below 30 Energy by jumping before sparking.",
+      "devNote": [
+        "This does not require canWaterShineCharge, as you can store the shinecharge before entering the room.",
+        "Note that it is possible to spark into the ceiling to break the blocks without energy loss, but it has collision oscillation.",
+        "FIXME: Add temporary blue strats."
+      ]
+    },
+    {
+      "id": 87,
+      "link": [2, 7],
+      "name": "Come In Shinecharging (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"shineChargeFrames": 0}
+      ],
+      "endsWithShineCharge": true
+    },
+    {
+      "id": 88,
+      "link": [2, 7],
+      "name": "Water Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        {"shineChargeFrames": 0}
+      ],
+      "endsWithShineCharge": true
+    },
+    {
+      "id": 89,
+      "link": [2, 7],
+      "name": "Precise Stutter Water Shinecharge",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2.4375
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        {"shineChargeFrames": 0}
+      ],
+      "endsWithShineCharge": true
+    },
+    {
+      "id": 90,
+      "link": [2, 7],
+      "name": "Precise Stutter Water Shinecharge (Shorter Runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        {"or": [
+          {"doorUnlockedAtNode": 1},
+          "canInsaneJump"
+        ]},
+        {"shineChargeFrames": 0}
+      ],
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["super", "missiles"], "requires": []},
+        {"nodeId": 1, "types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "endsWithShineCharge": true,
+      "note": [
+        "If only 2 tiles of runway are available and it is not possible to unlock the opposite door, then this requires a double frame-perfect stutter:",
+        "run toward the door, release forward for exactly 3 frames, pressing forward again on the last possible frame before the transition."
+      ],
+      "devNote": [
+        "FIXME: canInsaneJump is for difficulty placement; replace with a more appropriate tech since no jump is involved."
+      ]
+    },
+    {
+      "id": 91,
+      "link": [2, 7],
+      "name": "Precise Stutter Water Shinecharge (Very Short Runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canInsaneJump",
+        "canBeVeryPatient",
+        {"doorUnlockedAtNode": 1},
+        {"shineChargeFrames": 0}
+      ],
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["super", "missiles"], "requires": []},
+        {"nodeId": 1, "types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "endsWithShineCharge": true,
+      "note": [
+        "With only 1 tile of runway in the other room, Samus should ideally start on the last pixel of runway with X subpixels of $3FFF or less.",
+        "Run toward the door, releasing forward for exactly 1 frame and pressing it again on the last possible frame before the transition.",
+        "Starting with X subpixels of $7FFF can also work (e.g., by simply backing against the door ledge, then jumping and turning around mid-air);",
+        "in this case, Samus must advance 1 or 2 pixels with an arm pump before the transition (e.g., firing a shot or pressing and/or releasing an angle button),",
+        "and the shinecharge will be gained slightly further away.",
+        "After the transition, shoot open the opposite door while running, to extend the runway by a tile."
+      ],
+      "detailNote": [
+        "Correct subpixels can be achieved using one of several methods:",
+        "1) press against the door ledge (or a wall aligned with it);",
+        "jump, and while mid-air, tap forward for exactly 1 frame to land with subpixels $4000,",
+        "moonwalk back for exactly 1 frame to end with subpixels $C000.",
+        "2) press against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), and moonwalk back two pixels,",
+        "then jump and mid-air turnaround onto the ledge;",
+        "if Samus jumped from the correct pixel but does not land on the ledge, then it was needed to moonwalk back 1 more frame;",
+        "in this case it is possible to retry by doing a mid-air turnaround back onto the platform, and moonwalking back for 1 frame.",
+        "3) if X-Ray is available, press against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), then jump and mid-air turnaround toward the door,",
+        "and use X-Ray to turnaround in place away from the door;",
+        "repeat this sequence 3 more times: jump, mid-air turnaround, X-Ray turnaround;",
+        "then do one more jump and mid-air turnaround, high enough to land on the door ledge,",
+        "and Samus should be in the correct position with subpixels $C000."
+      ],
+      "devNote": [
+        "The `canBeVeryPatient` is for difficulty placement; this could be improved with a more specific tech later,",
+        "since it does not actually take a long time to execute."
+      ]
+    },
+    {
+      "id": 68,
+      "link": [3, 1],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "Gravity",
+        "ScrewAttack",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 160},
+        {"shinespark": {"frames": 6, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 69,
+      "link": [3, 2],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "Gravity",
+        "ScrewAttack",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 160},
+        {"shinespark": {"frames": 6, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 48,
+      "link": [3, 3],
+      "name": "Carry G-Mode Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 49,
+      "link": [3, 3],
+      "name": "Carry G-Mode Morph Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          {"and": [
+            "Gravity",
+            "h_artificialMorphSpringBall"
+          ]},
+          {"and": [
+            "HiJump",
+            "h_artificialMorphSpringBall"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 110,
+      "link": [3, 3],
+      "name": "Carry G-Mode Back Up, Bomb Into Spring Ball Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphUnderwaterBombIntoSpringBallJump"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "note": [
+        "Pause and jump just before the fade out finishes. Turn off Spring Ball and place a Bomb just above where Samus' head would be if standing.",
+        "Pause again between 23-25 frames later and equip Spring Ball; Samus has a three frame window where she has upward momentum from the Bomb and can jump again.",
+        "The positioning of the Bomb is quite lenient, with an 11 frame window for where it can be placed.",
+        "Unmorph at the top of the jump to touch the transition blocks."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [3, 4],
+      "name": "Base",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": []
+    },
+    {
+      "id": 51,
+      "link": [3, 5],
+      "name": "Temporary Blue",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {
+          "direction": "any"
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 109,
+      "link": [3, 5],
+      "name": "G-Mode Overload PLMs, Through the Bomb Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "flashSuitChecked": true,
+      "note": "There are camera scroll blocks, which can be used to overload PLMs, just above the bomb blocks."
+    },
+    {
+      "id": 52,
+      "link": [3, 5],
+      "name": "G-Mode Morph Bomb Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphBombThings"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 53,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 54,
+      "link": [4, 3],
+      "name": "Suitless",
+      "requires": [
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 55,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 56,
+      "link": [4, 6],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 57,
+      "link": [5, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 58,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 59,
+      "link": [5, 5],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 60,
+      "link": [5, 5],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_usePowerBomb",
+          {"and": [
+            "Gravity",
+            "ScrewAttack"
+          ]},
+          {"and": [
+            "Gravity",
+            "canIBJ"
+          ]},
+          {"and": [
+            "h_useMorphBombs",
+            "h_useSpringBall"
+          ]},
+          {"and": [
+            "h_useMorphBombs",
+            "canTrivialMidAirMorph",
+            "canDisableEquipment"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 61,
+      "link": [5, 6],
+      "name": "Base",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 65,
+      "link": [5, 6],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 6, "excessFrames": 6}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "To save Energy, spark diagonally towards the outer sides of the room after hitting the ceiling bomb block.",
+      "devNote": [
+        "Note that it is possible to spark into the ceiling to break the blocks without energy loss, but it has collision oscillation.",
+        "With low Energy, this may not make it to 6, however the requirements to get to 6 are less than getting to the top of the room."
+      ]
+    },
+    {
+      "id": 62,
+      "link": [6, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 63,
+      "link": [6, 4],
+      "name": "Suitless",
+      "requires": [
+        "canSuitlessMaridia",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canDownGrab",
+              "canSpringBallJumpMidAir",
+              "canConsecutiveWalljump"
+            ]}
+          ]},
+          "h_maxHeightSpringBallJump"
+        ]}
+      ]
+    },
+    {
+      "id": 64,
+      "link": [6, 5],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_bombThings",
+          {"and": [
+            "Gravity",
+            "ScrewAttack"
+          ]},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 25,
+      "link": [7, 1],
+      "name": "Leave Shinecharged",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 10}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: This is a prime example for 3-room shinecharges, once the schema can model it."
+    },
+    {
+      "id": 27,
+      "link": [7, 1],
+      "name": "Leave With Temporary Blue",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 0},
+        "h_getBlueSpeedMaxRunway",
+        "canTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "devNote": [
+        "The `h_getBlueSpeedMaxRunway` requirement is to satisfy the tests,",
+        "since we don't have a way to represent that the temporary blue originates from the startsWithShineCharge."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [7, 2],
+      "name": "Leave With Spark",
+      "startsWithShineCharge": true,
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 120},
+        {"shinespark": {"frames": 9}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 93,
+      "link": [7, 2],
+      "name": "Leave With Temporary Blue",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 0},
+        "h_getBlueSpeedMaxRunway",
+        "canXRayTurnaround",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "devNote": [
+        "The `h_getBlueSpeedMaxRunway` requirement is to satisfy the tests,",
+        "since we don't have a way to represent that the temporary blue originates from the startsWithShineCharge."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [7, 4],
+      "name": "Diagonal Shinespark to the Top",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 50},
+        {"shinespark": {"frames": 23, "excessFrames": 10}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Spark diagonally through the bomb blocks."
+    },
+    {
+      "id": 94,
+      "link": [7, 5],
+      "name": "Temporary Blue to Break the Blocks",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 0},
+        "h_getBlueSpeedMaxRunway",
+        "canTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 46,
+      "link": [7, 6],
+      "name": "Shinespark to Break the Blocks",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 50},
+        {"or": [
+          {"shinespark": {"frames": 10, "excessFrames": 8}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 7, "excessFrames": 7}}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            "canMidairShinespark",
+            {"shinespark": {"frames": 1, "excessFrames": 1}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Spark vertically through the bomb blocks. It is still possible to break the blocks while below 30 Energy by jumping before sparking.",
+      "devNote": [
+        "It is possible to save some energy by sparking into the left wall, but it won't work with midair sparking, which saves the same amount and is easier.",
+        "Note that it is possible to spark into the ceiling to break the blocks without energy loss, but it has collision oscillation.",
+        "FIXME: Add temporary blue strats."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [8, 1],
+      "name": "Leave With Spark",
+      "startsWithShineCharge": true,
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 120},
+        {"shinespark": {"frames": 9}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 96,
+      "link": [8, 1],
+      "name": "Leave With Temporary Blue",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 0},
+        "h_getBlueSpeedMaxRunway",
+        "canXRayTurnaround",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "devNote": [
+        "The `h_getBlueSpeedMaxRunway` requirement is to satisfy the tests,",
+        "since we don't have a way to represent that the temporary blue originates from the startsWithShineCharge."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [8, 2],
+      "name": "Leave Shinecharged",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 10}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: This is a prime example for 3-room shinecharges, once the schema can model it."
+    },
+    {
+      "id": 97,
+      "link": [8, 2],
+      "name": "Leave With Temporary Blue",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 0},
+        "h_getBlueSpeedMaxRunway",
+        "canTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "devNote": [
+        "The `h_getBlueSpeedMaxRunway` requirement is to satisfy the tests,",
+        "since we don't have a way to represent that the temporary blue originates from the startsWithShineCharge."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [8, 4],
+      "name": "Diagonal Shinespark to the Top",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 50},
+        {"shinespark": {"frames": 23, "excessFrames": 10}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Spark diagonally through the bomb blocks."
+    },
+    {
+      "id": 98,
+      "link": [8, 5],
+      "name": "Temporary Blue to Break the Blocks",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 0},
+        "h_getBlueSpeedMaxRunway",
+        "canTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 23,
+      "link": [8, 6],
+      "name": "Shinespark to Break the Blocks",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"shineChargeFrames": 50},
+        {"or": [
+          {"shinespark": {"frames": 10, "excessFrames": 8}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 7, "excessFrames": 7}}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            "canMidairShinespark",
+            {"shinespark": {"frames": 1, "excessFrames": 1}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Spark vertically through the bomb blocks. It is still possible to break the blocks while below 30 Energy by jumping before sparking.",
+      "devNote": [
+        "It is possible to save some energy by sparking into the left wall, but it won't work with midair sparking, which saves the same amount and is easier.",
+        "Note that it is possible to spark into the ceiling to break the blocks without energy loss, but it has collision oscillation.",
+        "FIXME: Add temporary blue strats."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Cross Room Jump with Screw Attack",
+      "note": [
+        "Use Screw Attack to break the bomb block by entering from a non-water room with a spin jump.",
+        "It helps to enter as low as possible and with as much horizontal speed as possible and with HiJump turned off.",
+        "Depending on the setup, this may have collision oscillation, making only a 50% success when done correctly."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Cross Room Jump Through Top Door",
+      "note": [
+        "Use Screw Attack or blue speed to break the bomb block by entering from a non-water room with a spin jump, and make it all the way through the top door.",
+        "Use angle to break spin, and do a momentum conserving turnaround either on the same frame or one frame later;",
+        "this first turnaround should be done early enough that the turnaround is complete by the time Samus clears the two-tile passage in the middle of the room.",
+        "The second momentum conserving turnaround must be done somewhat late, and by switching from holding forward to holding backward one frame later (a perfect 'boomerang').",
+        "Shoot open the door, and use a third momentum conserving turnaround on it as it opens."
+      ]
+    }
+  ],
+  "nextStratId": 111,
+  "nextNotableId": 3
+}

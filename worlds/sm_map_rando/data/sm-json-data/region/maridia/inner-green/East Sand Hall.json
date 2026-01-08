@@ -1,0 +1,1909 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 210,
+  "name": "East Sand Hall",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Green",
+  "roomAddress": "0x7D4C2",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a684",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [2, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a690",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Sand Entrance",
+      "nodeType": "entrance",
+      "nodeSubType": "sandpit",
+      "nodeAddress": "0x001a69c",
+      "doorOrientation": "up",
+      "mapTileMask": [
+        [1, 2, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Junction Below Sand Entrance",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "East Sand Hall Left Evirs",
+      "enemyName": "Evir",
+      "quantity": 2,
+      "betweenNodes": [1, 4]
+    },
+    {
+      "id": "e2",
+      "groupName": "East Sand Hall Right Evir",
+      "enemyName": "Evir",
+      "quantity": 1,
+      "betweenNodes": [2, 4]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {
+          "id": 2,
+          "devNote": "This link is only for sparking and G-Mode. All other strats should go 1 -> 4 -> 2."
+        },
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {
+          "id": 1,
+          "devNote": "This link is only for sparking and G-Mode. All other strats should go 2 -> 4 -> 1."
+        },
+        {"id": 2},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 73,
+      "link": [1, 1],
+      "name": "Evir Farm (1 Evir, Grapple)",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        "canSuitlessMaridia",
+        "Grapple",
+        "canDodgeWhileShooting",
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 180}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 240}
+          ]},
+          {"and": [
+            "Spazer",
+            "canFarmWhileShooting",
+            {"cycleFrames": 280}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Evir", "count": 1}],
+      "note": [
+        "Fire angle-down shots to kill the first Evir from safely on the ledge,",
+        "then collect the drop using Grapple.",
+        "Crouching can help in reaching the Evir's drop if it is low."
+      ]
+    },
+    {
+      "id": 74,
+      "link": [1, 1],
+      "name": "Evir Farm (2 Evirs)",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        "canPlayInSand",
+        "canDodgeWhileShooting",
+        {"or": [
+          {"and": [
+            "Gravity",
+            "ScrewAttack",
+            {"cycleFrames": 320}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 330},
+            {"or": [
+              "Gravity",
+              {"and": [
+                "canSuitlessMaridia",
+                "HiJump",
+                {"cycleFrames": 50}
+              ]}
+            ]}
+          ]},
+          {"and": [
+            {"or": [
+              "Wave",
+              "Spazer"
+            ]},
+            "canFarmWhileShooting",
+            {"cycleFrames": 975},
+            {"or": [
+              "Gravity",
+              {"and": [
+                "canSuitlessMaridia",
+                "HiJump",
+                {"cycleFrames": 90}
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Evir", "count": 2}],
+      "note": [
+        "If Screw Attack or Plasma are available, farm the two Evirs closest to the door.",
+        "With Wave or Spazer, it won't be possible to kill the second Evir in time,",
+        "in which case the room can be crossed to reach a third one."
+      ],
+      "devNote": ["Farming a third Evir is possible but would rarely be worthwhile."]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Evir Projectile",
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "Gravity",
+          "canComplexGMode"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "The easiest way to lure an Evir projectile and get through the door before it is to stand facing and against the door cap, open the door then turn right and run back to the left."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Come In With Spark (Suitless)",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "top"
+        }
+      },
+      "requires": [
+        "canMidairShinespark",
+        {"shinespark": {"frames": 75, "excessFrames": 7}}
+      ],
+      "note": "Spark through the top of the door to avoid bonking."
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Come In With Spark (Gravity)",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "top"
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 61, "excessFrames": 6}}
+      ],
+      "note": "Spark through the top of the door to avoid bonking."
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Shinespark (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canMidairShinespark",
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 51, "excessFrames": 4}}
+      ],
+      "note": "Shinespark midair to avoid bonking. Jump outward before sparking save Energy."
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Shinespark (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canPlayInSand",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 67, "excessFrames": 13}}
+      ],
+      "note": [
+        "It helps to wait to enter the sandfall until after Samus is near the peak of her jump."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Cross-Room Speed Jump over Evirs",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 19.3625,
+          "maxTiles": 21.25
+        }
+      },
+      "requires": [
+        {"notable": "Cross-Room Speed Jump over Evirs"},
+        "canPlayInSand",
+        "canCrossRoomJumpIntoWater",
+        "canTrickyDashJump"
+      ],
+      "note": [
+        "Stand at an effective distance of between about 20 and 21 tiles from the door.",
+        "Run through the door, and jump any time after the transition, holding jump through the entire room to make it to the other side.",
+        "Samus will go over the Evirs, so there is no need for blue speed."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Cross-Room Spring Ball Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 10
+        }
+      },
+      "requires": [
+        {"notable": "Cross-Room Spring Ball Jump"},
+        "canPlayInSand",
+        "canCrossRoomJumpIntoWater",
+        "canLateralMidAirMorph",
+        "canTrickySpringBallJump",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Enter with enough run speed to jump (after the transition) across the full room using one Spring Ball Jump.",
+        "When exiting the first Sandfall, Samus will be rising still.  That is the time to Spring Ball jump."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Cross-Room Spring Ball Bounce (Left to Right)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "controlled",
+          "remoteAndLandingMinTiles": [[19.3625, 1]]
+        }
+      },
+      "requires": [
+        {"notable": "Cross-Room Spring Ball Bounce (Left to Right)"},
+        "canTrickyJump"
+      ],
+      "note": [
+        "Gain run speed using between 19 and 33 tiles in the other room, and either roll in or do a controlled bounce to enter while descending close to the ground.",
+        "Bounce near the end of the platform in front of the door, clearing the whole room at once.",
+        "Samus will go over the Evirs, so there is no need for blue speed."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Cross-Room Blue Spring Ball Bounce (Left to Right)",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled",
+          "minExtraRunSpeed": "$2.1",
+          "maxExtraRunSpeed": "$2.3"
+        }
+      },
+      "requires": [
+        {"notable": "Cross-Room Blue Spring Ball Bounce (Left to Right)"},
+        "canTrickyDashJump",
+        "canTrickySpringBallBounce",
+        "canInsaneJump"
+      ],
+      "note": [
+        "Use a 3-tap or 4-tap to gain a speedball with a specific amount of speed in the other room (between $2.1 and $2.3 extra run speed), and either roll in or do a controlled bounce to enter while descending close to the ground.",
+        "Bounce on the platform in front of the door, then bounce on the second-to-last pillar."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Cross-Room Blue Speed Jump, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 1,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$4.4"
+        }
+      },
+      "requires": [
+        "canPlayInSand",
+        "canCrossRoomJumpIntoWater",
+        "canInsaneJump",
+        "canChainTemporaryBlue",
+        "canBeVeryPatient"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Perform a 1-tap to gain blue speed with a significant amount of momentum.",
+        "Run through the door, and jump near the end of the platform, crossing the room.",
+        "If Samus gains enough height from the jump, it is possible unmorph mid-air to discard horizontal speed at the right side of the room, then pause to remorph (`canPauseRemorphTemporaryBlue`).",
+        "Otherwise, a precisely timed unmorph is needed to avoid bonking the door and losing the blue state;",
+        "at certain speeds, it may be necessary to briefly release jump in order to control the height for the unmorph."
+      ],
+      "devNote": [
+        "This needs an extra run speed of at least $4.4, and ideally not much more than that."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Cross-Room Blue Spring Ball Bounce, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled",
+          "minExtraRunSpeed": "$2.1",
+          "maxExtraRunSpeed": "$2.3"
+        }
+      },
+      "requires": [
+        {"notable": "Cross-Room Blue Spring Ball Bounce (Left to Right)"},
+        "canTrickyDashJump",
+        "canTrickySpringBallBounce",
+        "canInsaneJump",
+        "canChainTemporaryBlue",
+        "canBeVeryPatient"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use a 3-tap or 4-tap to gain a speedball with a specific amount of speed in the other room (between $2.1 and $2.3 extra run speed), and either roll in or do a controlled bounce to enter while descending close to the ground.",
+        "Cross the room by bouncing on the pillars.",
+        "Then chain temporary blue into the next room."
+      ],
+      "devNote": [
+        "The 'canBeVeryPatient' requirement is for difficulty placement as this is quite precise and unforgiving."
+      ]
+    },
+    {
+      "id": 61,
+      "link": [1, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 68, "excessFrames": 12}}
+      ],
+      "note": "Spark at the peak of the jump, just before or after touching the sand fall, in order to be high enough to get over the last pillar."
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "G-Mode With Assist",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "The sand does not impede Samus in G-Mode."
+    },
+    {
+      "id": 68,
+      "link": [1, 2],
+      "name": "G-Mode Itemless",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canSuitlessMaridia",
+        "h_crouchJumpDownGrab",
+        "canInsaneJump"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The sand does not impede Samus in G-Mode.",
+        "Carefully jump over the first two Evirs. Crouch against the pillar and wait a brief moment before jumping and down grabbing onto it.",
+        "Lure the third Evir's projectile by jumping then crouch jump and down grab the second pillar.",
+        "Getting onto the final pillar is the hardest part, which requires a subpixel precise jump.",
+        "Carefully lure the Evir projectile while getting into position, one pixel from the right edge.",
+        "Stand and spinjump to the right. Note that running before jumping doesn't help."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 4],
+      "name": "Evir Avoid with Gravity",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canCarefulJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ],
+      "note": "Wait a little bit for the Evirs to descend some before jumping.",
+      "devNote": "Running in with speed to kill or jump over the Evirs is still a careful jump."
+    },
+    {
+      "id": 17,
+      "link": [1, 4],
+      "name": "Evir Fight Gravity",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "Ice",
+          "ScrewAttack",
+          {"enemyKill": {
+            "enemies": [["Evir"], ["Evir"]],
+            "explicitWeapons": ["Plasma", "Super", "PowerBombPeriphery"]
+          }}
+        ]}
+      ],
+      "devNote": "Other weapons take too long to kill the enemy."
+    },
+    {
+      "id": 18,
+      "link": [1, 4],
+      "name": "Suitless HiJump Jump with Momentum",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 3.4375
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump",
+        "canCarefulJump"
+      ],
+      "note": "By entering the room with run speed, it is possible to jump over the pair of Evirs."
+    },
+    {
+      "id": 19,
+      "link": [1, 4],
+      "name": "Suitless Speed HiJump Jump with Momentum",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump",
+        "canCarefulJump"
+      ],
+      "note": "By entering the room with run speed, it is possible to jump over the pair of Evirs."
+    },
+    {
+      "id": 20,
+      "link": [1, 4],
+      "name": "Suitless HiJump Evir Avoid",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canPlayInSand",
+        {"or": [
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [1, 4],
+      "name": "Evir Fight Suitless",
+      "requires": [
+        "canSuitlessMaridia",
+        "canDodgeWhileShooting",
+        "HiJump",
+        "canPlayInSand",
+        "canTrickyJump",
+        {"or": [
+          "Ice",
+          {"enemyKill": {
+            "enemies": [["Evir"], ["Evir"]],
+            "explicitWeapons": ["Plasma", "Super", "PowerBombPeriphery"]
+          }}
+        ]}
+      ],
+      "devNote": "Other weapons take too long to kill the enemy."
+    },
+    {
+      "id": 22,
+      "link": [1, 4],
+      "name": "Jump with Momentum",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 6.4375
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canPlayInSand",
+        "canTrickyJump",
+        {"enemyKill": {
+          "enemies": [["Evir"]],
+          "explicitWeapons": ["Plasma", "Super"]
+        }}
+      ],
+      "note": [
+        "Gain momentum in the room to the left, then jump at the edge of the runway in this room in order to jump off of the sand and land on the first pillar.",
+        "Requires a runway of 7 tiles (with no open end) in the adjacent room, and killing the second Evir with a quick super or two plasma hits (note that the particle despawns as the Evir dies)."
+      ],
+      "devNote": "This is not technically a canCrossRoomJumpIntoWater, but it is used here because of the way the momentum changes as Samus enters the water."
+    },
+    {
+      "id": 23,
+      "link": [1, 4],
+      "name": "Cross Room Jump with Ice or Damage Boost",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 6.4375
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump with Ice or Damage Boost"},
+        "canCrossRoomJumpIntoWater",
+        "canPlayInSand",
+        "canInsaneJump",
+        {"or": [
+          "canTrickyUseFrozenEnemies",
+          {"and": [
+            "canNeutralDamageBoost",
+            {"enemyDamage": {"enemy": "Evir", "type": "contact", "hits": 1}}
+          ]},
+          {"and": [
+            "canNeutralDamageBoost",
+            "h_pauseAbuseMinimalReserveRefill"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Requires a runway of 7 tiles (with no open end) in the adjacent room. Requires two precise inputs of jumping through the doorway and a short aiming down press before hitting the ceiling.",
+        "Damage boost off of the right Evir in order to land on the first pillar. With Ice, instead freeze the Evir to land on it and avoid the damage.",
+        "When entering the room with a bad jump, it is possible to perform a midair wiggle to get back to the door platform."
+      ]
+    },
+    {
+      "id": 70,
+      "link": [1, 4],
+      "name": "Suitless Bootless Evir Freeze (Left to Center)",
+      "requires": [
+        {"notable": "Suitless Bootless Evir Freeze (Left to Center)"},
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        "canTrickyUseFrozenEnemies",
+        "canPlayInSand",
+        "canCameraManip"
+      ],
+      "note": [
+        "When entering the room, immediately shoot straight ahead to freeze the second Evir,",
+        "then quickly also freeze the first Evir, with a diagonal-down shot.",
+        "Wait on top of the first Evir for the second Evir to sink far enough to be able to jump onto it,",
+        "then use it as a platform to jump onto the first pillar (either directly or after a jump on the sand)."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [1, 4],
+      "name": "Cross Room Jump with Air Ball",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 6.4375
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canPlayInSand",
+        "canLateralMidAirMorph",
+        {"or": [
+          "canTrickyJump",
+          {"and": [
+            "canCarefulJump",
+            {"enemyDamage": {"enemy": "Evir", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Requires a runway of 7 tiles (with no open end) in the adjacent room.",
+        "Jump into an air ball on room entry in order to get to the first pillar.",
+        "Aim down after the transition to avoid hitting the overhang near the door."
+      ],
+      "devNote": "It is assumed that getting to the second pillar is free relative to getting to the right door."
+    },
+    {
+      "id": 25,
+      "link": [1, 4],
+      "name": "Cross Room Jump with Bomb Boost",
+      "entranceCondition": {
+        "comeInWithBombBoost": {}
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Bomb boost through the doorway as close to the door transition as possible in order to get as far as possible."
+      ],
+      "devNote": "It is assumed that getting to the second pillar is free relative to getting to the right door."
+    },
+    {
+      "id": 62,
+      "link": [1, 4],
+      "name": "Use Flash Suit, Diagonal Spark and Evir Avoid",
+      "requires": [
+        "canPlayInSand",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 9, "excessFrames": 2}}
+      ],
+      "note": [
+        "Jump and spark diagonally into the ceiling before touching the sand at the bottom.",
+        "Land on the platform or before it and jump onto it.",
+        "Sparking after touching the sand will prevent Samus from moving much horizontally and will not work."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Cross-Room Speed Jump over Evirs",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 19.3625,
+          "maxTiles": 20.3
+        }
+      },
+      "requires": [
+        {"notable": "Cross-Room Speed Jump over Evirs"},
+        "canPlayInSand",
+        "canCrossRoomJumpIntoWater",
+        "canTrickyDashJump"
+      ],
+      "note": [
+        "Stand at an effective distance of about 20 tiles from the door.",
+        "Run through the door, and jump any time after the transition, holding jump through the entire room to make it to the other side.",
+        "Samus will go over the Evirs, so there is no need for blue speed."
+      ],
+      "devNote": [
+        "This needs an extra run speed of at least $4.4, and ideally not much more than that.",
+        "A little higher run speed can also work but may require releasing jump near the peak to avoid getting caught on the overhang."
+      ]
+    },
+    {
+      "id": 69,
+      "link": [2, 1],
+      "name": "Cross-Room Blue Speed Jump (Right to Left)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 1,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$4.4"
+        }
+      },
+      "requires": [
+        {"notable": "Cross-Room Blue Speed Jump (Right to Left)"},
+        "canPlayInSand",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "Perform a 1-tap to gain blue speed with a significant amount of momentum.",
+        "Run through the door, and jump any time after the transition, crossing the room."
+      ],
+      "devNote": [
+        "This assumes an extra run speed of at least $4.4, though some lower speeds can also work ($3.B through $3.F).",
+        "The window between $4.0 and $4.3 must be avoided because it would give too much jump height."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Cross-Room Blue Speed Jump, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 1,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$4.4"
+        }
+      },
+      "requires": [
+        {"notable": "Cross-Room Blue Speed Jump (Right to Left)"},
+        "canPlayInSand",
+        "canCrossRoomJumpIntoWater",
+        "canInsaneJump",
+        "canPauseRemorphTemporaryBlue",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Perform a 1-tap to gain blue speed with a significant amount of momentum.",
+        "Run through the door, and jump into an airball any time after the transition, crossing the room.",
+        "At higher speeds, it may be necessary to unmorph at the left side of the room while still high in the air, to discard horizontal speed, then pause to remorph (`canPauseRemorphTemporaryBlue`)."
+      ],
+      "devNote": [
+        "This needs an extra run speed of at least $4.4.",
+        "For speed $4.5, it helps to jump early and hold an aim-down pose.",
+        "Speed $4.6 doesn't seem possible, as you end up too high to land without bonking the door, and too low to have time for a pause remorph?",
+        "For speeds between $4.7 and $4.9, a pause remorph works.",
+        "Speed $4.A is difficult but can be done with a last-frame jump, a momentum-conserving morph (ceiling mockball) while touching the second overhang, and a pause remorph.",
+        "Speed $4.B doesn't seem to work as you can't avoid bonking the first overhang?"
+      ]
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Cross-Room Blue Spring Ball Bounce (Right to Left)",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled",
+          "minExtraRunSpeed": "$2.0"
+        }
+      },
+      "requires": [
+        {"notable": "Cross-Room Blue Spring Ball Bounce (Right to Left)"},
+        {"or": [
+          "canTrickyJump",
+          "canSlowShortCharge"
+        ]}
+      ],
+      "note": [
+        "Gain a speedball in the other room, and either roll in or do a controlled bounce to enter while descending close to the ground.",
+        "Bounce anywhere on the platform in front of the door, clearing the whole room at once.",
+        "If needed, blue speed will destroy any Evirs along the way and allow bouncing on the sand at the end to make it onto the ledge."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Cross-Room Blue Spring Ball Bounce, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled",
+          "minExtraRunSpeed": "$2.1",
+          "maxExtraRunSpeed": "$2.3"
+        }
+      },
+      "requires": [
+        {"notable": "Cross-Room Blue Spring Ball Bounce (Right to Left)"},
+        "canTrickyDashJump",
+        "canTrickySpringBallBounce",
+        "canPauseRemorphTemporaryBlue",
+        "canBeVeryPatient"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use a 3-tap or 4-tap to gain a speedball with a specific amount of speed in the other room (between $2.1 and $2.3 extra run speed), and either roll in or do a controlled bounce to enter while descending close to the ground.",
+        "Bounce across the room, destroying the Evirs along the path, then bounce on the sand at the left side of the room, and unmorph to go straight up in the single-tile-wide space with no sandfall;",
+        "perform a pause remorph to chain temporary blue to the door."
+      ],
+      "devNote": [
+        "The 'canBeVeryPatient' requirement is for difficulty placement as this is quite precise and unforgiving.",
+        "Bouncing on the pillars is also possible, as an alternative to doing a pause remorph."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "Cross-Room Spring Ball Bounce (Right to Left)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "controlled",
+          "remoteAndLandingMinTiles": [[19.3625, 1]]
+        }
+      },
+      "requires": [
+        {"notable": "Cross-Room Spring Ball Bounce (Right to Left)"},
+        "canTrickyJump"
+      ],
+      "note": [
+        "Gain run speed using between 19 and 33 tiles in the other room, and either roll in or do a controlled bounce to enter while descending close to the ground.",
+        "Bounce near the end of the platform in front of the door, clearing the whole room at once.",
+        "Samus will go over the Evirs, so there is no need for blue speed."
+      ],
+      "devNote": [
+        "FIXME: This can work with more or less speed, but it probably requires bouncing on the pillars, doing a spring fling, and/or taking Evir damage.",
+        "Note that the blue spring ball bounce strat may generally be preferable since it can be done with less runway and tends to be more lenient."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 1],
+      "name": "Cross-Room Spring Ball Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 10
+        }
+      },
+      "requires": [
+        {"notable": "Cross-Room Spring Ball Jump"},
+        "canPlayInSand",
+        "canCrossRoomJumpIntoWater",
+        "canLateralMidAirMorph",
+        "canTrickySpringBallJump",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Enter with enough run speed to jump (after the transition) across the full room using one Spring Ball Jump.",
+        "When exiting the first Sandfall, Samus will be rising still.  That is the time to Spring Ball jump.",
+        "Alternatively, an immediate pause can be used to Spring Ball jump during the first narrow gap between Sandfalls.",
+        "Sometimes Samus will land above the sand on the far left end of the room, where it will be necessary to unmorph and jump out."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [2, 1],
+      "name": "Come In With Spark (Suitless)",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "top"
+        }
+      },
+      "requires": [
+        "canMidairShinespark",
+        {"shinespark": {"frames": 75, "excessFrames": 7}}
+      ],
+      "note": "Spark through the top of the door to avoid bonking."
+    },
+    {
+      "id": 33,
+      "link": [2, 1],
+      "name": "Come In With Spark (Gravity)",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "top"
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 61, "excessFrames": 6}}
+      ],
+      "note": "Spark through the top of the door to avoid bonking."
+    },
+    {
+      "id": 34,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Shinespark (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canMidairShinespark",
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 51, "excessFrames": 4}}
+      ],
+      "note": "Shinespark midair to avoid bonking. Jump outward before sparking save Energy."
+    },
+    {
+      "id": 35,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Shinespark (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canPlayInSand",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 67, "excessFrames": 13}}
+      ],
+      "note": [
+        "It helps to wait to enter the sandfall until after Samus is near the peak of her jump."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [2, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 68, "excessFrames": 7}},
+          {"and": [
+            "canSandfallBounce",
+            {"shinespark": {"frames": 68, "excessFrames": 14}}
+          ]}
+        ]}
+      ],
+      "note": "Jump from close to the door in order to be able to spark from further into the sand fall."
+    },
+    {
+      "id": 36,
+      "link": [2, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "The sand does not impede Samus in G-Mode.",
+      "devNote": "Only the last jump needs any items."
+    },
+    {
+      "id": 37,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 75,
+      "link": [2, 2],
+      "name": "Suitless Evir Farm (1 Evir, Grapple)",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "canDodgeWhileShooting",
+        "canSuitlessMaridia",
+        "HiJump",
+        "Grapple",
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 240}
+          ]},
+          {"and": [
+            "Wave",
+            {"disableEquipment": "Ice"},
+            "canFarmWhileShooting",
+            {"cycleFrames": 420}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Evir", "count": 1}],
+      "note": [
+        "If Plasma is available, quickly fire two shots when entering to kill the Evir;",
+        "it can help to crouch for the second shot.",
+        "If only Wave is available, quickly fire three shots,",
+        "then jump out exactly one tile away from the ledge",
+        "and fire three more shots angled-down to kill the Evir.",
+        "In any case, use Grapple to collect the drop from the pillar without needing to drop down."
+      ],
+      "devNote": ["If Gravity is available, then other farm strats can be used instead."]
+    },
+    {
+      "id": 76,
+      "link": [2, 2],
+      "name": "Evir Farm (1 Evir, Gravity, Strong Weapon)",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "Gravity",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            "Wave"
+          ]}
+        ]},
+        "canCarefulJump",
+        {"cycleFrames": 290},
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "canPlayInSand",
+            {"or": [
+              "HiJump",
+              "canWalljump",
+              {"and": [
+                "canGravityJump",
+                "h_doubleEquipmentScreenCycleFrames"
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Evir", "count": 1}],
+      "devNote": [
+        "Other ways of farming Evirs with Gravity are covered in the 3 Evir farm strat.",
+        "These strong weapon cases are unique in that farming just the first Evir can be done at significantly lower difficulty."
+      ]
+    },
+    {
+      "id": 77,
+      "link": [2, 2],
+      "name": "Evir Farm (3 Evirs, Gravity)",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "Gravity",
+        "canDodgeWhileShooting",
+        "canPlayInSand",
+        {"or": [
+          {"and": [
+            "Plasma",
+            "Wave"
+          ]},
+          "canTrickyJump"
+        ]},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 900}
+          ]},
+          {"and": [
+            "Wave",
+            {"disableEquipment": "Ice"},
+            {"cycleFrames": 1320}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            "canFarmWhileShooting",
+            {"cycleFrames": 980}
+          ]},
+          {"and": [
+            "Spazer",
+            {"disableEquipment": "Ice"},
+            "canFarmWhileShooting",
+            {"cycleFrames": 1360}
+          ]}
+        ]},
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          {"and": [
+            "canGravityJump",
+            "h_doubleEquipmentScreenCycleFrames"
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Evir", "count": 3}],
+      "note": [
+        "The Evirs must be killed quickly before they descend too far.",
+        "It can help to fire at the Evirs from a safe distance",
+        "so they will not be triggered to attack Samus."
+      ],
+      "devNote": ["FIXME: HiJump + Spring fling can be an alternative to Gravity."]
+    },
+    {
+      "id": 38,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 39,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Evir Projectile",
+      "requires": [
+        "Gravity",
+        "canComplexGMode"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "The Evir won't shoot unless Samus enters the sand falls. Getting to the transition tiles while standing before the projectile can be tricky.",
+        "With no movement items besides Gravity, walk off the platform while facing right, turn around spin jump to barely enter the sand fall before landing back on the platform and quickly getting to the door."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 2],
+      "name": "Right Door G-Mode Setup Suitless HiJump",
+      "requires": [
+        {"notable": "Right Door G-Mode Setup Suitless HiJump"},
+        "canTrickyGMode",
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "canMidairWiggle",
+        "HiJump"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "The Evir won't shoot unless Samus enters the sand falls. Getting to the transition tiles while standing before the projectile while suitless is very precise.",
+        "From the sand, turnaround spinjump towards the right. Turn towards the sandfall about when you're just above the platform. Turn right and shoot as soon as you enter the sandfall. And try to land right next to the transition."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [2, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 4],
+      "name": "Suitless In Sand",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canPlayInSand"
+      ]
+    },
+    {
+      "id": 43,
+      "link": [2, 4],
+      "name": "Jump with Momentum",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": false,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canPlayInSand",
+        "canTrickyJump",
+        "canTrickyUseFrozenEnemies"
+      ],
+      "note": [
+        "Gain momentum in the room to the right, then jump immediately on entry in order to land on the first pillar. Jumping too late will likely put Samus into the pit.",
+        "Requires a small runway of only one tile or less in the adjacent room. Jumping before the door transition will set Samus straight into an Evir projectile, knocking her into the sand."
+      ],
+      "devNote": [
+        "This is not technically a canCrossRoomJumpIntoWater, but it is used here because of the way the momentum changes as Samus enters the water.",
+        "It is assumed that getting to the third pillar is free relative to getting to the left door.",
+        "The only current strat that would put this into logic is using a frozen Evir, so canTrickyUseFrozenEnemies is added for clarity."
+      ]
+    },
+    {
+      "id": 44,
+      "link": [2, 4],
+      "name": "Cross Room Jump with Bomb Boost",
+      "entranceCondition": {
+        "comeInWithBombBoost": {}
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Bomb boost through the doorway. Get the bomb boost while as close to the door transition as possible in order to get to the first pillar.",
+      "devNote": "It is assumed that getting to the third pillar is free relative to getting to the left door."
+    },
+    {
+      "id": 45,
+      "link": [2, 4],
+      "name": "Spring Ball Jump and Ice",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        "canTrickySpringBallJump",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Freeze the Evir soon after entering the room.",
+        "Use a Spring Ball jump to reach the first pillar, then continue across using the Evir as a platform."
+      ]
+    },
+    {
+      "id": 64,
+      "link": [2, 4],
+      "name": "Use Flash Suit, Frozen Evir Platform",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        "canPlayInSand",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 5, "excessFrames": 2}}
+      ],
+      "note": [
+        "Freeze the Evir very low with either crouched shots or diagonal aim-down beam shots, then spark vertically from inside the sand into the ceiling to get to the first platform.",
+        "Use the Evir as a platform to get to the center of the room."
+      ]
+    },
+    {
+      "id": 71,
+      "link": [2, 4],
+      "name": "Door Stuck Flatley Jump",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        {"notable": "Door Stuck Flatley Jump"},
+        "canInsaneJump",
+        "h_usePowerBomb",
+        "canTrickyUseFrozenEnemies",
+        "canPlayInSand"
+      ],
+      "note": [
+        "Enter the room with a door stuck setup.",
+        "Perform a frame-perfect Flatley jump from inside the door to just barely reach the first pillar.",
+        "Use a Power Bomb to make the Evir rise.",
+        "Freeze it and use it as a platform to jump across."
+      ],
+      "devNote": [
+        "This is only really useful when entering from a water room,",
+        "since otherwise there is an easier strat that simply runs into the room with momentum and jumps."
+      ]
+    },
+    {
+      "id": 65,
+      "link": [3, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canPrepareForNextRoom",
+        "canPlayInSand",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 11, "excessFrames": 4}}
+      ],
+      "note": "Perform a diagonal spark to cross the sand.",
+      "devNote": "This is a separate strat, because the suitless bootless Evir projectile dodge is much more difficult when starting from the right side of the room."
+    },
+    {
+      "id": 46,
+      "link": [3, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "canInsaneJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]},
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The sand does not impede Samus in G-Mode.",
+        "Enter the room on the right half of the transition, where both Evirs will be off camera to avoid their projectiles."
+      ],
+      "devNote": "Only the last jump needs any items."
+    },
+    {
+      "id": 47,
+      "link": [3, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "canInsaneJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]},
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "h_crouchJumpDownGrab",
+            "canInsaneJump"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The sand does not impede Samus in G-Mode.",
+        "Enter the room on the right half of the transition, where both Evirs will be off camera to avoid their projectiles.",
+        "It is possible to jump to the tall pillar with nothing, requiring a subpixel precise jump.",
+        "Running before jumping doesn't help. Stand one pixel from the right edge and spinjump to the right."
+      ]
+    },
+    {
+      "id": 48,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}},
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ]
+    },
+    {
+      "id": 49,
+      "link": [3, 4],
+      "name": "Evir Dodge",
+      "requires": [
+        "canPrepareForNextRoom",
+        "canPlayInSand",
+        "canTrickyJump",
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canInsaneJump"
+        ]}
+      ],
+      "note": [
+        "To safely avoid the Evir shot, enter in a spin jump from either the far left or far right side of the transition."
+      ],
+      "devNote": [
+        "Entering from a non-sand room, or passing throught the toilet does not change the ability to dodge the evirs much."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 51,
+      "link": [4, 1],
+      "name": "Fight Evirs with Gravity",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canPlayInSand",
+          "canWalljump",
+          "h_useSpringBall"
+        ]},
+        {"or": [
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              "ScrewAttack",
+              {"enemyKill": {
+                "enemies": [["Evir"], ["Evir"]],
+                "explicitWeapons": ["Super", "Plasma", "PowerBombPeriphery"]
+              }}
+            ]}
+          ]}
+        ]}
+      ],
+      "devNote": [
+        "Other weapons take too long to kill the enemy.",
+        "Ice is likely to be blocked by the particle."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [4, 1],
+      "name": "Suitless Evir Avoid",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canPlayInSand",
+        {"or": [
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]},
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}},
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ]
+    },
+    {
+      "id": 53,
+      "link": [4, 1],
+      "name": "Fight Evirs Suitless",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canPlayInSand",
+        "canDodgeWhileShooting",
+        {"enemyKill": {
+          "enemies": [["Evir"], ["Evir"]],
+          "explicitWeapons": ["Super", "Plasma", "PowerBombPeriphery"]
+        }}
+      ],
+      "devNote": [
+        "Other weapons take too long to kill the enemy.",
+        "Ice is likely to be blocked by the particle."
+      ]
+    },
+    {
+      "id": 54,
+      "link": [4, 1],
+      "name": "Suitless Bootless Evir Freeze (Center to Left)",
+      "requires": [
+        {"notable": "Suitless Bootless Evir Freeze (Center to Left)"},
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        "canTrickyUseFrozenEnemies",
+        "canPlayInSand",
+        "canCameraManip",
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"and": [
+            {"ammo": {"type": "PowerBomb", "count": 1}},
+            {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 2}}
+          ]},
+          {"and": [
+            {"ammo": {"type": "PowerBomb", "count": 1}},
+            "h_pauseAbuseMinimalReserveRefill",
+            "h_pauseAbuseMinimalReserveRefill"
+          ]}
+        ]}
+      ],
+      "note": [
+        "If entering from the sandfall above, come in at the far left of the transition, with either a spin-jump or i-frames, to avoid the Evir shot;",
+        "land on the right side of the pillar to the left, being careful to not bring left Evir on camera.",
+        "If coming from the right side of the room, then moonwalk on the center pillar to scroll the camera as far right as possible, to avoid getting hit by an Evir shot;",
+        "alternatively, jump slightly to the left and freeze the Evir, then return back to the center pillar before jumping across the sand.",
+        "Freeze the right Evir and jump onto it.",
+        "Quickly move left and fire an angle-down shot to freeze the left Evir before it descends too far.",
+        "Jump onto the left Evir, back up to the right side of it to maximize space to build momentum, and jump to the left onto the sand and then onto the ledge.",
+        "If Samus does not quite get enough height to make it onto the ledge, then break spin, turn around to the right, land on the sand again, and do a turnaround spin-jump to the left.",
+        "If the Evirs descend too far, it is possible to use a Power Bomb to bring them back up again, but caution is needed to avoid killing the first Evir, and it is difficult to avoid getting shot."
+      ],
+      "devNote": [
+        "This strat is still possible after falling through the sandpit after being centered by the toilet by landing towards the right, then crossing back left."
+      ]
+    },
+    {
+      "id": 66,
+      "link": [4, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 34, "excessFrames": 6}},
+          {"and": [
+            "canCameraManip",
+            "canInsaneJump",
+            {"shinespark": {"frames": 11, "excessFrames": 4}}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Either perform a horizontal shinespark from the second to last platform, or perform a particularly tight dodge to get to the last platform and then spark diagonally across the rest.",
+        "The horizontal spark can be done relatively low and then jump off of the sand in order to save Energy."
+      ],
+      "devNote": "The Evir projectile dodge is much more difficult when starting from the right side of the room."
+    },
+    {
+      "id": 55,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 56,
+      "link": [4, 2],
+      "name": "Gravity in Sand",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canTrickyJump",
+          "Ice",
+          "ScrewAttack",
+          {"enemyKill": {
+            "enemies": [["Evir"]],
+            "explicitWeapons": ["Plasma", "Super", "PowerBombPeriphery"]
+          }},
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]},
+        "canPlayInSand",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canUseFrozenEnemies",
+          "canGravityJump",
+          {"and": [
+            "canTrickyJump",
+            "can4HighMidAirMorph",
+            "canTrickySpringBallJump"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 57,
+      "link": [4, 2],
+      "name": "Evir Damage Boost",
+      "requires": [
+        "Gravity",
+        "canTrickyJump",
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+      ]
+    },
+    {
+      "id": 58,
+      "link": [4, 2],
+      "name": "Suitless Evir Freeze",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canTrickyJump",
+        "canTrickyUseFrozenEnemies",
+        "canPlayInSand"
+      ],
+      "note": [
+        "Let the Evir descend slightly from its spawn point to be at the correct height.",
+        "A power bomb can be used to bring it back up if it falls too far."
+      ]
+    },
+    {
+      "id": 59,
+      "link": [4, 2],
+      "name": "Spring Ball HiJump",
+      "requires": [
+        {"notable": "Spring Ball HiJump"},
+        "canSuitlessMaridia",
+        "HiJump",
+        "canTrickySpringBallJump",
+        "canStationaryLateralMidAirMorph",
+        "canSpringFling",
+        "canPlayInSand",
+        {"or": [
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}},
+          {"enemyKill": {
+            "enemies": [["Evir"]],
+            "explicitWeapons": ["Plasma", "Super", "PowerBomb"]
+          }},
+          "canTrickyDodgeEnemies",
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ],
+      "note": [
+        "On the left side of the raised platform, jump for max height.",
+        "Lateral Midair Morph for horizontal momentum, and perform the Spring Ball jump the moment before touching the sandfall.",
+        "Pause again to disable springball as soon as possible."
+      ]
+    },
+    {
+      "id": 60,
+      "link": [4, 2],
+      "name": "Suitless Bootless Evir Freeze (Center to Right)",
+      "requires": [
+        {"notable": "Suitless Bootless Evir Freeze (Center to Right)"},
+        "canSuitlessMaridia",
+        "canTrickyUseFrozenEnemies",
+        "canPlayInSand",
+        "h_maxHeightSpringBallJump",
+        "canStationaryLateralMidAirMorph"
+      ],
+      "note": [
+        "From the sand fall, quickly get onto the left platform to prevent the right side Evir from lowering too far.",
+        "Jump on the sand to the right while freezing the Evir as high as possible. Refreeze the Evir so it is a slightly higher platform than the right pillar.",
+        "Perform a spring ball jump with a stationary lateral mid-air morph from the left side of the current platform to get onto the Evir. Use a running jump off of the Evir.",
+        "As a backup, it may be possible to make the Evir rise again by hitting it with a PB - place the PB in the air to avoid double hitting and killing it."
+      ]
+    },
+    {
+      "id": 72,
+      "link": [4, 2],
+      "name": "Suitless Bootless Evir Climb",
+      "requires": [
+        {"notable": "Suitless Bootless Evir Climb"},
+        "h_usePowerBomb",
+        "canBePatient",
+        "canTrickyUseFrozenEnemies",
+        "canPlayInSand",
+        "canTrickyDodgeEnemies"
+      ],
+      "note": [
+        "Use a Power Bomb to make the right-most Evir rise.",
+        "Freeze it low and jump onto it.",
+        "Crouch and continue holding down;",
+        "when the Evir is about to thaw, jump with a buffered aim-down and refreeze the Evir after it climbs a few pixels.",
+        "Repeat many times until gaining enough height to spin jump onto the pillar."
+      ],
+      "detailNote": [
+        "With each refreeze, it is recommended that Samus switch which side of the Evir to stand on,",
+        "to avoid a risk of getting shot by the Evir."
+      ]
+    },
+    {
+      "id": 67,
+      "link": [4, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canPlayInSand",
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 8, "excessFrames": 2}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 6, "excessFrames": 1}}
+          ]}
+        ]}
+      ],
+      "note": "To save Energy, spark diagonally to get onto the pillar, then jump to the door."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Cross-Room Speed Jump over Evirs",
+      "note": [
+        "Stand at an effective distance of approximately 20 tiles from the door.",
+        "Run through the door, and jump any time after the transition, holding jump through the entire room to make it to the other side.",
+        "Samus will go over the Evirs, so there is no need for blue speed."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Cross-Room Spring Ball Jump",
+      "note": [
+        "Enter with enough run speed to jump (after the transition) across the full room using one Spring Ball Jump.",
+        "When exiting the first Sandfall, Samus will be rising still.  That is the time to Spring Ball jump."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Cross-Room Blue Spring Ball Bounce (Left to Right)",
+      "note": [
+        "Use a 3-tap or 4-tap to gain a speedball with a specific amount of speed in the other room (between $2.1 and $2.3 extra run speed), and either roll in or do a controlled bounce to enter while descending close to the ground.",
+        "Bounce on the platform in front of the door, then bounce on the second-to-last pillar."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Cross-Room Blue Spring Ball Bounce (Right to Left)",
+      "note": [
+        "Gain a speedball in the other room, and either roll in or do a controlled bounce to enter while descending close to the ground.",
+        "Bounce anywhere on the platform in front of the door, clearing the whole room at once.",
+        "If needed, blue speed will destroy any Evirs along the way and allow bouncing on the sand at the end to make it onto the ledge."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Cross-Room Spring Ball Bounce (Left to Right)",
+      "note": [
+        "Gain run speed using between 19 and 33 tiles in the other room, and either roll in or do a controlled bounce to enter while descending close to the ground.",
+        "Bounce near the end of the platform in front of the door, clearing the whole room at once.",
+        "Samus will go over the Evirs, so there is no need for blue speed."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Cross Room Jump with Ice or Damage Boost",
+      "note": [
+        "Requires a runway of 7 tiles (with no open end) in the adjacent room. Requires two precise inputs of jumping through the doorway and aiming down before hitting the ceiling.",
+        "Damage boost off of the right Evir in order to land on the first pillar. With Ice, instead freeze the Evir to land on it and avoid the damage.",
+        "When entering the room with a bad jump, it is possible to perform a midair wiggle to get back to the door platform."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Cross-Room Spring Ball Bounce (Right to Left)",
+      "note": [
+        "Gain run speed using between 19 and 33 tiles in the other room, and either roll in or do a controlled bounce to enter while descending close to the ground.",
+        "Bounce near the end of the platform in front of the door, clearing the whole room at once.",
+        "Samus will go over the Evirs, so there is no need for blue speed."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Right Door G-Mode Setup Suitless HiJump",
+      "note": [
+        "The Evir won't shoot unless Samus enters the sand falls. Getting to the transition tiles while standing before the projectile while suitless is very precise.",
+        "From the sand, turnaround spinjump towards the right. Turn towards the sandfall about when you're level with the platform. Turn right and shoot as soon as you enter the sandfall. And try to land right next to the transition."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Suitless Bootless Evir Freeze (Center to Left)",
+      "note": [
+        "If entering from the sandfall above, come in at the far left of the transition, with either a spin-jump or i-frames, to avoid the Evir shot;",
+        "land on the right side of the pillar to the left, being careful to not bring left Evir on camera.",
+        "If coming from the right side of the room, then moonwalk on the center pillar to scroll the camera as far right as possible, to avoid getting hit by an Evir shot;",
+        "alternatively, jump slightly to the left and freeze the Evir, then return back to the center pillar before jumping across the sand.",
+        "Freeze the right Evir and jump onto it.",
+        "Quickly move left and fire an angle-down shot to freeze the left Evir before it descends too far.",
+        "Jump onto the left Evir, back up to the right side of it to maximize space to build momentum, and jump to the left onto the sand and then onto the ledge.",
+        "If Samus does not quite get enough height to make it onto the ledge, then break spin, turn around to the right, land on the sand again, and do a turnaround spin-jump to the left.",
+        "If the Evirs descend too far, it is possible to use a Power Bomb to bring them back up again, but caution is needed to avoid killing the first Evir, and it is difficult to avoid getting shot."
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Spring Ball HiJump",
+      "note": [
+        "On the left side of the raised platform, jump for max height.",
+        "Use a stationary lateral mid-air morph for horizontal momentum, and perform the Spring Ball jump the moment before touching the sandfall.",
+        "Pause again to disable Spring Ball as soon as possible."
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Suitless Bootless Evir Freeze (Center to Right)",
+      "note": [
+        "From the sand fall, quickly get onto the left platform to prevent the right side Evir from lowering too far.",
+        "Jump on the sand to the right while freezing the Evir as high as possible. Refreeze the Evir so it is a slightly higher platform than the right pillar.",
+        "Perform a spring ball jump with a stationary lateral mid-air morph from the left side of the current platform to get onto the Evir. Use a running jump off of the Evir.",
+        "As a backup, it may be possible to make the Evir rise again by hitting it with a PB - place the PB in the air to avoid double hitting and killing it."
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Cross-Room Blue Speed Jump (Right to Left)",
+      "note": [
+        "Perform a 1-tap to gain blue speed with a significant amount of momentum.",
+        "Run through the door, and jump any time after the transition, crossing the room."
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Suitless Bootless Evir Freeze (Left to Center)",
+      "note": [
+        "When entering the room, immediately shoot straight ahead to freeze the second Evir,",
+        "then quickly also freeze the first Evir.",
+        "Wait on top of the first Evir for the second Evir to sink far enough to be able to jump onto it,",
+        "then use it as a platform to jump onto the first pillar (either directly or after a jump on the sand)."
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Suitless Bootless Evir Climb",
+      "note": [
+        "Use a Power Bomb to make the right-most Evir rise.",
+        "Freeze it low and jump onto it.",
+        "Crouch and continue holding down;",
+        "when the Evir is about to thaw, jump with a buffered aim-down and refreeze the Evir after it climbs a few pixels.",
+        "Repeat many times until gaining enough height to spin jump onto the pillar."
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Door Stuck Flatley Jump",
+      "note": [
+        "Enter the room with a door stuck setup.",
+        "Perform a frame-perfect Flatley jump from inside the door to just barely reach the first pillar.",
+        "Use a Power Bomb to make the Evir rise.",
+        "Freeze it with Ice to jump across."
+      ]
+    }
+  ],
+  "nextStratId": 78,
+  "nextNotableId": 16
+}

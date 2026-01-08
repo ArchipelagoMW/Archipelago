@@ -1,0 +1,1282 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 139,
+  "name": "Metal Pirates Room",
+  "area": "Norfair",
+  "subarea": "Lower",
+  "subsubarea": "East",
+  "roomAddress": "0x7B62B",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x0019a32",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Metal Pirates Gray Lock (to Plowerhouse)",
+          "lockType": "killEnemies",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                {"obstaclesCleared": ["A"]}
+              ]
+            }
+          ],
+          "yields": ["f_ZebesAwake"],
+          "devNote": "The requirements for obstacle A are in a strat at node 2."
+        }
+      ],
+      "mapTileMask": [
+        [2, 2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019a3e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Metal Pirates Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "G-Mode Junction",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [2, 2, 2]
+      ],
+      "note": "Represents being anywhere in the room with G-Mode"
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Metal Pirates",
+      "obstacleType": "enemies"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Metal Pirates",
+      "enemyName": "Space Pirate (fighting)",
+      "quantity": 2,
+      "homeNodes": [3]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 33,
+      "link": [1, 1],
+      "name": "Leave With Side Platform (Small Ledge)",
+      "requires": [
+        {"heatFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 2,
+            "openEnd": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": "Max extra run speed $0.B"
+    },
+    {
+      "id": 34,
+      "link": [1, 1],
+      "name": "Leave With Side Platform (Full Runway)",
+      "requires": [
+        {"heatFrames": 280},
+        "canTrickyJump",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"and": [
+            "canHitbox",
+            "canTrickyDodgeEnemies"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 40,
+            "openEnd": 0
+          },
+          "obstruction": [3, 2]
+        }
+      },
+      "devNote": ["Max extra run speed $6.8."]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        {"heatFrames": 10},
+        "h_heatedCrystalFlash",
+        {"heatFrames": 10}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Dead Pirates",
+      "requires": [
+        {"heatFrames": 200},
+        {"obstaclesCleared": ["A"]}
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Hitbox Through Pirates",
+      "requires": [
+        "canHitbox",
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        "canShinechargeMovement",
+        {"or": [
+          "canHitbox",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"heatFrames": 180},
+        {"shineChargeFrames": 60}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [
+            {"obstaclesCleared": ["A"]},
+            {"heatFrames": 180}
+          ]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [
+            {"obstaclesCleared": ["A"]},
+            {"heatFrames": 150}
+          ]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": "FIXME: Shorter runway shinecharges could be added from 3."
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 125}
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 3],
+      "name": "Pirate Attack Animation Cancel",
+      "requires": [
+        "canHitbox",
+        "canInsaneJump",
+        {"heatFrames": 100}
+      ],
+      "note": "Shoot the Pirate twice to force it to block instead of kicking or shooting towards the door."
+    },
+    {
+      "id": 8,
+      "link": [1, 3],
+      "name": "Speed Echoes Kill (Left to Right)",
+      "requires": [
+        {"notable": "Speed Echoes Kill"},
+        {"obstaclesNotCleared": ["A"]},
+        "canUseSpeedEchoes",
+        "canHitbox",
+        {"canShineCharge": {"usedTiles": 38, "openEnd": 2}},
+        {"or": [
+          {"canShineCharge": {"usedTiles": 23, "openEnd": 2}},
+          {"heatFrames": 60}
+        ]},
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 1}},
+            {"shinespark": {"frames": 1}}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"shinespark": {"frames": 9}},
+            {"shinespark": {"frames": 9}}
+          ]}
+        ]},
+        {"or": [
+          {"heatFramesWithEnergyDrops": {
+            "frames": 630,
+            "drops": [{"enemy": "Space Pirate (fighting)", "count": 12}]
+          }},
+          {"and": [
+            "canFarmWhileShooting",
+            {"heatFramesWithEnergyDrops": {
+              "frames": 360,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+            }},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 270,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+            }}
+          ]}
+        ]},
+        {"partialRefill": {"type": "Energy", "limit": 99}},
+        {"partialRefill": {"type": "Super", "limit": 1}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Use the Echoes created by shinesparking to defeat the Metal Pirates.",
+        "This involves Shineparking into a precise point while also turning the Pirates vulnerable as the echoes reach them."
+      ],
+      "devNote": [
+        "FIXME: It's possible to activate a spark on the ground at 27 energy and collect drops in time.",
+        "The canFarmWhileShooting presumes spawning the drops on the ground where they can be collected while charging the next shinespark."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [1, 4],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Dead Pirates",
+      "requires": [
+        {"heatFrames": 200},
+        {"obstaclesCleared": ["A"]}
+      ]
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Hitbox Through Pirates",
+      "requires": [
+        "canHitbox",
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        "canShinechargeMovement",
+        {"or": [
+          "canHitbox",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"heatFrames": 180},
+        {"shineChargeFrames": 60}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [
+            {"obstaclesCleared": ["A"]},
+            {"heatFrames": 180}
+          ]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [
+            {"obstaclesCleared": ["A"]},
+            {"heatFrames": 150}
+          ]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": "FIXME: Shorter runway shinecharges could be added from 3."
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "Leave With Side Platform (Small Ledge)",
+      "requires": [
+        {"heatFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 2,
+            "openEnd": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": "Max extra run speed $0.B"
+    },
+    {
+      "id": 36,
+      "link": [2, 2],
+      "name": "Leave With Side Platform (Full Runway)",
+      "requires": [
+        {"heatFrames": 280},
+        "canTrickyJump",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"and": [
+            "canHitbox",
+            "canTrickyDodgeEnemies"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 40,
+            "openEnd": 0
+          },
+          "obstruction": [3, 2]
+        }
+      },
+      "devNote": ["Max extra run speed $6.8."]
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        {"heatFrames": 10},
+        "h_heatedCrystalFlash",
+        {"heatFrames": 10}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 125}
+      ]
+    },
+    {
+      "id": 18,
+      "link": [2, 3],
+      "name": "Pirate Attack Animation Cancel",
+      "requires": [
+        "canHitbox",
+        "canInsaneJump",
+        {"heatFrames": 100}
+      ],
+      "note": "Shoot the Pirate twice to force it to block instead of kicking or shooting towards the door."
+    },
+    {
+      "id": 19,
+      "link": [2, 3],
+      "name": "Speed Echoes Kill (Right to Left)",
+      "requires": [
+        {"notable": "Speed Echoes Kill"},
+        {"obstaclesNotCleared": ["A"]},
+        "canUseSpeedEchoes",
+        "canHitbox",
+        {"canShineCharge": {"usedTiles": 38, "openEnd": 2}},
+        {"or": [
+          {"canShineCharge": {"usedTiles": 23, "openEnd": 2}},
+          {"heatFrames": 60}
+        ]},
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 1}},
+            {"shinespark": {"frames": 1}}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"shinespark": {"frames": 9}},
+            {"shinespark": {"frames": 9}}
+          ]}
+        ]},
+        {"or": [
+          {"heatFramesWithEnergyDrops": {
+            "frames": 630,
+            "drops": [{"enemy": "Space Pirate (fighting)", "count": 12}]
+          }},
+          {"and": [
+            "canFarmWhileShooting",
+            {"heatFramesWithEnergyDrops": {
+              "frames": 360,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+            }},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 270,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+            }}
+          ]}
+        ]},
+        {"partialRefill": {"type": "Energy", "limit": 99}},
+        {"partialRefill": {"type": "Super", "limit": 1}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Use the Echoes created by shinesparking to defeat the Metal Pirates.",
+        "This involves Shineparking into a precise point while also turning the Pirates vulnerable as the echoes reach them."
+      ],
+      "devNote": [
+        "FIXME: It's possible to activate a spark on the ground at 27 energy and collect drops in time.",
+        "The canFarmWhileShooting presumes spawning the drops on the ground where they can be collected while charging the next shinespark."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [2, 4],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 20,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 125}
+      ],
+      "devNote": [
+        "Timed from drop collection.",
+        "FIXME: Samus will be closer to one door than the other.",
+        "Drops will also spawn closer to a door which may or may not be the desired one."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 125}
+      ],
+      "devNote": [
+        "Timed from drop collection.",
+        "FIXME: Samus will be closer to one door than the other.",
+        "Drops will also spawn closer to a door which may or may not be the desired one."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [3, 3],
+      "name": "Charge Plasma Kill",
+      "requires": [
+        "Charge",
+        "Plasma",
+        {"or": [
+          {"and": [
+            {"or": [
+              "canDodgeWhileShooting",
+              {"enemyDamage": {
+                "enemy": "Space Pirate (fighting)",
+                "type": "contact",
+                "hits": 2
+              }}
+            ]},
+            {"or": [
+              "Ice",
+              "Wave"
+            ]},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 700,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 12}]
+            }}
+          ]},
+          {"and": [
+            {"or": [
+              "canDodgeWhileShooting",
+              {"enemyDamage": {
+                "enemy": "Space Pirate (fighting)",
+                "type": "contact",
+                "hits": 2
+              }}
+            ]},
+            "Ice",
+            "Wave",
+            {"heatFramesWithEnergyDrops": {
+              "frames": 450,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 12}]
+            }}
+          ]},
+          {"and": [
+            {"or": [
+              "canDodgeWhileShooting",
+              {"enemyDamage": {
+                "enemy": "Space Pirate (fighting)",
+                "type": "contact",
+                "hits": 2
+              }}
+            ]},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 950,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 12}]
+            }}
+          ]},
+          {"and": [
+            "canXRayWaitForIFrames",
+            {"heatFramesWithEnergyDrops": {
+              "frames": 210,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+            }},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 210,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+            }}
+          ]}
+        ]},
+        {"partialRefill": {"type": "Energy", "limit": 99}},
+        {"partialRefill": {"type": "Super", "limit": 1}}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 23,
+      "link": [3, 3],
+      "name": "Charge Plasma Double Hit Kill",
+      "requires": [
+        "Charge",
+        "Plasma",
+        "canTrickyJump",
+        {"or": [
+          {"and": [
+            "Wave",
+            "Ice",
+            {"heatFramesWithEnergyDrops": {
+              "frames": 200,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+            }},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 200,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+            }}
+          ]},
+          {"and": [
+            {"or": [
+              "Ice",
+              "Wave"
+            ]},
+            "canInsaneJump",
+            {"heatFramesWithEnergyDrops": {
+              "frames": 260,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+            }},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 260,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+            }}
+          ]},
+          {"and": [
+            "canInsaneJump",
+            {"heatFramesWithEnergyDrops": {
+              "frames": 350,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+            }},
+            {"heatFramesWithEnergyDrops": {
+              "frames": 350,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+            }}
+          ]}
+        ]},
+        {"partialRefill": {"type": "Energy", "limit": 99}},
+        {"partialRefill": {"type": "Super", "limit": 1}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Stand under the Metal Pirate as it does a dive kick and fire the plasma shot so that it stays with the Pirate longer, hitting twice.",
+        "Uncharged shots can finish off a Pirate if Ice or Wave is also equipped."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [3, 3],
+      "name": "Charge Spazer Kill",
+      "requires": [
+        "canDodgeWhileShooting",
+        "Charge",
+        "Spazer",
+        {"or": [
+          {"heatFramesWithEnergyDrops": {
+            "frames": 4400,
+            "drops": [{"enemy": "Space Pirate (fighting)", "count": 12}]
+          }},
+          {"and": [
+            "Ice",
+            {"heatFramesWithEnergyDrops": {
+              "frames": 3000,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 12}]
+            }}
+          ]},
+          {"and": [
+            "Wave",
+            {"heatFramesWithEnergyDrops": {
+              "frames": 2650,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 12}]
+            }}
+          ]},
+          {"and": [
+            "Ice",
+            "Wave",
+            {"heatFramesWithEnergyDrops": {
+              "frames": 1750,
+              "drops": [{"enemy": "Space Pirate (fighting)", "count": 12}]
+            }}
+          ]}
+        ]},
+        {"partialRefill": {"type": "Energy", "limit": 99}},
+        {"partialRefill": {"type": "Super", "limit": 1}}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 25,
+      "link": [3, 3],
+      "name": "Plasma Kill",
+      "requires": [
+        {"or": [
+          "canDodgeWhileShooting",
+          {"enemyDamage": {
+            "enemy": "Space Pirate (fighting)",
+            "type": "contact",
+            "hits": 8
+          }}
+        ]},
+        "Plasma",
+        {"heatFramesWithEnergyDrops": {
+          "frames": 2000,
+          "drops": [{"enemy": "Space Pirate (fighting)", "count": 12}]
+        }},
+        {"partialRefill": {"type": "Energy", "limit": 99}},
+        {"partialRefill": {"type": "Super", "limit": 1}}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 26,
+      "link": [3, 3],
+      "name": "Slow Kill",
+      "requires": [
+        "h_heatProof",
+        "canDodgeWhileShooting",
+        "Charge",
+        "Wave",
+        {"partialRefill": {"type": "Energy", "limit": 99}},
+        {"partialRefill": {"type": "Super", "limit": 1}}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 27,
+      "link": [3, 3],
+      "name": "Very Slow Kill",
+      "requires": [
+        "h_heatProof",
+        "canDodgeWhileShooting",
+        {"or": [
+          {"and": [
+            "Spazer",
+            "canBeVeryPatient"
+          ]},
+          {"and": [
+            "Charge",
+            "canBeVeryPatient"
+          ]},
+          {"and": [
+            "Charge",
+            "Ice",
+            "canBePatient"
+          ]}
+        ]},
+        {"partialRefill": {"type": "Energy", "limit": 99}},
+        {"partialRefill": {"type": "Super", "limit": 1}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Uncharged Spazer does half damage.",
+      "devNote": "This strat is only for uncharged spazer or charge with or without ice"
+    },
+    {
+      "id": 28,
+      "link": [3, 3],
+      "name": "Super Kill",
+      "requires": [
+        {"or": [
+          "canDodgeWhileShooting",
+          {"enemyDamage": {
+            "enemy": "Space Pirate (fighting)",
+            "type": "contact",
+            "hits": 2
+          }}
+        ]},
+        {"enemyKill": {
+          "enemies": [["Space Pirate (fighting)", "Space Pirate (fighting)"]],
+          "explicitWeapons": ["Super"]
+        }},
+        {"heatFramesWithEnergyDrops": {
+          "frames": 450,
+          "drops": [{"enemy": "Space Pirate (fighting)", "count": 12}]
+        }},
+        {"partialRefill": {"type": "Energy", "limit": 99}},
+        {"partialRefill": {"type": "Super", "limit": 1}}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 29,
+      "link": [3, 3],
+      "name": "Super Kill and Farm",
+      "requires": [
+        "canFarmWhileShooting",
+        {"or": [
+          {"and": [
+            {"resourceAvailable": [{"type": "Energy", "count": 73}]},
+            {"ammo": {"type": "Super", "count": 4}}
+          ]},
+          {"ammo": {"type": "Super", "count": 5}}
+        ]},
+        {"heatFramesWithEnergyDrops": {
+          "frames": 225,
+          "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+        }},
+        {"heatFramesWithEnergyDrops": {
+          "frames": 225,
+          "drops": [{"enemy": "Space Pirate (fighting)", "count": 6}]
+        }},
+        {"partialRefill": {"type": "Energy", "limit": 119}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "If energy would fall into Health Bomb range, immediately collect some health drops so that the second wave of drops (from a single pirate) will be able to spawn Supers."
+      ],
+      "devNote": ["Collecting Super drops is shown by spending fewer to kill the pirates."]
+    },
+    {
+      "id": 30,
+      "link": [3, 3],
+      "name": "Missile Kill",
+      "requires": [
+        {"or": [
+          "canDodgeWhileShooting",
+          {"enemyDamage": {
+            "enemy": "Space Pirate (fighting)",
+            "type": "contact",
+            "hits": 6
+          }}
+        ]},
+        {"enemyKill": {
+          "enemies": [["Space Pirate (fighting)", "Space Pirate (fighting)"]],
+          "explicitWeapons": ["Missile"]
+        }},
+        {"heatFramesWithEnergyDrops": {
+          "frames": 2700,
+          "drops": [{"enemy": "Space Pirate (fighting)", "count": 12}]
+        }},
+        {"partialRefill": {"type": "Energy", "limit": 99}},
+        {"partialRefill": {"type": "Super", "limit": 1}}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 31,
+      "link": [3, 3],
+      "name": "Metal Pirates Farm",
+      "requires": [
+        "h_heatProof",
+        "canDodgeWhileShooting",
+        {"resetRoom": {"nodes": [1, 2]}},
+        {"or": [
+          {"and": [
+            "Plasma",
+            "Charge",
+            "Wave",
+            "Ice",
+            {"cycleFrames": 720}
+          ]},
+          {"and": [
+            "Plasma",
+            {"or": [
+              "Charge",
+              "Wave",
+              "Ice"
+            ]},
+            {"cycleFrames": 1110}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 1320}
+          ]},
+          {"and": [
+            "Charge",
+            "Ice",
+            "Wave",
+            "Spazer",
+            {"cycleFrames": 1800}
+          ]},
+          {"and": [
+            "Ice",
+            "Wave",
+            "Spazer",
+            {"cycleFrames": 2700}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Space Pirate (fighting)", "count": 2}],
+      "devNote": "FIXME: There are many more beam combinations that could be used."
+    },
+    {
+      "id": 32,
+      "link": [3, 3],
+      "name": "Shinespark Farm",
+      "requires": [
+        {"notable": "Speed Echoes Kill"},
+        "h_heatProof",
+        {"resetRoom": {"nodes": [1, 2]}},
+        "canFarmWhileShooting",
+        "canUseSpeedEchoes",
+        "canHitbox",
+        {"canShineCharge": {"usedTiles": 38, "openEnd": 2}},
+        {"shinespark": {"frames": 9}},
+        {"cycleFrames": 730}
+      ],
+      "clearsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Space Pirate (fighting)", "count": 2}],
+      "note": [
+        "Use the Echoes created by shinesparking to defeat the Metal Pirates.",
+        "This involves Shineparking into a precise point while also turning the Pirates vulnerable as the echoes reach them."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [4, 1],
+      "name": "G-Mode, Cross the Room",
+      "requires": [
+        "h_heatedGMode",
+        {"heatFrames": 45}
+      ]
+    },
+    {
+      "id": 40,
+      "link": [4, 1],
+      "name": "G-Mode, Ammo Kill",
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          {"ammo": {"type": "Super", "count": 6}},
+          {"ammo": {"type": "Missile", "count": 36}}
+        ]},
+        {"or": [
+          {"heatFrames": 45},
+          "h_heatedGModePauseAbuse"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Be careful to avoid the stationary, invisible projectiles that the pirates spawn from where they jump.",
+        "It is possible to exit G-mode and quicky pause abuse, to collect the pirates' drops and get to the door."
+      ],
+      "devNote": [
+        "It is possible to enter the room in direct G-mode, kill the pirates, return to the open door, then exit G-mode and quickly touch the transition to awaken Zebes (but not get the metal pirates kill flag).",
+        "This is not included, as it is a very niche knowledge check, and at that point, you might as well pause abuse to get the pirate drops and both flags."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [4, 1],
+      "name": "G-Mode, Beam Kill",
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "Plasma",
+          {"and": [
+            "Charge",
+            "Spazer"
+          ]},
+          {"and": [
+            "Charge",
+            "Wave"
+          ]},
+          {"and": [
+            "Spazer",
+            "Ice",
+            "Wave"
+          ]},
+          {"and": [
+            "canBePatient",
+            {"or": [
+              {"and": [
+                "Charge",
+                "Ice"
+              ]},
+              {"and": [
+                "Spazer",
+                "Ice"
+              ]},
+              {"and": [
+                "Spazer",
+                "Wave"
+              ]}
+            ]}
+          ]},
+          {"and": [
+            "canBeVeryPatient",
+            {"or": [
+              "Charge",
+              "Spazer"
+            ]}
+          ]}
+        ]},
+        {"or": [
+          {"heatFrames": 45},
+          "h_heatedGModePauseAbuse"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Be careful to avoid the stationary, invisible projectiles that the pirates spawn from where they jump.",
+        "It is possible to exit G-mode and quicky pause abuse, to collect the pirates' drops and get to the door."
+      ],
+      "devNote": [
+        "It is possible to enter the room in direct G-mode, kill the pirates, return to the open door, then exit G-mode and quickly touch the transition to awaken Zebes (but not get the metal pirates kill flag).",
+        "This is not included, as it is a very niche knowledge check, and at that point, you might as well pause abuse to get the pirate drops and both flags."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [4, 1],
+      "name": "G-Mode, Shinespark Kill",
+      "requires": [
+        "h_heatedGMode",
+        "canTrickyGMode",
+        {"notable": "Speed Echoes Kill"},
+        {"canShineCharge": {"usedTiles": 18, "openEnd": 1}},
+        {"shinespark": {"frames": 9, "excessFrames": 9}},
+        {"shinespark": {"frames": 9, "excessFrames": 9}},
+        "canUseSpeedEchoes",
+        {"or": [
+          {"heatFrames": 45},
+          "h_heatedGModePauseAbuse"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "The pirates will place stationary, invisible projectiles when they jump or Samus runs through them, making that portion of the runway unusable without taking damage.",
+        "To prevent this, it is important to shinecharge with only a small portion of the room to prevent the opposite pirate from placing a projectile.",
+        "After shinecharging through the first pirate, stand between where it jumps, then near the end of the shinecharge timer, spark vertically with low energy to kill the pirate.",
+        "It is possible to exit G-mode and quicky pause abuse, to collect the pirates' drops and get to the door."
+      ],
+      "devNote": [
+        "It is possible to enter the room in direct G-mode, kill the pirates, return to the open door, then exit G-mode and quickly touch the transition to awaken Zebes (but not get the metal pirates kill flag).",
+        "This is not included, as it is a very niche knowledge check, and at that point, you might as well pause abuse to get the pirate drops and both flags."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [4, 2],
+      "name": "G-Mode, Cross the Room",
+      "requires": [
+        "h_heatedGMode",
+        {"heatFrames": 45}
+      ]
+    },
+    {
+      "id": 44,
+      "link": [4, 2],
+      "name": "G-Mode, Ammo Kill",
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          {"ammo": {"type": "Super", "count": 6}},
+          {"ammo": {"type": "Missile", "count": 36}}
+        ]},
+        {"or": [
+          {"heatFrames": 190},
+          "h_heatedGModePauseAbuse"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Be careful to avoid the stationary, invisible projectiles that the pirates spawn from where they jump.",
+        "It is possible to exit G-mode and quicky pause abuse, to collect the pirates' drops and open the door and leave.",
+        "Otherwise, it requires exiting G-mode at the left side of the room, shooting the door and returning to the right side of the room."
+      ],
+      "devNote": [
+        "FIXME: These heat frames would be lower if both doors were locked and either could be used to set the metal pirates kill flag.",
+        "It is possible to enter the room in direct G-mode, kill the pirates, return to the open door, then exit G-mode and quickly touch the transition to awaken Zebes (but not get the metal pirates kill flag).",
+        "This is not included, as it is a very niche knowledge check, and at that point, you might as well pause abuse to get the pirate drops and both flags."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [4, 2],
+      "name": "G-Mode, Beam Kill",
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "Plasma",
+          {"and": [
+            "Charge",
+            "Spazer"
+          ]},
+          {"and": [
+            "Charge",
+            "Wave"
+          ]},
+          {"and": [
+            "Spazer",
+            "Ice",
+            "Wave"
+          ]},
+          {"and": [
+            "canBePatient",
+            {"or": [
+              {"and": [
+                "Charge",
+                "Ice"
+              ]},
+              {"and": [
+                "Spazer",
+                "Ice"
+              ]},
+              {"and": [
+                "Spazer",
+                "Wave"
+              ]}
+            ]}
+          ]},
+          {"and": [
+            "canBeVeryPatient",
+            {"or": [
+              "Charge",
+              "Spazer"
+            ]}
+          ]}
+        ]},
+        {"or": [
+          {"heatFrames": 190},
+          "h_heatedGModePauseAbuse"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Be careful to avoid the stationary, invisible projectiles that the pirates spawn from where they jump.",
+        "It is possible to exit G-mode and quicky pause abuse, to collect the pirates' drops and open the door and leave.",
+        "Otherwise, it requires exiting G-mode at the left side of the room, shooting the door and returning to the right side of the room."
+      ],
+      "devNote": [
+        "FIXME: These heat frames would be lower if both doors were locked and either could be used to set the metal pirates kill flag.",
+        "It is possible to enter the room in direct G-mode, kill the pirates, return to the open door, then exit G-mode and quickly touch the transition to awaken Zebes (but not get the metal pirates kill flag).",
+        "This is not included, as it is a very niche knowledge check, and at that point, you might as well pause abuse to get the pirate drops and both flags."
+      ]
+    },
+    {
+      "id": 46,
+      "link": [4, 2],
+      "name": "G-Mode, Shinespark Kill",
+      "requires": [
+        "h_heatedGMode",
+        "canTrickyGMode",
+        {"notable": "Speed Echoes Kill"},
+        {"canShineCharge": {"usedTiles": 18, "openEnd": 1}},
+        {"shinespark": {"frames": 9, "excessFrames": 9}},
+        {"shinespark": {"frames": 9, "excessFrames": 9}},
+        "canUseSpeedEchoes",
+        {"or": [
+          {"heatFrames": 190},
+          "h_heatedGModePauseAbuse"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "The pirates will place stationary, invisible projectiles when they jump or Samus runs through them, making that portion of the runway unusable without taking damage.",
+        "To prevent this, it is important to shinecharge with only a small portion of the room to prevent the opposite pirate from placing a projectile.",
+        "After shinecharging through the first pirate, stand between where it jumps, then near the end of the shinecharge timer, spark vertically with low energy to kill the pirate.",
+        "It is possible to exit G-mode and quicky pause abuse, to collect the pirates' drops and open the door and leave.",
+        "Otherwise, it requires exiting G-mode at the left side of the room, shooting the door and returning to the right side of the room."
+      ],
+      "devNote": [
+        "FIXME: These heat frames would be lower if both doors were locked and either could be used to set the metal pirates kill flag.",
+        "It is possible to enter the room in direct G-mode, kill the pirates, return to the open door, then exit G-mode and quickly touch the transition to awaken Zebes (but not get the metal pirates kill flag).",
+        "This is not included, as it is a very niche knowledge check, and at that point, you might as well pause abuse to get the pirate drops and both flags."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Speed Echoes Kill",
+      "note": [
+        "Use the Echoes created by shinesparking to defeat the Metal Pirates.",
+        "This involves Shineparking into a precise point while also turning the Pirates vulnerable as the echoes reach them."
+      ]
+    }
+  ],
+  "nextStratId": 47,
+  "nextNotableId": 2,
+  "devNote": "All kill heatframes have been lowered by 250 to adjust for the traversal requirement"
+}

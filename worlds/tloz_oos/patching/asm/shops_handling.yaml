@@ -1,0 +1,227 @@
+# Change shopItemReplacementTable so that each item can only be bought once
+08/4cf6/shopItemReplacementTable: |
+    db $3f,$01,$ff,$00   ; Member shop 1
+    db $40,$80,$ff,$00   ; Horon shop 3
+    db $3f,$02,$ff,$00   ; Member shop 2
+    db $40,$40,$ff,$00   ; Horon shop 2
+    db $40,$20,$ff,$00   ; Horon shop 1
+    db $3f,$08,$ff,$00   ; Member shop 3
+    db $00,$00,$00,$00
+    db $92,$04,$09,$18   ; Test TREASURE_PUNCH obtained (always) to redirect to entry 0x9
+    db $92,$04,$0a,$10   ; Test TREASURE_PUNCH obtained (always) to redirect to entry 0xa
+    db $3f,$20,$ff,$00   ; Syrup 2
+    db $3f,$40,$ff,$00   ; Syrup 3
+    db $3f,$80,$ff,$00   ; Syrup 1
+    db $00,$00,$00,$00
+    db $00,$00,$00,$00
+    db $40,$01,$ff,$00   ; Advance 1
+    db $40,$02,$ff,$00   ; Advance 2
+    db $40,$04,$ff,$00   ; Advance 3
+    db $00,$00,$00,$00
+    db $00,$00,$00,$00
+    db $00,$00,$00,$00
+
+# Remove the bits that are altered on-the-fly inside wBoughtShopItems2 when inside a shop
+08/4af1/: |
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+# remove generic text from shopItemTextTable so that replacement text can be displayed.
+08/4d46/: db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+# Remove all "you are already full" checks for shop slots that usually carry hearts, bombs or a shield
+08/4a66/: |
+    ld a,$01
+    or a
+    ret nz
+
+# Neutralize all vanilla "wBoughtItems1" flag set
+0b/47e7/: db $00
+0b/4803/: db $00
+0b/480d/: db $00
+0b/4819/: db $00
+0b/4857/: db $00
+0b/48c1/: db $00
+# Neutralize all vanilla "wBoughtItems2" flag set
+0b/482d/: db $00
+0b/4837/: db $00
+0b/4841/: db $00
+
+# Call giveTreasureCustom instead of giveTreasure for shop slots, and also
+# set the flag related to that shop item so it can't be bought again
+08//shopGiveTreasure: |
+    ; Give the treasure as you might expect when buying the item from the shopkeeper
+    call giveTreasureCustom
+
+    ; Also set the appropriate flag to mark the item as bought 
+    ld e,$42
+    ld a,(de)    ; interaction subid
+    ld hl,shopItemReplacementTable
+    add a,a
+    rst 18       ; rst_addDoubleIndex
+    inc hl
+    ldd a,(hl)    ; bitmask -> a
+    ld l,(hl)   ; flag_addr -> l
+    ld h,$c6
+    or (hl)     ; bitmask | flag_value -> a
+    ld (hl),a   ; store flag_value with added bit
+    ret
+# In shopItemState3, replace giveTreasure by a call to the function above, and also overwrite the next few instructions
+# which are a seed refill when buying a specific shop item in Member Shop (which we don't want in rando!)
+08/4bfb/: |
+    push de
+    call shopGiveTreasure
+    call saveFile
+    pop de
+    nop
+    nop
+
+
+### HORON SHOP #####################################################################
+
+# have horon village shop stock and sell its items from the start, and don't
+# stop the flute appearing because of animal flags.
+
+# sword check
+08/48d7/: |
+    nop
+    nop
+# sword check
+08/4adf/: |
+    nop
+    nop
+    nop
+
+# Don't set a ricky flag when buying 150-rupee shop item.
+# This has become useless since we randomize the cheap item instead of the special Flute replacement
+# 0b/4823/: db ormemory; dw wRickyState; db 00
+
+### ADVANCE SHOP ###################################################################
+
+# If "open_advance_shop" setting is set, make advance shop always open.
+# Otherwise, make it always closed, even on GBA
+04/6195/advanceShopDoor: |
+    ld a,option.openAdvanceShop
+    or a
+    ret z
+
+# Change the initial text the game uses for Advance Shop 1 because... it uses a generic one
+# instead of the specific one that exists for it inside textbanks?!
+0b/4829/: db $22
+
+
+### SYRUP'S SHOP ###################################################################
+
+# Remove Syrup quantity checks, and set price textbox substitution instead to allow for variable prices
+08/6d82/: |
+    ld hl,wTextNumberSubstitution
+    ld (hl),c
+    inc l
+    ld (hl),b
+    jr $1d
+
+
+### SUBROSIAN MARKET ###############################################################
+
+# A dictionary with:
+#  - market item descriptor low address as key
+#  - flag mask as value
+09//marketItemFlags: |
+    db $db,$01
+    db $e3,$02
+    db $ef,$04
+    db $f3,$08
+    db $00
+# 5th item defaults at value 10
+
+# Give a randomized item and set the matching flag for the item not to reappear
+09//marketGiveTreasure: |
+    push af
+    push hl
+    ld a,l
+    ld e,a
+    ld hl,marketItemFlags
+    call lookupKey
+    jr c,@found
+    ld a,$10
+    @found:
+    ld hl,wBoughtSubrosianItems
+    or (hl)
+    ld (hl),a
+    pop hl
+    pop af
+
+    call giveTreasureCustom
+
+    push de
+    call saveFile
+    pop de
+
+    ret
+09/788a/: |
+    call marketGiveTreasure
+    jr $12
+
+# Remove star ore from inventory when buying the first subrosian market
+# item. this can't go in the gain/lose items table, since the given item
+# doesn't necessarily have a unique ID.
+09//tradeStarOre: |
+    or a
+    jr nz,@next
+    push hl
+    ld hl,$c69a
+    res 5,(hl)
+    pop hl
+    @next:
+    rst 18
+    ldi a,(hl)
+    ld c,(hl)
+    ret
+09/7887/: call tradeStarOre
+
+# Remove conditions on market slots (remove 2nd if owning shield, and remove Member's Card if under a
+# specific essence requirement)
+09/7744/: |
+    jr $2a
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+# In Subrosian Market, remove item if it was already bought instead of putting the next one in the list
+09/776d/: jp nz,interactionDelete
+09/777a/: jr nz,$f1
+
+# Change the tested flags that make the items disappear
+09/77c6/: db $04 # Item 3
+09/77ce/: db $08 # Item 4
+09/77d2/: db $10 # Item 5
+
+# Remove ember seeds from prices
+09/77af/: db $00,$00 # Item 2
+09/77c7/: db $00,$00 # Item 3
+
+
+### PRICES #######################################################################
+
+08/4c97/: db shopPrices.horonShop1
+08/4c96/: db shopPrices.horonShop2
+08/4c94/: db shopPrices.horonShop3
+
+08/4c93/: db shopPrices.memberShop1
+08/4c95/: db shopPrices.memberShop2
+08/4c98/: db shopPrices.memberShop3
+
+08/4c9c/: db shopPrices.syrupShop1
+08/4c9d/: db shopPrices.syrupShop2
+08/4c9e/: db shopPrices.syrupShop3
+
+08/4ca1/: db shopPrices.advanceShop1
+08/4ca2/: db shopPrices.advanceShop2
+08/4ca3/: db shopPrices.advanceShop3
+
+09/77b1/: db shopPrices.subrosianMarket2
+09/77c9/: db shopPrices.subrosianMarket3
+09/77d1/: db shopPrices.subrosianMarket4
+09/77d5/: db shopPrices.subrosianMarket5
+  

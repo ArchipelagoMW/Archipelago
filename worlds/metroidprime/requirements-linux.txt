@@ -1,0 +1,2 @@
+py-randomprime==1.27.0
+ppc-asm==1.2.1

@@ -1,0 +1,743 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 209,
+  "name": "West Sand Pit",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Pink",
+  "roomAddress": "0x7D4EF",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Sand Entrance",
+      "nodeType": "entrance",
+      "nodeSubType": "sandpit",
+      "nodeAddress": "0x001a6a8",
+      "doorOrientation": "up",
+      "mapTileMask": [
+        [1, 2],
+        [1, 2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Left Sand Exit",
+      "nodeType": "exit",
+      "nodeSubType": "sandpit",
+      "nodeAddress": "0x001a6b4",
+      "doorOrientation": "down",
+      "mapTileMask": [
+        [1, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Left - Left Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x7C5DD",
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Top Left - Right Item",
+      "nodeType": "item",
+      "nodeSubType": "chozo",
+      "nodeItem": "ReserveTank",
+      "nodeAddress": "0x7C5E3",
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Morph Tunnel Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Junction Between Items",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ],
+      "note": "Positioned in a tunnel above 5. You actually have to go back to 5 to move between the left and right portions of this junction, but access both ways has the same requirements."
+    },
+    {
+      "id": 7,
+      "name": "Below Morph Tunnel Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ],
+      "note": "Positioned below 5, next to the crumble blocks."
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "West Sand Pit Boulders",
+      "enemyName": "Boulder",
+      "quantity": 2,
+      "homeNodes": [7]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 1},
+        {"id": 5}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 2,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 7],
+      "name": "Avoid Sand",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "h_useSpringBall",
+            "canJumpIntoIBJ"
+          ]}
+        ]}
+      ],
+      "note": "Land on the solid ground to the right and space jump or Springball over the sand."
+    },
+    {
+      "id": 6,
+      "link": [1, 7],
+      "name": "Gravity In Sand",
+      "requires": [
+        "Gravity",
+        "canPlayInSand",
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "canWalljump",
+          "canIBJ",
+          "canGravityJump"
+        ]}
+      ],
+      "note": "Gravity with a good jump from the sand can reach the Solid Rock Maze region."
+    },
+    {
+      "id": 7,
+      "link": [1, 7],
+      "name": "Suitless Wall Jump Break Free",
+      "requires": [
+        {"notable": "Suitless Wall Jump Break Free"},
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "HiJump",
+        "canConsecutiveWalljump",
+        "canPreciseWalljump"
+      ],
+      "note": [
+        "HiJump with a good jump from the sand can reach the Solid Rock Maze region.  Use the sandfall if Samus gets stuck in the sand.",
+        "Perform several wall jumps to climb up to the water level, then precise wall jumps to break free."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 7],
+      "name": "Space Wall Climb",
+      "requires": [
+        "canPlayInSand",
+        "HiJump",
+        "canConsecutiveWalljump",
+        "canSpaceJumpWaterBounce"
+      ],
+      "note": "HiJump with a good jump from the sand can reach the Solid Rock Maze region. Use the sandfall if Samus gets stuck in the sand."
+    },
+    {
+      "id": 9,
+      "link": [1, 7],
+      "name": "Suitless Dual Jump Assist",
+      "requires": [
+        "canSuitlessMaridia",
+        {"or": [
+          "canPrepareForNextRoom",
+          "canPlayInSand"
+        ]},
+        "HiJump",
+        "h_maxHeightSpringBallJump"
+      ],
+      "note": [
+        "HiJump with a good jump from the sand can reach the Solid Rock Maze region.  Use the sandfall if Samus gets stuck in the sand.",
+        "Bouncing on the sand as springball can reach the above maze by altering Samus' fall height, like by bouncing under the solid ledge before trying to jump up."
+      ],
+      "devNote": [
+        "Jumping through the sandfall is failable enough to require canPlayInSand",
+        "This is not a traditional max height spring ball jump, as it requires HiJump and crosses the waterline, but it requires similar inputs and precision."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 7],
+      "name": "Shinespark - Shoot the Block with Wave",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        "h_navigateUnderwater",
+        "canPlayInSand",
+        "canShinechargeMovementComplex",
+        "Wave",
+        {"shinespark": {"frames": 24, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Shoot the shot block before reaching the sand and then shinespark up.",
+        "A diagonal ShineSpark will most likely not have any horizontal movement when performed from the sand."
+      ],
+      "devNote": "Gravity has minimal effect on the required charge or spark frames."
+    },
+    {
+      "id": 11,
+      "link": [1, 7],
+      "name": "Shinespark - Shoot the Block with Wave, Enter with Spin, Diagonal Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 55},
+        "h_navigateUnderwater",
+        "canMidairShinespark",
+        "canShinechargeMovementComplex",
+        "Wave",
+        "canPrepareForNextRoom",
+        {"shinespark": {"frames": 17}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Shoot the shot block on the descent then shinespark diagonally up before hitting the sand.",
+      "devNote": "Gravity has minimal effect on the required charge or spark frames."
+    },
+    {
+      "id": 12,
+      "link": [1, 7],
+      "name": "Shinespark With Morph",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 150},
+        "h_navigateUnderwater",
+        "canPlayInSand",
+        "canShinechargeMovementTricky",
+        {"or": [
+          "canResetFallSpeed",
+          {"and": [
+            "canPrepareForNextRoom",
+            "h_usePowerBomb"
+          ]}
+        ]},
+        {"shinespark": {"frames": 24, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Break the shot block before reaching the sand and then shinespark up.",
+        "Samus cannot shinespark after unmorphing until she touches the sand and this can be used to shoot upwards without sparking.",
+        "A diagonal ShineSpark will most likely not have any horizontal movement when performed from the sand."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 7],
+      "name": "Shinespark With Hero Shot",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 160},
+        "h_navigateUnderwater",
+        "canPlayInSand",
+        "canHeroShot",
+        "canTrickyJump",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 25, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Break the shot block before reaching the sand and then shinespark up.",
+        "A diagonal ShineSpark will most likely not have any horizontal movement when performed from the sand."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [1, 7],
+      "name": "Jump Assist, Use Flash Suit",
+      "requires": [
+        "canPlayInSand",
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 10, "excessFrames": 3}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 7, "excessFrames": 3}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 37,
+      "link": [1, 7],
+      "name": "Break Block on Descent, Use Flash Suit",
+      "requires": [
+        "canPlayInSand",
+        {"or": [
+          "h_usePowerBomb",
+          "Wave"
+        ]},
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 18, "excessFrames": 3}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Break the block on the descent with Wave or a Power Bomb, jump off the sand, then spark diagonally out of the water."
+    },
+    {
+      "id": 38,
+      "link": [1, 7],
+      "name": "Hero Shot Break Block, Use Flash Suit",
+      "requires": [
+        "canPlayInSand",
+        "canHeroShot",
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 27, "excessFrames": 5}},
+          {"and": [
+            "canTrickyCarryFlashSuit",
+            {"shinespark": {"frames": 18, "excessFrames": 3}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "From the bottom of the sand, shoot upwards to break the block then Shinespark up. To use a flash suit in deep sand:",
+        "vertically - quickly roll the directional inputs from forward to up and jump.",
+        "diagonally, with minimal horizontal speed - while holding angle, quickly tap forward then press and hold jump.",
+        "Alternatively, to save Energy, shoot the block without falling into the sand, then reposition and spark up left.",
+        "This can be done with a midair unmorph then shoot up, or from shooting up from the sand surface then quickly spin jumping off in order not to sink."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 7],
+      "name": "G-Mode Through Crumbles from the Left",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "Morph",
+        "h_navigateUnderwater",
+        {"or": [
+          "Gravity",
+          {"and": [
+            "HiJump",
+            "h_crouchJumpDownGrab"
+          ]},
+          "h_maxHeightSpringBallJump"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Get to the left side of the room while avoiding the hole in the ground, jump up through the Morph tunnel.",
+        "Jump up to the ledge with either Gravity, HiJump and a Crouch Jump Down Grab, or a maximum height Spring Ball Jump."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [1, 7],
+      "name": "Bootless Underwater Wall Jump",
+      "requires": [
+        "canPlayInSand",
+        {"or": [
+          "canSpringBallJumpMidAir",
+          "canSandfallBounce"
+        ]},
+        "canBootless2WideUWJ",
+        "SpaceJump"
+      ],
+      "note": "Sandfall bounce or spring ball jump to the first ledge, then bootless underwater wall jump to the water surface, then use Space Jump to escape."
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 16,
+      "link": [3, 6],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_bombThings",
+          "h_useSpringBall"
+        ]}
+      ]
+    },
+    {
+      "id": 17,
+      "link": [3, 6],
+      "name": "MidAir Morph",
+      "requires": [
+        "h_threeTileJumpMorph"
+      ]
+    },
+    {
+      "id": 18,
+      "link": [4, 6],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 19,
+      "link": [5, 6],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_useSpringBall",
+          "canIBJ"
+        ]}
+      ]
+    },
+    {
+      "id": 20,
+      "link": [5, 6],
+      "name": "MidAir Morph",
+      "requires": [
+        {"or": [
+          "h_fourTileJumpMorph",
+          {"and": [
+            "canPreciseWalljump",
+            "canWallJumpInstantMorph"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [5, 7],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 22,
+      "link": [6, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_bombThings",
+          "h_useSpringBall"
+        ]}
+      ]
+    },
+    {
+      "id": 23,
+      "link": [6, 3],
+      "name": "MidAir Morph",
+      "requires": [
+        "h_threeTileJumpMorph"
+      ]
+    },
+    {
+      "id": 24,
+      "link": [6, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_bombThings",
+          "h_useSpringBall"
+        ]}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [6, 4],
+      "name": "Turnaround Aim Cancel",
+      "requires": [
+        "canTurnaroundAimCancel"
+      ]
+    },
+    {
+      "id": 26,
+      "link": [6, 4],
+      "name": "Xray Turnaround",
+      "requires": [
+        "canXRayTurnaround"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 27,
+      "link": [6, 5],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 28,
+      "link": [7, 1],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 29,
+      "link": [7, 1],
+      "name": "Suitless Way Back",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        {"or": [
+          "canPreciseWalljump",
+          "canSpaceJumpWaterBounce"
+        ]}
+      ]
+    },
+    {
+      "id": 30,
+      "link": [7, 1],
+      "name": "Crumble Blocks",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 31,
+      "link": [7, 5],
+      "name": "Gravity",
+      "requires": [
+        "canMidAirMorph",
+        "Gravity",
+        {"or": [
+          "canWallJumpInstantMorph",
+          "canCarefulJump"
+        ]}
+      ],
+      "note": "Jump and morph directly into the morph tunnel.  Using a walljump can help make the jump safer."
+    },
+    {
+      "id": 32,
+      "link": [7, 5],
+      "name": "Gravity with Springball",
+      "requires": [
+        "Gravity",
+        "h_useSpringBall",
+        {"or": [
+          {"and": [
+            {"tech": "canJumpIntoIBJ"},
+            "h_bombThings"
+          ]},
+          "canSpringBallBombJump",
+          "HiJump"
+        ]}
+      ],
+      "note": "Springball bounce on top of the crumble blocks.  Use either a bomb or HiJump to gain a little bit of extra height.",
+      "devNote": "The tech requirement is `catching yourself on an aerial bomb` which is what canJumpIntoIBJ adds to canIBJ.  Only one bomb or powerbomb is needed."
+    },
+    {
+      "id": 33,
+      "link": [7, 5],
+      "name": "Suitless Mid Air Morph",
+      "requires": [
+        "canSuitlessMaridia",
+        "canMidAirMorph",
+        {"or": [
+          {"and": [
+            "HiJump",
+            "canPreciseWalljump",
+            "canWallJumpInstantMorph"
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpaceJumpWaterEscape"
+          ]},
+          {"and": [
+            "canPreciseWalljump",
+            "canSpaceJumpWaterBounce"
+          ]}
+        ]}
+      ],
+      "note": "Escape the water with either HiJump or SpaceJump, then carefully jump and morph into the tunnel."
+    },
+    {
+      "id": 34,
+      "link": [7, 5],
+      "name": "Spring Ball Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallJump",
+        "can4HighMidAirMorph",
+        "canCarefulJump"
+      ]
+    },
+    {
+      "id": 35,
+      "link": [7, 5],
+      "name": "Suitless Bootless IBJ",
+      "requires": [
+        "canJumpIntoIBJ",
+        "canBombJumpWaterEscape",
+        "canCrumbleJump",
+        "canInsaneJump"
+      ],
+      "note": "Jump off of the crumble blocks consecutively while placing a bomb on the water line and convert that into an IBJ to climb to the dry morph tunnel.",
+      "devNote": "This is only useful without other movement items, which means that falling through the crumble blocks would require Samus to restart the room from above (likely shinecharged or with a flash suit)."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Suitless Wall Jump Break Free",
+      "note": [
+        "HiJump with a good jump from the sand can reach the Solid Rock Maze region.  Use the sandfall if Samus gets stuck in the sand.",
+        "Perform several wall jumps to climb up to the water level, then precise wall jumps to break free."
+      ]
+    }
+  ],
+  "nextStratId": 40,
+  "nextNotableId": 3
+}

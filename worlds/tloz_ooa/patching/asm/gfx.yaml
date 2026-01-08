@@ -1,0 +1,156 @@
+# Most of the code here has to do with interactions other than
+# the id $60 "treasure" interaction that must use treasure interaction
+# graphics.
+
+# set hl = the address of the sprite for treasure with ID b and subID c.
+3f//lookupItemSprite_body: |
+    ld e,$16
+    ld hl,getTreasureDataSprite
+    call interBankCall
+    ld a,e
+    ld hl,$66db     ; interaction60SubidData
+    add a,a
+    rst 10
+    ld a,e
+    rst 10
+    ret
+    
+
+# red soldier sprite data for deku forest soldier check.
+3f//soldierSpriteData: |
+    db 4d,00,22
+
+    
+3f//customSpriteJumpTableNotItem: |
+    dwbe 4000,soldierSpriteData
+    db ff
+
+# format (ID, subID, jump address). these functions *must* pop af as the last
+# instruction before returning.
+3f//customSpriteJumpTable: |
+    dwbe 4700, locations.hiddenShop1
+    dwbe 4702, locations.hiddenShop2
+    dwbe 4705, locations.hiddenShop3
+    dwbe 4704, locations.lynnaShop1
+    dwbe 4703, locations.lynnaShop2
+    dwbe 4701, locations.lynnaShop3
+    dwbe 470e, locations.advanceShop1
+    dwbe 470f, locations.advanceShop2
+    dwbe 4710, locations.advanceShop3
+    dwbe 4709, locations.syrupShop2
+    dwbe 470a, locations.syrupShop3
+    dwbe 470b, locations.syrupShop1
+    dwbe 6314, locations.hiddenTokayCave
+    dwbe 6315, locations.hiddenTokayCave
+    dwbe 633e, locations.wildTokayGame
+    dwbe 6b0b, locations.chevalInvention
+    dwbe 6b0c, locations.chevalTest
+    dwbe 7731, locations.d8Stalfos
+    dwbe 8007, locations.libraryPast
+    dwbe 8008, locations.libraryPresent
+    dwbe 8100, locations.tokayMarket1
+    dwbe 8101, locations.tokayMarket2
+    db ff
+
+# overrides the sprite data loaded for certain interactions. this is mostly
+# used for "non-item" interactions that depict items, like the ones in shops.
+3f//checkLoadCustomSprite: |
+    call $4437  ; _interactionGetData
+    push af
+    push hl
+    push bc
+    ld e,$41
+    ld a,(de)
+    ld b,a
+    inc e
+    ld a,(de)
+    ld c,a
+    ld e,$02
+    ld hl,customSpriteJumpTable
+    call searchDoubleKey
+    jr c,@customSprite
+    ; Same stuff with not item sprite
+    ld hl,customSpriteJumpTableNotItem
+    call searchDoubleKey
+    jr c,@customSpriteNotItem
+    pop bc
+    pop hl
+    pop af
+    ret
+    @customSprite:
+    pop bc
+    ldi a,(hl)
+    ld b,a
+    ld c,(hl)
+    pop hl
+    call lookupItemSprite_body
+    pop af
+    ret
+    @customSpriteNotItem:
+    pop bc
+    ldi a,(hl)
+    ld b,a
+    ld c,(hl)
+    pop hl
+    ld h,b
+    ld l,c
+    pop af
+    ret
+
+3f/4356/: call checkLoadCustomSprite
+
+## Some treasure don't actually use the treasure animation, this fix it. 
+3f//interactionGetIDForAnimationTable_body: |
+    push bc
+    ld e,$41 ; Interaction.id
+    ld a,(de)
+    ld b,a
+    inc e
+    ld a,(de)
+    ld c,a
+    ld e,$02
+    ld hl,customSpriteJumpTable
+    call searchDoubleKey
+    jr nc,@normal
+
+    ; It's a special case; use the animation table for INTERACID_TREASURE
+    ld a,INTERACID_TREASURE
+    ld e,a
+    jr @ret
+
+    @normal:
+    ; It's not a special case; return the unmodified interaction ID
+    ld e,b
+
+    @ret:
+    pop bc
+    ret
+
+00//interactionGetIDForAnimationTable: |
+    ld e,$3f
+    ld hl,interactionGetIDForAnimationTable_body
+    call interBankCall
+    ld a,e
+    ret
+
+00/263c/: call interactionGetIDForAnimationTable
+00/2663/: call interactionGetIDForAnimationTable
+
+
+# Inject the "Archipelago Item" sprite in subrosian sprite sheet in place of the rosa bow (which shouldn't be used because no linked game)
+1a/6620/: |
+    db $03,$03,$07,$04,$0F,$08,$3F,$3C,$7E,$43,$F9,$87,$FD,$BF,$FA,$C6
+    db $FB,$87,$F7,$8C,$EF,$98,$8F,$F8,$4F,$78,$38,$3F,$04,$07,$03,$03
+    db $C0,$C0,$E0,$20,$90,$70,$3C,$FC,$7E,$C2,$F9,$87,$FD,$BF,$7F,$43
+    db $F9,$C7,$F1,$2F,$D1,$3F,$91,$7F,$12,$FE,$1C,$FC,$20,$E0,$C0,$C0
+# Use that custom sprite with a blue palette inside GFX#5a (will be used for regular remote items)
+3f/67e9/: db $65,$14,$43 
+# Use that custom sprite with a red palette inside GFX#59 (will be used for progression remote items)
+3f/67e6/: db $65,$14,$53 
+
+# King Zora Potion
+3f/67f5/: db $79,$01,$13 
+
+# give items that don't normally appear as treasure interactions entries in
+# the treasure graphics table.
+3f/676b/: db $79,$01,$23 # potion

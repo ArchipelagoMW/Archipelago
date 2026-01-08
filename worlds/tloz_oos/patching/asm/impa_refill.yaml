@@ -1,0 +1,113 @@
+# An "adapter" function to change the parameter registers, making it easier to use in a common context
+# (similar to checkTreasureObtained from bank 0, but without an interBankCall)
+3f//checkTreasureObtained_bodyProxy: |
+    push hl
+    ld l,a
+    call $446d  ; checkTreasureObtained_body
+    ld a,l
+    srl h
+    pop hl
+    ret
+
+# Refill all consumable / losable items in the inventory:
+#   - each seed type up to 20
+#   - all bombs
+#   - shield (in case it was eaten by a Like Like)
+#   - health
+# No new item can be obtained from this, it can only refill what the player had and used/lost at some point.
+3f//refillInventory: |
+    ld b,TREASURE_EMBER_SEEDS
+    ld de,wNumEmberSeeds
+    
+    @refillSeedsLoop:
+    ld a,b
+    call checkTreasureObtained_bodyProxy
+    jr nc,@nextSeed
+    ld a,(de)           ; currently owned seeds
+    cp c
+    jr nc,@nextSeed
+    ld a,c
+    ld (de),a
+    call $460a          ; part of giveTreasure_body@modef that caps the number of seeds based on satchel level
+    
+    @nextSeed:
+    ld a,b
+    cp TREASURE_MYSTERY_SEEDS
+    jr z,@refillBombs
+    inc e
+    inc b
+    jr @refillSeedsLoop
+    
+    @refillBombs:
+    ld a,TREASURE_BOMBS
+    call checkTreasureObtained_bodyProxy
+    jr nc,@refillBombchus
+    ld hl,wMaxBombs
+    ldd a,(hl)
+    cp c
+    jr c,@changeBombAmount
+    ld a,c
+    @changeBombAmount:
+    cp (hl)
+    jr c,@refillShield
+    ld (hl),a
+    
+    @refillBombchus:
+    ld a,TREASURE_BOMBCHUS
+    call checkTreasureObtained_bodyProxy
+    jr nc,@refillShield
+    ld hl,wNumBombchus
+    ld a,(wMaxBombchus)
+    ld (hl),a
+    
+    @refillShield:
+    ld a,(wShieldLevel)
+    or a
+    jr z,@refillHealth
+    ld a,TREASURE_SHIELD
+    ld hl,wObtainedTreasureFlags
+    ldh ($8b),a         ; put item ID in FF8B
+    call setFlag
+    call $46bc          ; addTreasureToInventory
+    
+    @refillHealth:
+    ld hl,wLinkMaxHealth
+    ldd a,(hl)
+    ld (hl),a
+    
+    ; Play a sound and update status bar to give feedback
+    ld a,SND_GETSEED
+    call playSound
+    ld a,$03
+    ld (wStatusBarNeedsRefresh),a
+    ret
+
+# A function usable through the `asm15` script command which triggers the refill function above
+15//impaRefill: |
+    push hl
+    push de
+    ld c,$20
+    ld e,$3f
+    ld hl,refillInventory
+    call interBankCall
+    pop de
+    pop hl
+    ret
+
+# Actual use on Impa script of the refill script function above
+0b/74ef/: |
+    db checkabutton
+    db disableinput
+    db showtext,$25,$03
+    
+    db asm15
+    dw impaRefill
+    
+    db enableinput
+    db $74,$ef  ; jump back to the beginning of the script
+
+# Make Impa always stand in front of her house
+0a/5d57/: |
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    db $00,$00,$00

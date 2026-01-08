@@ -1,0 +1,56 @@
+{% if debug_enabled %}
+    <div class="card-header bg-info text-white">
+        <h4 class="card-title">
+            <span class="fas fa-flask"></span>
+            Debug Settings
+            <span class="fas fa-flask"></span>
+        </h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p>Debug Mode</p>
+                <div>
+                    <div class="form-check form-check-inline rounded">
+                        <input class="form-check-input debug-mode" type="radio" name="debug_mode" id="debug-mode-0"
+                               value="false">
+                        <label class="form-check-label" for="debug-mode-0">Off</label>
+                    </div>
+                    <div class="form-check form-check-inline rounded">
+                        <input class="form-check-input debug-mode" type="radio" name="debug_mode" id="debug-mode-1"
+                               value="true" checked>
+                        <label class="form-check-label" for="debug-mode-1">On</label>
+                    </div>
+                </div>
+                <ul>
+                    <li class="debug-mode-effect debug-mode-effect-true">Starting stats for characters are maxed out for testing.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+            $(".debug-mode").change(() => {
+                let checked = $('.debug-mode:checked');
+                localforage.setItem("rom.debug_mode", checked.val());
+
+                // Toggle classes for background info for highlighting.
+                checked.closest('.form-check').addClass('bg-primary text-white');
+                $('.debug-mode').not(':checked').closest('.form-check').removeClass('bg-primary text-white');
+
+                // Show/hide descriptions for selected option.
+                $('.debug-mode-effect').hide();
+                $(`.debug-mode-effect-${checked.val()}`).show();
+            });
+
+            // Load debug mode flag, default to off.
+            localforage.getItem("rom.debug_mode").then((value) => {
+                if (value === null) {
+                    value = "false";
+                }
+                $(`.debug-mode[value='${value}']`).prop("checked", true).change();
+            });
+        });
+    </script>
+{% endif %}

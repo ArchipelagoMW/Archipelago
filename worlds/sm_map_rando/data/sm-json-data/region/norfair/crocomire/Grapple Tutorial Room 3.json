@@ -1,0 +1,1105 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 131,
+  "name": "Grapple Tutorial Room 3",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "Crocomire",
+  "roomAddress": "0x7AB64",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1],
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00194b6",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1, 1],
+        [2, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00194c2",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 2],
+        [1, 1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Junction Left of Green Gate",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 2],
+        [1, 1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Center Platform Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 1],
+        [1, 2, 2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Green Gate",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "B",
+      "name": "G-Mode Indirect Despawn Gate",
+      "obstacleType": "abstract"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Grapple Tutorial Room 3 Gamets",
+      "enemyName": "Gamet",
+      "quantity": 5,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Grapple Tutorial Room 3 Puyos",
+      "enemyName": "Puyo",
+      "quantity": 5,
+      "homeNodes": [4]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Gamet",
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "h_trickyFrozenEnemyRunway",
+          {"and": [
+            "h_frozenEnemyRunway",
+            "Morph"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "Lure the Gamets up out of the water. It may be helpful to freeze them on the ascent to prevent them from separating and moving horizontally.",
+        "Positioning is much easier with Morph; simply morph on the runway before they start separating.",
+        "Freeze a Gamet while there is a half-tile gap between it and the runway in order to extend it as much as possible."
+      ]
+    },
+    {
+      "id": 54,
+      "link": [1, 1],
+      "name": "Gamet Farm",
+      "requires": [
+        {"simpleCycleFrames": 100},
+        {"cycleFrames": 20}
+      ],
+      "farmCycleDrops": [{"enemy": "Gamet", "count": 5}]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Gamet",
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canTrickyUseFrozenEnemies",
+          "canTrickyJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to lure the Gamets out of the water with nothing but ledge grabs."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "G-Mode Indirect Despawn the Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": [
+        "Cross the room while in indirect G-Mode and the gate will not be there.",
+        "Note that if any of the Gamets are killed, none of them will respawn, but they can still be frozen and used as a platform.",
+        "It is possible but difficult to cross either of the moats with Grapple before PLMs are overloaded, but not both of them."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Leave With Runway - Frozen Gamet",
+      "requires": [
+        "h_navigateUnderwater",
+        "canTrickyJump",
+        {"or": [
+          "h_trickyFrozenEnemyRunway",
+          {"and": [
+            "h_frozenEnemyRunway",
+            "Morph"
+          ]}
+        ]},
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 9,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Lure the Geemers up out of the water. It may be helpful to freeze them on the ascent to prevent them from separating and moving horizontally.",
+        "At the top, position a Gamet flush with the central runway. Positioning is much easier with Morph; simply morph on the runway before they start separating.",
+        "Freeze the Gamet before it begins moving horizontally, and it will be able to turn to the right.",
+        "Use it as a frozen platform to cross both bodies of water.",
+        "Lure the Gamet to the right and freeze it while there is a half-tile gap between it and the runway in order to extend it as much as possible."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "G-Mode Setup - Get Hit By Gamet",
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          {"resourceCapacity": [{"type": "Super", "count": 1}]},
+          {"obstaclesCleared": ["A"]}
+        ]},
+        "canComplexGMode",
+        {"or": [
+          {"and": [
+            "Gravity",
+            "SpaceJump"
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpaceJumpWaterBounce"
+          ]},
+          "canTrickyUseFrozenEnemies"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Carefully and quickly lure the Gamets to the right door without letting them go off camera.",
+        "It may help to kill any extra Gamets once they spread apart."
+      ]
+    },
+    {
+      "id": 55,
+      "link": [1, 2],
+      "name": "G-Mode Setup - Get Hit By Gamet, Tricky Manipulation",
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          {"resourceCapacity": [{"type": "Super", "count": 1}]},
+          {"obstaclesCleared": ["A"]}
+        ]},
+        "canTrickyGMode",
+        {"or": [
+          {"and": [
+            "Gravity",
+            "canPreciseGrapple"
+          ]},
+          {"and": [
+            "Gravity",
+            "canTrickyWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "canPreciseGrapple"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Carefully and quickly lure the Gamets to the right door without letting them go off camera.",
+        "It may help to kill any extra Gamets once they spread apart.",
+        "With Grapple, it can help to immediately press down after connecting to the block in order to get a quicker swing to the right."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "G-Mode Indirect Morph IBJ Despawn the Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          {"and": [
+            "HiJump",
+            "h_artificialMorphJumpIntoIBJ"
+          ]}
+        ]},
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          "canBePatient"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Slowly kill the Puyos with Bombs or use a Power Bomb. Stand under the gate when exiting G-Mode to open the gate.",
+      "devNote": "This is only to avoid a Gravity jump."
+    },
+    {
+      "id": 9,
+      "link": [1, 3],
+      "name": "Enter Shinesparking",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 56, "excessFrames": 1}}
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 3],
+      "name": "Shinespark, Come in Shinecharging",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 54, "excessFrames": 1}}
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 3],
+      "name": "Frozen Gamet Bridge",
+      "requires": [
+        {"notable": "Frozen Gamet Bridge"},
+        "canTrickyUseFrozenEnemies"
+      ],
+      "note": [
+        "Lead a Gamet up through the water and freeze it to cross the first moat.",
+        "Freeze the Gamet before it starts moving left.",
+        "Wait for it to thaw and fly over the second moat where it can be frozen again."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 3],
+      "name": "Double Gamet Boost",
+      "requires": [
+        {"notable": "Double Gamet Boost"},
+        "h_navigateUnderwater",
+        "canTrickyJump",
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Gamet", "type": "contact", "hits": 2}}
+      ],
+      "note": [
+        "1- Stand near the farm point, on the edge of where you make Gamets spawn.",
+        "2- Wait for the water position to be high.",
+        "3- Move to make the Gamets spawn. Moonwalk is useful here.",
+        "4- Quickly climb up to the last ledge before the door.",
+        "5- Run, jump, dboost off a Gamet.",
+        "6- Dboost a second time off the Gamet to cross the second moat."
+      ],
+      "devNote": "FIXME: A ceiling bomb jump could be added if Samus could not take an enemy hit."
+    },
+    {
+      "id": 13,
+      "link": [1, 3],
+      "name": "Lenient SpringBall Bounce",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 6
+        }
+      },
+      "requires": [
+        "canCarefulJump",
+        "canMockball",
+        "canSpringBallBounce"
+      ],
+      "note": [
+        "With at least 6 tiles of run speed, jump over the first moat and MockBall into a regular springball jump over the second moat.",
+        "Aim down before reaching the ceiling to increase the jump distance."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 3],
+      "name": "Tricky SpringBall Bounce",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        "canMockball",
+        "canSpringBallBounce"
+      ],
+      "note": [
+        "With around four tiles of run speed, jump over the first moat and MockBall into a regular springball jump over the second moat.",
+        "SpeedBooster makes the jump possible with a shorter runway, but the trajectory is less predictable."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 3],
+      "name": "Insane SpringBall Bounce",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canInsaneJump",
+        "canMockball",
+        "canSpringBallBounce"
+      ],
+      "note": [
+        "With at least two tiles of run speed, jump over the first moat by maximizing the jump distance and then MockBall into a regular springball to jump over the second moat."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [1, 3],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 44, "excessFrames": 6}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [1, 3],
+      "name": "G-Mode Morph IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          {"and": [
+            "HiJump",
+            "h_artificialMorphJumpIntoIBJ"
+          ]}
+        ]},
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          "canBePatient"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "Grapple",
+            {"obstaclesNotCleared": ["B"]}
+          ]}
+        ]}
+      ],
+      "devNote": [
+        "It is possible to use one set of the Grapple blocks in G-Mode. Generally the second moat is harder to cross so the logic is only allowing it there.",
+        "FIXME: It may be possible to cross the whole room with Grapple in G-Mode, but it would be very hard."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [1, 4],
+      "name": "Gravity",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "canIBJ",
+          "canUseFrozenEnemies",
+          "canGravityJump"
+        ]}
+      ]
+    },
+    {
+      "id": 19,
+      "link": [1, 4],
+      "name": "Speed Jump",
+      "requires": [
+        "SpeedBooster",
+        "canTrickyJump",
+        {"or": [
+          "canWalljump",
+          "canLateralMidAirMorph"
+        ]}
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 4],
+      "name": "Little Run Speed Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        {"or": [
+          "canWalljump",
+          "canLateralMidAirMorph"
+        ]}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [1, 4],
+      "name": "Some Run Speed Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canCarefulJump",
+        {"or": [
+          "canTrickyJump",
+          "canWalljump",
+          "canLateralMidAirMorph"
+        ]}
+      ]
+    },
+    {
+      "id": 22,
+      "link": [1, 4],
+      "name": "Full Run Speed Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 6
+        }
+      },
+      "requires": [
+        "canCarefulJump"
+      ]
+    },
+    {
+      "id": 23,
+      "link": [1, 4],
+      "name": "Gamet Boost",
+      "requires": [
+        "h_navigateUnderwater",
+        "canHorizontalDamageBoost",
+        "canCarefulJump",
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canTrickyJump"
+        ]},
+        {"enemyDamage": {"enemy": "Gamet", "type": "contact", "hits": 1}}
+      ],
+      "note": [
+        "1- Stand near the farm point, on the edge of where you make Gamets spawn.",
+        "2- Wait for the water position to be high.",
+        "3- Move to make the Gamets spawn. Moonwalking while facing the stairs is useful here.",
+        "4- Quickly climb up to the last ledge before the door.",
+        "5- Run, jump, dboost off a Gamet."
+      ],
+      "devNote": "FIXME: There could be another strat added that then kills the Gamets at 4 to refill."
+    },
+    {
+      "id": 24,
+      "link": [1, 4],
+      "name": "Suitless SpringBall Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "h_maxHeightSpringBallJump"
+      ],
+      "note": "Wait for the water to be rising and perform a max height SpringBall Jump."
+    },
+    {
+      "id": 49,
+      "link": [1, 4],
+      "name": "Underwater Walljump Break Free",
+      "requires": [
+        "canUnderwaterWalljumpBreakFree"
+      ],
+      "note": "This may be easier by starting with a flatley jump from the lowest ledge.",
+      "devNote": "This is likely never useful unless the Gamets are gone or Samus can't take a hit from them for some reason."
+    },
+    {
+      "id": 53,
+      "link": [1, 4],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 17,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "requires": [
+                {"or": [
+                  "SpeedBooster",
+                  "canLateralMidAirMorph"
+                ]}
+              ],
+              "note": ["This applies to Warehouse Entrance."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 7.4375,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyJump"
+              ],
+              "note": [
+                "This applies to Shaktool Room, Ridley Tank Room, Dust Torizo Room, and Halfie Climb Room."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 10.4375,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "requires": [
+                {"or": [
+                  "SpeedBooster",
+                  "canPreciseWalljump"
+                ]}
+              ],
+              "note": ["This applies to Big Boy Room and Mickey Mouse Room."]
+            },
+            {
+              "minHeight": 4,
+              "maxHeight": 4,
+              "minTiles": 11.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyJump"
+              ],
+              "note": ["This applies to Aqueduct."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[2, 0]],
+              "requires": [
+                "canTrickyJump"
+              ],
+              "note": ["This applies to Waterway Energy Tank Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 15.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "requires": [],
+              "note": ["This applies to Metal Pirates Room."]
+            }
+          ]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Leave with Limited Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Leave with Full Runway",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "G-Mode Indirect Despawn the Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Exit G-Mode while under the gate to open it without a Super."
+    },
+    {
+      "id": 34,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_greenGateGlitch",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 37,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 38,
+      "link": [3, 3],
+      "name": "Exit G-Mode to Open Gate",
+      "requires": [
+        "canGMode",
+        {"obstaclesCleared": ["B"]}
+      ],
+      "clearsObstacles": ["A"],
+      "resetsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": "Exit G-Mode while under the gate to open it without a Super."
+    },
+    {
+      "id": 39,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ]
+    },
+    {
+      "id": 40,
+      "link": [3, 4],
+      "name": "Avoid Puyo",
+      "requires": [
+        {"or": [
+          "Grapple",
+          "SpaceJump",
+          "canResetFallSpeed",
+          {"and": [
+            "canTrickyJump",
+            "canLateralMidAirMorph"
+          ]},
+          {"and": [
+            "Gravity",
+            "canTrickyWalljump"
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["B"]
+    },
+    {
+      "id": 41,
+      "link": [3, 4],
+      "name": "Fight Puyo",
+      "requires": [
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Puyo"]],
+            "explicitWeapons": ["Wave", "Ice+Spazer", "Plasma", "Missile", "Super", "Charge+Spazer"]
+          }},
+          {"and": [
+            "Gravity",
+            {"enemyKill": {
+              "enemies": [["Puyo"]],
+              "explicitWeapons": ["ScrewAttack", "PseudoScrew"]
+            }}
+          ]},
+          {"enemyDamage": {"enemy": "Puyo", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "resetsObstacles": ["B"],
+      "note": "Kill either the leftmost puyo or jump into the right side of the water and fight all the puyos."
+    },
+    {
+      "id": 42,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 51,
+      "link": [4, 2],
+      "name": "Leave with Spark, Use Flash Suit",
+      "requires": [
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 22, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Kill the Puyos in the right pit, jump in the pool multiple times while opening the gate and the door, then spark out the door."
+    },
+    {
+      "id": 43,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "Grapple",
+            {"obstaclesNotCleared": ["B"]}
+          ]},
+          "canPreciseGrapple"
+        ]}
+      ]
+    },
+    {
+      "id": 44,
+      "link": [4, 3],
+      "name": "Gravity",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canWalljump",
+          "canGravityJump",
+          "canLongIBJ",
+          {"and": [
+            "HiJump",
+            "canJumpIntoIBJ"
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 45,
+      "link": [4, 3],
+      "name": "Gravity and Ice",
+      "requires": [
+        "Gravity",
+        "HiJump",
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "Spazer",
+          "Wave",
+          "Plasma"
+        ]}
+      ],
+      "note": "Either freeze the Puyos immediately on the stairs, or at the highest part of their jump to barely jump up to the ledge with HiJump."
+    },
+    {
+      "id": 46,
+      "link": [4, 3],
+      "name": "Tricky Jump",
+      "requires": [
+        "canTrickyJump",
+        {"or": [
+          "canLateralMidAirMorph",
+          "canInsaneWalljump",
+          {"and": [
+            "SpeedBooster",
+            "canPreciseWalljump"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Run and jump at the very edge of the center platform.",
+        "Wait for the water level to begin lowering to walljump on the far edge.",
+        "An airball may be a little easier."
+      ]
+    },
+    {
+      "id": 47,
+      "link": [4, 3],
+      "name": "SpringFling",
+      "requires": [
+        "canCarefulJump",
+        "canLateralMidAirMorph",
+        "canSpringFling",
+        "SpeedBooster"
+      ]
+    },
+    {
+      "id": 48,
+      "link": [4, 3],
+      "name": "Suitless Double SpringBall Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        "h_doubleSpringBallJumpWithHiJump"
+      ],
+      "note": "Jump when the water level is at its lowest."
+    },
+    {
+      "id": 52,
+      "link": [4, 3],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 6, "excessFrames": 3}}
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Frozen Gamet Bridge",
+      "note": [
+        "Lead a Gamet up through the water and freeze it to cross the first moat.",
+        "Freeze the Gamet before it starts moving left.",
+        "Wait for it to thaw and fly over the second moat where it can be frozen again."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Double Gamet Boost",
+      "note": [
+        "1- Stand near the farm point, on the edge of where you make Gamets spawn.",
+        "2- Wait for the water position to be high.",
+        "3- Move to make the Gamets spawn. Moonwalk is useful here.",
+        "4- Quickly climb up to the last ledge before the door.",
+        "5- Run, jump, dboost off a Gamet.",
+        "6- Dboost a second time off the Gamet to cross the second moat."
+      ]
+    }
+  ],
+  "nextStratId": 56,
+  "nextNotableId": 3
+}

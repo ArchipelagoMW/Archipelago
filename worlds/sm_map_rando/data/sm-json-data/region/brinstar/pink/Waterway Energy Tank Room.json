@@ -1,0 +1,736 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 65,
+  "name": "Waterway Energy Tank Room",
+  "area": "Brinstar",
+  "subarea": "Pink",
+  "roomAddress": "0x7A0D2",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018f8e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 2, 2, 2, 2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "ETank",
+      "nodeAddress": "0x787FA",
+      "mapTileMask": [
+        [2, 2, 2, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Dry Platform Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 2, 1, 1, 1, 1]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Speed blocks",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Waterway Zeros",
+      "enemyName": "Zero",
+      "quantity": 2,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Waterway Puyos",
+      "enemyName": "Puyo",
+      "quantity": 3,
+      "betweenNodes": [1, 2]
+    },
+    {
+      "id": "e3",
+      "groupName": "Waterway Skulteras",
+      "enemyName": "Skultera",
+      "quantity": 2,
+      "betweenNodes": [1, 2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 2,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Caterpillar",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 36,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "Gravity",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "obstruction": [2, 0]
+        }
+      },
+      "note": [
+        "If using the full runway, back into the corner against the Speed blocks,",
+        "then perform 4 arm pumps to advance 8 pixels while running."
+      ],
+      "devNote": "Max extra run speed $7.0."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (Gravity)",
+      "requires": [
+        "Gravity",
+        "h_shinechargeMaxRunway",
+        "canShinechargeMovement",
+        {"shineChargeFrames": 35}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Zero Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"or": [
+              {"and": [
+                {"or": [
+                  "Wave",
+                  "Spazer",
+                  "Plasma"
+                ]},
+                {"cycleFrames": 340}
+              ]},
+              {"and": [
+                "ScrewAttack",
+                {"cycleFrames": 360}
+              ]},
+              {"and": [
+                "Grapple",
+                {"cycleFrames": 360}
+              ]},
+              {"cycleFrames": 420}
+            ]}
+          ]},
+          {"and": [
+            {"or": [
+              "Charge",
+              "Wave",
+              "Spazer",
+              "Plasma"
+            ]},
+            {"cycleFrames": 690}
+          ]},
+          {"cycleFrames": 780}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Zero", "count": 2}]
+    },
+    {
+      "id": 37,
+      "link": [1, 1],
+      "name": "Zero, Puyo, and Skultera Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        "Gravity",
+        "h_getBlueSpeedMaxRunway",
+        {"or": [
+          {"and": [
+            {"or": [
+              "Plasma",
+              "Wave",
+              "Spazer"
+            ]},
+            {"cycleFrames": 440}
+          ]},
+          {"cycleFrames": 510}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Zero", "count": 2},
+        {"enemy": "Puyo", "count": 3},
+        {"enemy": "Skultera", "count": 2}
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Spinning (Gravity)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Gravity)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 2,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Gravity)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 2,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave Space Jumping (Gravity)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue (Gravity)",
+      "requires": [
+        "Gravity",
+        "h_getBlueSpeedMaxRunway",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Zero",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "The timing to get hit by these guys is a bit tighter, since they are so slow. Buffering their movement with x-ray can help."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Shinespark (Come in Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 20},
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 152, "excessFrames": 10}}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "If coming from a water environment, this assumes entering with a small spin jump."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Speedball (Come in With Blue Speed)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canSpeedball"
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Roll through the whole room, breaking the speedblocks.",
+        "The fish enemies will die but some puyos will remain."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Come in Blue Spinning, Speedball",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "unusableTiles": 0
+        }
+      },
+      "requires": [
+        "canSpeedball"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Come In With Blue Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled",
+          "maxExtraRunSpeed": "$3.F",
+          "minLandingTiles": 1
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["A"],
+      "devNote": "Higher run speeds can also work but may require more landing tiles if the speedball occurs just before the transition."
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 72, "excessFrames": 13}},
+          {"and": [
+            "Gravity",
+            {"shinespark": {"frames": 59, "excessFrames": 10}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [1, 2],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [],
+      "devNote": [
+        "This strat has limited usefulness since you will be stuck behind the speed blocks.",
+        "Potentially it could be useful if you could use a flash suit to get out (though this is not yet logic);",
+        "for example, the item could be an Energy Tank and you could need its refill in order to spark out (rather than sparking in).",
+        "It also could be useful if the game were modified to allow retaining items after resetting."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [1, 2],
+      "name": "Grapple Teleport Inside Wall",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [
+        {"notable": "Grapple Teleport Inside Wall"}
+      ],
+      "note": [
+        "Enter the room in a pose that allows Samus to stand.",
+        "After teleporting, retract Grapple by pressing up.",
+        "Then hold right to release Grapple while standing.",
+        "Samus should get pushed up onto the floor."
+      ],
+      "devNote": [
+        "This strat has limited usefulness since you will be stuck behind the speed blocks.",
+        "Potentially it could be useful if you could use a flash suit to get out (though this is not yet logic);",
+        "for example, the item could be an Energy Tank and you could need its refill in order to spark out (rather than sparking in).",
+        "It also could be useful if the game were modified to allow retaining items after resetting."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 3],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump"
+      ],
+      "note": "Space Jump across the room, starting from the door, to reach the dry platform."
+    },
+    {
+      "id": 21,
+      "link": [1, 3],
+      "name": "Precise Wall Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canPreciseWalljump"
+      ]
+    },
+    {
+      "id": 22,
+      "link": [1, 3],
+      "name": "Bomb Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        {"or": [
+          "canBombJumpWaterEscape",
+          {"and": [
+            "h_useSpringBall",
+            "canJumpIntoIBJ"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 23,
+      "link": [1, 3],
+      "name": "Spring Ball Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallJump"
+      ],
+      "note": "Press pause slightly before jumping into morph, in order ensure Samus still has upward momentum when the pause fade-out finishes."
+    },
+    {
+      "id": 24,
+      "link": [1, 3],
+      "name": "Frozen Caterpillar",
+      "requires": [
+        "canSuitlessMaridia",
+        "canBePatient",
+        "canTrickyUseFrozenEnemies",
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "note": [
+        "Watch a Zero (Caterpillar) climb along the ceiling before knocking it down near the speed blocks.",
+        "Freeze it and jump on top.  Escape the water with a spinjump or crouch jump."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 27,
+      "link": [3, 1],
+      "name": "Leave With Spark",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 32, "openEnd": 1}},
+        "canMidairShinespark",
+        {"shinespark": {"frames": 75}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Charge a spark on the dry platform, and jump into a mid-air spark across the room and through the door."
+    },
+    {
+      "id": 28,
+      "link": [3, 1],
+      "name": "Leave With Spark (Big Jump)",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 32, "openEnd": 1}},
+        "canShinechargeMovement",
+        "canCarefulJump",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 62}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Charge a spark going left, then build speed and jump far to the right into a mid-air spark across the room and through the door."
+    },
+    {
+      "id": 29,
+      "link": [3, 1],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 32,
+            "openEnd": 1
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 30,
+      "link": [3, 1],
+      "name": "Leave With Controlled Spring Ball Bounce",
+      "requires": [
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 32,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 2,
+            "openEnd": 1
+          },
+          "movementType": "controlled"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 31,
+      "link": [3, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 32,
+            "openEnd": 1
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 32,
+      "link": [3, 1],
+      "name": "Leave With Temporary Blue (Speedball)",
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 32, "openEnd": 1}},
+        "canChainTemporaryBlue",
+        "canSpeedball",
+        {"or": [
+          "canInsaneJump",
+          "HiJump",
+          "canSpringBallBounce"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Perform a speedball into a temporary blue chain to reach the door.",
+        "If HiJump and Spring Ball are unavailable, then getting out of the water requires a very precise jump:",
+        "delay aiming down for the mid-air morph until after Samus is above the water line."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [3, 1],
+      "name": "Leave With Temporary Blue (Space Jump)",
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 32, "openEnd": 1}},
+        "SpaceJump",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Gain blue speed, then Space Jump across the room, ending in temporary blue chain to reach the door."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [3, 2],
+      "name": "Suitless Spark",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 32, "openEnd": 1}},
+        "canShinechargeMovement",
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 72, "excessFrames": 10}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Run from left to right on the dry platform to gain a shinecharge.",
+        "Then fall off and spark to the left to break the speed blocks."
+      ],
+      "devNote": "Doable without a short charge, since there are 32 tiles (plus one open end) to charge it."
+    },
+    {
+      "id": 35,
+      "link": [3, 2],
+      "name": "Temporary Blue Chain",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 32, "openEnd": 1}},
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"or": [
+          "Wave",
+          {"ammo": {"type": "PowerBomb", "count": 1}},
+          "canDodgeWhileShooting"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "This is a long temporary blue chain to make it through all the speed blocks.",
+        "If possible, destroy the enemies beforehand using Wave or a Power Bomb;",
+        "otherwise, carefully kill them individually with temporary blue."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Grapple Teleport Inside Wall",
+      "note": [
+        "Enter the room in a pose that allows Samus to stand.",
+        "After teleporting, retract Grapple by pressing up.",
+        "Then hold right to release Grapple while standing.",
+        "Samus should get pushed up onto the floor."
+      ]
+    }
+  ],
+  "nextStratId": 38,
+  "nextNotableId": 2
+}

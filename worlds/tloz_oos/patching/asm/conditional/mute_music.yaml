@@ -1,0 +1,20 @@
+# Remove "ld (wMusicVolume),a" from initSound by a call to a custom function
+39/401c/: call muteMusic
+
+# Remove "ld (wc023),a" from initSound
+39/402a/: |
+    nop
+    nop
+    nop
+
+# Edit updateMusicVolume to replace the whole music volume management part by a fixed set
+39/4065/: |
+    pop hl
+    pop de
+    pop bc
+    muteMusic:
+    xor a
+    ld ($c022),a
+    ld a,$01
+    ld ($c023),a
+    ret

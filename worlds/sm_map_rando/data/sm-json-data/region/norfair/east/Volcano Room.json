@@ -1,0 +1,553 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 116,
+  "name": "Volcano Room",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "East",
+  "roomAddress": "0x7AE32",
+  "roomEnvironments": [
+    {
+      "heated": false,
+      "entranceNodes": [1],
+      "note": "This room is not heated when entering from the top"
+    },
+    {
+      "heated": true,
+      "entranceNodes": [2],
+      "note": "This room is only heated when entering from the bottom"
+    }
+  ],
+  "mapTileMask": [
+    [0, 0, 1],
+    [0, 0, 1],
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001964e",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 0, 2],
+        [0, 0, 2],
+        [1, 1, 2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001965a",
+      "doorOrientation": "left",
+      "doorEnvironments": [
+        {
+          "physics": "lava",
+          "entranceNodes": [1],
+          "note": "There is always lava at this door if entering from node 1"
+        },
+        {
+          "physics": "air",
+          "entranceNodes": [2],
+          "note": "Lava can eventually rise up to this door entering from node 2, but it's possible to have air physics"
+        }
+      ],
+      "mapTileMask": [
+        [0, 0, 1],
+        [0, 0, 1],
+        [2, 2, 1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Volcano Room Top Funes",
+      "enemyName": "Fune",
+      "quantity": 5,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Volcano Room Bottom Fune",
+      "enemyName": "Fune",
+      "quantity": 1,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {
+          "id": 2,
+          "note": "The room is heated when entering from bottom but not when entering from top."
+        }
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1,
+          "heated": false
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "devNote": "The comeInNormally entrance condition ensures that there is no heat."
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "Morph",
+        {"or": [
+          {"and": [
+            "canMockball",
+            "canCarefulJump",
+            {"lavaFrames": 60}
+          ]},
+          {"lavaFrames": 100}
+        ]},
+        {"or": [
+          {"lavaFrames": 150},
+          {"and": [
+            "SpaceJump",
+            {"lavaFrames": 60}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"lavaFrames": 80}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"lavaFrames": 60}]
+        }
+      ],
+      "devNote": [
+        "FIXME: A leaveWithRunway variation could be added, but it would require Speed Booster to be disabled,",
+        "which would need new schema support in order to properly match entrance conditions in the next room."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Suitless Lava Dive",
+      "requires": [
+        "canSuitlessLavaDive",
+        "Morph",
+        {"or": [
+          {"and": [
+            "canCarefulJump",
+            "canMockball",
+            {"lavaFrames": 155}
+          ]},
+          {"lavaFrames": 200}
+        ]},
+        {"or": [
+          {"and": [
+            "canSpaceJumpWaterBounce",
+            {"or": [
+              {"and": [
+                "canPreciseSpaceJump",
+                {"lavaFrames": 35}
+              ]},
+              {"lavaFrames": 60}
+            ]}
+          ]},
+          {"lavaFrames": 150}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"lavaFrames": 80}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"lavaFrames": 150}]
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Farm Funes and Suitless Lava Dive",
+      "requires": [
+        "canSuitlessLavaDive",
+        "canFarmWhileShooting",
+        {"enemyKill": {
+          "enemies": [["Fune", "Fune"]],
+          "explicitWeapons": ["PowerBomb"]
+        }},
+        "canMockball",
+        {"lavaFramesWithEnergyDrops": {
+          "frames": 120,
+          "drops": [{"enemy": "Fune", "count": 1}]
+        }},
+        {"lavaFrames": 35},
+        {"or": [
+          {"and": [
+            "canSpaceJumpWaterBounce",
+            {"or": [
+              {"and": [
+                "canPreciseSpaceJump",
+                {"lavaFrames": 35}
+              ]},
+              {"lavaFrames": 60}
+            ]}
+          ]},
+          {"lavaFrames": 150}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"lavaFrames": 80}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"lavaFrames": 150}]
+        }
+      ],
+      "devNote": "FIXME: a Gravity version of this could be added."
+    },
+    {
+      "id": 5,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"or": [
+          "canMockball",
+          {"heatFrames": 35}
+        ]},
+        {"heatFrames": 420}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 20}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "link": [2, 1],
+      "name": "Leave with Runway",
+      "requires": [
+        "Morph",
+        {"or": [
+          "canMockball",
+          {"heatFrames": 35}
+        ]},
+        {"heatFrames": 380}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1,
+          "heated": true
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "SpaceJump",
+      "requires": [
+        "Morph",
+        "SpaceJump",
+        {"or": [
+          "canMockball",
+          {"heatFrames": 35}
+        ]},
+        {"heatFrames": 405}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 20}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Come in Running, Space Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "Morph",
+        "SpaceJump",
+        "canMockball",
+        {"heatFrames": 390}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 20}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Crystal Flash below Shot Blocks",
+      "requires": [
+        {"heatFrames": 180},
+        "h_heatedCrystalFlash",
+        {"heatFrames": 250}
+      ],
+      "devNote": [
+        "FIXME: by adding a junction here, we could account for more ways of entering the room;",
+        "but a junction would complicate how the heated/unheated state of the room is tracked."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Come In Getting Blue Speed, Leave With Temporary Blue (Big Jump)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 4,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$4.7"
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"heatFrames": 760}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ],
+      "note": [
+        "Move quickly (when X-Ray is not active) to climb the shaft before the Fune fireballs would reach Samus."
+      ],
+      "devNote": [
+        "The last runway tile is considered unusable, as Samus is likely to clip down through it."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Come In Getting Blue Speed, Leave With Temporary Blue (Spring Ball Bounce)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"heatFrames": 1020}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ],
+      "note": [
+        "Move quickly (when X-Ray is not active) to climb the shaft before the Fune fireballs would reach Samus."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "G-Mode Morph, Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "canComplexGMode",
+        "canOffScreenMovement",
+        {"or": [
+          "h_artificialMorphMovement",
+          {"ammo": {"type": "PowerBomb", "count": 3}}
+        ]},
+        {"or": [
+          "canInsaneJump",
+          {"and": [
+            "canTrickyJump",
+            "h_heatProof"
+          ]},
+          {"and": [
+            "h_heatProof",
+            "h_lavaProof",
+            {"or": [
+              "Gravity",
+              "HiJump"
+            ]}
+          ]}
+        ]},
+        {"heatFrames": 1000},
+        {"or": [
+          "canTrickyGMode",
+          {"heatFrames": 500}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 20}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter the morph tunnel then exit G-mode. Shooting the shot block off screen can be done by jumping and shooting up or with Grapple or a Power Bomb.",
+        "Getting positioned under the shot block can be done by walking into the camera scroll block and then walking against the right wall,",
+        "jump to the left and walk a little more (about one more tile). This will also give some visibility of Samus.",
+        "Without heat damage, it is recommended to jump up past the shot block and wait for it to respawn; with the block intact, Samus can't accidentally touch the lava."
+      ],
+      "devNote": "These heat frames are not very tight, as the room is difficult to do consistently."
+    },
+    {
+      "id": 8,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1,
+          "heated": true
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 9,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 16,
+  "nextNotableId": 1
+}

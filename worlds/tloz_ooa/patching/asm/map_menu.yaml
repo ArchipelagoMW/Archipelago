@@ -1,0 +1,14 @@
+# map pop-up icons for seed trees
+# present
+02/6d05/: db locations.crescentTree.id - $0b
+02/6d08/: db locations.symmetryTree.id - $0b
+02/6d0b/: db locations.lynnaTree.id - $0b
+02/6d0e/: db locations.zoraTree.id - $0b
+
+# past
+02/6d20/: db locations.ridgeWestTree.id - $0b
+02/6d23/: db locations.palaceTree.id - $0b
+02/6d26/: db locations.ridgeEastTree.id - $0b
+02/6d29/: db locations.lynnaTree.id - $0b
+02/6d2c/: db locations.forestTree.id - $0b
+02/6d2f/: db locations.zoraTree.id - $0b

@@ -1,0 +1,504 @@
+{
+  "$schema": "../../schema/m3-bossScenarios.schema.json",
+  "scenarios": [
+    {
+      "id": 1,
+      "name": "Botwoon 1",
+      "boss": "Botwoon 1",
+      "requires": [],
+      "bossDodgeRate": 60,
+      "attackOpportunityDuration": 30,
+      "damageWindows": [
+        {
+          "name": "Base",
+          "windowPercent": 16.7,
+          "requires": []
+        }
+      ],
+      "incomingDamage": [
+        {
+          "name": "BaseAcid",
+          "attack": "acid",
+          "frequencyFrames": 4000,
+          "avoidingRequires": [
+            "Gravity",
+            "ScrewAttack"
+          ],
+          "note": "Acid is already pretty easy to avoid with Morph and Gravity (hence the low frequency), but with Screw attack it's absolutely trivial"
+        },
+        {
+          "name": "GravityAcid",
+          "attack": "acid",
+          "frequencyFrames": 4000,
+          "avoidingRequires": [
+            "Gravity"
+          ],
+          "note": "Being suitless makes some acid situations much harder to dodge because you can't run out of the way"
+        },
+        {
+          "name": "MorphAcid",
+          "attack": "acid",
+          "frequencyFrames": 3000,
+          "avoidingRequires": [
+            {"or":[
+              "Morph",
+              {"and":[
+                "Gravity",
+                "ScrewAttack"
+              ]}
+            ]}
+          ],
+          "note": "Not having Morph makes some acid dodges much harder, although having Screw Attack active makes those dodges trivial too."
+        }
+      ],
+      "note": "Attack opportunity duration estimated to 30 to try to represent charged beam properly relative to ammo"
+    },
+    {
+      "id": 2,
+      "name": "Botwoon 2",
+      "boss": "Botwoon 2",
+      "requires": [],
+      "bossDodgeRate": 60,
+      "attackOpportunityDuration": 30,
+      "damageWindows": [
+        {
+          "name": "Base",
+          "windowPercent": 16.7,
+          "requires": []
+        }
+      ],
+      "incomingDamage": [],
+      "note": "Botwoon 2 can not hit Samus while she is in the bottom left corner of the room."
+    },
+    {
+      "id": 3,
+      "name": "Reverse Botwoon 1",
+      "boss": "Reverse Botwoon 1",
+      "requires": [],
+      "bossDodgeRate": 10,
+      "excludedWeapons": [
+        "Charge+Wave",
+        "Charge+Ice+Wave",
+        "Charge+Wave+Spazer",
+        "Charge+Ice+Wave+Spazer",
+        "Charge+Wave+Plasma",
+        "Charge+Ice+Wave+Plasma"
+      ],
+      "damageWindows": [
+        {
+          "name": "Magic Pixel Beam Fight",
+          "windowPercent": 15,
+          "requires": [
+            "Charge"
+          ],
+          "note": [
+            "Requires standing on a certain 2 pixel wide position from the wall.",
+            "Use angle up or angle down to shoot through the wall.",
+            "This does not include Charge plus Wave."
+          ]
+        },
+        {
+          "name": "Plasma Shield",
+          "windowPercent": 80,
+          "requires": [
+            "canSpecialBeamAttack",
+            "Plasma"
+          ],
+          "note": "Freely fire Plasma Special Beam Attacks while close to the wall."
+        },
+        {
+          "name": "Peek Supers",
+          "windowPercent": 0.25,
+          "requires": ["Super"],
+          "note": "Wait for the one pattern (bottom->right) where Botwoon's head passes through the dividing barrier briefly and fire a Super Missile.",
+          "devNote": "Loosely 6seconds per pattern, 2seconds for acid, 16 patterns, 1 good pattern, acid after every second pattern. ~1 super per minute"
+        }
+      ],
+      "incomingDamage": [
+        {
+          "name": "Close Acid",
+          "attack": "acid",
+          "frequencyFrames": 3600,
+          "avoidingRequires": [
+            "Gravity",
+            "ScrewAttack"
+          ],
+          "devNote": "This mostly represents random damage."
+        },
+        {
+          "name": "Close Acid Suitless",
+          "attack": "acid",
+          "frequencyFrames": 1500,
+          "avoidingRequires": [ 
+            "canCarefulJump",
+            {"or": [
+              "Gravity",
+              "HiJump"
+            ]}
+          ],
+          "note": "A spinjump is enough to avoid close acid but it does require a quick reaction.",
+          "devNote": "Won't expect predictive dodges since that also extends the fight by lowering damage window."
+        },
+        {
+          "name": "Far Acid",
+          "attack": "acid",
+          "frequencyFrames": 4500,
+          "avoidingRequires": [
+            {"or": [
+              "Morph",
+              "Gravity",
+              "canCarefulJump"
+            ]}
+          ],
+          "note": "This can be dodged by running away or Morphing if the shots were fired at a standing Samus."
+        }
+      ],
+      "note": [
+        "This scenario is for shooting through the wall without wave beam.",
+        "An on screen acid attack is expected every 15seconds.  With close spawn being difficult to avoid and far spawn reasonable to avoid.",
+        "Usually at least one charge shot can hit per botwoon pattern.  Bad patterns, misses, mispositioning, and avoiding damage is represented in windowPercent."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Reverse Botwoon 2",
+      "boss": "Reverse Botwoon 2",
+      "requires": [],
+      "bossDodgeRate": 15,
+      "damageWindows": [
+        {
+          "name": "Base",
+          "windowPercent": 40,
+          "requires": []
+        }
+      ],
+      "incomingDamage": [],
+      "note": "Reverse Botwoon 2 can not hit Samus.",
+      "devNote": [
+        "With inifinite time, all attacks can hit Botwoons head when it passes through the wall.",
+        "This scenario does not cover Ice/Spazer SBAs, or shooting missiles through the wall, since they still have a high miss rate."
+      ]
+    },
+    {
+      "id": 11,
+      "name": "StandardPhantoon",
+      "boss": "Phantoon",
+      "excludedWeapons": [
+        "Super",
+        "Charge+Ice+Wave+Spazer",
+        "Charge+Plasma",
+        "Charge+Ice+Plasma",
+        "Charge+Wave+Plasma",
+        "Charge+Ice+Wave+Plasma"
+      ],
+      "requires": [],
+      "bossDodgeRate": 0,
+      "attackOpportunityDuration": 20,
+      "particleFrequencyFrames": 150,
+      "damageWindows": [
+        {
+          "name": "Base",
+          "windowPercent": 3.6,
+          "requires": []
+        }
+      ],
+      "incomingDamage": [
+        {
+          "name": "BaseFlame",
+          "attack": "flame",
+          "frequencyFrames": 1000,
+          "avoidingRequires": [ "never" ]
+        },
+        {
+          "name": "ScrewFlame",
+          "attack": "flame",
+          "frequencyFrames": 1000,
+          "avoidingRequires": [ "ScrewAttack" ],
+          "note": "Screw Attack makes avoiding damage in general much easier, so we'll have it prevent of half incoming damage"
+        }
+      ],
+      "note": [
+        "This is the scenario for a regular Phantoon fight, so all valid weapons except supers and charged shots whose damage is 300 or more (those end the round on the first shot).",
+        "This scenario estimates roughly 25 seconds per round, each having 3 opportunities that last 20 frames (2 missiles or 1 charged shot).",
+        "3 incoming hits per round (Half being prevent by Screw).",
+        "10 flames farmed per round.",
+        "This scenario expects that the player doesn't know when Phantoon will open its eye."
+      ]
+    },
+    {
+      "id": 12,
+      "name": "BigChargePhantoon",
+      "boss": "Phantoon",
+      "explicitWeapons": [
+        "Charge+Ice+Wave+Spazer",
+        "Charge+Plasma",
+        "Charge+Ice+Plasma",
+        "Charge+Wave+Plasma",
+        "Charge+Ice+Wave+Plasma"
+      ],
+      "requires": [],
+      "bossDodgeRate": 0,
+      "attackOpportunityDuration": 20,
+      "particleFrequencyFrames": 150,
+      "damageWindows": [
+        {
+          "name": "Base",
+          "windowPercent": 1.2,
+          "requires": []
+        }
+      ],
+      "incomingDamage": [
+        {
+          "name": "BaseFlame",
+          "attack": "flame",
+          "frequencyFrames": 1000,
+          "avoidingRequires": [ "never" ]
+        },
+        {
+          "name": "ScrewFlame",
+          "attack": "flame",
+          "frequencyFrames": 1000,
+          "avoidingRequires": [ "ScrewAttack" ],
+          "note": "Screw Attack makes avoiding damage in general much easier, so we'll have it prevent half of incoming damage"
+        }
+      ],
+      "note": [
+        "This is the scenario for high-damage charged shots, which end the round on the first shot.",
+        "This scenario estimates roughly 25 seconds per round, each having 1 opportunity that lasts 20 frames (so only 1 charged shot).",
+        "3 incoming hits per round (Half being prevented by Screw).",
+        "10 flames farmed per round.",
+        "This scenario expects that the player doesn't know when Phantoon will open its eye."
+      ]
+    },
+    {
+      "id": 13,
+      "name": "NintendoPowerPhantoon",
+      "boss": "Phantoon",
+      "explicitWeapons": ["Super"],
+      "requires": [],
+      "bossDodgeRate": 0,
+      "attackOpportunityDuration": 20,
+      "particleFrequencyFrames": 120,
+      "damageWindows": [
+        {
+          "name": "Base",
+          "windowPercent": 0.95,
+          "requires": []
+        }
+      ],
+      "incomingDamage": [
+        {
+          "name": "BaseFlame",
+          "attack": "flame",
+          "frequencyFrames": 1440,
+          "avoidingRequires": [ "never" ]
+        },
+        {
+          "name": "ScrewFlame",
+          "attack": "flame",
+          "frequencyFrames": 392,
+          "avoidingRequires": [ "ScrewAttack" ],
+          "note": "We're having Screw Attack prevent half of normal damage + all of the enrage damage, which ends up being almost 80% of all incoming damage"
+        }
+      ],
+      "note": [
+        "Five Super Missiles should do the trick!",
+        "This scenario estimates roughly 36 seconds per round (but expecting only 4 enrage phases), each having 1 opportunity that last 20 frames (1 Super).",
+        "3 incoming hits per round (Half being prevent by Screw), + 5 incoming hits per enrage phase (all of which are prevented by screw).",
+        "So the player is expected to dodge one enrage wave out of 6.",
+        "10 flames farmed per round, + 10 more per enrage phase.",
+        "This scenario expects that the player doesn't know when Phantoon will open its eye"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "GravityDraygon",
+      "boss": "Draygon",
+      "requires": ["Gravity"],
+      "bossDodgeRate": 0,
+      "attackOpportunityDuration": 100,
+      "particleFrequencyFrames": 540,
+      "damageWindows": [
+        {
+          "name": "Base",
+          "windowPercent": 11.11,
+          "requires": []
+        }
+      ],
+      "incomingDamage": [
+        {
+          "name": "Base",
+          "attack": "contact",
+          "frequencyFrames": 720,
+          "avoidingRequires": [ "never" ]
+        },
+        {
+          "name": "Turrets",
+          "attack": "turretProjectile",
+          "frequencyFrames": 1080,
+          "avoidingRequires": ["h_breakThreeDraygonTurrets"]
+        }
+      ],
+      "note": [
+        "This scenario estimates roughly 18 seconds per round.",
+        "1 out of 5 rounds botched by goop.",
+        "Successful rounds give one attack opportunity averaging 100 frames.",
+        "Each round expects to see the player get hit 1.5 times.",
+        "Player is expected to know how to break free of draygon's grasp when grabbed, but only at a moderate speed.",
+        "Farming is almost non-existent because getting the drops would reduce the attack opportunity.",
+        "Turret projectiles hit once per round if not taken out."
+      ]
+    },
+    {
+      "id": 22,
+      "name": "SuitlessDraygon",
+      "boss": "Draygon",
+      "requires": [
+        "canSuitlessMaridia",
+        "Morph",
+        {"or":[
+          "Super",
+          "Missile"
+        ]}
+      ],
+      "bossDodgeRate": 0,
+      "attackOpportunityDuration": 100,
+      "particleFrequencyFrames": 540,
+      "damageWindows": [
+        {
+          "name": "Base",
+          "windowPercent": 5.55,
+          "requires": []
+        }
+      ],
+      "incomingDamage": [
+        {
+          "name": "Base",
+          "attack": "contact",
+          "frequencyFrames": 720,
+          "avoidingRequires": [ "never" ]
+        }
+      ],
+      "note": [
+        "This scenario is pretty similar to the Gravity one, but is separate because it has to make additional assumptions.",
+        "It expects twice as many rounds botched by goop.",
+        "It assumes Morph is available and the turrets have been destroyed (and expects Draygon's requirements to hard-require those for a non-grapple suitless kill."
+      ]
+    },
+    {
+      "id": 31,
+      "name": "Regular Ridley",
+      "boss": "Ridley",
+      "requires": ["Varia"],
+      "bossDodgeRate": 0,
+      "damageWindows": [
+        {
+          "name": "Base",
+          "windowPercent": 25,
+          "requires": []
+        }
+      ],
+      "incomingDamage": [
+        {
+          "name": "BaseContact",
+          "attack": "contact",
+          "frequencyFrames": 500,
+          "avoidingRequires": [ "never" ]
+        },
+        {
+          "name": "ScrewContact",
+          "attack": "contact",
+          "frequencyFrames": 2000,
+          "avoidingRequires": [ "ScrewAttack" ]
+        },
+        {
+          "name": "BaseTail",
+          "attack": "tail",
+          "frequencyFrames": 540,
+          "avoidingRequires": [ "never" ]
+        },
+        {
+          "name": "BaseTail",
+          "attack": "tail",
+          "frequencyFrames": 810,
+          "avoidingRequires": [ "Morph" ]
+        },
+        {
+          "name": "BaseFire",
+          "attack": "fireball",
+          "frequencyFrames": 2000,
+          "avoidingRequires": [ "never" ]
+        },
+        {
+          "name": "ScrewFire",
+          "attack": "fireball",
+          "frequencyFrames": 2000,
+          "avoidingRequires": [ "ScrewAttack" ]
+        }
+      ],
+      "note": [
+        "This scenario expects all-out spam for 25% of the time.",
+        "Player is not expected to have mastered dodging swoops, so hjb offers no help.",
+        "Player is expected to take advantage of a left-facing pogo, but not to manipulate a right-facing pogo into a left-facing one.",
+        "Incoming damage frequencies are an estimate to give a 4-tank requirement for Supers with Morph and Gravity but no Screw.",
+        "Contact damage is once every 400 frames, with 20% of them being dodged with Screw.",
+        "Fire damage is once every 1000 frammes, with 50% of them being dodged by Screw.",
+        "Tail damage is once every 324 frames, with 40% being dodged by Morph (so with Morph, one tail hit every 540 frames).",
+        "This scenario expects Ridley's requirements to hard-require Varia."
+      ]
+    },
+    {
+      "id": 41,
+      "name": "Regular MB2",
+      "boss": "Mother Brain 2",
+      "requires": [],
+      "bossDodgeRate": 0,
+      "damageWindows": [
+        {
+          "name": "Base",
+          "windowPercent": 90,
+          "requires": []
+        }
+      ],
+      "incomingDamage": [
+        {
+          "name": "Ring",
+          "attack": "ring",
+          "frequencyFrames": 1000,
+          "avoidingRequires": ["never"]
+        },
+        {
+          "name": "Explosion",
+          "attack": "bomb-explosion",
+          "frequencyFrames": 5000,
+          "avoidingRequires": ["never"]
+        },
+        {
+          "name": "Explosion Center",
+          "attack": "bomb-explosion-center",
+          "frequencyFrames": 5000,
+          "avoidingRequires": ["never"]
+        },
+        {
+          "name": "Eye Beam",
+          "attack": "laser",
+          "frequencyFrames": 10000,
+          "avoidingRequires": ["never"]
+        },
+        {
+          "name": "Red Beam",
+          "attack": "redbeam",
+          "frequencyFrames": 10000,
+          "avoidingRequires": ["never"]
+        }
+      ],
+      "note": [
+        "This scenario expects all-out spam for 90% of the time.",
+        "Ketchup phase calculated to last 25% of the fight. Its frequency is adjusted accordingly since the frequency is over the whole fight.",
+        "Player is expected to aim for the center of a bomb explosion when landing in it, and to hit it 50% of the time.",
+        "No mid-air unmorph dodging tactics are considered at this time.",
+        "Rainbow Beam is excluded from the scenario because it is handled as a hard requirement after the fight has concluded."
+      ]
+    }
+  ]
+}

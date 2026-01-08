@@ -1,0 +1,1479 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 38,
+  "name": "Morph Ball Room",
+  "area": "Brinstar",
+  "subarea": "Blue",
+  "roomAddress": "0x79E9F",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [0, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 0, 1, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x0018e9e",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "useImplicitComeInNormally": false,
+      "useImplicitComeInWithMockball": false,
+      "locks": [
+        {
+          "name": "Morph Ball Room Gray Lock (to Green Hill Zone)",
+          "lockType": "killEnemies",
+          "lock": ["f_ZebesAwake"],
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                {"obstaclesCleared": ["C"]}
+              ],
+              "devNote": "Obstacle can be destroyed either going 1 -> 6 or 6 -> 1."
+            }
+          ],
+          "devNote": "Technically this yields f_ZebesAwake, although it requires the same flag to spawn the enemies, so it's not possible here."
+        }
+      ],
+      "mapTileMask": [
+        [0, 0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0],
+        [2, 2, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Elevator",
+      "nodeType": "door",
+      "nodeSubType": "elevator",
+      "nodeAddress": "0x0018eb6",
+      "doorOrientation": "up",
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "mapTileMask": [
+        [0, 0, 0, 0, 0, 2, 0, 0],
+        [0, 0, 0, 0, 0, 2, 0, 0],
+        [1, 1, 1, 1, 1, 2, 1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018eaa",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 2, 2]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Right Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Morph",
+      "nodeAddress": "0x786DE",
+      "mapTileMask": [
+        [0, 0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 2, 1, 1, 1]
+      ],
+      "devNote": [
+        "This item is technically no longer spawned after Zebes is awake, which would require canRiskPermanentLossOfAccess.",
+        "The logic here is not modeling that, as that bug is likely not going to be kept by anyone that utilizes this data."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Left Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "PowerBomb",
+      "nodeAddress": "0x7874C",
+      "locks": [
+        {
+          "name": "Blue Brinstar Power Bombs Spawn Lock",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                {"or": [
+                  "h_ZebesIsAwake",
+                  "h_allItemsSpawned"
+                ]}
+              ]
+            }
+          ],
+          "note": "Item doesn't appear before Zebes is awakened."
+        }
+      ],
+      "mapTileMask": [
+        [0, 0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0],
+        [1, 1, 2, 2, 1, 1, 1, 1]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Bomb Blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "B",
+      "name": "Power Bomb Blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "C",
+      "name": "Sidehopper trio",
+      "obstacleType": "enemies"
+    },
+    {
+      "id": "D",
+      "name": "At the Power Bomb Item While in Artificial Morph",
+      "obstacleType": "abstract"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Morph Ball Room Sidehoppers",
+      "enemyName": "Sidehopper",
+      "quantity": 3,
+      "homeNodes": [1],
+      "spawn": ["f_ZebesAwake"]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 2},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 4},
+        {"id": 5}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [
+        {"obstaclesCleared": ["C"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 72,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        {"obstaclesCleared": ["C"]},
+        "SpeedBooster",
+        "canInsaneJump",
+        "canMomentumConservingMorph"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 25,
+            "openEnd": 0
+          },
+          "obstruction": [4, 0]
+        }
+      },
+      "devNote": [
+        "Max extra run speed $4.A.",
+        "Using the full runway, this requires a last-frame jump, followed by a 2-frame window for the morph."
+      ]
+    },
+    {
+      "id": 57,
+      "link": [1, 1],
+      "name": "Sidehopper Hit on Entry",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}}
+      ]
+    },
+    {
+      "id": 58,
+      "link": [1, 1],
+      "name": "Free Passage",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "h_ZebesNotAwake"
+      ],
+      "clearsObstacles": ["C"],
+      "devNote": "The obstacle isn't really cleared, but should enable all strats that require it to be."
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"obstaclesCleared": ["C"]},
+        "canShinechargeMovement",
+        {"canShineCharge": {"usedTiles": 25, "openEnd": 0}},
+        {"shineChargeFrames": 45}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [
+        {"obstaclesCleared": ["C"]}
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 23,
+            "openEnd": 0
+          },
+          "minExtraRunSpeed": "$2.7"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [
+        {"obstaclesCleared": ["C"]}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 23,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        {"obstaclesCleared": ["C"]}
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 18,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        {"obstaclesCleared": ["C"]}
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 17,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"obstaclesCleared": ["C"]},
+        {"canShineCharge": {"usedTiles": 24, "openEnd": 0}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 73,
+      "link": [1, 1],
+      "name": "Sidehopper Farm",
+      "requires": [
+        "h_ZebesIsAwake",
+        "canPrepareForNextRoom",
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "Plasma",
+            "Charge",
+            {"cycleFrames": 270}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 250}
+          ]},
+          {"and": [
+            "Plasma",
+            "Wave",
+            "canTrickyDodgeEnemies",
+            {"cycleFrames": 300}
+          ]},
+          {"and": [
+            "h_PlasmaHitbox",
+            {"cycleFrames": 360}
+          ]},
+          {"and": [
+            "Morph",
+            "canTrickyDodgeEnemies",
+            {"or": [
+              {"and": [
+                "Wave",
+                "Spazer",
+                {"cycleFrames": 600}
+              ]},
+              {"and": [
+                "Wave",
+                {"cycleFrames": 840}
+              ]},
+              {"and": [
+                "Spazer",
+                "Ice",
+                {"cycleFrames": 840}
+              ]},
+              {"and": [
+                "Spazer",
+                {"cycleFrames": 960}
+              ]},
+              {"and": [
+                "Ice",
+                {"cycleFrames": 1560}
+              ]},
+              {"and": [
+                "canBePatient",
+                {"cycleFrames": 2320}
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["C"],
+      "resetsObstacles": ["A", "B", "D"],
+      "farmCycleDrops": [{"enemy": "Sidehopper", "count": 3}]
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        {"obstaclesCleared": ["C"]},
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "Power Beam Sidehopper Kill",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 5}}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 12,
+      "link": [1, 1],
+      "name": "Quick Sidehopper Kill",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Sidehopper", "Sidehopper"], ["Sidehopper"]],
+          "explicitWeapons": ["Missile", "Super", "PowerBomb", "ScrewAttack", "Plasma"]
+        }}
+      ],
+      "clearsObstacles": ["C"],
+      "note": [
+        "For the Power Bomb and Screw Attack kills, this strat assumes you don't know you're entering the room beforehand.",
+        "If you know, it's possible to Power Bomb kill the first two Sidehoppers damage-free by morphing before entering.",
+        "For Screw, just entering with a spin jump would work."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 1],
+      "name": "Spark into Room",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 40, "excessFrames": 9}}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 14,
+      "link": [1, 1],
+      "name": "Prepared Kill on Entry",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        {"or": [
+          {"and": [
+            "Plasma",
+            "Charge"
+          ]},
+          {"and": [
+            "Plasma",
+            "canTrickyDodgeEnemies",
+            {"or": [
+              "Ice",
+              "Wave"
+            ]}
+          ]},
+          "ScrewAttack"
+        ]}
+      ],
+      "clearsObstacles": ["C"],
+      "note": [
+        "Enter the room ready to kill the hoppers before they can hit Samus.",
+        "Enter with a Charged Plasma shot ready, in a Screw Attack spin jump, or prepated to rapidly kill the hopper with Plasma and another beam."
+      ]
+    },
+    {
+      "id": 67,
+      "link": [1, 1],
+      "name": "Prepared Kill on Entry, Morph Entry",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "Morph",
+        "canTrickyJump",
+        {"or": [
+          "Plasma",
+          {"and": [
+            "h_usePowerBomb",
+            {"or": [
+              "canTrickyDodgeEnemies",
+              {"enemyKill": {
+                "enemies": [["Sidehopper"]],
+                "explicitWeapons": ["Missile", "Super", "PowerBomb"]
+              }}
+            ]}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["C"],
+      "note": [
+        "Roll into the room, fall off the step and roll into the corner.",
+        "Either use a Power Bomb on entry, or unmorph at the bottom of the step and quickly kill the hoppers with Plasma."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 1],
+      "name": "Prepared Missile and Super Kill",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canTrickyDodgeEnemies",
+        {"ammo": {"type": "Missile", "count": 1}},
+        {"ammo": {"type": "Super", "count": 1}},
+        {"or": [
+          "Morph",
+          {"and": [
+            {"ammo": {"type": "Missile", "count": 1}},
+            {"ammo": {"type": "Super", "count": 1}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["C"],
+      "note": [
+        "Enter the room and immediately shoot a Missile and a Super to kill the first hopper.",
+        "Quickly kill the second the same way or safely kill it with morph."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 1],
+      "name": "Prepared Missile and Super Kill (First Hopper)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canTrickyDodgeEnemies",
+        {"ammo": {"type": "Missile", "count": 1}},
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "note": "Enter the room and immediately shoot a Missile and a Super to kill the first hopper.",
+      "devNote": "This can then be paired with quickly leaving the room normally or with a G-Mode setup, if the door is unlocked."
+    },
+    {
+      "id": 63,
+      "link": [1, 1],
+      "name": "Pause Abuse Sidehopper Hit",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "h_pauseAbuseMinimalReserveRefill"
+      ]
+    },
+    {
+      "id": 64,
+      "link": [1, 1],
+      "name": "Pause Abuse Quick Sidehopper Kill",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "h_pauseAbuseMinimalReserveRefill",
+        {"or": [
+          "Plasma",
+          {"enemyKill": {
+            "enemies": [["Sidehopper", "Sidehopper", "Sidehopper"]],
+            "explicitWeapons": ["Missile", "Super"]
+          }}
+        ]}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 65,
+      "link": [1, 1],
+      "name": "Pause Abuse Pseudo Screw Sidehopper Kill",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPseudoScrew",
+        "h_pauseAbuseMinimalReserveRefill",
+        "h_pauseAbuseMinimalReserveRefill",
+        "h_pauseAbuseMinimalReserveRefill",
+        {"or": [
+          "h_pauseAbuseMinimalReserveRefill",
+          "Morph"
+        ]},
+        {"or": [
+          "h_pauseAbuseMinimalReserveRefill",
+          "canTrickyDodgeEnemies"
+        ]}
+      ],
+      "clearsObstacles": ["C"],
+      "note": [
+        "Pseudo Screw the first ground hopper and focus fire on it until it dies while taking 2-3 hits.",
+        "Kill the ceiling hopper while on the ground, crouched near the stair for some safety, or with Morph without risk.",
+        "The third hopper can be killed with another Pseudo Screw with pause abuse, a Morph dodge, or a dodge by jumping over it while it lunges towards Samus."
+      ]
+    },
+    {
+      "id": 68,
+      "link": [1, 1],
+      "name": "Mockball Entry, Tank Hit",
+      "entranceCondition": {
+        "comeInWithMockball": {
+          "speedBooster": "any",
+          "adjacentMinTiles": 0,
+          "remoteAndLandingMinTiles": [[0, 0]]
+        }
+      },
+      "requires": [
+        {"or": [
+          {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}},
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ],
+      "note": "Tank a hit or use a pause abuse with a reserve refill."
+    },
+    {
+      "id": 69,
+      "link": [1, 1],
+      "name": "Mockball Entry, Quick Kill",
+      "entranceCondition": {
+        "comeInWithMockball": {
+          "speedBooster": "any",
+          "adjacentMinTiles": 0,
+          "remoteAndLandingMinTiles": [[0, 0]]
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        {"or": [
+          "Plasma",
+          "ScrewAttack",
+          {"and": [
+            "h_usePowerBomb",
+            {"enemyKill": {
+              "enemies": [["Sidehopper"]],
+              "explicitWeapons": ["Missile", "Super", "PowerBomb"]
+            }}
+          ]}
+        ]}
+      ],
+      "note": "Unmorph and quickly kill the hoppers on entry."
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Sidehopper",
+      "requires": [
+        "h_ZebesIsAwake"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}},
+        "h_ZebesIsAwake"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [1, 1],
+      "name": "Diagonal Spark on Entry",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 5},
+        "canPrepareForNextRoom",
+        "canTrickyJump",
+        "canDodgeWhileShooting",
+        {"shinespark": {"frames": 5, "excessFrames": 1}},
+        {"enemyKill": {
+          "enemies": [["Sidehopper"]],
+          "explicitWeapons": ["Missile", "Super", "PowerBomb", "Plasma", "Spazer", "Wave", "Bombs"]
+        }}
+      ],
+      "clearsObstacles": ["C"],
+      "note": "Spark diagonally immediately on entry to kill the first two sidehoppers, then carefully kill the third."
+    },
+    {
+      "id": 18,
+      "link": [1, 1],
+      "name": "Use Flash Suit, Diagonal Spark on Entry",
+      "requires": [
+        "canDodgeWhileShooting",
+        "canUseSpeedEchoes",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 5, "excessFrames": 1}},
+        {"enemyKill": {
+          "enemies": [["Sidehopper"]],
+          "explicitWeapons": ["Missile", "Super", "PowerBomb", "Plasma", "Spazer", "Wave"]
+        }}
+      ],
+      "clearsObstacles": ["C"],
+      "flashSuitChecked": true,
+      "note": "Spark diagonally immediately on entry to kill the first two sidehoppers, then carefully kill the third."
+    },
+    {
+      "id": 19,
+      "link": [1, 1],
+      "name": "Power Bomb Sidehopper Kill and Bomb Blocks",
+      "requires": [
+        {"or": [
+          "canMockball",
+          {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}}
+        ]},
+        {"enemyKill": {
+          "enemies": [["Sidehopper", "Sidehopper"], ["Sidehopper"]],
+          "explicitWeapons": ["PowerBomb"]
+        }}
+      ],
+      "clearsObstacles": ["A", "C"],
+      "note": [
+        "This strat assumes you don't know you're entering the room beforehand. Otherwise, it's possible to kill the first two Sidehoppers without taking damage.",
+        "It's possible to break the bomb blocks alongside the third Sidehopper without taking an additional hit with a mockball."
+      ],
+      "devNote": "FIXME: There are missing Power Bomb strats that enter the room with a mockball."
+    },
+    {
+      "id": 20,
+      "link": [1, 1],
+      "name": "Medium Sidehopper Kill",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 2}},
+        {"or": [
+          "Spazer",
+          "Wave"
+        ]}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 60,
+      "link": [1, 1],
+      "name": "Pause Abuse Sidehopper Kill",
+      "requires": [
+        "h_pauseAbuseMinimalReserveRefill",
+        {"or": [
+          "Spazer",
+          "Wave"
+        ]},
+        {"or": [
+          "h_pauseAbuseMinimalReserveRefill",
+          {"and": [
+            "Morph",
+            "canTrickyJump"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 61,
+      "link": [1, 1],
+      "name": "Pause Abuse, Morph Slow Sidehopper Kill",
+      "requires": [
+        "Morph",
+        "canTrickyDodgeEnemies",
+        "h_pauseAbuseMinimalReserveRefill",
+        "h_pauseAbuseMinimalReserveRefill",
+        {"or": [
+          "Ice",
+          {"and": [
+            "h_pauseAbuseMinimalReserveRefill",
+            "h_pauseAbuseMinimalReserveRefill"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 62,
+      "link": [1, 1],
+      "name": "Pause Abuse Slow Sidehopper Kill, Morphless",
+      "requires": [
+        "h_pauseAbuseMinimalReserveRefill",
+        "h_pauseAbuseMinimalReserveRefill",
+        "h_pauseAbuseMinimalReserveRefill",
+        {"or": [
+          "Ice",
+          {"and": [
+            "h_pauseAbuseMinimalReserveRefill",
+            "h_pauseAbuseMinimalReserveRefill",
+            "h_pauseAbuseMinimalReserveRefill"
+          ]}
+        ]},
+        {"or": [
+          "canTrickyDodgeEnemies",
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ],
+      "clearsObstacles": ["C"],
+      "note": "To save a hit, jump over the third Sidehopper as it lunges towards Samus."
+    },
+    {
+      "id": 24,
+      "link": [1, 5],
+      "name": "Blocks Already Broken",
+      "requires": [
+        "Morph",
+        {"obstaclesCleared": ["A", "C"]}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [1, 5],
+      "name": "Bomb the Blocks",
+      "requires": [
+        "h_bombThings",
+        {"obstaclesCleared": ["C"]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 59,
+      "link": [1, 5],
+      "name": "Run Through",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 2}},
+        {"or": [
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}}
+        ]},
+        "h_bombThings"
+      ]
+    },
+    {
+      "id": 26,
+      "link": [1, 5],
+      "name": "Speedball (Left to Right)",
+      "requires": [
+        {"obstaclesCleared": ["C"]},
+        {"speedBall": {"length": 25, "openEnd": 0}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "It's a short charge into a speedball to break the bomb blocks.",
+        "The Sidehoppers need to be destroyed beforehand to clear the running space."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [1, 5],
+      "name": "Room Entry Speedball",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canSpeedball"
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": [
+        "This is a direct link because clearing the hoppers is unnecessary.",
+        "One tile is subtracted from the runway length since Samus must be blue before contacting the first Hopper.",
+        "There is 1 unusable tile in this runway."
+      ]
+    },
+    {
+      "id": 70,
+      "link": [1, 5],
+      "name": "Morph Entry, Precise Dodge",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canTrickyDodgeEnemies",
+        "canCameraManip",
+        "h_bombThings"
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Roll into the room, fall off the step and roll into the corner.",
+        "Roll to the right immediately as the floor hopper is going to take its second jump to get it off camera.",
+        "Once it is off camera, stop and wait for the next hopper to jump towards Samus, then roll under it as it jumps again."
+      ]
+    },
+    {
+      "id": 71,
+      "link": [1, 5],
+      "name": "Mockball Entry, Precise Dodge",
+      "entranceCondition": {
+        "comeInWithMockball": {
+          "speedBooster": "any",
+          "adjacentMinTiles": 0,
+          "remoteAndLandingMinTiles": [[0, 0]]
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canTrickyDodgeEnemies",
+        "canCameraManip",
+        "h_bombThings"
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Roll into the room, fall off the step and roll into the corner.",
+        "Roll to the right immediately as the floor hopper is going to take its second jump to get it off camera.",
+        "Once it is off camera, stop and wait for the next hopper to jump towards Samus, then roll under it as it jumps again."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [1, 5],
+      "name": "G-Mode Morph Overload PLMs Zebes Asleep",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_ZebesNotAwake"
+      ],
+      "clearsObstacles": ["D"],
+      "flashSuitChecked": true,
+      "note": "Overload the PLMs by rolling through the camera scroll blocks which are 4 tiles to the right of the stair by the door."
+    },
+    {
+      "id": 29,
+      "link": [1, 5],
+      "name": "Indirect G-Mode Morph, Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 2}},
+          "h_artificialMorphPowerBomb",
+          "canComplexGMode",
+          {"and": [
+            "Morph",
+            {"or": [
+              {"and": [
+                "Plasma",
+                "Charge"
+              ]},
+              "ScrewAttack"
+            ]}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["D"],
+      "flashSuitChecked": true,
+      "note": [
+        "Either kill the Sidehoppers immediately on entry by placing a Power Bomb while rolling off the stair, dodge them multiple times, or tank their hits.",
+        "If Samus has Morph Ball, it is also possible to kill the Sidehoppers upon room entry with Screw Attack or a powerful beam.",
+        "Overload the PLMs by rolling through the camera scroll blocks which are 4 tiles to the right of the stair by the door.",
+        "Roll under the last Sidehopper and through the bomb blocks."
+      ]
+    },
+    {
+      "id": 74,
+      "link": [1, 5],
+      "name": "Indirect G-Mode Morph, Overload PLMs, Power Bomb Wall",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 2}},
+          "h_artificialMorphPowerBomb",
+          "canComplexGMode"
+        ]},
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphMovement",
+          "h_additionalBomb"
+        ]}
+      ],
+      "clearsObstacles": ["B", "D"],
+      "flashSuitChecked": true,
+      "note": [
+        "Either kill the Sidehoppers immediately on entry by placing a Power Bomb while rolling off the stair, dodge them multiple times, or tank their hits.",
+        "If Samus has Morph Ball, it is also possible to kill the Sidehoppers upon room entry with Screw Attack or a powerful beam.",
+        "Overload the PLMs by rolling through the camera scroll blocks which are 4 tiles to the right of the stair by the door.",
+        "Roll under the last Sidehopper and through the bomb blocks.",
+        "Place a Power Bomb next to the right wall then quickly exit G-mode before it explodes to destroy the blocks."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [1, 5],
+      "name": "Direct G-Mode Morph, Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "canComplexGMode",
+          {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 2}},
+          {"and": [
+            "h_artificialMorphPowerBomb",
+            {"or": [
+              "canTrickyDodgeEnemies",
+              {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}}
+            ]}
+          ]},
+          {"and": [
+            "Morph",
+            "ScrewAttack"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["D"],
+      "flashSuitChecked": true,
+      "note": [
+        "Tank the Sidehopper hits or kill them after a single hit by quickly placing a Power Bomb.",
+        "It is also possible to kill the Sidehoppers with a very fast Screw Attack, if Samus has Morph Ball.",
+        "Overload the PLMs by rolling through the camera scroll blocks which are 4 tiles to the right of the stair by the door.",
+        "Roll under the last Sidehopper and through the bomb blocks."
+      ]
+    },
+    {
+      "id": 75,
+      "link": [1, 5],
+      "name": "Direct G-Mode Morph, Overload PLMs, Power Bomb Wall",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "canComplexGMode",
+          {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 2}},
+          {"and": [
+            "h_artificialMorphPowerBomb",
+            {"or": [
+              "canTrickyDodgeEnemies",
+              {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}}
+            ]}
+          ]},
+          {"and": [
+            "Morph",
+            "ScrewAttack"
+          ]}
+        ]},
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphMovement",
+          "h_additionalBomb"
+        ]}
+      ],
+      "clearsObstacles": ["B", "D"],
+      "flashSuitChecked": true,
+      "note": [
+        "Tank the Sidehopper hits or kill them after a single hit by quickly placing a Power Bomb.",
+        "It is also possible to kill the Sidehoppers with a very fast Screw Attack, if Samus has Morph Ball.",
+        "Overload the PLMs by rolling through the camera scroll blocks which are 4 tiles to the right of the stair by the door.",
+        "Roll under the last Sidehopper and through the bomb blocks.",
+        "Place a Power Bomb next to the right wall then quickly exit G-mode before it explodes to destroy the blocks."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 30, "openEnd": 0}},
+        "canShinechargeMovement",
+        {"shineChargeFrames": 50}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 66,
+      "link": [2, 2],
+      "name": "Carry G-Mode Back Up the Elevator",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 32,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 33,
+      "link": [2, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 34,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 35,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 36,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 37,
+      "link": [3, 2],
+      "name": "Carry G-Mode Up the Elevator",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 38,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 39,
+      "link": [3, 3],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 30, "openEnd": 0}},
+        "canShinechargeMovement",
+        {"shineChargeFrames": 50}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 40,
+      "link": [3, 3],
+      "name": "Leave Spinning",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 26,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$2.4"
+        }
+      }
+    },
+    {
+      "id": 41,
+      "link": [3, 3],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 26,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 42,
+      "link": [3, 3],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 23,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 43,
+      "link": [3, 3],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 21,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 44,
+      "link": [3, 3],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 29, "openEnd": 0}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 45,
+      "link": [3, 5],
+      "name": "G-Mode Morph Power Bomb the Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb",
+        "h_artificialMorphMovement"
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": "Place the Power Bomb, then exit g-mode before the bomb goes off."
+    },
+    {
+      "id": 46,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "Morph",
+          "SpaceJump",
+          "HiJump"
+        ]}
+      ]
+    },
+    {
+      "id": 47,
+      "link": [4, 2],
+      "name": "Careful Jump",
+      "requires": [
+        "canCarefulJump"
+      ]
+    },
+    {
+      "id": 48,
+      "link": [4, 2],
+      "name": "Crouch Jump Down Grab",
+      "requires": [
+        "h_crouchJumpDownGrab"
+      ]
+    },
+    {
+      "id": 49,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 50,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_usePowerBomb",
+          {"obstaclesCleared": ["B"]}
+        ]}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 51,
+      "link": [5, 1],
+      "name": "Blocks Already Broken",
+      "requires": [
+        "Morph",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "note": "Kill the ground hoppers by shooting through the morph tunnel, then roll through to the left door."
+    },
+    {
+      "id": 52,
+      "link": [5, 1],
+      "name": "Speedball (Right to Left)",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        {"getBlueSpeed": {"usedTiles": 21, "openEnd": 1}},
+        "canSpeedball"
+      ],
+      "clearsObstacles": ["A", "C"],
+      "note": [
+        "It's a short charge into a speedball to break the Bomb Blocks.",
+        "The Power Bomb Blocks need to be destroyed to have enough running room.",
+        "The sidehoppers that remain can be killed safely using the morph tunnel."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [5, 1],
+      "name": "Safe Sidehopper Kill",
+      "requires": [
+        "Morph",
+        {"or": [
+          "Wave",
+          "canDodgeWhileShooting",
+          "h_usePowerBomb",
+          "ScrewAttack"
+        ]},
+        {"obstaclesCleared": ["A"]}
+      ],
+      "clearsObstacles": ["C"],
+      "note": "The SideHoppers can be killed safely from behind with Power Beam.",
+      "devNote": "Killing the ceiling hopper is the only one that's not free. Killing the bottom two and leaving the left door is accounted for elsewhere."
+    },
+    {
+      "id": 54,
+      "link": [5, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_usePowerBomb",
+          {"obstaclesCleared": ["B"]}
+        ]}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 55,
+      "link": [5, 5],
+      "name": "Bomb the Blocks",
+      "requires": [
+        "h_bombThings"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 56,
+      "link": [5, 5],
+      "name": "Power Bomb Blocks While in Artificial Morph from the Left",
+      "requires": [
+        "canGMode",
+        {"obstaclesCleared": ["D"]},
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphSpringBall",
+          "h_artificialMorphPowerBomb",
+          "h_artificialMorphBombs"
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "note": "Place the Power Bomb, then exit g-mode before the bomb goes off."
+    }
+  ],
+  "notables": [],
+  "nextStratId": 76,
+  "nextNotableId": 1
+}

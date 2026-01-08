@@ -1,0 +1,1232 @@
+[
+    {
+        "tech_id": 1,
+        "name": "canBePatient",
+        "difficulty": "Extreme",
+        "video_id": 973
+    },
+    {
+        "tech_id": 2,
+        "name": "canBeVeryPatient",
+        "difficulty": "Insane",
+        "video_id": 974
+    },
+    {
+        "tech_id": 3,
+        "name": "canBeExtremelyPatient",
+        "difficulty": "Beyond",
+        "video_id": 271
+    },
+    {
+        "tech_id": 4,
+        "name": "canPrepareForNextRoom",
+        "difficulty": "Very Hard",
+        "video_id": 853
+    },
+    {
+        "tech_id": 5,
+        "name": "canSuitlessLavaDive",
+        "difficulty": "Hard",
+        "video_id": 132
+    },
+    {
+        "tech_id": 6,
+        "name": "canHeatRun",
+        "difficulty": "Basic",
+        "video_id": 899
+    },
+    {
+        "tech_id": 7,
+        "name": "canSuitlessMaridia",
+        "difficulty": "Medium",
+        "video_id": 904
+    },
+    {
+        "tech_id": 8,
+        "name": "canSunkenTileWideWallClimb",
+        "difficulty": "Hard",
+        "video_id": 1011
+    },
+    {
+        "tech_id": 9,
+        "name": "canCrossRoomJumpIntoWater",
+        "difficulty": "Hard",
+        "video_id": 1012
+    },
+    {
+        "tech_id": 10,
+        "name": "canSpaceJumpWaterBounce",
+        "difficulty": "Medium",
+        "video_id": 1010
+    },
+    {
+        "tech_id": 11,
+        "name": "canSpaceJumpWaterEscape",
+        "difficulty": "Expert",
+        "video_id": 938
+    },
+    {
+        "tech_id": 12,
+        "name": "canDisableEquipment",
+        "difficulty": "Medium",
+        "video_id": 1013
+    },
+    {
+        "tech_id": 13,
+        "name": "canPlayInSand",
+        "difficulty": "Hard",
+        "video_id": 1014
+    },
+    {
+        "tech_id": 14,
+        "name": "canEscapeSand",
+        "difficulty": "Very Hard",
+        "video_id": 233
+    },
+    {
+        "tech_id": 15,
+        "name": "canSandfallBounce",
+        "difficulty": "Expert",
+        "video_id": 939
+    },
+    {
+        "tech_id": 16,
+        "name": "canSandBombBoost",
+        "difficulty": "Extreme",
+        "video_id": 764
+    },
+    {
+        "tech_id": 17,
+        "name": "canSandGrappleBoost",
+        "difficulty": "Extreme",
+        "video_id": 763
+    },
+    {
+        "tech_id": 18,
+        "name": "canManageReserves",
+        "difficulty": "Hard",
+        "video_id": 779
+    },
+    {
+        "tech_id": 19,
+        "name": "canPauseAbuse",
+        "difficulty": "Expert",
+        "video_id": 941
+    },
+    {
+        "tech_id": 20,
+        "name": "canReserveDoubleDamageBoost",
+        "difficulty": "Extreme",
+        "video_id": 991
+    },
+    {
+        "tech_id": 188,
+        "name": "canPreciseReserveRefill",
+        "difficulty": "Extreme",
+        "video_id": 1302
+    },
+    {
+        "tech_id": 21,
+        "name": "canDownGrab",
+        "difficulty": "Medium",
+        "video_id": 1015
+    },
+    {
+        "tech_id": 22,
+        "name": "canDownBack",
+        "difficulty": "Very Hard",
+        "video_id": 894
+    },
+    {
+        "tech_id": 23,
+        "name": "canStopOnADime",
+        "difficulty": "Implicit",
+        "video_id": 895
+    },
+    {
+        "tech_id": 24,
+        "name": "canMoonwalk",
+        "difficulty": "Hard",
+        "video_id": 555
+    },
+    {
+        "tech_id": 25,
+        "name": "canMoonfall",
+        "difficulty": "Very Hard",
+        "video_id": 485
+    },
+    {
+        "tech_id": 26,
+        "name": "canMoondance",
+        "difficulty": "Insane",
+        "video_id": 293
+    },
+    {
+        "tech_id": 27,
+        "name": "canExtendedMoondance",
+        "difficulty": "Insane",
+        "video_id": 782
+    },
+    {
+        "tech_id": 28,
+        "name": "canEnemyStuckMoonfall",
+        "difficulty": "Extreme",
+        "video_id": 292
+    },
+    {
+        "tech_id": 29,
+        "name": "canFreeFallClip",
+        "difficulty": "Insane",
+        "video_id": 7305
+    },
+    {
+        "tech_id": 30,
+        "name": "canResetFallSpeed",
+        "difficulty": "Hard",
+        "video_id": 1016
+    },
+    {
+        "tech_id": 31,
+        "name": "canTrivialMidAirMorph",
+        "difficulty": "Implicit",
+        "video_id": 896
+    },
+    {
+        "tech_id": 32,
+        "name": "canMidAirMorph",
+        "difficulty": "Basic",
+        "video_id": 900
+    },
+    {
+        "tech_id": 33,
+        "name": "canWallJumpInstantMorph",
+        "difficulty": "Hard",
+        "video_id": 1018
+    },
+    {
+        "tech_id": 34,
+        "name": "can3HighWallMidAirMorph",
+        "difficulty": "Expert",
+        "video_id": 942
+    },
+    {
+        "tech_id": 35,
+        "name": "can4HighMidAirMorph",
+        "difficulty": "Very Hard",
+        "video_id": 907
+    },
+    {
+        "tech_id": 196,
+        "name": "canInsaneMidAirMorph",
+        "difficulty": "Insane",
+        "video_id": 2631
+    },
+    {
+        "tech_id": 36,
+        "name": "canRJump",
+        "difficulty": "Expert",
+        "video_id": 943
+    },
+    {
+        "tech_id": 37,
+        "name": "canLateralMidAirMorph",
+        "difficulty": "Hard",
+        "video_id": 1019
+    },
+    {
+        "tech_id": 38,
+        "name": "canSpringBallBounce",
+        "difficulty": "Very Hard",
+        "video_id": 1024
+    },
+    {
+        "tech_id": 39,
+        "name": "canTrickySpringBallBounce",
+        "difficulty": "Expert",
+        "video_id": 944
+    },
+    {
+        "tech_id": 40,
+        "name": "canStationaryLateralMidAirMorph",
+        "difficulty": "Expert",
+        "video_id": 945
+    },
+    {
+        "tech_id": 41,
+        "name": "canMockball",
+        "difficulty": "Hard",
+        "video_id": 1026
+    },
+    {
+        "tech_id": 42,
+        "name": "canSpeedball",
+        "difficulty": "Very Hard",
+        "video_id": 792
+    },
+    {
+        "tech_id": 43,
+        "name": "canBounceBall",
+        "difficulty": "Very Hard",
+        "video_id": 908
+    },
+    {
+        "tech_id": 44,
+        "name": "canTwoTileSqueeze",
+        "difficulty": "Hard",
+        "video_id": 1028
+    },
+    {
+        "tech_id": 45,
+        "name": "canCrouchGateClip",
+        "difficulty": "Extreme",
+        "video_id": 791
+    },
+    {
+        "tech_id": 46,
+        "name": "canTunnelCrawl",
+        "difficulty": "Very Hard",
+        "video_id": 909
+    },
+    {
+        "tech_id": 180,
+        "name": "canMomentumConservingTurnaround",
+        "difficulty": "Very Hard",
+        "video_id": 937
+    },
+    {
+        "tech_id": 47,
+        "name": "canQuickDrop",
+        "difficulty": "Very Hard",
+        "video_id": 946
+    },
+    {
+        "tech_id": 181,
+        "name": "canMomentumConservingMorph",
+        "difficulty": "Expert",
+        "video_id": 768
+    },
+    {
+        "tech_id": 48,
+        "name": "canMidairWiggle",
+        "difficulty": "Very Hard",
+        "video_id": 910
+    },
+    {
+        "tech_id": 49,
+        "name": "canOffScreenMovement",
+        "difficulty": "Extreme",
+        "video_id": 987
+    },
+    {
+        "tech_id": 50,
+        "name": "canUseGrapple",
+        "difficulty": "Implicit",
+        "video_id": 897
+    },
+    {
+        "tech_id": 51,
+        "name": "canPreciseGrapple",
+        "difficulty": "Hard",
+        "video_id": 1031
+    },
+    {
+        "tech_id": 52,
+        "name": "canGrappleJump",
+        "difficulty": "Expert",
+        "video_id": 911
+    },
+    {
+        "tech_id": 195,
+        "name": "canPreciseGrappleJump",
+        "difficulty": "Extreme",
+        "video_id": 4068
+    },
+    {
+        "tech_id": 53,
+        "name": "canTrickyGrappleJump",
+        "difficulty": "Insane",
+        "video_id": 776
+    },
+    {
+        "tech_id": 54,
+        "name": "canBombGrappleJump",
+        "difficulty": "Insane",
+        "video_id": 274
+    },
+    {
+        "tech_id": 55,
+        "name": "canGrappleTeleport",
+        "difficulty": "Expert",
+        "video_id": 775
+    },
+    {
+        "tech_id": 56,
+        "name": "canGrappleBombHang",
+        "difficulty": "Expert",
+        "video_id": 31
+    },
+    {
+        "tech_id": 57,
+        "name": "canUnmorphGrappleHang",
+        "difficulty": "Extreme",
+        "video_id": 766
+    },
+    {
+        "tech_id": 192,
+        "name": "canFrozenEnemyGrappleHang",
+        "difficulty": "Extreme",
+        "video_id": 3533
+    },
+    {
+        "tech_id": 204,
+        "name": "canSuperSink",
+        "difficulty": "Insane",
+        "video_id": 7316
+    },
+    {
+        "tech_id": 185,
+        "name": "canMorphTurnaround",
+        "difficulty": "Hard",
+        "video_id": 4066
+    },
+    {
+        "tech_id": 58,
+        "name": "canCrouchJump",
+        "difficulty": "Medium",
+        "video_id": 1022
+    },
+    {
+        "tech_id": 59,
+        "name": "canTurnaroundSpinJump",
+        "difficulty": "Implicit",
+        "video_id": null
+    },
+    {
+        "tech_id": 60,
+        "name": "canFlatleyJump",
+        "difficulty": "Very Hard",
+        "video_id": 506
+    },
+    {
+        "tech_id": 61,
+        "name": "canGravityJump",
+        "difficulty": "Medium",
+        "video_id": 1025
+    },
+    {
+        "tech_id": 62,
+        "name": "canUseIFrames",
+        "difficulty": "Hard",
+        "video_id": 1033
+    },
+    {
+        "tech_id": 63,
+        "name": "canStationarySpinJump",
+        "difficulty": "Very Hard",
+        "video_id": 914
+    },
+    {
+        "tech_id": 64,
+        "name": "canSpringBallJumpMidAir",
+        "difficulty": "Medium",
+        "video_id": 1027
+    },
+    {
+        "tech_id": 65,
+        "name": "canTrickySpringBallJump",
+        "difficulty": "Hard",
+        "video_id": 1034
+    },
+    {
+        "tech_id": 66,
+        "name": "canSpringwall",
+        "difficulty": "Very Hard",
+        "video_id": 916
+    },
+    {
+        "tech_id": 67,
+        "name": "canDoubleSpringBallJumpMidAir",
+        "difficulty": "Expert",
+        "video_id": 947
+    },
+    {
+        "tech_id": 68,
+        "name": "canUnderwaterBombIntoSpringBallJump",
+        "difficulty": "Insane",
+        "video_id": 6789
+    },
+    {
+        "tech_id": 69,
+        "name": "canSpringFling",
+        "difficulty": "Expert",
+        "video_id": 780
+    },
+    {
+        "tech_id": 70,
+        "name": "canCrumbleJump",
+        "difficulty": "Very Hard",
+        "video_id": 641
+    },
+    {
+        "tech_id": 71,
+        "name": "canCarefulJump",
+        "difficulty": "Medium",
+        "video_id": 457
+    },
+    {
+        "tech_id": 72,
+        "name": "canTrickyJump",
+        "difficulty": "Very Hard",
+        "video_id": 917
+    },
+    {
+        "tech_id": 73,
+        "name": "canTrickyDashJump",
+        "difficulty": "Expert",
+        "video_id": 433
+    },
+    {
+        "tech_id": 74,
+        "name": "canInsaneJump",
+        "difficulty": "Extreme",
+        "video_id": 979
+    },
+    {
+        "tech_id": 75,
+        "name": "canCWJ",
+        "difficulty": "Expert",
+        "video_id": 4739
+    },
+    {
+        "tech_id": 76,
+        "name": "canWalljump",
+        "difficulty": "Basic",
+        "video_id": 901
+    },
+    {
+        "tech_id": 77,
+        "name": "canPreciseWalljump",
+        "difficulty": "Medium",
+        "video_id": 842
+    },
+    {
+        "tech_id": 78,
+        "name": "canTrickyWalljump",
+        "difficulty": "Hard",
+        "video_id": 1036
+    },
+    {
+        "tech_id": 79,
+        "name": "canInsaneWalljump",
+        "difficulty": "Extreme",
+        "video_id": 999
+    },
+    {
+        "tech_id": 80,
+        "name": "canConsecutiveWalljump",
+        "difficulty": "Medium",
+        "video_id": 1029
+    },
+    {
+        "tech_id": 81,
+        "name": "canFastWalljumpClimb",
+        "difficulty": "Expert",
+        "video_id": 951
+    },
+    {
+        "tech_id": 83,
+        "name": "canUnderwaterWalljump",
+        "difficulty": "Extreme",
+        "video_id": 976
+    },
+    {
+        "tech_id": 187,
+        "name": "canLongUnderwaterWalljump",
+        "difficulty": "Insane",
+        "video_id": 123
+    },
+    {
+        "tech_id": 186,
+        "name": "canUnderwaterWalljumpBreakFree",
+        "difficulty": "Beyond",
+        "video_id": 1125
+    },
+    {
+        "tech_id": 201,
+        "name": "canBootless2WideUWJ",
+        "difficulty": "Beyond",
+        "video_id": 2475
+    },
+    {
+        "tech_id": 84,
+        "name": "canJumpIntoRespawningBlock",
+        "difficulty": "Very Hard",
+        "video_id": 774
+    },
+    {
+        "tech_id": 197,
+        "name": "canSidePlatformCrossRoomJump",
+        "difficulty": "Very Hard",
+        "video_id": 5100
+    },
+    {
+        "tech_id": 85,
+        "name": "canUnmorphBombBoost",
+        "difficulty": "Expert",
+        "video_id": 920
+    },
+    {
+        "tech_id": 86,
+        "name": "canWallJumpBombBoost",
+        "difficulty": "Expert",
+        "video_id": 953
+    },
+    {
+        "tech_id": 87,
+        "name": "canBombHorizontally",
+        "difficulty": "Medium",
+        "video_id": 1035
+    },
+    {
+        "tech_id": 88,
+        "name": "canHBJ",
+        "difficulty": "Expert",
+        "video_id": 954
+    },
+    {
+        "tech_id": 89,
+        "name": "canIBJ",
+        "difficulty": "Medium",
+        "video_id": 3681
+    },
+    {
+        "tech_id": 193,
+        "name": "canLongIBJ",
+        "difficulty": "Hard",
+        "video_id": 1037
+    },
+    {
+        "tech_id": 90,
+        "name": "canJumpIntoIBJ",
+        "difficulty": "Hard",
+        "video_id": 1040
+    },
+    {
+        "tech_id": 91,
+        "name": "canBombAboveIBJ",
+        "difficulty": "Extreme",
+        "video_id": 7072
+    },
+    {
+        "tech_id": 92,
+        "name": "canCeilingBombJump",
+        "difficulty": "Insane",
+        "video_id": 1008
+    },
+    {
+        "tech_id": 93,
+        "name": "canLongCeilingBombJump",
+        "difficulty": "Beyond",
+        "video_id": 348
+    },
+    {
+        "tech_id": 94,
+        "name": "canDiagonalBombJump",
+        "difficulty": "Extreme",
+        "video_id": 998
+    },
+    {
+        "tech_id": 96,
+        "name": "canDoubleBombJump",
+        "difficulty": "Expert",
+        "video_id": 958
+    },
+    {
+        "tech_id": 97,
+        "name": "canStaggeredIBJ",
+        "difficulty": "Expert",
+        "video_id": 434
+    },
+    {
+        "tech_id": 98,
+        "name": "canPowerBombMidIBJ",
+        "difficulty": "Hard",
+        "video_id": 771
+    },
+    {
+        "tech_id": 99,
+        "name": "canSpringBallBombJump",
+        "difficulty": "Very Hard",
+        "video_id": 730
+    },
+    {
+        "tech_id": 100,
+        "name": "canBombJumpWaterEscape",
+        "difficulty": "Very Hard",
+        "video_id": 922
+    },
+    {
+        "tech_id": 101,
+        "name": "canUseEnemies",
+        "difficulty": "Implicit",
+        "video_id": 456
+    },
+    {
+        "tech_id": 102,
+        "name": "canSnailClimb",
+        "difficulty": "Hard",
+        "video_id": 1042
+    },
+    {
+        "tech_id": 103,
+        "name": "canNeutralDamageBoost",
+        "difficulty": "Hard",
+        "video_id": 1041
+    },
+    {
+        "tech_id": 104,
+        "name": "canHorizontalDamageBoost",
+        "difficulty": "Very Hard",
+        "video_id": 1043
+    },
+    {
+        "tech_id": 105,
+        "name": "canManipulateMellas",
+        "difficulty": "Very Hard",
+        "video_id": 79
+    },
+    {
+        "tech_id": 106,
+        "name": "canSamusEaterStandUp",
+        "difficulty": "Very Hard",
+        "video_id": 923
+    },
+    {
+        "tech_id": 107,
+        "name": "canKago",
+        "difficulty": "Very Hard",
+        "video_id": 924
+    },
+    {
+        "tech_id": 108,
+        "name": "canTrivialUseFrozenEnemies",
+        "difficulty": "Implicit",
+        "video_id": 898
+    },
+    {
+        "tech_id": 109,
+        "name": "canUseFrozenEnemies",
+        "difficulty": "Basic",
+        "video_id": 902
+    },
+    {
+        "tech_id": 110,
+        "name": "canMochtroidIceClimb",
+        "difficulty": "Hard",
+        "video_id": 1044
+    },
+    {
+        "tech_id": 111,
+        "name": "canTrickyUseFrozenEnemies",
+        "difficulty": "Hard",
+        "video_id": 1046
+    },
+    {
+        "tech_id": 112,
+        "name": "canWallIceClip",
+        "difficulty": "Extreme",
+        "video_id": 1000
+    },
+    {
+        "tech_id": 113,
+        "name": "canCrazyCrabClimb",
+        "difficulty": "Extreme",
+        "video_id": 1001
+    },
+    {
+        "tech_id": 114,
+        "name": "canMetroidAvoid",
+        "difficulty": "Very Hard",
+        "video_id": 925
+    },
+    {
+        "tech_id": 115,
+        "name": "canBabyMetroidAvoid",
+        "difficulty": "Expert",
+        "video_id": 960
+    },
+    {
+        "tech_id": 116,
+        "name": "canDodgeWhileShooting",
+        "difficulty": "Hard",
+        "video_id": 1051
+    },
+    {
+        "tech_id": 117,
+        "name": "canFarmWhileShooting",
+        "difficulty": "Expert",
+        "video_id": 767
+    },
+    {
+        "tech_id": 118,
+        "name": "canTrickyDodgeEnemies",
+        "difficulty": "Expert",
+        "video_id": 1139
+    },
+    {
+        "tech_id": 119,
+        "name": "canEscapeEnemyGrab",
+        "difficulty": "Implicit",
+        "video_id": null
+    },
+    {
+        "tech_id": 120,
+        "name": "canEnemyExtendRunway",
+        "difficulty": "Expert",
+        "video_id": 962
+    },
+    {
+        "tech_id": 121,
+        "name": "canTrickyEnemyExtendRunway",
+        "difficulty": "Extreme",
+        "video_id": 777
+    },
+    {
+        "tech_id": 122,
+        "name": "canHitbox",
+        "difficulty": "Hard",
+        "video_id": 988
+    },
+    {
+        "tech_id": 123,
+        "name": "canPseudoScrew",
+        "difficulty": "Medium",
+        "video_id": 1055
+    },
+    {
+        "tech_id": 124,
+        "name": "canWalljumpWithCharge",
+        "difficulty": "Very Hard",
+        "video_id": 926
+    },
+    {
+        "tech_id": 125,
+        "name": "canSpecialBeamAttack",
+        "difficulty": "Implicit",
+        "video_id": null
+    },
+    {
+        "tech_id": 126,
+        "name": "canOffScreenSuperShot",
+        "difficulty": "Hard",
+        "video_id": 1056
+    },
+    {
+        "tech_id": 127,
+        "name": "canGateGlitch",
+        "difficulty": "Hard",
+        "video_id": 1059
+    },
+    {
+        "tech_id": 128,
+        "name": "canWrapAroundShot",
+        "difficulty": "Ignored",
+        "video_id": null
+    },
+    {
+        "tech_id": 129,
+        "name": "canGrappleClip",
+        "difficulty": "Extreme",
+        "video_id": 188
+    },
+    {
+        "tech_id": 130,
+        "name": "canHeroShot",
+        "difficulty": "Hard",
+        "video_id": 3139
+    },
+    {
+        "tech_id": 131,
+        "name": "canAutoCancelWeapon",
+        "difficulty": "Very Hard",
+        "video_id": 929
+    },
+    {
+        "tech_id": 132,
+        "name": "canShinespark",
+        "difficulty": "Basic",
+        "video_id": 903
+    },
+    {
+        "tech_id": 133,
+        "name": "canHorizontalShinespark",
+        "difficulty": "Medium",
+        "video_id": 1052
+    },
+    {
+        "tech_id": 134,
+        "name": "canMidairShinespark",
+        "difficulty": "Hard",
+        "video_id": 453
+    },
+    {
+        "tech_id": 135,
+        "name": "canShinesparkDeepStuck",
+        "difficulty": "Extreme",
+        "video_id": 716
+    },
+    {
+        "tech_id": 136,
+        "name": "canShinechargeMovement",
+        "difficulty": "Medium",
+        "video_id": 1053
+    },
+    {
+        "tech_id": 137,
+        "name": "canShinechargeMovementComplex",
+        "difficulty": "Very Hard",
+        "video_id": 931
+    },
+    {
+        "tech_id": 138,
+        "name": "canShinechargeMovementTricky",
+        "difficulty": "Expert",
+        "video_id": 963
+    },
+    {
+        "tech_id": 139,
+        "name": "canUseSpeedEchoes",
+        "difficulty": "Very Hard",
+        "video_id": 806
+    },
+    {
+        "tech_id": 189,
+        "name": "canControlShinesparkEnd",
+        "difficulty": "Expert",
+        "video_id": 2074
+    },
+    {
+        "tech_id": 203,
+        "name": "canShinesparkSlopeClip",
+        "difficulty": "Extreme",
+        "video_id": 6880
+    },
+    {
+        "tech_id": 140,
+        "name": "canSlowShortCharge",
+        "difficulty": "Expert",
+        "video_id": 965
+    },
+    {
+        "tech_id": 141,
+        "name": "canSpikeSuit",
+        "difficulty": "Ignored",
+        "video_id": null
+    },
+    {
+        "tech_id": 142,
+        "name": "canTrickyCarryFlashSuit",
+        "difficulty": "Ignored",
+        "video_id": null
+    },
+    {
+        "tech_id": 143,
+        "name": "canSpeedKeep",
+        "difficulty": "Extreme",
+        "video_id": 995
+    },
+    {
+        "tech_id": 144,
+        "name": "canPreciseSpaceJump",
+        "difficulty": "Expert",
+        "video_id": 770
+    },
+    {
+        "tech_id": 145,
+        "name": "canBlueSpaceJump",
+        "difficulty": "Very Hard",
+        "video_id": 932
+    },
+    {
+        "tech_id": 146,
+        "name": "canTemporaryBlue",
+        "difficulty": "Very Hard",
+        "video_id": 930
+    },
+    {
+        "tech_id": 147,
+        "name": "canChainTemporaryBlue",
+        "difficulty": "Expert",
+        "video_id": 956
+    },
+    {
+        "tech_id": 148,
+        "name": "canLongChainTemporaryBlue",
+        "difficulty": "Insane",
+        "video_id": 765
+    },
+    {
+        "tech_id": 149,
+        "name": "canPauseRemorphTemporaryBlue",
+        "difficulty": "Extreme",
+        "video_id": 184
+    },
+    {
+        "tech_id": 150,
+        "name": "canWaterShineCharge",
+        "difficulty": "Hard",
+        "video_id": 577
+    },
+    {
+        "tech_id": 151,
+        "name": "canStutterWaterShineCharge",
+        "difficulty": "Very Hard",
+        "video_id": 966
+    },
+    {
+        "tech_id": 199,
+        "name": "canPreciseStutterWaterShineCharge",
+        "difficulty": "Expert",
+        "video_id": 2214
+    },
+    {
+        "tech_id": 152,
+        "name": "canXRayWaitForIFrames",
+        "difficulty": "Hard",
+        "video_id": 1069
+    },
+    {
+        "tech_id": 153,
+        "name": "canXRayTurnaround",
+        "difficulty": "Very Hard",
+        "video_id": 934
+    },
+    {
+        "tech_id": 154,
+        "name": "canXRayCancelShinecharge",
+        "difficulty": "Extreme",
+        "video_id": 153
+    },
+    {
+        "tech_id": 155,
+        "name": "canXRayStandUp",
+        "difficulty": "Hard",
+        "video_id": 1071
+    },
+    {
+        "tech_id": 156,
+        "name": "canXRayClimb",
+        "difficulty": "Very Hard",
+        "video_id": 795
+    },
+    {
+        "tech_id": 202,
+        "name": "canLongXRayClimb",
+        "difficulty": "Expert",
+        "video_id": 2212
+    },
+    {
+        "tech_id": 157,
+        "name": "canRightSideDoorStuck",
+        "difficulty": "Expert",
+        "video_id": 968
+    },
+    {
+        "tech_id": 158,
+        "name": "canRightSideDoorStuckFromWater",
+        "difficulty": "Extreme",
+        "video_id": 1006
+    },
+    {
+        "tech_id": 159,
+        "name": "canXMode",
+        "difficulty": "Extreme",
+        "video_id": 1002
+    },
+    {
+        "tech_id": 160,
+        "name": "canSuperJump",
+        "difficulty": "Ignored",
+        "video_id": null
+    },
+    {
+        "tech_id": 161,
+        "name": "canRMode",
+        "difficulty": "Extreme",
+        "video_id": 265
+    },
+    {
+        "tech_id": 162,
+        "name": "canGMode",
+        "difficulty": "Expert",
+        "video_id": 982
+    },
+    {
+        "tech_id": 205,
+        "name": "canComplexGMode",
+        "difficulty": "Extreme",
+        "video_id": 5882
+    },
+    {
+        "tech_id": 200,
+        "name": "canTrickyGMode",
+        "difficulty": "Insane",
+        "video_id": 5749
+    },
+    {
+        "tech_id": 198,
+        "name": "canHeatedGMode",
+        "difficulty": "Insane",
+        "video_id": 4719
+    },
+    {
+        "tech_id": 163,
+        "name": "canGModeImmobile",
+        "difficulty": "Extreme",
+        "video_id": 994
+    },
+    {
+        "tech_id": 164,
+        "name": "canArtificialMorph",
+        "difficulty": "Extreme",
+        "video_id": 985
+    },
+    {
+        "tech_id": 206,
+        "name": "canPowerBombItemOverloadPLMs",
+        "difficulty": "Extreme",
+        "video_id": 6234
+    },
+    {
+        "tech_id": 194,
+        "name": "canSamusEaterTeleport",
+        "difficulty": "Extreme",
+        "video_id": 3809
+    },
+    {
+        "tech_id": 165,
+        "name": "canDownwardGModeSetup",
+        "difficulty": "Insane",
+        "video_id": 1009
+    },
+    {
+        "tech_id": 166,
+        "name": "canUpwardGModeSetup",
+        "difficulty": "Extreme",
+        "video_id": 1004
+    },
+    {
+        "tech_id": 167,
+        "name": "canAwakenZebes",
+        "difficulty": "Medium",
+        "video_id": 1054
+    },
+    {
+        "tech_id": 168,
+        "name": "canRiskPermanentLossOfAccess",
+        "difficulty": "Ignored",
+        "video_id": null
+    },
+    {
+        "tech_id": 169,
+        "name": "canCeilingClip",
+        "difficulty": "Hard",
+        "video_id": 1064
+    },
+    {
+        "tech_id": 170,
+        "name": "canXRayCeilingClip",
+        "difficulty": "Hard",
+        "video_id": 1070
+    },
+    {
+        "tech_id": 171,
+        "name": "canPreciseCeilingClip",
+        "difficulty": "Expert",
+        "video_id": 969
+    },
+    {
+        "tech_id": 172,
+        "name": "canHighPixelCeilingClip",
+        "difficulty": "Extreme",
+        "video_id": 762
+    },
+    {
+        "tech_id": 173,
+        "name": "canPartialFloorClip",
+        "difficulty": "Very Hard",
+        "video_id": 796
+    },
+    {
+        "tech_id": 174,
+        "name": "canCrystalFlash",
+        "difficulty": "Hard",
+        "video_id": 935
+    },
+    {
+        "tech_id": 191,
+        "name": "canHeatedCrystalFlash",
+        "difficulty": "Very Hard",
+        "video_id": 3478
+    },
+    {
+        "tech_id": 175,
+        "name": "canBombIntoCrystalFlashClip",
+        "difficulty": "Expert",
+        "video_id": 970
+    },
+    {
+        "tech_id": 176,
+        "name": "canJumpIntoCrystalFlashClip",
+        "difficulty": "Extreme",
+        "video_id": 986
+    },
+    {
+        "tech_id": 177,
+        "name": "can10PowerBombCrystalFlash",
+        "difficulty": "Expert",
+        "video_id": 971
+    },
+    {
+        "tech_id": 178,
+        "name": "canElevatorCrystalFlash",
+        "difficulty": "Ignored",
+        "video_id": null
+    },
+    {
+        "tech_id": 179,
+        "name": "canTurnaroundAimCancel",
+        "difficulty": "Very Hard",
+        "video_id": 936
+    },
+    {
+        "tech_id": 182,
+        "name": "canCameraManip",
+        "difficulty": "Hard",
+        "video_id": 1057
+    },
+    {
+        "tech_id": 183,
+        "name": "canDeepTransition",
+        "difficulty": "Extreme",
+        "video_id": 778
+    },
+    {
+        "tech_id": 184,
+        "name": "canSkipDoorLock",
+        "difficulty": "Extreme",
+        "video_id": 800
+    },
+    {
+        "tech_id": 190,
+        "name": "canUsePowerBombLag",
+        "difficulty": "Expert",
+        "video_id": 2072
+    },
+    {
+        "tech_id": 10001,
+        "name": "canHyperGateShot",
+        "difficulty": "Hard",
+        "video_id": 3140
+    }
+]

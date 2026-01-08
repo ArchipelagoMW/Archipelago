@@ -1,0 +1,9 @@
+{
+    "DoorType": {
+        // Door Type enum
+        "null": 1,
+        "wrinkly": 2,
+        "boss": 3,
+        "dk_portal": 4
+    }
+}

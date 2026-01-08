@@ -1,0 +1,323 @@
+__ STORY __
+954: Bought Beedle's 300R item
+955: Bought Beedle's 600R item
+956: Bought Beedle's 1200R item
+957: Bought Beedle's 800R item
+958: Bought Beedle's 1600R item
+959: Defeat Demise
+
+__ SKYLOFT __
+Chest near Goddess Statue
+119 - Fx80
+
+Shed chest
+118 - Fx40
+
+Academy bell
+117 - Fx20
+
+waterfall first chest
+127 - Ex80
+
+waterfall second chest
+126 - Ex40
+
+west cliff goddess chest
+107 - Cx08
+
+bazaar goddess chest
+105 - Cx02
+
+shed goddess chest
+82 - Bx04
+
+floating island goddess chest
+81 - Bx02
+
+waterfall goddess chest
+48 - 7x01
+
+batreaux's 30 crystals chest
+93 - Ax20
+
+__ SKY __
+CHEST BLOCK: 8x08-Fx01 - Use for chests only
+- 8x08-9x01 [8 flags]: Standard chests
+- Ax08-Fx01 [24 flags]: Goddess chests
+
+FUN FUN 500 rupee
+3x08 (marked wrong on spreadsheet)
+
+chest in breakable boulder near fun fun
+75 - 8x08
+
+chest in breakable boulder near lumpy
+74 - 8x04
+
+Bamboo island GC: 115 - Fx08
+GC on island next to bamboo island: 114 - Fx04
+GC in cave on island next to bamboo island: 113 - Fx02
+Beedle's island GC: 112 - Fx01
+Beedle's island cage GC: 123 - Ex08
+NE island GC behind bomb rocks: 122 - Ex04
+NE island cage GC: 121 - Ex02
+Lumpy pumpkin - GC on the roof: 120 - Ex01
+Lumpy pumpkin - outside GC: 99 - Dx08
+GC on island closest to faron pillar: 98 - Dx04
+GC outside volcanic island: 97 - Dx02
+GC inside volcanic island: 96 - Dx01
+GC under fun fun island: 107 - Cx08
+SW triple island upper GC: 106 - Cx04
+SW triple island lower GC: 105 - Cx02
+SW triple island cage GC: 104 - Cx01
+
+__ THUNDERHEAD __
+isle of songs crest
+- goddess sword: 50 - 7x04
+- goddess longsword: 51 - 7x08
+- goddess white sword: 52 - 7x10
+
+East island chest
+73 - 8x02
+
+East island GC: 83 - Bx08
+GC on top of isle of songs: 82 - Bx04
+GC outside isle of songs: 81 - Bx02
+First GC on mogma mitts island: 80 - Bx01
+Second GC on mogma mitts island: 91 - Ax08
+Bug heaven GC: 90 - Ax04
+
+__ SEALED GROUNDS __
+sealed temple chest
+87 - Bx80
+
+__ FARON WOODS __
+deep woods chest
+119 - Fx80
+
+chest behind bombable rock
+118 - Fx40
+
+great tree chest
+117 - Fx20
+
+__ LAKE FLORIA __
+Lake floria chest
+119 - Fx80
+
+Dragon lair east chest
+118 - Fx40
+
+Dragon lair south chest
+117 - Fx20
+
+__ ELDIN VOLCANO __
+Chest behind bomb wall in first room
+126 - Ex40
+
+Chest after crawlspace
+110 - Cx40
+
+Chest behind bombable wall near cliff
+22 - 3x40 (Repurposed)
+
+Chest behind bomb wall near volcano ascent
+68 - 9x10
+
+Mogma turf - free fall chest
+108 - Cx10
+
+Mogma turf - chest behind bomb wall at entrance
+114 - Fx04
+
+Mogma turf - sand slide chest
+113 - Fx02
+
+Mogma turf - Chest behind bomb wall in fire maze
+112 - Fx01
+
+__ BOKO BASE / VOLCANO SUMMIT __
+Raised chest in volcano summit
+55 - 7x80
+
+First chest in volcano summit
+54 - 7x40
+
+Chest in alcove (added to VS, already in BB)
+62 - 6x40
+
+Chest behind bombable wall in waterfall area
+127 - Ex80
+
+__ LANAYRU DESERT __
+Note: Ax20 (93) is available to repurpose as well
+Those bokos don't spawn in rando
+
+Lanayru mine - chest at first landing
+47 - 4x80
+
+Lanayru mine - chest near first timeshift stone
+46 - 4x40
+
+Lanayru mine - chest behind statue
+45 - 4x20
+
+Lanayru mine - chest at the end of mine
+44 - 4x10
+
+Chest near party wheel
+43 - 4x08
+
+Chest on platform near fire node
+42 - 4x04
+
+Chest on platform near lightning node
+41 - 4x02
+
+Chest on top of LMF
+48 - 7x01
+
+Chest near sand oasis
+72 - 8x01
+
+Secret passageway chest
+94 - Ax40 (Repurposed)
+
+Fire node - shortcut chest
+82 - Bx04
+
+Fire node - first small chest
+83 - Bx08
+
+Fire node - second small chest
+110 - Cx40
+
+Fire node - left ending chest
+125 - Ex20
+
+Fire node - right ending chest
+107 - Cx08 (Repurposed)
+
+Lightning node - first chest
+84 - Bx10 (Repurposed)
+
+Lightning node - second chest
+85 - Bx20 (Repurposed)
+
+Lightning node - raised chest near generator
+86 - Bx40 (Repurposed)
+
+__ SAND SEA __
+Skippers retreat - Chest after moblin
+119 - Fx80
+
+Skippers retreat - Chest on top of cacti pillar
+118 - Fx40
+
+Skippers retreat - Skydive chest
+117 - Fx20
+
+Pirate stronghold - First chest
+116 - Fx10
+
+Pirate stronghold - Second chest
+115 - Fx08
+
+Pirate stronghold - Third chest
+114 - Fx04
+
+__ Skyview __
+Chest near boss door
+84 - Bx10 (Repurposed: Dig spot removed in rando)
+
+__ Earth Temple __
+Vent chest
+63 - 6x80
+
+Chest behind bombable rock
+62 - 6x40
+
+Chest left of main room bridge
+61 - 6x20
+
+Chest guarded by lizalfos
+60 - 6x10
+
+Heart container
+6x01 - Marked as [should exist] on spreadsheet
+
+__ Lanayru Mining Facility __
+Chest behind bars
+45 - 4x20
+
+First chest in hub room
+61 - 6x20
+
+Chest in first west room
+42 - 4x04
+
+Chest in key locked room
+41 - 4x02
+
+Raised chest in hop across boxes room
+57 - 6x02
+
+Lower chest in hop across boxes room
+49 - 7x02
+
+Shortcut chest in main hub
+48 - 7x01
+
+chest behind first crawlspace
+55 - 7x80
+
+Chest in spike maze
+52 - 7x10
+
+__ Ancient Cistern __
+Chest in east part
+98 - Dx04
+
+Chest near vines
+97 - Dx02
+
+Chest behind the waterfall
+120 - Ex01
+
+Obtain item from flame CS
+85 - Bx20
+
+__ Sandship __
+Chest before 4-door corridor
+127 - Ex80
+
+Chest behind combination lock
+126 - Ex40
+
+Obtain item from flame CS
+87 - Bx80
+
+__ Fire Sanctuary __
+Chest in second room
+113 - Fx02
+
+Chest on balcony
+126 - Ex40
+
+Chest near first trapped mogma
+123 - Ex08
+
+First chest in water fruit room
+122 - Ex04
+
+Second chest in water fruit room
+102 - Dx40
+
+Rescue first trapped mogma
+100 - Dx10 (Repurposed)
+
+Plats chest
+108 - Cx10 (Repurposed)
+
+Chest in staircase room
+17 - 3x02 (Repurposed)

@@ -1,0 +1,1595 @@
+[
+    {
+        "name": "Abundant Shrine",
+        "sections": [
+{"name": "Abundant Shrine - Center hidden item"},
+{"name": "Abundant Shrine - Center item"},
+{"name": "Abundant Shrine - East hidden item"},
+{"name": "Abundant Shrine - East item"},
+{"name": "Abundant Shrine - Hidden item near northern lake"},
+{"name": "Abundant Shrine - Hidden item on southern lake"},
+{"name": "Abundant Shrine - Item near ledge"},
+{"name": "Abundant Shrine - North east item"},
+{"name": "Abundant Shrine - North west hidden item"},
+{"name": "Abundant Shrine - South west item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 394,
+                "y": 154
+            },
+            {
+                "map": "route14",
+                "x": 64,
+                "y": 624
+            }
+        ]
+    },
+    {
+        "name": "Abyssal Ruins",
+        "sections": [
+{"name": "Abyssal Ruins 1F Center - East item"},
+{"name": "Abyssal Ruins 1F Center - North item"},
+{"name": "Abyssal Ruins 1F East - Item near center"},
+{"name": "Abyssal Ruins 1F East - Kinda south item"},
+{"name": "Abyssal Ruins 1F East - North item #1"},
+{"name": "Abyssal Ruins 1F East - North item #2"},
+{"name": "Abyssal Ruins 1F East - South item"},
+{"name": "Abyssal Ruins 1F East - West item"},
+{"name": "Abyssal Ruins 1F North - East item"},
+{"name": "Abyssal Ruins 1F North - Item east of entrance"},
+{"name": "Abyssal Ruins 1F North - Item north of center"},
+{"name": "Abyssal Ruins 1F North - Item west of entrance"},
+{"name": "Abyssal Ruins 1F North - West item"},
+{"name": "Abyssal Ruins 1F South - East item"},
+{"name": "Abyssal Ruins 1F South - Item near entrance"},
+{"name": "Abyssal Ruins 1F South - North item #1"},
+{"name": "Abyssal Ruins 1F South - North item #2"},
+{"name": "Abyssal Ruins 1F South - North west item #1"},
+{"name": "Abyssal Ruins 1F South - North west item #2"},
+{"name": "Abyssal Ruins 1F South - West item"},
+{"name": "Abyssal Ruins 1F West - East item"},
+{"name": "Abyssal Ruins 1F West - North item #1"},
+{"name": "Abyssal Ruins 1F West - North item #2"},
+{"name": "Abyssal Ruins 1F West - South east item #1"},
+{"name": "Abyssal Ruins 1F West - South east item #2"},
+{"name": "Abyssal Ruins 1F West - South item"},
+{"name": "Abyssal Ruins 2F - East item"},
+{"name": "Abyssal Ruins 2F - Item north east of center"},
+{"name": "Abyssal Ruins 2F - Item south east of center"},
+{"name": "Abyssal Ruins 2F - Item west of center"},
+{"name": "Abyssal Ruins 2F - Kinda north east item"},
+{"name": "Abyssal Ruins 2F - Kinda north item"},
+{"name": "Abyssal Ruins 2F - Kinda north west item"},
+{"name": "Abyssal Ruins 2F - Kinda south west item"},
+{"name": "Abyssal Ruins 2F - North west item"},
+{"name": "Abyssal Ruins 2F - South east item"},
+{"name": "Abyssal Ruins 2F - South west item"},
+{"name": "Abyssal Ruins 3F - Center item"},
+{"name": "Abyssal Ruins 3F - East item"},
+{"name": "Abyssal Ruins 3F - Item south of center"},
+{"name": "Abyssal Ruins 3F - Kinda north east item"},
+{"name": "Abyssal Ruins 3F - North east item"},
+{"name": "Abyssal Ruins 3F - North west item"},
+{"name": "Abyssal Ruins 3F - South west item"},
+{"name": "Abyssal Ruins 3F - West item"},
+{"name": "Abyssal Ruins 4F - Item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 496,
+                "y": 136
+            },
+            {
+                "map": "undellabay",
+                "x": 536,
+                "y": 680
+            },
+            {
+                "map": "undellabay",
+                "x": 296,
+                "y": 392
+            },
+            {
+                "map": "undellabay",
+                "x": 536,
+                "y": 168
+            },
+            {
+                "map": "undellabay",
+                "x": 776,
+                "y": 392
+            }
+        ]
+    },
+    {
+        "name": "Accumula Town",
+        "sections": [
+{"name": "Accumula Town - Item from man in north west building"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 464,
+                "y": 276
+            }
+        ]
+    },
+    {
+        "name": "Anville Town",
+        "sections": [
+{"name": "Anville Town - Item from depot agent on first visit"},
+{"name": "Anville Town - North hidden item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 14,
+                "y": 61
+            },
+            {
+                "map": "nimbasacity",
+                "x": 616,
+                "y": 672
+            }
+        ]
+    },
+    {
+        "name": "Castelia City",
+        "sections": [
+{"name": "Castelia City - Item from dancers"},
+{"name": "Castelia City - Item from harlequin in Studio Castelia"},
+{"name": "Castelia City - Item from Iris in Plasma hideout"},
+{"name": "Castelia City - Item from manager in Café Sonata"},
+{"name": "Castelia City - Item from scientist at Thumb Pier"},
+{"name": "Castelia City - Item from scientist in northern street for seeing 20 species"},
+{"name": "Castelia City - Item from scientist in building in northern street"},
+{"name": "Castelia City - Item in Plasma hideout"},
+{"name": "Castelia City - TM from hiker in building in Castelia Street"},
+{"name": "Castelia City - TM from man in black behind dumpster"},
+{"name": "Castelia City - TM from Mr. Lock in building in northern street"},
+{"name": "Castelia City - TM from school kid in building in northern street"},
+{"name": "Castelia Gym - Badge reward"},
+{"name": "Castelia Gym - Gym guide item"},
+{"name": "Castelia Gym - TM reward"},
+{"name": "Royal Unova - Item for defeating every trainer"},
+{"name": "Battle Company - 47F item from clerk #1"},
+{"name": "Battle Company - 47F item from clerk #2"},
+{"name": "Battle Company - 47F item from clerk #3"},
+{"name": "Battle Company - 47F item from clerk #4"},
+{"name": "Battle Company - 47F item from clerk #5"},
+{"name": "Battle Company - 47F item from clerk #6"},
+{"name": "Battle Company - 47F item from scientist"},
+{"name": "Battle Company - 47F item in lower-left corner"},
+{"name": "Battle Company - 55F center item"},
+{"name": "Battle Company - 55F item from President Geoff"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 264,
+                "y": 260
+            }
+        ]
+    },
+    {
+        "name": "Celestial Tower",
+        "sections": [
+{"name": "Celestial Tower - 2F left item"},
+{"name": "Celestial Tower - 2F right item"},
+{"name": "Celestial Tower - 3F item"},
+{"name": "Celestial Tower - 4F left item"},
+{"name": "Celestial Tower - 4F right item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 108,
+                "y": 100
+            },
+            {
+                "map": "route7",
+                "x": 152,
+                "y": 128
+            }
+        ]
+    },
+    {
+        "name": "Challenger's Cave",
+        "sections": [
+{"name": "Challenger's Cave - B1F hidden item near stairs to 1F"},
+{"name": "Challenger's Cave - B1F hidden item near stairs to B2F"},
+{"name": "Challenger's Cave - B1F north item"},
+{"name": "Challenger's Cave - B1F south item"},
+{"name": "Challenger's Cave - B2F hidden item on south end of island"},
+{"name": "Challenger's Cave - B2F item near eastern ledge"},
+{"name": "Challenger's Cave - B2F item near stairs #1"},
+{"name": "Challenger's Cave - B2F item near stairs #2"},
+{"name": "Challenger's Cave - B2F item on island"},
+{"name": "Challenger's Cave - B2F north east hidden item"},
+{"name": "Challenger's Cave - B2F south east hidden item"},
+{"name": "Challenger's Cave - B2F south east item"},
+{"name": "Challenger's Cave - B2F south west hidden item #1"},
+{"name": "Challenger's Cave - B2F south west hidden item #2"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 234,
+                "y": 98
+            },
+            {
+                "map": "route9",
+                "x": 204,
+                "y": 408
+            }
+        ]
+    },
+    {
+        "name": "Chargestone Cave",
+        "sections": [
+{"name": "Chargestone Cave - 1F north east item"},
+{"name": "Chargestone Cave - 1F north hidden item #1"},
+{"name": "Chargestone Cave - 1F north hidden item #2"},
+{"name": "Chargestone Cave - 1F north west item #1"},
+{"name": "Chargestone Cave - 1F north west item #2"},
+{"name": "Chargestone Cave - 1F north west item #3"},
+{"name": "Chargestone Cave - 1F south east item #1"},
+{"name": "Chargestone Cave - 1F south east item #2"},
+{"name": "Chargestone Cave - 1F south hidden item"},
+{"name": "Chargestone Cave - B1F center item"},
+{"name": "Chargestone Cave - B1F east hidden item"},
+{"name": "Chargestone Cave - B1F north item"},
+{"name": "Chargestone Cave - B1F west hidden item"},
+{"name": "Chargestone Cave - B2F east hidden item"},
+{"name": "Chargestone Cave - B2F hidden item"},
+{"name": "Chargestone Cave - B2F west hidden item"},
+{"name": "Chargestone Cave - B2F north east item"},
+{"name": "Chargestone Cave - B2F south east item"},
+{"name": "Chargestone Cave - B2F south west item"},
+{"name": "Chargestone Cave - Item from nugget brothers #1"},
+{"name": "Chargestone Cave - Item from nugget brothers #2"},
+{"name": "Chargestone Cave - Item from Professor Juniper"},
+{"name": "Chargestone Cave - TM from sage Bronius"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 84,
+                "y": 160
+            },
+            {
+                "map": "chargestonecaveoutside",
+                "x": 184,
+                "y": 312
+            }
+        ]
+    },
+    {
+        "name": "Cold Storage",
+        "sections": [
+{"name": "Cold Storage - Center item"},
+{"name": "Cold Storage - East item"},
+{"name": "Cold Storage - Hidden item in trash can"},
+{"name": "Cold Storage - Item from worker"},
+{"name": "Cold Storage - North east hidden item"},
+{"name": "Cold Storage - South east hidden item"},
+{"name": "Cold Storage - TM from sage Zinzolin"},
+{"name": "Cold Storage - West item"},
+{"name": "Cold Storage Building - Item in container"},
+{"name": "Cold Storage Building - Item near entrance, up the stairs"},
+{"name": "Cold Storage Building - Item on first ice field"},
+{"name": "Cold Storage Building - North east item"},
+{"name": "Cold Storage Building - South east item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 148,
+                "y": 206
+            },
+            {
+                "map": "driftveilcity",
+                "x": 280,
+                "y": 1004
+            }
+        ]
+    },
+    {
+        "name": "Cold Storage Building",
+        "sections": [
+{"name": "Cold Storage Building - Item in container"},
+{"name": "Cold Storage Building - Item near entrance, up the stairs"},
+{"name": "Cold Storage Building - Item on first ice field"},
+{"name": "Cold Storage Building - North east item"},
+{"name": "Cold Storage Building - South east item"},
+{"name": "Cold Storage - TM from sage Zinzolin"}
+        ],
+        "map_locations": [
+            {
+                "map": "coldstorageoutside",
+                "x": 87,
+                "y": 397
+            }
+        ]
+    },
+    {
+        "name": "Cold Storage Container",
+        "sections": [
+{"name": "Cold Storage Building - Item in container"},
+{"name": "Cold Storage - TM from sage Zinzolin"}
+        ],
+        "map_locations": [
+            {
+                "map": "coldstorage",
+                "x": 78,
+                "y": 99
+            }
+        ]
+    },
+    {
+        "name": "Desert Resort",
+        "sections": [
+{"name": "Desert Resort - Even more south west item"},
+{"name": "Desert Resort - Hidden item near tower"},
+{"name": "Desert Resort - Item between Relic Castle entrances"},
+{"name": "Desert Resort - Item from man in black"},
+{"name": "Desert Resort - Item from Professor Juniper"},
+{"name": "Desert Resort - Item from ranger Jaden"},
+{"name": "Desert Resort - Item from ranger Mylene"},
+{"name": "Desert Resort - North east hidden item"},
+{"name": "Desert Resort - North west item"},
+{"name": "Desert Resort - Sandy area item #1"},
+{"name": "Desert Resort - Sandy area item #2"},
+{"name": "Desert Resort - Sandy area item #3"},
+{"name": "Desert Resort - South hidden item"},
+{"name": "Desert Resort - South west item"},
+{"name": "Desert Resort - West hidden item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 230,
+                "y": 208
+            }
+        ]
+    },
+    {
+        "name": "Desert Resort + Relic Castle",
+        "sections": [
+{"name": "Desert Resort - Even more south west item"},
+{"name": "Desert Resort - Hidden item near tower"},
+{"name": "Desert Resort - Item between Relic Castle entrances"},
+{"name": "Desert Resort - Item from man in black"},
+{"name": "Desert Resort - Item from Professor Juniper"},
+{"name": "Desert Resort - Item from ranger Jaden"},
+{"name": "Desert Resort - Item from ranger Mylene"},
+{"name": "Desert Resort - North east hidden item"},
+{"name": "Desert Resort - North west item"},
+{"name": "Desert Resort - Sandy area item #1"},
+{"name": "Desert Resort - Sandy area item #2"},
+{"name": "Desert Resort - Sandy area item #3"},
+{"name": "Desert Resort - South hidden item"},
+{"name": "Desert Resort - South west item"},
+{"name": "Desert Resort - West hidden item"},
+{"name": "Relic Castle - 1F castleside item from backpacker"},
+{"name": "Relic Castle - 1F towerside item"},
+{"name": "Relic Castle - B1F castleside hidden item"},
+{"name": "Relic Castle - B1F castleside item"},
+{"name": "Relic Castle - B2F castleside item #1"},
+{"name": "Relic Castle - B2F castleside item #2"},
+{"name": "Relic Castle - B3F castleside item #1"},
+{"name": "Relic Castle - B3F castleside item #2"},
+{"name": "Relic Castle - B3F towerside hidden item"},
+{"name": "Relic Castle - B4F castleside hidden item"},
+{"name": "Relic Castle - B4F castleside item"},
+{"name": "Relic Castle - TM from sage Ryoku"}
+        ],
+        "map_locations": [
+            {
+                "map": "route4",
+                "x": 22,
+                "y": 91
+            }
+        ]
+    },
+    {
+        "name": "Dragonspiral Tower",
+        "sections": [
+{"name": "Dragonspiral Tower - 2F item on pillar"},
+{"name": "Dragonspiral Tower - 2F north east item"},
+{"name": "Dragonspiral Tower - 3F item"},
+{"name": "Dragonspiral Tower - 4F item"},
+{"name": "Dragonspiral Tower - 5F item #1"},
+{"name": "Dragonspiral Tower - 5F item #2"},
+{"name": "Dragonspiral Tower - 5F item #3"},
+{"name": "Dragonspiral Tower - 6F item"},
+{"name": "Dragonspiral Tower - Item from Cedric Juniper"},
+{"name": "Dragonspiral Tower - Item near entrance (Winter)"},
+{"name": "Dragonspiral Tower - Outside hidden item"},
+{"name": "Dragonspiral Tower - Outside item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 132,
+                "y": 62
+            },
+            {
+                "map": "icirruscity",
+                "x": 324,
+                "y": 16
+            }
+        ]
+    },
+    {
+        "name": "Dreamyard",
+        "sections": [
+{"name": "Dreamyard - 2F east item"},
+{"name": "Dreamyard - 2F west item"},
+{"name": "Dreamyard - Item behind broken wall"},
+{"name": "Dreamyard - Item near furnace"},
+{"name": "Dreamyard - Item near traffic cone"},
+{"name": "Dreamyard - North west item"},
+{"name": "Dreamyard - South hidden item in barrel"},
+{"name": "Dreamyard - South west item"},
+{"name": "Dreamyard - TM from sage Gorm"},
+{"name": "Dreamyard Basement - North east hidden item"},
+{"name": "Dreamyard Basement - North west item"},
+{"name": "Dreamyard Basement - South west hidden item"},
+{"name": "Dreamyard Basement - South west item"},
+{"name": "Dreamyard Basement - West hidden item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 478,
+                "y": 236
+            },
+            {
+                "map": "striatoncity",
+                "x": 1112,
+                "y": 96
+            }
+        ]
+    },
+    {
+        "name": "Driftveil City",
+        "sections": [
+{"name": "Driftveil City - Hidden item in market"},
+{"name": "Driftveil City - Item from girl in pokémon center #1"},
+{"name": "Driftveil City - Item from girl in pokémon center #2"},
+{"name": "Driftveil City - Item from girl in pokémon center #3"},
+{"name": "Driftveil City - Item from lady asking for a pokémon knowing a certain TM move"},
+{"name": "Driftveil City - Item from man for seeing more than 50 pokémon"},
+{"name": "Driftveil City - Item from man in black in market"},
+{"name": "Driftveil City - Item in market"},
+{"name": "Driftveil City - Item near lighthouse"},
+{"name": "Driftveil City - North west item"},
+{"name": "Driftveil City - TM from Bianca"},
+{"name": "Driftveil Gym - Badge reward"},
+{"name": "Driftveil Gym - Gym guide item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 148,
+                "y": 182
+            }
+        ]
+    },
+    {
+        "name": "Giant Chasm",
+        "sections": [
+{"name": "Giant Chasm Crater - Item near lake"},
+{"name": "Giant Chasm Crater - Item near northern stairs #1"},
+{"name": "Giant Chasm Crater - Item near northern stairs #2"},
+{"name": "Giant Chasm Crater - North west item #1"},
+{"name": "Giant Chasm Crater - North west item #2"},
+{"name": "Giant Chasm Crater - South east item"},
+{"name": "Giant Chasm Crater - South west item"},
+{"name": "Giant Chasm Crater - West item"},
+{"name": "Giant Chasm Entrance Cave - Hidden item near entrance"},
+{"name": "Giant Chasm Entrance Cave - North east item"},
+{"name": "Giant Chasm Entrance Cave - North hidden item"},
+{"name": "Giant Chasm Entrance Cave - North west hidden item"},
+{"name": "Giant Chasm Entrance Cave - North west item"},
+{"name": "Giant Chasm Entrance Cave - South west item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 396,
+                "y": 62
+            },
+            {
+                "map": "route13",
+                "x": 768,
+                "y": 16
+            }
+        ]
+    },
+    {
+        "name": "Icirrus City",
+        "sections": [
+{"name": "Icirrus City - East hidden item #1"},
+{"name": "Icirrus City - East hidden item #2"},
+{"name": "Icirrus City - Hidden item in large water puddle"},
+{"name": "Icirrus City - Hidden item west of pokémon center (Winter)"},
+{"name": "Icirrus City - Item from Aha if answer was correct"},
+{"name": "Icirrus City - Item from Aha if answer was incorrect"},
+{"name": "Icirrus City - Item from Pokémon Fan Club chairman for gaining 25 levels"},
+{"name": "Icirrus City - Item from Pokémon Fan Club chairman for gaining 50 levels"},
+{"name": "Icirrus City - Item from Pokémon Fan Club chairman for gaining 99 levels"},
+{"name": "Icirrus City - Item from the former Team Rocket member's wife (Winter)"},
+{"name": "Icirrus City - Item west of pokémon center (Winter)"},
+{"name": "Icirrus City - South hidden item #1 (Winter)"},
+{"name": "Icirrus City - South hidden item #2 (Winter)"},
+{"name": "Icirrus City - South hidden item #3 (Winter)"},
+{"name": "Icirrus City - TM from old lady in pokémon center"},
+{"name": "Icirrus Gym - Badge reward"},
+{"name": "Icirrus Gym - Gym guide item"},
+{"name": "Icirrus Gym - TM reward"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 148,
+                "y": 86
+            }
+        ]
+    },
+    {
+        "name": "Lacunosa Town",
+        "sections": [
+{"name": "Lacunosa Town - Hidden item near policeman"},
+{"name": "Lacunosa Town - Hidden item on north eastern wall"},
+{"name": "Lacunosa Town - Item from executive"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 380,
+                "y": 86
+            }
+        ]
+    },
+    {
+        "name": "Liberty Garden",
+        "sections": [
+{"name": "Liberty Garden - Hidden item in trash can"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 148,
+                "y": 290
+            },
+            {
+                "map": "casteliacity",
+                "x": 174,
+                "y": 822
+            }
+        ]
+    },
+    {
+        "name": "Lostlorn Forest",
+        "sections": [
+{"name": "Lostlorn Forest - Hidden item near dark grass"},
+{"name": "Lostlorn Forest - Item in dark grass"},
+{"name": "Lostlorn Forest - Item in tree stump"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 292,
+                "y": 168
+            },
+            {
+                "map": "route16",
+                "x": 496,
+                "y": 22
+            }
+        ]
+    },
+    {
+        "name": "Marvelous Bridge",
+        "sections": [
+{"name": "Marvelous Bridge - Item from Shadow Triad #1"},
+{"name": "Marvelous Bridge - Item from Shadow Triad #2"},
+{"name": "Marvelous Bridge - Item from Shadow Triad #3"},
+{"name": "Marvelous Bridge - Patrat shuffle reward"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 320,
+                "y": 178
+            }
+        ]
+    },
+    {
+        "name": "Mistralton Cave",
+        "sections": [
+{"name": "Mistralton Cave - 1F north east item"},
+{"name": "Mistralton Cave - 1F north hidden item"},
+{"name": "Mistralton Cave - 1F north west item"},
+{"name": "Mistralton Cave - 1F west hidden item"},
+{"name": "Mistralton Cave - 2F item near stairs to 3F"},
+{"name": "Mistralton Cave - 2F north west hidden item"},
+{"name": "Mistralton Cave - 2F north west item"},
+{"name": "Mistralton Cave - 2F south east hidden item"},
+{"name": "Mistralton Cave - 2F south item"},
+{"name": "Mistralton Cave - 2F south west hidden item"},
+{"name": "Guidance Chamber - North east hidden item"},
+{"name": "Guidance Chamber - North east item"},
+{"name": "Guidance Chamber - North west hidden item"},
+{"name": "Guidance Chamber - North west item"},
+{"name": "Guidance Chamber - South west item"},
+{"name": "Mistralton Cave - 3F north east hidden item"},
+{"name": "Mistralton Cave - 3F north east item"},
+{"name": "Mistralton Cave - 3F north west hidden item"},
+{"name": "Mistralton Cave - 3F north west item"},
+{"name": "Mistralton Cave - 3F south west item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 138,
+                "y": 148
+            },
+            {
+                "map": "route6",
+                "x": 972,
+                "y": 160
+            }
+        ]
+    },
+    {
+        "name": "Mistralton City",
+        "sections": [
+{"name": "Mistralton City - Appearing item at south end of runway"},
+{"name": "Mistralton City - Hidden item at greenhouse or vegetable patches #1"},
+{"name": "Mistralton City - Hidden item at greenhouse or vegetable patches #2"},
+{"name": "Mistralton City - Hidden item at greenhouse or vegetable patches #3"},
+{"name": "Mistralton City - Item from veteran in Cargo Service building"},
+{"name": "Mistralton City - Item near south plane"},
+{"name": "Mistralton Gym - Badge reward"},
+{"name": "Mistralton Gym - Gym guide item"},
+{"name": "Mistralton Gym - TM reward"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 80,
+                "y": 134
+            }
+        ]
+    },
+    {
+        "name": "Moor of Icirrus",
+        "sections": [
+{"name": "Moor of Icirrus - Hidden item behind boulder"},
+{"name": "Moor of Icirrus - Hidden item near ledge"},
+{"name": "Moor of Icirrus - Item behind boulder #1"},
+{"name": "Moor of Icirrus - Item behind boulder #2"},
+{"name": "Moor of Icirrus - Item from ranger Chloris"},
+{"name": "Moor of Icirrus - Item from ranger Harry"},
+{"name": "Moor of Icirrus - Item near northern lake"},
+{"name": "Moor of Icirrus - North east item"},
+{"name": "Moor of Icirrus - North hidden item"},
+{"name": "Moor of Icirrus - South east hidden item"},
+{"name": "Moor of Icirrus - South east item (Spring/Summer/Autumn)"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 176,
+                "y": 72
+            },
+            {
+                "map": "route8",
+                "x": 672,
+                "y": 38
+            }
+        ]
+    },
+    {
+        "name": "Nacrene City",
+        "sections": [
+{"name": "Nacrene City - Hidden item near Café Warehouse"},
+{"name": "Nacrene City - Hidden item on railway"},
+{"name": "Nacrene City - Item from Bianca"},
+{"name": "Nacrene City - Item from Cheren #1"},
+{"name": "Nacrene City - Item from Cheren #2"},
+{"name": "Nacrene City - Item from Cheren #3"},
+{"name": "Nacrene City - Item from girl in west building"},
+{"name": "Nacrene City - Item from Lenora after Relic Castle"},
+{"name": "Nacrene City - Item from waitress in Café Warehouse"},
+{"name": "Nacrene Gym - Badge reward"},
+{"name": "Nacrene Gym - Gym guide item"},
+{"name": "Nacrene Gym - TM reward"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 406,
+                "y": 236
+            }
+        ]
+    },
+    {
+        "name": "Nimbasa City",
+        "sections": [
+{"name": "Nimbasa City - Hidden item near ferris wheel"},
+{"name": "Nimbasa City - Item from ace trainer exiting battle subway"},
+{"name": "Nimbasa City - Item from ace trainer in another western building"},
+{"name": "Nimbasa City - Item from Day-Care man"},
+{"name": "Nimbasa City - Item from man in eastern gate"},
+{"name": "Nimbasa City - Item from Musical Theater owner"},
+{"name": "Nimbasa City - Item from socialite in western building"},
+{"name": "Nimbasa City - Item near ferris wheel"},
+{"name": "Nimbasa City - TM from ace trainer in western building"},
+{"name": "Nimbasa City - TM from lady in Musical Theater"},
+{"name": "Nimbasa Gym - Badge reward"},
+{"name": "Nimbasa Gym - Gym guide item"},
+{"name": "Nimbasa Gym - TM reward"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 264,
+                "y": 182
+            }
+        ]
+    },
+    {
+        "name": "N's Castle",
+        "sections": [
+{"name": "N's Castle - 2F right room item"},
+{"name": "N's Castle - 3F center room item"},
+{"name": "N's Castle - 4F center room item"},
+{"name": "N's Castle - Item from grunt in 3F left room"},
+{"name": "N's Castle - N's room item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 340,
+                "y": 30
+            }
+        ]
+    },
+    {
+        "name": "Nuvema Town",
+        "sections": [
+{"name": "Nuvema Town - Item from Looker"},
+{"name": "Nuvema Town - Item from Mom after first fight"},
+{"name": "Nuvema Town - TM from Professor Juniper for seeing 115 species"},
+{"name": "Nuvema Town - TM from Professor Juniper for seeing 25 species"},
+{"name": "Nuvema Town - TM from Professor Juniper for seeing 60 species"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 464,
+                "y": 316
+            }
+        ]
+    },
+    {
+        "name": "Opelucid City",
+        "sections": [
+{"name": "Opelucid City - Hidden item near Pokémon Center"},
+{"name": "Opelucid City - Hidden item on northern road"},
+{"name": "Opelucid City - Item from female NPC in Drayden's house"},
+{"name": "Opelucid City - Item from female NPC in northern house"},
+{"name": "Opelucid City - Item from linebacker in Drayden's house"},
+{"name": "Opelucid City - Item from Professor Juniper"},
+{"name": "Opelucid Gym - Badge reward"},
+{"name": "Opelucid Gym - Gym guide item"},
+{"name": "Opelucid Gym - TM reward"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 264,
+                "y": 86
+            }
+        ]
+    },
+    {
+        "name": "P2 Laboratory",
+        "sections": [
+{"name": "P2 Laboratory - Item inside"},
+{"name": "P2 Laboratory - Item outside"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 444,
+                "y": 302
+            }
+        ]
+    },
+    {
+        "name": "Pinwheel Forest",
+        "sections": [
+{"name": "Pinwheel Forest - East hidden item"},
+{"name": "Pinwheel Forest - East item inside tree stump"},
+{"name": "Pinwheel Forest - Item from Lenora"},
+{"name": "Pinwheel Forest - Item from ranger Audra"},
+{"name": "Pinwheel Forest - Item from ranger Forrest"},
+{"name": "Pinwheel Forest - Item from ranger Irene"},
+{"name": "Pinwheel Forest - Item from ranger Miguel"},
+{"name": "Pinwheel Forest - Item near water #1"},
+{"name": "Pinwheel Forest - Item near water #2"},
+{"name": "Pinwheel Forest - North item near ledge"},
+{"name": "Pinwheel Forest - North west item inside tree stump"},
+{"name": "Pinwheel Forest - Outside hidden item behind dark grass"},
+{"name": "Pinwheel Forest - Outside item near ledge"},
+{"name": "Pinwheel Forest - Outside item near railway"},
+{"name": "Pinwheel Forest - Outside north hidden item"},
+{"name": "Pinwheel Forest - Outside north item"},
+{"name": "Pinwheel Forest - Outside south east hidden item"},
+{"name": "Pinwheel Forest - Outside south hidden item"},
+{"name": "Pinwheel Forest - Outside south item"},
+{"name": "Pinwheel Forest - Outside south west item"},
+{"name": "Pinwheel Forest - South east item"},
+{"name": "Pinwheel Forest - South item #1"},
+{"name": "Pinwheel Forest - South item #2"},
+{"name": "Pinwheel Forest - South west hidden item"},
+{"name": "Pinwheel Forest - Stolen item from Plasma grunt"},
+{"name": "Pinwheel Forest - West hidden item inside tree stump"},
+{"name": "Pinwheel Forest - West item inside tree stump"},
+{"name": "Pinwheel Forest Outside - Item from challenge rock"},
+{"name": "Pinwheel Forest Outside - TM from woman near Nacrene City"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 388,
+                "y": 250
+            }
+        ]
+    },
+    {
+        "name": "Relic Castle",
+        "sections": [
+{"name": "Relic Castle - 1F castleside item from backpacker"},
+{"name": "Relic Castle - 1F towerside item"},
+{"name": "Relic Castle - B1F castleside hidden item"},
+{"name": "Relic Castle - B1F castleside item"},
+{"name": "Relic Castle - B2F castleside item #1"},
+{"name": "Relic Castle - B2F castleside item #2"},
+{"name": "Relic Castle - B3F castleside item #1"},
+{"name": "Relic Castle - B3F castleside item #2"},
+{"name": "Relic Castle - B3F towerside hidden item"},
+{"name": "Relic Castle - B4F castleside hidden item"},
+{"name": "Relic Castle - B4F castleside item"},
+{"name": "Relic Castle - TM from sage Ryoku"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 214,
+                "y": 208
+            },
+            {
+                "map": "desertresort",
+                "x": 872,
+                "y": 216
+            }
+        ]
+    },
+    {
+        "name": "Relic Castle - Exit",
+        "sections": [
+{"name": "Relic Castle - 1F towerside item"},
+{"name": "Relic Castle - B3F towerside hidden item"}
+        ],
+        "map_locations": [
+            {
+                "map": "reliccastlemaze",
+                "x": 49,
+                "y": 50
+            }
+        ]
+    },
+    {
+        "name": "Route 1",
+        "sections": [
+{"name": "Route 1 - Item after catching tutorial #1"},
+{"name": "Route 1 - Item after catching tutorial #2"},
+{"name": "Route 1 - Item after catching tutorial #3"},
+{"name": "Route 1 - Item after catching tutorial #4"},
+{"name": "Route 1 - Item after catching tutorial #5"},
+{"name": "Route 1 - Item from ranger Brenda"},
+{"name": "Route 1 - Item from ranger Claude"},
+{"name": "Route 1 - Item from woman"},
+{"name": "Route 1 - South hidden item"},
+{"name": "Route 1 - South item"},
+{"name": "Route 1 - West item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 464,
+                "y": 296
+            }
+        ]
+    },
+    {
+        "name": "Route 10",
+        "sections": [
+{"name": "Route 10 - Center item"},
+{"name": "Route 10 - Hidden item on western cliff"},
+{"name": "Route 10 - Item from Bianca #1"},
+{"name": "Route 10 - Item from Bianca #2"},
+{"name": "Route 10 - Item from Bianka #1"},
+{"name": "Route 10 - Item from Bianka #2"},
+{"name": "Route 10 - Item from veteran near northern bridge"},
+{"name": "Route 10 - Item in dark grass #1"},
+{"name": "Route 10 - Item in dark grass #2"},
+{"name": "Route 10 - Item near badge gate"},
+{"name": "Route 10 - West item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 294,
+                "y": 62
+            }
+        ]
+    },
+    {
+        "name": "Route 11",
+        "sections": [
+{"name": "Route 11 - Hidden item near western gate"},
+{"name": "Route 11 - Hidden item on northern cliff"},
+{"name": "Route 11 - Item from ranger Crofton"},
+{"name": "Route 11 - Item from ranger Thalia"},
+{"name": "Route 11 - Item in ravine"},
+{"name": "Route 11 - Item near western gate"},
+{"name": "Route 11 - Item on northern cliff"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 288,
+                "y": 86
+            }
+        ]
+    },
+    {
+        "name": "Route 12",
+        "sections": [
+{"name": "Route 12 - Hidden item #1"},
+{"name": "Route 12 - Hidden item #2"},
+{"name": "Route 12 - Hidden item #3"},
+{"name": "Route 12 - Hidden item #4"},
+{"name": "Route 12 - Item from breeder Ethel"},
+{"name": "Route 12 - Item from breeder Eustace"},
+{"name": "Route 12 - Item near western gate"},
+{"name": "Route 12 - Item on hills"},
+{"name": "Route 12 - North east item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 354,
+                "y": 86
+            }
+        ]
+    },
+    {
+        "name": "Route 13",
+        "sections": [
+{"name": "Route 13 - Hidden item in dark grass #1"},
+{"name": "Route 13 - Hidden item in dark grass #2"},
+{"name": "Route 13 - Hidden item on side of cliff between bridges"},
+{"name": "Route 13 - Hidden item on south eastern coast #1"},
+{"name": "Route 13 - Hidden item on south eastern coast #2"},
+{"name": "Route 13 - Hidden item on south eastern coast #3"},
+{"name": "Route 13 - Item from old man"},
+{"name": "Route 13 - Item from parasol lady"},
+{"name": "Route 13 - Item from veteran in western house #1"},
+{"name": "Route 13 - Item from veteran in western house #2"},
+{"name": "Route 13 - Item in shallow water"},
+{"name": "Route 13 - Item near northern ledges"},
+{"name": "Route 13 - Item near stairs to Giant Chasm"},
+{"name": "Route 13 - Item on cliff behind boulder"},
+{"name": "Route 13 - Item on cliff near bridges #1"},
+{"name": "Route 13 - Item on cliff near bridges #2"},
+{"name": "Route 13 - Random item from man in black"},
+{"name": "Route 13 - South item"},
+{"name": "Route 13 - TM from Wingull"},
+{"name": "Route 13 - West hidden item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 414,
+                "y": 112
+            }
+        ]
+    },
+    {
+        "name": "Route 14",
+        "sections": [
+{"name": "Route 14 - East hidden item"},
+{"name": "Route 14 - Item near dark grass"},
+{"name": "Route 14 - North item"},
+{"name": "Route 14 - TM from sage Giallo"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 420,
+                "y": 152
+            }
+        ]
+    },
+    {
+        "name": "Route 15",
+        "sections": [
+{"name": "Route 15 - Hidden item between ledges"},
+{"name": "Route 15 - Hidden item near Poké Transfer Lab"},
+{"name": "Route 15 - Item from ranger Keith"},
+{"name": "Route 15 - Item from ranger Shelly"},
+{"name": "Route 15 - Item in dark grass"},
+{"name": "Route 15 - South east item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 354,
+                "y": 182
+            }
+        ]
+    },
+    {
+        "name": "Route 16",
+        "sections": [
+{"name": "Route 16 - Item near dark grass"},
+{"name": "Route 16 - Item near eastern gate"},
+{"name": "Route 16 - Item near Lostlorn Forest entrance"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 288,
+                "y": 182
+            }
+        ]
+    },
+    {
+        "name": "Route 17",
+        "sections": [
+{"name": "Route 17 - Central hidden item"},
+{"name": "Route 17 - North hidden item #1"},
+{"name": "Route 17 - North hidden item #2"},
+{"name": "Route 17 - North hidden item #3"},
+{"name": "Route 17 - South east item"},
+{"name": "Route 17 - South west item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 436,
+                "y": 316
+            }
+        ]
+    },
+    {
+        "name": "Route 18",
+        "sections": [
+{"name": "Route 18 - East item"},
+{"name": "Route 18 - Lower coast hidden item"},
+{"name": "Route 18 - North item"},
+{"name": "Route 18 - Ravine hidden item"},
+{"name": "Route 18 - Ravine item"},
+{"name": "Route 18 - South item"},
+{"name": "Route 18 - TM from sage Rood"},
+{"name": "Route 18 - Upper coast hidden item"},
+{"name": "Route 18 - West item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 414,
+                "y": 316
+            }
+        ]
+    },
+    {
+        "name": "Route 2",
+        "sections": [
+{"name": "Route 2 - East item #1"},
+{"name": "Route 2 - East item #2"},
+{"name": "Route 2 - Item behind boulder"},
+{"name": "Route 2 - Item behind cut tree #1"},
+{"name": "Route 2 - Item behind cut tree #2"},
+{"name": "Route 2 - South west item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 461,
+                "y": 256
+            }
+        ]
+    },
+    {
+        "name": "Route 3",
+        "sections": [
+{"name": "Route 3 - Center item"},
+{"name": "Route 3 - Item across water"},
+{"name": "Route 3 - Item from girl after Wellspring Cave #1"},
+{"name": "Route 3 - Item from girl after Wellspring Cave #2"},
+{"name": "Route 3 - Item from girl after Wellspring Cave #3"},
+{"name": "Route 3 - Item from pokémon breeder Adelaide"},
+{"name": "Route 3 - Item from pokémon breeder Galen"},
+{"name": "Route 3 - North item"},
+{"name": "Route 3 - North west item"},
+{"name": "Route 3 - South east or west hidden item"},
+{"name": "Route 3 - South item"},
+{"name": "Route 3 - South west item"},
+{"name": "Route 3 - West item #1"},
+{"name": "Route 3 - West item #2"},
+{"name": "Route 3 or Dreamyard - Hidden item in sandbox or behind traffic cone"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 431,
+                "y": 236
+            }
+        ]
+    },
+    {
+        "name": "Route 4",
+        "sections": [
+{"name": "Route 4 - Central hidden item"},
+{"name": "Route 4 - Hidden item near buildings #1"},
+{"name": "Route 4 - Hidden item near buildings #2"},
+{"name": "Route 4 - Item from Professor Juniper #1"},
+{"name": "Route 4 - Item from Professor Juniper #10"},
+{"name": "Route 4 - Item from Professor Juniper #2"},
+{"name": "Route 4 - Item from Professor Juniper #3"},
+{"name": "Route 4 - Item from Professor Juniper #4"},
+{"name": "Route 4 - Item from Professor Juniper #5"},
+{"name": "Route 4 - Item from Professor Juniper #6"},
+{"name": "Route 4 - Item from Professor Juniper #7"},
+{"name": "Route 4 - Item from Professor Juniper #8"},
+{"name": "Route 4 - Item from Professor Juniper #9"},
+{"name": "Route 4 - Item north east of parasol lady"},
+{"name": "Route 4 - Item south west of parasol lady"},
+{"name": "Route 4 - North east hidden item"},
+{"name": "Route 4 - North east item in sandy area"},
+{"name": "Route 4 - North west item"},
+{"name": "Route 4 - South east item in sandy area"},
+{"name": "Route 4 - South item"},
+{"name": "Route 4 - South west hidden item"},
+{"name": "Route 4 - South west item in sandy area"},
+{"name": "Route 4 - TM from worker in northern building"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 264,
+                "y": 228
+            }
+        ]
+    },
+    {
+        "name": "Route 5",
+        "sections": [
+{"name": "Route 5 - Item near ledge"},
+{"name": "Route 5 - North east item"},
+{"name": "Route 5 - North west item"},
+{"name": "Route 5 - South west item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 240,
+                "y": 182
+            }
+        ]
+    },
+    {
+        "name": "Route 6",
+        "sections": [
+{"name": "Route 6 - East hidden item"},
+{"name": "Route 6 - Hidden item behind Season Research Lab #1"},
+{"name": "Route 6 - Hidden item behind Season Research Lab #2"},
+{"name": "Route 6 - Item from child in western house"},
+{"name": "Route 6 - Item from ranger Richard"},
+{"name": "Route 6 - Item from ranger Shanti"},
+{"name": "Route 6 - Item from scientist for all Deerling forms"},
+{"name": "Route 6 - Item next to Season Research Lab"},
+{"name": "Route 6 - Item south of Season Research Lab"},
+{"name": "Route 6 - North east item"},
+{"name": "Route 6 - South item"},
+{"name": "Route 6 - TM from Clay"},
+{"name": "Route 6 - West item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 113,
+                "y": 160
+            }
+        ]
+    },
+    {
+        "name": "Route 7",
+        "sections": [
+{"name": "Route 7 - East item"},
+{"name": "Route 7 - Item from ranger Mary"},
+{"name": "Route 7 - Item from ranger Pedro"},
+{"name": "Route 7 - Item south east of Celestial Tower"},
+{"name": "Route 7 - Item south of Celestial Tower"},
+{"name": "Route 7 - South item"},
+{"name": "Route 7 - TM from battle girl"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 102,
+                "y": 118
+            }
+        ]
+    },
+    {
+        "name": "Route 8",
+        "sections": [
+{"name": "Route 8 - Center item"},
+{"name": "Route 8 - East hidden item"},
+{"name": "Route 8 - East item"},
+{"name": "Route 8 - Item from Bianca"},
+{"name": "Route 8 - Item from eastern parasol lady"},
+{"name": "Route 8 - Item from ranger Annie"},
+{"name": "Route 8 - Item from ranger Lewis"},
+{"name": "Route 8 - Item near northern lake"},
+{"name": "Route 8 - North west item"},
+{"name": "Route 8 - TM from western parasol lady"},
+{"name": "Route 8 - West hidden item (Spring/Summer/Autumn)"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 174,
+                "y": 86
+            }
+        ]
+    },
+    {
+        "name": "Route 9",
+        "sections": [
+{"name": "Route 9 - Hidden item near Challenger's Cave"},
+{"name": "Route 9 - Hidden item on road"},
+{"name": "Route 9 - Item near Challenger's Cave #1"},
+{"name": "Route 9 - Item near Challenger's Cave #2"},
+{"name": "Route 9 - TM from infielder"},
+{"name": "Shopping Mall Nine - Item from worker"},
+{"name": "Shopping Mall Nine - Item in storage room"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 244,
+                "y": 86
+            }
+        ]
+    },
+    {
+        "name": "Skyarrow Bridge",
+        "sections": [
+{"name": "Skyarrow Bridge - Item from hiker in gate"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 314,
+                "y": 245
+            }
+        ]
+    },
+    {
+        "name": "Striaton City",
+        "sections": [
+{"name": "Striaton City - Garden item"},
+{"name": "Striaton City - Item from Amanita"},
+{"name": "Striaton City - Item from boy in Trainer's School"},
+{"name": "Striaton City - Item from Cheren #1"},
+{"name": "Striaton City - Item from Cheren #2"},
+{"name": "Striaton City - Item from Cheren #3"},
+{"name": "Striaton City - Item from fisherman"},
+{"name": "Striaton City - Item from man in south east building"},
+{"name": "Striaton City - Item from roughneck"},
+{"name": "Striaton City - North west hidden item #1"},
+{"name": "Striaton City - North west hidden item #2"},
+{"name": "Striaton City - South item"},
+{"name": "Striaton City - TM from Fennel"},
+{"name": "Striaton Gym - Badge reward"},
+{"name": "Striaton Gym - Gym guide item"},
+{"name": "Striaton Gym - TM reward"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 456,
+                "y": 236
+            }
+        ]
+    },
+    {
+        "name": "Tubeline Bridge",
+        "sections": [
+{"name": "Tubeline Bridge - TM from battle girl"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 208,
+                "y": 82
+            }
+        ]
+    },
+    {
+        "name": "Twist Mountain",
+        "sections": [
+{"name": "Twist Mountain - Item from worker near ice rock cave"},
+{"name": "Twist Mountain - Item near ice rock"},
+{"name": "Twist Mountain - Lower floor little east cave item (Winter)"},
+{"name": "Twist Mountain - Lower floor north west cave hidden item (Spring/Summer/Autumn)"},
+{"name": "Twist Mountain - Lower floor north west cave item (Spring/Summer/Autumn)"},
+{"name": "Twist Mountain - Main floor east hidden item (Winter)"},
+{"name": "Twist Mountain - Main floor east item"},
+{"name": "Twist Mountain - Main floor north hidden item #1 (Winter)"},
+{"name": "Twist Mountain - Main floor north hidden item #2 (Winter)"},
+{"name": "Twist Mountain - Main floor north west item"},
+{"name": "Twist Mountain - Main floor south item"},
+{"name": "Twist Mountain - Main floor west item"},
+{"name": "Twist Mountain - Middle floor east cave hidden item"},
+{"name": "Twist Mountain - Middle floor north cave item (Winter)"},
+{"name": "Twist Mountain - Middle floor west cave hidden item #1"},
+{"name": "Twist Mountain - Middle floor west cave hidden item #2"},
+{"name": "Twist Mountain - Middle floor west cave item #1"},
+{"name": "Twist Mountain - Middle floor west cave item #2"},
+{"name": "Twist Mountain - Outside hidden item"},
+{"name": "Twist Mountain - TM from Alder"},
+{"name": "Twist Mountain - Upper floor north east cave hidden item"},
+{"name": "Twist Mountain - Upper floor north east cave item"},
+{"name": "Twist Mountain - Upper floor south east cave hidden item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 144,
+                "y": 110
+            }
+        ]
+    },
+    {
+        "name": "Twist Mountain - Inside",
+        "sections": [
+{"name": "Twist Mountain - Item from worker near ice rock cave"},
+{"name": "Twist Mountain - Item near ice rock"},
+{"name": "Twist Mountain - Lower floor little east cave item (Winter)"},
+{"name": "Twist Mountain - Lower floor north west cave hidden item (Spring/Summer/Autumn)"},
+{"name": "Twist Mountain - Lower floor north west cave item (Spring/Summer/Autumn)"},
+{"name": "Twist Mountain - Main floor east hidden item (Winter)"},
+{"name": "Twist Mountain - Main floor east item"},
+{"name": "Twist Mountain - Main floor north hidden item #1 (Winter)"},
+{"name": "Twist Mountain - Main floor north hidden item #2 (Winter)"},
+{"name": "Twist Mountain - Main floor north west item"},
+{"name": "Twist Mountain - Main floor south item"},
+{"name": "Twist Mountain - Main floor west item"},
+{"name": "Twist Mountain - Middle floor east cave hidden item"},
+{"name": "Twist Mountain - Middle floor north cave item (Winter)"},
+{"name": "Twist Mountain - Middle floor west cave hidden item #1"},
+{"name": "Twist Mountain - Middle floor west cave hidden item #2"},
+{"name": "Twist Mountain - Middle floor west cave item #1"},
+{"name": "Twist Mountain - Middle floor west cave item #2"},
+{"name": "Twist Mountain - Upper floor north east cave hidden item"},
+{"name": "Twist Mountain - Upper floor north east cave item"},
+{"name": "Twist Mountain - Upper floor south east cave hidden item"}
+        ],
+        "map_locations": [
+            {
+                "map": "icirruscity",
+                "x": 166,
+                "y": 774
+            },
+            {
+                "map": "twistmountainoutside",
+                "x": 200,
+                "y": 166
+            }
+        ]
+    },
+    {
+        "name": "Undella Bay",
+        "sections": [
+{"name": "Undella Bay - Hidden item on western shore #1"},
+{"name": "Undella Bay - Hidden item on western shore #2"},
+{"name": "Undella Bay - North hidden item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 473,
+                "y": 136
+            }
+        ]
+    },
+    {
+        "name": "Undella Bay + Abyssal Ruins",
+        "sections": [
+{"name": "Undella Bay - Hidden item on western shore #1"},
+{"name": "Undella Bay - Hidden item on western shore #2"},
+{"name": "Undella Bay - North hidden item"},
+
+{"name": "Abyssal Ruins 1F Center - East item"},
+{"name": "Abyssal Ruins 1F Center - North item"},
+{"name": "Abyssal Ruins 1F East - Item near center"},
+{"name": "Abyssal Ruins 1F East - Kinda south item"},
+{"name": "Abyssal Ruins 1F East - North item #1"},
+{"name": "Abyssal Ruins 1F East - North item #2"},
+{"name": "Abyssal Ruins 1F East - South item"},
+{"name": "Abyssal Ruins 1F East - West item"},
+{"name": "Abyssal Ruins 1F North - East item"},
+{"name": "Abyssal Ruins 1F North - Item east of entrance"},
+{"name": "Abyssal Ruins 1F North - Item north of center"},
+{"name": "Abyssal Ruins 1F North - Item west of entrance"},
+{"name": "Abyssal Ruins 1F North - West item"},
+{"name": "Abyssal Ruins 1F South - East item"},
+{"name": "Abyssal Ruins 1F South - Item near entrance"},
+{"name": "Abyssal Ruins 1F South - North item #1"},
+{"name": "Abyssal Ruins 1F South - North item #2"},
+{"name": "Abyssal Ruins 1F South - North west item #1"},
+{"name": "Abyssal Ruins 1F South - North west item #2"},
+{"name": "Abyssal Ruins 1F South - West item"},
+{"name": "Abyssal Ruins 1F West - East item"},
+{"name": "Abyssal Ruins 1F West - North item #1"},
+{"name": "Abyssal Ruins 1F West - North item #2"},
+{"name": "Abyssal Ruins 1F West - South east item #1"},
+{"name": "Abyssal Ruins 1F West - South east item #2"},
+{"name": "Abyssal Ruins 1F West - South item"},
+{"name": "Abyssal Ruins 2F - East item"},
+{"name": "Abyssal Ruins 2F - Item north east of center"},
+{"name": "Abyssal Ruins 2F - Item south east of center"},
+{"name": "Abyssal Ruins 2F - Item west of center"},
+{"name": "Abyssal Ruins 2F - Kinda north east item"},
+{"name": "Abyssal Ruins 2F - Kinda north item"},
+{"name": "Abyssal Ruins 2F - Kinda north west item"},
+{"name": "Abyssal Ruins 2F - Kinda south west item"},
+{"name": "Abyssal Ruins 2F - North west item"},
+{"name": "Abyssal Ruins 2F - South east item"},
+{"name": "Abyssal Ruins 2F - South west item"},
+{"name": "Abyssal Ruins 3F - Center item"},
+{"name": "Abyssal Ruins 3F - East item"},
+{"name": "Abyssal Ruins 3F - Item south of center"},
+{"name": "Abyssal Ruins 3F - Kinda north east item"},
+{"name": "Abyssal Ruins 3F - North east item"},
+{"name": "Abyssal Ruins 3F - North west item"},
+{"name": "Abyssal Ruins 3F - South west item"},
+{"name": "Abyssal Ruins 3F - West item"},
+{"name": "Abyssal Ruins 4F - Item"}
+        ],
+        "map_locations": [
+            {
+                "map": "undellatown",
+                "x": 1008,
+                "y": 267
+            }
+        ]
+    },
+    {
+        "name": "Undella Town",
+        "sections": [
+{"name": "Undella Town - Behind the hedges of The Riches' Mansion"},
+{"name": "Undella Town - Item from man in Pokémon Center"},
+{"name": "Undella Town - TM from girl"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 448,
+                "y": 134
+            }
+        ]
+    },
+    {
+        "name": "Victory Road",
+        "sections": [
+{"name": "Victory Road 1F - Center cavern item"},
+{"name": "Victory Road 1F - Eastern cavern item"},
+{"name": "Victory Road 1F - Western cavern hidden item #1"},
+{"name": "Victory Road 1F - Western cavern hidden item #2"},
+{"name": "Victory Road 2F - Eastern cavern hidden item"},
+{"name": "Victory Road 3F - Middle cavern hidden item"},
+{"name": "Victory Road 3F - Western cavern item"},
+{"name": "Victory Road 4F - Eastern cavern hidden item #1"},
+{"name": "Victory Road 4F - Eastern cavern hidden item #2"},
+{"name": "Victory Road 4F - Western cavern hidden item"},
+{"name": "Victory Road 4F - Western cavern item"},
+{"name": "Victory Road Outside - Item #1"},
+{"name": "Victory Road Outside - Item #2"},
+{"name": "Victory Road Outside - Item #3"},
+{"name": "Victory Road Outside - Item #4"},
+{"name": "Victory Road Outside - Item #5"},
+{"name": "Victory Road Outside - Item #6"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 326,
+                "y": 48
+            },
+            {
+                "map": "route10",
+                "x": 1160,
+                "y": 156
+            }
+        ]
+    },
+    {
+        "name": "Village Bridge",
+        "sections": [
+{"name": "Village Bridge - Hidden item in trash can"},
+{"name": "Village Bridge - Item from baker Chris"},
+{"name": "Village Bridge - Item from fisherman for showing a certain pokémon #1"},
+{"name": "Village Bridge - Item from fisherman for showing a certain pokémon #2"},
+{"name": "Village Bridge - Item from fisherman for showing a certain pokémon #3"},
+{"name": "Village Bridge - Item from fisherman for showing a certain pokémon #4"},
+{"name": "Village Bridge - Item from fisherman for showing a certain pokémon #5"},
+{"name": "Village Bridge - Item on northern island"},
+{"name": "Village Bridge - Item on southern island"},
+{"name": "Village Bridge - North east hidden item #1"},
+{"name": "Village Bridge - North east hidden item #2"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 320,
+                "y": 82
+            }
+        ]
+    },
+    {
+        "name": "Wellspring Cave",
+        "sections": [
+{"name": "Wellspring Cave - 1F hidden item #1"},
+{"name": "Wellspring Cave - 1F hidden item #2"},
+{"name": "Wellspring Cave - 1F north east item"},
+{"name": "Wellspring Cave - 1F south item"},
+{"name": "Wellspring Cave - 1F west item"},
+{"name": "Wellspring Cave - B1F hidden item north west of trainers"},
+{"name": "Wellspring Cave - B1F hidden item south east of trainers"},
+{"name": "Wellspring Cave - B1F item east of trainers"},
+{"name": "Wellspring Cave - B1F item south of trainers"},
+{"name": "Wellspring Cave - B1F north hidden item"},
+{"name": "Wellspring Cave - B1F north item"},
+{"name": "Wellspring Cave - B1F south hidden item"},
+{"name": "Wellspring Cave - B1F south item"}
+        ],
+        "map_locations": [
+            {
+                "map": "overworld",
+                "x": 430,
+                "y": 220
+            },
+            {
+                "map": "route3",
+                "x": 22,
+                "y": 112
+            }
+        ]
+    }
+]

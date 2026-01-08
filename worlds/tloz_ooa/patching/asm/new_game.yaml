@@ -1,0 +1,113 @@
+# setting up a new file - this is done when link is dropped into the world, not
+# at actual file creation.
+
+03//initialGlobalFlags: |
+    db 0a,0c,1d,20,23,2b,33,3d,40,41,43,45,ff
+
+07/4195/startingBomb: db 00
+
+# set flags to skip opening and a bunch of other things. see doc/technical.md
+# for a dictionary of the flags.
+03//setInitialFlags: |
+    push hl
+
+    # global flags
+    ld hl,initialGlobalFlags
+    @loop:
+    ldi a,(hl)
+    cp $ff
+    jr z,@done
+    push hl
+    call setGlobalFlag
+    pop hl
+    jr @loop
+    @done:
+
+    # linked global flags
+    ld a,(wIsLinkedGame)
+    or a
+    jr z,@unlinked
+    ld a,$38
+    push hl
+    call setGlobalFlag
+    pop hl
+    @unlinked:
+
+    # animal vars
+    ld a,option.animalCompanion
+    ld (wAnimalRegion),a
+    cp $0c
+    jr nz,@notDimitri
+    ld a,$02
+    ld ($c737),a # disable SE nuun portal
+    @notDimitri:
+    ld a,$03
+    ld (wDimitriState),a
+    ld a,$ff
+    ld (wAnimalTutorialFlags),a
+    
+    ; Change seeds selected by default inside shooter and satchel
+    ld a,option.defaultSeedType - $20
+    ld hl,wSatchelSelectedSeeds
+    ldi (hl),a    ; Satchel initial selection
+    ld (hl),a     ; Slingshot initial selection
+
+    # maku tree state (vanished)
+    ld a,$01
+    ld (wMakuTreeState),a
+
+    # room flags 3 | 6 | 7
+    ld a,$c8
+    ld ($c739),a # big intro cutscene
+
+    # room flag 7
+    ld a,$80
+    ld ($c8bb),a # linked crescent island rosa encounter (1)
+
+    # room flags 5 | 6
+    ld a,$60
+    ld ($c8cb),a # linked crescent island rosa encounter (2)
+
+    # room flag 6
+    ld a,$40
+    ld ($c703),a # d4 entrance (present)
+    ld ($c70a),a # d5 entrance
+    ld ($c72e),a # inside graveyard poe's grave
+    ld ($c73a),a # nayru's house
+    ld ($c759),a # triangle stone
+    ld ($c76a),a # first encounter with impa
+    ld ($c77a),a # start
+    ld ($c77b),a # graveyard kids
+    ld ($c77c),a # graveyard poe
+    ld ($c78d),a # d1 entrance
+    ld ($c790),a # d7 entrance
+    ld ($c7ba),a # d3 entrance
+    ld ($c80f),a # d6 entrance (past)
+    ld ($c820),a # ralph encounter on talus peaks
+    ld ($c85c),a # d8 entrance
+    ld ($c883),a # d2 entrance (past)
+    ld ($c897),a # ralph encounter near rafton
+    ld ($c9f6),a # top of black tower, south of stairs
+
+    # room flag 3
+    ld a,$08
+    ld ($c725),a # foreman
+    ld ($c813),a # symmetry city "middle house"
+
+    # room flag 0
+    ld a,$01
+    ld ($c738),a # maku tree (present)
+    ld ($c876),a # black tower entrance
+
+    # give L-3 ring box
+    ld a,$10
+    ld ($c69f),a # treasure flag
+    ld a,$03
+    ld (wRingBoxLevel),a
+
+    ld a,GLOBALFLAG_WON_FAIRY_HIDING_GAME
+    call setGlobalFlag
+
+    pop hl
+    ret
+03/6e97/: jp setInitialFlags

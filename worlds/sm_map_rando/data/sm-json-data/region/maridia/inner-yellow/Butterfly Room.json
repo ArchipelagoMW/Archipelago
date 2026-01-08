@@ -1,0 +1,902 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 213,
+  "name": "Butterfly Room",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Yellow",
+  "roomAddress": "0x7D5EC",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a750",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001a75c",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "locks": [
+        {
+          "name": "Butterfly Room Gray Lock (to West Cactus Alley)",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedDraygon"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Sand Entrance",
+      "nodeType": "entrance",
+      "nodeSubType": "sandpit",
+      "doorOrientation": "up",
+      "mapTileMask": [
+        [2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Butterfly Room Right Zoas",
+      "enemyName": "Zoa",
+      "quantity": 2,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Butterfly Room Left Zoa",
+      "enemyName": "Zoa",
+      "quantity": 1,
+      "homeNodes": [1]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {
+          "id": 1,
+          "note": "When entering the room from above, fall to either side and avoid the sand, as it may lead to a softlock. It's best not to turn around during the fall."
+        },
+        {
+          "id": 2,
+          "note": "When entering the room from above, fall to either side and avoid the sand, as it may lead to a softlock. It's best not to turn around during the fall."
+        }
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Zoa",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"or": [
+          "h_trickyFrozenEnemyRunway",
+          {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "Freeze the Zoa just a few pixels higher than it would be if Samus was standing next to the farm.",
+        "Dodge and freeze the other Zoas, or tank a hit then kill them and don't collect their drops.",
+        "Maintain a half-tile runway between the frozen Zoa and the runway in order to extend it as much as possible."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": "Max extra run speed $1.2"
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Zoa Farm (From Ledge)",
+      "requires": [
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 180}
+          ]},
+          {"and": [
+            {"cycleFrames": 300},
+            {"or": [
+              "Spazer",
+              "Wave",
+              "Plasma",
+              "canDodgeWhileShooting",
+              {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 1}}
+            ]}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Zoa", "count": 3}]
+    },
+    {
+      "id": 36,
+      "link": [1, 1],
+      "name": "Door Lock Wall Ice Clip",
+      "requires": [
+        {"notable": "Door Lock Wall Ice Clip"},
+        "h_navigateUnderwater",
+        "canWallIceClip",
+        "Wave",
+        {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 2}}
+      ],
+      "bypassesDoorShell": true,
+      "note": "Repeatedly freeze the Zoas to slowly push Samus into the wall and through the locked doorway.",
+      "devNote": "The drops will keep Samus at high energy, but 2 hits enemy damage were added as a worst-case scenario where the next-to-last Zoa you kill doesn't give you energy."
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Zoa",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Gravity",
+          "HiJump"
+        ]}
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Frozen Zoa Bridge",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies",
+        "canPlayInSand"
+      ],
+      "note": "Use the frozen Zoas as a bridge. Falling will require Samus to use ice beam and a crouch jump to escape."
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Suitless Bombs",
+      "requires": [
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "h_useMorphBombs"
+      ],
+      "note": "It is relatively easy to get out of the sand by rapidly placing bombs."
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Doorway Jump or Precise Jump",
+      "requires": [
+        {"notable": "Doorway Jump or Precise Jump"},
+        "canSuitlessMaridia",
+        "canCarefulJump",
+        {"or": [
+          {"doorUnlockedAtNode": 1},
+          "canTrickyJump"
+        ]},
+        "canPlayInSand"
+      ],
+      "note": [
+        "Kill all the Zoas and don't pick up their drops. If the door is unlocked, stand in the doorframe and jump across the room.",
+        "Otherwise, jump across the sand, starting 1.5 tiles away from the sandfall. Hold jump and forward the whole time. Samus will dip into the sand, but still make it to the other side."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Suitless Sand Escape (Left to Right)",
+      "requires": [
+        "h_crouchJumpDownGrab",
+        "canEscapeSand"
+      ],
+      "note": [
+        "It is possible to get out of the sand with nothing.",
+        "While holding down, crouch jump then press forward diagonal to clip into the wall enough to jump out."
+      ],
+      "devNote": "This will never be in logic because there are easier ways to cross the room, but can be used to escape the sand."
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 22, "excessFrames": 11}}
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Cross Room Jump with Bomb Boost",
+      "entranceCondition": {
+        "comeInWithBombBoost": {}
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "Only requires a runway of approximately 0.5 tiles in the adjacent room.",
+        "Bomb boost through the doorway and hold right."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 38,
+      "link": [1, 2],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 39,
+      "link": [1, 2],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 10},
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shinespark": {"frames": 21, "excessFrames": 0}}
+          ]},
+          {"shinespark": {"frames": 23, "excessFrames": 0}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "This requires jumping through the door, but we don't use 'comeInShinechargedJumping' because it's not required to come from an air environment.",
+        "FIXME: clean up the way this kind of cross-room movement is expressed."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Gravity",
+          "HiJump"
+        ]}
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Frozen Zoa Bridge",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies",
+        "canPlayInSand"
+      ],
+      "note": "Use the frozen Zoas as a bridge. Falling will require Samus to use ice beam and a crouch jump to escape."
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Suitless Bombs",
+      "requires": [
+        "canSuitlessMaridia",
+        "h_useMorphBombs",
+        "canPlayInSand"
+      ],
+      "note": "It is relatively easy to get out of the sand with rapidly placing bombs."
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Doorway Jump or Precise Jump",
+      "requires": [
+        {"notable": "Doorway Jump or Precise Jump"},
+        "canSuitlessMaridia",
+        "canCarefulJump",
+        {"or": [
+          {"doorUnlockedAtNode": 2},
+          "canTrickyJump"
+        ]},
+        "canPlayInSand"
+      ],
+      "note": [
+        "Kill all the Zoas and don't pick up their drops. If the door is unlocked, stand in the doorframe and jump across the room.",
+        "Otherwise, jump across the sand, starting 1.5 tiles away from the sandfall. Hold jump and forward the whole time. Samus will dip into the sand, but still make it to the other side."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Suitless Sand Escape (Right to Left)",
+      "requires": [
+        "h_crouchJumpDownGrab",
+        "canEscapeSand"
+      ],
+      "note": [
+        "It is possible to get out of the sand with nothing.",
+        "While holding down, crouch jump then press forward diagonal to clip into the wall enough to jump out."
+      ],
+      "devNote": "This will never be in logic because there are easier ways to cross the room, but can be used to escape the sand."
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 22, "excessFrames": 11}}
+      ]
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Cross Room Jump with Bomb Boost",
+      "entranceCondition": {
+        "comeInWithBombBoost": {}
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "Only requires a runway of approximately 0.5 tiles in the adjacent room.",
+        "Bomb boost through the doorway and hold left."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 105}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 41,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 42,
+      "link": [2, 1],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 10},
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shinespark": {"frames": 21, "excessFrames": 0}}
+          ]},
+          {"shinespark": {"frames": 23, "excessFrames": 0}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "This requires jumping through the door, but we don't use 'comeInShinechargedJumping' because it's not required to come from an air environment.",
+        "FIXME: clean up the way this kind of cross-room movement is expressed."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 28,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 29,
+      "link": [2, 2],
+      "name": "Leave With Runway - Frozen Zoa",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"or": [
+          "h_trickyFrozenEnemyRunway",
+          {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "Freeze the Zoa just a few pixels higher than it would be if Samus was standing next to the farm.",
+        "Dodge and freeze the other Zoas, or tank a hit then kill them and don't collect their drops.",
+        "Maintain a half-tile runway between the frozen Zoa and the runway in order to extend it as much as possible."
+      ]
+    },
+    {
+      "id": 46,
+      "link": [2, 2],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": "Max extra run speed $1.2"
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Zoa Farm (From Ledge)",
+      "requires": [
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 180}
+          ]},
+          {"and": [
+            {"cycleFrames": 270},
+            {"or": [
+              "Spazer",
+              "Wave",
+              "Plasma",
+              "canDodgeWhileShooting",
+              {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 1}}
+            ]}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Zoa", "count": 3}]
+    },
+    {
+      "id": 47,
+      "link": [2, 2],
+      "name": "Zoa Farm (In Sand, Strong Weapon)",
+      "requires": [
+        {"or": [
+          "HiJump",
+          "Gravity",
+          "canEscapeSand"
+        ]},
+        {"or": [
+          "Spazer",
+          "Wave",
+          "Plasma",
+          "Grapple",
+          {"and": [
+            "Gravity",
+            "ScrewAttack",
+            {"cycleFrames": 30}
+          ]}
+        ]},
+        {"or": [
+          "canDodgeWhileShooting",
+          {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 1}}
+        ]},
+        {"cycleFrames": 130}
+      ],
+      "farmCycleDrops": [{"enemy": "Zoa", "count": 3}]
+    },
+    {
+      "id": 48,
+      "link": [2, 2],
+      "name": "Zoa Farm (In Sand, Power Beam)",
+      "requires": [
+        {"or": [
+          "HiJump",
+          "Gravity",
+          "canEscapeSand"
+        ]},
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 1}}
+        ]},
+        {"cycleFrames": 165}
+      ],
+      "farmCycleDrops": [{"enemy": "Zoa", "count": 3}]
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Door Lock Wall Ice Clip",
+      "requires": [
+        {"notable": "Door Lock Wall Ice Clip"},
+        "h_navigateUnderwater",
+        "canWallIceClip",
+        "Wave",
+        {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 2}}
+      ],
+      "bypassesDoorShell": true,
+      "note": "Repeatedly freeze the Zoas to slowly push Samus into the wall and through the locked doorway.",
+      "devNote": "The drops will keep Samus at high energy, but 2 hits enemy damage were added as a worst-case scenario where the next-to-last Zoa you kill doesn't give you energy."
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Zoa",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 34,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_navigateUnderwater",
+          "HiJump"
+        ]}
+      ]
+    },
+    {
+      "id": 43,
+      "link": [3, 1],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 20},
+        {"shinespark": {"frames": 15, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: A 'Carry Shinecharge' version is possible but we need to model which side of the transition Samus enters through.",
+        "FIXME: Model that Samus must be in a jumping (vs. falling) state, in order to be able to spark mid-air."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_navigateUnderwater",
+          "HiJump"
+        ]}
+      ]
+    },
+    {
+      "id": 44,
+      "link": [3, 2],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 20},
+        {"shinespark": {"frames": 15, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: A 'Carry Shinecharge' version is possible but we need to model which side of the transition Samus enters through.",
+        "FIXME: Model that Samus must be in a jumping (vs. falling) state, in order to be able to spark mid-air."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Doorway Jump or Precise Jump",
+      "note": [
+        "Kill all the Zoas and don't pick up their drops. If the door is unlocked, stand in the doorframe and jump across the room.",
+        "Otherwise, jump across the sand, starting 1.5 tiles away from the sandfall. Hold jump and forward the whole time. Samus will dip into the sand, but still make it to the other side."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Door Lock Wall Ice Clip",
+      "note": "Repeatedly freeze the Zoas to slowly push Samus into the wall and through the locked doorway."
+    }
+  ],
+  "nextStratId": 49,
+  "nextNotableId": 3
+}

@@ -1,0 +1,86 @@
+# Edit interaction7f_subid00 state0 to spawn a treasure interaction instead of giving
+# essence graphics to the INTERACID_ESSENCE interaction.
+09/4a13/: |
+    ld hl,@essenceLocationsTable
+    rst 18  ; rst_addDoubleIndex
+    ld b,(hl)
+    inc hl
+    ld c,(hl)
+    
+    call getFreeInteractionSlot
+    ret nz
+    ld (hl),INTERACID_TREASURE
+    inc l
+    ld (hl),b
+    inc l
+    ld (hl),c
+    ld l,$71
+    ld (hl),COLLECT_PICKUP
+    call objectCopyPosition
+    ret
+    
+    @essenceLocationsTable:
+    dwbe locations.essenceD1
+    dwbe locations.essenceD2
+    dwbe locations.essenceD3
+    dwbe locations.essenceD4
+    dwbe locations.essenceD5
+    dwbe locations.essenceD6
+    dwbe locations.essenceD7
+    dwbe locations.essenceD8
+
+# Replace  "ld e,Interaction.zh  ;  ld (de),a" by a custom function applying the same kind of effect,
+# but on the remote-controlled treasure instead
+09//applyFloatingEffect: |
+    push hl
+    ld b,a
+    call findTreasure
+    ld l,$4f   ; z position
+    ld (hl),b
+    ld l,$5a
+    ld (hl),$c0     ; Highest priority to be drawn in front of the glow effect
+    pop hl
+    ret
+09/4a56/: call applyFloatingEffect
+
+# Lower the speed at which the item travels to the player (from SPEED_80 to SPEED_20)
+09/4a8c/: db $05
+# Make the position of the treasure follow the position of the INTERACID_ESSENCE invisible object, and skip a few
+# states once the treasure is collected
+09/4ab6/: |
+    ld c,$04
+    call $1f04  ;  objectUpdateSpeedZ_paramC
+    call findTreasure
+    jr nc,@treasureCollected
+    call objectCopyPosition
+    ret
+
+    @treasureCollected:
+    ; Make Link face down
+    ld a,$02
+    ld ($d008),a
+    ; Switch to "swirl" cutscene
+    call interactionIncState
+    call interactionIncState
+    jp interactionIncState
+
+# Make the glow disappear once treasure has been collected
+09//stopFlickerOnTreasureCollection: |
+    push hl
+    call findTreasure
+    pop hl
+    jr nc,@treasureCollected
+    ; Repeat instructions overwritten by call
+    ld a,$80
+    xor (hl)
+    ret
+    
+    @treasureCollected:
+    ; Treasure was collected, hide the flickering glow
+    xor a
+    ld l,$40
+    ret
+09/4bc1/: call stopFlickerOnTreasureCollection
+
+# Replace the sound when getting an essence from "MUS_GET_ESSENCE" to "SND_GETITEM"
+3f/6ced/: db $4c ; SND_GETITEM

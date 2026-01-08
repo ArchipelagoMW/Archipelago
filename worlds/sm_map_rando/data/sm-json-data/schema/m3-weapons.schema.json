@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/vg-json-data/sm-json-data/master/schema/m3-weapons.schema.json",
+  "type": "object",
+  "title": "Super Metroid Weapon Schema",
+  "properties": {
+    "weapons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "title": "Weapon Object",
+        "description": "An object that describes a Super Metroid weapon. Each beam combo variation (including charged and chargeless variations) counts as one weapon.",
+        "required": [
+          "id",
+          "name",
+          "damage",
+          "cooldownFrames",
+          "useRequires",
+          "situational",
+          "hitsGroup",
+          "categories"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Weapon ID",
+            "description": "Numerical identifier for this weapon, unique across the entire game",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "name": {
+            "type": "string",
+            "title": "Weapon Name",
+            "description": "A name for the weapon, intended to be used as a recognizable ID. This is often the same as an associated item, but doesn't have to be.",
+            "default": "",
+            "examples": [
+              "Missile"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "damage": {
+            "type": "integer",
+            "title": "Base Weapon Damage",
+            "description": "Amount of damage the weapon inflicts on an enemy with no weakness or resistance to it",
+            "default": 0,
+            "examples": [
+              50
+            ]
+          },
+          "cooldownFrames": {
+            "type": "integer",
+            "title": "Cooldown Frames",
+            "description": "Number of frames Samus has to wait before the weapon can be used again",
+            "default": 0,
+            "examples": [
+              60
+            ]
+          },
+          "useRequires": {
+            "$ref" : "m3-requirements.schema.json#/definitions/logicalRequirements",
+            "title": "Weapon Use Requirements",
+            "description": "Equipment, tech, and flag requirements that are needed to be able to use this weapon"
+          },
+          "shotRequires": {
+            "$ref" : "m3-requirements.schema.json#/definitions/logicalRequirements",
+            "title": "Weapon Shot Requirements",
+            "description": "Additional Equipment, tech, and flag requirements that are needed, on top of the use requirements, for every shot fired with this weapon."
+          },
+          "situational": {
+            "type": "boolean",
+            "title": "Situational",
+            "description": "If true, this weapon's usability depends on situational things, such as room layout. If false, this weapon is always usable when its requirements are met.",
+            "default": false
+          },
+          "hitsGroup": {
+            "type": "boolean",
+            "title": "Hits Group",
+            "description": "If true, this weapon hits an entire group of enemies with every shot. Only likely to be relevant for weapons with ammo costs.",
+            "default": false
+          },
+          "categories": {
+            "type": [
+              "array"
+            ],
+            "title": "Weapon Categories",
+            "description": "An array of categories that apply to this weapon. Useful for grouping weapons together in an enemy's weaknesses or invulnerabilities",
+            "items": {
+              "type": "string",
+              "enum": [
+                "All",
+                "Beam",
+                "ChargedBeam",
+                "UnchargedBeam",
+                "UnchargedSpazerBeam",
+                "UnchargedIceBeam",
+                "BeamNoPlasma",
+                "UnchargedBeamNoPlasma",
+                "PowerBombBlast",
+                "SpecialBeamAttack"
+              ],
+              "title": "Weapon Category"
+            }
+          },
+          "note": {
+            "$ref" : "m3-note.schema.json#/definitions/note"
+          },
+          "devNote": {
+            "$ref" : "m3-note.schema.json#/definitions/devNote"
+          }
+        }
+      }
+    }
+  }
+}

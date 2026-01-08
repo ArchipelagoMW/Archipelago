@@ -1,0 +1,479 @@
+0b/6a6c/: dwbe locations.hollyGift
+0b/64cc/: dwbe locations.blainoPrize
+09/660f/: dw locations.underwaterItemBelowNatzuBridge
+09/6281/: dw locations.floodgateKeeperHouse
+09/66c6/: dw locations.springBananaTree
+09/62a3/: dw locations.goronMountainPits
+0b/7332/: dwbe locations.oldManInTreehouse
+0b/6418/: dwbe locations.lostWoodsPedestal
+08/4ce4/: dwbe locations.syrupShop1
+08/4ce0/: dwbe locations.syrupShop2
+08/4ce2/: dwbe locations.syrupShop3
+08/4cd6/: dwbe locations.horonShop1
+08/4cd4/: dwbe locations.horonShop2
+08/4cd0/: dwbe locations.horonShop3
+08/4cce/: dwbe locations.memberShop1
+08/4cd2/: dwbe locations.memberShop2
+08/4cd8/: dwbe locations.memberShop3
+08/4cea/: dwbe locations.advanceShop1
+08/4cec/: dwbe locations.advanceShop2
+08/4cee/: dwbe locations.advanceShop3
+0b/4fc5/: dwbe locations.towerOfWinter
+0b/4fb9/: dwbe locations.towerOfSummer
+0b/4fb5/: dwbe locations.towerOfSpring
+0b/4fc1/: dwbe locations.towerOfAutumn
+0b/6646/: dwbe locations.subrosianDanceHall
+09/77da/: dwbe locations.subrosianMarket1
+09/77e2/: dwbe locations.subrosianMarket2
+09/77ee/: dwbe locations.subrosianMarket3
+09/77f2/: dwbe locations.subrosianMarket4
+09/77f4/: dwbe locations.subrosianMarket5
+09/66b1/: dw locations.d1Basement
+0b/4c0b/: dwbe locations.d4DiveSpot
+09/5051/: dwbe locations.d5ArmosChest
+0b/4c22/: dwbe locations.d5Basement
+09/5689/: dw locations.d7ArmosPuzzle
+0b/4fd5/: dwbe locations.mayorGift
+0b/5c1b/: dwbe locations.goronGift
+0b/5094/: dwbe locations.drLeftReward
+0b/50e3/: dwbe locations.malonTrade
+0b/5067/: dwbe locations.mrsRuulTrade
+14/4bda/: dwbe locations.subrosianChefTrade
+0b/61d3/: dwbe locations.biggoronTrade
+0b/6353/: dwbe locations.ingoTrade
+0b/5263/: dwbe locations.yellingOldManTrade
+0b/5f41/: dwbe locations.syrupTrade
+0b/521a/: dwbe locations.tickTockTrade
+0b/63e5/: dwbe locations.guruguruTrade
+
+# Seed trees (ID only as they can only receive seed items)
+0d/68fb/: db locations.horonVillageSeedTree.id - $20
+0d/68fe/: db locations.woodsOfWinterSeedTree.id - $20
+0d/6901/: db locations.northHoronSeedTree.id - $20
+0d/6904/: db locations.spoolSwampSeedTree.id - $20
+0d/6907/: db locations.sunkenCitySeedTree.id - $20
+0d/690a/: db locations.tarmRuinsSeedTree.id - $20
+
+# D0 end chest
+0a/7b90/: db locations.d0SwordChest.id
+0a/7b92/: db locations.d0SwordChest.subid
+
+# Temple of Seasons
+15/70ce/: db locations.templeOfSeasons.id
+15/70cc/: db locations.templeOfSeasons.subid
+
+# Samasa Desert Pit
+09/648c/: dw locations.samasaDesertPit
+0b/60b1/: db locations.samasaDesertPit.id
+
+# Maku Tree Gift
+15/613a/: db locations.makuTree.id
+15/613d/: db locations.makuTree.subid
+09/7e16/: db locations.makuTree.id
+09/7e19/: db locations.makuTree.subid
+
+# Diving spot outside D4
+0b/734e/: dwbe locations.divingSpotOutsideD4
+0b/7358/: dwbe locations.divingSpotOutsideD4
+
+##### SUBROSIA SEASIDE ########################################
+
+# Note for the future, INTERAC_DATING_ROSA_EVENT subid 2 is an interaction that follows the player until they leave the beach
+# (warp (can't find why) or walk to a room <60) and creates the treasure if the right tile is dug
+
+08/62a5/: |  # Replace "checkGlobalFlag" on GLOBALFLAG_STAR_ORE_FOUND
+    call getThisRoomFlags
+    bit 5,a
+
+08/62fd/checkGotBeachCheckInThisRoom: |  # Replace "call checkTreasureObtained"
+    call getThisRoomFlags
+    bit 5,a
+    db $20  ; Replace "jr c" by "jr nz"
+
+# Star Ore item doesn't get a subid in vanilla game, we need to optimize that procedure to be able to set one
+08/62e3/: |
+    jr z,$18
+    /copy s,$08,$22e4,$06
+    jr nz,$10
+    push bc
+    ld bc,locations.subrosiaSeaside
+    call createTreasure
+    pop bc
+
+08/630f/: |
+    ld hl,$c866
+    set 5,(hl)
+
+
+##### BOMB FLOWER ############################################
+
+09/4397/: call objectSetInvisible
+09/43be/: |
+    ld bc,locations.bombFlower
+    jp spawnTreasureOnLink
+
+# Remove the problematic check where Bomb Flower interaction is removed if you own
+# Bomb Flower (even in vanilla, this seems useless since the "GOT_ITEM" room flag
+# is checked first...)
+09/435c/: |
+    nop
+    nop
+    nop
+    nop
+    nop
+
+##### GOLDEN BEASTS OLD MAN ####################################
+
+# Make the golden beasts old man give a treasure instead of a ring
+15/6ad9/: |
+    ld bc,locations.goldenBeastsOldMan
+    jp spawnTreasureOnLink
+
+# Change the golden beasts old man requirement (both checked value and text)
+15/6acf/goldenBeastsRequirement: db option.goldenBeastsRequirement
+# Change the "jr z" into a "jr nc" to allow having more beasts killed than needed
+15/6ad2/: db $30
+
+
+##### TREEHOUSE OLD MAN ############################################
+
+# Change the essence requirement for treehouse old man
+0a/4f8b/: db option.treehouseOldManRequirement
+
+
+##### GREAT FURNACE ###############################################
+
+# Great Furnace location usually doesn't need a subID since it gives a Hard Ore with subid 0.
+# Change that to allow randomized items with nonzero subID.
+15//setHardOreIds: |
+    inc l
+    ld (hl),locations.greatFurnace.id
+    inc l
+    ld (hl),locations.greatFurnace.subid
+    ret
+15/5b83/: call setHardOreIds
+
+# 09/66ea/: dwbe locations.greatFurnace
+
+##### HARD ORE SMITHY ###############################################
+
+# Skip "has shield" check for forging hard ore
+0b/75c6/: db jumpifitemobtained,TREASURE_PUNCH
+
+# Rework of the "subrosianSmith_giveUpgradedShield" function to handle randomized
+# item and set a proper flag for client tracking
+15/62a7/: |
+    call getThisRoomFlags
+    set 6,(hl)      ; +0x40 on room flag
+    ld bc,locations.subrosianSmithyOre
+    jp spawnTreasureOnLink
+
+
+##### BELL SMITHY ###############################################
+
+# Remove the "post-endgame" discussion when no items are reforgeable (patch is changed by secret_locations.yaml)
+0b/7596/: dw $7598
+
+# The "secret checking" script space is free (from 2f611 to 2f622 included)
+0b/7611/reforgeRustyBell: |
+    db orroomflag,$80
+    db loseitem,TREASURE_RUSTY_BELL
+    db giveitem,locations.subrosianSmithyBell.id,locations.subrosianSmithyBell.subid
+    dwbe $75b6
+0b/75b3/: dwbe reforgeRustyBell
+
+
+##### TEMPLE OF SEASONS ##############################################
+
+# don't display normal fixed text for temple of seasons item.
+15/70be/: |
+    nop
+    nop
+    nop
+# rod cutscene
+15/70cf/: call giveTreasureCustom
+
+
+##### MASTER DIVER'S TRADE #########################################
+
+# Change Master Diver's condition from "has flippers" to "has obtained item"
+0b/72f0/: db jumpifroomflagset,$80
+# remove master's plaque from inventory to prevent confusion.
+0b//script_diverGiveItem: |
+    db giveitem, locations.masterPlaqueTrade.id, locations.masterPlaqueTrade.subid
+    db orroomflag,$80
+    db loseitem,TREASURE_MASTERS_PLAQUE
+    db retscript
+0b/730d/: |
+    db callscript
+    dw script_diverGiveItem
+
+
+##### MT CUCCO PLATFORM CAVE ########################################
+
+# mt. cucco platform cave item is normally created using ring-specific code.
+# values are replaced at randomization.
+09/641a/: |
+    ld bc,locations.mtCuccoPlatformCave
+    call createTreasure
+
+
+##### LOST WOODS PEDESTAL ###########################################
+
+# ignore sword level for lost woods pedestal.
+08/7e62/: ld a,$01
+# remove second sword (used to trigger spin slash) from lost woods script.
+0b/641a/: db retscript
+0b/6421/: db retscript
+
+# This function is written in place of @checkTransition and does all the work
+# in handling Lost Woods transitions, deciding in which room should the player
+# be warped and whether related counter should be incremented.
+# ----------------
+# in(C): room index to warp to if sequence is complete
+# in(DE): address to the transition counter
+# in(HL): address to expected transitions table
+# out(A): counter value
+# out(Z): set if transition is complete
+01/5e01/checkSpecialLostWoodsTransitions: |
+    ld a,(de)
+    rst 18      ; rst_addDoubleIndex
+    
+    ; Test the transition direction
+    ld b,(hl)   ; b <- expected direction
+    ld a,(wScreenTransitionDirection)
+    cp b
+    jr nz,@wrongTransition
+    
+    ; Test the transition season
+    inc hl
+    ld b,(hl)   ; b <- expected season
+    ld a,(wRoomStateModifier)
+    cp b
+    jr nz,@wrongTransition
+    
+    ; Successful transition, increment counter
+    ld a,(de)
+    cp $03
+    jr z,@complete
+      
+    ; On progress (not completion), increase counter and loop back to same room
+    inc a
+    ld (de),a               ; Update transition counter
+    ld (wCustomBuffer),a    ; Set some nonzero value in custom buffer to schedule the loopback
+    xor a                   ; Clear C flag to ensure we are testing the other sequence
+    ret
+    
+    ; On completion, warp to room in C and reset counter
+    @complete:
+    xor a
+    ld (de),a  ; Update transition counter
+    ld a,c
+    ld (wActiveRoom),a
+    scf  ; Set carry flag to indicate calling function we are overriding the destination
+    ret
+    	
+    ; Reset counter on wrong transition
+    @wrongTransition:
+    xor a
+    ld (de),a
+    ret
+
+# This function is written in the middle of @checkSwordUpgradeTransitions letting
+# some space before and after for safety
+01/5e48/checkNorthTransitions: |
+    ; Clear the custom buffer used to store whether we need to loopback to the same map for complex cases
+    ; (e.g. we are making progress in the sequence but transitioning to the right)
+    xor a
+    ld (wCustomBuffer),a
+    
+    ld de,wLostWoodsTransitionCounter1
+    ld hl,@northTransitions
+    ld c,$30
+    jp checkSpecialLostWoodsTransitions
+ 
+    @northTransitions:
+    /include lostWoodsMainSequence
+01/5dd3/: call checkNorthTransitions
+
+# This function is written in place of @checkSwordUpgradeTransitions
+01/5e31/checkPedestalTransitions: |
+    ld de,wLostWoodsTransitionCounter2
+    ld hl,@pedestalTransitions
+    ld c,$c9
+    call checkSpecialLostWoodsTransitions
+    ret c
+    ; Since this is the second function being called, check if something was store inside the custom buffer
+    ; to know if we need to force loopback before going back to vanilla code
+    jp enforceLoopbackOnProgress
+    
+    @pedestalTransitions:
+    /include lostWoodsPedestalSequence
+01/5dd7/: call checkPedestalTransitions
+
+# This function reads the custom buffer to enforce a loopback to the same room if some progress was made on one of the
+# sequences
+01//enforceLoopbackOnProgress: |
+    ld a,(wCustomBuffer)
+    or a
+    ret z
+    ld a,$40
+    ld (wActiveRoom),a
+    scf
+    ret
+
+##### HERO'S CAVE CHEST ############################################
+
+# stop hero's cave chest from giving a second sword that causes a spin slash.
+0a/7bb9/: |
+    db $00,$00,$00,$00,$00,$00,$00
+    db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    db $00
+
+
+##### SUBROSIAN HIDE AND SEEK ############################################
+
+# removes the event where the subrosians steal your feather.
+11/6f8c/: db $ff
+
+# set fixed items for the first dig and all subsequent digs
+15/5dd6/: |
+    ; First dig: put randomized item
+    ld bc,locations.subrosiaHideAndSeek
+    jr $25
+    ; Subsequent digs: put 50 Ore Chunks
+    ld bc,$3700
+    jr $20
+
+# allow to transition away from the screen even if the item is not dug
+09/659b/: |
+    xor a
+    ld ($ccab),a
+    jp interactionDelete
+
+
+##### VASU'S GIFT ###################################################
+
+# Vasu usually gives a ring, we need him to give a treasure instead
+15/49a6/: |
+    ld bc,locations.vasuGift
+    jp spawnTreasureOnLink
+
+
+##### LONELY GORON'S GIFT ###################################################
+
+# Instructions to remove most of the Goron's ring box upgrade script
+0b/5bff/: db $eb
+0b/5c00/: db $eb,$eb,$eb,$eb,$eb,$eb,$eb,$eb,$eb,$eb,$eb,$eb,$eb,$eb,$eb,$eb
+0b/5c10/: db $eb,$eb,$eb,$eb,$eb,$eb,$eb,$eb,$eb,$eb
+
+
+##### SUBROSIAN SIGN-LOVING GUY ########################################
+
+# Edit subrosian_checkSignsDestroyed to edit the condition
+15/592c/: |
+    ld a,(wTotalSignsDestroyed)
+    ld b,a
+    ld c,$05  # condition met text
+    cp option.signGuyRequirement
+    jr nc,$14
+    ld c,$00  # tell requirement text
+    jr $10
+
+# Change the item given
+15/595d/: |
+    ld bc,locations.subrosianSignLovingGuy
+    jp spawnTreasureOnLink
+
+
+##### MAPLE TRADE ######################################################
+
+# Make Maple trade a randomized item which sets a custom flag, both for client tracking purpose
+# and to prevent from obtaining this item several times (@state3 of INTERACID_GHASTLY_DOLL)
+0a/53cc/: |
+    call interactionIncState
+
+    # Test flag to skip treasure creation if item has already been obtained (from several Lon Lon Eggs in pool)
+    ld a,(wBoughtShopItems2)
+    bit 3,a
+    ret nz
+
+    # Create a treasure with a forced collect mode (using multiworld collect override)
+    ld bc,locations.mapleTrade
+    call spawnTreasureOnLink
+    ld l,$71
+    ld (hl),COLLECT_PICKUP_NOFLAG
+    
+    # Set a flag to tell it has been collected
+    ld a,(wBoughtShopItems2)
+    or $08
+    ld (wBoughtShopItems2),a
+    ret
+# Remove timer after getting Maple trade item
+0a/540e/: |
+    nop
+    nop
+    nop
+    nop
+
+
+##### TALON TRADE ######################################################
+
+# Make Talon spawn a real treasure interaction instead of a fixed trade item
+15//spawnTalonTreasure: |
+    call getFreeInteractionSlot
+    ret nz
+    ld (hl),INTERACID_TREASURE
+    inc l
+    ld (hl),locations.talonTrade.id
+    inc l
+    ld (hl),locations.talonTrade.subid
+    ld l,$4b        ; y
+    ld (hl),$68
+    ld l,$4d        ; x
+    ld (hl),$48
+    ; Put a forced collect mode which overrides any kind of deduction from room ID
+    ld l,$71
+    ld (hl),COLLECT_PICKUP_NOFLAG
+    ret
+# Edit caveTalonScript to call that specific function
+0b/607d/: |
+    db asm15
+    dw spawnTalonTreasure
+    db $eb,$eb    ; do nothing (initcollisions for nothing)
+
+# Look for an interaction of type treasure in the room, and move the first
+# one found on Link for him to collect it.
+15//moveTreasureOnLink: |
+    push hl
+    push de
+    push bc
+
+    ld hl,$d041
+    @loop:
+    ld a,(hl)
+    cp INTERACID_TREASURE
+    jr nz,@next
+
+    @found:
+    ld de,$d00b  ; wLink.yh
+    call objectCopyPosition_rawAddress
+    jr @end
+
+    @next:
+    ld a,h
+    cp $df
+    jr z,@end
+    inc h
+    jr @loop
+
+    @end:
+    pop bc
+    pop de
+    pop hl
+    ret
+# Edit talon_giveMushroomAfterWaking to move the treasure behind him on Link
+# instead of giving an item spawned on the fly
+14/49f5/: |
+    db asm15
+    dw moveTreasureOnLink

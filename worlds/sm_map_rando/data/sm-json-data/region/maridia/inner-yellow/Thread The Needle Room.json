@@ -1,0 +1,1024 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 214,
+  "name": "Thread The Needle Room",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Yellow",
+  "roomAddress": "0x7D2D9",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a564",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 2, 2, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a570",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 2, 2, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Thread The Needle Room Left Choots",
+      "enemyName": "Choot",
+      "quantity": 5,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Thread The Needle Room Left Puyos",
+      "enemyName": "Puyo",
+      "quantity": 5,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e3",
+      "groupName": "Thread The Needle Room Right Choots",
+      "enemyName": "Choot",
+      "quantity": 3,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e4",
+      "groupName": "Thread The Needle Room Right Puyos",
+      "enemyName": "Puyo",
+      "quantity": 2,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Spark",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 1}},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 28, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "note": [
+        "A half tile is considered unusable, in order to be able to quickly spin jump forward after gaining the shinecharge."
+      ],
+      "devNote": [
+        "FIXME: If Morph or X-Ray is available, an extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Nearby Water Runway)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      },
+      "devNote": [
+        "FIXME: An extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Nearby Water Runway)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      },
+      "devNote": [
+        "FIXME: An extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Space Jumping (Nearby Water Runway)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 0
+          }
+        }
+      },
+      "devNote": [
+        "FIXME: If Morph or X-Ray is available, an extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave Spinning (Far Water Runway, Space Jump)",
+      "requires": [
+        "Gravity",
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          }
+        }
+      },
+      "devNote": [
+        "FIXME: If Morph or X-Ray is available, an extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Far Water Runway, Space Jump)",
+      "requires": [
+        "Gravity",
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      },
+      "devNote": [
+        "FIXME: An extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Far Water Runway, Space Jump)",
+      "requires": [
+        "Gravity",
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      },
+      "devNote": [
+        "FIXME: An extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Leave With Controlled Spring Ball Bounce (Far Water Runway)",
+      "requires": [
+        "Gravity",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "movementType": "controlled"
+        }
+      },
+      "devNote": [
+        "FIXME: An extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Leave Space Jumping (Far Water Runway)",
+      "requires": [
+        "Gravity",
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          }
+        }
+      },
+      "devNote": [
+        "FIXME: If Morph or X-Ray is available, an extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 1}},
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "note": [
+        "A half tile is considered unusable, in order to avoid sliding into the wall and losing blue state."
+      ],
+      "devNote": [
+        "FIXME: An extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 1],
+      "name": "Leave Spinning (Far Platform Runway, Space Jump)",
+      "requires": [
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 13,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Far Platform Runway, Space Jump)",
+      "requires": [
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 14,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Far Platform Runway, Space Jump)",
+      "requires": [
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "link": [1, 1],
+      "name": "Leave With Controlled Spring Ball Bounce (Far Platform Runway)",
+      "requires": [
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "movementType": "controlled"
+        }
+      }
+    },
+    {
+      "id": 16,
+      "link": [1, 1],
+      "name": "Leave Space Jumping (Far Platform Runway)",
+      "requires": [
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 18,
+      "link": [1, 1],
+      "name": "Choot and Puyo Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          "Gravity",
+          {"cycleFrames": 330}
+        ]},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 1110}
+          ]},
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 1240}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 1330}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 1380}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 1440}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 2010}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 2670}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Choot", "count": 5},
+        {"enemy": "Puyo", "count": 5}
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Puyo",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [1, 2],
+      "name": "Kill the Enemies",
+      "requires": [
+        {"or": [
+          "h_hasBeamUpgrade",
+          "canDodgeWhileShooting",
+          "canUseGrapple",
+          "ScrewAttack",
+          "canBePatient",
+          {"resourceCapacity": [{"type": "Missile", "count": 1}]},
+          "h_usePowerBomb"
+        ]}
+      ]
+    },
+    {
+      "id": 23,
+      "link": [1, 2],
+      "name": "Morph Dodge",
+      "requires": [
+        "h_navigateUnderwater",
+        "Morph",
+        {"enemyDamage": {"enemy": "Puyo", "type": "contact", "hits": 1}},
+        {"or": [
+          "canCarefulJump",
+          {"enemyDamage": {"enemy": "Puyo", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "note": [
+        "Safely kill the first Choot, then roll through the bottom of the room after passing the two Puyos.",
+        "Expects one to two Puyo hits while crossing the room."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [1, 2],
+      "name": "Lenient Dodge",
+      "requires": [
+        {"enemyDamage": {"enemy": "Puyo", "type": "contact", "hits": 2}},
+        {"or": [
+          "canCarefulJump",
+          {"enemyDamage": {"enemy": "Puyo", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "note": "Dodge the Puyos and kill the Choots. Expects two to three Puyo hits."
+    },
+    {
+      "id": 25,
+      "link": [1, 2],
+      "name": "Leave With Temporary Blue (Left-to-Right)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 4,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.2",
+          "maxExtraRunSpeed": "$1.F"
+        }
+      },
+      "requires": [
+        {"notable": "Leave With Temporary Blue"},
+        "canChainTemporaryBlue",
+        {"or": [
+          "canTrickySpringBallBounce",
+          "canPreciseSpaceJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use Space jumps or Spring Ball bounces to carry blue speed across the room.",
+        "Then chain temporary blue into the next room.",
+        "It helps to enter with a relatively low amount of run speed, using a 4-tap."
+      ],
+      "devNote": "Higher or lower amounts of run speed can work in some cases."
+    },
+    {
+      "id": 26,
+      "link": [1, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 12], [108, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 27,
+      "link": [1, 2],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[108, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 28,
+      "link": [1, 2],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[108, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Kill the Enemies",
+      "requires": [
+        {"or": [
+          "h_hasBeamUpgrade",
+          "canDodgeWhileShooting",
+          "canUseGrapple",
+          "ScrewAttack",
+          "canBePatient",
+          {"resourceCapacity": [{"type": "Missile", "count": 1}]},
+          "h_usePowerBomb"
+        ]}
+      ]
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "Morph Dodge",
+      "requires": [
+        "h_navigateUnderwater",
+        "Morph",
+        {"enemyDamage": {"enemy": "Puyo", "type": "contact", "hits": 1}},
+        {"or": [
+          "canCarefulJump",
+          {"enemyDamage": {"enemy": "Puyo", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "note": [
+        "Safely kill the first Choot, then roll through the bottom of the room after passing the two Puyos.",
+        "Expects one to two Puyo hits while crossing the room."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 1],
+      "name": "Lenient Dodge",
+      "requires": [
+        {"enemyDamage": {"enemy": "Puyo", "type": "contact", "hits": 2}},
+        {"or": [
+          "canCarefulJump",
+          {"enemyDamage": {"enemy": "Puyo", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "note": "Dodge the Puyos and kill the Choots. Expects two to three Puyo hits."
+    },
+    {
+      "id": 32,
+      "link": [2, 1],
+      "name": "Leave With Temporary Blue (Right to Left)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 4,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.4",
+          "maxExtraRunSpeed": "$1.F"
+        }
+      },
+      "requires": [
+        {"notable": "Leave With Temporary Blue"},
+        "canChainTemporaryBlue",
+        {"or": [
+          "canTrickySpringBallBounce",
+          "canPreciseSpaceJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use Space jumps or Spring Ball bounces to carry blue speed across the room.",
+        "Then chain temporary blue into the next room.",
+        "It helps to enter with a relatively low amount of run speed, using a 4-tap."
+      ],
+      "devNote": "Higher or lower amounts of run speed can work in some cases."
+    },
+    {
+      "id": 33,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 34,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 35,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 36,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 37,
+      "link": [2, 2],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 1}},
+        {"shineChargeFrames": 90}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "note": [
+        "A half tile is considered unusable, in order to be able to quickly spin jump forward after gaining the shinecharge."
+      ],
+      "devNote": [
+        "FIXME: If Morph or X-Ray is available, an extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [2, 2],
+      "name": "Leave Spinning (Water Runway, Space Jump)",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          },
+          "maxExtraRunSpeed": "$3.1"
+        }
+      },
+      "devNote": [
+        "FIXME: If Morph or X-Ray is available, an extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [2, 2],
+      "name": "Leave With Mockball (Water Runway)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      },
+      "devNote": [
+        "FIXME: If Morph or X-Ray is available, an extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce (Water Runway)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      },
+      "devNote": [
+        "FIXME: If Morph or X-Ray is available, an extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [2, 2],
+      "name": "Leave Space Jumping (Water Runway)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          }
+        }
+      },
+      "devNote": [
+        "FIXME: If Morph or X-Ray is available, an extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 1}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "devNote": [
+        "FIXME: If Morph or X-Ray is available, an extra half tile of runway could be gained by standing up inside the last tile of the platform."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [2, 2],
+      "name": "Leave Spinning (Far Platform Runway, Space Jump)",
+      "requires": [
+        "canTrickyJump",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 44,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce (Far Platform Runway, Space Jump)",
+      "requires": [
+        "canTrickyJump",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 45,
+      "link": [2, 2],
+      "name": "Leave With Controlled Spring Ball Bounce (Far Platform Runway)",
+      "requires": [
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "movementType": "controlled"
+        }
+      }
+    },
+    {
+      "id": 46,
+      "link": [2, 2],
+      "name": "Leave Space Jumping (Far Platform Runway)",
+      "requires": [
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 47,
+      "link": [2, 2],
+      "name": "Choot and Puyo Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          "Gravity",
+          {"cycleFrames": 120}
+        ]},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 610}
+          ]},
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 660}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 700}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 720}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 820}
+          ]},
+          {"cycleFrames": 1070}
+        ]}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Choot", "count": 3},
+        {"enemy": "Puyo", "count": 3}
+      ]
+    },
+    {
+      "id": 50,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 51,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Puyo",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 52,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Puyo", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Leave With Temporary Blue",
+      "note": [
+        "Use Space jumps or Spring Ball bounces to carry blue speed across the room.",
+        "Then chain temporary blue into the next room.",
+        "It helps to enter with a relatively low amount of run speed, using a 4-tap."
+      ]
+    }
+  ],
+  "nextStratId": 53,
+  "nextNotableId": 2
+}

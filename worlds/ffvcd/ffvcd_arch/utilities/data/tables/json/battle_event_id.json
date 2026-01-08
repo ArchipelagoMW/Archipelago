@@ -1,0 +1,1794 @@
+{
+    "00": {
+        "event_id_dec": 0,
+        "table_address": "D07800",
+        "formation_value": "01b6",
+        "formation_offset": "D04B60",
+        "formation_address": "1B60"
+    },
+    "01": {
+        "event_id_dec": 1,
+        "table_address": "D07804",
+        "formation_value": "01b7",
+        "formation_offset": "D04B70",
+        "formation_address": "1B70"
+    },
+    "02": {
+        "event_id_dec": 2,
+        "table_address": "D07808",
+        "formation_value": "01b8",
+        "formation_offset": "D04B80",
+        "formation_address": "1B80"
+    },
+    "03": {
+        "event_id_dec": 3,
+        "table_address": "D0780C",
+        "formation_value": "01b9",
+        "formation_offset": "D04B90",
+        "formation_address": "1B90"
+    },
+    "04": {
+        "event_id_dec": 4,
+        "table_address": "D07810",
+        "formation_value": "01ba",
+        "formation_offset": "D04BA0",
+        "formation_address": "1BA0"
+    },
+    "05": {
+        "event_id_dec": 5,
+        "table_address": "D07814",
+        "formation_value": "01f1",
+        "formation_offset": "D04F10",
+        "formation_address": "1F10"
+    },
+    "06": {
+        "event_id_dec": 6,
+        "table_address": "D07818",
+        "formation_value": "01bb",
+        "formation_offset": "D04BB0",
+        "formation_address": "1BB0"
+    },
+    "07": {
+        "event_id_dec": 7,
+        "table_address": "D0781C",
+        "formation_value": "01bc",
+        "formation_offset": "D04BC0",
+        "formation_address": "1BC0"
+    },
+    "08": {
+        "event_id_dec": 8,
+        "table_address": "D07820",
+        "formation_value": "01bd",
+        "formation_offset": "D04BD0",
+        "formation_address": "1BD0"
+    },
+    "09": {
+        "event_id_dec": 9,
+        "table_address": "D07824",
+        "formation_value": "01be",
+        "formation_offset": "D04BE0",
+        "formation_address": "1BE0"
+    },
+    "0A": {
+        "event_id_dec": 10,
+        "table_address": "D07828",
+        "formation_value": "01bf",
+        "formation_offset": "D04BF0",
+        "formation_address": "1BF0"
+    },
+    "0B": {
+        "event_id_dec": 11,
+        "table_address": "D0782C",
+        "formation_value": "01c0",
+        "formation_offset": "D04C00",
+        "formation_address": "1C00"
+    },
+    "0C": {
+        "event_id_dec": 12,
+        "table_address": "D07830",
+        "formation_value": "01c1",
+        "formation_offset": "D04C10",
+        "formation_address": "1C10"
+    },
+    "0D": {
+        "event_id_dec": 13,
+        "table_address": "D07834",
+        "formation_value": "01c2",
+        "formation_offset": "D04C20",
+        "formation_address": "1C20"
+    },
+    "0E": {
+        "event_id_dec": 14,
+        "table_address": "D07838",
+        "formation_value": "01c3",
+        "formation_offset": "D04C30",
+        "formation_address": "1C30"
+    },
+    "0F": {
+        "event_id_dec": 15,
+        "table_address": "D0783C",
+        "formation_value": "01c4",
+        "formation_offset": "D04C40",
+        "formation_address": "1C40"
+    },
+    "10": {
+        "event_id_dec": 16,
+        "table_address": "D07840",
+        "formation_value": "01c5",
+        "formation_offset": "D04C50",
+        "formation_address": "1C50"
+    },
+    "11": {
+        "event_id_dec": 17,
+        "table_address": "D07844",
+        "formation_value": "01c6",
+        "formation_offset": "D04C60",
+        "formation_address": "1C60"
+    },
+    "12": {
+        "event_id_dec": 18,
+        "table_address": "D07848",
+        "formation_value": "01c7",
+        "formation_offset": "D04C70",
+        "formation_address": "1C70"
+    },
+    "13": {
+        "event_id_dec": 19,
+        "table_address": "D0784C",
+        "formation_value": "01c8",
+        "formation_offset": "D04C80",
+        "formation_address": "1C80"
+    },
+    "14": {
+        "event_id_dec": 20,
+        "table_address": "D07850",
+        "formation_value": "01c9",
+        "formation_offset": "D04C90",
+        "formation_address": "1C90"
+    },
+    "15": {
+        "event_id_dec": 21,
+        "table_address": "D07854",
+        "formation_value": "01ca",
+        "formation_offset": "D04CA0",
+        "formation_address": "1CA0"
+    },
+    "16": {
+        "event_id_dec": 22,
+        "table_address": "D07858",
+        "formation_value": "01cb",
+        "formation_offset": "D04CB0",
+        "formation_address": "1CB0"
+    },
+    "17": {
+        "event_id_dec": 23,
+        "table_address": "D0785C",
+        "formation_value": "01cc",
+        "formation_offset": "D04CC0",
+        "formation_address": "1CC0"
+    },
+    "18": {
+        "event_id_dec": 24,
+        "table_address": "D07860",
+        "formation_value": "01cd",
+        "formation_offset": "D04CD0",
+        "formation_address": "1CD0"
+    },
+    "19": {
+        "event_id_dec": 25,
+        "table_address": "D07864",
+        "formation_value": "01ce",
+        "formation_offset": "D04CE0",
+        "formation_address": "1CE0"
+    },
+    "1A": {
+        "event_id_dec": 26,
+        "table_address": "D07868",
+        "formation_value": "01cf",
+        "formation_offset": "D04CF0",
+        "formation_address": "1CF0"
+    },
+    "1B": {
+        "event_id_dec": 27,
+        "table_address": "D0786C",
+        "formation_value": "01d0",
+        "formation_offset": "D04D00",
+        "formation_address": "1D00"
+    },
+    "1C": {
+        "event_id_dec": 28,
+        "table_address": "D07870",
+        "formation_value": "01d1",
+        "formation_offset": "D04D10",
+        "formation_address": "1D10"
+    },
+    "1D": {
+        "event_id_dec": 29,
+        "table_address": "D07874",
+        "formation_value": "01d2",
+        "formation_offset": "D04D20",
+        "formation_address": "1D20"
+    },
+    "1E": {
+        "event_id_dec": 30,
+        "table_address": "D07878",
+        "formation_value": "01d3",
+        "formation_offset": "D04D30",
+        "formation_address": "1D30"
+    },
+    "1F": {
+        "event_id_dec": 31,
+        "table_address": "D0787C",
+        "formation_value": "01d4",
+        "formation_offset": "D04D40",
+        "formation_address": "1D40"
+    },
+    "20": {
+        "event_id_dec": 32,
+        "table_address": "D07880",
+        "formation_value": "01d5",
+        "formation_offset": "D04D50",
+        "formation_address": "1D50"
+    },
+    "21": {
+        "event_id_dec": 33,
+        "table_address": "D07884",
+        "formation_value": "01d6",
+        "formation_offset": "D04D60",
+        "formation_address": "1D60"
+    },
+    "22": {
+        "event_id_dec": 34,
+        "table_address": "D07888",
+        "formation_value": "01d7",
+        "formation_offset": "D04D70",
+        "formation_address": "1D70"
+    },
+    "23": {
+        "event_id_dec": 35,
+        "table_address": "D0788C",
+        "formation_value": "01d8",
+        "formation_offset": "D04D80",
+        "formation_address": "1D80"
+    },
+    "24": {
+        "event_id_dec": 36,
+        "table_address": "D07890",
+        "formation_value": "01d9",
+        "formation_offset": "D04D90",
+        "formation_address": "1D90"
+    },
+    "25": {
+        "event_id_dec": 37,
+        "table_address": "D07894",
+        "formation_value": "01da",
+        "formation_offset": "D04DA0",
+        "formation_address": "1DA0"
+    },
+    "26": {
+        "event_id_dec": 38,
+        "table_address": "D07898",
+        "formation_value": "01db",
+        "formation_offset": "D04DB0",
+        "formation_address": "1DB0"
+    },
+    "27": {
+        "event_id_dec": 39,
+        "table_address": "D0789C",
+        "formation_value": "01dc",
+        "formation_offset": "D04DC0",
+        "formation_address": "1DC0"
+    },
+    "28": {
+        "event_id_dec": 40,
+        "table_address": "D078A0",
+        "formation_value": "01dd",
+        "formation_offset": "D04DD0",
+        "formation_address": "1DD0"
+    },
+    "29": {
+        "event_id_dec": 41,
+        "table_address": "D078A4",
+        "formation_value": "01fc",
+        "formation_offset": "D04FC0",
+        "formation_address": "1FC0"
+    },
+    "2A": {
+        "event_id_dec": 42,
+        "table_address": "D078A8",
+        "formation_value": "01df",
+        "formation_offset": "D04DF0",
+        "formation_address": "1DF0"
+    },
+    "2B": {
+        "event_id_dec": 43,
+        "table_address": "D078AC",
+        "formation_value": "01e0",
+        "formation_offset": "D04E00",
+        "formation_address": "1E00"
+    },
+    "2C": {
+        "event_id_dec": 44,
+        "table_address": "D078B0",
+        "formation_value": "01e1",
+        "formation_offset": "D04E10",
+        "formation_address": "1E10"
+    },
+    "2D": {
+        "event_id_dec": 45,
+        "table_address": "D078B4",
+        "formation_value": "01e2",
+        "formation_offset": "D04E20",
+        "formation_address": "1E20"
+    },
+    "2E": {
+        "event_id_dec": 46,
+        "table_address": "D078B8",
+        "formation_value": "01e7",
+        "formation_offset": "D04E70",
+        "formation_address": "1E70"
+    },
+    "2F": {
+        "event_id_dec": 47,
+        "table_address": "D078BC",
+        "formation_value": "01e4",
+        "formation_offset": "D04E40",
+        "formation_address": "1E40"
+    },
+    "30": {
+        "event_id_dec": 48,
+        "table_address": "D078C0",
+        "formation_value": "01e5",
+        "formation_offset": "D04E50",
+        "formation_address": "1E50"
+    },
+    "31": {
+        "event_id_dec": 49,
+        "table_address": "D078C4",
+        "formation_value": "01e6",
+        "formation_offset": "D04E60",
+        "formation_address": "1E60"
+    },
+    "32": {
+        "event_id_dec": 50,
+        "table_address": "D078C8",
+        "formation_value": "01e3",
+        "formation_offset": "D04E30",
+        "formation_address": "1E30"
+    },
+    "33": {
+        "event_id_dec": 51,
+        "table_address": "D078CC",
+        "formation_value": "01e8",
+        "formation_offset": "D04E80",
+        "formation_address": "1E80"
+    },
+    "34": {
+        "event_id_dec": 52,
+        "table_address": "D078D0",
+        "formation_value": "01e9",
+        "formation_offset": "D04E90",
+        "formation_address": "1E90"
+    },
+    "35": {
+        "event_id_dec": 53,
+        "table_address": "D078D4",
+        "formation_value": "01fa",
+        "formation_offset": "D04FA0",
+        "formation_address": "1FA0"
+    },
+    "36": {
+        "event_id_dec": 54,
+        "table_address": "D078D8",
+        "formation_value": "01f8",
+        "formation_offset": "D04F80",
+        "formation_address": "1F80"
+    },
+    "37": {
+        "event_id_dec": 55,
+        "table_address": "D078DC",
+        "formation_value": "01fb",
+        "formation_offset": "D04FB0",
+        "formation_address": "1FB0"
+    },
+    "38": {
+        "event_id_dec": 56,
+        "table_address": "D078E0",
+        "formation_value": "01de",
+        "formation_offset": "D04DE0",
+        "formation_address": "1DE0"
+    },
+    "39": {
+        "event_id_dec": 57,
+        "table_address": "D078E4",
+        "formation_value": "01ee",
+        "formation_offset": "D04EE0",
+        "formation_address": "1EE0"
+    },
+    "3A": {
+        "event_id_dec": 58,
+        "table_address": "D078E8",
+        "formation_value": "01ef",
+        "formation_offset": "D04EF0",
+        "formation_address": "1EF0"
+    },
+    "3B": {
+        "event_id_dec": 59,
+        "table_address": "D078EC",
+        "formation_value": "01f7",
+        "formation_offset": "D04F70",
+        "formation_address": "1F70"
+    },
+    "3C": {
+        "event_id_dec": 60,
+        "table_address": "D078F0",
+        "formation_value": "005c",
+        "formation_offset": "D035C0",
+        "formation_address": "05C0"
+    },
+    "3D": {
+        "event_id_dec": 61,
+        "table_address": "D078F4",
+        "formation_value": "004C",
+        "formation_offset": "D03A00",
+        "formation_address": "04C0"
+    },
+    "3E": {
+        "event_id_dec": 62,
+        "table_address": "D078F8",
+        "formation_value": "00BB",
+        "formation_offset": "D03A10",
+        "formation_address": "0BB0"
+    },
+    "3F": {
+        "event_id_dec": 63,
+        "table_address": "D078FC",
+        "formation_value": "00A5",
+        "formation_offset": "D03A20",
+        "formation_address": "0A50"
+    },
+    "40": {
+        "event_id_dec": 64,
+        "table_address": "D07900",
+        "formation_value": "01a7",
+        "formation_offset": "D04A70",
+        "formation_address": "1A70"
+    },
+    "41": {
+        "event_id_dec": 65,
+        "table_address": "D07904",
+        "formation_value": "01a8",
+        "formation_offset": "D04A80",
+        "formation_address": "1A80"
+    },
+    "42": {
+        "event_id_dec": 66,
+        "table_address": "D07908",
+        "formation_value": "01a9",
+        "formation_offset": "D04A90",
+        "formation_address": "1A90"
+    },
+    "43": {
+        "event_id_dec": 67,
+        "table_address": "D0790C",
+        "formation_value": "01ea",
+        "formation_offset": "D04EA0",
+        "formation_address": "1EA0"
+    },
+    "44": {
+        "event_id_dec": 68,
+        "table_address": "D07910",
+        "formation_value": "01eb",
+        "formation_offset": "D04EB0",
+        "formation_address": "1EB0"
+    },
+    "45": {
+        "event_id_dec": 69,
+        "table_address": "D07914",
+        "formation_value": "01ec",
+        "formation_offset": "D04EC0",
+        "formation_address": "1EC0"
+    },
+    "46": {
+        "event_id_dec": 70,
+        "table_address": "D07918",
+        "formation_value": "01ed",
+        "formation_offset": "D04ED0",
+        "formation_address": "1ED0"
+    },
+    "47": {
+        "event_id_dec": 71,
+        "table_address": "D0791C",
+        "formation_value": "01f2",
+        "formation_offset": "D04F20",
+        "formation_address": "1F20"
+    },
+    "48": {
+        "event_id_dec": 72,
+        "table_address": "D07920",
+        "formation_value": "01f3",
+        "formation_offset": "D04F30",
+        "formation_address": "1F30"
+    },
+    "49": {
+        "event_id_dec": 73,
+        "table_address": "D07924",
+        "formation_value": "01f4",
+        "formation_offset": "D04F40",
+        "formation_address": "1F40"
+    },
+    "4A": {
+        "event_id_dec": 74,
+        "table_address": "D07928",
+        "formation_value": "01f6",
+        "formation_offset": "D04F60",
+        "formation_address": "1F60"
+    },
+    "4B": {
+        "event_id_dec": 75,
+        "table_address": "D0792C",
+        "formation_value": "01f5",
+        "formation_offset": "D04F50",
+        "formation_address": "1F50"
+    },
+    "4C": {
+        "event_id_dec": 76,
+        "table_address": "D07930",
+        "formation_value": "01ad",
+        "formation_offset": "D04AD0",
+        "formation_address": "1AD0"
+    },
+    "4D": {
+        "event_id_dec": 77,
+        "table_address": "D07934",
+        "formation_value": "01fd",
+        "formation_offset": "D04FD0",
+        "formation_address": "1FD0"
+    },
+    "4E": {
+        "event_id_dec": 78,
+        "table_address": "D07938",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "4F": {
+        "event_id_dec": 79,
+        "table_address": "D0793C",
+        "formation_value": "0161",
+        "formation_offset": "D04610",
+        "formation_address": "1610"
+    },
+    "50": {
+        "event_id_dec": 80,
+        "table_address": "D07940",
+        "formation_value": "0195",
+        "formation_offset": "D04950",
+        "formation_address": "1950"
+    },
+    "51": {
+        "event_id_dec": 81,
+        "table_address": "D07944",
+        "formation_value": "01b1",
+        "formation_offset": "D04B10",
+        "formation_address": "1B10"
+    },
+    "52": {
+        "event_id_dec": 82,
+        "table_address": "D07948",
+        "formation_value": "01b2",
+        "formation_offset": "D04B20",
+        "formation_address": "1B20"
+    },
+    "53": {
+        "event_id_dec": 83,
+        "table_address": "D0794C",
+        "formation_value": "01b3",
+        "formation_offset": "D04B30",
+        "formation_address": "1B30"
+    },
+    "54": {
+        "event_id_dec": 84,
+        "table_address": "D07950",
+        "formation_value": "01b4",
+        "formation_offset": "D04B40",
+        "formation_address": "1B40"
+    },
+    "55": {
+        "event_id_dec": 85,
+        "table_address": "D07954",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "56": {
+        "event_id_dec": 86,
+        "table_address": "D07958",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "57": {
+        "event_id_dec": 87,
+        "table_address": "D0795C",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "58": {
+        "event_id_dec": 88,
+        "table_address": "D07960",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "59": {
+        "event_id_dec": 89,
+        "table_address": "D07964",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "5A": {
+        "event_id_dec": 90,
+        "table_address": "D07968",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "5B": {
+        "event_id_dec": 91,
+        "table_address": "D0796C",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "5C": {
+        "event_id_dec": 92,
+        "table_address": "D07970",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "5D": {
+        "event_id_dec": 93,
+        "table_address": "D07974",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "5E": {
+        "event_id_dec": 94,
+        "table_address": "D07978",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "5F": {
+        "event_id_dec": 95,
+        "table_address": "D0797C",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "60": {
+        "event_id_dec": 96,
+        "table_address": "D07980",
+        "formation_value": "0058",
+        "formation_offset": "D03580",
+        "formation_address": "0580"
+    },
+    "61": {
+        "event_id_dec": 97,
+        "table_address": "D07984",
+        "formation_value": "005a",
+        "formation_offset": "D035A0",
+        "formation_address": "05A0"
+    },
+    "62": {
+        "event_id_dec": 98,
+        "table_address": "D07988",
+        "formation_value": "0057",
+        "formation_offset": "D03570",
+        "formation_address": "0570"
+    },
+    "63": {
+        "event_id_dec": 99,
+        "table_address": "D0798C",
+        "formation_value": "005b",
+        "formation_offset": "D035B0",
+        "formation_address": "05B0"
+    },
+    "64": {
+        "event_id_dec": 100,
+        "table_address": "D07990",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "65": {
+        "event_id_dec": 101,
+        "table_address": "D07994",
+        "formation_value": "00ec",
+        "formation_offset": "D03EC0",
+        "formation_address": "0EC0"
+    },
+    "66": {
+        "event_id_dec": 102,
+        "table_address": "D07998",
+        "formation_value": "0125",
+        "formation_offset": "D04250",
+        "formation_address": "1250"
+    },
+    "67": {
+        "event_id_dec": 103,
+        "table_address": "D0799C",
+        "formation_value": "0110",
+        "formation_offset": "D04100",
+        "formation_address": "1100"
+    },
+    "68": {
+        "event_id_dec": 104,
+        "table_address": "D079A0",
+        "formation_value": "0110",
+        "formation_offset": "D04100",
+        "formation_address": "1100"
+    },
+    "69": {
+        "event_id_dec": 105,
+        "table_address": "D079A4",
+        "formation_value": "0157",
+        "formation_offset": "D04570",
+        "formation_address": "1570"
+    },
+    "6A": {
+        "event_id_dec": 106,
+        "table_address": "D079A8",
+        "formation_value": "013b",
+        "formation_offset": "D043B0",
+        "formation_address": "13B0"
+    },
+    "6B": {
+        "event_id_dec": 107,
+        "table_address": "D079AC",
+        "formation_value": "01ac",
+        "formation_offset": "D04AC0",
+        "formation_address": "1AC0"
+    },
+    "6C": {
+        "event_id_dec": 108,
+        "table_address": "D079B0",
+        "formation_value": "01df",
+        "formation_offset": "D04DF0",
+        "formation_address": "1DF0"
+    },
+    "6D": {
+        "event_id_dec": 109,
+        "table_address": "D079B4",
+        "formation_value": "01ff",
+        "formation_offset": "D04FF0",
+        "formation_address": "1FF0"
+    },
+    "6E": {
+        "event_id_dec": 110,
+        "table_address": "D079B8",
+        "formation_value": "01b5",
+        "formation_offset": "D04B50",
+        "formation_address": "1B50"
+    },
+    "6F": {
+        "event_id_dec": 111,
+        "table_address": "D079BC",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "70": {
+        "event_id_dec": 112,
+        "table_address": "D079C0",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "71": {
+        "event_id_dec": 113,
+        "table_address": "D079C4",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "72": {
+        "event_id_dec": 114,
+        "table_address": "D079C8",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "73": {
+        "event_id_dec": 115,
+        "table_address": "D079CC",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "74": {
+        "event_id_dec": 116,
+        "table_address": "D079D0",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "75": {
+        "event_id_dec": 117,
+        "table_address": "D079D4",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "76": {
+        "event_id_dec": 118,
+        "table_address": "D079D8",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "77": {
+        "event_id_dec": 119,
+        "table_address": "D079DC",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "78": {
+        "event_id_dec": 120,
+        "table_address": "D079E0",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "79": {
+        "event_id_dec": 121,
+        "table_address": "D079E4",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "7A": {
+        "event_id_dec": 122,
+        "table_address": "D079E8",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "7B": {
+        "event_id_dec": 123,
+        "table_address": "D079EC",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "7C": {
+        "event_id_dec": 124,
+        "table_address": "D079F0",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "7D": {
+        "event_id_dec": 125,
+        "table_address": "D079F4",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "7E": {
+        "event_id_dec": 126,
+        "table_address": "D079F8",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "7F": {
+        "event_id_dec": 127,
+        "table_address": "D079FC",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "80": {
+        "event_id_dec": 128,
+        "table_address": "D07802",
+        "formation_value": "01b6",
+        "formation_offset": "D04B60",
+        "formation_address": "1B60"
+    },
+    "81": {
+        "event_id_dec": 129,
+        "table_address": "D07806",
+        "formation_value": "01b7",
+        "formation_offset": "D04B70",
+        "formation_address": "1B70"
+    },
+    "82": {
+        "event_id_dec": 130,
+        "table_address": "D0780A",
+        "formation_value": "01b8",
+        "formation_offset": "D04B80",
+        "formation_address": "1B80"
+    },
+    "83": {
+        "event_id_dec": 131,
+        "table_address": "D0780E",
+        "formation_value": "01b9",
+        "formation_offset": "D04B90",
+        "formation_address": "1B90"
+    },
+    "84": {
+        "event_id_dec": 132,
+        "table_address": "D07812",
+        "formation_value": "01ba",
+        "formation_offset": "D04BA0",
+        "formation_address": "1BA0"
+    },
+    "85": {
+        "event_id_dec": 133,
+        "table_address": "D07816",
+        "formation_value": "01f1",
+        "formation_offset": "D04F10",
+        "formation_address": "1F10"
+    },
+    "86": {
+        "event_id_dec": 134,
+        "table_address": "D0781A",
+        "formation_value": "01bb",
+        "formation_offset": "D04BB0",
+        "formation_address": "1BB0"
+    },
+    "87": {
+        "event_id_dec": 135,
+        "table_address": "D0781E",
+        "formation_value": "01bc",
+        "formation_offset": "D04BC0",
+        "formation_address": "1BC0"
+    },
+    "88": {
+        "event_id_dec": 136,
+        "table_address": "D07822",
+        "formation_value": "01bd",
+        "formation_offset": "D04BD0",
+        "formation_address": "1BD0"
+    },
+    "89": {
+        "event_id_dec": 137,
+        "table_address": "D07826",
+        "formation_value": "01be",
+        "formation_offset": "D04BE0",
+        "formation_address": "1BE0"
+    },
+    "8A": {
+        "event_id_dec": 138,
+        "table_address": "D0782A",
+        "formation_value": "01bf",
+        "formation_offset": "D04BF0",
+        "formation_address": "1BF0"
+    },
+    "8B": {
+        "event_id_dec": 139,
+        "table_address": "D0782E",
+        "formation_value": "01c0",
+        "formation_offset": "D04C00",
+        "formation_address": "1C00"
+    },
+    "8C": {
+        "event_id_dec": 140,
+        "table_address": "D07832",
+        "formation_value": "01c2",
+        "formation_offset": "D04C20",
+        "formation_address": "1C20"
+    },
+    "8D": {
+        "event_id_dec": 141,
+        "table_address": "D07836",
+        "formation_value": "01c1",
+        "formation_offset": "D04C10",
+        "formation_address": "1C10"
+    },
+    "8E": {
+        "event_id_dec": 142,
+        "table_address": "D0783A",
+        "formation_value": "01c3",
+        "formation_offset": "D04C30",
+        "formation_address": "1C30"
+    },
+    "8F": {
+        "event_id_dec": 143,
+        "table_address": "D0783E",
+        "formation_value": "01c4",
+        "formation_offset": "D04C40",
+        "formation_address": "1C40"
+    },
+    "90": {
+        "event_id_dec": 144,
+        "table_address": "D07842",
+        "formation_value": "01c5",
+        "formation_offset": "D04C50",
+        "formation_address": "1C50"
+    },
+    "91": {
+        "event_id_dec": 145,
+        "table_address": "D07846",
+        "formation_value": "01c6",
+        "formation_offset": "D04C60",
+        "formation_address": "1C60"
+    },
+    "92": {
+        "event_id_dec": 146,
+        "table_address": "D0784A",
+        "formation_value": "01c7",
+        "formation_offset": "D04C70",
+        "formation_address": "1C70"
+    },
+    "93": {
+        "event_id_dec": 147,
+        "table_address": "D0784E",
+        "formation_value": "01c8",
+        "formation_offset": "D04C80",
+        "formation_address": "1C80"
+    },
+    "94": {
+        "event_id_dec": 148,
+        "table_address": "D07852",
+        "formation_value": "01c9",
+        "formation_offset": "D04C90",
+        "formation_address": "1C90"
+    },
+    "95": {
+        "event_id_dec": 149,
+        "table_address": "D07856",
+        "formation_value": "01ca",
+        "formation_offset": "D04CA0",
+        "formation_address": "1CA0"
+    },
+    "96": {
+        "event_id_dec": 150,
+        "table_address": "D0785A",
+        "formation_value": "01cb",
+        "formation_offset": "D04CB0",
+        "formation_address": "1CB0"
+    },
+    "97": {
+        "event_id_dec": 151,
+        "table_address": "D0785E",
+        "formation_value": "01cc",
+        "formation_offset": "D04CC0",
+        "formation_address": "1CC0"
+    },
+    "98": {
+        "event_id_dec": 152,
+        "table_address": "D07862",
+        "formation_value": "01cd",
+        "formation_offset": "D04CD0",
+        "formation_address": "1CD0"
+    },
+    "99": {
+        "event_id_dec": 153,
+        "table_address": "D07866",
+        "formation_value": "01ce",
+        "formation_offset": "D04CE0",
+        "formation_address": "1CE0"
+    },
+    "9A": {
+        "event_id_dec": 154,
+        "table_address": "D0786A",
+        "formation_value": "01cf",
+        "formation_offset": "D04CF0",
+        "formation_address": "1CF0"
+    },
+    "9B": {
+        "event_id_dec": 155,
+        "table_address": "D0786E",
+        "formation_value": "01d0",
+        "formation_offset": "D04D00",
+        "formation_address": "1D00"
+    },
+    "9C": {
+        "event_id_dec": 156,
+        "table_address": "D07872",
+        "formation_value": "01d1",
+        "formation_offset": "D04D10",
+        "formation_address": "1D10"
+    },
+    "9D": {
+        "event_id_dec": 157,
+        "table_address": "D07876",
+        "formation_value": "01d2",
+        "formation_offset": "D04D20",
+        "formation_address": "1D20"
+    },
+    "9E": {
+        "event_id_dec": 158,
+        "table_address": "D0787A",
+        "formation_value": "01d3",
+        "formation_offset": "D04D30",
+        "formation_address": "1D30"
+    },
+    "9F": {
+        "event_id_dec": 159,
+        "table_address": "D0787E",
+        "formation_value": "01d4",
+        "formation_offset": "D04D40",
+        "formation_address": "1D40"
+    },
+    "A0": {
+        "event_id_dec": 160,
+        "table_address": "D07882",
+        "formation_value": "01d5",
+        "formation_offset": "D04D50",
+        "formation_address": "1D50"
+    },
+    "A1": {
+        "event_id_dec": 161,
+        "table_address": "D07886",
+        "formation_value": "01d6",
+        "formation_offset": "D04D60",
+        "formation_address": "1D60"
+    },
+    "A2": {
+        "event_id_dec": 162,
+        "table_address": "D0788A",
+        "formation_value": "01d7",
+        "formation_offset": "D04D70",
+        "formation_address": "1D70"
+    },
+    "A3": {
+        "event_id_dec": 163,
+        "table_address": "D0788E",
+        "formation_value": "01d8",
+        "formation_offset": "D04D80",
+        "formation_address": "1D80"
+    },
+    "A4": {
+        "event_id_dec": 164,
+        "table_address": "D07892",
+        "formation_value": "01d9",
+        "formation_offset": "D04D90",
+        "formation_address": "1D90"
+    },
+    "A5": {
+        "event_id_dec": 165,
+        "table_address": "D07896",
+        "formation_value": "01da",
+        "formation_offset": "D04DA0",
+        "formation_address": "1DA0"
+    },
+    "A6": {
+        "event_id_dec": 166,
+        "table_address": "D0789A",
+        "formation_value": "01db",
+        "formation_offset": "D04DB0",
+        "formation_address": "1DB0"
+    },
+    "A7": {
+        "event_id_dec": 167,
+        "table_address": "D0789E",
+        "formation_value": "01dc",
+        "formation_offset": "D04DC0",
+        "formation_address": "1DC0"
+    },
+    "A8": {
+        "event_id_dec": 168,
+        "table_address": "D078A2",
+        "formation_value": "01dd",
+        "formation_offset": "D04DD0",
+        "formation_address": "1DD0"
+    },
+    "A9": {
+        "event_id_dec": 169,
+        "table_address": "D078A6",
+        "formation_value": "01fc",
+        "formation_offset": "D04FC0",
+        "formation_address": "1FC0"
+    },
+    "AA": {
+        "event_id_dec": 170,
+        "table_address": "D078AA",
+        "formation_value": "01df",
+        "formation_offset": "D04DF0",
+        "formation_address": "1DF0"
+    },
+    "AB": {
+        "event_id_dec": 171,
+        "table_address": "D078AE",
+        "formation_value": "01e0",
+        "formation_offset": "D04E00",
+        "formation_address": "1E00"
+    },
+    "AC": {
+        "event_id_dec": 172,
+        "table_address": "D078B2",
+        "formation_value": "01e1",
+        "formation_offset": "D04E10",
+        "formation_address": "1E10"
+    },
+    "AD": {
+        "event_id_dec": 173,
+        "table_address": "D078B6",
+        "formation_value": "01e2",
+        "formation_offset": "D04E20",
+        "formation_address": "1E20"
+    },
+    "AE": {
+        "event_id_dec": 174,
+        "table_address": "D078BA",
+        "formation_value": "01e7",
+        "formation_offset": "D04E70",
+        "formation_address": "1E70"
+    },
+    "AF": {
+        "event_id_dec": 175,
+        "table_address": "D078BE",
+        "formation_value": "01e4",
+        "formation_offset": "D04E40",
+        "formation_address": "1E40"
+    },
+    "B0": {
+        "event_id_dec": 176,
+        "table_address": "D078C2",
+        "formation_value": "01e5",
+        "formation_offset": "D04E50",
+        "formation_address": "1E50"
+    },
+    "B1": {
+        "event_id_dec": 177,
+        "table_address": "D078C6",
+        "formation_value": "01e6",
+        "formation_offset": "D04E60",
+        "formation_address": "1E60"
+    },
+    "B2": {
+        "event_id_dec": 178,
+        "table_address": "D078CA",
+        "formation_value": "01e3",
+        "formation_offset": "D04E30",
+        "formation_address": "1E30"
+    },
+    "B3": {
+        "event_id_dec": 179,
+        "table_address": "D078CE",
+        "formation_value": "01e8",
+        "formation_offset": "D04E80",
+        "formation_address": "1E80"
+    },
+    "B4": {
+        "event_id_dec": 180,
+        "table_address": "D078D2",
+        "formation_value": "01e9",
+        "formation_offset": "D04E90",
+        "formation_address": "1E90"
+    },
+    "B5": {
+        "event_id_dec": 181,
+        "table_address": "D078D6",
+        "formation_value": "01fa",
+        "formation_offset": "D04FA0",
+        "formation_address": "1FA0"
+    },
+    "B6": {
+        "event_id_dec": 182,
+        "table_address": "D078DA",
+        "formation_value": "01f8",
+        "formation_offset": "D04F80",
+        "formation_address": "1F80"
+    },
+    "B7": {
+        "event_id_dec": 183,
+        "table_address": "D078DE",
+        "formation_value": "01fb",
+        "formation_offset": "D04FB0",
+        "formation_address": "1FB0"
+    },
+    "B8": {
+        "event_id_dec": 184,
+        "table_address": "D078E2",
+        "formation_value": "01de",
+        "formation_offset": "D04DE0",
+        "formation_address": "1DE0"
+    },
+    "B9": {
+        "event_id_dec": 185,
+        "table_address": "D078E6",
+        "formation_value": "01ee",
+        "formation_offset": "D04EE0",
+        "formation_address": "1EE0"
+    },
+    "BA": {
+        "event_id_dec": 186,
+        "table_address": "D078EA",
+        "formation_value": "01ef",
+        "formation_offset": "D04EF0",
+        "formation_address": "1EF0"
+    },
+    "BB": {
+        "event_id_dec": 187,
+        "table_address": "D078EE",
+        "formation_value": "01f7",
+        "formation_offset": "D04F70",
+        "formation_address": "1F70"
+    },
+    "BC": {
+        "event_id_dec": 188,
+        "table_address": "D078F2",
+        "formation_value": "0065",
+        "formation_offset": "D03650",
+        "formation_address": "0650"
+    },
+    "BD": {
+        "event_id_dec": 189,
+        "table_address": "D078F6",
+        "formation_value": "004C",
+        "formation_offset": "D03A00",
+        "formation_address": "04C0"
+    },
+    "BE": {
+        "event_id_dec": 190,
+        "table_address": "D078FA",
+        "formation_value": "00BB",
+        "formation_offset": "D03A10",
+        "formation_address": "0BB0"
+    },
+    "BF": {
+        "event_id_dec": 191,
+        "table_address": "D078FE",
+        "formation_value": "00A5",
+        "formation_offset": "D03A20",
+        "formation_address": "0A50"
+    },
+    "C0": {
+        "event_id_dec": 192,
+        "table_address": "D07902",
+        "formation_value": "01aa",
+        "formation_offset": "D04AA0",
+        "formation_address": "1AA0"
+    },
+    "C1": {
+        "event_id_dec": 193,
+        "table_address": "D07906",
+        "formation_value": "01aa",
+        "formation_offset": "D04AA0",
+        "formation_address": "1AA0"
+    },
+    "C2": {
+        "event_id_dec": 194,
+        "table_address": "D0790A",
+        "formation_value": "01aa",
+        "formation_offset": "D04AA0",
+        "formation_address": "1AA0"
+    },
+    "C3": {
+        "event_id_dec": 195,
+        "table_address": "D0790E",
+        "formation_value": "01eb",
+        "formation_offset": "D04EB0",
+        "formation_address": "1EB0"
+    },
+    "C4": {
+        "event_id_dec": 196,
+        "table_address": "D07912",
+        "formation_value": "01ec",
+        "formation_offset": "D04EC0",
+        "formation_address": "1EC0"
+    },
+    "C5": {
+        "event_id_dec": 197,
+        "table_address": "D07916",
+        "formation_value": "01ed",
+        "formation_offset": "D04ED0",
+        "formation_address": "1ED0"
+    },
+    "C6": {
+        "event_id_dec": 198,
+        "table_address": "D0791A",
+        "formation_value": "01ea",
+        "formation_offset": "D04EA0",
+        "formation_address": "1EA0"
+    },
+    "C7": {
+        "event_id_dec": 199,
+        "table_address": "D0791E",
+        "formation_value": "01f2",
+        "formation_offset": "D04F20",
+        "formation_address": "1F20"
+    },
+    "C8": {
+        "event_id_dec": 200,
+        "table_address": "D07922",
+        "formation_value": "01f3",
+        "formation_offset": "D04F30",
+        "formation_address": "1F30"
+    },
+    "C9": {
+        "event_id_dec": 201,
+        "table_address": "D07926",
+        "formation_value": "01f4",
+        "formation_offset": "D04F40",
+        "formation_address": "1F40"
+    },
+    "CA": {
+        "event_id_dec": 202,
+        "table_address": "D0792A",
+        "formation_value": "01f6",
+        "formation_offset": "D04F60",
+        "formation_address": "1F60"
+    },
+    "CB": {
+        "event_id_dec": 203,
+        "table_address": "D0792E",
+        "formation_value": "01f5",
+        "formation_offset": "D04F50",
+        "formation_address": "1F50"
+    },
+    "CC": {
+        "event_id_dec": 204,
+        "table_address": "D07932",
+        "formation_value": "01ad",
+        "formation_offset": "D04AD0",
+        "formation_address": "1AD0"
+    },
+    "CD": {
+        "event_id_dec": 205,
+        "table_address": "D07936",
+        "formation_value": "01fd",
+        "formation_offset": "D04FD0",
+        "formation_address": "1FD0"
+    },
+    "CE": {
+        "event_id_dec": 206,
+        "table_address": "D0793A",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "CF": {
+        "event_id_dec": 207,
+        "table_address": "D0793E",
+        "formation_value": "0161",
+        "formation_offset": "D04610",
+        "formation_address": "1610"
+    },
+    "D0": {
+        "event_id_dec": 208,
+        "table_address": "D07942",
+        "formation_value": "0195",
+        "formation_offset": "D04950",
+        "formation_address": "1950"
+    },
+    "D1": {
+        "event_id_dec": 209,
+        "table_address": "D07946",
+        "formation_value": "01b1",
+        "formation_offset": "D04B10",
+        "formation_address": "1B10"
+    },
+    "D2": {
+        "event_id_dec": 210,
+        "table_address": "D0794A",
+        "formation_value": "01b2",
+        "formation_offset": "D04B20",
+        "formation_address": "1B20"
+    },
+    "D3": {
+        "event_id_dec": 211,
+        "table_address": "D0794E",
+        "formation_value": "01b3",
+        "formation_offset": "D04B30",
+        "formation_address": "1B30"
+    },
+    "D4": {
+        "event_id_dec": 212,
+        "table_address": "D07952",
+        "formation_value": "01b4",
+        "formation_offset": "D04B40",
+        "formation_address": "1B40"
+    },
+    "D5": {
+        "event_id_dec": 213,
+        "table_address": "D07956",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "D6": {
+        "event_id_dec": 214,
+        "table_address": "D0795A",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "D7": {
+        "event_id_dec": 215,
+        "table_address": "D0795E",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "D8": {
+        "event_id_dec": 216,
+        "table_address": "D07962",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "D9": {
+        "event_id_dec": 217,
+        "table_address": "D07966",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "DA": {
+        "event_id_dec": 218,
+        "table_address": "D0796A",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "DB": {
+        "event_id_dec": 219,
+        "table_address": "D0796E",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "DC": {
+        "event_id_dec": 220,
+        "table_address": "D07972",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "DD": {
+        "event_id_dec": 221,
+        "table_address": "D07976",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "DE": {
+        "event_id_dec": 222,
+        "table_address": "D0797A",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "DF": {
+        "event_id_dec": 223,
+        "table_address": "D0797E",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "E0": {
+        "event_id_dec": 224,
+        "table_address": "D07982",
+        "formation_value": "005a",
+        "formation_offset": "D035A0",
+        "formation_address": "05A0"
+    },
+    "E1": {
+        "event_id_dec": 225,
+        "table_address": "D07986",
+        "formation_value": "005a",
+        "formation_offset": "D035A0",
+        "formation_address": "05A0"
+    },
+    "E2": {
+        "event_id_dec": 226,
+        "table_address": "D0798A",
+        "formation_value": "005a",
+        "formation_offset": "D035A0",
+        "formation_address": "05A0"
+    },
+    "E3": {
+        "event_id_dec": 227,
+        "table_address": "D0798E",
+        "formation_value": "005a",
+        "formation_offset": "D035A0",
+        "formation_address": "05A0"
+    },
+    "E4": {
+        "event_id_dec": 228,
+        "table_address": "D07992",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "E5": {
+        "event_id_dec": 229,
+        "table_address": "D07996",
+        "formation_value": "00f0",
+        "formation_offset": "D03F00",
+        "formation_address": "0F00"
+    },
+    "E6": {
+        "event_id_dec": 230,
+        "table_address": "D0799A",
+        "formation_value": "0125",
+        "formation_offset": "D04250",
+        "formation_address": "1250"
+    },
+    "E7": {
+        "event_id_dec": 231,
+        "table_address": "D0799E",
+        "formation_value": "0111",
+        "formation_offset": "D04110",
+        "formation_address": "1110"
+    },
+    "E8": {
+        "event_id_dec": 232,
+        "table_address": "D079A2",
+        "formation_value": "0111",
+        "formation_offset": "D04110",
+        "formation_address": "1110"
+    },
+    "E9": {
+        "event_id_dec": 233,
+        "table_address": "D079A6",
+        "formation_value": "00e8",
+        "formation_offset": "D03E80",
+        "formation_address": "0E80"
+    },
+    "EA": {
+        "event_id_dec": 234,
+        "table_address": "D079AA",
+        "formation_value": "013b",
+        "formation_offset": "D043B0",
+        "formation_address": "13B0"
+    },
+    "EB": {
+        "event_id_dec": 235,
+        "table_address": "D079AE",
+        "formation_value": "01ab",
+        "formation_offset": "D04AB0",
+        "formation_address": "1AB0"
+    },
+    "EC": {
+        "event_id_dec": 236,
+        "table_address": "D079B2",
+        "formation_value": "0071",
+        "formation_offset": "D03710",
+        "formation_address": "0710"
+    },
+    "ED": {
+        "event_id_dec": 237,
+        "table_address": "D079B6",
+        "formation_value": "01ff",
+        "formation_offset": "D04FF0",
+        "formation_address": "1FF0"
+    },
+    "EE": {
+        "event_id_dec": 238,
+        "table_address": "D079BA",
+        "formation_value": "01b5",
+        "formation_offset": "D04B50",
+        "formation_address": "1B50"
+    },
+    "EF": {
+        "event_id_dec": 239,
+        "table_address": "D079BE",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "F0": {
+        "event_id_dec": 240,
+        "table_address": "D079C2",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "F1": {
+        "event_id_dec": 241,
+        "table_address": "D079C6",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "F2": {
+        "event_id_dec": 242,
+        "table_address": "D079CA",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "F3": {
+        "event_id_dec": 243,
+        "table_address": "D079CE",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "F4": {
+        "event_id_dec": 244,
+        "table_address": "D079D2",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "F5": {
+        "event_id_dec": 245,
+        "table_address": "D079D6",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "F6": {
+        "event_id_dec": 246,
+        "table_address": "D079DA",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "F7": {
+        "event_id_dec": 247,
+        "table_address": "D079DE",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "F8": {
+        "event_id_dec": 248,
+        "table_address": "D079E2",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "F9": {
+        "event_id_dec": 249,
+        "table_address": "D079E6",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "FA": {
+        "event_id_dec": 250,
+        "table_address": "D079EA",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "FB": {
+        "event_id_dec": 251,
+        "table_address": "D079EE",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "FC": {
+        "event_id_dec": 252,
+        "table_address": "D079F2",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "FD": {
+        "event_id_dec": 253,
+        "table_address": "D079F6",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "FE": {
+        "event_id_dec": 254,
+        "table_address": "D079FA",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    },
+    "FF": {
+        "event_id_dec": 255,
+        "table_address": "D079FE",
+        "formation_value": "0000",
+        "formation_offset": null,
+        "formation_address": null
+    }
+}

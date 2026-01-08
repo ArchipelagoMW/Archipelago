@@ -1,0 +1,36 @@
+# entries (ID, subID) indexed by wDungeon Index
+15//bossItemTable: |
+    db $00,$00                  ; Hero's Cave doesn't have a boss
+    dwbe locations.d1Boss
+    dwbe locations.d2Boss
+    dwbe locations.d3Boss
+    dwbe locations.d4Boss
+    dwbe locations.d5Boss
+    dwbe locations.d6Boss
+    dwbe locations.d7Boss
+    dwbe locations.d8Boss
+
+# spawn items from bossItemTable in place of boss heart containers.
+15//spawnBossItem: |
+    push hl
+    ld hl,bossItemTable
+    ld a,(wDungeonIndex)
+    cp $0c   ; ages d6 past
+    jr nz,@next
+    ld a,$06
+    @next:
+    rst 18
+    ld b,(hl)
+    inc hl
+    ld c,(hl)
+    call createTreasure
+    call objectCopyPosition
+    pop hl
+    ret
+
+0b/4b8f/: |
+    db asm15
+    dw spawnBossItem
+0b/4bb1/: |
+    db asm15
+    dw spawnBossItem

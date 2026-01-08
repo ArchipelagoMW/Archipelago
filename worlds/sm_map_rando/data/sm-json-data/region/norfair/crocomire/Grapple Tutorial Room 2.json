@@ -1,0 +1,419 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 130,
+  "name": "Grapple Tutorial Room 2",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "Crocomire",
+  "roomAddress": "0x7ABD2",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00194e6",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [2],
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00194f2",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2],
+        [1],
+        [1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Grapple Tutorial Room 2 Funes",
+      "enemyName": "Fune",
+      "quantity": 3,
+      "homeNodes": [1]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canLongIBJ",
+          "canJumpIntoIBJ"
+        ]}
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Grapple",
+      "requires": [
+        "Grapple",
+        {"or": [
+          "HiJump",
+          "canWalljump"
+        ]}
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "HiJump",
+      "requires": [
+        "HiJump",
+        {"or": [
+          "canPreciseWalljump",
+          "SpeedBooster"
+        ]}
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "SpringBall Jump",
+      "requires": [
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"shinespark": {"frames": 19, "excessFrames": 5}},
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"shinespark": {"frames": 11, "excessFrames": 5}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Come In Shinecharged, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 24, "excessFrames": 3}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Leave With Spark (HiJump Wall Climb)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementTricky",
+        "canFastWalljumpClimb",
+        {"shinespark": {"frames": 19, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Leave With Spark (Bootless Wall Climb, Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canFastWalljumpClimb",
+        "canInsaneJump",
+        {"shinespark": {"frames": 20, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Leave With Spark (HiJump Tricky Dash Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementTricky",
+        "canTrickyDashJump",
+        {"shineChargeFrames": 175},
+        {"shinespark": {"frames": 6, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Bomb Boost",
+      "requires": [
+        "canWallJumpBombBoost"
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 11, "excessFrames": 5}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 7, "excessFrames": 4}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "G-Mode Morph IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 20,
+      "link": [1, 2],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"},
+            {"position": [6, 4], "note": "Grapple Tutorial Room 2"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ],
+      "devNote": [
+        "FIXME: Other setup rooms such as Moat are theoretically possible but seem unreasonably difficult?"
+      ]
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"or": [
+          "Wave",
+          "Grapple",
+          {"shineChargeFrames": 5}
+        ]},
+        {"shineChargeFrames": 165}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "devNote": [
+        "FIXME: A Super door could still be unlocked as part of this strat, but Wave/Grapple would no longer help;",
+        "there doesn't seem to be a way to model that interaction without making a separate strat."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 5, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "Leave With Side Platform",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 1,
+          "runway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": "Max extra run speed $1.5"
+    },
+    {
+      "id": 21,
+      "link": [2, 2],
+      "name": "Leave With Grapple Swing",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleSwing": {
+          "blocks": [{"position": [6, 4], "note": "Closest Grapple block to the door"}]
+        }
+      }
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 23,
+  "nextNotableId": 1
+}

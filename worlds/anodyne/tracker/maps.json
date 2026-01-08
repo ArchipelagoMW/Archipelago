@@ -1,0 +1,158 @@
+[
+    {
+        "name": "Nexus",
+        "img": "images/maps/NEXUS.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Apartment",
+        "img": "images/maps/APARTMENT.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Beach",
+        "img": "images/maps/BEACH.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Temple of the Seeing One",
+        "img": "images/maps/BEDROOM.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Blank",
+        "img": "images/maps/BLANK.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Blue",
+        "img": "images/maps/BLUE.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Boss Rush",
+        "img": "images/maps/BOSS_RUSH.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Cell",
+        "img": "images/maps/CELL.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Circus",
+        "img": "images/maps/CIRCUS.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Cliffs",
+        "img": "images/maps/CLIFFS.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Mountain Cavern",
+        "img": "images/maps/CROWD.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Debug",
+        "img": "images/maps/DEBUG.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Drawer",
+        "img": "images/maps/DRAWER.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Fields",
+        "img": "images/maps/FIELDS.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Deep Forest",
+        "img": "images/maps/FOREST.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Garden",
+        "img": "images/maps/GO.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Red",
+        "img": "images/maps/HAPPY.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Hotel",
+        "img": "images/maps/HOTEL.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Woods",
+        "img": "images/maps/OVERWORLD.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Red Grotto",
+        "img": "images/maps/RED_CAVE.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Red Sea",
+        "img": "images/maps/RED_SEA.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Space",
+        "img": "images/maps/SPACE.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Street",
+        "img": "images/maps/STREET.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Young Town",
+        "img": "images/maps/SUBURB.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Crossing",
+        "img": "images/maps/TERMINAL.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    },
+    {
+        "name": "Windmill",
+        "img": "images/maps/WINDMILL.png",
+        "location_size": 20,
+        "location_border_thickness": 1
+    }
+]

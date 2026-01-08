@@ -1,0 +1,301 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 49,
+  "name": "Green Brinstar Fireflea Room",
+  "area": "Brinstar",
+  "subarea": "Green",
+  "roomAddress": "0x79C5E",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1],
+    [1, 1, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018d7e",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1],
+        [2, 2, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018d8a",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 2],
+        [1, 1, 0]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Green Brinstar Firefleas",
+      "enemyName": "Fireflea",
+      "quantity": 5,
+      "homeNodes": [1]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (X-Mode)",
+      "requires": [
+        "canXMode",
+        "h_XModeThornHit",
+        "h_XModeThornHit",
+        "h_XModeThornHit",
+        "h_shinechargeMaxRunway",
+        "canShinechargeMovement",
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Jump into the large patch of thorns from below.",
+      "devNote": "Three thorns hits are expected per attempt (with any additional leniency hits being multiplied by this amount)."
+    },
+    {
+      "id": 13,
+      "link": [1, 1],
+      "name": "Leave With Spark",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 16, "openEnd": 1}},
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 13, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "note": [
+        "Gain a shinecharge running left-to-right at the top of the room.",
+        "Then run to the left, jump across the room, and shinespark through the door."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [
+        "canInsaneJump",
+        "canBeVeryPatient"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 17,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 0,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$3.2",
+          "maxExtraRunSpeed": "$3.3"
+        }
+      },
+      "note": [
+        "This uses the runway at the top-right of the room, requiring an extremely precise jump in order to thread the needle between the platforms and reach the left door.",
+        "If obtaining blue speed, a multi-stutter should be used with a 2-tap shortcharge, with an early second tap and a last-frame jump, in order to gain enough momentum for the jump;",
+        "bonk the ceiling, and wait to aim down until passing between the platforms."
+      ],
+      "devNote": [
+        "TODO: The canBeVeryPatient requirement is for difficulty placement; it could be replaced with a more specific tech if one becomes applicable."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"or": [
+          {"canShineCharge": {"usedTiles": 16, "openEnd": 0}},
+          {"and": [
+            {"canShineCharge": {"usedTiles": 17, "openEnd": 0}},
+            {"doorUnlockedAtNode": 2}
+          ]}
+        ]},
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"nodeId": 2, "types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Fireflea Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 630}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 900}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Fireflea", "count": 5}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Gain Flash Suit (Spikesuit)",
+      "requires": [
+        {"or": [
+          {"canShineCharge": {"usedTiles": 16, "openEnd": 0}},
+          {"and": [
+            {"doorUnlockedAtNode": 2},
+            {"canShineCharge": {"usedTiles": 17, "openEnd": 0}}
+          ]}
+        ]},
+        {"thornHits": 1},
+        {"or": [
+          "h_spikeSuitThornHitLeniency",
+          {"resetRoom": {"nodes": [1, 2]}}
+        ]},
+        "canSpikeSuit",
+        {"shinespark": {"frames": 5, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "Assuming the room can be reset, leniency is not included because a farm is available."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 17,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 15,
+  "nextNotableId": 1
+}

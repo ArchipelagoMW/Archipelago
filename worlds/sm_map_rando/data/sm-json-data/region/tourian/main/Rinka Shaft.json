@@ -1,0 +1,1241 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 236,
+  "name": "Rinka Shaft",
+  "area": "Tourian",
+  "subarea": "Main",
+  "roomAddress": "0x7DDF3",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001aab0",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Middle Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001aabc",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "red",
+      "nodeAddress": "0x001aac8",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Rinka Shaft Rinkas",
+      "enemyName": "Rinka",
+      "quantity": 3,
+      "homeNodes": [2, 3]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 59,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "canMomentumConservingMorph",
+        "canInsaneJump"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 2,
+            "openEnd": 2
+          },
+          "obstruction": [2, 2]
+        }
+      },
+      "devNote": [
+        "Max extra run speed $1.1.",
+        "This strat is included for completeness, though it apparently doesn't have any applications."
+      ]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 2,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 2,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 2,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 2,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Rinka",
+      "requires": [
+        "canComplexGMode"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Lure a Rinka to the top door without letting it go off screen.",
+        "The bottom right Rinka can be lured at the correct angle by standing on the central platform then jumping slightly before it moves."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 86},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 143},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, moving quickly to avoid Rinka hits, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged (Hi Jump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged (Hi Jump Platforming)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged (Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Hi Jump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 95},
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 115},
+        "canWalljump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (HiJump Platforming)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 115},
+        "HiJump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump Platforming)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 75},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 8}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave With Spark (Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 4}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "can4HighMidAirMorph"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave With Spark (Platforming)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 165},
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 5}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 23,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 24,
+      "link": [2, 2],
+      "name": "Leave With Runway - Frozen Rinka",
+      "requires": [
+        "h_trickyFrozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "One simple setup to position a Rinka is to stand a few pixels away from the right edge of the floating platform in front of the door.",
+        "The lower right Rinka spawner will spawn a Rinka at a good angle.",
+        "It is possible maintain a half-tile gap between the Rinka and the runway in order to extend it as far as possible."
+      ],
+      "devNote": "FIXME: It is possible but challenging to set up a frozen Rinka at the top door by walking off of the small platform on the right side of the room."
+    },
+    {
+      "id": 25,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Rinka",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Rinka", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 27,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 28,
+      "link": [2, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 95}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 29,
+      "link": [2, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [2, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 31,
+      "link": [3, 1],
+      "name": "Very Deep Stuck X-Ray Climb With Immobile",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false,
+          "mobility": "immobile"
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"enemyDamage": {"enemy": "Rinka", "type": "contact", "hits": 1}},
+        "canLongXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter immobile with G-mode direct, taking a Rinka hit to regain mobility.",
+        "Back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 2 screens, moving quickly to minimize Rinka damage.",
+        "Perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ],
+      "devNote": [
+        "The 'immobile' requirement in the entranceCondition is not necessary but is included for clarity.",
+        "Without coming in immobile, it would not be possible to have enough energy to survive the Rinka hit.",
+        "The enemyDamage in this strat is for a second Rinka hit while climbing.",
+        "The first Rinka hit is included in the gModeImmobile requirement."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [3, 1],
+      "name": "Very Deep Stuck X-Ray Climb With Ice",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "Ice",
+        "canLongXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, and freeze the bottom Rinka near the door.",
+        "Back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 2 screens, moving quickly to avoid Rinka damage.",
+        "Perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [3, 1],
+      "name": "Very Deep Stuck X-Ray Climb With Crystal Flash",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_CrystalFlash",
+        {"autoReserveTrigger": {}},
+        "canLongXRayClimb",
+        {"enemyDamage": {"enemy": "Rinka", "type": "contact", "hits": 2}}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, and go to the top of the room to perform a Crystal Flash to refill on energy without destroying all the bottom Rinkas.",
+        "Use the Rinkas to damage down.",
+        "For the final hit that will trigger auto-reserves, stand in the open doorway between 1 and 6 pixels from the transition.",
+        "The auto reserve trigger will cancel G-mode and close the door on top of Samus.",
+        "Climb up 2 screens, moving quickly to minimize Rinka damage.",
+        "Perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [3, 1],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 155},
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 35,
+      "link": [3, 1],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump Platforming)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 165},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 4}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [3, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "can4HighMidAirMorph",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Use X-ray immediately after shinecharging, in order to be able to dodge the Rinkas."
+    },
+    {
+      "id": 37,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 38,
+      "link": [3, 2],
+      "name": "Very Deep Stuck X-Ray Climb With Immobile",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false,
+          "mobility": "immobile"
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"enemyDamage": {"enemy": "Rinka", "type": "contact", "hits": 1}},
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter immobile with G-mode direct, taking a Rinka hit to regain mobility.",
+        "Back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, moving quickly to minimize Rinka damage.",
+        "Perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ],
+      "devNote": [
+        "The 'immobile' requirement in the entranceCondition is not necessary but is included for clarity.",
+        "Without coming in immobile, it would not be possible to have enough energy to survive the Rinka hit.",
+        "The enemyDamage in this strat is for a second Rinka hit while climbing.",
+        "The first Rinka hit is included in the gModeImmobile requirement."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [3, 2],
+      "name": "Very Deep Stuck X-Ray Climb With Ice",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "Ice",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, and freeze the bottom Rinka near the door.",
+        "Back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, moving quickly to avoid Rinka damage.",
+        "Perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [3, 2],
+      "name": "Very Deep Stuck X-Ray Climb With Crystal Flash",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_CrystalFlash",
+        {"autoReserveTrigger": {}},
+        "canXRayClimb",
+        {"enemyDamage": {"enemy": "Rinka", "type": "contact", "hits": 2}}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, and go to the top of the room to perform a Crystal Flash to refill on energy without destroying all the bottom Rinkas.",
+        "Use a Rinka to damage down.",
+        "For the final hit that will trigger auto-reserves, stand in the open doorway between 1 and 6 pixels from the transition.",
+        "The auto reserve trigger will cancel G-mode and close the door on top of Samus.",
+        "Climb up 1 screen, moving quickly to minimize Rinka damage.",
+        "Perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Full Runway, HiJump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 135}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 42,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Full Runway, HiJump Platforming)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 43,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave With Spark (Full Runway, Platforming)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 6}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 44,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Short Runway, HiJump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 105}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 45,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Short Runway, Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 46,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Short Runway, HiJump Platforming)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 47,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Short Runway, Platforming)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 48,
+      "link": [3, 2],
+      "name": "Carry Shinecharge (Hi Jump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 49,
+      "link": [3, 2],
+      "name": "Carry Shinecharge (Hi Jump Platforming)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 115},
+        "HiJump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 50,
+      "link": [3, 2],
+      "name": "Carry Shinecharge (Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 120},
+        "canWalljump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 51,
+      "link": [3, 2],
+      "name": "Come in Shinecharged, Leave With Spark (Hi Jump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 80},
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 5}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 52,
+      "link": [3, 2],
+      "name": "Come in Shinecharged, Leave With Spark (Hi Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 7}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 53,
+      "link": [3, 2],
+      "name": "Come in Shinecharged, Leave With Spark (Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 110},
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 6}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 54,
+      "link": [3, 2],
+      "name": "Come in Shinecharged, Leave With Spark (Platforming)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 145},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 6}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 55,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Use X-ray immediately after shinecharging, in order to be able to dodge the Rinkas."
+    },
+    {
+      "id": 56,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 57,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit By Rinka",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 58,
+      "link": [3, 3],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Rinka", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 60,
+  "nextNotableId": 1
+}

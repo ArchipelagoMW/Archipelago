@@ -1,0 +1,504 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 47,
+  "name": "Brinstar Pre-Map Room",
+  "area": "Brinstar",
+  "subarea": "Green",
+  "roomAddress": "0x79B9D",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018d36",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x0018d42",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Brinstar Pre-Map Gray Lock (to Green Shaft)",
+          "lockType": "killEnemies",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "Morph",
+                {"or": [
+                  "h_bombThings",
+                  {"obstaclesCleared": ["A"]},
+                  {"and": [
+                    "canSlowShortCharge",
+                    "canSpeedball",
+                    {"getBlueSpeed": {"usedTiles": 14, "openEnd": 1}}
+                  ]}
+                ]}
+              ],
+              "clearsObstacles": ["A"],
+              "note": [
+                "Both sides of the room must be accessed to reach all enemies and unlock the door.",
+                "Beyond that, the enemies can be killed with Power Beam."
+              ]
+            }
+          ],
+          "yields": ["f_ZebesAwake"]
+        }
+      ],
+      "mapTileMask": [
+        [1, 2, 2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Bomb Blocks",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Brinstar Pre-Map Left Zeela",
+      "enemyName": "Zeela",
+      "quantity": 1,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Brinstar Pre-Map Right Zeelas",
+      "enemyName": "Zeela",
+      "quantity": 2,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e3",
+      "groupName": "Brinstar Pre-Map Small Sidehopper",
+      "enemyName": "Sm. Sidehopper",
+      "quantity": 1,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {
+          "id": 2,
+          "devNote": "FIXME: Node 1 could be used to reset the room, with additional requirements."
+        }
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 27,
+      "link": [1, 1],
+      "name": "Zeela Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"cycleFrames": 120}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Zeela", "count": 1}]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Zeela",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Zeela", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"or": [
+          "h_bombThings",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Temporary Blue Bounce (Come in Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canTemporaryBlue",
+        "canSpringBallBounce"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": [
+        "There is 1 unusable tile in this runway.",
+        "TODO: Add an insane speedball strat which is possible by jumping up through the door blue with very low speed."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Temporary Blue Bounce (Come in With Temporary Blue)",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "canSpringBallBounce"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "There is 1 unusable tile in this runway."
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"or": [
+          "h_bombThings",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Come In Getting Blue Speed, Speedball",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canSpeedball"
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": "There are 3 unusable tiles in this runway."
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Speedball (In-Room)",
+      "requires": [
+        "canSlowShortCharge",
+        {"getBlueSpeed": {"usedTiles": 14, "openEnd": 1}},
+        "canSpeedball"
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Run on the upper platform to perform the speedball."
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Speedball (In-Room) Extended Runway With Frozen Zeela",
+      "requires": [
+        "h_frozenEnemyRunway",
+        "canSlowShortCharge",
+        {"getBlueSpeed": {"usedTiles": 15, "openEnd": 1}},
+        "canSpeedball"
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Use a frozen Zeela to extend the upper platform to help set up the speedball."
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Temporary Blue Bounce",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 17, "openEnd": 1}},
+        "canTemporaryBlue",
+        "canSpringBallBounce"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Use the upper platform to run and gain temporary blue."
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 17, "openEnd": 1}},
+        "canShinechargeMovement",
+        {"obstaclesCleared": ["A"]},
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 15,
+          "openEnd": 0
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 17, "openEnd": 1}},
+        {"shineChargeFrames": 85}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Use the upper platform to gain a shinecharge and carry it out the right door."
+    },
+    {
+      "id": 20,
+      "link": [2, 2],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 17,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 7,
+            "openEnd": 1
+          }
+        }
+      },
+      "devNote": "It's also possible to do a neutral bounce into an uncontrolled spring ball bounce through the door; but it's unclear if it has any application."
+    },
+    {
+      "id": 21,
+      "link": [2, 2],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 16,
+            "openEnd": 1
+          },
+          "maxExtraRunSpeed": "$2.4"
+        }
+      }
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 17, "openEnd": 1}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 23,
+      "link": [2, 2],
+      "name": "Zeela & Sidehopper Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"cycleFrames": 320},
+        {"or": [
+          "canDodgeWhileShooting",
+          "Plasma",
+          {"and": [
+            "Wave",
+            "Spazer"
+          ]},
+          {"and": [
+            "Ice",
+            "Wave"
+          ]},
+          {"and": [
+            "Ice",
+            "Spazer"
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Zeela", "count": 2},
+        {"enemy": "Sm. Sidehopper", "count": 1}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 24,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Zeela or Sidehopper",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sm. Sidehopper", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 28,
+  "nextNotableId": 1
+}

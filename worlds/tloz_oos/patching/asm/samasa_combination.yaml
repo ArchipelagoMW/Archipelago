@@ -1,0 +1,19 @@
+# Change the actual combination required to open the door
+# Inject the combination checked when pressing door buttons...
+0a//samasaCombination: /include samasaCombination
+# ...then reference it where relevant
+0a/6017/: db samasaCombinationLengthMinusOne   ; defined in code
+0a/6006/: dw samasaCombination
+
+# Inject a new cutscene for the piratian to show the randomized
+# combination by pulling and pressing drawers, just like in vanilla
+15//showSamasaCutscene: /include showSamasaCutscene
+# Call this new script from the base piratian script
+0b/5e4c/: |
+    db checkabutton
+    db setdisabledobjectsto91
+    db showtextlowindex,$0c
+    db writeobjectbyte,$7c,$01
+    db setspeed,$50
+    db loadscript,$15
+    dw showSamasaCutscene

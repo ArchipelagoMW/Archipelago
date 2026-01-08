@@ -1,0 +1,52 @@
+0a//deterministicGashaLootTable: /include deterministicGashaLootTable
+
+# Inject an override at the beginning of INTERACID_GASHA_SPOT @state5 to use
+# deterministic Gasha Nut loot instead of regular logic if the matching option
+# is enabled.
+# Current deterministic loot index is stored inside the 6 upper bits of wGashaSpotFlags,
+# which means we need to perform some bit shifts before being able to read/write it.
+0a//checkDeterministicGashaLoot: |
+    ; Read the top 6 bits of wGashaSpotFlags to get the currently harvested count
+    ld a,(hl)
+    rra
+    rra
+    ld b,a  ; Store deterministic treasure index in b
+    and $cf
+    ; Test if there are still deterministic loot to give
+    cp option.deterministicGashaLootCount
+    jr c,@deterministic
+    jp $47c5  ; No more, go back to vanila loot logic
+    
+    @deterministic:
+    ; Spawn the appropriate treasure
+    ld a,b
+    and $cf
+    add a,a
+    ld hl,deterministicGashaLootTable
+    rst 10  ; addAToHL
+    ldi a,(hl)
+    push bc
+    ld b,a
+    ld c,(hl)
+    call spawnTreasureOnLink
+    pop bc
+    jr nz,@done
+    ld l,$71  ; Set forced collect mode in var31
+    ld (hl),COLLECT_PICKUP  ; Make the item set the room flag when collected
+    
+    ; Increment count, then rotate back to its initial state and store it
+    ld a,b
+    inc a
+    rla
+    rla
+    ld (wGashaSpotFlags),a
+    ; Increase nut state to make the tree wither
+    call interactionIncState
+    
+    @done:
+    ret
+
+# Replace the first check of INTERACID_GASHA_SPOT @state5 to check for
+# deterministic Gasha Nut loot instead of regular logic if the matching option
+# is enabled
+0a/47bb/: jp checkDeterministicGashaLoot

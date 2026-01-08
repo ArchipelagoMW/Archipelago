@@ -1,0 +1,1 @@
+"""List data for randomizer."""

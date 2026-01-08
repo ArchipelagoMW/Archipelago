@@ -1,0 +1,132 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 321,
+  "name": "Toilet Bowl",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Pink",
+  "roomAddress": "0x7D408",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Doorway",
+      "nodeType": "door",
+      "nodeSubType": "vertical",
+      "nodeAddress": "0x001a60c",
+      "doorOrientation": "up",
+      "doorEnvironments": [{"physics": "air"}],
+      "useImplicitLeaveNormally": false,
+      "useImplicitComeInNormally": false,
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "mapTileMask": [
+        [2],
+        [2],
+        [2],
+        [2],
+        [2],
+        [2],
+        [2],
+        [2],
+        [2],
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Doorway",
+      "nodeType": "door",
+      "nodeSubType": "vertical",
+      "nodeAddress": "0x001a600",
+      "doorOrientation": "down",
+      "doorEnvironments": [{"physics": "air"}],
+      "useImplicitLeaveNormally": false,
+      "useImplicitComeInNormally": false,
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "mapTileMask": [
+        [2],
+        [2],
+        [2],
+        [2],
+        [2],
+        [2],
+        [2],
+        [2],
+        [2],
+        [2]
+      ]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 2],
+      "name": "Base",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true,
+      "devNote": "These doors can't be locked and 'comesThroughToilet' doesn't make sense unless this room was chained together."
+    },
+    {
+      "id": 2,
+      "link": [2, 1],
+      "name": "Base",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true,
+      "devNote": "These doors can't be locked and 'comesThroughToilet' doesn't make sense unless this room was chained together."
+    }
+  ],
+  "notables": [],
+  "nextStratId": 3,
+  "nextNotableId": 1,
+  "note": "This is the vertical pipe that connects Plasma Spark Room and Oasis. Visually it looks like a portion of Aqueduct and Botwoon Hallway (and surroundings).",
+  "devNote": [
+    "Samus can't move freely between the nodes.",
+    "Traversal through the room happens by placing Samus at the other end of the room with no option but to leave.",
+    "The Toilet doesn't work normally with G-mode. On entry, Reserves are triggered, but Samus cannot use X-Ray.",
+    "Weird things happen if Reserves are still filling when Samus reaches the end of the Toilet ride."
+  ]
+}

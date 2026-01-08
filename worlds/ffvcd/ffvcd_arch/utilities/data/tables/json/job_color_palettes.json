@@ -1,0 +1,552 @@
+{
+    "0": {
+        "char": "Butz",
+        "job": "Knight",
+        "byte_string": "06228410ff7f60551f4755217e191b041c26d110f8213f0300620045a042c86e"
+    },
+    "1": {
+        "char": "Butz",
+        "job": "Monk",
+        "byte_string": "06228410ff7f60551f475521ff4c1a2c1c26d110f8216b515f02a042e02d3f03"
+    },
+    "2": {
+        "char": "Butz",
+        "job": "Thief",
+        "byte_string": "06228410ff7f60551f475521e61ae30d1c26d110f8213f03d725ff6bbf3bd110"
+    },
+    "3": {
+        "char": "Butz",
+        "job": "Dragoon",
+        "byte_string": "06228410ff7f60551f4755212e6e67511c26d110f821197e706d3f031b04887f"
+    },
+    "4": {
+        "char": "Butz",
+        "job": "Ninja",
+        "byte_string": "06228410ff7f60551f475521c04d20491c26d110f821a05e7902b601ff7f1c03"
+    },
+    "5": {
+        "char": "Butz",
+        "job": "Samurai",
+        "byte_string": "06228410ff7f60551f4755211b0411081c26d110f821524a4a293f03ff6bfd3d"
+    },
+    "6": {
+        "char": "Butz",
+        "job": "Berserker",
+        "byte_string": "06228410ff7f60551f475521b54ace2d1c26d110f8211b04385bff6bdd56c04d"
+    },
+    "7": {
+        "char": "Butz",
+        "job": "Hunter",
+        "byte_string": "06228410ff7f60551f475521c03f6c221c26d110f82179027f4b53011a2cbf3b"
+    },
+    "8": {
+        "char": "Butz",
+        "job": "Mystic Knight",
+        "byte_string": "06228410ff7f60555b365521ff6b1847b61dd110f82119017c79a042ce2d3544"
+    },
+    "9": {
+        "char": "Butz",
+        "job": "White Mage",
+        "byte_string": "80258410ff7f60551f475521ff6b7f3f1c26d110f821bb1c58321f3c1f3cd110"
+    },
+    "10": {
+        "char": "Butz",
+        "job": "Black Mage",
+        "byte_string": "524e8410ff7ff37f630c5521a0726051630cd110f8211602bf43fc02a042e02d"
+    },
+    "11": {
+        "char": "Butz",
+        "job": "Time Mage",
+        "byte_string": "19218410ff7f00693f531f03567a2d793f3adb0dff3f7f405f035f72a51ee53b"
+    },
+    "12": {
+        "char": "Butz",
+        "job": "Summoner",
+        "byte_string": "a0028410ff7f60551f475521800260051c26d110f8217f3f9a26df5b2003d110"
+    },
+    "13": {
+        "char": "Butz",
+        "job": "Blue Mage",
+        "byte_string": "19218410ff7f60551f475521857de3481c26d110f821e87aff6bff2c151c3f03"
+    },
+    "14": {
+        "char": "Butz",
+        "job": "Red Mage",
+        "byte_string": "d34d8410ff7f60551f4755211f0413081c26d110f821b0257f3f3f0353261011"
+    },
+    "15": {
+        "char": "Butz",
+        "job": "Trainer",
+        "byte_string": "934c8410ff7f60551f4755213f4b5a3a1c26d110f821d110c0599f02ff6bde52"
+    },
+    "16": {
+        "char": "Butz",
+        "job": "Chemist",
+        "byte_string": "06228410ff7f60551f4755211f03b6011c26d110f821ff6b2057e029bf3fcc10"
+    },
+    "17": {
+        "char": "Butz",
+        "job": "Geomancer",
+        "byte_string": "06228410ff7f6055bd365521804a802d9819d110f821b601d73bc91e3f038067"
+    },
+    "18": {
+        "char": "Butz",
+        "job": "Bard",
+        "byte_string": "06228410ff7f60551f475521c91ea0051c26d110f821ff6b1450bc029f78cc10"
+    },
+    "19": {
+        "char": "Butz",
+        "job": "Dancer",
+        "byte_string": "06228410ff7f60551f475521191413181c26d110f8214a29ff6b1f1de003c002"
+    },
+    "20": {
+        "char": "Butz",
+        "job": "Mimic",
+        "byte_string": "06228410ff7f60551f475521207ee07c1c26d110f821fb141100bf3fa40a5301"
+    },
+    "21": {
+        "char": "Butz",
+        "job": "Freelancer",
+        "byte_string": "06228410ff7f60551f475521207ee07c1c26d110f82153273536ff6ba40a5301"
+    },
+    "22": {
+        "char": "Lenna",
+        "job": "Knight",
+        "byte_string": "06228410ff7fa6213f53ff409266206adf2d17343f4e3f036049a02ca042d34d"
+    },
+    "23": {
+        "char": "Lenna",
+        "job": "Monk",
+        "byte_string": "80258410ff7fa6213f53ff4099109110df2d17343f4e3f03ff11e029ad51cc10"
+    },
+    "24": {
+        "char": "Lenna",
+        "job": "Thief",
+        "byte_string": "524e8410ff7fa6213f53ff40e61ae30ddf2d17343f4e3f03d725f13bbf3bd110"
+    },
+    "25": {
+        "char": "Lenna",
+        "job": "Dragoon",
+        "byte_string": "f73e8410ff7fa6213f53ff400e6e6751df2d17343f4e997fa042df032045937a"
+    },
+    "26": {
+        "char": "Lenna",
+        "job": "Ninja",
+        "byte_string": "a0028410ff7fa6213f53ff4020498038df2d17343f4ee61a79027f3f0e6e3f03"
+    },
+    "27": {
+        "char": "Lenna",
+        "job": "Samurai",
+        "byte_string": "19218410ff7fa6213f53ff403b301124df2d17343f4e734ead359f03df4e2835"
+    },
+    "28": {
+        "char": "Lenna",
+        "job": "Berserker",
+        "byte_string": "d34d8410ff7fa6213f53ff403c033702df2d17343f4e7701ff6b3d3eff33d110"
+    },
+    "29": {
+        "char": "Lenna",
+        "job": "Hunter",
+        "byte_string": "934c8410ff7fa6213f53ff4040534032df2d17343f4eff11ff6b3f03ae141f11"
+    },
+    "30": {
+        "char": "Lenna",
+        "job": "Mystic Knight",
+        "byte_string": "06228410ff7f880c3f4354367c19950cf8316b11394b7f2f00620045a042c86e"
+    },
+    "31": {
+        "char": "Lenna",
+        "job": "White Mage",
+        "byte_string": "80258410ff7fa6213f53ff40ff6b7f3fdf2d17343f4ebb1c58321f3c1f3cd110"
+    },
+    "32": {
+        "char": "Lenna",
+        "job": "Black Mage",
+        "byte_string": "524e8410ff7f95478410ff40206a6051841017343f4e790295473f03a042e02d"
+    },
+    "33": {
+        "char": "Lenna",
+        "job": "Time Mage",
+        "byte_string": "f73e8410ff7fa6213f53ff407e01b900df2d17343f4e0e6e7e4bff6be348d110"
+    },
+    "34": {
+        "char": "Lenna",
+        "job": "Summoner",
+        "byte_string": "a0028410ff7fa6213f53ff4080026005df2d17343f4e7f3f3f2fff6bce2dd110"
+    },
+    "35": {
+        "char": "Lenna",
+        "job": "Blue Mage",
+        "byte_string": "19218410ff7fa6213f53ff40a961e348df2d17343f4e0e6eff6b1a1813181f03"
+    },
+    "36": {
+        "char": "Lenna",
+        "job": "Red Mage",
+        "byte_string": "d34d8410ff7fa6213f53ff40df081508df2d17343f4e9e227f3fbf1758326f11"
+    },
+    "37": {
+        "char": "Lenna",
+        "job": "Trainer",
+        "byte_string": "934c8410ff7fa6213f53ff403f4b5a3adf2d17343f4ed110c059e348ff6b793e"
+    },
+    "38": {
+        "char": "Lenna",
+        "job": "Chemist",
+        "byte_string": "06228410ff7fa6213f53ff403f163601df2d17343f4edf572e3b0022ff2acc10"
+    },
+    "39": {
+        "char": "Lenna",
+        "job": "Geomancer",
+        "byte_string": "80258410ff7fa6213f53ff40004f203adf2d17343f4e9547ff411f303f03ff6b"
+    },
+    "40": {
+        "char": "Lenna",
+        "job": "Bard",
+        "byte_string": "524e8410ff7fa6213f53ff402e3ba612df2d17343f4ef821ff6bc0699f781450"
+    },
+    "41": {
+        "char": "Lenna",
+        "job": "Dancer",
+        "byte_string": "f73e8410ff7fa6213f53ff40c06ac069df2d17343f4e750b6059ff6bb00aff40"
+    },
+    "42": {
+        "char": "Lenna",
+        "job": "Mimic",
+        "byte_string": "a0028410ff7fa6213f53ff40bf0e7f15df2d17343f4ec06ac0697a1df50b0622"
+    },
+    "43": {
+        "char": "Lenna",
+        "job": "Freelancer",
+        "byte_string": "19218410ff7fa6213f53ff40bf0e7f15df2d17343f4ec06ac0697a1df50b0622"
+    },
+    "44": {
+        "char": "Galuf",
+        "job": "Knight",
+        "byte_string": "06228410ff7f880c3f4354367c19950cf8316b11394b7f2f00620045a042c86e"
+    },
+    "45": {
+        "char": "Galuf",
+        "job": "Monk",
+        "byte_string": "524e8410ff7f880c3f4354364929a518f8316b11394b66321a2cef5d6b51ff4c"
+    },
+    "46": {
+        "char": "Galuf",
+        "job": "Thief",
+        "byte_string": "f73e8410ff7f880c3f435436e61ae30df8316b11394b3f03d725ff6bbf3bd110"
+    },
+    "47": {
+        "char": "Galuf",
+        "job": "Dragoon",
+        "byte_string": "a0028410ff7f880c3f435436b461ec40f8316b11394b0f7e696d3f031b04d77e"
+    },
+    "48": {
+        "char": "Galuf",
+        "job": "Ninja",
+        "byte_string": "19218410ff7f880c3f435436714ead35f8316b11394b4925fe191b0dff7f1c03"
+    },
+    "49": {
+        "char": "Galuf",
+        "job": "Samurai",
+        "byte_string": "00008410ff7f880c3f4354361b046c0cf8316b11394b385b5246ff7f3404c330"
+    },
+    "50": {
+        "char": "Galuf",
+        "job": "Berserker",
+        "byte_string": "19218410ff7f880c3f435436b94ad12df8316b11394b1b043a5bff6bdd56e029"
+    },
+    "51": {
+        "char": "Galuf",
+        "job": "Hunter",
+        "byte_string": "a0028410ff7f880c3f4354362a270a22f8316b11394bad001c035301f768df63"
+    },
+    "52": {
+        "char": "Galuf",
+        "job": "Mystic Knight",
+        "byte_string": "06228410ff7f880c3f435436ff6b1847f8316b11394b19017479a042ce2d2d44"
+    },
+    "53": {
+        "char": "Galuf",
+        "job": "White Mage",
+        "byte_string": "524e8410ff7f880c3f435436ff6b7f3ff8316b11394bbb1c5832a042e02dd110"
+    },
+    "54": {
+        "char": "Galuf",
+        "job": "Black Mage",
+        "byte_string": "f73e8410ff7f5f1a84105436cc71e33cf8316b11394b1602bf43fc02004f002e"
+    },
+    "55": {
+        "char": "Galuf",
+        "job": "Time Mage",
+        "byte_string": "a0028410ff7f880c3f4354367e01b900f8316b11394b0e6e7e4bff6be348d110"
+    },
+    "56": {
+        "char": "Galuf",
+        "job": "Summoner",
+        "byte_string": "19218410ff7f880c3f435436801e601df8316b11394b7f3f3f03ff6bce2dd110"
+    },
+    "57": {
+        "char": "Galuf",
+        "job": "Blue Mage",
+        "byte_string": "00008410ff7f880c3f435436a961e348f8316b11394b7f3fff6bfa2013181f03"
+    },
+    "58": {
+        "char": "Galuf",
+        "job": "Red Mage",
+        "byte_string": "19218410ff7f880c3f435436df201518f8316b11394b3f467f3fbf1758326f11"
+    },
+    "59": {
+        "char": "Galuf",
+        "job": "Trainer",
+        "byte_string": "a0028410ff7f880c3f4354363f4b5a3af8316b11394bd110c059e348ff6bbf17"
+    },
+    "60": {
+        "char": "Galuf",
+        "job": "Chemist",
+        "byte_string": "06228410ff7f880c3f4354361f03b601f8316b11394bff6b2057e029bf3fcc10"
+    },
+    "61": {
+        "char": "Galuf",
+        "job": "Geomancer",
+        "byte_string": "524e8410ff7f880c3f435436ed16040af8316b11394b5501937fad7e9f028c1b"
+    },
+    "62": {
+        "char": "Galuf",
+        "job": "Bard",
+        "byte_string": "f73e8410ff7f880c3f435436c91e8005f8316b11394bff6b1318bc025a15cc10"
+    },
+    "63": {
+        "char": "Galuf",
+        "job": "Dancer",
+        "byte_string": "a0028410ff7f880c3f435436fa01d600f8316b11394b4a290006007eb51fe348"
+    },
+    "64": {
+        "char": "Galuf",
+        "job": "Mimic",
+        "byte_string": "19218410ff7f880c3f435436207ee07cf8316b11394bfb141100bf3fa40a5301"
+    },
+    "65": {
+        "char": "Galuf",
+        "job": "Freelancer",
+        "byte_string": "00008410ff7f880c3f4354364053203ef8316b11394b5f039f0e5b62bb0d5535"
+    },
+    "66": {
+        "char": "Faris",
+        "job": "Knight",
+        "byte_string": "06228410ff7fa621fe4ab951a06180383b2e50493c6e9b0240721477e61ae30d"
+    },
+    "67": {
+        "char": "Faris",
+        "job": "Monk",
+        "byte_string": "80258410ff7fa621fe4ab951bf3b77263b2e50493c6eff6bff111f11a042f200"
+    },
+    "68": {
+        "char": "Faris",
+        "job": "Thief",
+        "byte_string": "524e8410ff7fa621fe4ab9517f1a77013b2e50493c6e3f032043403abf3bd110"
+    },
+    "69": {
+        "char": "Faris",
+        "job": "Dragoon",
+        "byte_string": "f73e8410ff7fa621fe4ab951bf10b5103b2e50493c6e7f12a0423f03a043af10"
+    },
+    "70": {
+        "char": "Faris",
+        "job": "Ninja",
+        "byte_string": "a0028410ff7fa621fe4ab9513b3011243b2e50493c6edf3879027f3f0e6e3f03"
+    },
+    "71": {
+        "char": "Faris",
+        "job": "Samurai",
+        "byte_string": "19218410ff7fa621fe4ab951734e8c313b2e50493c6eff7f79029f03a0612835"
+    },
+    "72": {
+        "char": "Faris",
+        "job": "Berserker",
+        "byte_string": "d34d8410ff7fa621fe4ab9513c0337023b2e50493c6e7701ff6b3d3ef200d110"
+    },
+    "73": {
+        "char": "Faris",
+        "job": "Hunter",
+        "byte_string": "934c8410ff7fa621fe4ab951405340323b2e50493c6eff11ff6b77010c099947"
+    },
+    "74": {
+        "char": "Faris",
+        "job": "Mystic Knight",
+        "byte_string": "06228410ff7fa621fe4ab9513967ad393b2e50493c6eff6bc057e029de021f01"
+    },
+    "75": {
+        "char": "Faris",
+        "job": "White Mage",
+        "byte_string": "80258410ff7fa621fe4ab951ff6b7f3f3b2e50493c6ebb1c5832b6147f4d9611"
+    },
+    "76": {
+        "char": "Faris",
+        "job": "Black Mage",
+        "byte_string": "524e8410ff7f9547fe4ab951206a60513b2e50493c6ee90195470903de029501"
+    },
+    "77": {
+        "char": "Faris",
+        "job": "Time Mage",
+        "byte_string": "f73e8410ff7fa621fe4ab951ca478a463b2e50493c6e0e6e7e4bff6be3481f01"
+    },
+    "78": {
+        "char": "Faris",
+        "job": "Summoner",
+        "byte_string": "a0028410ff7fa621fe4ab951800260053b2e50493c6e7f3fff6b3616ce2dd110"
+    },
+    "79": {
+        "char": "Faris",
+        "job": "Blue Mage",
+        "byte_string": "19218410ff7fa621fe4ab951a961e3483b2e50493c6eff6b3e1afc1813181f03"
+    },
+    "80": {
+        "char": "Faris",
+        "job": "Red Mage",
+        "byte_string": "d34d8410ff7fa621fe4ab951df0815083b2e50493c6eff6bfe1abf1758326f11"
+    },
+    "81": {
+        "char": "Faris",
+        "job": "Trainer",
+        "byte_string": "934c8410ff7fa621fe4ab9513f4b5a3a3b2e50493c6eb511805a8349ff6b793e"
+    },
+    "82": {
+        "char": "Faris",
+        "job": "Chemist",
+        "byte_string": "06228410ff7fa621fe4ab9511f03b6013b2e50493c6eff6b2057e029bf3fcc10"
+    },
+    "83": {
+        "char": "Faris",
+        "job": "Geomancer",
+        "byte_string": "80258410ff7fa621fe4ab951ec5500493b2e50493c6eec5e640b06223f03b801"
+    },
+    "84": {
+        "char": "Faris",
+        "job": "Bard",
+        "byte_string": "524e8410ff7fa621fe4ab9512e3b26123b2e50493c6e5521ff6b1d031477606a"
+    },
+    "85": {
+        "char": "Faris",
+        "job": "Dancer",
+        "byte_string": "f73e8410ff7fa621fe4ab951bf0318023b2e50493c6e750b7f6acc105f4d7a28"
+    },
+    "86": {
+        "char": "Faris",
+        "job": "Mimic",
+        "byte_string": "a0028410ff7fa621fe4ab951640b06223b2e50493c6e3c0253011477606aff03"
+    },
+    "87": {
+        "char": "Faris",
+        "job": "Freelancer",
+        "byte_string": "19218410ff7fa621fe4ab951640b06223b2e50493c6e3c0253011477606aa04d"
+    },
+    "88": {
+        "char": "Cara",
+        "job": "Knight",
+        "byte_string": "06228410ff7f00693f531f03ff4d9f343f3adb0dff3f606a640b06221477b801"
+    },
+    "89": {
+        "char": "Cara",
+        "job": "Monk",
+        "byte_string": "80258410ff7f00693f531f033f021f003f3adb0dff3fec5eff5714003f03391a"
+    },
+    "90": {
+        "char": "Cara",
+        "job": "Thief",
+        "byte_string": "524e8410ff7f00693f531f032e3b26123f3adb0dff3f5521391abf031477606a"
+    },
+    "91": {
+        "char": "Cara",
+        "job": "Dragoon",
+        "byte_string": "f73e8410ff7f00693f531f0392650f3d3f3adb0dff3f5d03577ecc10640b040a"
+    },
+    "92": {
+        "char": "Cara",
+        "job": "Ninja",
+        "byte_string": "a0028410ff7f00693f531f03206e80553f3adb0dff3f147726127f3f0e6e640b"
+    },
+    "93": {
+        "char": "Cara",
+        "job": "Samurai",
+        "byte_string": "19218410ff7f00693f531f033b3011243f3adb0dff3f734ead359f03ff6d3f02"
+    },
+    "94": {
+        "char": "Cara",
+        "job": "Berserker",
+        "byte_string": "d34d8410ff7f00693f531f033c0337023f3adb0dff3f7701ff6b1f67f200ff3f"
+    },
+    "95": {
+        "char": "Cara",
+        "job": "Hunter",
+        "byte_string": "934c8410ff7f00693f531f03640b06223f3adb0dff3fff11ff6b3f03ae141f11"
+    },
+    "96": {
+        "char": "Cara",
+        "job": "Mystic Knight",
+        "byte_string": "06228410ff7f00693f531f033967ad393f3adb0dff3fff6be036e0295d393b30"
+    },
+    "97": {
+        "char": "Cara",
+        "job": "White Mage",
+        "byte_string": "80258410ff7f00693f531f03ff6b7f3f3f3adb0dff3fbb1c5304851c1f039611"
+    },
+    "98": {
+        "char": "Cara",
+        "job": "Black Mage",
+        "byte_string": "524e8410ff7f8b7a3f531f03206a60513f3adb0dff3fd70195475f02ca2c926d"
+    },
+    "99": {
+        "char": "Cara",
+        "job": "Time Mage",
+        "byte_string": "f73e8410ff7f00693f531f037e01b9003f3adb0dff3f0e6e7e4bff6b2359d110"
+    },
+    "100": {
+        "char": "Cara",
+        "job": "Summoner",
+        "byte_string": "a0028410ff7f00693f531f03800260053f3adb0dff3f7f3f3f1fff6bce2dd110"
+    },
+    "101": {
+        "char": "Cara",
+        "job": "Blue Mage",
+        "byte_string": "19218410ff7f00693f531f03af61ea483f3adb0dff3fdc76375efc2813241f03"
+    },
+    "102": {
+        "char": "Cara",
+        "job": "Red Mage",
+        "byte_string": "d34d8410ff7f00693f531f03ff2c53183f3adb0dff3f3f52bf33bf4b58326f11"
+    },
+    "103": {
+        "char": "Cara",
+        "job": "Trainer",
+        "byte_string": "934c8410ff7f00693f531f033f4b5a3a3f3adb0dff3fd1101f03e348ff6be079"
+    },
+    "104": {
+        "char": "Cara",
+        "job": "Chemist",
+        "byte_string": "06228410ff7f00693f531f031f03b6013f3adb0dff3fff6b2057e029bf3fcc10"
+    },
+    "105": {
+        "char": "Cara",
+        "job": "Geomancer",
+        "byte_string": "80258410ff7f00693f531f03a076a0413f3adb0dff3f9547ff419c309f338536"
+    },
+    "106": {
+        "char": "Cara",
+        "job": "Bard",
+        "byte_string": "524e8410ff7f00693f531f032e3b852e3f3adb0dff3fb115ff6b0016955dea48"
+    },
+    "107": {
+        "char": "Cara",
+        "job": "Dancer",
+        "byte_string": "f73e8410ff7f00693f531f037e01b9003f3adb0dff3f207f7e4b80278351d110"
+    },
+    "108": {
+        "char": "Cara",
+        "job": "Mimic",
+        "byte_string": "a0028410ff7f00693f531f03567a2d793f3adb0dff3f7f405f035f72a51ee53b"
+    },
+    "109": {
+        "char": "Cara",
+        "job": "Freelancer",
+        "byte_string": "19218410ff7f00693f531f03567a2d793f3adb0dff3f7f405f035f72a51ee53b"
+    }
+}

@@ -1,0 +1,99 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 317,
+  "name": "Dachora Energy Refill",
+  "area": "Brinstar",
+  "subarea": "Pink",
+  "roomAddress": "0x7A07B",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018f6a",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Energy Refill",
+      "nodeType": "utility",
+      "nodeSubType": "energy",
+      "utility": ["energy"],
+      "mapTileMask": [
+        [2]
+      ]
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 4,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 5,
+      "link": [2, 2],
+      "name": "Refill",
+      "requires": [
+        "h_useEnergyRefillStation"
+      ]
+    }
+  ],
+  "notables": [],
+  "nextStratId": 6,
+  "nextNotableId": 1
+}

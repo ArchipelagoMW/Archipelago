@@ -1,0 +1,71 @@
+# basically anything that has to do with determining whether an item should be
+# created/given, how to create/give the item, and what happens when the item is
+# obtained.
+
+# have seed satchel inherently refill all seeds.
+3f//testSatchelRefillOnItemGet: |
+    push bc
+    call $44c8  ; giveTreasure_body
+    ld a,b
+    pop bc
+    push af
+    ld a,b
+    cp TREASURE_SEED_SATCHEL
+    jr nz,@notSatchel
+    push bc
+    push de
+    call refillSeedSatchel
+    pop de
+    pop bc
+    @notSatchel:
+    pop af
+    ld b,a
+    ret
+00/16f6/: call testSatchelRefillOnItemGet
+
+# setting a flute's icon and song when obtained. also makes the corresponding
+# animal companion rideable, etc.
+3f//activateFlute: |
+    push af
+    push de
+    push hl
+    ld a,b
+    cp TREASURE_FLUTE
+    jr nz,@done
+    ld e,$af
+    ld a,c
+    sub $0a     ; get animal index item parameter
+    ld (de),a
+    add a,$42
+    ld h,$c6
+    ld l,a      ; hl = flags for relevant animal
+    cp $45
+    jr nz,@moosh
+    set 5,(hl)
+    jr @done
+    @moosh:
+    set 7,(hl)
+    @done:
+    pop hl
+    pop de
+    pop af
+    call $454e   ; applyParameter
+    ret
+3f/452b/: call activateFlute
+
+# Set room flag 0x20 when knocking off tree seeds (mostly for tracking purpose)
+10//extendedKnockOffTree: |
+    push hl
+    call getThisRoomFlags
+    or $20
+    ld (hl),a
+    pop hl
+    ld bc,$fec0   ; original instruction replaced by injected call
+    ret
+10/4b29/: call extendedKnockOffTree
+
+# remove interactions from jewel caves so that they act as normal chests,
+# meaning no linked changes. this also removes the vire event.
+11/6ca2/: db $ff  # swamp
+11/6ca8/: db $ff  # lake
+11/6d0f/: db $ff  # woods

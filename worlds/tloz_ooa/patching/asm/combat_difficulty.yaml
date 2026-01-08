@@ -1,0 +1,7 @@
+06//alterDamageReceived: |
+    add a,option.receivedDamageModifier
+    ld b,a
+    ld (de),a
+    ld hl,$46ae    ; @ringDamageModifierTable
+    jp $46a4       ; @writeDamageToApply
+06/466e/: call alterDamageReceived

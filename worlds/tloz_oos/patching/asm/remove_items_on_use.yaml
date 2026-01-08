@@ -1,0 +1,83 @@
+# This patch injects "consumption" of some items when they are used in-game, removing them from inventory.
+# This makes sense in correlation with subscreen_1_improvement, where all owned items are displayed
+# and having a reduced set of owned items make the screen more manageable.
+# This is especially useful for items the vanilla game considered as one with different subids (e.g. trade items)
+
+# Lose dungeon keys when used in keyholes for inventory cleansing
+06//loseKeyInsideKeyhole: |
+  ld (wSubscreen1CurrentSlotIndex),a
+  call checkTreasureObtained
+  jr nc,@done
+  ld a,(wSubscreen1CurrentSlotIndex)
+  call loseTreasure
+  scf
+  @done:
+  ret
+06/420d/: call loseKeyInsideKeyhole
+
+0b//removeCuccodex: |
+  db orroomflag,$40
+  db loseitem,TREASURE_CUCCODEX
+  dwbe $50e7  ; jump back to 50e7
+0b/50e5/: dwbe removeCuccodex
+
+05//loseLonLonEgg: |
+  ld a,TREASURE_LON_LON_EGG
+  jp loseTreasure
+05/68e6/: |
+  nop
+  call loseLonLonEgg
+
+0b//removeGhastlyDoll: |
+  db orroomflag,$40
+  db loseitem,TREASURE_GHASTLY_DOLL
+  dwbe $506b  ; jump back to 506b
+0b/5069/: dwbe removeGhastlyDoll
+
+0b//removeIronPot: |
+  db loseitem,TREASURE_IRON_POT
+  db loadscript,$14
+  dw $4b8e  ; lavaSoupSubrosianScript_fillPot
+0b/6568/: dwbe removeIronPot
+
+0b//removeLavaSoup: |
+  db orroomflag,$40
+  db loseitem,TREASURE_LAVA_SOUP
+  dwbe $61d7  ; jump back to 61d7
+0b/61d5/: dwbe removeLavaSoup
+
+0b//removeGoronVase: |
+  db orroomflag,$40
+  db loseitem,TREASURE_GORON_VASE
+  dwbe $635c  ; jump back to 635c
+0b/635a/: dwbe removeGoronVase
+
+0b//removeFish: |
+  db orroomflag,$40
+  db loseitem,TREASURE_FISH
+  dwbe $5267  ; jump back to 5267
+0b/5265/: dwbe removeFish
+
+0b//removeMegaphone: |
+  db loseitem,TREASURE_MEGAPHONE
+  db loadscript,$14
+  dw $49db  ; talon_giveMushroomAfterWaking
+0b/60a0/: dwbe removeMegaphone
+
+0b//removeMushroom: |
+  db orroomflag,$40
+  db loseitem,TREASURE_MUSHROOM
+  dwbe $5f49  ; jump back to 5f49
+0b/5f47/: dwbe removeMushroom
+
+0b//removeWoodenBird: |
+  db orroomflag,$40
+  db loseitem,TREASURE_WOODEN_BIRD
+  dwbe $521e  ; jump back to 521e
+0b/521c/: dwbe removeWoodenBird
+
+0b//removeEngineGrease: |
+  db orroomflag,$40
+  db loseitem,TREASURE_ENGINE_GREASE
+  dwbe $63e9  ; jump back to 63e9
+0b/63e7/: dwbe removeEngineGrease

@@ -1,0 +1,11 @@
+# Remove the bush above the cliff
+22/42a0/: db $11,$11,$11,$11
+22/7fe8/: db $11,$11,$11,$11
+23/7ce7/: db $11,$11,$11,$11
+24/7a03/: db $11,$11,$11,$11
+
+# Remove the hole leading to D0
+22/42bf/: db $af
+23/4007/: db $af
+23/7d06/: db $af
+24/7a22/: db $af

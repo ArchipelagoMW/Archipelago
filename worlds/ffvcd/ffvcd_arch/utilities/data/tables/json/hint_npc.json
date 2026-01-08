@@ -1,0 +1,62 @@
+{
+    "Chancellor In W1": {
+        "start": "E19AD3",
+        "end": "E19B19"
+    },
+    "Zokk": {
+        "start": "E149DD",
+        "end": "E14A0F"
+    },
+    "Scholar In Karnak": {
+        "start": "E19ED6",
+        "end": "E19F6A"
+    },
+    "Guido W1 Ancient Library": {
+        "start": "E35380",
+        "end": "E353F9"
+    },
+    "Scholar In Walse Upper": {
+        "start": "E176C0",
+        "end": "E17731"
+    },
+    "Puzzle Woman In Surgate": {
+        "start": "E281F7",
+        "end": "E2828D"
+    },
+    "Kelgar": {
+        "start": "E26328",
+        "end": "E264FB"
+    },
+    "Purple Wizard In Bal": {
+        "start": "E1079B",
+        "end": "E10873"
+    },
+    "Wizard In Rugor": {
+        "start": "E23975",
+        "end": "E239D8"
+    },
+    "Purple Wizard In Mua": {
+        "start": "E33A31",
+        "end": "E33ABC"
+    },
+    "Mirage Village Bartender": {
+        "start": "E30595",
+        "end": "E30604"
+    },
+    "Mirage Village Bartendee": {
+        "start": "E30518",
+        "end": "E30594"
+    },
+    "Dwarf Storage 1": {
+        "start": "E36AFA",
+        "end": "E36B51"
+    },
+    "Dwarf Storage 2": {
+        "start": "E36A7F",
+        "end": "E36AF9"
+    },
+    "Dwarf Main ": {
+        "start": "E36B52",
+        "end": "E36BA4"
+    }
+}

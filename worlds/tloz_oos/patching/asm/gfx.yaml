@@ -1,0 +1,133 @@
+# Most of the code here has to do with interactions other than
+# the id $60 "treasure" interaction that must use treasure interaction
+# graphics.
+
+# set hl = the address of the sprite for treasure with ID b and subID c.
+3f//lookupItemSprite_body: |
+    ld e,$15
+    ld hl,getTreasureDataSprite
+    call interBankCall
+    ld a,e
+    ld hl,$66dc     ; interaction60SubidData
+    add a,a
+    rst 10
+    ld a,e
+    rst 10
+    ret
+
+# format (ID, subID, jump address). these functions *must* pop af as the last
+# instruction before returning.
+3f//customSpriteJumpTable: |
+    dwbe $4700, locations.memberShop1
+    dwbe $4702, locations.memberShop2
+    dwbe $4705, locations.memberShop3
+    dwbe $4704, locations.horonShop1
+    dwbe $4703, locations.horonShop2
+    dwbe $4701, locations.horonShop3
+    dwbe $470e, locations.advanceShop1
+    dwbe $470f, locations.advanceShop2
+    dwbe $4710, locations.advanceShop3
+    dwbe $4709, locations.syrupShop2
+    dwbe $470a, locations.syrupShop3
+    dwbe $470b, locations.syrupShop1
+    dwbe $5900, locations.lostWoodsPedestal
+    dwbe $8100, locations.subrosianMarket1
+    dwbe $8104, locations.subrosianMarket2
+    dwbe $810a, locations.subrosianMarket3
+    dwbe $810c, locations.subrosianMarket4
+    dwbe $810d, locations.subrosianMarket5
+    dwbe $c600, locations.d0SwordChest
+    dwbe $e602, locations.templeOfSeasons
+    db $ff
+
+# overrides the sprite data loaded for certain interactions. this is mostly
+# used for "non-item" interactions that depict items, like the ones in shops.
+3f//checkLoadCustomSprite: |
+    call $4437  ; _interactionGetData
+    push af
+    push hl
+    push bc
+    
+    ld e,$41
+    ld a,(de)
+    ld b,a
+    inc e
+    ld a,(de)
+    ld c,a
+    ld e,$02
+    ld hl,customSpriteJumpTable
+    call searchDoubleKey
+    jr c,@customSprite
+    pop bc
+    pop hl
+    pop af
+    ret
+
+    @customSprite:
+    pop bc
+    ldi a,(hl)
+    ld b,a
+    ld c,(hl)
+    pop hl
+    call lookupItemSprite_body
+    pop af
+    ret
+3f/4356/: call checkLoadCustomSprite
+
+
+# Make the rod of seasons interaction behave like a regular item, graphically.
+# Otherwise, asymmetric wide items can't go there.
+14//overrideAnimationId: |
+    ld e,$41
+    ld a,(de) # ID
+    cp $e6
+    ret nz
+    ld e,$42
+    ld a,(de) # sub ID
+    cp $02
+    ld a,$e6
+    ret nz
+    ld a,$60
+    ret
+00/25d9/: call overrideAnimationId
+00/2600/: call overrideAnimationId
+
+# give the noble sword (lost woods pedestal) object OAM pointers compatible
+# with normal treasure graphics.
+14/53d7/: dw 5719
+14/55a7/: dw 684f
+
+
+# give items that don't normally appear as treasure interactions entries in
+# the treasure graphics table.
+3f/6790/: db $5f,$16,$33  # Ricky's flute (GFX #3c)
+3f/6793/: db $5f,$16,$23  # Dimitri's flute (GFX #3d)
+3f/6796/: db $5f,$16,$13  # Moosh's flute (GFX #3e)
+3f/6799/: db $5d,$10,$26  # Rare Peach Stone (GFX #3f)
+
+3f/67b4/: db $5d,$0c,$13  # Member's Card (GFX #48)
+3f/67b7/: db $65,$14,$33  # Treasure Map (GFX #49)
+3f/67ba/: db $60,$14,$00  # Fool's Ore (GFX #4a)
+3f/67bd/: db $5d,$00,$23  # Potion (GFX #4b)
+3f/67c0/: db $65,$0c,$23  # Ribbon (GFX #4c)
+3f/67c3/: db $5c,$0c,$20  # Ore Chunks x10 (GFX #4d)
+3f/67c6/: db $5c,$0c,$10  # Ore Chunks x25 (GFX #4e)
+
+# Add custom palette variants for rod of seasons to be able to know which
+# season it gives at first sight
+3f/67c9/: |
+    db $60,$10,$00  ; GFX #4f (rod of spring)
+    db $60,$10,$30  ; GFX #50 (rod of autumn)
+    db $60,$10,$10  ; GFX #51 (rod of winter)
+
+# Use that custom sprite with a red palette inside GFX#52 (will be used for progression remote items)
+3f/67d2/: db $61,$06,$53
+# Use that custom sprite with a blue palette inside GFX#53 (will be used for regular remote items)
+3f/67d5/: db $61,$06,$43
+
+# Inject the "Archipelago Item" sprite in an unused sector of last items spritesheet
+1b/7a80/: |
+    db $03,$03,$07,$04,$0f,$08,$3f,$3c,$7e,$43,$f9,$87,$fd,$bf,$fa,$c6
+    db $fb,$87,$f7,$8c,$ef,$98,$8f,$f8,$4f,$78,$38,$3f,$04,$07,$03,$03
+    db $c0,$c0,$e0,$20,$90,$70,$3c,$fc,$7e,$c2,$f9,$87,$fd,$bf,$7f,$43
+    db $f9,$c7,$f1,$2f,$d1,$3f,$91,$7f,$12,$fe,$1c,$fc,$20,$e0,$c0,$c0

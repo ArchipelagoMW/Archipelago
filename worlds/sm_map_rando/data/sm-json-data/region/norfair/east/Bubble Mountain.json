@@ -1,0 +1,4553 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 97,
+  "name": "Bubble Mountain",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "East",
+  "roomAddress": "0x7ACB3",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 1],
+    [1, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Side - Top Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x0019552",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1],
+        [1, 1],
+        [1, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Left Side - Top Middle Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001959a",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1],
+        [2, 1],
+        [1, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Left Side - Bottom Middle Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001955e",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1],
+        [1, 1],
+        [2, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Left Side - Bottom Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001956a",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1],
+        [1, 1],
+        [1, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Bottom Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019576",
+      "doorOrientation": "down",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1],
+        [1, 1],
+        [1, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Middle Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019582",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1],
+        [1, 2],
+        [1, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x001958e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2],
+        [1, 1],
+        [1, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Bottom Right Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78C66",
+      "mapTileMask": [
+        [1, 1],
+        [1, 1],
+        [1, 1],
+        [1, 2]
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Main Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1],
+        [2, 1],
+        [2, 2],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 10,
+      "name": "G-Mode Morph Junction (Above the Power Bomb Blocks)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1],
+        [1, 1],
+        [2, 1],
+        [1, 1]
+      ],
+      "note": "Represents being on the Power Bomb blocks with G-Mode Morph (artificial morph)"
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Power Bomb Blocks",
+      "obstacleType": "inanimate",
+      "note": "The Power Bomb blocks above the bottom doors"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Bubble Mountain Bottom Sova",
+      "enemyName": "Sova",
+      "quantity": 1,
+      "homeNodes": [5]
+    },
+    {
+      "id": "e2",
+      "groupName": "Bubble Mountain Morph Maze Sovas",
+      "enemyName": "Sova",
+      "quantity": 2,
+      "betweenNodes": [5, 9]
+    },
+    {
+      "id": "e3",
+      "groupName": "Bubble Mountain Wavers",
+      "enemyName": "Waver",
+      "quantity": 3,
+      "homeNodes": [9]
+    },
+    {
+      "id": "e4",
+      "groupName": "King Cacatac",
+      "enemyName": "Cacatac",
+      "quantity": 1,
+      "homeNodes": [7]
+    },
+    {
+      "id": "e5",
+      "groupName": "Bubble Mountain Ripper 2",
+      "enemyName": "Ripper 2 (red)",
+      "quantity": 1,
+      "homeNodes": [8]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {
+          "id": 7,
+          "note": "This link only includes ways of crossing to 7 that can't be done from node 9"
+        },
+        {"id": 9},
+        {"id": 10}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 9},
+        {"id": 10}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 9},
+        {"id": 10}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {
+          "id": 9,
+          "note": "This link is only for the X-Ray climb, which skips the junction altogether."
+        }
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 4},
+        {"id": 5},
+        {"id": 9}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 10}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {
+          "id": 1,
+          "note": "This link only includes ways of crossing to 1 that can't be done from node 9"
+        },
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 9},
+        {"id": 10}
+      ]
+    },
+    {
+      "from": 8,
+      "to": [
+        {"id": 9}
+      ]
+    },
+    {
+      "from": 9,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 5},
+        {"id": 7},
+        {"id": 8},
+        {"id": 9}
+      ]
+    },
+    {
+      "from": 10,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 7}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Sova",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_bombThings"
+        ]},
+        {"or": [
+          "canTrickyJump",
+          "SpaceJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Place a Power Bomb on the bottom stair attached to the door in order to prevent killing the Sova, or free a Sova from the Morph maze with Bombs.",
+        "If coming from below, be sure to lure the Sova to the bottom before placing a Power Bomb near the blocks in order to prevent killing it.",
+        "Use the frozen Sova to climb to the top left door. Stand on a low frozen Waver to lower the camera enough to get the Sova to move again."
+      ]
+    },
+    {
+      "id": 207,
+      "link": [1, 1],
+      "name": "Leave With Grapple Swing",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleSwing": {
+          "blocks": [{"position": [9, 2], "note": "Closest Grapple block to the door"}]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 216,
+      "link": [1, 1],
+      "name": "Waver Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"cycleFrames": 80}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Waver", "count": 1}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Waver",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Wait 20 seconds for a Waver to come and hit Samus."
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Waver"], ["Waver"]],
+            "explicitWeapons": ["Wave", "Spazer", "Plasma", "Missile", "Super", "Grapple"]
+          }},
+          {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+        ]},
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 164,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "canXRayCancelShinecharge"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use X-ray to cancel the shinecharge, in order to quickly destroy the Waver before taking a hit.",
+        "Alternatively, run, jump, or slide off the edge, using a pause buffer to morph.",
+        "Or if enough runway is available, simply avoid using the last tile to stay out of the way of the Waver."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 156}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Slide off the edge to kill the Waver with blue."
+    },
+    {
+      "id": 165,
+      "link": [1, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "canXRayCancelShinecharge"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use X-ray to cancel the shinecharge, in order to quickly destroy the Waver before taking a hit.",
+        "Alternatively, run, jump, or slide off the edge, using a pause buffer to morph.",
+        "Or if enough runway is available, simply avoid using the last tile to stay out of the way of the Waver."
+      ]
+    },
+    {
+      "id": 166,
+      "link": [1, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "canXRayCancelShinecharge",
+        {"ammo": {"type": "PowerBomb", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use X-ray to cancel the shinecharge, in order to quickly destroy the Waver before taking a hit.",
+        "Alternatively, run, jump, or slide off the edge, using a pause buffer to morph.",
+        "Or if enough runway is available, simply avoid using the last tile to stay out of the way of the Waver.",
+        "Lay the Power Bomb low enough to kill the Sova.",
+        "Descend during the Power Bomb explosion, to take advantage of the more lenient timing provided by the lag."
+      ]
+    },
+    {
+      "id": 167,
+      "link": [1, 5],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "canXRayCancelShinecharge",
+        {"ammo": {"type": "PowerBomb", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "any"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use X-ray to cancel the shinecharge, in order to quickly destroy the Waver before taking a hit.",
+        "Alternatively, run, jump, or slide off the edge, using a pause buffer to morph.",
+        "Or if enough runway is available, simply avoid using the last tile to stay out of the way of the Waver.",
+        "Lay the Power Bomb low enough to kill the Sova.",
+        "Descend during the Power Bomb explosion, to take advantage of the more lenient timing provided by the lag."
+      ]
+    },
+    {
+      "id": 168,
+      "link": [1, 6],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.2"
+        }
+      },
+      "requires": [
+        "canSpeedball",
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Destroy the Cac by touching it while in aim-down pose; enter a speedball for a moment, before unmorphing past the two half-tile dropoffs.",
+        "Alternatively, if enough run speed is available, it is also an option to airball over the Cac."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 7],
+      "name": "Base",
+      "requires": [
+        "Grapple"
+      ],
+      "note": "Kill King Cac by scrolling the camera before Grappling across."
+    },
+    {
+      "id": 9,
+      "link": [1, 7],
+      "name": "Walljump",
+      "requires": [
+        "canWalljump",
+        "canCarefulJump",
+        {"or": [
+          "canCameraManip",
+          "canTrickyWalljump",
+          {"and": [
+            "canNeutralDamageBoost",
+            {"enemyDamage": {"enemy": "Cacatac", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ],
+      "note": "King Cac can be killed by scrolling the camera before jumping across."
+    },
+    {
+      "id": 10,
+      "link": [1, 7],
+      "name": "Running Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        {"or": [
+          "canTrickyJump",
+          {"and": [
+            "SpeedBooster",
+            "canCarefulJump"
+          ]}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "canNeutralDamageBoost",
+            {"enemyDamage": {"enemy": "Cacatac", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 7],
+      "name": "Jump Across",
+      "requires": [
+        {"doorUnlockedAtNode": 1},
+        "canTrickyJump",
+        "canCameraManip"
+      ],
+      "wallJumpAvoid": true,
+      "note": "Kill King Cac by scrolling the camera, before attempting the jump."
+    },
+    {
+      "id": 221,
+      "link": [1, 7],
+      "name": "Speedy Jump Across",
+      "requires": [
+        "SpeedBooster",
+        "canCarefulJump",
+        {"or": [
+          {"doorUnlockedAtNode": 1},
+          "canTrickyJump"
+        ]},
+        {"or": [
+          "canCameraManip",
+          {"and": [
+            "canNeutralDamageBoost",
+            {"enemyDamage": {"enemy": "Cacatac", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ],
+      "note": "King Cac can be killed by scrolling the camera before jumping across."
+    },
+    {
+      "id": 12,
+      "link": [1, 7],
+      "name": "Airball",
+      "requires": [
+        "canLateralMidAirMorph",
+        {"or": [
+          "canTrickyJump",
+          {"doorUnlockedAtNode": 1}
+        ]},
+        {"or": [
+          "canCameraManip",
+          {"enemyDamage": {"enemy": "Cacatac", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "note": "King Cac can be killed by scrolling the camera before jumping across."
+    },
+    {
+      "id": 13,
+      "link": [1, 7],
+      "name": "Damage Boost (Left to Right)",
+      "requires": [
+        {"notable": "Damage Boost"},
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ],
+      "note": "Damage Boost off a Waver to cross the gap."
+    },
+    {
+      "id": 14,
+      "link": [1, 7],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 42, "excessFrames": 22}}
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 7],
+      "name": "Hero Shot Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 50},
+        "canHeroShot",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 35, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump over the Waver, fire a shot mid-air, and activate the shinespark wind-up.",
+        "Wait until the shot is at a specific position before sparking.",
+        "Sparking too late will cause the shot to despawn before reaching the door.",
+        "Sparking too early will cause Samus to bonk the door as it will not yet be open.",
+        "A beam shot, Missile, or Super can be used."
+      ]
+    },
+    {
+      "id": 169,
+      "link": [1, 7],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.2"
+        }
+      },
+      "requires": [
+        "canSpeedball",
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Destroy the Cac by touching it while in aim-down pose; enter a speedball for a moment, before unmorphing past the two half-tile drops.",
+        "Alternatively, if enough run speed is available, it is also an option to airball over the Cac."
+      ]
+    },
+    {
+      "id": 170,
+      "link": [1, 7],
+      "name": "Come in With Blue Spring Ball Bounce, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled",
+          "minExtraRunSpeed": "$1.2",
+          "minLandingTiles": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": ["Destroy the Cac by bouncing on it with a controlled blue spring ball bounce."]
+    },
+    {
+      "id": 171,
+      "link": [1, 7],
+      "name": "Come in With Blue Space Jump, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "unusableTiles": 0
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 16,
+      "link": [1, 9],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 17,
+      "link": [1, 10],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 222,
+      "link": [2, 1],
+      "name": "Frozen Waver, Normalized Room Entry",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canTrickyUseFrozenEnemies"
+      ],
+      "note": "Freeze the Wavers on entry, as their initial pattern makes climbing much easier."
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Speedy Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 35
+        }
+      },
+      "requires": [
+        "canTrickyJump"
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Speedy HiJump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 8
+        }
+      },
+      "requires": [
+        "canCarefulJump",
+        "HiJump",
+        {"or": [
+          "ScrewAttack",
+          {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Tricky Speedy HiJump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 7
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        "HiJump",
+        {"or": [
+          "ScrewAttack",
+          {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Speedy Spring Ball Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 15
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        "canTrickySpringBallJump",
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ]
+    },
+    {
+      "id": 202,
+      "link": [2, 1],
+      "name": "Tricky Dash Spring Ball Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 7
+        }
+      },
+      "requires": [
+        "canTrickyDashJump",
+        "canTrickySpringBallJump",
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ],
+      "note": "Use 7 tiles from the adjacent runway then use Spring Ball at the peak of the jump and bounce off the Waver to get up onto the top left ledge."
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Enter Running and Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 27, "excessFrames": 2}}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Enter with Shinecharge and Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 50},
+        {"shinespark": {"frames": 27, "excessFrames": 2}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Enter with Shinecharge and Midair Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 22},
+        "canShinechargeMovement",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 19}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 125},
+        "HiJump",
+        "canPreciseWalljump",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 18, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump Space Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "HiJump",
+        "SpaceJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 20, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged (HiJump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canPreciseWalljump",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged (HiJump Space Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "SpaceJump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 145}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 208,
+      "link": [2, 1],
+      "name": "Precise Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"}
+          ]
+        }
+      },
+      "requires": [
+        "canPreciseGrappleJump"
+      ]
+    },
+    {
+      "id": 209,
+      "link": [2, 1],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [6, 4], "note": "Grapple Tutorial Room 2"},
+            {"position": [6, 2], "note": "Lava Grapple Tunnel"},
+            {
+              "position": [5, 2],
+              "note": "The Moat, Double Chamber, Wrecked Ship Energy Tank Room"
+            },
+            {"position": [2.375, 4.5625], "note": "Post Crocomire Farming Room"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ]
+    },
+    {
+      "id": 212,
+      "link": [2, 1],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 13,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                {"or": [
+                  {"and": [
+                    "HiJump",
+                    {"or": [
+                      "canTrickyDodgeEnemies",
+                      {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+                    ]}
+                  ]},
+                  {"and": [
+                    "canTrickySpringBallJump",
+                    {"or": [
+                      "canTrickyDashJump",
+                      {"and": [
+                        "canNeutralDamageBoost",
+                        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+                      ]}
+                    ]}
+                  ]}
+                ]}
+              ],
+              "note": ["This applies to Warehouse Entrance."],
+              "detailNote": [
+                "If Hi-Jump is available, it is possible to kill the Waver using angle-up shots."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 11.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                {"or": [
+                  {"and": [
+                    "HiJump",
+                    "canHorizontalDamageBoost",
+                    {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+                  ]},
+                  {"and": [
+                    "canTrickyDashJump",
+                    "canTrickySpringBallJump"
+                  ]}
+                ]}
+              ],
+              "note": ["This applies to Ridley Tank Room, Halfie Climb Room, and Dust Torizo Room."],
+              "detailNote": [
+                "In the case of the Spring Ball mid-air jump, maintain forward momentum while entering the pause menu,",
+                "so that the mid-air jump gets a boost in jump height.",
+                "A backward input may be buffered along with the jump input during the unpause black screen."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyJump",
+                {"or": [
+                  {"and": [
+                    "HiJump",
+                    {"or": [
+                      "canTrickyDashJump",
+                      "canTrickyDodgeEnemies",
+                      {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+                    ]}
+                  ]},
+                  "canTrickySpringBallJump"
+                ]}
+              ],
+              "note": ["This applies to Dust Torizo Room and Halfie Climb Room."],
+              "detailNote": [
+                "In the Hi-Jump case, it helps to use a little less than the full available runway,",
+                "in order to get a higher jump and more easily avoid the Waver."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 10.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyDashJump",
+                "canTrickySpringBallJump"
+              ],
+              "note": ["This applies to Big Boy Room and Mickey Mouse Room."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[2, 0]],
+              "requires": [
+                {"or": [
+                  {"and": [
+                    "canMomentumConservingMorph",
+                    "canTrickySpringBallJump"
+                  ]},
+                  {"and": [
+                    "canInsaneJump",
+                    {"or": [
+                      "canHorizontalDamageBoost",
+                      "canNeutralDamageBoost"
+                    ]},
+                    {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+                  ]},
+                  {"and": [
+                    "canInsaneJump",
+                    "HiJump"
+                  ]}
+                ]}
+              ],
+              "note": ["This applies to Waterway Energy Tank Room."],
+              "detailNote": [
+                "If Spring Ball is available, it is easier to use less than the full runway;",
+                "a momentum-conserving morph is not required but makes it more reliable.",
+                "Otherwise, back against the Speed blocks, and arm pump 4 times to advance 8 pixels.",
+                "Spin jump through the door (do not aim down), and use Hi-Jump or neutral knockback or a damage boost from a Waver to get up."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 20,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canTrickyDashJump",
+                "canMomentumConservingMorph",
+                "canTrickySpringBallJump"
+              ],
+              "note": ["This applies to Metroid Room 1 and Statues Hallway."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 37.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                {"or": [
+                  "canMomentumConservingMorph",
+                  {"and": [
+                    "canInsaneJump",
+                    "HiJump"
+                  ]}
+                ]}
+              ],
+              "note": ["This applies to Flyway."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[4, 0]],
+              "requires": [
+                "canInsaneJump",
+                "canMomentumConservingMorph",
+                "canInsaneMidAirMorph"
+              ],
+              "note": ["This applies to Baby Kraid Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "requires": [
+                "canTrickyJump",
+                {"or": [
+                  "HiJump",
+                  "canTrickySpringBallJump"
+                ]}
+              ],
+              "note": ["This applies to Metal Pirates Room."]
+            }
+          ]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Leave With Runway - Frozen Sova",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_bombThings"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Place a Power Bomb on the bottom stair attached to the door in order to prevent killing the Sova, or free a Sova from the Morph maze with Bombs.",
+        "If coming from below, be sure to lure the Sova to the bottom before placing a Power Bomb near the blocks in order to prevent killing it."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Waver",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 34,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 35,
+      "link": [2, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 115},
+        "canShinechargeMovement"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [2, 3],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 7, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 37,
+      "link": [2, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovement",
+        {"shineChargeFrames": 105}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 172,
+      "link": [2, 3],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 173,
+      "link": [2, 4],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"ammo": {"type": "PowerBomb", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Lay the Power Bomb low enough to kill the Sova.",
+        "Descend during the Power Bomb explosion, to take advantage of the more lenient timing provided by the lag."
+      ]
+    },
+    {
+      "id": 174,
+      "link": [2, 5],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"ammo": {"type": "PowerBomb", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "any"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Lay the Power Bomb low enough to kill the Sova.",
+        "Descend during the Power Bomb explosion, to take advantage of the more lenient timing provided by the lag."
+      ]
+    },
+    {
+      "id": 175,
+      "link": [2, 6],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue (HiJump, Pause Remorph)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$2.6"
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canPauseRemorphTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "With blue speed, jump over or through the Cacatac.",
+        "With a precisely controlled jump, morph, and unmorph it is possible to land on the platform past the Cac;",
+        "but it is easier to unmorph in the open space past the platform and use a pause to buffer a remorph."
+      ],
+      "devNote": "The 2 in-room runway tiles are unusable, since at the minimal speed ($2.6) it is necessary to jump either through the transition or on the first frame after, to avoid bonking the ledge below the Cacatac."
+    },
+    {
+      "id": 176,
+      "link": [2, 6],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (HiJump Spring Ball Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canSpringBallJumpMidAir",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 223,
+      "link": [2, 7],
+      "name": "Frozen Waver, Normalized Room Entry",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canTrickyUseFrozenEnemies"
+      ],
+      "note": "Freeze the Wavers on entry, as their initial pattern makes climbing much easier."
+    },
+    {
+      "id": 38,
+      "link": [2, 7],
+      "name": "Speedy Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 35
+        }
+      },
+      "requires": [
+        "canTrickyJump"
+      ]
+    },
+    {
+      "id": 39,
+      "link": [2, 7],
+      "name": "Speedy HiJump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 7
+        }
+      },
+      "requires": [
+        "canCarefulJump",
+        "HiJump",
+        {"or": [
+          "ScrewAttack",
+          {"enemyDamage": {"enemy": "Cacatac", "type": "contact", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 7],
+      "name": "Speedy Spring Ball Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 15
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        "canTrickySpringBallJump",
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Cacatac", "type": "contact", "hits": 1}}
+      ]
+    },
+    {
+      "id": 41,
+      "link": [2, 7],
+      "name": "Running Jump into Right Side Precise Walljump Climb",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": false,
+          "minTiles": 2.4375
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        "canConsecutiveWalljump",
+        "canPreciseWalljump",
+        {"or": [
+          "canTrickyWalljump",
+          "ScrewAttack",
+          "canWalljumpWithCharge",
+          {"and": [
+            "canWallJumpInstantMorph",
+            {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 1}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 7],
+      "name": "Running Jump into Right Side Walljump Climb",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": false,
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canCarefulJump",
+        "canConsecutiveWalljump",
+        {"or": [
+          "canTrickyWalljump",
+          "ScrewAttack",
+          "canWalljumpWithCharge",
+          {"and": [
+            "canWallJumpInstantMorph",
+            {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 1}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 43,
+      "link": [2, 7],
+      "name": "Speedy Running Jump into Right Side Walljump Climb",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        "canCarefulJump",
+        "canConsecutiveWalljump",
+        {"or": [
+          "canTrickyWalljump",
+          "ScrewAttack",
+          "canWalljumpWithCharge",
+          {"and": [
+            "canWallJumpInstantMorph",
+            {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 1}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 44,
+      "link": [2, 7],
+      "name": "Enter Running and Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 22, "excessFrames": 2}}
+      ]
+    },
+    {
+      "id": 45,
+      "link": [2, 7],
+      "name": "Enter with Shinecharge and Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 5},
+        {"shinespark": {"frames": 22, "excessFrames": 2}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 46,
+      "link": [2, 7],
+      "name": "Come in Shinecharging, Leave With Spark (HiJump Space Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "SpaceJump",
+        "canHeroShot",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 31, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 47,
+      "link": [2, 7],
+      "name": "Come in Shinecharged, Leave With Spark (HiJump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 125},
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 27, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 177,
+      "link": [2, 7],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$2.6",
+          "maxExtraRunSpeed": "$2.F"
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": "The 2 in-room runway tiles are unusable, since at the minimal speed ($2.6) it is necessary to jump either through the transition or on the first frame after, to avoid bonking the ledge below the Cacatac."
+    },
+    {
+      "id": 178,
+      "link": [2, 7],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (HiJump Spring Ball Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canSpringBallJumpMidAir",
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 48,
+      "link": [2, 9],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 49,
+      "link": [2, 10],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 50,
+      "link": [3, 1],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canLongXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 2 screens."
+    },
+    {
+      "id": 51,
+      "link": [3, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 2 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [3, 1],
+      "name": "Enter Running, Climb Bubble Stairs, and Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 20, "excessFrames": 2}}
+      ]
+    },
+    {
+      "id": 53,
+      "link": [3, 1],
+      "name": "Enter Running and Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 39}}
+      ]
+    },
+    {
+      "id": 54,
+      "link": [3, 1],
+      "name": "Enter Shinecharged and Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 35},
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 39}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 210,
+      "link": [3, 1],
+      "name": "Precise Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"}
+          ]
+        }
+      },
+      "requires": [
+        "canPreciseGrappleJump"
+      ]
+    },
+    {
+      "id": 211,
+      "link": [3, 1],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [6, 4], "note": "Grapple Tutorial Room 2"},
+            {"position": [6, 2], "note": "Lava Grapple Tunnel"},
+            {
+              "position": [5, 2],
+              "note": "The Moat, Double Chamber, Wrecked Ship Energy Tank Room"
+            },
+            {"position": [2.375, 4.5625], "note": "Post Crocomire Farming Room"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ]
+    },
+    {
+      "id": 55,
+      "link": [3, 2],
+      "name": "Enter Running and Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 135}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 56,
+      "link": [3, 2],
+      "name": "Enter Running and Leave Shinecharged (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}},
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 57,
+      "link": [3, 2],
+      "name": "Enter Shinecharged and Leave Shinesparking",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 125},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 5}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 58,
+      "link": [3, 2],
+      "name": "Enter Shinecharged and Leave Shinesparking (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 90},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}},
+        {"shinespark": {"frames": 7, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 179,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 59,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 60,
+      "link": [3, 3],
+      "name": "Leave with Runway (Floor Not Broken)",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 61,
+      "link": [3, 3],
+      "name": "Leave With Runway - Frozen Sova",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "note": "Be sure to lure the Sova to the bottom before placing a Power Bomb near the blocks in order to prevent killing it.",
+      "devNote": "This is only useful if the blocks are broken, but if they are not broken the longer runway can be used."
+    },
+    {
+      "id": 62,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_bombThings"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Lure a Sova from the bomb maze, or from just below the Power Bomb blocks.",
+        "Using a Power Bomb while avoiding killing the Sova can be done by placing the Power Bomb on the lowest stair on the ledge above,",
+        "Starting at the bottom of the room and going up through the Power Bomb blocks can be done by first luring the Sova into safety at the bottom of the room."
+      ]
+    },
+    {
+      "id": 205,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit By Waver",
+      "requires": [
+        "canComplexGMode"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Lure the Waver from the right side of the room. It only moves while on camera.",
+        "Crouch next to the closed door and let the Waver pass just overhead twice before opening it and getting into position, in order to get hit by the third swoop.",
+        "Or open the door and use the Waver's second swoop, which is a bit tighter."
+      ]
+    },
+    {
+      "id": 206,
+      "link": [3, 3],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}},
+        "canBeExtremelyPatient"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "It takes nearly 6 minutes for a Waver to come and hit Samus."
+    },
+    {
+      "id": 180,
+      "link": [3, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"ammo": {"type": "PowerBomb", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Lay the Power Bomb low enough to kill the Sova.",
+        "Descend during the Power Bomb explosion, to take advantage of the more lenient timing provided by the lag."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [3, 5],
+      "name": "Stored Moonfall Clip",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        "canMoonfall"
+      ]
+    },
+    {
+      "id": 181,
+      "link": [3, 5],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        {"ammo": {"type": "PowerBomb", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "right"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Lay the Power Bomb low enough to kill the Sova.",
+        "Descend during the Power Bomb explosion, to take advantage of the more lenient timing provided by the lag."
+      ],
+      "devNote": "FIXME: With X-Ray, more runway could be used."
+    },
+    {
+      "id": 182,
+      "link": [3, 6],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (HiJump Spring Ball Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "HiJump",
+        "canSpringBallJumpMidAir"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 64,
+      "link": [3, 7],
+      "name": "Enter Running and Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 26}}
+      ],
+      "note": "Diagonal spark from the Save Room Door steps."
+    },
+    {
+      "id": 65,
+      "link": [3, 7],
+      "name": "Enter Shinecharged and Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 26}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Diagonal spark from the Save Room Door steps."
+    },
+    {
+      "id": 183,
+      "link": [3, 7],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (HiJump Spring Ball Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "HiJump",
+        "canSpringBallJumpMidAir"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 66,
+      "link": [3, 9],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 67,
+      "link": [3, 10],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 68,
+      "link": [4, 1],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 3 screens."
+    },
+    {
+      "id": 69,
+      "link": [4, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 3 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 70,
+      "link": [4, 2],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 2 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 184,
+      "link": [4, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"ammo": {"type": "PowerBomb", "count": 1}},
+        "canBeVeryPatient"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": "The canBeVeryPatient requirement is for difficulty placement"
+    },
+    {
+      "id": 71,
+      "link": [4, 3],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 72,
+      "link": [4, 3],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 185,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"ammo": {"type": "PowerBomb", "count": 1}},
+        "canBeVeryPatient"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": "The canBeVeryPatient requirement is for difficulty placement"
+    },
+    {
+      "id": 73,
+      "link": [4, 4],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 74,
+      "link": [4, 4],
+      "name": "Leave With Runway - Frozen Sova",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"or": [
+          {"resetRoom": {"nodes": [4, 5]}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Starting from the top of the room will require careful manipulation of the Sovas.",
+        "If going through the Power Bomb blocks, place the Power Bomb on the lowest stair on the ledge above,",
+        "go down and lure the Sova up and use a Super to knock it off once it is just above the right side of where the Power Bomb blocks were.",
+        "If using Bombs, lure the Sova that is just below the Power Bomb blocks, then use a Super to prevent it from going into the Morph tunnel.",
+        "Starting at the bottom of the room and going up for the item before coming back down can be done, even with a Power Bomb, by first luring the Sova into safety at the bottom of the room."
+      ],
+      "devNote": "FIXME: It is possible to do this by following the Sova around the room to avoid resetting the room or using a Super."
+    },
+    {
+      "id": 75,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 217,
+      "link": [4, 4],
+      "name": "Single Sova Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [4]}},
+            {"cycleFrames": 155}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [5]}},
+            {"cycleFrames": 180}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Sova", "count": 1}]
+    },
+    {
+      "id": 76,
+      "link": [4, 4],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [
+        {"or": [
+          {"resetRoom": {"nodes": [4, 5]}},
+          {"and": [
+            "canComplexGMode",
+            {"ammo": {"type": "Super", "count": 1}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Starting from the top of the room will require careful manipulation of the Sovas.",
+        "If going through the Power Bomb blocks, place the Power Bomb on the lowest stair on the ledge above,",
+        "go down and lure the Sova up and use a Super to knock it off once it is just above the right side of where the Power Bomb blocks were.",
+        "If using Bombs, lure the Sova that is just below the Power Bomb blocks, then use a Super to prevent it from going into the Morph tunnel.",
+        "Starting at the bottom of the room and going up for the item before coming back down can be done, even with a Power Bomb, by first luring the Sova into safety at the bottom of the room."
+      ],
+      "devNote": "FIXME: It is possible to do this by following the Sova around the room to avoid resetting the room or using a Super."
+    },
+    {
+      "id": 77,
+      "link": [4, 4],
+      "name": "G-Mode Morph Power Bomb the Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphMovement",
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Place a Power Bomb high enough to reach the blocks above."
+    },
+    {
+      "id": 78,
+      "link": [4, 4],
+      "name": "G-Mode Morph Power Bomb the Blocks (Power Bombs Only)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphBombHorizontally",
+        {"ammo": {"type": "PowerBomb", "count": 3}}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "The blocks are breakable with 4 Power Bombs.",
+        "Horizontally bomb over the vertical door then up two ledges before placing a Power Bomb that can reach the blocks above."
+      ],
+      "devNote": [
+        "FIXME: It is possible to enter 5 in indirect, and shoot the door at 4 if it has ever been locked,",
+        "or 5 if its still locked to overload PLMs and go through the bomb maze."
+      ]
+    },
+    {
+      "id": 79,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 204,
+      "link": [4, 5],
+      "name": "Ice Moonfall Door Lock Skip",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "h_bombThings",
+        "canTrickyUseFrozenEnemies",
+        "canEnemyStuckMoonfall",
+        "canFreeFallClip"
+      ],
+      "bypassesDoorShell": true,
+      "note": [
+        "Use two frozen Sovas to moonfall and clip down past the door shell.",
+        "One of the Sovas behind the bomb blocks will need to be released using a bomb or Power Bomb.",
+        "In Norfair rooms, enemies thaw more quickly, so there is probably not enough time to clip down through the enemy;",
+        "instead, before it thaws, slide off the edge or shoot it."
+      ],
+      "devNote": [
+        "FIXME: add strats for entering from the top, through the Power Bomb blocks or Bomb tunnel."
+      ]
+    },
+    {
+      "id": 80,
+      "link": [4, 5],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 70},
+        "canShinechargeMovement"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 81,
+      "link": [4, 5],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovement",
+        {"shineChargeFrames": 50}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 186,
+      "link": [4, 5],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "right"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 82,
+      "link": [4, 5],
+      "name": "Stored Moonfall Door Shell Bypass",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        "canMoonfall"
+      ],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 187,
+      "link": [4, 6],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (HiJump Spring Ball Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"ammo": {"type": "PowerBomb", "count": 1}},
+        "HiJump",
+        "canSpringBallJumpMidAir",
+        "canBeVeryPatient"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": "The canBeVeryPatient requirement is for difficulty placement"
+    },
+    {
+      "id": 188,
+      "link": [4, 7],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (HiJump Spring Ball Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"ammo": {"type": "PowerBomb", "count": 1}},
+        "HiJump",
+        "canSpringBallJumpMidAir",
+        "canBeVeryPatient"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": "The canBeVeryPatient requirement is for difficulty placement"
+    },
+    {
+      "id": 83,
+      "link": [5, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 84,
+      "link": [5, 4],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 70},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 85,
+      "link": [5, 4],
+      "name": "Come in Shinecharged, Leave Shinesparking",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 40},
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 9}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 86,
+      "link": [5, 5],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 87,
+      "link": [5, 5],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shinespark": {"frames": 12, "excessFrames": 12}}
+      ],
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 88,
+      "link": [5, 5],
+      "name": "G-Mode Indirect Morph Power Bomb the Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphMovement",
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Place a Power Bomb high enough to reach the blocks above."
+    },
+    {
+      "id": 89,
+      "link": [5, 9],
+      "name": "Power Bomb Blocks",
+      "requires": [
+        {"or": [
+          "h_usePowerBomb",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": "It is possible to go through the Morph Maze with a single Power Bomb, placed low enough to not break A, but this isn't very useful."
+    },
+    {
+      "id": 90,
+      "link": [5, 9],
+      "name": "Morph Maze",
+      "requires": [
+        "h_useMorphBombs",
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall",
+          "canIBJ"
+        ]}
+      ]
+    },
+    {
+      "id": 91,
+      "link": [5, 9],
+      "name": "Ice Clip",
+      "requires": [
+        "h_iceClip"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Freeze the wall crawler at a precise location in order to jump through the Power Bomb Blocks.",
+        "The pixel window is larger and higher with Morph and an X-Ray Stand Up."
+      ]
+    },
+    {
+      "id": 92,
+      "link": [6, 1],
+      "name": "Come in Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 115},
+        "canMidairShinespark",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 30, "excessFrames": 6}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 93,
+      "link": [6, 1],
+      "name": "Run in and Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canMidairShinespark",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 30, "excessFrames": 6}}
+      ]
+    },
+    {
+      "id": 94,
+      "link": [6, 1],
+      "name": "Grapple Teleport X-Ray Climb (1 Screen)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled) with a horizontal position of 21 (as far right as possible).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition above, without needing to open the door.",
+        "At the beginning of the climb, avoid pressing left without X-Ray being held, to prevent triggering the transition of the lower door."
+      ]
+    },
+    {
+      "id": 214,
+      "link": [6, 1],
+      "name": "Grapple Teleport X-Ray Climb (2 Screens)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [
+        "canLongXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled) with a horizontal position of 21 (as far right as possible).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 2 screens to get up to the door transition above, without needing to open the door.",
+        "At the beginning of the climb, avoid pressing left without X-Ray being held, to prevent triggering the transition of the lower door."
+      ]
+    },
+    {
+      "id": 189,
+      "link": [6, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 95,
+      "link": [6, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 96,
+      "link": [6, 2],
+      "name": "Carry Grapple Teleport (Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 97,
+      "link": [6, 2],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 98,
+      "link": [6, 2],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled) with a horizontal position of 21 (as far right as possible).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition above, without needing to open the door.",
+        "At the beginning of the climb, avoid pressing left without X-Ray being held, to prevent triggering the transition of the lower door."
+      ]
+    },
+    {
+      "id": 190,
+      "link": [6, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 99,
+      "link": [6, 3],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 100,
+      "link": [6, 3],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 191,
+      "link": [6, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"ammo": {"type": "PowerBomb", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Lay the Power Bomb low enough to kill the Sova.",
+        "Descend during the Power Bomb explosion, to take advantage of the more lenient timing provided by the lag."
+      ]
+    },
+    {
+      "id": 192,
+      "link": [6, 5],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"ammo": {"type": "PowerBomb", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "any"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 101,
+      "link": [6, 6],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 102,
+      "link": [6, 6],
+      "name": "G-Mode Setup - Get Hit By Waver",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Wait 50 seconds for a Waver to get to this door."
+    },
+    {
+      "id": 103,
+      "link": [6, 6],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Wait 50 seconds for a Waver to come and hit Samus."
+    },
+    {
+      "id": 104,
+      "link": [6, 7],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 105,
+      "link": [6, 7],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 106,
+      "link": [6, 7],
+      "name": "Come in Shinecharged and Leave Shinesparking",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 120},
+        "canMidairShinespark",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 15}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 107,
+      "link": [6, 7],
+      "name": "Come in Shinecharged and Leave Shinesparking (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 80},
+        "HiJump",
+        "canMidairShinespark",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 11}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 108,
+      "link": [6, 7],
+      "name": "Run in and Leave Shinesparking",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 5, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 109,
+      "link": [6, 7],
+      "name": "Run in and Leave Shinecharged (HiJump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "HiJump",
+        "canWalljump",
+        {"shineChargeFrames": 135}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 193,
+      "link": [6, 7],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 110,
+      "link": [6, 10],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphMovement",
+        {"or": [
+          {"and": [
+            "canTrickyJump",
+            "canCameraManip"
+          ]},
+          "h_artificialMorphPowerBomb",
+          {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Lower the camera to watch the Wavers and to help avoid them.",
+        "With Bombs alone, it may be helpful to kill the top Waver; this can be done by placing Bombs in a vertical line and then moving out of the way as it approaches."
+      ]
+    },
+    {
+      "id": 111,
+      "link": [7, 1],
+      "name": "Base",
+      "requires": [
+        "Grapple"
+      ]
+    },
+    {
+      "id": 112,
+      "link": [7, 1],
+      "name": "Springball Bounce",
+      "requires": [
+        "canCarefulJump",
+        "canSpringBallBounce",
+        "canMockball",
+        {"or": [
+          {"doorUnlockedAtNode": 7},
+          "canTrickyJump"
+        ]}
+      ],
+      "note": [
+        "Use the full runway of the top-right door to jump to the ledge below the Cacatac and mockball on it.",
+        "Either full jump from the left side of this platform, or do a small hop followed by a big jump to cross the gap.",
+        "Disabling Springball once past the Grapple Blocks makes this much easier."
+      ]
+    },
+    {
+      "id": 113,
+      "link": [7, 1],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 41, "excessFrames": 2}}
+      ],
+      "devNote": "Ending the spark earlier takes a hit from the Waver"
+    },
+    {
+      "id": 114,
+      "link": [7, 1],
+      "name": "Enter Shinecharged and Shinespark from Cacatac Platform",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        "canCarefulJump",
+        {"shinespark": {"frames": 30, "excessFrames": 6}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Dealing with spikes is up to luck.",
+        "It is possible to shoot the Cacatac while jumping towards it."
+      ]
+    },
+    {
+      "id": 115,
+      "link": [7, 1],
+      "name": "Run in and Shinespark from Cacatac Platform",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2.5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        "canCarefulJump",
+        {"shinespark": {"frames": 30, "excessFrames": 6}}
+      ],
+      "note": [
+        "Dealing with spikes is up to luck.",
+        "It is possible to shoot the Cacatac while jumping towards it."
+      ]
+    },
+    {
+      "id": 116,
+      "link": [7, 1],
+      "name": "Shinespark from Cacatac Platform Through Door",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2.5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        "canTrickyJump",
+        "canHeroShot",
+        {"shinespark": {"frames": 25}},
+        {"or": [
+          {"and": [
+            "Wave",
+            "Spazer"
+          ]},
+          "Plasma",
+          {"ammo": {"type": "Missile", "count": 2}},
+          {"ammo": {"type": "Super", "count": 2}}
+        ]}
+      ],
+      "note": [
+        "Kill the Cacatac and quickly jump over to its platform.",
+        "Shoot towards the top-left door to open it, then follow the shot by jumping over the pit before initiating the shinespark."
+      ]
+    },
+    {
+      "id": 117,
+      "link": [7, 1],
+      "name": "Damage Boost (Right to Left)",
+      "requires": [
+        {"notable": "Damage Boost"},
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ],
+      "note": "Damage Boost off a Waver to cross the gap."
+    },
+    {
+      "id": 118,
+      "link": [7, 1],
+      "name": "Hero Shot Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 45},
+        "canHeroShot",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 36, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump,  fire a shot mid-air, and activate the shinespark wind-up.",
+        "Wait until the shot is at a specific position before sparking.",
+        "Sparking too late will cause the shot to despawn before reaching the door.",
+        "Sparking too early will cause Samus to bonk the door as it will not yet be open.",
+        "A beam shot, Missile, or Super can be used."
+      ]
+    },
+    {
+      "id": 194,
+      "link": [7, 1],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue (Spring Ball Bounce)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2.5,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.9",
+          "maxExtraRunSpeed": "$2.8"
+        }
+      },
+      "requires": [
+        "canSpeedball",
+        "canTrickySpringBallBounce",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": ["Speeds higher or lower than this can work but with greater difficulty."]
+    },
+    {
+      "id": 195,
+      "link": [7, 1],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue (Space Jump)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2.5,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.9",
+          "maxExtraRunSpeed": "$2.8"
+        }
+      },
+      "requires": [
+        "canBlueSpaceJump",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 119,
+      "link": [7, 1],
+      "name": "Grapple Teleport X-Ray Climb (1 Screen)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled) with a horizontal position of 21 (as far right as possible).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition above, without needing to open the door.",
+        "At the beginning of the climb, avoid pressing left without X-Ray being held, to prevent triggering the transition of the lower door."
+      ]
+    },
+    {
+      "id": 215,
+      "link": [7, 1],
+      "name": "Grapple Teleport X-Ray Climb (2 Screens)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [
+        "canLongXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled) with a horizontal position of 21 (as far right as possible).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 2 screens to get up to the door transition above, without needing to open the door.",
+        "At the beginning of the climb, avoid pressing left without X-Ray being held, to prevent triggering the transition of the lower door."
+      ]
+    },
+    {
+      "id": 196,
+      "link": [7, 2],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2.5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 120,
+      "link": [7, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 121,
+      "link": [7, 2],
+      "name": "Carry Grapple Teleport (Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 122,
+      "link": [7, 2],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 123,
+      "link": [7, 2],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled) with a horizontal position of 21 (as far right as possible).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition above, without needing to open the door.",
+        "At the beginning of the climb, avoid pressing left without X-Ray being held, to prevent triggering the transition of the lower door."
+      ]
+    },
+    {
+      "id": 197,
+      "link": [7, 3],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2.5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 124,
+      "link": [7, 3],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 125,
+      "link": [7, 3],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 198,
+      "link": [7, 4],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2.5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"ammo": {"type": "PowerBomb", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Lay the Power Bomb low enough to kill the Sova.",
+        "Descend during the Power Bomb explosion, to take advantage of the more lenient timing provided by the lag."
+      ]
+    },
+    {
+      "id": 199,
+      "link": [7, 5],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2.5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"ammo": {"type": "PowerBomb", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "any"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Lay the Power Bomb low enough to kill the Sova.",
+        "Descend during the Power Bomb explosion, to take advantage of the more lenient timing provided by the lag."
+      ]
+    },
+    {
+      "id": 126,
+      "link": [7, 6],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 127,
+      "link": [7, 6],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 120},
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 128,
+      "link": [7, 6],
+      "name": "Come In Shinecharged, Leave Sparking",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        {"shinespark": {"frames": 5}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 129,
+      "link": [7, 6],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2.5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 200,
+      "link": [7, 6],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2.5,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canXRayCancelShinecharge",
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 130,
+      "link": [7, 7],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3.5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 131,
+      "link": [7, 7],
+      "name": "Leave With Runway - Frozen Sova",
+      "requires": [
+        "h_frozenEnemyRunway",
+        "SpaceJump",
+        "canBePatient",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_bombThings"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Place a Power Bomb on the bottom stair attached to the door in order to prevent killing the Sova, or free a Sova from the Morph maze with Bombs.",
+        "If coming from below, be sure to lure the Sova to the bottom before placing a Power Bomb near the blocks in order to prevent killing it.",
+        "Use Space Jump to follow the Sova to the top right door. Freeze it just at the bottom of the small stairs, as Samus can run over the half-tile gap that remains."
+      ]
+    },
+    {
+      "id": 132,
+      "link": [7, 7],
+      "name": "Cacatac and Waver Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"or": [
+              {"and": [
+                "Grapple",
+                {"cycleFrames": 300}
+              ]},
+              {"and": [
+                "SpaceJump",
+                {"cycleFrames": 390}
+              ]},
+              {"and": [
+                "HiJump",
+                "canTrickyWalljump",
+                {"cycleFrames": 690}
+              ]}
+            ]}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [6]}},
+            {"cycleFrames": 370}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [7]}},
+            {"cycleFrames": 360}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Cacatac", "count": 1},
+        {"enemy": "Waver", "count": 1}
+      ]
+    },
+    {
+      "id": 133,
+      "link": [7, 7],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 134,
+      "link": [7, 7],
+      "name": "G-Mode Setup - Get Hit By Waver",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Wait 40 seconds for a Waver to get to this door."
+    },
+    {
+      "id": 135,
+      "link": [7, 7],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Wait 40 seconds for a Waver to come and hit Samus."
+    },
+    {
+      "id": 136,
+      "link": [7, 9],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 137,
+      "link": [7, 10],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphMovement",
+        {"or": [
+          {"and": [
+            "canTrickyJump",
+            "canCameraManip"
+          ]},
+          "h_artificialMorphPowerBomb",
+          {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Lower the camera to watch the Wavers and to help avoid them.",
+        "With Bombs alone, it may be helpful to kill the top Waver; this can be done by placing Bombs in a vertical line and then moving out of the way as it approaches."
+      ]
+    },
+    {
+      "id": 138,
+      "link": [7, 10],
+      "name": "G-Mode Morph Power Bombs Only",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"tech": "canBombHorizontally"},
+        "h_artificialMorphPowerBomb",
+        "h_additionalBomb",
+        "canTrickyDodgeEnemies"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Wait for the Waver to pass or quickly use a Power Bomb to boost over the gap towards the Cacatac.",
+        "Use a second Power Bomb to jump over it and down below; hold left as soon as Samus starts moving upward, in order to avoid the invisible Cacatac spikes."
+      ]
+    },
+    {
+      "id": 139,
+      "link": [8, 9],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 213,
+      "link": [8, 9],
+      "name": "IBJ",
+      "requires": [
+        "canIBJ",
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Ripper"]],
+            "explicitWeapons": ["ScrewAttack", "Super", "PowerBomb"]
+          }},
+          "canJumpIntoIBJ"
+        ]}
+      ],
+      "note": ["Either kill the Ripper, or dodge it by jumping into IBJ."]
+    },
+    {
+      "id": 203,
+      "link": [8, 9],
+      "name": "Frozen Ripper",
+      "requires": [
+        "canTrickyUseFrozenEnemies"
+      ],
+      "note": [
+        "Jump above the Ripper, and shoot down to freeze it as it moves below Samus.",
+        "Alternatively, from below, freeze the Ripper as far to the right as possible, and spin jump to squeeze on top of it from the left."
+      ]
+    },
+    {
+      "id": 140,
+      "link": [8, 9],
+      "name": "X-Mode Shinespark",
+      "requires": [
+        "canXMode",
+        "canBounceBall",
+        "canLateralMidAirMorph",
+        "canShinechargeMovement",
+        "h_shinechargeMaxRunway",
+        "h_XModeSpikeHitLeniency",
+        "h_XModeSpikeHitLeniency",
+        {"shinespark": {"frames": 6}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 141,
+      "link": [9, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canLongIBJ",
+          {"and": [
+            "HiJump",
+            "canJumpIntoIBJ"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 142,
+      "link": [9, 1],
+      "name": "Dual Jump Assist",
+      "requires": [
+        "HiJump",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 143,
+      "link": [9, 1],
+      "name": "Springwall",
+      "requires": [
+        "canSpringwall"
+      ]
+    },
+    {
+      "id": 144,
+      "link": [9, 1],
+      "name": "HiJump Walljump (Left)",
+      "requires": [
+        "HiJump",
+        "canPreciseWalljump"
+      ],
+      "note": "This is the same size of ledge as WRITG."
+    },
+    {
+      "id": 145,
+      "link": [9, 1],
+      "name": "HiJumpless Walljump (Left)",
+      "requires": [
+        "canConsecutiveWalljump",
+        "canInsaneWalljump"
+      ],
+      "note": "This is the same size of ledge as WRITG."
+    },
+    {
+      "id": 146,
+      "link": [9, 1],
+      "name": "Frozen Waver",
+      "requires": [
+        "canUseFrozenEnemies",
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "canWalljump",
+            "canTrickyUseFrozenEnemies"
+          ]},
+          {"and": [
+            "canTrickyJump",
+            "canTrickyUseFrozenEnemies"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 147,
+      "link": [9, 1],
+      "name": "Speedy Jump with Grapple",
+      "requires": [
+        "HiJump",
+        "SpeedBooster",
+        "canPreciseGrapple",
+        "h_midAirShootUp"
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump from the Save room door runway and use Grapple to grab onto the Grapple Blocks."
+    },
+    {
+      "id": 148,
+      "link": [9, 1],
+      "name": "Tricky Spring Ball Jump with Grapple",
+      "requires": [
+        {"notable": "Tricky Spring Ball Jump with Grapple"},
+        "canTrickySpringBallJump",
+        "canPreciseGrapple"
+      ],
+      "note": [
+        "Perform a very tight Spring Ball jump from the Save room door runway, starting from either a crouch or spin jump,",
+        "then use Grapple to barely reach the ceiling blocks."
+      ]
+    },
+    {
+      "id": 149,
+      "link": [9, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 150,
+      "link": [9, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 151,
+      "link": [9, 5],
+      "name": "Power Bomb Blocks",
+      "requires": [
+        {"or": [
+          "h_usePowerBomb",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 152,
+      "link": [9, 5],
+      "name": "Morph Maze",
+      "requires": [
+        "h_useMorphBombs"
+      ]
+    },
+    {
+      "id": 153,
+      "link": [9, 7],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canLongIBJ"
+        ]}
+      ]
+    },
+    {
+      "id": 154,
+      "link": [9, 7],
+      "name": "Walljump with HiJump",
+      "requires": [
+        "HiJump",
+        "canCarefulJump",
+        "canWalljump"
+      ],
+      "note": "Starting from the platform near the door to the left, run and jump to the right wall and wall jump twice to get to the top."
+    },
+    {
+      "id": 155,
+      "link": [9, 7],
+      "name": "Frozen Waver",
+      "requires": [
+        "canUseFrozenEnemies",
+        "canCarefulJump",
+        {"or": [
+          "canWalljump",
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            {"or": [
+              "canTrickyJump",
+              "HiJump",
+              "canSpringBallJumpMidAir"
+            ]}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 156,
+      "link": [9, 7],
+      "name": "Dual Jump Assist",
+      "requires": [
+        "HiJump",
+        "canTrickySpringBallJump"
+      ],
+      "note": "Run and Jump into a Springball Jump from the Save Room runway."
+    },
+    {
+      "id": 157,
+      "link": [9, 7],
+      "name": "Right Side Delayed Walljumps",
+      "requires": [
+        {"notable": "Right Side Delayed Walljumps"},
+        "canTrickyWalljump",
+        "canConsecutiveWalljump"
+      ],
+      "note": "A tricky, delayed walljump makes it possible to climb to top right in-room, with nothing."
+    },
+    {
+      "id": 158,
+      "link": [9, 8],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 159,
+      "link": [9, 9],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 201,
+      "link": [9, 9],
+      "name": "Waver Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 660}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [3]}},
+            {"cycleFrames": 720}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Waver", "count": 2}]
+    },
+    {
+      "id": 218,
+      "link": [9, 9],
+      "name": "Sova Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"or": [
+              {"and": [
+                "SpaceJump",
+                {"cycleFrames": 1500}
+              ]},
+              {"and": [
+                "HiJump",
+                "canTrickyWalljump",
+                {"cycleFrames": 1320}
+              ]},
+              {"and": [
+                "HiJump",
+                "canSpringBallJumpMidAir",
+                {"cycleFrames": 1320},
+                "h_doubleEquipmentScreenCycleFrames"
+              ]}
+            ]}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 1140}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [3]}},
+            {"cycleFrames": 1140}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [4]}},
+            {"cycleFrames": 720}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [5]}},
+            {"cycleFrames": 730}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [6]}},
+            {"cycleFrames": 1770},
+            {"or": [
+              "SpaceJump",
+              {"and": [
+                "HiJump",
+                "canTrickyWalljump"
+              ]}
+            ]}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [7]}},
+            {"cycleFrames": 1740},
+            {"or": [
+              "SpaceJump",
+              {"and": [
+                "HiJump",
+                "canTrickyWalljump"
+              ]}
+            ]}
+          ]}
+        ]},
+        "h_useMorphBombs"
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Sova", "count": 3}]
+    },
+    {
+      "id": 219,
+      "link": [9, 9],
+      "name": "Cacatac and Waver Farm",
+      "requires": [
+        {"or": [
+          {"resetRoom": {"nodes": [2]}},
+          {"and": [
+            {"resetRoom": {"nodes": [3]}},
+            {"cycleFrames": 60}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "SpaceJump",
+            {"cycleFrames": 600}
+          ]},
+          {"and": [
+            "HiJump",
+            "canTrickyWalljump",
+            {"cycleFrames": 660}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Cacatac", "count": 1},
+        {"enemy": "Waver", "count": 2}
+      ]
+    },
+    {
+      "id": 220,
+      "link": [9, 9],
+      "name": "Ripper Farm",
+      "requires": [
+        "ScrewAttack",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          {"and": [
+            "canSpringBallJumpMidAir",
+            "h_doubleEquipmentScreenCycleFrames",
+            {"cycleFrames": 20}
+          ]},
+          {"and": [
+            "canIBJ",
+            {"cycleFrames": 600}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"or": [
+              {"and": [
+                "SpaceJump",
+                {"cycleFrames": 1050}
+              ]},
+              {"and": [
+                "HiJump",
+                "canTrickyWalljump",
+                {"cycleFrames": 970}
+              ]},
+              {"and": [
+                "HiJump",
+                "canSpringBallJumpMidAir",
+                {"cycleFrames": 970},
+                "h_doubleEquipmentScreenCycleFrames"
+              ]}
+            ]}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 840}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [3]}},
+            {"cycleFrames": 960}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [4]}},
+            {"cycleFrames": 1800},
+            "h_useMorphBombs"
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [5]}},
+            {"cycleFrames": 1800},
+            "h_useMorphBombs"
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Ripper 2 (red)", "count": 1},
+        {"enemy": "Waver", "count": 1}
+      ]
+    },
+    {
+      "id": 160,
+      "link": [10, 1],
+      "name": "G-Mode Morph IBJ",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphLongIBJ",
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"or": [
+              "canBePatient",
+              "canDoubleBombJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Carefully dodge the Wavers while being prepared to abort the IBJ and start over if necessary."
+    },
+    {
+      "id": 161,
+      "link": [10, 3],
+      "name": "Base",
+      "requires": [
+        "canGMode"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 162,
+      "link": [10, 3],
+      "name": "G-Mode Morph Power Bomb the Blocks",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 163,
+      "link": [10, 7],
+      "name": "G-Mode Morph IBJ",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphLongIBJ",
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"and": [
+            "canTrickyDodgeEnemies",
+            "canBePatient",
+            {"or": [
+              "canBeVeryPatient",
+              "canDoubleBombJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Carefully dodge the Wavers while being prepared to abort the IBJ and start over if necessary.",
+        "It may be best to first IBJ to the top left side and kill the top Waver with Bombs;",
+        "this can be done by placing bombs in a vertical line, then dodging the Waver as it approaches."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Damage Boost",
+      "note": "Crossing between the topmost doors by damage boosting using a Waver."
+    },
+    {
+      "id": 2,
+      "name": "Tricky Spring Ball Jump with Grapple",
+      "note": [
+        "Perform a very tight Spring Ball jump from the Save room door runway, starting from either a crouch or spin jump,",
+        "then use Grapple to barely reach the ceiling blocks."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Right Side Delayed Walljumps",
+      "note": "A tricky, delayed walljump makes it possible to climb to top right in-room, with nothing."
+    }
+  ],
+  "nextStratId": 224,
+  "nextNotableId": 4
+}

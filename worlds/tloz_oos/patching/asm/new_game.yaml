@@ -1,0 +1,100 @@
+# setting up a new file - this is done when link is dropped into the world, not
+# at actual file creation.
+
+# Set default text speed to 5
+07/4183/: db $04
+
+# Change Link starting point
+07/4193/: db option.startingGroup       # Room
+07/4195/: db option.startingRoom        # Room
+07/4197/: db option.startingPosY        # Y
+07/4199/: db option.startingPosX        # X
+07/41a4/: db $00                        # Set shield level to 0. Should not have any effect before obtaining a shield and can be used to know if a shield have been obtained this way
+07/41a6/: db option.animalCompanion     # Natzu layout
+
+# Set new game max bombs to 0 instead of 10
+07/418d/: db $00
+
+# overwrite initial health and max health (since they are overwritten by another function anyway) to set
+# the initial seed selection instead. first byte is low c6xx address, second is index.
+07/418e/satchelInitialSelection: db $be, option.defaultSeedType - $20
+07/419a/slingshotInitialSelection: db $bf, option.defaultSeedType - $20
+
+07//startingInventory: /include startingInventory
+# On file creation, set additional flags to skip a few events/cutscenes/tutorials
+# from the vanilla game which are cumbersome in a rando context.
+07//setInitialFlags: |
+  ; Start inventory handling
+  ld hl,startingInventory
+  @startInventoryLoop:
+  ldi a,(hl)
+  or a
+  jr z,@endStartInventory
+  ld d,a
+  ld e,(hl)
+  inc hl
+  ldi a,(hl)
+  ld (de),a
+  jr @startInventoryLoop
+  @endStartInventory:
+
+  ; Mark intro as seen
+  ld a,$0a
+  call setGlobalFlag
+  ld a,$1c
+  call setGlobalFlag
+  ld a,$21
+  call setGlobalFlag
+
+  ; Room flag 6
+  ld a,$40
+  ld ($c796),a   ; Remove post-dungeon cutscene at D1 entrance
+  ld ($c78d),a   ; Remove post-dungeon cutscene at D2 entrance
+  ld ($c760),a   ; Remove post-dungeon cutscene at D3 entrance
+  ld ($c71d),a   ; Remove post-dungeon cutscene at D4 entrance
+  ld ($c78a),a   ; Remove post-dungeon cutscene at D5 entrance
+  ld ($c700),a   ; Remove post-dungeon cutscene at D6 entrance
+  ld ($c7d0),a   ; Remove post-dungeon cutscene at D7 entrance
+  ld ($c800),a   ; Remove post-dungeon cutscene at D8 entrance
+  ld ($c829),a   ; Remove Maku Tree cutscene at temple of seasons gate
+  ld ($c82a),a   ; Remove Maku Tree cutscene at winter tower
+  ld ($c79b),a   ; Sokra stump
+  ld ($c7e9),a   ; Sokra in town
+  ld ($c7a7),a   ; Vanilla start room
+
+  ; Room flags 5 | 6 | 7
+  ld a,$e0
+  ld ($c79a),a  # Rosa portal
+
+  ; Room flags 6 | 7
+  ld a,$c0
+  ld ($c798),a  # Troupe
+  ld ($c7cb),a  # Rosa (first encounter)
+
+  ; Room flag 0
+  ld a,$01
+  ld ($c716),a  ; Enable a tile replacement in Temple Remains to prevent softlock when exiting cave
+
+  # automatically open tarm gate if requirement is 0 jewels
+  ld a,option.tarmGateRequiredJewels
+  or a
+  jr nz,@done
+  ld a,$80
+  ld ($c763),a
+
+  @done:
+  ld hl,$4404  ; initializeChildOnGameStart, probably useless but we never know
+  ret
+07/4049/: call setInitialFlags
+
+# Remove the "Accept our quest, hero!" cutscene when launching the game
+# for the first time
+01/5874/: |
+  nop
+  nop
+  xor a
+  cp $01
+
+# Disable Impa intro script by jumping directly to @impaIntroDone
+0b/74aa/: db $74,$ef
+# Space from 0x2F4AC to 0x2F4EE (included) is free

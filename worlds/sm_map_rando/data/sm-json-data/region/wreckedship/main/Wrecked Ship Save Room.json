@@ -1,0 +1,192 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 304,
+  "name": "Wrecked Ship Save Room",
+  "area": "Wrecked Ship",
+  "subarea": "Main",
+  "roomAddress": "0x7CE8A",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a318",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Wrecked Ship Save Station",
+      "nodeType": "utility",
+      "nodeSubType": "save",
+      "locks": [
+        {
+          "name": "Wrecked Ship Save Station Lock",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedPhantoon"
+              ]
+            }
+          ]
+        }
+      ],
+      "utility": ["save"],
+      "mapTileMask": [
+        [2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Wrecked Ship Save Room Covern",
+      "enemyName": "Covern",
+      "quantity": 1,
+      "homeNodes": [1, 2],
+      "stopSpawn": ["f_DefeatedPhantoon"]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Covern",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 0
+        }
+      },
+      "note": "Stand half way between the ledge and the save station to position the Covern and extend the runway as far as possible."
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Covern Farm",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "Ice",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 240}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            "canFarmWhileShooting",
+            {"cycleFrames": 120}
+          ]},
+          {"cycleFrames": 540}
+        ]},
+        {"cycleFrames": 480}
+      ],
+      "farmCycleDrops": [{"enemy": "Covern", "count": 1}]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Covern",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Covern", "type": "contact", "hits": 1}},
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    }
+  ],
+  "notables": [],
+  "nextStratId": 9,
+  "nextNotableId": 1
+}

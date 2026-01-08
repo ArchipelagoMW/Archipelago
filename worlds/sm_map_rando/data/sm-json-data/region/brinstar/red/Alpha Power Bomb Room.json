@@ -1,0 +1,699 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 76,
+  "name": "Alpha Power Bomb Room",
+  "area": "Brinstar",
+  "subarea": "Red",
+  "roomAddress": "0x7A3AE",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00190ea",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Chozo Item",
+      "nodeType": "item",
+      "nodeSubType": "chozo",
+      "nodeItem": "PowerBomb",
+      "nodeAddress": "0x7890E",
+      "mapTileMask": [
+        [1, 2, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Hidden Left Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78914",
+      "mapTileMask": [
+        [2, 1, 1]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Hopping Boyons",
+      "obstacleType": "enemies"
+    },
+    {
+      "id": "B",
+      "name": "Power Bomb Blocks",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Alpha Power Bomb Room Boyons",
+      "enemyName": "Boyon",
+      "quantity": 4,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 27,
+      "link": [1, 1],
+      "name": "Gain Flash Suit (Spikesuit)",
+      "requires": [
+        "canSamusEaterStandUp",
+        {"samusEaterFrames": 160},
+        "h_shinechargeMaxRunway",
+        {"thornHits": 1},
+        "h_spikeSuitSamusEaterLeniency",
+        "h_spikeSuitThornHitLeniency",
+        "canSpikeSuit",
+        {"shinespark": {"frames": 5, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (Samus Eater)",
+      "requires": [
+        "canSamusEaterStandUp",
+        {"samusEaterFrames": 160},
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 80}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Land in the Samus Eater while moving forward.",
+        "Continue holding dash and forward to gain a shinecharge while running in place inside the Samus Eater."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue (Samus Eater)",
+      "requires": [
+        "canSamusEaterStandUp",
+        {"samusEaterFrames": 160},
+        "h_shinechargeMaxRunway",
+        "canXRayCancelShinecharge",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Land in the far left side of the Samus Eater while moving forward to the right.",
+        "Continue holding dash, forward, and angle-up or angle-down to gain a shinecharge while running in place inside the Samus Eater.",
+        "The down press for the shinecharge must be precisely timed to occur after the Samus Eater releases Samus but before running into the wall (~2-frame window).",
+        "Then use X-Ray to cancel the shinecharge frames, in order to jump out with temporary blue before the Samus Eater begins another cycle.",
+        "If the down press for the shinecharge occurs too early, Samus will end up in an aim-down pose before landing and will not be able to gain temporary blue."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "canTrickyJump"
+        ]},
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 11,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Space Jump)",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "canTrickyJump"
+        ]},
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 11,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Space Jump)",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "canTrickyJump"
+        ]},
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 11,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Controlled Spring Ball Bounce",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        "canTrickySpringBallBounce",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 11,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "movementType": "controlled"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Controlled Spring Ball Bounce (High Speed)",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        "canTrickySpringBallBounce"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 11,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$2.D",
+          "movementType": "controlled"
+        }
+      },
+      "note": "At high speed, it is possible to avoid Boyon damage."
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "canTrickyJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 11,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 28,
+      "link": [1, 1],
+      "name": "Boyon Farm",
+      "requires": [
+        "canBePatient",
+        "h_useMorphBombs",
+        {"resetRoom": {"nodes": [1]}},
+        {"cycleFrames": 4930}
+      ],
+      "clearsObstacles": ["A"],
+      "resetsObstacles": ["B"],
+      "farmCycleDrops": [{"enemy": "Boyon", "count": 4}]
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [1, 1],
+      "name": "Leave with Samus Eater Teleport",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSamusEaterTeleport": {
+          "floorPositions": [[12, 13], [2, 13], [8, 13]],
+          "ceilingPositions": []
+        }
+      },
+      "bypassesDoorShell": "free"
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Avoid Boyon Damage",
+      "requires": [
+        {"or": [
+          "canTrickyJump",
+          "Ice",
+          {"obstaclesCleared": ["A"]},
+          {"and": [
+            "canCarefulJump",
+            "h_useSpringBall"
+          ]},
+          "can4HighMidAirMorph",
+          {"and": [
+            "SpaceJump",
+            "canCarefulJump"
+          ]},
+          {"and": [
+            "SpaceJump",
+            "ScrewAttack"
+          ]},
+          {"and": [
+            "ScrewAttack",
+            "canCarefulJump"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Avoid Boyon Damage (Blue Jump)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canCarefulJump"
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Kill Boyons",
+      "requires": [
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Boyon", "Boyon", "Boyon", "Boyon"]],
+            "excludedWeapons": ["Bombs", "PseudoScrew"]
+          }},
+          {"and": [
+            "canBePatient",
+            "h_useMorphBombs"
+          ]},
+          {"and": [
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 16}},
+            "canPseudoScrew"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Take Damage",
+      "requires": [
+        {"or": [
+          {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 2}},
+          {"and": [
+            "canCarefulJump",
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}}
+          ]},
+          {"and": [
+            "canHorizontalDamageBoost",
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "G-Mode Morph Power Bomb the Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphMovement",
+          {"and": [
+            "h_artificialMorphBombs",
+            "canBePatient"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": [
+        "Traverse the room while avoiding or killing the Boyons.",
+        "If the Chozo item is still there, it is best to exit G-Mode before the final Power Bomb goes off to ensure that PLMs aren't overloaded.",
+        "If Samus falls into a Samus Eater, she will often be teleported into it when exiting G-Mode."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "G-Mode Morph Power Bomb the Blocks (Power Bombs Only)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          {"ammo": {"type": "PowerBomb", "count": 6}},
+          {"and": [
+            {"ammo": {"type": "PowerBomb", "count": 4}},
+            "h_artificialMorphBombHorizontally"
+          ]},
+          {"and": [
+            {"ammo": {"type": "PowerBomb", "count": 4}},
+            "canInsaneJump",
+            "canHitbox"
+          ]},
+          {"and": [
+            {"ammo": {"type": "PowerBomb", "count": 3}},
+            "h_artificialMorphBombHorizontally",
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}}
+          ]},
+          {"and": [
+            {"ammo": {"type": "PowerBomb", "count": 2}},
+            "h_artificialMorphBombHorizontally",
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}},
+            "canInsaneJump",
+            "canHitbox"
+          ]},
+          {"and": [
+            {"ammo": {"type": "PowerBomb", "count": 2}},
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 2}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "flashSuitChecked": true,
+      "note": [
+        "Traverse the room with a small number of Power Bombs.",
+        "If the Chozo item is still there, it is best to exit G-Mode before the final Power Bomb goes off to ensure that PLMs aren't overloaded.",
+        "This strat can be done easily with 7 Power Bombs. Simply kill all of the Boyons before progressing.",
+        "The final Power Bomb needs to be placed on the second to last floating platform or later to break the wall.",
+        "Samus can use one Power Bomb and a Boyon hit to get from the door to the second platform, or from the second to fourth platform.",
+        "Alternatively, when next to the Boyons, place a Power Bomb while the Boyon is low, slightly after the peak of the jump, hitbox through the Boyons.",
+        "If the Boyons are killed, Samus can horizontally boost far enough to skip a platform.",
+        "Samus can cross the room with any of the following: 7 PB; 6 PB and a horizontal boost; 5 PB and hitboxing the first Boyons; 5 PB and damage from the first Boyons;",
+        "4 PB and damage from the first Boyons and hitboxing the second; 3 PB and hitting both sets of Boyons.",
+        "Note that if Samus falls into a Samus Eater, she will often be teleported into it when exiting G-Mode."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "G-Mode Morph Power Bomb the Blocks (Thorn Damage Boost, Lenient)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canUseIFrames",
+        "canNeutralDamageBoost",
+        "canInsaneJump",
+        {"thornHits": 5},
+        "h_artificialMorphPowerBomb",
+        "h_additionalBomb"
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": [
+        "Traverse the room while rolling on the thorns and avoiding the Samus Eaters.",
+        "Roll from the first platform onto the thorns under the first set of Boyons.",
+        "When just past the first Boyons, turn right to damage boost up and hit the block and fall back on the thorns.",
+        "While still facing right wait for the thorns to hit again;",
+        "use the boost to get onto the next set of thorns and roll across them into the third Samus Eater before using a Power Bomb.",
+        "Use the Power Bomb to boost up into the thorns. Hit the thorns again to get next to the Chozo statue.",
+        "Place another Power Bomb and exit G-Mode before it goes off to break the wall.",
+        "Note that if Samus is teleported into the Samus Eater when exiting G-Mode, then PLMs weren't properly overloaded before entering it.",
+        "PLMs can be overloaded by waiting on their petals before entering them. Taking 2 thorn hits while under the first Boyons is important for this reason."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "G-Mode Morph Power Bomb the Blocks (Thorn Damage Boost)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canUseIFrames",
+        "canNeutralDamageBoost",
+        "canTrickyGMode",
+        {"thornHits": 2},
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": [
+        "Traverse the room while rolling on the thorns and avoiding the Samus Eaters.",
+        "Roll from the first platform onto the thorns under the first set of Boyons.",
+        "When just past the first Boyons, turn right and wait on the safe spot for a second to overload PLMs.",
+        "Move right to touch the thorns and use that to damage boost leftwards onto the next thorns and roll into the third Samus Eater.",
+        "Place a Power Bomb and then quickly unmorph and jump onto the block above and exit G-Mode before the Power Bomb explodes to break the wall.",
+        "Note that if Samus is teleported into the Samus Eater when exiting G-Mode, then PLMs weren't properly overloaded before entering it.",
+        "PLMs can be overloaded by waiting on their petals before entering them.",
+        "Also note that there are much easier strats with more Energy or more Power Bombs."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [1, 3],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Damageless",
+      "requires": [
+        {"or": [
+          "canTrickyJump",
+          "Ice",
+          {"obstaclesCleared": ["A"]},
+          {"and": [
+            "canCarefulJump",
+            "h_useSpringBall"
+          ]},
+          "can4HighMidAirMorph",
+          {"and": [
+            "SpaceJump",
+            "canCarefulJump"
+          ]},
+          {"and": [
+            "SpaceJump",
+            "ScrewAttack"
+          ]},
+          {"and": [
+            "ScrewAttack",
+            "canCarefulJump"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Kill Boyons",
+      "requires": [
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Boyon", "Boyon", "Boyon", "Boyon"]],
+            "excludedWeapons": ["Bombs", "PseudoScrew"]
+          }},
+          {"and": [
+            "canBePatient",
+            "h_useMorphBombs"
+          ]},
+          {"and": [
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 16}},
+            "canPseudoScrew"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Take Damage",
+      "requires": [
+        {"or": [
+          {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 2}},
+          {"and": [
+            "canCarefulJump",
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}}
+          ]},
+          {"and": [
+            "canHorizontalDamageBoost",
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["B"]},
+          "h_usePowerBomb"
+        ]}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 23,
+      "link": [2, 3],
+      "name": "Kill Boyons and PB Blocks",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        {"enemyKill": {
+          "enemies": [["Boyon", "Boyon", "Boyon", "Boyon"]],
+          "explicitWeapons": ["PowerBomb"]
+        }}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "note": "Place the PB on the block next to the leftmost Boyon, in order to double hit all Boyons and break the PB blocks."
+    },
+    {
+      "id": 24,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["B"]},
+          "h_usePowerBomb"
+        ]}
+      ],
+      "clearsObstacles": ["B"]
+    }
+  ],
+  "notables": [],
+  "nextStratId": 29,
+  "nextNotableId": 1
+}

@@ -1,0 +1,372 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 181,
+  "name": "Watering Hole",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Yellow",
+  "roomAddress": "0x7D13B",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 0],
+    [1, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a48c",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2],
+        [2, 0],
+        [1, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Left Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Super",
+      "nodeAddress": "0x7C4AF",
+      "mapTileMask": [
+        [1, 1],
+        [1, 0],
+        [2, 0]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Right Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x7C4B5",
+      "mapTileMask": [
+        [1, 1],
+        [1, 0],
+        [2, 0]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Watering Hole Zebs",
+      "enemyName": "Zeb",
+      "quantity": 2,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Watering Hole Choot",
+      "enemyName": "Choot",
+      "quantity": 1,
+      "homeNodes": [1]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Zeb",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "note": "Requires a pixel-perfect freeze in order to run onto and off of the frozen Zeb."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Double Frozen Zeb Runway",
+      "requires": [
+        {"notable": "Double Frozen Zeb Runway"},
+        "h_trickyFrozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 20,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Freeze both Zebs in order to significantly extend the length of the runway.",
+        "Requires a pixel-perfect freeze in order to run onto and off of the frozen Zebs."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Zeb Farm",
+      "requires": [
+        {"simpleCycleFrames": 80},
+        {"cycleFrames": 30}
+      ],
+      "farmCycleDrops": [{"enemy": "Zeb", "count": 1}]
+    },
+    {
+      "id": 25,
+      "link": [1, 1],
+      "name": "Double Zeb Farm",
+      "requires": [
+        "canTrickyDodgeEnemies",
+        {"cycleFrames": 170}
+      ],
+      "farmCycleDrops": [{"enemy": "Zeb", "count": 2}],
+      "note": ["Run back and forth between the two Zeb spawners to farm them simultaneously."]
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Zeb",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "canIBJ",
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Frozen Choot",
+      "requires": [
+        "Gravity",
+        "canTrickyUseFrozenEnemies"
+      ],
+      "devNote": "The only thing tricky about this is realizing to leave the Choot alive before going down."
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Crouch Jump Down Grab",
+      "requires": [
+        {"notable": "Precise Crouch Jump Down Grab"},
+        "Gravity",
+        "canTrickyJump",
+        "h_crouchJumpDownGrab"
+      ],
+      "note": [
+        "Getting out with only Gravity and no wall jump requires a tight crouch jump and down grab while above the water:",
+        "Position very close to the edge, and press forward immediately after crouch jumping (almost simultaneously)."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Suitless Springball Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "h_maxHeightSpringBallJump"
+      ],
+      "note": "This is a max height springball jump.",
+      "devNote": "FIXME add a slightly easier variant that damage boosts off of the Choot."
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Suitless HiJump",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canDownGrab"
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Suitless HiJump Springball",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Naked Wall Jump Escape",
+      "requires": [
+        "canSuitlessMaridia",
+        "canStationarySpinJump",
+        "canSunkenTileWideWallClimb"
+      ],
+      "note": "A stationary spinjump can fit into the 1 tile wide hole where Samus can slowly infinite walljump to freedom."
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 32, "excessFrames": 13}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 12,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Double Frozen Zeb Runway",
+      "note": [
+        "Freeze both Zebs in order to significantly extend the length of the runway.",
+        "Requires a pixel-perfect freeze in order to run onto and off of the frozen Zebs."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Precise Crouch Jump Down Grab",
+      "wallJumpAvoid": true,
+      "note": [
+        "Use a precise crouch jump and down grab to get to the second platform above the water.",
+        "Position very close to the edge, and press forward immediately after crouch jumping (almost simultaneously)."
+      ]
+    }
+  ],
+  "nextStratId": 26,
+  "nextNotableId": 3
+}

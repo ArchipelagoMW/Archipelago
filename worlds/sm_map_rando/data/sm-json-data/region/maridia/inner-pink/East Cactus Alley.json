@@ -1,0 +1,1813 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 196,
+  "name": "East Cactus Alley",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Pink",
+  "roomAddress": "0x7DA2B",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a954",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a960",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Junction Left of Morph Tunnel",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1],
+        [2, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": " Top Right Ledge Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 2, 2],
+        [1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Bottom Middle Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 2, 1, 1],
+        [1, 1, 2, 2, 1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "East Cactus Alley Junction (Right of Morph Tunnel)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 1, 1, 1],
+        [1, 2, 1, 1, 1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "East Cactus Alley Left Cacatac",
+      "enemyName": "Cacatac",
+      "quantity": 1,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e2",
+      "groupName": "East Cactus Alley Bottom Cacatacs",
+      "enemyName": "Cacatac",
+      "quantity": 2,
+      "homeNodes": [5]
+    },
+    {
+      "id": "e3",
+      "groupName": "East Cactus Alley Top Right Cacatacs",
+      "enemyName": "Cacatac",
+      "quantity": 2,
+      "homeNodes": [4]
+    },
+    {
+      "id": "e4",
+      "groupName": "East Cactus Alley Top Left Cacatac",
+      "enemyName": "Cacatac",
+      "quantity": 1,
+      "betweenNodes": [5, 6]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 2},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 4},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 3},
+        {"id": 5}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Cacatac Farm (1 Cacatac)",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"or": [
+              {"and": [
+                "HiJump",
+                "SpeedBooster",
+                "canCarefulJump",
+                {"cycleFrames": 300}
+              ]},
+              {"and": [
+                "HiJump",
+                "canWalljump",
+                {"cycleFrames": 310}
+              ]},
+              {"and": [
+                "SpaceJump",
+                {"cycleFrames": 360}
+              ]},
+              {"and": [
+                "canTrickyWalljump",
+                {"cycleFrames": 380}
+              ]},
+              {"and": [
+                "canSpringBallJumpMidAir",
+                {"or": [
+                  "HiJump",
+                  "canSpringwall",
+                  {"and": [
+                    "canTrickySpringBallJump",
+                    "canTrickyJump"
+                  ]}
+                ]},
+                {"cycleFrames": 340},
+                "h_doubleEquipmentScreenCycleFrames"
+              ]},
+              {"and": [
+                "canDoubleBombJump",
+                {"cycleFrames": 830}
+              ]}
+            ]}
+          ]},
+          {"and": [
+            "canSuitlessMaridia",
+            {"or": [
+              {"and": [
+                "HiJump",
+                "canTrickyJump",
+                "canMidairWiggle",
+                "canTrickyWalljump",
+                {"cycleFrames": 360}
+              ]},
+              {"and": [
+                "HiJump",
+                "canSpaceJumpWaterBounce",
+                "canWalljump",
+                {"cycleFrames": 390}
+              ]},
+              {"and": [
+                "HiJump",
+                "canSpaceJumpWaterEscape",
+                {"cycleFrames": 430}
+              ]},
+              {"and": [
+                {"notable": "Suitless Bootless Space Jump"},
+                "canSpaceJumpWaterBounce",
+                "canWalljump",
+                {"cycleFrames": 440}
+              ]},
+              {"and": [
+                "HiJump",
+                "canTrickySpringBallJump",
+                {"or": [
+                  "canTrickyJump",
+                  "canFlatleyJump"
+                ]},
+                {"cycleFrames": 360},
+                "h_doubleEquipmentScreenCycleFrames"
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Cacatac", "count": 1}]
+    },
+    {
+      "id": 68,
+      "link": [1, 1],
+      "name": "X-Mode, Leave Shinecharged",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        "canShinechargeMovementComplex",
+        "canXMode",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        {"or": [
+          "h_XModeSpikeHit",
+          "canStationarySpinJump",
+          "canTrickyJump"
+        ]},
+        "Gravity",
+        {"or": [
+          {"and": [
+            "HiJump",
+            "SpaceJump",
+            {"shineChargeFrames": 130}
+          ]},
+          {"and": [
+            "HiJump",
+            "canPreciseWalljump",
+            {"shineChargeFrames": 160}
+          ]},
+          {"and": [
+            "SpaceJump",
+            "canPreciseWalljump",
+            {"shineChargeFrames": 160}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": [
+        "Two spike hits are expected per attempt (with any additional leniency hits being multiplied by this amount)."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "X-Mode, Leave With Spark",
+      "requires": [
+        "canXMode",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        "h_shinechargeMaxRunway",
+        "canShinechargeMovementTricky",
+        "canTrickyJump",
+        "Gravity",
+        {"or": [
+          {"and": [
+            "HiJump",
+            "canTrickyDashJump"
+          ]},
+          {"and": [
+            "canFastWalljumpClimb",
+            "canPreciseWalljump"
+          ]},
+          {"and": [
+            "SpaceJump",
+            "canInsaneJump",
+            {"shinespark": {"frames": 3}}
+          ]}
+        ]},
+        "canMidairShinespark",
+        {"shinespark": {"frames": 5}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": [
+        "Two spike hits are expected per attempt (with any additional leniency hits being multiplied by this amount)."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [],
+      "note": "Doesn't require anything, but getting out does."
+    },
+    {
+      "id": 6,
+      "link": [1, 4],
+      "name": "G-Mode Morph Diagonal IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_artificialMorphDiagonalBombJump",
+          {"and": [
+            "h_artificialMorphHBJ",
+            "h_artificialMorphJumpIntoIBJ"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Hug the right wall after killing the first Cacatac in order to avoid its invisible, stationary projectiles.",
+        "After getting to the small island platform, diagonal IBJ up while avoiding the top Cacatac.",
+        "Alternatively HBJ to the next platform and Spring Ball from the right edge of this platform into an IBJ above the spikes."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 6],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "h_artificialMorphSpringBall",
+          "h_artificialMorphBombHorizontally"
+        ]},
+        {"or": [
+          {"and": [
+            "h_artificialMorphBombs",
+            {"or": [
+              "Gravity",
+              "h_artificialMorphSpringBall"
+            ]}
+          ]},
+          "h_artificialMorphPowerBomb",
+          {"enemyDamage": {"enemy": "Cacatac", "type": "contact", "hits": 1}}
+        ]},
+        {"or": [
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphBombThings"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Hug the right wall after killing the first Cacatac in order to avoid its invisible, stationary projectiles."
+    },
+    {
+      "id": 75,
+      "link": [2, 1],
+      "name": "G-Mode Morph, Spring Ball Gravity Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canGravityJump",
+        "h_artificialMorphSpringFling",
+        {"or": [
+          "HiJump",
+          {"and": [
+            "h_artificialMorphJumpIntoIBJ",
+            "canInsaneJump"
+          ]},
+          {"and": [
+            "h_artificialMorphJumpIntoIBJ",
+            {"spikeHits": 1}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Pause and just before the pause fully triggers, jump and press left, and then disable Gravity and Spring Ball.",
+        "With HiJump and a good jump, it is possible to jump straight to the high ledge, but quickly pausing and turning on Spring Ball and jumping again can help as a backup.",
+        "Without HiJump, use this jump to start an IBJ directly over the spike pit, then boost horizontally to the left ledge.",
+        "Jump over the Cacatac and the spike pits with suitless Spring Flings. The final jump can be done the same way as the first, if Samus is not able to wall jump."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "G-Mode Morph, IBJ, HBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "G-Mode Morph, IBJ, HBJ"},
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]},
+        "h_artificialMorphDiagonalBombJump",
+        "h_artificialMorphHBJ"
+      ],
+      "flashSuitChecked": true,
+      "note": "This requires multiple HBJ to get over spike pits. The first one, by the right door, must be started at the top of an IBJ."
+    },
+    {
+      "id": 76,
+      "link": [2, 1],
+      "name": "G-Mode Morph, Very Precise Gravity Jump Spring Ball Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canGravityJump",
+        "h_artificialMorphSpringFling",
+        "canTrickyGMode",
+        {"or": [
+          "h_artificialMorphBombThings",
+          {"enemyDamage": {"enemy": "Cacatac", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Pause and on the last frame before the pause triggers, press left and jump, and then disable Gravity and Spring Ball.",
+        "On the first possible frame, repause and equip Spring Ball again then buffer the second jump out of the pause. Both of these actions are frame perfect.",
+        "If the first jump was done correctly, Samus will move upwards with very little horizontal movement until breaking the water, after which she will swing rapidly to the left.",
+        "Jump over the Cacatac and the spike pits with suitless Spring Flings. The final jump can be done the same way as the first, if Samus is not able to wall jump.",
+        "This one is more lenient, and has a 4-frame window for the second jump, if the first is performed frame-perfectly."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Leave With Mockball (From Across Room)",
+      "requires": [
+        "Gravity",
+        "HiJump",
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Cacatac Farm (2 Cacatacs)",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"or": [
+              {"and": [
+                "canWalljump",
+                {"cycleFrames": 740}
+              ]},
+              {"and": [
+                "SpaceJump",
+                {"cycleFrames": 790}
+              ]},
+              {"and": [
+                "HiJump",
+                "canTrickyDashJump",
+                {"cycleFrames": 795}
+              ]},
+              {"and": [
+                "canSpringBallJumpMidAir",
+                {"or": [
+                  "HiJump",
+                  "canSpringFling"
+                ]},
+                {"cycleFrames": 920},
+                "h_doubleEquipmentScreenCycleFrames"
+              ]},
+              {"and": [
+                "canDiagonalBombJump",
+                {"cycleFrames": 1380}
+              ]}
+            ]}
+          ]},
+          {"and": [
+            "canSuitlessMaridia",
+            {"or": [
+              {"and": [
+                "HiJump",
+                "canSpaceJumpWaterBounce",
+                "canWalljump",
+                {"cycleFrames": 810}
+              ]},
+              {"and": [
+                "HiJump",
+                "canSpaceJumpWaterEscape",
+                {"cycleFrames": 850}
+              ]},
+              {"and": [
+                "HiJump",
+                "h_maxHeightSpringBallJump",
+                "canTrickyJump",
+                "canStationaryLateralMidAirMorph",
+                {"cycleFrames": 1070},
+                "h_doubleEquipmentScreenCycleFrames"
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Cacatac", "count": 2}]
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "X-Mode, Leave Shinecharged",
+      "requires": [
+        "canXMode",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        {"or": [
+          "h_XModeSpikeHit",
+          "canStationarySpinJump"
+        ]},
+        "Gravity",
+        "canShinechargeMovementComplex",
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 65}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": "Two spike hits are expected per attempt (with any additional leniency hits being multiplied by this amount)."
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 19,
+      "link": [2, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "SpaceJump",
+          "canWalljump",
+          "h_IBJFromSpikes"
+        ]}
+      ]
+    },
+    {
+      "id": 78,
+      "link": [2, 4],
+      "name": "IBJ Into HBJ",
+      "requires": [
+        "Gravity",
+        "canDiagonalBombJump",
+        {"or": [
+          "canLongIBJ",
+          "canJumpIntoIBJ"
+        ]}
+      ],
+      "note": "Perform an HBJ at the top of an IBJ. This is basically a very short diagonal bomb jump."
+    },
+    {
+      "id": 20,
+      "link": [2, 4],
+      "name": "Gravity and SpringBall",
+      "requires": [
+        "Gravity",
+        "canSpringBallJumpMidAir",
+        {"or": [
+          "HiJump",
+          {"and": [
+            "h_maxHeightSpringBallJump",
+            "canSpringFling"
+          ]}
+        ]}
+      ],
+      "note": "There is just enough distance for a MidAir SpringBall jump to reach without HiJump."
+    },
+    {
+      "id": 21,
+      "link": [2, 4],
+      "name": "Suitless HiJump Space Jump Break Free",
+      "requires": [
+        "HiJump",
+        {"or": [
+          "canSpaceJumpWaterEscape",
+          {"and": [
+            "canSpaceJumpWaterBounce",
+            "canWalljump"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Use SpaceJump to break out of the water.",
+        "Afterward, it's easiest to use a wall jump to gain height but this is not required."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 4],
+      "name": "Suitless HiJump SpringBall Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "h_maxHeightSpringBallJump",
+        "canTrickyJump",
+        {"or": [
+          "canStationaryLateralMidAirMorph",
+          {"and": [
+            {"tech": "canJumpIntoIBJ"},
+            "canBombHorizontally"
+          ]}
+        ]}
+      ],
+      "note": [
+        "SpringBall jump just as Samus exits the water to reach the distant ledge.",
+        "To get enough horizontal distance, either use a Stationary Lateral Mid-Air Morph with a crouch jump for extra height, or spin jump out before morphing.",
+        "Or SpringBall jump part of the way over and land on a Bomb explosion to cross the rest of the distance."
+      ],
+      "devNote": "canStationaryLateralMidAirMorph is not strictly required but better describes the difficulty."
+    },
+    {
+      "id": 23,
+      "link": [2, 4],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        "Gravity",
+        {"shinespark": {"frames": 21, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 24,
+      "link": [2, 4],
+      "name": "Suitless Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 22, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 61,
+      "link": [2, 4],
+      "name": "Speedy HiJump",
+      "requires": [
+        "Gravity",
+        "HiJump",
+        "canTrickyDashJump"
+      ],
+      "note": [
+        "The in-room runway with the door closed works but is somewhat precise.",
+        "With the door open the jump is easier, but only use a small portion of the runway that was occupied by the door."
+      ]
+    },
+    {
+      "id": 72,
+      "link": [2, 4],
+      "name": "Precise Gravity Jump from Spikes",
+      "requires": [
+        "canGravityJump",
+        "HiJump",
+        {"spikeHits": 1},
+        "canUseIFrames",
+        "canTrickyJump",
+        {"or": [
+          "canInsaneJump",
+          "canCrouchJump",
+          "canDownGrab"
+        ]},
+        {"or": [
+          "canInsaneJump",
+          {"spikeHits": 1}
+        ]}
+      ],
+      "note": [
+        "Take a spike hit and pause just after getting hit. Quickly crouch and jump just before the fade out ends.",
+        "With a precise Gravity jump, it is possible to not need a crouch jump or down grab."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 4],
+      "name": "X-Mode Shinespark",
+      "requires": [
+        "Gravity",
+        "canXMode",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        {"or": [
+          "h_XModeSpikeHit",
+          "canStationarySpinJump"
+        ]},
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 25, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "Two spike hits are expected per attempt (with any additional leniency hits being multiplied by this amount)."
+    },
+    {
+      "id": 26,
+      "link": [2, 4],
+      "name": "Cross Room Jump with Assist",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "canTrickySpringBallJump",
+          "SpaceJump"
+        ]},
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Requires a runway of at least 1 tile in the adjacent room, although it is easier with more."
+    },
+    {
+      "id": 27,
+      "link": [2, 4],
+      "name": "Cross Room Jump with IBJ",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump with IBJ"},
+        "canJumpIntoIBJ",
+        "canBombHorizontally",
+        "canResetFallSpeed",
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ],
+      "wallJumpAvoid": true,
+      "note": [
+        "Requires a runway of at least 1 tiles in the adjacent room, although it is easier with more.",
+        "Start the IBJ as far left as possible. The furthest right is just right of the waterfall.",
+        "Turning around, carefully, is one way to lose forward momentum and begin the IBJ.",
+        "At the top of the IBJ bomb to the left and unmorph to reset fall speed."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [2, 4],
+      "name": "Cross Room Jump with HiJump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "HiJump",
+        {"or": [
+          "canWalljump",
+          "canTrickyJump",
+          "SpeedBooster"
+        ]},
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Requires a runway of at least 1 tile in the adjacent room, although it is easier with more."
+    },
+    {
+      "id": 29,
+      "link": [2, 4],
+      "name": "Cross Room Jump with HiJump (Lenient)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "This assumes a runway of at least 2 tiles in the adjacent room, although it is easier with more."
+    },
+    {
+      "id": 30,
+      "link": [2, 4],
+      "name": "Cross Room Jump with Spring Ball, Bomb Boost",
+      "entranceCondition": {
+        "comeInWithBombBoost": {}
+      },
+      "requires": [
+        "canSpringBallBombJump",
+        "canCrossRoomJumpIntoWater",
+        "canInsaneJump",
+        {"or": [
+          "canJumpIntoIBJ",
+          "canUnmorphBombBoost"
+        ]}
+      ],
+      "wallJumpAvoid": true,
+      "note": "Use the bomb boost as Samus is going through the doorway, then spring ball after breaking the water, then IBJ or use an unmorph bomb boost.",
+      "devNote": [
+        "This strat requires a minimum of 2 bombs or Power Bombs.",
+        "This strat requires fairly high precision in order to jump out of the water, particularly if using a Power Bomb and down grab.",
+        "It is also not particularly useful, as a normal Spring Ball jump is easier and can be done with a single tile runway.",
+        "It seems like the only real uses of this strat would then be to prevent a pause (maintain a blue suit without speedbooster),",
+        "or a cross room artificial morph with no doorcap in the previous room (cross room + g-mode strats haven't been added to logic yet)."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 4],
+      "name": "Cross Room Tricky Dash Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 6.4375
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyDashJump"
+      ],
+      "note": [
+        "Requires a runway of 7 tiles with no open end in the adjacent room, to hit a peak of the speed vs height graph."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [2, 4],
+      "name": "Cross Room Jump with SpeedBooster",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 17
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ],
+      "note": ["Requires a runway of at least 17 tiles in the adjacent room."]
+    },
+    {
+      "id": 33,
+      "link": [2, 4],
+      "name": "Cross Room Jump with SpeedBooster (Lenient)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 18
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": ["Assumes a runway of at least 18 tiles in the adjacent room."]
+    },
+    {
+      "id": 73,
+      "link": [2, 4],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Dust Torizo Room and Noob Bridge."],
+              "devNote": [
+                "The jump could also be done with a shorter runway, with a tricky dash jump using run speed $4.0 or $4.1.",
+                "But it wouldn't apply to any more rooms in the game."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 28.2472,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Double Chamber."],
+              "devNote": [
+                "The jump could also be done with a shorter runway, with a tricky dash jump using run speed $4.0 or $4.1.",
+                "But it wouldn't apply to any more rooms in the game."
+              ]
+            },
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 23.8731,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "environment": "water",
+              "requires": [
+                "canGravityJump",
+                "canMomentumConservingMorph"
+              ],
+              "note": [
+                "This applies to Below Botwoon Energy Tank and Botwoon Energy Tank Room",
+                "gain run speed, and time a pause to unequip Gravity after Samus jumps and aims down;",
+                "hold down through the unpause to buffer a morph."
+              ],
+              "detailNote": [
+                "With a momentum conserving turnaround, this has a 3-frame window for the jump,",
+                "and between a 1-frame and 3-frame window for the pause, depending on the jump timing",
+                "(with later jumps corresponding to larger windows for the pause to hit)."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canInsaneJump",
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Statues Hallway and Baby Kraid Room."],
+              "devNote": [
+                "This almost works from Metroid Room 1 (with $4.1 run speed) but comes up a few pixels short."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 21.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "environment": "water",
+              "requires": [
+                "canTrickyDashJump",
+                "canInsaneJump",
+                "canGravityJump",
+                "canMomentumConservingMorph"
+              ],
+              "note": [
+                "This applies to Draygon's Room.",
+                "Start a little less than a tile away from the wall, gain run speed, and time a pause to unequip Gravity after Samus jumps and aims down;",
+                "hold down through the unpause to buffer a morph."
+              ],
+              "detailNote": ["Gain extra run speed of $4.0 or $4.1."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 41.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canInsaneJump",
+                "canMomentumConservingMorph"
+              ],
+              "note": [
+                "This applies to Blue Brinstar Energy Tank Room (Power Bomb blocks broken), Bowling Alley (middle), and Basement."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[5, 0]],
+              "requires": [
+                "canInsaneJump",
+                "canMomentumConservingMorph",
+                "canInsaneMidAirMorph"
+              ],
+              "note": ["This applies to Basement (power off)."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "requires": [],
+              "note": ["This applies to Metal Pirates Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[5, 2]],
+              "requires": [
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Flyway"]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ]
+    },
+    {
+      "id": 34,
+      "link": [2, 4],
+      "name": "X-Ray Climb Space Jump",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb",
+        "SpaceJump"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "X-ray climb until Samus is above the water surface.",
+        "To avoid falling out, be careful not to turn left except while holding X-ray.",
+        "From a standing position facing left, hold left and immediately jump, then use Space Jump to reach the ledge.",
+        "Alternatively, from a standing position facing right, do a turn-around spin jump, waiting to jump until part way through the turn-around animation (otherwise Samus will bonk inside the wall)",
+        "It is also possible to climb lower, with Samus' feet still in the water; in this case, the turn-around animation is slower, providing a larger window to jump, though in this case either a wall jump or a Space Jump water escape may be needed."
+      ]
+    },
+    {
+      "id": 62,
+      "link": [2, 4],
+      "name": "Underwater Walljump Break Free",
+      "requires": [
+        "canUnderwaterWalljumpBreakFree",
+        {"spikeHits": 2}
+      ],
+      "devNote": "Two spike hits for leniency."
+    },
+    {
+      "id": 63,
+      "link": [2, 4],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 18, "excessFrames": 7}}
+      ]
+    },
+    {
+      "id": 69,
+      "link": [2, 4],
+      "name": "Precise Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [13, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [7, 3], "note": "The Precious Room"},
+            {"position": [7, 2], "note": "The Moat"}
+          ]
+        }
+      },
+      "requires": [
+        "canPreciseGrappleJump"
+      ]
+    },
+    {
+      "id": 70,
+      "link": [2, 4],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [8, 2], "note": "Bowling Alley"},
+            {
+              "position": [7, 3],
+              "obstructions": [[6, 10]],
+              "note": "Red Brinstar Firefleas Room"
+            },
+            {
+              "position": [9, 2],
+              "note": "Climb Supers Room, Bubble Mountain, Lava Grapple Tunnel"
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ]
+    },
+    {
+      "id": 71,
+      "link": [2, 4],
+      "name": "Tricky Grapple Jump (With Assist)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [{"position": [7, 3], "environment": "water", "note": "Pants Room"}]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump",
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "canJumpIntoIBJ",
+            "canBombHorizontally"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 35,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 36,
+      "link": [3, 1],
+      "name": "Gravity and Walljump",
+      "requires": [
+        "Gravity",
+        {"or": [
+          {"and": [
+            "canPreciseWalljump",
+            "canConsecutiveWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 37,
+      "link": [3, 1],
+      "name": "Gravity and Springball",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canSpringwall",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 38,
+      "link": [3, 1],
+      "name": "Speedy Jump",
+      "requires": [
+        "Gravity",
+        "HiJump",
+        "SpeedBooster",
+        "canCarefulJump"
+      ],
+      "note": "Jump from the raised alcove.  A down grab can help."
+    },
+    {
+      "id": 39,
+      "link": [3, 1],
+      "name": "IBJ",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canLongIBJ",
+          {"and": [
+            "HiJump",
+            "canJumpIntoIBJ"
+          ]}
+        ]},
+        {"or": [
+          "canBombHorizontally",
+          "h_IBJFromSpikes"
+        ]}
+      ]
+    },
+    {
+      "id": 40,
+      "link": [3, 1],
+      "name": "HiJump Walljump",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canPreciseWalljump",
+        {"or": [
+          "canTrickyJump",
+          "canMidairWiggle"
+        ]},
+        {"or": [
+          "canConsecutiveWalljump",
+          "canTrickyWalljump"
+        ]}
+      ]
+    },
+    {
+      "id": 41,
+      "link": [3, 1],
+      "name": "Suitless Space Jump HiJump",
+      "requires": [
+        "HiJump",
+        {"or": [
+          "canSpaceJumpWaterEscape",
+          {"and": [
+            "canSpaceJumpWaterBounce",
+            "canWalljump"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 67,
+      "link": [3, 1],
+      "name": "Suitless Bootless Space Jump",
+      "requires": [
+        {"notable": "Suitless Bootless Space Jump"},
+        "canSpaceJumpWaterBounce",
+        "canWalljump"
+      ],
+      "note": [
+        "With Space Jump alone, it is possible to jump to the water line and bounce on the surface.",
+        "This requires a moderately precise Space Jump to start the Space Jump and then a wall jump to escape the water."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [3, 1],
+      "name": "Suitless Springball",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canTrickySpringBallJump",
+        {"or": [
+          "canTrickyJump",
+          "canFlatleyJump"
+        ]}
+      ],
+      "note": [
+        "1) Start the jump from the raised alcove, standing on the edge facing right.",
+        "2) Turn-around spin jump to get the necessary horizontal speed to reach the upper ledge.",
+        "3) SpringBall jump after breaking the water line.",
+        "A lateral mid-air morph or spring fling can help, but are not required.",
+        "Unmorphing on a failed attempt can help avoid spike damage."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [3, 6],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_useSpringBall",
+          {"and": [
+            "Gravity",
+            "h_bombThings"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 44,
+      "link": [3, 6],
+      "name": "Suitless Bootless",
+      "requires": [
+        "canSuitlessMaridia",
+        "canMidAirMorph",
+        "canDisableEquipment"
+      ],
+      "note": "This can be done by turning off Gravity and HiJump to do a mid-air morph through the morph tunnel."
+    },
+    {
+      "id": 45,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 46,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 47,
+      "link": [5, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "SpaceJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          "canDiagonalBombJump",
+          "h_IBJFromSpikes"
+        ]}
+      ]
+    },
+    {
+      "id": 77,
+      "link": [5, 4],
+      "name": "Gravity Jump",
+      "requires": [
+        "canGravityJump",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Kill the Cacatac above by standing near the edge, jumping, and shooting just before hitting the ceiling.",
+        "While near the edge, perform a Gravity jump out of the water. A running jump makes this significantly harder."
+      ]
+    },
+    {
+      "id": 48,
+      "link": [5, 4],
+      "name": "Springball Spike Boost",
+      "requires": [
+        {"notable": "Springball Spike Boost"},
+        "HiJump",
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        "canTrickySpringBallJump",
+        {"or": [
+          "canInsaneJump",
+          "canStationaryLateralMidAirMorph"
+        ]},
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 2}}
+      ],
+      "note": "When the Cacatac on the ground fires a spike, perform a  springball Jump to break the waterline and then hit the spike for extra height."
+    },
+    {
+      "id": 49,
+      "link": [5, 4],
+      "name": "Underwater Walljump",
+      "requires": [
+        "canUnderwaterWalljump",
+        "canSpaceJumpWaterBounce"
+      ]
+    },
+    {
+      "id": 50,
+      "link": [5, 4],
+      "name": "HiJumpless Double SpringBall Jump and Bomb-Grapple-Jump",
+      "requires": [
+        {"notable": "HiJumpless Double SpringBall Jump and Bomb-Grapple-Jump"},
+        "canBombGrappleJump",
+        "canDoubleSpringBallJumpMidAir",
+        "h_maxHeightSpringBallJump"
+      ],
+      "note": [
+        "1) Crouch jump and then SpringBall jump.",
+        "2) Bomb-Grapple-Jump using the distant Cacatac who is above the water.",
+        "3) SpringBall jump again just as Samus exits the water."
+      ]
+    },
+    {
+      "id": 51,
+      "link": [5, 4],
+      "name": "Bomb Jump Water Escape",
+      "requires": [
+        {"notable": "Bomb Jump Water Escape"},
+        "HiJump",
+        "h_maxHeightSpringBallJump",
+        "canSpringFling",
+        "canBombJumpWaterEscape",
+        "canJumpIntoIBJ"
+      ],
+      "note": [
+        "Perform the spring ball jump near max height.",
+        "Place the first bomb after the spring ball jump; just above the water line.",
+        "Press pause just after placing the bomb, to disable Spring Ball (a 'spring fling', to reset fall speed).",
+        "Place the second bomb soon after regaining control, while the game is fading back in."
+      ]
+    },
+    {
+      "id": 64,
+      "link": [5, 4],
+      "name": "Underwater Walljump Break Free",
+      "requires": [
+        "canUnderwaterWalljumpBreakFree"
+      ],
+      "note": "It is recommended to do this on the left wall to the right of the two lower Cacatacs, so that Samus can avoid the spikes on a fail."
+    },
+    {
+      "id": 74,
+      "link": [5, 4],
+      "name": "X-Mode Shinespark",
+      "requires": [
+        "Gravity",
+        "canXMode",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 17, "excessFrames": 12}}
+      ]
+    },
+    {
+      "id": 65,
+      "link": [5, 4],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 20, "excessFrames": 12}}
+      ]
+    },
+    {
+      "id": 52,
+      "link": [5, 6],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "SpaceJump",
+          "canHBJ",
+          "canResetFallSpeed",
+          {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 1}}
+        ]},
+        {"or": [
+          "SpaceJump",
+          "canWalljump",
+          "HiJump",
+          "canIBJ",
+          "canHBJ",
+          "canSpringBallBombJump",
+          {"spikeHits": 1}
+        ]}
+      ]
+    },
+    {
+      "id": 53,
+      "link": [5, 6],
+      "name": "Cacatac Boost",
+      "requires": [
+        "Gravity",
+        "canHorizontalDamageBoost",
+        "canUseIFrames",
+        {"enemyDamage": {"enemy": "Cacatac", "type": "contact", "hits": 1}}
+      ],
+      "note": [
+        "Jump into the ceiling Cacatac and damage boost onto the platform between spike pits.",
+        "Use i-frames to cross the second set of spikes."
+      ]
+    },
+    {
+      "id": 54,
+      "link": [5, 6],
+      "name": "Suitless HiJump",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        {"spikeHits": 1},
+        {"or": [
+          "Gravity",
+          "canWalljump",
+          "canSpaceJumpWaterEscape",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "canJumpIntoIBJ",
+            "h_useSpringBall"
+          ]},
+          {"spikeHits": 1}
+        ]}
+      ],
+      "devNote": [
+        "The first spike pit on the right is considered unavoidable, as if the player has Gravity and HiJump, the jump is quite tricky.",
+        "In that scenario, the player will hit the spikes or need the strat with canDisableEquipment."
+      ]
+    },
+    {
+      "id": 55,
+      "link": [5, 6],
+      "name": "Suitless Bootless Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        {"disableEquipment": "HiJump"},
+        {"disableEquipment": "Gravity"},
+        "canTrickyJump",
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ],
+      "note": "This can be done by turning off Gravity and HiJump to jump over both spike pits."
+    },
+    {
+      "id": 56,
+      "link": [5, 6],
+      "name": "Suitless Springball",
+      "requires": [
+        "canSuitlessMaridia",
+        "canSpringBallJumpMidAir",
+        {"spikeHits": 1},
+        {"or": [
+          "canTrickySpringBallJump",
+          {"and": [
+            "canWalljump",
+            "canSpaceJumpWaterBounce"
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            "h_useSpringBall"
+          ]},
+          {"spikeHits": 1}
+        ]}
+      ],
+      "note": "This can be done by turning off Gravity and HiJump to jump over both spike pits."
+    },
+    {
+      "id": 66,
+      "link": [5, 6],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 10, "excessFrames": 7}}
+      ],
+      "note": "It's possible to hit the block on the right while facing left to save some Energy, but that's not expected here."
+    },
+    {
+      "id": 57,
+      "link": [6, 3],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 58,
+      "link": [6, 5],
+      "name": "Suitless",
+      "requires": [
+        "canSuitlessMaridia",
+        {"or": [
+          {"spikeHits": 1},
+          "canTrickySpringBallJump",
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canWalljump",
+              "canDownGrab",
+              "canSpaceJumpWaterEscape",
+              "canSpringBallJumpMidAir"
+            ]}
+          ]}
+        ]},
+        {"or": [
+          {"spikeHits": 1},
+          "HiJump"
+        ]}
+      ]
+    },
+    {
+      "id": 59,
+      "link": [6, 5],
+      "name": "Gravity",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "SpaceJump",
+          "canHBJ",
+          {"spikeHits": 1}
+        ]}
+      ]
+    },
+    {
+      "id": 60,
+      "link": [6, 5],
+      "name": "Suitless Bootless",
+      "requires": [
+        "canSuitlessMaridia",
+        {"disableEquipment": "HiJump"},
+        {"disableEquipment": "Gravity"},
+        "canTrickyJump"
+      ],
+      "note": "This can be done by turning off Gravity and HiJump to jump over both spike pits."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "G-Mode Morph, IBJ, HBJ",
+      "note": "This requires multiple HBJ to get over spike pits. The first one, by the right door, must be started at the top of an IBJ."
+    },
+    {
+      "id": 2,
+      "name": "Cross Room Jump with IBJ",
+      "wallJumpAvoid": true,
+      "note": [
+        "Requires a runway of at least 1 tiles in the adjacent room, although it is easier with more.",
+        "Start the IBJ as far left as possible. The furthest right is just right of the waterfall.",
+        "Turning around, carefully, is one way to lose forward momentum and begin the IBJ.",
+        "At the top of the IBJ bomb to the left and unmorph to reset fall speed."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Springball Spike Boost",
+      "note": "When the Cacatac on the ground fires a spike, perform a  springball Jump to break the waterline and then hit the spike for extra height."
+    },
+    {
+      "id": 5,
+      "name": "HiJumpless Double SpringBall Jump and Bomb-Grapple-Jump",
+      "note": [
+        "1) Crouch jump and then SpringBall jump.",
+        "2) Bomb-Grapple-Jump using the distant Cacatac who is above the water.",
+        "3) SpringBall jump again just as Samus exits the water."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Bomb Jump Water Escape",
+      "note": [
+        "Perform the spring ball jump near max height.",
+        "Place the first bomb after the spring ball jump; just above the water line.",
+        "Press pause just after placing the bomb, to disable Spring Ball (a 'spring fling', to reset fall speed).",
+        "Place the second bomb soon after regaining control, while the game is fading back in."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Suitless Bootless Space Jump",
+      "note": [
+        "With Space Jump alone, it is possible to jump to the water line and bounce on the surface.",
+        "This requires a moderately precise Space Jump to start the Space Jump and then a wall jump to escape the water."
+      ]
+    }
+  ],
+  "nextStratId": 79,
+  "nextNotableId": 8
+}

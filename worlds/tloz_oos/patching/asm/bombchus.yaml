@@ -1,0 +1,10 @@
+# Make bombchus like bombs
+3f/6c53/: db $0d,SND_GETSEED
+
+# Move wSeedSatchelLevel to leave space for wMaxBombchus (which isn't vanilla)
+# giveTreasure_body@modef
+3f/460a/: ld a,(wSeedSatchelLevel)
+
+# treasure collection behavior
+3f/6c76/: db <wSeedSatchelLevel
+3f/6d51/: db <wSeedSatchelLevel

@@ -1,0 +1,1031 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 70,
+  "name": "Below Spazer",
+  "area": "Brinstar",
+  "subarea": "Red",
+  "roomAddress": "0x7A408",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001910e",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001911a",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1],
+        [1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x0019126",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2],
+        [1, 1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Below Spazer Cacatac",
+      "enemyName": "Cacatac",
+      "quantity": 1,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Below Spazer Yapping Maws",
+      "enemyName": "Yapping Maw",
+      "quantity": 2,
+      "homeNodes": [2],
+      "note": "Can pickup the drops without taking damage"
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 48,
+      "link": [1, 1],
+      "name": "X-Mode, Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        {"enemyKill": {
+          "enemies": [["Yapping Maw"]],
+          "explicitWeapons": ["Super"]
+        }},
+        "canXMode",
+        "h_XModeThornHit",
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 75}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "note": [
+        "While in X-mode on the thorns, Samus' will be flashing as i-frames periodically refresh;",
+        "by timing the shinecharge and X-Ray release to happen soon after i-frames refresh,",
+        "a second thorn hit can be avoided."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Come in Shinecharged, Leave with Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 140},
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 1}},
+          {"enemyKill": {
+            "enemies": [["Cacatac"]],
+            "explicitWeapons": ["Missile", "Super", "Wave", "Spazer", "Plasma"]
+          }}
+        ]},
+        {"shinespark": {"frames": 24}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump onto the third single-tile platform, then jump over the Cacatac (or kill it).",
+        "Fire a shot and activate the shinespark wind-up.",
+        "Wait until the shot hits the door before sparking."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Hero Shot Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 40},
+        "canShinechargeMovementTricky",
+        "canHeroShot",
+        {"shinespark": {"frames": 38}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump, fire a shot mid-air, and activate the shinespark wind-up.",
+        "Wait until the shot is at a specific position before sparking.",
+        "Sparking too late will cause the shot to despawn before reaching the door.",
+        "Sparking too early will cause Samus to bonk the door as it will not yet be open.",
+        "A beam shot, Missile, or Super can be used."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        "h_bombThings",
+        {"or": [
+          "HiJump",
+          "SpaceJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          "canJumpIntoIBJ",
+          {"and": [
+            "Gravity",
+            "canIBJ"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 3],
+      "name": "Temporary Blue Chain",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        {"doorUnlockedAtNode": 1},
+        "HiJump",
+        {"or": [
+          "Gravity",
+          {"and": [
+            "canTrickySpringBallJump",
+            "canDodgeWhileShooting",
+            "canLongChainTemporaryBlue",
+            {"enemyKill": {
+              "enemies": [["Yapping Maw"]],
+              "explicitWeapons": ["Super"]
+            }}
+          ]}
+        ]},
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "unlocksDoors": [{"nodeId": 1, "types": ["ammo"], "requires": []}],
+      "note": "It may help to disable HiJump for more controlled jumps."
+    },
+    {
+      "id": 11,
+      "link": [1, 3],
+      "name": "Use Flash Suit",
+      "requires": [
+        "h_bombThings",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 16, "excessFrames": 3}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Spark diagonally in order to make it to the top.",
+      "devNote": "FIXME: There should be a come in shinecharged strat that does the same thing."
+    },
+    {
+      "id": 44,
+      "link": [1, 3],
+      "name": "Come In Shinecharged, Shinespark (From Ground)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 24, "excessFrames": 2}},
+        "h_bombThings"
+      ]
+    },
+    {
+      "id": 45,
+      "link": [1, 3],
+      "name": "Come In Shinecharged, Shinespark (Mid-Air)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 40},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 16, "excessFrames": 3}},
+        "h_bombThings"
+      ]
+    },
+    {
+      "id": 46,
+      "link": [1, 3],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb",
+        "h_bombThings"
+      ],
+      "flashSuitChecked": true,
+      "note": "X-Ray climb up about 1 screen, then do a turn-around spin jump to reach the top ledge."
+    },
+    {
+      "id": 12,
+      "link": [1, 3],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, hold left while releasing Grapple to stay standing (not being forced into a crouch).",
+        "Then X-ray climb to get out of the floor."
+      ],
+      "devNote": [
+        "This can be done with a setup from either of the two possible Grapple blocks in Halfie Climb.",
+        "The lower block can be used more easily."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 3],
+      "name": "Grapple Teleport Clip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [
+        {"notable": "Grapple Teleport Clip"}
+      ],
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, hold left while releasing Grapple to stay standing (not being forced into a crouch).",
+        "Then jump to clip out of the floor."
+      ],
+      "devNote": [
+        "This requires a setup from the highest possible Grapple block in Halfie Climb, in order to end up high enough to clip out without X-Ray."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave with Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 24}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Kill the Cacatac, and reach the center of the room.",
+        "Fire a shot and activate the shinespark wind-up.",
+        "Wait until the shot hits the door before sparking."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Hero Shot Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 40},
+        "canShinechargeMovementTricky",
+        "canHeroShot",
+        {"shinespark": {"frames": 38}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump, fire a shot mid-air, and activate the shinespark wind-up.",
+        "Wait until the shot is at a specific position before sparking.",
+        "Sparking too late will cause the shot to despawn before reaching the door.",
+        "Sparking too early will cause Samus to bonk the door as it will not yet be open.",
+        "A beam shot, Missile, or Super can be used."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "Cacatac Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 300}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 240}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Cacatac", "count": 1}]
+    },
+    {
+      "id": 20,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 21,
+      "link": [2, 2],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 23,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 24,
+      "link": [2, 2],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 49,
+      "link": [2, 2],
+      "name": "X-Mode, Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        {"enemyKill": {
+          "enemies": [["Yapping Maw"]],
+          "explicitWeapons": ["Super"]
+        }},
+        "canXMode",
+        "h_XModeThornHit",
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 65}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "note": [
+        "While in X-mode on the thorns, Samus' will be flashing as i-frames periodically refresh;",
+        "by timing the shinecharge and X-Ray release to happen soon after i-frames refresh,",
+        "a second thorn hit can be avoided."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [2, 3],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 27,
+      "link": [2, 3],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [2, 3],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        "h_bombThings"
+      ]
+    },
+    {
+      "id": 29,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        "h_bombThings"
+      ]
+    },
+    {
+      "id": 30,
+      "link": [3, 1],
+      "name": "Jump and Speedball",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.2"
+        }
+      },
+      "requires": [
+        "Spazer",
+        "canSpeedball",
+        "canCarefulJump"
+      ],
+      "note": "Shoot forward with spazer to break the shot block, then jump into the morph tunnel while staying blue to break a bomb block."
+    },
+    {
+      "id": 31,
+      "link": [3, 1],
+      "name": "Jump Shot Speedball",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.2"
+        }
+      },
+      "requires": [
+        {"notable": "Jump Shot Speedball"},
+        "canSpeedball",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Run through the door and jump into a speedball to break the bomb blocks,",
+        "timing a precise shot during the jump to clear the shot block.",
+        "Note: Spazer can trivially break the shot block by shooting forward before jumping."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [3, 1],
+      "name": "Blue Space Jump Speedball",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "maxExtraRunSpeed": "$2.0",
+          "unusableTiles": 0
+        }
+      },
+      "requires": [
+        {"notable": "Jump Shot Speedball"},
+        "canPreciseSpaceJump",
+        "canSpeedball"
+      ],
+      "note": [
+        "Shoot the block while moving up after a Space Jump; then speedball through the morph tunnel."
+      ],
+      "devNote": ["This can also work at much higher speeds but would be more difficult."]
+    },
+    {
+      "id": 47,
+      "link": [3, 1],
+      "name": "Side Platform Jump Speedball",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Dust Torizo Room and Noob Bridge."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 28.2472,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Double Chamber."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "note": ["This applies to Metal Pirates."]
+            }
+          ]
+        }
+      },
+      "requires": [
+        {"notable": "Jump Shot Speedball"},
+        {"getBlueSpeed": {"usedTiles": 20, "openEnd": 1}},
+        {"or": [
+          "canTrickyDashJump",
+          "Spazer",
+          "Wave"
+        ]},
+        "canSpeedball"
+      ],
+      "note": [
+        "Jump through the door and into a speedball to break the bomb blocks,",
+        "timing a shot during the jump, immediately after the transition, to clear the shot block."
+      ],
+      "detailNote": [
+        "If Spazer or Wave are available, the timing for the shot is more lenient;",
+        "otherwise, jumping with lower extra run speed (between $3.2 and $3.F) can help widen the timing window.",
+        "If using a lower run speed, it often helps to aim down before bonking the ceiling, to avoid falling short of the ledge."
+      ],
+      "devNote": [
+        "The run speed required is not overly precise,",
+        "but certain ranges of speeds must be avoided (especially extra run speeds $4.0 and $4.1)",
+        "to prevent Samus from getting too high of a jump and not being able to reach the ledge."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [3, 1],
+      "name": "CWJ Jump Shot Speedball",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "minExtraRunSpeed": "$1.3",
+          "maxExtraRunSpeed": "$1.8",
+          "unusableTiles": 0
+        }
+      },
+      "requires": [
+        {"notable": "CWJ Jump Shot Speedball"},
+        "canInsaneJump",
+        "canCWJ",
+        "canSpeedball"
+      ],
+      "note": [
+        "In the previous room, gain low-momentum blue speed and jump, bonking the top of the doorway.",
+        "After the transition, perform a CWJ off the ledge, then fire a shot and speedball through the tunnel."
+      ],
+      "devNote": [
+        "Higher speeds could probably also work, but depending on the geometry in the previous room",
+        "it may require a precise release of jump to avoid bonking the wall above the door."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [3, 1],
+      "name": "Temporary Blue Chain Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "canTrickySpringBallBounce"
+      ],
+      "note": [
+        "Once Samus is close enough to the ledge, the shot block can be cleared by jumping, releasing angle, shooting, and aiming down before hitting the ceiling;",
+        "then continue chaining temporary blue until Samus is close enough to Spring Ball bounce through the morph tunnel."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [3, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 35,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 36,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 37,
+      "link": [3, 2],
+      "name": "Stored Moonfall Clip",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "note": "Moondance clip near the door to fall two tiles into the ground, then Moonfall again to continue clipping all the way to the area below."
+    },
+    {
+      "id": 51,
+      "link": [3, 2],
+      "name": "Super Sink",
+      "entranceCondition": {
+        "comeInWithSuperSink": {}
+      },
+      "requires": [],
+      "note": ["Enter the room with a super sink, in order to clip down through the floor."]
+    },
+    {
+      "id": 38,
+      "link": [3, 3],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 39,
+      "link": [3, 3],
+      "name": "Leave Spinning",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 40,
+      "link": [3, 3],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 41,
+      "link": [3, 3],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 42,
+      "link": [3, 3],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 43,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Grapple Teleport Clip",
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, hold left while releasing Grapple to stay standing (not being forced into a crouch).",
+        "Then jump to clip out of the floor."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Jump Shot Speedball",
+      "note": [
+        "Jump from the top right door with speed to break the bomb blocks.",
+        "Time a precise shot during the jump to clear the shot block.",
+        "Note: Spazer can trivially break the shot block by shooting forward before jumping."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "CWJ Jump Shot Speedball",
+      "note": [
+        "In the previous room, gain low-momentum blue speed and jump, bonking the top of the doorway.",
+        "After the transition, perform a CWJ off the ledge, then fire a shot and speedball through the tunnel."
+      ]
+    }
+  ],
+  "nextStratId": 52,
+  "nextNotableId": 4
+}

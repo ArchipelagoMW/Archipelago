@@ -1,0 +1,168 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 28,
+  "name": "Crateria Power Bomb Room",
+  "area": "Crateria",
+  "subarea": "Central",
+  "roomAddress": "0x793AA",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00189b2",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "PowerBomb",
+      "nodeAddress": "0x781CC",
+      "mapTileMask": [
+        [1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Crateria Power Bomb Room Alcoons",
+      "enemyName": "Alcoon",
+      "quantity": 3,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Alcoon",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "Wait for the Alcoon to walk off and reach the bottom of the slope.",
+        "Dodge it's fireballs with Morph or Screw, or simply freeze it and wait while standing behind it.",
+        "Keep a half-tile gap between the Alcoon and the runway in order to extend the runway as much as possible."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Alcoon Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            {"or": [
+              "ScrewAttack",
+              {"ammo": {"type": "Missile", "count": 3}}
+            ]},
+            {"cycleFrames": 575}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 650}
+          ]},
+          {"and": [
+            {"or": [
+              "Wave",
+              "Spazer"
+            ]},
+            {"cycleFrames": 1000}
+          ]},
+          {"and": [
+            {"or": [
+              "canDodgeWhileShooting",
+              "Ice"
+            ]},
+            {"cycleFrames": 1210}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Alcoon", "count": 3}],
+      "note": [
+        "The Alcoons have a 99.5% Power Bomb drop rate, after which they only drop small energy."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canDodgeWhileShooting",
+          {"enemyDamage": {"enemy": "Alcoon", "type": "fireball", "hits": 3}},
+          {"enemyKill": {
+            "enemies": [["Alcoon", "Alcoon"], ["Alcoon"]],
+            "excludedWeapons": ["PowerBeam", "Bombs"]
+          }}
+        ]}
+      ],
+      "note": "Duck under the first two Alcoon shots, or retreat back a platform to fight them with Power Beam.",
+      "devNote": "All the Alcoons are assumed killed in each case."
+    },
+    {
+      "id": 6,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    }
+  ],
+  "notables": [],
+  "nextStratId": 7,
+  "nextNotableId": 1
+}

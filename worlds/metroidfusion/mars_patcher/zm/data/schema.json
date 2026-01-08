@@ -1,0 +1,883 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Metroid Zero Mission patching schema",
+    "description": "A json schema describing the input for patching Metroid Zero Mission via mars_patcher.",
+    "type": "object",
+    "properties": {
+        "seed_hash": {
+            "description": "A seed hash that will be displayed on the file select screen.",
+            "type": "string",
+            "pattern": "^[0-9A-Z]{8}$"
+        },
+        "locations": {
+            "type": "object",
+            "description": "Specifies how the item locations in the game should be changed.",
+            "properties": {
+                "major_locations": {
+                    "type": "array",
+                    "description": "Specifies how the major item locations should be changed. A major item location is a location where an item is obtained from a sprite or interacting with a device.",
+                    "minItems": 16,
+                    "maxItems": 16,
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "source": {
+                                "$ref": "#/$defs/valid_sources"
+                            },
+                            "item": {
+                                "$ref": "#/$defs/valid_items"
+                            },
+                            "item_messages": {
+                                "$ref": "#/$defs/item_messages"
+                            },
+                            "jingle": {
+                                "$ref": "#/$defs/jingle"
+                            }
+                        },
+                        "required": [
+                            "source",
+                            "item",
+                            "jingle"
+                        ]
+                    }
+                },
+                "minor_locations": {
+                    "type": "array",
+                    "description": "Specifies how the minor item locations should be changed. A minor item location is a location where an item is obtained by touching a tank block. _tank clipdata is required at each location, the patcher does not modify any clipdata for minor locations.",
+                    "minItems": 100,
+                    "maxItems": 100,
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "area": {
+                                "$ref": "#/$defs/area_id",
+                                "description": "The area ID where this item is located."
+                            },
+                            "room": {
+                                "$ref": "#/$defs/type_u8",
+                                "description": "The room ID where this item is located."
+                            },
+                            "block_x": {
+                                "$ref": "#/$defs/type_u8",
+                                "description": "The X-coordinate in the room where this item is located."
+                            },
+                            "block_y": {
+                                "$ref": "#/$defs/type_u8",
+                                "description": "The Y-coordinate in the room where this item is located."
+                            },
+                            "item": {
+                                "$ref": "#/$defs/valid_items"
+                            },
+                            "item_sprite": {
+                                "$ref": "#/$defs/valid_item_sprites"
+                            },
+                            "item_messages": {
+                                "$ref": "#/$defs/item_messages"
+                            },
+                            "jingle": {
+                                "$ref": "#/$defs/jingle"
+                            },
+                            "hinted_by": {
+                                "$ref": "#/$defs/hint_locations",
+                                "description": "The hint location (Chozo statue) that hints to this item's location ('None' if not hinted by anything)."
+                            }
+                        },
+                        "required": [
+                            "area",
+                            "room",
+                            "block_x",
+                            "block_y",
+                            "item",
+                            "jingle"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "minor_locations",
+                "major_locations"
+            ]
+        },
+        "starting_location": {
+            "type": "object",
+            "description": "The location the player should spawn at the start of the game.",
+            "properties": {
+                "area": {
+                    "$ref": "#/$defs/area_id",
+                    "description": "The area ID of the starting location."
+                },
+                "room": {
+                    "$ref": "#/$defs/type_u8",
+                    "description": "The room ID of the starting location."
+                },
+                "block_x": {
+                    "$ref": "#/$defs/type_u8",
+                    "description": "The X-coordinate in the room where the player should spawn. If the room contains a save station, then this value will not be taken into consideration."
+                },
+                "block_y": {
+                    "$ref": "#/$defs/type_u8",
+                    "description": "The Y-coordinate in the room where the player should spawn. If the room contains a save station, then this value will not be taken into consideration."
+                }
+            },
+            "required": [
+                "area",
+                "room",
+                "block_x",
+                "block_y"
+            ]
+        },
+        "starting_items": {
+            "type": "object",
+            "properties": {
+                "energy": {
+                    "type": "integer",
+                    "description": "How much energy the player should start with on a new save file.",
+                    "minimum": 1,
+                    "maximum": 1299,
+                    "default": 99
+                },
+                "missiles": {
+                    "type": "integer",
+                    "description": "How many missiles the player should start with on a new save file.",
+                    "minimum": 0,
+                    "maximum": 999,
+                    "default": 0
+                },
+                "super_missiles": {
+                    "type": "integer",
+                    "description": "How many missiles the player should start with on a new save file.",
+                    "minimum": 0,
+                    "maximum": 99,
+                    "default": 0
+                },
+                "power_bombs": {
+                    "type": "integer",
+                    "description": "How many power bombs the player should start with on a new save file.",
+                    "minimum": 0,
+                    "maximum": 99,
+                    "default": 0
+                },
+                "abilities": {
+                    "type": "array",
+                    "description": "Which abilities the player should start with on a new save file.",
+                    "uniqueItems": true,
+                    "items": {
+                        "$ref": "#/$defs/valid_abilities"
+                    },
+                    "default": []
+                },
+                "downloaded_maps": {
+                    "type": "array",
+                    "description": "Which area maps will be downloaded from the start.",
+                    "uniqueItems": true,
+                    "items": {
+                        "$ref": "#/$defs/area_id"
+                    },
+                    "default": []
+                },
+                "suit_type": {
+                    "type": "string",
+                    "description": "Which suit type the player should start with.",
+                    "enum": [
+                        "SUITLESS",
+                        "NORMAL",
+                        "FULLY_POWERED"
+                    ],
+                    "default": "normal"
+                },
+                "ziplines_activated": {
+                    "type": "boolean",
+                    "description": "Whether the ziplines should be activated from the start.",
+                    "default": false
+                }
+            },
+            "default": null
+        },
+        "tank_increments": {
+            "type": "object",
+            "description": "How much ammo/health tanks provide when collected.",
+            "properties": {
+                "energy_tank": {
+                    "type": "integer",
+                    "description": "How much health energy tanks provide when collected.",
+                    "minimum": -1300,
+                    "maximum": 1300,
+                    "default": 100
+                },
+                "missile_tank": {
+                    "type": "integer",
+                    "description": "How much ammo missile tanks provide when collected.",
+                    "minimum": -1000,
+                    "maximum": 1000,
+                    "default": 5
+                },
+                "super_missile_tank": {
+                    "type": "integer",
+                    "description": "How much ammo super missile tanks provide when collected.",
+                    "minimum": -100,
+                    "maximum": 100,
+                    "default": 2
+                },
+                "power_bomb_tank": {
+                    "type": "integer",
+                    "description": "How much ammo power bomb tanks provide when collected.",
+                    "minimum": -100,
+                    "maximum": 100,
+                    "default": 2
+                }
+            },
+            "required": [
+                "energy_tank",
+                "missile_tank",
+                "super_missile_tank",
+                "power_bomb_tank"
+            ],
+            "default": null
+        },
+        "elevator_connections": {
+            "type": "object",
+            "description": "Defines the elevator that each elevator connects to.",
+            "properties": {
+                "elevator_tops": {
+                    "type": "object",
+                    "description": "Defines the bottom elevator that each top elevator connects to.",
+                    "propertyNames": {
+                        "$ref": "#/$defs/valid_elevator_tops"
+                    },
+                    "additionalProperties": {
+                        "$ref": "#/$defs/valid_elevator_bottoms"
+                    },
+                    "minProperties": 10
+                },
+                "elevator_bottoms": {
+                    "type": "object",
+                    "description": "Defines the top elevator that each bottom elevator connects to.",
+                    "propertyNames": {
+                        "$ref": "#/$defs/valid_elevator_bottoms"
+                    },
+                    "additionalProperties": {
+                        "$ref": "#/$defs/valid_elevator_tops"
+                    },
+                    "minProperties": 10
+                }
+            },
+            "required": [
+                "elevator_tops",
+                "elevator_bottoms"
+            ]
+        },
+        "door_locks": {
+            "type": "array",
+            "description": "List of all lockable doors and their lock type.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "area": {
+                        "$ref": "#/$defs/area_id",
+                        "description": "The area ID where this door is located."
+                    },
+                    "door": {
+                        "$ref": "#/$defs/type_u8",
+                        "description": "The door ID of this door."
+                    },
+                    "lock_type": {
+                        "type": "string",
+                        "description": "The type of cover on the hatch.",
+                        "enum": [
+                            "OPEN",
+                            "NORMAL",
+                            "MISSILE",
+                            "SUPER_MISSILE",
+                            "POWER_BOMB",
+                            "LOCKED"
+                        ]
+                    }
+                },
+                "required": [
+                    "area",
+                    "door",
+                    "lock_type"
+                ]
+            }
+        },
+        "palettes": {
+            "type": "object",
+            "description": "Properties for randomized in-game palettes.",
+            "properties": {
+                "seed": {
+                    "$ref": "#/$defs/seed",
+                    "description": "A number used to initialize the random number generator for palettes. If not specified, the patcher will randomly generate one.",
+                    "default": null
+                },
+                "randomize": {
+                    "type": "object",
+                    "description": "What kind of palettes should be randomized.",
+                    "propertyNames": {
+                        "type": "string",
+                        "enum": [
+                            "tilesets",
+                            "enemies",
+                            "samus",
+                            "beams"
+                        ]
+                    },
+                    "additionalProperties": {
+                        "type": "object",
+                        "description": "The range to use for rotating palette hues.",
+                        "properties": {
+                            "hue_min": {
+                                "$ref": "#/$defs/hue_rotation",
+                                "description": "The minimum value to use for rotating palette hues. If not specified, the patcher will randomly generate one.",
+                                "default": null
+                            },
+                            "hue_max": {
+                                "$ref": "#/$defs/hue_rotation",
+                                "description": "The maximum value to use for rotating palette hues. If not specified, the patcher will randomly generate one.",
+                                "default": null
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "color_space": {
+                    "type": "string",
+                    "description": "The color space to use for rotating palette hues.",
+                    "enum": [
+                        "HSV",
+                        "OKLAB"
+                    ],
+                    "default": "OKLAB"
+                },
+                "symmetric": {
+                    "type": "boolean",
+                    "description": "Randomly rotates hues in the positive or negative direction true.",
+                    "default": true
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "randomize"
+            ],
+            "default": null
+        },
+        "intro_text": {
+            "type": "object",
+            "description": "Specifies what text should appear during the new game intro.",
+            "propertyNames": {
+                "$ref": "#/$defs/valid_languages"
+            },
+            "additionalProperties": {
+                "type": "string",
+                "description": "The language specific text used for the intro"
+            },
+            "default": null
+        },
+        "title_text": {
+            "type": "array",
+            "description": "Lines of ascii text to write to the title screen.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "description": "The ASCII text for this line",
+                        "pattern": "^[ -~]{0,30}$"
+                    },
+                    "line_num": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 14
+                    }
+                }
+            },
+            "default": null
+        },
+        "credits_text": {
+            "type": "array",
+            "description": "Lines of text to insert into the credits.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "line_type": {
+                        "type": "string",
+                        "description": "The color and line height of the text (or blank).",
+                        "enum": [
+                            "BLANK",
+                            "BLUE",
+                            "RED",
+                            "WHITE1",
+                            "WHITE2"
+                        ]
+                    },
+                    "text": {
+                        "type": "string",
+                        "description": "The ASCII text for this line.",
+                        "pattern": "^[ -~]{0,34}$"
+                    },
+                    "blank_lines": {
+                        "$ref": "#/$defs/type_u8",
+                        "description": "Inserts the provided number of blank lines after the text line.",
+                        "default": 0
+                    },
+                    "centered": {
+                        "type": "boolean",
+                        "description": "Centers the text horizontally when true.",
+                        "default": true
+                    }
+                },
+                "required": [
+                    "line_type"
+                ]
+            }
+        },
+        "disable_demos": {
+            "type": "boolean",
+            "description": "Disables title screen demos when true.",
+            "default": false
+        },
+        "skip_door_transitions": {
+            "type": "boolean",
+            "description": "Makes all door transitions instant when true.",
+            "default": false
+        },
+        "stereo_default": {
+            "type": "boolean",
+            "description": "Forces stereo sound by default when true.",
+            "default": true
+        },
+        "disable_music": {
+            "type": "boolean",
+            "description": "Disables all music tracks when true.",
+            "default": false
+        },
+        "disable_sound_effects": {
+            "type": "boolean",
+            "description": "Disables all sound effects when true.",
+            "default": false
+        },
+        "unexplored_map": {
+            "type": "boolean",
+            "description": "When enabled, starts you with a map where all unexplored items and non-visited tiles have a gray background. This is different from the downloaded map stations where there, the full tile is gray.",
+            "default": false
+        },
+        "accessibility_patches": {
+            "type": "boolean",
+            "description": "Whether to apply patches for better accessibility.",
+            "default": false
+        },
+        "level_edits": {
+            "type": "object",
+            "description": "Specifies room edits that should be done. These will be applied last.",
+            "propertyNames": {
+                "description": "Specifies the Area ID.",
+                "$ref": "#/$defs/area_id_key"
+            },
+            "additionalProperties": {
+                "type": "object",
+                "patternProperties": {
+                    "[0-9]+": {
+                        "type": "object",
+                        "description": "Specifies the Room ID.",
+                        "properties": {
+                            "bg1": {
+                                "description": "The BG1 layer that should be edited.",
+                                "$ref": "#/$defs/block_layer"
+                            },
+                            "bg2": {
+                                "description": "The BG2 layer that should be edited.",
+                                "$ref": "#/$defs/block_layer"
+                            },
+                            "clipdata": {
+                                "description": "The Clipdata layer that should be edited.",
+                                "$ref": "#/$defs/block_layer"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                }
+            }
+        },
+        "minimap_edits": {
+            "type": "object",
+            "description": "Specifies minimap edits that should be done.",
+            "propertyNames": {
+                "description": "Specifies the Area ID.",
+                "$ref": "#/$defs/minimap_id_key"
+            },
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "x": {
+                            "$ref": "#/$defs/type_u5",
+                            "description": "The X position in the minimap that should get edited."
+                        },
+                        "y": {
+                            "$ref": "#/$defs/type_u5",
+                            "description": "The Y position in the minimap that should get edited."
+                        },
+                        "tile": {
+                            "$ref": "#/$defs/type_u10",
+                            "description": "The tile value that should be used to edit the minimap."
+                        },
+                        "palette": {
+                            "$ref": "#/$defs/type_u4",
+                            "description": "The palette row to use for the tile."
+                        },
+                        "h_flip": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Whether the tile should be horizontally flipped or not."
+                        },
+                        "v_flip": {
+                            "type": "boolean",
+                            "default": false,
+                            "description": "Whether the tile should be vertically flipped or not."
+                        }
+                    }
+                }
+            }
+        },
+        "hide_doors_on_minimap": {
+            "type": "boolean",
+            "description": "When enabled, hides doors on the minimap. This is automatically enabled when the 'DoorLocks' field is provided.",
+            "default": false
+        },
+        "room_names": {
+            "type": "array",
+            "description": "Specifies a name to be displayed when the A Button is pressed on the pause menu.",
+            "uniqueItems": true,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "area": {
+                        "$ref": "#/$defs/area_id",
+                        "description": "The area ID where this room is located."
+                    },
+                    "room": {
+                        "$ref": "#/$defs/type_u8",
+                        "description": "The room ID."
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Specifies what text should appear for this room. Two lines are available, with an absolute maximum of 56 characters per line, if all characters used are small. Text will auto-wrap if the next word doesn't fit on the line. If the text is too long, it will be truncated.  Use \n to force a line break. If not provided, will display 'Unknown Room'.",
+                        "maxLength": 112
+                    }
+                },
+                "required": ["area", "room", "name"]
+            }
+        },
+        "reveal_hidden_tiles": {
+            "type": "boolean",
+            "description": "When enabled, reveals normally hidden blocks that are breakable by upgrades. Hidden pickup tanks are not revealed regardless of this setting.",
+            "default": false
+        }
+    },
+    "required": [
+        "seed_hash",
+        "locations"
+    ],
+    "$defs": {
+        "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647
+        },
+        "type_u4": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 15
+        },
+        "type_u5": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 31
+        },
+        "type_u8": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+        },
+        "type_u10": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1023
+        },
+        "area_id": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6
+        },
+        "area_id_key": {
+            "type": "string",
+            "enum": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6"
+            ]
+        },
+        "minimap_id_key": {
+            "type": "string",
+            "enum": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+            ]
+        },
+        "hue_rotation": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 360
+        },
+        "valid_sources": {
+            "type": "string",
+            "description": "Valid major locations.",
+            "enum": [
+                "LONG_BEAM",
+                "CHARGE_BEAM",
+                "ICE_BEAM",
+                "WAVE_BEAM",
+                "PLASMA_BEAM",
+                "BOMBS",
+                "VARIA_SUIT",
+                "GRAVITY_SUIT",
+                "MORPH_BALL",
+                "SPEED_BOOSTER",
+                "HI_JUMP",
+                "SCREW_ATTACK",
+                "SPACE_JUMP",
+                "POWER_GRIP",
+                "FULLY_POWERED",
+                "ZIPLINES"
+            ]
+        },
+        "valid_items": {
+            "type": "string",
+            "description": "Valid items for shuffling.",
+            "enum": [
+                "NONE",
+                "ENERGY_TANK",
+                "MISSILE_TANK",
+                "SUPER_MISSILE_TANK",
+                "POWER_BOMB_TANK",
+                "LONG_BEAM",
+                "CHARGE_BEAM",
+                "ICE_BEAM",
+                "WAVE_BEAM",
+                "PLASMA_BEAM",
+                "BOMBS",
+                "VARIA_SUIT",
+                "GRAVITY_SUIT",
+                "MORPH_BALL",
+                "SPEED_BOOSTER",
+                "HI_JUMP",
+                "SCREW_ATTACK",
+                "SPACE_JUMP",
+                "POWER_GRIP",
+                "FULLY_POWERED",
+                "ZIPLINES",
+                "ICE_TRAP"
+            ]
+        },
+        "valid_item_sprites": {
+            "type": "string",
+            "description": "Valid graphics for item tanks/sprites.",
+            "enum": [
+                "DEFAULT",
+                "EMPTY",
+                "ENERGY_TANK",
+                "MISSILE_TANK",
+                "SUPER_MISSILE_TANK",
+                "POWER_BOMB_TANK",
+                "LONG_BEAM",
+                "CHARGE_BEAM",
+                "ICE_BEAM",
+                "WAVE_BEAM",
+                "PLASMA_BEAM",
+                "BOMBS",
+                "VARIA_SUIT",
+                "GRAVITY_SUIT",
+                "MORPH_BALL",
+                "SPEED_BOOSTER",
+                "HI_JUMP",
+                "SCREW_ATTACK",
+                "SPACE_JUMP",
+                "POWER_GRIP",
+                "FULLY_POWERED",
+                "ZIPLINES",
+                "ANONYMOUS",
+                "SHINY_MISSILE_TANK",
+                "SHINY_POWER_BOMB_TANK"
+            ]
+        },
+        "valid_abilities": {
+            "type": "string",
+            "description": "Valid abilities to start with.",
+            "enum": [
+                "LONG_BEAM",
+                "CHARGE_BEAM",
+                "ICE_BEAM",
+                "WAVE_BEAM",
+                "PLASMA_BEAM",
+                "BOMBS",
+                "VARIA_SUIT",
+                "GRAVITY_SUIT",
+                "MORPH_BALL",
+                "SPEED_BOOSTER",
+                "HI_JUMP",
+                "SCREW_ATTACK",
+                "SPACE_JUMP",
+                "POWER_GRIP"
+            ]
+        },
+        "valid_elevator_tops": {
+            "type": "string",
+            "description": "Valid elevators at the top of elevator shafts.",
+            "enum": [
+                "BRINSTAR_TO_KRAID",
+                "BRINSTAR_TO_NORFAIR",
+                "BRINSTAR_TO_TOURIAN",
+                "NORFAIR_TO_RIDLEY",
+                "CRATERIA_TO_TOURIAN"
+            ]
+        },
+        "valid_elevator_bottoms": {
+            "type": "string",
+            "description": "Valid elevators at the bottom of elevator shafts.",
+            "enum": [
+                "KRAID_TO_BRINSTAR",
+                "NORFAIR_TO_BRINSTAR",
+                "TOURIAN_TO_BRINSTAR",
+                "RIDLEY_TO_NORFAIR",
+                "TOURIAN_TO_CRATERIA"
+            ]
+        },
+        "valid_languages": {
+            "type": "string",
+            "description": "Valid languages supported by the game.",
+            "enum": [
+                "JAPANESE_KANJI",
+                "JAPANESE_HIRAGANA",
+                "ENGLISH",
+                "GERMAN",
+                "FRENCH",
+                "ITALIAN",
+                "SPANISH"
+            ]
+        },
+        "message_languages": {
+            "type": "object",
+            "propertyNames": {
+                "$ref": "#/$defs/valid_languages"
+            },
+            "required": ["ENGLISH"],
+            "additionalProperties": {
+                "type": "string",
+                "description": "Specifies what text should appear for a 2 line message. Text will auto-wrap if the next word doesn't fit on the line. If the text is too long, it will be truncated. Use \n to force a line break. If not provided, a message based on the Item will be shown. If a language is not provided, it will use the provided English message."
+            }
+        },
+        "item_messages": {
+            "type": "object",
+            "properties": {
+                "kind": {
+                    "$ref": "#/$defs/item_messages_kind"
+                }
+            },
+            "required": ["kind"],
+            "if": {
+                "properties": {
+                    "kind": {"const": "CUSTOM_MESSAGE" }
+                }
+            },
+            "then": {
+                "properties": {
+                    "kind": {
+                        "$ref": "#/$defs/item_messages_kind"
+                    },
+                    "languages": {
+                        "$ref": "#/$defs/message_languages"
+                    },
+                    "centered": {
+                        "type": "boolean",
+                        "default": true
+                    }
+                },
+                "required": ["languages"],
+                "additionalProperties": false
+            },
+            "else": {
+                "properties": {
+                    "kind": {
+                        "$ref": "#/$defs/item_messages_kind"
+                    },
+                    "message_id": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 56,
+                        "description": "The Message ID, will display one of the predefined messages in the ROM"
+                    }
+                },
+                "required": ["message_id"],
+                "additionalProperties": false
+            }
+        },
+        "item_messages_kind": {
+            "type": "string",
+            "enum": ["CUSTOM_MESSAGE", "MESSAGE_ID"]
+        },
+        "jingle": {
+            "type": "string",
+            "enum": ["DEFAULT", "MINOR", "MAJOR", "UNKNOWN", "FULLY_POWERED"]
+        },
+        "hint_locations": {
+            "type": "string",
+            "enum": [
+                "NONE",
+                "LONG_BEAM",
+                "BOMBS",
+                "ICE_BEAM",
+                "SPEED_BOOSTER",
+                "HIGH_JUMP",
+                "VARIA_SUIT",
+                "WAVE_BEAM",
+                "SCREW_ATTACK"
+            ]
+        },
+        "block_layer": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "x": {
+                        "$ref": "#/$defs/type_u8",
+                        "description": "The X position in the room that should get edited."
+                    },
+                    "y": {
+                        "$ref": "#/$defs/type_u8",
+                        "description": "The Y position in the room that should get edited."
+                    },
+                    "value": {
+                        "$ref": "#/$defs/type_u10",
+                        "description": "The value that should be used to edit the room. For backgrounds, this is calculated via `((Row-1) * ColumnsInTileset) + (Column-1)`."
+                    }
+                }
+            }
+        }
+    }
+}

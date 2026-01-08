@@ -1,0 +1,10 @@
+﻿[
+
+    {
+        "name": "all_maps",
+        "img": "images/SonicAdventureMaps.png",
+        "location_size": 40,
+        "location_border_thickness": 5
+    }
+
+]

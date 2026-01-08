@@ -1,0 +1,3327 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 173,
+  "name": "Fish Tank",
+  "area": "Maridia",
+  "subarea": "Outer",
+  "roomAddress": "0x7D017",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1],
+    [1, 1, 1, 1],
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a3d8",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [2, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "red",
+      "nodeAddress": "0x001a3e4",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 2, 2, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a3fc",
+      "doorOrientation": "up",
+      "doorEnvironments": [{"physics": "water"}],
+      "useImplicitComeInNormally": false,
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "mapTileMask": [
+        [1, 1, 1, 2],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a3f0",
+      "doorOrientation": "up",
+      "doorEnvironments": [{"physics": "water"}],
+      "useImplicitComeInNormally": false,
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "mapTileMask": [
+        [2, 1, 1, 1],
+        [2, 1, 1, 1],
+        [1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Platform Junction Near Top Left Door",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Middle Junction Near Top Left Pirate",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 2, 1],
+        [1, 2, 2, 2],
+        [1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Platform Below Top Right Door",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 2],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Fish Tank Bottom Skultera",
+      "enemyName": "Skultera",
+      "quantity": 1,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Fish Tank Top Left Skultera",
+      "enemyName": "Skultera",
+      "quantity": 1,
+      "homeNodes": [5]
+    },
+    {
+      "id": "e3",
+      "groupName": "Fish Tank Central Skultera",
+      "enemyName": "Skultera",
+      "quantity": 1,
+      "homeNodes": [6]
+    },
+    {
+      "id": "e4",
+      "groupName": "Fish Tank Top Right Skultera",
+      "enemyName": "Skultera",
+      "quantity": 1,
+      "homeNodes": [7]
+    },
+    {
+      "id": "e5",
+      "groupName": "Fish Tank Bottom Pirate",
+      "enemyName": "Pink Space Pirate (standing)",
+      "quantity": 1,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e6",
+      "groupName": "Fish Tank Central Pirate",
+      "enemyName": "Pink Space Pirate (standing)",
+      "quantity": 1,
+      "homeNodes": [6]
+    },
+    {
+      "id": "e7",
+      "groupName": "Fish Tank Top Right Pirate",
+      "enemyName": "Pink Space Pirate (standing)",
+      "quantity": 1,
+      "homeNodes": [7]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {
+          "id": 4,
+          "note": "Direct link for cross room jump and IBJ, which can't be done from 5 to 4 and must be directly from 1.",
+          "devNote": "This link also exists because it will become useful as an alternate to walljumping"
+        },
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 4},
+        {"id": 5},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 2},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 3},
+        {"id": 6},
+        {"id": 7}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 110,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 12,
+            "openEnd": 0,
+            "gentleUpTiles": 1,
+            "gentleDownTiles": 1,
+            "steepDownTiles": 1,
+            "startingDownTiles": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $2.A."]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 9,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 9,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 24, "openEnd": 1}},
+        "canLongChainTemporaryBlue",
+        "canGravityJump"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "note": [
+        "Use the runway at the bottom-right side of the room to gain temporary blue.",
+        "Use Gravity jumps to navigate to the left, chaining temporary blue through the door."
+      ]
+    },
+    {
+      "id": 127,
+      "link": [1, 1],
+      "name": "Skultera Farm (Single Skultera)",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"or": [
+              {"and": [
+                "Plasma",
+                {"cycleFrames": 140}
+              ]},
+              {"and": [
+                "ScrewAttack",
+                {"cycleFrames": 170}
+              ]},
+              {"and": [
+                "Wave",
+                {"cycleFrames": 190}
+              ]},
+              {"and": [
+                "Spazer",
+                {"cycleFrames": 210}
+              ]},
+              {"and": [
+                "Ice",
+                {"cycleFrames": 290}
+              ]},
+              {"cycleFrames": 390}
+            ]}
+          ]},
+          {"and": [
+            {"or": [
+              "Plasma",
+              "Wave",
+              "Spazer"
+            ]},
+            {"cycleFrames": 270}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 330}
+          ]},
+          {"and": [
+            {"or": [
+              "canDodgeWhileShooting",
+              "HiJump"
+            ]},
+            {"cycleFrames": 450}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Skultera", "count": 1}]
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Skultera", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 4],
+      "name": "IBJ",
+      "requires": [
+        "Gravity",
+        "canLongIBJ"
+      ],
+      "note": "Once high enough, it may be necessary to kill the fish and open the door."
+    },
+    {
+      "id": 108,
+      "link": [1, 4],
+      "name": "Gravity Jump",
+      "requires": [
+        "canGravityJump",
+        {"or": [
+          "HiJump",
+          "canCarefulJump"
+        ]}
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 4],
+      "name": "Cross Room Jump with HiJump and Speedbooster",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": "Requires a runway of at least 4 tiles in the adjacent room.",
+      "devNote": [
+        "Using more run speed to avoid the momentumConservingTurnaround requirement will bonk the door, requiring a turnaround to get through",
+        "This would be a way to bring high vertical speed into the room on the other side of 4."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 4],
+      "name": "Cross Room Jump with Speedbooster",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 18
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ],
+      "note": "Requires a runway of at least 18 tiles in the adjacent room."
+    },
+    {
+      "id": 12,
+      "link": [1, 4],
+      "name": "Cross Room Jump with Speedbooster (lenient)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 22
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Requires a runway of at least 22 tiles in the adjacent room."
+    },
+    {
+      "id": 123,
+      "link": [1, 4],
+      "name": "Cross Room Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "any",
+          "remoteAndLandingMinTiles": [[22, 1]]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ]
+    },
+    {
+      "id": 124,
+      "link": [1, 4],
+      "name": "Tricky Cross Room Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "any",
+          "remoteAndLandingMinTiles": [[18.4375, 1]]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyDashJump"
+      ]
+    },
+    {
+      "id": 111,
+      "link": [1, 4],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canMomentumConservingTurnaround"
+              ],
+              "note": ["This applies to Dust Torizo Room."],
+              "devNote": [
+                "The jump could also be done with a shorter runway, with a tricky dash jump using run speed $4.0 or $4.1.",
+                "But it wouldn't apply to any more rooms in the game."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "requires": [
+                "canTrickyJump"
+              ],
+              "note": ["This applies to Metal Pirates Room."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canInsaneJump",
+                {"or": [
+                  "canMomentumConservingMorph",
+                  {"and": [
+                    "canMomentumConservingTurnaround",
+                    "canBeVeryPatient"
+                  ]}
+                ]}
+              ],
+              "note": [
+                "This applies to Statues Hallway.",
+                "This can be done in two ways:",
+                "1) If Morph is available, perform a momentum-conserving morph through the transition,",
+                "then unmorph as soon as possible after the transition.",
+                "2) Alternatively, do an extremely precise momentum-conserving turnaround through the transition."
+              ],
+              "devNote": [
+                "The momentum-conserving turnaround is double frame-perfect,",
+                "requiring a last-frame jump and frame-perfect turnaround just before Samus would bonk the ceiling."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 37.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Flyway."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[4, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump",
+                "canInsaneMidAirMorph"
+              ],
+              "note": [
+                "This applies to Baby Kraid Room.",
+                "In the previous room, there is a 2-frame window for the jump, just before Samus would hit the door ledge,",
+                "then a 1-frame or 2-frame window (depending on the jump) for the morph, just before Samus would bonk the ceiling.",
+                "After the transition, unmorph within the first 2 frames, to conserve upward momentum;",
+                "if Samus got the later frame for the morph (where the animation does not show as fully morphed in the previous room),",
+                "then there will only be 1 frame to unmorph."
+              ]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "devNote": [
+        "We don't include strats here that require HiJump or Spring Ball,",
+        "since with either of those items you could instead go 1 -> 5 -> 4."
+      ]
+    },
+    {
+      "id": 103,
+      "link": [1, 4],
+      "name": "Precise Grapple Jump Through Door (Right Position)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"}
+          ]
+        }
+      },
+      "requires": [
+        "canPreciseGrappleJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "right"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {"types": ["missiles"], "requires": ["canTrickyGrappleJump"]}
+      ]
+    },
+    {
+      "id": 104,
+      "link": [1, 4],
+      "name": "Tricky Grapple Jump Through Door",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"},
+            {"position": [6, 4], "note": "Grapple Tutorial Room 2"},
+            {"position": [6, 2], "note": "Lava Grapple Tunnel"},
+            {
+              "position": [5, 2],
+              "note": "The Moat, Double Chamber, Wrecked Ship Energy Tank Room"
+            },
+            {"position": [2.375, 4.5625], "note": "Post Crocomire Farming Room"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "any"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 13,
+      "link": [1, 5],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canWalljump",
+          "SpaceJump",
+          "canLongIBJ",
+          {"and": [
+            "canJumpIntoIBJ",
+            "canBombHorizontally"
+          ]},
+          "h_maxHeightSpringBallJump",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 109,
+      "link": [1, 5],
+      "name": "Gravity Jump",
+      "requires": [
+        "canGravityJump"
+      ]
+    },
+    {
+      "id": 130,
+      "link": [1, 5],
+      "name": "Jump to the Frozen Fish",
+      "requires": [
+        "Gravity",
+        "canUseFrozenEnemies",
+        "HiJump",
+        "SpeedBooster"
+      ]
+    },
+    {
+      "id": 131,
+      "link": [1, 5],
+      "name": "Tricky Dash Jump",
+      "requires": [
+        "Gravity",
+        "HiJump",
+        "canTrickyDashJump",
+        "canDownGrab"
+      ],
+      "note": [
+        "Get a tricky dash jump running up the hill, then precisely down grab at the top.",
+        "It is best to start a few pixels away from the edge of the runway, so that Samus can jump at the correct frame and while being higher up the hill."
+      ],
+      "devNote": "A down grab is not strictly necessary, but it makes it much easier."
+    },
+    {
+      "id": 14,
+      "link": [1, 5],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 30},
+        "h_navigateUnderwater",
+        {"shinespark": {"frames": 55}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [1, 5],
+      "name": "Springball to the Frozen Fish",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickyUseFrozenEnemies",
+        "HiJump",
+        "canTrickySpringBallJump"
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 5],
+      "name": "Double Springball Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "h_doubleSpringBallJumpWithHiJump"
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 5],
+      "name": "Cross Room Jump to the Frozen Fish",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 2.4375
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround",
+        "canTrickyUseFrozenEnemies",
+        "canInsaneJump",
+        "canDownGrab",
+        {"or": [
+          "Wave",
+          "Spazer",
+          "Plasma"
+        ]}
+      ],
+      "note": [
+        "Requires 3 tiles of run speed (with no open end) to make it past the overhang above the door.",
+        "Cross Room jump and aim towards the left side where the fish is.",
+        "Shooting at it from below can deal damage sooner to get a faster freeze.",
+        "Hug the frozen fish to gain the extra height needed to climb on top."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [1, 5],
+      "name": "Cross Room Jump with HiJump and Springball",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 2.4375
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround",
+        "canTrickySpringBallJump",
+        "canInsaneJump"
+      ],
+      "note": "Requires 3 tiles of run speed (with no open end) to make it past the overhang above the door."
+    },
+    {
+      "id": 19,
+      "link": [1, 5],
+      "name": "Cross Room Jump with HiJump and Speedbooster",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround",
+        "canTrickyJump"
+      ],
+      "note": "Requires a runway of at least 3 tiles in the adjacent room."
+    },
+    {
+      "id": 20,
+      "link": [1, 5],
+      "name": "Cross Room Jump with HiJump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": "Requires a runway of at least 4 tiles in the adjacent room."
+    },
+    {
+      "id": 21,
+      "link": [1, 5],
+      "name": "Tricky Cross Room Jump with Speedbooster",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 6.4375
+        }
+      },
+      "requires": [
+        "canTrickyDashJump",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": "Requires running a precise distance of 7 tiles in the adjacent room, to hit a peak of the speed vs height graph."
+    },
+    {
+      "id": 22,
+      "link": [1, 5],
+      "name": "Cross Room Jump with Speedbooster",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 11.4375
+        }
+      },
+      "requires": [
+        "SpeedBooster",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Requires a runway of at least 12 tiles (with no open end) in the adjacent room."
+    },
+    {
+      "id": 23,
+      "link": [1, 5],
+      "name": "Cross Room Jump with Speedbooster and Springball",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 10
+        }
+      },
+      "requires": [
+        "SpeedBooster",
+        "canCrossRoomJumpIntoWater",
+        "canSpringBallJumpMidAir",
+        "canTrickyJump"
+      ],
+      "note": "Requires a runway of at least 10 tiles in the adjacent room."
+    },
+    {
+      "id": 125,
+      "link": [1, 5],
+      "name": "Cross Room Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "any",
+          "remoteAndLandingMinTiles": [[19, 1]]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ]
+    },
+    {
+      "id": 126,
+      "link": [1, 5],
+      "name": "Tricky Cross Room Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "any",
+          "remoteAndLandingMinTiles": [[6.4375, 1]]
+        }
+      },
+      "requires": [
+        "canTrickyDashJump",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Requires running a precise distance of 7 tiles in the adjacent room, to hit a peak of the speed vs height graph."
+    },
+    {
+      "id": 112,
+      "link": [1, 5],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 8.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "HiJump",
+                "canMomentumConservingTurnaround"
+              ],
+              "note": ["This applies to Warehouse Entrance."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 8,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "HiJump",
+                "canMomentumConservingTurnaround"
+              ],
+              "note": ["This applies to Ridley Tank Room and Dust Torizo Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 9,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "HiJump",
+                "canMomentumConservingTurnaround"
+              ],
+              "note": ["This applies to Big Boy Room and Mickey Mouse Room."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canMomentumConservingTurnaround"
+              ],
+              "note": ["This applies to Dust Torizo Room."],
+              "devNote": [
+                "The jump could also be done with a shorter runway, with a tricky dash jump using run speed $4.0 or $4.1.",
+                "But it wouldn't apply to any more rooms in the game."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "requires": [
+                "canTrickyJump"
+              ],
+              "note": ["This applies to Metal Pirates Room."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 23,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "HiJump",
+                "canMomentumConservingMorph",
+                "canInsaneJump",
+                "canInsaneMidAirMorph"
+              ],
+              "note": [
+                "This applies to Metroid Room 1.",
+                "In the previous room, perform a last-frame jump,",
+                "then morph on the last possible frame before bonking the ceiling.",
+                "After the transition, unmorph within the first 2 frames, to conserve upward momentum."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canInsaneJump",
+                {"or": [
+                  "canMomentumConservingMorph",
+                  {"and": [
+                    "canMomentumConservingTurnaround",
+                    "canBeVeryPatient"
+                  ]}
+                ]}
+              ],
+              "note": [
+                "This applies to Statues Hallway.",
+                "This can be done in two ways:",
+                "1) If Morph is available, perform a momentum-conserving morph through the transition,",
+                "then unmorph as soon as possible after the transition.",
+                "2) Alternatively, do an extremely precise momentum-conserving turnaround through the transition."
+              ],
+              "devNote": [
+                "The momentum-conserving turnaround is double frame-perfect,",
+                "requiring a last-frame jump and frame-perfect turnaround just before Samus would bonk the ceiling."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 37.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Flyway."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[4, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump",
+                "canInsaneMidAirMorph"
+              ],
+              "note": [
+                "This applies to Baby Kraid Room.",
+                "In the previous room, there is a 2-frame window for the jump, just before Samus would hit the door ledge,",
+                "then a 1-frame or 2-frame window (depending on the jump) for the morph, just before Samus would bonk the ceiling.",
+                "After the transition, unmorph within the first 2 frames, to conserve upward momentum;",
+                "if Samus got the later frame for the morph (where the animation does not show as fully morphed in the previous room),",
+                "then there will only be 1 frame to unmorph."
+              ]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ]
+    },
+    {
+      "id": 85,
+      "link": [1, 5],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 39, "excessFrames": 3}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 36, "excessFrames": 3}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 86,
+      "link": [1, 5],
+      "name": "Use Flash Suit, From the Upper Ledge",
+      "requires": [
+        "canUseFrozenEnemies",
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 15, "excessFrames": 3}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 12, "excessFrames": 3}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 87,
+      "link": [1, 5],
+      "name": "Use Flash Suit, Cross Room Jump to Ledge",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 1.4375
+        }
+      },
+      "requires": [
+        "canMomentumConservingTurnaround",
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 15, "excessFrames": 3}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 12, "excessFrames": 3}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 24,
+      "link": [1, 5],
+      "name": "G-Mode Morph IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          {"and": [
+            "h_artificialMorphJumpIntoIBJ",
+            "h_artificialMorphBombHorizontally"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Kill the first fish with bombs then dodge or kill the second one."
+    },
+    {
+      "id": 105,
+      "link": [1, 5],
+      "name": "Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"}
+          ]
+        }
+      },
+      "requires": [
+        "canGrappleJump"
+      ]
+    },
+    {
+      "id": 106,
+      "link": [1, 5],
+      "name": "Precise Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [{"position": [6, 4], "note": "Grapple Tutorial Room 2"}]
+        }
+      },
+      "requires": [
+        "canPreciseGrappleJump"
+      ]
+    },
+    {
+      "id": 107,
+      "link": [1, 5],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [6, 2], "note": "Lava Grapple Tunnel"},
+            {
+              "position": [5, 2],
+              "note": "The Moat, Double Chamber, Wrecked Ship Energy Tank Room"
+            },
+            {"position": [2.375, 4.5625], "note": "Post Crocomire Farming Room"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ]
+    },
+    {
+      "id": 25,
+      "link": [1, 5],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 26,
+      "link": [1, 5],
+      "name": "Very Long Underwater Walljump Climb (In Room)",
+      "requires": [
+        "canLongUnderwaterWalljump",
+        {"or": [
+          "canUseFrozenEnemies",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "canFlatleyJump",
+            {"doorUnlockedAtNode": 1}
+          ]}
+        ]}
+      ],
+      "unlocksDoors": [{"nodeId": 1, "types": ["ammo"], "requires": []}],
+      "note": "This underwater walljump is very long. Some jump assistance, cross room jump, or a flatley jump from the door frame is needed to get to the first overhang."
+    },
+    {
+      "id": 27,
+      "link": [1, 5],
+      "name": "Very Long Underwater Walljump Climb (Cross Room)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 2.4375
+        }
+      },
+      "requires": [
+        "canLongUnderwaterWalljump",
+        "canTrickyJump",
+        "canDisableEquipment",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": [
+        "This underwater walljump is very long. Some jump assistance, cross room jump, or a flatley jump from the door frame is needed to get to the first overhang.",
+        "The cross room jump requires an adjacent runway of 3 tiles (with no open end) with HiJump disabled. Perform a turnaround just before hitting the ceiling."
+      ],
+      "devNote": "With a longer runway there are fewer tech requirements to the jump, but at this difficulty they shouldn't matter."
+    },
+    {
+      "id": 101,
+      "link": [1, 5],
+      "name": "G-Mode Morph, Double Spring Ball Jump onto Frozen Fish",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "Artificial Morph, Double Spring Ball Jump onto Frozen Fish"},
+        "canComplexGMode",
+        "h_artificialMorphDoubleSpringBallJump",
+        "canInsaneJump",
+        "canTrickyUseFrozenEnemies",
+        "canDownGrab",
+        {"or": [
+          {"and": [
+            "Plasma",
+            "Wave"
+          ]},
+          {"and": [
+            "h_artificialMorphPowerBomb",
+            "Plasma"
+          ]},
+          {"and": [
+            "h_artificialMorphPowerBomb",
+            "Wave",
+            "Spazer"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Double Spring Ball jump while artificially morphed and quickly unmorph and freeze the fish before landing on it.",
+        "The required positioning of the fish is fairly precise; aim for it to be at the lowest point a few tiles from the right wall,",
+        "or one tile from the right wall where Samus has more time to press against it.",
+        "Down grabbing onto the fish makes this significantly easier.",
+        "The fish should be frozen in one hit, this requires Plasma and Wave or a single Power Bomb hit and Plasma or Wave and Spazer.",
+        "With Plasma, it is tricky to freeze the fish without killing it; avoid shooting it horizontally.",
+        "The positioning of a Power Bomb, is fairly lenient, but will always hit the fish once if placed a couple tiles below the peak of a normal Spring Ball + HiJump."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Come in With Water Shinecharge, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "canStationaryLateralMidAirMorph",
+        {"or": [
+          {"and": [
+            "HiJump",
+            "canTrickySpringBallJump"
+          ]},
+          {"and": [
+            {"or": [
+              "HiJump",
+              "canTrickySpringBallJump"
+            ]},
+            "canBeVeryPatient"
+          ]}
+        ]},
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Run into the room to gain temporary blue with a water shinecharge.",
+        "Use X-ray along with HiJump and/or Spring Ball to chain it through the room."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [],
+      "note": [
+        "After teleporting, Grapple will open the door (if it is blue), making it not possible to swing over to the ledge."
+      ],
+      "devNote": [
+        "FIXME: Add canRiskPermanentLossOfAccess variations to get onto the ledge if the door is not blue;",
+        "also to get up through the door with a tricky grapple jump, if the door is pink or green (using a Super to open it)."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 31,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 33,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 128,
+      "link": [2, 2],
+      "name": "Pirate Farm (Single Pirate)",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"cycleFrames": 630},
+        "Plasma"
+      ],
+      "farmCycleDrops": [{"enemy": "Pink Space Pirate (standing)", "count": 1}],
+      "devNote": [
+        "This is for farming suitless.",
+        "If Gravity is available, it is instead worthwhile to farm all the Pirates in the room."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 114,
+      "link": [2, 2],
+      "name": "Stutter Shinecharge, Leave With Spark",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canStutterWaterShineCharge",
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"shinespark": {"frames": 12}},
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"shinespark": {"frames": 3}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 115,
+      "link": [2, 2],
+      "name": "Water Shinecharge, Hero Shot Leave With Spark",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canHeroShot",
+        {"shinespark": {"frames": 29}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": ["Start with low run speed by positioning exactly 2 pixels from the door."]
+    },
+    {
+      "id": 116,
+      "link": [2, 2],
+      "name": "Very Precise Stutter Shinecharge, Leave With Spark",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canPreciseStutterWaterShineCharge",
+        "canInsaneJump",
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"shinespark": {"frames": 12}},
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"shinespark": {"frames": 3}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only 1 tile of runway, this requires a single-frame stutter (release forward then repress on the next frame), on the last possible frame."
+      ]
+    },
+    {
+      "id": 117,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (5-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 130},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With a runway of 5 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 5 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 118,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (4-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 140},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 10}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 4 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 4 frames, and repress forward on the last possible frame before the transition.",
+        "It also works well to release forward for 3 frames and repress on the last possible frame.",
+        "Other timings can also work, but may gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge."
+      ]
+    },
+    {
+      "id": 119,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (3-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 145},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 10}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 3 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 3 or 4 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "devNote": [
+        "The same shinecharge frames could be achieved with a closed end runway (effective length of 2.4375),",
+        "with a 3-frame stutter, but there doesn't appear to be any application."
+      ]
+    },
+    {
+      "id": 120,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (2-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 150},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only a runway of 2 tiles (open end) in the other room,",
+        "the ideal timing for the stutter is to release forward for 3 frames, and repress forward on the last possible frame before the transition.",
+        "Other timings can work, but will gain the shinecharge further from the door, leaving fewer shinecharge frames remaining.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "devNote": [
+        "FIXME: The canBeVeryPatient requirement is for difficulty placement of the boomerang method;",
+        "but the boomerang (or maybe specifically the moonwalk boomerang) should possibly be its own tech,",
+        "and the same with rapid arm pumping."
+      ]
+    },
+    {
+      "id": 121,
+      "link": [2, 2],
+      "name": "Precise Stutter Shinecharge, Leave Shinecharged (1-tile runway)",
+      "entranceCondition": {
+        "comeInStutterShinecharging": {
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canInsaneJump",
+        "canBeVeryPatient",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "With only 1 tile of runway in the other room, Samus should ideally start on the last pixel of runway with X subpixels of $3FFF or less.",
+        "Run toward the door, releasing forward for exactly 1 frame and pressing it again on the last possible frame before the transition.",
+        "Starting with X subpixels of $7FFF can also work (e.g., by simply backing against the door ledge, then jumping and turning around mid-air);",
+        "in this case, Samus must advance 1 or 2 pixels with an arm pump before the transition (e.g., firing a shot or pressing and/or releasing an angle button),",
+        "and the shinecharge will be gained slightly further away from the door.",
+        "After gaining the shinecharge, continue holding forward in order to make Samus stand.",
+        "Then turnaround spin jump back toward the door, and continue spin jumping to reach the transition with a shinecharge.",
+        "Alternatively, with greater difficulty but saving some shinecharge frames,",
+        "after performing the turnaround spin jump, briefly moonwalk back, then retain momentum by boomeranging forward",
+        "(switching from pressing backward to pressing forward on the next frame),",
+        "and arm pump to reach the door quickly."
+      ],
+      "detailNote": [
+        "Ideal subpixels ($3FFF) can be achieved using one of several methods:",
+        "1) press forward against the door ledge (or a wall aligned with it);",
+        "jump, and while mid-air, tap forward for exactly 1 frame to land with subpixels $BFFF,",
+        "moonwalk back for exactly 1 frame to end with subpixels $3FFF.",
+        "2) press forward against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), and moonwalk back two pixels,",
+        "then jump and mid-air turnaround onto the ledge;",
+        "if Samus jumped from the correct pixel but does not land on the ledge, then it was needed to moonwalk back 1 more frame;",
+        "in this case it is possible to retry by doing a mid-air turnaround back onto the platform, and moonwalking back for 1 frame.",
+        "3) if X-Ray is available, press against the door ledge (from a platform below, assuming one exists)",
+        "turn around (while on the ground), then jump and mid-air turnaround toward the door,",
+        "and use X-Ray to turnaround in place away from the door;",
+        "repeat this sequence 3 more times: jump, mid-air turnaround, X-Ray turnaround;",
+        "then do one more jump and mid-air turnaround, high enough to land on the door ledge,",
+        "and Samus should be in the correct position with subpixels $3FFF."
+      ]
+    },
+    {
+      "id": 122,
+      "link": [2, 2],
+      "name": "Water Shinecharge, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": ["Start with low run speed by positioning exactly 2 pixels from the door."],
+      "devNote": [
+        "This can also be done with a stutter shinecharge, which can shorten the temp blue chain,",
+        "but not by enough to remove the need for the canLongChainTemporaryBlue requirement."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [2, 3],
+      "name": "Come in With Water Shinecharge, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "canStationaryLateralMidAirMorph",
+        "HiJump",
+        {"or": [
+          "canBeVeryPatient",
+          "canTrickySpringBallJump"
+        ]},
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "any"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Run into the room to gain temporary blue with a water shinecharge.",
+        "Use X-ray along with HiJump to chain it through the room."
+      ],
+      "devNote": [
+        "FIXME: This could be done with Spring Ball instead of HiJump;",
+        "but it requires some space on either the left or right of the door in the room above, e.g. it won't work with the vanilla connection, and we would need some way to model that."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [2, 4],
+      "name": "Grapple Teleport into Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3]]
+        }
+      },
+      "requires": [
+        {"notable": "Grapple Teleport into Grapple Jump"},
+        {"doorUnlockedAtNode": 4},
+        "canMidairWiggle",
+        "canTrickyGrappleJump",
+        "canInsaneJump"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": ["Swing to the right, shoot open the door above, and grapple jump through it."],
+      "devNote": [
+        "FIXME: Add a version of this with an exit condition for grapple jumping through the transition."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [2, 5],
+      "name": "Suitless Water Shinecharge (Lenient)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 4.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        {"canShineCharge": {"usedTiles": 23, "openEnd": 2}},
+        {"or": [
+          {"shinespark": {"frames": 41, "excessFrames": 7}},
+          {"and": [
+            "canDodgeWhileShooting",
+            "canMidairShinespark",
+            {"shinespark": {"frames": 38, "excessFrames": 7}}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Reduce Samus' run speed with a stutter or late dash tap in order to complete the shinecharge in time."
+      ]
+    },
+    {
+      "id": 93,
+      "link": [2, 5],
+      "name": "Suitless Water Shinecharge",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "canTrickyJump",
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"shinespark": {"frames": 41, "excessFrames": 7}},
+          {"and": [
+            "canDodgeWhileShooting",
+            "canMidairShinespark",
+            {"shinespark": {"frames": 38, "excessFrames": 7}}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Start the dash as close to the door transition as possible in order to store the shinespark in time.",
+        "Stand 2 or 3 pixels from the door for run speed to be low enough going into the next room."
+      ]
+    },
+    {
+      "id": 88,
+      "link": [2, 5],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 38, "excessFrames": 7}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 37,
+      "link": [2, 5],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3]]
+        }
+      },
+      "requires": [],
+      "note": [
+        "Swing over the right to make it to the ledge.",
+        "Avoid extending Grapple, to prevent being damaged by the Skulltera.",
+        "You can wait for the camera to fix itself; continue swinging while waiting, to avoid damage."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [2, 6],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canIBJ",
+          "canCarefulJump",
+          "canSpringBallJumpMidAir",
+          "canGravityJump",
+          {"enemyDamage": {
+            "enemy": "Pink Space Pirate (standing)",
+            "type": "contact",
+            "hits": 1
+          }},
+          {"enemyKill": {
+            "enemies": [["Pink Space Pirate (standing)"]],
+            "explicitWeapons": ["Plasma", "ScrewAttack"]
+          }}
+        ]}
+      ]
+    },
+    {
+      "id": 39,
+      "link": [2, 6],
+      "name": "Suitless",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        {"or": [
+          "canTrickyJump",
+          "canDodgeWhileShooting",
+          {"enemyDamage": {
+            "enemy": "Pink Space Pirate (standing)",
+            "type": "contact",
+            "hits": 1
+          }},
+          {"enemyKill": {
+            "enemies": [["Pink Space Pirate (standing)"]],
+            "explicitWeapons": ["Plasma"]
+          }}
+        ]},
+        {"or": [
+          "canTrickyJump",
+          "canSpringBallJumpMidAir",
+          {"enemyDamage": {
+            "enemy": "Pink Space Pirate (standing)",
+            "type": "contact",
+            "hits": 1
+          }},
+          {"enemyKill": {
+            "enemies": [["Pink Space Pirate (standing)"]],
+            "explicitWeapons": ["Plasma"]
+          }}
+        ]}
+      ],
+      "note": "Shooting towards Pirates will cause them to stop in place and not fire back."
+    },
+    {
+      "id": 40,
+      "link": [2, 6],
+      "name": "SpringBall Escape",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallJump",
+        {"or": [
+          "canStationaryLateralMidAirMorph",
+          "canSpringFling"
+        ]},
+        {"or": [
+          "canTrickyJump",
+          "canDodgeWhileShooting",
+          {"enemyDamage": {
+            "enemy": "Pink Space Pirate (standing)",
+            "type": "contact",
+            "hits": 1
+          }},
+          {"enemyKill": {
+            "enemies": [["Pink Space Pirate (standing)"]],
+            "explicitWeapons": ["Plasma"]
+          }}
+        ]},
+        {"or": [
+          "canTrickyJump",
+          {"enemyDamage": {
+            "enemy": "Pink Space Pirate (standing)",
+            "type": "contact",
+            "hits": 1
+          }},
+          {"enemyKill": {
+            "enemies": [["Pink Space Pirate (standing)"]],
+            "explicitWeapons": ["Plasma"]
+          }}
+        ]}
+      ],
+      "note": [
+        "The second jump is harder than a normal mid-air springball jump.",
+        "Use either a stationary lateral mid air morph, to gain enough horizontal momentum,",
+        "or a SpringFling to reduce Samus' fall speed as soon as it begins to build up.",
+        "Shooting towards Pirates will cause them to stop in place and not fire back."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [2, 6],
+      "name": "Suitless Water Shinecharge Vertical Spark",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 4.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "canShinechargeMovement",
+        "canDodgeWhileShooting",
+        {"canShineCharge": {"usedTiles": 23, "openEnd": 2}},
+        {"or": [
+          {"shinespark": {"frames": 43, "excessFrames": 9}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 38, "excessFrames": 9}}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Reduce Samus' run speed with a stutter or late dash tap in order to complete the shinecharge in time.",
+        "Spark up and fall onto the platform left of the fish."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 6],
+      "name": "Suitless Water Shinecharge Diagonal Spark",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 4.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        {"canShineCharge": {"usedTiles": 23, "openEnd": 2}},
+        {"or": [
+          {"shinespark": {"frames": 43, "excessFrames": 26}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 38, "excessFrames": 25}}
+          ]}
+        ]},
+        {"or": [
+          {"enemyDamage": {
+            "enemy": "Pink Space Pirate (standing)",
+            "type": "contact",
+            "hits": 1
+          }},
+          {"enemyKill": {
+            "enemies": [["Pink Space Pirate (standing)"]],
+            "explicitWeapons": ["Plasma"]
+          }},
+          "h_pauseAbuseMinimalReserveRefill",
+          {"and": [
+            "canControlShinesparkEnd",
+            "canUseSpeedEchoes",
+            {"resourceAtMost": [{"type": "RegularEnergy", "count": 29}]}
+          ]},
+          {"and": [
+            "canInsaneJump",
+            "canTrickyDodgeEnemies"
+          ]}
+        ]},
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "Ice",
+            "Plasma"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Reduce Samus' run speed with a stutter or late dash tap in order to complete the shinecharge in time.",
+        "With low energy, shinespark diagonally to the middle ledge on the left."
+      ]
+    },
+    {
+      "id": 94,
+      "link": [2, 6],
+      "name": "Suitless Water Shinecharge Vertical Spark (Short Runway)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "canShinechargeMovement",
+        "canDodgeWhileShooting",
+        "canTrickyJump",
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"shinespark": {"frames": 43, "excessFrames": 9}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 38, "excessFrames": 9}}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Start the dash as close to the door transition as possible in order to store the shinespark in time.",
+        "Stand 2 or 3 pixels from the door for run speed to be low enough going into the next room.",
+        "Spark up and fall onto the platform left of the fish."
+      ]
+    },
+    {
+      "id": 95,
+      "link": [2, 6],
+      "name": "Suitless Water Shinecharge Diagonal Spark (Short Runway)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "canTrickyJump",
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"shinespark": {"frames": 43, "excessFrames": 26}},
+          {"and": [
+            "canDodgeWhileShooting",
+            "canMidairShinespark",
+            {"shinespark": {"frames": 38, "excessFrames": 25}}
+          ]}
+        ]},
+        {"or": [
+          {"enemyDamage": {
+            "enemy": "Pink Space Pirate (standing)",
+            "type": "contact",
+            "hits": 1
+          }},
+          {"enemyKill": {
+            "enemies": [["Pink Space Pirate (standing)"]],
+            "explicitWeapons": ["Plasma"]
+          }},
+          "h_pauseAbuseMinimalReserveRefill",
+          {"and": [
+            "canControlShinesparkEnd",
+            "canUseSpeedEchoes",
+            {"resourceAtMost": [{"type": "RegularEnergy", "count": 29}]}
+          ]},
+          {"and": [
+            "canInsaneJump",
+            "canTrickyDodgeEnemies"
+          ]}
+        ]},
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "Ice",
+            "Plasma"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Start the dash as close to the door transition as possible in order to store the shinespark in time.",
+        "Stand 2 or 3 pixels from the door for run speed to be low enough going into the next room.",
+        "With low energy, shinespark diagonally to the middle ledge on the left."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [3, 1],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "canPrepareForNextRoom"
+        ]},
+        "canHorizontalShinespark",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 15},
+            {"shinespark": {"frames": 73}}
+          ]},
+          {"and": [
+            "canSuitlessMaridia",
+            {"shineChargeFrames": 25},
+            {"shinespark": {"frames": 92, "excessFrames": 12}}
+          ]},
+          {"and": [
+            "canSuitlessMaridia",
+            "canControlShinesparkEnd",
+            {"shineChargeFrames": 25},
+            {"shinespark": {"frames": 92, "excessFrames": 33}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Spark horizontally and fall to the bottom left door.",
+        "Note that it is possible to spark with less Energy while avoiding the Skultera if starting with a precise amount of Energy:",
+        "When sparking from the left side of the platform, spark with between 88 and 103 Energy while suitless."
+      ],
+      "devNote": "The variant with canControlShinesparkEnd could end at 5, but it would require other items to go to 4, which would no longer make this useful."
+    },
+    {
+      "id": 44,
+      "link": [3, 3],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 24, "openEnd": 1}},
+        "canLongChainTemporaryBlue",
+        "canGravityJump",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "any"
+        }
+      },
+      "note": [
+        "Use the runway at the bottom-right side of the room to gain temporary blue.",
+        "Use Gravity jumps to navigate the room, chaining temporary blue through the door."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [3, 3],
+      "name": "Carry G-Mode Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 46,
+      "link": [3, 3],
+      "name": "Carry G-Mode Morph Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          {"and": [
+            "h_artificialMorphIBJ",
+            "Gravity"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "Gravity"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 132,
+      "link": [3, 3],
+      "name": "Carry G-Mode Back Up, Bomb Into Spring Ball Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphUnderwaterBombIntoSpringBallJump"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "note": [
+        "Pause and jump just before the fade out finishes. Turn off Spring Ball and place a Bomb just above where Samus' head would be if standing.",
+        "Pause again between 23-25 frames later and equip Spring Ball; Samus has a three frame window where she has upward momentum from the Bomb and can jump again.",
+        "The positioning of the Bomb is quite lenient, with an 11 frame window for where it can be placed.",
+        "Unmorph at the top of the jump to touch the transition blocks."
+      ]
+    },
+    {
+      "id": 47,
+      "link": [3, 7],
+      "name": "Base",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": []
+    },
+    {
+      "id": 48,
+      "link": [4, 1],
+      "name": "Base",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": []
+    },
+    {
+      "id": 96,
+      "link": [4, 1],
+      "name": "Come In Shinecharged Jumping, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinechargedJumping": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 125},
+        {"shinespark": {"frames": 7, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: model the need to enter spinning; for now, extra shinecharge frames are included to compensate."
+      ]
+    },
+    {
+      "id": 49,
+      "link": [4, 4],
+      "name": "Carry G-Mode Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "canGravityJump",
+          {"and": [
+            "Gravity",
+            {"or": [
+              "canConsecutiveWalljump",
+              "SpaceJump",
+              "canLongIBJ",
+              {"and": [
+                "HiJump",
+                "canWalljump"
+              ]},
+              {"and": [
+                "HiJump",
+                "canTrickyDashJump",
+                "canDownGrab"
+              ]},
+              "h_maxHeightSpringBallJump",
+              {"and": [
+                "HiJump",
+                "canSpringBallJumpMidAir"
+              ]}
+            ]}
+          ]},
+          {"and": [
+            "Gravity",
+            "canUseFrozenEnemies",
+            {"or": [
+              "canWalljump",
+              {"and": [
+                "HiJump",
+                "SpeedBooster"
+              ]},
+              "canSpringBallJumpMidAir"
+            ]}
+          ]},
+          "h_doubleSpringBallJumpWithHiJump",
+          {"and": [
+            "canSuitlessMaridia",
+            "canTrickyUseFrozenEnemies",
+            "HiJump",
+            "canTrickySpringBallJump"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 50,
+      "link": [4, 4],
+      "name": "Carry G-Mode Morph Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          {"and": [
+            "canGravityJump",
+            "h_artificialMorphSpringBall"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 51,
+      "link": [4, 4],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 24, "openEnd": 1}},
+        "canChainTemporaryBlue",
+        "canGravityJump"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "left"
+        }
+      },
+      "note": [
+        "Use the runway at the bottom-right side of the room to gain temporary blue.",
+        "Use Gravity jumps to navigate to the left, chaining temporary blue through the door."
+      ],
+      "devNote": [
+        "FIXME: A suitless version of this can be possible (coming in from node 2) with Spring Ball;",
+        "but it requires some space to the left of the door in the room above, e.g. it won't work with the vanilla connection, and we would need some way to model that."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [4, 5],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        "h_navigateUnderwater",
+        "canPrepareForNextRoom",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 3, "excessFrames": 0}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Requires Samus to enter in a state that can diagonally spark immediately.",
+      "devNote": [
+        "FIXME: The requirement to be in a pose that can spark immediately may not align with the exit condition in the other room.",
+        "We need a way to make this requirement explicit and take it into account."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [4, 5],
+      "name": "Room Entry Fall onto Frozen Fish",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        {"notable": "Room Entry Fall onto Frozen Fish"},
+        "h_navigateUnderwater",
+        "canPrepareForNextRoom",
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          {"and": [
+            "Wave",
+            "Plasma"
+          ]},
+          {"and": [
+            "Plasma",
+            "Charge"
+          ]},
+          {"and": [
+            "Wave",
+            "Spazer",
+            "Charge"
+          ]}
+        ]}
+      ],
+      "note": "Enter on the left side of the door while aiming down and freeze the fish immediately."
+    },
+    {
+      "id": 54,
+      "link": [4, 5],
+      "name": "Damage Boost",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "Gravity",
+        "canHorizontalDamageBoost",
+        "canPrepareForNextRoom",
+        {"enemyDamage": {"enemy": "Skultera", "type": "contact", "hits": 1}}
+      ],
+      "note": "Enter on the left side of the door in order to land on the fish, then Damage Boost to reach the ledge on the right."
+    },
+    {
+      "id": 55,
+      "link": [4, 5],
+      "name": "Room Entry Reset Fall Speed",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        {"notable": "Room Entry Reset Fall Speed"},
+        "canSuitlessMaridia",
+        "canResetFallSpeed",
+        "canPrepareForNextRoom"
+      ],
+      "note": [
+        "Morph and unmorph before reaching the transition, and then drift to the ledge.",
+        "Enter the room as far right as possible."
+      ],
+      "devNote": "FIXME: An enemy can hit Samus where she would unmorph as a way to perform this strat without Morph."
+    },
+    {
+      "id": 56,
+      "link": [4, 5],
+      "name": "Wall Jump Entry",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        {"notable": "Wall Jump Entry"},
+        "canSuitlessMaridia",
+        "canPreciseWalljump",
+        "canPrepareForNextRoom",
+        "canMidairWiggle",
+        "canCarefulJump"
+      ],
+      "note": [
+        "Wall jump in the room above, on the right wall of the doorway, immediately before the door transition.",
+        "To get to the ledge: If the room above has normal physics, hold right in this room. If the room above has water physics, shoot to break spin while holding right in this room."
+      ],
+      "detailNote": [
+        "Wall jumping expands Samus' hitbox vertically, making it possible to trigger the door transition with upward momentum.",
+        "Failing this trick will likely result in a soft lock."
+      ],
+      "devNote": [
+        "Strat starts before entering this transition.",
+        "FIXME: The midair wiggle is only needed if the room above has water physics. That's not something in the logic for vertical doors currently. Also if the room above is heated, these may require some heat frames to set up."
+      ]
+    },
+    {
+      "id": 113,
+      "link": [4, 5],
+      "name": "Wall Jump Entry (Through Toilet)",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "yes"
+      },
+      "requires": [
+        {"notable": "Wall Jump Entry"},
+        "canSuitlessMaridia",
+        "canPreciseWalljump",
+        "canPrepareForNextRoom",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Wall jump in the room above, on the left wall of the doorway, immediately before the door transition.",
+        "If entering from an air room above, simply hold right and jump to reach the ledge.",
+        "If entering from a water room above, release jump (while still holding right) when Samus is about to reach the ledge,",
+        "to reduce Samus' hitbox vertically by changing her pose from wall jumping to spin jumping."
+      ],
+      "detailNote": [
+        "Wall jumping expands Samus' hitbox vertically, making it possible to trigger the door transition with upward momentum.",
+        "Even though the wall jumping and spin jumping animations look the same, their hitbox is drastically different.",
+        "Passing through the Toilet centers Samus horizontally in the doorway.",
+        "Failing this trick will likely result in a soft lock."
+      ],
+      "devNote": ["Strat starts before entering this transition."]
+    },
+    {
+      "id": 89,
+      "link": [4, 5],
+      "name": "Use Flash Suit",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 2, "excessFrames": 2}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 90,
+      "link": [4, 5],
+      "name": "Use Flash Suit, Toilet Entry",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "yes"
+      },
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 4, "excessFrames": 2}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 57,
+      "link": [4, 5],
+      "name": "G-Mode Morph IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Kill or dodge the fish by the top left door."
+    },
+    {
+      "id": 102,
+      "link": [4, 5],
+      "name": "G-Mode Morph, Double Spring Ball Jump onto Frozen Fish",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"notable": "Artificial Morph, Double Spring Ball Jump onto Frozen Fish"},
+        "canComplexGMode",
+        "h_artificialMorphDoubleSpringBallJump",
+        "canInsaneJump",
+        "canTrickyUseFrozenEnemies",
+        "canDownGrab",
+        {"or": [
+          {"and": [
+            "Plasma",
+            "Wave"
+          ]},
+          {"and": [
+            "h_artificialMorphPowerBomb",
+            "Plasma"
+          ]},
+          {"and": [
+            "h_artificialMorphPowerBomb",
+            "Wave",
+            "Spazer"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Double Spring Ball jump while artificially morphed and quickly unmorph and freeze the fish before landing on it.",
+        "The required positioning of the fish is fairly precise; aim for it to be at the lowest point a few tiles from the right wall,",
+        "or one tile from the right wall where Samus has more time to press against it.",
+        "Down grabbing onto the fish makes this significantly easier.",
+        "The fish should be frozen in one hit, this requires Plasma and Wave or a single Power Bomb hit and Plasma or Wave and Spazer.",
+        "With Plasma, it is tricky to freeze the fish without killing it; avoid shooting it horizontally.",
+        "The positioning of a Power Bomb, is fairly lenient, but will always hit the fish once if placed a couple tiles below the peak of a normal Spring Ball + HiJump."
+      ]
+    },
+    {
+      "id": 58,
+      "link": [4, 7],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        "Gravity",
+        "canPrepareForNextRoom",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 70, "excessFrames": 16}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Immediately spark after the door transition into the wall just to the right of the top right door."
+    },
+    {
+      "id": 59,
+      "link": [4, 7],
+      "name": "Suitless Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        "canSuitlessMaridia",
+        "canPrepareForNextRoom",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 88, "excessFrames": 21}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Immediately spark after the door transition into the wall just to the right of the top right door."
+    },
+    {
+      "id": 61,
+      "link": [5, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 62,
+      "link": [5, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]},
+          {"and": [
+            "canPreciseWalljump",
+            "canConsecutiveWalljump"
+          ]},
+          "SpaceJump",
+          "canUseFrozenEnemies"
+        ]}
+      ]
+    },
+    {
+      "id": 63,
+      "link": [5, 4],
+      "name": "Suitless Frozen Fish",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies",
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 64,
+      "link": [5, 4],
+      "name": "Rolling Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "h_useSpringBall"
+      ]
+    },
+    {
+      "id": 65,
+      "link": [5, 4],
+      "name": "Top Left Direct Jump with Gravity",
+      "requires": [
+        {"notable": "Top Left Direct Jump"},
+        "Gravity",
+        "canTrickyJump"
+      ],
+      "note": "Build up run speed and jump at the last moment to reach the door."
+    },
+    {
+      "id": 66,
+      "link": [5, 4],
+      "name": "Top Left Direct Suitless HiJump",
+      "requires": [
+        {"notable": "Top Left Direct Jump"},
+        "canSuitlessMaridia",
+        "HiJump",
+        "canTrickyJump",
+        {"or": [
+          "canFlatleyJump",
+          "canMomentumConservingTurnaround"
+        ]}
+      ],
+      "note": [
+        "Jump towards the door with HiJump equipped.",
+        "A Flatley style jump can position Samus over the edge of the ledge, closer to the door.",
+        "Turning around while facing down, just before touching the ceiling, is another way to move Samus a few pixels closer to the door."
+      ]
+    },
+    {
+      "id": 67,
+      "link": [5, 4],
+      "name": "Top Left Direct Suitless Springball Jump",
+      "requires": [
+        {"notable": "Top Left Direct Jump"},
+        "canSuitlessMaridia",
+        "canTrickySpringBallJump",
+        {"or": [
+          "canTrickyJump",
+          "canStationaryLateralMidAirMorph"
+        ]}
+      ],
+      "note": [
+        "Jump towards the door with a Springball Jump, jumping as late as possible.",
+        "A Flatley style jump can position Samus over the edge of the ledge, closer to the door, allowing for an earlier Springball jump.",
+        "The slight fall from a Flatley Jump helps with the Springball jump, but then Samus must unmorph to extend her hitbox to touch the transition.",
+        "A Stationary Lateral MidAir Morph also helps with this jump.",
+        "Unmorphing after a missed jump can return Samus to the ledge to try again."
+      ]
+    },
+    {
+      "id": 91,
+      "link": [5, 4],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 3, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 68,
+      "link": [5, 5],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 69,
+      "link": [5, 6],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 70,
+      "link": [6, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 71,
+      "link": [6, 5],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Gravity",
+          "HiJump"
+        ]}
+      ]
+    },
+    {
+      "id": 72,
+      "link": [6, 5],
+      "name": "Suitless Spring Ball",
+      "requires": [
+        "canSuitlessMaridia",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 73,
+      "link": [6, 5],
+      "name": "Suitless With Ice",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        "canTrickyUseFrozenEnemies"
+      ],
+      "note": [
+        "Freeze the fish a bit left of the peak in its swim cycle.",
+        "Build run speed on top of the fish before jumping to the ledge.",
+        "The positioning is more lenient if the fish is frozen while moving leftward."
+      ]
+    },
+    {
+      "id": 129,
+      "link": [6, 6],
+      "name": "Skultera Farm (All Skulteras)",
+      "requires": [
+        "Gravity",
+        "canConsecutiveWalljump",
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [3]}},
+            {"cycleFrames": 1300}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 1540}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [4]}},
+            "canPreciseWalljump",
+            {"cycleFrames": 1690}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 1890}
+          ]}
+        ]},
+        {"or": [
+          "Plasma",
+          "ScrewAttack",
+          {"and": [
+            "Wave",
+            {"cycleFrames": 365}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 480}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 1250}
+          ]},
+          {"cycleFrames": 1685}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Skultera", "count": 4}],
+      "devNote": [
+        "Farming Skulteras with Plasma or Screw Attack is included for completeness,",
+        "though with these items it would be better to farm the Pirates.",
+        "FIXME: there are other, slower ways to farm here, e.g. without Gravity."
+      ]
+    },
+    {
+      "id": 74,
+      "link": [6, 6],
+      "name": "Pirate Farm (All Pirates)",
+      "requires": [
+        "Gravity",
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [3]}},
+            {"cycleFrames": 950}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 1260}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [4]}},
+            "canPreciseWalljump",
+            {"cycleFrames": 1440}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            "canConsecutiveWalljump",
+            {"cycleFrames": 1600}
+          ]}
+        ]},
+        {"or": [
+          "canWalljump",
+          {"cycleFrames": 90}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 150}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Pink Space Pirate (standing)", "count": 4}],
+      "devNote": ["FIXME: there are other, slower ways to farm here, e.g. without Gravity."]
+    },
+    {
+      "id": 75,
+      "link": [6, 7],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canIBJ",
+          "canGravityJump",
+          "canCarefulJump",
+          "canSpringBallJumpMidAir",
+          {"enemyDamage": {
+            "enemy": "Pink Space Pirate (standing)",
+            "type": "contact",
+            "hits": 1
+          }},
+          {"enemyKill": {
+            "enemies": [["Pink Space Pirate (standing)"]],
+            "explicitWeapons": ["Plasma", "ScrewAttack"]
+          }}
+        ]}
+      ]
+    },
+    {
+      "id": 76,
+      "link": [6, 7],
+      "name": "Suitless HiJump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canCarefulJump",
+        "HiJump"
+      ]
+    },
+    {
+      "id": 77,
+      "link": [6, 7],
+      "name": "Suitless Springball",
+      "requires": [
+        "canSuitlessMaridia",
+        "canCarefulJump",
+        "canSpringBallJumpMidAir",
+        {"or": [
+          "canTrickyJump",
+          "canStationaryLateralMidAirMorph",
+          "canSpringFling"
+        ]}
+      ]
+    },
+    {
+      "id": 78,
+      "link": [6, 7],
+      "name": "Insane Naked Jump Over Pirate (Left to Right)",
+      "requires": [
+        "canSuitlessMaridia",
+        "canInsaneJump"
+      ],
+      "note": "This is particularly precise, and requires subpixel precision.",
+      "devNote": "This is only useful if Samus is going to unlock the right door for later use, or with a flash suit to escape the room."
+    },
+    {
+      "id": 79,
+      "link": [6, 7],
+      "name": "Suitless Frozen Pirate",
+      "requires": [
+        "canSuitlessMaridia",
+        "Plasma",
+        "canUseFrozenEnemies"
+      ]
+    },
+    {
+      "id": 80,
+      "link": [7, 3],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 81,
+      "link": [7, 3],
+      "name": "Suitless",
+      "requires": [
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 92,
+      "link": [7, 3],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 3, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 82,
+      "link": [7, 6],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          "canDodgeWhileShooting",
+          "canGravityJump",
+          "canCrouchJump",
+          "canDownGrab",
+          {"enemyDamage": {
+            "enemy": "Pink Space Pirate (standing)",
+            "type": "contact",
+            "hits": 1
+          }},
+          {"enemyKill": {
+            "enemies": [["Pink Space Pirate (standing)"]],
+            "explicitWeapons": ["Plasma"]
+          }}
+        ]}
+      ]
+    },
+    {
+      "id": 97,
+      "link": [7, 6],
+      "name": "Suitless Jump Assist",
+      "requires": [
+        "canSuitlessMaridia",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"or": [
+              "h_crouchJumpDownGrab",
+              "canSpringBallJumpMidAir",
+              "canDodgeWhileShooting"
+            ]}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            "h_crouchJumpDownGrab"
+          ]}
+        ]}
+      ],
+      "note": [
+        "It is possible to land on the platform with the pirate when it is facing away and shaking its head.",
+        "Then quickly jump away or continuously shoot the pirate to prevent it from shooting."
+      ]
+    },
+    {
+      "id": 98,
+      "link": [7, 6],
+      "name": "Suitless Pirate Tank",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseIFrames",
+        {"enemyDamage": {
+          "enemy": "Pink Space Pirate (standing)",
+          "type": "contact",
+          "hits": 1
+        }},
+        {"or": [
+          "HiJump",
+          "h_crouchJumpDownGrab",
+          {"and": [
+            "canTrickyJump",
+            "canTrickySpringBallJump"
+          ]}
+        ]}
+      ],
+      "note": "Tank the pirate then quickly crouch jump and down grab or use HiJump to get to the ledge."
+    },
+    {
+      "id": 99,
+      "link": [7, 6],
+      "name": "Suitless Plasma",
+      "requires": [
+        "canSuitlessMaridia",
+        "Plasma",
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "h_crouchJumpDownGrab",
+          "canUseFrozenEnemies"
+        ]}
+      ],
+      "note": "Kill or freeze the pirate then crouch jump and down grab or use another method to get to the ledge."
+    },
+    {
+      "id": 100,
+      "link": [7, 6],
+      "name": "Suitless Bootless",
+      "requires": [
+        "canSuitlessMaridia",
+        "canCarefulJump",
+        {"disableEquipment": "HiJump"},
+        {"disableEquipment": "Gravity"}
+      ],
+      "note": "Carefully jump over the pirate and onto the next ledge. The jump requires both Gravity and HiJump to be unequipped."
+    },
+    {
+      "id": 83,
+      "link": [7, 7],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Top Left Direct Jump",
+      "note": [
+        "Jump into the top left door from the nearby ledge using one of Gravity, HiJump, or SpringBall.",
+        "This requires a very precise jump from the very edge of the ledge and risks falling into the Bottom-Left pit which may be difficult to climb back from."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Grapple Teleport into Grapple Jump",
+      "note": ["Swing to the right, shoot open the door above, and grapple jump through it."]
+    },
+    {
+      "id": 4,
+      "name": "Room Entry Fall onto Frozen Fish",
+      "note": "Enter on the left side of the door while aiming down and freeze the fish immediately."
+    },
+    {
+      "id": 5,
+      "name": "Room Entry Reset Fall Speed",
+      "note": [
+        "Morph and unmorph before reaching the transition, and then drift to the ledge.",
+        "Enter the room as far right as possible."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Wall Jump Entry",
+      "note": [
+        "Wall jump in the room above, on the right wall of the doorway, immdiately before the door transition. Failure will likely result in a soft lock.",
+        "To get to the ledge: If the room above has normal physics, hold right in this room. If the room above has water physics, shoot to break spin while holding right in this room."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Artificial Morph, Double Spring Ball Jump onto Frozen Fish",
+      "note": [
+        "Double Spring Ball jump while artificially morphed and quickly unmorph and freeze the fish before landing on it.",
+        "The required positioning of the fish is fairly precise; aim for it to be at the lowest point a few tiles from the right wall,",
+        "or one tile from the right wall where Samus has more time to press against it.",
+        "Down grabbing onto the fish makes this significantly easier.",
+        "The fish should be frozen in one hit, requiring a strong beam which can be supplemented by a single Power Bomb hit.",
+        "With Plasma, it is tricky to freeze the fish without killing it - avoid shooting it horizontally."
+      ]
+    }
+  ],
+  "nextStratId": 133,
+  "nextNotableId": 9,
+  "devNote": [
+    "FIXME: node 4 should have 'implicitLeaveNormally'/'implicitUnlocksDoors' false."
+  ]
+}

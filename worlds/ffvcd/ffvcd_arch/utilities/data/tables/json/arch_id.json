@@ -1,0 +1,2537 @@
+{
+    "100": {
+        "name": "Knight Crystal",
+        "item_type": "Crystal",
+        "item_id": "00"
+    },
+    "101": {
+        "name": "Monk Crystal",
+        "item_type": "Crystal",
+        "item_id": "01"
+    },
+    "102": {
+        "name": "Thief Crystal",
+        "item_type": "Crystal",
+        "item_id": "02"
+    },
+    "103": {
+        "name": "Dragoon Crystal",
+        "item_type": "Crystal",
+        "item_id": "03"
+    },
+    "104": {
+        "name": "Ninja Crystal",
+        "item_type": "Crystal",
+        "item_id": "04"
+    },
+    "105": {
+        "name": "Samurai Crystal",
+        "item_type": "Crystal",
+        "item_id": "05"
+    },
+    "106": {
+        "name": "Berserker Crystal",
+        "item_type": "Crystal",
+        "item_id": "06"
+    },
+    "107": {
+        "name": "Hunter Crystal",
+        "item_type": "Crystal",
+        "item_id": "07"
+    },
+    "108": {
+        "name": "MysticKnight Crystal",
+        "item_type": "Crystal",
+        "item_id": "08"
+    },
+    "109": {
+        "name": "WhiteMage Crystal",
+        "item_type": "Crystal",
+        "item_id": "09"
+    },
+    "110": {
+        "name": "BlackMage Crystal",
+        "item_type": "Crystal",
+        "item_id": "0A"
+    },
+    "111": {
+        "name": "TimeMage Crystal",
+        "item_type": "Crystal",
+        "item_id": "0B"
+    },
+    "112": {
+        "name": "Summoner Crystal",
+        "item_type": "Crystal",
+        "item_id": "0C"
+    },
+    "113": {
+        "name": "BlueMage Crystal",
+        "item_type": "Crystal",
+        "item_id": "0D"
+    },
+    "114": {
+        "name": "RedMage Crystal",
+        "item_type": "Crystal",
+        "item_id": "0E"
+    },
+    "115": {
+        "name": "Trainer Crystal",
+        "item_type": "Crystal",
+        "item_id": "0F"
+    },
+    "116": {
+        "name": "Chemist Crystal",
+        "item_type": "Crystal",
+        "item_id": "10"
+    },
+    "117": {
+        "name": "Geomancer Crystal",
+        "item_type": "Crystal",
+        "item_id": "11"
+    },
+    "118": {
+        "name": "Bard Crystal",
+        "item_type": "Crystal",
+        "item_id": "12"
+    },
+    "119": {
+        "name": "Dancer Crystal",
+        "item_type": "Crystal",
+        "item_id": "13"
+    },
+    "120": {
+        "name": "Mimic Crystal",
+        "item_type": "Crystal",
+        "item_id": "14"
+    },
+    "121": {
+        "name": "Freelancer Crystal",
+        "item_type": "Crystal",
+        "item_id": "15"
+    },
+    "200": {
+        "name": "Fire Sword Magic",
+        "item_type": "Magic",
+        "item_id": "00"
+    },
+    "201": {
+        "name": "Ice Sword Magic",
+        "item_type": "Magic",
+        "item_id": "01"
+    },
+    "202": {
+        "name": "Bolt Sword Magic",
+        "item_type": "Magic",
+        "item_id": "02"
+    },
+    "203": {
+        "name": "Venom Sword Magic",
+        "item_type": "Magic",
+        "item_id": "03"
+    },
+    "204": {
+        "name": "Mute Sword Magic",
+        "item_type": "Magic",
+        "item_id": "04"
+    },
+    "205": {
+        "name": "Sleep Sword Magic",
+        "item_type": "Magic",
+        "item_id": "05"
+    },
+    "206": {
+        "name": "Fire2 Sword Magic",
+        "item_type": "Magic",
+        "item_id": "06"
+    },
+    "207": {
+        "name": "Ice2 Sword Magic",
+        "item_type": "Magic",
+        "item_id": "07"
+    },
+    "208": {
+        "name": "Bolt2 Sword Magic",
+        "item_type": "Magic",
+        "item_id": "08"
+    },
+    "209": {
+        "name": "Drain Sword Magic",
+        "item_type": "Magic",
+        "item_id": "09"
+    },
+    "210": {
+        "name": "Break Sword Magic",
+        "item_type": "Magic",
+        "item_id": "0A"
+    },
+    "211": {
+        "name": "Bio Sword Magic",
+        "item_type": "Magic",
+        "item_id": "0B"
+    },
+    "212": {
+        "name": "Fire3 Sword Magic",
+        "item_type": "Magic",
+        "item_id": "0C"
+    },
+    "213": {
+        "name": "Ice3 Sword Magic",
+        "item_type": "Magic",
+        "item_id": "0D"
+    },
+    "214": {
+        "name": "Bolt3 Sword Magic",
+        "item_type": "Magic",
+        "item_id": "0E"
+    },
+    "215": {
+        "name": "Holy Sword Magic",
+        "item_type": "Magic",
+        "item_id": "0F"
+    },
+    "216": {
+        "name": "Flare Sword Magic",
+        "item_type": "Magic",
+        "item_id": "10"
+    },
+    "217": {
+        "name": "Psych Sword Magic",
+        "item_type": "Magic",
+        "item_id": "11"
+    },
+    "218": {
+        "name": "Cure White Magic",
+        "item_type": "Magic",
+        "item_id": "12"
+    },
+    "219": {
+        "name": "Scan White Magic",
+        "item_type": "Magic",
+        "item_id": "13"
+    },
+    "220": {
+        "name": "Antdt White Magic",
+        "item_type": "Magic",
+        "item_id": "14"
+    },
+    "221": {
+        "name": "Mute White Magic",
+        "item_type": "Magic",
+        "item_id": "15"
+    },
+    "222": {
+        "name": "Armor White Magic",
+        "item_type": "Magic",
+        "item_id": "16"
+    },
+    "223": {
+        "name": "Size White Magic",
+        "item_type": "Magic",
+        "item_id": "17"
+    },
+    "224": {
+        "name": "Cure2 White Magic",
+        "item_type": "Magic",
+        "item_id": "18"
+    },
+    "225": {
+        "name": "Life White Magic",
+        "item_type": "Magic",
+        "item_id": "19"
+    },
+    "226": {
+        "name": "Charm White Magic",
+        "item_type": "Magic",
+        "item_id": "1A"
+    },
+    "227": {
+        "name": "Image White Magic",
+        "item_type": "Magic",
+        "item_id": "1B"
+    },
+    "228": {
+        "name": "Shell White Magic",
+        "item_type": "Magic",
+        "item_id": "1C"
+    },
+    "229": {
+        "name": "Heal White Magic",
+        "item_type": "Magic",
+        "item_id": "1D"
+    },
+    "230": {
+        "name": "Cure3 White Magic",
+        "item_type": "Magic",
+        "item_id": "1E"
+    },
+    "231": {
+        "name": "Wall White Magic",
+        "item_type": "Magic",
+        "item_id": "1F"
+    },
+    "232": {
+        "name": "Bersk White Magic",
+        "item_type": "Magic",
+        "item_id": "20"
+    },
+    "233": {
+        "name": "Life2 White Magic",
+        "item_type": "Magic",
+        "item_id": "21"
+    },
+    "234": {
+        "name": "Holy White Magic",
+        "item_type": "Magic",
+        "item_id": "22"
+    },
+    "235": {
+        "name": "Dispel White Magic",
+        "item_type": "Magic",
+        "item_id": "23"
+    },
+    "236": {
+        "name": "Fire Black Magic",
+        "item_type": "Magic",
+        "item_id": "24"
+    },
+    "237": {
+        "name": "Ice Black Magic",
+        "item_type": "Magic",
+        "item_id": "25"
+    },
+    "238": {
+        "name": "Bolt Black Magic",
+        "item_type": "Magic",
+        "item_id": "26"
+    },
+    "239": {
+        "name": "Venom Black Magic",
+        "item_type": "Magic",
+        "item_id": "27"
+    },
+    "240": {
+        "name": "Sleep Black Magic",
+        "item_type": "Magic",
+        "item_id": "28"
+    },
+    "241": {
+        "name": "Toad Black Magic",
+        "item_type": "Magic",
+        "item_id": "29"
+    },
+    "242": {
+        "name": "Fire2 Black Magic",
+        "item_type": "Magic",
+        "item_id": "2A"
+    },
+    "243": {
+        "name": "Ice2 Black Magic",
+        "item_type": "Magic",
+        "item_id": "2B"
+    },
+    "244": {
+        "name": "Bolt2 Black Magic",
+        "item_type": "Magic",
+        "item_id": "2C"
+    },
+    "245": {
+        "name": "Drain Black Magic",
+        "item_type": "Magic",
+        "item_id": "2D"
+    },
+    "246": {
+        "name": "Break Black Magic",
+        "item_type": "Magic",
+        "item_id": "2E"
+    },
+    "247": {
+        "name": "Bio Black Magic",
+        "item_type": "Magic",
+        "item_id": "2F"
+    },
+    "248": {
+        "name": "Fire3 Black Magic",
+        "item_type": "Magic",
+        "item_id": "30"
+    },
+    "249": {
+        "name": "Ice3 Black Magic",
+        "item_type": "Magic",
+        "item_id": "31"
+    },
+    "250": {
+        "name": "Bolt3 Black Magic",
+        "item_type": "Magic",
+        "item_id": "32"
+    },
+    "251": {
+        "name": "Flare Black Magic",
+        "item_type": "Magic",
+        "item_id": "33"
+    },
+    "252": {
+        "name": "Doom Black Magic",
+        "item_type": "Magic",
+        "item_id": "34"
+    },
+    "253": {
+        "name": "Psych Black Magic",
+        "item_type": "Magic",
+        "item_id": "35"
+    },
+    "254": {
+        "name": "Drag Time Magic",
+        "item_type": "Magic",
+        "item_id": "36"
+    },
+    "255": {
+        "name": "Slow Time Magic",
+        "item_type": "Magic",
+        "item_id": "37"
+    },
+    "256": {
+        "name": "Regen Time Magic",
+        "item_type": "Magic",
+        "item_id": "38"
+    },
+    "257": {
+        "name": "Void Time Magic",
+        "item_type": "Magic",
+        "item_id": "39"
+    },
+    "258": {
+        "name": "Haste Time Magic",
+        "item_type": "Magic",
+        "item_id": "3A"
+    },
+    "259": {
+        "name": "Float Time Magic",
+        "item_type": "Magic",
+        "item_id": "3B"
+    },
+    "260": {
+        "name": "Demi Time Magic",
+        "item_type": "Magic",
+        "item_id": "3C"
+    },
+    "261": {
+        "name": "Stop Time Magic",
+        "item_type": "Magic",
+        "item_id": "3D"
+    },
+    "262": {
+        "name": "Exit Time Magic",
+        "item_type": "Magic",
+        "item_id": "3E"
+    },
+    "263": {
+        "name": "Comet Time Magic",
+        "item_type": "Magic",
+        "item_id": "3F"
+    },
+    "264": {
+        "name": "Slow2 Time Magic",
+        "item_type": "Magic",
+        "item_id": "40"
+    },
+    "265": {
+        "name": "Reset Time Magic",
+        "item_type": "Magic",
+        "item_id": "41"
+    },
+    "266": {
+        "name": "Qrter Time Magic",
+        "item_type": "Magic",
+        "item_id": "42"
+    },
+    "267": {
+        "name": "Hast2 Time Magic",
+        "item_type": "Magic",
+        "item_id": "43"
+    },
+    "268": {
+        "name": "Old Time Magic",
+        "item_type": "Magic",
+        "item_id": "44"
+    },
+    "269": {
+        "name": "Meteo Time Magic",
+        "item_type": "Magic",
+        "item_id": "45"
+    },
+    "270": {
+        "name": "Quick Time Magic",
+        "item_type": "Magic",
+        "item_id": "46"
+    },
+    "271": {
+        "name": "Xzone Time Magic",
+        "item_type": "Magic",
+        "item_id": "47"
+    },
+    "272": {
+        "name": "Chocob Esper Magic",
+        "item_type": "Magic",
+        "item_id": "48"
+    },
+    "273": {
+        "name": "Sylph Esper Magic",
+        "item_type": "Magic",
+        "item_id": "49"
+    },
+    "274": {
+        "name": "Remora Esper Magic",
+        "item_type": "Magic",
+        "item_id": "4A"
+    },
+    "275": {
+        "name": "Shiva Esper Magic",
+        "item_type": "Magic",
+        "item_id": "4B"
+    },
+    "276": {
+        "name": "Ramuh Esper Magic",
+        "item_type": "Magic",
+        "item_id": "4C"
+    },
+    "277": {
+        "name": "Ifrit Esper Magic",
+        "item_type": "Magic",
+        "item_id": "4D"
+    },
+    "278": {
+        "name": "Titan Esper Magic",
+        "item_type": "Magic",
+        "item_id": "4E"
+    },
+    "279": {
+        "name": "Golem Esper Magic",
+        "item_type": "Magic",
+        "item_id": "4F"
+    },
+    "280": {
+        "name": "Shoat Esper Magic",
+        "item_type": "Magic",
+        "item_id": "50"
+    },
+    "281": {
+        "name": "Crbnkl Esper Magic",
+        "item_type": "Magic",
+        "item_id": "51"
+    },
+    "282": {
+        "name": "Syldra Esper Magic",
+        "item_type": "Magic",
+        "item_id": "52"
+    },
+    "283": {
+        "name": "Odin Esper Magic",
+        "item_type": "Magic",
+        "item_id": "53"
+    },
+    "284": {
+        "name": "Phenix Esper Magic",
+        "item_type": "Magic",
+        "item_id": "54"
+    },
+    "285": {
+        "name": "Levia Esper Magic",
+        "item_type": "Magic",
+        "item_id": "55"
+    },
+    "286": {
+        "name": "Bahmut Esper Magic",
+        "item_type": "Magic",
+        "item_id": "56"
+    },
+    "287": {
+        "name": "Power Song Magic",
+        "item_type": "Magic",
+        "item_id": "57"
+    },
+    "288": {
+        "name": "Speed Song Magic",
+        "item_type": "Magic",
+        "item_id": "58"
+    },
+    "289": {
+        "name": "Vitality Song Magic",
+        "item_type": "Magic",
+        "item_id": "59"
+    },
+    "290": {
+        "name": "Magic Song Magic",
+        "item_type": "Magic",
+        "item_id": "5A"
+    },
+    "291": {
+        "name": "Hero Song Magic",
+        "item_type": "Magic",
+        "item_id": "5B"
+    },
+    "292": {
+        "name": "Requiem Song Magic",
+        "item_type": "Magic",
+        "item_id": "5C"
+    },
+    "293": {
+        "name": "Love Song Magic",
+        "item_type": "Magic",
+        "item_id": "5D"
+    },
+    "294": {
+        "name": "Charm Song Magic",
+        "item_type": "Magic",
+        "item_id": "5E"
+    },
+    "295": {
+        "name": "Condemn Blue Magic",
+        "item_type": "Magic",
+        "item_id": "82"
+    },
+    "296": {
+        "name": "Roulette Blue Magic",
+        "item_type": "Magic",
+        "item_id": "83"
+    },
+    "297": {
+        "name": "AquaRake Blue Magic",
+        "item_type": "Magic",
+        "item_id": "84"
+    },
+    "298": {
+        "name": "L5 Doom Blue Magic",
+        "item_type": "Magic",
+        "item_id": "85"
+    },
+    "299": {
+        "name": "L4 Qrter Blue Magic",
+        "item_type": "Magic",
+        "item_id": "86"
+    },
+    "300": {
+        "name": "L2 Old Blue Magic",
+        "item_type": "Magic",
+        "item_id": "87"
+    },
+    "301": {
+        "name": "L3 Flare Blue Magic",
+        "item_type": "Magic",
+        "item_id": "88"
+    },
+    "302": {
+        "name": "FrogSong Blue Magic",
+        "item_type": "Magic",
+        "item_id": "89"
+    },
+    "303": {
+        "name": "TinySong Blue Magic",
+        "item_type": "Magic",
+        "item_id": "8A"
+    },
+    "304": {
+        "name": "Flash Blue Magic",
+        "item_type": "Magic",
+        "item_id": "8B"
+    },
+    "305": {
+        "name": "Time Slip Blue Magic",
+        "item_type": "Magic",
+        "item_id": "8C"
+    },
+    "306": {
+        "name": "MoonFlut Blue Magic",
+        "item_type": "Magic",
+        "item_id": "8D"
+    },
+    "307": {
+        "name": "DethClaw Blue Magic",
+        "item_type": "Magic",
+        "item_id": "8E"
+    },
+    "308": {
+        "name": "Aero Blue Magic",
+        "item_type": "Magic",
+        "item_id": "8F"
+    },
+    "309": {
+        "name": "Aero 2 Blue Magic",
+        "item_type": "Magic",
+        "item_id": "90"
+    },
+    "310": {
+        "name": "Aero 3 Blue Magic",
+        "item_type": "Magic",
+        "item_id": "91"
+    },
+    "311": {
+        "name": "Emission Blue Magic",
+        "item_type": "Magic",
+        "item_id": "92"
+    },
+    "312": {
+        "name": "GblinPnch Blue Magic",
+        "item_type": "Magic",
+        "item_id": "93"
+    },
+    "313": {
+        "name": "DrkShock Blue Magic",
+        "item_type": "Magic",
+        "item_id": "94"
+    },
+    "314": {
+        "name": "GuardOff Blue Magic",
+        "item_type": "Magic",
+        "item_id": "95"
+    },
+    "315": {
+        "name": "Fusion Blue Magic",
+        "item_type": "Magic",
+        "item_id": "96"
+    },
+    "316": {
+        "name": "MindBlst Blue Magic",
+        "item_type": "Magic",
+        "item_id": "97"
+    },
+    "317": {
+        "name": "Vampire Blue Magic",
+        "item_type": "Magic",
+        "item_id": "98"
+    },
+    "318": {
+        "name": "Hammer Blue Magic",
+        "item_type": "Magic",
+        "item_id": "99"
+    },
+    "319": {
+        "name": "BigGuard Blue Magic",
+        "item_type": "Magic",
+        "item_id": "9A"
+    },
+    "320": {
+        "name": "Exploder Blue Magic",
+        "item_type": "Magic",
+        "item_id": "9B"
+    },
+    "321": {
+        "name": "???? Blue Magic",
+        "item_type": "Magic",
+        "item_id": "9C"
+    },
+    "322": {
+        "name": "Blowfish Blue Magic",
+        "item_type": "Magic",
+        "item_id": "9D"
+    },
+    "323": {
+        "name": "WhiteWind Blue Magic",
+        "item_type": "Magic",
+        "item_id": "9E"
+    },
+    "324": {
+        "name": "Missile Blue Magic",
+        "item_type": "Magic",
+        "item_id": "9F"
+    },
+    "400": {
+        "name": "Kick Ability",
+        "item_type": "Ability",
+        "item_id": "06"
+    },
+    "401": {
+        "name": "BuildUp Ability",
+        "item_type": "Ability",
+        "item_id": "07"
+    },
+    "402": {
+        "name": "Mantra Ability",
+        "item_type": "Ability",
+        "item_id": "08"
+    },
+    "403": {
+        "name": "Escape Ability",
+        "item_type": "Ability",
+        "item_id": "09"
+    },
+    "404": {
+        "name": "Steal Ability",
+        "item_type": "Ability",
+        "item_id": "0A"
+    },
+    "405": {
+        "name": "Mug Ability",
+        "item_type": "Ability",
+        "item_id": "0B"
+    },
+    "406": {
+        "name": "Jump Ability",
+        "item_type": "Ability",
+        "item_id": "0C"
+    },
+    "407": {
+        "name": "DrgnSwd Ability",
+        "item_type": "Ability",
+        "item_id": "0D"
+    },
+    "408": {
+        "name": "Smoke Ability",
+        "item_type": "Ability",
+        "item_id": "0E"
+    },
+    "409": {
+        "name": "Image Ability",
+        "item_type": "Ability",
+        "item_id": "0F"
+    },
+    "410": {
+        "name": "Throw Ability",
+        "item_type": "Ability",
+        "item_id": "10"
+    },
+    "411": {
+        "name": "SwdSlap Ability",
+        "item_type": "Ability",
+        "item_id": "11"
+    },
+    "412": {
+        "name": "GilToss Ability",
+        "item_type": "Ability",
+        "item_id": "12"
+    },
+    "413": {
+        "name": "Slash Ability",
+        "item_type": "Ability",
+        "item_id": "13"
+    },
+    "414": {
+        "name": "Animals Ability",
+        "item_type": "Ability",
+        "item_id": "14"
+    },
+    "415": {
+        "name": "Aim Ability",
+        "item_type": "Ability",
+        "item_id": "15"
+    },
+    "416": {
+        "name": "X-Fight Ability",
+        "item_type": "Ability",
+        "item_id": "16"
+    },
+    "417": {
+        "name": "Conjure Ability",
+        "item_type": "Ability",
+        "item_id": "17"
+    },
+    "418": {
+        "name": "Observe Ability",
+        "item_type": "Ability",
+        "item_id": "18"
+    },
+    "419": {
+        "name": "Analyze Ability",
+        "item_type": "Ability",
+        "item_id": "19"
+    },
+    "420": {
+        "name": "Tame Ability",
+        "item_type": "Ability",
+        "item_id": "1A"
+    },
+    "421": {
+        "name": "Control Ability",
+        "item_type": "Ability",
+        "item_id": "1B"
+    },
+    "422": {
+        "name": "Catch Ability",
+        "item_type": "Ability",
+        "item_id": "1C"
+    },
+    "423": {
+        "name": "Mix Ability",
+        "item_type": "Ability",
+        "item_id": "1E"
+    },
+    "424": {
+        "name": "Drink Ability",
+        "item_type": "Ability",
+        "item_id": "1F"
+    },
+    "425": {
+        "name": "Pray Ability",
+        "item_type": "Ability",
+        "item_id": "20"
+    },
+    "426": {
+        "name": "Revive Ability",
+        "item_type": "Ability",
+        "item_id": "21"
+    },
+    "427": {
+        "name": "Terrain Ability",
+        "item_type": "Ability",
+        "item_id": "22"
+    },
+    "428": {
+        "name": "Hide Ability",
+        "item_type": "Ability",
+        "item_id": "24"
+    },
+    "429": {
+        "name": "Sing Ability",
+        "item_type": "Ability",
+        "item_id": "27"
+    },
+    "430": {
+        "name": "Flirt Ability",
+        "item_type": "Ability",
+        "item_id": "28"
+    },
+    "431": {
+        "name": "Dance Ability",
+        "item_type": "Ability",
+        "item_id": "29"
+    },
+    "432": {
+        "name": "Mimic Ability",
+        "item_type": "Ability",
+        "item_id": "2A"
+    },
+    "433": {
+        "name": "MgcSwrd Lv.1 Ability",
+        "item_type": "Ability",
+        "item_id": "30"
+    },
+    "434": {
+        "name": "MgcSwrd Lv.2 Ability",
+        "item_type": "Ability",
+        "item_id": "31"
+    },
+    "435": {
+        "name": "MgcSwrd Lv.3 Ability",
+        "item_type": "Ability",
+        "item_id": "32"
+    },
+    "436": {
+        "name": "MgcSwrd Lv.4 Ability",
+        "item_type": "Ability",
+        "item_id": "33"
+    },
+    "437": {
+        "name": "MgcSwrd Lv.5 Ability",
+        "item_type": "Ability",
+        "item_id": "34"
+    },
+    "438": {
+        "name": "MgcSwrd Lv.6 Ability",
+        "item_type": "Ability",
+        "item_id": "35"
+    },
+    "439": {
+        "name": "White Lv.1 Ability",
+        "item_type": "Ability",
+        "item_id": "38"
+    },
+    "440": {
+        "name": "White Lv.2 Ability",
+        "item_type": "Ability",
+        "item_id": "39"
+    },
+    "441": {
+        "name": "White Lv.3 Ability",
+        "item_type": "Ability",
+        "item_id": "3A"
+    },
+    "442": {
+        "name": "White Lv.4 Ability",
+        "item_type": "Ability",
+        "item_id": "3B"
+    },
+    "443": {
+        "name": "White Lv.5 Ability",
+        "item_type": "Ability",
+        "item_id": "3C"
+    },
+    "444": {
+        "name": "White Lv.6 Ability",
+        "item_type": "Ability",
+        "item_id": "3D"
+    },
+    "445": {
+        "name": "Black Lv.1 Ability",
+        "item_type": "Ability",
+        "item_id": "40"
+    },
+    "446": {
+        "name": "Black Lv.2 Ability",
+        "item_type": "Ability",
+        "item_id": "41"
+    },
+    "447": {
+        "name": "Black Lv.3 Ability",
+        "item_type": "Ability",
+        "item_id": "42"
+    },
+    "448": {
+        "name": "Black Lv.4 Ability",
+        "item_type": "Ability",
+        "item_id": "43"
+    },
+    "449": {
+        "name": "Black Lv.5 Ability",
+        "item_type": "Ability",
+        "item_id": "44"
+    },
+    "450": {
+        "name": "Black Lv.6 Ability",
+        "item_type": "Ability",
+        "item_id": "45"
+    },
+    "451": {
+        "name": "Time Lv.1 Ability",
+        "item_type": "Ability",
+        "item_id": "48"
+    },
+    "452": {
+        "name": "Time Lv.2 Ability",
+        "item_type": "Ability",
+        "item_id": "49"
+    },
+    "453": {
+        "name": "Time Lv.3 Ability",
+        "item_type": "Ability",
+        "item_id": "4A"
+    },
+    "454": {
+        "name": "Time Lv.4 Ability",
+        "item_type": "Ability",
+        "item_id": "4B"
+    },
+    "455": {
+        "name": "Time Lv.5 Ability",
+        "item_type": "Ability",
+        "item_id": "4C"
+    },
+    "456": {
+        "name": "Time Lv.6 Ability",
+        "item_type": "Ability",
+        "item_id": "4D"
+    },
+    "457": {
+        "name": "Summon Lv.1 Ability",
+        "item_type": "Ability",
+        "item_id": "50"
+    },
+    "458": {
+        "name": "Summon Lv.2 Ability",
+        "item_type": "Ability",
+        "item_id": "51"
+    },
+    "459": {
+        "name": "Summon Lv.3 Ability",
+        "item_type": "Ability",
+        "item_id": "52"
+    },
+    "460": {
+        "name": "Summon Lv.4 Ability",
+        "item_type": "Ability",
+        "item_id": "53"
+    },
+    "461": {
+        "name": "Summon Lv.5 Ability",
+        "item_type": "Ability",
+        "item_id": "54"
+    },
+    "462": {
+        "name": "Red Lv.1 Ability",
+        "item_type": "Ability",
+        "item_id": "58"
+    },
+    "463": {
+        "name": "Red Lv.2 Ability",
+        "item_type": "Ability",
+        "item_id": "59"
+    },
+    "464": {
+        "name": "Red Lv.3 Ability",
+        "item_type": "Ability",
+        "item_id": "5A"
+    },
+    "465": {
+        "name": "X-Magic Ability",
+        "item_type": "Ability",
+        "item_id": "60"
+    },
+    "466": {
+        "name": "Blue Ability",
+        "item_type": "Ability",
+        "item_id": "61"
+    },
+    "467": {
+        "name": "Equip Shield Ability",
+        "item_type": "Ability",
+        "item_id": "68"
+    },
+    "468": {
+        "name": "Equip Armors Ability",
+        "item_type": "Ability",
+        "item_id": "69"
+    },
+    "469": {
+        "name": "Equip Ribbon Ability",
+        "item_type": "Ability",
+        "item_id": "6A"
+    },
+    "470": {
+        "name": "Equip Swords Ability",
+        "item_type": "Ability",
+        "item_id": "6B"
+    },
+    "471": {
+        "name": "Equip Spears Ability",
+        "item_type": "Ability",
+        "item_id": "6C"
+    },
+    "472": {
+        "name": "Equip Katana Ability",
+        "item_type": "Ability",
+        "item_id": "6D"
+    },
+    "473": {
+        "name": "Equip Axes Ability",
+        "item_type": "Ability",
+        "item_id": "6E"
+    },
+    "474": {
+        "name": "Equip Bows Ability",
+        "item_type": "Ability",
+        "item_id": "6F"
+    },
+    "475": {
+        "name": "Equip Whips Ability",
+        "item_type": "Ability",
+        "item_id": "70"
+    },
+    "476": {
+        "name": "Equip Harps Ability",
+        "item_type": "Ability",
+        "item_id": "71"
+    },
+    "477": {
+        "name": "Agility Ability",
+        "item_type": "Ability",
+        "item_id": "72"
+    },
+    "478": {
+        "name": "HP +10% Ability",
+        "item_type": "Ability",
+        "item_id": "73"
+    },
+    "479": {
+        "name": "HP +20% Ability",
+        "item_type": "Ability",
+        "item_id": "74"
+    },
+    "480": {
+        "name": "HP +30% Ability",
+        "item_type": "Ability",
+        "item_id": "75"
+    },
+    "481": {
+        "name": "MP +10% Ability",
+        "item_type": "Ability",
+        "item_id": "76"
+    },
+    "482": {
+        "name": "MP +30% Ability",
+        "item_type": "Ability",
+        "item_id": "77"
+    },
+    "483": {
+        "name": "Brawl Ability",
+        "item_type": "Ability",
+        "item_id": "78"
+    },
+    "484": {
+        "name": "Dbl Grip Ability",
+        "item_type": "Ability",
+        "item_id": "79"
+    },
+    "485": {
+        "name": "2-Wield Ability",
+        "item_type": "Ability",
+        "item_id": "7A"
+    },
+    "486": {
+        "name": "Medicine Ability",
+        "item_type": "Ability",
+        "item_id": "7B"
+    },
+    "487": {
+        "name": "Cover Ability",
+        "item_type": "Ability",
+        "item_id": "7C"
+    },
+    "488": {
+        "name": "Counter Ability",
+        "item_type": "Ability",
+        "item_id": "7D"
+    },
+    "489": {
+        "name": "Evade Ability",
+        "item_type": "Ability",
+        "item_id": "7E"
+    },
+    "490": {
+        "name": "Barrier Ability",
+        "item_type": "Ability",
+        "item_id": "80"
+    },
+    "491": {
+        "name": "Berserk Ability",
+        "item_type": "Ability",
+        "item_id": "81"
+    },
+    "492": {
+        "name": "Caution Ability",
+        "item_type": "Ability",
+        "item_id": "82"
+    },
+    "493": {
+        "name": "Preemptive Ability",
+        "item_type": "Ability",
+        "item_id": "83"
+    },
+    "494": {
+        "name": "DmgFloor Ability",
+        "item_type": "Ability",
+        "item_id": "85"
+    },
+    "495": {
+        "name": "Equip Rods Ability",
+        "item_type": "Ability",
+        "item_id": "87"
+    },
+    "600": {
+        "name": "Knife Item",
+        "item_type": "Item",
+        "item_id": "02"
+    },
+    "601": {
+        "name": "Dagger Item",
+        "item_type": "Item",
+        "item_id": "03"
+    },
+    "602": {
+        "name": "Mythril Knife Item",
+        "item_type": "Item",
+        "item_id": "04"
+    },
+    "603": {
+        "name": "Kunai Item",
+        "item_type": "Item",
+        "item_id": "05"
+    },
+    "604": {
+        "name": "Mage Masher Item",
+        "item_type": "Item",
+        "item_id": "06"
+    },
+    "605": {
+        "name": "Guardian Item",
+        "item_type": "Item",
+        "item_id": "07"
+    },
+    "606": {
+        "name": "Kodachi Item",
+        "item_type": "Item",
+        "item_id": "08"
+    },
+    "607": {
+        "name": "Orialcon Item",
+        "item_type": "Item",
+        "item_id": "09"
+    },
+    "608": {
+        "name": "Air Knife Item",
+        "item_type": "Item",
+        "item_id": "0A"
+    },
+    "609": {
+        "name": "Assassin Item",
+        "item_type": "Item",
+        "item_id": "0B"
+    },
+    "610": {
+        "name": "Hardened Dagger Item",
+        "item_type": "Item",
+        "item_id": "0C"
+    },
+    "611": {
+        "name": "Broadsword Item",
+        "item_type": "Item",
+        "item_id": "0D"
+    },
+    "612": {
+        "name": "RegalCut Item",
+        "item_type": "Item",
+        "item_id": "0E"
+    },
+    "613": {
+        "name": "Mythril Sword Item",
+        "item_type": "Item",
+        "item_id": "0F"
+    },
+    "614": {
+        "name": "Coral Sword Item",
+        "item_type": "Item",
+        "item_id": "10"
+    },
+    "615": {
+        "name": "Ancient Sword Item",
+        "item_type": "Item",
+        "item_id": "11"
+    },
+    "616": {
+        "name": "Epee Sword Item",
+        "item_type": "Item",
+        "item_id": "12"
+    },
+    "617": {
+        "name": "Slumber Sword Item",
+        "item_type": "Item",
+        "item_id": "13"
+    },
+    "618": {
+        "name": "Defender Sword Item",
+        "item_type": "Item",
+        "item_id": "14"
+    },
+    "619": {
+        "name": "Excalibur Item",
+        "item_type": "Item",
+        "item_id": "15"
+    },
+    "620": {
+        "name": "Ragnarok Item",
+        "item_type": "Item",
+        "item_id": "16"
+    },
+    "621": {
+        "name": "Javelin Item",
+        "item_type": "Item",
+        "item_id": "17"
+    },
+    "622": {
+        "name": "Spear Item",
+        "item_type": "Item",
+        "item_id": "18"
+    },
+    "623": {
+        "name": "Mythril Spear Item",
+        "item_type": "Item",
+        "item_id": "19"
+    },
+    "624": {
+        "name": "Trident Item",
+        "item_type": "Item",
+        "item_id": "1A"
+    },
+    "625": {
+        "name": "Wind Spear Item",
+        "item_type": "Item",
+        "item_id": "1B"
+    },
+    "626": {
+        "name": "Partisan Item",
+        "item_type": "Item",
+        "item_id": "1C"
+    },
+    "627": {
+        "name": "Heavy Spear Item",
+        "item_type": "Item",
+        "item_id": "1D"
+    },
+    "628": {
+        "name": "DblLance Item",
+        "item_type": "Item",
+        "item_id": "1E"
+    },
+    "629": {
+        "name": "Holy Lance Item",
+        "item_type": "Item",
+        "item_id": "1F"
+    },
+    "630": {
+        "name": "Dragoon Lance Item",
+        "item_type": "Item",
+        "item_id": "20"
+    },
+    "631": {
+        "name": "Battle Axe Item",
+        "item_type": "Item",
+        "item_id": "21"
+    },
+    "632": {
+        "name": "Mythril Hammer Item",
+        "item_type": "Item",
+        "item_id": "22"
+    },
+    "633": {
+        "name": "Ogre Killer Item",
+        "item_type": "Item",
+        "item_id": "23"
+    },
+    "634": {
+        "name": "War Hammer Item",
+        "item_type": "Item",
+        "item_id": "24"
+    },
+    "635": {
+        "name": "Venom Axe Item",
+        "item_type": "Item",
+        "item_id": "25"
+    },
+    "636": {
+        "name": "Earth Hammer Item",
+        "item_type": "Item",
+        "item_id": "26"
+    },
+    "637": {
+        "name": "Rune Axe Item",
+        "item_type": "Item",
+        "item_id": "27"
+    },
+    "638": {
+        "name": "Thor Hammer Item",
+        "item_type": "Item",
+        "item_id": "28"
+    },
+    "639": {
+        "name": "Katana Item",
+        "item_type": "Item",
+        "item_id": "29"
+    },
+    "640": {
+        "name": "Air Blade Item",
+        "item_type": "Item",
+        "item_id": "2A"
+    },
+    "641": {
+        "name": "Kotetsu Item",
+        "item_type": "Item",
+        "item_id": "2B"
+    },
+    "642": {
+        "name": "Bizen Item",
+        "item_type": "Item",
+        "item_id": "2C"
+    },
+    "643": {
+        "name": "Forged Item",
+        "item_type": "Item",
+        "item_id": "2D"
+    },
+    "644": {
+        "name": "Murasume Item",
+        "item_type": "Item",
+        "item_id": "2E"
+    },
+    "645": {
+        "name": "Masamune Item",
+        "item_type": "Item",
+        "item_id": "2F"
+    },
+    "646": {
+        "name": "Tempest Item",
+        "item_type": "Item",
+        "item_id": "30"
+    },
+    "647": {
+        "name": "Rod Item",
+        "item_type": "Item",
+        "item_id": "31"
+    },
+    "648": {
+        "name": "Fire Rod Item",
+        "item_type": "Item",
+        "item_id": "32"
+    },
+    "649": {
+        "name": "Ice Rod Item",
+        "item_type": "Item",
+        "item_id": "33"
+    },
+    "650": {
+        "name": "Thunder Rod Item",
+        "item_type": "Item",
+        "item_id": "34"
+    },
+    "651": {
+        "name": "Venom Rod Item",
+        "item_type": "Item",
+        "item_id": "35"
+    },
+    "652": {
+        "name": "Lillith Rod Item",
+        "item_type": "Item",
+        "item_id": "36"
+    },
+    "653": {
+        "name": "Wizard Rod Item",
+        "item_type": "Item",
+        "item_id": "37"
+    },
+    "654": {
+        "name": "Staff Item",
+        "item_type": "Item",
+        "item_id": "38"
+    },
+    "655": {
+        "name": "Mythril Staff Item",
+        "item_type": "Item",
+        "item_id": "39"
+    },
+    "656": {
+        "name": "Power Staff Item",
+        "item_type": "Item",
+        "item_id": "3A"
+    },
+    "657": {
+        "name": "Healing Staff Item",
+        "item_type": "Item",
+        "item_id": "3B"
+    },
+    "658": {
+        "name": "Staff of Light Item",
+        "item_type": "Item",
+        "item_id": "3C"
+    },
+    "659": {
+        "name": "Sage's Staff Item",
+        "item_type": "Item",
+        "item_id": "3D"
+    },
+    "660": {
+        "name": "Judgement Staff Item",
+        "item_type": "Item",
+        "item_id": "3E"
+    },
+    "661": {
+        "name": "Fire Bow Item",
+        "item_type": "Item",
+        "item_id": "3F"
+    },
+    "662": {
+        "name": "Ice Bow Item",
+        "item_type": "Item",
+        "item_id": "40"
+    },
+    "663": {
+        "name": "Thunder Bow Item",
+        "item_type": "Item",
+        "item_id": "41"
+    },
+    "664": {
+        "name": "Darkness Bow Item",
+        "item_type": "Item",
+        "item_id": "42"
+    },
+    "665": {
+        "name": "Killer Bow Item",
+        "item_type": "Item",
+        "item_id": "43"
+    },
+    "666": {
+        "name": "Elven Bow Item",
+        "item_type": "Item",
+        "item_id": "44"
+    },
+    "667": {
+        "name": "Yoichi Bow Item",
+        "item_type": "Item",
+        "item_id": "45"
+    },
+    "668": {
+        "name": "Artemis Bow Item",
+        "item_type": "Item",
+        "item_id": "46"
+    },
+    "669": {
+        "name": "Silver Harp Item",
+        "item_type": "Item",
+        "item_id": "47"
+    },
+    "670": {
+        "name": "Dream Harp Item",
+        "item_type": "Item",
+        "item_id": "48"
+    },
+    "671": {
+        "name": "Lamia's Harp Item",
+        "item_type": "Item",
+        "item_id": "49"
+    },
+    "672": {
+        "name": "Apollo's Harp Item",
+        "item_type": "Item",
+        "item_id": "4A"
+    },
+    "673": {
+        "name": "Whip Item",
+        "item_type": "Item",
+        "item_id": "4B"
+    },
+    "674": {
+        "name": "Chain Whip Item",
+        "item_type": "Item",
+        "item_id": "4C"
+    },
+    "675": {
+        "name": "Thunder Whip Item",
+        "item_type": "Item",
+        "item_id": "4D"
+    },
+    "676": {
+        "name": "Flame Whip Item",
+        "item_type": "Item",
+        "item_id": "4E"
+    },
+    "677": {
+        "name": "Dragon's Whisker Item",
+        "item_type": "Item",
+        "item_id": "4F"
+    },
+    "678": {
+        "name": "Giyaman Item",
+        "item_type": "Item",
+        "item_id": "50"
+    },
+    "679": {
+        "name": "Earth Bell Item",
+        "item_type": "Item",
+        "item_id": "51"
+    },
+    "680": {
+        "name": "Rune Chime Item",
+        "item_type": "Item",
+        "item_id": "52"
+    },
+    "681": {
+        "name": "Tinkerbell Item",
+        "item_type": "Item",
+        "item_id": "53"
+    },
+    "682": {
+        "name": "Drain Sword Item",
+        "item_type": "Item",
+        "item_id": "55"
+    },
+    "683": {
+        "name": "RuneEdge Item",
+        "item_type": "Item",
+        "item_id": "56"
+    },
+    "684": {
+        "name": "Flametongue Item",
+        "item_type": "Item",
+        "item_id": "57"
+    },
+    "685": {
+        "name": "IceBrand Item",
+        "item_type": "Item",
+        "item_id": "58"
+    },
+    "686": {
+        "name": "Full Moon Item",
+        "item_type": "Item",
+        "item_id": "59"
+    },
+    "687": {
+        "name": "Shuriken Item",
+        "item_type": "Item",
+        "item_id": "5A"
+    },
+    "688": {
+        "name": "Pinwheel Item",
+        "item_type": "Item",
+        "item_id": "5B"
+    },
+    "689": {
+        "name": "Excailbur Item",
+        "item_type": "Item",
+        "item_id": "5C"
+    },
+    "690": {
+        "name": "BeastKiller Item",
+        "item_type": "Item",
+        "item_id": "5D"
+    },
+    "691": {
+        "name": "Flail Item",
+        "item_type": "Item",
+        "item_id": "5E"
+    },
+    "692": {
+        "name": "Morning Star Item",
+        "item_type": "Item",
+        "item_id": "5F"
+    },
+    "693": {
+        "name": "Wonder Wand Item",
+        "item_type": "Item",
+        "item_id": "60"
+    },
+    "694": {
+        "name": "Brave Blade Item",
+        "item_type": "Item",
+        "item_id": "61"
+    },
+    "695": {
+        "name": "Soot Item",
+        "item_type": "Item",
+        "item_id": "62"
+    },
+    "696": {
+        "name": "Chicken Knife Item",
+        "item_type": "Item",
+        "item_id": "63"
+    },
+    "697": {
+        "name": "RisingSun Item",
+        "item_type": "Item",
+        "item_id": "64"
+    },
+    "698": {
+        "name": "Silver Bow Item",
+        "item_type": "Item",
+        "item_id": "65"
+    },
+    "699": {
+        "name": "Gale Bow Item",
+        "item_type": "Item",
+        "item_id": "66"
+    },
+    "700": {
+        "name": "AntiMagic Bow Item",
+        "item_type": "Item",
+        "item_id": "67"
+    },
+    "701": {
+        "name": "Avis Killer Item",
+        "item_type": "Item",
+        "item_id": "68"
+    },
+    "702": {
+        "name": "DoomCut Item",
+        "item_type": "Item",
+        "item_id": "69"
+    },
+    "703": {
+        "name": "Giant's Axe Item",
+        "item_type": "Item",
+        "item_id": "6A"
+    },
+    "704": {
+        "name": "ManEater Item",
+        "item_type": "Item",
+        "item_id": "6B"
+    },
+    "705": {
+        "name": "Thief Knife Item",
+        "item_type": "Item",
+        "item_id": "6C"
+    },
+    "706": {
+        "name": "Dancing Dagger Item",
+        "item_type": "Item",
+        "item_id": "6D"
+    },
+    "707": {
+        "name": "Enhancer Item",
+        "item_type": "Item",
+        "item_id": "6E"
+    },
+    "708": {
+        "name": "Leather Shield Item",
+        "item_type": "Item",
+        "item_id": "81"
+    },
+    "709": {
+        "name": "Bronze Shield Item",
+        "item_type": "Item",
+        "item_id": "82"
+    },
+    "710": {
+        "name": "Iron Shield Item",
+        "item_type": "Item",
+        "item_id": "83"
+    },
+    "711": {
+        "name": "Mythril Shield Item",
+        "item_type": "Item",
+        "item_id": "84"
+    },
+    "712": {
+        "name": "Golden Shield Item",
+        "item_type": "Item",
+        "item_id": "85"
+    },
+    "713": {
+        "name": "Aegis Shield Item",
+        "item_type": "Item",
+        "item_id": "86"
+    },
+    "714": {
+        "name": "Diamond Shield Item",
+        "item_type": "Item",
+        "item_id": "87"
+    },
+    "715": {
+        "name": "Crystal Shield Item",
+        "item_type": "Item",
+        "item_id": "88"
+    },
+    "716": {
+        "name": "Leather Cap Item",
+        "item_type": "Item",
+        "item_id": "89"
+    },
+    "717": {
+        "name": "Bronze Helm Item",
+        "item_type": "Item",
+        "item_id": "8A"
+    },
+    "718": {
+        "name": "Iron Helm Item",
+        "item_type": "Item",
+        "item_id": "8B"
+    },
+    "719": {
+        "name": "Mythril Helm Item",
+        "item_type": "Item",
+        "item_id": "8C"
+    },
+    "720": {
+        "name": "Golden Helm Item",
+        "item_type": "Item",
+        "item_id": "8D"
+    },
+    "721": {
+        "name": "Diamond Helm Item",
+        "item_type": "Item",
+        "item_id": "8E"
+    },
+    "722": {
+        "name": "Crystal Helm Item",
+        "item_type": "Item",
+        "item_id": "8F"
+    },
+    "723": {
+        "name": "Plumed Hat Item",
+        "item_type": "Item",
+        "item_id": "90"
+    },
+    "724": {
+        "name": "Tricorn Hat Item",
+        "item_type": "Item",
+        "item_id": "91"
+    },
+    "725": {
+        "name": "Magus Item",
+        "item_type": "Item",
+        "item_id": "92"
+    },
+    "726": {
+        "name": "Circlet Item",
+        "item_type": "Item",
+        "item_id": "93"
+    },
+    "727": {
+        "name": "Gold Hairpin Item",
+        "item_type": "Item",
+        "item_id": "94"
+    },
+    "728": {
+        "name": "Ribbon Item",
+        "item_type": "Item",
+        "item_id": "95"
+    },
+    "729": {
+        "name": "Bandana Item",
+        "item_type": "Item",
+        "item_id": "96"
+    },
+    "730": {
+        "name": "GrnBeret Item",
+        "item_type": "Item",
+        "item_id": "97"
+    },
+    "731": {
+        "name": "DarkHood Item",
+        "item_type": "Item",
+        "item_id": "98"
+    },
+    "732": {
+        "name": "Lamia's Tiara Item",
+        "item_type": "Item",
+        "item_id": "99"
+    },
+    "733": {
+        "name": "Leather Armor Item",
+        "item_type": "Item",
+        "item_id": "9A"
+    },
+    "734": {
+        "name": "Bronze Armor Item",
+        "item_type": "Item",
+        "item_id": "9B"
+    },
+    "735": {
+        "name": "Iron Armor Item",
+        "item_type": "Item",
+        "item_id": "9C"
+    },
+    "736": {
+        "name": "Mythril Armor Item",
+        "item_type": "Item",
+        "item_id": "9D"
+    },
+    "737": {
+        "name": "Golden Armor Item",
+        "item_type": "Item",
+        "item_id": "9E"
+    },
+    "738": {
+        "name": "Diamond Armor Item",
+        "item_type": "Item",
+        "item_id": "9F"
+    },
+    "739": {
+        "name": "Crystal Armor Item",
+        "item_type": "Item",
+        "item_id": "A0"
+    },
+    "740": {
+        "name": "CopperPlt Item",
+        "item_type": "Item",
+        "item_id": "A1"
+    },
+    "741": {
+        "name": "Training Suit Item",
+        "item_type": "Item",
+        "item_id": "A2"
+    },
+    "742": {
+        "name": "Silver Plate Item",
+        "item_type": "Item",
+        "item_id": "A3"
+    },
+    "743": {
+        "name": "Stealth Suit Item",
+        "item_type": "Item",
+        "item_id": "A4"
+    },
+    "744": {
+        "name": "DiamndPlt Item",
+        "item_type": "Item",
+        "item_id": "A5"
+    },
+    "745": {
+        "name": "DarkSuit Item",
+        "item_type": "Item",
+        "item_id": "A6"
+    },
+    "746": {
+        "name": "Cotton Robe Item",
+        "item_type": "Item",
+        "item_id": "A7"
+    },
+    "747": {
+        "name": "Silk robe Item",
+        "item_type": "Item",
+        "item_id": "A8"
+    },
+    "748": {
+        "name": "Gaia Gear Item",
+        "item_type": "Item",
+        "item_id": "A9"
+    },
+    "749": {
+        "name": "Bard's Surplice Item",
+        "item_type": "Item",
+        "item_id": "AA"
+    },
+    "750": {
+        "name": "Lumina Robe Item",
+        "item_type": "Item",
+        "item_id": "AB"
+    },
+    "751": {
+        "name": "Black Robe Item",
+        "item_type": "Item",
+        "item_id": "AC"
+    },
+    "752": {
+        "name": "White Robe Item",
+        "item_type": "Item",
+        "item_id": "AD"
+    },
+    "753": {
+        "name": "Mirage Vest Item",
+        "item_type": "Item",
+        "item_id": "AE"
+    },
+    "754": {
+        "name": "Guard Ring Item",
+        "item_type": "Item",
+        "item_id": "AF"
+    },
+    "755": {
+        "name": "Thief's Glove Item",
+        "item_type": "Item",
+        "item_id": "B0"
+    },
+    "756": {
+        "name": "Giant's Gloves Item",
+        "item_type": "Item",
+        "item_id": "B1"
+    },
+    "757": {
+        "name": "Elf Cape Item",
+        "item_type": "Item",
+        "item_id": "B2"
+    },
+    "758": {
+        "name": "Cursed Ring Item",
+        "item_type": "Item",
+        "item_id": "B3"
+    },
+    "759": {
+        "name": "Glasses Item",
+        "item_type": "Item",
+        "item_id": "B4"
+    },
+    "760": {
+        "name": "Running Shoes Item",
+        "item_type": "Item",
+        "item_id": "B5"
+    },
+    "761": {
+        "name": "Mythril Glove Item",
+        "item_type": "Item",
+        "item_id": "B6"
+    },
+    "762": {
+        "name": "Silver Armlet Item",
+        "item_type": "Item",
+        "item_id": "B7"
+    },
+    "763": {
+        "name": "Diamond Armlet Item",
+        "item_type": "Item",
+        "item_id": "B8"
+    },
+    "764": {
+        "name": "Strength Item",
+        "item_type": "Item",
+        "item_id": "B9"
+    },
+    "765": {
+        "name": "Power Wrist Item",
+        "item_type": "Item",
+        "item_id": "BA"
+    },
+    "766": {
+        "name": "Angel Gwn Item",
+        "item_type": "Item",
+        "item_id": "BB"
+    },
+    "767": {
+        "name": "Angel Ring Item",
+        "item_type": "Item",
+        "item_id": "BC"
+    },
+    "768": {
+        "name": "Flame Ring Item",
+        "item_type": "Item",
+        "item_id": "BD"
+    },
+    "769": {
+        "name": "Coral Ring Item",
+        "item_type": "Item",
+        "item_id": "BE"
+    },
+    "770": {
+        "name": "Bone Mail Item",
+        "item_type": "Item",
+        "item_id": "BF"
+    },
+    "771": {
+        "name": "Leather Shoes Item",
+        "item_type": "Item",
+        "item_id": "C0"
+    },
+    "772": {
+        "name": "Kaiser Knuckles Item",
+        "item_type": "Item",
+        "item_id": "C1"
+    },
+    "773": {
+        "name": "Gauntlets Item",
+        "item_type": "Item",
+        "item_id": "C2"
+    },
+    "774": {
+        "name": "Tiger Mask Item",
+        "item_type": "Item",
+        "item_id": "C3"
+    },
+    "775": {
+        "name": "Flame Shield Item",
+        "item_type": "Item",
+        "item_id": "C4"
+    },
+    "776": {
+        "name": "CornaJar Item",
+        "item_type": "Item",
+        "item_id": "C5"
+    },
+    "777": {
+        "name": "Genji Shield Item",
+        "item_type": "Item",
+        "item_id": "C6"
+    },
+    "778": {
+        "name": "Genji Helm Item",
+        "item_type": "Item",
+        "item_id": "C7"
+    },
+    "779": {
+        "name": "Genji Armor Item",
+        "item_type": "Item",
+        "item_id": "C8"
+    },
+    "780": {
+        "name": "Genji Gloves Item",
+        "item_type": "Item",
+        "item_id": "C9"
+    },
+    "781": {
+        "name": "Wall Ring Item",
+        "item_type": "Item",
+        "item_id": "CA"
+    },
+    "782": {
+        "name": "Hypno Helm Item",
+        "item_type": "Item",
+        "item_id": "CB"
+    },
+    "783": {
+        "name": "Thornlet Item",
+        "item_type": "Item",
+        "item_id": "CC"
+    },
+    "784": {
+        "name": "Ice Shield Item",
+        "item_type": "Item",
+        "item_id": "CD"
+    },
+    "785": {
+        "name": "Cursed Shield Item",
+        "item_type": "Item",
+        "item_id": "CE"
+    },
+    "786": {
+        "name": "Rainbow Dress Item",
+        "item_type": "Item",
+        "item_id": "CF"
+    },
+    "787": {
+        "name": "Red Shoes Item",
+        "item_type": "Item",
+        "item_id": "D0"
+    },
+    "788": {
+        "name": "Potion Item",
+        "item_type": "Item",
+        "item_id": "E0"
+    },
+    "789": {
+        "name": "HiPotion Item",
+        "item_type": "Item",
+        "item_id": "E1"
+    },
+    "790": {
+        "name": "Ether Item",
+        "item_type": "Item",
+        "item_id": "E2"
+    },
+    "791": {
+        "name": "Elixir Item",
+        "item_type": "Item",
+        "item_id": "E3"
+    },
+    "792": {
+        "name": "Phoenix Down Item",
+        "item_type": "Item",
+        "item_id": "E4"
+    },
+    "793": {
+        "name": "Maiden's Kiss Item",
+        "item_type": "Item",
+        "item_id": "E5"
+    },
+    "794": {
+        "name": "Revivify Item",
+        "item_type": "Item",
+        "item_id": "E6"
+    },
+    "795": {
+        "name": "TurtleShell Item",
+        "item_type": "Item",
+        "item_id": "E7"
+    },
+    "796": {
+        "name": "Antidote Item",
+        "item_type": "Item",
+        "item_id": "E8"
+    },
+    "797": {
+        "name": "Eyedrop Item",
+        "item_type": "Item",
+        "item_id": "E9"
+    },
+    "798": {
+        "name": "DragonFang Item",
+        "item_type": "Item",
+        "item_id": "EA"
+    },
+    "799": {
+        "name": "DarkMatter Item",
+        "item_type": "Item",
+        "item_id": "EB"
+    },
+    "800": {
+        "name": "Soft Item",
+        "item_type": "Item",
+        "item_id": "EC"
+    },
+    "801": {
+        "name": "LuckMallet Item",
+        "item_type": "Item",
+        "item_id": "ED"
+    },
+    "802": {
+        "name": "Magic Lamp Item",
+        "item_type": "Item",
+        "item_id": "EF"
+    },
+    "803": {
+        "name": "Tent Item",
+        "item_type": "Item",
+        "item_id": "F0"
+    },
+    "804": {
+        "name": "Cabin Item",
+        "item_type": "Item",
+        "item_id": "F1"
+    },
+    "805": {
+        "name": "Giant Drink Item",
+        "item_type": "Item",
+        "item_id": "F2"
+    },
+    "806": {
+        "name": "Power Drink Item",
+        "item_type": "Item",
+        "item_id": "F3"
+    },
+    "807": {
+        "name": "Speed Drink Item",
+        "item_type": "Item",
+        "item_id": "F4"
+    },
+    "808": {
+        "name": "Protect Drink Item",
+        "item_type": "Item",
+        "item_id": "F5"
+    },
+    "809": {
+        "name": "Hero Drink Item",
+        "item_type": "Item",
+        "item_id": "F6"
+    },
+    "810": {
+        "name": "Ramuh Item",
+        "item_type": "Item",
+        "item_id": "F9"
+    },
+    "811": {
+        "name": "Shoat Item",
+        "item_type": "Item",
+        "item_id": "FA"
+    },
+    "812": {
+        "name": "Golem Item",
+        "item_type": "Item",
+        "item_id": "FB"
+    },
+    "813": {
+        "name": "Flame Scroll Item",
+        "item_type": "Item",
+        "item_id": "FC"
+    },
+    "814": {
+        "name": "Water Scroll Item",
+        "item_type": "Item",
+        "item_id": "FD"
+    },
+    "815": {
+        "name": "Thunder Scroll Item",
+        "item_type": "Item",
+        "item_id": "FE"
+    },
+    "1000": {
+        "name": "Walse Tower Key",
+        "item_type": "Key Item",
+        "item_id": "00"
+    },
+    "1001": {
+        "name": "Steamship Key",
+        "item_type": "Key Item",
+        "item_id": "01"
+    },
+    "1002": {
+        "name": "Ifrit's Fire",
+        "item_type": "Key Item",
+        "item_id": "02"
+    },
+    "1003": {
+        "name": "SandwormBait",
+        "item_type": "Key Item",
+        "item_id": "03"
+    },
+    "1004": {
+        "name": "Big Bridge Key",
+        "item_type": "Key Item",
+        "item_id": "04"
+    },
+    "1005": {
+        "name": "Hiryuu Call",
+        "item_type": "Key Item",
+        "item_id": "05"
+    },
+    "1006": {
+        "name": "Submarine Key",
+        "item_type": "Key Item",
+        "item_id": "06"
+    },
+    "1007": {
+        "name": "Anti Barrier",
+        "item_type": "Key Item",
+        "item_id": "07"
+    },
+    "1008": {
+        "name": "Bracelet",
+        "item_type": "Key Item",
+        "item_id": "08"
+    },
+    "1009": {
+        "name": "Pyramid Page",
+        "item_type": "Key Item",
+        "item_id": "0B"
+    },
+    "1010": {
+        "name": "Shrine Page",
+        "item_type": "Key Item",
+        "item_id": "0C"
+    },
+    "1011": {
+        "name": "Trench Page",
+        "item_type": "Key Item",
+        "item_id": "0D"
+    },
+    "1012": {
+        "name": "Falls Page",
+        "item_type": "Key Item",
+        "item_id": "0E"
+    },
+    "1013": {
+        "name": "Mirage Radar",
+        "item_type": "Key Item",
+        "item_id": "12"
+    },
+    "1014": {
+        "name": "Adamantite",
+        "item_type": "Key Item",
+        "item_id": "15"
+    },
+    "1015": {
+        "name": "Moogle Suit",
+        "item_type": "Key Item",
+        "item_id": "16"
+    },
+    "1016": {
+        "name": "Elder Branch",
+        "item_type": "Key Item",
+        "item_id": "18"
+    },
+    "1017": {
+        "name": "1st Tablet",
+        "item_type": "Key Item",
+        "item_id": "1A"
+    },
+    "1018": {
+        "name": "2nd Tablet",
+        "item_type": "Key Item",
+        "item_id": "1B"
+    },
+    "1019": {
+        "name": "3rd Tablet",
+        "item_type": "Key Item",
+        "item_id": "1C"
+    },
+    "1020": {
+        "name": "4th Tablet",
+        "item_type": "Key Item",
+        "item_id": "1D"
+    },
+    "900": {
+        "name": "100 Gil",
+        "item_type": "Gil",
+        "item_id": "01"
+    },
+    "901": {
+        "name": "300 Gil",
+        "item_type": "Gil",
+        "item_id": "03"
+    },
+    "902": {
+        "name": "1000 Gil",
+        "item_type": "Gil",
+        "item_id": "04"
+    },
+    "903": {
+        "name": "5000 Gil (#1)",
+        "item_type": "Gil",
+        "item_id": "1E"
+    },
+    "904": {
+        "name": "9900 Gil",
+        "item_type": "Gil",
+        "item_id": "0C"
+    },
+    "905": {
+        "name": "8000 Gil (#1)",
+        "item_type": "Gil",
+        "item_id": "18"
+    },
+    "906": {
+        "name": "4400 Gil",
+        "item_type": "Gil",
+        "item_id": "0E"
+    },
+    "907": {
+        "name": "10000 Gil (#1)",
+        "item_type": "Gil",
+        "item_id": "10"
+    },
+    "908": {
+        "name": "5000 Gil (#2)",
+        "item_type": "Gil",
+        "item_id": "1E"
+    },
+    "909": {
+        "name": "8000 Gil (#2)",
+        "item_type": "Gil",
+        "item_id": "18"
+    },
+    "910": {
+        "name": "5000 Gil (#3)",
+        "item_type": "Gil",
+        "item_id": "1E"
+    },
+    "911": {
+        "name": "9000 Gil (#1)",
+        "item_type": "Gil",
+        "item_id": "1C"
+    },
+    "912": {
+        "name": "18000 Gil",
+        "item_type": "Gil",
+        "item_id": "13"
+    },
+    "913": {
+        "name": "2500 Gil",
+        "item_type": "Gil",
+        "item_id": "14"
+    },
+    "914": {
+        "name": "4900 Gil",
+        "item_type": "Gil",
+        "item_id": "15"
+    },
+    "915": {
+        "name": "9500 Gil",
+        "item_type": "Gil",
+        "item_id": "16"
+    },
+    "916": {
+        "name": "9000 Gil (#2)",
+        "item_type": "Gil",
+        "item_id": "1C"
+    },
+    "917": {
+        "name": "8000 Gil (#3)",
+        "item_type": "Gil",
+        "item_id": "18"
+    },
+    "918": {
+        "name": "10000 Gil (#2)",
+        "item_type": "Gil",
+        "item_id": "10"
+    },
+    "919": {
+        "name": "12000 Gil (#1)",
+        "item_type": "Gil",
+        "item_id": "1A"
+    },
+    "920": {
+        "name": "12000 Gil (#2)",
+        "item_type": "Gil",
+        "item_id": "1A"
+    },
+    "921": {
+        "name": "9000 Gil (#3)",
+        "item_type": "Gil",
+        "item_id": "1C"
+    },
+    "922": {
+        "name": "12000 Gil (#3)",
+        "item_type": "Gil",
+        "item_id": "1A"
+    },
+    "923": {
+        "name": "5000 Gil (#4)",
+        "item_type": "Gil",
+        "item_id": "1E"
+    },
+    "924": {
+        "name": "15000 Gil",
+        "item_type": "Gil",
+        "item_id": "20"
+    },
+    "925": {
+        "name": "20000 Gil",
+        "item_type": "Gil",
+        "item_id": "21"
+    },
+    "926": {
+        "name": "25000 Gil",
+        "item_type": "Gil",
+        "item_id": "22"
+    }
+}

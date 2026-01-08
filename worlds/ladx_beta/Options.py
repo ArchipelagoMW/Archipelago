@@ -1,0 +1,787 @@
+from dataclasses import dataclass
+
+import logging
+from Options import (Choice, Toggle, DefaultOnToggle, Range, PerGameCommonOptions, OptionGroup, Removed,
+                     DeathLink, StartInventoryPool, ItemSet)
+
+DefaultOffToggle = Toggle
+
+logger = logging.getLogger("Link's Awakening Logger")
+
+
+class LADXROption:
+    def to_ladxr_option(self, all_options):
+        if not self.ladxr_name:
+            return None, None
+
+        return (self.ladxr_name, self.name_lookup[self.value].replace("_", ""))
+
+
+class Logic(Choice, LADXROption):
+    """
+    Affects where items are allowed to be placed.
+
+    **Normal:** Playable without using any tricks or glitches. Can require
+    knowledge from a vanilla playthrough, such as how to open Color Dungeon.
+
+    **Hard:** More advanced techniques may be required, but glitches are not.
+    Examples include tricky jumps, killing enemies with only pots.
+
+    **Glitched:** Advanced glitches and techniques may be required, but
+    extremely difficult or tedious tricks are not required. Examples include
+    Bomb Triggers, Super Jumps and Jesus Jumps.
+
+    **Hell:** Obscure knowledge and hard techniques may be required. Examples
+    include featherless jumping with boots and/or hookshot, sequential pit
+    buffers and unclipped superjumps. Things in here can be extremely hard to do
+    or very time consuming.
+    """
+    display_name = "Logic"
+    rich_text_doc = True
+    ladxr_name = "logic"
+    # option_casual = 0
+    option_normal = 1
+    option_hard = 2
+    option_glitched = 3
+    option_hell = 4
+
+    default = option_normal
+
+
+class TradeQuest(DefaultOffToggle, LADXROption):
+    """
+    Trade quest items are randomized. Each NPC takes its normal trade quest
+    item and gives a randomized item in return.
+    """
+    display_name = "Trade Quest"
+    ladxr_name = "tradequest"
+
+
+class TextShuffle(DefaultOffToggle):
+    """
+    Shuffles all text in the game.
+    """
+    display_name = "Text Shuffle"
+
+
+class Rooster(DefaultOnToggle, LADXROption):
+    """
+    Adds the rooster to the item pool. If disabled, the overworld will be
+    modified so that any location requiring the rooster is accessible by other
+    means.
+    """
+    display_name = "Rooster"
+    ladxr_name = "rooster"
+
+
+class RandomStartLocation(DefaultOffToggle, LADXROption):
+    """
+    Randomize where your starting house is located.
+    """
+    display_name = "Random Start Location"
+    ladxr_name = "randomstartlocation"
+
+
+class DungeonShuffle(DefaultOffToggle, LADXROption):
+    """
+    Randomizes dungeon entrances with each other.
+    """
+    display_name = "Dungeon Shuffle"
+    ladxr_name = "dungeonshuffle"
+
+
+class EntranceShuffle(Choice, LADXROption):
+    """
+    Randomizes where overworld entrances lead.
+
+    **Simple:** Single-entrance caves/houses that contain items are shuffled.
+
+    **Split:** Connector caves are also shuffled, in a separate pool from single entrance caves.
+
+    **Mixed:** Connector caves are also shuffled, in the same pool as single entrance caves.
+
+    **Wild:** Connections can go from overworld to overworlds, or inside to inside.
+
+    **Chaos:** Entrances and exits are decoupled.
+
+    **Insane:** Combines chaos and wild, anything goes anywhere, there is no God.
+
+    If *Random Start Location* and/or *Dungeon Shuffle* is enabled, then these will be shuffled with all the
+    other entrances.
+    """
+    option_none = 0
+    option_simple = 1
+    option_split = 2
+    option_mixed = 3
+    option_wild = 4
+    option_chaos = 5
+    option_insane = 6
+    default = option_none
+    display_name = "Entrance Shuffle"
+    rich_text_doc = True
+    ladxr_name = "entranceshuffle"
+
+
+class ShuffleJunk(DefaultOffToggle, LADXROption):
+    """
+    Caves/houses without items are also shuffled when entrance shuffle is set.
+    """
+    display_name = "Shuffle Junk"
+    ladxr_name = "shufflejunk"
+
+
+class ShuffleAnnoying(DefaultOffToggle, LADXROption):
+    """
+    A few very annoying entrances (Mamu and the Raft House) will also be shuffled when entrance shuffle is set.
+    """
+    display_name = "Shuffle Annoying"
+    ladxr_name = "shuffleannoying"
+
+
+class ShuffleWater(DefaultOffToggle, LADXROption):
+    """
+    Entrances that lead to water (Manbo and Damp Cave) will also be shuffled when entrance shuffle is set.
+
+    Use the warp-to-home from the Save & Quit menu if you get stuck (hold A+B+Start+Select until it works).
+    """
+    display_name = "Shuffle Water"
+    ladxr_name = "shufflewater"
+
+
+class APTitleScreen(DefaultOnToggle):
+    """
+    Enables AP specific title screen and disables the intro cutscene.
+    """
+    display_name = "AP Title Screen"
+
+
+class BossShuffle(Choice):
+    display_name = "Boss Shuffle"
+    none = 0
+    shuffle = 1
+    random = 2
+    default = none
+
+
+class DungeonItemShuffle(Choice):
+    display_name = "Dungeon Item Shuffle"
+    rich_text_doc = True
+    option_original_dungeon = 0
+    option_own_dungeons = 1
+    option_own_world = 2
+    option_any_world = 3
+    option_different_world = 4
+    # option_delete = 5
+    # option_start_with = 6
+    alias_true = 3
+    alias_false = 0
+    ladxr_item: str
+
+
+class ShuffleNightmareKeys(DungeonItemShuffle):
+    """
+    **Original Dungeon:** The item will be within its original dungeon.
+
+    **Own Dungeons:** The item will be within a dungeon in your world.
+
+    **Own World:** The item will be somewhere in your world.
+
+    **Any World:** The item could be anywhere.
+
+    **Different World:** The item will be somewhere in another world.
+    """
+    display_name = "Shuffle Nightmare Keys"
+    ladxr_item = "NIGHTMARE_KEY"
+
+
+class ShuffleSmallKeys(DungeonItemShuffle):
+    """
+    **Original Dungeon:** The item will be within its original dungeon.
+
+    **Own Dungeons:** The item will be within a dungeon in your world.
+
+    **Own World:** The item will be somewhere in your world.
+
+    **Any World:** The item could be anywhere.
+
+    **Different World:** The item will be somewhere in another world.
+    """
+    display_name = "Shuffle Small Keys"
+    ladxr_item = "KEY"
+
+
+class ShuffleMaps(DungeonItemShuffle):
+    """
+    **Original Dungeon:** The item will be within its original dungeon.
+
+    **Own Dungeons:** The item will be within a dungeon in your world.
+
+    **Own World:** The item will be somewhere in your world.
+
+    **Any World:** The item could be anywhere.
+
+    **Different World:** The item will be somewhere in another world.
+    """
+    display_name = "Shuffle Maps"
+    ladxr_item = "MAP"
+
+
+class ShuffleCompasses(DungeonItemShuffle):
+    """
+    **Original Dungeon:** The item will be within its original dungeon.
+
+    **Own Dungeons:** The item will be within a dungeon in your world.
+
+    **Own World:** The item will be somewhere in your world.
+
+    **Any World:** The item could be anywhere.
+
+    **Different World:** The item will be somewhere in another world.
+    """
+    display_name = "Shuffle Compasses"
+    ladxr_item = "COMPASS"
+
+
+class ShuffleStoneBeaks(DungeonItemShuffle):
+    """
+    **Original Dungeon:** The item will be within its original dungeon.
+
+    **Own Dungeons:** The item will be within a dungeon in your world.
+
+    **Own World:** The item will be somewhere in your world.
+
+    **Any World:** The item could be anywhere.
+
+    **Different World:** The item will be somewhere in another world.
+    """
+    display_name = "Shuffle Stone Beaks"
+    ladxr_item = "STONE_BEAK"
+
+
+class ShuffleInstruments(DungeonItemShuffle):
+    """
+    **Original Dungeon:** The item will be within its original dungeon.
+
+    **Own Dungeons:** The item will be within a dungeon in your world.
+
+    **Own World:** The item will be somewhere in your world.
+
+    **Any World:** The item could be anywhere.
+
+    **Different World:** The item will be somewhere in another world.
+
+    **Vanilla:** The item will be in its vanilla location in your world.
+    """
+    display_name = "Shuffle Instruments"
+    ladxr_item = "INSTRUMENT"
+    default = 100
+    option_vanilla = 100
+    alias_false = 100
+
+
+class Goal(Choice, LADXROption):
+    """
+    The Goal of the game.
+
+    **Instruments:** The Wind Fish's Egg will only open if you have the required
+    number of Instruments of the Sirens, and play the Ballad of the Wind Fish.
+
+    **Seashells:** The Egg will open when you bring 20 seashells. The Ballad and
+    Ocarina are not needed.
+
+    **Open:** The Egg will start pre-opened.
+
+	**Specific:** The Wind Fish's Egg will open with specific instruments, check the sign at the egg to see which.
+    """
+    display_name = "Goal"
+    rich_text_doc = True
+    ladxr_name = "goal"
+    option_instruments = 1
+    option_seashells = 2
+    option_open = 3
+    option_specific = 4
+
+    default = option_instruments
+
+    def to_ladxr_option(self, all_options):
+        if self.value == self.option_instruments:
+            return ("goal", all_options["instrument_count"])
+        else:
+            return LADXROption.to_ladxr_option(self, all_options)
+
+
+class InstrumentCount(Range, LADXROption):
+    """
+    Sets the number of instruments required to open the Egg.
+    """
+    display_name = "Instrument Count"
+    ladxr_name = None
+    range_start = 0
+    range_end = 8
+    default = 8
+
+
+class NagMessages(DefaultOffToggle, LADXROption):
+    """
+    Controls if nag messages are shown when rocks and crystals are touched.
+    Useful for glitches, annoying for everything else.
+    """
+    display_name = "Nag Messages"
+    ladxr_name = "nagmessages"
+
+
+class MusicChangeCondition(Choice):
+    """
+    Controls how the music changes.
+
+    **Sword:** When you pick up a sword, the music changes.
+
+    **Always:** You always have the post-sword music.
+    """
+    display_name = "Music Change Condition"
+    rich_text_doc = True
+    option_sword = 0
+    option_always = 1
+    default = option_always
+
+
+class HardMode(Choice, LADXROption):
+    """
+    **Oracle:** Less iframes and health from drops. Bombs damage yourself. Water
+    damages you without flippers. No pieces of power or acorns.
+
+    **Hero:** Switch version hero mode, double damage, no heart/fairy drops.
+
+    **OHKO:** You die on a single hit, always.
+    """
+    display_name = "Hard Mode"
+    ladxr_name = "hardmode"
+    rich_text_doc = True
+    option_none = 0
+    option_oracle = 1
+    option_hero = 2
+    option_ohko = 3
+    default = option_none
+
+
+class Stealing(Choice, LADXROption):
+    """
+    Puts stealing from the shop in logic if the player has a sword.
+    """
+    display_name = "Stealing"
+    ladxr_name = "steal"
+    option_in_logic = 1
+    option_out_of_logic = 2
+    option_disabled = 3
+    default = option_out_of_logic
+
+
+class Overworld(Choice, LADXROption):
+    """
+    **Open Mabe:** Replaces rock on the east side of Mabe Village with bushes,
+    allowing access to Ukuku Prairie without Power Bracelet.
+    """
+    display_name = "Overworld"
+    ladxr_name = "overworld"
+    rich_text_doc = True
+    option_normal = 0
+    option_open_mabe = 1
+    default = option_normal
+
+
+class Quickswap(Choice, LADXROption):
+    """
+    Instead of opening the map, the *SELECT* button swaps the top item of your inventory on to your *A* or *B* button.
+    """
+    display_name = "Quickswap"
+    ladxr_name = "quickswap"
+    rich_text_doc = True
+    option_none = 0
+    option_a = 1
+    option_b = 2
+    default = option_none
+
+
+class TextMode(Choice, LADXROption):
+    """
+    **Fast:** Makes text appear twice as fast.
+    """
+    display_name = "Text Mode"
+    ladxr_name = "textmode"
+    rich_text_doc = True
+    option_normal = 0
+    option_fast = 1
+    option_none = 2
+    default = option_fast
+
+
+class LowHpBeep(Choice, LADXROption):
+    """
+    Slows or disables the low health beeping sound.
+    """
+    display_name = "Low HP Beep"
+    ladxr_name = "lowhpbeep"
+    option_default = 0
+    option_slow = 1
+    option_none = 2
+    default = option_default
+
+
+class NoFlash(DefaultOnToggle, LADXROption):
+    """
+    Remove the flashing light effects from Mamu, shopkeeper and MadBatter.
+    Useful for capture cards and people that are sensitive to these things.
+    """
+    display_name = "No Flash"
+    ladxr_name = "noflash"
+
+
+class BootsControls(Choice):
+    """
+    Adds an additional button to activate Pegasus Boots (does nothing if you
+    haven't picked up your boots!)
+
+    **Vanilla:** Nothing changes, you have to equip the boots to use them.
+
+    **Bracelet:** Holding down the button for the bracelet also activates boots
+    (somewhat like Link to the Past).
+
+    **Press A:** Holding down A activates boots.
+
+    **Press B:** Holding down B activates boots.
+    """
+    display_name = "Boots Controls"
+    rich_text_doc = True
+    option_vanilla = 0
+    option_bracelet = 1
+    option_press_a = 2
+    alias_a = 2
+    option_press_b = 3
+    alias_b = 3
+
+
+class LinkPalette(Choice, LADXROption):
+    """
+    Sets Link's palette.
+
+    A-D are color palettes usually used during the damage animation and can
+    change based on where you are.
+    """
+    display_name = "Link's Palette"
+    ladxr_name = "linkspalette"
+    option_normal = -1
+    option_green = 0
+    option_yellow = 1
+    option_red = 2
+    option_blue = 3
+    option_invert_a = 4
+    option_invert_b = 5
+    option_invert_c = 6
+    option_invert_d = 7
+    default = option_normal
+
+    def to_ladxr_option(self, all_options):
+        return self.ladxr_name, str(self.value)
+
+
+class TrendyGame(Choice):
+    """
+    **Easy:** All of the items hold still for you.
+
+    **Normal:** The vanilla behavior.
+
+    **Hard:** The trade item also moves.
+
+    **Harder:** The items move faster.
+
+    **Hardest:** The items move diagonally.
+
+    **Impossible:** The items move impossibly fast, may scroll on and off the
+    screen.
+    """
+    display_name = "Trendy Game"
+    rich_text_doc = True
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    option_harder = 3
+    option_hardest = 4
+    option_impossible = 5
+    default = option_normal
+
+
+class GfxMod(DefaultOffToggle):
+    """
+    If enabled, the patcher will prompt the user for a modification file to change sprites in the game and optionally some text.
+    """
+    display_name = "GFX Modification"
+
+
+class Palette(Choice):
+    """
+    Sets the palette for the game.
+
+    Note: A few places aren't patched, such as the menu and a few color dungeon
+    tiles.
+
+    **Normal:** The vanilla palette.
+
+    **1-Bit:** One bit of color per channel.
+
+    **2-Bit:** Two bits of color per channel.
+
+    **Greyscale:** Shades of grey.
+
+    **Pink:** Aesthetic.
+
+    **Inverted:** Inverted.
+    """
+    display_name = "Palette"
+    rich_text_doc = True
+    option_normal = 0
+    option_1bit = 1
+    option_2bit = 2
+    option_greyscale = 3
+    option_pink = 4
+    option_inverted = 5
+
+
+class Music(Choice, LADXROption):
+    """
+    **Vanilla:** Regular Music
+
+    **Shuffled:** Shuffled Music
+
+    **Off:** No music
+    """
+    display_name = "Music"
+    ladxr_name = "music"
+    rich_text_doc = True
+    option_vanilla = 0
+    option_shuffled = 1
+    option_off = 2
+
+    def to_ladxr_option(self, all_options):
+        s = ""
+        if self.value == self.option_shuffled:
+            s = "random"
+        elif self.value == self.option_off:
+            s = "off"
+        return self.ladxr_name, s
+
+
+class Warps(Choice):
+    """
+    **Improved:** Adds remake style warp screen to the game. Choose your warp
+    destination on the map after jumping in a portal and press *B* to select.
+
+    **Improved Additional:** Improved warps, and adds a warp point at Crazy
+    Tracy's house (the Mambo teleport spot) and Eagle's Tower.
+    """
+    display_name = "Warps"
+    rich_text_doc = True
+    option_vanilla = 0
+    option_improved = 1
+    option_improved_additional = 2
+    default = option_vanilla
+
+
+class InGameHintCount(Range):
+    """
+    Determines how many owl statues and library books will indicate the location
+    of your items in the multiworld. All others will give junk hints that reveal
+    nothing.
+
+    There are:
+    - 10 overworld owl statues
+    - 21 dungeon owl statues
+    - 7 hint books in the library
+    """
+    display_name = "In-Game Hint Count"
+    rich_text_doc = True
+    range_start = 0
+    range_end = 38
+    default = 26
+
+
+class InGameHintExcludedItems(ItemSet):
+    """
+    Indicated items will not be used for in-game hints.
+    """
+    display_name = "In-Game Hint Excluded Items"
+    rich_text_doc = True
+
+
+class InGameHintPriorityItems(ItemSet):
+    """
+    Indicated items will be prioritized for in-game hints.
+    """
+    display_name = "In-Game Hint Priority Items"
+    rich_text_doc = True
+
+
+class ExpandStart(Range):
+    """
+    Starting from Tarin's Gift, locally place progression items until the target
+    number of locations or more can be reached. Does nothing if set to *1*.
+    """
+    display_name = "Expand Start"
+    range_start = 1
+    range_end = 10
+    default = 5
+
+
+class MoreFiller(DefaultOnToggle):
+    """
+    Removes some rupees from the vanilla item pool to make more room for filler.
+    """
+    display_name = "More Filler"
+
+
+class FillerPool(Choice):
+    """
+    Sets which items can be added to the item pool to replace removed items.
+    """
+    display_name = "Filler Pool"
+    option_ammo = 0
+    option_rupees = 1
+    option_seashells = 2
+    # option_powerups = 3
+    option_traps = 4
+    option_nothing = 5
+
+
+class ForeignItemIcons(Choice):
+    """
+    Choose how to display foreign items.
+
+    **Guess By Name:** Foreign items can look like any Link's Awakening item.
+
+    **Indicate Progression:** Foreign items are either a Piece of Power
+    (progression) or Guardian Acorn (non-progression).
+    """
+    display_name = "Foreign Item Icons"
+    rich_text_doc = True
+    option_guess_by_name = 0
+    option_indicate_progression = 1
+    default = option_guess_by_name
+
+
+class Follower(Choice):
+    """
+    Gives you a pet follower in the game.
+    """
+    display_name = "Follower"
+    option_none = 0
+    option_fox = 1
+    option_navi = 2
+    option_ghost = 3
+    option_yip_yip = 4
+
+
+ladx_option_groups = [
+    OptionGroup("Gameplay Adjustments", [
+        HardMode,
+        TrendyGame,
+    ]),
+    OptionGroup("World Layout", [
+        Overworld,
+        Warps,
+        RandomStartLocation,
+        DungeonShuffle,
+        EntranceShuffle,
+        ShuffleJunk,
+        ShuffleAnnoying,
+        ShuffleWater,
+    ]),
+    OptionGroup("Item Pool", [
+        ShuffleInstruments,
+        ShuffleNightmareKeys,
+        ShuffleSmallKeys,
+        ShuffleMaps,
+        ShuffleCompasses,
+        ShuffleStoneBeaks,
+        TradeQuest,
+        Rooster,
+        MoreFiller,
+        FillerPool,
+    ]),
+    OptionGroup("Quality of Life & Aesthetic", [
+        NagMessages,
+        Quickswap,
+        BootsControls,
+        ForeignItemIcons,
+        GfxMod,
+        LinkPalette,
+        Palette,
+        APTitleScreen,
+        TextShuffle,
+        TextMode,
+        Music,
+        MusicChangeCondition,
+        LowHpBeep,
+        NoFlash,
+        Follower,
+    ]),
+    OptionGroup("In-Game Hints", [
+        InGameHintCount,
+        InGameHintExcludedItems,
+        InGameHintPriorityItems,
+    ]),
+]
+
+@dataclass
+class LinksAwakeningOptions(PerGameCommonOptions):
+    logic: Logic
+    tradequest: TradeQuest
+    rooster: Rooster
+    random_start_location: RandomStartLocation
+    dungeon_shuffle: DungeonShuffle
+    entrance_shuffle: EntranceShuffle
+    shuffle_junk: ShuffleJunk
+    shuffle_annoying: ShuffleAnnoying
+    shuffle_water: ShuffleWater
+    goal: Goal
+    instrument_count: InstrumentCount
+    link_palette: LinkPalette
+    warps: Warps
+    trendy_game: TrendyGame
+    gfxmod: GfxMod
+    palette: Palette
+    text_shuffle: TextShuffle
+    foreign_item_icons: ForeignItemIcons
+    shuffle_nightmare_keys: ShuffleNightmareKeys
+    shuffle_small_keys: ShuffleSmallKeys
+    shuffle_maps: ShuffleMaps
+    shuffle_compasses: ShuffleCompasses
+    shuffle_stone_beaks: ShuffleStoneBeaks
+    music: Music
+    shuffle_instruments: ShuffleInstruments
+    music_change_condition: MusicChangeCondition
+    nag_messages: NagMessages
+    ap_title_screen: APTitleScreen
+    boots_controls: BootsControls
+    stealing: Stealing
+    quickswap: Quickswap
+    hard_mode: HardMode
+    low_hp_beep: LowHpBeep
+    text_mode: TextMode
+    no_flash: NoFlash
+    in_game_hint_count: InGameHintCount
+    in_game_hint_excluded_items: InGameHintExcludedItems
+    in_game_hint_priority_items: InGameHintPriorityItems
+    overworld: Overworld
+    death_link: DeathLink
+    more_filler: MoreFiller
+    filler_pool: FillerPool
+    start_inventory_from_pool: StartInventoryPool
+    expand_start: ExpandStart
+    follower: Follower
+
+    warp_improvements: Removed
+    additional_warp_points: Removed
+    stabilize_item_pool: Removed
+    tarins_gift: Removed
+    experimental_dungeon_shuffle: Removed
+    experimental_entrance_shuffle: Removed
+    in_game_hints: Removed

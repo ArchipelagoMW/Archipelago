@@ -1,0 +1,129 @@
+{
+  "Lanayru Mining Facility - First Room": {
+    "hint_region": "Lanayru Mining Facility",
+    "exits": {
+      "Dungeon Exit": "Nothing",
+      "Second Room": "Has Hook Beetle"
+    },
+    "locations": {
+      "Chest behind Bars": "Nothing"
+    }
+  },
+  "Lanayru Mining Facility - Second Room": {
+    "hint_region": "Lanayru Mining Facility",
+    "exits": {
+      "First Room": "Nothing",
+      "Front Main Room": "Nothing",
+      "Key Locked Room": "Lanayru Mining Facility Small Key",
+      "West Room": "Gust Bellows"
+    },
+    "locations": {}
+  },
+  "Lanayru Mining Facility - Key Locked Room": {
+    "hint_region": "Lanayru Mining Facility",
+    "macros": {
+      "Can Access LMF Key Locked Room in Past": "Has Hook Beetle"
+    },
+    "exits": {
+      "Second Room": "Nothing",
+      "Front Main Room": "Can Access LMF Key Locked Room in Past & (Distance Activator | Has Practice Sword | Gust Bellows | Whip | Bomb Bag)"
+    },
+    "locations": {
+      "Chest in Key Locked Room": "Can Access LMF Key Locked Room in Past",
+      "Raised Chest in Hop across Boxes Room": "Can Access LMF Key Locked Room in Past & (Distance Activator | Has Practice Sword | Gust Bellows | Whip | Bomb Bag)",
+      "Lower Chest in Hop across Boxes Room": "Can Access LMF Key Locked Room in Past & (Distance Activator | Has Practice Sword | Gust Bellows | Whip | Bomb Bag)"
+    }
+  },
+  "Lanayru Mining Facility - West Room": {
+    "hint_region": "Lanayru Mining Facility",
+    "macros": {
+      "Can Reach Armos in LMF West Room": "Gust Bellows & Can Defeat Beamos"
+    },
+    "exits": {
+      "Second Room": "Nothing",
+      "West Main Room": "Can Reach Armos in LMF West Room & Can Defeat Armos & (Has Goddess Sword | Has Slingshot | Has Bow | Whip)"
+    },
+    "locations": {
+      "Chest in First West Room": "Gust Bellows",
+      "Chest after Armos Fight": "Can Reach Armos in LMF West Room & Can Defeat Armos & (Has Goddess Sword | Has Slingshot | Has Bow | Whip)"
+    }
+  },
+  "Lanayru Mining Facility - Front Main Room": {
+    "hint_region": "Lanayru Mining Facility",
+    "exits": {
+      "Dungeon Exit": "Nothing",
+      "Second Room": "Nothing"
+    },
+    "locations": {
+      "First Chest in Hub Room": "Has Hook Beetle | Bomb Bag"
+    }
+  },
+  "Lanayru Mining Facility - West Main Room": {
+    "hint_region": "Lanayru Mining Facility",
+    "exits": {
+      "West Room": "Nothing",
+      "Front Main Room": "Nothing",
+      "Spike Maze": "Gust Bellows"
+    },
+    "locations": {
+      "Chest behind First Crawlspace": "Gust Bellows"
+    }
+  },
+  "Lanayru Mining Facility - Spike Maze": {
+    "hint_region": "Lanayru Mining Facility",
+    "exits": {
+      "Boss Door Area": "Gust Bellows & Can Hit Timeshift Stone"
+    },
+    "locations": {
+      "Chest in Spike Maze": "Gust Bellows"
+    }
+  },
+  "Lanayru Mining Facility - Boss Door Area": {
+    "hint_region": "Lanayru Mining Facility",
+    "exits": {
+      "Dungeon Exit": "Nothing",
+      "Boss Key Room": "Gust Bellows",
+      "Boss Room": "Lanayru Mining Facility Boss Key"
+    },
+    "locations": {}
+  },
+  "Lanayru Mining Facility - Boss Key Room": {
+    "hint_region": "Lanayru Mining Facility",
+    "macros": {
+      "Can Reach Armos in LMF Boss Key Room": "Gust Bellows & Bomb Bag & Can Defeat Beamos & (Has Practice Sword | Distance Activator)"
+    },
+    "exits": {
+      "Boss Door Area": "Can Reach Armos in LMF Boss Key Room & Can Defeat Armos & Can Hit Timeshift Stone"
+    },
+    "locations": {
+      "Boss Key Chest": "Can Reach Armos in LMF Boss Key Room & Can Defeat Armos",
+      "Shortcut Chest in Main Hub": "Can Reach Armos in LMF Boss Key Room & Can Defeat Armos"
+    }
+  },
+  "Lanayru Mining Facility - Boss Room": {
+    "hint_region": "Lanayru Mining Facility",
+    "macros": {
+      "Can Beat Moldarach": "Can Defeat Moldarachs"
+    },
+    "exits": {
+      "Boss Door Area": "Nothing",
+      "Hall of Ancient Robots": "Can Beat Moldarach"
+    },
+    "locations": {
+      "Heart Container": "Can Beat Moldarach"
+    }
+  },
+  "Lanayru Mining Facility - Hall of Ancient Robots": {
+    "hint_region": "Lanayru Mining Facility",
+    "macros": {
+      "Can Beat Lanayru Mining Facility": "Has Beetle | Has Bow"
+    },
+    "exits": {
+      "Boss Room": "Nothing",
+      "Exit Hall of Ancient Robots": "Can Beat Lanayru Mining Facility"
+    },
+    "locations": {
+      "Exit Hall of Ancient Robots": "Can Beat Lanayru Mining Facility"
+    }
+  }
+}

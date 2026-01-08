@@ -1,0 +1,76 @@
+# uncompressed 2bpp format: capital letters, then four punctuation characters.
+# the characters are one tile each and roughly match the single-tile digits.
+# these need to be loaded in two steps due to DMA transfer limitations?
+14//dma_CustomFontLetters: |
+    db 00,ff,3c,ff,66,ff,66,ff,7e,ff,66,ff,66,ff,00,ff
+    db 00,ff,7c,ff,66,ff,7c,ff,66,ff,66,ff,7c,ff,00,ff
+    db 00,ff,3c,ff,66,ff,60,ff,60,ff,66,ff,3c,ff,00,ff
+    db 00,ff,7c,ff,66,ff,66,ff,66,ff,66,ff,7c,ff,00,ff
+    db 00,ff,7e,ff,60,ff,7c,ff,60,ff,60,ff,7e,ff,00,ff
+    db 00,ff,7e,ff,60,ff,7c,ff,60,ff,60,ff,60,ff,00,ff
+    db 00,ff,3c,ff,66,ff,60,ff,6e,ff,66,ff,3c,ff,00,ff
+    db 00,ff,66,ff,66,ff,7e,ff,66,ff,66,ff,66,ff,00,ff
+    db 00,ff,3c,ff,18,ff,18,ff,18,ff,18,ff,3c,ff,00,ff
+    db 00,ff,06,ff,06,ff,66,ff,66,ff,66,ff,3c,ff,00,ff
+    db 00,ff,66,ff,6c,ff,78,ff,6c,ff,66,ff,66,ff,00,ff
+    db 00,ff,60,ff,60,ff,60,ff,60,ff,60,ff,7e,ff,00,ff
+    db 00,ff,7c,ff,7e,ff,6a,ff,6a,ff,6a,ff,6a,ff,00,ff
+    db 00,ff,62,ff,72,ff,7a,ff,5e,ff,4e,ff,46,ff,00,ff
+    db 00,ff,3c,ff,66,ff,66,ff,66,ff,66,ff,3c,ff,00,ff
+    db 00,ff,7c,ff,66,ff,66,ff,7c,ff,60,ff,60,ff,00,ff
+    db 00,ff,3c,ff,66,ff,66,ff,66,ff,3c,ff,0e,ff,00,ff
+    db 00,ff,7c,ff,66,ff,66,ff,7c,ff,66,ff,66,ff,00,ff
+    db 00,ff,3c,ff,66,ff,38,ff,1c,ff,66,ff,3c,ff,00,ff
+    db 00,ff,7e,ff,18,ff,18,ff,18,ff,18,ff,18,ff,00,ff
+    db 00,ff,66,ff,66,ff,66,ff,66,ff,66,ff,3c,ff,00,ff
+    db 00,ff,66,ff,66,ff,66,ff,6c,ff,78,ff,70,ff,00,ff
+    db 00,ff,6a,ff,6a,ff,6a,ff,6a,ff,7e,ff,3c,ff,00,ff
+    db 00,ff,66,ff,7e,ff,18,ff,3c,ff,66,ff,66,ff,00,ff
+    db 00,ff,66,ff,66,ff,3c,ff,18,ff,18,ff,18,ff,00,ff
+    db 00,ff,7e,ff,06,ff,1c,ff,38,ff,60,ff,7e,ff,00,ff
+14//dma_CustomFontPunct: |
+    db 00,ff,00,ff,00,ff,00,ff,00,ff,00,ff,00,ff,00,ff
+    db 00,ff,10,ff,10,ff,7c,ff,10,ff,10,ff,00,ff,00,ff
+    db 00,ff,00,ff,00,ff,7c,ff,00,ff,00,ff,00,ff,00,ff
+    db 00,ff,00,ff,00,ff,00,ff,00,ff,18,ff,18,ff,00,ff
+14//dma_FileSelectStringAttrs: |
+      db 0a,0a,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,2a,2a
+      db 0a,0a,0a,0a,0a,0a,0a,0a,0a,0a,0a,0a    ; offscreen
+      db 0a,0a,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,0e,2a,2a
+      db 0a,0a,0a,0a,0a,0a,0a,0a,0a,0a,0a,0a    ; offscreen
+14//dma_FileSelectStringTiles: /include dma_FileSelectStringTiles
+
+# queues a DMA transfer for the custom string to be displayed at the top of
+# the file select string.
+02//displayFileSelectString: |
+    call loadUncompressedGfxHeader
+    
+    ; Load base font
+    ld b,$19            ; 26*16 bytes
+    ld c,$14            ; Bank 14
+    ld de,$8e21
+    ld hl,dma_CustomFontLetters
+    call queueDmaTransfer
+    
+    ; Load punctuation
+    ld b,$03            ; 4*16 bytes
+    ld c,$14            ; Bank 14
+    ld de,$8fc1
+    ld hl,dma_CustomFontPunct
+    call queueDmaTransfer
+    
+    ; Load string attributes
+    ld b,$03            ; 4*16 bytes
+    ld c,$14            ; Bank 14
+    ld de,$9c21
+    ld hl,dma_FileSelectStringAttrs
+    call queueDmaTransfer
+    
+    ; Load string tiles
+    ld b,$03            ; 4*16 bytes
+    ld c,$14            ; Bank 14
+    ld de,$9c20
+    ld hl,dma_FileSelectStringTiles
+    jp queueDmaTransfer
+02/4246/: call displayFileSelectString
+02/4a94/: jp displayFileSelectString

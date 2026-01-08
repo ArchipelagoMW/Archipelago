@@ -1,0 +1,8 @@
+{
+    "minimum_ap_version": "0.6.3", 
+    "world_version": "0.1.2",
+    "authors": ["Happyhappyism"],
+    "version": 7,
+    "compatible_version": 7,
+    "game": "Bomberman 64 The Second Attack"
+}

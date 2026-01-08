@@ -1,0 +1,3448 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 104,
+  "name": "Double Chamber",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "East",
+  "roomAddress": "0x7ADAD",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1, 1],
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019606",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1, 1, 1],
+        [1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019612",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [2, 2, 1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "red",
+      "nodeAddress": "0x001961e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 2],
+        [1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78CBC",
+      "mapTileMask": [
+        [1, 2, 2, 1],
+        [1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Junction Below Spikes",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [1, 1, 2, 2]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Direct G-Mode Junction, Prepared Remote Acquire (Bottom Right)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [1, 1, 2, 2]
+      ],
+      "note": "Represents being at the bottom right with G-Mode and overloaded PLMs. The item must have been touched or previously been collected."
+    },
+    {
+      "id": 7,
+      "name": "G-Mode Junction (Bottom Right)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [1, 1, 2, 2]
+      ],
+      "note": "Represents being at the bottom right with G-Mode and Morph.",
+      "devNote": "This can only be used for strats that can be done with either indirect or direct and PLMs overloaded or not."
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Blue Gate",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Double Chamber Funes",
+      "enemyName": "Fune",
+      "quantity": 2,
+      "betweenNodes": [1, 2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Double Chamber Ripper 2",
+      "enemyName": "Ripper 2 (green)",
+      "quantity": 1,
+      "betweenNodes": [3, 5]
+    },
+    {
+      "id": "e3",
+      "groupName": "Double Chamber Kago",
+      "enemyName": "Kago",
+      "quantity": 1,
+      "homeNodes": [5]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 142,
+      "link": [1, 1],
+      "name": "Ripper Farm",
+      "requires": [
+        "h_heatProof",
+        "SpaceJump",
+        "ScrewAttack",
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 660}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 810}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Ripper 2 (green)", "count": 1}]
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 150}
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovement",
+        {"heatFrames": 150},
+        {"shineChargeFrames": 135}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 79,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        {"or": [
+          "canXRayCancelShinecharge",
+          {"heatFrames": 160}
+        ]},
+        "canXRayTurnaround",
+        {"heatFrames": 350}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 91,
+      "link": [1, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 92,
+      "link": [1, 3],
+      "name": "Indirect G-Mode, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "h_maxHeightSpringBallJump",
+          "canWalljump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          "canPreciseGrapple"
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "With Grapple, a running jump then single Grapple swing can be used before PLMs are overloaded, alternatively jump on the crumble blocks and Grapple the Ripper."
+    },
+    {
+      "id": 93,
+      "link": [1, 3],
+      "name": "Indirect G-Mode Morph, Despawn Gate, IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphIBJ",
+        "h_artificialMorphBombHorizontally",
+        "canCameraManip",
+        "canTrickyJump",
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Bomb boost onto the crumble blocks in the middle of the spike pit, then on the right side, move the Ripper off camera and IBJ.",
+        "If the camera gets shifted so that the Ripper stays on camera, shift it back to the right by IBJng up a bit on the left side of the 4 crumbles then move to the right as Samus falls."
+      ]
+    },
+    {
+      "id": 94,
+      "link": [1, 3],
+      "name": "Direct G-Mode, Through the Crumbles",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          "SpaceJump",
+          "canPreciseGrapple",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            "HiJump",
+            "canWalljump",
+            "canTrickyJump"
+          ]},
+          {"and": [
+            "canWalljump",
+            "canUseIFrames",
+            {"spikeHits": 1}
+          ]},
+          "h_IBJFromSpikes"
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "Overload PLMs by shooting the gate, then go through the crumble blocks below and get to the door."
+    },
+    {
+      "id": 95,
+      "link": [1, 3],
+      "name": "G-Mode Morph, Through the Crumbles, IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]},
+        "h_artificialMorphBombHorizontally",
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"and": [
+            "Morph",
+            {"ammo": {"type": "Missile", "count": 2}}
+          ]},
+          {"and": [
+            "Morph",
+            {"ammo": {"type": "Super", "count": 1}}
+          ]},
+          {"and": [
+            "h_artificialMorphDoubleBombJump",
+            "h_artificialMorphStaggeredIBJ"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs by bombing the gate or crumble blocks, then go through the crumble blocks below and get to the door.",
+        "IBJ past the Ripper or kill it. The Kago bugs will not spawn until Samus exits G-mode, so it is fine to kill it or IBJ from on top of it."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 250}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 96,
+      "link": [1, 4],
+      "name": "Indirect G-Mode, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 97,
+      "link": [1, 4],
+      "name": "Indirect G-Mode, Despawn Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"heatFrames": 25}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Stand under where the gate will spawn when exiting G-mode to open it before grabbing the item."
+    },
+    {
+      "id": 98,
+      "link": [1, 4],
+      "name": "Direct G-Mode, Through the Crumbles",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          "SpaceJump",
+          "canPreciseGrapple",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          "canInsaneWalljump",
+          {"and": [
+            "HiJump",
+            "canUseIFrames",
+            {"enemyDamage": {"enemy": "Ripper 2 (green)", "type": "contact", "hits": 1}},
+            {"or": [
+              "canWalljump",
+              "SpeedBooster"
+            ]}
+          ]},
+          "h_IBJFromSpikes"
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": "Overload PLMs by shooting the gate, then go through the crumble blocks below and get to the item."
+    },
+    {
+      "id": 99,
+      "link": [1, 4],
+      "name": "Direct G-Mode Morph, Through the Crumbles, IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]},
+        "h_artificialMorphBombHorizontally",
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"and": [
+            "Morph",
+            {"ammo": {"type": "Missile", "count": 2}}
+          ]},
+          {"and": [
+            "Morph",
+            {"ammo": {"type": "Super", "count": 1}}
+          ]},
+          {"and": [
+            "h_artificialMorphDoubleBombJump",
+            "h_artificialMorphStaggeredIBJ"
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs by bombing the gate or crumble blocks, then go through the crumble blocks below and get to the item.",
+        "IBJ past the Ripper or kill it. The Kago bugs will not spawn until Samus exits G-mode, so it is fine to kill it or IBJ from on top of it."
+      ]
+    },
+    {
+      "id": 100,
+      "link": [1, 7],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [2, 1],
+      "name": "Walljump Climb Using the Kamer",
+      "requires": [
+        {"notable": "Walljump Climb Using the Kamer"},
+        "canPreciseWalljump",
+        "canConsecutiveWalljump",
+        "canUseEnemies",
+        {"or": [
+          {"heatFrames": 560},
+          {"and": [
+            "canTrickyWalljump",
+            {"heatFrames": 360}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"heatFrames": 240}
+          ]},
+          {"and": [
+            {"or": [
+              "canUseFrozenEnemies",
+              {"ammo": {"type": "Super", "count": 1}}
+            ]},
+            {"heatFrames": 432}
+          ]},
+          {"and": [
+            {"ammo": {"type": "PowerBomb", "count": 1}},
+            {"heatFrames": 456}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Wall jump up the left wall and then on the moving platform (Kamer) while avoiding the Fune's fireball.",
+        "The Kamers will temporarily move down if Samus is below them, so it is best to walk under the first Kamer before climbing the wall.",
+        "It is possible to freeze or kill the Fune with a Super or Power Bomb to make things easier."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "Walljump Climb Using the Kamer with HiJump",
+      "requires": [
+        {"notable": "Walljump Climb Using the Kamer"},
+        "HiJump",
+        "canUseEnemies",
+        "canWalljump",
+        {"or": [
+          {"heatFrames": 360},
+          {"and": [
+            "canCarefulJump",
+            {"heatFrames": 250}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Wall jump up the left wall and then on the moving platform (Kamer) while avoiding the Fune's fireball.",
+        "The Kamers will temporarily move down if Samus is below them, so it is best to walk under the first Kamer before climbing the wall."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Delayed Walljump",
+      "requires": [
+        "canTrickyWalljump",
+        "canConsecutiveWalljump",
+        "canTrickyJump",
+        "canUseEnemies",
+        {"or": [
+          {"heatFrames": 190},
+          {"and": [
+            "canPrepareForNextRoom",
+            {"heatFrames": 120}
+          ]}
+        ]}
+      ],
+      "note": "Wall jump up the left wall, perform a delayed wall jump on the Fune to reach the door."
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 200},
+        {"or": [
+          "canPrepareForNextRoom",
+          {"heatFrames": 100}
+        ]}
+      ]
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "HiJump Space Jump",
+      "requires": [
+        "HiJump",
+        "SpaceJump",
+        {"heatFrames": 120},
+        {"or": [
+          "canPrepareForNextRoom",
+          {"heatFrames": 70}
+        ]}
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "HiJump Spring Ball Jump",
+      "requires": [
+        "HiJump",
+        "canSpringBallJumpMidAir",
+        {"heatFrames": 160}
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "IBJ",
+      "requires": [
+        {"or": [
+          "canLongIBJ",
+          {"and": [
+            "HiJump",
+            "canJumpIntoIBJ"
+          ]}
+        ]},
+        {"heatFrames": 1450}
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Shinespark (In-Room)",
+      "requires": [
+        {"canShineCharge": {
+          "usedTiles": 28,
+          "gentleUpTiles": 3,
+          "gentleDownTiles": 3,
+          "openEnd": 0
+        }},
+        {"or": [
+          {"shinespark": {"frames": 27, "excessFrames": 4}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 17, "excessFrames": 4}}
+          ]}
+        ]},
+        {"heatFrames": 380}
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Shinespark Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 1},
+        {"shinespark": {"frames": 1, "excessFrames": 1}},
+        "canShinesparkDeepStuck",
+        "canXRayClimb",
+        "canBePatient",
+        {"heatFrames": 1600}
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "G-Mode Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_heatProof",
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_heatProof",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Shinespark (Come in Charged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 40},
+        {"shinespark": {"frames": 27, "excessFrames": 4}},
+        {"heatFrames": 200}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Speedjump",
+      "requires": [
+        "SpeedBooster",
+        "HiJump",
+        {"heatFrames": 350}
+      ],
+      "note": "Run from the right wall to 2/3 of the way across the room and jump up onto the moving platforms."
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Tricky Dash Jump",
+      "requires": [
+        "canTrickyDashJump",
+        {"heatFrames": 450}
+      ],
+      "note": [
+        "Run under the second moving platform from the right to trigger it to move down.",
+        "Then run back to the left wall, run again to the right, and jump when on the center of the mound just to the right below the platform."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Cross Room HiJump Spring Ball Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canPrepareForNextRoom",
+        "canSpringBallJumpMidAir",
+        {"heatFrames": 120}
+      ],
+      "note": [
+        "Spin jump into the room with at least 1 tile of run speed.",
+        "Then perform a mid-air Spring Ball jump to reach the ledge above."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Cross Room Tricky Spring Ball Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canLateralMidAirMorph",
+        "canTrickySpringBallJump",
+        "canTrickyJump",
+        {"heatFrames": 160}
+      ],
+      "note": [
+        "Spin jump into the room with at least 1 tile of run speed.",
+        "Perform a lateral mid-air morph into a spring ball jump.",
+        "Press against the left side of the first moving platform to gain enough height to get on top of it."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "canShinechargeMovementComplex",
+        "HiJump",
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "canPreciseWalljump",
+            "canTrickyJump"
+          ]}
+        ]},
+        {"heatFrames": 400},
+        {"canShineCharge": {
+          "usedTiles": 28,
+          "gentleUpTiles": 3,
+          "gentleDownTiles": 3,
+          "openEnd": 0
+        }},
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 240}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 100}]
+        }
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 80,
+      "link": [2, 1],
+      "name": "Leave With Temporary Blue (HiJump, Spring Ball Jump)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canSpringBallJumpMidAir",
+        {"canShineCharge": {
+          "usedTiles": 19,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 2,
+          "openEnd": 1
+        }},
+        "canPauseRemorphTemporaryBlue",
+        {"heatFrames": 550},
+        {"or": [
+          "canXRayCancelShinecharge",
+          {"heatFrames": 160}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 81,
+      "link": [2, 1],
+      "name": "Blue Cross-Room Jump, Leave With Temporary Blue (HiJump, Spring Ball Jump)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canXRayTurnaround",
+        "canSpringBallJumpMidAir",
+        "canPauseRemorphTemporaryBlue",
+        {"heatFrames": 380}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "link": [2, 1],
+      "name": "Blue Cross-Room Jump, Leave With Temporary Blue (Speedy Jump, HiJump)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$2.0"
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canLateralMidAirMorph",
+        "canInsaneJump",
+        "canPauseRemorphTemporaryBlue",
+        "canXRayTurnaround",
+        {"heatFrames": 360}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 83,
+      "link": [2, 1],
+      "name": "Blue Cross-Room Jump, Leave With Temporary Blue (Speedy Jump, Spring Ball Jump)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$2.0"
+        }
+      },
+      "requires": [
+        "canLateralMidAirMorph",
+        "canTrickySpringBallJump",
+        "canInsaneJump",
+        "canPauseRemorphTemporaryBlue",
+        "canXRayTurnaround",
+        {"heatFrames": 440}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 87,
+      "link": [2, 1],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"},
+            {"position": [6, 4], "note": "Grapple Tutorial Room 2"},
+            {"position": [6, 2], "note": "Lava Grapple Tunnel"},
+            {
+              "position": [5, 2],
+              "note": "The Moat, Double Chamber, Wrecked Ship Energy Tank Room"
+            },
+            {"position": [2.375, 4.5625], "note": "Post Crocomire Farming Room"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump",
+        "h_heatProof"
+      ],
+      "devNote": ["The Kamers make this tricky since it's easy to bonk on them."]
+    },
+    {
+      "id": 101,
+      "link": [2, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canWalljump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          "canTrickyDashJump",
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 28,
+              "gentleUpTiles": 3,
+              "gentleDownTiles": 3,
+              "openEnd": 0
+            }},
+            "canMidairShinespark",
+            {"shinespark": {"frames": 1, "excessFrames": 1}}
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "It is possible to climb the left side of the room with SpeedBooster alone, with either a tricky dash jump or a vertical shinespark.",
+      "devNote": "This is only for strats without Morph, otherwise the strats can stop at 7 first."
+    },
+    {
+      "id": 102,
+      "link": [2, 1],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphIBJ",
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 23,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 90,
+      "link": [2, 2],
+      "name": "Leave With Side Platform",
+      "requires": [
+        {"heatFrames": 320}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 28,
+            "openEnd": 0,
+            "gentleUpTiles": 3,
+            "gentleDownTiles": 3
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $5.0"]
+    },
+    {
+      "id": 24,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [2, 2],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "canShinechargeMovement",
+        {"heatFrames": 300},
+        {"canShineCharge": {
+          "usedTiles": 28,
+          "gentleUpTiles": 3,
+          "gentleDownTiles": 3,
+          "openEnd": 0
+        }},
+        {"shineChargeFrames": 40}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 84,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"canShineCharge": {
+          "usedTiles": 28,
+          "gentleUpTiles": 3,
+          "gentleDownTiles": 3,
+          "openEnd": 0
+        }},
+        {"heatFrames": 320},
+        {"or": [
+          "canXRayCancelShinecharge",
+          {"heatFrames": 160}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 103,
+      "link": [2, 3],
+      "name": "Indirect G-Mode, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "h_maxHeightSpringBallJump",
+          "canWalljump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          {"and": [
+            "canTrickyDashJump",
+            "canPreciseGrapple"
+          ]},
+          {"and": [
+            "canPreciseGrapple",
+            {"canShineCharge": {
+              "usedTiles": 28,
+              "gentleUpTiles": 3,
+              "gentleDownTiles": 3,
+              "openEnd": 0
+            }},
+            "canMidairShinespark",
+            {"shinespark": {"frames": 17, "excessFrames": 4}}
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to climb the left side of the room with SpeedBooster alone, with either a tricky dash jump or a vertical shinespark, then Grapple the Ripper or ceiling blocks.",
+        "With Grapple, a running jump then single Grapple swing can be used before PLMs are overloaded, alternatively jump on the crumble blocks and Grapple the Ripper."
+      ]
+    },
+    {
+      "id": 104,
+      "link": [2, 3],
+      "name": "Indirect G-Mode Morph, Despawn Gate, IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphIBJ",
+        "h_artificialMorphBombHorizontally",
+        "canCameraManip",
+        "canTrickyJump",
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Bomb boost onto the crumble blocks in the middle of the spike pit, then on the right side, move the Ripper off camera and IBJ.",
+        "If the camera gets shifted so that the Ripper stays on camera, shift it back to the right by IBJng up a bit on the left side of the 4 crumbles then move to the right as Samus falls."
+      ]
+    },
+    {
+      "id": 105,
+      "link": [2, 3],
+      "name": "Direct G-Mode, Through the Crumbles",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          "SpaceJump",
+          "canPreciseGrapple",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            "HiJump",
+            "canWalljump",
+            "canTrickyJump"
+          ]},
+          {"and": [
+            "canWalljump",
+            "canUseIFrames",
+            {"spikeHits": 1}
+          ]},
+          "h_IBJFromSpikes"
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs by shooting the gate, then go through the crumble blocks below and get to the door.",
+        "The gate can be shot while precisely positioned from below without requiring any items.",
+        "The positioning is precise and off camera; while facing left, position Samus front foot barely on the flat part after the slope."
+      ]
+    },
+    {
+      "id": 106,
+      "link": [2, 3],
+      "name": "G-Mode Morph, Through the Crumbles, IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]},
+        "h_artificialMorphBombHorizontally",
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"and": [
+            "Morph",
+            {"ammo": {"type": "Missile", "count": 2}}
+          ]},
+          {"and": [
+            "Morph",
+            {"ammo": {"type": "Super", "count": 1}}
+          ]},
+          {"and": [
+            "h_artificialMorphDoubleBombJump",
+            "h_artificialMorphStaggeredIBJ"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs by bombing the gate or crumble blocks, then go through the crumble blocks below and get to the door.",
+        "IBJ past the Ripper or kill it. The Kago bugs will not spawn until Samus exits G-mode, so it is fine to kill it or IBJ from on top of it."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [2, 4],
+      "name": "HiJump Speed Jump",
+      "requires": [
+        "HiJump",
+        "SpeedBooster",
+        {"heatFrames": 220}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 27,
+      "link": [2, 4],
+      "name": "HiJump Space Jump",
+      "requires": [
+        "HiJump",
+        "SpaceJump",
+        {"heatFrames": 250}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 28,
+      "link": [2, 4],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 310}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 29,
+      "link": [2, 4],
+      "name": "HiJump Wall Jump",
+      "requires": [
+        "HiJump",
+        "canWalljump",
+        "canTrickyJump",
+        {"heatFrames": 380}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Run to the right, wait a moment for the platforms to come down, then wall jump off the second platform from the right."
+    },
+    {
+      "id": 30,
+      "link": [2, 4],
+      "name": "HiJump Spring Ball Jump",
+      "requires": [
+        "HiJump",
+        "canSpringBallJumpMidAir",
+        {"heatFrames": 250}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 31,
+      "link": [2, 4],
+      "name": "Tricky Dash Jump",
+      "requires": [
+        "canTrickyDashJump",
+        {"heatFrames": 380}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Run under the furthest right moving platform to trigger it to move down.",
+        "Then run back to the left wall, run again to the right, and jump when on the center of the mound just to the left below the platform.",
+        "Shoot straight up to open the gate on the way up."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [2, 4],
+      "name": "Tricky Dash Jump Wall Jump",
+      "requires": [
+        "canTrickyDashJump",
+        "canWalljump",
+        {"heatFrames": 300}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Starting from the left wall, run to the right and when on the center of the mound just to the right of the second moving platform from the right.",
+        "Wall jump off of the platform as it moves down."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [2, 4],
+      "name": "Shinespark (In-Room)",
+      "requires": [
+        {"canShineCharge": {
+          "usedTiles": 28,
+          "gentleUpTiles": 3,
+          "gentleDownTiles": 3,
+          "openEnd": 0
+        }},
+        {"shinespark": {"frames": 24, "excessFrames": 8}},
+        {"heatFrames": 300},
+        {"or": [
+          "canHeroShot",
+          {"heatFrames": 100}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 34,
+      "link": [2, 4],
+      "name": "Cross Room HiJump Speed Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "HiJump",
+        {"heatFrames": 220}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 35,
+      "link": [2, 4],
+      "name": "Cross Room HiJump Wall Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "HiJump",
+        "canWalljump",
+        "canTrickyJump",
+        {"heatFrames": 260}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Jump through the door transition, and wall jump off the second moving platform to get on top."
+    },
+    {
+      "id": 36,
+      "link": [2, 4],
+      "name": "Cross Room Tricky Spring Ball Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canLateralMidAirMorph",
+        "canTrickySpringBallJump",
+        "canTrickyJump",
+        {"heatFrames": 280}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Spin jump into the room with at least 2 tiles of run speed.",
+        "Perform a lateral mid-air morph into a spring ball jump.",
+        "Land on the second moving platform."
+      ]
+    },
+    {
+      "id": 107,
+      "link": [2, 4],
+      "name": "Indirect G-Mode, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canWalljump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          "canTrickyDashJump",
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 28,
+              "gentleUpTiles": 3,
+              "gentleDownTiles": 3,
+              "openEnd": 0
+            }},
+            "canMidairShinespark",
+            {"shinespark": {"frames": 17, "excessFrames": 4}}
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": "It is possible to climb the left side of the room with SpeedBooster alone, with either a tricky dash jump or a vertical shinespark."
+    },
+    {
+      "id": 108,
+      "link": [2, 4],
+      "name": "Indirect G-Mode Morph, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphIBJ",
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 109,
+      "link": [2, 4],
+      "name": "Indirect G-Mode, Despawn Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canWalljump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          "canTrickyDashJump",
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 28,
+              "gentleUpTiles": 3,
+              "gentleDownTiles": 3,
+              "openEnd": 0
+            }},
+            "canMidairShinespark",
+            {"shinespark": {"frames": 17, "excessFrames": 4}}
+          ]}
+        ]},
+        {"heatFrames": 25}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Stand under where the gate will spawn when exiting G-mode to open it before grabbing the item."
+    },
+    {
+      "id": 110,
+      "link": [2, 4],
+      "name": "Indirect G-Mode Morph, Despawn Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphIBJ",
+        {"heatFrames": 25}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Stand under where the gate will spawn when exiting G-mode to open it before grabbing the item."
+    },
+    {
+      "id": 111,
+      "link": [2, 4],
+      "name": "Direct G-Mode, Through the Crumbles",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          "SpaceJump",
+          "canPreciseGrapple",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          "canInsaneWalljump",
+          {"and": [
+            "HiJump",
+            "canUseIFrames",
+            {"enemyDamage": {"enemy": "Ripper 2 (green)", "type": "contact", "hits": 1}},
+            {"or": [
+              "canWalljump",
+              "SpeedBooster"
+            ]}
+          ]},
+          "h_IBJFromSpikes"
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs by shooting the gate, then go through the crumble blocks below and get to the item.",
+        "The gate can be shot while precisely positioned from below without requiring any items.",
+        "The positioning is precise and off camera; while facing left, position Samus front foot barely on the flat part after the slope."
+      ]
+    },
+    {
+      "id": 112,
+      "link": [2, 4],
+      "name": "Direct G-Mode Morph, Through the Crumbles, IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]},
+        "h_artificialMorphBombHorizontally",
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"and": [
+            "Morph",
+            {"ammo": {"type": "Missile", "count": 2}}
+          ]},
+          {"and": [
+            "Morph",
+            {"ammo": {"type": "Super", "count": 1}}
+          ]},
+          {"and": [
+            "h_artificialMorphDoubleBombJump",
+            "h_artificialMorphStaggeredIBJ"
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs by bombing the gate or crumble blocks, then go through the crumble blocks below and get to the item.",
+        "IBJ past the Ripper or kill it. The Kago bugs will not spawn until Samus exits G-mode, so it is fine to kill it or IBJ from on top of it."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [2, 5],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 113,
+      "link": [2, 7],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 38,
+      "link": [3, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 39,
+      "link": [3, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        {"heatFrames": 1600}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled) with a horizontal position of 21 (as far right as possible).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door.",
+        "Samus will not be visible during the climb.",
+        "At the beginning of the climb, avoid pressing left without X-Ray being held, to prevent triggering the transition of the bottom door."
+      ]
+    },
+    {
+      "id": 114,
+      "link": [3, 1],
+      "name": "Direct G-Mode Morph, Remote Acquire",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "h_artificialMorphCeilingBombJump",
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "h_artificialMorphIBJ",
+            "h_artificialMorphPowerBomb"
+          ]},
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "canTrickyDodgeEnemies",
+            "h_artificialMorphDoubleBombJump",
+            "h_artificialMorphStaggeredIBJ"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": [
+        "Bomb horizontally on room entry to jump over the Ripper and land on the crumble blocks, or use a Power Bomb to kill the Ripper.",
+        "Avoid touching all 6 crumbles, so Samus can use the item to overload PLMs and go through one of the crumbles to get to the left side of the room.",
+        "If the item has already been obtained, Samus can shoot or Bomb the gate many times to overload PLMs."
+      ]
+    },
+    {
+      "id": 115,
+      "link": [3, 1],
+      "name": "Indirect G-Mode, Despawn the Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canPreciseGrapple",
+          "canInsaneWalljump",
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump onto the crumble blocks to make them solid, then use them as a platform to cross the room.",
+        "With Grapple, a running jump then single Grapple swing can be used before PLMs are overloaded, alternatively jump on the crumble blocks and Grapple the Ripper."
+      ],
+      "devNote": "This is only for strats that can't go to 7 - variants without Morph, or without a way to get back up after going down."
+    },
+    {
+      "id": 116,
+      "link": [3, 1],
+      "name": "Indirect G-Mode Morph, Despawn the Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphCeilingBombJump",
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "h_artificialMorphIBJ",
+            "h_artificialMorphPowerBomb"
+          ]},
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "canTrickyDodgeEnemies",
+            "h_artificialMorphDoubleBombJump",
+            "h_artificialMorphStaggeredIBJ"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "Bomb horizontally on room entry to jump over the Ripper and land on the crumble blocks, or use a Power Bomb to kill the Ripper."
+    },
+    {
+      "id": 40,
+      "link": [3, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 41,
+      "link": [3, 2],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 117,
+      "link": [3, 2],
+      "name": "Direct G-Mode Morph, Remote Acquire",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "h_artificialMorphCeilingBombJump",
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "h_artificialMorphIBJ",
+            "h_artificialMorphPowerBomb"
+          ]},
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "canTrickyDodgeEnemies",
+            "h_artificialMorphDoubleBombJump",
+            "h_artificialMorphStaggeredIBJ"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": [
+        "Bomb horizontally on room entry to jump over the Ripper and land on the crumble blocks, or use a Power Bomb to kill the Ripper.",
+        "Avoid touching all 6 crumbles, so Samus can use the item to overload PLMs and go through one of the crumbles to get to the left side of the room.",
+        "If the item has already been obtained, Samus can shoot or Bomb the gate many times to overload PLMs."
+      ]
+    },
+    {
+      "id": 118,
+      "link": [3, 2],
+      "name": "Indirect G-Mode, Despawn the Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canPreciseGrapple",
+          "canInsaneWalljump",
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump onto the crumble blocks to make them solid, then use them as a platform to cross the room.",
+        "With Grapple, a running jump then single Grapple swing can be used before PLMs are overloaded, alternatively jump on the crumble blocks and Grapple the Ripper."
+      ],
+      "devNote": "This is only for strats that can't go to 7 - variants without Morph."
+    },
+    {
+      "id": 119,
+      "link": [3, 2],
+      "name": "Indirect G-Mode Morph, Despawn the Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphCeilingBombJump",
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "h_artificialMorphIBJ",
+            "h_artificialMorphPowerBomb"
+          ]},
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "canTrickyDodgeEnemies",
+            "h_artificialMorphDoubleBombJump",
+            "h_artificialMorphStaggeredIBJ"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "Bomb horizontally on room entry to jump over the Ripper and land on the crumble blocks, or use a Power Bomb to kill the Ripper."
+    },
+    {
+      "id": 42,
+      "link": [3, 3],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 88,
+      "link": [3, 3],
+      "name": "Leave With Grapple Swing",
+      "requires": [
+        "h_heatProof"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleSwing": {
+          "blocks": [{"position": [5, 2], "note": "Closest Grapple block to the door"}]
+        }
+      }
+    },
+    {
+      "id": 43,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 143,
+      "link": [3, 3],
+      "name": "Ripper Farm",
+      "requires": [
+        "h_heatProof",
+        "SpaceJump",
+        "ScrewAttack",
+        {"resetRoom": {"nodes": [3]}},
+        {"cycleFrames": 230}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Ripper 2 (green)", "count": 1}],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: It is possible but risky to farm using hijump, walljump, and crumble jumps."
+    },
+    {
+      "id": 44,
+      "link": [3, 3],
+      "name": "Shinespark through Wave Beam Door (Top Path)",
+      "requires": [
+        {"notable": "Shinespark through Wave Beam Door"},
+        "HiJump",
+        {"or": [
+          "SpaceJump",
+          "Grapple"
+        ]},
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "Wave",
+          {"and": [
+            "h_heatedBlueGateGlitch",
+            {"heatFrames": 60}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "canTrickyDashJump",
+            "canWalljump"
+          ]},
+          "SpaceJump"
+        ]},
+        {"canShineCharge": {
+          "usedTiles": 28,
+          "gentleUpTiles": 3,
+          "gentleDownTiles": 3,
+          "openEnd": 0
+        }},
+        {"heatFrames": 780},
+        {"shinespark": {"frames": 57}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "note": [
+        "Charge a spark along the bottom of the room and use it to spark through the right side door.",
+        "Requires opening the door and shutter first."
+      ],
+      "devNote": [
+        "A hero shot variation of this strat might be possible, starting from a node to the left;",
+        "if nothing else it could be done with a shortcharge on the 12-tile platform to the left."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [3, 3],
+      "name": "Shinespark through Wave Beam Door (Through Crumbles)",
+      "requires": [
+        {"notable": "Shinespark through Wave Beam Door"},
+        "HiJump",
+        "Morph",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"heatFrames": 240}
+        ]},
+        {"or": [
+          {"and": [
+            "canTrickyDashJump",
+            "canWalljump"
+          ]},
+          "SpaceJump"
+        ]},
+        {"canShineCharge": {
+          "usedTiles": 28,
+          "gentleUpTiles": 3,
+          "gentleDownTiles": 3,
+          "openEnd": 0
+        }},
+        {"heatFrames": 780},
+        {"shinespark": {"frames": 57}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "note": [
+        "Charge a spark along the bottom of the room and use it to spark through the right side door.",
+        "Requires opening the door and shutter first."
+      ]
+    },
+    {
+      "id": 46,
+      "link": [3, 3],
+      "name": "XMode with Walljump",
+      "requires": [
+        "canXMode",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        "canWalljump",
+        "h_shinechargeMaxRunway",
+        {"heatFrames": 540},
+        {"shinespark": {"frames": 5}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Jump into the spikes and try to bounce on the crumble blocks moving towards the door.",
+      "devNote": "Three spike hits are expected per attempt (with any additional leniency hits being multiplied by this amount)."
+    },
+    {
+      "id": 47,
+      "link": [3, 3],
+      "name": "XMode with HiJump, Leave Shinecharged",
+      "requires": [
+        "canXMode",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        "h_shinechargeMaxRunway",
+        "HiJump",
+        {"heatFrames": 480},
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Jump into the spikes and try to bounce on the crumble blocks moving towards the door.",
+      "devNote": [
+        "Three spike hits are expected per attempt (with any additional leniency hits being multiplied by this amount).",
+        "FIXME: It is possible to do this with two, is it reasonable?"
+      ]
+    },
+    {
+      "id": 120,
+      "link": [3, 3],
+      "name": "Direct G-Mode, Remote Acquire Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "SpaceJump",
+          "canPreciseGrapple",
+          "canSpringBallJumpMidAir",
+          "canInsaneWalljump",
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          {"and": [
+            "canStaggeredIBJ",
+            "canDoubleBombJump",
+            "canBombHorizontally"
+          ]},
+          {"and": [
+            "h_IBJFromSpikes",
+            "h_IBJFromSpikes"
+          ]},
+          {"and": [
+            "h_IBJFromSpikes",
+            "canCameraManip",
+            "canMoonwalk"
+          ]}
+        ]},
+        "h_heatedDirectGModeLeaveSameDoor"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": "Jump onto the crumble blocks to make them solid, then use them as a platform to cross the room."
+    },
+    {
+      "id": 121,
+      "link": [3, 3],
+      "name": "Direct G-Mode, Remote Acquire Item, Kill the Ripper then IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "ScrewAttack",
+          "h_usePowerBomb",
+          {"ammo": {"type": "Missile", "count": 2}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]},
+        "canIBJ",
+        "canBombHorizontally",
+        "h_heatedDirectGModeLeaveSameDoor"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": "Jump onto the crumble blocks to make them solid, then use them as a platform to cross the room."
+    },
+    {
+      "id": 122,
+      "link": [3, 3],
+      "name": "Direct G-Mode Morph, Remote Acquire Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "h_artificialMorphLongCeilingBombJump",
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "h_artificialMorphIBJ",
+            "h_artificialMorphPowerBomb"
+          ]},
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "canTrickyDodgeEnemies",
+            "h_artificialMorphDoubleBombJump",
+            "h_artificialMorphStaggeredIBJ"
+          ]}
+        ]},
+        "h_heatedDirectGModeLeaveSameDoor"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": "Bomb horizontally on room entry to jump over the Ripper and land on the crumble blocks, or use a Power Bomb to kill the Ripper."
+    },
+    {
+      "id": 48,
+      "link": [3, 4],
+      "name": "Grapple",
+      "requires": [
+        "Grapple",
+        {"heatFrames": 180}
+      ]
+    },
+    {
+      "id": 49,
+      "link": [3, 4],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 160}
+      ]
+    },
+    {
+      "id": 50,
+      "link": [3, 4],
+      "name": "Spike IBJ",
+      "requires": [
+        "h_heatedIBJFromSpikes",
+        {"heatFrames": 1100}
+      ]
+    },
+    {
+      "id": 51,
+      "link": [3, 4],
+      "name": "Spike SpringBall",
+      "requires": [
+        "canUseIFrames",
+        {"spikeHits": 1},
+        "canSpringBallJumpMidAir",
+        {"heatFrames": 300}
+      ]
+    },
+    {
+      "id": 52,
+      "link": [3, 4],
+      "name": "SpringFling over the Spikes",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canSpringFling",
+        "canLateralMidAirMorph",
+        "canCarefulJump",
+        {"heatFrames": 120}
+      ]
+    },
+    {
+      "id": 53,
+      "link": [3, 4],
+      "name": "Spike HiJump",
+      "requires": [
+        "canUseIFrames",
+        {"spikeHits": 1},
+        "canWalljump",
+        "HiJump",
+        {"heatFrames": 300}
+      ]
+    },
+    {
+      "id": 89,
+      "link": [3, 4],
+      "name": "Ripper I-Frames, Spike Jump",
+      "requires": [
+        "canPrepareForNextRoom",
+        "canUseIFrames",
+        {"enemyDamage": {"enemy": "Ripper 2 (green)", "type": "contact", "hits": 1}},
+        {"or": [
+          "canHorizontalDamageBoost",
+          {"and": [
+            "HiJump",
+            "canTrickyJump"
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]},
+          "canTrickySpringBallJump"
+        ]},
+        {"heatFrames": 300}
+      ],
+      "note": [
+        "Run off or perform a short hop off the ledge into the Ripper and damage boost to the left of the spikes.",
+        "Using the i-frames from the Ripper, quickly jump from the spikes to the item.",
+        "With HiJump, it is also possible to avoid the damage boost and land right of the crumble blocks and get a good jump to the left."
+      ],
+      "devNote": [
+        "FIXME: It is possible to avoid the Ripper and jump off of the crumble blocks.",
+        "With a Spring Ball jump, this requires an very precise jump and very quick pause to get as much horizontal speed as possible before the second jump.",
+        "With HiJump + Wall Jump, it is possible to crumble spin jump from the first crumbles to the second crumbles and then wall jump."
+      ]
+    },
+    {
+      "id": 54,
+      "link": [3, 4],
+      "name": "Shinespark (Come In Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canHorizontalShinespark",
+        {"heatFrames": 140},
+        {"shinespark": {"frames": 45, "excessFrames": 14}}
+      ]
+    },
+    {
+      "id": 55,
+      "link": [3, 4],
+      "name": "Shinespark (Come in with Spark)",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"heatFrames": 140},
+        {"shinespark": {"frames": 51, "excessFrames": 14}}
+      ],
+      "collectsItems": [4],
+      "devNote": "The item will not be forced to be collected if the spark was in the top position."
+    },
+    {
+      "id": 56,
+      "link": [3, 4],
+      "name": "Spike Speedjump",
+      "requires": [
+        "canUseIFrames",
+        {"spikeHits": 1},
+        "SpeedBooster",
+        "HiJump",
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 57,
+      "link": [3, 4],
+      "name": "Hijumpless Spike Speedjump",
+      "requires": [
+        {"notable": "Hijumpless Spike Speedjump"},
+        {"or": [
+          {"spikeHits": 1},
+          {"and": [
+            {"enemyDamage": {"enemy": "Ripper 2 (green)", "type": "contact", "hits": 1}},
+            "canHorizontalDamageBoost",
+            "canInsaneJump"
+          ]}
+        ]},
+        "canUseIFrames",
+        "canTrickyDashJump",
+        "canPreciseWalljump",
+        {"heatFrames": 300}
+      ],
+      "failures": [
+        {
+          "name": "Crumble Fall",
+          "leadsToNode": 5,
+          "note": "Falls down into node 5 with no possiblity of quick crumble escape."
+        }
+      ],
+      "note": [
+        "Position Samus into the bottom right corner, using i-frames to run and jump from the crumble blocks,",
+        "and then wall jump to make it onto the ledge.",
+        "If using a spike hit to gain i-frames, be sure to be holding forward (left) when landing, in order to get pushed back into the corner.",
+        "If using the Ripper to gain i-frames, perform a damage boost from a relatively low position,",
+        "in order to land quickly enough to reach the crumble blocks before i-frames run out."
+      ]
+    },
+    {
+      "id": 58,
+      "link": [3, 4],
+      "name": "XMode Shinespark",
+      "requires": [
+        "canXMode",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        "canTrickyJump",
+        "canMidairShinespark",
+        "h_shinechargeMaxRunway",
+        {"heatFrames": 400},
+        {"shinespark": {"frames": 12, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true,
+      "note": "A short hop from the door can bounce on the crumbles. Just be careful of being pushed back onto the crumble blocks by the spikes.",
+      "devNote": "Two spike hits are expected per attempt (with any additional leniency hits being multiplied by this amount)."
+    },
+    {
+      "id": 59,
+      "link": [3, 4],
+      "name": "HiJumpless Wall Jump",
+      "requires": [
+        {"notable": "HiJumpless Wall Jump"},
+        "h_heatProof",
+        "canInsaneWalljump",
+        "canHorizontalDamageBoost",
+        {"or": [
+          "canUseIFrames",
+          "canCrumbleJump"
+        ]},
+        {"enemyDamage": {"enemy": "Ripper 2 (green)", "type": "contact", "hits": 1}}
+      ],
+      "note": [
+        "Jump into the spike pit, hitting the Ripper to avoid spike damage.",
+        "Climb the left wall while avoiding falling onto the spikes or through the crumble blocks. The ledge is the same size of that in writg."
+      ]
+    },
+    {
+      "id": 85,
+      "link": [3, 4],
+      "name": "Ceiling Bomb Jump Over Spikes",
+      "requires": [
+        "h_heatProof",
+        "canCeilingBombJump",
+        "canResetFallSpeed"
+      ],
+      "note": [
+        "Samus can ceiling bomb jump up gentle slopes.",
+        "Going down gentle slopes is also possible but harder, instead an unmorph to reset fall speed is recommended here."
+      ]
+    },
+    {
+      "id": 123,
+      "link": [3, 4],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canPreciseGrapple",
+          "canSpringBallJumpMidAir",
+          "canInsaneWalljump",
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          {"and": [
+            "canStaggeredIBJ",
+            "canDoubleBombJump",
+            "canBombHorizontally"
+          ]},
+          "h_IBJFromSpikes"
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump onto the crumble blocks to make them solid, then use them as a platform to cross the room.",
+        "With Grapple, a running jump then single Grapple swing can be used before PLMs are overloaded, alternatively jump on the crumble blocks and Grapple the Ripper."
+      ]
+    },
+    {
+      "id": 124,
+      "link": [3, 4],
+      "name": "G-Mode, Kill the Ripper then IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "ScrewAttack",
+          "h_usePowerBomb",
+          {"ammo": {"type": "Missile", "count": 2}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]},
+        "canIBJ",
+        "canBombHorizontally",
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump onto the crumble blocks to make them solid, then use them as a platform to cross the room."
+    },
+    {
+      "id": 125,
+      "link": [3, 4],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphCeilingBombJump",
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "h_artificialMorphIBJ",
+            "h_artificialMorphPowerBomb"
+          ]},
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "canTrickyDodgeEnemies",
+            "h_artificialMorphDoubleBombJump",
+            "h_artificialMorphStaggeredIBJ"
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": "Bomb horizontally on room entry to jump over the Ripper and land on the crumble blocks, or use a Power Bomb to kill the Ripper."
+    },
+    {
+      "id": 139,
+      "link": [3, 4],
+      "name": "G-Mode, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_heatedGMode",
+        {"or": [
+          "SpaceJump",
+          "canPreciseGrapple",
+          "canSpringBallJumpMidAir",
+          "canInsaneWalljump",
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          {"and": [
+            "canStaggeredIBJ",
+            "canDoubleBombJump",
+            "canBombHorizontally"
+          ]},
+          "h_IBJFromSpikes"
+        ]},
+        {"heatFrames": 35}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump onto the crumble blocks to make them solid, then use them as a platform to cross the room.",
+        "With Grapple, a running jump then single Grapple swing can be used before PLMs are overloaded, alternatively jump on the crumble blocks and Grapple the Ripper.",
+        "In indirect G-mode, stand where the gate will spawn and exit G-mode to open the gate.",
+        "In direct G-mode, overload PLMs by shooting the gate then position Samus a few pixels away from the gate to where upward diagonal shots go through it.",
+        "Crouch then shoot diagonally and quickly exit G-mode (3-7 frames later) to open the gate on G-mode exit."
+      ],
+      "devNote": [
+        "The canComplexGMode is only used here to describe opening the gate in direct G-mode without gate glitching.",
+        "However, the indirect variant still requires canHeatedGMode or Varia - with Varia, indirect strats can instead be used to go to the top left door and return."
+      ]
+    },
+    {
+      "id": 140,
+      "link": [3, 4],
+      "name": "G-Mode, Kill the Ripper then IBJ, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_heatedGMode",
+        {"or": [
+          "ScrewAttack",
+          "h_usePowerBomb",
+          {"ammo": {"type": "Missile", "count": 2}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]},
+        "canIBJ",
+        "canBombHorizontally",
+        {"heatFrames": 35}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump onto the crumble blocks to make them solid, then use them as a platform to cross the room.",
+        "In indirect G-mode, stand where the gate will spawn and exit G-mode to open the gate.",
+        "In direct G-mode, overload PLMs by shooting the gate then position Samus a few pixels away from the gate to where upward diagonal shots go through it.",
+        "Crouch then shoot diagonally and quickly exit G-mode (3-7 frames later) to open the gate on G-mode exit."
+      ],
+      "devNote": [
+        "The canComplexGMode is only used here to describe opening the gate in direct G-mode without gate glitching.",
+        "However, the indirect variant still requires canHeatedGMode or Varia - with Varia, indirect strats can instead be used to go to the top left door and return."
+      ]
+    },
+    {
+      "id": 141,
+      "link": [3, 4],
+      "name": "G-Mode Morph, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_heatedGMode",
+        {"or": [
+          "h_artificialMorphCeilingBombJump",
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "h_artificialMorphIBJ",
+            "h_artificialMorphPowerBomb"
+          ]},
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "canTrickyDodgeEnemies",
+            "h_artificialMorphDoubleBombJump",
+            "h_artificialMorphStaggeredIBJ"
+          ]}
+        ]},
+        {"heatFrames": 35}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Bomb horizontally on room entry to jump over the Ripper and land on the crumble blocks, or use a Power Bomb to kill the Ripper.",
+        "In indirect G-mode, stand where the gate will spawn and exit G-mode to open the gate.",
+        "In direct G-mode, overload PLMs by shooting the gate then position Samus a few pixels away from the gate to where upward diagonal shots go through it.",
+        "Crouch then shoot diagonally and quickly exit G-mode (3-7 frames later) to open the gate on G-mode exit."
+      ],
+      "devNote": [
+        "Artificial morph strats can be useful, for instance, in indirect G-mode without heat protection, where Samus needs to collect the item.",
+        "The canComplexGMode is only used here to describe opening the gate in direct G-mode without gate glitching.",
+        "However, the indirect variant still requires canHeatedGMode or Varia - with Varia, indirect strats can instead be used to go to the top left door and return."
+      ]
+    },
+    {
+      "id": 60,
+      "link": [3, 5],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 250}
+      ]
+    },
+    {
+      "id": 126,
+      "link": [3, 6],
+      "name": "Direct G-Mode, Prepared Remote Acquire",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canPreciseGrapple",
+          "canInsaneWalljump",
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          {"and": [
+            "canStaggeredIBJ",
+            "canDoubleBombJump",
+            "canBombHorizontally"
+          ]},
+          "h_IBJFromSpikes",
+          "canCeilingBombJump",
+          {"and": [
+            "canBombHorizontally",
+            "canIBJ",
+            "h_usePowerBomb"
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump onto the crumble blocks to make them solid, then use them as a platform to get to the item.",
+        "With Grapple, a running jump then single Grapple swing can be used before PLMs are overloaded, alternatively jump on the crumble blocks and Grapple the Ripper.",
+        "Avoid touching all 6 crumbles, so Samus can use the item to overload PLMs and go through one of the crumbles to get to the left side of the room.",
+        "If the item has already been obtained, Samus can shoot the gate many times to overload PLMs."
+      ]
+    },
+    {
+      "id": 127,
+      "link": [3, 6],
+      "name": "Direct G-Mode, Kill the Ripper then IBJ, Prepared Remote Acquire",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "ScrewAttack",
+          "h_usePowerBomb",
+          {"ammo": {"type": "Missile", "count": 2}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]},
+        "canIBJ",
+        "canBombHorizontally",
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump onto the crumble blocks to make them solid, then use them as a platform to get to the item.",
+        "Avoid touching all 6 crumbles, so Samus can use the item to overload PLMs and go through one of the crumbles to get to the left side of the room.",
+        "If the item has already been obtained, Samus can shoot the gate many times to overload PLMs."
+      ]
+    },
+    {
+      "id": 128,
+      "link": [3, 6],
+      "name": "Direct G-Mode Morph, Prepared Remote Acquire",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "h_artificialMorphCeilingBombJump",
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "h_artificialMorphIBJ",
+            "h_artificialMorphPowerBomb"
+          ]},
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "canTrickyDodgeEnemies",
+            "h_artificialMorphDoubleBombJump",
+            "h_artificialMorphStaggeredIBJ"
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Bomb horizontally on room entry to jump over the Ripper and land on the crumble blocks, or use a Power Bomb to kill the Ripper.",
+        "Avoid touching all 6 crumbles, so Samus can use the item to overload PLMs and go through one of the crumbles to get to the left side of the room.",
+        "If the item has already been obtained, Samus can shoot or Bomb the gate many times to overload PLMs."
+      ],
+      "devNote": "This is only useful if the item is Morph, because with Morph, another strat would have been used."
+    },
+    {
+      "id": 129,
+      "link": [3, 7],
+      "name": "Indirect G-Mode, Despawn the Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canPreciseGrapple",
+          "canInsaneWalljump",
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          {"and": [
+            "canStaggeredIBJ",
+            "canDoubleBombJump",
+            "canBombHorizontally"
+          ]},
+          "h_IBJFromSpikes",
+          "canCeilingBombJump",
+          {"and": [
+            "canBombHorizontally",
+            "canIBJ",
+            "h_usePowerBomb"
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump onto the crumble blocks to make them solid, then use them as a platform to cross the room.",
+        "With Grapple, a running jump then single Grapple swing can be used before PLMs are overloaded, alternatively jump on the crumble blocks and Grapple the Ripper."
+      ],
+      "devNote": "With Grapple, Morph isn't needed, but there's no reason to go there without Morph."
+    },
+    {
+      "id": 130,
+      "link": [3, 7],
+      "name": "Indirect G-Mode, Despawn the Gate, Kill the Ripper then IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "ScrewAttack",
+          "h_usePowerBomb",
+          {"ammo": {"type": "Missile", "count": 2}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]},
+        "canIBJ",
+        "canBombHorizontally",
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump onto the crumble blocks to make them solid, then use them as a platform to cross the room."
+    },
+    {
+      "id": 61,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 250},
+        {"or": [
+          {"and": [
+            "Wave",
+            {"heatFrames": 100}
+          ]},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 62,
+      "link": [4, 1],
+      "name": "Gate Glitch",
+      "requires": [
+        {"heatFrames": 250},
+        "h_heatedBlueGateGlitch"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 63,
+      "link": [4, 3],
+      "name": "Walljump",
+      "requires": [
+        "canWalljump",
+        {"heatFrames": 300}
+      ],
+      "collectsItems": [4]
+    },
+    {
+      "id": 64,
+      "link": [4, 3],
+      "name": "Grapple",
+      "requires": [
+        "Grapple",
+        {"heatFrames": 180}
+      ]
+    },
+    {
+      "id": 65,
+      "link": [4, 3],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 160}
+      ]
+    },
+    {
+      "id": 66,
+      "link": [4, 3],
+      "name": "Walljump Leave with Runway",
+      "requires": [
+        "canWalljump",
+        {"heatFrames": 280}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ],
+      "collectsItems": [4]
+    },
+    {
+      "id": 67,
+      "link": [4, 3],
+      "name": "Grapple Leave with Runway",
+      "requires": [
+        "Grapple",
+        {"heatFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "link": [4, 3],
+      "name": "Space Jump Leave with Runway",
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "link": [4, 3],
+      "name": "Spike IBJ",
+      "requires": [
+        "h_heatedIBJFromSpikes",
+        {"heatFrames": 1100}
+      ]
+    },
+    {
+      "id": 70,
+      "link": [4, 3],
+      "name": "MidAir SpringBall",
+      "requires": [
+        "canUseIFrames",
+        {"spikeHits": 1},
+        "canSpringBallJumpMidAir",
+        {"heatFrames": 300}
+      ]
+    },
+    {
+      "id": 71,
+      "link": [4, 3],
+      "name": "HiJump, Speedjump from the Spikes",
+      "requires": [
+        "canUseIFrames",
+        {"spikeHits": 1},
+        "HiJump",
+        "SpeedBooster",
+        {"heatFrames": 250}
+      ],
+      "collectsItems": [4]
+    },
+    {
+      "id": 72,
+      "link": [4, 3],
+      "name": "XMode Shinespark",
+      "requires": [
+        "canXMode",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        "canTrickyJump",
+        "canUseIFrames",
+        "canMidairShinespark",
+        "h_shinechargeMaxRunway",
+        {"heatFrames": 480},
+        {"shinespark": {"frames": 11, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true,
+      "note": "A short hop from the ledge can bounce on the crumbles and into the spikes.  Just be careful of being pushed back onto the crumble blocks by the spikes.",
+      "devNote": "Two spike hits are expected per attempt (with any additional leniency hits being multiplied by this amount)."
+    },
+    {
+      "id": 86,
+      "link": [4, 3],
+      "name": "Ceiling Bomb Jump Over Spikes",
+      "requires": [
+        "h_heatProof",
+        "canCeilingBombJump",
+        "canResetFallSpeed"
+      ],
+      "note": [
+        "Samus can ceiling bomb jump up gentle slopes.",
+        "Going down gentle slopes is also possible but harder, instead an unmorph to reset fall speed is recommended here."
+      ]
+    },
+    {
+      "id": 73,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 74,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 160}
+      ]
+    },
+    {
+      "id": 75,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 76,
+      "link": [5, 3],
+      "name": "Crystal Flash Clip",
+      "requires": [
+        "h_heatProof",
+        "h_jumpIntoCrystalFlashClip",
+        "Grapple"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump from below the respawning shot block into a Crystal Flash.",
+        "Use Grappling Beam as the Crystal Flash finishes to be placed next to the door.",
+        "Do not aim down as the Crystal Flash finishes."
+      ]
+    },
+    {
+      "id": 77,
+      "link": [5, 5],
+      "name": "Kago Farm",
+      "requires": [
+        "h_heatProof",
+        "Morph",
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"or": [
+              {"and": [
+                "SpaceJump",
+                {"cycleFrames": 1060}
+              ]},
+              {"and": [
+                "HiJump",
+                "SpeedBooster",
+                {"cycleFrames": 940}
+              ]}
+            ]}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 830}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [3]}},
+            {"or": [
+              {"and": [
+                "SpaceJump",
+                {"cycleFrames": 1160}
+              ]},
+              {"and": [
+                "HiJump",
+                "SpeedBooster",
+                {"or": [
+                  "Grapple",
+                  "canWalljump"
+                ]},
+                {"cycleFrames": 1190}
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Kago", "count": 1}],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: There are more possible item combinations."
+    },
+    {
+      "id": 78,
+      "link": [5, 5],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 131,
+      "link": [6, 1],
+      "name": "Direct G-Mode, Remote Acquire Item",
+      "requires": [
+        "canComplexGMode",
+        "Morph",
+        {"or": [
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canWalljump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          "canIBJ",
+          "canTrickyDashJump",
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 28,
+              "gentleUpTiles": 3,
+              "gentleDownTiles": 3,
+              "openEnd": 0
+            }},
+            "canMidairShinespark",
+            {"shinespark": {"frames": 17, "excessFrames": 4}}
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": "It is possible to climb the left side of the room with SpeedBooster alone, with either a tricky dash jump or a vertical shinespark."
+    },
+    {
+      "id": 132,
+      "link": [6, 1],
+      "name": "Direct G-Mode, Remote Acquire Item, Kago Farm",
+      "requires": [
+        "canComplexGMode",
+        "Morph",
+        {"or": [
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canWalljump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          "canIBJ",
+          "canTrickyDashJump",
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 28,
+              "gentleUpTiles": 3,
+              "gentleDownTiles": 3,
+              "openEnd": 0
+            }},
+            "canMidairShinespark",
+            {"shinespark": {"frames": 1, "excessFrames": 1}}
+          ]}
+        ]},
+        "Plasma",
+        "h_heatedGModePauseAbuse",
+        "canInsaneJump"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": [
+        "With Plasma and a pause abuse, it is possible to kill the Kago and exit G-mode while killing the Kago bugs and make it to the door with a small amount of Energy remaining.",
+        "Shoot Plasma and quickly exit G-Mode, so that the bugs die immediately. Avoid having spent much time on the left side of the room, as the Fune fireballs will reduce the number of drops obtained.",
+        "Note that it is possible to climb the left side of the room with SpeedBooster alone, with either a tricky dash jump or a vertical shinespark."
+      ],
+      "devNote": [
+        "All of these methods are fast enough to be able to escape after obtaining the drops. The shinespark is longer than 1 frame, but is modeled this way because the drops aren't properly modeled.",
+        "FIXME: The item that was remote acquired could be Morph, one of the items needed to climb the room, or maybe Plasma."
+      ]
+    },
+    {
+      "id": 133,
+      "link": [6, 2],
+      "name": "Direct G-Mode, Remote Acquire Item",
+      "requires": [
+        "canComplexGMode",
+        "Morph",
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 134,
+      "link": [6, 2],
+      "name": "Direct G-Mode, Remote Acquire Item, Kago Farm",
+      "requires": [
+        "canComplexGMode",
+        "Morph",
+        "Plasma",
+        "h_heatedGModePauseAbuse"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": [
+        "With Plasma and a pause abuse, it is possible to kill the Kago and exit G-mode while killing the Kago bugs and make it to the door with a small amount of Energy remaining.",
+        "Shoot Plasma and quickly exit G-Mode, so that the bugs die immediately. Avoid having spent much time on the left side of the room, as the Fune fireballs will reduce the number of drops obtained."
+      ],
+      "devNote": "FIXME: The item that was remote acquired could be Morph or maybe Plasma."
+    },
+    {
+      "id": 135,
+      "link": [7, 1],
+      "name": "G-Mode",
+      "requires": [
+        "Morph",
+        {"or": [
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canWalljump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          "canIBJ",
+          "canTrickyDashJump",
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 28,
+              "gentleUpTiles": 3,
+              "gentleDownTiles": 3,
+              "openEnd": 0
+            }},
+            "canMidairShinespark",
+            {"shinespark": {"frames": 17, "excessFrames": 4}}
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "It is possible to climb the left side of the room with SpeedBooster alone, with either a tricky dash jump or a vertical shinespark."
+    },
+    {
+      "id": 136,
+      "link": [7, 1],
+      "name": "G-Mode, Kago Farm",
+      "requires": [
+        "Morph",
+        {"or": [
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canWalljump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          "canTrickyDashJump",
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 28,
+              "gentleUpTiles": 3,
+              "gentleDownTiles": 3,
+              "openEnd": 0
+            }},
+            "canMidairShinespark",
+            {"shinespark": {"frames": 1, "excessFrames": 1}}
+          ]}
+        ]},
+        "Plasma",
+        "h_heatedGModePauseAbuse",
+        "canInsaneJump"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "With Plasma and a pause abuse, it is possible to kill the Kago and exit G-mode while killing the Kago bugs and make it to the door with a small amount of Energy remaining.",
+        "Shoot Plasma and quickly exit G-Mode, so that the bugs die immediately. Avoid having spent much time on the left side of the room, as the Fune fireballs will reduce the number of drops obtained.",
+        "Note that it is possible to climb the left side of the room with SpeedBooster alone, with either a tricky dash jump or a vertical shinespark."
+      ],
+      "devNote": "All of these methods are fast enough to be able to escape after obtaining the drops. The shinespark is longer than 1 frame, but is modeled this way because the drops aren't properly modeled."
+    },
+    {
+      "id": 137,
+      "link": [7, 2],
+      "name": "G-Mode",
+      "requires": [
+        "Morph",
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 138,
+      "link": [7, 2],
+      "name": "G-Mode, Kago Farm",
+      "requires": [
+        "Morph",
+        "Plasma",
+        "h_heatedGModePauseAbuse"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "With Plasma and a pause abuse, it is possible to kill the Kago and exit G-mode while killing the Kago bugs and make it to the door with a small amount of Energy remaining.",
+        "Shoot Plasma and quickly exit G-Mode, so that the bugs die immediately. Avoid having spent much time on the left side of the room, as the Fune fireballs will reduce the number of drops obtained."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Walljump Climb Using the Kamer",
+      "note": [
+        "Wall jump up the left wall and then on the moving platform (Kamer) while avoiding the Fune's fireball.",
+        "The Kamers will temporarily move down if Samus is below them, so it is best to walk under the first Kamer before climbing the wall.",
+        "It is possible to freeze or kill the Fune with a Super or Power Bomb to make things easier."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Shinespark through Wave Beam Door",
+      "note": [
+        "Charge a spark along the bottom of the room and use it to spark through the right side door.",
+        "Requires opening the door and shutter first."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Hijumpless Spike Speedjump",
+      "note": [
+        "Position Samus into the bottom right corner, using invulnerability frames run then jump while on the crumble blocks.",
+        "It is possible to use a damage boost on the Ripper to save energy and position Samus into the corner."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "HiJumpless Wall Jump",
+      "note": [
+        "Jump into the spike pit, hitting the Ripper to avoid spike damage.",
+        "Climb the left wall while avoiding falling onto the spikes or through the crumble blocks. The ledge is the same size of that in writg."
+      ]
+    }
+  ],
+  "nextStratId": 144,
+  "nextNotableId": 5,
+  "devNote": [
+    "FIXME: Heat frames could be represented more accurately if a node were added to the left of the morph tunnel (or possibly if node 5 were moved to be on that side):",
+    "e.g. this could be used to tighten the Leave Shinecharged or Leave With Temporary Blue strats out through node 2 when coming from the right.",
+    "FIXME: It's possible to use a crumble jump to carry temp blue out through node 3."
+  ]
+}

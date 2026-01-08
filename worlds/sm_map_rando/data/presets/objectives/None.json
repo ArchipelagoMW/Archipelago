@@ -1,0 +1,27 @@
+{
+    "preset": "None",
+    "objective_options": [
+        {"objective": "Kraid", "setting": "No"},
+        {"objective": "Phantoon", "setting": "No"},
+        {"objective": "Draygon", "setting": "No"},
+        {"objective": "Ridley", "setting": "No"},
+        {"objective": "SporeSpawn", "setting": "No"},
+        {"objective": "Crocomire", "setting": "No"},
+        {"objective": "Botwoon", "setting": "No"},
+        {"objective": "GoldenTorizo", "setting": "No"},
+        {"objective": "BombTorizo", "setting": "No"},
+        {"objective": "BowlingStatue", "setting": "No"},
+        {"objective": "AcidChozoStatue", "setting": "No"},
+        {"objective": "PitRoom", "setting": "No"},
+        {"objective": "BabyKraidRoom", "setting": "No"},
+        {"objective": "PlasmaRoom", "setting": "No"},
+        {"objective": "MetalPiratesRoom", "setting": "No"},
+        {"objective": "MetroidRoom1", "setting": "No"},
+        {"objective": "MetroidRoom2", "setting": "No"},
+        {"objective": "MetroidRoom3", "setting": "No"},
+        {"objective": "MetroidRoom4", "setting": "No"}
+    ],
+    "min_objectives": 0,
+    "max_objectives": 0,
+    "objective_screen": "Enabled"
+}

@@ -1,0 +1,10 @@
+{
+    "version":  7,
+    "authors":  [
+                    "ArsonAssassin"
+                ],
+    "game":  "Dark Cloud 2",
+    "compatible_version":  7,
+    "minimum_ap_version":  "0.6.4",
+    "world_version":  "0.0.4"
+}

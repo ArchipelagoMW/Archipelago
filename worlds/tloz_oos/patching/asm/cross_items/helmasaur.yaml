@@ -1,0 +1,122 @@
+0c/6c8a/: dw ironMask_state_switchHook
+
+0c//ironMask_state_switchHook: |
+  ld e,$4d
+  ld hl,ironMask_state_switchHook_4d
+  jp interBankCall
+
+4d/6b54/ironMask_state_switchHook_4d: |
+  ; I had to reimplement that one because of how different both helmasaurs are
+  ld e,$85 ; substate
+  ld a,(de)
+  ; substate is changed by switch hook code already
+  rst 00 ; jumpTable
+  dw @substate0
+  dw @substate1
+  dw @substate2
+  dw @substate3
+
+  ; Using switch hook may cause this enemy's mask to be removed.
+  @substate0:
+  ld e,$a5 ; Enemy.enemyCollisionMode
+  ld a,(de)
+  cp $50 ; ENEMYCOLLISION_UNMASKED_IRON_MASK
+  jr z,@dontRemoveMask
+
+  ld e,$b0 ; Enemy.var30
+  ld a,(de)
+  or a
+  jr nz,@dontRemoveMask
+
+  call $2e15 ; getFreeEnemySlot_uncounted
+  jr nz,@dontRemoveMask
+
+  ld l,e ; var 30
+  ld (hl),$01
+  
+  ld l,$80
+  ld e,l
+  ; everything up to health
+  @copydata:
+  inc l
+  inc e
+  
+  ld a,(de) 
+  ld (hl),a
+  
+  ld a,l
+  cp $bf
+  jr nz,@copydata
+
+  ld l,$ab ; Enemy.invincibilityCounter
+  ld (hl),$e8
+  ld l,$ad ; knockbackCounter
+  ld (hl),$10
+  
+  ; collision data
+  ld l,$a4
+  ld (hl),$9c
+  inc l
+  ld (hl),$50
+  
+  ; change var30 to indicate future hooks this iron mask has been dealt with
+  ld l,$b0
+  inc (hl)
+
+  ld e,$82 ; Enemy.subid
+  ld a,$01
+  ld (de),a
+  ld a,$05
+
+  push hl
+  call $2772 ; enemySetAnimation
+  pop hl
+
+  push de
+  ld d,h
+
+  ld a,$04
+  call $2772 ; enemySetAnimation
+
+  ld e,$84 ; Enemy.state
+  ld a,$0a ; state to be set
+  ld (de),a
+
+  pop de
+
+  ld a,$52 ; SND_BOMB_LAND
+  call playSound
+
+  ld a,$3c
+  jr @setCounter
+
+  @dontRemoveMask:
+  ld a,$10
+  
+  @setCounter:
+  ld e,$86 ; Enemy.counter1
+  ld (de),a
+  jp ecom_incSubstate
+
+  @substate1:
+  @substate2:
+  ret
+
+  @substate3:
+  ld e,$b0 ; Enemy.var30
+  ld a,(de)
+  or a
+  ld b,$0a ; state to be set
+  jp nz,ecom_fallToGroundAndSetState
+
+  ld e,$a5 ; Enemy.enemyCollisionMode
+  ld a,(de)
+  cp $1c ; ENEMYCOLLISION_IRON_MASK
+  jp nz,ecom_fallToGroundAndSetState8
+
+  ld b,$0a ; state to be set
+  call ecom_fallToGroundAndSetState
+
+  ld l,$a4 ; Enemy.collisionType
+  res 7,(hl)
+  ret

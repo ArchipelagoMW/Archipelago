@@ -1,0 +1,289 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 68,
+  "name": "X-Ray Scope Room",
+  "area": "Brinstar",
+  "subarea": "Red",
+  "roomAddress": "0x7A2CE",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019072",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "viewableNodes": [
+        {
+          "id": 2,
+          "strats": [
+            {
+              "name": "Power Bomb",
+              "requires": [
+                "h_usePowerBomb"
+              ],
+              "note": "Raise the shutter before checking the item to not become stuck."
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [1, 2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "chozo",
+      "nodeItem": "XRayScope",
+      "nodeAddress": "0x78876",
+      "mapTileMask": [
+        [2, 1]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Bomb Block",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ],
+      "devNote": "There are additional requirements to get back out. It's a softlock if they aren't met."
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Shinespark to Break Bomb Block (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "Morph",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 5, "excessFrames": 0}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Gain a shinecharge while running into the room, then quickly jump into the morph tunnel.",
+        "Use the shinespark to break the bomb block."
+      ],
+      "devNote": [
+        "3 runway tiles are considered unusable, to allow a reasonable amount of space to gain run speed to morph into the tunnel.",
+        "Using more runway for the shinecharge can work but with greater difficulty."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Shinespark to Break Bomb Block (Insane Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 6,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Morph",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shinespark": {"frames": 5, "excessFrames": 0}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Gain a shinecharge while running into the room, stopping just before running into the wall.",
+        "Without holding dash, spin-jump to the left and mid-air morph into the morph tunnel.",
+        "The mid-air morph must be delayed in order for Samus to move far enough left to avoid catching on the ceiling.",
+        "Use the shinespark to break the bomb block."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [],
+      "note": [
+        "This allows reaching the item without Morph.",
+        "The item will need to be Morph in order to get out."
+      ],
+      "devNote": [
+        "FIXME: Once we have a way to represent grapple teleporting while carrying a shinecharge, a strat could be added that uses a spark to break the bomb block."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "G-Mode Morph Overload PLMs (Bomb the Crumbles)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphBombThings"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload the PLMs with Bombs by bombing the crumble block on the ground behind the first moving elevator.",
+        "After PLMs are overloaded, go through to the item (through the intended entrance or exit path)."
+      ],
+      "devNote": "This is only useful if the item is Morph."
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "G-Mode Morph Overload PLMs (Power Bomb the Item)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canPowerBombItemOverloadPLMs",
+        "h_artificialMorphPowerBomb",
+        "h_additionalBomb",
+        {"or": [
+          "h_artificialMorphSpringBall",
+          "h_additionalBomb"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs before touching the crumble block in the morph tunnel, then go through it after they are overloaded.",
+        "This can be done with 2 Power Bombs by placing them on the center of the rightmost tile inside the ceiling morph tunnel. One tile left of the elevator."
+      ],
+      "devNote": "This is only useful if the item is Morph."
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_bombThings",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"or": [
+          "h_bombThings",
+          "h_useSpringBall"
+        ]}
+      ],
+      "note": "If using Power Bombs, 1 is used to break the blocks and another is used to escape."
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Jump Morph",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "h_threeTileJumpMorph"
+      ]
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Running Jump Morph",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canLateralMidAirMorph",
+        "canTrickyJump"
+      ],
+      "note": "A running lateral mid-air morph can squeeze into the hole with good enough timing."
+    },
+    {
+      "id": 10,
+      "link": [2, 2],
+      "name": "Power Bomb the Block",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Screw Attack the Block",
+      "requires": [
+        "ScrewAttack"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Use Flash Suit to Break the Block",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 1, "excessFrames": 1}}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 15,
+  "nextNotableId": 1
+}

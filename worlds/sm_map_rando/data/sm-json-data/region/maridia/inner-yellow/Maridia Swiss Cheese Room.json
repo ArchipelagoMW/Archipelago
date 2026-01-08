@@ -1,0 +1,896 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 180,
+  "name": "Maridia Swiss Cheese Room",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Yellow",
+  "roomAddress": "0x7D16D",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 0, 0, 0],
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a498",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 0, 0, 0],
+        [1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a4a4",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 0, 0, 0],
+        [1, 1, 1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Junction Left of Morph Tunnel",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 0, 0, 0],
+        [2, 2, 2, 1]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Right Door Menus",
+      "obstacleType": "enemies"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Maridia Swiss Cheese Room Left Owtches",
+      "enemyName": "Owtch",
+      "quantity": 4,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Maridia Swiss Cheese Room Left Menus",
+      "enemyName": "Menu",
+      "quantity": 3,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e3",
+      "groupName": "Maridia Swiss Cheese Room Right Owtches",
+      "enemyName": "Owtch",
+      "quantity": 3,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e4",
+      "groupName": "Maridia Swiss Cheese Room Right Menus",
+      "enemyName": "Menu",
+      "quantity": 2,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 39,
+      "link": [1, 1],
+      "name": "Menu Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        "canCameraManip",
+        "canDodgeWhileShooting",
+        "canTrickyJump",
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 220}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 280}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 290}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 290}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 330}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            {"cycleFrames": 435}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"cycleFrames": 500}
+          ]}
+        ]},
+        {"or": [
+          "canFarmWhileShooting",
+          {"cycleFrames": 400}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Menu", "count": 2}],
+      "note": [
+        "A Menu can be activated by jumping on the doorway platform to scroll the camera down.",
+        "A second Menu can be activated with a tricky jump onto the ledge on the right,",
+        "without needing to fall down to the bottom part of the room."
+      ],
+      "devNote": [
+        "FIXME: By dropping down, it would be possible to farm 4 or 5 Menus and also Owtches."
+      ]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 34,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "HiJump",
+        {"canShineCharge": {"usedTiles": 22, "openEnd": 2}},
+        "canSpringBallJumpMidAir",
+        "canPauseRemorphTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Menu",
+      "requires": [
+        "canManipulateMellas"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Open the door and get into position, jump and aim down then walk through the door.",
+        "If Samus is not able to reset the room, get close to the door with a vertically swooping Menu. Move forwards slowly luring it to the doorway."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "h_artificialMorphIBJ",
+            "Gravity"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "The off screen portion can be simple with Spring Ball or two short IBJs."
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "G-Mode Morph Blind Bomb Boost",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canOffScreenMovement",
+        "h_artificialMorphBombHorizontally",
+        "h_artificialMorphBombThings",
+        "h_additionalBomb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use one bomb to get to the off-screen region. After going a full screen to the right, when Samus is partially visible in the left wall, bomb to the middle platform on the right.",
+        "Bomb again to the right, note that these small platforms are one tile left of the ones that are on camera. Exit G-Mode and get to the right door."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canOffScreenMovement",
+        "h_artificialMorphIBJ",
+        {"or": [
+          "h_artificialMorphSpringBall",
+          "h_artificialMorphPowerBomb",
+          "canInsaneJump",
+          {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}}
+        ]},
+        {"or": [
+          "h_artificialMorphSpringBall",
+          "Gravity",
+          "canTrickyGMode"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "With Bombs alone, this is much more difficult. After going off screen, roll to the left until Samus is back on screen.",
+        "Once Samus is obstructed by the first block, boost horizontally onto where the right edge of where the other on-screen platform is.",
+        "Then peform an IBJ which is completely blind at the top. Boost onto the left or right platform then exit G-mode and fix the camera if necessary."
+      ],
+      "devNote": "This strat is only useful for avoiding a wall jump. A simpler variant exits G-Mode after the morph tunnel."
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Leave with Runway, Short Runway without Menu",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "note": "Enter the room slowly to not lure the Menu, then use the short runway to leave the room."
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Leave with Runway, Deal with Menu",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "note": "Kill or tank the Menu to use the full runway."
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Kill the Menus",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canDodgeWhileShooting",
+            {"enemyKill": {
+              "enemies": [["Menu", "Menu"]]
+            }}
+          ]},
+          {"enemyKill": {
+            "enemies": [["Menu", "Menu"]],
+            "explicitWeapons": ["PowerBomb", "ScrewAttack", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+          }},
+          {"and": [
+            "canPrepareForNextRoom",
+            {"enemyKill": {
+              "enemies": [["Menu", "Menu"]],
+              "explicitWeapons": ["PseudoScrew"]
+            }}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 22, "openEnd": 2}},
+        "canTrickySpringBallBounce",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Gain temporary blue using the in-room runway.",
+        "Wait by the morph tunnel until the tidal water is about halfway through its rising phase;",
+        "also, if the Owtch to the right of the morph tunnel is still alive, wait for it to be safely out of the way to the right.",
+        "Perform a neutral bounce into the morph tunnel, using Spring Ball to continue bouncing through it and across the room."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Tank the Menus",
+      "requires": [
+        {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 40,
+      "link": [2, 2],
+      "name": "Menu Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "canDodgeWhileShooting",
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 210}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 220}
+          ]},
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 240}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 260}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 285}
+          ]},
+          {"and": [
+            {"or": [
+              "canTrickyDodgeEnemies",
+              {"and": [
+                "Gravity",
+                "canTrickyJump"
+              ]}
+            ]},
+            {"cycleFrames": 360}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Menu", "count": 2}],
+      "devNote": ["FIXME: It is also posssible to farm Owtches and/or additional Menus."]
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Menu",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_bombThings",
+          "h_useSpringBall"
+        ]},
+        {"obstaclesCleared": ["A"]}
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 3],
+      "name": "MidAir Morph with Gravity",
+      "requires": [
+        "canMidAirMorph",
+        "Gravity",
+        "canTrickyJump",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "note": [
+        "With Gravity, it's possible to move forward and mid-air morph into the morph passage.",
+        "The momentum can push Samus into the tunnel, no need to press forward while in mid-air."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 3],
+      "name": "Suitless MidAir Morph",
+      "requires": [
+        "h_threeTileJumpMorph",
+        {"obstaclesCleared": ["A"]}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 3],
+      "name": "Frozen Menu Bridge",
+      "requires": [
+        {"notable": "Frozen Menu Bridge"},
+        "Morph",
+        "h_navigateUnderwater",
+        "canTrickyUseFrozenEnemies",
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 2}}
+      ],
+      "note": [
+        "Freeze one of the Menus (bugs) in a position where you can use it to get into the morph passage.",
+        "One of the easier methods is with a damage boost. Stand in the water, take a hit for positioning, and freeze the bug near but left of Samus.",
+        "Then morph on top and damage boost into the morph tunnel as it unfreezes."
+      ],
+      "devNote": "FIXME: There is a damageless variant where Samus jumps high before morphing, giving a small bounce as she lands on the bug to get through the tunnel."
+    },
+    {
+      "id": 22,
+      "link": [2, 3],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "h_artificialMorphPowerBomb",
+            "h_additionalBomb",
+            {"or": [
+              "h_artificialMorphBombHorizontally",
+              {"and": [
+                "h_additionalBomb",
+                "Gravity"
+              ]}
+            ]}
+          ]},
+          {"and": [
+            "h_artificialMorphBombs",
+            {"or": [
+              "h_artificialMorphBombHorizontally",
+              "Gravity"
+            ]},
+            {"or": [
+              "canInsaneJump",
+              {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}}
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [3, 1],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump",
+        {"or": [
+          "h_usePowerBomb",
+          "ScrewAttack",
+          "Plasma",
+          {"and": [
+            "Ice",
+            "Wave",
+            "Spazer"
+          ]},
+          {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 4}}
+        ]}
+      ],
+      "note": "Kill the Menus and Space Jump up.",
+      "devNote": "With Space Jump alone with low tech, tanking the damage is not likely going to work."
+    },
+    {
+      "id": 23,
+      "link": [3, 1],
+      "name": "HiJump",
+      "requires": [
+        "HiJump",
+        {"or": [
+          "h_usePowerBomb",
+          "ScrewAttack",
+          "Plasma",
+          {"and": [
+            "Ice",
+            "Wave",
+            "Spazer"
+          ]},
+          {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 2}}
+        ]},
+        {"or": [
+          "canCarefulJump",
+          "canCrouchJump",
+          "canDownGrab",
+          "canWalljump"
+        ]}
+      ],
+      "note": [
+        "Kill or tank the Menus or spin jump directly from the safety to the right up to the ledge.",
+        "With a spin jump, Samus can make it to the ledge without a wall jump or other means."
+      ],
+      "devNote": "The safe direct jump is not expected here and is included in another srat, but it is still worth mentioning here."
+    },
+    {
+      "id": 37,
+      "link": [3, 1],
+      "name": "Speedy Jump",
+      "requires": [
+        "SpeedBooster",
+        "canTrickyJump"
+      ],
+      "note": "Use the full runway to jump up to the higher ledge."
+    },
+    {
+      "id": 38,
+      "link": [3, 1],
+      "name": "Jump From Safety, Menu Avoid",
+      "requires": [
+        "canDodgeWhileShooting",
+        {"or": [
+          "SpaceJump",
+          "HiJump"
+        ]}
+      ],
+      "note": [
+        "From the safe ledge on the lower right, jump directly to the top ledge without getting hit by the Menus.",
+        "With HiJump, a spin jump can get Samus onto the ledge.",
+        "With Space Jump, perform one jump without luring the Menus, then a second to get onto the ledge."
+      ],
+      "devNote": "canDodgeWhileShooting isn't optimal here, but it is a similar difficulty of dodging."
+    },
+    {
+      "id": 24,
+      "link": [3, 1],
+      "name": "Tricky Menu Avoid",
+      "requires": [
+        "canTrickyJump",
+        {"or": [
+          "canPreciseWalljump",
+          "canTrickySpringBallJump"
+        ]}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [3, 1],
+      "name": "Frozen Menu Platforms",
+      "requires": [
+        "canUseFrozenEnemies",
+        {"or": [
+          "Plasma",
+          "Wave",
+          "Spazer",
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}}
+        ]},
+        {"or": [
+          "canDodgeWhileShooting",
+          {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 1],
+      "name": "Kill the Menus",
+      "requires": [
+        {"or": [
+          "canIBJ",
+          "canWalljump",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Menu", "Menu", "Menu"]],
+            "explicitWeapons": ["PowerBomb", "ScrewAttack", "Plasma", "Missile", "Super", "Grapple"]
+          }},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Menu", "Menu", "Menu"]]
+            }},
+            {"or": [
+              "canFarmWhileShooting",
+              {"and": [
+                "canDodgeWhileShooting",
+                {"or": [
+                  "Wave",
+                  "Spazer",
+                  {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}},
+                  "h_pauseAbuseMinimalReserveRefill"
+                ]}
+              ]},
+              {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 3}}
+            ]}
+          ]}
+        ]}
+      ],
+      "devNote": "The Menus are relatively hard to dodge, and would end up with the same requirements as killing them with the Power Beam."
+    },
+    {
+      "id": 28,
+      "link": [3, 1],
+      "name": "Leave With Spark (Bootless)",
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"canShineCharge": {"usedTiles": 22, "openEnd": 2}},
+        {"shinespark": {"frames": 11, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Charge a spark below towards the right then run back and jump up and spark out of the left door."
+    },
+    {
+      "id": 29,
+      "link": [3, 1],
+      "name": "Leave Shinecharged (HiJump)",
+      "requires": [
+        "canShinechargeMovementComplex",
+        "HiJump",
+        {"canShineCharge": {"usedTiles": 20, "openEnd": 2}},
+        {"or": [
+          {"and": [
+            "canWalljump",
+            {"shineChargeFrames": 120}
+          ]},
+          {"shineChargeFrames": 135}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Run to the left to gain a shinecharge, and use the last few tiles of runway to jump up to the ledge above."
+    },
+    {
+      "id": 33,
+      "link": [3, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 15, "excessFrames": 10}}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "It is possible to spark into the tip of the upper ledge then fall onto the lower, but that is not expected here."
+    },
+    {
+      "id": 30,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 31,
+      "link": [3, 2],
+      "name": "Shinespark Out Right",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        "canCarefulJump",
+        "Morph",
+        {"canShineCharge": {"usedTiles": 22, "openEnd": 2}},
+        {"shinespark": {"frames": 30}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["missiles", "powerbomb"],
+          "requires": [
+            {"or": [
+              "h_useSpringBall",
+              "h_bombThings",
+              "h_threeTileJumpMorph"
+            ]}
+          ]
+        }
+      ],
+      "note": [
+        "Charge on the central runway then carry the spark through the morph tunnel and out the right door.",
+        "The door can be shot just before initiating the spark.",
+        "This is easier with Gravity because the tide won't interfere."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [3, 2],
+      "name": "Suitless Shinespark Out Right",
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canCarefulJump",
+        "Morph",
+        {"canShineCharge": {"usedTiles": 22, "openEnd": 1}},
+        {"shinespark": {"frames": 30}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["missiles", "powerbomb"],
+          "requires": [
+            {"or": [
+              "h_useSpringBall",
+              "h_bombThings",
+              "h_threeTileJumpMorph"
+            ]}
+          ]
+        }
+      ],
+      "note": [
+        "Charge on the central runway then carry the spark through the morph tunnel and out the right door.",
+        "This can be done by being careful not to fall off of the runway and into the water or timing the tide.",
+        "The door can be shot just before initiating the spark."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Frozen Menu Bridge",
+      "note": [
+        "Freeze one of the Menus (bugs) in a position where you can use it to get into the morph passage.",
+        "One of the easier methods is with a damage boost. Stand in the water, take a hit for positioning, and freeze the bug near but left of Samus.",
+        "Then morph on top and damage boost into the morph tunnel as it unfreezes."
+      ]
+    }
+  ],
+  "nextStratId": 41,
+  "nextNotableId": 3
+}

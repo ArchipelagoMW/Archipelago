@@ -1,0 +1,105 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Business Center and Frog Savestation",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 86,
+          "roomName": "Business Center",
+          "nodeid": 5,
+          "nodeName": "Business Center Center Right Door (to Save)",
+          "position": "left"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "East",
+          "roomid": 302,
+          "roomName": "Frog Savestation",
+          "nodeid": 1,
+          "nodeName": "Frog Savestation Left Door (to Business Center)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Cathedral Entrance and Business Center",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "East",
+          "roomid": 90,
+          "roomName": "Cathedral Entrance",
+          "nodeid": 1,
+          "nodeName": "Cathedral Entrance Left Door (to Business Center)",
+          "position": "right"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 86,
+          "roomName": "Business Center",
+          "nodeid": 6,
+          "nodeName": "Business Center Top Right Door (to Cathedral Entrance)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Crocomire Speedway and Acid Snakes Tunnel",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 120,
+          "roomName": "Crocomire Speedway",
+          "nodeid": 4,
+          "nodeName": "Crocomire Speedway Bottom Right Door (to Acid Snakes tunnel)",
+          "position": "left"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "East",
+          "roomid": 119,
+          "roomName": "Acid Snakes Tunnel",
+          "nodeid": 1,
+          "nodeName": "Acid Snakes Tunnel Left Door (to Crocomire Speedway)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Crocomire Speedway and Crocomire's Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 120,
+          "roomName": "Crocomire Speedway",
+          "nodeid": 3,
+          "nodeName": "Crocomire Speedway Bottom Door (to Crocomire)",
+          "position": "top"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "Crocomire",
+          "roomid": 122,
+          "roomName": "Crocomire's Room",
+          "nodeid": 2,
+          "nodeName": "Crocomire Room Top Door (to Crocomire Speedway)",
+          "position": "bottom"
+        }
+      ]
+    }
+  ]
+}

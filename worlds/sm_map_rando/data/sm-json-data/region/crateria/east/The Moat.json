@@ -1,0 +1,1294 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 7,
+  "name": "The Moat",
+  "area": "Crateria",
+  "subarea": "East",
+  "roomAddress": "0x795FF",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018ade",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018aea",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2],
+        [1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78248",
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Shinesparking Left Through Item",
+      "obstacleType": "abstract"
+    },
+    {
+      "id": "B",
+      "name": "Shinesparking Right Through Item",
+      "obstacleType": "abstract"
+    },
+    {
+      "id": "C",
+      "name": "Hero Shot to Open Door",
+      "obstacleType": "abstract"
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1,
+          "steepUpTiles": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 61,
+      "link": [1, 1],
+      "name": "Leave With Grapple Swing",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleSwing": {
+          "blocks": [{"position": [7, 2], "note": "Closest Grapple block to left door"}]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport",
+      "requires": [
+        {"notable": "Leave With Grapple Teleport"},
+        "canMoonwalk",
+        "canInsaneJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "note": [
+        "Hold angle-up, jump, bonk the ceiling, and use Grapple just before landing.",
+        "Moonwalk into the transition on the same frame that the Grapple Beam reaches the Grapple block.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Grapple",
+          "SpaceJump"
+        ]}
+      ],
+      "devNote": "This avoids collecting the item."
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Shinespark Above Item",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "top"
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 42, "excessFrames": 9}}
+      ],
+      "devNote": "Sparking in top position means the item will be avoided."
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Speedy Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 26
+        }
+      },
+      "requires": [
+        "canTrickyJump"
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Insane Speedy Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 21
+        }
+      },
+      "requires": [
+        "canInsaneJump"
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Speedy Airball",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 18
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        "canLateralMidAirMorph"
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Insane Speedy Airball",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 11
+        }
+      },
+      "requires": [
+        "canInsaneJump",
+        "canLateralMidAirMorph",
+        "canMomentumConservingMorph"
+      ]
+    },
+    {
+      "id": 63,
+      "link": [1, 2],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Dust Torizo Room and Halfie Climb Room."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 3,
+              "minTiles": 29.4375,
+              "speedBooster": true,
+              "obstructions": [[2, 0]],
+              "requires": [
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Waterway Energy Tank Room."],
+              "devNote": [
+                "With good positioning this can be done with a lateral mid-air morph not touching the ceiling.",
+                "This has little use since with Gravity a Gravity jump would also be possible."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump"
+              ],
+              "note": ["This applies to Statues Hallway."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump"
+              ],
+              "note": ["This applies to Flyway."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[4, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump",
+                "canInsaneMidAirMorph"
+              ],
+              "note": ["This applies to Baby Kraid Room."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "note": ["This applies to Metal Pirates Room."],
+              "detailNote": ["This has a 3-frame window for the jump."]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyJump"
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "This isn't marked as a wall-jump avoid, since it may have some advantage over the CWJ",
+        "by reducing the soft-lock risk."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "SpringBall Bounce, Run Through the Door",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canSpringBallBounce",
+        "canDisableEquipment",
+        {"or": [
+          "canTrickyJump",
+          "h_useMorphBombs"
+        ]}
+      ],
+      "collectsItems": [3],
+      "note": "Run, jump, lateral midair morph on the way down, then bounce off the pedestal to get to the other side."
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "SpringBall Bounce, Open Doorway",
+      "requires": [
+        "canSpringBallBounce",
+        "canDisableEquipment",
+        {"doorUnlockedAtNode": 1},
+        {"or": [
+          "canTrickyJump",
+          "h_useMorphBombs"
+        ]}
+      ],
+      "collectsItems": [3],
+      "note": "Open the door and step as close to the transition as possible. Run, jump, lateral midair morph on the way down, then bounce off the pedestal to get to the other side."
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Continuous Walljump, Run Through the Door",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": false,
+          "minTiles": 1.4
+        }
+      },
+      "requires": [
+        "canCWJ",
+        "canDisableEquipment"
+      ],
+      "collectsItems": [3],
+      "note": [
+        "Aligning against the closed door shell on the other side of the transition.",
+        "Run towards the water and jump on the last possible frame.",
+        "Perform the CWJ off of the item pedestal to cross to the other side."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Continuous Walljump, Open Doorway",
+      "requires": [
+        "canCWJ",
+        "canDisableEquipment",
+        {"doorUnlockedAtNode": 1},
+        {"or": [
+          "canMoonwalk",
+          "Morph",
+          "canXRayTurnaround"
+        ]}
+      ],
+      "collectsItems": [3],
+      "note": [
+        "Stand on the farthest pixel into the door possible using moonwalk, X-Ray, or morphball turn around.",
+        "Run towards the water and jump on the last possible frame.",
+        "Perform the CWJ off of the item pedestal to cross to the other side."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "G-mode Morph IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          {"and": [
+            "HiJump",
+            "h_artificialMorphJumpIntoIBJ"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "G-mode Morph HBJ or Ceiling Bomb Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphCeilingBombJump",
+          "h_artificialMorphHBJ"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Hero Shot Spark Above Item",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 40},
+        "canShinechargeMovementTricky",
+        "canHeroShot",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 38}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump, fire a shot mid-air, and activate the shinespark wind-up.",
+        "Wait until the shot is at a specific position before sparking.",
+        "Sparking too late will cause the shot to despawn before reaching the door.",
+        "Sparking too early will cause Samus to bonk the door as it will not yet be open.",
+        "A beam shot, Missile, or Super can be used."
+      ],
+      "devNote": "Sparking in top position means the item will be avoided."
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        {"or": [
+          "canBlueSpaceJump",
+          {"and": [
+            "canGravityJump",
+            "canLongChainTemporaryBlue"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [1, 2],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue (Speedy Jump)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2,
+          "openEnd": 0,
+          "steepDownTiles": 1,
+          "minExtraRunSpeed": "$4.0"
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        "canLateralMidAirMorph",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with enough speed to jump over all the water, morphing mid-air and then unmorphing into temporary blue."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [1, 2],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue (Insane Speedy Jump)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2,
+          "openEnd": 0,
+          "steepDownTiles": 1,
+          "minExtraRunSpeed": "$3.2"
+        }
+      },
+      "requires": [
+        "canInsaneJump",
+        "canMomentumConservingMorph",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with enough speed to jump over all the water, morphing mid-air and then unmorphing into temporary blue.",
+        "Morph just before hitting the ceiling, in order to extend the jump horizontally."
+      ]
+    },
+    {
+      "id": 65,
+      "link": [1, 2],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue (Spring Ball Bounce)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 2,
+          "openEnd": 0,
+          "steepDownTiles": 1,
+          "minExtraRunSpeed": "$0.8"
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        "canChainTemporaryBlue",
+        "canSpeedball"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with blue speed and bounce on the item pedestal to make it across, then unmorph into temporary blue.",
+        "If entering at high speed, morph on the left side of the pedestal so that there is enough space to use a controlled Spring Ball bounce."
+      ],
+      "detailNote": ["If entering with very low speed, a spring fling can help make it across."]
+    },
+    {
+      "id": 20,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        "canDisableEquipment"
+      ],
+      "collectsItems": [3],
+      "note": "This jump is much easier without HiJump or Speedbooster equipped."
+    },
+    {
+      "id": 21,
+      "link": [1, 3],
+      "name": "Movement Assist",
+      "requires": [
+        {"or": [
+          "Grapple",
+          "SpaceJump",
+          "Gravity"
+        ]}
+      ],
+      "collectsItems": [3]
+    },
+    {
+      "id": 22,
+      "link": [1, 3],
+      "name": "Run Through Door",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [],
+      "collectsItems": [3]
+    },
+    {
+      "id": 23,
+      "link": [1, 3],
+      "name": "Come In Shinecharged, End Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        "canShinechargeMovementComplex"
+      ],
+      "collectsItems": [3],
+      "endsWithShineCharge": true
+    },
+    {
+      "id": 24,
+      "link": [1, 3],
+      "name": "Hero Shot Spark Through Item",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 40},
+        "canShinechargeMovementTricky",
+        "canHeroShot",
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 38}}
+      ],
+      "clearsObstacles": ["B", "C"],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump, fire a shot mid-air, and activate the shinespark wind-up.",
+        "Wait until the shot is at a specific position before sparking.",
+        "Sparking too late will cause the shot to despawn before reaching the door.",
+        "Sparking too early will cause Samus to bonk the door as it will not yet be open.",
+        "A beam shot, Missile, or Super can be used."
+      ],
+      "devNote": "Sparking in bottom position means the item will be collected along the way."
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Grapple",
+          "SpaceJump"
+        ]}
+      ],
+      "note": "This avoids collecting the item.",
+      "devNote": "Several other strats would also be possible for avoiding the item."
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Pass Below",
+      "requires": [
+        "h_bombThings"
+      ]
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Gravity",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canWalljump",
+          "canGravityJump",
+          {"and": [
+            "canSpringBallJumpMidAir",
+            "HiJump"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue (Speedy Jump)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 4,
+          "openEnd": 0,
+          "minExtraRunSpeed": "$1.2"
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with enough speed to jump onto or over the item pedestal, morphing mid-air and then unmorphing into temporary blue."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 31,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 32,
+      "link": [2, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door.",
+        "Samus will not be visible during the climb."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [2, 1],
+      "name": "Use Flash Suit, Diagonal Spark Avoid the Item",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 3, "excessFrames": 1}}
+      ]
+    },
+    {
+      "id": 34,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 62,
+      "link": [2, 2],
+      "name": "Leave With Grapple Swing",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleSwing": {
+          "blocks": [{"position": [5, 2], "note": "Closest Grapple block to right door"}]
+        }
+      }
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Grapple",
+          "SpaceJump"
+        ]}
+      ],
+      "collectsItems": [3]
+    },
+    {
+      "id": 37,
+      "link": [2, 3],
+      "name": "Right to Left Jump",
+      "requires": [
+        "canDisableEquipment",
+        "canCarefulJump",
+        {"or": [
+          {"doorUnlockedAtNode": 2},
+          "canTrickyJump",
+          "canLateralMidAirMorph",
+          "SpeedBooster"
+        ]}
+      ],
+      "collectsItems": [3],
+      "note": [
+        "Execution of this strat is non-trivial, and failing will lead to falling into the pit.",
+        "Depending on item loadout, that could be a softlock."
+      ],
+      "devNote": "Could use a failure definition?"
+    },
+    {
+      "id": 38,
+      "link": [2, 3],
+      "name": "Right to Left Jump, Run Through Door",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canDisableEquipment",
+        "canCarefulJump"
+      ],
+      "collectsItems": [3],
+      "note": [
+        "Execution of this strat is non-trivial, and failing will lead to falling into the pit.",
+        "Depending on item loadout, that could be a softlock."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [2, 3],
+      "name": "Shinespark Through Item",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "requires": [
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 23, "excessFrames": 1}}
+      ],
+      "clearsObstacles": ["A"],
+      "collectsItems": [3],
+      "devNote": "This will grab the item and continue the spark to the left door. If this is an E-Tank, Samus will not maintain full Energy after the next strat."
+    },
+    {
+      "id": 40,
+      "link": [2, 3],
+      "name": "Come In Shinecharging, End Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 130}
+      ],
+      "collectsItems": [3],
+      "endsWithShineCharge": true,
+      "note": [
+        "After gaining a shinecharge, run back to the door to make space for a running jump to the left."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [2, 3],
+      "name": "Come in Shinecharged, End Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        "canShinechargeMovementComplex"
+      ],
+      "collectsItems": [3],
+      "endsWithShineCharge": true
+    },
+    {
+      "id": 42,
+      "link": [2, 3],
+      "name": "Hero Shot Spark Through Item",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 25},
+        "canShinechargeMovementTricky",
+        "canHeroShot",
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 17}}
+      ],
+      "clearsObstacles": ["A", "C"],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Run, fire a shot mid-air, jump, and activate a mid-air shinespark to the left.",
+        "Sparking too late will cause the shot to despawn before reaching the door.",
+        "Sparking too early will cause Samus to bonk the door as it will not yet be open.",
+        "A beam shot, Missile, or Super can be used."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        {"obstaclesNotCleared": ["A", "B", "C"]}
+      ]
+    },
+    {
+      "id": 44,
+      "link": [3, 1],
+      "name": "Continue Shinespark Left",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"obstaclesNotCleared": ["B", "C"]},
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 19, "excessFrames": 19}}
+      ],
+      "resetsObstacles": ["A"],
+      "devNote": [
+        "This will continue the Shinespark from the right door. This is needed in case the item is an E-Tank, Samus will not maintain full Energy after the Spark.",
+        "FIXME: The h_shinechargeMaxRunway is to satisfy tests for now;",
+        "we should add a proper way to represent that the shinespark carries over from the previous strat."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [3, 1],
+      "name": "Continue Hero Shot Shinespark Left",
+      "requires": [
+        {"obstaclesCleared": ["A", "C"]},
+        {"obstaclesNotCleared": ["B"]},
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 21, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "devNote": [
+        "This will continue the Shinespark from the right door. This is needed in case the item is an E-Tank, Samus will not maintain full Energy after the Spark.",
+        "FIXME: The h_shinechargeMaxRunway is to satisfy tests for now;",
+        "we should add a proper way to represent that the shinespark carries over from the previous strat."
+      ]
+    },
+    {
+      "id": 46,
+      "link": [3, 1],
+      "name": "Continue Shinecharge, Leave With Spark",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"obstaclesNotCleared": ["A", "B", "C"]},
+        "canShinechargeMovementComplex",
+        "canHeroShot",
+        {"shineChargeFrames": 15},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "From the pedestal, fire a shot to the left to open the door.",
+        "If needed, jump slightly to the left to follow the shot, then activate the shinespark wind-up.",
+        "Wait until the shot hits the door before sparking."
+      ],
+      "devNote": "If approaching from the right, the camera will be scrolled further, making it unnecessary to jump and follow the shot."
+    },
+    {
+      "id": 47,
+      "link": [3, 2],
+      "name": "Grapple",
+      "requires": [
+        "Grapple",
+        {"obstaclesNotCleared": ["A", "B", "C"]}
+      ]
+    },
+    {
+      "id": 48,
+      "link": [3, 2],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump",
+        {"obstaclesNotCleared": ["A", "B", "C"]}
+      ]
+    },
+    {
+      "id": 49,
+      "link": [3, 2],
+      "name": "Gravity with Jump Assist",
+      "requires": [
+        "Gravity",
+        {"or": [
+          {"and": [
+            "canTrickySpringBallJump",
+            {"or": [
+              "canLateralMidAirMorph",
+              "canTrickyJump"
+            ]}
+          ]},
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]}
+        ]},
+        {"obstaclesNotCleared": ["A", "B", "C"]}
+      ]
+    },
+    {
+      "id": 50,
+      "link": [3, 2],
+      "name": "IBJ",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canLongIBJ",
+          {"and": [
+            "HiJump",
+            "canJumpIntoIBJ"
+          ]}
+        ]},
+        {"obstaclesNotCleared": ["A", "B", "C"]}
+      ]
+    },
+    {
+      "id": 51,
+      "link": [3, 2],
+      "name": "Gravity Jump",
+      "requires": [
+        "canGravityJump",
+        {"obstaclesNotCleared": ["A", "B", "C"]}
+      ]
+    },
+    {
+      "id": 52,
+      "link": [3, 2],
+      "name": "Horizontal Bomb Jump",
+      "requires": [
+        "canHBJ",
+        {"obstaclesNotCleared": ["A", "B", "C"]}
+      ]
+    },
+    {
+      "id": 53,
+      "link": [3, 2],
+      "name": "Double Spring Ball Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "h_doubleSpringBallJumpWithHiJump",
+        {"obstaclesNotCleared": ["A", "B", "C"]}
+      ]
+    },
+    {
+      "id": 64,
+      "link": [3, 2],
+      "name": "CWJ Bomb Boost",
+      "requires": [
+        {"notable": "CWJ Bomb Boost"},
+        "canCWJ",
+        "canWallJumpBombBoost",
+        "canResetFallSpeed"
+      ],
+      "note": [
+        "Stand on the item pedestal facing right.",
+        "Perform a short stationary spin jump with some dash speed, and do a continuous wall jump off the item pedestal.",
+        "Lay a Power Bomb (or Bomb) and use it to boost to the right, with a well-timed unmorph to reset fall speed."
+      ],
+      "detailNote": [
+        "It is ideal to gain 3 frames of dash speed, the maximum possible, but lower amounts can work.",
+        "It is even possible to do a regular wall jump instead of a CWJ, but the CWJ makes it significantly more lenient.",
+        "It is best for the wall jump to be performed as high as possible.",
+        "If Speed Booster is available, equipping it will generally be helpful,",
+        "as it will increase the height of Samus' wall jump based on the amount of dash speed."
+      ]
+    },
+    {
+      "id": 54,
+      "link": [3, 2],
+      "name": "Ceiling Bomb Jump",
+      "requires": [
+        "canCeilingBombJump",
+        {"obstaclesNotCleared": ["A", "B", "C"]}
+      ]
+    },
+    {
+      "id": 55,
+      "link": [3, 2],
+      "name": "Continue Shinespark Right",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        {"obstaclesNotCleared": ["A", "C"]},
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 23, "excessFrames": 7}}
+      ],
+      "resetsObstacles": ["B"],
+      "devNote": [
+        "FIXME: The h_shinechargeMaxRunway is to satisfy tests for now;",
+        "we should add a proper way to represent that the shinespark carries over from the previous strat."
+      ]
+    },
+    {
+      "id": 56,
+      "link": [3, 2],
+      "name": "Continue Hero Shot Shinespark Right",
+      "requires": [
+        {"obstaclesCleared": ["B", "C"]},
+        {"obstaclesNotCleared": ["A"]},
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 23, "excessFrames": 7}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "devNote": [
+        "FIXME: The h_shinechargeMaxRunway is to satisfy tests for now;",
+        "we should add a proper way to represent that the shinespark carries over from the previous strat."
+      ]
+    },
+    {
+      "id": 57,
+      "link": [3, 2],
+      "name": "Continue Shinecharge into Diagonal Spark",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"obstaclesNotCleared": ["A", "B", "C"]},
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 45},
+        {"shinespark": {"frames": 7}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump from the pedestal to the right, and shinespark diagonally to make it past the water."
+      ]
+    },
+    {
+      "id": 58,
+      "link": [3, 2],
+      "name": "Continue Shinecharge, Leave With Spark",
+      "startsWithShineCharge": true,
+      "requires": [
+        {"obstaclesNotCleared": ["A", "B", "C"]},
+        "canShinechargeMovementComplex",
+        "canHeroShot",
+        {"shineChargeFrames": 45},
+        {"shinespark": {"frames": 22}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "From the pedestal, jump to the right to bring the door on-camera.",
+        "Fire a shot mid-air, and activate the shinespark wind-up.",
+        "Wait until the shot hits the door before sparking."
+      ],
+      "devNote": "If approaching from the right, the camera will be scrolled further, requiring a larger jump to prevent the shot from despawning."
+    },
+    {
+      "id": 59,
+      "link": [3, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 4, "excessFrames": 2}}
+      ]
+    },
+    {
+      "id": 60,
+      "link": [3, 2],
+      "name": "Use Flash Suit, Hero Shot Through Right Door",
+      "requires": [
+        "canHeroShot",
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 16, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 2,
+      "name": "Leave With Grapple Teleport",
+      "note": [
+        "Hold angle-up, jump, bonk the ceiling, and use Grapple just before landing.",
+        "Moonwalk into the transition on the same frame that the Grapple Beam reaches the Grapple block.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "CWJ Bomb Boost",
+      "note": [
+        "Stand on the item pedestal facing right.",
+        "Perform a stationary spin jump with some dash speed, and do a continuous wall jump off the item pedestal.",
+        "Lay a Power Bomb (or Bomb) and use it to boost to the right, with a well-timed unmorph to reset fall speed."
+      ]
+    }
+  ],
+  "nextStratId": 66,
+  "nextNotableId": 4
+}

@@ -1,0 +1,86 @@
+
+
+15//impaRefill: |
+    push de
+    push hl
+    
+    ld b,TREASURE_EMBER_SEEDS
+    ld hl,wNumEmberSeeds
+    
+    @refillSeedsLoop:
+    ld a,b
+    call checkTreasureObtained
+    jr nc,@nextSeed
+    ld a,(hl)           ; currently owned seeds
+    cp $20
+    jr nc,@nextSeed
+    ld (hl),$20
+    
+    @nextSeed:
+    ld a,b
+    cp TREASURE_MYSTERY_SEEDS
+    jr z,@refillBombs
+    inc hl
+    inc b
+    jr @refillSeedsLoop
+    
+    @refillBombs:
+    ld a,TREASURE_BOMBS
+    call checkTreasureObtained
+    jr nc,@refillShield
+    ld hl,wMaxBombs
+    ldd a,(hl)
+    ld (hl),a
+    
+    @refillShield:
+    ld a,TREASURE_SHIELD
+    call checkTreasureObtained
+    jr nc,@refillHealth
+    ld a,TREASURE_SHIELD
+    ldh ($8b),a     ; put item ID in FF8B
+    ld e,$3f
+    ld hl,$46b6     ; addTreasureToInventory in bank 3F
+    call interBankCall
+    
+    @refillHealth:
+    ld hl,wLinkMaxHealth
+    ldd a,(hl)
+    ld (hl),a
+    
+    ; Play a sound and update status bar to give feedback
+    ld a,SND_GETSEED
+    call playSound
+    ld a,$03
+    ld (wStatusBarNeedsRefresh),a
+    
+    pop hl
+    pop de
+    ret
+
+
+# Make Like-Like only remove the shield without unsetting the treasure flag
+0d//loseShieldWithoutLosingFlag: |
+    call loseTreasure
+    ld hl,wObtainedTreasureFlags
+    set 1,(hl)
+    ret
+0d/5db3/: call loseShieldWithoutLosingFlag
+
+# Creation a new script for impa
+0c//impaScriptRewrite: |
+  db initcollisions
+  @loop:
+  db checkabutton
+  db showloadedtext
+
+  db asm15
+  dw impaRefill
+
+  dwbe @loop ; jump back to the beginning of the script
+
+# changin impa script def
+09/64e5/: dw impaScriptRewrite
+# Make Impa always stand at a specific spot in the house
+09/6484/: jp $64c1 # val00
+
+# TODO TEXT

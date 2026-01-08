@@ -1,0 +1,2250 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 61,
+  "name": "Pink Brinstar Wave Gate Room",
+  "area": "Brinstar",
+  "subarea": "Pink",
+  "roomAddress": "0x7A130",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x0018fb2",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "useImplicitComeInNormally": false,
+      "useImplicitComeInWithMockball": false,
+      "locks": [
+        {
+          "name": "Pink Brinstar Hoppers Left Gray Lock (to Big Pink)",
+          "lockType": "killEnemies",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                {"obstaclesCleared": ["A"]}
+              ]
+            }
+          ],
+          "yields": ["f_ZebesAwake"]
+        }
+      ],
+      "mapTileMask": [
+        [1, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x0018fbe",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Pink Brinstar Hoppers Right Gray Lock (to E-Tank)",
+          "lockType": "killEnemies",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                {"obstaclesCleared": ["A"]}
+              ]
+            }
+          ],
+          "yields": ["f_ZebesAwake"],
+          "devNote": "Hoppers must be killed, possibly by going to 1 and back."
+        }
+      ],
+      "mapTileMask": [
+        [1, 2],
+        [1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ],
+      "note": "Represents being on the Grapple block if going right or to the right of the gate, if going left."
+    },
+    {
+      "id": 4,
+      "name": "Frozen Hopper Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1],
+        [2, 1]
+      ],
+      "note": "Represents being with the Hoppers, one of them is frozen, and they are no longer a threat to Samus."
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Hoppers",
+      "obstacleType": "enemies"
+    },
+    {
+      "id": "B",
+      "name": "Blue Gate",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "C",
+      "name": "In G-Mode - Can't Use Grapple, Open Door",
+      "obstacleType": "abstract"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Pink Wave Gate Small Sidehoppers",
+      "enemyName": "Sm. Sidehopper",
+      "quantity": 2,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Pink Wave Gate Sidehopper",
+      "enemyName": "Sidehopper",
+      "quantity": 1,
+      "homeNodes": [1]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 78,
+      "link": [1, 1],
+      "name": "Leave With Runway, Use I-Frames",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}},
+        "canUseIFrames"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "devNote": "This is worst-case scenario. A strat that comes in and leaves with a single hit could be added."
+    },
+    {
+      "id": 92,
+      "link": [1, 1],
+      "name": "X-Mode, Leave Shinecharged",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "h_destroyBombWalls",
+        "canXMode",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        "h_shinechargeMaxRunway",
+        "canBeVeryPatient",
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "A very precise bounce is needed in order to enter X-mode with dash speed.",
+        "Neutral knockback or a damage boost can be used to reach the door more quickly."
+      ]
+    },
+    {
+      "id": 85,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 12,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $2.9."]
+    },
+    {
+      "id": 79,
+      "link": [1, 1],
+      "name": "Base, Sidehopper Hit on Entry",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"enemyDamage": {"enemy": "Sm. Sidehopper", "type": "contact", "hits": 1}}
+      ]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Power Beam Kill",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 3}}
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": [
+        "The Small Sidehoppers may deliver more of the hits, but this is an assumed worst case scenario"
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Intermediate Weapon Kill",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}},
+        {"or": [
+          "Spazer",
+          "Wave"
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Fast Weapon Kill",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Sidehopper", "Sm. Sidehopper", "Sm. Sidehopper"]],
+          "explicitWeapons": ["Missile", "Super", "PowerBomb", "ScrewAttack", "Plasma"]
+        }},
+        {"obstaclesNotCleared": ["C"]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Stacked Super Kill",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"enemyDamage": {"enemy": "Sm. Sidehopper", "type": "contact", "hits": 1}},
+        "canPrepareForNextRoom",
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Weaken the big hopper with a Power Beam shot and then use one Super to hit all three enemies when they stack together."
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Kill on Entry (Screw Attack)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "ScrewAttack"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 80,
+      "link": [1, 1],
+      "name": "Kill on Entry (Charged Plasma)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "Charge",
+        "Plasma"
+      ],
+      "clearsObstacles": ["A"],
+      "note": "On entry, shoot diagonally downwards to kill the first two hoppers, then shoot the third."
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Kill on Entry (Come In With Blue Speed)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Kill on Entry (Come In With Spark)",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        {"shinespark": {"frames": 24}}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Kill on Entry (Come In With Unmorph Power Bomb Boost)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        {"tech": "canJumpIntoIBJ"},
+        "canResetFallSpeed",
+        "h_usePowerBomb",
+        "canHitbox",
+        {"or": [
+          "canPseudoScrew",
+          "Plasma",
+          {"ammo": {"type": "Missile", "count": 2}},
+          {"ammo": {"type": "Super", "count": 1}},
+          {"and": [
+            "Ice",
+            "Wave"
+          ]},
+          {"and": [
+            "Ice",
+            "Spazer"
+          ]},
+          {"and": [
+            "Wave",
+            "Spazer"
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"tech": "canBombHorizontally"}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Bounce on the Power Bomb, then quickly kill the remaining Sidehopper with a strong beam, ammo, or pseudo-screw.",
+        "If Samus has a weak beam, use the bomb to boost to the right to get the Sidehopper to jump to the right, then morph under it while killing it."
+      ],
+      "devNote": "This is significantly easier than a typical canUnmorphBombBoost, so it is instead modeled with canJumpIntoIBJ and canResetFallSpeed."
+    },
+    {
+      "id": 91,
+      "link": [1, 1],
+      "name": "Indirect G-Mode Damageless Kill",
+      "requires": [
+        "canGMode",
+        {"obstaclesCleared": ["C"]},
+        "canTrickyDodgeEnemies",
+        {"or": [
+          "ScrewAttack",
+          "Plasma"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "If coming from a water room, Samus' jump height will be much lower. With Screw Attack, it is important to turnaround before touching the hoppers.",
+        "It can help to hold left through the transition and then buffer a right spin jump while landing."
+      ],
+      "devNote": "FIXME: Assumes worst case scenario of it being a water connection. Add a way to check if this is an air connection."
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Reverse Gate Glitch (HiJump)",
+      "requires": [
+        {"notable": "Reverse Gate Glitch"},
+        {"obstaclesCleared": ["A"]},
+        {"or": [
+          "canTrickyJump",
+          "h_backIntoCorner"
+        ]},
+        "HiJump",
+        "canOffScreenSuperShot"
+      ],
+      "clearsObstacles": ["B"],
+      "note": [
+        "Jump straight up and shoot with the correct timing.",
+        "This strat involves shooting a Super diagonally from the correct height while flush against the left wall.",
+        "Its acceleration will cause it to clip into the blue gate off-screen."
+      ],
+      "devNote": [
+        "Springball jumps didn't look possible but was close.",
+        "IBJ didn't look possible."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "Reverse Gate Glitch (HiJump, Hoppers Alive)",
+      "requires": [
+        {"notable": "Reverse Gate Glitch"},
+        {"obstaclesNotCleared": ["A"]},
+        {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}},
+        "canTrickyJump",
+        "canNeutralDamageBoost",
+        "canUseIFrames",
+        "HiJump",
+        "canOffScreenSuperShot"
+      ],
+      "clearsObstacles": ["B"],
+      "note": [
+        "Use damage from the small sidehopper to align against the left wall.",
+        "Jump straight up and shoot with the correct timing.",
+        "This strat involves shooting a Super diagonally from the correct height while flush against the left wall.",
+        "Its acceleration will cause it to clip into the blue gate off-screen."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 1],
+      "name": "Reverse Gate Glitch (SpaceJump)",
+      "requires": [
+        {"notable": "Reverse Gate Glitch"},
+        {"obstaclesCleared": ["A"]},
+        {"or": [
+          "canTrickyJump",
+          "h_backIntoCorner"
+        ]},
+        "canStationarySpinJump",
+        "SpaceJump",
+        "canOffScreenSuperShot"
+      ],
+      "clearsObstacles": ["B"],
+      "note": [
+        "Use a stationary spinjump, or spinjump against the wall and turn around without moving; and shoot with the same correct timing.",
+        "This strat involves shooting a Super diagonally from the correct height while flush against the left wall.",
+        "Its acceleration will cause it to clip into the blue gate off-screen."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 1],
+      "name": "Reverse Gate Glitch (Speedy Jump)",
+      "requires": [
+        {"notable": "Reverse Gate Glitch"},
+        {"obstaclesCleared": ["A"]},
+        "canTrickyDashJump",
+        "canOffScreenSuperShot"
+      ],
+      "clearsObstacles": ["B"],
+      "note": [
+        "Build run speed and jump into the left wall, turning around without changing Samus' pixel position.",
+        "This strat involves shooting a Super diagonally from the correct height while flush against the left wall.",
+        "Its acceleration will cause it to clip into the blue gate off-screen."
+      ],
+      "devNote": "The reverse gate glitch requires killing the enemies first, so it's required here."
+    },
+    {
+      "id": 14,
+      "link": [1, 1],
+      "name": "Reverse Gate Glitch (Door Frame Jump)",
+      "requires": [
+        {"notable": "Reverse Gate Glitch"},
+        {"obstaclesCleared": ["A"]},
+        {"obstaclesNotCleared": ["C"]},
+        {"doorUnlockedAtNode": 1},
+        "canTrickyJump",
+        "canOffScreenSuperShot"
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "clearsObstacles": ["B"],
+      "note": [
+        "A consistent setup is to align with the wall below the door frame facing right.",
+        "Jump and turn around to land on the door frame.",
+        "Then jump and turn around again to return to being aligned with the wall but at the right height for shooting the Super.",
+        "This strat involves shooting a Super diagonally from the correct height while flush against the left wall.",
+        "Its acceleration will cause it to clip into the blue gate off-screen."
+      ],
+      "devNote": [
+        "The reverse gate glitch pretty much requires killing the enemies first, so it's required here.",
+        "Direct GMode would have a usable door frame, but the gate can't be opened."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 1],
+      "name": "G-Mode Indirect to Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["B", "C"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [1, 1],
+      "name": "G-Mode Morph Indirect to Despawn Gate Power Bomb Kill",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"enemyDamage": {"enemy": "Sm. Sidehopper", "type": "contact", "hits": 1}},
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A", "B", "C"],
+      "flashSuitChecked": true,
+      "note": "Kill the Sidehoppers with a Power Bomb upon entry."
+    },
+    {
+      "id": 93,
+      "link": [1, 1],
+      "name": "Sidehopper Farm",
+      "requires": [
+        "canPrepareForNextRoom",
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 130}
+          ]},
+          {"and": [
+            "h_PlasmaHitbox",
+            {"cycleFrames": 170}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "resetsObstacles": ["B", "C"],
+      "farmCycleDrops": [
+        {"enemy": "Sidehopper", "count": 1},
+        {"enemy": "Sm. Sidehopper", "count": 2}
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 81,
+      "link": [1, 1],
+      "name": "Mockball Entry, Tank Hit",
+      "entranceCondition": {
+        "comeInWithMockball": {
+          "speedBooster": "any",
+          "adjacentMinTiles": 0,
+          "remoteAndLandingMinTiles": [[0, 0]]
+        }
+      },
+      "requires": [
+        {"enemyDamage": {"enemy": "Sm. Sidehopper", "type": "contact", "hits": 1}}
+      ]
+    },
+    {
+      "id": 18,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Hopper (Jump Entry)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true,
+      "note": [
+        "This is possible to do without taking a second hit:",
+        "Enter the room in a jump, then shoot down to open the door and land in the doorsill."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Hopper",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "This is possible to do without taking a second hit:",
+        "Enter the room in a jump, then shoot down to open the door and land in the doorsill."
+      ],
+      "devNote": [
+        "Version for entering from the right, or if unable to enter jumping.",
+        "A Power Bomb would kill the hoppers."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [1, 2],
+      "name": "IBJ",
+      "requires": [
+        "canLongIBJ",
+        {"obstaclesCleared": ["A"]},
+        {"or": [
+          "Wave",
+          {"obstaclesCleared": ["B"]}
+        ]}
+      ],
+      "devNote": [
+        "IBJ requires the enemies to be killed",
+        "The reverse gate glitch may be executed earlier from node 1 -> 1."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [1, 2],
+      "name": "G-Mode Morph Indirect to Despawn Gate with IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphLongIBJ",
+        {"enemyDamage": {"enemy": "Sm. Sidehopper", "type": "contact", "hits": 1}},
+        {"or": [
+          {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 3}},
+          "h_artificialMorphPowerBomb"
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "flashSuitChecked": true,
+      "note": "Kill the Sidehoppers with Bombs or a Power Bomb, then IBJ up onto the Grapple block."
+    },
+    {
+      "id": 23,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"enemyDamage": {"enemy": "Sm. Sidehopper", "type": "contact", "hits": 1}}
+        ]},
+        {"or": [
+          "SpaceJump",
+          "canWalljump",
+          {"and": [
+            "Grapple",
+            {"obstaclesNotCleared": ["C"]}
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]}
+        ]}
+      ],
+      "devNote": "The reverse gate glitch may be executed earlier from node 1 -> 1."
+    },
+    {
+      "id": 24,
+      "link": [1, 3],
+      "name": "Jump into Room",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        {"or": [
+          "SpaceJump",
+          "canWalljump",
+          {"and": [
+            "Grapple",
+            {"obstaclesNotCleared": ["C"]}
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [1, 3],
+      "name": "Speedy Jump Onto Grapple Block",
+      "requires": [
+        "HiJump",
+        "canTrickyJump",
+        "SpeedBooster",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "note": "Run from the left side to the right, then jump just before or at the end of the runway to get up onto the Grapple block."
+    },
+    {
+      "id": 26,
+      "link": [1, 3],
+      "name": "Spring Ball from the Doorframe",
+      "requires": [
+        {"doorUnlockedAtNode": 1},
+        "canTrickySpringBallJump",
+        "canTrickyJump",
+        {"obstaclesCleared": ["A"]},
+        {"obstaclesNotCleared": ["C"]}
+      ],
+      "note": [
+        "Perform a very precise Spring Ball jump from the doorframe onto the Grapple block.",
+        "A running spin jump or crouch jump can be used."
+      ],
+      "devNote": "FIXME: Direct GMode would have a usable door frame."
+    },
+    {
+      "id": 27,
+      "link": [1, 3],
+      "name": "Speedy Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 34.4375
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canTrickyJump"
+      ],
+      "note": "Jump into the room and onto the Grapple block."
+    },
+    {
+      "id": 28,
+      "link": [1, 3],
+      "name": "Tricky Speedy Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 25
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canTrickyDashJump"
+      ],
+      "note": "Jump into the room and onto the Grapple block."
+    },
+    {
+      "id": 29,
+      "link": [1, 3],
+      "name": "Speedy HiJump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 6.4375
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "HiJump",
+        "canDisableEquipment",
+        "canCarefulJump"
+      ],
+      "note": "Jump into the room and onto the Grapple block."
+    },
+    {
+      "id": 30,
+      "link": [1, 3],
+      "name": "Tricky Speedy HiJump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 1.4375
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "HiJump",
+        "canTrickyDashJump",
+        "canDisableEquipment"
+      ],
+      "note": "Jump into the room and onto the Grapple block. Requires a runway of only 2 tiles in the adjacent room.",
+      "devNote": "It can be done with no open ends, but it's a fair bit tighter."
+    },
+    {
+      "id": 31,
+      "link": [1, 3],
+      "name": "Cross-Room Spring Ball Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 7
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canTrickySpringBallJump",
+        "canCarefulJump"
+      ],
+      "note": "Perform a Spring Ball jump from a speedy jump in the previous room."
+    },
+    {
+      "id": 32,
+      "link": [1, 3],
+      "name": "Tricky Cross-Room Spring Ball Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canTrickySpringBallJump",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Perform a very precise Spring Ball jump through the transition and onto the Grapple block.",
+        "A running spin jump or crouch jump can be used."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [1, 3],
+      "name": "Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "any",
+          "remoteAndLandingMinTiles": [[34, 1]]
+        }
+      },
+      "requires": [],
+      "note": "Come in with a spring ball bounce after gaining speed on a remote runway using at least 34 tiles.",
+      "devNote": "This requires extra run speed of at least $6.0."
+    },
+    {
+      "id": 87,
+      "link": [1, 3],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 17,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "HiJump"
+              ],
+              "note": ["This applies to Warehouse Entrance."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 11.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "HiJump"
+              ],
+              "note": ["This applies to Ridley Tank Room, Dust Torizo Room, and Halfie Climb Room."],
+              "detailNote": [
+                "This has a 2-frame window for the jump.",
+                "Getting the jump on the last frame may requiring quickly aiming down (between 1 and 3 frames after the jump)."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 11.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "HiJump",
+                "canTrickyJump"
+              ],
+              "note": ["This applies to Mickey Mouse Room."],
+              "detailNote": [
+                "Avoid backing into the corner; press towards it and turn around.",
+                "It helps to advance 4 pixels by performing 2 arm pumps (press and release of an angle button) while running.",
+                "This will give a 2-frame window for the jump, while without the arm pumps the jump would be frame perfect.",
+                "Getting the jump on the last frame requires quickly aiming down (between 1 and 5 frames after the jump)."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[2, 0]],
+              "requires": [
+                {"or": [
+                  "canMomentumConservingMorph",
+                  "canInsaneJump"
+                ]}
+              ],
+              "note": ["This applies to Waterway Energy Tank Room."],
+              "devNote": [
+                "This can be done most easily with a ceiling mockball through the transition:",
+                "this has a 5-frame window for the jump, and between a 1-frame and 5-frame window for the morph,",
+                "with later jumps giving the larger windows for the morph.",
+                "Without Morph, it is possible to jump directly through the door with a last-frame jump."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                {"or": [
+                  "canMomentumConservingMorph",
+                  {"and": [
+                    "canInsaneJump",
+                    "canMomentumConservingTurnaround"
+                  ]}
+                ]}
+              ],
+              "note": ["This applies to Statues Hallway."],
+              "detailNote": [
+                "The momentum-conserving turnaround version requires a last-frame jump, with a 3-frame window for the turnaround;",
+                "the first of the possible frames for the turnaround requires a precise down-grab onto the Grapple block (4-frame window)."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Flyway."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[4, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump",
+                "canInsaneMidAirMorph"
+              ],
+              "note": ["This applies to Baby Kraid Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "requires": [
+                "canTrickyDashJump"
+              ],
+              "note": ["This applies to Metal Pirates Room."]
+            }
+          ]
+        }
+      },
+      "requires": [],
+      "wallJumpAvoid": true,
+      "flashSuitChecked": true,
+      "devNote": [
+        "Variations involving a spring ball jump are not included,",
+        "since a spring ball jump can be done using a 1-tile runway connected to the door.",
+        "Likewise, jumping up with HiJump and Speed Booster with a 2-tile runway is already covered."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [1, 3],
+      "name": "Use Flash Suit (Cross Room Jump)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 16, "excessFrames": 8}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 11, "excessFrames": 7}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump into the room and spark up onto the grapple block."
+    },
+    {
+      "id": 35,
+      "link": [1, 3],
+      "name": "Use Flash Suit (Cross Room Jump From Water)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "HiJump",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 20, "excessFrames": 2}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump into the room and spark up onto the grapple block.",
+      "devNote": "The other strat should always be usable if there is air physics."
+    },
+    {
+      "id": 36,
+      "link": [1, 3],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 16, "excessFrames": 7}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 12, "excessFrames": 7}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 37,
+      "link": [1, 3],
+      "name": "G-Mode Morph IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphLongIBJ",
+        {"enemyDamage": {"enemy": "Sm. Sidehopper", "type": "contact", "hits": 1}},
+        {"or": [
+          {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 3}},
+          "h_artificialMorphPowerBomb"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Kill the Sidehoppers with Bombs or a Power Bomb, then IBJ up onto the Grapple block. Use Wave to get through."
+    },
+    {
+      "id": 38,
+      "link": [1, 3],
+      "name": "Hopper X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        {"notable": "Hopper X-Ray Climb"},
+        "canXRayClimb",
+        {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 2}}
+      ],
+      "wallJumpAvoid": true,
+      "flashSuitChecked": true,
+      "note": [
+        "To minimize damage from the Hoppers, get stuck in the door relatively high and move quickly.",
+        "Climb up somewhat less than 1 screen, until Samus' head appears between 1 and 3 tiles below the door.",
+        "Then perform a turn-around spin jump to the right to get on top of the Grapple block."
+      ],
+      "devNote": [
+        "It is possible to avoid all Hopper damage, but it is not clear if this can be done reliably.",
+        "Two hits from the big Sidehopper appears to be a worst-case scenario."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [1, 4],
+      "name": "Hopper Freeze",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "canTrickyUseFrozenEnemies",
+        "canTrickyJump",
+        {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}},
+        {"or": [
+          {"and": [
+            "Wave",
+            "Spazer"
+          ]},
+          "Plasma",
+          {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "note": [
+        "Carefully freeze the hoppers without taking too much damage but also without accidently killing all of the enemies."
+      ],
+      "devNote": [
+        "The Small Sidehoppers may deliver more of the hits, but this is an assumed worst case scenario"
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 41,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 42,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 94,
+      "link": [2, 2],
+      "name": "Sidehopper Farm",
+      "requires": [
+        "canWalljump",
+        "canTrickyJump",
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 600}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 690}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 810}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "resetsObstacles": ["C"],
+      "farmCycleDrops": [
+        {"enemy": "Sidehopper", "count": 1},
+        {"enemy": "Sm. Sidehopper", "count": 2}
+      ]
+    },
+    {
+      "id": 43,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 44,
+      "link": [2, 2],
+      "name": "Plasma SBA Sidehopper Kill",
+      "requires": [
+        "Charge",
+        "Plasma",
+        "canSpecialBeamAttack",
+        {"ammo": {"type": "PowerBomb", "count": 1}}
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": "This also raises the elevator, but using this method to get up is a bit obscure and would use the notable from 2->3."
+    },
+    {
+      "id": 45,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "SpaceJump",
+          "canLongIBJ",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 46,
+      "link": [2, 3],
+      "name": "Ride the Elevator",
+      "requires": [
+        "h_useMorphBombs"
+      ],
+      "clearsObstacles": ["B"],
+      "note": "The elevator can be raised by hitting below the shot block with a Bomb."
+    },
+    {
+      "id": 47,
+      "link": [2, 3],
+      "name": "Elevator with Power Bombs or Wave",
+      "requires": [
+        {"or": [
+          "h_usePowerBomb",
+          "Wave"
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "note": "Use a Power Bomb against the left wall or Wave to kill the enemies and ride the elevator."
+    },
+    {
+      "id": 48,
+      "link": [2, 3],
+      "name": "Shot Clip to Ride the Elevator",
+      "requires": [
+        {"notable": "Shot Clip to Ride the Elevator"},
+        {"or": [
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}},
+          "Spazer",
+          {"and": [
+            "Charge",
+            "Plasma"
+          ]},
+          {"and": [
+            "Charge",
+            "Ice",
+            "canSpecialBeamAttack",
+            {"ammo": {"type": "PowerBomb", "count": 1}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "wallJumpAvoid": true,
+      "note": [
+        "The elevator can be raised by clipping a shot into the floor, shot while falling with the right amount of vertical speed.",
+        "This can be done with a Missile, Super, or charged Spazer or Plasma shot, a well positioned angle Spazer shot while crouched, or an  or Ice SBA."
+      ],
+      "devNote": "FIXME: Do we need leniency or another tech for this?"
+    },
+    {
+      "id": 49,
+      "link": [2, 3],
+      "name": "Speedy Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 37
+        }
+      },
+      "requires": [],
+      "note": "Jump near the end of the runway in-room. Assumes there is a runway in the adjacent room of at least 37 tiles."
+    },
+    {
+      "id": 86,
+      "link": [2, 3],
+      "name": "Speedy Spring Ball Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 14
+        }
+      },
+      "requires": [
+        "canTrickySpringBallJump"
+      ]
+    },
+    {
+      "id": 50,
+      "link": [2, 3],
+      "name": "Speedy HiJump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 7
+        }
+      },
+      "requires": [
+        "HiJump"
+      ],
+      "note": "Jump at the end of the runway in-room. Assumes there is a runway in the adjacent room of at least 7 tiles."
+    },
+    {
+      "id": 51,
+      "link": [2, 3],
+      "name": "Tricky Speedy Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 29
+        }
+      },
+      "requires": [
+        "canTrickyDashJump"
+      ],
+      "note": "Jump at the end of the runway in-room. Assumes that a runway of exactly 29 tiles is used in the adjacent room.",
+      "devNote": "This requires extra run speed of exactly $6.0 or $6.1 when jumping."
+    },
+    {
+      "id": 52,
+      "link": [2, 3],
+      "name": "Tricky Speedy HiJump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 6
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canTrickyJump"
+      ],
+      "note": "Jump at the very end of the runway in-room. Requires a runway in the adjacent room of at least 6 tiles."
+    },
+    {
+      "id": 53,
+      "link": [2, 3],
+      "name": "Tricky Speedy Spring Ball Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canTrickySpringBallJump",
+        "canTrickyDashJump"
+      ],
+      "note": "Using exactly 2 runway tiles (with open end) in the other room, jump at the very end of the runway in-room."
+    },
+    {
+      "id": 54,
+      "link": [2, 3],
+      "name": "Screw and Kago to Ride the Elevator",
+      "requires": [
+        {"notable": "Screw and Kago to Ride the Elevator"},
+        "canKago",
+        {"or": [
+          "ScrewAttack",
+          "canPseudoScrew"
+        ]},
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canCrouchJump",
+              "canDownGrab"
+            ]}
+          ]},
+          "canTrickyJump",
+          "Morph"
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "wallJumpAvoid": true,
+      "note": [
+        "Start the elevator ride by using Screw Attack or Pseudo Screw in the hole.",
+        "Kago the elevator to fall back in and hit the elevator again. This is much easier while the elevator is still rising, but can still be done with Morph afterwards.",
+        "Unless HiJump is owned, this will need to be done once more to get high enough to get to the blue gate."
+      ]
+    },
+    {
+      "id": 55,
+      "link": [2, 3],
+      "name": "Shinespark, Come in Shinecharging",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"or": [
+          {"shinespark": {"frames": 22, "excessFrames": 4}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 15, "excessFrames": 3}}
+          ]},
+          {"and": [
+            "canMidairShinespark",
+            "HiJump",
+            {"shinespark": {"frames": 12, "excessFrames": 4}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 56,
+      "link": [2, 3],
+      "name": "Shinespark, Come in Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 1},
+        {"shinespark": {"frames": 22, "excessFrames": 4}}
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 57,
+      "link": [2, 3],
+      "name": "Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "any",
+          "remoteAndLandingMinTiles": [[42, 0]]
+        }
+      },
+      "requires": [],
+      "note": "Come in with a spring ball bounce after gaining speed on a remote runway using at least 42 tiles.",
+      "devNote": "This requires extra run speed of at least $6.D."
+    },
+    {
+      "id": 58,
+      "link": [2, 3],
+      "name": "Spring Ball Bounce (Tricky Dash Jump)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "any",
+          "remoteAndLandingMinTiles": [[32, 0]]
+        }
+      },
+      "requires": [
+        "canTrickyDashJump",
+        "canInsaneJump"
+      ],
+      "note": "Come in with a spring ball bounce after gaining speed on a remote runway using exactly 32 tiles.",
+      "devNote": "This requires extra run speed of either $6.0 or $6.1"
+    },
+    {
+      "id": 59,
+      "link": [2, 3],
+      "name": "Shinespark to Ride the Elevator (Come in Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"notable": "Shinespark to Ride the Elevator"},
+        "canHorizontalShinespark",
+        "canUseSpeedEchoes",
+        {"shinespark": {"frames": 1, "excessFrames": 1}}
+      ],
+      "clearsObstacles": ["B"],
+      "wallJumpAvoid": true,
+      "note": "Shinesparking horizontally into the wall will trigger the elevator as Samus's echos hit it."
+    },
+    {
+      "id": 60,
+      "link": [2, 3],
+      "name": "Shinespark to Ride the Elevator (Come in Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 45},
+        {"notable": "Shinespark to Ride the Elevator"},
+        "canHorizontalShinespark",
+        "canUseSpeedEchoes",
+        {"shinespark": {"frames": 1, "excessFrames": 1}}
+      ],
+      "clearsObstacles": ["B"],
+      "wallJumpAvoid": true,
+      "flashSuitChecked": true,
+      "note": "Shinesparking horizontally into the wall will trigger the elevator as Samus's echos hit it."
+    },
+    {
+      "id": 61,
+      "link": [2, 3],
+      "name": "Shinespark to Ride the Elevator (Come in With Spark)",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"notable": "Shinespark to Ride the Elevator"},
+        "canHorizontalShinespark",
+        "canUseSpeedEchoes",
+        {"shinespark": {"frames": 15, "excessFrames": 6}}
+      ],
+      "clearsObstacles": ["B"],
+      "wallJumpAvoid": true,
+      "note": "Shinesparking horizontally into the wall will trigger the elevator as Samus's echos hit it."
+    },
+    {
+      "id": 62,
+      "link": [2, 3],
+      "name": "Shinespark to Ride the Elevator (Use Flash Suit)",
+      "requires": [
+        {"notable": "Shinespark to Ride the Elevator"},
+        "canHorizontalShinespark",
+        "canUseSpeedEchoes",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 1, "excessFrames": 1}}
+      ],
+      "clearsObstacles": ["B"],
+      "wallJumpAvoid": true,
+      "note": "Shinesparking horizontally into the wall will trigger the elevator as Samus's echos hit it."
+    },
+    {
+      "id": 88,
+      "link": [2, 3],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 36.3703,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "environment": "water",
+              "requires": [
+                "canTrickyDashJump",
+                "canInsaneJump",
+                "canGravityJump",
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Botwoon Energy Tank Room"],
+              "detailNote": [
+                "This needs extra run speed of $6.0 or $6.1.",
+                "It is easier to do by timing a pause to hit just after jumping and aiming down,",
+                "then unequipping Gravity and holding down during the unpause black screen to buffer the morph."
+              ]
+            }
+          ]
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["B"],
+      "wallJumpAvoid": true
+    },
+    {
+      "id": 89,
+      "link": [2, 3],
+      "name": "Side Platform Cross Room Jump (Hi-Jump)",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 16,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyDashJump"
+              ],
+              "note": ["This applies to Lava Dive Room"],
+              "detailNote": ["This needs extra run speed between $2.C and $2.F."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Dust Torizo Room and Noob Bridge"]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 22,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyDashJump"
+              ],
+              "note": ["This applies to Double Chamber"],
+              "detailNote": [
+                "Stand between about 1 and 7 tiles away from the runway end, to start running.",
+                "This is to avoid Samus having $5.0 or more extra run speed, where a dropoff in jump height occurs with Hi-Jump,"
+              ]
+            },
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 23.8731,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "environment": "water",
+              "requires": [
+                "canGravityJump",
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Below Botwoon Energy Tank and Botwoon Energy Tank Room."],
+              "detailNote": [
+                "Time a pause to hit just after jumping and aiming down,",
+                "then unequip Gravity and hold down during the unpause black screen to buffer the morph."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 31,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump"
+              ],
+              "note": ["This applies to Metroid Room 1, Statues Hallway, and Baby Kraid Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 41.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump"
+              ],
+              "note": [
+                "This applies to Blue Brinstar Energy Tank Room (Power Bomb blocks broken), Bowling Alley (middle, power off), Basement (power on)."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "requires": [
+                "canInsaneJump"
+              ],
+              "note": ["This applies to Metal Pirates Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 37.4375,
+              "speedBooster": true,
+              "obstructions": [[5, 2]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump"
+              ],
+              "note": ["This applies to Flyway."]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canTrickyJump"
+      ],
+      "clearsObstacles": ["B"],
+      "wallJumpAvoid": true
+    },
+    {
+      "id": 90,
+      "link": [2, 3],
+      "name": "Side Platform Cross Room Jump (Spring Ball Jump)",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 16,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyDashJump"
+              ],
+              "note": ["This applies to Lava Dive Room"],
+              "detailNote": [
+                "This needs extra run speed $2.0 or $2.1,",
+                "being sure to maintain forward momentum while performing the mid-air jump to boost its height."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 9.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyDashJump"
+              ],
+              "note": [
+                "This applies to Shaktool Room, Tourian Hopper Room, and Bowling Alley (bottom)."
+              ],
+              "detailNote": [
+                "This needs extra run speed $2.0 or $2.1,",
+                "being sure to maintain forward momentum while performing the mid-air jump to boost its height."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 27.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Dust Torizo Room and Noob Bridge."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 9.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyDashJump"
+              ],
+              "note": [
+                "This applies to Bomb Torizo Room, Pink Brinstar Wave Gate Room, Phantoon's Room, Fish Tank, Botwoon's Room, and Big Boy Room."
+              ],
+              "detailNote": [
+                "This needs extra run speed $2.0 or $2.1,",
+                "being sure to maintain forward momentum while performing the mid-air jump to boost its height."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 28.2472,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [],
+              "note": ["This applies to Double Chamber."]
+            },
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 23.8731,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Below Botwoon Energy Tank and Botwoon Energy Tank Room."],
+              "detailNote": [
+                "This may be easier with a pause buffer and Gravity jump (though not required):",
+                "time a pause to hit just after jumping and aiming down,",
+                "then unequip Gravity and hold down during the unpause black screen to buffer the morph."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 31,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canTrickyDashJump"
+              ],
+              "note": ["This applies to Metroid Room 1, Statues Hallway, and Baby Kraid Room."],
+              "detailNote": [
+                "In Metroid Room 1, this requires extra run speed of $4.0 or $4.1;",
+                "in the other rooms, it is also possible to gain more speed."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 21.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canTrickyDashJump"
+              ],
+              "note": [
+                "This applies to Draygon's Room, Blue Brinstar Energy Tank Room, Bowling Alley (middle, power off), and Basement (power on)."
+              ],
+              "detailNote": [
+                "In Draygon's Room, this requires extra run speed of $4.0 or $4.1;",
+                "in the other rooms, it may also be possible to gain more speed."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "note": ["This applies to Metal Pirates Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[5, 0]],
+              "note": ["This applies to Basement."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 37.4375,
+              "speedBooster": true,
+              "obstructions": [[5, 2]],
+              "requires": [
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Flyway."]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canTrickySpringBallJump"
+      ],
+      "clearsObstacles": ["B"],
+      "wallJumpAvoid": true
+    },
+    {
+      "id": 63,
+      "link": [2, 3],
+      "name": "Pink Hoppers X-Ray Climb Spring Ball Jump",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb",
+        "canTrickyJump",
+        "canLateralMidAirMorph",
+        "canTrickySpringBallJump",
+        "canSpringFling"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "X-Ray climb until Samus is a little over halfway off screen; the position is not precise.",
+        "Face right, then do a turnaround buffer spin jump into a Spring Ball jump to reach the ledge.",
+        "The pause input can be pressed at the same time as the turnaround.",
+        "It helps to do an airball to gain horizontal speed.",
+        "The jump input after pausing should not be buffered, in order to allow a little time for the spring fling horizontal speed to take effect."
+      ]
+    },
+    {
+      "id": 64,
+      "link": [2, 3],
+      "name": "Pink Hoppers X-Ray Climb HiJump Insane Jump",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "HiJump",
+        "canXRayClimb",
+        "canOffScreenMovement",
+        "canInsaneJump"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Get stuck 3 pixels inside the door, and X-ray climb to a precise height:",
+        "after just one pixel of Samus' feet are visible while crouching facing left, perform exactly 7 more X-Ray stand-ups.",
+        "Use X-ray to face left, then run and jump to barely make it onto the ledge."
+      ],
+      "devNote": ["3 pixels stuck in the door is X position 478 (0x1DE)."]
+    },
+    {
+      "id": 65,
+      "link": [2, 3],
+      "name": "Pink Hoppers G-Mode Deep Stuck X-Ray Climb Insane Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb",
+        "canOffScreenMovement",
+        "canInsaneJump"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-Mode and use X-Ray to get stuck 9 pixels inside the door.",
+        "X-Ray climb to a relatively specific height:",
+        "after just one pixel of Samus' feet are visible while crouching facing left, perform between 20 and 22 more X-Ray stand-ups (any of these work).",
+        "Use X-ray to face left, then run and jump to barely make it onto the ledge."
+      ],
+      "devNote": [
+        "9 pixels stuck in the door is X position 484 (0x1E4).",
+        "The correct Y positions for the jump are 193 (0xC1), 188 (0xBC), and 187 (0xBB)",
+        "FIXME: Some of the X position to the left (482, 483) could also work; maybe investigate which vertical positions work for them?"
+      ]
+    },
+    {
+      "id": 66,
+      "link": [2, 3],
+      "name": "G-Mode Morph IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphLongIBJ"
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 67,
+      "link": [2, 3],
+      "name": "G-Mode Morph Elevator with Power Bomb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A", "B"],
+      "flashSuitChecked": true,
+      "note": "Using a power bomb against the left wall will kill the enemies and trigger the elevator."
+    },
+    {
+      "id": 82,
+      "link": [2, 3],
+      "name": "Precise Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [13, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [7, 3], "note": "The Precious Room"},
+            {"position": [7, 2], "note": "The Moat"}
+          ]
+        }
+      },
+      "requires": [
+        "canPreciseGrappleJump"
+      ]
+    },
+    {
+      "id": 83,
+      "link": [2, 3],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [8, 2], "note": "Bowling Alley"},
+            {
+              "position": [7, 3],
+              "obstructions": [[6, 10]],
+              "note": "Red Brinstar Firefleas Room"
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ],
+      "devNote": ["This appears not to be possible from Climb Supers Room?"]
+    },
+    {
+      "id": 84,
+      "link": [2, 3],
+      "name": "Tricky Grapple Jump (Gravity)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [{"position": [7, 3], "environment": "water", "note": "Pants Room"}]
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canTrickyGrappleJump"
+      ]
+    },
+    {
+      "id": 68,
+      "link": [2, 3],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 69,
+      "link": [3, 1],
+      "name": "Dead Sidehoppers",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ]
+    },
+    {
+      "id": 70,
+      "link": [3, 1],
+      "name": "Tank a Hit",
+      "requires": [
+        {"or": [
+          {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}},
+          {"and": [
+            "canCarefulJump",
+            {"enemyDamage": {"enemy": "Sm. Sidehopper", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ],
+      "note": "Jump far to the left in order to hit a small Sidehopper instead of a large one."
+    },
+    {
+      "id": 71,
+      "link": [3, 1],
+      "name": "Screw Kill",
+      "requires": [
+        "ScrewAttack",
+        {"or": [
+          "canCarefulJump",
+          {"enemyDamage": {"enemy": "Sm. Sidehopper", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "It is possible to kill the Sidehoppers damageless by jumping into the bottom left corner then quickly spin jumping again."
+    },
+    {
+      "id": 72,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        {"or": [
+          "canCarefulJump",
+          "canWalljump",
+          "SpaceJump",
+          "Grapple"
+        ]}
+      ]
+    },
+    {
+      "id": 73,
+      "link": [3, 3],
+      "name": "Open the Gate",
+      "requires": [
+        "Wave"
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 74,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 75,
+      "link": [4, 3],
+      "name": "Frozen Hopper Platform",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "canTrickyUseFrozenEnemies",
+        "canTrickyJump",
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ],
+      "note": [
+        "Use a Frozen Hopper as a platform to jump up to the Grapple Block with an additional movement item.",
+        "Letting it jump from the spike ledge or the door frame will make the jump easier, but it is difficult to avoid Hopper damage when setting this up."
+      ],
+      "devNote": "FIXME: A big hopper doing a high jump from the door frame is enough to reach the grapple block without a movement item.  This would need a full manip since it is hard to try to make happen."
+    },
+    {
+      "id": 76,
+      "link": [4, 4],
+      "name": "Reverse Gate Glitch (Frozen Hopper Platform)",
+      "requires": [
+        {"notable": "Reverse Gate Glitch"},
+        {"obstaclesNotCleared": ["A"]},
+        "canTrickyUseFrozenEnemies",
+        "canTrickyJump",
+        "canOffScreenSuperShot",
+        {"or": [
+          "h_backIntoCorner",
+          {"and": [
+            {"enemyDamage": {"enemy": "Sidehopper", "type": "contact", "hits": 1}},
+            "canNeutralDamageBoost"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "note": [
+        "Freeze a small hopper to the side and kill the remaining Side Hoppers.",
+        "Stand against the left wall (damage knockback will align Samus with the wall) and shoot up to freeze the hopper.",
+        "Jump up to land on it, aligned with the wall.",
+        "Alternatively, Jump and shoot down to freeze the hopper as a way to avoid damage.",
+        "Fire a Super just above the door shell to hit the Gate.",
+        "This strat involves shooting a Super diagonally from the correct height while flush against the left wall.",
+        "Its acceleration will cause it to clip into the blue gate off-screen."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Shinespark to Ride the Elevator",
+      "wallJumpAvoid": true,
+      "note": "Shinesparking horizontally into the wall will trigger the elevator as Samus's echos hit it."
+    },
+    {
+      "id": 2,
+      "name": "Reverse Gate Glitch",
+      "note": [
+        "This strat involves shooting a Super diagonally from the correct height while flush against the left wall.",
+        "Its acceleration will cause it to clip into the blue gate off-screen."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Hopper X-Ray Climb",
+      "wallJumpAvoid": true,
+      "note": [
+        "To minimize damage from the Hoppers, get stuck in the door relatively high and move quickly.",
+        "Climb up somewhat less than 1 screen, until Samus' head appears between 1 and 3 tiles below the door.",
+        "Then perform a turn-around spin jump to the right to get on top of the Grapple block."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Shot Clip to Ride the Elevator",
+      "wallJumpAvoid": true,
+      "note": [
+        "The elevator can be raised by clipping a shot into the floor, shot while falling with the right amount of vertical speed.",
+        "This can be done with a Missile, Super, or charged Spazer or Plasma shot, a well positioned angle Spazer shot while crouched, or an  or Ice SBA."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Screw and Kago to Ride the Elevator",
+      "wallJumpAvoid": true,
+      "note": [
+        "Start the elevator ride by using Screw Attack or Pseudo Screw in the hole.",
+        "Kago the elevator to fall back in and hit the elevator again. This is much easier while the elevator is still rising, but can still be done with Morph afterwards.",
+        "Unless HiJump is owned, this will need to be done once more to get high enough to get to the blue gate."
+      ]
+    }
+  ],
+  "nextStratId": 95,
+  "nextNotableId": 6
+}

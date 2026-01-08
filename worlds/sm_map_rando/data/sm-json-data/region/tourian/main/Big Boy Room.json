@@ -1,0 +1,711 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 232,
+  "name": "Big Boy Room",
+  "area": "Tourian",
+  "subarea": "Main",
+  "roomAddress": "0x7DCB1",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Doorway",
+      "nodeType": "door",
+      "nodeSubType": "doorway",
+      "nodeAddress": "0x001aa44",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001aa38",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Baby Metroid Gray Lock (to Dust Torizo)",
+          "lockType": "permanent",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "never"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [1, 1, 2, 2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Baby Inactive",
+      "obstacleType": "abstract"
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {
+          "id": 1,
+          "note": "The baby event happens every time you enter from the right"
+        },
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Enter From Left",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [],
+      "clearsObstacles": ["A"],
+      "note": "The Baby Metroid is not active when entering from the left side of the room."
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave with Runway, Extended Seaweed Runway",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 36,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 15,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $3.1"]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canShinechargeMovement",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 0}},
+        {"shineChargeFrames": 45}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 12,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 12,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 9,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 7,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 14, "openEnd": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Carry G-Mode Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Carry G-Mode Morph Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Leave With Spark",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canShinechargeMovementTricky",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 0}},
+        {"shinespark": {"frames": 35}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Gain a shinecharge by running right-to-left on the leftmost runway.",
+        "Then run toward the right, jumping twice before sparking mid-air."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Leave With Mockball (Space Jump)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Leave With Spring Ball Bounce (Space Jump)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Leave With Controlled Spring Ball Bounce",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "controlled"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "Leave Space Jumping",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 1
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 18,
+      "link": [1, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 14, "openEnd": 1}},
+        "canChainTemporaryBlue",
+        {"or": [
+          "canLongChainTemporaryBlue",
+          "canSpringBallBounce",
+          "SpaceJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Get Drained",
+      "requires": [
+        {"resourceAtMost": [{"type": "RegularEnergy", "count": 1}]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Baby Inactive",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Classic Baby Skip",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "Wave",
+        {"or": [
+          "Spazer",
+          "Plasma"
+        ]},
+        "canMidAirMorph",
+        "HiJump",
+        "SpeedBooster",
+        "canTrickyJump",
+        "canBabyMetroidAvoid"
+      ],
+      "note": [
+        "Jump over the Baby Metroid to avoid getting grabbed.",
+        "Use Wave plus a Wide Beam to clear much of the seaweed with each shot.",
+        "The classic counter clockwise skip ends with a mid air morph into the transition."
+      ],
+      "devNote": "A wide beam is used to avoid picking off stray seaweeds since that is a skill used in waveless skip."
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Baby Skip Without Wave or Speed",
+      "requires": [
+        {"notable": "Baby Skip Without Wave or Speed"},
+        {"obstaclesNotCleared": ["A"]},
+        "canMidAirMorph",
+        "HiJump",
+        "canTrickyJump",
+        "canBabyMetroidAvoid"
+      ],
+      "note": "Avoid the Baby Metroid by jumping over it many times in order to clear a path through the seaweed."
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Baby Skip With Nothing",
+      "requires": [
+        {"notable": "Baby Skip With Nothing"},
+        {"obstaclesNotCleared": ["A"]},
+        "canBabyMetroidAvoid",
+        "canInsaneJump"
+      ],
+      "note": [
+        "Avoid the Baby Metroid with no items at all.",
+        "Jump over it many times in order to clear a path through the seaweed.",
+        "With a counter clockwise setup, stand as close to the transition as possible while allowing the Baby to circle Samus.",
+        "Then jump towards the transition and touch it with a walljump check.",
+        "A clockwise setup is more difficult to clear the seaweed, but can jump directly into the transition."
+      ],
+      "devNote": [
+        "FIXME: Add a Baby Skip with a flash suit. Note, however, it will only pair with rooms that have an entrance condition where Samus is sparking.",
+        "In order to have it be properly implemented, all horizontal doors will need to have a shinespark entrance condition added."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Leave With Spring Ball Bounce (Space Jump)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 10,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 10,
+            "openEnd": 1
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 37,
+      "link": [2, 2],
+      "name": "Leave With Side Platform",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 11,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $2.5 with spin, or $2.6 with a quick aim-down."]
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Leave Spinning",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 7,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 34,
+      "link": [2, 2],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Baby Skip Without Wave or Speed",
+      "note": "Avoid the Baby Metroid by jumping over it many times in order to clear a path through the seaweed."
+    },
+    {
+      "id": 2,
+      "name": "Baby Skip With Nothing",
+      "note": [
+        "Avoid the Baby Metroid with no items at all.",
+        "Jump over it many times in order to clear a path through the seaweed.",
+        "With a counter clockwise setup, stand as close to the transition as possible while allowing the Baby to circle Samus.",
+        "Then jump towards the transition and touch it with a walljump check.",
+        "A clockwise setup is more difficult to clear the seaweed, but can jump directly into the transition."
+      ]
+    }
+  ],
+  "nextStratId": 38,
+  "nextNotableId": 3
+}

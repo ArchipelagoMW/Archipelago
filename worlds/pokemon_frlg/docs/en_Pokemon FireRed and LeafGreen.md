@@ -1,0 +1,1 @@
+# Pokémon FireRed and LeafGreen

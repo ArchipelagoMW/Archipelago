@@ -1,0 +1,2476 @@
+[
+    {
+        "name": "Blue Brinstar Elevator Room",
+        "room_id": 306,
+        "node_id": 1,
+        "x": 12,
+        "y": 10
+    },
+    {
+        "name": "Bomb Torizo Room",
+        "room_id": 19,
+        "node_id": 1,
+        "x": 8,
+        "y": 13,
+        "has_item": true
+    },
+    {
+        "name": "Climb Top",
+        "room_id": 11,
+        "node_id": 1,
+        "x": 24,
+        "y": 8
+    },
+    {
+        "name": "Climb Top Right",
+        "room_id": 11,
+        "node_id": 3,
+        "x": 40,
+        "y": 8
+    },
+    {
+        "name": "Climb Bottom Right",
+        "room_id": 11,
+        "node_id": 4,
+        "x": 39,
+        "y": 120
+    },
+    {
+        "name": "Climb Bottom Left",
+        "room_id": 11,
+        "node_id": 2,
+        "x": 12,
+        "y": 138
+    },
+    {
+        "name": "Crateria Power Bomb Room",
+        "room_id": 28,
+        "node_id": 2,
+        "door_load_node_id": 1,
+        "x": 3.5,
+        "y": 10
+    },
+    {
+        "name": "Crateria Super Room Top Left",
+        "room_id": 29,
+        "node_id": 1,
+        "door_load_node_id": 1,
+        "x": 4,
+        "y": 10
+    },
+    {
+        "name": "Crateria Super Room Top Middle",
+        "room_id": 29,
+        "node_id": 4,
+        "door_load_node_id": 1,
+        "x": 42.5,
+        "y": 10,
+        "spicy": true
+    },
+    {
+        "name": "Crateria Super Room Bottom Left",
+        "room_id": 29,
+        "node_id": 2,
+        "door_load_node_id": 2,
+        "x": 35,
+        "y": 122,
+        "camera_offset_x": -4
+    },
+    {
+        "name": "Crateria Super Room Bottom Right",
+        "room_id": 29,
+        "node_id": 5,
+        "door_load_node_id": 2,
+        "x": 56,
+        "y": 122,
+        "spicy": true
+    },
+    {
+        "name": "Final Missile Bombway Left",
+        "room_id": 18,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10
+    },
+    {
+        "name": "Final Missile Bombway Right",
+        "room_id": 18,
+        "node_id": 2,
+        "x": 28.5,
+        "y": 10
+    },
+    {
+        "name": "Flyway",
+        "room_id": 13,
+        "node_id": 2,
+        "x": 40,
+        "y": 13
+    },
+    {
+        "name": "Landing Site Top Left",
+        "room_id": 8,
+        "node_id": 1,
+        "x": 29.5,
+        "y": 41,
+        "camera_offset_x": 4
+    },
+    {
+        "name": "Landing Site Top Right",
+        "room_id": 8,
+        "node_id": 3,
+        "x": 134,
+        "y": 24,
+        "camera_offset_x": -4
+    },
+    {
+        "name": "Parlor Top Left",
+        "room_id": 10,
+        "node_id": 1,
+        "x": 10.5,
+        "y": 9
+    },
+    {
+        "name": "Parlor Alcatraz",
+        "room_id": 10,
+        "node_id": 5,
+        "x": 57,
+        "y": 26
+    },
+    {
+        "name": "Parlor Bottom",
+        "room_id": 10,
+        "node_id": 7,
+        "x": 24,
+        "y": 71
+    },
+    {
+        "name": "Pit Room",
+        "room_id": 12,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 10
+    },
+    {
+        "name": "Pre-Map Flyway",
+        "room_id": 14,
+        "node_id": 2,
+        "x": 40,
+        "y": 13
+    },
+    {
+        "name": "Gauntlet Energy Tank Room Left",
+        "room_id": 31,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10
+    },
+    {
+        "name": "Gauntlet Entrance Left",
+        "room_id": 30,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 9
+    },
+    {
+        "name": "Gauntlet Entrance Right",
+        "room_id": 30,
+        "node_id": 2,
+        "x": 74.5,
+        "y": 9
+    },
+    {
+        "name": "Green Brinstar Elevator Room",
+        "room_id": 23,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10
+    },
+    {
+        "name": "Green Pirates Shaft Top",
+        "room_id": 21,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Green Pirates Shaft Middle",
+        "room_id": 21,
+        "node_id": 2,
+        "x": 8,
+        "y": 74
+    },
+    {
+        "name": "Green Pirates Shaft Bottom",
+        "room_id": 21,
+        "node_id": 3,
+        "x": 8,
+        "y": 106
+    },
+    {
+        "name": "Lower Mushrooms",
+        "room_id": 22,
+        "node_id": 1,
+        "x": 24,
+        "y": 13
+    },
+    {
+        "name": "Statues Hallway",
+        "room_id": 26,
+        "node_id": 1,
+        "x": 24,
+        "y": 12
+    },
+    {
+        "name": "Bowling Alley Path",
+        "room_id": 33,
+        "node_id": 2,
+        "x": 27,
+        "y": 10,
+        "enemy_attack_before_control": true
+    },
+    {
+        "name": "Crab Maze Left",
+        "room_id": 36,
+        "node_id": 3,
+        "door_load_node_id": 2,
+        "x": 39,
+        "y": 23       
+    },
+    {
+        "name": "Crab Maze Right",
+        "room_id": 36,
+        "node_id": 1,
+        "x": 55,
+        "y": 26       
+    },
+    {
+        "name": "Crateria Kihunter Room",
+        "room_id": 24,
+        "node_id": 3,
+        "x": 22,
+        "y": 26
+    },
+    {
+        "name": "East Ocean Top Right",
+        "room_id": 34,
+        "node_id": 2,
+        "x": 107,
+        "y": 75
+    },
+    {
+        "name": "East Ocean Center",
+        "room_id": 34,
+        "node_id": 3,
+        "door_load_node_id": 1,
+        "x": 84,
+        "y": 78,
+        "spicy": true,
+        "requires": ["canHorizontalDamageBoost", "canTrickyJump"],
+        "camera_offset_x": -4,
+        "camera_offset_y": 3
+    },
+    {
+        "name": "East Ocean Left",
+        "room_id": 34,
+        "node_id": 1,
+        "x": 7.5,
+        "y": 75
+    },
+    {
+        "name": "Forgotten Highway Elbow",
+        "room_id": 305,
+        "node_id": 1,
+        "x": 5,
+        "y": 13
+    },
+    {
+        "name": "Forgotten Highway Elevator",
+        "room_id": 37,
+        "node_id": 1,
+        "x": 8,
+        "y": 7
+    },
+    {
+        "name": "Forgotten Highway Kago Room",
+        "room_id": 35,
+        "node_id": 2,
+        "x": 6.5,
+        "y": 40
+    },
+    {
+        "name": "Homing Geemer Room",
+        "room_id": 313,
+        "node_id": 1,
+        "x": 8,
+        "y": 10
+    },
+    {
+        "name": "Red Brinstar Elevator Room",
+        "room_id": 25,
+        "node_id": 1,
+        "x": 8,
+        "y": 7
+    },
+    {
+        "name": "West Ocean Top",
+        "room_id": 32,
+        "node_id": 12,
+        "door_load_node_id": 3,
+        "x": 4.5,
+        "y": 23
+    },
+    {
+        "name": "West Ocean Bottom",
+        "room_id": 32,
+        "node_id": 1,
+        "x": 7.5,
+        "y": 75
+    },
+    {
+        "name": "Blue Brinstar Boulder Room",
+        "room_id": 42,
+        "node_id": 2,
+        "x": 27.5,
+        "y": 13,
+        "requires": [
+            "canSuitlessMaridia",
+            "h_crouchJumpDownGrab"
+        ]
+    },
+    {
+        "name": "Blue Brinstar Energy Tank Room Bottom",
+        "room_id": 41,
+        "node_id": 1,
+        "x": 24,
+        "y": 45
+    },
+    {
+        "name": "Blue Brinstar Energy Tank Room Top",
+        "room_id": 41,
+        "node_id": 2,
+        "x": 43.5,
+        "y": 10
+    },
+    {
+        "name": "Construction Zone Bottom",
+        "room_id": 39,
+        "node_id": 3,
+        "x": 3.5,
+        "y": 26
+    },
+    {
+        "name": "Construction Zone Top",
+        "room_id": 39,
+        "node_id": 1,
+        "x": 8,
+        "y": 8
+    },
+    {
+        "name": "Morph Ball Room Left",
+        "room_id": 38,
+        "node_id": 1,
+        "x": 24,
+        "y": 44
+    },
+    {
+        "name": "Early Supers Room Left",
+        "room_id": 45,
+        "node_id": 1,
+        "x": 5,
+        "y": 28
+    },
+    {
+        "name": "Early Supers Room Right",
+        "room_id": 45,
+        "node_id": 2,
+        "x": 40,
+        "y": 28,
+        "has_item": true
+    },
+    {
+        "name": "Etecoon Energy Tank Room Bottom Left",
+        "room_id": 51,
+        "node_id": 3,
+        "x": 4.5,
+        "y": 26
+    },
+    {
+        "name": "Green Brinstar Fireflea Room",
+        "room_id": 49,
+        "node_id": 1,
+        "x": 5,
+        "y": 26
+    },
+    {
+        "name": "Green Brinstar Main Shaft Top",
+        "room_id": 44,
+        "node_id": 12,
+        "door_load_node_id": 5,
+        "x": 8,
+        "y": 106
+    },
+    {
+        "name": "Green Brinstar Main Shaft Bottom",
+        "room_id": 44,
+        "node_id": 9,
+        "x": 24,
+        "y": 125
+    },
+    {
+        "name": "Green Hill Zone Left",
+        "room_id": 54,
+        "node_id": 1,
+        "x": 24,
+        "y": 28
+    },
+    {
+        "name": "Noob Bridge",
+        "room_id": 55,
+        "node_id": 1,
+        "x": 40,
+        "y": 12
+    },
+    {
+        "name": "Spore Spawn Kihunter Room",
+        "room_id": 56,
+        "node_id": 1,
+        "x": 23,
+        "y": 13
+    },
+    {
+        "name": "Spore Spawn Room Top",
+        "room_id": 57,
+        "node_id": 1,
+        "x": 8,
+        "y": 10
+    },
+    {
+        "name": "Big Pink Top Left",
+        "room_id": 59,
+        "node_id": 1,
+        "x": 19.5,
+        "y": 10
+    },
+    {
+        "name": "Big Pink Middle Right",
+        "room_id": 59,
+        "node_id": 7,
+        "x": 75,
+        "y": 90
+    },
+    {
+        "name": "Big Pink Bottom Right",
+        "room_id": 59,
+        "node_id": 8,
+        "x": 56,
+        "y": 106
+    },
+    {
+        "name": "Big Pink Bottom Left",
+        "room_id": 59,
+        "node_id": 9,
+        "x": 4.5,
+        "y": 154
+    },
+    {
+        "name": "Dachora Room Top Left",
+        "room_id": 58,
+        "node_id": 1,
+        "x": 56,
+        "y": 12
+    },
+    {
+        "name": "Dachora Room Top Right",
+        "room_id": 58,
+        "node_id": 3,
+        "x": 72,
+        "y": 12
+    },
+    {
+        "name": "Dachora Room Bottom",
+        "room_id": 58,
+        "node_id": 2,
+        "x": 72,
+        "y": 108
+    },
+    {
+        "name": "Pink Brinstar Hopper Room Right",
+        "room_id": 61,
+        "node_id": 2,
+        "x": 25.75,
+        "y": 26
+    },
+    {
+        "name": "Pink Brinstar Power Bomb Room Bottom Right",
+        "room_id": 60,
+        "node_id": 2,
+        "x": 28.5,
+        "y": 26
+    },
+    {
+        "name": "Spore Spawn Farming Room",
+        "room_id": 64,
+        "node_id": 2,
+        "x": 38,
+        "y": 12
+    },
+    {
+        "name": "Spore Spawn Super Room Top",
+        "room_id": 63,
+        "node_id": 1,
+        "x": 22,
+        "y": 11
+    },
+    {
+        "name": "Waterway Energy Tank Room",
+        "room_id": 65,
+        "node_id": 1,
+        "x": 21.5,
+        "y": 8
+    },
+    {
+        "name": "Alpha Power Bomb Room",
+        "room_id": 76,
+        "node_id": 1,
+        "x": 44.5,
+        "y": 10
+    },
+    {
+        "name": "Bat Room",
+        "room_id": 69,
+        "node_id": 1,
+        "x": 4,
+        "y": 11
+    },
+    {
+        "name": "Below Spazer Top Right",
+        "room_id": 70,
+        "node_id": 3,
+        "x": 22,
+        "y": 11
+    },
+    {
+        "name": "Below Spazer Top Left",
+        "room_id": 70,
+        "node_id": 1,
+        "door_load_node_id": 3,
+        "x": 5,
+        "y": 7
+    },
+    {
+        "name": "Caterpillar Room Right",
+        "room_id": 75,
+        "node_id": 5,
+        "x": 42.5,
+        "y": 58
+    },
+    {
+        "name": "Caterpillar Room Left",
+        "room_id": 75,
+        "node_id": 2,
+        "x": 6,
+        "y": 90
+    },
+    {
+        "name": "Hellway",
+        "room_id": 74,
+        "node_id": 2,
+        "x": 42,
+        "y": 10
+    },
+    {
+        "name": "Red Brinstar Fireflea Room Left",
+        "room_id": 67,
+        "node_id": 1,
+        "x": 4.5,
+        "y": 10
+    },
+    {
+        "name": "Red Brinstar Fireflea Room Right",
+        "room_id": 67,
+        "node_id": 2,
+        "x": 77,
+        "y": 28
+    },
+    {
+        "name": "Red Tower Top",
+        "room_id": 66,
+        "node_id": 5,
+        "x": 8,
+        "y": 10
+    },
+    {
+        "name": "Red Tower Bottom",
+        "room_id": 66,
+        "node_id": 7,
+        "door_load_node_id": 3,
+        "x": 8,
+        "y": 154
+    },
+    {
+        "name": "Red Tower Center",
+        "room_id": 66,
+        "node_id": 2,
+        "x": 3,
+        "y": 106
+    },
+    {
+        "name": "X-Ray Scope Room Right",
+        "room_id": 68,
+        "node_id": 1,
+        "x": 26,
+        "y": 10
+    },
+    {
+        "name": "Kraid Eye Door Room",
+        "room_id": 83,
+        "node_id": 2,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Warehouse Entrance Left",
+        "room_id": 78,
+        "node_id": 2,
+        "door_load_node_id": 1,
+        "x": 12,
+        "y": 10
+    },
+    {
+        "name": "Warehouse Entrance Right",
+        "room_id": 78,
+        "node_id": 3,
+        "x": 44.5,
+        "y": 11
+    },
+    {
+        "name": "Warehouse Kihunter Room Right",
+        "room_id": 81,
+        "node_id": 3,
+        "x": 60.5,
+        "y": 10
+    },
+    {
+        "name": "Warehouse Kihunter Room Bottom",
+        "room_id": 81,
+        "node_id": 2,
+        "x": 26,
+        "y": 26
+    },
+    {
+        "name": "Warehouse Zeela Room Right",
+        "room_id": 79,
+        "node_id": 3,
+        "x": 24,
+        "y": 26
+    },
+    {
+        "name": "Acid Snakes Tunnel Farm",
+        "room_id": 119,
+        "node_id": 4,
+        "door_load_node_id": 1,
+        "x": 8,
+        "y": 10,
+        "requires": ["canHeatRun"]
+    },
+    {
+        "name": "Bat Cave Farm",
+        "room_id": 100,
+        "node_id": 3,
+        "door_load_node_id": 2,
+        "x": 10,
+        "y": 10,
+        "requires": ["canHeatRun"]
+    },
+    {
+        "name": "Bubble Mountain Center",
+        "room_id": 97,
+        "node_id": 3,
+        "x": 4.5,
+        "y": 42
+    },
+    {
+        "name": "Bubble Mountain Bottom Left",
+        "room_id": 97,
+        "node_id": 4,
+        "x": 4,
+        "y": 58
+    },
+    {
+        "name": "Cathedral Entrance",
+        "room_id": 90,
+        "node_id": 3,
+        "door_load_node_id": 1,
+        "x": 11,
+        "y": 22,
+        "spicy": true,
+        "requires": [{"heatFrames": 260}]
+    },
+    {
+        "name": "Cathedral Left",
+        "room_id": 91,
+        "node_id": 1,
+        "x": 6.5,
+        "y": 26,
+        "spicy": true,
+        "requires": ["canHeatRun", {"heatFrames": 180}]
+    },
+    {
+        "name": "Cathedral Right",
+        "room_id": 91,
+        "node_id": 2,
+        "x": 41.5,
+        "y": 16,
+        "camera_offset_y": 4,
+        "spicy": true,
+        "requires": [
+            "canHeatRun",
+            {"enemyDamage": {
+                "enemy": "Sova",
+                "type": "contact",
+                "hits": 1
+            }},
+            {"heatFrames": 120}
+        ]
+    },
+    {
+        "name": "Double Chamber Left",
+        "room_id": 104,
+        "node_id": 2,
+        "x": 24,
+        "y": 29.5,
+        "requires": ["canHeatRun", {"heatFrames": 100}]
+    },
+    {
+        "name": "Double Chamber Right",
+        "room_id": 104,
+        "node_id": 3,
+        "x": 59.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 50}]
+    },
+    {
+        "name": "Frog Speedway Left",
+        "room_id": 93,
+        "node_id": 1,
+        "x": 24,
+        "y": 10
+    },
+    {
+        "name": "Frog Speedway Right",
+        "room_id": 93,
+        "node_id": 2,
+        "x": 88,
+        "y": 10
+    },
+    {
+        "name": "Green Bubbles Missile Room Left",
+        "room_id": 98,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Green Bubbles Missile Room Right",
+        "room_id": 98,
+        "node_id": 2,
+        "x": 29,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Kronic Boost Room Left",
+        "room_id": 113,
+        "node_id": 2,
+        "x": 6,
+        "y": 25,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Kronic Boost Room Right",
+        "room_id": 113,
+        "node_id": 5,
+        "door_load_node_id": 3,
+        "x": 26,
+        "y": 25,
+        "requires": ["canHeatRun"]
+    },
+    {
+        "name": "Lava Dive Room Left",
+        "room_id": 115,
+        "node_id": 1,
+        "x": 21,
+        "y": 12,
+        "requires": ["canHeatRun", {"heatFrames": 110}]
+    },
+    {
+        "name": "Lava Dive Room Right",
+        "room_id": 115,
+        "node_id": 2,
+        "x": 54,
+        "y": 9,
+        "requires": ["canHeatRun", {"heatFrames": 70}]
+    },
+    {
+        "name": "Lower Norfair Elevator",
+        "room_id": 309,
+        "node_id": 4,
+        "door_load_node_id": 1,
+        "x": 8,
+        "y": 10,
+        "requires": ["canHeatRun"]
+    },
+    {
+        "name": "Magdollite Tunnel Left",
+        "room_id": 114,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Magdollite Tunnel Right",
+        "room_id": 114,
+        "node_id": 2,
+        "x": 44.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Purple Farming Room",
+        "room_id": 96,
+        "node_id": 2,
+        "door_load_node_id": 1,
+        "x": 4,
+        "y": 10,
+        "requires": ["canHeatRun"]
+    },
+    {
+        "name": "Purple Shaft",
+        "room_id": 95,
+        "node_id": 3,
+        "x": 3.5,
+        "y": 42,
+        "requires": ["canHeatRun", {"heatFrames": 60}]
+    },
+    {
+        "name": "Red Pirate Shaft",
+        "room_id": 118,
+        "node_id": 2,
+        "x": 11.5,
+        "y": 10
+    },
+    {
+        "name": "Rising Tide Left",
+        "room_id": 92,
+        "node_id": 1,
+        "door_load_node_id": 2,
+        "x": 18.5,
+        "y": 11,
+        "requires": ["canHeatRun", {"heatFrames": 160}]
+    },
+    {
+        "name": "Rising Tide Right",
+        "room_id": 92,
+        "node_id": 2,
+        "x": 76.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Single Chamber Left",
+        "room_id": 103,
+        "node_id": 4,
+        "x": 12.5,
+        "y": 26,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Single Chamber Right",
+        "room_id": 103,
+        "node_id": 5,
+        "x": 83,
+        "y": 7,
+        "requires": ["canHeatRun", {"heatFrames": 100}]
+    },
+    {
+        "name": "Speed Booster Hall Left",
+        "room_id": 101,
+        "node_id": 1,
+        "x": 23,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 100}]
+    },
+    {
+        "name": "Speed Booster Hall Right",
+        "room_id": 101,
+        "node_id": 2,
+        "x": 136,
+        "y": 26,
+        "requires": ["canHeatRun", {"heatFrames": 100}]
+    },
+    {
+        "name": "Spiky Acid Snakes Tunnel Left",
+        "room_id": 112,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Spiky Acid Snakes Tunnel Right",
+        "room_id": 112,
+        "node_id": 2,
+        "x": 60.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Spiky Platforms Tunnel Left",
+        "room_id": 117,
+        "node_id": 1,
+        "x": 26.5,
+        "y": 9,
+        "requires": ["canHeatRun", {"heatFrames": 340}],
+        "spicy": true,
+        "note": [
+            "Getting to the left is easier when starting from a new game or loading from the menu:",
+            "run left immediately, landing on the moving platform and continuing running left off of it;",
+            "do a short spin-jump to the left and then a second spin-jump to the left to land back on top of the moving platform;",
+            "crouch while riding the platform to avoid the last spike.",
+            "It can also be done from a quick reload (after death or with L + R + Select + Start) but this is more difficult because the moving platform is not in an ideal position:",
+            "use spin jumps with ledge grabs onto the floor to move quickly and minimize lava damage;",
+            "spin jump onto the moving platform after you are past the last spike."
+        ],
+        "devNote": ["This could be done in 320 heat frames, but we use a higher value since we don't want this coming into logic below Expert."]
+    },
+    {
+        "name": "Spiky Platforms Tunnel Right",
+        "room_id": 117,
+        "node_id": 2,
+        "x": 60.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Upper Norfair Farming Room",
+        "room_id": 94,
+        "node_id": 5,
+        "door_load_node_id": 2,
+        "x": 9.5,
+        "y": 26,
+        "requires": ["canHeatRun"]
+    },
+    {
+        "name": "Volcano Room Left",
+        "room_id": 116,
+        "node_id": 2,
+        "x": 12,
+        "y": 42,
+        "requires": ["canHeatRun", {"heatFrames": 80}]
+    },
+    {
+        "name": "Volcano Room Right",
+        "room_id": 116,
+        "node_id": 1,
+        "x": 40,
+        "y": 37
+    },
+    {
+        "name": "Business Center",
+        "room_id": 86,
+        "node_id": 8,
+        "door_load_node_id": 3,
+        "x": 10,
+        "y": 90
+    },
+    {
+        "name": "Crocomire Escape Right",
+        "room_id": 121,
+        "node_id": 2,
+        "x": 46,
+        "y": 10,
+        "spicy": true,
+        "requires": ["canHeatRun", {"heatFrames": 240}]
+    },
+    {
+        "name": "Crocomire Escape Left",
+        "room_id": 121,
+        "node_id": 1,
+        "x": 4,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Crocomire Speedway Left",
+        "room_id": 120,
+        "node_id": 2,
+        "x": 24,
+        "y": 13,
+        "requires": ["canHeatRun", {"heatFrames": 110}]
+    },
+    {
+        "name": "Crocomire Speedway Bottom Right",
+        "room_id": 120,
+        "node_id": 6,
+        "door_load_node_id": 4,
+        "x": 200,
+        "y": 40,
+        "requires": ["canHeatRun"]
+    },
+    {
+        "name": "Crumble Shaft Bottom",
+        "room_id": 111,
+        "node_id": 2,
+        "x": 5.5,
+        "y": 60,
+        "requires": ["canHeatRun", {"heatFrames": 70}]
+    },
+    {
+        "name": "Hi Jump Energy Tank Room Left",
+        "room_id": 88,
+        "node_id": 1,
+        "x": 6,
+        "y": 25
+    },
+    {
+        "name": "Ice Beam Acid Room Left",
+        "room_id": 107,
+        "node_id": 1,
+        "x": 11.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 100}]
+    },
+    {
+        "name": "Ice Beam Gate Room Center Left",
+        "room_id": 106,
+        "node_id": 2,
+        "x": 56,
+        "y": 42
+    },
+    {
+        "name": "Ice Beam Gate Room Right",
+        "room_id": 106,
+        "node_id": 4,
+        "x": 88,
+        "y": 42,
+        "spicy": true
+    },
+    {
+        "name": "Ice Beam Gate Room Bottom",
+        "room_id": 106,
+        "node_id": 3,
+        "x": 56,
+        "y": 56
+    },
+    {
+        "name": "Ice Beam Snake Room Top",
+        "room_id": 108,
+        "node_id": 1,
+        "x": 8,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 60}]
+    },
+    {
+        "name": "Ice Beam Snake Room Bottom",
+        "room_id": 108,
+        "node_id": 3,
+        "x": 3.5,
+        "y": 38,
+        "requires": ["canHeatRun", {"heatFrames": 100}]
+    },
+    {
+        "name": "Ice Beam Snake Room Right",
+        "room_id": 108,
+        "node_id": 2,
+        "x": 26.5,
+        "y": 28,
+        "requires": ["canHeatRun", {"heatFrames": 60}]
+    },
+    {
+        "name": "Ice Beam Tutorial Room Left",
+        "room_id": 110,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Ice Beam Tutorial Room Right",
+        "room_id": 110,
+        "node_id": 2,
+        "x": 28.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Crocomire's Room",
+        "room_id": 122,
+        "node_id": 1,
+        "x": 24,
+        "y": 11
+    },
+    {
+        "name": "Grapple Tutorial Room 1",
+        "room_id": 129,
+        "node_id": 1,
+        "x": 8,
+        "y": 10
+    },
+    {
+        "name": "Grapple Tutorial Room 2 Bottom",
+        "room_id": 130,
+        "node_id": 1,
+        "x": 6,
+        "y": 24
+    },
+    {
+        "name": "Grapple Tutorial Room 2 Top",
+        "room_id": 130,
+        "node_id": 2,
+        "x": 12,
+        "y": 11
+    },
+    {
+        "name": "Grapple Tutorial Room 3 Right",
+        "room_id": 131,
+        "node_id": 2,
+        "x": 44.5,
+        "y": 10
+    },
+    {
+        "name": "Grapple Tutorial Room 3 Left",
+        "room_id": 131,
+        "node_id": 4,
+        "door_load_node_id": 2,
+        "x": 21.5,
+        "y": 10
+    },
+    {
+        "name": "Post Crocomire Farming Room",
+        "room_id": 123,
+        "node_id": 2,
+        "door_load_node_id": 3,
+        "x": 3,
+        "y": 27
+    },
+    {
+        "name": "Post Crocomire Jump Room Left",
+        "room_id": 127,
+        "node_id": 1,
+        "x": 6.5,
+        "y": 26
+    },
+    {
+        "name": "Post Crocomire Jump Room Right",
+        "room_id": 127,
+        "node_id": 2,
+        "x": 124.5,
+        "y": 39
+    },
+    {
+        "name": "Post Crocomire Missile Room",
+        "room_id": 126,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10
+    },
+    {
+        "name": "Post Crocomire Shaft Top",
+        "room_id": 125,
+        "node_id": 4,
+        "x": 6.5,
+        "y": 10
+    },
+    {
+        "name": "Post Crocomire Shaft Right",
+        "room_id": 125,
+        "node_id": 3,
+        "x": 12.5,
+        "y": 58
+    },
+    {
+        "name": "Acid Statue Room Top",
+        "room_id": 149,
+        "node_id": 1,
+        "x": 25.5,
+        "y": 12,
+        "requires": ["canHeatRun", {"heatFrames": 70}]
+    },
+    {
+        "name": "Acid Statue Room Bottom",
+        "room_id": 149,
+        "node_id": 5,
+        "door_load_node_id": 2,
+        "x": 14.5,
+        "y": 43,
+        "spicy": true,
+        "requires": ["canHeatRun"]
+    },
+    {
+        "name": "Fast Ripper Room Right",
+        "room_id": 153,
+        "node_id": 2,
+        "x": 56,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 50}]
+    },
+    {
+        "name": "Golden Torizo's Room Top Left",
+        "room_id": 150,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Screw Attack Room Top",
+        "room_id": 151,
+        "node_id": 3,
+        "x": 8,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 60}]
+    },
+    {
+        "name": "Amphitheatre Bottom Left",
+        "room_id": 136,
+        "node_id": 1,
+        "door_load_node_id": 1,
+        "x": 6,
+        "y": 69,
+        "spicy": true,
+        "requires": ["canHeatRun", {"heatFrames": 280}, "canConsecutiveWalljump"],
+        "camera_offset_y": -4
+    },
+    {
+        "name": "Amphitheatre Top Right",
+        "room_id": 136,
+        "node_id": 2,
+        "door_load_node_id": 1,
+        "x": 25.5,
+        "y": 24,
+        "spicy": true,
+        "requires": ["canHeatRun", {"heatFrames": 320}]
+    },
+    {
+        "name": "Fast Pillars Setup Room",
+        "room_id": 133,
+        "node_id": 5,
+        "door_load_node_id": 2,
+        "x": 8,
+        "y": 43,
+        "requires": ["canHeatRun"]
+    },
+    {
+        "name": "Lower Norfair Escape Power Bomb Room",
+        "room_id": 147,
+        "node_id": 3,
+        "door_load_node_id": 2,
+        "x": 8,
+        "y": 10,
+        "requires": ["canHeatRun"]
+    },
+    {
+        "name": "Lower Norfair Farming Room Right",
+        "room_id": 141,
+        "node_id": 2,
+        "x": 44.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Lower Norfair Farming Room Left",
+        "room_id": 141,
+        "node_id": 1,
+        "x": 9,
+        "y": 11,
+        "requires": ["canHeatRun", {"heatFrames": 80}]
+    },
+    {
+        "name": "Lower Norfair Fireflea Room",
+        "room_id": 145,
+        "node_id": 1,
+        "x": 8,
+        "y": 10.5
+    },
+    {
+        "name": "Lower Norfair Spring Ball Maze Room Center",
+        "room_id": 146,
+        "node_id": 4,
+        "door_load_node_id": 2,
+        "x": 39,
+        "y": 9,
+        "requires": ["canHeatRun"]
+    },
+    {
+        "name": "Lower Norfair Spring Ball Maze Room Right",
+        "room_id": 146,
+        "node_id": 2,
+        "x": 72,
+        "y": 13,
+        "requires": ["canHeatRun", {"heatFrames": 80}]
+    },
+    {
+        "name": "Main Hall Left",
+        "room_id": 132,
+        "node_id": 1,
+        "x": 13.5,
+        "y": 41,
+        "requires": ["canHeatRun", {"heatFrames": 120}]
+    },
+    {
+        "name": "Main Hall Elevator",
+        "room_id": 132,
+        "node_id": 4,
+        "door_load_node_id": 4,
+        "x": 72,
+        "y": 42,
+        "requires": ["canHeatRun", {"heatFrames": 20}]
+    },
+    {
+        "name": "Mickey Mouse Room",
+        "room_id": 144,
+        "node_id": 2,
+        "x": 56,
+        "y": 21,
+        "requires": ["canHeatRun", {"heatFrames": 160}, {"or": ["canWalljump", "h_crouchJumpDownGrab"]}]
+    },
+    {
+        "name": "Pillar Room Right",
+        "room_id": 134,
+        "node_id": 2,
+        "x": 52.5,
+        "y": 9,
+        "requires": ["canHeatRun", {"heatFrames": 100}]
+    },
+    {
+        "name": "Pillar Room Left",
+        "room_id": 134,
+        "node_id": 1,
+        "x": 4,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Red Kihunter Shaft Top",
+        "room_id": 137,
+        "node_id": 5,
+        "door_load_node_id": 1,
+        "x": 8.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 20}]
+    },
+    {
+        "name": "Red Kihunter Shaft Bottom Left",
+        "room_id": 137,
+        "node_id": 3,
+        "x": 7.5,
+        "y": 72,
+        "requires": ["canHeatRun", {"heatFrames": 240}]
+    },
+    {
+        "name": "Red Kihunter Shaft Bottom Right",
+        "room_id": 137,
+        "node_id": 2,
+        "x": 40,
+        "y": 77,
+        "requires": ["canHeatRun", {"heatFrames": 100}]
+    },
+    {
+        "name": "Ridley Tank Room",
+        "room_id": 143,
+        "node_id": 1,
+        "x": 4.5,
+        "y": 12,
+        "requires": ["canHeatRun", {"heatFrames": 60}]
+    },
+    {
+        "name": "The Worst Room In The Game Top",
+        "room_id": 135,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "The Worst Room In The Game Right",
+        "room_id": 135,
+        "node_id": 3,
+        "x": 12,
+        "y": 26,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Three Musketeers' Room",
+        "room_id": 148,
+        "node_id": 1,
+        "x": 24,
+        "y": 10,
+        "requires": ["canHeatRun", {"heatFrames": 50}]
+    },
+    {
+        "name": "Wasteland Right",
+        "room_id": 138,
+        "node_id": 2,
+        "x": 88,
+        "y": 7,
+        "requires": ["canHeatRun", {"heatFrames": 50}]
+    },
+    {
+        "name": "Wasteland Bottom",
+        "room_id": 138,
+        "node_id": 1,
+        "x": 20.5,
+        "y": 42,
+        "requires": ["canHeatRun", {"heatFrames": 40}]
+    },
+    {
+        "name": "Boyon Gate Hall Left",
+        "room_id": 200,
+        "node_id": 4,
+        "door_load_node_id": 3,
+        "x": 19,
+        "y": 10
+    },
+    {
+        "name": "Boyon Gate Hall Right",
+        "room_id": 200,
+        "node_id": 3,
+        "x": 26.5,
+        "y": 10
+    },
+    {
+        "name": "Crab Hole Top",
+        "room_id": 201,
+        "node_id": 1,
+        "x": 10.5,
+        "y": 13
+    },
+    {
+        "name": "Crab Hole Bottom",
+        "room_id": 201,
+        "node_id": 2,
+        "x": 11,
+        "y": 29
+    },
+    {
+        "name": "Crab Tunnel Left",
+        "room_id": 176,
+        "node_id": 1,
+        "x": 8.5,
+        "y": 13
+    },
+    {
+        "name": "Crab Tunnel Right",
+        "room_id": 176,
+        "node_id": 2,
+        "x": 53,
+        "y": 13
+    },
+    {
+        "name": "Fish Tank Top Right",
+        "room_id": 173,
+        "node_id": 2,
+        "x": 56,
+        "y": 8,
+        "spicy": true,
+        "requires": ["canSuitlessMaridia", "canCarefulJump"]
+    },
+    {
+        "name": "Fish Tank Left",
+        "room_id": 173,
+        "node_id": 1,
+        "x": 10.5,
+        "y": 23.5
+    },
+    {
+        "name": "Glass Tunnel Bottom",
+        "room_id": 170,
+        "node_id": 2,
+        "x": 8,
+        "y": 39.5
+    },
+    {
+        "name": "Glass Tunnel Top",
+        "room_id": 170,
+        "node_id": 4,
+        "door_load_node_id": 2,
+        "x": 8,
+        "y": 9
+    },
+    {
+        "name": "Main Street Top",
+        "room_id": 172,
+        "node_id": 4,
+        "x": 24,
+        "y": 10
+    },
+    {
+        "name": "Main Street Middle",
+        "room_id": 172,
+        "node_id": 3,
+        "x": 7,
+        "y": 38,
+        "requires": ["canSuitlessMaridia"]
+    },
+    {
+        "name": "Main Street Bottom",
+        "room_id": 172,
+        "node_id": 8,
+        "door_load_node_id": 2,
+        "x": 20.5,
+        "y": 124
+    },
+    {
+        "name": "Mama Turtle Room",
+        "room_id": 178,
+        "node_id": 1,
+        "x": 41,
+        "y": 61
+    },
+    {
+        "name": "Mt. Everest Top Left",
+        "room_id": 174,
+        "node_id": 1,
+        "x": 8,
+        "y": 13
+    },
+    {
+        "name": "Mt. Everest Top Right",
+        "room_id": 174,
+        "node_id": 4,
+        "x": 90,
+        "y": 11
+    },
+    {
+        "name": "Mt. Everest Bottom Left",
+        "room_id": 174,
+        "node_id": 2,
+        "x": 66,
+        "y": 60
+    },
+    {
+        "name": "Mt. Everest Bottom Right",
+        "room_id": 174,
+        "node_id": 3,
+        "door_load_node_id": 2,
+        "x": 72,
+        "y": 61
+    },
+    {
+        "name": "Red Fish Room Top Left",
+        "room_id": 177,
+        "node_id": 1,
+        "x": 13,
+        "y": 8
+    },
+    {
+        "name": "Red Fish Room Top Right",
+        "room_id": 177,
+        "node_id": 2,
+        "x": 36,
+        "y": 9
+    },
+    {
+        "name": "West Glass Tube Tunnel",
+        "room_id": 169,
+        "node_id": 1,
+        "x": 8,
+        "y": 10
+    },
+    {
+        "name": "Aqueduct Top Left",
+        "room_id": 183,
+        "node_id": 9,
+        "door_load_node_id": 6,
+        "x": 8.5,
+        "y": 8
+    },
+    {
+        "name": "Aqueduct Center Left",
+        "room_id": 183,
+        "node_id": 1,
+        "x": 4.5,
+        "y": 26
+    },
+    {
+        "name": "Aqueduct Bottom",
+        "room_id": 183,
+        "node_id": 2,
+        "x": 40,
+        "y": 42
+    },
+    {
+        "name": "Below Botwoon Energy Tank",
+        "room_id": 205,
+        "node_id": 3,
+        "door_load_node_id": 1,
+        "x": 61.5,
+        "y": 12,
+        "spicy": true,
+        "enemy_attack_before_control": true
+    },
+    {
+        "name": "Botwoon Energy Tank Room Left",
+        "room_id": 186,
+        "node_id": 1,
+        "x": 8,
+        "y": 11
+    },
+    {
+        "name": "Botwoon Energy Tank Room Right",
+        "room_id": 186,
+        "node_id": 4,
+        "x": 104,
+        "y": 10
+    },
+    {
+        "name": "Botwoon Hallway Left",
+        "room_id": 184,
+        "node_id": 1,
+        "x": 8,
+        "y": 13
+    },
+    {
+        "name": "Botwoon Hallway Right",
+        "room_id": 184,
+        "node_id": 2,
+        "x": 60,
+        "y": 10
+    },
+    {
+        "name": "Botwoon's Room",
+        "room_id": 185,
+        "node_id": 2,
+        "x": 25.5,
+        "y": 11
+    },
+    {
+        "name": "Colosseum Left",
+        "room_id": 189,
+        "node_id": 1,
+        "x": 34.5,
+        "y": 10,
+        "spicy": true,
+        "requires": [{"spikeHits": 1}, "canInsaneWalljump"],
+        "camera_offset_x": -12
+    },
+    {
+        "name": "Colosseum Right",
+        "room_id": 189,
+        "node_id": 3,
+        "x": 64.5,
+        "y": 8,
+        "spicy": true,
+        "requires": [{"spikeHits": 1}, "canHorizontalDamageBoost", "canTrickyJump", "canPreciseWalljump"],
+        "camera_offset_x": -12,
+        "devNote": ["This is as far right as we can adjust the camera without activating the Mochtroid."]
+    },
+    {
+        "name": "Crab Shaft Top",
+        "room_id": 175,
+        "node_id": 3,
+        "x": 8,
+        "y": 7
+    },
+    {
+        "name": "Crab Shaft Center",
+        "room_id": 175,
+        "node_id": 1,
+        "x": 8,
+        "y": 42
+    },
+    {
+        "name": "Crab Shaft Bottom",
+        "room_id": 175,
+        "node_id": 2,
+        "x": 8,
+        "y": 60
+    },
+    {
+        "name": "East Cactus Alley Room Left",
+        "room_id": 196,
+        "node_id": 1,
+        "x": 5,
+        "y": 10
+    },
+    {
+        "name": "East Cactus Alley Room Right",
+        "room_id": 196,
+        "node_id": 2,
+        "x": 77,
+        "y": 26
+    },
+    {
+        "name": "East Sand Hole",
+        "room_id": 208,
+        "node_id": 2,
+        "door_load_node_id": 1,
+        "x": 25,
+        "y": 11
+    },
+    {
+        "name": "Halfie Climb Room Right",
+        "room_id": 187,
+        "node_id": 3,
+        "x": 40,
+        "y": 39,
+        "spicy": true,
+        "note": ["To pass through the Oums, jump and aim down."]
+    },
+    {
+        "name": "The Precious Room",
+        "room_id": 192,
+        "node_id": 2,
+        "x": 8,
+        "y": 23
+    },
+    {
+        "name": "Maridia Elevator Room Center",
+        "room_id": 215,
+        "node_id": 2,
+        "x": 9,
+        "y": 76
+    },
+    {
+        "name": "Northwest Maridia Bug Room Left",
+        "room_id": 180,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 10
+    },
+    {
+        "name": "Northwest Maridia Bug Room Center",
+        "room_id": 180,
+        "node_id": 3,
+        "door_load_node_id": 1,
+        "spicy": true,
+        "x": 39,
+        "y": 26
+    },
+    {
+        "name": "Kassiuz Room",
+        "room_id": 217,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 59
+    },
+    {
+        "name": "Plasma Spark Room Top",
+        "room_id": 197,
+        "node_id": 5,
+        "door_load_node_id": 4,
+        "x": 39,
+        "y": 9
+    },
+    {
+        "name": "Plasma Spark Room Bottom",
+        "room_id": 197,
+        "node_id": 2,
+        "x": 52,
+        "y": 71,
+        "requires": ["canSuitlessMaridia"]
+    },
+    {
+        "name": "Pseudo Plasma Spark Room Top",
+        "room_id": 179,
+        "node_id": 1,
+        "x": 56.5,
+        "y": 26,
+        "requires": ["canWalljump"]
+    },
+    {
+        "name": "Thread The Needle Room",
+        "room_id": 214,
+        "node_id": 1,
+        "x": 53,
+        "y": 9,
+        "requires": ["canCarefulJump"]
+    },
+    {
+        "name": "Watering Hole",
+        "room_id": 181,
+        "node_id": 1,
+        "x": 4,
+        "y": 12
+    },
+    {
+        "name": "East Pants Room",
+        "room_id": 322,
+        "node_id": 1,
+        "door_load_node_id": 2,
+        "x": 8,
+        "y": 10
+    },
+    {
+        "name": "East Sand Hall Left",
+        "room_id": 210,
+        "node_id": 1,
+        "x": 4,
+        "y": 10
+    },
+    {
+        "name": "East Sand Hall Right",
+        "room_id": 210,
+        "node_id": 2,
+        "x": 44.5,
+        "y": 10
+    },
+    {
+        "name": "Oasis",
+        "room_id": 198,
+        "node_id": 1,
+        "x": 8,
+        "y": 26
+    },
+    {
+        "name": "Shaktool Room Left",
+        "room_id": 222,
+        "node_id": 1,
+        "x": 5,
+        "y": 12
+    },
+    {
+        "name": "Shaktool Room Right",
+        "room_id": 222,
+        "node_id": 2,
+        "x": 59,
+        "y": 12
+    },
+    {
+        "name": "Spring Ball Room",
+        "room_id": 223,
+        "node_id": 1,
+        "x": 11,
+        "y": 10
+    },
+    {
+        "name": "West Sand Hall Left",
+        "room_id": 199,
+        "node_id": 1,
+        "x": 11,
+        "y": 12
+    },
+    {
+        "name": "West Sand Hall Right",
+        "room_id": 199,
+        "node_id": 2,
+        "x": 60.5,
+        "y": 10
+    },
+    {
+        "name": "Attic",
+        "room_id": 160,
+        "node_id": 1,
+        "x": 3,
+        "y": 10
+    },
+    {
+        "name": "Basement Left",
+        "room_id": 156,
+        "node_id": 2,
+        "x": 40,
+        "y": 7
+    },
+    {
+        "name": "Basement Right",
+        "room_id": 156,
+        "node_id": 3,
+        "x": 73,
+        "y": 13
+    },
+    {
+        "name": "Bowling Alley Top",
+        "room_id": 161,
+        "node_id": 1,
+        "x": 59,
+        "y": 10
+    },
+    {
+        "name": "Bowling Alley Center",
+        "room_id": 161,
+        "node_id": 2,
+        "x": 73.25,
+        "y": 27
+    },
+    {
+        "name": "Bowling Alley Bottom",
+        "room_id": 161,
+        "node_id": 3,
+        "x": 21,
+        "y": 44
+    },
+    {
+        "name": "Electric Death Room",
+        "room_id": 166,
+        "node_id": 1,
+        "x": 8,
+        "y": 7
+    },
+    {
+        "name": "Spiky Death Room",
+        "room_id": 165,
+        "node_id": 1,
+        "x": 4,
+        "y": 13
+    },
+    {
+        "name": "Sponge Bath",
+        "room_id": 164,
+        "node_id": 1,
+        "x": 4,
+        "y": 10
+    },
+    {
+        "name": "Wrecked Ship East Super Room",
+        "room_id": 163,
+        "node_id": 1,
+        "x": 37,
+        "y": 13
+    },
+    {
+        "name": "Wrecked Ship Energy Tank Room",
+        "room_id": 167,
+        "node_id": 1,
+        "x": 43,
+        "y": 10
+    },
+    {
+        "name": "Wrecked Ship Entrance",
+        "room_id": 154,
+        "node_id": 1,
+        "x": 24,
+        "y": 10
+    },
+    {
+        "name": "Wrecked Ship Main Shaft Top",
+        "room_id": 155,
+        "node_id": 1,
+        "x": 72,
+        "y": 29
+    },
+    {
+        "name": "Wrecked Ship Main Shaft Right",
+        "room_id": 155,
+        "node_id": 6,
+        "x": 92.5,
+        "y": 106
+    },
+    {
+        "name": "Wrecked Ship Main Shaft Bottom",
+        "room_id": 155,
+        "node_id": 7,
+        "x": 66,
+        "y": 118
+    },
+    {
+        "name": "Big Boy Room",
+        "room_id": 232,
+        "node_id": 2,
+        "x": 54,
+        "y": 13
+    },
+    {
+        "name": "Dust Torizo Room",
+        "room_id": 231,
+        "node_id": 2,
+        "x": 25,
+        "y": 12
+    },
+    {
+        "name": "Metroid Room 1 Right",
+        "room_id": 226,
+        "node_id": 2,
+        "x": 87,
+        "y": 12
+    },
+    {
+        "name": "Rinka Shaft",
+        "room_id": 236,
+        "node_id": 1,
+        "x": 11,
+        "y": 12
+    },
+    {
+        "name": "Seaweed Room",
+        "room_id": 233,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 9
+    },
+    {
+        "name": "Tourian Escape Room 1",
+        "room_id": 239,
+        "node_id": 1,
+        "x": 25,
+        "y": 10
+    },
+    {
+        "name": "Tourian Escape Room 2",
+        "room_id": 240,
+        "node_id": 1,
+        "x": 8,
+        "y": 8
+    },
+    {
+        "name": "Tourian Escape Room 3",
+        "room_id": 241,
+        "node_id": 1,
+        "x": 22,
+        "y": 9
+    },
+    {
+        "name": "Tourian Escape Room 4",
+        "room_id": 242,
+        "node_id": 2,
+        "x": 44.5,
+        "y": 45,
+        "requires": [{"or": ["canWalljump", "h_crouchJumpDownGrab"]}]
+    },
+    {
+        "name": "Tourian Eye Door Room",
+        "room_id": 235,
+        "node_id": 1,
+        "x": 26,
+        "y": 12
+    },
+    {
+        "name": "Tourian First Room",
+        "room_id": 224,
+        "node_id": 3,
+        "x": 8.5,
+        "y": 58
+    },
+    {
+        "name": "Crateria Map Room",
+        "room_id": 15,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10
+    },
+    {
+        "name": "Crateria Save Room",
+        "room_id": 16,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "The Final Missile",
+        "room_id": 17,
+        "node_id": 1,
+        "x": 11.5,
+        "y": 10
+    },
+    {
+        "name": "Gauntlet Energy Tank Room Right",
+        "room_id": 31,
+        "node_id": 2,
+        "x": 92,
+        "y": 10
+    },
+    {
+        "name": "Terminator Room",
+        "room_id": 20,
+        "node_id": 2,
+        "x": 89,
+        "y": 11
+    },
+    {
+        "name": "The Moat Left",
+        "room_id": 7,
+        "node_id": 1,
+        "x": 13,
+        "y": 25
+    },
+    {
+        "name": "The Moat Right",
+        "room_id": 7,
+        "node_id": 2,
+        "x": 28,
+        "y": 10
+    },
+    {
+        "name": "Billy Mays Room",
+        "room_id": 43,
+        "node_id": 1,
+        "x": 11.5,
+        "y": 13
+    },
+    {
+        "name": "First Missile Room",
+        "room_id": 40,
+        "node_id": 1,
+        "x": 10.5,
+        "y": 10
+    },
+    {
+        "name": "Morph Ball Room Right",
+        "room_id": 38,
+        "node_id": 3,
+        "x": 104,
+        "y": 45
+    },
+    {
+        "name": "Brinstar Map Room",
+        "room_id": 48,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Brinstar Reserve Tank Room",
+        "room_id": 46,
+        "node_id": 1,
+        "x": 6.5,
+        "y": 12
+    },
+    {
+        "name": "Etecoon Energy Tank Room Top",
+        "room_id": 51,
+        "node_id": 2,
+        "x": 20,
+        "y": 10,
+        "camera_offset_x": -4
+    },
+    {
+        "name": "Etecoon Save Room",
+        "room_id": 315,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Etecoon Super Room",
+        "room_id": 52,
+        "node_id": 1,
+        "x": 10,
+        "y": 11
+    },
+    {
+        "name": "Green Brinstar Missile Refill",
+        "room_id": 316,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Big Pink Save Room",
+        "room_id": 318,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Dachora Energy Refill",
+        "room_id": 317,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Hopper Energy Tank Room",
+        "room_id": 62,
+        "node_id": 1,
+        "x": 6,
+        "y": 13
+    },
+    {
+        "name": "Spore Spawn Super Room Bottom",
+        "room_id": 63,
+        "node_id": 2,
+        "x": 20.5,
+        "y": 139
+    },
+    {
+        "name": "Sloaters Refill",
+        "room_id": 319,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Spazer Room",
+        "room_id": 71,
+        "node_id": 1,
+        "x": 6.5,
+        "y": 13
+    },
+    {
+        "name": "Kraid Recharge Station",
+        "room_id": 301,
+        "node_id": 1,
+        "x": 12,
+        "y": 12
+    },
+    {
+        "name": "Kraid Save Room",
+        "room_id": 300,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 12
+    },
+    {
+        "name": "Varia Suit Room",
+        "room_id": 85,
+        "node_id": 1,
+        "x": 11,
+        "y": 12
+    },
+    {
+        "name": "Warehouse Entrance Pit",
+        "room_id": 78,
+        "node_id": 4,
+        "door_load_node_id": 3,
+        "x": 26,
+        "y": 21,
+        "camera_offset_x": 0,
+        "camera_offset_y": -6,
+        "requires": []
+    },
+    {
+        "name": "Frog Savestation",
+        "room_id": 302,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 12
+    },
+    {
+        "name": "Lower Norfair Elevator Save Room",
+        "room_id": 310,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Nutella Refill",
+        "room_id": 308,
+        "node_id": 2,
+        "x": 10,
+        "y": 12
+    },
+    {
+        "name": "Speed Booster Room",
+        "room_id": 102,
+        "node_id": 1,
+        "x": 6,
+        "y": 11,
+        "requires": ["canHeatRun", {"heatFrames": 60}]
+    },
+    {
+        "name": "Wave Beam Room",
+        "room_id": 105,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10
+    },
+    {
+        "name": "Crocomire Save Room",
+        "room_id": 303,
+        "node_id": 1,
+        "x": 3,
+        "y": 10
+    },
+    {
+        "name": "Hi Jump Boots Room",
+        "room_id": 89,
+        "node_id": 1,
+        "x": 11.5,
+        "y": 10
+    },
+    {
+        "name": "Hi Jump Energy Tank Room Right",
+        "room_id": 88,
+        "node_id": 2,
+        "x": 20.5,
+        "y": 10
+    },
+    {
+        "name": "Ice Beam Room",
+        "room_id": 109,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 10
+    },
+    {
+        "name": "Norfair Map Room",
+        "room_id": 87,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Grapple Beam Room",
+        "room_id": 128,
+        "node_id": 2,
+        "x": 10.5,
+        "y": 42
+    },
+    {
+        "name": "Post Crocomire Power Bomb Room",
+        "room_id": 124,
+        "node_id": 1,
+        "x": 12,
+        "y": 10,
+        "requires": [
+            "canHeatRun", {"heatFrames": 40}
+        ]
+    },
+    {
+        "name": "Post Crocomire Save Room",
+        "room_id": 311,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 12
+    },
+    {
+        "name": "Screw Attack Room Middle",
+        "room_id": 151,
+        "node_id": 2,
+        "x": 8,
+        "y": 34,
+        "requires": [
+            "canHeatRun", 
+            {"heatFrames": 60},
+            {"or": [
+                "canWalljump",
+                "h_crouchJumpDownGrab"
+            ]}
+        ],
+        "camera_offset_y": -8
+    },
+    {
+        "name": "Screw Attack Room Bottom",
+        "room_id": 151,
+        "node_id": 1,
+        "x": 4.5,
+        "y": 43,
+        "requires": [
+            "canHeatRun", 
+            {"heatFrames": 40}
+        ]
+    },
+    {
+        "name": "Red Kihunter Shaft Save Room",
+        "room_id": 312,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 12
+    },
+    {
+        "name": "Glass Tunnel Save Room",
+        "room_id": 171,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 12
+    },
+    {
+        "name": "Aqueduct Save Room",
+        "room_id": 182,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Draygon Save Room",
+        "room_id": 190,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 12
+    },
+    {
+        "name": "Maridia Health Refill Room",
+        "room_id": 191,
+        "node_id": 1,
+        "x": 6,
+        "y": 12
+    },
+    {
+        "name": "Maridia Missile Refill Room",
+        "room_id": 188,
+        "node_id": 1,
+        "x": 6,
+        "y": 12
+    },
+    {
+        "name": "Space Jump Room",
+        "room_id": 194,
+        "node_id": 1,
+        "x": 10,
+        "y": 13
+    },
+    {
+        "name": "West Sand Hole",
+        "room_id": 209,
+        "node_id": 2,
+        "door_load_node_id": 1,
+        "x": 17,
+        "y": 12,
+        "camera_offset_x": -8,
+        "camera_offset_y": 1
+    },
+    {
+        "name": "Forgotten Highway Save Room",
+        "room_id": 216,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 12
+    },
+    {
+        "name": "Gravity Suit Room",
+        "room_id": 162,
+        "node_id": 2,
+        "x": 11.5,
+        "y": 10
+    },
+    {
+        "name": "Wrecked Ship East Missile Room",
+        "room_id": 168,
+        "node_id": 1,
+        "x": 7,
+        "y": 10
+    },
+    {
+        "name": "Wrecked Ship Map Room",
+        "room_id": 157,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Wrecked Ship Save Room",
+        "room_id": 304,
+        "node_id": 1,
+        "x": 5.5,
+        "y": 12
+    },
+    {
+        "name": "Wrecked Ship West Super Room",
+        "room_id": 159,
+        "node_id": 1,
+        "x": 8,
+        "y": 12
+    },
+    {
+        "name": "Lower Tourian Save Room",
+        "room_id": 237,
+        "node_id": 1,
+        "x": 12.5,
+        "y": 10
+    },
+    {
+        "name": "Tourian Recharge Room",
+        "room_id": 234,
+        "node_id": 1,
+        "x": 11,
+        "y": 12
+    },
+    {
+        "name": "Tourian Map Room",
+        "room_id": 225,
+        "node_id": 1,
+        "x": 3.5,
+        "y": 10
+    }
+]

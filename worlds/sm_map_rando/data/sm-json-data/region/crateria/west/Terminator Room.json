@@ -1,0 +1,360 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 20,
+  "name": "Terminator Room",
+  "area": "Crateria",
+  "subarea": "West",
+  "roomAddress": "0x7990D",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [0, 0, 0, 1, 1, 1],
+    [0, 1, 1, 1, 1, 0],
+    [1, 1, 1, 0, 0, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018be6",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 0, 0, 1, 1, 1],
+        [0, 1, 1, 1, 1, 0],
+        [2, 1, 1, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018bf2",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 0, 0, 2, 2, 2],
+        [0, 2, 2, 2, 2, 0],
+        [1, 2, 2, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "ETank",
+      "nodeAddress": "0x78432",
+      "mapTileMask": [
+        [0, 0, 0, 1, 1, 1],
+        [0, 1, 1, 1, 1, 0],
+        [2, 1, 1, 0, 0, 0]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Terminator Geemers",
+      "enemyName": "Geemer (blue)",
+      "quantity": 6,
+      "homeNodes": [1, 2, 3]
+    },
+    {
+      "id": "e2",
+      "groupName": "Terminator Wavers",
+      "enemyName": "Waver",
+      "quantity": 3,
+      "homeNodes": [1, 2, 3]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      },
+      "collectsItems": [3]
+    },
+    {
+      "id": 19,
+      "link": [1, 1],
+      "name": "Leave with Runway, Avoid Item",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 0,
+          "gentleUpTiles": 2
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Geemer and Waver Farm",
+      "requires": [
+        {"or": [
+          {"resetRoom": {"nodes": [1]}},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 60}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            {"or": [
+              "Wave",
+              "Spazer",
+              "Plasma"
+            ]},
+            {"cycleFrames": 960}
+          ]},
+          {"cycleFrames": 1110}
+        ]}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Geemer (blue)", "count": 6},
+        {"enemy": "Waver", "count": 3}
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get hit by Waver or Geemer",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get hit by Geemer or Waver",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 17,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 18,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    }
+  ],
+  "notables": [],
+  "nextStratId": 20,
+  "nextNotableId": 1
+}

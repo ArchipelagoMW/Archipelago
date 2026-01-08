@@ -1,0 +1,1824 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 211,
+  "name": "Yoink Room",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Yellow",
+  "roomAddress": "0x7D433",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a630",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "useImplicitComeInNormally": false,
+      "useImplicitComeInWithMockball": false,
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Sand Exit",
+      "nodeType": "exit",
+      "nodeSubType": "sandpit",
+      "nodeAddress": "0x001a624",
+      "doorOrientation": "down",
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a618",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "useImplicitComeInNormally": false,
+      "useImplicitComeInWithMockball": false,
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Junction Below Left Door",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Junction Below Right Door",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Left Yapping Maw",
+      "obstacleType": "enemies"
+    },
+    {
+      "id": "B",
+      "name": "Right Yapping Maw",
+      "obstacleType": "enemies"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Yoink Room Zoa",
+      "enemyName": "Zoa",
+      "quantity": 1,
+      "homeNodes": [1, 3]
+    },
+    {
+      "id": "e2",
+      "groupName": "Yoink Room Yapping Maws",
+      "enemyName": "Yapping Maw",
+      "quantity": 2,
+      "homeNodes": [4, 5]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Zoa",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "Freeze the Yapping Maw on room entry, and continue to periodically refreeze it throughout.",
+        "Jump and freeze the Zoa at the correct height, noting that it will rise one more pixel after it thaws.",
+        "Maintain a half-tile runway between the frozen Zoa and the runway in order to extend it as much as possible."
+      ]
+    },
+    {
+      "id": 81,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "Gravity",
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["A"]},
+          "canTrickyDodgeEnemies"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 2,
+            "openEnd": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $0.9."]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Land on Door Frame",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canTrickyJump",
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": ["canInsaneJump"]},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 65,
+      "link": [1, 1],
+      "name": "Door Stuck, Open Door",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 86,
+      "link": [1, 1],
+      "name": "Zoa Farm (Door Frame)",
+      "requires": [
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"simpleCycleFrames": 90},
+            {"cycleFrames": 30}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"simpleCycleFrames": 300},
+            {"cycleFrames": 60}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Zoa", "count": 1}]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Zoa",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 83,
+      "link": [1, 1],
+      "name": "Carry G-Mode Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canWalljump",
+          "h_crouchJumpDownGrab",
+          "canTrickySpringBallJump",
+          "canUseFrozenEnemies"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 84,
+      "link": [1, 1],
+      "name": "Carry G-Mode Morph Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canArtificialMorph"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "devNote": "Artificial morph will allow Samus not to fall; real Morph is not sufficient."
+    },
+    {
+      "id": 71,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canMomentumConservingTurnaround",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 70}
+          ]},
+          {"shineChargeFrames": 80}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: It is possible to leave with more frames remaining by falling directly into the sand (e.g., with a down-back turnaround);",
+        "but then it would not be possible to mid-air shinespark in the next room before landing, and we don't yet have a way to model that."
+      ]
+    },
+    {
+      "id": 72,
+      "link": [1, 2],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canMomentumConservingTurnaround",
+        {"shineChargeFrames": 40}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "This requires jumping through the door, but we don't use 'comeInShinechargedJumping' because it's not required to come from an air environment.",
+        "FIXME: clean up the way this kind of cross-room movement is expressed."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 3],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 3],
+      "name": "Space Jump Jumping Entry",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "SpaceJump",
+        {"or": [
+          {"doorUnlockedAtNode": 1},
+          {"doorUnlockedAtNode": 3}
+        ]}
+      ],
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["super"], "requires": ["canTrickyJump"]},
+        {"nodeId": 1, "types": ["missiles", "powerbomb"], "requires": ["never"]},
+        {"nodeId": 3, "types": ["super"], "requires": ["canTrickyJump"]},
+        {"nodeId": 3, "types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "devNote": "Requires a jumping entry, but any runway length and environment is fine."
+    },
+    {
+      "id": 13,
+      "link": [1, 3],
+      "name": "Naked Damage Boost (L to R)",
+      "requires": [
+        {"notable": "Damage Boost"},
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 1}}
+      ],
+      "note": "From the doorframe, wait for the Zoa to rise out of the water, then use it to damage boost into the open opposite door."
+    },
+    {
+      "id": 14,
+      "link": [1, 3],
+      "name": "Speedy Jump Morph (L to R)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 6
+        }
+      },
+      "requires": [
+        {"notable": "Speedy Jump Morph"},
+        "Morph",
+        "canTrickyJump",
+        "canLateralMidAirMorph",
+        {"doorUnlockedAtNode": 3}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Build up run speed and jump into the transition to cross this room without touching the water.",
+        "Shoot open the opposite door upon entering and morph before touching the ceiling to bounce into the open door."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 3],
+      "name": "Speedy Jump Morph with Speed Booster (L to R)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        {"notable": "Speedy Jump Morph"},
+        "Morph",
+        "canTrickyJump",
+        "canLateralMidAirMorph",
+        {"doorUnlockedAtNode": 3}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Build up run speed and jump into the transition to cross this room without touching the water.",
+        "Shoot open the opposite door upon entering and morph before touching the ceiling to bounce into the open door."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 3],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "top"
+        }
+      },
+      "requires": [
+        "canMidairShinespark",
+        "canPrepareForNextRoom",
+        {"shinespark": {"frames": 20}},
+        {"doorUnlockedAtNode": 3}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "Enter with a high shinespark through the door then shoot the opposite door and fall into it."
+    },
+    {
+      "id": 61,
+      "link": [1, 3],
+      "name": "Blue Speed Cross-Room Jump, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.0",
+          "maxExtraRunSpeed": "$2.0"
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": ["Higher speeds can work but with greater difficulty."]
+    },
+    {
+      "id": 62,
+      "link": [1, 3],
+      "name": "Blue Speed Cross-Room Jump onto Door Frame, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.C",
+          "maxExtraRunSpeed": "$2.4"
+        }
+      },
+      "requires": [
+        "canInsaneJump",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Jump into the room with blue speed, shoot open the door mid-air;",
+        "then airball across the room and unmorph on the door ledge, chaining temporary blue into the next room."
+      ]
+    },
+    {
+      "id": 73,
+      "link": [1, 3],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 74,
+      "link": [1, 3],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 75,
+      "link": [1, 3],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "This requires jumping through the door, but we don't use 'comeInShinechargedJumping' because it's not required to come from an air environment.",
+        "FIXME: clean up the way this kind of cross-room movement is expressed."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 3],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 18,
+      "link": [1, 3],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 19,
+      "link": [1, 3],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 20,
+      "link": [1, 4],
+      "name": "Base",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": []
+    },
+    {
+      "id": 66,
+      "link": [1, 4],
+      "name": "Fall Into Room With Mockball",
+      "entranceCondition": {
+        "comeInWithMockball": {
+          "speedBooster": "any",
+          "adjacentMinTiles": 0,
+          "remoteAndLandingMinTiles": [[0, 0]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 67,
+      "link": [1, 5],
+      "name": "Jump Through Room",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canTrickyJump",
+        "canPlayInSand"
+      ],
+      "note": [
+        "Jump through the door to cross most of the room, then jump off of the sand to cross the rest.",
+        "With enough speed, crossing the whole room without landing in the sand is also possible, but Samus must still jump quickly after landing to avoid being grabbed by the Yapping Maw."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 2],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 85,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit by Zoa",
+      "requires": [
+        "h_navigateUnderwater",
+        "canPlayInSand",
+        "canDownwardGModeSetup",
+        {"or": [
+          "Ice",
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["A"]},
+          {"obstaclesCleared": ["B"]},
+          "canTrickyGMode",
+          {"and": [
+            "canInsaneJump",
+            {"or": [
+              "Gravity",
+              "HiJump",
+              "canWalljump",
+              {"and": [
+                "h_crouchJumpDownGrab",
+                {"doorUnlockedAtNode": 1}
+              ]},
+              {"and": [
+                "h_crouchJumpDownGrab",
+                {"doorUnlockedAtNode": 3}
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["super"], "requires": ["canTrickyJump"]},
+        {"nodeId": 1, "types": ["missiles", "powerbomb"], "requires": ["never"]},
+        {"nodeId": 3, "types": ["super"], "requires": ["canTrickyJump"]},
+        {"nodeId": 3, "types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Kill, freeze, or dodge the Yapping Maws. Kill the Zoa and wait for its drop to disappear.",
+        "Just before it disappears, move into the sand and crouch. Press forward when near the transition to stand up and touch the transition on the first frame of standing.",
+        "If the drop is an ammo drop, Samus can collect the drop and not have to wait for it to respawn.",
+        "To do this, sink slightly into the sand before collecting the drop, then crouch and stand up to touch the transition and get hit by the Zoa.",
+        "Note that if the Yapping Maw grabs Samus after touching the transition, the G-mode setup can still work."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [3, 1],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 23,
+      "link": [3, 1],
+      "name": "Space Jump Jumping Entry",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "SpaceJump",
+        {"or": [
+          {"doorUnlockedAtNode": 1},
+          {"doorUnlockedAtNode": 3}
+        ]}
+      ],
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["super"], "requires": ["canTrickyJump"]},
+        {"nodeId": 1, "types": ["missiles", "powerbomb"], "requires": ["never"]},
+        {"nodeId": 3, "types": ["super"], "requires": ["canTrickyJump"]},
+        {"nodeId": 3, "types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "devNote": "Requires a jumping entry, but any runway length and environment is fine."
+    },
+    {
+      "id": 24,
+      "link": [3, 1],
+      "name": "Naked Damage Boost (R to L)",
+      "requires": [
+        {"notable": "Damage Boost"},
+        "canTrickyJump",
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 1}}
+      ],
+      "note": "From the doorframe, wait for the Zoa to rise out of the water, then use it to damage boost into the open opposite door."
+    },
+    {
+      "id": 25,
+      "link": [3, 1],
+      "name": "Speedy Jump Morph (R to L)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 6
+        }
+      },
+      "requires": [
+        {"notable": "Speedy Jump Morph"},
+        "Morph",
+        "canTrickyJump",
+        "canLateralMidAirMorph",
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Build up run speed and jump into the transition to cross this room without touching the water.",
+        "Shoot open the opposite door upon entering and morph before touching the ceiling to bounce into the open door."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 1],
+      "name": "Speedy Jump Morph with Speed Booster (R to L)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        {"notable": "Speedy Jump Morph"},
+        "Morph",
+        "canTrickyJump",
+        "canLateralMidAirMorph",
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Build up run speed and jump into the transition to cross this room without touching the water.",
+        "Shoot open the opposite door upon entering and morph before touching the ceiling to bounce into the open door."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [3, 1],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "top"
+        }
+      },
+      "requires": [
+        "canMidairShinespark",
+        "canPrepareForNextRoom",
+        {"shinespark": {"frames": 20}},
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "Enter with a high shinespark through the door then shoot the opposite door and fall into it."
+    },
+    {
+      "id": 76,
+      "link": [3, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 77,
+      "link": [3, 1],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 78,
+      "link": [3, 1],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "This requires jumping through the door, but we don't use 'comeInShinechargedJumping' because it's not required to come from an air environment.",
+        "FIXME: clean up the way this kind of cross-room movement is expressed."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [3, 1],
+      "name": "Blue Speed Cross-Room Jump, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.0",
+          "maxExtraRunSpeed": "$2.0"
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": ["Higher speeds can work but with greater difficulty."]
+    },
+    {
+      "id": 64,
+      "link": [3, 1],
+      "name": "Blue Speed Cross-Room Jump onto Door Frame, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.C",
+          "maxExtraRunSpeed": "$2.4"
+        }
+      },
+      "requires": [
+        "canInsaneJump",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Jump into the room with blue speed, shoot open the door mid-air;",
+        "then airball across the room and unmorph on the door ledge, chaining temporary blue into the next room."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 29,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 30,
+      "link": [3, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 79,
+      "link": [3, 2],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canMomentumConservingTurnaround",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 70}
+          ]},
+          {"shineChargeFrames": 80}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: It is possible to leave with more frames remaining by falling directly into the sand (e.g., with a down-back turnaround);",
+        "but then it would not be possible to mid-air shinespark in the next room before landing, and we don't yet have a way to model that."
+      ]
+    },
+    {
+      "id": 80,
+      "link": [3, 2],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canMomentumConservingTurnaround",
+        {"shineChargeFrames": 40}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "This requires jumping through the door, but we don't use 'comeInShinechargedJumping' because it's not required to come from an air environment.",
+        "FIXME: clean up the way this kind of cross-room movement is expressed."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [3, 2],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 32,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 33,
+      "link": [3, 3],
+      "name": "Leave With Runway - Frozen Zoa",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "Freeze the Yapping Maw on room entry, and continue to periodically refreeze it throughout.",
+        "Jump and freeze the Zoa at the correct height, noting that it will rise one more pixel after it thaws.",
+        "Maintain a half-tile runway between the frozen Zoa and the runway in order to extend it as much as possible."
+      ]
+    },
+    {
+      "id": 82,
+      "link": [3, 3],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "Gravity",
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["B"]},
+          "canTrickyDodgeEnemies"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 2,
+            "openEnd": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $0.9."]
+    },
+    {
+      "id": 34,
+      "link": [3, 3],
+      "name": "Land on Door Frame",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canTrickyJump",
+        {"doorUnlockedAtNode": 3}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": ["canInsaneJump"]},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 68,
+      "link": [3, 3],
+      "name": "Door Stuck, Open Door",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        {"doorUnlockedAtNode": 3}
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 87,
+      "link": [3, 3],
+      "name": "Zoa Farm (Door Frame)",
+      "requires": [
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"simpleCycleFrames": 90},
+            {"cycleFrames": 30}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"simpleCycleFrames": 300},
+            {"cycleFrames": 60}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Zoa", "count": 1}]
+    },
+    {
+      "id": 35,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit By Zoa",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 37,
+      "link": [3, 3],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Zoa", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 38,
+      "link": [3, 3],
+      "name": "Carry G-Mode Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canWalljump",
+          "h_crouchJumpDownGrab",
+          "canTrickySpringBallJump",
+          "canUseFrozenEnemies"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 39,
+      "link": [3, 3],
+      "name": "Carry G-Mode Morph Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canArtificialMorph"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "devNote": "Artificial morph will allow Samus not to fall; real Morph is not sufficient."
+    },
+    {
+      "id": 69,
+      "link": [3, 4],
+      "name": "Jump Through Room",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canTrickyJump",
+        "canPlayInSand"
+      ],
+      "note": [
+        "Jump through the door to cross most of the room, then jump off of the sand to cross the rest.",
+        "With enough speed, crossing the whole room without landing in the sand is also possible, but Samus must still jump quickly after landing to avoid being grabbed by the Yapping Maw."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [3, 5],
+      "name": "Base",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": []
+    },
+    {
+      "id": 70,
+      "link": [3, 5],
+      "name": "Fall Into Room With Mockball",
+      "entranceCondition": {
+        "comeInWithMockball": {
+          "speedBooster": "any",
+          "adjacentMinTiles": 0,
+          "remoteAndLandingMinTiles": [[0, 0]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 41,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Gravity",
+          {"and": [
+            "canSuitlessMaridia",
+            "HiJump"
+          ]}
+        ]},
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["missiles"], "requires": ["canDodgeWhileShooting"]},
+        {"nodeId": 1, "types": ["super"], "requires": []},
+        {"nodeId": 1, "types": ["powerbomb"], "requires": ["canTrickyJump"]}
+      ]
+    },
+    {
+      "id": 42,
+      "link": [4, 1],
+      "name": "Dodge Yapping Maw",
+      "requires": [
+        "canSuitlessMaridia",
+        "canCarefulJump",
+        {"or": [
+          "canWalljump",
+          "h_crouchJumpDownGrab",
+          "canTrickySpringBallJump"
+        ]},
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["missiles"], "requires": ["canDodgeWhileShooting"]},
+        {"nodeId": 1, "types": ["super"], "requires": []},
+        {"nodeId": 1, "types": ["powerbomb"], "requires": ["canTrickyJump"]}
+      ],
+      "note": "Escape by wall jumping when the water is low or using a crouch jump and down grab when it's high."
+    },
+    {
+      "id": 43,
+      "link": [4, 1],
+      "name": "Kill Yapping Maw With Super",
+      "requires": [
+        "canSuitlessMaridia",
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"or": [
+          "canWalljump",
+          "h_crouchJumpDownGrab",
+          "canTrickySpringBallJump"
+        ]},
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [{"nodeId": 1, "types": ["ammo"], "requires": []}],
+      "note": "Escape by wall jumping when the water is low or using a crouch jump and down grab when it's high."
+    },
+    {
+      "id": 44,
+      "link": [4, 1],
+      "name": "Freeze Yapping Maw",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies",
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [{"nodeId": 1, "types": ["ammo"], "requires": []}],
+      "note": "Keep freezing the Yapping Maw while using a frozen bug to escape."
+    },
+    {
+      "id": 45,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 88,
+      "link": [4, 4],
+      "name": "Zoa Farm (Suitless Dodge Yapping Maws)",
+      "requires": [
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "canTrickyDodgeEnemies",
+        {"cycleFrames": 170},
+        {"or": [
+          "Plasma",
+          "Wave",
+          "Spazer",
+          "Grapple",
+          {"cycleFrames": 10}
+        ]},
+        {"or": [
+          "HiJump",
+          "canInsaneJump"
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Zoa", "count": 1}],
+      "note": [
+        "While farming the Zoas, jump back and forth across the room to avoid the Yapping Maws."
+      ]
+    },
+    {
+      "id": 89,
+      "link": [4, 4],
+      "name": "Zoa Farm (Gravity Dodge Yapping Maws)",
+      "requires": [
+        "Gravity",
+        "canPlayInSand",
+        "canTrickyDodgeEnemies",
+        {"cycleFrames": 120},
+        {"or": [
+          "Plasma",
+          "Wave",
+          "Spazer",
+          "Grapple",
+          {"cycleFrames": 10}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Zoa", "count": 1}],
+      "note": [
+        "While farming the Zoas, jump back and forth across the room to avoid the Yapping Maws."
+      ]
+    },
+    {
+      "id": 90,
+      "link": [4, 4],
+      "name": "Zoa Farm (Freeze Yapping Maw)",
+      "requires": [
+        "Ice",
+        "canDodgeWhileShooting",
+        {"simpleCycleFrames": 200},
+        {"cycleFrames": 40}
+      ],
+      "farmCycleDrops": [{"enemy": "Zoa", "count": 1}],
+      "note": ["Freeze a Yapping Maw to farm the Zoas safely."]
+    },
+    {
+      "id": 91,
+      "link": [4, 4],
+      "name": "Kill Yapping Maw With Super",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "canSuitlessMaridia",
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 92,
+      "link": [4, 4],
+      "name": "Zoa Farm (Yapping Maw Killed)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"simpleCycleFrames": 200},
+        {"cycleFrames": 40}
+      ],
+      "farmCycleDrops": [{"enemy": "Zoa", "count": 1}],
+      "note": ["With the Yapping Maw killed, the Zoas can be farmed safely."]
+    },
+    {
+      "id": 46,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 47,
+      "link": [4, 5],
+      "name": "Suitless HiJump",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        {"or": [
+          "canPlayInSand",
+          "h_useSpringBall",
+          "SpaceJump"
+        ]}
+      ],
+      "note": "Kill the Zoa while avoiding the Yapping Maw, then cross the sand. Spring ball can be used to help cross the sand."
+    },
+    {
+      "id": 48,
+      "link": [4, 5],
+      "name": "Suitless Frozen Bridge",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies",
+        "canCarefulJump"
+      ],
+      "note": [
+        "Freeze the Zoa as it spawns and jump on it then jump across the room.",
+        "Freeze any Yapping Maws that attack and use them or a frozen Zoa as a platform to leave."
+      ]
+    },
+    {
+      "id": 49,
+      "link": [4, 5],
+      "name": "Suitless Kill Yapping Maw with Super",
+      "requires": [
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": "One Super to cross the room, a second is likely used before getting up to the door."
+    },
+    {
+      "id": 50,
+      "link": [4, 5],
+      "name": "Naked Sand Jumps (L to R)",
+      "requires": [
+        {"notable": "Sand Jumps"},
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        "canPlayInSand"
+      ],
+      "note": [
+        "Avoid the Yapping Maw after entering by not standing in one place for too long.",
+        "Kill the Zoa and quickly jump across the sand.",
+        "Hitting the Zoas will drop Samus deep into the sand below."
+      ]
+    },
+    {
+      "id": 51,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 52,
+      "link": [5, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Gravity",
+          {"and": [
+            "canSuitlessMaridia",
+            "HiJump"
+          ]}
+        ]},
+        {"doorUnlockedAtNode": 3}
+      ],
+      "unlocksDoors": [
+        {"nodeId": 3, "types": ["missiles"], "requires": ["canDodgeWhileShooting"]},
+        {"nodeId": 3, "types": ["super"], "requires": []},
+        {"nodeId": 3, "types": ["powerbomb"], "requires": ["canTrickyJump"]}
+      ]
+    },
+    {
+      "id": 53,
+      "link": [5, 3],
+      "name": "Dodge Yapping Maw",
+      "requires": [
+        "canSuitlessMaridia",
+        "canCarefulJump",
+        {"or": [
+          "canWalljump",
+          "h_crouchJumpDownGrab",
+          "canTrickySpringBallJump"
+        ]},
+        {"doorUnlockedAtNode": 3}
+      ],
+      "unlocksDoors": [
+        {"nodeId": 3, "types": ["missiles"], "requires": ["canDodgeWhileShooting"]},
+        {"nodeId": 3, "types": ["super"], "requires": []},
+        {"nodeId": 3, "types": ["powerbomb"], "requires": ["canTrickyJump"]}
+      ],
+      "note": "Escape by wall jumping when the water is low or using a crouch jump and down grab when it's high."
+    },
+    {
+      "id": 54,
+      "link": [5, 3],
+      "name": "Kill Yapping Maw With Super",
+      "requires": [
+        "canSuitlessMaridia",
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["B"]}
+        ]},
+        {"or": [
+          "canWalljump",
+          "h_crouchJumpDownGrab",
+          "canTrickySpringBallJump"
+        ]},
+        {"doorUnlockedAtNode": 3}
+      ],
+      "unlocksDoors": [{"nodeId": 3, "types": ["ammo"], "requires": []}],
+      "note": "Escape by wall jumping when the water is low or using a crouch jump and down grab when it's high."
+    },
+    {
+      "id": 55,
+      "link": [5, 3],
+      "name": "Freeze Yapping Maw",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies",
+        {"doorUnlockedAtNode": 3}
+      ],
+      "unlocksDoors": [{"nodeId": 3, "types": ["ammo"], "requires": []}],
+      "note": "Keep freezing the Yapping Maw while using a frozen bug to escape."
+    },
+    {
+      "id": 56,
+      "link": [5, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 57,
+      "link": [5, 4],
+      "name": "Suitless HiJump",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        {"or": [
+          "canPlayInSand",
+          "h_useSpringBall",
+          "SpaceJump"
+        ]}
+      ],
+      "note": "Kill the Zoa while avoiding the Yapping Maw, then cross the sand. Spring ball can be used to help cross the sand."
+    },
+    {
+      "id": 58,
+      "link": [5, 4],
+      "name": "Suitless Frozen Bridge",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies",
+        "canCarefulJump"
+      ],
+      "note": [
+        "Freeze the Zoa as it spawns and jump on it then jump across the room.",
+        "Freeze any Yapping Maws that attack and use them or a frozen Zoa as a platform to leave."
+      ]
+    },
+    {
+      "id": 59,
+      "link": [5, 4],
+      "name": "Suitless Kill Yapping Maw with Super",
+      "requires": [
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["B"]}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "devNote": "One Super to cross the room, a second is likely used before getting up to the door."
+    },
+    {
+      "id": 60,
+      "link": [5, 4],
+      "name": "Naked Sand Jumps (R to L)",
+      "requires": [
+        {"notable": "Sand Jumps"},
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        "canPlayInSand"
+      ],
+      "note": [
+        "Avoid the Yapping Maw after entering by not standing in one place for too long.",
+        "Kill the Zoa and quickly jump across the sand.",
+        "Hitting the Zoas will drop Samus deep into the sand below."
+      ]
+    },
+    {
+      "id": 93,
+      "link": [5, 5],
+      "name": "Kill Yapping Maw With Super",
+      "requires": [
+        {"obstaclesNotCleared": ["B"]},
+        "canSuitlessMaridia",
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 94,
+      "link": [5, 5],
+      "name": "Zoa Farm (Yapping Maw Killed)",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        {"simpleCycleFrames": 200},
+        {"cycleFrames": 40}
+      ],
+      "farmCycleDrops": [{"enemy": "Zoa", "count": 1}],
+      "note": ["With the Yapping Maw killed, the Zoas can be farmed safely."]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Sand Jumps",
+      "note": [
+        "Cross the room with nothing while avoiding the enemies.",
+        "Juke the Yapping Maw after entering and kill the Zoa to clear a path over the sand."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Damage Boost",
+      "note": "Wait inside the door frame for a Zoa to rise out of the sand, then use it to cross the room."
+    },
+    {
+      "id": 3,
+      "name": "Speedy Jump Morph",
+      "note": [
+        "With a fast enough jump into the room it is possible to cross over the water and land in the opposite door by morphing before reaching the ceiling."
+      ]
+    }
+  ],
+  "nextStratId": 95,
+  "nextNotableId": 4
+}

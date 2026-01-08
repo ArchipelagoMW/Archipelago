@@ -1,0 +1,139 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 124,
+  "name": "Post Crocomire Power Bomb Room",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "Crocomire",
+  "roomAddress": "0x7AADE",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001946e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "PowerBomb",
+      "nodeAddress": "0x78C04",
+      "mapTileMask": [
+        [2]
+      ]
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "G-Mode, Remote Acquire Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_heatedDirectGModeLeaveSameDoor"
+      ],
+      "collectsItems": [2],
+      "flashSuitChecked": true,
+      "devNote": "An indirect option could be added to just get to the item without heat damage, but that would require very unusual room layouts and isn't worth the effort."
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 4,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 65}
+      ]
+    },
+    {
+      "id": 5,
+      "link": [2, 1],
+      "name": "Leave with Runway",
+      "requires": [
+        {"heatFrames": 55}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ]
+    }
+  ],
+  "notables": [],
+  "nextStratId": 7,
+  "nextNotableId": 1
+}

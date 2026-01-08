@@ -1,0 +1,62 @@
+# Extend grab mode D which checks if quantity has bit 7 on.
+# If it does, also increase next byte (max quantity for bombs,
+# which is the only item which uses mode D)
+3f//extendedModeD: |
+  ld h,d
+  ld l,e
+  inc l
+  ld a,(hl)
+
+  ; Always increase max bombs if quantity has bit 7 set (only for "treasure" bombs, not drops)
+  bit 7,c
+  jr nz,@increaseMaxQuantity
+
+  ; If max bombs == 0, increase max bombs even if it is a wild bomb drop (like the one in D2)
+  or a
+  jr nz,@done
+  ld a,$10
+  ldd (hl),a
+  jr @done
+  
+  @increaseMaxQuantity:
+  res 7,c
+  add a,c
+  daa
+  jr nc,@writeNewMaxValue
+  ld a,$99
+  @writeNewMaxValue:
+  ldd (hl),a
+  
+  @done:
+  jp $4594    ; mode4
+3f/45c2/: call extendedModeD
+
+# Put a fixed limit on @modea to prevent max health to go past the point where
+# HUD starts looking buggy. Heart Containers being the only ones to use that mode,
+# we can do a pretty hacky fix without worrying too much
+3f//incrementAndCapMaxHealth: |
+  ld a,(de)
+  add a,c
+  cp $40
+  jr c,@belowMax
+  ld a,$40
+  @belowMax:
+  ld (de),a
+  ret
+3f/45aa/: jp incrementAndCapMaxHealth
+
+# Put a limit on Satchel level to prevent HUD from going bonkers by having
+# a wrong max seed count. This edits @mode2 and checks satchel level for
+# all few items sharing this mode (for simplicity's sake).
+3f//incrementAndCapSatchelLevel: |
+  ld a,(de)
+  inc a
+  ld (de),a
+  
+  ld a,(wSeedSatchelLevel)
+  cp $03
+  jr c,@belowMax
+  ld a,$03
+  @belowMax:
+  ret
+3f/458e/: jp incrementAndCapSatchelLevel

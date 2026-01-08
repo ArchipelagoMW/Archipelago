@@ -1,0 +1,247 @@
+{
+    "30": {
+        "area_name": "Crescent Island",
+        "capacity": 20,
+        "order": 10,
+        "num_checks": 5,
+        "vanilla_capacity": 9
+    },
+    "12": {
+        "area_name": "Bal Castle",
+        "capacity": 20,
+        "order": 12,
+        "num_checks": 4,
+        "vanilla_capacity": 9
+    },
+    "16": {
+        "area_name": "Ruined City",
+        "capacity": 20,
+        "order": 11,
+        "num_checks": 3,
+        "vanilla_capacity": 8
+    },
+    "3": {
+        "area_name": "Pyramid",
+        "capacity": 70,
+        "order": 17,
+        "num_checks": 28,
+        "vanilla_capacity": 70
+    },
+    "29": {
+        "area_name": "Barrier Tower",
+        "capacity": 20,
+        "order": 14,
+        "num_checks": 4,
+        "vanilla_capacity": 7
+    },
+    "31": {
+        "area_name": "North Mountain",
+        "capacity": 20,
+        "order": 5,
+        "num_checks": 3,
+        "vanilla_capacity": 6
+    },
+    "19": {
+        "area_name": "Kelb",
+        "capacity": 20,
+        "order": 8,
+        "num_checks": 2,
+        "vanilla_capacity": 6
+    },
+    "26": {
+        "area_name": "Mirage Village",
+        "capacity": 20,
+        "order": 20,
+        "num_checks": 1,
+        "vanilla_capacity": 5
+    },
+    "10": {
+        "area_name": "Istory Falls",
+        "capacity": 44,
+        "order": 20,
+        "num_checks": 17,
+        "vanilla_capacity": 44
+    },
+    "27": {
+        "area_name": "Karnak",
+        "capacity": 42,
+        "order": 7,
+        "num_checks": 19,
+        "vanilla_capacity": 42
+    },
+    "24": {
+        "area_name": "Surgate Castle",
+        "capacity": 20,
+        "order": 13,
+        "num_checks": 3,
+        "vanilla_capacity": 4
+    },
+    "2": {
+        "area_name": "Rugor",
+        "capacity": 20,
+        "order": 20,
+        "num_checks": 1,
+        "vanilla_capacity": 4
+    },
+    "23": {
+        "area_name": "Exdeath's Castle",
+        "capacity": 37,
+        "order": 16,
+        "num_checks": 16,
+        "vanilla_capacity": 37
+    },
+    "21": {
+        "area_name": "Moogle Village",
+        "capacity": 36,
+        "order": 15,
+        "num_checks": 9,
+        "vanilla_capacity": 12
+    },
+    "4": {
+        "area_name": "Kuzar",
+        "capacity": 35,
+        "order": 21,
+        "num_checks": 12,
+        "vanilla_capacity": 35
+    },
+    "8": {
+        "area_name": "Tule",
+        "capacity": 32,
+        "order": 3,
+        "num_checks": 11,
+        "vanilla_capacity": 16
+    },
+    "6": {
+        "area_name": "Solitary Island",
+        "capacity": 31,
+        "order": 19,
+        "num_checks": 14,
+        "vanilla_capacity": 31
+    },
+    "9": {
+        "area_name": "Flying Lonka Ruins",
+        "capacity": 30,
+        "order": 12,
+        "num_checks": 15,
+        "vanilla_capacity": 30
+    },
+    "20": {
+        "area_name": "Wind Shrine",
+        "capacity": 28,
+        "order": 2,
+        "num_checks": 11,
+        "vanilla_capacity": 14
+    },
+    "17": {
+        "area_name": "Tycoon Castle",
+        "capacity": 28,
+        "order": 5,
+        "num_checks": 14,
+        "vanilla_capacity": 28
+    },
+    "15": {
+        "area_name": "Walse",
+        "capacity": 27,
+        "order": 6,
+        "num_checks": 18,
+        "vanilla_capacity": 27
+    },
+    "0": {
+        "area_name": "Steamship",
+        "capacity": 24,
+        "order": 8,
+        "num_checks": 10,
+        "vanilla_capacity": 24
+    },
+    "1": {
+        "area_name": "Carwen",
+        "capacity": 20,
+        "order": 5,
+        "num_checks": 3,
+        "vanilla_capacity": 4
+    },
+    "34": {
+        "area_name": "Jacole",
+        "capacity": 20,
+        "order": 5,
+        "num_checks": 2,
+        "vanilla_capacity": 4
+    },
+    "14": {
+        "area_name": "Lix",
+        "capacity": 20,
+        "order": 10,
+        "num_checks": 1,
+        "vanilla_capacity": 2
+    },
+    "33": {
+        "area_name": "Pirate's Cave",
+        "capacity": 20,
+        "order": 1,
+        "num_checks": 6,
+        "vanilla_capacity": 7
+    },
+    "7": {
+        "area_name": "Mua",
+        "capacity": 20,
+        "order": 15,
+        "num_checks": 12,
+        "vanilla_capacity": 20
+    },
+    "18": {
+        "area_name": "Void",
+        "capacity": 20,
+        "order": 23,
+        "num_checks": 5,
+        "vanilla_capacity": 17
+    },
+    "13": {
+        "area_name": "Fork Tower",
+        "capacity": 20,
+        "order": 18,
+        "num_checks": 6,
+        "vanilla_capacity": 16
+    },
+    "28": {
+        "area_name": "Great Trench",
+        "capacity": 20,
+        "order": 20,
+        "num_checks": 6,
+        "vanilla_capacity": 14
+    },
+    "5": {
+        "area_name": "Phoenix Tower",
+        "capacity": 1000,
+        "order": 20,
+        "num_checks": 11,
+        "vanilla_capacity": 14
+    },
+    "22": {
+        "area_name": "Ship Graveyard",
+        "capacity": 20,
+        "order": 4,
+        "num_checks": 8,
+        "vanilla_capacity": 12
+    },
+    "11": {
+        "area_name": "Hiryuu Valley",
+        "capacity": 20,
+        "order": 13,
+        "num_checks": 8,
+        "vanilla_capacity": 12
+    },
+    "32": {
+        "area_name": "Ancient Library",
+        "capacity": 20,
+        "order": 9,
+        "num_checks": 5,
+        "vanilla_capacity": 11
+    },
+    "25": {
+        "area_name": "Rift",
+        "capacity": 1000,
+        "order": 22,
+        "num_checks": 17,
+        "vanilla_capacity": 49
+    }
+}

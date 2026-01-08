@@ -1,0 +1,1370 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 136,
+  "name": "Amphitheatre",
+  "area": "Norfair",
+  "subarea": "Lower",
+  "subsubarea": "East",
+  "roomAddress": "0x7B4E5",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [0, 1, 1, 1],
+    [1, 1, 1, 1],
+    [1, 1, 1, 1],
+    [1, 1, 1, 1],
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019996",
+      "doorOrientation": "left",
+      "doorEnvironments": [
+        {
+          "physics": "air",
+          "entranceNodes": [1],
+          "note": "The acid can rise above this door when entering from node 1, but it's possible to have air physics"
+        },
+        {
+          "physics": "acid",
+          "entranceNodes": [2],
+          "note": "When entering from node 2, this door is always submerged in acid"
+        }
+      ],
+      "useImplicitComeInNormally": false,
+      "useImplicitComeInWithMockball": false,
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "useImplicitDoorUnlocks": false,
+      "mapTileMask": [
+        [0, 1, 1, 1],
+        [2, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00199a2",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 2, 2, 2],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Platform Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [0, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 2, 2, 2],
+        [1, 2, 2, 2],
+        [1, 2, 2, 2]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Center Floating Platforms Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [0, 1, 1, 1],
+        [1, 2, 2, 2],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Below Left Door Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [0, 1, 1, 1],
+        [1, 1, 1, 1],
+        [2, 1, 1, 1],
+        [2, 1, 1, 1],
+        [2, 1, 1, 1]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Room Not Filled With Acid",
+      "obstacleType": "abstract",
+      "note": "Entering trough the left door means there is time before the room fills with acid."
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Amphitheatre Top Pirate",
+      "enemyName": "Yellow Space Pirate (standing)",
+      "quantity": 1,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Amphitheatre Bottom Left Acid Pirate",
+      "enemyName": "Yellow Space Pirate (standing)",
+      "quantity": 1,
+      "betweenNodes": [3, 5]
+    },
+    {
+      "id": "e3",
+      "groupName": "Amphitheatre Bottom Center Acid Pirate",
+      "enemyName": "Yellow Space Pirate (standing)",
+      "quantity": 1,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e4",
+      "groupName": "Amphitheatre Right Acid Pirates",
+      "enemyName": "Yellow Space Pirate (standing)",
+      "quantity": 2,
+      "betweenNodes": [3, 4]
+    },
+    {
+      "id": "e5",
+      "groupName": "Amphitheatre Center Platform Pirates",
+      "enemyName": "Yellow Space Pirate (standing)",
+      "quantity": 2,
+      "homeNodes": [4]
+    },
+    {
+      "id": "e6",
+      "groupName": "Amphitheatre Top Left Pirates",
+      "enemyName": "Yellow Space Pirate (standing)",
+      "quantity": 2,
+      "betweenNodes": [4, 2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 5}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "devNote": "FIXME: Add acid-filled version of the runway, and requirements to unlock the door with Missiles and Power Bombs."
+    },
+    {
+      "id": 40,
+      "link": [1, 1],
+      "name": "Land in Door Frame",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canInsaneJump",
+        {"heatFrames": 55},
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "devNote": "This would technically clear A, but depending on what is being done here, there will likely be too much acid to cross the room."
+    },
+    {
+      "id": 41,
+      "link": [1, 1],
+      "name": "Door Stuck, Open Door",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        {"heatFrames": 55},
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": "This would technically clear A, but depending on what is being done here, there will likely be too much acid to cross the room."
+    },
+    {
+      "id": 36,
+      "link": [1, 1],
+      "name": "Prepared Return Without Falling",
+      "requires": [
+        "canPrepareForNextRoom",
+        {"or": [
+          "SpaceJump",
+          "canWalljump"
+        ]},
+        {"heatFrames": 80},
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "devNote": "This would technically clear A, but depending on what is being done here, there will likely be too much acid to cross the room."
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "h_heatedCrystalFlash"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "resetsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: Add acid-filled version of the Crystal Flash, and requirements to unlock the door with Missiles and Power Bombs."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Carry G-Mode Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canConsecutiveWalljump",
+          {"and": [
+            "canJumpIntoIBJ",
+            "canLongIBJ",
+            "canDoubleBombJump",
+            "canInsaneJump"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Carry G-Mode Morph Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canArtificialMorph"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "devNote": "Artificial morph will allow Samus not to fall; real Morph is not sufficient."
+    },
+    {
+      "id": 44,
+      "link": [1, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canInsaneJump",
+          {"and": [
+            "Charge",
+            "canTrickyUseFrozenEnemies",
+            "Plasma",
+            "canTrickyJump"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Cross the room while avoiding the pirate's stationary invisible lasers.",
+        "On entry, fall to the right to land past the first pirate, then run and jump over the next pirate and continue to the top door.",
+        "It is possible but precise to cross the room without any items or a wall jump by jumping from the slightly raised platform on the right."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [1, 3],
+      "name": "Base",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"or": [
+          "ScrewAttack",
+          {"heatFrames": 60}
+        ]},
+        {"heatFrames": 300}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Falling into the room while holding right is safe at low horizontal speed.",
+        "Pirates can be shot with any weapon to prevent them from firing."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "Careful Movement",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canCarefulJump",
+        {"heatFrames": 300}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Entering with 3 tiles of run speed will let Samus pass under the ceiling and over the bottom center pirate.",
+        "Pirates can be shot with any weapon to prevent them from firing."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Careful Movement (Come in Running)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canCarefulJump",
+        {"heatFrames": 240}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Entering with 3 tiles of run speed will let Samus pass under the ceiling and over the bottom center pirate.",
+        "Pirates can be shot with any weapon to prevent them from firing."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [1, 3],
+      "name": "Fall Into Room With Mockball",
+      "entranceCondition": {
+        "comeInWithMockball": {
+          "speedBooster": "any",
+          "adjacentMinTiles": 0,
+          "remoteAndLandingMinTiles": [[0, 0]]
+        }
+      },
+      "requires": [
+        {"or": [
+          "ScrewAttack",
+          {"heatFrames": 60}
+        ]},
+        {"heatFrames": 300}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: There are better ways to fall to 3, but coming in with an unfamiliar speed could land Samus in a bad position."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [1, 4],
+      "name": "SpaceJump",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "SpaceJump",
+        {"heatFrames": 500}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 39,
+      "link": [1, 5],
+      "name": "Base",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 180}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 43,
+      "link": [1, 5],
+      "name": "Fall Into Room With Mockball",
+      "entranceCondition": {
+        "comeInWithMockball": {
+          "speedBooster": "any",
+          "adjacentMinTiles": 0,
+          "remoteAndLandingMinTiles": [[0, 0]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 180}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 10,
+      "link": [2, 2],
+      "name": "Leave With Runway (Pirate Alive)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 16,
+          "openEnd": 0,
+          "gentleUpTiles": 5
+        }
+      }
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Leave With Runway (Heatproof Pirate Kill)",
+      "requires": [
+        "h_heatProof",
+        {"enemyKill": {
+          "enemies": [["Yellow Space Pirate (standing)"]],
+          "excludedWeapons": ["Bombs"]
+        }}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 20,
+          "openEnd": 1,
+          "gentleUpTiles": 6
+        }
+      }
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Leave With Runway (Quick Suitless Pirate Kill)",
+      "requires": [
+        {"heatFrames": 220},
+        {"enemyKill": {
+          "enemies": [["Yellow Space Pirate (standing)"]],
+          "explicitWeapons": ["Super", "ScrewAttack"]
+        }}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 20,
+          "openEnd": 1,
+          "gentleUpTiles": 6
+        }
+      }
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Leave With Runway (Medium Suitless Pirate Kill)",
+      "requires": [
+        {"heatFrames": 450},
+        {"enemyKill": {
+          "enemies": [["Yellow Space Pirate (standing)"]],
+          "explicitWeapons": ["Missile", "Charge+Plasma"]
+        }}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 20,
+          "openEnd": 1,
+          "gentleUpTiles": 6
+        }
+      }
+    },
+    {
+      "id": 49,
+      "link": [2, 2],
+      "name": "Single Pirate Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          {"and": [
+            "Charge",
+            "Plasma",
+            {"cycleFrames": 230}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 185}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Yellow Space Pirate (standing)", "count": 1}]
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [2, 3],
+      "name": "Reverse, Vertical Dive",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        "canSuitlessLavaDive",
+        {"or": [
+          "SpaceJump",
+          "canTrickyJump",
+          {"and": [
+            "canLateralMidAirMorph",
+            "canCarefulJump"
+          ]},
+          {"and": [
+            "ScrewAttack",
+            "canCarefulJump"
+          ]},
+          {"and": [
+            "h_heatProof",
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]]
+            }},
+            "canCarefulJump"
+          ]}
+        ]},
+        {"heatFrames": 320},
+        {"acidFrames": 195}
+      ],
+      "note": [
+        "Dive into the acid to the left of the first floating platform to quickly sink to the bottom of the room.",
+        "It is possible to jump directly over the pirate at the bottom of the ramp directly to the gap between platforms.",
+        "Falling in this way will land between the platforms at the bottom of the room."
+      ],
+      "devNote": [
+        "It is faster to fall all the way to the bottom and then jump onto the platform to the left,",
+        "than to morph/unmorph to reset fall speed to reach it directly."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 4],
+      "name": "Reverse Partial Dive",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        "canSuitlessLavaDive",
+        {"heatFrames": 180},
+        {"acidFrames": 80}
+      ],
+      "note": "Jump over the pirate and fall straight down to land on an upper-middle floating platform."
+    },
+    {
+      "id": 17,
+      "link": [2, 5],
+      "name": "Reverse Thread the Needle (Charge Plasma)",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"notable": "Reverse Thread the Needle"},
+        {"obstaclesNotCleared": ["A"]},
+        "canInsaneJump",
+        "canSuitlessLavaDive",
+        "Charge",
+        "Plasma",
+        "canHitbox",
+        {"or": [
+          "ScrewAttack",
+          {"heatFrames": 210}
+        ]},
+        {"heatFrames": 330},
+        {"acidFrames": 210}
+      ],
+      "note": [
+        "Begin running from the top of the second slope and jump at the bottom of the third slope, bonking the large stalagtite in the ceiling.",
+        "Kill the first pirate with Screw Attack (or ahead of time with Charge+Plasma), and pass through the second pirate using a charged plasma shot.",
+        "Enter the acid while aiming down to shrink Samus' hitbox.",
+        "This strat works with all combinations of movement items and suits."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [2, 5],
+      "name": "Reverse Thread the Needle (Blue Speed)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 9,
+          "openEnd": 1,
+          "gentleDownTiles": 4
+        }
+      },
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"notable": "Reverse Thread the Needle"},
+        {"obstaclesNotCleared": ["A"]},
+        "canInsaneJump",
+        "canSuitlessLavaDive",
+        "canSlowShortCharge",
+        {"heatFrames": 330},
+        {"acidFrames": 210}
+      ],
+      "note": [
+        "Enter the room blue with very low run speed (e.g. with a 4-tap).",
+        "Use a precisely timed jump to bonk the large stalagtite in the ceiling and fall through both pirates, killing them with the blue speed.",
+        "Enter the acid while aiming down to shrink Samus' hitbox.",
+        "This strat works with all combinations of movement items and suits."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [3, 1],
+      "name": "Space Jump Acid Climb",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        "canSuitlessLavaDive",
+        "Gravity",
+        "SpaceJump",
+        {"or": [
+          {"and": [
+            {"heatFrames": 330},
+            {"acidFrames": 330}
+          ]},
+          {"and": [
+            "HiJump",
+            {"heatFrames": 220},
+            {"acidFrames": 220}
+          ]}
+        ]}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "SpaceJump diagonally towards the door through the acid.",
+      "devNote": ["FIXME: Add requirements to unlock the door with Missiles and Power Bombs."]
+    },
+    {
+      "id": 20,
+      "link": [3, 1],
+      "name": "Acid Stutter Shinespark",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        "h_heatProof",
+        "Gravity",
+        "canSuitlessLavaDive",
+        {"canShineCharge": {"usedTiles": 13, "openEnd": 1}},
+        {"shinespark": {"frames": 55}},
+        {"acidFrames": 600}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "There is just enough runway below the left door to build a shinespark.",
+      "devNote": "This strat is only used to avoid walljumping."
+    },
+    {
+      "id": 21,
+      "link": [3, 1],
+      "name": "Speedy Gravity Jump",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        "HiJump",
+        "canTrickyDashJump",
+        "canGravityJump",
+        {"enemyKill": {
+          "enemies": [["Yellow Space Pirate (standing)"]],
+          "explicitWeapons": ["ScrewAttack", "Super", "Charge+Plasma"]
+        }},
+        {"heatFrames": 240},
+        {"acidFrames": 240},
+        {"gravitylessHeatFrames": 150},
+        {"gravitylessAcidFrames": 150}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Clear the runway by killing the pirate.",
+        "Then Gravity jump after building as much run speed as possible."
+      ],
+      "devNote": ["This strat is only used to avoid walljumping."]
+    },
+    {
+      "id": 46,
+      "link": [3, 3],
+      "name": "Crystal Flash (In Acid)",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        {"heatFrames": 170},
+        {"acidFrames": 170},
+        "canHeatedCrystalFlash",
+        "h_heatedAcidCrystalFlashRefill",
+        {"heatFrames": 20},
+        {"acidFrames": 20},
+        {"or": [
+          "Gravity",
+          {"and": [
+            {"heatFrames": 5},
+            {"acidFrames": 5}
+          ]}
+        ]}
+      ],
+      "devNote": [
+        "We list the requirements explicitly rather than using the helper `h_heatedAcidCrystalFlash`",
+        "to reflect that it's possible to save some heat/acid frames with a soft morph while landing;",
+        "this makes the difference in being able to make the CF with 3 tanks with Gravity."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [3, 4],
+      "name": "Base - Space Jump",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "SpaceJump",
+        {"heatFrames": 420}
+      ]
+    },
+    {
+      "id": 22,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"or": [
+          "canCarefulJump",
+          "ScrewAttack",
+          {"enemyDamage": {
+            "enemy": "Yellow Space Pirate (standing)",
+            "type": "laser",
+            "hits": 1
+          }}
+        ]},
+        {"or": [
+          {"and": [
+            "canWalljump",
+            {"heatFrames": 420}
+          ]},
+          {"and": [
+            "HiJump",
+            {"heatFrames": 360}
+          ]},
+          {"and": [
+            "canTrickySpringBallJump",
+            {"heatFrames": 520}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 23,
+      "link": [3, 4],
+      "name": "Tricky Jump",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canInsaneJump",
+        {"heatFrames": 480}
+      ],
+      "note": "Between the two pirates there is a short runway that can be used to jump to the higher platform."
+    },
+    {
+      "id": 24,
+      "link": [3, 4],
+      "name": "Frozen Pirate",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "Charge",
+        "canTrickyUseFrozenEnemies",
+        "Plasma",
+        "canTrickyJump",
+        {"heatFrames": 440}
+      ],
+      "note": [
+        "Freeze a pirate to use as a platform. A very strong beam is required to stay out of the acid.",
+        "Shooting the Pirate with two diagonal shots can help prevent it from being killed as it is frozen."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [3, 5],
+      "name": "Acid Hop",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        "canSuitlessLavaDive",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"heatFrames": 105},
+            {"acidFrames": 105}
+          ]},
+          {"and": [
+            {"heatFrames": 170},
+            {"acidFrames": 170}
+          ]}
+        ]}
+      ],
+      "note": "Avoid the pirate while moving through the acid to get closer to the wall."
+    },
+    {
+      "id": 47,
+      "link": [3, 5],
+      "name": "Kill Pirate and Crystal Flash",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        "canSuitlessLavaDive",
+        {"or": [
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["Super", "Charge+Plasma"]
+            }}
+          ]},
+          {"enemyKill": {
+            "enemies": [["Yellow Space Pirate (standing)"]],
+            "explicitWeapons": ["Charge+Ice+Wave+Plasma"]
+          }},
+          {"and": [
+            "Gravity",
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["ScrewAttack"]
+            }}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"heatFrames": 80},
+            {"acidFrames": 80}
+          ]},
+          {"and": [
+            {"heatFrames": 130},
+            {"acidFrames": 130}
+          ]}
+        ]},
+        "h_heatedAcidCrystalFlash",
+        {"heatFrames": 35},
+        {"acidFrames": 35}
+      ],
+      "note": "Kill the Pirate and perform a Crystal Flash."
+    },
+    {
+      "id": 26,
+      "link": [4, 1],
+      "name": "Reverse SpaceJump",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        "Gravity",
+        "SpaceJump",
+        {"heatFrames": 360},
+        {"acidFrames": 360}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Land on the fourth platform from the top and build some speed to spacejump across straight to the door.",
+        "The optimal platform can be hit by simpily holding right when entering the acid."
+      ],
+      "devNote": [
+        "Includes a little bit extra frame count to drop down two platforms first.",
+        "FIXME: this lower platform could be modeled more cleanly as a separate junction node;",
+        "it would be useful as another place to Crystal Flash when traversing the room left-to-right."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"or": [
+          "canCarefulJump",
+          "canPreciseWalljump",
+          "ScrewAttack",
+          "canSpringBallJumpMidAir",
+          "SpaceJump",
+          {"enemyDamage": {
+            "enemy": "Yellow Space Pirate (standing)",
+            "type": "contact",
+            "hits": 2
+          }}
+        ]},
+        {"heatFrames": 420}
+      ],
+      "note": "Jump over or kill the final pirate in front of the door."
+    },
+    {
+      "id": 28,
+      "link": [4, 2],
+      "name": "HiJump",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "HiJump",
+        {"or": [
+          "SpeedBooster",
+          {"heatFrames": 90}
+        ]},
+        {"heatFrames": 270},
+        {"or": [
+          "canCarefulJump",
+          "canLateralMidAirMorph",
+          "ScrewAttack",
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["Charge+Ice+Wave+Spazer"]
+            }},
+            {"heatFrames": 240}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["Missile", "Charge+Plasma"]
+            }},
+            {"heatFrames": 120}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["Super"]
+            }},
+            {"heatFrames": 60}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 29,
+      "link": [4, 2],
+      "name": "Kill Pirates",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"or": [
+          {"and": [
+            {"enemyKill": {
+              "enemies": [
+                ["Yellow Space Pirate (standing)", "Yellow Space Pirate (standing)"],
+                ["Yellow Space Pirate (standing)"]
+              ],
+              "explicitWeapons": ["Charge+Ice+Wave+Spazer", "Missile"]
+            }},
+            {"heatFrames": 900}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [
+                ["Yellow Space Pirate (standing)", "Yellow Space Pirate (standing)"],
+                ["Yellow Space Pirate (standing)"]
+              ],
+              "explicitWeapons": ["Super", "Charge+Plasma"]
+            }},
+            {"heatFrames": 660}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 30,
+      "link": [4, 3],
+      "name": "Reverse Continued Dive",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"heatFrames": 180},
+            {"acidFrames": 180}
+          ]},
+          {"and": [
+            {"heatFrames": 240},
+            {"acidFrames": 240}
+          ]}
+        ]}
+      ],
+      "note": "Jump off the platform to the left with low horizontal speed and hold left to avoid landing on any pirates."
+    },
+    {
+      "id": 48,
+      "link": [4, 4],
+      "name": "Crystal Flash (Acidless)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "h_heatedCrystalFlash"
+      ],
+      "devNote": [
+        "This requires acting quickly enough that the acid does not catch Samus,",
+        "but this is not difficult to do.",
+        "A Crystal Flash could also be performed in acid here, while traversing the room right-to-left,",
+        "but it would have no benefit compared to Crystal Flashing on room entry and taking the 2->3 path.",
+        "FIXME: add another Crystal Flash strat at a junction two platforms lower,",
+        "which has a more significant movement requirement to avoid getting caught by the acid."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [5, 1],
+      "name": "Acid Wall Climb with Gravity",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        "Gravity",
+        {"or": [
+          {"and": [
+            "HiJump",
+            "canConsecutiveWalljump",
+            {"heatFrames": 150},
+            {"acidFrames": 150}
+          ]},
+          {"and": [
+            "canConsecutiveWalljump",
+            {"heatFrames": 210},
+            {"acidFrames": 210}
+          ]}
+        ]}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "Climb to the top left door while in Acid."
+    },
+    {
+      "id": 32,
+      "link": [5, 1],
+      "name": "Acid Wall Climb without Gravity",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        "canConsecutiveWalljump",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"heatFrames": 280},
+            {"acidFrames": 280}
+          ]},
+          {"and": [
+            {"heatFrames": 400},
+            {"acidFrames": 400}
+          ]}
+        ]}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "It is possible to walljump in acid without Gravity Suit."
+    },
+    {
+      "id": 33,
+      "link": [5, 1],
+      "name": "Acidless",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"or": [
+          {"and": [
+            "canConsecutiveWalljump",
+            {"heatFrames": 300}
+          ]},
+          {"and": [
+            "canConsecutiveWalljump",
+            "HiJump",
+            {"heatFrames": 240}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"heatFrames": 600}
+          ]},
+          {"and": [
+            "SpaceJump",
+            "HiJump",
+            {"heatFrames": 390}
+          ]}
+        ]}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 34,
+      "link": [5, 1],
+      "name": "Triple SpringBall Jump",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        "h_heatProof",
+        "canSuitlessLavaDive",
+        "canCrouchJump",
+        "h_doubleSpringBallJumpWithHiJump",
+        "canTrickyJump",
+        {"acidFrames": 330},
+        {"acidFrames": 1000}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Acid allows for more time than water to perform Spring Ball jumps.",
+        "This gives just barely enough time to fit in three spring ball jumps."
+      ],
+      "devNote": [
+        "This strat is only used to avoid walljumping.",
+        "1000 leniency frames for retries, and so this does not become the expected strat"
+      ]
+    },
+    {
+      "id": 35,
+      "link": [5, 1],
+      "name": "Gravity Jump SpringBall Jump",
+      "requires": [
+        {"notable": "Reverse Acid Dive"},
+        {"obstaclesNotCleared": ["A"]},
+        "HiJump",
+        "canTrickyJump",
+        "canGravityJump",
+        "h_crouchJumpDownGrab",
+        "canSpringBallJumpMidAir",
+        {"heatFrames": 600},
+        {"acidFrames": 600}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Perform a gravity jump followed by a springball jump to reach the left side door.",
+        "The gravity jump timing is very precise."
+      ],
+      "devNote": [
+        "This strat is only used to avoid walljumping.",
+        "FIXME: Gravity heat reduction is disabled for part of this strat."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [5, 5],
+      "name": "Single Pirate Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [1]}},
+        {"obstaclesCleared": ["A"]},
+        "canTrickyJump",
+        {"cycleFrames": 145},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Charge",
+            "Plasma",
+            "Wave",
+            {"cycleFrames": 60},
+            "canFarmWhileShooting"
+          ]}
+        ]},
+        {"or": [
+          "canMoonfall",
+          {"cycleFrames": 60}
+        ]},
+        {"or": [
+          {"and": [
+            "canConsecutiveWalljump",
+            {"cycleFrames": 280}
+          ]},
+          {"and": [
+            "canConsecutiveWalljump",
+            "HiJump",
+            {"cycleFrames": 220}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"cycleFrames": 580}
+          ]},
+          {"and": [
+            "SpaceJump",
+            "HiJump",
+            {"cycleFrames": 370}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Yellow Space Pirate (standing)", "count": 1}]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Reverse Acid Dive",
+      "note": "Dive into the acid and get to the doorway high on the left wall. Note that you can wall jump climb in acid without gravity."
+    },
+    {
+      "id": 2,
+      "name": "Reverse Thread the Needle",
+      "note": [
+        "Jump directly from the top door's ramp, through the pirates, to the far bottom left of the acid filled room.",
+        "Begin running from the top of the second slope and jump at the bottom of the third slope, bonking the large stalagtite in the ceiling.",
+        "Kill the first pirate with Screw Attack (or ahead of time with Charge+Plasma), and pass through the second pirate using a charged plasma shot.",
+        "Alternatively, with a very low speed shortcharge, blue speed can kill both pirates.",
+        "Enter the acid while aiming down to shrink Samus' hitbox.",
+        "This strat works with all combinations of movement items and suits."
+      ]
+    }
+  ],
+  "nextStratId": 51,
+  "nextNotableId": 3
+}

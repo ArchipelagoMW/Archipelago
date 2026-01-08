@@ -1,0 +1,539 @@
+{
+    "12": {
+        "name": "Cure"
+    },
+    "13": {
+        "name": "Scan"
+    },
+    "14": {
+        "name": "Antidote"
+    },
+    "15": {
+        "name": "Mute"
+    },
+    "16": {
+        "name": "Armor"
+    },
+    "17": {
+        "name": "Size"
+    },
+    "18": {
+        "name": "Cure2"
+    },
+    "19": {
+        "name": "Life"
+    },
+    "1A": {
+        "name": "Charm"
+    },
+    "1B": {
+        "name": "Image"
+    },
+    "1C": {
+        "name": "Shell"
+    },
+    "1D": {
+        "name": "Heal"
+    },
+    "1E": {
+        "name": "Cure3"
+    },
+    "1F": {
+        "name": "Wall"
+    },
+    "20": {
+        "name": "Berserk"
+    },
+    "21": {
+        "name": "Life2"
+    },
+    "22": {
+        "name": "Holy"
+    },
+    "23": {
+        "name": "Dispel"
+    },
+    "24": {
+        "name": "Fire"
+    },
+    "25": {
+        "name": "Ice"
+    },
+    "26": {
+        "name": "Bolt"
+    },
+    "27": {
+        "name": "Venom"
+    },
+    "28": {
+        "name": "Sleep"
+    },
+    "29": {
+        "name": "Toad"
+    },
+    "2A": {
+        "name": "Fire2"
+    },
+    "2B": {
+        "name": "Ice2"
+    },
+    "2C": {
+        "name": "Bolt2"
+    },
+    "2D": {
+        "name": "Drain"
+    },
+    "2E": {
+        "name": "Break"
+    },
+    "2F": {
+        "name": "Bio"
+    },
+    "30": {
+        "name": "Fire3"
+    },
+    "31": {
+        "name": "Ice3"
+    },
+    "32": {
+        "name": "Bolt3"
+    },
+    "33": {
+        "name": "Flare"
+    },
+    "34": {
+        "name": "Doom"
+    },
+    "35": {
+        "name": "Psych"
+    },
+    "36": {
+        "name": "Drag"
+    },
+    "37": {
+        "name": "Slow"
+    },
+    "38": {
+        "name": "Regen"
+    },
+    "39": {
+        "name": "Void"
+    },
+    "3A": {
+        "name": "Haste"
+    },
+    "3B": {
+        "name": "Float"
+    },
+    "3C": {
+        "name": "Demi"
+    },
+    "3D": {
+        "name": "Stop"
+    },
+    "3E": {
+        "name": "Exit"
+    },
+    "3F": {
+        "name": "Comet"
+    },
+    "40": {
+        "name": "Slow2"
+    },
+    "41": {
+        "name": "Reset"
+    },
+    "42": {
+        "name": "Quarter"
+    },
+    "43": {
+        "name": "Haste2"
+    },
+    "44": {
+        "name": "Old"
+    },
+    "45": {
+        "name": "Meteo"
+    },
+    "46": {
+        "name": "Quick"
+    },
+    "47": {
+        "name": "XZone"
+    },
+    "48": {
+        "name": "Chocobo"
+    },
+    "49": {
+        "name": "Sylph"
+    },
+    "4A": {
+        "name": "Remora"
+    },
+    "4B": {
+        "name": "Shiva"
+    },
+    "4C": {
+        "name": "Ramuh"
+    },
+    "4D": {
+        "name": "Ifrit"
+    },
+    "4E": {
+        "name": "Titan"
+    },
+    "4F": {
+        "name": "Golem"
+    },
+    "50": {
+        "name": "Shoat"
+    },
+    "51": {
+        "name": "Carbuncle"
+    },
+    "52": {
+        "name": "Syldra"
+    },
+    "53": {
+        "name": "Odin"
+    },
+    "54": {
+        "name": "Phoenix"
+    },
+    "55": {
+        "name": "Leviathan"
+    },
+    "56": {
+        "name": "Bahamut"
+    },
+    "80": {
+        "name": "Fight"
+    },
+    "81": {
+        "name": "Specialty"
+    },
+    "82": {
+        "name": "Condemn"
+    },
+    "83": {
+        "name": "Roulette"
+    },
+    "84": {
+        "name": "AquaRake"
+    },
+    "85": {
+        "name": "L5"
+    },
+    "86": {
+        "name": "L4"
+    },
+    "87": {
+        "name": "L2"
+    },
+    "88": {
+        "name": "L3"
+    },
+    "89": {
+        "name": "FrogSong"
+    },
+    "8A": {
+        "name": "TinySong"
+    },
+    "8B": {
+        "name": "Flash"
+    },
+    "8C": {
+        "name": "Time"
+    },
+    "8D": {
+        "name": "Moonflute"
+    },
+    "8E": {
+        "name": "DeathClaw"
+    },
+    "8F": {
+        "name": "Aero"
+    },
+    "90": {
+        "name": "Aero2"
+    },
+    "91": {
+        "name": "Aero3"
+    },
+    "92": {
+        "name": "Emission"
+    },
+    "93": {
+        "name": "GoblinPunch"
+    },
+    "94": {
+        "name": "DarkShock"
+    },
+    "95": {
+        "name": "GuardOff"
+    },
+    "96": {
+        "name": "Fusion"
+    },
+    "97": {
+        "name": "MindBlast"
+    },
+    "98": {
+        "name": "Vampire"
+    },
+    "99": {
+        "name": "MagicHammer"
+    },
+    "9A": {
+        "name": "MightyGuard"
+    },
+    "9B": {
+        "name": "Exploder"
+    },
+    "9C": {
+        "name": "Question"
+    },
+    "9D": {
+        "name": "Blowfish"
+    },
+    "9E": {
+        "name": "WhiteWind"
+    },
+    "9F": {
+        "name": "Missile"
+    },
+    "A0": {
+        "name": "Kurururu"
+    },
+    "A1": {
+        "name": "Level"
+    },
+    "A2": {
+        "name": "Escape"
+    },
+    "A3": {
+        "name": "Stalker"
+    },
+    "A4": {
+        "name": "Byblos"
+    },
+    "A5": {
+        "name": "No"
+    },
+    "A6": {
+        "name": "GrandCross"
+    },
+    "A7": {
+        "name": "DeltaAttack"
+    },
+    "A8": {
+        "name": "InterceptorRocket"
+    },
+    "A9": {
+        "name": "BarrierChange"
+    },
+    "AA": {
+        "name": "Nothing"
+    },
+    "AB": {
+        "name": "WindSlash"
+    },
+    "AC": {
+        "name": "NoDamage"
+    },
+    "AD": {
+        "name": "Targeting"
+    },
+    "AE": {
+        "name": "Gravity"
+    },
+    "AF": {
+        "name": "Darkness"
+    },
+    "B0": {
+        "name": "ReaperSword"
+    },
+    "B1": {
+        "name": "Punishment"
+    },
+    "B2": {
+        "name": "Blaster"
+    },
+    "B3": {
+        "name": "Beak"
+    },
+    "B4": {
+        "name": "Hug"
+    },
+    "B5": {
+        "name": "Spore"
+    },
+    "B6": {
+        "name": "PoisonBreath"
+    },
+    "B7": {
+        "name": "DanceoftheDead"
+    },
+    "B8": {
+        "name": "ZombiePowder"
+    },
+    "B9": {
+        "name": "ZombieBreath"
+    },
+    "BA": {
+        "name": "Spirit"
+    },
+    "BB": {
+        "name": "Allure"
+    },
+    "BC": {
+        "name": "Entangle"
+    },
+    "BD": {
+        "name": "RainbowWind"
+    },
+    "BE": {
+        "name": "StrangeDance"
+    },
+    "BF": {
+        "name": "ElectromagneticField"
+    },
+    "C0": {
+        "name": "WhiteHole"
+    },
+    "C1": {
+        "name": "Needle"
+    },
+    "C2": {
+        "name": "Maelstrom"
+    },
+    "C3": {
+        "name": "Bone"
+    },
+    "C4": {
+        "name": "Tailscrew"
+    },
+    "C5": {
+        "name": "StomachAcid"
+    },
+    "C6": {
+        "name": "RocketPunch"
+    },
+    "C7": {
+        "name": "MustardBomb"
+    },
+    "C8": {
+        "name": "Almagest"
+    },
+    "C9": {
+        "name": "Quicksand"
+    },
+    "CA": {
+        "name": "AtomicRay"
+    },
+    "CB": {
+        "name": "MiniBlaze"
+    },
+    "CC": {
+        "name": "Snowstorm"
+    },
+    "CD": {
+        "name": "Blaze"
+    },
+    "CE": {
+        "name": "ElectricShock"
+    },
+    "CF": {
+        "name": "EarthShaker"
+    },
+    "D0": {
+        "name": "TrueEdge"
+    },
+    "D1": {
+        "name": "TidalWave"
+    },
+    "D2": {
+        "name": "MegaFlare"
+    },
+    "D3": {
+        "name": "SonicWave"
+    },
+    "D4": {
+        "name": "Thread"
+    },
+    "D5": {
+        "name": "Mucus"
+    },
+    "D6": {
+        "name": "Quake"
+    },
+    "D7": {
+        "name": "StrongFight"
+    },
+    "D8": {
+        "name": "Medicine"
+    },
+    "D9": {
+        "name": "Image2"
+    },
+    "DA": {
+        "name": "BreathWing"
+    },
+    "DB": {
+        "name": "Flame"
+    },
+    "DC": {
+        "name": "Thunder"
+    },
+    "DD": {
+        "name": "SurgeBeam"
+    },
+    "DE": {
+        "name": "Fight2"
+    },
+    "DF": {
+        "name": "Remedy"
+    },
+    "E0": {
+        "name": "ValiantAttack"
+    },
+    "E1": {
+        "name": "GigaFlare"
+    },
+    "E2": {
+        "name": "Circle"
+    },
+    "E3": {
+        "name": "Wormhole"
+    },
+    "E4": {
+        "name": "Possess"
+    },
+    "E5": {
+        "name": "Dynamo"
+    },
+    "E6": {
+        "name": "Magnet"
+    },
+    "E7": {
+        "name": "ReversePolarity"
+    },
+    "E8": {
+        "name": "Jump"
+    },
+    "E9": {
+        "name": "XZone2"
+    },
+    "EA": {
+        "name": "Hurricane"
+    },
+    "EB": {
+        "name": "DemonEye"
+    },
+    "EC": {
+        "name": "Pull"
+    },
+    "ED": {
+        "name": "Terminate"
+    }
+}

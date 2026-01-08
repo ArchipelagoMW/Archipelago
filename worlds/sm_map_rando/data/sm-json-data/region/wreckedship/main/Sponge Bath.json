@@ -1,0 +1,1296 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 164,
+  "name": "Sponge Bath",
+  "area": "Wrecked Ship",
+  "subarea": "Main",
+  "roomAddress": "0x7CD5C",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a2d0",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a2dc",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Sponge Bath Bull",
+      "enemyName": "Bull",
+      "quantity": 1,
+      "homeNodes": [1, 2],
+      "spawn": ["f_DefeatedPhantoon"]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave with Runway, Full Length",
+      "requires": [
+        {"or": [
+          "Gravity",
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 21,
+          "openEnd": 0,
+          "steepUpTiles": 3
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Stutter Water Shinecharge, Leave With Spark (Bottom)",
+      "requires": [
+        {"or": [
+          "f_DefeatedPhantoon",
+          {"canShineCharge": {"usedTiles": 21, "steepUpTiles": 3, "openEnd": 0}}
+        ]},
+        "canStutterWaterShineCharge",
+        "canShinechargeMovementComplex",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 20}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "If Phantoon is defeated, start at least 2 tiles from the water line, and stutter just before entering it in order to charge a spark in room.",
+      "devNote": "Using the dry runway and leaving with shinecharged would require canRiskPermanentLossOfAccess."
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Stutter Water Shinecharge, Leave With Spark",
+      "requires": [
+        {"or": [
+          "f_DefeatedPhantoon",
+          {"canShineCharge": {"usedTiles": 21, "steepUpTiles": 3, "openEnd": 0}}
+        ]},
+        "canStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canWalljump",
+        {"or": [
+          "canSpaceJumpWaterBounce",
+          "HiJump"
+        ]},
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 29}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "If Phantoon is defeated, start at least 2 tiles from the water line, and stutter just before entering it in order to charge a spark in room.",
+      "devNote": "Using the dry runway and leaving with shinecharged would require canRiskPermanentLossOfAccess."
+    },
+    {
+      "id": 62,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (Precise Stutter Shinecharge)",
+      "requires": [
+        {"or": [
+          "f_DefeatedPhantoon",
+          {"canShineCharge": {"usedTiles": 21, "steepUpTiles": 3, "openEnd": 0}}
+        ]},
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 150},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "note": [
+        "Either kill the Bull or shoot it to force it to move to the right side of the room.",
+        "Starting from inside the doorway, using the full runway, run toward the water;",
+        "ideally, release forward for between 4 and 6 frames before re-pressing it on the last possible frame before entering the water.",
+        "Other positions and timings can work but will gain the shinecharge further from the door."
+      ],
+      "detailNote": [
+        "Depending on subpixels and the exact timing of the stutter, Samus may fall off the stairs.",
+        "Good subpixels can be obtained by pressing against the door (or the wall above it) before turning around and moonwalking back,",
+        "stopping at either of the two possible positions on the last pixel before Samus would touch the transition."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Bull Farm",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"or": [
+          "ScrewAttack",
+          "canPseudoScrew",
+          "Plasma",
+          "Grapple",
+          {"and": [
+            "h_useMorphBombs",
+            "canFarmWhileShooting",
+            {"cycleFrames": 200}
+          ]}
+        ]},
+        {"resetRoom": {"nodes": [1]}},
+        {"cycleFrames": 150}
+      ],
+      "farmCycleDrops": [{"enemy": "Bull", "count": 1}]
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Bull",
+      "requires": [
+        "f_DefeatedPhantoon"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Bull", "type": "contact", "hits": 1}},
+        "f_DefeatedPhantoon"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Gravity",
+          "SpaceJump"
+        ]}
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Ship Unpowered",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "HiJump",
+      "requires": [
+        "HiJump",
+        "canWalljump"
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Bull Boost",
+      "requires": [
+        {"notable": "Bull Boost"},
+        "canSuitlessMaridia",
+        "HiJump",
+        "canUseEnemies",
+        "canNeutralDamageBoost",
+        "canCrouchJump",
+        "Morph",
+        {"enemyDamage": {"enemy": "Bull", "type": "contact", "hits": 1}}
+      ],
+      "note": "Position the Bull with beam shots before jumping into it."
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Bomb Jump",
+      "requires": [
+        "canBombJumpWaterEscape"
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Midair SpringBall",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallJump"
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Shinespark, Come in Charging",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 7, "excessFrames": 2}}
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Shinespark, Come in Charging, Water Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 10,
+          "openEnd": 0,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        {"shinespark": {"frames": 7, "excessFrames": 2}}
+      ],
+      "devNote": "The 17 submerged tiles behave as 7 tiles with high run speed. The 3 steep down tiles behave as approximately 1."
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "Shinespark, Come in Charged",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 30},
+        "canMidairShinespark",
+        {"shinespark": {"frames": 39, "excessFrames": 10}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [1, 2],
+      "name": "Exterior Speedjump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canSuitlessMaridia",
+        "canCarefulJump",
+        {"or": [
+          "canWalljump",
+          "HiJump"
+        ]}
+      ],
+      "note": "Requires at least 3 tiles to work, but some longer lengths don't work."
+    },
+    {
+      "id": 61,
+      "link": [1, 2],
+      "name": "Cross-Room Wall-Jumpless Speedy Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 18
+        }
+      },
+      "requires": [
+        "canCarefulJump"
+      ],
+      "note": "Jump while in the water, after passing the Bull."
+    },
+    {
+      "id": 19,
+      "link": [1, 2],
+      "name": "Cross-Room Wall-Jumpless Tricky Dash Jump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 14.4375
+        }
+      },
+      "requires": [
+        "canTrickyDashJump"
+      ],
+      "note": [
+        "Requires a very precise runway length in the previous room of 15 tiles with no open end.",
+        "Jump while under or to the right of the Bull.",
+        "Samus's speed no longer changes once hitting the water, so the jump is very forgiving, while the runway length is not."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 2],
+      "name": "In-Room Speedjump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickyDashJump",
+        "canWalljump"
+      ],
+      "note": "It doesn't work from flush against the door. Start moving about half a tile away from it."
+    },
+    {
+      "id": 64,
+      "link": [1, 2],
+      "name": "G-Mode Morph Spring Ball IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphJumpIntoIBJ",
+        {"tech": "canBombJumpWaterEscape"}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Kill the Bull with bombs, by switching between the high and low ground. Rapidly place bombs while rolling slowly.",
+        "Place the first bomb on the descent, just below the waterline."
+      ],
+      "devNote": "FIXME: This might be possible with a Power Bomb and an unmorph, but it would only have one attempt."
+    },
+    {
+      "id": 21,
+      "link": [1, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 4, "excessFrames": 2}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [1, 2],
+      "name": "Ceiling Bomb Jump",
+      "requires": [
+        "canCeilingBombJump"
+      ],
+      "devNote": "It is possible with a low vertical diagonal bomb jump, or a double HBJ, but those aren't tech yet."
+    },
+    {
+      "id": 23,
+      "link": [1, 2],
+      "name": "G-mode Morph Ceiling Bomb Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphCeilingBombJump"
+      ],
+      "flashSuitChecked": true,
+      "note": "Kill the Bull with bombs, by switching between the high and low ground. Rapidly place bombs while rolling slowly.",
+      "devNote": "It is possible with a low vertical diagonal bomb jump, or a double HBJ, but those aren't tech yet."
+    },
+    {
+      "id": 24,
+      "link": [1, 2],
+      "name": "Stutter Water Shinecharge",
+      "requires": [
+        "canStutterWaterShineCharge",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 7, "excessFrames": 2}}
+      ],
+      "note": "If Phantoon is defeated, start at least 2 tiles from the water line, and stutter just before entering it in order to charge a spark in room."
+    },
+    {
+      "id": 25,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (Gravity or Phantoon Alive)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 19,
+          "openEnd": 0,
+          "steepDownTiles": 3
+        }
+      },
+      "requires": [
+        {"or": [
+          "Gravity",
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]},
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 70}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "One runway tile is considered unusable, in order to allow a quick jump up without needing to turn around."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged (HiJump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 10,
+          "openEnd": 0,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        "canWaterShineCharge",
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 100}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "The 17 submerged tiles behave as 7 tiles with high run speed. The 3 steep down tiles behave as approximately 1."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [1, 2],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 110},
+        "Gravity",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 28,
+      "link": [1, 2],
+      "name": "Carry Shinecharge (HiJump, Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 160},
+        "canShinechargeMovementComplex",
+        "HiJump",
+        "canWalljump"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 29,
+      "link": [1, 2],
+      "name": "Come in Shinecharged, Leave with Spark (Space Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 150},
+        "SpaceJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 9}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "If needed, shoot the Bull to prevent it from blocking Samus' path."
+    },
+    {
+      "id": 30,
+      "link": [1, 2],
+      "name": "Stutter Water Shinecharge, Leave Shinecharged (SpaceJump)",
+      "requires": [
+        {"or": [
+          "f_DefeatedPhantoon",
+          {"canShineCharge": {"usedTiles": 20, "steepDownTiles": 3, "openEnd": 0}}
+        ]},
+        "canStutterWaterShineCharge",
+        "canShinechargeMovementComplex",
+        "canWalljump",
+        "canSpaceJumpWaterBounce",
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "If Phantoon is defeated, start at least 2 tiles from the water line, and stutter just before entering it in order to shinecharge in room.",
+      "devNote": "Using the dry runway and leaving with shinecharged with more frames would require canRiskPermanentLossOfAccess."
+    },
+    {
+      "id": 31,
+      "link": [1, 2],
+      "name": "Stutter Water Shinecharge, Leave Shinecharged (HiJump)",
+      "requires": [
+        {"or": [
+          "f_DefeatedPhantoon",
+          {"canShineCharge": {"usedTiles": 20, "steepDownTiles": 3, "openEnd": 0}}
+        ]},
+        "canStutterWaterShineCharge",
+        "canShinechargeMovementComplex",
+        "canWalljump",
+        "HiJump",
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 95}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "If Phantoon is defeated, start at least 2 tiles from the water line, and stutter just before entering it in order to shinecharge in room.",
+      "devNote": "Using the dry runway and leaving with shinecharged with more frames would require canRiskPermanentLossOfAccess."
+    },
+    {
+      "id": 32,
+      "link": [1, 2],
+      "name": "Leave Spinning",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]},
+          "Gravity"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 15,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$1.6"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 33,
+      "link": [1, 2],
+      "name": "Leave Spinning (Door Open)",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]},
+          "Gravity"
+        ]},
+        {"doorUnlockedAtNode": 1}
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 16,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$1.6"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 34,
+      "link": [1, 2],
+      "name": "Leave With Mockball",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]},
+          "Gravity"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 15,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 2,
+            "openEnd": 1
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": "Longer landing runway could be used but would be difficult at high run speeds."
+    },
+    {
+      "id": 35,
+      "link": [1, 2],
+      "name": "Leave With Mockball (Open Door)",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]},
+          "Gravity"
+        ]},
+        {"doorUnlockedAtNode": 1}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 16,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 2,
+            "openEnd": 1
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": "Longer landing runway could be used but would be difficult at high run speeds."
+    },
+    {
+      "id": 36,
+      "link": [1, 2],
+      "name": "Leave Space Jumping",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]},
+          "Gravity"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 15,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$1.8"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 37,
+      "link": [1, 2],
+      "name": "Leave Space Jumping (Door Open)",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]},
+          "Gravity"
+        ]},
+        {"doorUnlockedAtNode": 1}
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 16,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$1.8"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 38,
+      "link": [1, 2],
+      "name": "Leave With Temporary Blue (Gravity or Power Off)",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]},
+          "Gravity"
+        ]},
+        {"canShineCharge": {"usedTiles": 19, "steepDownTiles": 3, "openEnd": 0}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 39,
+      "link": [1, 2],
+      "name": "Leave With Temporary Blue (Stutter Water Shinecharge Spring Ball Jump)",
+      "requires": [
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Bull"]]
+          }},
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]},
+          "canTrickyJump"
+        ]},
+        "canStutterWaterShineCharge",
+        "h_getBlueSpeedMaxRunway",
+        "canTrickySpringBallJump",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "If possible (and applicable), kill the Bull ahead of time, and do a shinecharge to gain temporary blue.",
+        "Otherwise, shoot the Bull to get it out of the way;",
+        "then, after getting blue speed with a stutter water shinecharge, jump directly into a spring ball jump rather than shinecharging first."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 41,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 1,
+          "steepUpTiles": 2
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "To maximize frames remaining, gain a shinecharge while sliding off the ledge into the water."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 130},
+        "Gravity",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter the room with a shinecharge.",
+        "Run and jump over the Bull (if power is on), and carry the shinecharge into the next room."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (SpaceJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 135},
+        "SpaceJump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter the room with a shinecharge.",
+        "Use Space Jump to run and jump over the Bull and water (if power is on), and carry the shinecharge into the next room."
+      ]
+    },
+    {
+      "id": 44,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Leave with Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 75},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 25}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter the room with a shinecharge.",
+        "Run and jump over the Bull (if power is on).",
+        "Fire a shot mid-air, and activate the shinespark wind-up.",
+        "Wait to spark until the shot as reached the door."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [2, 1],
+      "name": "Hero Shot Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 60},
+        "canShinechargeMovementTricky",
+        "canHeroShot",
+        {"or": [
+          {"enemyDamage": {"enemy": "Bull", "type": "contact", "hits": 1}},
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]},
+        {"shinespark": {"frames": 32}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter the room with a shinecharge.",
+        "Run and jump off the ledge.",
+        "Fire a shot mid-air and activate the shinespark wind-up.",
+        "Take a hit from the the Bull (if power is on).",
+        "Wait until the shot is at a specific position before sparking.",
+        "Sparking too late will cause the shot to despawn before reaching the door.",
+        "Sparking too early will cause Samus to bonk the door as it will not yet be open.",
+        "A beam shot, Missile, or Super can be used."
+      ]
+    },
+    {
+      "id": 46,
+      "link": [2, 1],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 1,
+            "steepDownTiles": 2
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 47,
+      "link": [2, 1],
+      "name": "Leave Spinning (Space Jump, Door Open)",
+      "requires": [
+        "SpaceJump",
+        {"doorUnlockedAtNode": 2}
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 9,
+            "openEnd": 1,
+            "steepUpTiles": 2
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 48,
+      "link": [2, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 1,
+            "steepUpTiles": 2
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 49,
+      "link": [2, 1],
+      "name": "Leave With Mockball (Door Open)",
+      "requires": [
+        {"doorUnlockedAtNode": 2}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 9,
+            "openEnd": 1,
+            "steepUpTiles": 2
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 50,
+      "link": [2, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 1,
+            "steepUpTiles": 2
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 51,
+      "link": [2, 1],
+      "name": "Leave Space Jumping (Door Open)",
+      "requires": [
+        {"doorUnlockedAtNode": 2}
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 9,
+            "openEnd": 1,
+            "steepUpTiles": 2
+          }
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 52,
+      "link": [2, 1],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 8,
+          "openEnd": 1,
+          "steepUpTiles": 2
+        }
+      },
+      "requires": [
+        "canSpeedball"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Jump at the end of the runway to kill the Bull with blue speed, or jump over it.",
+        "Then gain a speedball to approach the door with temporary blue."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 54,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 55,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 56,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 9,
+          "openEnd": 1,
+          "steepDownTiles": 2
+        }
+      }
+    },
+    {
+      "id": 63,
+      "link": [2, 2],
+      "name": "Leave Shinecharged (Gravity or Phantoon Alive)",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 19, "steepDownTiles": 3, "openEnd": 0}},
+        {"or": [
+          "Gravity",
+          {"and": [
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]},
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 70}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "One runway tile is considered unusable, in order to allow a quick jump up without needing to turn around."
+      ]
+    },
+    {
+      "id": 57,
+      "link": [2, 2],
+      "name": "Bull Farm",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"or": [
+          "ScrewAttack",
+          "canPseudoScrew",
+          "Plasma",
+          "Grapple",
+          {"and": [
+            "h_useMorphBombs",
+            "canInsaneJump",
+            {"cycleFrames": 510}
+          ]}
+        ]},
+        {"resetRoom": {"nodes": [2]}},
+        {"cycleFrames": 155}
+      ],
+      "farmCycleDrops": [{"enemy": "Bull", "count": 1}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 58,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 59,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Bull",
+      "requires": [
+        "f_DefeatedPhantoon"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 60,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Bull", "type": "contact", "hits": 1}},
+        "f_DefeatedPhantoon"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Bull Boost",
+      "note": "Position the Bull with beam shots before jumping into it."
+    }
+  ],
+  "nextStratId": 65,
+  "nextNotableId": 2
+}

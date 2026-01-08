@@ -1,0 +1,2 @@
+orjson>=3.9.10
+requests~=2.32.3

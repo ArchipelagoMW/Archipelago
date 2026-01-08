@@ -1,0 +1,1037 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 33,
+  "name": "Pancakes and Wavers Room",
+  "area": "Crateria",
+  "subarea": "East",
+  "roomAddress": "0x79461",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018a12",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018a1e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Pancakes and Wavers Wavers",
+      "enemyName": "Waver",
+      "quantity": 3,
+      "homeNodes": [1, 2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Pancakes and Wavers Choots",
+      "enemyName": "Choot",
+      "quantity": 3,
+      "homeNodes": [1]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1,
+          "steepUpTiles": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave with Runway, With Gravity",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1,
+          "steepUpTiles": 2
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Choot",
+      "requires": [
+        "h_frozenEnemyRunway",
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 12,
+          "openEnd": 1,
+          "steepUpTiles": 4,
+          "steepDownTiles": 2
+        }
+      },
+      "note": "Freeze the Choot near the end of its descent or immediately after it jumps in order to be able to run onto and off of it without a problem."
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Runway, Suitless - Frozen Choot",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 1,
+          "steepUpTiles": 2,
+          "steepDownTiles": 1
+        }
+      },
+      "note": "Freeze the Choot near the end of its descent or immediately after it jumps in order to be able to run onto and off of it without a problem.",
+      "devNote": "The submerged tiles don't contribute to the runway length."
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Double Frozen Choot Runway (Left)",
+      "requires": [
+        {"notable": "Double Frozen Choot Runway"},
+        "h_trickyFrozenEnemyRunway",
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 19,
+          "openEnd": 1,
+          "steepUpTiles": 6,
+          "steepDownTiles": 4
+        }
+      },
+      "note": [
+        "Freeze two Choots to significantly increase the length of the runway.",
+        "Freeze each near the end of its descent or immediately after it jumps in order to be able to run onto and off of it without a problem.",
+        "Standing between two Choots then precisely timing a crouched angle shot can help with the timing. A buffered X-Ray shot may also help."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Double Frozen Choot Runway, Suitless (Left)",
+      "requires": [
+        {"notable": "Double Frozen Choot Runway"},
+        "h_trickyFrozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 9,
+          "openEnd": 1,
+          "steepUpTiles": 3,
+          "steepDownTiles": 2
+        }
+      },
+      "note": [
+        "Freeze two Choots to significantly increase the length of the runway.",
+        "Freeze each near the end of its descent or immediately after it jumps in order to be able to run onto and off of it without a problem.",
+        "Standing between two Choots then precisely timing a crouched angle shot can help with the timing. A buffered X-Ray shot may also help."
+      ],
+      "devNote": "The submerged tiles don't contribute to the runway length."
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Triple Frozen Choot Runway (Left)",
+      "requires": [
+        {"notable": "Triple Frozen Choot Runway"},
+        "h_trickyFrozenEnemyRunway",
+        "Gravity",
+        "canInsaneJump",
+        {"enemyDamage": {"enemy": "Choot", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 28,
+          "openEnd": 0,
+          "steepUpTiles": 6,
+          "steepDownTiles": 6
+        }
+      },
+      "note": [
+        "Freeze all three Choots to significantly increase the length of the runway and run across the entire room.",
+        "Freeze each immediately after it jumps in order to be able to run onto and off of it without a problem.",
+        "Jump between two of them and wait for them to fall and start to rise again, taking one Choot hit in the process.",
+        "This will give Samus just enough time to shoot them both and jump and freeze the third and barely be able to use the runway before they thaw.",
+        "With this runway, Samus can then get a suitless, in-room shinecharge, with just a 1-tap."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Triple Frozen Choot Runway, Suitless (Left)",
+      "requires": [
+        {"notable": "Triple Frozen Choot Runway"},
+        "h_trickyFrozenEnemyRunway",
+        "canInsaneJump",
+        {"enemyDamage": {"enemy": "Choot", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 15,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Freeze all three Choots to significantly increase the length of the runway and run across the entire room.",
+        "Freeze each immediately after it jumps in order to be able to run onto and off of it without a problem.",
+        "Jump between two of them and wait for them to fall and start to rise again, taking one Choot hit in the process.",
+        "This will give Samus just enough time to shoot them both and jump and freeze the third and barely be able to use the runway before they thaw.",
+        "With this runway, Samus can then get a suitless, in-room shinecharge, with just a 1-tap."
+      ],
+      "devNote": [
+        "The submerged tiles don't contribute to the runway length.",
+        "Although there is a longer runway available for shinecharging, this is an equivalent for how fast Samus can leave the room.",
+        "It shouldn't be a problem, as this length should be enough for shinecharging at this difficulty."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Waver and Choot Farm (Both Doors)",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 990}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 620}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 920}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 1010}
+          ]},
+          {"and": [
+            {"or": [
+              "canDodgeWhileShooting",
+              "Ice"
+            ]},
+            {"cycleFrames": 1740}
+          ]},
+          {"and": [
+            "canUseGrapple",
+            {"cycleFrames": 740}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Waver", "count": 6},
+        {"enemy": "Choot", "count": 6}
+      ]
+    },
+    {
+      "id": 43,
+      "link": [1, 1],
+      "name": "Waver and Choot Farm (Single Door)",
+      "requires": [
+        {"resetRoom": {"nodes": [1, 2]}},
+        {"cycleFrames": 100},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 495}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 310}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 460}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 505}
+          ]},
+          {"and": [
+            {"or": [
+              "canDodgeWhileShooting",
+              "Ice"
+            ]},
+            {"cycleFrames": 870}
+          ]},
+          {"and": [
+            "canUseGrapple",
+            {"cycleFrames": 370}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Waver", "count": 3},
+        {"enemy": "Choot", "count": 3}
+      ],
+      "devNote": [
+        "The 100 extra cycleFrames is an average extra time needed to return back to the entry door rather than continuing to the opposite door.",
+        "For simplicity, the weapon-specific cycleFrames are exactly half those in the 'Both Doors' variant,",
+        "even though technically some weapons may be affected slightly more than others by having to use a specific door."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get hit by Waver",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 12,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Plasma Hero Shot Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 40},
+        "Plasma",
+        "canHeroShot",
+        "canShinechargeMovementTricky",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 37}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["super"],
+          "requires": [],
+          "devNote": "FIXME: Using a Super seems extremely awkward but possible; add a higher-level tech requirement here."
+        },
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Fire a Plasma shot while running into the room, jump and activate the shinespark wind-up mid-air.",
+        "Wait to spark right until just as the Plasma shot goes off screen."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Come in Shinecharged, Damage Boost",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 140},
+        "canShinechargeMovementTricky",
+        "canHorizontalDamageBoost",
+        "canTrickyJump",
+        "canUseIFrames",
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use a Waver to damage boost across part of the room, then pass through any remaining enemies while i-frames are active.",
+        "Killing the first waver and damage boosting with the second may be easier."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1,
+          "steepDownTiles": 2
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 15}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Gain a shinecharge while entering the room.",
+        "Move quickly to the right, either dodging the enemies or using them to damage boost.",
+        "Shoot open the door and spark through."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [1, 2],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 4,
+          "openEnd": 1,
+          "steepDownTiles": 2
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        "h_trickyFrozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Freeze each of the three Choot enemies at the correct pixel height to walk across the room.",
+        "Be careful about taking damage or falling on slopes."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [1, 2],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        "h_trickyFrozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Freeze each of the three Choot enemies at the correct pixel height to walk across the room.",
+        "Be careful about taking damage or falling on slopes."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Leave With Spark (Come In Shinecharged, Plasma)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 70},
+        "Plasma",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 24}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["super"],
+          "requires": [],
+          "devNote": "FIXME: Using a Super seems very awkward but possible; add a higher-level tech requirement here."
+        },
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run into the room, and just before Samus would run into the water, fire a Plasma shot and make a big jump across the room.",
+        "The shot should clear the enemies and open the door.",
+        "Activate the shinespark mid-air."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Leave With Spark (Come In Shinecharged, ScrewAttack)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "ScrewAttack",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 24}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run and jump through the room with Screw Attack.",
+        "As the door starts to come on camera, shoot it open, carefully avoiding enemies from blocking the shot.",
+        "Jump and activate the shinespark mid-air."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Plasma Hero Shot Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 40},
+        "Plasma",
+        "canHeroShot",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 28}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["super"],
+          "requires": [],
+          "devNote": "FIXME: Using a Super seems extremely awkward but possible; add a higher-level tech requirement here."
+        },
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run into the room, and fire a Plasma shot.",
+        "Depending on the vertical position needed for the spark, either stop on a dime and activate the shinespark from the ground, or continue running and jump into a midair shinespark.",
+        "Wait to spark until just as the Plasma shot goes off screen."
+      ]
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Shinecharged DamageBoost",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 150},
+        "canShinechargeMovementTricky",
+        "canHorizontalDamageBoost",
+        "canTrickyJump",
+        "canUseIFrames",
+        {"enemyDamage": {"enemy": "Choot", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump into the Choot to damage boost across part of the room, then pass through any remaining enemies while i-frames are active."
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave With Spark (Plasma or ScrewAttack)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 1,
+          "steepDownTiles": 2
+        }
+      },
+      "requires": [
+        {"or": [
+          "Plasma",
+          "ScrewAttack"
+        ]},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 9}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Gain a shinecharge while entering the room.",
+        "Move quickly to the left, using Plasma or Screw Attack to avoid being hit by enemies.",
+        "Shoot open the door and spark through."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave With Spark (Dodge Enemies)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 1,
+          "steepDownTiles": 2
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 9}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Gain a shinecharge while entering the room.",
+        "Move quickly to the left, dodging the enemies.",
+        "Shoot open the door and spark through."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 1],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 8,
+          "openEnd": 1,
+          "steepDownTiles": 2
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        "h_trickyFrozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Freeze each of the three Choot enemies at the correct pixel height to walk across the room.",
+        "Be careful about taking damage or falling on slopes."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        "h_trickyFrozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Freeze each of the three Choot enemies at the correct pixel height to walk across the room.",
+        "Be careful about taking damage or falling on slopes."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1,
+          "steepUpTiles": 1
+        }
+      }
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Leave with Runway, With Gravity",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 9,
+          "openEnd": 1,
+          "steepUpTiles": 2
+        }
+      }
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "Leave With Runway - Frozen Choot",
+      "requires": [
+        "h_frozenEnemyRunway",
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 16,
+          "openEnd": 1,
+          "steepUpTiles": 4,
+          "steepDownTiles": 2
+        }
+      },
+      "note": "Freeze the Choot near the end of its descent or immediately after it jumps in order to be able to run onto and off of it without a problem."
+    },
+    {
+      "id": 34,
+      "link": [2, 2],
+      "name": "Leave With Runway, Suitless - Frozen Choot",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 11,
+          "openEnd": 1,
+          "steepUpTiles": 2,
+          "steepDownTiles": 1
+        }
+      },
+      "note": "Freeze the Choot near the end of its descent or immediately after it jumps in order to be able to run onto and off of it without a problem.",
+      "devNote": "The submerged tiles don't contribute to the runway length."
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "Double Frozen Choot Runway (Right)",
+      "requires": [
+        {"notable": "Double Frozen Choot Runway"},
+        "h_trickyFrozenEnemyRunway",
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 23,
+          "openEnd": 1,
+          "steepUpTiles": 6,
+          "steepDownTiles": 4
+        }
+      },
+      "note": [
+        "Freeze two Choots to significantly increase the length of the runway.",
+        "Freeze each near the end of its descent or immediately after it jumps in order to be able to run onto and off of it without a problem.",
+        "Standing between two Choots then precisely timing a crouched angle shot can help with the timing. A buffered X-Ray shot may also help."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [2, 2],
+      "name": "Double Frozen Choot Runway, Suitless (Right)",
+      "requires": [
+        {"notable": "Double Frozen Choot Runway"},
+        "h_trickyFrozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 16,
+          "openEnd": 1,
+          "steepUpTiles": 3,
+          "steepDownTiles": 2
+        }
+      },
+      "note": [
+        "Freeze two Choots to significantly increase the length of the runway.",
+        "Freeze each near the end of its descent or immediately after it jumps in order to be able to run onto and off of it without a problem.",
+        "Standing between two Choots then precisely timing a crouched angle shot can help with the timing. A buffered X-Ray shot may also help."
+      ],
+      "devNote": "The submerged tiles don't contribute to the runway length."
+    },
+    {
+      "id": 37,
+      "link": [2, 2],
+      "name": "Triple Frozen Choot Runway (Right)",
+      "requires": [
+        {"notable": "Triple Frozen Choot Runway"},
+        "h_trickyFrozenEnemyRunway",
+        "Gravity",
+        "canInsaneJump",
+        {"enemyDamage": {"enemy": "Choot", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 28,
+          "openEnd": 0,
+          "steepUpTiles": 6,
+          "steepDownTiles": 6
+        }
+      },
+      "note": [
+        "Freeze all three Choots to significantly increase the length of the runway and run across the entire room.",
+        "Freeze each immediately after it jumps in order to be able to run onto and off of it without a problem.",
+        "Jump between two of them and wait for them to fall and start to rise again, taking one Choot hit in the process.",
+        "This will give Samus just enough time to shoot them both and jump and freeze the third and barely be able to use the runway before they thaw.",
+        "With this runway, Samus can then get a suitless, in-room shinecharge, with just a 1-tap."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [2, 2],
+      "name": "Triple Frozen Choot Runway, Suitless (Right)",
+      "requires": [
+        {"notable": "Triple Frozen Choot Runway"},
+        "h_trickyFrozenEnemyRunway",
+        "canInsaneJump",
+        {"enemyDamage": {"enemy": "Choot", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 15,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Freeze all three Choots to significantly increase the length of the runway and run across the entire room.",
+        "Freeze each immediately after it jumps in order to be able to run onto and off of it without a problem.",
+        "Jump between two of them and wait for them to fall and start to rise again, taking one Choot hit in the process.",
+        "This will give Samus just enough time to shoot them both and jump and freeze the third and barely be able to use the runway before they thaw.",
+        "With this runway, Samus can then get a suitless, in-room shinecharge, with just a 1-tap."
+      ],
+      "devNote": [
+        "The submerged tiles don't contribute to the runway length.",
+        "Although there is a longer runway available for shinecharging, this is an equivalent for how fast Samus can leave the room.",
+        "It shouldn't be a problem, as this length should be enough for shinecharging at this difficulty."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get hit by Waver",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 40,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Double Frozen Choot Runway",
+      "note": [
+        "Freeze two Choots to significantly increase the length of the runway.",
+        "Freeze each near the end of its descent or immediately after it jumps in order to be able to run onto and off of it without a problem.",
+        "Standing between two Choots then precisely timing a crouched angle shot can help with the timing. A buffered X-Ray shot may also help."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Triple Frozen Choot Runway",
+      "note": [
+        "Freeze all three Choots to significantly increase the length of the runway and run across the entire room.",
+        "Freeze each immediately after it jumps in order to be able to run onto and off of it without a problem.",
+        "Jump between two of them and wait for them to fall and start to rise again, taking one Choot hit in the process.",
+        "This will give Samus just enough time to shoot them both and jump and freeze the third and barely be able to use the runway before they thaw.",
+        "With this runway, Samus can then get a suitless, in-room shinecharge, with just a 1-tap."
+      ]
+    }
+  ],
+  "nextStratId": 44,
+  "nextNotableId": 3
+}

@@ -1,0 +1,718 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 114,
+  "name": "Magdollite Tunnel",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "East",
+  "roomAddress": "0x7AEB4",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019696",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00196a2",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Magdollite Tunnel Multiviolas",
+      "enemyName": "Multiviola",
+      "quantity": 2,
+      "homeNodes": [1, 2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Magdollite Tunnel Magdollites",
+      "enemyName": "Magdollite",
+      "quantity": 3,
+      "homeNodes": [1, 2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Magdollite Farm",
+      "requires": [
+        "h_heatProof",
+        {"cycleFrames": 310}
+      ],
+      "farmCycleDrops": [{"enemy": "Magdollite", "count": 3}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Multiviola",
+      "requires": [
+        "canComplexGMode",
+        {"heatFrames": 1880},
+        {"or": [
+          "canInsaneJump",
+          "h_heatProof",
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"heatFrames": 350},
+            {"enemyDamage": {"enemy": "Magdollite", "type": "flame", "hits": 2}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Follow the left Multiviola back and forth across the room while avoiding it and the Magdolites."
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"heatFrames": 440},
+          {"and": [
+            {"heatFrames": 360},
+            {"or": [
+              "canTrickyJump",
+              {"and": [
+                {"heatFrames": 30},
+                "canDodgeWhileShooting",
+                {"or": [
+                  "Plasma",
+                  "Wave",
+                  "Spazer",
+                  "ScrewAttack",
+                  "canPseudoScrew",
+                  {"ammo": {"type": "Missile", "count": 1}},
+                  {"ammo": {"type": "Super", "count": 1}}
+                ]}
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "canPrepareForNextRoom",
+            "canPseudoScrew"
+          ]}
+        ]},
+        {"heatFrames": 300}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Space Jump with Run Speed",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        "canCarefulJump",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "canPrepareForNextRoom",
+            "canPseudoScrew"
+          ]}
+        ]},
+        {"heatFrames": 230}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Blue Space Jump",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canPreciseSpaceJump",
+        {"heatFrames": 230}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Shinespark (Come In Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 57, "excessFrames": 4}},
+        {"heatFrames": 210}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The height for the Shinespark can be easily gotten by jumping against the door, up to the ceiling."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Shinespark (Come In Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 16},
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 57, "excessFrames": 4}},
+        {"heatFrames": 210}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The height for the Shinespark can be easily gotten by jumping against the door, up to the ceiling."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Cross While Farming",
+      "requires": [
+        "canFarmWhileShooting",
+        {"heatFramesWithEnergyDrops": {
+          "frames": 440,
+          "drops": [
+            {"enemy": "Magdollite", "count": 7},
+            {"enemy": "Multiviola", "count": 1}
+          ]
+        }},
+        {"heatFrames": 100}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The Magdollite flames can be killed for drops.",
+        "The left Multiviola will be in the way and should be killed too."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [1, 2],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        {"heatFrames": 760}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "link": [1, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canTrickyJump",
+          "Wave",
+          "Spazer",
+          "Plasma",
+          "ScrewAttack",
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}},
+          "h_usePowerBomb",
+          {"enemyDamage": {"enemy": "Multiviola", "type": "contact", "hits": 1}}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "Stand next to the Magdollites while they are rising so that they place their invisible flames low and out of the way."
+    },
+    {
+      "id": 29,
+      "link": [1, 2],
+      "name": "G-Mode, Farm on Exit",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModePauseAbuse",
+        {"or": [
+          "canTrickyUseFrozenEnemies",
+          {"ammo": {"type": "Super", "count": 1}},
+          {"and": [
+            "canFarmWhileShooting",
+            "canInsaneJump"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to kill a Multiviola by the door and pause abuse to grab its Energy drop on G-mode exit.",
+        "While luring the right Multiviola around the room, it is important to prevnt the Magdollites from spawning too many fireballs, otherwise the Multiviola won't give any drops.",
+        "Either kill the middle Magdollite with a Super and stay away from the others when possible, or use Ice keep them frozen.",
+        "Be careful not to touch any invisible flames that the Magdollites do spawn.",
+        "It is also possible to do this with nothing; stand on the right platform while the Magdollite shoots to the right, then go to left edge of the runway to the right,",
+        "pause abuse and exit G-mode while crouching and shooting upwards to kill and collect the flame drops."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"heatFrames": 420},
+          {"and": [
+            {"heatFrames": 335},
+            {"or": [
+              "canInsaneJump",
+              {"and": [
+                "canDodgeWhileShooting",
+                {"or": [
+                  "Plasma",
+                  "Wave",
+                  "Spazer",
+                  "ScrewAttack",
+                  "canPseudoScrew",
+                  {"ammo": {"type": "Missile", "count": 1}},
+                  {"ammo": {"type": "Super", "count": 1}}
+                ]}
+              ]}
+            ]}
+          ]},
+          {"and": [
+            {"heatFrames": 360},
+            "canTrickyJump"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "canPrepareForNextRoom",
+            "canPseudoScrew"
+          ]},
+          "canPreciseSpaceJump"
+        ]},
+        {"heatFrames": 310}
+      ],
+      "flashSuitChecked": true,
+      "note": "Without Screw or pseudo screw, it is possible to carefully space jump over the left Multiviola."
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Space Jump with Run Speed",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "canPrepareForNextRoom",
+            "canPseudoScrew"
+          ]}
+        ]},
+        {"heatFrames": 230}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Blue Space Jump",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canPreciseSpaceJump",
+        {"heatFrames": 220}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Shinespark (Come In Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 57, "excessFrames": 4}},
+        {"heatFrames": 210}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The height for the Shinespark can be easily gotten by jumping against the door, up to the ceiling."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Shinespark (Come In Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 16},
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 57, "excessFrames": 4}},
+        {"heatFrames": 210}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The height for the Shinespark can be easily gotten by jumping against the door, up to the ceiling."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Cross While Farming",
+      "requires": [
+        "canFarmWhileShooting",
+        {"heatFramesWithEnergyDrops": {
+          "frames": 240,
+          "drops": [{"enemy": "Magdollite", "count": 5}]
+        }},
+        {"heatFramesWithEnergyDrops": {
+          "frames": 200,
+          "drops": [{"enemy": "Magdollite", "count": 3}]
+        }},
+        {"heatFrames": 90}
+      ],
+      "flashSuitChecked": true,
+      "note": ["The Magdollite flames can be killed for drops."]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$0.A"
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        {"heatFrames": 790}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ],
+      "devNote": [
+        "A run speed of $0.7 would be enough to make the first jump (and even less could work with an additional jump).",
+        "The slightly higher speed of $0.A saves a few heat frames, making it reasonable enough to get through on 1 tank.",
+        "This constraint is mostly a technicality since these speeds are all lower than a human player would use."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canTrickyJump",
+          "Ice",
+          "Wave",
+          "Plasma",
+          "ScrewAttack",
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}},
+          "h_usePowerBomb",
+          {"enemyDamage": {"enemy": "Multiviola", "type": "contact", "hits": 1}}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Stand on low platforms as the Magdollites are rising so that they place their invisible flames low and out of the way.",
+        "After the third Magdollite is a Multiviola that can easily hit Samus; kill or dodge it by crouching just left of the Magdollite."
+      ],
+      "devNote": "Methods for crossing the room without canTrickyJump require killing the left Multiviola in two hits or less."
+    },
+    {
+      "id": 31,
+      "link": [2, 1],
+      "name": "G-Mode, Farm on Exit",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModePauseAbuse",
+        "canTrickyDodgeEnemies",
+        {"or": [
+          "canTrickyUseFrozenEnemies",
+          {"ammo": {"type": "Super", "count": 3}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to kill a Multiviola by the door and pause abuse to grab its Energy drop on G-mode exit.",
+        "This requires luring the left Multiviola around the room multiple times.",
+        "It is important to prevnt the Magdollites from spawning too many fireballs, otherwise the Multiviola won't give any drops.",
+        "Either kill them with Supers or use Ice keep them frozen. Be careful not to touch any invisible flames that the Magdollites do spawn."
+      ],
+      "devNote": "It is possible to do this with nothing, but requires precise positioning and lucky drops."
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 50}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 23,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Double Magdollite Farm",
+      "requires": [
+        "h_heatProof",
+        "canTrickyJump",
+        {"cycleFrames": 320}
+      ],
+      "farmCycleDrops": [{"enemy": "Magdollite", "count": 6}],
+      "flashSuitChecked": true,
+      "note": "It may help to desynchronize the Magdollites by bringing them on camera at different times."
+    },
+    {
+      "id": 27,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Multiviola",
+      "requires": [
+        {"heatFrames": 570},
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"enemyDamage": {"enemy": "Multiviola", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Follow the right Multiviola to the left and back.",
+      "devNote": "Could save some heat frames by setting this up while crossing the room."
+    }
+  ],
+  "notables": [],
+  "nextStratId": 33,
+  "nextNotableId": 1
+}

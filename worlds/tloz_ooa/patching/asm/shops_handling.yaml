@@ -1,0 +1,152 @@
+# Change shopItemReplacementTable so that each item can only be bought once
+09/4523/shopItemReplacementTable: |
+    db $42,$01,$ff,$00   ; Hidden shop 1
+    db $43,$80,$ff,$00   ; Lynna shop 3
+    db $42,$02,$ff,$00   ; Hidden shop 2
+    db $43,$40,$ff,$00   ; Lynna shop 2
+    db $43,$20,$ff,$00   ; Lynna shop 1
+    db $42,$08,$ff,$00   ; Hidden shop 3
+    db $92,$04,$09,$18
+    db $9a,$04,$09,$18   ; Test TREASURE_PUNCH obtained (always) to redirect to entry 0x9
+    db $9a,$04,$0a,$10   ; Test TREASURE_PUNCH obtained (always) to redirect to entry 0xa
+    db $42,$20,$ff,$00   ; Syrup 2
+    db $42,$40,$ff,$00   ; Syrup 3
+    db $42,$80,$ff,$00   ; Syrup 1, octet 2 should be 0x80 to avoid the item to be repurchasable.
+    db $92,$04,$09,$18
+    db $92,$04,$09,$18
+    db $43,$01,$ff,$00   ; Advance 1
+    db $43,$02,$ff,$00   ; Advance 2
+    db $43,$04,$ff,$00   ; Advance 3
+    db $92,$04,$09,$18
+    db $92,$04,$09,$18
+    db $92,$04,$09,$18
+    db $92,$04,$09,$18
+    db $9a,$04,$05,$00   ; Test TREASURE_PUNCH obtained (always) to redirect to entry 0x5
+
+# remove generic text from shopItemTextTable so that replacement text can be displayed.
+09/457b/: db $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+
+# Remove all "you are already full" checks for shop slots that usually carry hearts, bombs or a shield
+09/426f/: |
+    ld a,$01
+    or a
+    ret nz
+
+# Neutralize all vanilla "wBoughtItems1" flag set
+0c/4801/: db $00
+0c/481d/: db $00
+0c/4827/: db $00
+0c/4831/: db $00
+0c/486b/: db $00
+0c/48f1/: db $00
+# Neutralize all vanilla "wBoughtItems2" flag set
+0c/4841/: db $00
+0c/484b/: db $00
+0c/4855/: db $00
+0c/4877/: db $00
+
+# Call giveTreasureCustom instead of giveTreasure for shop slots, and also
+# set the flag related to that shop item so it can't be bought again
+09//shopGiveTreasure: |
+    push bc
+    push hl
+
+    push bc
+    ld b,a
+    push af
+    ld e, $16
+    ld hl, getTreasureDataBCE
+    call interBankCall
+    ld e,b
+    call satchelRefillSeeds
+    call shooterAddDefaultSeed
+    call activateFlute
+    pop af
+    pop bc
+
+    call giveTreasureCustom
+
+    ld e,$42
+    ld a,(de)    ; interaction subid
+    ld hl,shopItemReplacementTable
+    add a,a
+    rst 18       ; rst_addDoubleIndex
+    inc hl
+    ldd a,(hl)    ; bitmask -> a
+    or a
+    jr z,@done    
+    ld l,(hl)   ; flag_addr -> l
+    ld h,$c6
+    or (hl)     ; bitmask | flag_value -> a
+    ld (hl),a   ; store flag_value with added bit
+
+    @done:
+    pop hl
+    pop bc
+
+    push de
+    call saveFile
+    pop de
+    ret
+09/4425/: call shopGiveTreasure
+
+# Jump to flag check directly, don't check if full, if we have the item already, etc...
+09/42f5/: |
+    jp $4358 ; @checkReplaceItem
+
+#### LYNNA SHOP #####################################################################
+
+## Don't set a ricky flag when buying 150-rupee shop item.
+## This has become useless since we randomize the cheap item instead of the special Flute replacement
+## 0b/4823/: db ormemory; dw wRickyState; db 00
+
+#### HIDDEN SHOP ##################################################################
+#
+## don't refill seeds when getting the first hidden shop item.
+#08/4c02/: |
+#    nop
+#    nop
+#    nop
+#
+#
+#### ADVANCE SHOP ###################################################################
+
+# If "open_advance_shop" setting is set, make advance shop always open.
+# Otherwise, make it always closed, even on GBA
+04/6533/advanceShopDoor: |
+    ld a,option.openAdvanceShop
+    or a
+    ret z
+
+## Change the initial text the game uses for Advance Shop 1 because... it uses a generic one
+## instead of the specific one that exists for it inside textbanks?!
+#0b/4829/: db $22
+#
+#
+#### SYRUP'S SHOP ###################################################################
+#
+## Remove Syrup quantity checks, and set price textbox substitution instead to allow for variable prices
+09/6efb/: |
+    ld hl,wTextNumberSubstitution
+    ld (hl),c
+    inc l
+    ld (hl),b
+    jr $1d
+
+### PRICES #######################################################################
+
+09/44be/: db shopPrices.lynnaShop1
+09/44bd/: db shopPrices.lynnaShop2
+09/44bb/: db shopPrices.lynnaShop3
+
+09/44ba/: db shopPrices.hiddenShop1
+09/44bc/: db shopPrices.hiddenShop2
+09/44bf/: db shopPrices.hiddenShop3
+
+09/44c3/: db shopPrices.syrupShop1
+09/44c4/: db shopPrices.syrupShop2
+09/44c5/: db shopPrices.syrupShop3
+
+09/44c8/: db shopPrices.advanceShop1
+09/44c9/: db shopPrices.advanceShop2
+09/44ca/: db shopPrices.advanceShop3

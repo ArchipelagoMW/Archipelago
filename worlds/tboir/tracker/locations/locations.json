@@ -1,0 +1,1521 @@
+[
+    {
+        "name": "Basement",
+        "sections": [
+            {"name": "Basement - Treasure Room"},
+            {"name": "Basement - Shop"},
+            {"name": "Basement - Secret Room"},
+            {"name": "Basement - Super Secret Room"},
+            {"name": "Basement - Boss Room"},
+            {"name": "Basement - Arcade"},
+            {"name": "Basement - Challenge Room"},
+            {"name": "Basement - Curse Room"},
+            {"name": "Basement - Sacrifice Room"},
+            {"name": "Basement - Miniboss Room"},
+            {"name": "Basement - Deal Room"},
+            {"name": "Basement - Vault"},
+            {"name": "Basement - Dice Room"},
+            {"name": "Basement - Bedroom"},
+            {"name": "Basement - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 65,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Cellar",
+        "sections": [
+            {"name": "Cellar - Treasure Room"},
+            {"name": "Cellar - Shop"},
+            {"name": "Cellar - Secret Room"},
+            {"name": "Cellar - Super Secret Room"},
+            {"name": "Cellar - Boss Room"},
+            {"name": "Cellar - Arcade"},
+            {"name": "Cellar - Challenge Room"},
+            {"name": "Cellar - Curse Room"},
+            {"name": "Cellar - Sacrifice Room"},
+            {"name": "Cellar - Miniboss Room"},
+            {"name": "Cellar - Deal Room"},
+            {"name": "Cellar - Vault"},
+            {"name": "Cellar - Dice Room"},
+            {"name": "Cellar - Bedroom"},
+            {"name": "Cellar - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 95,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Burning Basement",
+        "sections": [
+            {"name": "Burning Basement - Treasure Room"},
+            {"name": "Burning Basement - Shop"},
+            {"name": "Burning Basement - Secret Room"},
+            {"name": "Burning Basement - Super Secret Room"},
+            {"name": "Burning Basement - Boss Room"},
+            {"name": "Burning Basement - Arcade"},
+            {"name": "Burning Basement - Challenge Room"},
+            {"name": "Burning Basement - Curse Room"},
+            {"name": "Burning Basement - Sacrifice Room"},
+            {"name": "Burning Basement - Miniboss Room"},
+            {"name": "Burning Basement - Deal Room"},
+            {"name": "Burning Basement - Vault"},
+            {"name": "Burning Basement - Dice Room"},
+            {"name": "Burning Basement - Bedroom"},
+            {"name": "Burning Basement - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 125,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Caves",
+        "sections": [
+            {"name": "Caves - Treasure Room"},
+            {"name": "Caves - Shop"},
+            {"name": "Caves - Secret Room"},
+            {"name": "Caves - Super Secret Room"},
+            {"name": "Caves - Boss Room"},
+            {"name": "Caves - Arcade"},
+            {"name": "Caves - Challenge Room"},
+            {"name": "Caves - Curse Room"},
+            {"name": "Caves - Sacrifice Room"},
+            {"name": "Caves - Miniboss Room"},
+            {"name": "Caves - Deal Room"},
+            {"name": "Caves - Vault"},
+            {"name": "Caves - Dice Room"},
+            {"name": "Caves - Bedroom"},
+            {"name": "Caves - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 355,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Catacombs",
+        "sections": [
+            {"name": "Catacombs - Treasure Room"},
+            {"name": "Catacombs - Shop"},
+            {"name": "Catacombs - Secret Room"},
+            {"name": "Catacombs - Super Secret Room"},
+            {"name": "Catacombs - Boss Room"},
+            {"name": "Catacombs - Arcade"},
+            {"name": "Catacombs - Challenge Room"},
+            {"name": "Catacombs - Curse Room"},
+            {"name": "Catacombs - Sacrifice Room"},
+            {"name": "Catacombs - Miniboss Room"},
+            {"name": "Catacombs - Deal Room"},
+            {"name": "Catacombs - Vault"},
+            {"name": "Catacombs - Dice Room"},
+            {"name": "Catacombs - Bedroom"},
+            {"name": "Catacombs - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 385,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Flooded Caves",
+        "sections": [
+            {"name": "Flooded Caves - Treasure Room"},
+            {"name": "Flooded Caves - Shop"},
+            {"name": "Flooded Caves - Secret Room"},
+            {"name": "Flooded Caves - Super Secret Room"},
+            {"name": "Flooded Caves - Boss Room"},
+            {"name": "Flooded Caves - Arcade"},
+            {"name": "Flooded Caves - Challenge Room"},
+            {"name": "Flooded Caves - Curse Room"},
+            {"name": "Flooded Caves - Sacrifice Room"},
+            {"name": "Flooded Caves - Miniboss Room"},
+            {"name": "Flooded Caves - Deal Room"},
+            {"name": "Flooded Caves - Vault"},
+            {"name": "Flooded Caves - Dice Room"},
+            {"name": "Flooded Caves - Bedroom"},
+            {"name": "Flooded Caves - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 415,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Depths",
+        "sections": [
+            {"name": "Depths - Treasure Room"},
+            {"name": "Depths - Shop"},
+            {"name": "Depths - Secret Room"},
+            {"name": "Depths - Super Secret Room"},
+            {"name": "Depths - Boss Room"},
+            {"name": "Depths - Arcade"},
+            {"name": "Depths - Challenge Room"},
+            {"name": "Depths - Curse Room"},
+            {"name": "Depths - Sacrifice Room"},
+            {"name": "Depths - Miniboss Room"},
+            {"name": "Depths - Deal Room"},
+            {"name": "Depths - Vault"},
+            {"name": "Depths - Dice Room"},
+            {"name": "Depths - Bedroom"},
+            {"name": "Depths - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 645,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Necropolis",
+        "sections": [
+            {"name": "Necropolis - Treasure Room"},
+            {"name": "Necropolis - Shop"},
+            {"name": "Necropolis - Secret Room"},
+            {"name": "Necropolis - Super Secret Room"},
+            {"name": "Necropolis - Boss Room"},
+            {"name": "Necropolis - Arcade"},
+            {"name": "Necropolis - Challenge Room"},
+            {"name": "Necropolis - Curse Room"},
+            {"name": "Necropolis - Sacrifice Room"},
+            {"name": "Necropolis - Miniboss Room"},
+            {"name": "Necropolis - Deal Room"},
+            {"name": "Necropolis - Vault"},
+            {"name": "Necropolis - Dice Room"},
+            {"name": "Necropolis - Bedroom"},
+            {"name": "Necropolis - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 675,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Dank Depths",
+        "sections": [
+            {"name": "Dank Depths - Treasure Room"},
+            {"name": "Dank Depths - Shop"},
+            {"name": "Dank Depths - Secret Room"},
+            {"name": "Dank Depths - Super Secret Room"},
+            {"name": "Dank Depths - Boss Room"},
+            {"name": "Dank Depths - Arcade"},
+            {"name": "Dank Depths - Challenge Room"},
+            {"name": "Dank Depths - Curse Room"},
+            {"name": "Dank Depths - Sacrifice Room"},
+            {"name": "Dank Depths - Miniboss Room"},
+            {"name": "Dank Depths - Deal Room"},
+            {"name": "Dank Depths - Vault"},
+            {"name": "Dank Depths - Dice Room"},
+            {"name": "Dank Depths - Bedroom"},
+            {"name": "Dank Depths - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 705,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Mom",
+        "sections": [
+            {"name": "Defeat Mom"},
+            {"name": "Mom Reward #1"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 815,
+                "y": 345
+            },
+            {
+                "map": "main",
+                "x": 895,
+                "y": 545
+            }
+        ]
+    },
+    {
+        "name": "Boss Rush",
+        "sections": [
+            {"name": "Defeat Boss Rush"},
+            {"name": "Boss Rush Reward #1"},
+            {"name": "Boss Rush Reward #2"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 795,
+                "y": 215
+            }
+        ]
+    },
+    {
+        "name": "Womb",
+        "sections": [
+            {"name": "Womb - Secret Room"},
+            {"name": "Womb - Super Secret Room"},
+            {"name": "Womb - Boss Room"},
+            {"name": "Womb - Arcade"},
+            {"name": "Womb - Challenge Room"},
+            {"name": "Womb - Curse Room"},
+            {"name": "Womb - Sacrifice Room"},
+            {"name": "Womb - Miniboss Room"},
+            {"name": "Womb - Deal Room"},
+            {"name": "Womb - Vault"},
+            {"name": "Womb - Dice Room"},
+            {"name": "Womb - Bedroom"},
+            {"name": "Womb - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 935,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Utero",
+        "sections": [
+            {"name": "Utero - Secret Room"},
+            {"name": "Utero - Super Secret Room"},
+            {"name": "Utero - Boss Room"},
+            {"name": "Utero - Arcade"},
+            {"name": "Utero - Challenge Room"},
+            {"name": "Utero - Curse Room"},
+            {"name": "Utero - Sacrifice Room"},
+            {"name": "Utero - Miniboss Room"},
+            {"name": "Utero - Deal Room"},
+            {"name": "Utero - Vault"},
+            {"name": "Utero - Dice Room"},
+            {"name": "Utero - Bedroom"},
+            {"name": "Utero - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 965,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Scarred Womb",
+        "sections": [
+            {"name": "Scarred Womb - Secret Room"},
+            {"name": "Scarred Womb - Super Secret Room"},
+            {"name": "Scarred Womb - Boss Room"},
+            {"name": "Scarred Womb - Arcade"},
+            {"name": "Scarred Womb - Challenge Room"},
+            {"name": "Scarred Womb - Curse Room"},
+            {"name": "Scarred Womb - Sacrifice Room"},
+            {"name": "Scarred Womb - Miniboss Room"},
+            {"name": "Scarred Womb - Deal Room"},
+            {"name": "Scarred Womb - Vault"},
+            {"name": "Scarred Womb - Dice Room"},
+            {"name": "Scarred Womb - Bedroom"},
+            {"name": "Scarred Womb - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 995,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Mom's Heart",
+        "sections": [
+            {"name": "Defeat Mom's Heart"},
+            {"name": "Mom's Heart Reward #1"},
+            {"name": "Mom's Heart Reward #2"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1105,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "???",
+        "sections": [
+            {"name": "??? - Treasure Room"},
+            {"name": "??? - Shop"},
+            {"name": "??? - Boss Room"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 935,
+                "y": 165
+            }
+        ]
+    },
+    {
+        "name": "Hush",
+        "sections": [
+            {"name": "Defeat Hush"},
+            {"name": "Hush Reward #1"},
+            {"name": "Hush Reward #2"},
+            {"name": "Hush Reward #3"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1020,
+                "y": 55
+            }
+        ]
+    },
+    {
+        "name": "Cathedral",
+        "sections": [
+            {"name": "Cathedral - Secret Room"},
+            {"name": "Cathedral - Super Secret Room"},
+            {"name": "Cathedral - Boss Room"},
+            {"name": "Cathedral - Arcade"},
+            {"name": "Cathedral - Challenge Room"},
+            {"name": "Cathedral - Curse Room"},
+            {"name": "Cathedral - Sacrifice Room"},
+            {"name": "Cathedral - Miniboss Room"},
+            {"name": "Cathedral - Deal Room"},
+            {"name": "Cathedral - Vault"},
+            {"name": "Cathedral - Dice Room"},
+            {"name": "Cathedral - Bedroom"},
+            {"name": "Cathedral - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1305,
+                "y": 245
+            }
+        ]
+    },
+    {
+        "name": "Isaac",
+        "sections": [
+            {"name": "Defeat Isaac"},
+            {"name": "Isaac Reward #1"},
+            {"name": "Isaac Reward #2"},
+            {"name": "Isaac Reward #3"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1475,
+                "y": 245
+            }
+        ]
+    },
+    {
+        "name": "Sheol",
+        "sections": [
+            {"name": "Sheol - Secret Room"},
+            {"name": "Sheol - Super Secret Room"},
+            {"name": "Sheol - Boss Room"},
+            {"name": "Sheol - Arcade"},
+            {"name": "Sheol - Challenge Room"},
+            {"name": "Sheol - Curse Room"},
+            {"name": "Sheol - Sacrifice Room"},
+            {"name": "Sheol - Miniboss Room"},
+            {"name": "Sheol - Deal Room"},
+            {"name": "Sheol - Vault"},
+            {"name": "Sheol - Dice Room"},
+            {"name": "Sheol - Bedroom"},
+            {"name": "Sheol - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1305,
+                "y": 445
+            }
+        ]
+    },
+    {
+        "name": "Satan",
+        "sections": [
+            {"name": "Defeat Satan"},
+            {"name": "Satan Reward #1"},
+            {"name": "Satan Reward #2"},
+            {"name": "Satan Reward #3"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1475,
+                "y": 445
+            }
+        ]
+    },
+    {
+        "name": "Chest",
+        "sections": [
+            {"name": "Chest - Secret Room"},
+            {"name": "Chest - Super Secret Room"},
+            {"name": "Chest - Boss Room"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1595,
+                "y": 245
+            }
+        ]
+    },
+    {
+        "name": "Blue Baby",
+        "sections": [
+            {"name": "Defeat Blue Baby"},
+            {"name": "Blue Baby Reward #1"},
+            {"name": "Blue Baby Reward #2"},
+            {"name": "Blue Baby Reward #3"},
+            {"name": "Blue Baby Reward #4"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1765,
+                "y": 245
+            }
+        ]
+    },
+    {
+        "name": "Dark Room",
+        "sections": [
+            {"name": "Dark Room - Secret Room"},
+            {"name": "Dark Room - Super Secret Room"},
+            {"name": "Dark Room - Boss Room"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1595,
+                "y": 445
+            }
+        ]
+    },
+    {
+        "name": "The Lamb",
+        "sections": [
+            {"name": "Defeat The Lamb"},
+            {"name": "The Lamb Reward #1"},
+            {"name": "The Lamb Reward #2"},
+            {"name": "The Lamb Reward #3"},
+            {"name": "The Lamb Reward #4"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1765,
+                "y": 445
+            }
+        ]
+    },
+    {
+        "name": "Mega Satan",
+        "sections": [
+            {"name": "Defeat Mega Satan"},
+            {"name": "Mega Satan Reward #1"},
+            {"name": "Mega Satan Reward #2"},
+            {"name": "Mega Satan Reward #3"},
+            {"name": "Mega Satan Reward #4"},
+            {"name": "Mega Satan Reward #5"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1760,
+                "y": 350
+            }
+        ]
+    },
+    {
+        "name": "Downpour",
+        "sections": [
+            {"name": "Downpour - Treasure Room"},
+            {"name": "Downpour - Shop"},
+            {"name": "Downpour - Secret Room"},
+            {"name": "Downpour - Super Secret Room"},
+            {"name": "Downpour - Boss Room"},
+            {"name": "Downpour - Arcade"},
+            {"name": "Downpour - Challenge Room"},
+            {"name": "Downpour - Curse Room"},
+            {"name": "Downpour - Sacrifice Room"},
+            {"name": "Downpour - Miniboss Room"},
+            {"name": "Downpour - Deal Room"},
+            {"name": "Downpour - Vault"},
+            {"name": "Downpour - Dice Room"},
+            {"name": "Downpour - Bedroom"},
+            {"name": "Downpour - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 145,
+                "y": 545
+            }
+        ]
+    },
+    {
+        "name": "Dross",
+        "sections": [
+            {"name": "Dross - Treasure Room"},
+            {"name": "Dross - Shop"},
+            {"name": "Dross - Secret Room"},
+            {"name": "Dross - Super Secret Room"},
+            {"name": "Dross - Boss Room"},
+            {"name": "Dross - Arcade"},
+            {"name": "Dross - Challenge Room"},
+            {"name": "Dross - Curse Room"},
+            {"name": "Dross - Sacrifice Room"},
+            {"name": "Dross - Miniboss Room"},
+            {"name": "Dross - Deal Room"},
+            {"name": "Dross - Vault"},
+            {"name": "Dross - Dice Room"},
+            {"name": "Dross - Bedroom"},
+            {"name": "Dross - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 175,
+                "y": 545
+            }
+        ]
+    },
+    {
+        "name": "Mirrorworld",
+        "sections": [
+            {"name": "Mirrorworld - Treasure Room"},
+            {"name": "Mirrorworld - Boss Room"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 315,
+                "y": 545
+            }
+        ]
+    },
+    {
+        "name": "Mines",
+        "sections": [
+            {"name": "Mines - Treasure Room"},
+            {"name": "Mines - Shop"},
+            {"name": "Mines - Secret Room"},
+            {"name": "Mines - Super Secret Room"},
+            {"name": "Mines - Boss Room"},
+            {"name": "Mines - Arcade"},
+            {"name": "Mines - Challenge Room"},
+            {"name": "Mines - Curse Room"},
+            {"name": "Mines - Sacrifice Room"},
+            {"name": "Mines - Miniboss Room"},
+            {"name": "Mines - Deal Room"},
+            {"name": "Mines - Vault"},
+            {"name": "Mines - Dice Room"},
+            {"name": "Mines - Bedroom"},
+            {"name": "Mines - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 435,
+                "y": 545
+            }
+        ]
+    },
+    {
+        "name": "Ashpit",
+        "sections": [
+            {"name": "Ashpit - Treasure Room"},
+            {"name": "Ashpit - Shop"},
+            {"name": "Ashpit - Secret Room"},
+            {"name": "Ashpit - Super Secret Room"},
+            {"name": "Ashpit - Boss Room"},
+            {"name": "Ashpit - Arcade"},
+            {"name": "Ashpit - Challenge Room"},
+            {"name": "Ashpit - Curse Room"},
+            {"name": "Ashpit - Sacrifice Room"},
+            {"name": "Ashpit - Miniboss Room"},
+            {"name": "Ashpit - Deal Room"},
+            {"name": "Ashpit - Vault"},
+            {"name": "Ashpit - Dice Room"},
+            {"name": "Ashpit - Bedroom"},
+            {"name": "Ashpit - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 465,
+                "y": 545
+            }
+        ]
+    },
+    {
+        "name": "The Escape",
+        "sections": [
+            {"name": "The Escape - Knife Piece"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 605,
+                "y": 545
+            }
+        ]
+    },
+    {
+        "name": "Mausoleum",
+        "sections": [
+            {"name": "Mausoleum - Treasure Room"},
+            {"name": "Mausoleum - Shop"},
+            {"name": "Mausoleum - Secret Room"},
+            {"name": "Mausoleum - Super Secret Room"},
+            {"name": "Mausoleum - Boss Room"},
+            {"name": "Mausoleum - Arcade"},
+            {"name": "Mausoleum - Challenge Room"},
+            {"name": "Mausoleum - Curse Room"},
+            {"name": "Mausoleum - Sacrifice Room"},
+            {"name": "Mausoleum - Miniboss Room"},
+            {"name": "Mausoleum - Deal Room"},
+            {"name": "Mausoleum - Vault"},
+            {"name": "Mausoleum - Dice Room"},
+            {"name": "Mausoleum - Bedroom"},
+            {"name": "Mausoleum - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 725,
+                "y": 545
+            }
+        ]
+    },
+    {
+        "name": "Gehenna",
+        "sections": [
+            {"name": "Gehenna - Treasure Room"},
+            {"name": "Gehenna - Shop"},
+            {"name": "Gehenna - Secret Room"},
+            {"name": "Gehenna - Super Secret Room"},
+            {"name": "Gehenna - Boss Room"},
+            {"name": "Gehenna - Arcade"},
+            {"name": "Gehenna - Challenge Room"},
+            {"name": "Gehenna - Curse Room"},
+            {"name": "Gehenna - Sacrifice Room"},
+            {"name": "Gehenna - Miniboss Room"},
+            {"name": "Gehenna - Deal Room"},
+            {"name": "Gehenna - Vault"},
+            {"name": "Gehenna - Dice Room"},
+            {"name": "Gehenna - Bedroom"},
+            {"name": "Gehenna - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 755,
+                "y": 545
+            }
+        ]
+    },
+    {
+        "name": "Corpse",
+        "sections": [
+            {"name": "Corpse - Secret Room"},
+            {"name": "Corpse - Super Secret Room"},
+            {"name": "Corpse - Boss Room"},
+            {"name": "Corpse - Arcade"},
+            {"name": "Corpse - Challenge Room"},
+            {"name": "Corpse - Curse Room"},
+            {"name": "Corpse - Sacrifice Room"},
+            {"name": "Corpse - Miniboss Room"},
+            {"name": "Corpse - Deal Room"},
+            {"name": "Corpse - Vault"},
+            {"name": "Corpse - Dice Room"},
+            {"name": "Corpse - Bedroom"},
+            {"name": "Corpse - Library"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1015,
+                "y": 545
+            }
+        ]
+    },
+    {
+        "name": "Mother",
+        "sections": [
+            {"name": "Defeat Mother"},
+            {"name": "Mother Reward #1"},
+            {"name": "Mother Reward #2"},
+            {"name": "Mother Reward #3"},
+            {"name": "Mother Reward #4"},
+            {"name": "Mother Reward #5"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1100,
+                "y": 695
+            }
+        ]
+    },
+    {
+        "name": "Home",
+        "sections": [
+            {"name": "Home - Closet"},
+            {"name": "Home - Boss Room"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 435,
+                "y": 915
+            }
+        ]
+    },
+    {
+        "name": "Beast",
+        "sections": [
+            {"name": "Defeat Beast"},
+            {"name": "Beast Reward #1"},
+            {"name": "Beast Reward #2"},
+            {"name": "Beast Reward #3"},
+            {"name": "Beast Reward #4"},
+            {"name": "Beast Reward #5"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 520,
+                "y": 745
+            }
+        ]
+    },
+    {
+        "name": "The Void",
+        "sections": [
+            {"name": "The Void - Secret Room"},
+            {"name": "The Void - Super Secret Room"},
+            {"name": "The Void - Boss Room"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1445,
+                "y": 885
+            }
+        ]
+    },
+    {
+        "name": "Delirium",
+        "sections": [
+            {"name": "Defeat Delirium"},
+            {"name": "Delirium Reward #1"},
+            {"name": "Delirium Reward #2"},
+            {"name": "Delirium Reward #3"},
+            {"name": "Delirium Reward #4"},
+            {"name": "Delirium Reward #5"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1660,
+                "y": 765
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #1",
+        "sections": [
+            {"name": "Item Pickup #1"},
+            {"name": "Item Pickup #2"},
+            {"name": "Item Pickup #3"},
+            {"name": "Item Pickup #4"},
+            {"name": "Item Pickup #5"},
+            {"name": "Item Pickup #6"},
+            {"name": "Item Pickup #7"},
+            {"name": "Item Pickup #8"},
+            {"name": "Item Pickup #9"},
+            {"name": "Item Pickup #10"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1900,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #2",
+        "sections": [
+            {"name": "Item Pickup #11"},
+            {"name": "Item Pickup #12"},
+            {"name": "Item Pickup #13"},
+            {"name": "Item Pickup #14"},
+            {"name": "Item Pickup #15"},
+            {"name": "Item Pickup #16"},
+            {"name": "Item Pickup #17"},
+            {"name": "Item Pickup #18"},
+            {"name": "Item Pickup #19"},
+            {"name": "Item Pickup #20"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1860,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #3",
+        "sections": [
+            {"name": "Item Pickup #21"},
+            {"name": "Item Pickup #22"},
+            {"name": "Item Pickup #23"},
+            {"name": "Item Pickup #24"},
+            {"name": "Item Pickup #25"},
+            {"name": "Item Pickup #26"},
+            {"name": "Item Pickup #27"},
+            {"name": "Item Pickup #28"},
+            {"name": "Item Pickup #29"},
+            {"name": "Item Pickup #30"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1820,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #4",
+        "sections": [
+            {"name": "Item Pickup #31"},
+            {"name": "Item Pickup #32"},
+            {"name": "Item Pickup #33"},
+            {"name": "Item Pickup #34"},
+            {"name": "Item Pickup #35"},
+            {"name": "Item Pickup #36"},
+            {"name": "Item Pickup #37"},
+            {"name": "Item Pickup #38"},
+            {"name": "Item Pickup #39"},
+            {"name": "Item Pickup #40"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1780,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #5",
+        "sections": [
+            {"name": "Item Pickup #41"},
+            {"name": "Item Pickup #42"},
+            {"name": "Item Pickup #43"},
+            {"name": "Item Pickup #44"},
+            {"name": "Item Pickup #45"},
+            {"name": "Item Pickup #46"},
+            {"name": "Item Pickup #47"},
+            {"name": "Item Pickup #48"},
+            {"name": "Item Pickup #49"},
+            {"name": "Item Pickup #50"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1740,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #6",
+        "sections": [
+            {"name": "Item Pickup #51"},
+            {"name": "Item Pickup #52"},
+            {"name": "Item Pickup #53"},
+            {"name": "Item Pickup #54"},
+            {"name": "Item Pickup #55"},
+            {"name": "Item Pickup #56"},
+            {"name": "Item Pickup #57"},
+            {"name": "Item Pickup #58"},
+            {"name": "Item Pickup #59"},
+            {"name": "Item Pickup #60"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1700,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #7",
+        "sections": [
+            {"name": "Item Pickup #61"},
+            {"name": "Item Pickup #62"},
+            {"name": "Item Pickup #63"},
+            {"name": "Item Pickup #64"},
+            {"name": "Item Pickup #65"},
+            {"name": "Item Pickup #66"},
+            {"name": "Item Pickup #67"},
+            {"name": "Item Pickup #68"},
+            {"name": "Item Pickup #69"},
+            {"name": "Item Pickup #70"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1660,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #8",
+        "sections": [
+            {"name": "Item Pickup #71"},
+            {"name": "Item Pickup #72"},
+            {"name": "Item Pickup #73"},
+            {"name": "Item Pickup #74"},
+            {"name": "Item Pickup #75"},
+            {"name": "Item Pickup #76"},
+            {"name": "Item Pickup #77"},
+            {"name": "Item Pickup #78"},
+            {"name": "Item Pickup #79"},
+            {"name": "Item Pickup #80"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1620,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #9",
+        "sections": [
+            {"name": "Item Pickup #81"},
+            {"name": "Item Pickup #82"},
+            {"name": "Item Pickup #83"},
+            {"name": "Item Pickup #84"},
+            {"name": "Item Pickup #85"},
+            {"name": "Item Pickup #86"},
+            {"name": "Item Pickup #87"},
+            {"name": "Item Pickup #88"},
+            {"name": "Item Pickup #89"},
+            {"name": "Item Pickup #90"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1580,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #10",
+        "sections": [
+            {"name": "Item Pickup #91"},
+            {"name": "Item Pickup #92"},
+            {"name": "Item Pickup #93"},
+            {"name": "Item Pickup #94"},
+            {"name": "Item Pickup #95"},
+            {"name": "Item Pickup #96"},
+            {"name": "Item Pickup #97"},
+            {"name": "Item Pickup #98"},
+            {"name": "Item Pickup #99"},
+            {"name": "Item Pickup #100"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1540,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #11",
+        "sections": [
+            {"name": "Item Pickup #101"},
+            {"name": "Item Pickup #102"},
+            {"name": "Item Pickup #103"},
+            {"name": "Item Pickup #104"},
+            {"name": "Item Pickup #105"},
+            {"name": "Item Pickup #106"},
+            {"name": "Item Pickup #107"},
+            {"name": "Item Pickup #108"},
+            {"name": "Item Pickup #109"},
+            {"name": "Item Pickup #110"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1500,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #12",
+        "sections": [
+            {"name": "Item Pickup #111"},
+            {"name": "Item Pickup #112"},
+            {"name": "Item Pickup #113"},
+            {"name": "Item Pickup #114"},
+            {"name": "Item Pickup #115"},
+            {"name": "Item Pickup #116"},
+            {"name": "Item Pickup #117"},
+            {"name": "Item Pickup #118"},
+            {"name": "Item Pickup #119"},
+            {"name": "Item Pickup #120"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1460,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #13",
+        "sections": [
+            {"name": "Item Pickup #121"},
+            {"name": "Item Pickup #122"},
+            {"name": "Item Pickup #123"},
+            {"name": "Item Pickup #124"},
+            {"name": "Item Pickup #125"},
+            {"name": "Item Pickup #126"},
+            {"name": "Item Pickup #127"},
+            {"name": "Item Pickup #128"},
+            {"name": "Item Pickup #129"},
+            {"name": "Item Pickup #130"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1420,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #14",
+        "sections": [
+            {"name": "Item Pickup #131"},
+            {"name": "Item Pickup #132"},
+            {"name": "Item Pickup #133"},
+            {"name": "Item Pickup #134"},
+            {"name": "Item Pickup #135"},
+            {"name": "Item Pickup #136"},
+            {"name": "Item Pickup #137"},
+            {"name": "Item Pickup #138"},
+            {"name": "Item Pickup #139"},
+            {"name": "Item Pickup #140"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1380,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #15",
+        "sections": [
+            {"name": "Item Pickup #141"},
+            {"name": "Item Pickup #142"},
+            {"name": "Item Pickup #143"},
+            {"name": "Item Pickup #144"},
+            {"name": "Item Pickup #145"},
+            {"name": "Item Pickup #146"},
+            {"name": "Item Pickup #147"},
+            {"name": "Item Pickup #148"},
+            {"name": "Item Pickup #149"},
+            {"name": "Item Pickup #150"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1340,
+                "y": 20
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #16",
+        "sections": [
+            {"name": "Item Pickup #151"},
+            {"name": "Item Pickup #152"},
+            {"name": "Item Pickup #153"},
+            {"name": "Item Pickup #154"},
+            {"name": "Item Pickup #155"},
+            {"name": "Item Pickup #156"},
+            {"name": "Item Pickup #157"},
+            {"name": "Item Pickup #158"},
+            {"name": "Item Pickup #159"},
+            {"name": "Item Pickup #160"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1900,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #17",
+        "sections": [
+            {"name": "Item Pickup #161"},
+            {"name": "Item Pickup #162"},
+            {"name": "Item Pickup #163"},
+            {"name": "Item Pickup #164"},
+            {"name": "Item Pickup #165"},
+            {"name": "Item Pickup #166"},
+            {"name": "Item Pickup #167"},
+            {"name": "Item Pickup #168"},
+            {"name": "Item Pickup #169"},
+            {"name": "Item Pickup #170"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1860,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #18",
+        "sections": [
+            {"name": "Item Pickup #171"},
+            {"name": "Item Pickup #172"},
+            {"name": "Item Pickup #173"},
+            {"name": "Item Pickup #174"},
+            {"name": "Item Pickup #175"},
+            {"name": "Item Pickup #176"},
+            {"name": "Item Pickup #177"},
+            {"name": "Item Pickup #178"},
+            {"name": "Item Pickup #179"},
+            {"name": "Item Pickup #180"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1820,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #19",
+        "sections": [
+            {"name": "Item Pickup #181"},
+            {"name": "Item Pickup #182"},
+            {"name": "Item Pickup #183"},
+            {"name": "Item Pickup #184"},
+            {"name": "Item Pickup #185"},
+            {"name": "Item Pickup #186"},
+            {"name": "Item Pickup #187"},
+            {"name": "Item Pickup #188"},
+            {"name": "Item Pickup #189"},
+            {"name": "Item Pickup #190"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1780,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #20",
+        "sections": [
+            {"name": "Item Pickup #191"},
+            {"name": "Item Pickup #192"},
+            {"name": "Item Pickup #193"},
+            {"name": "Item Pickup #194"},
+            {"name": "Item Pickup #195"},
+            {"name": "Item Pickup #196"},
+            {"name": "Item Pickup #197"},
+            {"name": "Item Pickup #198"},
+            {"name": "Item Pickup #199"},
+            {"name": "Item Pickup #200"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1740,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #21",
+        "sections": [
+            {"name": "Item Pickup #201"},
+            {"name": "Item Pickup #202"},
+            {"name": "Item Pickup #203"},
+            {"name": "Item Pickup #204"},
+            {"name": "Item Pickup #205"},
+            {"name": "Item Pickup #206"},
+            {"name": "Item Pickup #207"},
+            {"name": "Item Pickup #208"},
+            {"name": "Item Pickup #209"},
+            {"name": "Item Pickup #210"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1700,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #22",
+        "sections": [
+            {"name": "Item Pickup #211"},
+            {"name": "Item Pickup #212"},
+            {"name": "Item Pickup #213"},
+            {"name": "Item Pickup #214"},
+            {"name": "Item Pickup #215"},
+            {"name": "Item Pickup #216"},
+            {"name": "Item Pickup #217"},
+            {"name": "Item Pickup #218"},
+            {"name": "Item Pickup #219"},
+            {"name": "Item Pickup #220"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1660,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #23",
+        "sections": [
+            {"name": "Item Pickup #221"},
+            {"name": "Item Pickup #222"},
+            {"name": "Item Pickup #223"},
+            {"name": "Item Pickup #224"},
+            {"name": "Item Pickup #225"},
+            {"name": "Item Pickup #226"},
+            {"name": "Item Pickup #227"},
+            {"name": "Item Pickup #228"},
+            {"name": "Item Pickup #229"},
+            {"name": "Item Pickup #230"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1620,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #24",
+        "sections": [
+            {"name": "Item Pickup #231"},
+            {"name": "Item Pickup #232"},
+            {"name": "Item Pickup #233"},
+            {"name": "Item Pickup #234"},
+            {"name": "Item Pickup #235"},
+            {"name": "Item Pickup #236"},
+            {"name": "Item Pickup #237"},
+            {"name": "Item Pickup #238"},
+            {"name": "Item Pickup #239"},
+            {"name": "Item Pickup #240"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1580,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #25",
+        "sections": [
+            {"name": "Item Pickup #241"},
+            {"name": "Item Pickup #242"},
+            {"name": "Item Pickup #243"},
+            {"name": "Item Pickup #244"},
+            {"name": "Item Pickup #245"},
+            {"name": "Item Pickup #246"},
+            {"name": "Item Pickup #247"},
+            {"name": "Item Pickup #248"},
+            {"name": "Item Pickup #249"},
+            {"name": "Item Pickup #250"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1540,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #26",
+        "sections": [
+            {"name": "Item Pickup #251"},
+            {"name": "Item Pickup #252"},
+            {"name": "Item Pickup #253"},
+            {"name": "Item Pickup #254"},
+            {"name": "Item Pickup #255"},
+            {"name": "Item Pickup #256"},
+            {"name": "Item Pickup #257"},
+            {"name": "Item Pickup #258"},
+            {"name": "Item Pickup #259"},
+            {"name": "Item Pickup #260"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1500,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #27",
+        "sections": [
+            {"name": "Item Pickup #261"},
+            {"name": "Item Pickup #262"},
+            {"name": "Item Pickup #263"},
+            {"name": "Item Pickup #264"},
+            {"name": "Item Pickup #265"},
+            {"name": "Item Pickup #266"},
+            {"name": "Item Pickup #267"},
+            {"name": "Item Pickup #268"},
+            {"name": "Item Pickup #269"},
+            {"name": "Item Pickup #270"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1460,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #28",
+        "sections": [
+            {"name": "Item Pickup #271"},
+            {"name": "Item Pickup #272"},
+            {"name": "Item Pickup #273"},
+            {"name": "Item Pickup #274"},
+            {"name": "Item Pickup #275"},
+            {"name": "Item Pickup #276"},
+            {"name": "Item Pickup #277"},
+            {"name": "Item Pickup #278"},
+            {"name": "Item Pickup #279"},
+            {"name": "Item Pickup #280"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1420,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #29",
+        "sections": [
+            {"name": "Item Pickup #281"},
+            {"name": "Item Pickup #282"},
+            {"name": "Item Pickup #283"},
+            {"name": "Item Pickup #284"},
+            {"name": "Item Pickup #285"},
+            {"name": "Item Pickup #286"},
+            {"name": "Item Pickup #287"},
+            {"name": "Item Pickup #288"},
+            {"name": "Item Pickup #289"},
+            {"name": "Item Pickup #290"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1380,
+                "y": 60
+            }
+        ]
+    },
+    {
+        "name": "Item Batch #30",
+        "sections": [
+            {"name": "Item Pickup #291"},
+            {"name": "Item Pickup #292"},
+            {"name": "Item Pickup #293"},
+            {"name": "Item Pickup #294"},
+            {"name": "Item Pickup #295"},
+            {"name": "Item Pickup #296"},
+            {"name": "Item Pickup #297"},
+            {"name": "Item Pickup #298"},
+            {"name": "Item Pickup #299"},
+            {"name": "Item Pickup #300"}
+        ],
+        "map_locations": [
+            {
+                "map": "main",
+                "x": 1340,
+                "y": 60
+            }
+        ]
+    }
+]

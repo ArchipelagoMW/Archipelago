@@ -1,0 +1,765 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 163,
+  "name": "Wrecked Ship East Super Room",
+  "area": "Wrecked Ship",
+  "subarea": "Main",
+  "roomAddress": "0x7CDF1",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a2f4",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Item (Behind the Bomb Wall)",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Super",
+      "nodeAddress": "0x7C365",
+      "locks": [
+        {
+          "name": "Wrecked Ship Right Super Spawn Lock",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                {"or": [
+                  "f_DefeatedPhantoon",
+                  "h_allItemsSpawned"
+                ]}
+              ],
+              "note": "The item doesn't spawn until Phantoon is defeated."
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [1, 1, 1, 2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "R-Mode",
+      "obstacleType": "abstract",
+      "note": "Samus is in R-Mode."
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Wrecked Ship East Supers Covern",
+      "enemyName": "Covern",
+      "quantity": 1,
+      "homeNodes": [1, 2],
+      "stopSpawn": ["f_DefeatedPhantoon"]
+    },
+    {
+      "id": "e2",
+      "groupName": "Wrecked Ship East Supers Bulls",
+      "enemyName": "Bull",
+      "quantity": 2,
+      "homeNodes": [1],
+      "spawn": ["f_DefeatedPhantoon"]
+    },
+    {
+      "id": "e3",
+      "groupName": "Wrecked Ship East Supers Workrobots",
+      "enemyName": "Workrobot",
+      "quantity": 2,
+      "homeNodes": [1],
+      "spawn": ["f_DefeatedPhantoon"]
+    },
+    {
+      "id": "e4",
+      "groupName": "Wrecked Ship East Supers Trapped Atomics",
+      "enemyName": "Trapped Atomic",
+      "quantity": 4,
+      "homeNodes": [1],
+      "stopSpawn": ["f_DefeatedPhantoon"]
+    },
+    {
+      "id": "e5",
+      "groupName": "Wrecked Ship East Supers Custom Covern",
+      "enemyName": "Custom Covern (Bull)",
+      "quantity": 1,
+      "homeNodes": [1],
+      "stopSpawn": ["f_DefeatedPhantoon"],
+      "note": "This represents a Covern that has a reduced drop chance that would be logically possible in the powered on state of Wrecked ship."
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5.5,
+          "openEnd": 1
+        }
+      },
+      "devNote": [
+        "Note that this room has a half-width runway tile.",
+        "It is possible to extend this runway with a Covern with canRiskPermanentLossOfAccess, but it is very difficult to position the Covern.",
+        "The Covern can easily be positioned 2 pixels above the runway with Morph, but that can't be used to extend short shinecharge strats."
+      ]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Shinecharged, Conveyor Run",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"enemyKill": {
+          "enemies": [["Bull", "Bull"]]
+        }},
+        "canShinechargeMovement",
+        {"canShineCharge": {"usedTiles": 20, "openEnd": 2}},
+        {"shineChargeFrames": 85}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Bull", "Bull"]]
+        }},
+        "canTrickyJump",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 0
+          }
+        }
+      },
+      "note": [
+        "The effective runway length is shortened due to the conveyor moving in the same direction as Samus.",
+        "If needing the highest possible speed, run on the conveyor furthest from the door."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave Spinning (Power Off)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 11,
+            "openEnd": 2
+          }
+        }
+      },
+      "note": [
+        "If needing the highest possible speed, run on the conveyor furthest from the door."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Bull", "Bull"]]
+        }},
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      },
+      "note": "Run on the conveyor closest to the door; its effective length is shortened due to moving in the same direction as Samus."
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Power Off)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 11,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Bull", "Bull"]]
+        }},
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      },
+      "note": "Run on the conveyor closest to the door; its effective length is shortened due to moving in the same direction as Samus."
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Power Off)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 11,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Bull", "Bull"]]
+        }},
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 0
+          }
+        }
+      },
+      "note": [
+        "The effective runway length is shortened due to the conveyor moving in the same direction as Samus.",
+        "If needing the highest possible speed, use the conveyor furthest from the door."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Leave Space Jumping (Power Off)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 11,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue (Power On)",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"enemyKill": {
+          "enemies": [["Bull", "Bull"]]
+        }},
+        {"getBlueSpeed": {"usedTiles": 20, "openEnd": 2}},
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "note": [
+        "Shortcharge by running right on the conveyor closest to the door, gain blue speed, and jump onto the platform to the right with temporary blue.",
+        "Then use X-ray to turn and ride the conveyor back to the left and reach the door."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue (Power Off)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"canShineCharge": {"usedTiles": 14, "openEnd": 0}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 13,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "devNote": "The Bull and Workrobot projectiles aren't a problem."
+    },
+    {
+      "id": 14,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Covern or Bull",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"or": [
+          {"enemyDamage": {"enemy": "Covern", "type": "contact", "hits": 1}},
+          {"and": [
+            {"enemyDamage": {"enemy": "Bull", "type": "contact", "hits": 1}},
+            "f_DefeatedPhantoon"
+          ]}
+        ]}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "devNote": "The Covern will do more damage than the Bull, so there is no canRiskPermanentLossOfAccess."
+    },
+    {
+      "id": 16,
+      "link": [1, 1],
+      "name": "Come in in R-Mode",
+      "entranceCondition": {
+        "comeInWithRMode": {}
+      },
+      "requires": [],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [1, 1],
+      "name": "Bull Farm",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          "ScrewAttack",
+          "canPseudoScrew",
+          "Plasma",
+          "Grapple",
+          {"and": [
+            "h_useMorphBombs",
+            {"or": [
+              "canInsaneJump",
+              {"enemyDamage": {"enemy": "Bull", "type": "contact", "hits": 2}}
+            ]},
+            {"cycleFrames": 300}
+          ]}
+        ]},
+        {"cycleFrames": 300}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Bull", "count": 2}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 27,
+      "link": [1, 1],
+      "name": "Conservative Covern Farm (Power Off)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "Grapple",
+            {"or": [
+              "Wave",
+              "Spazer"
+            ]},
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            {"or": [
+              "canFarmWhileShooting",
+              {"cycleFrames": 300}
+            ]},
+            {"cycleFrames": 120}
+          ]}
+        ]},
+        {"cycleFrames": 480}
+      ],
+      "clearsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Custom Covern (Bull)", "count": 2}],
+      "flashSuitChecked": true,
+      "note": "There are additional requirements for killing the Bull enemy who appears when Phantoon is defeated.",
+      "devNote": [
+        "This is Covern farm with a reduced drop chance so as to be applicable while powered off without breaking the powered on state.",
+        "The weaponry must be able to kill a Bull and follow the dissappearing cycle of a Covern.",
+        "Resetting the room is slower than waiting for the Covern to respawn, so it is counted as 2 drops.",
+        "These Coverns have no Super or Missile drop chance."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 1],
+      "name": "Atomics Farm (Power Off)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"resetRoom": {"nodes": [1]}},
+        "canDodgeWhileShooting",
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 1020}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 960}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 1400}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Trapped Atomic", "count": 4}],
+      "note": [
+        "Any beam can kill the Atomics by aiming for the seam in the glass.",
+        "The drop may be hard to collect; try spin jumping along the side of the glass."
+      ],
+      "devNote": "Other options should just farm the Covern."
+    },
+    {
+      "id": 28,
+      "link": [1, 1],
+      "name": "Covern Farm",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "Ice",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 240}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            "canFarmWhileShooting",
+            {"cycleFrames": 120}
+          ]},
+          {"cycleFrames": 540}
+        ]},
+        {"cycleFrames": 480}
+      ],
+      "farmCycleDrops": [{"enemy": "Covern", "count": 1}]
+    },
+    {
+      "id": 18,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "h_destroyBombWalls",
+        "f_DefeatedPhantoon",
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall",
+          "h_bombThings",
+          {"and": [
+            "Morph",
+            "canUseEnemies"
+          ]}
+        ]}
+      ],
+      "note": "By normal means, the path can't be passed unless the Workrobot is activated (so Phantoon dead)"
+    },
+    {
+      "id": 19,
+      "link": [1, 2],
+      "name": "Blue Speed Jump",
+      "requires": [
+        "f_DefeatedPhantoon",
+        "canCarefulJump",
+        {"or": [
+          "canDodgeWhileShooting",
+          {"enemyKill": {
+            "enemies": [["Bull", "Bull"]]
+          }},
+          {"enemyDamage": {"enemy": "Bull", "type": "contact", "hits": 1}}
+        ]},
+        {"getBlueSpeed": {"usedTiles": 18, "openEnd": 1}},
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall",
+          "h_bombThings"
+        ]}
+      ],
+      "note": [
+        "Run on the conveyor to build Speed for breaking the bomb block.",
+        "Push the right side Worker Robot onto the conveyor",
+        "Jump low into the wall so Samus' head touches the block.",
+        "Speed can be used to clear the Bulls."
+      ],
+      "devNote": "Spacejumping from left conveyor feels a little harder."
+    },
+    {
+      "id": 20,
+      "link": [1, 2],
+      "name": "Robot Clip (Left to Right)",
+      "requires": [
+        "canMidAirMorph",
+        "h_destroyBombWalls",
+        "canKago"
+      ],
+      "note": [
+        "Kago through the Workrobot by jumping, pressing down, then morphing and moving right just before hitting the robot.",
+        "The bomb blocks can be broken with a bomb, Power Bomb, or using Screw Attack.",
+        "If using bombs, be careful when breaking the bottom bomb block - if morphed, you will be pushed into it and stuck.",
+        "To do this, place a bomb at the bottom, then a bomb at the peak boost height and unmorph before landing. Alternatively use a short jump morph.",
+        "If the morph tunnel is open, kagoing through the robot will force Samus into it."
+      ],
+      "devNote": [
+        "If Phantoon is alive, 'Base' can be used instead.",
+        "Note that this strat is useless in vanilla, as the item only spawns if Phantoon has been killed."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [1, 2],
+      "name": "Robot Clip Run-In-Place",
+      "requires": [
+        {"notable": "Robot Clip Run-In-Place"},
+        "canMidAirMorph",
+        "canSlowShortCharge",
+        "canKago",
+        {"getBlueSpeed": {"usedTiles": 15, "openEnd": 1}}
+      ],
+      "note": [
+        "Kago into the worker robot and start running away from the wall until the bomb blocks are broken with SpeedBooster.",
+        "The short charge taps are extremely precise because gaining too much run speed and Samus will exit the robot."
+      ],
+      "devNote": [
+        "If Phantoon is dead, 'Blue Speed Jump' can be used instead.",
+        "Note that this strat is useless in vanilla, as the item only spawns if Phantoon has been killed."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [1, 2],
+      "name": "Robot Clip, Use Flash Suit",
+      "requires": [
+        "canMidAirMorph",
+        "canKago",
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 1, "excessFrames": 1}}
+      ],
+      "note": [
+        "Kago into the worker robot and shinespark into the wall in order to break the bomb block.",
+        "Either spark diagonally against the wall or horizontally while not crouched."
+      ],
+      "devNote": "Note that this strat is useless in vanilla, as the item only spawns if Phantoon has been killed."
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall",
+          "h_bombThings"
+        ]}
+      ],
+      "note": "By normal means, the path can't be passed unless the Workrobot is activated (so Phantoon dead)",
+      "devNote": "This doesn't require breaking the bomb blocks on the premise that you can't get here without breaking them."
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Crystal Flash Clip",
+      "requires": [
+        {"notable": "Crystal Flash Clip"},
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall",
+          "h_bombThings"
+        ]},
+        "h_CrystalFlash",
+        "canCeilingClip"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Crystal flash to force a standup then spin jump up then morph to bypass the dead robot. Use Coverns to damage down if necessary.",
+        "Note that if the Covern spawns on Samus while crystal flashing, it will deal large amounts of damage.",
+        "To avoid this, it is recommended to kill the Covern and leave its drop, then quickly get in the morph tunnel and CF."
+      ],
+      "devNote": [
+        "If Phantoon is alive, 'Base' can be used instead.",
+        "Note that this strat is useless in vanilla, as the item only spawns if Phantoon has been killed."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "R-Mode Standup Clip",
+      "requires": [
+        {"notable": "R-Mode Standup Clip"},
+        {"obstaclesCleared": ["A"]},
+        "canCeilingClip",
+        "canBePatient",
+        {"or": [
+          "Ice",
+          "Wave",
+          "Spazer",
+          "Plasma",
+          "ScrewAttack"
+        ]},
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall",
+          "h_bombThings"
+        ]}
+      ],
+      "note": [
+        "In R-Mode, kill the Coverns until there is Energy in Samus's Reserves. Get into the Morph tunnel and go to the far left.",
+        "Wait for Coverns to damage Samus down until Reserves trigger, forcing a stand up and enabling her to escape.",
+        "Note that it is required to break the bomb block above the Morph tunnel as well, in order to clip out."
+      ],
+      "devNote": [
+        "If Phantoon is alive, 'Base' can be used instead.",
+        "Note that this strat is useless in vanilla, as the item only spawns if Phantoon has been killed."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Robot Clip Run-In-Place",
+      "note": [
+        "Kago into the worker robot and start running away from the wall until the bomb blocks are broken with SpeedBooster.",
+        "The short charge taps are extremely precise because gaining too much run speed and Samus will exit the robot."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Crystal Flash Clip",
+      "note": [
+        "Crystal flash to force a standup then spin jump up then morph to bypass the dead robot. Use Coverns to damage down if necessary.",
+        "Note that if the Covern spawns on Samus while crystal flashing, it will deal large amounts of damage.",
+        "To avoid this, it is recommended to kill the Covern and leave its drop, then quickly get in the morph tunnel and CF."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "R-Mode Standup Clip",
+      "note": [
+        "In R-Mode, kill the Coverns until there is Energy in Samus's Reserves. Get into the Morph tunnel and go to the far left.",
+        "Wait for Coverns to damage Samus down until Reserves trigger, forcing a stand up and enabling her to escape.",
+        "Note that it is required to break the bomb block above the Morph tunnel as well, in order to clip out."
+      ]
+    }
+  ],
+  "nextStratId": 29,
+  "nextNotableId": 4
+}

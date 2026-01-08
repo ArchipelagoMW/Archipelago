@@ -1,0 +1,1396 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 160,
+  "name": "Attic",
+  "area": "Wrecked Ship",
+  "subarea": "Main",
+  "roomAddress": "0x7CA52",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001a1e0",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Attic Left Gray Lock (to West Ocean)",
+          "lockType": "killEnemies",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedPhantoon"
+              ],
+              "note": "The enemies are killable using Power Beam, once they actually spawn."
+            }
+          ],
+          "yields": ["f_ZebesAwake"],
+          "devNote": "This is unlocked and yielded from killing the enemies, which are free to kill"
+        }
+      ],
+      "mapTileMask": [
+        [2, 2, 2, 2, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a1c8",
+      "doorOrientation": "down",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Attic Bottom Gray Lock (to Main Shaft)",
+          "lockType": "killEnemies",
+          "lock": ["f_DefeatedPhantoon"],
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [],
+              "note": "The enemies are killable using Power Beam, once they actually spawn."
+            }
+          ],
+          "yields": ["f_ZebesAwake"],
+          "devNote": "This is unlocked and yielded from killing the enemies, which are free to kill"
+        }
+      ],
+      "mapTileMask": [
+        [1, 1, 1, 1, 2, 2, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001a1d4",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Attic Right Gray Lock (to Robot Assembly Line)",
+          "lockType": "killEnemies",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedPhantoon"
+              ],
+              "note": "The enemies are killable using Power Beam, once they actually spawn."
+            }
+          ],
+          "yields": ["f_ZebesAwake"],
+          "devNote": "This is unlocked and yielded from killing the enemies, which are free to kill"
+        }
+      ],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Kihunters",
+      "obstacleType": "enemies"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Attic Covern",
+      "enemyName": "Covern",
+      "quantity": 1,
+      "homeNodes": [1, 2, 3],
+      "stopSpawn": ["f_DefeatedPhantoon"]
+    },
+    {
+      "id": "e2",
+      "groupName": "Attic Trapped Atomics",
+      "enemyName": "Trapped Atomic",
+      "quantity": 9,
+      "homeNodes": [1, 2, 3],
+      "stopSpawn": ["f_DefeatedPhantoon"]
+    },
+    {
+      "id": "e3",
+      "groupName": "Attic Atomics",
+      "enemyName": "Atomic",
+      "quantity": 4,
+      "homeNodes": [1, 2, 3],
+      "spawn": ["f_DefeatedPhantoon"]
+    },
+    {
+      "id": "e4",
+      "groupName": "Attic Kihunters",
+      "enemyName": "Kihunter (yellow)",
+      "quantity": 4,
+      "homeNodes": [1, 2, 3],
+      "spawn": ["f_DefeatedPhantoon"]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 2,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Atomic",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "h_frozenEnemyRunway",
+        "f_DefeatedPhantoon"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "Freeze the Atomic in position to extend the runway. Maintain a half-tile gap between the Atomic and the runway to extend it as far as possible.",
+        "One easy method to align the Atomic is to lure the it high then stand under it to freeze it."
+      ],
+      "devNote": "This should be possible with a frozen Covern, but it is annoying to set up."
+    },
+    {
+      "id": 56,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 5,
+          "runway": {
+            "length": 14,
+            "openEnd": 0
+          },
+          "obstruction": [3, 0]
+        }
+      },
+      "devNote": [
+        "Max extra run speed $2.C.",
+        "This strat is included for completeness, though it apparently doesn't have any applications."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Shinecharged, Second Closest Runway",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canShinechargeMovement",
+        {"canShineCharge": {"usedTiles": 20, "openEnd": 0}},
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave Shinecharged, Closest Runway",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canShinechargeMovement",
+        {"canShineCharge": {"usedTiles": 14, "openEnd": 0}},
+        {"shineChargeFrames": 70}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 10,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$0.8"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 38,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave Spinning (Space Jump, Power On)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "SpaceJump",
+        "f_DefeatedPhantoon"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          }
+        }
+      },
+      "note": "With the power on, blue speed can be used to pass through the atomic cage on the floor while continuing to gain speed."
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 9,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Space Jump)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 38,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Space Jump, Power On)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "SpaceJump",
+        "f_DefeatedPhantoon"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 9,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "link": [1, 1],
+      "name": "Leave With Tricky Spring Ball Bounce",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canTrickySpringBallBounce"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 38,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "movementType": "controlled"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "link": [1, 1],
+      "name": "Leave With Tricky Spring Ball Bounce (Power On)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canTrickySpringBallBounce",
+        "f_DefeatedPhantoon"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "movementType": "controlled"
+        }
+      }
+    },
+    {
+      "id": 14,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 38,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 15,
+      "link": [1, 1],
+      "name": "Leave Space Jumping (Power On)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "f_DefeatedPhantoon"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 16,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 20, "openEnd": 0}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [1, 1],
+      "name": "Door Runway, Shinespark Left",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canShinechargeMovement",
+        {"canShineCharge": {"usedTiles": 35, "openEnd": 1}},
+        "canMidairShinespark",
+        {"shinespark": {"frames": 80}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      }
+    },
+    {
+      "id": 57,
+      "link": [1, 1],
+      "name": "Gain Flash Suit (Spikesuit)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "f_DefeatedPhantoon",
+        {"canShineCharge": {"usedTiles": 20, "openEnd": 0}},
+        {"thornHits": 1},
+        "h_spikeSuitThornHitLeniency",
+        "canSpikeSuit",
+        {"shinespark": {"frames": 2, "excessFrames": 2}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [1, 1],
+      "name": "Kihunters and Atomics Farm (Power On)",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 420}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 440}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              "Wave",
+              "Spazer"
+            ]},
+            {"cycleFrames": 840}
+          ]},
+          {"and": [
+            "canTrickyDodgeEnemies",
+            "Ice",
+            {"cycleFrames": 1200}
+          ]},
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"cycleFrames": 1740}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Kihunter (yellow)", "count": 1},
+        {"enemy": "Atomic", "count": 2}
+      ]
+    },
+    {
+      "id": 19,
+      "link": [1, 1],
+      "name": "Raised Atomics Farm (Power Off)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 930}
+          ]},
+          {"and": [
+            {"or": [
+              "canDodgeWhileShooting",
+              "canRiskPermanentLossOfAccess"
+            ]},
+            "Wave",
+            {"cycleFrames": 1010}
+          ]},
+          {"and": [
+            {"or": [
+              "canDodgeWhileShooting",
+              "canRiskPermanentLossOfAccess"
+            ]},
+            "Spazer",
+            {"cycleFrames": 1140}
+          ]},
+          {"and": [
+            {"or": [
+              "canFarmWhileShooting",
+              "canRiskPermanentLossOfAccess"
+            ]},
+            "Ice",
+            {"cycleFrames": 1300}
+          ]},
+          {"and": [
+            "canFarmWhileShooting",
+            {"cycleFrames": 1980}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Trapped Atomic", "count": 3}]
+    },
+    {
+      "id": 59,
+      "link": [1, 1],
+      "name": "Atomics Farm (Power Off, Morph Bombs)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"resetRoom": {"nodes": [1, 2, 3]}},
+        "h_useMorphBombs",
+        {"cycleFrames": 2300}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Trapped Atomic", "count": 4}]
+    },
+    {
+      "id": 60,
+      "link": [1, 1],
+      "name": "Atomics Farm (Power Off, Speed Booster)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"resetRoom": {"nodes": [1, 2, 3]}},
+        "canShinechargeMovementComplex",
+        "canUseSpeedEchoes",
+        {"canShineCharge": {"usedTiles": 20, "openEnd": 0}},
+        {"shinespark": {"frames": 4, "excessFrames": 4}},
+        {"cycleFrames": 2600}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Trapped Atomic", "count": 8}]
+    },
+    {
+      "id": 61,
+      "link": [1, 1],
+      "name": "Covern Farm",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "Ice",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 240}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            "canFarmWhileShooting",
+            {"cycleFrames": 120}
+          ]},
+          {"cycleFrames": 540}
+        ]},
+        {"cycleFrames": 480}
+      ],
+      "farmCycleDrops": [{"enemy": "Covern", "count": 1}]
+    },
+    {
+      "id": 20,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": "If the leftmost Kihunter is still alive, lay the Power Bomb with it on screen, to kill it before the Crystal Flash refill begins."
+    },
+    {
+      "id": 21,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Covern, Atomic, or Kihunter",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"or": [
+          {"enemyDamage": {"enemy": "Covern", "type": "contact", "hits": 1}},
+          {"and": [
+            {"enemyDamage": {"enemy": "Atomic", "type": "contact", "hits": 1}},
+            "f_DefeatedPhantoon"
+          ]}
+        ]}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "devNote": "The Covern will do more damage than the Atomic, so there is no canRiskPermanentLossOfAccess."
+    },
+    {
+      "id": 23,
+      "link": [1, 2],
+      "name": "Power Off",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 24,
+      "link": [1, 2],
+      "name": "Power On",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"and": [
+            "canDodgeWhileShooting",
+            "canTrickyJump"
+          ]},
+          {"enemyKill": {
+            "enemies": [["Kihunter (yellow)"]],
+            "explicitWeapons": ["Missile", "Super", "ScrewAttack", "Plasma", "Ice+Wave+Spazer"]
+          }},
+          {"enemyDamage": {"enemy": "Kihunter (yellow)", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 25,
+      "link": [1, 3],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 12], [108, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 26,
+      "link": [1, 3],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[108, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 27,
+      "link": [1, 3],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[108, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Power Off",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Power On",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"and": [
+            "canDodgeWhileShooting",
+            "canTrickyJump"
+          ]},
+          {"enemyKill": {
+            "enemies": [["Kihunter (yellow)"], ["Kihunter (yellow)"]],
+            "explicitWeapons": ["Missile", "Super", "ScrewAttack", "Plasma", "Ice+Wave+Spazer"]
+          }},
+          {"enemyDamage": {"enemy": "Kihunter (yellow)", "type": "contact", "hits": 2}}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Atomic Ice Moonfall Door Lock Skip",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "f_DefeatedPhantoon",
+        "canEnemyStuckMoonfall",
+        "canFreeFallClip",
+        "canTrickyUseFrozenEnemies"
+      ],
+      "bypassesDoorShell": true,
+      "note": [
+        "Clear out the Kihunters near the door, and freeze two Atomics to set up a moonfall between them, and aim down.",
+        "After gaining enough speed, press forward to fall down and clip past the door shell below.",
+        "Falling with too much speed can cause Samus to go out of bounds."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Leave Charged, Full Runway",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 35, "openEnd": 1}},
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "Leave Charged, Partial Runway",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 24, "openEnd": 1}},
+        {"shineChargeFrames": 55}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 34,
+      "link": [2, 2],
+      "name": "Leave Charged, Short Runway",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 18, "openEnd": 1}},
+        {"shineChargeFrames": 15}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shinespark": {"frames": 6, "excessFrames": 6}}
+      ],
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 36,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue (X-Ray Turnaround)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 35, "openEnd": 0}},
+        "canXRayTurnaround",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "any"
+        }
+      }
+    },
+    {
+      "id": 37,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue (Facing Left)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 18, "openEnd": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "left"
+        }
+      }
+    },
+    {
+      "id": 38,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue (Facing Right)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 14, "openEnd": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "left"
+        }
+      }
+    },
+    {
+      "id": 62,
+      "link": [2, 2],
+      "name": "Kihunters and Atomics Farm (Power On)",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 520}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            "Plasma",
+            {"cycleFrames": 800}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            "Wave",
+            "Spazer",
+            "Ice",
+            {"cycleFrames": 930}
+          ]},
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"or": [
+              "Wave",
+              "Spazer",
+              "Ice"
+            ]},
+            {"cycleFrames": 1400}
+          ]},
+          {"and": [
+            "canInsaneJump",
+            {"cycleFrames": 2600}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Kihunter (yellow)", "count": 3},
+        {"enemy": "Atomic", "count": 2}
+      ]
+    },
+    {
+      "id": 63,
+      "link": [2, 2],
+      "name": "Raised Atomics Farm (Power Off)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          {"and": [
+            {"or": [
+              "canDodgeWhileShooting",
+              "canRiskPermanentLossOfAccess"
+            ]},
+            "Plasma",
+            {"cycleFrames": 930}
+          ]},
+          {"and": [
+            {"or": [
+              "canTrickyDodgeEnemies",
+              "canRiskPermanentLossOfAccess"
+            ]},
+            "Wave",
+            {"cycleFrames": 1010}
+          ]},
+          {"and": [
+            {"or": [
+              "canTrickyDodgeEnemies",
+              "canRiskPermanentLossOfAccess"
+            ]},
+            "Spazer",
+            {"cycleFrames": 1140}
+          ]},
+          {"and": [
+            {"or": [
+              "canTrickyDodgeEnemies",
+              "canRiskPermanentLossOfAccess"
+            ]},
+            "Ice",
+            {"cycleFrames": 1300}
+          ]},
+          {"and": [
+            {"or": [
+              "canInsaneJump",
+              "canRiskPermanentLossOfAccess"
+            ]},
+            "canFarmWhileShooting",
+            {"cycleFrames": 1980}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Trapped Atomic", "count": 3}]
+    },
+    {
+      "id": 39,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 40,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"or": [
+          {"enemyDamage": {"enemy": "Kihunter (yellow)", "type": "contact", "hits": 1}},
+          {"and": [
+            {"enemyDamage": {"enemy": "Covern", "type": "contact", "hits": 1}},
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Use a Covern or Kihunter. A flying Kihunter takes about 25 seconds to get to the door.",
+      "devNote": "The Kihunter will do more damage than the Covern, so whether Phantoon is dead or not, that strat will be accurate or conservative."
+    },
+    {
+      "id": 58,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit by Thawing Atomic",
+      "requires": [
+        "f_DefeatedPhantoon",
+        "canWallIceClip",
+        "canDownwardGModeSetup"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Run from the ledge into the open doorway while hitting the frozen Atomic and the door transition simultaneously, just as the Atomic thaws and touches Samus during the transition.",
+        "Note that this requires a precise freeze (3 pixel window), precise thaw timing, and a 50% success rate due to collision oscillation.",
+        "The starting position of Samus is a bit more lenient than other downward G-mode setups, as Samus can have higher run speed when hitting the Atomic than in most other rooms.",
+        "One normalized setup to get into a usable position is to run into the right pillar, turn around, then run back."
+      ],
+      "devNote": "This can not work with a Covern, as it only moves vertically and can't hit Samus in the transition."
+    },
+    {
+      "id": 41,
+      "link": [2, 3],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canShinechargeMovement",
+        {"canShineCharge": {"usedTiles": 35, "openEnd": 0}},
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 42,
+      "link": [2, 3],
+      "name": "Power Off",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 43,
+      "link": [2, 3],
+      "name": "Power On",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"and": [
+            "canDodgeWhileShooting",
+            "canTrickyJump"
+          ]},
+          {"enemyKill": {
+            "enemies": [["Kihunter (yellow)"], ["Kihunter (yellow)"]],
+            "explicitWeapons": ["Missile", "Super", "ScrewAttack", "Plasma", "Ice+Wave+Spazer"]
+          }},
+          {"enemyDamage": {"enemy": "Kihunter (yellow)", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 44,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 45,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 46,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 47,
+      "link": [3, 2],
+      "name": "Power Off",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 48,
+      "link": [3, 2],
+      "name": "Power On",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"and": [
+            "canDodgeWhileShooting",
+            "canTrickyJump"
+          ]},
+          {"enemyKill": {
+            "enemies": [["Kihunter (yellow)"]],
+            "explicitWeapons": ["Missile", "Super", "ScrewAttack", "Plasma", "Ice+Wave+Spazer"]
+          }},
+          {"enemyDamage": {"enemy": "Kihunter (yellow)", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 49,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 17,
+          "openEnd": 0,
+          "steepUpTiles": 4
+        }
+      }
+    },
+    {
+      "id": 50,
+      "link": [3, 3],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 34,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 51,
+      "link": [3, 3],
+      "name": "Leave With Mockball",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 34,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 8,
+            "openEnd": 1
+          }
+        }
+      },
+      "devNote": [
+        "A couple extra tiles could be used by taking a hit and using i-frames from the atomic cage on the floor, if Phantoon is defeated;",
+        "with a 12-tile shortcharge to gain invulnerability from blue speed, even more runway could be used."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [3, 3],
+      "name": "Leave Space Jumping",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 22,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 64,
+      "link": [3, 3],
+      "name": "Kihunters and Atomics Farm (Power On)",
+      "requires": [
+        "f_DefeatedPhantoon",
+        {"resetRoom": {"nodes": [3]}},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 400}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 520}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              "Wave",
+              "Spazer"
+            ]},
+            {"cycleFrames": 840}
+          ]},
+          {"and": [
+            "canTrickyDodgeEnemies",
+            "Ice",
+            {"cycleFrames": 1500}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Kihunter (yellow)", "count": 3},
+        {"enemy": "Atomic", "count": 1}
+      ]
+    },
+    {
+      "id": 65,
+      "link": [3, 3],
+      "name": "Raised Atomics Farm (Power Off)",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        {"resetRoom": {"nodes": [3]}},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 930}
+          ]},
+          {"and": [
+            {"or": [
+              "canDodgeWhileShooting",
+              "canRiskPermanentLossOfAccess"
+            ]},
+            "Wave",
+            {"cycleFrames": 1010}
+          ]},
+          {"and": [
+            {"or": [
+              "canDodgeWhileShooting",
+              "canRiskPermanentLossOfAccess"
+            ]},
+            "Spazer",
+            {"cycleFrames": 1140}
+          ]},
+          {"and": [
+            {"or": [
+              "canInsaneJump",
+              "canRiskPermanentLossOfAccess"
+            ]},
+            "Ice",
+            {"cycleFrames": 1300}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Trapped Atomic", "count": 3}]
+    },
+    {
+      "id": 53,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 54,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit By Covern, Atomic, or Kihunter",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 55,
+      "link": [3, 3],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"or": [
+          {"enemyDamage": {"enemy": "Kihunter (yellow)", "type": "contact", "hits": 1}},
+          {"and": [
+            {"enemyDamage": {"enemy": "Covern", "type": "contact", "hits": 1}},
+            {"not": "f_DefeatedPhantoon"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Use a Covern or Kihunter. A flying Kihunter will collide with Samus eventually, which could take up to 30 seconds, based on her positioning.",
+      "devNote": "The Kihunter will do more damage than the Covern, so whether Phantoon is dead or not, that strat will be accurate or conservative."
+    }
+  ],
+  "notables": [],
+  "nextStratId": 66,
+  "nextNotableId": 1
+}

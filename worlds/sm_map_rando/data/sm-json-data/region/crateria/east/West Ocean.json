@@ -1,0 +1,3306 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 32,
+  "name": "West Ocean",
+  "area": "Crateria",
+  "subarea": "East",
+  "roomAddress": "0x793FE",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 0, 0, 1, 0, 0],
+    [1, 1, 1, 1, 1, 1, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Lower Section - Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00189ca",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [2, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Upper Right Section - Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00189ee",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 2],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Upper Right Section - Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00189fa",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 2],
+        [1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Lower Section - Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x0018a06",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "useImplicitComeInNormally": false,
+      "useImplicitComeInWithMockball": false,
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "locks": [
+        {
+          "name": "West Ocean Ship Exit Gray Lock (to Gravity Suit Room)",
+          "lockType": "permanent",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "never"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 2, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Lower Section - Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x00189d6",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 2, 2],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Middle Right Door (By Zeb Farm)",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00189e2",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 2, 2, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Bridge Left Door (Same Connection as Lower Section - Bottom Left Door)",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00189ca",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 2, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ],
+      "note": [
+        "This door can only be accessed with the use of glitchy techniques.",
+        "Graphically it aligns with the Left Door of Homing Geemer Room, but surprisingly it leads to the same location as the Lower Section - Bottom Left Door of West Ocean."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Bridge Right Door (Same Connection as Lower Section - Bottom Right Door)",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00189d6",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 2, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ],
+      "note": [
+        "This door can only be accessed with the use of glitchy techniques.",
+        "Graphically it aligns with the Right Door of Homing Geemer Room, but surprisingly it leads to the same location as the Lower Section - Bottom Right Door of West Ocean."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Top Hidden Item (Above Trippers)",
+      "nodeType": "item",
+      "nodeSubType": "hidden",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x781EE",
+      "mapTileMask": [
+        [2, 2, 2, 2, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Left Morph Maze Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x781F4",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [2, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Bottom Left Underwater Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x781E8",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [2, 2, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Top Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 1, 2, 2, 2, 2],
+        [2, 2, 2, 2, 2, 2, 2, 2],
+        [1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Bottom Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 1, 0, 0],
+        [2, 2, 2, 2, 2, 1, 0, 0],
+        [2, 2, 2, 2, 2, 2, 1, 1],
+        [1, 1, 2, 2, 2, 2, 2, 2]
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Morph Maze Junction (Below Super Block)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [2, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 15,
+      "name": "G-Mode Morph Junction (By Left Door)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [2, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ],
+      "note": "Represents being at the left door with G-Mode and morph or artificial morph"
+    },
+    {
+      "id": 16,
+      "name": "G-Mode Morph Overloaded PLMs Junction (By Left Door)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [2, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ],
+      "note": "Represents being at the left door with G-Mode, PLMs overloaded, and morph or artificial morph"
+    },
+    {
+      "id": 17,
+      "name": "G-Mode Morph Junction Direct (By Left Door)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0, 0],
+        [2, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ],
+      "note": "Represents being at the left door with G-Mode and morph or artificial morph, in direct G-Mode"
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Shoot Respawning Super Block",
+      "obstacleType": "abstract"
+    },
+    {
+      "id": "B",
+      "name": "G-Mode Overload PLMs by PBing Item - Return or Risk Loss of Access",
+      "obstacleType": "abstract"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "West Ocean Zeb",
+      "enemyName": "Zeb",
+      "quantity": 1,
+      "homeNodes": [6]
+    },
+    {
+      "id": "e2",
+      "groupName": "West Ocean Trippers",
+      "enemyName": "Tripper",
+      "quantity": 3,
+      "homeNodes": [12]
+    },
+    {
+      "id": "e3",
+      "groupName": "West Ocean Ripper 2",
+      "enemyName": "Ripper 2 (green)",
+      "quantity": 1,
+      "homeNodes": [13]
+    },
+    {
+      "id": "e4",
+      "groupName": "West Ocean Skulteras",
+      "enemyName": "Skultera",
+      "quantity": 2,
+      "homeNodes": [13]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 5},
+        {"id": 13},
+        {"id": 15},
+        {"id": 17}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 12}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 5},
+        {"id": 8},
+        {"id": 12}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 4},
+        {"id": 5},
+        {"id": 8},
+        {
+          "id": 12,
+          "devNote": [
+            "It's possible to stop half-way by shooting open the door that appears to lead to Bowling Alley",
+            "This has limited usefulness, because this door actually leads to the same transition as the bottom right door (to the Wrecked Ship Entrance).",
+            "Likewise the door on the left, which appears to lead to Pancakes and Wavers Room, actually leads to the same transition as the bottom left door (to the Moat).",
+            "There is a potential application by using this runway to the right, as it is longer than the one in front of the bottom right door.",
+            "FIXME: add nodes to represent the doors that appear to lead left and right to Pancakes and Wavers Room and Bowling Alley, and add a similar strat leading there."
+          ]
+        },
+        {"id": 15},
+        {"id": 17}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 13},
+        {"id": 15},
+        {"id": 17}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 6},
+        {"id": 12}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 8,
+      "to": [
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 9,
+      "to": [
+        {"id": 12}
+      ]
+    },
+    {
+      "from": 10,
+      "to": [
+        {"id": 13},
+        {"id": 14}
+      ]
+    },
+    {
+      "from": 11,
+      "to": [
+        {"id": 13}
+      ]
+    },
+    {
+      "from": 12,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 6},
+        {"id": 8},
+        {"id": 9},
+        {"id": 12},
+        {"id": 13},
+        {"id": 14}
+      ]
+    },
+    {
+      "from": 13,
+      "to": [
+        {"id": 1},
+        {"id": 4},
+        {"id": 5},
+        {"id": 11},
+        {"id": 13}
+      ]
+    },
+    {
+      "from": 14,
+      "to": [
+        {"id": 10},
+        {"id": 12},
+        {"id": 13}
+      ]
+    },
+    {
+      "from": 15,
+      "to": [
+        {"id": 16}
+      ]
+    },
+    {
+      "from": 16,
+      "to": [
+        {"id": 14}
+      ]
+    },
+    {
+      "from": 17,
+      "to": [
+        {"id": 1},
+        {"id": 16}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 24,
+          "openEnd": 1,
+          "steepUpTiles": 6,
+          "steepDownTiles": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 5],
+      "name": "Shinespark Into Room",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 146, "excessFrames": 35}}
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 5],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 23,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 6
+        }
+      },
+      "requires": [
+        "canHorizontalShinespark",
+        {"or": [
+          {"shinespark": {"frames": 131, "excessFrames": 35}},
+          {"and": [
+            "canShinechargeMovement",
+            "canMidairShinespark",
+            {"shinespark": {"frames": 106, "excessFrames": 35}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 13],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 5,
+      "link": [1, 15],
+      "name": "G-mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 17],
+      "name": "G-mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 1,
+          "steepUpTiles": 1
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [2, 2],
+      "name": "Leave Shinecharged (HiJump Wall Jump)",
+      "requires": [
+        "HiJump",
+        "canTrickyDashJump",
+        "canWalljump",
+        {"canShineCharge": {"usedTiles": 25, "steepUpTiles": 4, "openEnd": 1}},
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [2, 2],
+      "name": "Leave Shinecharged (HiJump Space Jump)",
+      "requires": [
+        "HiJump",
+        "SpaceJump",
+        {"canShineCharge": {"usedTiles": 25, "steepUpTiles": 4, "openEnd": 1}},
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 135}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [2, 2],
+      "name": "Leave Shinecharged (HiJump)",
+      "requires": [
+        "HiJump",
+        {"canShineCharge": {"usedTiles": 23, "steepUpTiles": 4, "openEnd": 1}},
+        "canTrickyDashJump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Leave With Spark (Tricky Dash Jump, Wall Jump)",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 32, "steepUpTiles": 4, "openEnd": 1}},
+        "canTrickyDashJump",
+        "canWalljump",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 10}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "note": [
+        "Gain a shinecharge while bonking the door below the top-right door.",
+        "Then turn around, run a precise distance of 7 tiles, and jump and walljump to approach the top-right door and shinespark out."
+      ]
+    },
+    {
+      "id": 137,
+      "link": [2, 2],
+      "name": "Leave Shinecharged (Tricky Dash Jump, Wall Jump)",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 18, "steepUpTiles": 4, "openEnd": 1}},
+        "canTrickyDashJump",
+        "canWalljump",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 170}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "note": [
+        "Gain a shinecharge while running left-to-right.",
+        "Continue running right for a precise distance of 7 tiles, then jump and walljump to reach the top-right door with shinecharge frames remaining."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Leave With Mockball (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 7,
+            "openEnd": 1,
+            "steepUpTiles": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 7,
+            "openEnd": 1,
+            "steepUpTiles": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 12],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 18,
+      "link": [3, 2],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 33,
+          "openEnd": 1,
+          "steepUpTiles": 4
+        }
+      }
+    },
+    {
+      "id": 20,
+      "link": [3, 3],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "link": [3, 3],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 11,
+            "openEnd": 1,
+            "steepUpTiles": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 22,
+      "link": [3, 3],
+      "name": "Leave With Spring Ball Bounce (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 7,
+            "openEnd": 1,
+            "steepUpTiles": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 23,
+      "link": [3, 3],
+      "name": "Leave With Spring Ball Bounce (Neutral Bounce)",
+      "requires": [
+        "canInsaneJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 7,
+            "openEnd": 1,
+            "steepUpTiles": 1
+          },
+          "minExtraRunSpeed": "$5.2",
+          "movementType": "uncontrolled"
+        }
+      },
+      "note": [
+        "Do a neutral bounce (lateral mid-air morph into not holding jump while landing) into an uncontrolled bounce."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [3, 3],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 25,
+      "link": [3, 5],
+      "name": "Stored Moonfall Clip Through the Bridge",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        "canFreeFallClip"
+      ],
+      "note": [
+        "Moonfall onto the Homing Geemer walkway twice to clip all the way down into the ocean below.",
+        "The Moonfall must be performed at the very edge of the slope so that Samus fully falls to the lower area.",
+        "The first Moonfall will clip into the slope above the walkway, and the second Moonfall will clip all the way through.",
+        "Pose changing can send Samus inside of the walkway, where the right door connects to the WS main entrance door, and the left door connects to the Moat door."
+      ]
+    },
+    {
+      "id": 145,
+      "link": [3, 5],
+      "name": "Super Sink",
+      "entranceCondition": {
+        "comeInWithSuperSink": {}
+      },
+      "requires": [],
+      "note": [
+        "Enter the room with a super sink, in order to clip down several screens to the bottom part of the room."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 8],
+      "name": "Stored Moonfall Clip Into the Bridge",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        {"notable": "Get Inside the Bridge"},
+        "canFreeFallClip",
+        "canSkipDoorLock"
+      ],
+      "note": [
+        "Moonfall onto the Homing Geemer walkway twice to clip down into the bridge below.",
+        "The Moonfall must be performed at the very edge of the slope so that Samus fully falls to the lower area.",
+        "The first Moonfall will clip into the slope above the walkway, and the second Moonfall will clip all the way through.",
+        "Pose changing will allow Samus to remain inside of the bridge, where the right door connects to the WS main entrance door, and the left door connects to the Moat door."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [3, 12],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 28,
+      "link": [4, 4],
+      "name": "Land in Door Frame",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "canCarefulJump",
+        {"doorUnlockedAtNode": 4}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": ["canInsaneJump"]},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "Jump through the door and shoot it open as you enter, landing on the door frame to avoid falling."
+    },
+    {
+      "id": 140,
+      "link": [4, 4],
+      "name": "Door Stuck, Open Door",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        {"doorUnlockedAtNode": 4}
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 29,
+      "link": [4, 4],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 30,
+      "link": [4, 4],
+      "name": "Leave With Temporary Blue (Blue Space Jump)",
+      "requires": [
+        {"canShineCharge": {
+          "usedTiles": 23,
+          "steepUpTiles": 1,
+          "steepDownTiles": 5,
+          "openEnd": 1
+        }},
+        "canBlueSpaceJump",
+        "canTrickyJump",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true,
+      "note": ["Time a Space Jump immediately after clearing the last set of Grapple blocks."]
+    },
+    {
+      "id": 31,
+      "link": [4, 4],
+      "name": "Leave With Temporary Blue (Spring Ball Jumps)",
+      "requires": [
+        "Gravity",
+        "HiJump",
+        {"or": [
+          {"and": [
+            "h_shinechargeMaxRunway",
+            "canXRayTurnaround"
+          ]},
+          {"canShineCharge": {
+            "usedTiles": 18,
+            "steepUpTiles": 3,
+            "steepDownTiles": 4,
+            "openEnd": 2
+          }}
+        ]},
+        "canSpringBallJumpMidAir",
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 32,
+      "link": [4, 4],
+      "name": "Leave With Temporary Blue (Spring Ball Bounce)",
+      "requires": [
+        {"canShineCharge": {
+          "usedTiles": 20,
+          "steepUpTiles": 1,
+          "steepDownTiles": 4,
+          "openEnd": 1
+        }},
+        "canSpeedball",
+        "canSpringBallBounce",
+        "canTrickyJump",
+        "HiJump",
+        "canSpringBallJumpMidAir",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 33,
+      "link": [4, 4],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 23,
+            "openEnd": 1,
+            "steepUpTiles": 1,
+            "steepDownTiles": 5
+          }
+        }
+      }
+    },
+    {
+      "id": 34,
+      "link": [4, 4],
+      "name": "Leave With Mockball (Space Jump)",
+      "requires": [
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 23,
+            "openEnd": 1,
+            "steepUpTiles": 1,
+            "steepDownTiles": 5
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 35,
+      "link": [4, 4],
+      "name": "Leave With Spring Ball Bounce (Space Jump)",
+      "requires": [
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 23,
+            "openEnd": 1,
+            "steepUpTiles": 1,
+            "steepDownTiles": 5
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 36,
+      "link": [4, 4],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 23,
+            "openEnd": 1,
+            "steepUpTiles": 1,
+            "steepDownTiles": 5
+          }
+        }
+      }
+    },
+    {
+      "id": 37,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "canPrepareForNextRoom",
+        {"doorUnlockedAtNode": 4},
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "devNote": "This is to represent the ability to Crystal Flash after coming in jumping, shooting open the door, and landing in the door frame."
+    },
+    {
+      "id": 38,
+      "link": [4, 4],
+      "name": "Carry G-Mode Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canWalljump",
+          {"and": [
+            "canLongIBJ",
+            "Gravity"
+          ]},
+          {"and": [
+            "HiJump",
+            "canJumpIntoIBJ"
+          ]},
+          {"and": [
+            "canLongIBJ",
+            "canBombHorizontally",
+            "canResetFallSpeed"
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            "canLongIBJ",
+            "canTrickyJump"
+          ]},
+          {"and": [
+            "HiJump",
+            {"or": [
+              "SpeedBooster",
+              "canSpringBallJumpMidAir"
+            ]}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            "canPreciseGrapple"
+          ]},
+          {"and": [
+            "Gravity",
+            "canShinechargeMovement",
+            "canMidairShinespark",
+            "h_shinechargeMaxRunway",
+            {"shinespark": {"frames": 35, "excessFrames": 10}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 39,
+      "link": [4, 4],
+      "name": "Carry G-Mode Morph Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canArtificialMorph"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "devNote": "Artificial morph will allow Samus not to fall; real Morph is not sufficient."
+    },
+    {
+      "id": 40,
+      "link": [4, 5],
+      "name": "Base",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": []
+    },
+    {
+      "id": 141,
+      "link": [4, 5],
+      "name": "Fall Into Room With Mockball",
+      "entranceCondition": {
+        "comeInWithMockball": {
+          "speedBooster": "any",
+          "adjacentMinTiles": 0,
+          "remoteAndLandingMinTiles": [[0, 0]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 41,
+      "link": [4, 5],
+      "name": "Hero Shot Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canHeroShot",
+        {"shinespark": {"frames": 26}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "While falling out the door, swing out to the left a couple tiles before moving back right, in order to make the camera scroll.",
+        "Run, jump, fire a shot mid-air, and activate a well-timed mid-air shinespark to make it through the door."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [4, 8],
+      "name": "G-Mode Deep Stuck X-Ray Climb into the Bridge",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"notable": "Get Inside the Bridge"},
+        "canSkipDoorLock",
+        {"or": [
+          "canArtificialMorph",
+          "canWalljump",
+          "SpaceJump",
+          {"and": [
+            "canLongIBJ",
+            "Gravity"
+          ]},
+          {"and": [
+            "HiJump",
+            "canJumpIntoIBJ"
+          ]},
+          {"and": [
+            "canLongIBJ",
+            "canBombHorizontally",
+            "canResetFallSpeed"
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            "canLongIBJ",
+            "canTrickyJump"
+          ]},
+          {"and": [
+            "HiJump",
+            {"or": [
+              "SpeedBooster",
+              "canSpringBallJumpMidAir"
+            ]}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            "canPreciseGrapple"
+          ]},
+          {"and": [
+            "Gravity",
+            "canShinechargeMovement",
+            "canMidairShinespark",
+            "h_shinechargeMaxRunway",
+            {"shinespark": {"frames": 35, "excessFrames": 10}}
+          ]}
+        ]},
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 43,
+      "link": [4, 8],
+      "name": "Shinespark Deep Stuck X-Ray Climb into the Bridge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 1},
+        {"notable": "Get Inside the Bridge"},
+        "canSkipDoorLock",
+        {"shinespark": {"frames": 1, "excessFrames": 1}},
+        "canShinesparkDeepStuck",
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 44,
+      "link": [4, 8],
+      "name": "Very Deep Stuck X-Ray Climb into the Bridge",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"notable": "Get Inside the Bridge"},
+        {"or": [
+          "canArtificialMorph",
+          "canWalljump",
+          "SpaceJump",
+          {"and": [
+            "canLongIBJ",
+            "Gravity"
+          ]},
+          {"and": [
+            "HiJump",
+            "canJumpIntoIBJ"
+          ]},
+          {"and": [
+            "canLongIBJ",
+            "canBombHorizontally",
+            "canResetFallSpeed"
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            "canLongIBJ",
+            "canTrickyJump"
+          ]},
+          {"and": [
+            "HiJump",
+            {"or": [
+              "SpeedBooster",
+              "canSpringBallJumpMidAir"
+            ]}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            "canPreciseGrapple"
+          ]},
+          {"and": [
+            "Gravity",
+            "canShinechargeMovement",
+            "canMidairShinespark",
+            "h_shinechargeMaxRunway",
+            {"shinespark": {"frames": 35, "excessFrames": 10}}
+          ]}
+        ]},
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [4, 12],
+      "name": "G-Mode Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "canArtificialMorph",
+          "canWalljump",
+          "SpaceJump",
+          {"and": [
+            "canLongIBJ",
+            "Gravity"
+          ]},
+          {"and": [
+            "HiJump",
+            "canJumpIntoIBJ"
+          ]},
+          {"and": [
+            "canLongIBJ",
+            "canBombHorizontally",
+            "canResetFallSpeed"
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            "canLongIBJ",
+            "canTrickyJump"
+          ]},
+          {"and": [
+            "HiJump",
+            {"or": [
+              "SpeedBooster",
+              "canSpringBallJumpMidAir"
+            ]}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            "canPreciseGrapple"
+          ]},
+          {"and": [
+            "Gravity",
+            "canShinechargeMovement",
+            "canMidairShinespark",
+            "h_shinechargeMaxRunway",
+            {"shinespark": {"frames": 35, "excessFrames": 10}}
+          ]}
+        ]},
+        "canLongXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 2 screens."
+    },
+    {
+      "id": 46,
+      "link": [4, 12],
+      "name": "Shinespark Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 1},
+        {"shinespark": {"frames": 1, "excessFrames": 1}},
+        "canShinesparkDeepStuck",
+        "canLongXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 2 screens."
+    },
+    {
+      "id": 47,
+      "link": [4, 15],
+      "name": "G-mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "Morph",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          "h_artificialMorphSpringBall",
+          "h_artificialMorphHBJ",
+          "h_artificialMorphDiagonalBombJump"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 48,
+      "link": [4, 17],
+      "name": "G-mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "Morph",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          "h_artificialMorphSpringBall",
+          "h_artificialMorphHBJ",
+          "h_artificialMorphDiagonalBombJump"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 49,
+      "link": [5, 2],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 4 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [5, 3],
+      "name": "G-Mode Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 3 screens."
+    },
+    {
+      "id": 51,
+      "link": [5, 3],
+      "name": "Shinespark Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 1},
+        {"shinespark": {"frames": 1, "excessFrames": 1}},
+        "canShinesparkDeepStuck",
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 3 screens."
+    },
+    {
+      "id": 52,
+      "link": [5, 3],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 3 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [5, 4],
+      "name": "Wall Jump",
+      "requires": [
+        "canWalljump"
+      ]
+    },
+    {
+      "id": 54,
+      "link": [5, 4],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 55,
+      "link": [5, 4],
+      "name": "IBJ from the Water",
+      "requires": [
+        "Gravity",
+        "canLongIBJ"
+      ]
+    },
+    {
+      "id": 56,
+      "link": [5, 4],
+      "name": "IBJ from the Platforms",
+      "requires": [
+        {"or": [
+          {"and": [
+            "HiJump",
+            "canJumpIntoIBJ"
+          ]},
+          {"and": [
+            "canLongIBJ",
+            "canBombHorizontally",
+            "canResetFallSpeed"
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            "canLongIBJ",
+            "canTrickyJump"
+          ]}
+        ]}
+      ],
+      "note": "Jump into an IBJ while avoiding the Ripper, or start an IBJ from the platform to the left and boost horizontally at the top."
+    },
+    {
+      "id": 57,
+      "link": [5, 4],
+      "name": "SpeedyJump",
+      "requires": [
+        "HiJump",
+        "SpeedBooster",
+        "canCarefulJump"
+      ]
+    },
+    {
+      "id": 58,
+      "link": [5, 4],
+      "name": "Shinespark",
+      "requires": [
+        "Gravity",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 50, "excessFrames": 10}}
+      ]
+    },
+    {
+      "id": 59,
+      "link": [5, 4],
+      "name": "Health Conscious Shinespark",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovement",
+        "canMidairShinespark",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 35, "excessFrames": 10}}
+      ],
+      "note": "Jump to the submerged platform, then jump again."
+    },
+    {
+      "id": 60,
+      "link": [5, 4],
+      "name": "Grapple Fling",
+      "requires": [
+        "canTrickyJump",
+        "canPreciseGrapple"
+      ],
+      "note": "Attach to the ripper when it is all the way left.  Build momentum and launch Heavensward."
+    },
+    {
+      "id": 61,
+      "link": [5, 4],
+      "name": "HiJump Springball Jump",
+      "requires": [
+        "HiJump",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 62,
+      "link": [5, 4],
+      "name": "Use Flash Suit, Diagonal Spark",
+      "requires": [
+        "canCameraManip",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 13, "excessFrames": 3}}
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["canMidAirMorph"]}],
+      "note": [
+        "It is possible to open the door before sparking and then spark diagonally into it to save Energy.",
+        "Shoot straight up while directly below the door, then jump to raise the camera and hit the door.",
+        "It is also possible to use a Power Bomb from a midair morph,",
+        "or to midair morph, unmorph, then shoot a missile or super diagonally from the platform to the left.",
+        "If it is important to bonk before going through the door, diagonally spark far enough to the left to bonk the ceiling before hitting the transition."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [5, 4],
+      "name": "Grapple Clip Door Lock Skip",
+      "requires": [
+        {"notable": "Grapple Clip Door Lock Skip"},
+        "canUseEnemies",
+        "canGrappleClip",
+        "h_CrystalFlash",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Grapple on the Ripper to get inside the wall under the door.",
+        "Do a Crystal Flash to force a standup.",
+        "X-Ray climb up to the door transition."
+      ],
+      "devNote": "TODO: There may be Bob strats to skip the Crystal Flash requirement."
+    },
+    {
+      "id": 64,
+      "link": [5, 5],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 9,
+          "openEnd": 1,
+          "steepUpTiles": 2
+        }
+      }
+    },
+    {
+      "id": 65,
+      "link": [5, 5],
+      "name": "Leave With Temporary Blue (Gravity)",
+      "requires": [
+        "Gravity",
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"and": [
+            "canSpringBallJumpMidAir",
+            "canLongChainTemporaryBlue"
+          ]},
+          {"and": [
+            "canBlueSpaceJump",
+            "canChainTemporaryBlue"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 66,
+      "link": [5, 5],
+      "name": "Leave With Temporary Blue (Spring Ball Bounce)",
+      "requires": [
+        {"canShineCharge": {
+          "usedTiles": 20,
+          "steepUpTiles": 1,
+          "steepDownTiles": 4,
+          "openEnd": 1
+        }},
+        "canSpeedball",
+        "canSpringBallBounce",
+        "canTrickyJump",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 67,
+      "link": [5, 5],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 23,
+            "openEnd": 1,
+            "steepUpTiles": 1,
+            "steepDownTiles": 5
+          }
+        }
+      }
+    },
+    {
+      "id": 68,
+      "link": [5, 5],
+      "name": "Leave With Mockball (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 23,
+            "openEnd": 1,
+            "steepUpTiles": 1,
+            "steepDownTiles": 5
+          },
+          "landingRunway": {
+            "length": 9,
+            "openEnd": 1,
+            "steepUpTiles": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 142,
+      "link": [5, 5],
+      "name": "Leave With Controlled Spring Ball Bounce",
+      "requires": [
+        "canTrickySpringBallBounce"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 22,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 9,
+            "openEnd": 1,
+            "steepUpTiles": 2
+          },
+          "minExtraRunSpeed": "$1.2",
+          "maxExtraRunSpeed": "$4.8",
+          "blue": "any",
+          "movementType": "controlled"
+        }
+      },
+      "note": [
+        "Use the runway on the left side of the room to gain speed and bounce across the room."
+      ],
+      "devNote": ["Higher speed (at least up to $4.C) is possible with greater difficulty."]
+    },
+    {
+      "id": 69,
+      "link": [5, 5],
+      "name": "Leave With Spring Ball Bounce (Space Jump)",
+      "requires": [
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 23,
+            "openEnd": 1,
+            "steepUpTiles": 1,
+            "steepDownTiles": 5
+          },
+          "landingRunway": {
+            "length": 9,
+            "openEnd": 1,
+            "steepUpTiles": 2
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 70,
+      "link": [5, 5],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 23,
+            "openEnd": 1,
+            "steepUpTiles": 1,
+            "steepDownTiles": 5
+          }
+        }
+      }
+    },
+    {
+      "id": 71,
+      "link": [5, 13],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 72,
+      "link": [5, 15],
+      "name": "G-mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "Morph",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          "h_artificialMorphSpringBall",
+          "h_artificialMorphHBJ",
+          "h_artificialMorphDiagonalBombJump"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 73,
+      "link": [5, 17],
+      "name": "G-mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "Morph",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          "h_artificialMorphSpringBall",
+          "h_artificialMorphHBJ",
+          "h_artificialMorphDiagonalBombJump"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 74,
+      "link": [6, 2],
+      "name": "G-Mode Setup Lure Zeb from Below (to Top Right Section - Top Right Door)",
+      "requires": [
+        {"notable": "G-Mode Setup Lure Zeb from Below"},
+        "canComplexGMode",
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "h_bombThings",
+          "h_useSpringBall",
+          "h_usePowerBomb"
+        ]},
+        "canCameraManip"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Start from the Middle Right Door next to the Zeb farm.",
+        "While standing on the right of the Zeb farm, freeze the Zeb while it is still moving up and facing to the right.",
+        "Quickly go through the morph tunnel with a Bomb, Power Bomb, or Spring Ball, and get onto the small floating platform just above the Zeb farm.",
+        "After the Zeb is visible, freeze it and jump on top of it. Use the Zeb as a platform to climb high enough to get it to be aligned with the door.",
+        "Use the background to see how high the Zeb is - Get the Zeb 2-3 tiles higher than the thinner bright line in the background.",
+        "Note that if the Zeb is unfrozen and off screen horizontally it will despawn, but if it's off screen vertically it will not.",
+        "Chase the Zeb towards the doorway, refreezing it as needed."
+      ]
+    },
+    {
+      "id": 75,
+      "link": [6, 3],
+      "name": "G-Mode Setup Lure Zeb from Below (to Top Right Section - Bottom Right Door)",
+      "requires": [
+        {"notable": "G-Mode Setup Lure Zeb from Below"},
+        "canComplexGMode",
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "h_bombThings",
+          "h_useSpringBall",
+          "h_usePowerBomb"
+        ]},
+        "canCameraManip"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Start from the Middle Right Door next to the Zeb farm.",
+        "While standing on the right of the Zeb farm, freeze the Zeb while it is still moving up and facing to the right.",
+        "Quickly go through the morph tunnel with a Bomb, Power Bomb, or Spring Ball, and get onto the small floating platform just above the Zeb farm.",
+        "After the Zeb is visible, fall off the platform to make the Zeb move horizontally at the right height to hit Samus in the doorway to the right.",
+        "Note that if the Zeb is unfrozen and off screen horizontally it will despawn, but if it's off screen vertically it will not."
+      ]
+    },
+    {
+      "id": 76,
+      "link": [6, 6],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 77,
+      "link": [6, 6],
+      "name": "Leave With Runway - Frozen Zeb",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "Freeze the Zeb from the right while jumping in order to freeze it at the correct height, noting that it will raise 1 more pixel when it thaws.",
+        "While standing to the left of it, refreeze it again. Keep a half-tile gap between the Zeb and the runway in order to extend the runway as much as possible."
+      ],
+      "devNote": "The Zeb can be used to extend the runway at 2 and 3, but that requires a blind and precise positioning (and is not very useful at 3)."
+    },
+    {
+      "id": 78,
+      "link": [6, 6],
+      "name": "Zeb Farm",
+      "requires": [
+        {"simpleCycleFrames": 85},
+        {"cycleFrames": 20}
+      ],
+      "farmCycleDrops": [{"enemy": "Zeb", "count": 1}]
+    },
+    {
+      "id": 79,
+      "link": [6, 6],
+      "name": "G-Mode Setup - Get Hit by Zeb",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 80,
+      "link": [6, 12],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_bombThings",
+          "h_useSpringBall"
+        ]}
+      ],
+      "note": "The shot blocks can be destroyed without using bombs"
+    },
+    {
+      "id": 81,
+      "link": [6, 12],
+      "name": "X-Ray Standup",
+      "requires": [
+        "Morph",
+        "canXRayStandUp",
+        "canPartialFloorClip",
+        "canDownGrab"
+      ],
+      "flashSuitChecked": true,
+      "note": "Unmorph and shoot the shot block, then x-ray standup, partial floor clip, and down grab to escape."
+    },
+    {
+      "id": 82,
+      "link": [6, 12],
+      "name": "Bug Boost with Ice",
+      "requires": [
+        {"notable": "Bug Boost with Ice"},
+        "Morph",
+        "canNeutralDamageBoost",
+        "canTrickyUseFrozenEnemies",
+        "canCameraManip",
+        {"enemyDamage": {"enemy": "Zeb", "type": "contact", "hits": 1}}
+      ],
+      "note": [
+        "Get a Zeb to move left into the morph passage, and reach the end of the tunnel before it.",
+        "Freeze the bug at the correct height, such that it will move and be able to hit Samus while in the morph tunnel.",
+        "While in the first two-tile tall region, shoot and refreeze the bug. Then go to the second two-tile region and shoot the block.",
+        "Return and lure the bug such that it hits Samus and boosts her up and onto the ledge to escape.",
+        "Be careful not to despawn the enemy by moving it off camera, except while it is frozen. This strat is a one-shot try and failure is a softlock."
+      ],
+      "devNote": "Could use a failure definition?"
+    },
+    {
+      "id": 83,
+      "link": [6, 12],
+      "name": "Bug Boost with Wave or Spazer",
+      "requires": [
+        {"notable": "Bug Boost with Wave or Spazer"},
+        {"or": [
+          "Wave",
+          "Spazer"
+        ]},
+        "canNeutralDamageBoost",
+        "canMockball",
+        {"enemyDamage": {"enemy": "Zeb", "type": "contact", "hits": 1}}
+      ],
+      "note": [
+        "Get a Zeb to move left into the morph passage, and reach the end of the tunnel before it.",
+        "Shoot the block with Wave or while crouching with Spazer before luring the bug.",
+        "Quickly lure the bug then use a mockball on the 4 tile floor before the tunnel.",
+        "This strat is a one-shot try and failure is a softlock."
+      ],
+      "devNote": "Could use a failure definition?"
+    },
+    {
+      "id": 84,
+      "link": [6, 12],
+      "name": "Bug Boost",
+      "requires": [
+        {"notable": "Bug Boost"},
+        "canNeutralDamageBoost",
+        "canMockball",
+        {"enemyDamage": {"enemy": "Zeb", "type": "contact", "hits": 1}}
+      ],
+      "note": [
+        "Get a Zeb to move left into the morph passage, and reach the end of the tunnel before it.",
+        "Must be quick enough to shoot the shot block first. Requires a mockball on the 4 tile floor before the tunnel.",
+        "This strat is a one-shot try and failure is a softlock."
+      ],
+      "devNote": "Could use a failure definition?"
+    },
+    {
+      "id": 85,
+      "link": [6, 12],
+      "name": "Bug Ice Clip",
+      "requires": [
+        {"notable": "Bug Ice Clip"},
+        {"or": [
+          "h_XRayMorphIceClip",
+          "h_preciseIceClip"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Freeze a bug three tiles to the right of the morph tunnel entrance, directly under the tile where ceiling is higher.",
+        "Jump onto the bug, crouch, and jump up.",
+        "The bug must be at a very precise pixel height unless using  XRay and Morph.",
+        "Note that although the ceiling here is 3 tiles thick, only the bottom tile is solid; the other two are slopes pushing Samus up, allowing the trick to be done."
+      ],
+      "devNote": "This location does not work at the high pixel location, as Samus is forced into a crouch, likely because of the slope tiles above?"
+    },
+    {
+      "id": 86,
+      "link": [6, 12],
+      "name": "G-mode Morph X-Ray Standup",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayStandUp",
+        "canPartialFloorClip",
+        "canDownGrab",
+        {"or": [
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "h_additionalBomb"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to bomb boost from the door runway over the Zeb and onto the first step.",
+        "Without doing this, the Zeb will likely touch Samus, as it will start moving if Samus goes down a single step.",
+        "At the left end of the tunnel, roll against the lower left corner, exit G-mode, and X-Ray standup, shoot the block, partial floor clip, then jump and down grab to the ledge.",
+        "Wiggle to escape. A failed jump will result in a forced crouch, which is likely a soft lock."
+      ]
+    },
+    {
+      "id": 87,
+      "link": [6, 12],
+      "name": "G-Mode Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 88,
+      "link": [6, 12],
+      "name": "Shinespark Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 1},
+        {"shinespark": {"frames": 1, "excessFrames": 1}},
+        "canShinesparkDeepStuck",
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 89,
+      "link": [7, 7],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 90,
+      "link": [7, 7],
+      "name": "Leave With Runway, Both Doors Open",
+      "requires": [
+        {"doorUnlockedAtNode": 8}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"nodeId": 8, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 91,
+      "link": [8, 7],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 92,
+      "link": [8, 8],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 93,
+      "link": [8, 8],
+      "name": "Leave With Runway, Both Doors Open",
+      "requires": [
+        {"doorUnlockedAtNode": 7}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"nodeId": 7, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 94,
+      "link": [9, 12],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 95,
+      "link": [10, 13],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_bombThings",
+          {"obstaclesCleared": ["B"]}
+        ]}
+      ],
+      "devNote": [
+        "This is to go below through the bottom path, past the bomb block, to avoid the need to do a mid-air morph to use the top path.",
+        "This strat is also used to return below if in G-mode, to avoid canRiskPermanentLossOfAccess."
+      ]
+    },
+    {
+      "id": 96,
+      "link": [10, 14],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall",
+          "canIBJ"
+        ]},
+        {"or": [
+          {"obstaclesNotCleared": ["B"]},
+          "canRiskPermanentLossOfAccess"
+        ]}
+      ]
+    },
+    {
+      "id": 97,
+      "link": [11, 13],
+      "name": "Base",
+      "requires": [
+        "h_bombThings"
+      ]
+    },
+    {
+      "id": 98,
+      "link": [11, 13],
+      "name": "Camera Maniuplation",
+      "requires": [
+        "Morph",
+        "canCameraManip"
+      ],
+      "note": [
+        "Crouch and shoot the shot blocks from afar. There is enough time to get past them without Gravity before they respawn.",
+        "If the shot blocks do not break, roll all the way to the left to reset the camera, then go back."
+      ]
+    },
+    {
+      "id": 99,
+      "link": [12, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 100,
+      "link": [12, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 101,
+      "link": [12, 6],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_bombThings",
+          "h_useSpringBall"
+        ]}
+      ]
+    },
+    {
+      "id": 102,
+      "link": [12, 6],
+      "name": "Shinespark, Morph Tunnel Rush",
+      "requires": [
+        {"notable": "Shinespark, Morph Tunnel Rush"},
+        "canShinechargeMovementComplex",
+        "h_useSpringBall",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 25}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Preopen the door and shotblock, then go back and charge a shinespark.",
+        "Springball through the short morphball tunnel to just have enough time to shinespark out the door."
+      ]
+    },
+    {
+      "id": 103,
+      "link": [12, 8],
+      "name": "Enemy Stuck Moonfall into the Bridge",
+      "requires": [
+        {"notable": "Get Inside the Bridge"},
+        "canSkipDoorLock",
+        "canEnemyStuckMoonfall",
+        "canFreeFallClip",
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "h_useSpringBall",
+          {"and": [
+            "h_bombThings",
+            "h_additionalBomb"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Watch the middle Tripper move until it reaches the rightmost platform and then move it off camera.",
+        "Move to the Zeb Spawner and freeze the bug as it is rising and facing right.",
+        "Travel through the Morph tunnel and wait above the Zeb.",
+        "Once it rises to the correct height, let it start moving right.",
+        "Freeze the Zeb and the Tripper above the Bridge and perform the Enemy Stuck Moonfall.",
+        "Move off after building enough fall speed and wiggle back and forth to clip through the Bridge and land inside."
+      ],
+      "devNote": "FIXME: A [6, 8] version of this strat is possible with slightly different requirements but is more difficult."
+    },
+    {
+      "id": 104,
+      "link": [12, 9],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canLongIBJ"
+        ]}
+      ]
+    },
+    {
+      "id": 105,
+      "link": [12, 9],
+      "name": "Climb the Trippers with HiJump",
+      "requires": [
+        "canUseEnemies",
+        "HiJump"
+      ]
+    },
+    {
+      "id": 106,
+      "link": [12, 9],
+      "name": "Climb the Trippers Bootless",
+      "requires": [
+        "canUseEnemies",
+        {"or": [
+          {"and": [
+            "canUseFrozenEnemies",
+            "canPreciseWalljump"
+          ]},
+          "canTrickyWalljump",
+          {"and": [
+            "canCameraManip",
+            "canCarefulJump"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Jump on the left platforms to get the middle Tripper on screen, luring it to the right.",
+        "Get on the middle Tripper and use it to jump to the item. This requires a somewhat precise shot and jump, particularly if the top Tripper is in the way.",
+        "The jump and shot can be easier and done at the apex of a single jump starting with a crouch. Freezing the Trippers can make this much easier."
+      ]
+    },
+    {
+      "id": 107,
+      "link": [12, 9],
+      "name": "Shinespark",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 36}}
+      ]
+    },
+    {
+      "id": 138,
+      "link": [12, 9],
+      "name": "Speedy HiJump",
+      "requires": [
+        "SpeedBooster",
+        "HiJump",
+        "canCarefulJump"
+      ]
+    },
+    {
+      "id": 108,
+      "link": [12, 9],
+      "name": "Slow Tripper Ride",
+      "requires": [
+        "canUseEnemies",
+        "canBeVeryPatient"
+      ]
+    },
+    {
+      "id": 109,
+      "link": [12, 12],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 139,
+      "link": [12, 13],
+      "name": "Respawning Shot Block Moondance",
+      "requires": [
+        {"notable": "Respawning Shot Block Moondance"},
+        "canExtendedMoondance",
+        "canBeExtremelyPatient"
+      ],
+      "note": [
+        "Perform 176 moonfalls using the respawning shot block:",
+        "after each moonfall, destroy the shot block (aiming up with angle up + angle down) and press forward to stand up;",
+        "wait for the shot block to respawn before performing the next moonfall.",
+        "On the 176th moonfall, Samus will sink a tile into the floor.",
+        "Use Grapple to stand back up and perform 146 more moonfalls using the respawning shot block.",
+        "On the 146th moonfall, Samus will sink 2 tiles into the floor.",
+        "From here, continue using Grapple to stand up and perform another 145 moonfalls, but now without needing to use the shot block.",
+        "After clipping 2 tiles into the floor with the 145th moonfall, unequip Grapple and perform a final 146th moonfall from 2 tiles deep in the floor to clip past 3 more tiles and reach the bottom of the room.",
+        "Note that exact counting needed here: losing count and performing the 146th moonfall from the surface would cause Samus to clip 3 tiles into the floor and be stuck in a crouched state,",
+        "unable to stand back up with Grapple nor able to perform the final moonfall needed to clip the rest of the way down;",
+        "conversely, performing a moonfall early from 2 tiles deep, before gaining enough speed, will result in Samus only clipping down through a total of 4 tiles, again resulting in a softlock.",
+        "This strat takes approximately 45 minutes to execute."
+      ]
+    },
+    {
+      "id": 110,
+      "link": [12, 14],
+      "name": "Base",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "The super block respawns.",
+      "devNote": [
+        "This obstacle is to represent shooting the super block and is only used in quickly returning after grabbing the item.",
+        "It is necessary because there is a g-mode strat to get to 14."
+      ]
+    },
+    {
+      "id": 111,
+      "link": [12, 14],
+      "name": "Enemy Stuck Moonfall Super Block Clip",
+      "requires": [
+        {"notable": "Enemy Stuck Moonfall Super Block Clip"},
+        "canEnemyStuckMoonfall",
+        "canFreeFallClip",
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "h_useSpringBall",
+          {"and": [
+            "h_bombThings",
+            "h_additionalBomb"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Watch the lowest Tripper move until it reaches the left side wall and then move it off camera.",
+        "Move to the Zeb Spawner and freeze the bug as it is rising and facing left.",
+        "Travel through the Morph tunnel and wait above the Zeb.",
+        "Once it rises to about halfway up the floating platform, let it start moving left.",
+        "Freeze the Zeb and the Tripper above the Super Block and perform the Enemy Stuck Moonfall.",
+        "Move off after building enough fall speed and aim down to clip through the Super block."
+      ],
+      "devNote": "FIXME: A [6, 14] version of this strat is possible with slightly different requirements but is more difficult."
+    },
+    {
+      "id": 112,
+      "link": [13, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 113,
+      "link": [13, 1],
+      "name": "Ocean Floor Shinecharge, Spark Left",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 38}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Jump to the runway connected to the left side door before sparking."
+    },
+    {
+      "id": 114,
+      "link": [13, 4],
+      "name": "Ocean Floor Shinecharge, Fast Wallclimb to Gravity Door",
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canFastWalljumpClimb",
+        "HiJump",
+        "Gravity",
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 162}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Use walljumps to climb from the ocean floor up to the gravity suit room door."
+    },
+    {
+      "id": 115,
+      "link": [13, 4],
+      "name": "Ocean Floor Shinecharge, Fast Spacejump Wallclimb to Gravity Door",
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canFastWalljumpClimb",
+        "HiJump",
+        "Gravity",
+        "SpaceJump",
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 145}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Spacejump out of the water then use walljumps up to the gravity suit room door."
+    },
+    {
+      "id": 116,
+      "link": [13, 5],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "Grapple"
+        ]}
+      ]
+    },
+    {
+      "id": 117,
+      "link": [13, 5],
+      "name": "Over Ocean Platforming",
+      "requires": [
+        {"or": [
+          "canCarefulJump",
+          "canConsecutiveWalljump"
+        ]}
+      ],
+      "note": "It may be best to have shorter, later jumps to prevent bonking the ceiling or hitting the Ripper."
+    },
+    {
+      "id": 118,
+      "link": [13, 5],
+      "name": "Gravity Suit",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canIBJ"
+        ]}
+      ],
+      "devNote": "A speedy jump would be obsoleted by another strat for being tricky."
+    },
+    {
+      "id": 119,
+      "link": [13, 5],
+      "name": "Gravity Suit and Shinespark",
+      "requires": [
+        "Gravity",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 17, "excessFrames": 5}}
+      ]
+    },
+    {
+      "id": 120,
+      "link": [13, 5],
+      "name": "Ocean Floor Jump Assist Shinecharge Right",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"or": [
+          "HiJump",
+          "SpaceJump"
+        ]},
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 121,
+      "link": [13, 5],
+      "name": "Ocean Floor Precise Walljump Shinespark Right",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        "canPreciseWalljump",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 15}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 122,
+      "link": [13, 5],
+      "name": "Over Ocean Spark, In-Room",
+      "requires": [
+        "canHorizontalShinespark",
+        {"or": [
+          {"canShineCharge": {
+            "usedTiles": 23,
+            "steepUpTiles": 6,
+            "steepDownTiles": 1,
+            "openEnd": 1
+          }},
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 24,
+              "steepUpTiles": 6,
+              "steepDownTiles": 1,
+              "openEnd": 1
+            }},
+            {"doorUnlockedAtNode": 1}
+          ]}
+        ]},
+        {"or": [
+          {"shinespark": {"frames": 131}},
+          {"and": [
+            "canShinechargeMovement",
+            "canMidairShinespark",
+            {"shinespark": {"frames": 106}}
+          ]}
+        ]}
+      ],
+      "unlocksDoors": [{"nodeId": 1, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 123,
+      "link": [13, 5],
+      "name": "Over Ocean Spark, Through the Door",
+      "requires": [
+        {"or": [
+          "canCarefulJump",
+          "Grapple",
+          "Wave",
+          "SpaceJump"
+        ]},
+        {"or": [
+          {"canShineCharge": {
+            "usedTiles": 23,
+            "steepUpTiles": 6,
+            "steepDownTiles": 1,
+            "openEnd": 1
+          }},
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 24,
+              "steepUpTiles": 6,
+              "steepDownTiles": 1,
+              "openEnd": 1
+            }},
+            {"doorUnlockedAtNode": 1}
+          ]}
+        ]},
+        {"or": [
+          {"shinespark": {"frames": 131}},
+          {"and": [
+            "canShinechargeMovement",
+            "canMidairShinespark",
+            {"shinespark": {"frames": 106}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["ammo"], "requires": []},
+        {"nodeId": 5, "types": ["ammo"], "requires": []}
+      ],
+      "note": "Open the right door before sparking to spark out of it.",
+      "devNote": [
+        "The right door could be an obstacle, but with this shinecharge, a careful jump is probably fair to include.",
+        "This room is already pretty complex, so adding an obstacle is fairly significant."
+      ]
+    },
+    {
+      "id": 124,
+      "link": [13, 11],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall",
+          {"and": [
+            "Gravity",
+            "h_bombThings"
+          ]}
+        ]}
+      ],
+      "devNote": "Turning off Gravity and HiJump can make this mid-air morph easier."
+    },
+    {
+      "id": 125,
+      "link": [13, 13],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 136,
+      "link": [13, 13],
+      "name": "Ripper2 Farm",
+      "requires": [
+        "ScrewAttack",
+        "canCarefulJump",
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 1000}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [4]}},
+            {"or": [
+              {"and": [
+                "canWalljump",
+                {"cycleFrames": 380}
+              ]},
+              {"and": [
+                "SpaceJump",
+                {"cycleFrames": 320}
+              ]}
+            ]}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [5]}},
+            {"cycleFrames": 480}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A", "B"],
+      "farmCycleDrops": [{"enemy": "Ripper 2 (green)", "count": 1}]
+    },
+    {
+      "id": 143,
+      "link": [13, 13],
+      "name": "Skultera Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"or": [
+              {"and": [
+                "Gravity",
+                {"cycleFrames": 790}
+              ]},
+              {"cycleFrames": 1380}
+            ]}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [4]}},
+            {"or": [
+              {"and": [
+                "Gravity",
+                "SpaceJump",
+                {"cycleFrames": 750}
+              ]},
+              {"and": [
+                "Gravity",
+                "canWalljump",
+                {"cycleFrames": 1020}
+              ]},
+              {"and": [
+                "SpaceJump",
+                {"cycleFrames": 1390}
+              ]},
+              {"and": [
+                "canWalljump",
+                {"cycleFrames": 1420}
+              ]}
+            ]}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [5]}},
+            {"or": [
+              {"and": [
+                "Gravity",
+                "SpaceJump",
+                {"cycleFrames": 690}
+              ]},
+              {"and": [
+                "Gravity",
+                "canWalljump",
+                {"cycleFrames": 820}
+              ]},
+              {"and": [
+                "Gravity",
+                {"cycleFrames": 1110}
+              ]},
+              {"cycleFrames": 1600}
+            ]}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            "Gravity"
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 50}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 160}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 200}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 290}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            {"cycleFrames": 290}
+          ]},
+          {"cycleFrames": 500}
+        ]}
+      ],
+      "resetsObstacles": ["A", "B"],
+      "farmCycleDrops": [{"enemy": "Skultera", "count": 2}]
+    },
+    {
+      "id": 126,
+      "link": [14, 10],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 127,
+      "link": [14, 12],
+      "name": "Base",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "note": "The super block respawns."
+    },
+    {
+      "id": 128,
+      "link": [14, 12],
+      "name": "Beat Super Block Respawn",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canCarefulJump"
+      ],
+      "note": "It's possible to go down, grab the item, and return before the Super block respawns, if going quick enough."
+    },
+    {
+      "id": 129,
+      "link": [14, 13],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 130,
+      "link": [15, 16],
+      "name": "G-mode Overload PLMs with Grapple",
+      "requires": [
+        "canGMode",
+        "Grapple",
+        "Morph"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 131,
+      "link": [15, 16],
+      "name": "G-mode Overload PLMs by Bombing Crumble Block with Space Jump",
+      "requires": [
+        "canGMode",
+        "h_useMorphBombs",
+        "SpaceJump",
+        "canBeVeryPatient"
+      ],
+      "flashSuitChecked": true,
+      "note": "The crumble block is the leftmost flat ceiling tile."
+    },
+    {
+      "id": 132,
+      "link": [15, 16],
+      "name": "G-mode Overload PLMs by Bombing Crumble Block",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphLongIBJ",
+        "h_artificialMorphCeilingBombJump"
+      ],
+      "flashSuitChecked": true,
+      "note": "Start the IBJ on the second downward tile from the door. The crumble block is the leftmost flat ceiling tile.",
+      "devNote": "Without canCeilingBombJump, this would take more than 10 minutes."
+    },
+    {
+      "id": 133,
+      "link": [16, 14],
+      "name": "G-Mode Through the Crumble Block",
+      "requires": [
+        "canGMode",
+        {"or": [
+          {"and": [
+            "SpaceJump",
+            "Morph"
+          ]},
+          "h_artificialMorphLongIBJ",
+          {"and": [
+            "canTrickyDashJump",
+            "canSpringBallJumpMidAir",
+            "HiJump"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 144,
+      "link": [16, 14],
+      "name": "Shinespark Through Crumble Blocks, Quick Morph",
+      "requires": [
+        "canComplexGMode",
+        {"canShineCharge": {
+          "usedTiles": 23,
+          "steepUpTiles": 6,
+          "steepDownTiles": 1,
+          "openEnd": 1
+        }},
+        {"shinespark": {"frames": 23, "excessFrames": 0}},
+        "can4HighMidAirMorph",
+        {"or": [
+          "h_artificialMorphBombThings",
+          "h_artificialMorphSpringBall",
+          "can3HighWallMidAirMorph"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Shinespark vertically through the crumble block and quickly morph and move left into the bomb block just below.",
+        "Align Samus on the second downward slope in front of the door before sparking."
+      ],
+      "devNote": [
+        "The canInsaneJump is used as a difficulty placement, as this strat is unintuitive.",
+        "FIXME: This can't be used if going 17->16 and Power Bombing the item with canRiskPermanentLossOfAccess, because the block will remain solid."
+      ]
+    },
+    {
+      "id": 134,
+      "link": [17, 1],
+      "name": "G-mode Overload PLMs by Power Bombing Morph Maze Item",
+      "requires": [
+        "canPowerBombItemOverloadPLMs",
+        "canComplexGMode",
+        {"notable": "G-mode Overload PLMs by Power Bombing Morph Maze Item"},
+        "h_usePowerBomb",
+        {"or": [
+          "SpaceJump",
+          "canLongIBJ",
+          {"and": [
+            "canTrickyDashJump",
+            "canTrickySpringBallJump",
+            "HiJump"
+          ]}
+        ]}
+      ],
+      "collectsItems": [10],
+      "flashSuitChecked": true,
+      "note": [
+        "To overload the PLMs, place a Power Bomb precisely to the right of the bottom of the second overhang above the bottom left door.",
+        "This is at the max jump height without HiJump. Placing the Power Bomb higher or lower will not overload the PLMs without many Power Bombs."
+      ],
+      "devNote": "This requires the item to not be collected, but there is no reason to do this without it being there, so there is no canRiskPermanentLossOfAccess."
+    },
+    {
+      "id": 135,
+      "link": [17, 16],
+      "name": "G-mode Overload PLMs by Power Bombing Morph Maze Item, Permanent Softlock Risk",
+      "requires": [
+        "canPowerBombItemOverloadPLMs",
+        "canComplexGMode",
+        {"notable": "G-mode Overload PLMs by Power Bombing Morph Maze Item"},
+        {"itemNotCollectedAtNode": 10},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "Morph",
+          {"and": [
+            "h_artificialMorphSpringBall",
+            {"or": [
+              "HiJump",
+              "h_artificialMorphBombThings"
+            ]}
+          ]}
+        ]},
+        "h_artificialMorphPowerBomb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "To overload the PLMs, place a Power Bomb precisely to the right of the bottom of the second overhang above the bottom left door.",
+        "This is at the max jump height without HiJump. Placing the Power Bomb higher or lower will not overload the PLMs without many Power Bombs."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "G-Mode Setup Lure Zeb from Below",
+      "note": [
+        "Start from the Middle Right Door next to the Zeb farm.",
+        "While standing on the right of the Zeb farm, freeze the Zeb while it is still moving up and facing to the right.",
+        "Quickly go through the morph tunnel with a Bomb, Power Bomb, or Spring Ball, and get above the Zeb.",
+        "Using Ice, lure the Zeb to the same height as one of the doors to the right, then chase and use it for the setup.",
+        "Note that if the Zeb is unfrozen and off screen horizontally it will despawn, but if it's off screen vertically it will not."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Get Inside the Bridge",
+      "note": [
+        "Enter the bridge using a deep-stuck X-ray climb from below or high fall speed from above.",
+        "The doors do not connect to the same locations as Homing Geemer Room.",
+        "They connect to the same locations as the bottom-left and bottom-right doors of the room.",
+        "This can be used to bypass a lock on those doors or to exit with a longer runway."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Grapple Clip Door Lock Skip",
+      "note": [
+        "Grapple on the Ripper to get inside the wall under the door.",
+        "Do a Crystal Flash to force a standup.",
+        "X-Ray climb up to the door transition."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Bug Boost with Ice",
+      "note": [
+        "Get a Zeb to move left into the morph passage, and reach the end of the tunnel before it.",
+        "Freeze the bug at the correct height, such that it will move and be able to hit Samus while in the morph tunnel.",
+        "While in the first two-tile tall region, shoot and refreeze the bug. Then go to the second two-tile region and shoot the block.",
+        "Return and lure the bug such that it hits Samus and boosts her up and onto the ledge to escape.",
+        "Be careful not to despawn the enemy by moving it off camera, except while it is frozen. This strat is a one-shot try and failure is a softlock."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Bug Boost with Wave or Spazer",
+      "note": [
+        "Get a Zeb to move left into the morph passage, and reach the end of the tunnel before it.",
+        "Shoot the block with Wave or while crouching with Spazer before luring the bug.",
+        "Quickly lure the bug then use a mockball on the 4 tile floor before the tunnel.",
+        "This strat is a one-shot try and failure is a softlock."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Bug Boost",
+      "note": [
+        "Get a Zeb to move left into the morph passage, and reach the end of the tunnel before it.",
+        "Must be quick enough to shoot the shot block first. Requires a mockball on the 4 tile floor before the tunnel.",
+        "This strat is a one-shot try and failure is a softlock."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Bug Ice Clip",
+      "note": [
+        "Freeze a bug three tiles to the right of the morph tunnel entrance, directly under the tile where ceiling is higher.",
+        "Jump onto the bug, crouch, and jump up.",
+        "The bug must be at a very precise pixel height unless using  XRay and Morph.",
+        "Note that although the ceiling here is 3 tiles thick, only the bottom tile is solid; the other two are slopes pushing Samus up, allowing the trick to be done."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Shinespark, Morph Tunnel Rush",
+      "note": [
+        "Preopen the door and shotblock, then go back and charge a shinespark.",
+        "Springball through the short morphball tunnel to just have enough time to shinespark out the door."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Enemy Stuck Moonfall Super Block Clip",
+      "note": [
+        "Watch the lowest Tripper move until it reaches the left side wall and then move it off camera.",
+        "Move to the Zeb Spawner and freeze the bug as it is rising and facing left.",
+        "Travel through the Morph tunnel and wait above the Zeb.",
+        "Once it rises to about halfway up the floating platform, let it start moving left.",
+        "Freeze the Zeb and the Tripper above the Super Block and perform the Enemy Stuck Moonfall.",
+        "Move off after building enough fall speed and aim down to clip through the Super block."
+      ]
+    },
+    {
+      "id": 12,
+      "name": "G-mode Overload PLMs by Power Bombing Morph Maze Item",
+      "note": [
+        "To overload the PLMs, place a PB precisely to the right of the bottom of the second overhang above the bottom left door.",
+        "This is at the max jump height without HiJump. Placing the PB higher or lower will not overload the PLMs without many PBs."
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Respawning Shot Block Moondance",
+      "note": [
+        "Use the respawning shot block and Grapple to perform a moondance gaining enough fall speed to clip through 3 tiles.",
+        "This requires a total of 468 moonfalls, taking approximately 45 minutes to execute.",
+        "Exact counting is required, to ensure that the final moonfall (clipping through 3 tiles) is performed from 2 tiles deep in the floor."
+      ]
+    }
+  ],
+  "nextStratId": 146,
+  "nextNotableId": 14,
+  "note": "The section between Pancakes and Wavers Room and Bowling Alley is excluded from West Ocean and considered as its own room instead (Homing Geemer Room)"
+}

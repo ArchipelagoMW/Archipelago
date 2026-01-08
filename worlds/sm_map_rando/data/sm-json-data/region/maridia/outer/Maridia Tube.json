@@ -1,0 +1,3577 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 170,
+  "name": "Maridia Tube",
+  "area": "Maridia",
+  "subarea": "Outer",
+  "roomAddress": "0x7CEFB",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Doorway",
+      "nodeType": "door",
+      "nodeSubType": "doorway",
+      "nodeAddress": "0x001a33c",
+      "doorOrientation": "left",
+      "doorEnvironments": [
+        {
+          "physics": "water",
+          "note": "It has normal physics before the tube is broken, but that can be lost forever."
+        }
+      ],
+      "mapTileMask": [
+        [1],
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "red",
+      "nodeAddress": "0x001a354",
+      "doorOrientation": "right",
+      "doorEnvironments": [
+        {
+          "physics": "water",
+          "note": "It has normal physics before the tube is broken, but that can be lost forever."
+        }
+      ],
+      "mapTileMask": [
+        [1],
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Right Doorway",
+      "nodeType": "door",
+      "nodeSubType": "doorway",
+      "nodeAddress": "0x001a348",
+      "doorOrientation": "right",
+      "doorEnvironments": [
+        {
+          "physics": "water",
+          "note": "It has normal physics before the tube is broken, but that can be lost forever."
+        }
+      ],
+      "mapTileMask": [
+        [1],
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Top Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a330",
+      "doorOrientation": "up",
+      "doorEnvironments": [
+        {
+          "physics": "water",
+          "note": "It has normal physics before the tube is broken, but that can be lost forever."
+        }
+      ],
+      "useImplicitComeInNormally": false,
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "useImplicitDoorUnlocks": false,
+      "mapTileMask": [
+        [2],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Inside Maridia Tube Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Platform Below Top Door",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2],
+        [2],
+        [1]
+      ]
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {
+          "id": 4,
+          "note": "This link is only for the cross room jump. Other strats should go 1 -> 5 -> 6 -> 4."
+        },
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {
+          "id": 4,
+          "note": "This link is only for the cross room jump. Other strats should go 2 -> 7 -> 5 -> 6 -> 4."
+        },
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {
+          "id": 4,
+          "note": "This link is only for the cross room jump. Other strats should go 3 -> 5 -> 6 -> 4."
+        },
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 4},
+        {"id": 5},
+        {"id": 6}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave with Runway, Tube Not Broken",
+      "requires": [
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "devNote": "FIXME: Needs a way to represent that this runway has an 'air' environment."
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Carry G-Mode Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Carry G-Mode Morph Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 94,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 135}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 95,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Leave With Spark (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 5, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 96,
+      "link": [1, 2],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementComplex",
+        "Gravity",
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 97,
+      "link": [1, 2],
+      "name": "Come In Shinecharged, Leave With Spark (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementComplex",
+        "Gravity",
+        {"shineChargeFrames": 90},
+        {"shinespark": {"frames": 9, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 98,
+      "link": [1, 2],
+      "name": "Come In Shinecharged, Leave With Spark (Suitless, Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 135},
+        {"shinespark": {"frames": 11, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 99,
+      "link": [1, 2],
+      "name": "Come In Shinecharged, Leave With Spark (Suitless, Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 145},
+        {"shinespark": {"frames": 11, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Stored Moonfall Clip",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        "canMoonfall"
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Shinespark Through Room",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"or": [
+          {"shinespark": {"frames": 24}},
+          {"and": [
+            "Gravity",
+            {"shinespark": {"frames": 21}}
+          ]},
+          {"and": [
+            {"not": "f_MaridiaTubeBroken"},
+            "canRiskPermanentLossOfAccess",
+            {"shinespark": {"frames": 21}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 3],
+      "name": "Come In Shinecharging, Leave Shinecharged (Tube Not Broken)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess",
+        {"shineChargeFrames": 5}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 100,
+      "link": [1, 3],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 105}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 101,
+      "link": [1, 3],
+      "name": "Come In Shinecharging, Leave Shinecharged (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 102,
+      "link": [1, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 95}
+          ]},
+          {"shineChargeFrames": 150}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 103,
+      "link": [1, 3],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 5}
+          ]},
+          {"shineChargeFrames": 10}
+        ]},
+        {"shinespark": {"frames": 23}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 104,
+      "link": [1, 3],
+      "name": "Come In Shinecharged, Leave With Spark (Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 10}
+          ]},
+          {"shineChargeFrames": 20}
+        ]},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 3],
+      "name": "Carry G-Mode Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 3],
+      "name": "Carry G-Mode Morph Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "Morph",
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          {"and": [
+            "Gravity",
+            "h_artificialMorphBombHorizontally",
+            "h_artificialMorphBombThings"
+          ]},
+          {"and": [
+            {"not": "f_MaridiaTubeBroken"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true,
+      "devNote": [
+        "Bomb jumping across the broken tube uses a second bomb to climb up to the tube.",
+        "FIXME: Moving before the bomb explodes gives enough momentum to only need one power bomb."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 3],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 3],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 12,
+      "link": [1, 4],
+      "name": "Tricky Cross Room Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Only requires a runway of 1 tile in the adjacent room.",
+        "This strat is slightly easier on the right side at low run speeds, but the same otherwise."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 4],
+      "name": "Cross Room Speedy Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 7.4375
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Only requires a runway of 7 tiles in the adjacent room, but an extra tile makes for an easier jump."
+      ]
+    },
+    {
+      "id": 105,
+      "link": [1, 4],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity, HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 106,
+      "link": [1, 4],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "HiJump",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 153,
+      "link": [1, 4],
+      "name": "G-Mode Morph Power Bomb Gravity Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "Breaking the Tube Gravity Jump"},
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess",
+        "h_artificialMorphPowerBomb",
+        "canSuitlessMaridia",
+        "canTrickyJump"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"],
+      "flashSuitChecked": true,
+      "note": [
+        "In direct G-Mode, the tube will break once Samus moves after exiting G-Mode or when the Power Bomb finishes detonating, whichever is later.",
+        "In indirect G-Mode, Samus must exit G-Mode before the Power Bomb explodes.",
+        "Either way, it is recommended to exit G-Mode before the Power Bomb goes off to be safe.",
+        "Jump as the first action to gravity jump to the top of the room.",
+        "Note that the door will be closed, so open it during the ascent. This can only be attempted once."
+      ]
+    },
+    {
+      "id": 142,
+      "link": [1, 4],
+      "name": "Precise Grapple Jump Through Door (HiJump)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"}
+          ]
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canPreciseGrappleJump",
+        "HiJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "any"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {"types": ["missiles"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 143,
+      "link": [1, 4],
+      "name": "Tricky Grapple Jump Through Door (Bootless)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"},
+            {"position": [6, 4], "note": "Grapple Tutorial Room 2"},
+            {"position": [6, 2], "note": "Lava Grapple Tunnel"},
+            {
+              "position": [5, 2],
+              "note": "The Moat, Double Chamber, Wrecked Ship Energy Tank Room"
+            },
+            {"position": [2.375, 4.5625], "note": "Post Crocomire Farming Room"}
+          ]
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canTrickyGrappleJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "any"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 14,
+      "link": [1, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 15,
+      "link": [1, 5],
+      "name": "G-Mode Morph Power Bomb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb"
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"],
+      "flashSuitChecked": true,
+      "note": "The tube will break when exiting G-Mode or when the Power Bomb finishes detonating, whichever is later."
+    },
+    {
+      "id": 154,
+      "link": [1, 6],
+      "name": "G-Mode Morph Power Bomb Gravity Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "Breaking the Tube Gravity Jump"},
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess",
+        "h_artificialMorphPowerBomb",
+        "canSuitlessMaridia",
+        "canTrickyJump"
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"],
+      "flashSuitChecked": true,
+      "note": [
+        "In direct G-Mode, the tube will break once Samus moves after exiting G-Mode or when the Power Bomb finishes detonating, whichever is later.",
+        "In indirect G-Mode, Samus must exit G-Mode before the Power Bomb explodes.",
+        "Either way, it is recommended to exit G-Mode before the Power Bomb goes off to be safe.",
+        "Jump as the first action to gravity jump to the top of the room. This can only be attempted once."
+      ],
+      "devNote": [
+        "This could be useful as a way to unlock the top door for later, if there is no normal way to climb the room.",
+        "FIXME: Strats to unlock door 4 from 6 need to be added."
+      ]
+    },
+    {
+      "id": 107,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity, HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 108,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity, Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 145}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 109,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 110,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Leave With Spark (Suitless, HiJump, Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canSuitlessMaridia",
+        "HiJump",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 8, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 111,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Leave With Spark (Suitless, HiJump, Any Position)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canSuitlessMaridia",
+        "HiJump",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 175},
+        {"shinespark": {"frames": 7, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 112,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Gravity, HiJump, Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 115}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 113,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Gravity, HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 114,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Gravity, Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 115,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 116,
+      "link": [2, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Gravity, HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 90},
+        {"shinespark": {"frames": 13, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 117,
+      "link": [2, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 120},
+        {"shinespark": {"frames": 10, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Carry G-Mode Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Carry G-Mode Morph Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        {"or": [
+          {"and": [
+            "Gravity",
+            "h_artificialMorphMovement"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 159,
+      "link": [2, 1],
+      "name": "Carry G-Mode Morph Through Tube, Bomb Into Spring Ball Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "h_artificialMorphUnderwaterBombIntoSpringBallJump"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Pause and jump just before the fade out finishes. Turn off Spring Ball and place a Bomb just above where Samus' head would be if standing.",
+        "Pause again between 23-25 frames later and equip Spring Ball; Samus has a three frame window where she has upward momentum from the Bomb and can jump again.",
+        "The positioning of the Bomb is quite lenient, with an 11 frame window for where it can be placed.",
+        "This must be done twice to climb the room."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true,
+      "devNote": [
+        "Though there is no door shell here, the bypassesDoorShell is included for completeness in case a randomizer adds a door shell where bypassing it could be useful."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Upper Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Lower Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "Leave with Runway, Tube Not Broken",
+      "requires": [
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "devNote": "FIXME: Needs a way to represent that this runway has an 'air' environment."
+    },
+    {
+      "id": 90,
+      "link": [2, 2],
+      "name": "Break the Tube",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"]
+    },
+    {
+      "id": 37,
+      "link": [2, 2],
+      "name": "G-Mode Morph Power Bomb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]}
+        ]}
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"],
+      "flashSuitChecked": true,
+      "note": "The tube will break when exiting G-Mode or when the Power Bomb finishes detonating, whichever is later."
+    },
+    {
+      "id": 27,
+      "link": [2, 3],
+      "name": "G-Mode Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 28,
+      "link": [2, 3],
+      "name": "Shinespark Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 1},
+        {"shinespark": {"frames": 1, "excessFrames": 1}},
+        "canShinesparkDeepStuck",
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 118,
+      "link": [2, 3],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity, HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 115}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 119,
+      "link": [2, 3],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 135}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 120,
+      "link": [2, 3],
+      "name": "Come In Shinecharging, Leave With Spark (Suitless, HiJump, Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canSuitlessMaridia",
+        "HiJump",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 6, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 121,
+      "link": [2, 3],
+      "name": "Come In Shinecharging, Leave With Spark (Suitless, HiJump, Any Position)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canSuitlessMaridia",
+        "HiJump",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 175},
+        {"shinespark": {"frames": 4, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 122,
+      "link": [2, 3],
+      "name": "Carry Shinecharge (Gravity, HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 115}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 123,
+      "link": [2, 3],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 145}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 124,
+      "link": [2, 3],
+      "name": "Come In Shinecharged, Leave With Spark (Gravity, HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 90},
+        {"shinespark": {"frames": 6, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 125,
+      "link": [2, 3],
+      "name": "Come In Shinecharged, Leave With Spark (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 120},
+        {"shinespark": {"frames": 10, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 29,
+      "link": [2, 3],
+      "name": "Carry G-Mode Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [2, 3],
+      "name": "Carry G-Mode Morph Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        {"or": [
+          {"and": [
+            "Gravity",
+            "h_artificialMorphMovement"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 160,
+      "link": [2, 3],
+      "name": "Carry G-Mode Morph Through Tube, Bomb Into Spring Ball Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "h_artificialMorphUnderwaterBombIntoSpringBallJump"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Pause and jump just before the fade out finishes. Turn off Spring Ball and place a Bomb just above where Samus' head would be if standing.",
+        "Pause again between 23-25 frames later and equip Spring Ball; Samus has a three frame window where she has upward momentum from the Bomb and can jump again.",
+        "The positioning of the Bomb is quite lenient, with an 11 frame window for where it can be placed.",
+        "This must be done twice to climb the room."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 4],
+      "name": "Cross Room Platform Stuck Wiggle to Top Door",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 18
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Platform Stuck Wiggle to Top Door"},
+        "f_MaridiaTubeBroken",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround",
+        "canTrickyDashJump",
+        "canInsaneJump"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Requires a runway of at least 18 tiles in the adjacent room.",
+        "Ride up the right wall just above the doorway, then turnaround before and after hitting the platform following the doorway slope.",
+        "Continue up the rest of the way to reach the door."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [2, 4],
+      "name": "Cross Room Jump with Speedbooster",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 21
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canCrossRoomJumpIntoWater",
+        "canMidairWiggle",
+        "canTrickyJump"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Assumes a runway of at least 21 tiles in the adjacent room.",
+        "End Samus' momentum where no platforms are over head.",
+        "Shoot the door while rising to pass through."
+      ]
+    },
+    {
+      "id": 158,
+      "link": [2, 4],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 38,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [],
+              "note": "Applies to Noob Bridge.",
+              "devNote": [
+                "FIXME: This (and other cases) can leave with enough vertical momentum to make it to the middle door of Main Street,",
+                "if the top door of Maridia Tube connects to the bottom of Main Street."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump",
+                "canInsaneMidAirMorph"
+              ],
+              "note": ["This applies to Statues Hallway and Baby Kraid Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump",
+                "canInsaneMidAirMorph"
+              ],
+              "note": ["This applies to Bowling Alley (middle, power off) and Basement (power on)."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 39.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "requires": [],
+              "note": "Applies to Metal Pirates Room."
+            }
+          ]
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump",
+        "canMomentumConservingTurnaround"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 144,
+      "link": [2, 4],
+      "name": "Precise Grapple Jump Through Door",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [13, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [7, 3], "note": "The Precious Room"},
+            {"position": [7, 2], "note": "The Moat"},
+            {"position": [8, 2], "note": "Bowling Alley"},
+            {
+              "position": [7, 3],
+              "obstructions": [[6, 10]],
+              "note": "Red Brinstar Firefleas Room"
+            }
+          ]
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canPreciseGrappleJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "any"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {"types": ["missiles"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 145,
+      "link": [2, 4],
+      "name": "Tricky Grapple Jump Through Door (Any Position)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [13, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [7, 3], "note": "The Precious Room"},
+            {"position": [7, 2], "note": "The Moat"},
+            {"position": [8, 2], "note": "Bowling Alley"},
+            {
+              "position": [7, 3],
+              "obstructions": [[6, 10]],
+              "note": "Red Brinstar Firefleas Room"
+            },
+            {
+              "position": [9, 2],
+              "note": "Climb Supers Room, Bubble Mountain, Lava Grapple Tunnel"
+            }
+          ]
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canTrickyGrappleJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "any"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": ["Opening a Missile door while grapple jumping is tricky but possible."]
+    },
+    {
+      "id": 146,
+      "link": [2, 4],
+      "name": "Tricky Grapple Jump Through Door (Right Position)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [{"position": [7, 3], "environment": "water", "note": "Pants Room"}]
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canTrickyGrappleJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "right"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 33,
+      "link": [2, 4],
+      "name": "Grapple Teleport into Grapple Jump or Tube Intact (Lower Entrance)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3]]
+        }
+      },
+      "requires": [
+        {"notable": "Grapple Teleport into Grapple Jump (or Tube Intact)"},
+        {"doorUnlockedAtNode": 4},
+        {"or": [
+          {"and": [
+            "canMidairWiggle",
+            "canTrickyGrappleJump",
+            "canInsaneJump"
+          ]},
+          {"and": [
+            {"not": "f_MaridiaTubeBroken"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Swing to the right, shoot open the door above, and grapple jump through it.",
+        "The grapple beam will need to be retracted while swinging to the right, to avoid bonking on the small platform."
+      ],
+      "devNote": [
+        "FIXME: Add a version of this with an exit condition for grapple jumping through the transition.",
+        "FIXME: Add a canRiskPermanentLossOfAccess variation coming from Moat, which only works if door is not blue."
+      ]
+    },
+    {
+      "id": 87,
+      "link": [2, 5],
+      "name": "Base",
+      "requires": [
+        "f_MaridiaTubeBroken"
+      ]
+    },
+    {
+      "id": 155,
+      "link": [2, 6],
+      "name": "G-Mode Morph Power Bomb Gravity Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "Breaking the Tube Gravity Jump"},
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess",
+        "h_artificialMorphSpringBall",
+        "h_artificialMorphPowerBomb",
+        "canSuitlessMaridia",
+        "canTrickyJump"
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"],
+      "flashSuitChecked": true,
+      "note": [
+        "In direct G-Mode, the tube will break once Samus moves after exiting G-Mode or when the Power Bomb finishes detonating, whichever is later.",
+        "In indirect G-Mode, Samus must exit G-Mode before the Power Bomb explodes.",
+        "Either way, it is recommended to exit G-Mode before the Power Bomb goes off to be safe.",
+        "Jump as the first action to gravity jump to the top of the room. This can only be attempted once."
+      ],
+      "devNote": [
+        "This could be useful as a way to unlock the top door for later, if there is no normal way to climb the room.",
+        "FIXME: Strats to unlock door 4 from 6 need to be added."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [2, 6],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 35,
+      "link": [2, 6],
+      "name": "Grapple Teleport Inside Wall",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "note": [
+        "After teleporting, retract Grapple by pressing up.",
+        "Then if necessary, wiggle right out of the wall by turning around a few times."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [3, 1],
+      "name": "Shinespark Through Room",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"or": [
+          {"shinespark": {"frames": 24}},
+          {"and": [
+            "Gravity",
+            {"shinespark": {"frames": 21}}
+          ]},
+          {"and": [
+            {"not": "f_MaridiaTubeBroken"},
+            "canRiskPermanentLossOfAccess",
+            {"shinespark": {"frames": 21}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      }
+    },
+    {
+      "id": 39,
+      "link": [3, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged (Tube Not Broken)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess",
+        {"shineChargeFrames": 5}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 126,
+      "link": [3, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 105}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 127,
+      "link": [3, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 128,
+      "link": [3, 1],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 95}
+          ]},
+          {"shineChargeFrames": 150}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 129,
+      "link": [3, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 5}
+          ]},
+          {"shineChargeFrames": 10}
+        ]},
+        {"shinespark": {"frames": 23}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 130,
+      "link": [3, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 10}
+          ]},
+          {"shineChargeFrames": 20}
+        ]},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 40,
+      "link": [3, 1],
+      "name": "Carry G-Mode Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 41,
+      "link": [3, 1],
+      "name": "Carry G-Mode Morph Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "Morph",
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          {"and": [
+            "Gravity",
+            "h_artificialMorphBombHorizontally",
+            "h_additionalBomb"
+          ]},
+          {"and": [
+            {"not": "f_MaridiaTubeBroken"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true,
+      "devNote": [
+        "Bomb jumping across the broken tube uses a second bomb to climb up to the tube.",
+        "FIXME: Moving before the bomb explodes gives enough momentum to only need one power bomb."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [3, 1],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 43,
+      "link": [3, 1],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 44,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true,
+      "devNote": [
+        "Though there is no door shell here, this strat is included for completeness in case a randomizer adds a door shell where bypassing it could be useful."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 46,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Upper Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 47,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Lower Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 48,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 49,
+      "link": [3, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door."
+      ],
+      "devNote": [
+        "This strat is only useful if the room were modified to have a door lock on the left."
+      ]
+    },
+    {
+      "id": 131,
+      "link": [3, 2],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 132,
+      "link": [3, 2],
+      "name": "Come In Shinecharging, Leave With Spark (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 3, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 133,
+      "link": [3, 2],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 115}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 134,
+      "link": [3, 2],
+      "name": "Come In Shinecharged, Leave With Spark (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 80},
+        {"shinespark": {"frames": 10, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 135,
+      "link": [3, 2],
+      "name": "Come In Shinecharged, Leave With Spark (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 130},
+        {"shinespark": {"frames": 11, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 61,
+      "link": [3, 2],
+      "name": "Stored Moonfall Clip",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        "canMoonfall"
+      ]
+    },
+    {
+      "id": 163,
+      "link": [3, 2],
+      "name": "Super Sink",
+      "entranceCondition": {
+        "comeInWithSuperSink": {}
+      },
+      "requires": [],
+      "note": ["Enter the room with a super sink, to clip down to the bottom of the room."]
+    },
+    {
+      "id": 50,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 51,
+      "link": [3, 3],
+      "name": "Leave with Runway, Tube Not Broken",
+      "requires": [
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "devNote": "FIXME: Needs a way to represent that this runway has an 'air' environment."
+    },
+    {
+      "id": 52,
+      "link": [3, 3],
+      "name": "Carry G-Mode Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 53,
+      "link": [3, 3],
+      "name": "Carry G-Mode Morph Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 54,
+      "link": [3, 4],
+      "name": "Tricky Cross Room Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Only requires a runway of one tile in the adjacent room.",
+        "This strat is slightly easier on the right side at low run speeds, but the same otherwise."
+      ]
+    },
+    {
+      "id": 55,
+      "link": [3, 4],
+      "name": "Cross Room Speedy Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 7.4375
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canCrossRoomJumpIntoWater"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Only requires a runway of 7 tiles in the adjacent room, but an extra tile makes for an easier jump."
+      ]
+    },
+    {
+      "id": 136,
+      "link": [3, 4],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity, HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 137,
+      "link": [3, 4],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity",
+        "HiJump",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 156,
+      "link": [3, 4],
+      "name": "G-Mode Morph Power Bomb Gravity Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "Breaking the Tube Gravity Jump"},
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess",
+        "h_artificialMorphPowerBomb",
+        "canSuitlessMaridia",
+        "canTrickyJump"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"],
+      "flashSuitChecked": true,
+      "note": [
+        "In direct G-Mode, the tube will break once Samus moves after exiting G-Mode or when the Power Bomb finishes detonating, whichever is later.",
+        "In indirect G-Mode, Samus must exit G-Mode before the Power Bomb explodes.",
+        "Either way, it is recommended to exit G-Mode before the Power Bomb goes off to be safe.",
+        "Jump as the first action to gravity jump to the top of the room.",
+        "Note that the door will be closed, so open it during the ascent. This can only be attempted once."
+      ]
+    },
+    {
+      "id": 147,
+      "link": [3, 4],
+      "name": "Precise Grapple Jump Through Door (HiJump, Any Position)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [13, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [7, 3], "note": "The Precious Room"}
+          ]
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canPreciseGrappleJump",
+        "HiJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "any"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {"types": ["missiles"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 148,
+      "link": [3, 4],
+      "name": "Precise Grapple Jump Through Door (HiJump, Left Position)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [7, 2], "note": "The Moat"},
+            {"position": [8, 2], "note": "Bowling Alley"},
+            {
+              "position": [7, 3],
+              "obstructions": [[6, 10]],
+              "note": "Red Brinstar Firefleas Room"
+            }
+          ]
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canPreciseGrappleJump",
+        "HiJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "left"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {"types": ["missiles"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 149,
+      "link": [3, 4],
+      "name": "Precise Grapple Jump Through Door (Bootless, Right Position)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [13, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [7, 3], "note": "The Precious Room"}
+          ]
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canPreciseGrappleJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "right"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {"types": ["missiles"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 150,
+      "link": [3, 4],
+      "name": "Tricky Grapple Jump Through Door (Any Position)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [13, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [7, 3], "note": "The Precious Room"},
+            {"position": [7, 2], "note": "The Moat"},
+            {"position": [8, 2], "note": "Bowling Alley"},
+            {
+              "position": [7, 3],
+              "obstructions": [[6, 10]],
+              "note": "Red Brinstar Firefleas Room"
+            }
+          ]
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canTrickyGrappleJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "any"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": [
+        "Coming in from Pants Room (suitless, right position) might be possible with enough arm pumping."
+      ]
+    },
+    {
+      "id": 151,
+      "link": [3, 4],
+      "name": "Tricky Grapple Jump Through Door (Left Position)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {
+              "position": [9, 2],
+              "note": "Climb Supers Room, Bubble Mountain, Lava Grapple Tunnel"
+            }
+          ]
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canTrickyGrappleJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "left"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 152,
+      "link": [3, 4],
+      "name": "Tricky Grapple Jump Through Door (Right Position)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [{"position": [7, 3], "environment": "water", "note": "Pants Room"}]
+        }
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canTrickyGrappleJump"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleJump": {
+          "position": "right"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 56,
+      "link": [3, 4],
+      "name": "Grapple Teleport into Grapple Jump or Tube Intact (Right Entrance)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3]]
+        }
+      },
+      "requires": [
+        {"notable": "Grapple Teleport into Grapple Jump (or Tube Intact)"},
+        {"doorUnlockedAtNode": 4},
+        {"or": [
+          {"and": [
+            "canMidairWiggle",
+            "canTrickyGrappleJump",
+            "canInsaneJump"
+          ]},
+          {"and": [
+            {"not": "f_MaridiaTubeBroken"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Swing to the right, shoot open the door above, and grapple jump through it.",
+        "The grapple beam will need to be retracted while swinging to the right, to avoid bonking on the small platform."
+      ],
+      "devNote": [
+        "FIXME: Add a version of this with an exit condition for grapple jumping through the transition.",
+        "FIXME: Add a canRiskPermanentLossOfAccess variation coming from Moat, which only works if door is not blue."
+      ]
+    },
+    {
+      "id": 57,
+      "link": [3, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 58,
+      "link": [3, 5],
+      "name": "G-Mode Morph Power Bomb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb"
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"],
+      "flashSuitChecked": true,
+      "note": "The tube will break when exiting G-Mode or when the Power Bomb finishes detonating, whichever is later."
+    },
+    {
+      "id": 157,
+      "link": [3, 6],
+      "name": "G-Mode Morph Power Bomb Gravity Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "Breaking the Tube Gravity Jump"},
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess",
+        "h_artificialMorphPowerBomb",
+        "canSuitlessMaridia",
+        "canTrickyJump"
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"],
+      "flashSuitChecked": true,
+      "note": [
+        "In direct G-Mode, the tube will break once Samus moves after exiting G-Mode or when the Power Bomb finishes detonating, whichever is later.",
+        "In indirect G-Mode, Samus must exit G-Mode before the Power Bomb explodes.",
+        "Either way, it is recommended to exit G-Mode before the Power Bomb goes off to be safe.",
+        "Jump as the first action to gravity jump to the top of the room. This can only be attempted once."
+      ],
+      "devNote": [
+        "This could be useful as a way to unlock the top door for later, if there is no normal way to climb the room.",
+        "FIXME: Strats to unlock door 4 from 6 need to be added."
+      ]
+    },
+    {
+      "id": 59,
+      "link": [3, 6],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [2, 7]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 60,
+      "link": [3, 6],
+      "name": "Grapple Teleport Inside Wall",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "note": [
+        "After teleporting, retract Grapple by pressing up.",
+        "Then if necessary, wiggle right out of the wall by turning around a few times."
+      ]
+    },
+    {
+      "id": 138,
+      "link": [4, 1],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 85}
+          ]},
+          {"shineChargeFrames": 90}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: Passing through the Toilet is possible but tricky and may have certain momentum requirements, in addition to probably needing a down-back or turnaround."
+      ]
+    },
+    {
+      "id": 139,
+      "link": [4, 1],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 75},
+        {"shinespark": {"frames": 4, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: for sparking in top position, it would help to model being able to enter spinning;",
+        "for now, extra shinecharge frames are included to compensate.",
+        "FIXME: Passing through the Toilet is possible but tricky and may have certain momentum requirements, in addition to probably needing a down-back or turnaround."
+      ]
+    },
+    {
+      "id": 62,
+      "link": [4, 1],
+      "name": "Carry G-Mode Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "f_MaridiaTubeBroken",
+          {"and": [
+            {"notable": "Tube Clip"},
+            "canTunnelCrawl"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "If the tube is unbroken, this requires a tunnel crawl or unmorph at the top right of the tube in order to clip down through it."
+    },
+    {
+      "id": 161,
+      "link": [4, 1],
+      "name": "G-Mode Morph, Carry G-Mode Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"notable": "Tube Clip"}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "If the tube is unbroken, this requires unmorphing at the top right of the tube in order to clip down through it."
+    },
+    {
+      "id": 63,
+      "link": [4, 1],
+      "name": "Carry G-Mode Morph Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "f_MaridiaTubeBroken"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 140,
+      "link": [4, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 85}
+          ]},
+          {"shineChargeFrames": 90}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: Passing through the Toilet is possible but tricky and may have certain momentum requirements, in addition to probably needing a down-back or turnaround."
+      ]
+    },
+    {
+      "id": 141,
+      "link": [4, 3],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 75},
+        {"shinespark": {"frames": 4, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: for sparking in top position, it would help to model being able to enter spinning;",
+        "for now, extra shinecharge frames are included to compensate.",
+        "FIXME: Passing through the Toilet is possible but tricky and may have certain momentum requirements, in addition to probably needing a down-back or turnaround."
+      ]
+    },
+    {
+      "id": 64,
+      "link": [4, 3],
+      "name": "Carry G-Mode Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "f_MaridiaTubeBroken",
+          {"and": [
+            {"notable": "Tube Clip"},
+            "canTunnelCrawl"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "If the tube is unbroken, this requires a tunnel crawl or unmorph at the top right of the tube in order to clip down through it."
+    },
+    {
+      "id": 162,
+      "link": [4, 3],
+      "name": "G-Mode Morph, Carry G-Mode Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"notable": "Tube Clip"}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "If the tube is unbroken, this requires unmorphing at the top right of the tube in order to clip down through it."
+    },
+    {
+      "id": 65,
+      "link": [4, 3],
+      "name": "Carry G-Mode Morph Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "f_MaridiaTubeBroken"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 66,
+      "link": [4, 4],
+      "name": "Carry G-Mode Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "h_maxHeightSpringBallJump",
+          {"and": [
+            {"not": "f_MaridiaTubeBroken"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 67,
+      "link": [4, 4],
+      "name": "Carry G-Mode Morph Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "Gravity",
+          "h_artificialMorphDoubleSpringBallJump",
+          {"and": [
+            {"not": "f_MaridiaTubeBroken"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]},
+        {"or": [
+          "h_artificialMorphIBJ",
+          {"and": [
+            "HiJump",
+            "h_artificialMorphSpringBall"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBallBombJump",
+            "h_artificialMorphSpringBall"
+          ]},
+          {"and": [
+            "canGravityJump",
+            "h_artificialMorphSpringBall"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 91,
+      "link": [4, 4],
+      "name": "G-Mode Morph Power Bomb Gravity Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"notable": "Breaking the Tube Gravity Jump"},
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess",
+        "h_artificialMorphPowerBomb",
+        "canSuitlessMaridia",
+        "canTrickyJump"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"],
+      "flashSuitChecked": true,
+      "note": [
+        "In direct G-Mode, the tube will break once Samus moves after exiting G-Mode or when the Power Bomb finishes detonating, whichever is later.",
+        "In indirect G-Mode, Samus must exit G-Mode before the Power Bomb explodes.",
+        "Either way, it is recommended to exit G-Mode before the Power Bomb goes off to be safe.",
+        "Be sure not to overload PLMs with the camera scroll blocks which are next to the tube.",
+        "Jump as the first action to gravity jump to the top of the room.",
+        "Note that the door will be closed, so open it during the ascent. This can only be attempted once."
+      ]
+    },
+    {
+      "id": 69,
+      "link": [4, 5],
+      "name": "G-Mode Morph Power Bomb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb"
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"],
+      "flashSuitChecked": true,
+      "note": [
+        "The tube will break once Samus moves after exiting G-Mode or when the Power Bomb finishes detonating, whichever is later.",
+        "Be sure not to overload PLMs with the camera scroll blocks which are next to the tube.",
+        "It is possible to exit G-Mode before the Power Bomb goes off to be safe."
+      ]
+    },
+    {
+      "id": 68,
+      "link": [4, 6],
+      "name": "Base",
+      "entranceCondition": {
+        "comeInNormally": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": []
+    },
+    {
+      "id": 70,
+      "link": [5, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 77,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": [
+        "f_MaridiaTubeBroken"
+      ]
+    },
+    {
+      "id": 71,
+      "link": [5, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 72,
+      "link": [5, 4],
+      "name": "Breaking the Tube Gravity Jump",
+      "requires": [
+        {"notable": "Breaking the Tube Gravity Jump"},
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess",
+        "h_usePowerBomb",
+        "canSuitlessMaridia",
+        "canTrickyJump"
+      ],
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"],
+      "note": [
+        "Jump as the first action after breaking the tube to gravity jump to the top of the room.",
+        "Open the door and go through it during the ascent. This can only be attempted once."
+      ]
+    },
+    {
+      "id": 73,
+      "link": [5, 5],
+      "name": "Break the Tube with a Power Bomb",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"]
+    },
+    {
+      "id": 74,
+      "link": [5, 6],
+      "name": "Base",
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "Gravity"
+      ]
+    },
+    {
+      "id": 75,
+      "link": [5, 6],
+      "name": "Suitless Base",
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "HiJump"
+      ]
+    },
+    {
+      "id": 76,
+      "link": [5, 6],
+      "name": "Suitless",
+      "requires": [
+        "f_MaridiaTubeBroken",
+        "canSuitlessMaridia",
+        "canTrickySpringBallJump"
+      ]
+    },
+    {
+      "id": 78,
+      "link": [6, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 79,
+      "link": [6, 4],
+      "name": "Suitless HiJump",
+      "requires": [
+        "HiJump"
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 80,
+      "link": [6, 4],
+      "name": "Suitless Spring Ball",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallJump",
+        "canTrickyJump"
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Unmorph at the top of the jump to touch the transition. A crouch jump can help."
+    },
+    {
+      "id": 81,
+      "link": [6, 4],
+      "name": "Tube Intact",
+      "requires": [
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Until the tube is broken there is no water in this room."
+    },
+    {
+      "id": 92,
+      "link": [6, 4],
+      "name": "Breaking the Tube Gravity Jump (From Above)",
+      "requires": [
+        {"notable": "Breaking the Tube Gravity Jump"},
+        {"not": "f_MaridiaTubeBroken"},
+        "canRiskPermanentLossOfAccess",
+        "h_usePowerBomb",
+        "canSuitlessMaridia",
+        "canTrickyJump"
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "setsFlags": ["f_MaridiaTubeBroken"],
+      "note": [
+        "Jump as the first action after breaking the tube to gravity jump back up and out of the door.",
+        "This can only be attempted once."
+      ],
+      "devNote": "Any type of door can be unlocked, because it can be done before breaking the Tube."
+    },
+    {
+      "id": 82,
+      "link": [6, 5],
+      "name": "Base",
+      "requires": [
+        "f_MaridiaTubeBroken"
+      ]
+    },
+    {
+      "id": 85,
+      "link": [6, 5],
+      "name": "Break the Tube with a Power Bomb",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "setsFlags": ["f_MaridiaTubeBroken"]
+    },
+    {
+      "id": 83,
+      "link": [6, 5],
+      "name": "Unmorph Tube Clip",
+      "requires": [
+        {"notable": "Tube Clip"},
+        "Morph"
+      ],
+      "note": "Unmorph once fully underneath the rightside slope to clip."
+    },
+    {
+      "id": 84,
+      "link": [6, 5],
+      "name": "Morphless Tube Clip",
+      "requires": [
+        {"notable": "Tube Clip"},
+        "canTunnelCrawl"
+      ],
+      "note": [
+        "Wedge Samus under the right side slope with either a very clean low jump or tunnel crawl movements.",
+        "Once deep enough, the clip will happen automatically."
+      ]
+    },
+    {
+      "id": 93,
+      "link": [6, 6],
+      "name": "Unlock the Top Door",
+      "requires": [],
+      "unlocksDoors": [{"nodeId": 4, "types": ["ammo"], "requires": []}],
+      "devNote": "If 4 is locked, strats that go to 4 can't exit at 4, but they can drop to 6 and unlock the door."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Tube Clip",
+      "note": [
+        "Clip into the Maridia Tube from above without needing to break the tube.",
+        "This can be done with morph by unmorphing under the sloped tiles on the right, or with canTunnelCrawl by wedging Samus under them with a precise low jump and then performing a tunnel crawl."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Grapple Teleport into Grapple Jump (or Tube Intact)",
+      "note": [
+        "Swing to the right, shoot open the door above, and grapple jump through it.",
+        "The grapple beam will need to be retracted while swinging to the right, to avoid bonking on the small platform."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Cross Room Platform Stuck Wiggle to Top Door",
+      "note": [
+        "Requires a runway of at least 18 tiles in the adjacent room.",
+        "Ride up the right wall just above the doorway, then turnaround before and after hitting the platform following the doorway slope.",
+        "Continue up the rest of the way to reach the door."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Breaking the Tube Gravity Jump",
+      "note": [
+        "Jump as the first action after breaking the tube to gravity jump to the top of the room.",
+        "Open the door and go through it during the ascent. This can only be attempted once."
+      ]
+    }
+  ],
+  "nextStratId": 164,
+  "nextNotableId": 5
+}

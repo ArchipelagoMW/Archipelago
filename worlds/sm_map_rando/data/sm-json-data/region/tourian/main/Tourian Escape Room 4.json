@@ -1,0 +1,1112 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 242,
+  "name": "Tourian Escape Room 4",
+  "area": "Tourian",
+  "subarea": "Main",
+  "roomAddress": "0x7DEDE",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001ab28",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Tourian Escape 4 Lock (to Escape Room 3)",
+          "lockType": "permanent",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "never"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [2, 2, 2],
+        [2, 1, 1],
+        [2, 1, 1],
+        [2, 1, 1],
+        [2, 1, 1],
+        [2, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001ab34",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1],
+        [1, 2, 2],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom of Shaft",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 2, 2],
+        [1, 2, 2],
+        [1, 2, 2],
+        [1, 2, 2]
+      ],
+      "note": "This node represents being at the bottom of the shaft with the acid just starting to rise."
+    },
+    {
+      "id": 4,
+      "name": "Top of Shaft Without Acid Triggered",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 2, 2],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1]
+      ],
+      "note": "This node represents being at the top of the shaft without the acid having been triggered to rise."
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Acid Filling the Right Runway",
+      "obstacleType": "abstract"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Tourian Escape Room 4 Left Pirates",
+      "enemyName": "Tourian Space Pirate (all)",
+      "quantity": 6,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Tourian Escape Room 4 Right Pirates",
+      "enemyName": "Tourian Space Pirate (all)",
+      "quantity": 7,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {
+          "id": 2,
+          "note": "The acid starts rising when Samus is at the bottom of the long fall"
+        },
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {
+          "id": 3,
+          "note": "The acid starts rising when Samus is at the bottom of the long fall"
+        }
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 37,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 4,
+          "runway": {
+            "length": 4,
+            "openEnd": 2
+          },
+          "obstruction": [5, 4]
+        }
+      },
+      "devNote": ["Max extra run speed $1.8."]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 4,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {
+          "enemy": "Tourian Space Pirate (all)",
+          "type": "contact",
+          "hits": 1
+        }}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "HiJump",
+          "SpaceJump",
+          "canWalljump",
+          "canJumpIntoIBJ",
+          {"and": [
+            "canIBJ",
+            "canBePatient"
+          ]},
+          "canSpringBallJumpMidAir"
+        ]},
+        {"or": [
+          "canBePatient",
+          {"enemyKill": {
+            "enemies": [
+              ["Tourian Space Pirate (all)"],
+              ["Tourian Space Pirate (all)"],
+              ["Tourian Space Pirate (all)"],
+              ["Tourian Space Pirate (all)"]
+            ],
+            "explicitWeapons": ["Missile", "Super", "PowerBomb", "Wave", "Spazer", "Plasma", "ScrewAttack"]
+          }}
+        ]}
+      ],
+      "note": ["Go up safely by killing the Pirates."]
+    },
+    {
+      "id": 38,
+      "link": [1, 4],
+      "name": "Evade Pirates",
+      "requires": [
+        "canDodgeWhileShooting",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"or": [
+              "SpaceJump",
+              "canSpringBallJumpMidAir"
+            ]}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 39,
+      "link": [1, 4],
+      "name": "Tank Damage",
+      "requires": [
+        "canCarefulJump",
+        {"enemyDamage": {
+          "enemy": "Tourian Space Pirate (all)",
+          "type": "contact",
+          "hits": 2
+        }},
+        {"or": [
+          "HiJump",
+          {"and": [
+            "canTrickyJump",
+            {"or": [
+              "SpaceJump",
+              "canSpringBallJumpMidAir"
+            ]}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 35,
+      "link": [1, 4],
+      "name": "Frozen Pirates",
+      "requires": [
+        "canBePatient",
+        "canTrickyUseFrozenEnemies",
+        "canTrickyDodgeEnemies",
+        {"or": [
+          "Wave",
+          "Spazer",
+          {"ammo": {"type": "Missile", "count": 8}},
+          "canBeVeryPatient"
+        ]},
+        {"or": [
+          {"enemyDamage": {
+            "enemy": "Tourian Space Pirate (all)",
+            "type": "contact",
+            "hits": 4
+          }},
+          "canInsaneJump"
+        ]}
+      ],
+      "note": [
+        "Freeze the Pirates and use them as platforms to climb the room.",
+        "Sometimes the Pirates may decide to climb the wrong way; patience may be required to wait for them to come back.",
+        "If enough energy is available, it can be easier to use i-frames to jump up through a Pirate and freeze it from above, compared to jumping around it."
+      ],
+      "devNote": [
+        "Plasma is hard to use effectively as it's easy to accidentally kill the Pirates with it."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 4],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 15},
+        "canPrepareForNextRoom",
+        "canShinechargeMovement",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 57, "excessFrames": 13}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [1, 4],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"},
+            {"position": [6, 4], "note": "Grapple Tutorial Room 2"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ],
+      "devNote": ["FIXME: Setups from other rooms are possible but with greater difficulty."]
+    },
+    {
+      "id": 9,
+      "link": [1, 4],
+      "name": "G-Mode Morph Power Bomb Pirate Kill",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphIBJ",
+        {"ammo": {"type": "PowerBomb", "count": 10}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "IBJ and use 10 Power Bombs to kill the pirates and get to the top. Exit G-mode and fall to the bottom.",
+        "Note that there is a path up to the right that doesn't need wall jumps, but a crouch jump down grab is needed to get to the final platform."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [1, 4],
+      "name": "G-Mode Morph Bomb Boost Spring Ball, Pirate Avoid",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canCameraManip",
+        "canInsaneJump",
+        "h_artificialMorphSpringBallBombJump",
+        "h_additionalBomb",
+        "h_additionalBomb",
+        "h_additionalBomb",
+        "h_additionalBomb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Spring Ball bomb jump up to the top, then exit G-mode and fall to the bottom.",
+        "It is recommended to stay near the right wall with the camera positioned so that the left wall pirates are off camera.",
+        "Avoid touching any of the pirates' stationary, invisible lasers, which they place when they jump to the opposite wall."
+      ],
+      "devNote": "FIXME: This is likely possible with just Bombs, but seems very difficult, a diagonal bomb jump around the overhangs might make it feasible."
+    },
+    {
+      "id": 10,
+      "link": [1, 4],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 28,
+      "link": [1, 4],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 55, "excessFrames": 13}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        {"or": [
+          "canCarefulJump",
+          "ScrewAttack",
+          "Morph",
+          {"enemyDamage": {
+            "enemy": "Tourian Space Pirate (all)",
+            "type": "contact",
+            "hits": 1
+          }}
+        ]},
+        {"or": [
+          "canDodgeWhileShooting",
+          "Morph",
+          {"enemyKill": {
+            "enemies": [["Tourian Space Pirate (all)", "Tourian Space Pirate (all)"]],
+            "explicitWeapons": ["Plasma", "ScrewAttack", "Missile", "Super"]
+          }},
+          {"enemyDamage": {
+            "enemy": "Tourian Space Pirate (all)",
+            "type": "laser",
+            "hits": 8
+          }},
+          {"and": [
+            "Ice",
+            {"enemyDamage": {
+              "enemy": "Tourian Space Pirate (all)",
+              "type": "laser",
+              "hits": 6
+            }}
+          ]},
+          {"and": [
+            {"or": [
+              "Wave",
+              "Spazer"
+            ]},
+            {"enemyDamage": {
+              "enemy": "Tourian Space Pirate (all)",
+              "type": "laser",
+              "hits": 3
+            }}
+          ]},
+          {"and": [
+            "Wave",
+            "Spazer",
+            {"enemyDamage": {
+              "enemy": "Tourian Space Pirate (all)",
+              "type": "laser",
+              "hits": 2
+            }}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 26,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Leave with Runway, Race the Acid",
+      "requires": [
+        "canCarefulJump",
+        {"or": [
+          {"and": [
+            "canTrickyJump",
+            "canDodgeWhileShooting"
+          ]},
+          {"enemyKill": {
+            "enemies": [["Tourian Space Pirate (all)", "Tourian Space Pirate (all)"]],
+            "explicitWeapons": ["Plasma", "ScrewAttack", "Missile", "Super", "PowerBomb"]
+          }},
+          {"and": [
+            {"or": [
+              "Ice",
+              "Wave",
+              "Spazer"
+            ]},
+            {"or": [
+              "Morph",
+              "canDodgeWhileShooting"
+            ]}
+          ]},
+          {"and": [
+            "Ice",
+            {"enemyDamage": {
+              "enemy": "Tourian Space Pirate (all)",
+              "type": "laser",
+              "hits": 6
+            }}
+          ]},
+          {"and": [
+            {"or": [
+              "Wave",
+              "Spazer"
+            ]},
+            {"enemyDamage": {
+              "enemy": "Tourian Space Pirate (all)",
+              "type": "laser",
+              "hits": 3
+            }}
+          ]},
+          {"and": [
+            "Wave",
+            "Spazer",
+            {"enemyDamage": {
+              "enemy": "Tourian Space Pirate (all)",
+              "type": "laser",
+              "hits": 2
+            }}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 26,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 13,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canCarefulJump",
+          "ScrewAttack",
+          "Morph",
+          {"enemyDamage": {
+            "enemy": "Tourian Space Pirate (all)",
+            "type": "contact",
+            "hits": 1
+          }}
+        ]}
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 3],
+      "name": "Kill Pirates With Speed",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 6,
+          "openEnd": 0
+        }
+      },
+      "requires": [],
+      "devNote": [
+        "There are 19 unusable tiles in this runway.",
+        "It is not worthwhile to Shinespark into the room, because that would require more energy than the Pirates would deal."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [2, 4],
+      "name": "Crystal Flash Grapple Clip",
+      "requires": [
+        "h_jumpIntoCrystalFlashClip",
+        "HiJump",
+        "Grapple"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Clear the Pirates near the door.",
+        "Jump into a Crystal Flash clip where the ceiling is a single tile thick.",
+        "Switch to Grappling Beam before the Crystal Flash ends and mash shoot while holding down."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 4],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 17,
+      "link": [3, 1],
+      "name": "Protected Shaft Climb With Screw Attack",
+      "requires": [
+        "ScrewAttack",
+        {"or": [
+          "canConsecutiveWalljump",
+          {"and": [
+            "SpaceJump",
+            "HiJump"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Use Screw Attack to avoid Space Pirate attacks while climbing the central shaft.",
+        "The Screw Attack effect is not active when Samus is preparing to Walljump."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [3, 1],
+      "name": "Protected Shaft Climb With PseudoScrew",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canConsecutiveWalljump",
+            "canWalljumpWithCharge"
+          ]},
+          {"and": [
+            "SpaceJump",
+            "HiJump",
+            "canPseudoScrew"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Use Pseudo Screw to avoid Space Pirate attacks while climbing the central shaft.",
+        "The Screw Attack effect is not active when Samus is preparing to Walljump."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [3, 1],
+      "name": "Dodge While Climbing",
+      "requires": [
+        {"notable": "Dodge While Climbing"},
+        "canCarefulJump",
+        {"or": [
+          "canConsecutiveWalljump",
+          {"and": [
+            "HiJump",
+            "SpaceJump"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Navigate the room in reverse by killing or distracting the right side pirates and manipulating or dodging the left side pirates during the shaft climb.",
+        "The acid starts rising when Samus is at the bottom of the long climb.",
+        "The right-side pirates can be killed while going down to prevent having to dodge their lasers during the climb.",
+        "Alternatively, jump and force the pirates to shoot just before starting to climb."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [3, 1],
+      "name": "Bootless Walljumpless Space Jump (Longer Acid Dip)",
+      "requires": [
+        {"notable": "Bootless Walljumpless Space Jump"},
+        "SpaceJump",
+        "canTrickyJump",
+        {"acidFrames": 90}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"acidFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"acidFrames": 110}]
+        }
+      ],
+      "wallJumpAvoid": true,
+      "note": [
+        "Climbing the shaft with Space Jump is slower than other methods, so it is necessary to move quickly in order to minimize acid damage.",
+        "After reaching the top, fall down the right side to land on the platform below the door, taking a dip in acid before jumping into the door."
+      ],
+      "devNote": [
+        "The leaveNormally exit condition is for two reasons:",
+        "1) to prevent use of the runway, since it will not be an air environment,",
+        "2) to prevent use of implicit door unlock strats, since unlocking the door requires more acid damage."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [3, 1],
+      "name": "Bootless Walljumpless Space Jump (Short Acid Dip)",
+      "requires": [
+        {"notable": "Bootless Walljumpless Space Jump"},
+        "canPreciseSpaceJump",
+        "canTrickyJump",
+        {"acidFrames": 50}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"acidFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"acidFrames": 110}]
+        }
+      ],
+      "wallJumpAvoid": true,
+      "note": [
+        "Climbing the shaft with Space Jump is slower than other methods, so it is necessary to move quickly in order to minimize acid damage.",
+        "With each Space Jump, release jump early rather than doing a full-height jump, in order to be able to Space Jump again more quickly.",
+        "After reaching the top, fall down on the right side to land on the platform below the door, taking a brief dip in acid before jumping into the door."
+      ],
+      "devNote": [
+        "The leaveNormally exit condition is for two reasons:",
+        "1) to prevent use of the runway, since it might not be an air environment,",
+        "2) to prevent use of implicit door unlock strats, since unlocking the door requires more acid damage."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [3, 1],
+      "name": "Bootless Walljumpless Space Jump (Plasma)",
+      "requires": [
+        {"notable": "Bootless Walljumpless Space Jump"},
+        "canPreciseSpaceJump",
+        "canTrickyJump",
+        "Plasma",
+        {"or": [
+          {"enemyDamage": {
+            "enemy": "Tourian Space Pirate (all)",
+            "type": "contact",
+            "hits": 1
+          }},
+          {"and": [
+            "canHitbox",
+            "canInsaneJump"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "wallJumpAvoid": true,
+      "note": [
+        "Climbing the shaft with Space Jump is slower than other methods, so it is necessary to move quickly in order to minimize acid damage.",
+        "With each Space Jump, release jump early rather than doing a full-height jump, in order to be able to Space Jump again more quickly.",
+        "After reaching the top, fall down on the right side to land on the platform above the door.",
+        "Then press against the left wall and pass through the last Pirate while firing a Plasma shot down to open the door;",
+        "with precise timing, damage from the Pirate can be avoided by hitboxing through it.",
+        "Hold left to land directly in the doorway.",
+        "If done quickly enough, it is possible to avoid any acid damage."
+      ],
+      "devNote": [
+        "The leaveNormally exit condition is to prevent use of implicit door unlock strats,",
+        "since unlocking the door would probably require some acid damage;",
+        "FIXME: refine the door unlock requirements.",
+        "FIXME: leave with runway could be ok here, though in most cases you could just reset the room, so it doesn't matter much."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [3, 1],
+      "name": "Bootless Walljumpless Space Jump (Super)",
+      "requires": [
+        {"notable": "Bootless Walljumpless Space Jump"},
+        "canPreciseSpaceJump",
+        {"enemyKill": {
+          "enemies": [["Tourian Space Pirate (all)"]],
+          "explicitWeapons": ["Super"]
+        }}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "wallJumpAvoid": true,
+      "note": [
+        "Climbing the shaft with Space Jump is slower than other methods, so it is necessary to move quickly in order to minimize acid damage.",
+        "With each Space Jump, release jump early rather than doing a full-height jump, in order to be able to Space Jump again more quickly.",
+        "After reaching the top, fall down on the right side to land on the platform above the door.",
+        "Run left, falling off the platform and firing a Super downward to kill the last Pirate.",
+        "Buffer a beam shot to open the door immediately afterward; using weapon auto-cancel can help simplify the inputs.",
+        "If the shot is fired early enough, it is possible to hold left to land directly in the doorway.",
+        "Otherwise a down-back can be used to squeeze in.",
+        "If done quickly enough, it is possible to avoid any acid damage."
+      ],
+      "devNote": [
+        "The leaveNormally exit condition is to prevent use of implicit door unlock strats,",
+        "since unlocking the door would probably require some acid damage;",
+        "FIXME: refine the door unlock requirements.",
+        "FIXME: leave with runway could be ok here, though in most cases you could just reset the room, so it doesn't matter much."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [3, 1],
+      "name": "Bootless Walljumpless Space Jump (Left-Side Fall)",
+      "requires": [
+        {"notable": "Bootless Walljumpless Space Jump"},
+        "canPreciseSpaceJump",
+        {"or": [
+          {"and": [
+            "canInsaneJump",
+            "canResetFallSpeed"
+          ]},
+          {"and": [
+            "canInsaneJump",
+            "canDownBack",
+            {"enemyDamage": {
+              "enemy": "Tourian Space Pirate (all)",
+              "type": "contact",
+              "hits": 1
+            }}
+          ]},
+          {"and": [
+            "canResetFallSpeed",
+            {"enemyDamage": {
+              "enemy": "Tourian Space Pirate (all)",
+              "type": "contact",
+              "hits": 1
+            }}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "wallJumpAvoid": true,
+      "note": [
+        "Climbing the shaft with Space Jump is slower than other methods, so it is necessary to move quickly in order to minimize acid damage.",
+        "With each Space Jump, release jump early rather than doing a full-height jump, in order to be able to Space Jump again more quickly.",
+        "After reaching the top, fall down on the left side, keeping between the Pirates and the platforms.",
+        "If Morph is available, use it to reset fall speed by unmorphing soon after taking damage from the bottom Pirate.",
+        "With greater difficulty, the bottom Pirate can be avoided, resetting fall speed soon after getting past it.",
+        "If Morph is not available, then take damage from the bottom Pirate, press against the left wall, and fire a carefully timed shot downward to open the door;",
+        "in this case, use a down-back to fall directly into the doorway.",
+        "If done quickly enough, it is possible to avoid any acid damage."
+      ],
+      "devNote": [
+        "The leaveNormally exit condition is to prevent use of implicit door unlock strats,",
+        "since unlocking the door would probably require some acid damage;",
+        "FIXME: refine the door unlock requirements."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [3, 1],
+      "name": "Acid Bath Shinespark (Gravity)",
+      "requires": [
+        "Gravity",
+        "canSuitlessLavaDive",
+        {"canShineCharge": {"usedTiles": 17, "openEnd": 0}},
+        {"acidFrames": 90},
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 76, "excessFrames": 6}}
+      ],
+      "note": [
+        "Gain a shinecharge by running right-to-left at the bottom of the room.",
+        "Move quickly to minimize damage from the acid, which will begin rising as soon as you reach the bottom of the room.",
+        "Shinespark up the shaft."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [3, 1],
+      "name": "Stutter Acid Bath Shinespark",
+      "requires": [
+        {"notable": "Suitless Acid Bath Shinespark"},
+        "canStutterWaterShineCharge",
+        "canInsaneJump",
+        {"acidFrames": 215},
+        "canShinechargeMovementTricky",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 83, "excessFrames": 2}}
+      ],
+      "wallJumpAvoid": true,
+      "note": [
+        "Gain a shinecharge by running right-to-left at the bottom of the room, performing a stutter just before the acid reaches Samus' feet.",
+        "Use spin jumps to minimize damage from the acid, and spark diagonally (to the left) mid-air to make it up the shaft."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [3, 1],
+      "name": "IBJ and Acid Bath",
+      "requires": [
+        {"notable": "IBJ and Acid Bath"},
+        "canSuitlessLavaDive",
+        "canJumpIntoIBJ",
+        "canLongIBJ",
+        "canDoubleBombJump",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"acidFrames": 150}
+          ]},
+          {"acidFrames": 450}
+        ]}
+      ],
+      "wallJumpAvoid": true,
+      "note": "Clear the right side Space Pirates and then race the rising acid by bomb jumping."
+    },
+    {
+      "id": 23,
+      "link": [3, 1],
+      "name": "Leave With Temporary Blue (Race the Acid)",
+      "requires": [
+        "canFastWalljumpClimb",
+        {"canShineCharge": {"usedTiles": 21, "openEnd": 1}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 29,
+      "link": [3, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 76, "excessFrames": 5}},
+          {"and": [
+            "SpeedBooster",
+            {"shinespark": {"frames": 73, "excessFrames": 4}}
+          ]},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 72, "excessFrames": 4}}
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster",
+            {"shinespark": {"frames": 64, "excessFrames": 4}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 24,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "HiJump",
+          "SpaceJump",
+          "canWalljump",
+          "h_crouchJumpDownGrab",
+          "canJumpIntoIBJ",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"or": [
+          "canCarefulJump",
+          "ScrewAttack",
+          {"enemyDamage": {
+            "enemy": "Tourian Space Pirate (all)",
+            "type": "contact",
+            "hits": 1
+          }}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 25,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "devNote": "The Crystal Flash should be performed on a platform away from the acid trigger or any Pirates."
+    },
+    {
+      "id": 26,
+      "link": [4, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 21, "openEnd": 1}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 27,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": []
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Dodge While Climbing",
+      "note": [
+        "Navigate the room in reverse by killing or distracting the right side pirates and manipulating or dodging the left side pirates during the shaft climb.",
+        "The acid starts rising when Samus is at the bottom of the long climb.",
+        "The right-side pirates can be killed while going down to prevent having to dodge their lasers during the climb.",
+        "Alternatively, jump and force the pirates to shoot just before starting to climb."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Suitless Acid Bath Shinespark",
+      "wallJumpAvoid": true,
+      "note": [
+        "Gain a shinecharge by running right-to-left at the bottom of the room, performing a stutter just before the acid reaches Samus' feet.",
+        "Use spin jumps to minimize damage from the acid, and spark diagonally (to the left) mid-air to make it up the shaft."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "IBJ and Acid Bath",
+      "wallJumpAvoid": true,
+      "note": "Clear the right side Space Pirates and then race the rising acid by bomb jumping."
+    },
+    {
+      "id": 4,
+      "name": "Bootless Walljumpless Space Jump",
+      "wallJumpAvoid": true,
+      "note": [
+        "Climbing the shaft with Space Jump is slower than other methods, so it is necessary to move quickly in order to minimize acid damage.",
+        "It is possible to climb faster by releasing jump early, rather than doing full-height jumps, in order to be able to Space Jump again more quickly."
+      ]
+    }
+  ],
+  "nextStratId": 41,
+  "nextNotableId": 5
+}

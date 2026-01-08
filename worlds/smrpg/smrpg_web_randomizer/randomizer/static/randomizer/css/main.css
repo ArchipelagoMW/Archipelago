@@ -1,0 +1,291 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css?family=Cabin|Schoolbell:300,400,600");
+
+/* Bootstrap Toggle v2.2.2 corrections for Bootsrtap 4 */
+.toggle-off {
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
+}
+
+.toggle.off {
+    border-color: rgba(0, 0, 0, .25);
+}
+
+.toggle-handle {
+    background-color: white;
+    border: thin rgba(0, 0, 0, .25) solid;
+}
+
+/* Randomizer CSS below */
+body {
+    font-family: "Cabin", sans-serif;
+}
+
+label {
+    font-weight: normal;
+}
+
+.navbar-brand {
+    padding: 0;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.picon {
+    width: 18px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.icon.fire {
+    background: url('../img/fontTableDescription.png') 0 0;
+}
+
+.icon.ice {
+    background: url('../img/fontTableDescription.png') -32px 0;
+}
+
+.icon.lightning {
+    background: url('../img/fontTableDescription.png') -64px 0;
+}
+
+.icon.mute {
+    background: url('../img/fontTableDescription.png') -96px 0;
+}
+
+.icon.sleep {
+    background: url('../img/fontTableDescription.png') -128px 0;
+}
+
+.icon.poison {
+    background: url('../img/fontTableDescription.png') -160px 0;
+}
+
+.icon.fear {
+    background: url('../img/fontTableDescription.png') -192px 0;
+}
+
+.icon.mushroom {
+    background: url('../img/fontTableDescription.png') -224px 0;
+}
+
+.icon.scarecrow {
+    background: url('../img/fontTableDescription.png') 0 -24px;
+}
+
+.icon.ko {
+    background: url('../img/fontTableDescription.png') -32px -24px;
+}
+
+.icon.berserk {
+    background: url('../img/fontTableDescription.png') -64px -24px;
+}
+
+.icon.atkup {
+    background: url('../img/fontTableDescription.png') -96px -24px;
+}
+
+.icon.atkdown {
+    background: url('../img/fontTableDescription.png') -128px -24px;
+}
+
+.icon.matkup {
+    background: url('../img/fontTableDescription.png') -160px -24px;
+}
+
+.icon.matkdown {
+    background: url('../img/fontTableDescription.png') -192px -24px;
+}
+
+.icon.defup {
+    background: url('../img/fontTableDescription.png') -224px -24px;
+}
+
+.icon.defdown {
+    background: url('../img/fontTableDescription.png') 0 -48px;
+}
+
+.icon.mdefup {
+    background: url('../img/fontTableDescription.png') -32px -48px;
+}
+
+.icon.mdefdown {
+    background: url('../img/fontTableDescription.png') -64px -48px;
+}
+
+.icon.agiup {
+    background: url('../img/fontTableDescription.png') -96px -48px;
+}
+
+.icon.agidown {
+    background: url('../img/fontTableDescription.png') -128px -48px;
+}
+
+.icon.boost {
+    background: url('../img/fontTableDescription.png') -160px -48px;
+}
+
+.icon.x0 {
+    background: url('../img/fontTableDescription.png') -192px -48px;
+}
+
+.icon.x12 {
+    background: url('../img/fontTableDescription.png') -224px -48px;
+}
+
+.picon._2x {
+    background: url('../img/fontTableDialogue.png') 0 0;
+}
+
+.picon._0x {
+    background: url('../img/fontTableDialogue.png') -18px 0;
+}
+
+.picon.ice {
+    background: url('../img/fontTableDialogue.png') -36px 0;
+}
+
+.picon.fire {
+    background: url('../img/fontTableDialogue.png') -54px 0;
+}
+
+.picon.lightning {
+    background: url('../img/fontTableDialogue.png') -72px 0;
+}
+
+.picon.sleep {
+    background: url('../img/fontTableDialogue.png') 0 -16px;
+}
+
+.picon.fear {
+    background: url('../img/fontTableDialogue.png') -18px -16px;
+}
+
+.picon.mute {
+    background: url('../img/fontTableDialogue.png') -36px -16px;
+}
+
+.picon.poison {
+    background: url('../img/fontTableDialogue.png') -54px -16px;
+}
+
+.picon.ko {
+    background: url('../img/fontTableDialogue.png') -73px -16px;
+    width: 15px;
+}
+
+.picon.jump {
+    background: url('../img/fontTableDialogue.png') -90px -16px;
+}
+
+/* Flag styles */
+
+.flag-form-input {
+    display: none;
+}
+
+.flag-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 1rem;
+}
+
+.flag-checkbox, .flag-radio {
+    display: inline-block;
+    min-width: 2.0rem;
+    border-width: 0.05rem;
+    border-style: solid;
+    border-color: grey;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    color: grey;
+}
+
+.flag-checkbox {
+    border-radius: 0.1rem;
+}
+
+.flag-radio {
+    border-radius: 1.0rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.flag-checkbox-hard, .flag-radio-hard {
+    border-color: red;
+}
+
+.flag-form-input:checked + .flag-checkbox-container > .flag-checkbox, .flag-form-input:checked + .flag-radio-container > .flag-radio {
+    color: white;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.flag-form-input:checked + .flag-checkbox-container > .flag-checkbox-hard, .flag-form-input:checked + .flag-radio-container > .flag-radio-hard {
+    color: red;
+    background-color: darkred;
+    border-color: red;
+}
+
+.flag-label {
+    cursor: pointer;
+    color: grey;
+}
+
+.flag-form-input:checked + * + .flag-subsection-container > .flag-label {
+    color: black;
+}
+
+.flag-checkbox h5, .flag-radio h5, .flag-label h5 {
+    margin: 0;
+}
+
+.flag-checkbox-container, .flag-radio-container {
+    vertical-align: top;
+}
+
+.flag-subsection {
+    display: none;
+}
+
+.flag-form-input:checked + * + .flag-subsection-container > .flag-subsection {
+    display: block;
+}
+
+.flag-checkbox, .flag-radio, .flag-label {
+    font-size: 110%;
+}
+
+.flag-description {
+    font-size: 80%;
+}
+.inline-flag-description, .disabled-inline-flag-description {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 1rem;
+}
+.inline-flag-description .display-cell:first-child div, .disabled-inline-flag-description .display-cell:first-child div {
+    color: white;
+    text-align: center;
+}
+.inline-flag-description .display-cell:first-child div {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+.disabled-inline-flag-description .display-cell:first-child div {
+    background-color: #adadad;
+    border-color: #adadad;
+    text-decoration: line-through;
+}
+.disabled-inline-flag-description .display-cell:last-child {
+    color: #adadad;
+}
+.inline-flag-description .display-cell:first-child, .disabled-inline-flag-description .display-cell:first-child {
+    min-width: 1.5rem;
+}

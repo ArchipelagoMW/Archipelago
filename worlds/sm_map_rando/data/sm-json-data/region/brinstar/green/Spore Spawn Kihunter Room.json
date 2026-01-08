@@ -1,0 +1,511 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 56,
+  "name": "Spore Spawn Kihunter Room",
+  "area": "Brinstar",
+  "subarea": "Green",
+  "roomAddress": "0x79D9C",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x0018e32",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Spore Spawn Kihunters Left Gray Lock (to Big Pink)",
+          "lockType": "killEnemies",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [],
+              "note": "The enemies can be killed with Power Beam"
+            }
+          ],
+          "yields": ["f_ZebesAwake"],
+          "devNote": "This is unlocked and yielded from killing the enemies, which are free to kill"
+        }
+      ],
+      "mapTileMask": [
+        [2, 2, 2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x0018e3e",
+      "doorOrientation": "up",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Spore Spawn Kihunters Right Gray Lock (to Spore Spawn)",
+          "lockType": "killEnemies",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [],
+              "note": "The enemies can be killed with Power Beam"
+            }
+          ],
+          "yields": ["f_ZebesAwake"],
+          "devNote": "This is unlocked and yielded from killing the enemies, which are free to kill"
+        }
+      ],
+      "mapTileMask": [
+        [1, 1, 1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Spore Spawn Kihunters",
+      "enemyName": "Kihunter (green)",
+      "quantity": 3,
+      "homeNodes": [1, 2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [
+        {"or": [
+          "canDodgeWhileShooting",
+          "ScrewAttack",
+          "h_hasBeamUpgrade"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"or": [
+          "canDodgeWhileShooting",
+          "ScrewAttack",
+          "h_hasBeamUpgrade"
+        ]},
+        {"canShineCharge": {"usedTiles": 25, "openEnd": 0}},
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 105}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Store a shinecharge with enough space remaining to run and jump over all the steps with a single jump.",
+      "devNote": "The runway is 32 tiles, but about 7 of those should be used to run after getting the shinecharge."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 31,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 31,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 31,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 28,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 31, "openEnd": 0}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 23,
+      "link": [1, 1],
+      "name": "Kihunter Farm",
+      "requires": [
+        {"or": [
+          {"resetRoom": {"nodes": [1]}},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 90}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            {"or": [
+              "Plasma",
+              "Spazer",
+              "Wave",
+              "ScrewAttack"
+            ]},
+            {"cycleFrames": 500}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 660}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Kihunter (green)", "count": 3}]
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Kihunter",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [1, 2],
+      "name": "G-Mode Ice Clip, Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"notable": "Ice Clip Door Lock Skip Without Morph and X-Ray"},
+        "canTrickyGMode",
+        "h_preciseIceClip",
+        {"or": [
+          "Morph",
+          "canInsaneJump",
+          {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Lure a Kihunter over to the right near the door. Damage it so that it falls to the ground.",
+        "There is a 2 frame window at the beginning of its hop where Samus can use it to clip through the door",
+        "Be careful to avoid touching the invisible, stationary projectiles that it spits out.",
+        "Without Morph, jump onto the right side of it in order to have a chance to wiggle off quickly in case it is frozen at the wrong height."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Kihunter Ice Clip Door Lock Skip",
+      "requires": [
+        "h_XRayMorphIceClip"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Lure a Kihunter over to the right near the door. Damage it so that it falls to the ground.",
+        "Freeze it while it hops, and use Morph and X-Ray to stand on top of it and clip up through the door shell."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Ice Clip Door Lock Skip Without Morph and X-Ray",
+      "requires": [
+        {"notable": "Ice Clip Door Lock Skip Without Morph and X-Ray"},
+        "h_preciseIceClip"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Lure a Kihunter over to the right near the door. Damage it so that it falls to the ground.",
+        "There is a 2 frame window at the beginning of its hop where Samus can use it to clip through the door"
+      ]
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 25, "openEnd": 0}},
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Store a shinecharge with enough space remaining to run and jump over all the steps with a single jump.",
+      "devNote": "The runway is 32 tiles, but about 7 of those should be used to run after getting the shinecharge."
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Leave With Door Frame Below",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithDoorFrameBelow": {
+          "height": 3
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "Leave With Platform Below",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 8,
+          "leftPosition": -4.5,
+          "rightPosition": 6
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "Carry G-Mode Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "note": "Quickly jump back through the door to avoid a Kihunter hit."
+    },
+    {
+      "id": 20,
+      "link": [2, 2],
+      "name": "Carry G-Mode Morph Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 1}}
+        ]},
+        {"or": [
+          "h_artificialMorphSpringBallBombJump",
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump"
+          ]},
+          {"and": [
+            "h_artificialMorphIBJ",
+            "h_artificialMorphPowerBomb"
+          ]},
+          "Morph"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "note": [
+        "With Spring Ball alone, quickly jump over the Kihunter and wait for it to move away, then Spring Ball Bomb Jump through the door.",
+        "Alternatively, place a Power Bomb and roll to the left on entry to kill the Kihunter, then quickly IBJ through the door before more arrive."
+      ],
+      "devNote": "It is possible to do this with Bombs alone, but it is pretty chaotic."
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "G-Mode Ice Clip, Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"notable": "Ice Clip Door Lock Skip Without Morph and X-Ray"},
+        "canTrickyGMode",
+        "h_preciseIceClip",
+        {"or": [
+          "Morph",
+          "canInsaneJump",
+          {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Lure a Kihunter over to the right near the door (it may be easiest not to use the one that starts near the door). Damage it so that it falls to the ground.",
+        "There is a 2 frame window at the beginning of its hop where Samus can use it to clip through the door",
+        "Be careful to avoid touching the invisible, stationary projectiles that it spits out.",
+        "Without Morph, jump onto the right side of it in order to have a chance to wiggle off quickly in case it is frozen at the wrong height."
+      ],
+      "devNote": "This is only for indirect G-Mode, because it is trivial while in direct, and would use a different strat."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Ice Clip Door Lock Skip Without Morph and X-Ray",
+      "note": [
+        "Lure a Kihunter over to the right near the door. Damage it so that it falls to the ground.",
+        "There is a 2 frame window at the beginning of its hop where Samus can use it to clip through the door"
+      ]
+    }
+  ],
+  "nextStratId": 24,
+  "nextNotableId": 2
+}

@@ -1,0 +1,621 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 110,
+  "name": "Ice Beam Tutorial Room",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "West",
+  "roomAddress": "0x7A865",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019342",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001934e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Ice Beam Tutorial Room Boyons",
+      "enemyName": "Boyon",
+      "quantity": 3,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Ice Beam Tutorial Room Ripper 2",
+      "enemyName": "Ripper 2 (red)",
+      "quantity": 1,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [1, 1],
+      "name": "Boyon Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1, 2]}},
+        "h_heatProof",
+        "h_lavaProof",
+        "h_useMorphBombs",
+        "canBePatient",
+        "canDodgeWhileShooting",
+        {"or": [
+          "Ice",
+          "canFarmWhileShooting",
+          {"cycleFrames": 2700}
+        ]},
+        {"cycleFrames": 4500}
+      ],
+      "farmCycleDrops": [{"enemy": "Boyon", "count": 3}]
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Gravity",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall"
+        ]},
+        {"heatFrames": 330},
+        {"lavaFrames": 25}
+      ],
+      "devNote": "FIXME: Add a lava dip + spring ball midair strat, and a HiJump + damage boost strat."
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Speedy Jump",
+      "requires": [
+        "canMidAirMorph",
+        "SpeedBooster",
+        "canCarefulJump",
+        {"heatFrames": 275}
+      ],
+      "note": "Use the full runway in order to get a good jump."
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Boyon PB Kill",
+      "requires": [
+        "canMidAirMorph",
+        "canWalljump",
+        "canCarefulJump",
+        {"enemyKill": {
+          "enemies": [["Boyon", "Boyon", "Boyon"]],
+          "explicitWeapons": ["PowerBomb"]
+        }},
+        {"heatFrames": 780}
+      ],
+      "note": "Requires laying PBs on the very edge of the platform by the doorway, mostly hanging over the lava, in order to double hit the rightmost Boyon."
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Boyon Super Kill",
+      "requires": [
+        "canMidAirMorph",
+        "canWalljump",
+        "canCarefulJump",
+        {"enemyKill": {
+          "enemies": [["Boyon"]],
+          "explicitWeapons": ["Super"]
+        }},
+        {"heatFrames": 540}
+      ],
+      "note": [
+        "Jump and shoot supers diagonally down at the rightmost Boyon.",
+        "Jump at the edge of the platform and shoot just before hitting the ceiling, or start one tile left and shoot while at the ceiling."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Frozen Boyon",
+      "requires": [
+        "Morph",
+        "canTrivialUseFrozenEnemies",
+        {"heatFrames": 350}
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Lateral Mid-Air Morph",
+      "requires": [
+        "canLateralMidAirMorph",
+        {"or": [
+          "canTrickyJump",
+          {"and": [
+            "canNeutralDamageBoost",
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}}
+          ]}
+        ]},
+        {"heatFrames": 350}
+      ],
+      "note": [
+        "A well-executed lateral mid-air morph can get into the passage without taking a hit.",
+        "Otherwise, the Boyon can be used to push Samus into the passage."
+      ],
+      "devNote": [
+        "It's possible to get into the passage by a non-mockball mid-air morph, it just needs to be fairly late.",
+        "Due to its risk and not really being easier, it's not included here"
+      ]
+    },
+    {
+      "id": 19,
+      "link": [1, 2],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 145},
+        "canLateralMidAirMorph",
+        "canTrickyJump",
+        "canShinechargeMovementTricky",
+        {"heatFrames": 190},
+        {"shinespark": {"frames": 21, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canLateralMidAirMorph",
+        "canTrickyJump",
+        "canShinechargeMovementTricky",
+        {"heatFrames": 235},
+        {"shinespark": {"frames": 22, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [1, 2],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Morph",
+            {"or": [
+              "SpaceJump",
+              "canTrivialUseFrozenEnemies"
+            ]}
+          ]},
+          {"and": [
+            "canLateralMidAirMorph",
+            "canTrickyJump"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringFling",
+            "canTrickyJump"
+          ]},
+          "h_artificialMorphHBJ",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ",
+            "h_artificialMorphBombHorizontally",
+            {"lavaFrames": 160}
+          ]},
+          {"and": [
+            "Gravity",
+            "h_artificialMorphSpringBall",
+            {"lavaFrames": 40}
+          ]},
+          {"and": [
+            "Gravity",
+            "Morph",
+            {"lavaFrames": 24}
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Getting across the lava while artificially morphed requires an HBJ or Spring Fling.",
+        "For the Spring Fling, jump immediately before the pause triggers. With Morph, Samus can air ball across."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall",
+          {"and": [
+            "h_bombThings",
+            {"heatFrames": 80}
+          ]}
+        ]},
+        {"heatFrames": 270},
+        {"or": [
+          {"lavaFrames": 70},
+          {"and": [
+            "Gravity",
+            {"lavaFrames": 25}
+          ]}
+        ]},
+        {"or": [
+          {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}},
+          {"heatFrames": 30}
+        ]}
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Ice",
+      "requires": [
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall",
+          {"and": [
+            "h_bombThings",
+            {"heatFrames": 80}
+          ]}
+        ]},
+        {"or": [
+          "canTrickyUseFrozenEnemies",
+          {"and": [
+            "canUseFrozenEnemies",
+            "Wave"
+          ]}
+        ]},
+        {"heatFrames": 300}
+      ],
+      "note": "An ice shot can shoot through the wall below the Morph tunnel and can freeze the Boyon even without Wave."
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Impressive Damage Boost",
+      "requires": [
+        {"notable": "Impressive Damage Boost"},
+        "canHorizontalDamageBoost",
+        "canTrivialMidAirMorph",
+        "canTrickyJump",
+        {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}},
+        {"heatFrames": 220}
+      ],
+      "note": "Unmorph with the right timing to damage boost using the Boyon who is closest to the Morph tunnel in order to avoid taking any lava damage."
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "G-Mode Morph, Damageless",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "h_artificialMorphMovement",
+            "h_lavaProof"
+          ]},
+          {"and": [
+            "Morph",
+            "canTrickyUseFrozenEnemies"
+          ]},
+          {"and": [
+            "h_artificialMorphIBJ",
+            "h_artificialMorphBombHorizontally",
+            "canTrickyUseFrozenEnemies"
+          ]},
+          {"and": [
+            "canInsaneJump",
+            {"or": [
+              "h_artificialMorphHBJ",
+              "h_artificialMorphDiagonalBombJump"
+            ]}
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "Getting across the lava while artificially morphed requires an HBJ or Bomb boosting out and freezing a Boyon below.",
+      "devNote": "FIXME: It is also possible with a rolling speed bomb boost down back."
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "G-Mode Morph, Tank",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "Morph",
+          {"and": [
+            "h_artificialMorphSpringFling",
+            "canTrickyJump"
+          ]},
+          {"and": [
+            "h_artificialMorphIBJ",
+            "h_artificialMorphBombHorizontally"
+          ]},
+          {"and": [
+            "Gravity",
+            "h_artificialMorphSpringBall",
+            {"lavaFrames": 20}
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            {"lavaFrames": 50}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            {"notable": "Impressive Damage Boost"},
+            "canHorizontalDamageBoost",
+            "canTrickyJump",
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}}
+          ]},
+          {"lavaFrames": 90},
+          {"and": [
+            "Gravity",
+            {"lavaFrames": 35}
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "Spring Fling or IBJ across the right pit and damage boost or lava dive in the second; to Spring Fling, jump immediately before the pause triggers."
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "G-Mode Morph, Power Bomb Ripper Boost",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "Gravity",
+        "h_artificialMorphPowerBomb",
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 1}},
+        "canTrickyJump",
+        {"lavaFrames": 140},
+        "h_additionalBomb",
+        {"or": [
+          {"and": [
+            {"notable": "Impressive Damage Boost"},
+            "canHorizontalDamageBoost",
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}}
+          ]},
+          {"lavaFrames": 25}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Enter the lava pool as the Ripper touches the left wall. Place a Power Bomb in the corner and boost up into the Ripper to escape.",
+        "The Power Bomb timing is somewhat lenient, but incorrectly timing it will kill the Ripper and leave Samus in the lava pool."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "Ripper Farm",
+      "requires": [
+        {"or": [
+          {"resetRoom": {"nodes": [2]}},
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            "canMidAirMorph",
+            {"cycleFrames": 330}
+          ]}
+        ]},
+        "h_heatProof",
+        {"or": [
+          "h_lavaProof",
+          {"and": [
+            "canFarmWhileShooting",
+            "canPreciseWalljump",
+            {"cycleFrames": 15}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"cycleFrames": 10}
+          ]}
+        ]},
+        "ScrewAttack",
+        {"cycleFrames": 125}
+      ],
+      "farmCycleDrops": [{"enemy": "Ripper 2 (red)", "count": 1}]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Impressive Damage Boost",
+      "note": "Unmorph with the right timing to damage boost using the Boyon who is closest to the Morph tunnel in order to avoid taking any lava damage."
+    }
+  ],
+  "nextStratId": 27,
+  "nextNotableId": 2
+}

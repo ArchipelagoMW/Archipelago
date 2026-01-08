@@ -1,0 +1,21 @@
+# ???
+0a/7b9e/: |
+    ret
+    nop
+    nop
+
+10/4ae5/: db $34 ; Ember seed text is not vanilla, new one is at TX_0034
+
+# In case where dungeon has not been visited, make popup indicate a generic
+# "Unknown Dungeon" instead of the original region where the dungeon is located,
+# which can be a spoiler in runs with shuffled dungeons
+02/60f8/: |
+    ld b,$06
+    ld c,$02
+
+# Shorten initial Maku Tree text script when giving Gnarled Key, replacing lots of instructions by ineffective
+# "disableinput" instructions
+0b/716a/: db $bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd
+# (TX_1700 & TX_1701 are therefore free to use)
+
+0b/53c4/: db $bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd ; always skip the second know-it-all bird text

@@ -1,0 +1,105 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 1,
+  "name": "Ceres Elevator Room",
+  "area": "Ceres Station",
+  "subarea": "Ceres Station",
+  "roomAddress": "0x7DF45",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Elevator",
+      "nodeType": "exit",
+      "nodeSubType": "elevator",
+      "doorOrientation": "up",
+      "locks": [
+        {
+          "name": "Ceres Elevator Lock",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedCeresRidley"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [2],
+        [2],
+        [1]
+      ],
+      "devNote": [
+        "FIXME Do we need a nodeaddress here?",
+        "If this were to behave like a normal elevator, it would need G-mode return strats and 2->1 strats added"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001ab4c",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [2]
+      ]
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 2,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 3,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    }
+  ],
+  "notables": [],
+  "nextStratId": 4,
+  "nextNotableId": 1
+}

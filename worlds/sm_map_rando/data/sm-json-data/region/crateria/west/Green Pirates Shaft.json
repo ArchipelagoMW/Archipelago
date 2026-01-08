@@ -1,0 +1,1858 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 21,
+  "name": "Green Pirates Shaft",
+  "area": "Crateria",
+  "subarea": "West",
+  "roomAddress": "0x799BD",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018c5e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Middle Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018c3a",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [2],
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018c46",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "red",
+      "nodeAddress": "0x0018c52",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Left Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x7846A",
+      "mapTileMask": [
+        [1],
+        [2],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Right Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78464",
+      "mapTileMask": [
+        [1],
+        [2],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Junction Between Items",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [2],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Junction Below Items",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [1],
+        [2],
+        [2],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 10,
+      "name": "G-Mode Morph Junction (Middle Right Door)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [2],
+        [2],
+        [1]
+      ],
+      "note": "Represents being at the middle right door with G-Mode Morph (artificial morph)"
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Power Bomb Blocks",
+      "obstacleType": "inanimate",
+      "devNote": "This obstacle only needs to be tracked for morphless strats, because with Morph, Samus can fall through the crumble blocks."
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Green Pirates Shaft Pirates",
+      "enemyName": "Green Space Pirate (standing)",
+      "quantity": 5,
+      "homeNodes": [2, 4],
+      "note": "They're really between 2 and 4, but they are the actual obstacle between the two, so access to either + ability to kill them is enough to get their drops."
+    },
+    {
+      "id": "e2",
+      "groupName": "Green Pirates Beetoms",
+      "enemyName": "Beetom",
+      "quantity": 2,
+      "homeNodes": [9]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4},
+        {"id": 9},
+        {"id": 10}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 9},
+        {"id": 10}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 9},
+        {"id": 10}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 8,
+      "to": [
+        {"id": 5},
+        {"id": 6},
+        {"id": 9}
+      ]
+    },
+    {
+      "from": 9,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 10,
+      "to": [
+        {"id": 2},
+        {"id": 4},
+        {"id": 9}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 2,
+            "openEnd": 1
+          }
+        }
+      },
+      "note": "Create a runway by destroying all but the bottom row of shot blocks."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          }
+        }
+      },
+      "note": "Create a runway by destroying all but the bottom row of shot blocks."
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 8],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 6,
+      "link": [2, 1],
+      "name": "Grapple Teleport (from Red Brinstar Firefleas)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3]]
+        }
+      },
+      "requires": [
+        "canInsaneJump",
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "In Red Brinstar Firefleas, instead of simply grappling and moonwalking into the transition, perform a setup like in the Moat:",
+        "Angle-up, jump, bonk the ceiling, then use Grapple just before landing and moonwalk back as it attaches.",
+        "This will put Samus into a lower position after the transition.",
+        "Samus will be stuck inside the wall.",
+        "Perform a Crystal Flash, then morph and roll out."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "Grapple Teleport (from Moat)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        "Morph",
+        "canOffScreenMovement"
+      ],
+      "note": [
+        "After teleporting, press down while still grappling, to move Samus up and right by retracting the grapple.",
+        "Release Grapple, angle-down, and shoot the blocks to the left and right of Samus.",
+        "Morph and roll to the right; then Samus will be able to unmorph and stand."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 9,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 9,
+      "link": [2, 2],
+      "name": "Pirate Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2, 3, 4]}},
+        {"cycleFrames": 850},
+        {"or": [
+          "ScrewAttack",
+          "Wave",
+          "Spazer",
+          "Plasma",
+          {"and": [
+            "canPseudoScrew",
+            {"cycleFrames": 230}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 240}
+          ]},
+          {"and": [
+            "Charge",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 500}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Green Space Pirate (standing)", "count": 5}],
+      "devNote": [
+        "A two-way farm strat could be added for if the room can be reset at both the top and bottom."
+      ]
+    },
+    {
+      "id": 77,
+      "link": [2, 2],
+      "name": "Beetom Farm",
+      "requires": [
+        {"cycleFrames": 650},
+        {"resetRoom": {"nodes": [2]}},
+        "h_usePowerBomb",
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Beetom", "count": 2},
+        {"enemy": "Green Space Pirate (standing)", "count": 2}
+      ],
+      "note": [
+        "Jump to lay a Power Bomb above ground height, to both break the Power Bomb blocks and kill the Beetoms.",
+        "The top two Space Pirates will also be killed."
+      ]
+    },
+    {
+      "id": 80,
+      "link": [2, 2],
+      "name": "Pirates and Beetom Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 1150}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [3, 4]}},
+            {"cycleFrames": 1400}
+          ]}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          "Wave",
+          "Spazer",
+          "Plasma",
+          {"and": [
+            "Charge",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 500}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 240}
+          ]}
+        ]},
+        "h_usePowerBomb",
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall"
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Green Space Pirate (standing)", "count": 5},
+        {"enemy": "Beetom", "count": 2}
+      ],
+      "devNote": [
+        "This strat mainly exists as a way to farm Beetoms in case the room cannot be reset at node 2;",
+        "in this case, the Pirate along the way comes almost for free, and it also works at node 2."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "10 Power Bomb Crystal Flash",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+        "h_10PowerBombCrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Lay a Power Bomb on the floor to destroy the Power Bomb blocks.",
+        "Go up and to either the left or right ledge with the Beetoms, and lay another Power Bomb.",
+        "Both Beetoms should latch onto Samus.",
+        "Do a small jump straight up to avoid being bounced by the Power Bomb explosion.",
+        "Stand and collect two Power Bomb drops, one from each Beetom, then remorph in time to press the Crystal Flash inputs."
+      ],
+      "devNote": [
+        "The resetRoom requirement is in case you need to farm a bit to get above health-bomb energy."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [
+        "h_usePowerBomb",
+        {"or": [
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+          {"and": [
+            "Ice",
+            {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 78,
+      "link": [2, 4],
+      "name": "Tank the Damage",
+      "requires": [
+        {"enemyDamage": {
+          "enemy": "Green Space Pirate (standing)",
+          "type": "contact",
+          "hits": 5
+        }}
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 4],
+      "name": "Tank the Damage (Use I-Frames to Reduce Damage)",
+      "requires": [
+        "canUseIFrames",
+        {"enemyDamage": {
+          "enemy": "Green Space Pirate (standing)",
+          "type": "contact",
+          "hits": 3
+        }}
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 4],
+      "name": "Kill the Pirates",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [
+            [
+              "Green Space Pirate (standing)",
+              "Green Space Pirate (standing)",
+              "Green Space Pirate (standing)"
+            ],
+            ["Green Space Pirate (standing)", "Green Space Pirate (standing)"]
+          ]
+        }}
+      ]
+    },
+    {
+      "id": 15,
+      "link": [2, 4],
+      "name": "Tank the Damage Twice, Then Use Flash Suit",
+      "requires": [
+        {"enemyDamage": {
+          "enemy": "Green Space Pirate (standing)",
+          "type": "contact",
+          "hits": 2
+        }},
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 1, "excessFrames": 1}},
+        "canUseSpeedEchoes"
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 9],
+      "name": "Base",
+      "requires": [
+        "h_usePowerBomb"
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 9],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Climb until the camera fully shows Samus on the bottom of the screen.",
+        "Shoot up to clear the shot blocks and resume climbing until you can walk out to the left.",
+        "Fix the camera by shooting the floor shot block and jumping down."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [2, 9],
+      "name": "G-Mode Morph Crystal Flash, Reserve Trigger, Up to the Beetoms",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_artificialMorphCrystalFlash",
+        {"autoReserveTrigger": {}},
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Green Space Pirate (standing)"]]
+          }},
+          {"enemyDamage": {
+            "enemy": "Green Space Pirate (standing)",
+            "type": "laser",
+            "hits": 3
+          }}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Crystal Flash then damage down on the Pirates to Reserve trigger to exit G-Mode.",
+        "To prevent freeing the Beetoms, the Power Bomb needs to be placed on the left platform just below the door.",
+        "To prevent extra hits after the trigger, kill the Pirate when Samus is low on Energy, then finish damaging down using its invisible lasers."
+      ],
+      "devNote": "FIXME: Using a Power Bomb could also be used to exit G-mode. All G-mode CF strats need to be thoroughly checked and maybe make a tech for understanding it."
+    },
+    {
+      "id": 19,
+      "link": [2, 10],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 20,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 22,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 23,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 24,
+      "link": [3, 3],
+      "name": "Leave with Runway, Open Both Doors",
+      "requires": [
+        {"doorUnlockedAtNode": 4}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"nodeId": 4, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 25,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 26,
+      "link": [3, 4],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shineChargeFrames": 20}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 27,
+      "link": [3, 4],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 28,
+      "link": [3, 4],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 55}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 29,
+      "link": [3, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [3, 4],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 31,
+      "link": [3, 4],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 32,
+      "link": [3, 9],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canLongXRayClimb",
+        {"or": [
+          {"enemyDamage": {
+            "enemy": "Green Space Pirate (standing)",
+            "type": "laser",
+            "hits": 1
+          }},
+          {"enemyKill": {
+            "enemies": [["Green Space Pirate (standing)"]],
+            "explicitWeapons": ["Charge", "Ice", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+          }}
+        ]},
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "X-Ray climb about 2.5 screen lengths, until the camera shows Samus' helmet on the bottom of the screen.",
+        "Shoot up to clear the shot blocks and resume climbing until you can walk out to the right.",
+        "Fix the camera by shooting the floor shot block and jumping down.",
+        "The pirate will attack while climbing past it."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [3, 10],
+      "name": "G-Mode Morph Pirate Kill",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphIBJ",
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "h_artificialMorphPowerBomb",
+            "h_additionalBomb",
+            {"or": [
+              "HiJump",
+              "h_artificialMorphSpringBallBombJump",
+              {"tech": "canJumpIntoIBJ"}
+            ]}
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump",
+            {"enemyDamage": {
+              "enemy": "Green Space Pirate (standing)",
+              "type": "contact",
+              "hits": 5
+            }}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "With Spring Ball, it is possible to save a Power Bomb by placing it on the descent of the first jump by the bottom corner of the overhang,",
+        "then bouncing on it on the ascent of the second.",
+        "It is also possible but tighter to get high enough from bouncing on a Power Bomb with a single jump, similar to jumping into an IBJ.",
+        "This doesn't save anything if breaking the Power Bomb blocks above.",
+        "With an extra Power Bomb to spare, simply Spring Ball Bomb Jump."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [4, 1],
+      "name": "Grapple Teleport (from Red Brinstar Firefleas)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3]]
+        }
+      },
+      "requires": [
+        "canInsaneJump",
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "In Red Brinstar Firefleas, instead of simply grappling and moonwalking into the transition, perform a setup like in the Moat:",
+        "Angle-up, jump, bonk the ceiling, then use Grapple just before landing and moonwalk back as it attaches.",
+        "This will put Samus into a lower position after the transition.",
+        "Samus will be stuck inside the wall.",
+        "Perform a Crystal Flash, then morph and roll out."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [4, 1],
+      "name": "Grapple Teleport (from Moat)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        "Morph",
+        "canOffScreenMovement"
+      ],
+      "note": [
+        "After teleporting, press down while still grappling, to move Samus up and right by retracting the grapple.",
+        "Release Grapple, angle-down, and shoot the blocks to the left and right of Samus.",
+        "Morph and roll to the right; then Samus will be able to unmorph and stand."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [4, 2],
+      "name": "Tank the Damage (Get Hit by Each Pirate)",
+      "requires": [
+        {"enemyDamage": {
+          "enemy": "Green Space Pirate (standing)",
+          "type": "contact",
+          "hits": 5
+        }}
+      ]
+    },
+    {
+      "id": 37,
+      "link": [4, 2],
+      "name": "Tank the Damage (Use I-Frames to Reduce Damage)",
+      "requires": [
+        "canUseIFrames",
+        "canTrickyJump",
+        {"enemyDamage": {
+          "enemy": "Green Space Pirate (standing)",
+          "type": "contact",
+          "hits": 3
+        }}
+      ],
+      "note": "FIXME: This could use a ledge grab tech to avoid the 4th pirate hit.",
+      "devNote": "A shinespark could be used to kill the bottom two pirates."
+    },
+    {
+      "id": 38,
+      "link": [4, 2],
+      "name": "Kill the Pirates",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [
+            [
+              "Green Space Pirate (standing)",
+              "Green Space Pirate (standing)",
+              "Green Space Pirate (standing)"
+            ],
+            ["Green Space Pirate (standing)", "Green Space Pirate (standing)"]
+          ]
+        }}
+      ]
+    },
+    {
+      "id": 39,
+      "link": [4, 2],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb",
+        {"enemyKill": {
+          "enemies": [["Green Space Pirate (standing)"]],
+          "explicitWeapons": ["Charge", "Ice", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+        }}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct and kill the bottom Pirate.",
+        "Back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 2 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 79,
+      "link": [4, 2],
+      "name": "Very Deep Stuck X-Ray Climb, Morphed Pirate Kill",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb",
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          "h_artificialMorphIBJ"
+        ]}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct and kill the bottom Pirate with Bombs or a Power Bomb.",
+        "Back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 2 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [4, 2],
+      "name": "Tank the Damage Twice, Then Use Flash Suit",
+      "requires": [
+        {"enemyDamage": {
+          "enemy": "Green Space Pirate (standing)",
+          "type": "contact",
+          "hits": 2
+        }},
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 1, "excessFrames": 1}},
+        "canUseSpeedEchoes"
+      ]
+    },
+    {
+      "id": 41,
+      "link": [4, 2],
+      "name": "Tank the Damage Once, Then Use Flash Suit",
+      "requires": [
+        {"enemyDamage": {
+          "enemy": "Green Space Pirate (standing)",
+          "type": "contact",
+          "hits": 1
+        }},
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 1, "excessFrames": 1}},
+        "canInsaneJump",
+        "canUseSpeedEchoes"
+      ],
+      "note": [
+        "It is possible to damage once to get through the first two pirates, then shinespark to kill the three above.",
+        "Diagonal shinespark into the corner on the floor below the pirate above. This requires fairly precise positioning of the pirates.",
+        "It is possible to shoot them to slow them down and prevent them from shooting. Move up while the pirate is moving it's head so it doesn't turn around."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 43,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shineChargeFrames": 20}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 44,
+      "link": [4, 3],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 45,
+      "link": [4, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 55}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 46,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 47,
+      "link": [4, 3],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 48,
+      "link": [4, 3],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 49,
+      "link": [4, 4],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 50,
+      "link": [4, 4],
+      "name": "Leave with Runway, Open Both Doors",
+      "requires": [
+        {"doorUnlockedAtNode": 3}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"nodeId": 3, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 51,
+      "link": [4, 9],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canLongXRayClimb",
+        {"or": [
+          {"enemyDamage": {
+            "enemy": "Green Space Pirate (standing)",
+            "type": "laser",
+            "hits": 1
+          }},
+          {"enemyKill": {
+            "enemies": [["Green Space Pirate (standing)"]],
+            "explicitWeapons": ["Charge", "Ice", "Wave", "Spazer", "Plasma", "Missile", "Super"]
+          }}
+        ]},
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "X-Ray climb about 2.5 screen lengths, until the camera shows Samus' helmet on the bottom of the screen.",
+        "Shoot up to clear the shot blocks and resume climbing until you can walk out to the left.",
+        "Fix the camera by shooting the floor shot block and jumping down.",
+        "The bottom pirate will attack while climbing past it."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [4, 10],
+      "name": "G-Mode Morph Pirate Kill",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphIBJ",
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "h_artificialMorphPowerBomb",
+            "h_additionalBomb",
+            {"or": [
+              "HiJump",
+              "h_artificialMorphSpringBallBombJump",
+              {"tech": "canJumpIntoIBJ"}
+            ]}
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump",
+            {"enemyDamage": {
+              "enemy": "Green Space Pirate (standing)",
+              "type": "contact",
+              "hits": 5
+            }}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "With Spring Ball, it is possible to save a Power Bomb by placing it on the descent of the first jump by the bottom corner of the overhang,",
+        "then bouncing on it on the ascent of the second.",
+        "It is also possible but tighter to get high enough from bouncing on a Power Bomb with a single jump, similar to jumping into an IBJ.",
+        "This doesn't save anything if breaking the Power Bomb blocks above.",
+        "With an extra Power Bomb to spare, simply Spring Ball Bomb Jump."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [5, 8],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 54,
+      "link": [6, 8],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 55,
+      "link": [8, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 56,
+      "link": [8, 6],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 57,
+      "link": [8, 9],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 58,
+      "link": [9, 1],
+      "name": "Beetom X-Ray Climb",
+      "requires": [
+        {"notable": "Beetom X-Ray Climb"},
+        "canLongXRayClimb",
+        "Morph",
+        "canWallIceClip",
+        "canBeVeryPatient",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 9}},
+        {"resetRoom": {"nodes": [2, 3, 4]}}
+      ],
+      "resetsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Shoot out only the lower 2 shot blocks on the side Samus will be climbing.",
+        "Grab a Beetom and use Morph to pixel align the Beetom with the edge of the wall.  While facing right.",
+        "Xray stand up for height and shoot to freeze.  Angle down shot to be safe.  Continue refreezing during the next steps.",
+        "Grab the other Beetom and stand close, but not too close, to the first.",
+        "Do a small jump, but not too low, and do an angle down shot the frame before Samus lands.",
+        "This second beetom needs to be exactly 1 pixel below the first.  Refreeze the first before testing the positioning.",
+        "Jump onto your beetom, walk into the wall, and start xray Climbing.",
+        "Climb up 2.5 screens and then fire upwards to clear shot blocks.  Continue climbing and finish by walking away from the crumble blocks."
+      ],
+      "devNote": [
+        "5 hits to position the two Beetoms, 1 hit for each failed clip attempt, 4 attempts.",
+        "With Ice, Samus will be able to slowly farm the Green Pirates.",
+        "One could descend through 8 visiting one of 5 or 6 and xray climb back up to the top door using the non visited node."
+      ]
+    },
+    {
+      "id": 59,
+      "link": [9, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ]
+    },
+    {
+      "id": 60,
+      "link": [9, 2],
+      "name": "Leave With Runway - Single Frozen Beetom",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Bring a Beetom down from above and freeze it in position to extend the runway.",
+        "Keep a half-tile gap between the Beetom and the runway in order to extend it as much as possible."
+      ]
+    },
+    {
+      "id": 61,
+      "link": [9, 2],
+      "name": "Leave With Runway - Double Frozen Beetom",
+      "requires": [
+        "h_trickyFrozenEnemyRunway",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 9}},
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"and": [
+            "Morph",
+            "canEscapeEnemyGrab",
+            {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 3}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 12,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Bring a Beetom down from above and freeze it in position to extend the runway.",
+        "Shoot it again then quickly go back up and grab the second Beetom.",
+        "Keep a half-tile gap between the Beetoms and the runway in order to extend it as much as possible.",
+        "This is possible without breaking the Power Bomb blocks, by having both Beetoms attach to Samus,",
+        "roll through the crumble blocks, then shake off the Beetoms to separate them."
+      ]
+    },
+    {
+      "id": 62,
+      "link": [9, 2],
+      "name": "Beetom Moondance",
+      "requires": [
+        {"notable": "Beetom Moondance"},
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}}
+      ],
+      "note": [
+        "Pick up a Beetom and bring it up to the centered platform below the crumble blocks.",
+        "Freeze it at about head height where Samus can move around inside its sprite, and use it to Moondance.",
+        "Refreeze the Beetom regularly to keep it in place.",
+        "Once the clip begins, hold down to shrink Samus' hitbox so that she can fall through the Solid tile next to the power bomb block.",
+        "The shot block needs to be cleared in advance."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [9, 2],
+      "name": "Beetom Stuck Moonfall",
+      "requires": [
+        {"notable": "Beetom Stuck Moonfall"},
+        "canEnemyStuckMoonfall",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+      ],
+      "note": [
+        "Position both Beetoms above the shot block for an 'Enemy Stuck Moonfall' to clip through the floor below, bypassing the morph tunnel.",
+        "1) Attach a Beetom and freeze it off of Samus while standing on the shot block.",
+        "2) Attach the other Beetom and freeze it off of Samus while standing on the first Beetom.",
+        "3) Let the bottom Beetom unfreeze and then refreeze it once it touches the ground.",
+        "4) Destroy the shot block and refresh Ice on both Beetoms.",
+        "5) Moonfall between the Beetoms until Samus clips downward, while holding a button to automatically change animation pose (Angle-aim or Up)"
+      ]
+    },
+    {
+      "id": 64,
+      "link": [9, 2],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 65,
+      "link": [9, 2],
+      "name": "Leave with Moondance",
+      "requires": [
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 66,
+      "link": [9, 2],
+      "name": "Leave with Extended Moondance",
+      "requires": [
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}},
+        "h_extendedMoondanceBeetomLeniency"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 67,
+      "link": [9, 3],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"or": [
+          {"and": [
+            {"enemyKill": {
+              "enemies": [
+                [
+                  "Green Space Pirate (standing)",
+                  "Green Space Pirate (standing)",
+                  "Green Space Pirate (standing)"
+                ],
+                ["Green Space Pirate (standing)", "Green Space Pirate (standing)"]
+              ]
+            }},
+            {"or": [
+              {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 8}},
+              {"and": [
+                "canTrickyDodgeEnemies",
+                "canEscapeEnemyGrab",
+                {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 5}}
+              ]}
+            ]}
+          ]},
+          {"and": [
+            {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 5}},
+            {"enemyDamage": {
+              "enemy": "Green Space Pirate (standing)",
+              "type": "contact",
+              "hits": 3
+            }}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "It is possible to shake the Beetom off near the right door while facing left, then lure it down to the bottom without taking more hits (or to kill the Pirates with Bombs).",
+      "devNote": [
+        "FIXME: If starting the room at the bottom, the way it is written requires killing the pirates twice.",
+        "If starting from the top of the room, it's going to take more hits and wiggling the Beetom off above if the only way to kill the pirates is with Power Bombs."
+      ]
+    },
+    {
+      "id": 68,
+      "link": [9, 3],
+      "name": "Leave with Moondance",
+      "requires": [
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 10}}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 69,
+      "link": [9, 3],
+      "name": "Leave with Extended Moondance",
+      "requires": [
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 10}},
+        "h_extendedMoondanceBeetomLeniency"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Carefully Moondance where the floor is supported by more tiles."
+    },
+    {
+      "id": 70,
+      "link": [9, 4],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"or": [
+          {"and": [
+            {"enemyKill": {
+              "enemies": [
+                [
+                  "Green Space Pirate (standing)",
+                  "Green Space Pirate (standing)",
+                  "Green Space Pirate (standing)"
+                ],
+                ["Green Space Pirate (standing)", "Green Space Pirate (standing)"]
+              ]
+            }},
+            {"or": [
+              {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 8}},
+              {"and": [
+                "canTrickyDodgeEnemies",
+                "canEscapeEnemyGrab",
+                {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 5}}
+              ]}
+            ]}
+          ]},
+          {"and": [
+            {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 5}},
+            {"enemyDamage": {
+              "enemy": "Green Space Pirate (standing)",
+              "type": "contact",
+              "hits": 3
+            }}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "It is possible to shake the Beetom off near the right door while facing left, then lure it down to the bottom without taking more hits (or to kill the Pirates with Bombs).",
+      "devNote": [
+        "FIXME: If starting the room at the bottom, the way it is written requires killing the pirates twice.",
+        "If starting from the top of the room, it's going to take more hits and wiggling the Beetom off above if the only way to kill the pirates is with Power Bombs."
+      ]
+    },
+    {
+      "id": 71,
+      "link": [9, 4],
+      "name": "Leave with Moondance",
+      "requires": [
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 10}}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 72,
+      "link": [9, 4],
+      "name": "Leave with Extended Moondance",
+      "requires": [
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 10}},
+        "h_extendedMoondanceBeetomLeniency"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Carefully Moondance where the floor is supported by more tiles."
+    },
+    {
+      "id": 73,
+      "link": [10, 2],
+      "name": "Exit G-Mode",
+      "requires": [
+        "canGMode"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 74,
+      "link": [10, 4],
+      "name": "G-Mode Morph Pirate Kill",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphBombThings",
+        "h_additionalBomb"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 75,
+      "link": [10, 9],
+      "name": "G-Mode Morph - Power Bomb to the Beetoms",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Place a Power Bomb and exit G-Mode. To prevent freeing the Beetoms, the Power Bomb needs to be placed on the left platform just below the door."
+    },
+    {
+      "id": 76,
+      "link": [10, 9],
+      "name": "G-Mode Morph - Overload PLMs to the Beetoms",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphBombs",
+        {"or": [
+          {"and": [
+            "h_artificialMorphSpringBall",
+            {"or": [
+              "canBePatient",
+              "HiJump"
+            ]}
+          ]},
+          "h_artificialMorphCeilingBombJump"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Place bombs against the bottom of the crumble blocks to overload PLMs."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Beetom X-Ray Climb",
+      "note": [
+        "Shoot out only the lower 2 shot blocks on the side Samus will be climbing.",
+        "Grab a Beetom and use Morph to pixel align the Beetom with the edge of the wall.  While facing right.",
+        "Xray stand up for height and shoot to freeze.  Angle down shot to be safe.  Continue refreezing during the next steps.",
+        "Grab the other Beetom and stand close, but not too close, to the first.",
+        "Do a small jump, but not too low, and do an angle down shot the frame before Samus lands.",
+        "This second beetom needs to be exactly 1 pixel below the first.  Refreeze the first before testing the positioning.",
+        "Jump onto your beetom, walk into the wall, and start xray Climbing.",
+        "Climb up 2.5 screens and then fire upwards to clear shot blocks.  Continue climbing and finish by walking away from the crumble blocks."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Beetom Moondance",
+      "note": [
+        "Pick up a Beetom and bring it up to the centered platform below the crumble blocks.",
+        "Freeze it at about head height where Samus can move around inside its sprite, and use it to Moondance.",
+        "Refreeze the Beetom regularly to keep it in place.",
+        "Once the clip begins, hold down to shrink Samus' hitbox so that she can fall through the Solid tile next to the power bomb block.",
+        "The shot block needs to be cleared in advance."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Beetom Stuck Moonfall",
+      "note": [
+        "Position both Beetoms above the shot block for an 'Enemy Stuck Moonfall' to clip through the floor below, bypassing the morph tunnel.",
+        "1) Attach a Beetom and freeze it off of Samus while standing on the shot block.",
+        "2) Attach the other Beetom and freeze it off of Samus while standing on the first Beetom.",
+        "3) Let the bottom Beetom unfreeze and then refreeze it once it touches the ground.",
+        "4) Destroy the shot block and refresh Ice on both Beetoms.",
+        "5) Moonfall between the Beetoms until Samus clips downward, while holding a button to automatically change animation pose (Angle-aim or Up)"
+      ]
+    }
+  ],
+  "nextStratId": 81,
+  "nextNotableId": 4,
+  "devNote": [
+    "FIXME: There are possible strats to reach the items with X-ray climbs and grapple teleports without a way out.",
+    "These could still be useful to add, in case a randomizer allows keeping items after a reset.",
+    "This would require adding an obstacle to represent the crumbles being broken."
+  ]
+}

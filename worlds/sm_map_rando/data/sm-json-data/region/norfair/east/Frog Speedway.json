@@ -1,0 +1,901 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 93,
+  "name": "Frog Speedway",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "East",
+  "roomAddress": "0x7B106",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00197da",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 2, 2, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00197e6",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 2, 2, 2, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Frog Speedway Left Beetoms",
+      "enemyName": "Beetom",
+      "quantity": 3,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Frog Speedway Right Beetoms",
+      "enemyName": "Beetom",
+      "quantity": 3,
+      "betweenNodes": [1, 2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      },
+      "devNote": "The last few tiles of the runway technically need a way to deal with the Beetoms, but presumably that length is only useful with SpeedBooster."
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Beetom Farm (Speed Booster)",
+      "requires": [
+        "SpeedBooster",
+        {"or": [
+          {"resetRoom": {"nodes": [1]}},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 40}
+          ]}
+        ]},
+        "h_getBlueSpeedMaxRunway",
+        {"cycleFrames": 330}
+      ],
+      "farmCycleDrops": [{"enemy": "Beetom", "count": 6}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 37,
+      "link": [1, 1],
+      "name": "Beetom Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 370}
+          ]},
+          {"and": [
+            "Ice",
+            "h_useMorphBombs",
+            {"cycleFrames": 480}
+          ]},
+          {"and": [
+            "Morph",
+            {"resourceAvailable": [{"type": "Energy", "count": 50}]},
+            "h_usePowerBomb",
+            {"cycleFrames": 460}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Beetom", "count": 3}],
+      "flashSuitChecked": true,
+      "note": "Kill the Beetoms with Screw Attack or by freezing and using Bombs or Power Bombs.",
+      "devNote": [
+        "Health Bomb ends at 50 energy.",
+        "One ammo can be used to gain a power bomb and then power bombs can be used to farm more power bombs."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "10 Power Bomb Crystal Flash",
+      "requires": [
+        {"or": [
+          {"resetRoom": {"nodes": [1]}},
+          {"and": [
+            "h_getBlueSpeedMaxRunway",
+            {"resetRoom": {"nodes": [2]}}
+          ]}
+        ]},
+        "h_10PowerBombCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Lay a Power Bomb, collect a Power Bomb from a Beetom drop, then return in time to press the Crystal Flash inputs.",
+        "This can be done either by laying the Power Bomb in a corner against a door or Speed blocks, or by not moving horizontally when collecting the drop.",
+        "There is a safe way to do this without taking Beetom damage:",
+        "If entering from the left door, lay a Power Bomb when the first Beetom comes on screen,",
+        "run through the drops before they appear,",
+        "place a Power Bomb in the corner against the Speed blocks,",
+        "pick up two Power Bomb drops, and return in time to press the Crystal Flash inputs.",
+        "If entering from the right door, waste a Power Bomb if you are full,",
+        "use Speed Booster to run part way through the Speed blocks and spawn Power Bomb drops,",
+        "and then continue in the same way."
+      ],
+      "devNote": [
+        "The resetRoom requirement is in case you need to farm a bit to get above health-bomb energy."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "To save Energy, it is possible to lure a Beetom to the door without taking any extra hits and without any items.",
+        "Get close enough to it to get it to hop towards Samus, then walk and occasionally run to the door with it following.",
+        "It is possible to do this while crossing the room with SpeedBooster by jumping while blue at the end of the speed blocks."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Frozen Beetom Moondance",
+      "requires": [
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "note": "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing."
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Frozen Beetom Extended Moondance",
+      "requires": [
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+        "h_extendedMoondanceBeetomLeniency"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "note": [
+        "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "After 175 moonfalls, reposition the Beetom to chest height, then continue dancing."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Speed Block Moondance (Leave with Stored Fall Speed)",
+      "requires": [
+        {"notable": "Speed Block Moondance"},
+        "h_CrystalFlash",
+        "canTrickyJump",
+        "canTurnaroundAimCancel",
+        "h_getBlueSpeedMaxRunway",
+        "canTemporaryBlue",
+        "canMoondance",
+        "canSpeedball"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Use SpeedBooster to construct a structure for Moondancing that has 1 chest height block and 1 head height block to the right of it and no other Speed blocks.",
+        "Crystal Flash below the lower block, exactly pixel aligned with its right side, to standup and then begin Moondancing.",
+        "After Samus sinks through the bottom tile, it is possible to use Grapple to return to a crouch and wiggle right and then Turn-Around Aim Cancel to escape to the right.",
+        "Without Grapple, count to 174 Moonfalls and delicately Moonfall so as to remain crouched and then wiggle to the right.",
+        "Finally, use SpeedBooster if needed to break the remaining Speed blocks and reach the door."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Speed Block Moondance (Leave with More Stored Fall Speed)",
+      "requires": [
+        {"notable": "Speed Block Moondance"},
+        "h_CrystalFlash",
+        "canTrickyJump",
+        "canTurnaroundAimCancel",
+        "h_getBlueSpeedMaxRunway",
+        "canTemporaryBlue",
+        "canExtendedMoondance",
+        "canSpeedball"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Use SpeedBooster to construct a structure for Moondancing that has 1 chest height block and 1 head height block to the right of it and no other Speed blocks.",
+        "Crystal Flash below the lower block, exactly pixel aligned with its right side, to standup and then begin Moondancing.",
+        "After Samus sinks through the floor tiles, use Grapple to return to a standing position and count an additional 145 moonfalls.",
+        "Then use Grapple to return to a crouch and wiggle right and Turn-Around Aim Cancel to escape to the right.",
+        "Finally, use SpeedBooster if needed to break the remaining Speed blocks and reach the door."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "h_getBlueSpeedMaxRunway"
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "G-Mode Morph through Speed Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphBombs",
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          "canTrickyDodgeEnemies",
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+          {"and": [
+            "Morph",
+            {"or": [
+              "Ice",
+              {"ammo": {"type": "Missile", "count": 3}},
+              {"ammo": {"type": "Super", "count": 3}}
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Carefully kill the Beetoms with Bombs, then overload PLMs by placing many bombs next to the speed blocks.",
+        "An easy way to do this is to stay just out of range to avoid luring them and spam bombs in a vertical line until they wander close enough to jump into the blasts.",
+        "Safely kill the remaining Beetoms from inside the speed blocks."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Frozen Beetom Moondance",
+      "requires": [
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        "h_getBlueSpeedMaxRunway",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing."
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Frozen Beetom Extended Moondance",
+      "requires": [
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        "h_getBlueSpeedMaxRunway",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+        "h_extendedMoondanceBeetomLeniency"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Freeze a Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "After 175 moonfalls, reposition the Beetom to chest height, then continue dancing."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Speed Block Moondance (Leave with Stored Fall Speed)",
+      "requires": [
+        {"notable": "Speed Block Moondance"},
+        "h_CrystalFlash",
+        "canTrickyJump",
+        "canTurnaroundAimCancel",
+        "h_getBlueSpeedMaxRunway",
+        "canTemporaryBlue",
+        "canMoondance",
+        "canSpeedball"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Use SpeedBooster to construct a structure for Moondancing that has 1 chest height block and 1 head height block to the right of it and no other Speed blocks.",
+        "Crystal Flash below the lower block, exactly pixel aligned with its right side, to standup and then begin Moondancing.",
+        "After Samus sinks through the bottom tile, it is possible to use Grapple to return to a crouch and wiggle right and then Turn-Around Aim Cancel to escape to the right.",
+        "Without Grapple, count to 174 Moonfalls and delicately Moonfall so as to remain crouched and then wiggle to the right.",
+        "Finally, use SpeedBooster if needed to break the remaining Speed blocks and reach the door."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Speed Block Moondance (Leave with More Stored Fall Speed)",
+      "requires": [
+        {"notable": "Speed Block Moondance"},
+        "h_CrystalFlash",
+        "canTrickyJump",
+        "canTurnaroundAimCancel",
+        "h_getBlueSpeedMaxRunway",
+        "canTemporaryBlue",
+        "canExtendedMoondance",
+        "canSpeedball"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Use SpeedBooster to construct a structure for Moondancing that has 1 chest height block and 1 head height block to the right of it and no other Speed blocks.",
+        "Crystal Flash below the lower block, exactly pixel aligned with its right side, to standup and then begin Moondancing.",
+        "After Samus sinks through the floor tiles, use Grapple to return to a standing position and count an additional 145 moonfalls.",
+        "Then use Grapple to return to a crouch and wiggle right and Turn-Around Aim Cancel to escape to the right.",
+        "Finally, use SpeedBooster if needed to break the remaining Speed blocks and reach the door."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [1, 2],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 12], [108, 13]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "h_getBlueSpeedMaxRunway"
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Shot Block Overload (Speedless Speedway)",
+      "requires": [
+        {"notable": "Shot Block Overload (Speedless Speedway)"},
+        "Wave",
+        {"or": [
+          "Spazer",
+          "Plasma"
+        ]},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 3}},
+        {"or": [
+          "Ice",
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}},
+          "ScrewAttack",
+          {"and": [
+            {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 5}},
+            "h_bombThings"
+          ]},
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 15}}
+        ]}
+      ],
+      "note": [
+        "This strat is only usable right to left.",
+        "This room has many offscreen shot blocks. Shooting enough of them with wave + spazer or wave + plasma allows Samus to pass through the speed blocks.",
+        "There is just enough time to pass through all of the Speed blocks before they become solid again."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "G-Mode Morph through Speed Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphBombs"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs by placing many bombs next to the speed blocks.",
+        "Safely kill the Beetoms from inside the speed blocks."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "G-Mode Shot Block Overload (Speedless Speedway)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"notable": "Shot Block Overload (Speedless Speedway)"},
+        "Wave",
+        {"or": [
+          {"and": [
+            "Ice",
+            "Morph"
+          ]},
+          {"ammo": {"type": "Missile", "count": 6}},
+          {"ammo": {"type": "Super", "count": 6}},
+          "ScrewAttack",
+          "h_bombThings",
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 15}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Shoot diagonal up-left shots into the ceiling while pressed against the speed blocks to hit all of the shot blocks and overload PLMs.",
+        "Note that G-Mode makes it possible with Wave alone (no Spazer or Plasma necessary), and the speed blocks do not resolidify, so the Beetoms can be safely killed while inside of the speed blocks."
+      ]
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed (Speedless Speedway)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Shot Block Overload (Speedless Speedway)"},
+        "Wave",
+        {"or": [
+          "Spazer",
+          "Plasma"
+        ]},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 3}},
+        {"or": [
+          "Ice",
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}},
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 15}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "This strat is only usable right to left.",
+        "This room has many offscreen shot blocks. Shooting enough of them with wave + spazer or wave + plasma allows Samus to pass through the speed blocks.",
+        "There is just enough time to pass through all of the Speed blocks before they become solid again."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed (more speed, Speedless Speedway)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        {"notable": "Shot Block Overload (Speedless Speedway)"},
+        "Wave",
+        {"or": [
+          "Spazer",
+          "Plasma"
+        ]},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 3}},
+        {"or": [
+          "Ice",
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}},
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 15}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "This strat is only usable right to left.",
+        "This room has many offscreen shot blocks. Shooting enough of them with wave + spazer or wave + plasma allows Samus to pass through the speed blocks.",
+        "There is just enough time to pass through all of the Speed blocks before they become solid again."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "Shot Block Overload for Frozen Beetom Moondance",
+      "requires": [
+        {"notable": "Shot Block Overload (Speedless Speedway)"},
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+        "Wave",
+        {"or": [
+          "Spazer",
+          "Plasma"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "note": [
+        "Fire wide Wave beam shots into the ceiling until it is possible to walk through the Speed blocks.",
+        "Let a Beetom attach to Samus and then return to the right.",
+        "Freeze the Beetom at head height where Samus can Spinjump into it and begin Moondancing."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [2, 2],
+      "name": "Shot Block Overload for Frozen Beetom Extended Moondance",
+      "requires": [
+        {"notable": "Shot Block Overload (Speedless Speedway)"},
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}},
+        "h_extendedMoondanceBeetomLeniency",
+        "Wave",
+        {"or": [
+          "Spazer",
+          "Plasma"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "note": [
+        "Fire wide Wave beam shots into the ceiling until it is possible to walk through the Speed blocks.",
+        "Let a Beetom attach to Samus and then return to the right.",
+        "Freeze the Beetom at head height where Samus can Spinjump into it and begin Moondancing.",
+        "After 175 moonfalls, reposition the Beetom to chest height, then continue dancing."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Carefully run through the blocks without killing all of the Beetoms or getting attacked by one.",
+        "To save Energy, it is possible to lure a Beetom to the door without taking any extra hits and without any items.",
+        "Get close enough to it to get it to hop towards Samus, then walk and occasionally run to the door with it following.",
+        "It is possible to do this while crossing the room with SpeedBooster by luring one close to the left door and leaving it there, running through, then going back for it."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Beetom (Speedless Speedway)",
+      "requires": [
+        {"notable": "Shot Block Overload (Speedless Speedway)"},
+        "canComplexGMode",
+        "Wave",
+        {"or": [
+          "Spazer",
+          "Plasma"
+        ]},
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}},
+        {"or": [
+          "Ice",
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 3}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "This room has many offscreen shot blocks. Shooting enough of them with wave + spazer or wave + plasma allows Samus to pass through the speed blocks.",
+        "Quickly grab a Beetom and take it to the right door to use for a G-Mode setup."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Shot Block Overload (Speedless Speedway)",
+      "note": [
+        "This strat is only usable right to left.",
+        "This room has many offscreen shot blocks. Shooting enough of them with wave + spazer or wave + plasma allows Samus to pass through the speed blocks.",
+        "There is just enough time to pass through all of the Speed blocks before they become solid again."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Speed Block Moondance",
+      "note": [
+        "Use SpeedBooster to construct a structure for Moondancing that has 1 chest height block and 1 head height block to the right of it and no other Speed blocks.",
+        "Crystal Flash below the lower block, exactly pixel aligned with its right side, to standup and then begin Moondancing.",
+        "After Samus sinks through the bottom tile, it is possible to use Grapple to return to a crouch and wiggle right and then Turn-Around Aim Cancel to escape to the right.",
+        "Without Grapple, count to 174 Moonfalls and delicately Moonfall so as to remain crouched and then wiggle to the right.",
+        "Finally, use SpeedBooster if needed to break the remaining Speed blocks and reach the door."
+      ]
+    }
+  ],
+  "nextStratId": 38,
+  "nextNotableId": 3
+}

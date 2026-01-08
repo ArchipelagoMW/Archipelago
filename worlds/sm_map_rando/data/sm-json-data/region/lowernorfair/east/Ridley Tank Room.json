@@ -1,0 +1,122 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 143,
+  "name": "Ridley Tank Room",
+  "area": "Norfair",
+  "subarea": "Lower",
+  "subsubarea": "East",
+  "roomAddress": "0x7B698",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019a62",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Hidden Item",
+      "nodeType": "item",
+      "nodeSubType": "hidden",
+      "nodeItem": "ETank",
+      "nodeAddress": "0x79108",
+      "mapTileMask": [
+        [2]
+      ]
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        {"heatFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 12,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "note": [
+        "If using the full runway, press against the wall and turn around; do not back into the corner."
+      ],
+      "devNote": "Max extra run speed $2.B, or $2.C with Hi-Jump and a quick aim-down."
+    },
+    {
+      "id": 2,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        "Morph",
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 3,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 4,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 6,
+  "nextNotableId": 1
+}

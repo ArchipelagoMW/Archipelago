@@ -1,0 +1,4408 @@
+{
+  "REGION_VIRIDIAN_FOREST/MAIN": {
+    "parent_map": "MAP_VIRIDIAN_FOREST",
+    "name": "Viridian Forest",
+    "encounter_region": "Viridian Forest",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_VIRIDIAN_FOREST_ANTIDOTE",
+      "ITEM_VIRIDIAN_FOREST_POKE_BALL",
+      "ITEM_VIRIDIAN_FOREST_POTION_2",
+      "TRAINER_BUG_CATCHER_RICK_REWARD",
+      "TRAINER_BUG_CATCHER_DOUG_REWARD",
+      "ITEM_VIRIDIAN_FOREST_ANTIDOTE",
+      "TRAINER_BUG_CATCHER_ANTHONY_REWARD",
+      "TRAINER_BUG_CATCHER_CHARLIE_REWARD",
+      "ITEM_VIRIDIAN_FOREST_POTION",
+      "TRAINER_BUG_CATCHER_SAMMY_REWARD",
+      "HIDDEN_ITEM_VIRIDIAN_FOREST_POTION"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_VIRIDIAN_FOREST:0,1,2/MAP_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE:1": "Viridian Forest Exit (South)",
+      "MAP_VIRIDIAN_FOREST:3,4,5/MAP_ROUTE2_VIRIDIAN_FOREST_NORTH_ENTRANCE:0": "Viridian Forest Exit (North)"
+    }
+  },
+  "REGION_MT_MOON_1F/MAIN": {
+    "parent_map": "MAP_MT_MOON_1F",
+    "name": "Mt. Moon 1F",
+    "encounter_region": "Mt. Moon 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_MT_MOON_1F_TM09",
+      "TRAINER_BUG_CATCHER_KENT_REWARD",
+      "ITEM_MT_MOON_1F_PARALYZE_HEAL",
+      "TRAINER_LASS_IRIS_REWARD",
+      "TRAINER_SUPER_NERD_JOVAN_REWARD",
+      "ITEM_MT_MOON_1F_POTION",
+      "TRAINER_BUG_CATCHER_ROBBY_REWARD",
+      "ITEM_MT_MOON_1F_RARE_CANDY",
+      "ITEM_MT_MOON_1F_ESCAPE_ROPE",
+      "FAME_CHECKER_BROCK_5",
+      "TRAINER_LASS_MIRIAM_REWARD",
+      "TRAINER_YOUNGSTER_JOSH_REWARD",
+      "TRAINER_HIKER_MARCOS_REWARD",
+      "ITEM_MT_MOON_1F_MOON_STONE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_MOON_1F:0/MAP_MT_MOON_B1F:0": "Mt. Moon 1F Northwest Ladder",
+      "MAP_MT_MOON_1F:1/MAP_MT_MOON_B1F:1": "Mt. Moon 1F Center Ladder (Left)",
+      "MAP_MT_MOON_1F:2/MAP_MT_MOON_B1F:2": "Mt. Moon 1F Center Ladder (Right)",
+      "MAP_MT_MOON_1F:3/MAP_ROUTE4:0": "Mt. Moon 1F Exit"
+    }
+  },
+  "REGION_MT_MOON_B1F/FIRST_TUNNEL": {
+    "parent_map": "MAP_MT_MOON_B1F",
+    "name": "Mt. Moon B1F (First Tunnel)",
+    "encounter_region": "Mt. Moon B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_MT_MOON_B1F_TINY_MUSHROOM_3",
+      "HIDDEN_ITEM_MT_MOON_B1F_BIG_MUSHROOM_3",
+      "HIDDEN_ITEM_MT_MOON_B1F_BIG_MUSHROOM"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_MOON_B1F:2/MAP_MT_MOON_1F:2": "Mt. Moon B1F (First Tunnel) Northeast Ladder",
+      "MAP_MT_MOON_B1F:5/MAP_MT_MOON_B2F:2": "Mt. Moon B1F (First Tunnel) Southwest Ladder"
+    }
+  },
+  "REGION_MT_MOON_B1F/SECOND_TUNNEL": {
+    "parent_map": "MAP_MT_MOON_B1F",
+    "name": "Mt. Moon B1F (Second Tunnel)",
+    "encounter_region": "Mt. Moon B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_MT_MOON_B1F_TINY_MUSHROOM_2"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_MOON_B1F:1/MAP_MT_MOON_1F:1": "Mt. Moon B1F (Second Tunnel) East Ladder",
+      "MAP_MT_MOON_B1F:4/MAP_MT_MOON_B2F:1": "Mt. Moon B1F (Second Tunnel) West Ladder"
+    }
+  },
+  "REGION_MT_MOON_B1F/THIRD_TUNNEL": {
+    "parent_map": "MAP_MT_MOON_B1F",
+    "name": "Mt. Moon B1F (Third Tunnel)",
+    "encounter_region": "Mt. Moon B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_MT_MOON_B1F_BIG_MUSHROOM_2"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_MOON_B1F:0/MAP_MT_MOON_1F:0": "Mt. Moon B1F (Third Tunnel) Northwest Ladder",
+      "MAP_MT_MOON_B1F:3/MAP_MT_MOON_B2F:0": "Mt. Moon B1F (Third Tunnel) Southeast Ladder"
+    }
+  },
+  "REGION_MT_MOON_B1F/FOURTH_TUNNEL": {
+    "parent_map": "MAP_MT_MOON_B1F",
+    "name": "Mt. Moon B1F (Fourth Tunnel)",
+    "encounter_region": "Mt. Moon B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_MT_MOON_B1F_TINY_MUSHROOM"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_MOON_B1F:6/MAP_MT_MOON_B2F:3": "Mt. Moon B1F (Fourth Tunnel) West Ladder",
+      "MAP_MT_MOON_B1F:7/MAP_ROUTE4:1": "Mt. Moon B1F (Fourth Tunnel) East Ladder"
+    }
+  },
+  "REGION_MT_MOON_B2F/SOUTH": {
+    "parent_map": "MAP_MT_MOON_B2F",
+    "name": "Mt. Moon B2F (South)",
+    "encounter_region": "Mt. Moon B2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_2_REWARD",
+      "ITEM_MT_MOON_B2F_STAR_PIECE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_MOON_B2F:2/MAP_MT_MOON_B1F:5": "Mt. Moon B2F South Ladder"
+    }
+  },
+  "REGION_MT_MOON_B2F/NORTHEAST": {
+    "parent_map": "MAP_MT_MOON_B2F",
+    "name": "Mt. Moon B2F (Northeast)",
+    "encounter_region": "Mt. Moon B2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_3_REWARD",
+      "ITEM_MT_MOON_B2F_TM46",
+      "HIDDEN_ITEM_MT_MOON_B2F_ETHER"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_MOON_B2F:1/MAP_MT_MOON_B1F:4": "Mt. Moon B2F Northeast Ladder"
+    }
+  },
+  "REGION_MT_MOON_B2F/MAIN": {
+    "parent_map": "MAP_MT_MOON_B2F",
+    "name": "Mt. Moon B2F",
+    "encounter_region": "Mt. Moon B2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_MT_MOON_B2F_REVIVE",
+      "TRAINER_TEAM_ROCKET_GRUNT_4_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_REWARD",
+      "HIDDEN_ITEM_MT_MOON_B2F_MOON_STONE",
+      "TRAINER_SUPER_NERD_MIGUEL_REWARD",
+      "NPC_GIFT_GOT_FOSSIL_FROM_MT_MOON",
+      "ITEM_MT_MOON_B2F_ANTIDOTE"
+    ],
+    "events": [
+      "EVENT_MIGUEL_TAKES_FOSSIL"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_MT_MOON_B2F:0/MAP_MT_MOON_B1F:3": "Mt. Moon B2F Center Ladder",
+      "MAP_MT_MOON_B2F:3/MAP_MT_MOON_B1F:6": "Mt. Moon B2F Northwest Ladder"
+    }
+  },
+  "REGION_SSANNE_EXTERIOR/MAIN": {
+    "parent_map": "MAP_SSANNE_EXTERIOR",
+    "name": "S.S. Anne Exterior",
+    "encounter_region": "S.S. Anne Exterior",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SSANNE_EXTERIOR/WATER": "S.S. Anne Exterior Surfing Spot"
+    },
+    "warps": {
+      "MAP_SSANNE_EXTERIOR:0/MAP_VERMILION_CITY:0": "S.S. Anne Exterior Exit",
+      "MAP_SSANNE_EXTERIOR:1/MAP_SSANNE_1F_CORRIDOR:2": "S.S. Anne"
+    }
+  },
+  "REGION_SSANNE_EXTERIOR/WATER": {
+    "parent_map": "MAP_SSANNE_EXTERIOR",
+    "name": "S.S. Anne Exterior (Water)",
+    "encounter_region": "S.S. Anne Exterior",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_SSANNE_EXTERIOR_LAVA_COOKIE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SSANNE_1F_CORRIDOR/MAIN": {
+    "parent_map": "MAP_SSANNE_1F_CORRIDOR",
+    "name": "S.S. Anne 1F Corridor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_1F_CORRIDOR:0/MAP_SSANNE_2F_CORRIDOR:0": "S.S. Anne 1F Corridor Northwest Stairs",
+      "MAP_SSANNE_1F_CORRIDOR:1/MAP_SSANNE_KITCHEN:0": "S.S. Anne Kitchen",
+      "MAP_SSANNE_1F_CORRIDOR:2/MAP_SSANNE_EXTERIOR:1": "S.S. Anne Exit",
+      "MAP_SSANNE_1F_CORRIDOR:3/MAP_SSANNE_B1F_CORRIDOR:0": "S.S. Anne 1F Corridor Southeast Stairs",
+      "MAP_SSANNE_1F_CORRIDOR:4/MAP_SSANNE_1F_ROOM1:0": "S.S. Anne 1F Room 1",
+      "MAP_SSANNE_1F_CORRIDOR:5/MAP_SSANNE_1F_ROOM2:0": "S.S. Anne 1F Room 2",
+      "MAP_SSANNE_1F_CORRIDOR:6/MAP_SSANNE_1F_ROOM3:0": "S.S. Anne 1F Room 3",
+      "MAP_SSANNE_1F_CORRIDOR:7/MAP_SSANNE_1F_ROOM4:0": "S.S. Anne 1F Room 4",
+      "MAP_SSANNE_1F_CORRIDOR:8/MAP_SSANNE_1F_ROOM5:0": "S.S. Anne 1F Room 5",
+      "MAP_SSANNE_1F_CORRIDOR:9/MAP_SSANNE_1F_ROOM7:0": "S.S. Anne 1F Room 7",
+      "MAP_SSANNE_1F_CORRIDOR:10/MAP_SSANNE_1F_ROOM6:0": "S.S. Anne 1F Room 6"
+    }
+  },
+  "REGION_SSANNE_KITCHEN/MAIN": {
+    "parent_map": "MAP_SSANNE_KITCHEN",
+    "name": "S.S. Anne Kitchen",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SSANNE_KITCHEN_GREAT_BALL",
+      "HIDDEN_ITEM_SSANNE_KITCHEN_PECHA_BERRY",
+      "HIDDEN_ITEM_SSANNE_KITCHEN_CHERI_BERRY",
+      "HIDDEN_ITEM_SSANNE_KITCHEN_CHESTO_BERRY"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_KITCHEN:0/MAP_SSANNE_1F_CORRIDOR:1": "S.S. Anne Kitchen Exit"
+    }
+  },
+  "REGION_SSANNE_1F_ROOM1/MAIN": {
+    "parent_map": "MAP_SSANNE_1F_ROOM1",
+    "name": "S.S. Anne 1F Room 1",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_1F_ROOM1:0/MAP_SSANNE_1F_CORRIDOR:4": "S.S. Anne 1F Room 1 Exit"
+    }
+  },
+  "REGION_SSANNE_1F_ROOM2/MAIN": {
+    "parent_map": "MAP_SSANNE_1F_ROOM2",
+    "name": "S.S. Anne 1F Room 2",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_YOUNGSTER_TYLER_REWARD",
+      "TRAINER_LASS_ANN_REWARD",
+      "ITEM_SSANNE_1F_ROOM2_TM31"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_1F_ROOM2:0/MAP_SSANNE_1F_CORRIDOR:5": "S.S. Anne 1F Room 2 Exit"
+    }
+  },
+  "REGION_SSANNE_1F_ROOM3/MAIN": {
+    "parent_map": "MAP_SSANNE_1F_ROOM3",
+    "name": "S.S. Anne 1F Room 3",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_1F_ROOM3:0/MAP_SSANNE_1F_CORRIDOR:6": "S.S. Anne 1F Room 3 Exit"
+    }
+  },
+  "REGION_SSANNE_1F_ROOM4/MAIN": {
+    "parent_map": "MAP_SSANNE_1F_ROOM4",
+    "name": "S.S. Anne 1F Room 4",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_1F_ROOM4:0/MAP_SSANNE_1F_CORRIDOR:7": "S.S. Anne 1F Room 4 Exit"
+    }
+  },
+  "REGION_SSANNE_1F_ROOM5/MAIN": {
+    "parent_map": "MAP_SSANNE_1F_ROOM5",
+    "name": "S.S. Anne 1F Room 5",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_GENTLEMAN_ARTHUR_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_1F_ROOM5:0/MAP_SSANNE_1F_CORRIDOR:8": "S.S. Anne 1F Room 5 Exit"
+    }
+  },
+  "REGION_SSANNE_1F_ROOM6/MAIN": {
+    "parent_map": "MAP_SSANNE_1F_ROOM6",
+    "name": "S.S. Anne 1F Room 6",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_1F_ROOM6:0/MAP_SSANNE_1F_CORRIDOR:10": "S.S. Anne 1F Room 6 Exit"
+    }
+  },
+  "REGION_SSANNE_1F_ROOM7/MAIN": {
+    "parent_map": "MAP_SSANNE_1F_ROOM7",
+    "name": "S.S. Anne 1F Room 7",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_GENTLEMAN_THOMAS_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_1F_ROOM7:0/MAP_SSANNE_1F_CORRIDOR:9": "S.S. Anne 1F Room 7 Exit"
+    }
+  },
+  "REGION_SSANNE_B1F_CORRIDOR/MAIN": {
+    "parent_map": "MAP_SSANNE_B1F_CORRIDOR",
+    "name": "S.S. Anne B1F Corridor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_SSANNE_B1F_CORRIDOR_HYPER_POTION"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_B1F_CORRIDOR:0/MAP_SSANNE_1F_CORRIDOR:3": "S.S. Anne B1F Corridor Stairs",
+      "MAP_SSANNE_B1F_CORRIDOR:1/MAP_SSANNE_B1F_ROOM1:0": "S.S. Anne B1F Room 1",
+      "MAP_SSANNE_B1F_CORRIDOR:2/MAP_SSANNE_B1F_ROOM2:0": "S.S. Anne B1F Room 2",
+      "MAP_SSANNE_B1F_CORRIDOR:3/MAP_SSANNE_B1F_ROOM3:0": "S.S. Anne B1F Room 3",
+      "MAP_SSANNE_B1F_CORRIDOR:4/MAP_SSANNE_B1F_ROOM4:0": "S.S. Anne B1F Room 4",
+      "MAP_SSANNE_B1F_CORRIDOR:5/MAP_SSANNE_B1F_ROOM5:0": "S.S. Anne B1F Room 5"
+    }
+  },
+  "REGION_SSANNE_B1F_ROOM1/MAIN": {
+    "parent_map": "MAP_SSANNE_B1F_ROOM1",
+    "name": "S.S. Anne B1F Room 1",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SAILOR_PHILLIP_REWARD",
+      "TRAINER_FISHERMAN_BARNY_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_B1F_ROOM1:0/MAP_SSANNE_B1F_CORRIDOR:1": "S.S. Anne B1F Room 1 Exit"
+    }
+  },
+  "REGION_SSANNE_B1F_ROOM2/MAIN": {
+    "parent_map": "MAP_SSANNE_B1F_ROOM2",
+    "name": "S.S. Anne B1F Room 2",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SAILOR_HUEY_REWARD",
+      "ITEM_SSANNE_B1F_ROOM2_TM44"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_B1F_ROOM2:0/MAP_SSANNE_B1F_CORRIDOR:2": "S.S. Anne B1F Room 2 Exit"
+    }
+  },
+  "REGION_SSANNE_B1F_ROOM3/MAIN": {
+    "parent_map": "MAP_SSANNE_B1F_ROOM3",
+    "name": "S.S. Anne B1F Room 3",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SAILOR_DYLAN_REWARD",
+      "ITEM_SSANNE_B1F_ROOM3_ETHER"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_B1F_ROOM3:0/MAP_SSANNE_B1F_CORRIDOR:3": "S.S. Anne B1F Room 3 Exit"
+    }
+  },
+  "REGION_SSANNE_B1F_ROOM4/MAIN": {
+    "parent_map": "MAP_SSANNE_B1F_ROOM4",
+    "name": "S.S. Anne B1F Room 4",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SAILOR_LEONARD_REWARD",
+      "TRAINER_SAILOR_DUNCAN_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_B1F_ROOM4:0/MAP_SSANNE_B1F_CORRIDOR:4": "S.S. Anne B1F Room 4 Exit"
+    }
+  },
+  "REGION_SSANNE_B1F_ROOM5/MAIN": {
+    "parent_map": "MAP_SSANNE_B1F_ROOM5",
+    "name": "S.S. Anne B1F Room 5",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SSANNE_B1F_ROOM5_SUPER_POTION"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_B1F_ROOM5:0/MAP_SSANNE_B1F_CORRIDOR:5": "S.S. Anne B1F Room 5 Exit"
+    }
+  },
+  "REGION_SSANNE_2F_CORRIDOR/MAIN": {
+    "parent_map": "MAP_SSANNE_2F_CORRIDOR",
+    "name": "S.S. Anne 2F Corridor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_RIVAL_SS_ANNE_BULBASAUR_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_2F_CORRIDOR:0/MAP_SSANNE_1F_CORRIDOR:0": "S.S. Anne 2F Corridor Northwest Stairs",
+      "MAP_SSANNE_2F_CORRIDOR:1/MAP_SSANNE_3F_CORRIDOR:1": "S.S. Anne 2F Corridor Southwest Stairs",
+      "MAP_SSANNE_2F_CORRIDOR:2/MAP_SSANNE_CAPTAINS_OFFICE:0": "S.S. Anne 2F Corridor Northeast Stairs",
+      "MAP_SSANNE_2F_CORRIDOR:3/MAP_SSANNE_2F_ROOM1:0": "S.S. Anne 2F Room 1",
+      "MAP_SSANNE_2F_CORRIDOR:4/MAP_SSANNE_2F_ROOM2:0": "S.S. Anne 2F Room 2",
+      "MAP_SSANNE_2F_CORRIDOR:5/MAP_SSANNE_2F_ROOM3:0": "S.S. Anne 2F Room 3",
+      "MAP_SSANNE_2F_CORRIDOR:6/MAP_SSANNE_2F_ROOM4:0": "S.S. Anne 2F Room 4",
+      "MAP_SSANNE_2F_CORRIDOR:7/MAP_SSANNE_2F_ROOM5:0": "S.S. Anne 2F Room 5",
+      "MAP_SSANNE_2F_CORRIDOR:8/MAP_SSANNE_2F_ROOM6:0": "S.S. Anne 2F Room 6"
+    }
+  },
+  "REGION_SSANNE_2F_ROOM1/MAIN": {
+    "parent_map": "MAP_SSANNE_2F_ROOM1",
+    "name": "S.S. Anne 2F Room 1",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_2F_ROOM1:0/MAP_SSANNE_2F_CORRIDOR:3": "S.S. Anne 2F Room 1 Exit"
+    }
+  },
+  "REGION_SSANNE_2F_ROOM2/MAIN": {
+    "parent_map": "MAP_SSANNE_2F_ROOM2",
+    "name": "S.S. Anne 2F Room 2",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_FISHERMAN_DALE_REWARD",
+      "TRAINER_GENTLEMAN_BROOKS_REWARD",
+      "ITEM_SSANNE_2F_ROOM2_STARDUST"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_2F_ROOM2:0/MAP_SSANNE_2F_CORRIDOR:4": "S.S. Anne 2F Room 2 Exit"
+    }
+  },
+  "REGION_SSANNE_2F_ROOM3/MAIN": {
+    "parent_map": "MAP_SSANNE_2F_ROOM3",
+    "name": "S.S. Anne 2F Room 3",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_2F_ROOM3:0/MAP_SSANNE_2F_CORRIDOR:5": "S.S. Anne 2F Room 3 Exit"
+    }
+  },
+  "REGION_SSANNE_2F_ROOM4/MAIN": {
+    "parent_map": "MAP_SSANNE_2F_ROOM4",
+    "name": "S.S. Anne 2F Room 4",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_GENTLEMAN_LAMAR_REWARD",
+      "TRAINER_LASS_DAWN_REWARD",
+      "ITEM_SSANNE_2F_ROOM4_X_ATTACK"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_2F_ROOM4:0/MAP_SSANNE_2F_CORRIDOR:6": "S.S. Anne 2F Room 4 Exit"
+    }
+  },
+  "REGION_SSANNE_2F_ROOM5/MAIN": {
+    "parent_map": "MAP_SSANNE_2F_ROOM5",
+    "name": "S.S. Anne 2F Room 5",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_2F_ROOM5:0/MAP_SSANNE_2F_CORRIDOR:7": "S.S. Anne 2F Room 5 Exit"
+    }
+  },
+  "REGION_SSANNE_2F_ROOM6/MAIN": {
+    "parent_map": "MAP_SSANNE_2F_ROOM6",
+    "name": "S.S. Anne 2F Room 6",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_2F_ROOM6:0/MAP_SSANNE_2F_CORRIDOR:8": "S.S. Anne 2F Room 6 Exit"
+    }
+  },
+  "REGION_SSANNE_3F_CORRIDOR/MAIN": {
+    "parent_map": "MAP_SSANNE_3F_CORRIDOR",
+    "name": "S.S. Anne 3F Corridor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_3F_CORRIDOR:0/MAP_SSANNE_DECK:0": "S.S. Anne 3F Corridor Exit",
+      "MAP_SSANNE_3F_CORRIDOR:1/MAP_SSANNE_2F_CORRIDOR:1": "S.S. Anne 3F Corridor Stairs"
+    }
+  },
+  "REGION_SSANNE_DECK/MAIN": {
+    "parent_map": "MAP_SSANNE_DECK",
+    "name": "S.S. Anne Deck",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SAILOR_EDMOND_REWARD",
+      "TRAINER_SAILOR_TREVOR_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_DECK:0,1/MAP_SSANNE_3F_CORRIDOR:0": "S.S. Anne Deck Exit"
+    }
+  },
+  "REGION_SSANNE_CAPTAINS_OFFICE/MAIN": {
+    "parent_map": "MAP_SSANNE_CAPTAINS_OFFICE",
+    "name": "S.S. Anne Captain's Office",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "NPC_GIFT_GOT_HM01"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SSANNE_CAPTAINS_OFFICE:0/MAP_SSANNE_2F_CORRIDOR:2": "S.S. Anne Captain's Office Stairs"
+    }
+  },
+  "REGION_DIGLETTS_CAVE_SOUTH_ENTRANCE/MAIN": {
+    "parent_map": "MAP_DIGLETTS_CAVE_SOUTH_ENTRANCE",
+    "name": "Diglett's Cave South Entrance",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_DIGLETTS_CAVE_SOUTH_ENTRANCE:0/MAP_ROUTE11:0": "Diglett's Cave South Entrance Exit",
+      "MAP_DIGLETTS_CAVE_SOUTH_ENTRANCE:1/MAP_DIGLETTS_CAVE_B1F:1": "Diglett's Cave South Entrance Ladder"
+    }
+  },
+  "REGION_DIGLETTS_CAVE_B1F/MAIN": {
+    "parent_map": "MAP_DIGLETTS_CAVE_B1F",
+    "name": "Diglett's Cave B1F",
+    "encounter_region": "Diglett's Cave B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_DIGLETTS_CAVE_B1F_VERMILION_KEY"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_DIGLETTS_CAVE_B1F:0/MAP_DIGLETTS_CAVE_NORTH_ENTRANCE:0": "Diglett's Cave B1F Northwest Ladder",
+      "MAP_DIGLETTS_CAVE_B1F:1/MAP_DIGLETTS_CAVE_SOUTH_ENTRANCE:1": "Diglett's Cave B1F Southeast Ladder"
+    }
+  },
+  "REGION_DIGLETTS_CAVE_NORTH_ENTRANCE/MAIN": {
+    "parent_map": "MAP_DIGLETTS_CAVE_NORTH_ENTRANCE",
+    "name": "Diglett's Cave North Entrance",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_DIGLETTS_CAVE_NORTH_ENTRANCE:0/MAP_DIGLETTS_CAVE_B1F:0": "Diglett's Cave North Entrance Ladder",
+      "MAP_DIGLETTS_CAVE_NORTH_ENTRANCE:1/MAP_ROUTE2:4": "Diglett's Cave North Entrance Exit"
+    }
+  },
+  "REGION_ROCK_TUNNEL_1F/NORTHEAST": {
+    "parent_map": "MAP_ROCK_TUNNEL_1F",
+    "name": "Rock Tunnel 1F (Northeast)",
+    "encounter_region": "Rock Tunnel 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_ROCK_TUNNEL_1F_REPEL",
+      "TRAINER_POKEMANIAC_ASHTON_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROCK_TUNNEL_1F:0/MAP_ROUTE10:0": "Rock Tunnel 1F North Ladder",
+      "MAP_ROCK_TUNNEL_1F:1/MAP_ROCK_TUNNEL_B1F:0": "Rock Tunnel 1F Northeast Ladder"
+    }
+  },
+  "REGION_ROCK_TUNNEL_1F/NORTHWEST": {
+    "parent_map": "MAP_ROCK_TUNNEL_1F",
+    "name": "Rock Tunnel 1F (Northwest)",
+    "encounter_region": "Rock Tunnel 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_HIKER_LENNY_REWARD",
+      "TRAINER_HIKER_OLIVER_REWARD",
+      "ITEM_ROCK_TUNNEL_1F_ESCAPE_ROPE",
+      "TRAINER_HIKER_LUCAS_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROCK_TUNNEL_1F:2/MAP_ROCK_TUNNEL_B1F:1": "Rock Tunnel 1F Northwest Ladder",
+      "MAP_ROCK_TUNNEL_1F:3/MAP_ROCK_TUNNEL_B1F:2": "Rock Tunnel 1F Center Ladder"
+    }
+  },
+  "REGION_ROCK_TUNNEL_1F/SOUTH": {
+    "parent_map": "MAP_ROCK_TUNNEL_1F",
+    "name": "Rock Tunnel 1F (South)",
+    "encounter_region": "Rock Tunnel 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_PICNICKER_LEAH_REWARD",
+      "TRAINER_PICNICKER_ARIANA_REWARD",
+      "ITEM_ROCK_TUNNEL_1F_PEARL",
+      "TRAINER_PICNICKER_DANA_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROCK_TUNNEL_1F:4/MAP_ROCK_TUNNEL_B1F:3": "Rock Tunnel 1F East Ladder",
+      "MAP_ROCK_TUNNEL_1F:5/MAP_ROUTE10:1": "Rock Tunnel 1F Exit"
+    }
+  },
+  "REGION_ROCK_TUNNEL_B1F/SOUTHEAST": {
+    "parent_map": "MAP_ROCK_TUNNEL_B1F",
+    "name": "Rock Tunnel B1F (Southeast)",
+    "encounter_region": "Rock Tunnel B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_POKEMANIAC_WINSTON_REWARD",
+      "ITEM_ROCK_TUNNEL_B1F_REVIVE",
+      "TRAINER_PICNICKER_MARTHA_REWARD",
+      "TRAINER_POKEMANIAC_STEVE_REWARD",
+      "TRAINER_HIKER_ALLEN_REWARD",
+      "TRAINER_HIKER_ERIC_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROCK_TUNNEL_B1F:0/MAP_ROCK_TUNNEL_1F:1": "Rock Tunnel B1F Southeast Ladder",
+      "MAP_ROCK_TUNNEL_B1F:1/MAP_ROCK_TUNNEL_1F:2": "Rock Tunnel B1F Northeast Ladder"
+    }
+  },
+  "REGION_ROCK_TUNNEL_B1F/NORTHWEST": {
+    "parent_map": "MAP_ROCK_TUNNEL_B1F",
+    "name": "Rock Tunnel B1F (Northwest)",
+    "encounter_region": "Rock Tunnel B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_PICNICKER_SOFIA_REWARD",
+      "ITEM_ROCK_TUNNEL_B1F_MAX_ETHER",
+      "TRAINER_HIKER_DUDLEY_REWARD",
+      "TRAINER_POKEMANIAC_COOPER_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROCK_TUNNEL_B1F:2/MAP_ROCK_TUNNEL_1F:3": "Rock Tunnel B1F Center Ladder",
+      "MAP_ROCK_TUNNEL_B1F:3/MAP_ROCK_TUNNEL_1F:4": "Rock Tunnel B1F Northwest Ladder"
+    }
+  },
+  "REGION_POWER_PLANT/MAIN": {
+    "parent_map": "MAP_POWER_PLANT",
+    "name": "Power Plant",
+    "encounter_region": "Power Plant",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_POWER_PLANT_MAX_POTION",
+      "ITEM_POWER_PLANT_TM17",
+      "ITEM_POWER_PLANT_ELIXIR",
+      "ITEM_POWER_PLANT_TM25",
+      "ITEM_POWER_PLANT_THUNDER_STONE",
+      "HIDDEN_ITEM_POWER_PLANT_MAX_ELIXIR",
+      "HIDDEN_ITEM_POWER_PLANT_THUNDER_STONE"
+    ],
+    "events": [
+      "STATIC_POKEMON_ELECTRODE_1",
+      "STATIC_POKEMON_ELECTRODE_2",
+      "LEGENDARY_POKEMON_ZAPDOS"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_POWER_PLANT:0/MAP_ROUTE10:2": "Power Plant Exit (Front)",
+      "MAP_POWER_PLANT:1/MAP_ROUTE10:4": "Power Plant Exit (Back)"
+    }
+  },
+  "REGION_POKEMON_TOWER_1F/MAIN": {
+    "parent_map": "MAP_POKEMON_TOWER_1F",
+    "name": "Pokemon Tower 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_POKEMON_TOWER_1F/NEAR_STAIRS": ["Pokemon Tower 1F Open Path (Left)", "Pokemon Tower 1F Reveal Ghost (Left)"]
+    },
+    "warps": {
+      "MAP_POKEMON_TOWER_1F:0/MAP_LAVENDER_TOWN:0": "Pokemon Tower 1F Exit"
+    }
+  },
+  "REGION_POKEMON_TOWER_1F/NEAR_STAIRS": {
+    "parent_map": "MAP_POKEMON_TOWER_1F",
+    "name": "Pokemon Tower 1F (Near Stairs)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_POKEMON_TOWER_1F/MAIN": ["Pokemon Tower 1F Open Path (Right)", "Pokemon Tower 1F Reveal Ghost (Right)"]
+    },
+    "warps": {
+      "MAP_POKEMON_TOWER_1F:1/MAP_POKEMON_TOWER_2F:1": "Pokemon Tower 1F Stairs"
+    }
+  },
+  "REGION_POKEMON_TOWER_2F/MAIN": {
+    "parent_map": "MAP_POKEMON_TOWER_2F",
+    "name": "Pokemon Tower 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_RIVAL_POKEMON_TOWER_BULBASAUR_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_POKEMON_TOWER_2F:0/MAP_POKEMON_TOWER_3F:0": "Pokemon Tower 2F West Stairs",
+      "MAP_POKEMON_TOWER_2F:1/MAP_POKEMON_TOWER_1F:1": "Pokemon Tower 2F East Stairs"
+    }
+  },
+  "REGION_POKEMON_TOWER_3F/MAIN": {
+    "parent_map": "MAP_POKEMON_TOWER_3F",
+    "name": "Pokemon Tower 3F",
+    "encounter_region": "Pokemon Tower 3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_CHANNELER_HOPE_REWARD",
+      "ITEM_POKEMON_TOWER_3F_ESCAPE_ROPE",
+      "TRAINER_CHANNELER_PATRICIA_REWARD",
+      "TRAINER_CHANNELER_CARLY_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_POKEMON_TOWER_3F:0/MAP_POKEMON_TOWER_2F:0": "Pokemon Tower 3F West Stairs",
+      "MAP_POKEMON_TOWER_3F:1/MAP_POKEMON_TOWER_4F:1": "Pokemon Tower 3F East Stairs"
+    }
+  },
+  "REGION_POKEMON_TOWER_4F/MAIN": {
+    "parent_map": "MAP_POKEMON_TOWER_4F",
+    "name": "Pokemon Tower 4F",
+    "encounter_region": "Pokemon Tower 4F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_CHANNELER_LAUREL_REWARD",
+      "ITEM_POKEMON_TOWER_4F_ELIXIR",
+      "ITEM_POKEMON_TOWER_4F_AWAKENING",
+      "TRAINER_CHANNELER_JODY_REWARD",
+      "ITEM_POKEMON_TOWER_4F_GREAT_BALL",
+      "TRAINER_CHANNELER_PAULA_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_POKEMON_TOWER_4F:0/MAP_POKEMON_TOWER_5F:0": "Pokemon Tower 4F West Stairs",
+      "MAP_POKEMON_TOWER_4F:1/MAP_POKEMON_TOWER_3F:1": "Pokemon Tower 4F East Stairs"
+    }
+  },
+  "REGION_POKEMON_TOWER_5F/MAIN": {
+    "parent_map": "MAP_POKEMON_TOWER_5F",
+    "name": "Pokemon Tower 5F",
+    "encounter_region": "Pokemon Tower 5F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_CHANNELER_RUTH_REWARD",
+      "HIDDEN_ITEM_POKEMON_TOWER_5F_BIG_MUSHROOM",
+      "TRAINER_CHANNELER_TAMMY_REWARD",
+      "ITEM_POKEMON_TOWER_5F_CLEANSE_TAG",
+      "TRAINER_CHANNELER_KARINA_REWARD",
+      "TRAINER_CHANNELER_JANAE_REWARD",
+      "ITEM_POKEMON_TOWER_5F_NUGGET"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_POKEMON_TOWER_5F:0/MAP_POKEMON_TOWER_4F:0": "Pokemon Tower 5F West Stairs",
+      "MAP_POKEMON_TOWER_5F:1/MAP_POKEMON_TOWER_6F:1": "Pokemon Tower 5F East Stairs"
+    }
+  },
+  "REGION_POKEMON_TOWER_6F/MAIN": {
+    "parent_map": "MAP_POKEMON_TOWER_6F",
+    "name": "Pokemon Tower 6F",
+    "encounter_region": "Pokemon Tower 6F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_CHANNELER_ANGELICA_REWARD",
+      "ITEM_POKEMON_TOWER_6F_X_ACCURACY",
+      "TRAINER_CHANNELER_JENNIFER_REWARD",
+      "TRAINER_CHANNELER_EMILIA_REWARD",
+      "ITEM_POKEMON_TOWER_6F_RARE_CANDY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_POKEMON_TOWER_6F/NEAR_STAIRS": ["Pokemon Tower 6F Open Path (Top)", "Pokemon Tower 6F Reveal Ghost (Top)"]
+    },
+    "warps": {
+      "MAP_POKEMON_TOWER_6F:1/MAP_POKEMON_TOWER_5F:1": "Pokemon Tower 6F East Stairs"
+    }
+  },
+  "REGION_POKEMON_TOWER_6F/NEAR_STAIRS": {
+    "parent_map": "MAP_POKEMON_TOWER_6F",
+    "name": "Pokemon Tower 6F (Near Stairs)",
+    "encounter_region": "Pokemon Tower 6F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_POKEMON_TOWER_6F/MAIN": ["Pokemon Tower 6F Open Path (Bottom)", "Pokemon Tower 6F Reveal Ghost (Bottom)"]
+    },
+    "warps": {
+      "MAP_POKEMON_TOWER_6F:0/MAP_POKEMON_TOWER_7F:0": "Pokemon Tower 6F South Stairs"
+    }
+  },
+  "REGION_POKEMON_TOWER_7F/MAIN": {
+    "parent_map": "MAP_POKEMON_TOWER_7F",
+    "name": "Pokemon Tower 7F",
+    "encounter_region": "Pokemon Tower 7F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_19_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_20_REWARD",
+      "FAME_CHECKER_MRFUJI_2",
+      "TRAINER_TEAM_ROCKET_GRUNT_21_REWARD",
+      "HIDDEN_ITEM_POKEMON_TOWER_7F_SOOTHE_BELL"
+    ],
+    "events": [
+      "EVENT_RESCUE_MR_FUJI"
+    ],
+    "exits": {
+      "REGION_LAVENDER_TOWN_VOLUNTEER_POKEMON_HOUSE/MAIN": "Follow Mr. Fuji"
+    },
+    "warps": {
+      "MAP_POKEMON_TOWER_7F:0/MAP_POKEMON_TOWER_6F:0": "Pokemon Tower 7F Stairs"
+    }
+  },
+  "REGION_ROCKET_HIDEOUT_B1F/NORTH": {
+    "parent_map": "MAP_ROCKET_HIDEOUT_B1F",
+    "name": "Rocket Hideout B1F (North)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_9_REWARD",
+      "ITEM_ROCKET_HIDEOUT_B1F_ESCAPE_ROPE",
+      "HIDDEN_ITEM_ROCKET_HIDEOUT_B1F_PP_UP",
+      "TRAINER_TEAM_ROCKET_GRUNT_8_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROCKET_HIDEOUT_B1F:0/MAP_CELADON_CITY_GAME_CORNER:1": "Rocket Hideout B1F Northwest Stairs",
+      "MAP_ROCKET_HIDEOUT_B1F:1/MAP_ROCKET_HIDEOUT_B2F:1": "Rocket Hideout B1F Northeast Stairs"
+    }
+  },
+  "REGION_ROCKET_HIDEOUT_B1F/SOUTHWEST": {
+    "parent_map": "MAP_ROCKET_HIDEOUT_B1F",
+    "name": "Rocket Hideout B1F (Southwest)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_11_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_10_REWARD",
+      "ITEM_ROCKET_HIDEOUT_B1F_HYPER_POTION"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROCKET_HIDEOUT_B1F:2/MAP_ROCKET_HIDEOUT_B2F:2": "Rocket Hideout B1F South Stairs"
+    }
+  },
+  "REGION_ROCKET_HIDEOUT_B1F/SOUTHEAST": {
+    "parent_map": "MAP_ROCKET_HIDEOUT_B1F",
+    "name": "Rocket Hideout B1F (Southeast)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_12_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROCKET_HIDEOUT_B1F/NORTH": "Rocket Hideout B1F Barrier",
+      "REGION_ROCKET_HIDEOUT_ELEVATOR/MAIN": "Rocket Hideout B1F Elevator"
+    },
+    "warps": {}
+  },
+  "REGION_ROCKET_HIDEOUT_B2F/MAIN": {
+    "parent_map": "MAP_ROCKET_HIDEOUT_B2F",
+    "name": "Rocket Hideout B2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_13_REWARD",
+      "ITEM_ROCKET_HIDEOUT_B2F_X_SPEED",
+      "ITEM_ROCKET_HIDEOUT_B2F_MOON_STONE",
+      "ITEM_ROCKET_HIDEOUT_B2F_TM12",
+      "ITEM_ROCKET_HIDEOUT_B2F_SUPER_POTION"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROCKET_HIDEOUT_ELEVATOR/MAIN": "Rocket Hideout B2F Elevator"
+    },
+    "warps": {
+      "MAP_ROCKET_HIDEOUT_B2F:0/MAP_ROCKET_HIDEOUT_B3F:0": "Rocket Hideout B2F Northeast Stairs (Left)",
+      "MAP_ROCKET_HIDEOUT_B2F:1/MAP_ROCKET_HIDEOUT_B1F:1": "Rocket Hideout B2F Northeast Stairs (Right)",
+      "MAP_ROCKET_HIDEOUT_B2F:2/MAP_ROCKET_HIDEOUT_B1F:2": "Rocket Hideout B2F Southeast Stairs"
+    }
+  },
+  "REGION_ROCKET_HIDEOUT_B3F/MAIN": {
+    "parent_map": "MAP_ROCKET_HIDEOUT_B3F",
+    "name": "Rocket Hideout B3F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_15_REWARD",
+      "ITEM_ROCKET_HIDEOUT_B3F_TM21",
+      "HIDDEN_ITEM_ROCKET_HIDEOUT_B3F_NUGGET",
+      "ITEM_ROCKET_HIDEOUT_B3F_RARE_CANDY",
+      "TRAINER_TEAM_ROCKET_GRUNT_14_REWARD",
+      "ITEM_ROCKET_HIDEOUT_B3F_BLACK_GLASSES"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROCKET_HIDEOUT_B3F:0/MAP_ROCKET_HIDEOUT_B2F:0": "Rocket Hideout B3F North Stairs",
+      "MAP_ROCKET_HIDEOUT_B3F:1/MAP_ROCKET_HIDEOUT_B4F:0": "Rocket Hideout B3F South Stairs"
+    }
+  },
+  "REGION_ROCKET_HIDEOUT_B4F/WEST": {
+    "parent_map": "MAP_ROCKET_HIDEOUT_B4F",
+    "name": "Rocket Hideout B4F (West)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_ROCKET_HIDEOUT_B4F_MAX_ETHER",
+      "ITEM_ROCKET_HIDEOUT_B4F_TM49",
+      "TRAINER_TEAM_ROCKET_GRUNT_18_REWARD",
+      "NPC_GIFT_CAN_USE_ROCKET_HIDEOUT_LIFT"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROCKET_HIDEOUT_B4F:0/MAP_ROCKET_HIDEOUT_B3F:1": "Rocket Hideout B4F Stairs"
+    }
+  },
+  "REGION_ROCKET_HIDEOUT_B4F/EAST": {
+    "parent_map": "MAP_ROCKET_HIDEOUT_B4F",
+    "name": "Rocket Hideout B4F (East)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_ROCKET_HIDEOUT_B4F_CALCIUM",
+      "TRAINER_TEAM_ROCKET_GRUNT_16_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_17_REWARD",
+      "FAME_CHECKER_GIOVANNI_1",
+      "TRAINER_BOSS_GIOVANNI_REWARD",
+      "NPC_GIFT_GOT_SILPH_SCOPE",
+      "HIDDEN_ITEM_ROCKET_HIDEOUT_B4F_NET_BALL",
+      "HIDDEN_ITEM_ROCKET_HIDEOUT_B4F_NEST_BALL"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROCKET_HIDEOUT_ELEVATOR/MAIN": "Rocket Hideout B4F Elevator"
+    },
+    "warps": {}
+  },
+  "REGION_ROCKET_HIDEOUT_ELEVATOR/MAIN": {
+    "parent_map": "MAP_ROCKET_HIDEOUT_ELEVATOR",
+    "name": "Rocket Hideout Elevator",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROCKET_HIDEOUT_B1F/SOUTHEAST": "Rocket Hideout Elevator B1F Stop",
+      "REGION_ROCKET_HIDEOUT_B2F/MAIN": "Rocket Hideout Elevator B2F Stop",
+      "REGION_ROCKET_HIDEOUT_B4F/EAST": "Rocket Hideout Elevator B4F Stop"
+    },
+    "warps": {}
+  },
+  "REGION_SAFARI_ZONE_CENTER/SOUTH": {
+    "parent_map": "MAP_SAFARI_ZONE_CENTER",
+    "name": "Safari Zone Center Area (South)",
+    "encounter_region": "Safari Zone Center Area",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SAFARI_ZONE_CENTER/WATER": "Safari Zone Center Area (South) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SAFARI_ZONE_CENTER:0,1/MAP_FUCHSIA_CITY_SAFARI_ZONE_ENTRANCE:0": "Safari Zone Center Area Exit (South)",
+      "MAP_SAFARI_ZONE_CENTER:8/MAP_SAFARI_ZONE_CENTER_REST_HOUSE:0": "Safari Zone Center Area Rest House",
+      "MAP_SAFARI_ZONE_CENTER:6,7/MAP_SAFARI_ZONE_EAST:2,3": "Safari Zone Center Area Exit (East)"
+    }
+  },
+  "REGION_SAFARI_ZONE_CENTER/NORTHEAST": {
+    "parent_map": "MAP_SAFARI_ZONE_CENTER",
+    "name": "Safari Zone Center Area (Northeast)",
+    "encounter_region": "Safari Zone Center Area",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SAFARI_ZONE_CENTER/WATER": "Safari Zone Center Area (Northeast) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SAFARI_ZONE_CENTER:2,3/MAP_SAFARI_ZONE_NORTH:6,7": "Safari Zone Center Area Exit (North)"
+    }
+  },
+  "REGION_SAFARI_ZONE_CENTER/NORTHWEST": {
+    "parent_map": "MAP_SAFARI_ZONE_CENTER",
+    "name": "Safari Zone Center Area (Northwest)",
+    "encounter_region": "Safari Zone Center Area",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SAFARI_ZONE_CENTER/WATER": "Safari Zone Center Area (Northwest) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SAFARI_ZONE_CENTER:4,5/MAP_SAFARI_ZONE_WEST:4,5": "Safari Zone Center Area Exit (West)"
+    }
+  },
+  "REGION_SAFARI_ZONE_CENTER/WATER": {
+    "parent_map": "MAP_SAFARI_ZONE_CENTER",
+    "name": "Safari Zone Center Area (Water)",
+    "encounter_region": "Safari Zone Center Area",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "ITEM_SAFARI_ZONE_CENTER_NUGGET",
+      "HIDDEN_ITEM_SAFARI_ZONE_CENTER_LEAF_STONE"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SAFARI_ZONE_CENTER/NORTHWEST": "Safari Zone Center Area (Northwest) Landing Spot",
+      "REGION_SAFARI_ZONE_CENTER/NORTHEAST": "Safari Zone Center Area (Northeast) Landing Spot",
+      "REGION_SAFARI_ZONE_CENTER/SOUTH": "Safari Zone Center Area (South) Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_SAFARI_ZONE_EAST/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_EAST",
+    "name": "Safari Zone East Area",
+    "encounter_region": "Safari Zone East Area",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "ITEM_SAFARI_ZONE_EAST_LEAF_STONE",
+      "ITEM_SAFARI_ZONE_EAST_MAX_POTION",
+      "ITEM_SAFARI_ZONE_EAST_TM11",
+      "ITEM_SAFARI_ZONE_EAST_FULL_RESTORE"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SAFARI_ZONE_EAST/WATER": "Safari Zone East Area Surfing Spot"
+    },
+    "warps": {
+      "MAP_SAFARI_ZONE_EAST:0,1/MAP_SAFARI_ZONE_NORTH:4,5": "Safari Zone East Area Exit (Northwest)",
+      "MAP_SAFARI_ZONE_EAST:2,3/MAP_SAFARI_ZONE_CENTER:6,7": "Safari Zone East Area Exit (Southwest)",
+      "MAP_SAFARI_ZONE_EAST:4/MAP_SAFARI_ZONE_EAST_REST_HOUSE:0": "Safari Zone East Area Rest House"
+    }
+  },
+  "REGION_SAFARI_ZONE_EAST/WATER": {
+    "parent_map": "MAP_SAFARI_ZONE_EAST",
+    "name": "Safari Zone East Area (Water)",
+    "encounter_region": "Safari Zone East Area",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SAFARI_ZONE_NORTH/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_NORTH",
+    "name": "Safari Zone North Area",
+    "encounter_region": "Safari Zone North Area",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "ITEM_SAFARI_ZONE_NORTH_QUICK_CLAW",
+      "ITEM_SAFARI_ZONE_NORTH_TM47",
+      "ITEM_SAFARI_ZONE_NORTH_PROTEIN"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SAFARI_ZONE_NORTH/WATER": "Safari Zone North Area Surfing Spot"
+    },
+    "warps": {
+      "MAP_SAFARI_ZONE_NORTH:0,1/MAP_SAFARI_ZONE_WEST:0,1": "Safari Zone North Area Exit (Southwest)",
+      "MAP_SAFARI_ZONE_NORTH:2,3/MAP_SAFARI_ZONE_WEST:2,3": "Safari Zone North Area Exit (South)",
+      "MAP_SAFARI_ZONE_NORTH:4,5/MAP_SAFARI_ZONE_EAST:0,1": "Safari Zone North Area Exit (East)",
+      "MAP_SAFARI_ZONE_NORTH:6,7/MAP_SAFARI_ZONE_CENTER:2,3": "Safari Zone North Area Exit (Southeast)",
+      "MAP_SAFARI_ZONE_NORTH:8/MAP_SAFARI_ZONE_NORTH_REST_HOUSE:0": "Safari Zone North Area Rest House"
+    }
+  },
+  "REGION_SAFARI_ZONE_NORTH/WATER": {
+    "parent_map": "MAP_SAFARI_ZONE_NORTH",
+    "name": "Safari Zone North Area (Water)",
+    "encounter_region": "Safari Zone North Area",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SAFARI_ZONE_WEST/SOUTH": {
+    "parent_map": "MAP_SAFARI_ZONE_WEST",
+    "name": "Safari Zone West Area (South)",
+    "encounter_region": "Safari Zone West Area",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "ITEM_SAFARI_ZONE_WEST_MAX_REVIVE",
+      "ITEM_SAFARI_ZONE_WEST_MAX_POTION"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SAFARI_ZONE_WEST/WATER": "Safari Zone West Area (South) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SAFARI_ZONE_WEST:2,3/MAP_SAFARI_ZONE_NORTH:2,3": "Safari Zone West Area Exit (Northeast)",
+      "MAP_SAFARI_ZONE_WEST:4,5/MAP_SAFARI_ZONE_CENTER:4,5": "Safari Zone West Area Exit (East)",
+      "MAP_SAFARI_ZONE_WEST:7/MAP_SAFARI_ZONE_WEST_REST_HOUSE:0": "Safari Zone West Area Rest House"
+    }
+  },
+  "REGION_SAFARI_ZONE_WEST/NORTH": {
+    "parent_map": "MAP_SAFARI_ZONE_WEST",
+    "name": "Safari Zone West Area (North)",
+    "encounter_region": "Safari Zone West Area",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "ITEM_SAFARI_ZONE_WEST_GOLD_TEETH",
+      "ITEM_SAFARI_ZONE_WEST_TM32",
+      "HIDDEN_ITEM_SAFARI_ZONE_WEST_REVIVE"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SAFARI_ZONE_WEST/WATER": "Safari Zone West Area (North) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SAFARI_ZONE_WEST:0,1/MAP_SAFARI_ZONE_NORTH:0,1": "Safari Zone West Area Exit (North)",
+      "MAP_SAFARI_ZONE_WEST:6/MAP_SAFARI_ZONE_SECRET_HOUSE:0": "Safari Zone Secret House"
+    }
+  },
+  "REGION_SAFARI_ZONE_WEST/WATER": {
+    "parent_map": "MAP_SAFARI_ZONE_WEST",
+    "name": "Safari Zone West Area (Water)",
+    "encounter_region": "Safari Zone West Area",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SAFARI_ZONE_WEST/NORTH": "Safari Zone West Area (North) Landing Spot",
+      "REGION_SAFARI_ZONE_WEST/SOUTH": "Safari Zone West Area (South) Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_SAFARI_ZONE_CENTER_REST_HOUSE/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_CENTER_REST_HOUSE",
+    "name": "Safari Zone Center Area Rest House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SAFARI_ZONE_CENTER_REST_HOUSE:0/MAP_SAFARI_ZONE_CENTER:8": "Safari Zone Center Area Rest House Exit"
+    }
+  },
+  "REGION_SAFARI_ZONE_EAST_REST_HOUSE/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_EAST_REST_HOUSE",
+    "name": "Safari Zone East Area Rest House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SAFARI_ZONE_EAST_RESTHOUSE_FUCHSIA_KEY"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SAFARI_ZONE_EAST_REST_HOUSE:0/MAP_SAFARI_ZONE_EAST:4": "Safari Zone East Area Rest House Exit"
+    }
+  },
+  "REGION_SAFARI_ZONE_NORTH_REST_HOUSE/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_NORTH_REST_HOUSE",
+    "name": "Safari Zone North Area Rest House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "FAME_CHECKER_KOGA_6"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SAFARI_ZONE_NORTH_REST_HOUSE:0/MAP_SAFARI_ZONE_NORTH:8": "Safari Zone North Area Rest House Exit"
+    }
+  },
+  "REGION_SAFARI_ZONE_WEST_REST_HOUSE/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_WEST_REST_HOUSE",
+    "name": "Safari Zone West Area Rest House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SAFARI_ZONE_WEST_REST_HOUSE:0/MAP_SAFARI_ZONE_WEST:7": "Safari Zone West Area Rest House Exit"
+    }
+  },
+  "REGION_SAFARI_ZONE_SECRET_HOUSE/MAIN": {
+    "parent_map": "MAP_SAFARI_ZONE_SECRET_HOUSE",
+    "name": "Safari Zone Secret House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "NPC_GIFT_GOT_HM03"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SAFARI_ZONE_SECRET_HOUSE:0/MAP_SAFARI_ZONE_WEST:6": "Safari Zone Secret House Exit"
+    }
+  },
+  "REGION_SILPH_CO_1F/MAIN": {
+    "parent_map": "MAP_SILPH_CO_1F",
+    "name": "Silph Co. 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_ELEVATOR/MAIN": "Silph Co. 1F Elevator"
+    },
+    "warps": {
+      "MAP_SILPH_CO_1F:0/MAP_SAFFRON_CITY:0": "Silph Co. 1F Exit",
+      "MAP_SILPH_CO_1F:1/MAP_SILPH_CO_2F:3": "Silph Co. 1F Stairs"
+    }
+  },
+  "REGION_SILPH_CO_2F/MAIN": {
+    "parent_map": "MAP_SILPH_CO_2F",
+    "name": "Silph Co. 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_24_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_23_REWARD",
+      "TRAINER_SCIENTIST_JERRY_REWARD",
+      "ITEM_SILPH_CO_2F_CARD_KEY_2F"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_2F/NORTHWEST": "Silph Co. 2F Northwest Barrier (Bottom)",
+      "REGION_SILPH_CO_2F/SOUTHWEST": "Silph Co. 2F Southwest Barrier (Top)",
+      "REGION_SILPH_CO_ELEVATOR/MAIN": "Silph Co. 2F Elevator"
+    },
+    "warps": {
+      "MAP_SILPH_CO_2F:0/MAP_SILPH_CO_3F:0": "Silph Co. 2F Northeast Stairs (Left)",
+      "MAP_SILPH_CO_2F:2/MAP_SILPH_CO_8F:5": "Silph Co. 2F North Warp Tile",
+      "MAP_SILPH_CO_2F:3/MAP_SILPH_CO_1F:1": "Silph Co. 2F Northeast Stairs (Right)",
+      "MAP_SILPH_CO_2F:5/MAP_SILPH_CO_8F:2": "Silph Co. 2F Southeast Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_2F/NORTHWEST": {
+    "parent_map": "MAP_SILPH_CO_2F",
+    "name": "Silph Co. 2F (Northwest Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_2F/MAIN": "Silph Co. 2F Northwest Barrier (Top)"
+    },
+    "warps": {
+      "MAP_SILPH_CO_2F:1/MAP_SILPH_CO_3F:8": "Silph Co. 2F Northwest Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_2F/SOUTHWEST": {
+    "parent_map": "MAP_SILPH_CO_2F",
+    "name": "Silph Co. 2F (Southwest Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SCIENTIST_CONNOR_REWARD",
+      "HIDDEN_ITEM_SILPH_CO_2F_ULTRA_BALL"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_2F/MAIN": "Silph Co. 2F Southwest Barrier (Bottom)"
+    },
+    "warps": {
+      "MAP_SILPH_CO_2F:4/MAP_SILPH_CO_6F:1": "Silph Co. 2F Southwest Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_3F/MAIN": {
+    "parent_map": "MAP_SILPH_CO_3F",
+    "name": "Silph Co. 3F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_25_REWARD",
+      "ITEM_SILPH_CO_3F_CARD_KEY_5F",
+      "HIDDEN_ITEM_SILPH_CO_3F_PROTEIN"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_3F/CENTER": "Silph Co. 3F Center Barrier (Right)",
+      "REGION_SILPH_CO_ELEVATOR/MAIN": "Silph Co. 3F Elevator"
+    },
+    "warps": {
+      "MAP_SILPH_CO_3F:0/MAP_SILPH_CO_2F:0": "Silph Co. 3F Northeast Stairs (Left)",
+      "MAP_SILPH_CO_3F:1/MAP_SILPH_CO_5F:1": "Silph Co. 3F Northwest Warp Tile",
+      "MAP_SILPH_CO_3F:3/MAP_SILPH_CO_4F:2": "Silph Co. 3F Northeast Stairs (Right)",
+      "MAP_SILPH_CO_3F:5/MAP_SILPH_CO_5F:4": "Silph Co. 3F Southwest Warp Tile",
+      "MAP_SILPH_CO_3F:6/MAP_SILPH_CO_3F:7": "Silph Co. 3F East Warp Tile",
+      "MAP_SILPH_CO_3F:7/MAP_SILPH_CO_3F:6": "Silph Co. 3F Southeast Warp Tile",
+      "MAP_SILPH_CO_3F:8/MAP_SILPH_CO_2F:1": "Silph Co. 3F Northeast Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_3F/CENTER": {
+    "parent_map": "MAP_SILPH_CO_3F",
+    "name": "Silph Co. 3F (Center Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_3F/MAIN": "Silph Co. 3F Center Barrier (Left)",
+      "REGION_SILPH_CO_3F/WEST": "Silph Co. 3F West Barrier (Right)"
+    },
+    "warps": {
+      "MAP_SILPH_CO_3F:2/MAP_SILPH_CO_7F:4": "Silph Co. 3F Center Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_3F/WEST": {
+    "parent_map": "MAP_SILPH_CO_3F",
+    "name": "Silph Co. 3F (West Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SCIENTIST_JOSE_REWARD",
+      "ITEM_SILPH_CO_3F_HYPER_POTION"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_3F/CENTER": "Silph Co. 3F West Barrier (Left)"
+    },
+    "warps": {
+      "MAP_SILPH_CO_3F:4/MAP_SILPH_CO_9F:2": "Silph Co. 3F West Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_4F/MAIN": {
+    "parent_map": "MAP_SILPH_CO_4F",
+    "name": "Silph Co. 4F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_27_REWARD",
+      "ITEM_SILPH_CO_4F_TM41",
+      "HIDDEN_ITEM_SILPH_CO_4F_IRON",
+      "TRAINER_TEAM_ROCKET_GRUNT_26_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_4F/NORTHWEST": "Silph Co. 4F West Barrier (Bottom)",
+      "REGION_SILPH_CO_4F/NORTH": "Silph Co. 4F Center Barrier (Bottom)",
+      "REGION_SILPH_CO_ELEVATOR/MAIN": "Silph Co. 4F Elevator"
+    },
+    "warps": {
+      "MAP_SILPH_CO_4F:0/MAP_SILPH_CO_5F:0": "Silph Co. 4F Northeast Stairs (Left)",
+      "MAP_SILPH_CO_4F:2/MAP_SILPH_CO_3F:3": "Silph Co. 4F Northeast Stairs (Right)",
+      "MAP_SILPH_CO_4F:4/MAP_SILPH_CO_10F:4": "Silph Co. 4F Southwest Warp Tile",
+      "MAP_SILPH_CO_4F:5/MAP_SILPH_CO_10F:2": "Silph Co. 4F Center Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_4F/NORTH": {
+    "parent_map": "MAP_SILPH_CO_4F",
+    "name": "Silph Co. 4F (North Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SILPH_CO_4F_CARD_KEY_4F",
+      "TRAINER_SCIENTIST_RODNEY_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_4F/MAIN": "Silph Co. 4F Center Barrier (Top)"
+    },
+    "warps": {
+      "MAP_SILPH_CO_4F:1/MAP_SILPH_CO_6F:3": "Silph Co. 4F North Warp Tile (Right)",
+      "MAP_SILPH_CO_4F:3/MAP_SILPH_CO_10F:1": "Silph Co. 4F North Warp Tile (Left)"
+    }
+  },
+  "REGION_SILPH_CO_4F/NORTHWEST": {
+    "parent_map": "MAP_SILPH_CO_4F",
+    "name": "Silph Co. 4F (Northwest Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SILPH_CO_4F_FULL_HEAL",
+      "ITEM_SILPH_CO_4F_ESCAPE_ROPE",
+      "ITEM_SILPH_CO_4F_MAX_REVIVE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SILPH_CO_5F/MAIN": {
+    "parent_map": "MAP_SILPH_CO_5F",
+    "name": "Silph Co. 5F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_29_REWARD",
+      "HIDDEN_ITEM_SILPH_CO_5F_PP_UP",
+      "TRAINER_JUGGLER_DALTON_REWARD",
+      "TRAINER_SCIENTIST_BEAU_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_28_REWARD",
+      "ITEM_SILPH_CO_5F_CARD_KEY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_5F/NORTHWEST": "Silph Co. 5F Northwest Barrier (Right)",
+      "REGION_SILPH_CO_5F/CENTER": "Silph Co. 5F Center Barrier (Right)",
+      "REGION_SILPH_CO_5F/SOUTHWEST": "Silph Co. 5F Southwest Barrier (Right)",
+      "REGION_SILPH_CO_ELEVATOR/MAIN": "Silph Co. 5F Elevator"
+    },
+    "warps": {
+      "MAP_SILPH_CO_5F:0/MAP_SILPH_CO_4F:0": "Silph Co. 5F Northeast Stairs (Left)",
+      "MAP_SILPH_CO_5F:1/MAP_SILPH_CO_3F:1": "Silph Co. 5F North Warp Tile",
+      "MAP_SILPH_CO_5F:2/MAP_SILPH_CO_6F:2": "Silph Co. 5F Northeast Stairs (Right)",
+      "MAP_SILPH_CO_5F:3/MAP_SILPH_CO_9F:1": "Silph Co. 5F South Warp Tile",
+      "MAP_SILPH_CO_5F:5/MAP_SILPH_CO_7F:2": "Silph Co. 5F Northeast Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_5F/CENTER": {
+    "parent_map": "MAP_SILPH_CO_5F",
+    "name": "Silph Co. 5F (Center Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_SILPH_CO_5F_ELIXIR"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SILPH_CO_5F/NORTHWEST": {
+    "parent_map": "MAP_SILPH_CO_5F",
+    "name": "Silph Co. 5F (Northwest Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SILPH_CO_5F_PROTEIN",
+      "FAME_CHECKER_GIOVANNI_2"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SILPH_CO_5F/SOUTHWEST": {
+    "parent_map": "MAP_SILPH_CO_5F",
+    "name": "Silph Co. 5F (Southwest Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SILPH_CO_5F_TM01"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_5F/MAIN": "Silph Co. 5F Southwest Barrier (Left)"
+    },
+    "warps": {
+      "MAP_SILPH_CO_5F:4/MAP_SILPH_CO_3F:5": "Silph Co. 5F Southwest Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_6F/MAIN": {
+    "parent_map": "MAP_SILPH_CO_6F",
+    "name": "Silph Co. 6F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_30_REWARD",
+      "ITEM_SILPH_CO_6F_CARD_KEY_6F",
+      "HIDDEN_ITEM_SILPH_CO_6F_CARBOS",
+      "TRAINER_SCIENTIST_TAYLOR_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_31_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_6F/SOUTHWEST": "Silph Co. 6F Barrier (Right)",
+      "REGION_SILPH_CO_ELEVATOR/MAIN": "Silph Co. 6F Elevator"
+    },
+    "warps": {
+      "MAP_SILPH_CO_6F:0/MAP_SILPH_CO_7F:0": "Silph Co. 6F North Stairs",
+      "MAP_SILPH_CO_6F:1/MAP_SILPH_CO_2F:4": "Silph Co. 6F Northeast Warp Tile",
+      "MAP_SILPH_CO_6F:2/MAP_SILPH_CO_5F:2": "Silph Co. 6F Northeast Stairs",
+      "MAP_SILPH_CO_6F:3/MAP_SILPH_CO_4F:1": "Silph Co. 6F Northwest Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_6F/SOUTHWEST": {
+    "parent_map": "MAP_SILPH_CO_6F",
+    "name": "Silph Co. 6F (Southwest Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SILPH_CO_6F_HP_UP",
+      "ITEM_SILPH_CO_6F_X_SPECIAL"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SILPH_CO_7F/MAIN": {
+    "parent_map": "MAP_SILPH_CO_7F",
+    "name": "Silph Co. 7F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_33_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_35_REWARD",
+      "TRAINER_SCIENTIST_JOSHUA_REWARD",
+      "ITEM_SILPH_CO_7F_CALCIUM"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_7F/CENTER": "Silph Co. 7F Center Barrier (Top)",
+      "REGION_SILPH_CO_7F/EAST": "Silph Co. 7F Northeast Barrier (Top)",
+      "REGION_SILPH_CO_ELEVATOR/MAIN": "Silph Co. 7F Elevator"
+    },
+    "warps": {
+      "MAP_SILPH_CO_7F:0/MAP_SILPH_CO_6F:0": "Silph Co. 7F North Stairs",
+      "MAP_SILPH_CO_7F:3/MAP_SILPH_CO_8F:3": "Silph Co. 7F Northeast Stairs"
+    }
+  },
+  "REGION_SILPH_CO_7F/EAST": {
+    "parent_map": "MAP_SILPH_CO_7F",
+    "name": "Silph Co. 7F (East Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SILPH_CO_7F_TM08",
+      "HIDDEN_ITEM_SILPH_CO_7F_ZINC"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_7F/MAIN": "Silph Co. 7F Northeast Barrier (Bottom)",
+      "REGION_SILPH_CO_7F/SOUTHEAST": "Silph Co. 7F Southeast Barrier (Top)"
+    },
+    "warps": {}
+  },
+  "REGION_SILPH_CO_7F/SOUTHEAST": {
+    "parent_map": "MAP_SILPH_CO_7F",
+    "name": "Silph Co. 7F (Southeast Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_34_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_7F/EAST": "Silph Co. 7F Southeast Barrier (Bottom)"
+    },
+    "warps": {
+      "MAP_SILPH_CO_7F:2/MAP_SILPH_CO_5F:5": "Silph Co. 7F Southeast Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_7F/CENTER": {
+    "parent_map": "MAP_SILPH_CO_7F",
+    "name": "Silph Co. 7F (Center Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SILPH_CO_7F/NORTHWEST": {
+    "parent_map": "MAP_SILPH_CO_7F",
+    "name": "Silph Co. 7F (Northwest Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_RIVAL_SILPH_BULBASAUR_REWARD",
+      "NPC_GIFT_GOT_LINK_CABLE",
+      "ITEM_SILPH_CO_7F_CARD_KEY_7F"
+    ],
+    "events": [
+      "GIFT_POKEMON_LAPRAS"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_SILPH_CO_7F:1/MAP_SILPH_CO_11F:1": "Silph Co. 7F Northwest Warp Tile (Bottom)",
+      "MAP_SILPH_CO_7F:4/MAP_SILPH_CO_3F:2": "Silph Co. 7F Northwest Warp Tile (Top)"
+    }
+  },
+  "REGION_SILPH_CO_8F/MAIN": {
+    "parent_map": "MAP_SILPH_CO_8F",
+    "name": "Silph Co. 8F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_32_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_36_REWARD",
+      "TRAINER_SCIENTIST_PARKER_REWARD",
+      "ITEM_SILPH_CO_8F_IRON",
+      "HIDDEN_ITEM_SILPH_CO_8F_NUGGET",
+      "FAME_CHECKER_GIOVANNI_3"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_8F/WEST": "Silph Co. 8F Barrier (Right)",
+      "REGION_SILPH_CO_ELEVATOR/MAIN": "Silph Co. 8F Elevator"
+    },
+    "warps": {
+      "MAP_SILPH_CO_8F:0/MAP_SILPH_CO_9F:0": "Silph Co. 8F North Stairs",
+      "MAP_SILPH_CO_8F:1/MAP_SILPH_CO_8F:4": "Silph Co. 8F Center Warp Tile",
+      "MAP_SILPH_CO_8F:2/MAP_SILPH_CO_2F:5": "Silph Co. 8F North Warp Tile",
+      "MAP_SILPH_CO_8F:3/MAP_SILPH_CO_7F:3": "Silph Co. 8F Northeast Stairs",
+      "MAP_SILPH_CO_8F:5/MAP_SILPH_CO_2F:2": "Silph Co. 8F Southwest Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_8F/WEST": {
+    "parent_map": "MAP_SILPH_CO_8F",
+    "name": "Silph Co. 8F (West Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SILPH_CO_8F_CARD_KEY_8F"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_8F/MAIN": "Silph Co. 8F Barrier (Left)"
+    },
+    "warps": {
+      "MAP_SILPH_CO_8F:4/MAP_SILPH_CO_8F:1": "Silph Co. 8F West Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_9F/MAIN": {
+    "parent_map": "MAP_SILPH_CO_9F",
+    "name": "Silph Co. 9F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SCIENTIST_ED_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_38_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_9F/SOUTHWEST": "Silph Co. 9F South Barrier (Right)",
+      "REGION_SILPH_CO_ELEVATOR/MAIN": "Silph Co. 9F Elevator"
+    },
+    "warps": {
+      "MAP_SILPH_CO_9F:0/MAP_SILPH_CO_8F:0": "Silph Co. 9F North Stairs (Left)",
+      "MAP_SILPH_CO_9F:1/MAP_SILPH_CO_5F:3": "Silph Co. 9F Southeast Warp Tile",
+      "MAP_SILPH_CO_9F:3/MAP_SILPH_CO_10F:3": "Silph Co. 9F North Stairs (Right)"
+    }
+  },
+  "REGION_SILPH_CO_9F/SOUTHWEST": {
+    "parent_map": "MAP_SILPH_CO_9F",
+    "name": "Silph Co. 9F (Southwest Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_SILPH_CO_9F_MAX_POTION",
+      "HIDDEN_ITEM_SILPH_CO_9F_CALCIUM"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_9F/MAIN": "Silph Co. 9F South Barrier (Left)",
+      "REGION_SILPH_CO_9F/NORTHWEST": "Silph Co. 9F West Barrier (Right)"
+    },
+    "warps": {}
+  },
+  "REGION_SILPH_CO_9F/NORTHWEST": {
+    "parent_map": "MAP_SILPH_CO_9F",
+    "name": "Silph Co. 9F (Northwest Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_37_REWARD",
+      "ITEM_SILPH_CO_9F_CARD_KEY_9F"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_9F/SOUTHWEST": "Silph Co. 9F West Barrier (Left)"
+    },
+    "warps": {
+      "MAP_SILPH_CO_9F:2/MAP_SILPH_CO_3F:4": "Silph Co. 9F Northwest Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_10F/MAIN": {
+    "parent_map": "MAP_SILPH_CO_10F",
+    "name": "Silph Co. 10F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SCIENTIST_TRAVIS_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_39_REWARD",
+      "ITEM_SILPH_CO_10F_ULTRA_BALL",
+      "ITEM_SILPH_CO_10F_RARE_CANDY",
+      "ITEM_SILPH_CO_10F_CARBOS",
+      "HIDDEN_ITEM_SILPH_CO_10F_HP_UP"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_10F/SOUTHEAST": "Silph Co. 10F Barrier (Top)",
+      "REGION_SILPH_CO_ELEVATOR/MAIN": "Silph Co. 10F Elevator"
+    },
+    "warps": {
+      "MAP_SILPH_CO_10F:0/MAP_SILPH_CO_11F:0": "Silph Co. 10F North Stairs (Left)",
+      "MAP_SILPH_CO_10F:2/MAP_SILPH_CO_4F:5": "Silph Co. 10F East Warp Tile",
+      "MAP_SILPH_CO_10F:3/MAP_SILPH_CO_9F:3": "Silph Co. 10F North Stairs (Right)"
+    }
+  },
+  "REGION_SILPH_CO_10F/SOUTHEAST": {
+    "parent_map": "MAP_SILPH_CO_10F",
+    "name": "Silph Co. 10F (Southeast Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SILPH_CO_10F_CARD_KEY_10F"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_10F/MAIN": "Silph Co. 10F Barrier (Bottom)"
+    },
+    "warps": {
+      "MAP_SILPH_CO_10F:1/MAP_SILPH_CO_4F:3": "Silph Co. 10F Southeast Warp Tile (Top Left)",
+      "MAP_SILPH_CO_10F:4/MAP_SILPH_CO_4F:4": "Silph Co. 10F Southeast Warp Tile (Bottom Right)"
+    }
+  },
+  "REGION_SILPH_CO_11F/EAST": {
+    "parent_map": "MAP_SILPH_CO_11F",
+    "name": "Silph Co. 11F (East)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_40_REWARD",
+      "ITEM_SILPH_CO_11F_ZINC"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_ELEVATOR/MAIN": "Silph Co. 11F Elevator"
+    },
+    "warps": {
+      "MAP_SILPH_CO_11F:0/MAP_SILPH_CO_10F:0": "Silph Co. 11F Stairs"
+    }
+  },
+  "REGION_SILPH_CO_11F/WEST": {
+    "parent_map": "MAP_SILPH_CO_11F",
+    "name": "Silph Co. 11F (West)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_41_REWARD",
+      "HIDDEN_ITEM_SILPH_CO_11F_REVIVE",
+      "ITEM_SILPH_CO_11F_CARD_KEY_11F"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_11F/PRESIDENTS_ROOM": "Silph Co. 11F Barrier (Bottom)"
+    },
+    "warps": {
+      "MAP_SILPH_CO_11F:1/MAP_SILPH_CO_7F:1": "Silph Co. 11F Warp Tile"
+    }
+  },
+  "REGION_SILPH_CO_11F/PRESIDENTS_ROOM": {
+    "parent_map": "MAP_SILPH_CO_11F",
+    "name": "Silph Co. 11F (President's Room)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_BOSS_GIOVANNI_2_REWARD",
+      "NPC_GIFT_GOT_MASTER_BALL_FROM_SILPH"
+    ],
+    "events": [
+      "EVENT_LIBERATE_SILPH_CO"
+    ],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SILPH_CO_ELEVATOR/MAIN": {
+    "parent_map": "MAP_SILPH_CO_ELEVATOR",
+    "name": "Silph Co. Elevator",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SILPH_CO_1F/MAIN": "Silph Co. Elevator 1F Stop",
+      "REGION_SILPH_CO_2F/MAIN": "Silph Co. Elevator 2F Stop",
+      "REGION_SILPH_CO_3F/MAIN": "Silph Co. Elevator 3F Stop",
+      "REGION_SILPH_CO_4F/MAIN": "Silph Co. Elevator 4F Stop",
+      "REGION_SILPH_CO_5F/MAIN": "Silph Co. Elevator 5F Stop",
+      "REGION_SILPH_CO_6F/MAIN": "Silph Co. Elevator 6F Stop",
+      "REGION_SILPH_CO_7F/MAIN": "Silph Co. Elevator 7F Stop",
+      "REGION_SILPH_CO_8F/MAIN": "Silph Co. Elevator 8F Stop",
+      "REGION_SILPH_CO_9F/MAIN": "Silph Co. Elevator 9F Stop",
+      "REGION_SILPH_CO_10F/MAIN": "Silph Co. Elevator 10F Stop",
+      "REGION_SILPH_CO_11F/EAST": "Silph Co. Elevator 11F Stop"
+    },
+    "warps": {}
+  },
+  "REGION_SEAFOAM_ISLANDS_1F/MAIN": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_1F",
+    "name": "Seafoam Islands 1F",
+    "encounter_region": "Seafoam Islands 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SEAFOAM_ISLANDS_1F_ICE_HEAL"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_1F:0/MAP_SEAFOAM_ISLANDS_B1F:0": "Seafoam Islands 1F Northwest Ladder",
+      "MAP_SEAFOAM_ISLANDS_1F:1/MAP_SEAFOAM_ISLANDS_B1F:1": "Seafoam Islands 1F Northeast Ladder",
+      "MAP_SEAFOAM_ISLANDS_1F:3/MAP_ROUTE20:0": "Seafoam Islands 1F Exit (West)",
+      "MAP_SEAFOAM_ISLANDS_1F:5/MAP_SEAFOAM_ISLANDS_B1F:9": "Seafoam Islands 1F Drop (Left)",
+      "MAP_SEAFOAM_ISLANDS_1F:6/MAP_SEAFOAM_ISLANDS_B1F:10": "Seafoam Islands 1F Drop (Right)"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_1F/SOUTHEAST": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_1F",
+    "name": "Seafoam Islands 1F (Southeast)",
+    "encounter_region": "Seafoam Islands 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_1F:2/MAP_SEAFOAM_ISLANDS_B1F:2": "Seafoam Islands 1F Southeast Ladder",
+      "MAP_SEAFOAM_ISLANDS_1F:4/MAP_ROUTE20:1": "Seafoam Islands 1F Exit (East)"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B1F/WEST": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B1F",
+    "name": "Seafoam Islands B1F (West)",
+    "encounter_region": "Seafoam Islands B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SEAFOAM_ISLANDS_B1F_REVIVE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B1F:0/MAP_SEAFOAM_ISLANDS_1F:0": "Seafoam Islands B1F Northwest Ladder (Bottom)",
+      "MAP_SEAFOAM_ISLANDS_B1F:3/MAP_SEAFOAM_ISLANDS_B2F:3": "Seafoam Islands B1F Northwest Ladder (Top)",
+      "MAP_SEAFOAM_ISLANDS_B1F:4/MAP_SEAFOAM_ISLANDS_B2F:4": "Seafoam Islands B1F Center Ladder",
+      "MAP_SEAFOAM_ISLANDS_B1F:7/MAP_SEAFOAM_ISLANDS_B2F:7": "Seafoam Islands B1F Drop (Left)",
+      "MAP_SEAFOAM_ISLANDS_B1F:9/MAP_SEAFOAM_ISLANDS_1F:5": "!Seafoam Islands 1F Drop (Left)"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B1F/SOUTH": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B1F",
+    "name": "Seafoam Islands B1F (South)",
+    "encounter_region": "Seafoam Islands B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SEAFOAM_ISLANDS_B1F_WATER_STONE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B1F:5/MAP_SEAFOAM_ISLANDS_B2F:5": "Seafoam Islands B1F South Ladder"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B1F/NORTHEAST": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B1F",
+    "name": "Seafoam Islands B1F (Northeast)",
+    "encounter_region": "Seafoam Islands B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B1F:1/MAP_SEAFOAM_ISLANDS_1F:1": "Seafoam Islands B1F Northeast Ladder",
+      "MAP_SEAFOAM_ISLANDS_B1F:8/MAP_SEAFOAM_ISLANDS_B2F:8": "Seafoam Islands B1F Drop (Right)",
+      "MAP_SEAFOAM_ISLANDS_B1F:10/MAP_SEAFOAM_ISLANDS_1F:6": "!Seafoam Islands 1F Drop (Right)"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B1F/SOUTHEAST": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B1F",
+    "name": "Seafoam Islands B1F (Southeast)",
+    "encounter_region": "Seafoam Islands B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B1F:2/MAP_SEAFOAM_ISLANDS_1F:2": "Seafoam Islands B1F Southeast Ladder (Bottom Left)",
+      "MAP_SEAFOAM_ISLANDS_B1F:6/MAP_SEAFOAM_ISLANDS_B2F:6": "Seafoam Islands B1F Southeast Ladder (Top Right)"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B2F/NORTHWEST": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B2F",
+    "name": "Seafoam Islands B2F (Northwest)",
+    "encounter_region": "Seafoam Islands B2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B2F:3/MAP_SEAFOAM_ISLANDS_B1F:3": "Seafoam Islands B2F Northwest Ladder",
+      "MAP_SEAFOAM_ISLANDS_B2F:7/MAP_SEAFOAM_ISLANDS_B1F:7": "!Seafoam Islands B1F Drop (Left)",
+      "MAP_SEAFOAM_ISLANDS_B2F:9/MAP_SEAFOAM_ISLANDS_B3F:5": "Seafoam Islands B2F Drop (Left)"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B2F/SOUTHWEST": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B2F",
+    "name": "Seafoam Islands B2F (Southwest)",
+    "encounter_region": "Seafoam Islands B2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_SEAFOAM_ISLANDS_B2F_BIG_PEARL"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B2F:0/MAP_SEAFOAM_ISLANDS_B3F:0": "Seafoam Islands B2F Southwest Ladder",
+      "MAP_SEAFOAM_ISLANDS_B2F:4/MAP_SEAFOAM_ISLANDS_B1F:4": "Seafoam Islands B2F Center Ladder",
+      "MAP_SEAFOAM_ISLANDS_B2F:5/MAP_SEAFOAM_ISLANDS_B1F:5": "Seafoam Islands B2F South Ladder"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B2F/NORTHEAST": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B2F",
+    "name": "Seafoam Islands B2F (Northeast)",
+    "encounter_region": "Seafoam Islands B2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B2F:1/MAP_SEAFOAM_ISLANDS_B3F:1": "Seafoam Islands B2F Northeast Ladder",
+      "MAP_SEAFOAM_ISLANDS_B2F:8/MAP_SEAFOAM_ISLANDS_B1F:8": "!Seafoam Islands B1F Drop (Right)",
+      "MAP_SEAFOAM_ISLANDS_B2F:10/MAP_SEAFOAM_ISLANDS_B3F:6": "Seafoam Islands B2F Drop (Right)"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B2F/SOUTHEAST": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B2F",
+    "name": "Seafoam Islands B2F (Southeast)",
+    "encounter_region": "Seafoam Islands B2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B2F:2/MAP_SEAFOAM_ISLANDS_B3F:2": "Seafoam Islands B2F Southeast Ladder (Bottom)",
+      "MAP_SEAFOAM_ISLANDS_B2F:6/MAP_SEAFOAM_ISLANDS_B1F:6": "Seafoam Islands B2F Southeast Ladder (Top)"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B3F/WEST": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B3F",
+    "name": "Seafoam Islands B3F (West)",
+    "encounter_region": "Seafoam Islands B3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_SEAFOAM_ISLANDS_B3F_NUGGET"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SEAFOAM_ISLANDS_B3F/SOUTH_WATER": "Seafoam Islands B3F (West) Surfing Spot (Bottom)",
+      "REGION_SEAFOAM_ISLANDS_B3F/NORTHWEST_WATER": "Seafoam Islands B3F (West) Surfing Spot (Top)"
+    },
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B3F:0/MAP_SEAFOAM_ISLANDS_B2F:0": "Seafoam Islands B3F Southwest Ladder",
+      "MAP_SEAFOAM_ISLANDS_B3F:3/MAP_SEAFOAM_ISLANDS_B4F:0": "Seafoam Islands B3F West Ladder",
+      "MAP_SEAFOAM_ISLANDS_B3F:7/MAP_SEAFOAM_ISLANDS_B4F:2": "Seafoam Islands B3F Drop (Left)",
+      "MAP_SEAFOAM_ISLANDS_B3F:8/MAP_SEAFOAM_ISLANDS_B4F:3": "Seafoam Islands B3F Drop (Right)"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B3F/ISOLATED_PLATEAU": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B3F",
+    "name": "Seafoam Islands B3F (Isolated Plateau)",
+    "encounter_region": "Seafoam Islands B3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B3F:1/MAP_SEAFOAM_ISLANDS_B2F:1": "Seafoam Islands B3F Northeast Ladder (Right)",
+      "MAP_SEAFOAM_ISLANDS_B3F:4/MAP_SEAFOAM_ISLANDS_B4F:1": "Seafoam Islands B3F Northeast Ladder (Left)"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B3F/SOUTH_WATER": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B3F",
+    "name": "Seafoam Islands B3F (South Water)",
+    "encounter_region": "Seafoam Islands B3F",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAFOAM_ISLANDS_B3F/WEST": "Seafoam Islands B3F (West) Landing Spot (Bottom)",
+      "REGION_SEAFOAM_ISLANDS_B3F/EAST": "Seafoam Islands B3F (East) Landing Spot (Bottom)",
+      "REGION_SEAFOAM_ISLANDS_B4F/EAST_WATER": "Seafoam Islands B3F South Waterfall (Drop)"
+    },
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B3F:5/MAP_SEAFOAM_ISLANDS_B2F:9": "!Seafoam Islands B2F Drop (Left)",
+      "MAP_SEAFOAM_ISLANDS_B3F:6/MAP_SEAFOAM_ISLANDS_B2F:10": "!Seafoam Islands B2F Drop (Right)"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B3F/EAST": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B3F",
+    "name": "Seafoam Islands B3F (East)",
+    "encounter_region": "Seafoam Islands B3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAFOAM_ISLANDS_B3F/SOUTH_WATER": "Seafoam Islands B3F (East) Surfing Spot (Bottom)",
+      "REGION_SEAFOAM_ISLANDS_B3F/NORTHEAST_WATER": "Seafoam Islands B3F (East) Surfing Spot (Top)"
+    },
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B3F:2/MAP_SEAFOAM_ISLANDS_B2F:2": "Seafoam Islands B3F Southeast Ladder"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B3F/NORTHEAST_WATER": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B3F",
+    "name": "Seafoam Islands B3F (Northeast Water)",
+    "encounter_region": "Seafoam Islands B3F",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAFOAM_ISLANDS_B3F/EAST": "Seafoam Islands B3F (East) Landing Spot (Top)",
+      "REGION_SEAFOAM_ISLANDS_B3F/NORTHWEST_WATER": "Seafoam Islands B3F Northeast Waterfall (Climb)"
+    },
+    "warps": {}
+  },
+  "REGION_SEAFOAM_ISLANDS_B3F/NORTHWEST_WATER": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B3F",
+    "name": "Seafoam Islands B3F (Northwest Water)",
+    "encounter_region": "Seafoam Islands B3F",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAFOAM_ISLANDS_B3F/WEST": "Seafoam Islands B3F (West) Landing Spot (Top)"
+    },
+    "warps": {}
+  },
+  "REGION_SEAFOAM_ISLANDS_B4F/MAIN": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B4F",
+    "name": "Seafoam Islands B4F",
+    "encounter_region": "Seafoam Islands B4F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_SEAFOAM_ISLANDS_B4F_WATER_STONE",
+      "ITEM_SEAFOAM_ISLANDS_B4F_ULTRA_BALL"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SEAFOAM_ISLANDS_B4F/EAST_WATER": "Seafoam Islands B4F Surfing Spot (Right)",
+      "REGION_SEAFOAM_ISLANDS_B4F/WEST_WATER": "Seafoam Islands B4F Surfing Spot (Left)"
+    },
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B4F:0/MAP_SEAFOAM_ISLANDS_B3F:3": "Seafoam Islands B4F Center Ladder",
+      "MAP_SEAFOAM_ISLANDS_B4F:1/MAP_SEAFOAM_ISLANDS_B3F:4": "Seafoam Islands B4F Northeast Ladder"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B4F/EAST_WATER": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B4F",
+    "name": "Seafoam Islands B4F (East Water)",
+    "encounter_region": "Seafoam Islands B4F",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAFOAM_ISLANDS_B4F/MAIN": "Seafoam Islands B4F Landing Spot (Right)"
+    },
+    "warps": {}
+  },
+  "REGION_SEAFOAM_ISLANDS_B4F/WEST_WATER": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B4F",
+    "name": "Seafoam Islands B4F (West Water)",
+    "encounter_region": "Seafoam Islands B4F",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAFOAM_ISLANDS_B4F/MAIN": "Seafoam Islands B4F Landing Spot (Left)",
+      "REGION_SEAFOAM_ISLANDS_B4F/NEAR_ARTICUNO": "Seafoam Islands B4F (Near Articuno) Landing Spot"
+    },
+    "warps": {
+      "MAP_SEAFOAM_ISLANDS_B4F:2/MAP_SEAFOAM_ISLANDS_B3F:7": "!Seafoam Islands B3F Drop (Left)",
+      "MAP_SEAFOAM_ISLANDS_B4F:3/MAP_SEAFOAM_ISLANDS_B3F:8": "!Seafoam Islands B3F Drop (Right)"
+    }
+  },
+  "REGION_SEAFOAM_ISLANDS_B4F/NEAR_ARTICUNO": {
+    "parent_map": "MAP_SEAFOAM_ISLANDS_B4F",
+    "name": "Seafoam Islands B4F (Near Articuno)",
+    "encounter_region": "Seafoam Islands B4F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [
+      "LEGENDARY_POKEMON_ARTICUNO"
+    ],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_POKEMON_MANSION_1F/MAIN": {
+    "parent_map": "MAP_POKEMON_MANSION_1F",
+    "name": "Pokemon Mansion 1F",
+    "encounter_region": "Pokemon Mansion 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_POKEMON_MANSION_1F_MOON_STONE",
+      "TRAINER_YOUNGSTER_JOHNSON_REWARD",
+      "ITEM_POKEMON_MANSION_1F_ESCAPE_ROPE",
+      "ITEM_POKEMON_MANSION_1F_PROTEIN"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_POKEMON_MANSION_1F:0/MAP_CINNABAR_ISLAND:0": "Pokemon Mansion 1F Exit (West)",
+      "MAP_POKEMON_MANSION_1F:1/MAP_POKEMON_MANSION_2F:2": "Pokemon Mansion 1F West Stairs"
+    }
+  },
+  "REGION_POKEMON_MANSION_1F/SOUTH": {
+    "parent_map": "MAP_POKEMON_MANSION_1F",
+    "name": "Pokemon Mansion 1F (South)",
+    "encounter_region": "Pokemon Mansion 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SCIENTIST_TED_REWARD",
+      "ITEM_POKEMON_MANSION_1F_CARBOS"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_POKEMON_MANSION_1F/SOUTHEAST": "Pokemon Mansion 1F South Barrier"
+    },
+    "warps": {
+      "MAP_POKEMON_MANSION_1F:2/MAP_POKEMON_MANSION_B1F:0": "Pokemon Mansion 1F South Stairs",
+      "MAP_POKEMON_MANSION_1F:4,5,6/MAP_POKEMON_MANSION_3F:3,4,5": "!Pokemon Mansion 3F Drop (Left)"
+    }
+  },
+  "REGION_POKEMON_MANSION_1F/SOUTHEAST": {
+    "parent_map": "MAP_POKEMON_MANSION_1F",
+    "name": "Pokemon Mansion 1F (Southeast)",
+    "encounter_region": "Pokemon Mansion 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_POKEMON_MANSION_1F/SOUTH": "Pokemon Mansion 1F Southeast Barrier"
+    },
+    "warps": {
+      "MAP_POKEMON_MANSION_1F:3/MAP_CINNABAR_ISLAND:0!": "Pokemon Mansion 1F Exit (East)"
+    }
+  },
+  "REGION_POKEMON_MANSION_2F/MAIN": {
+    "parent_map": "MAP_POKEMON_MANSION_2F",
+    "name": "Pokemon Mansion 2F",
+    "encounter_region": "Pokemon Mansion 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_BURGLAR_ARNIE_REWARD",
+      "ITEM_POKEMON_MANSION_2F_ZINC",
+      "ITEM_POKEMON_MANSION_2F_CALCIUM"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_POKEMON_MANSION_2F/CENTER": "Pokemon Mansion 2F Center Barrier (Top)"
+    },
+    "warps": {
+      "MAP_POKEMON_MANSION_2F:0/MAP_POKEMON_MANSION_3F:0": "Pokemon Mansion 2F Northwest Stairs",
+      "MAP_POKEMON_MANSION_2F:2/MAP_POKEMON_MANSION_1F:1": "Pokemon Mansion 2F West Stairs (Left)",
+      "MAP_POKEMON_MANSION_2F:3/MAP_POKEMON_MANSION_3F:2": "Pokemon Mansion 2F West Stairs (Right)"
+    }
+  },
+  "REGION_POKEMON_MANSION_2F/CENTER": {
+    "parent_map": "MAP_POKEMON_MANSION_2F",
+    "name": "Pokemon Mansion 2F (Center)",
+    "encounter_region": "Pokemon Mansion 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_POKEMON_MANSION_2F/MAIN": "Pokemon Mansion 2F Center Barrier (Bottom)"
+    },
+    "warps": {
+      "MAP_POKEMON_MANSION_2F:4,5/MAP_POKEMON_MANSION_3F:6,7": "!Pokemon Mansion 3F Drop (Right)"
+    }
+  },
+  "REGION_POKEMON_MANSION_2F/EAST": {
+    "parent_map": "MAP_POKEMON_MANSION_2F",
+    "name": "Pokemon Mansion 2F (East)",
+    "encounter_region": "Pokemon Mansion 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_POKEMON_MANSION_2F_HP_UP"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_POKEMON_MANSION_2F:1/MAP_POKEMON_MANSION_3F:1": "Pokemon Mansion 2F East Stairs"
+    }
+  },
+  "REGION_POKEMON_MANSION_3F/SOUTHWEST": {
+    "parent_map": "MAP_POKEMON_MANSION_3F",
+    "name": "Pokemon Mansion 3F (Southwest)",
+    "encounter_region": "Pokemon Mansion 3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_BURGLAR_SIMON_REWARD",
+      "ITEM_POKEMON_MANSION_3F_MAX_POTION"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_POKEMON_MANSION_3F:2/MAP_POKEMON_MANSION_2F:3": "Pokemon Mansion 3F Southwest Stairs"
+    }
+  },
+  "REGION_POKEMON_MANSION_3F/NORTH": {
+    "parent_map": "MAP_POKEMON_MANSION_3F",
+    "name": "Pokemon Mansion 3F (North)",
+    "encounter_region": "Pokemon Mansion 3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_POKEMON_MANSION_3F_IRON"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_POKEMON_MANSION_3F/SOUTHEAST": "Pokemon Mansion 3F Barrier (Top)"
+    },
+    "warps": {
+      "MAP_POKEMON_MANSION_3F:0/MAP_POKEMON_MANSION_2F:0": "Pokemon Mansion 3F Northwest Stairs"
+    }
+  },
+  "REGION_POKEMON_MANSION_3F/SOUTHEAST": {
+    "parent_map": "MAP_POKEMON_MANSION_3F",
+    "name": "Pokemon Mansion 3F (Southeast)",
+    "encounter_region": "Pokemon Mansion 3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SCIENTIST_BRAYDON_REWARD",
+      "HIDDEN_ITEM_POKEMON_MANSION_3F_RARE_CANDY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_POKEMON_MANSION_3F/NORTH": "Pokemon Mansion 3F Barrier (Bottom)"
+    },
+    "warps": {
+      "MAP_POKEMON_MANSION_3F:1/MAP_POKEMON_MANSION_2F:1": "Pokemon Mansion 3F Southeast Stairs",
+      "MAP_POKEMON_MANSION_3F:3,4,5/MAP_POKEMON_MANSION_1F:4,5,6": "Pokemon Mansion 3F Drop (Left)",
+      "MAP_POKEMON_MANSION_3F:6,7/MAP_POKEMON_MANSION_2F:4,5": "Pokemon Mansion 3F Drop (Right)"
+    }
+  },
+  "REGION_POKEMON_MANSION_B1F": {
+    "parent_map": "MAP_POKEMON_MANSION_B1F",
+    "name": "Pokemon Mansion B1F",
+    "encounter_region": "Pokemon Mansion B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_BURGLAR_LEWIS_REWARD",
+      "ITEM_POKEMON_MANSION_B1F_FULL_RESTORE",
+      "TRAINER_SCIENTIST_IVAN_REWARD",
+      "HIDDEN_ITEM_POKEMON_MANSION_B1F_ELIXIR",
+      "ITEM_POKEMON_MANSION_B1F_TM14",
+      "ITEM_POKEMON_MANSION_B1F_SECRET_KEY",
+      "ITEM_POKEMON_MANSION_B1F_TM22"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_POKEMON_MANSION_B1F:0/MAP_POKEMON_MANSION_1F:2": "Pokemon Mansion B1F Stairs"
+    }
+  },
+  "REGION_VICTORY_ROAD_1F/SOUTH": {
+    "parent_map": "MAP_VICTORY_ROAD_1F",
+    "name": "Victory Road 1F (South)",
+    "encounter_region": "Victory Road 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_VICTORY_ROAD_1F/NORTH": "Victory Road 1F Rock Barrier (Left)"
+    },
+    "warps": {
+      "MAP_VICTORY_ROAD_1F:1/MAP_ROUTE23:0": "Victory Road 1F Exit"
+    }
+  },
+  "REGION_VICTORY_ROAD_1F/NORTH": {
+    "parent_map": "MAP_VICTORY_ROAD_1F",
+    "name": "Victory Road 1F (North)",
+    "encounter_region": "Victory Road 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_COOLTRAINER_NAOMI_REWARD",
+      "HIDDEN_ITEM_VICTORY_ROAD_1F_FULL_RESTORE",
+      "ITEM_VICTORY_ROAD_1F_TM02",
+      "ITEM_VICTORY_ROAD_1F_RARE_CANDY",
+      "HIDDEN_ITEM_VICTORY_ROAD_1F_ULTRA_BALL",
+      "TRAINER_COOLTRAINER_ROLANDO_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_VICTORY_ROAD_1F/SOUTH": "Victory Road 1F Strength Boulder (Top)"
+    },
+    "warps": {
+      "MAP_VICTORY_ROAD_1F:0/MAP_VICTORY_ROAD_2F:0": "Victory Road 1F Ladder"
+    }
+  },
+  "REGION_VICTORY_ROAD_2F/SOUTHWEST": {
+    "parent_map": "MAP_VICTORY_ROAD_2F",
+    "name": "Victory Road 2F (Southwest)",
+    "encounter_region": "Victory Road 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_VICTORY_ROAD_2F/CENTER": "Victory Road 2F West Rock Barrier (Left)"
+    },
+    "warps": {
+      "MAP_VICTORY_ROAD_2F:0/MAP_VICTORY_ROAD_1F:0": "Victory Road 2F West Ladder"
+    }
+  },
+  "REGION_VICTORY_ROAD_2F/CENTER": {
+    "parent_map": "MAP_VICTORY_ROAD_2F",
+    "name": "Victory Road 2F (Center)",
+    "encounter_region": "Victory Road 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_BLACK_BELT_DAISUKE_REWARD",
+      "ITEM_VICTORY_ROAD_2F_TM37",
+      "TRAINER_JUGGLER_NELSON_REWARD",
+      "ITEM_VICTORY_ROAD_2F_FULL_HEAL",
+      "TRAINER_TAMER_VINCENT_REWARD",
+      "TRAINER_JUGGLER_GREGORY_REWARD",
+      "ITEM_VICTORY_ROAD_2F_TM07"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_VICTORY_ROAD_2F/SOUTHEAST": "Victory Road 2F Southeast Rock Barrier (Left)"
+    },
+    "warps": {
+      "MAP_VICTORY_ROAD_2F:2/MAP_VICTORY_ROAD_3F:1": "Victory Road 2F Center Ladder",
+      "MAP_VICTORY_ROAD_2F:6/MAP_VICTORY_ROAD_3F:4": "!Victory Road 3F Drop"
+    }
+  },
+  "REGION_VICTORY_ROAD_2F/NORTHWEST": {
+    "parent_map": "MAP_VICTORY_ROAD_2F",
+    "name": "Victory Road 2F (Northwest)",
+    "encounter_region": "Victory Road 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_POKEMANIAC_DAWSON_REWARD",
+      "ITEM_VICTORY_ROAD_2F_GUARD_SPEC"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_VICTORY_ROAD_2F/SOUTHWEST": "Victory Road 2F Northwest Strength Boulder (Top)"
+    },
+    "warps": {
+      "MAP_VICTORY_ROAD_2F:1/MAP_VICTORY_ROAD_3F:0": "Victory Road 2F Northwest Ladder"
+    }
+  },
+  "REGION_VICTORY_ROAD_2F/SOUTHEAST": {
+    "parent_map": "MAP_VICTORY_ROAD_2F",
+    "name": "Victory Road 2F (Southeast)",
+    "encounter_region": "Victory Road 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_VICTORY_ROAD_2F:4/MAP_VICTORY_ROAD_3F:3": "Victory Road 2F Southeast Ladder"
+    }
+  },
+  "REGION_VICTORY_ROAD_2F/EAST": {
+    "parent_map": "MAP_VICTORY_ROAD_2F",
+    "name": "Victory Road 2F (East)",
+    "encounter_region": "Victory Road 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_VICTORY_ROAD_2F:3/MAP_VICTORY_ROAD_3F:2": "Victory Road 2F East Ladder",
+      "MAP_VICTORY_ROAD_2F:5/MAP_ROUTE23:1": "Victory Road 2F Exit"
+    }
+  },
+  "REGION_VICTORY_ROAD_3F/NORTH": {
+    "parent_map": "MAP_VICTORY_ROAD_3F",
+    "name": "Victory Road 3F (North)",
+    "encounter_region": "Victory Road 3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_COOLTRAINER_GEORGE_REWARD",
+      "ITEM_VICTORY_ROAD_3F_MAX_REVIVE",
+      "ITEM_VICTORY_ROAD_3F_TM50",
+      "TRAINER_COOLTRAINER_ALEXA_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_VICTORY_ROAD_3F/SOUTHWEST": "Victory Road 3F Rock Barrier (Right)"
+    },
+    "warps": {
+      "MAP_VICTORY_ROAD_3F:0/MAP_VICTORY_ROAD_2F:1": "Victory Road 3F Northwest Ladder",
+      "MAP_VICTORY_ROAD_3F:1/MAP_VICTORY_ROAD_2F:2": "Victory Road 3F Northeast Ladder"
+    }
+  },
+  "REGION_VICTORY_ROAD_3F/SOUTHWEST": {
+    "parent_map": "MAP_VICTORY_ROAD_3F",
+    "name": "Victory Road 3F (Southwest)",
+    "encounter_region": "Victory Road 3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_COOLTRAINER_COLBY_REWARD",
+      "TRAINER_COOLTRAINER_CAROLINE_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_VICTORY_ROAD_3F/NORTH": "Victory Road 3F West Strength Boulder (Bottom)"
+    },
+    "warps": {
+      "MAP_VICTORY_ROAD_3F:4/MAP_VICTORY_ROAD_2F:6": "Victory Road 3F Drop"
+    }
+  },
+  "REGION_VICTORY_ROAD_3F/SOUTHEAST": {
+    "parent_map": "MAP_VICTORY_ROAD_3F",
+    "name": "Victory Road 3F (Southeast)",
+    "encounter_region": "Victory Road 3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_COOL_COUPLE_RAY_TYRA_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_VICTORY_ROAD_3F/SOUTHWEST": "Victory Road 3F East Strength Boulder (Right)"
+    },
+    "warps": {
+      "MAP_VICTORY_ROAD_3F:2/MAP_VICTORY_ROAD_2F:3": "Victory Road 3F Southeast Ladder (Top)",
+      "MAP_VICTORY_ROAD_3F:3/MAP_VICTORY_ROAD_2F:4": "Victory Road 3F Southeast Ladder (Bottom)"
+    }
+  },
+  "REGION_MT_EMBER_EXTERIOR/SOUTH": {
+    "parent_map": "MAP_MT_EMBER_EXTERIOR",
+    "name": "Mt. Ember Exterior (South)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_43_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_44_REWARD"
+    ],
+    "events": [
+      "EVENT_LEARN_ROCKET_WAREHOUSE_PASSWORD"
+    ],
+    "exits": {
+      "REGION_MT_EMBER_EXTERIOR/CENTER": ["Mt. Ember Exterior South Ledge (Bottom)", "Mt. Ember Exterior Strength Boulders (Right)"]
+    },
+    "warps": {
+      "MAP_MT_EMBER_EXTERIOR:0,1/MAP_ONE_ISLAND_KINDLE_ROAD:0,1": "Mt. Ember Exterior Exit",
+      "MAP_MT_EMBER_EXTERIOR:5/MAP_MT_EMBER_RUBY_PATH_1F:0": "Mt. Ember Ruby Path"
+    }
+  },
+  "REGION_MT_EMBER_EXTERIOR/CENTER": {
+    "parent_map": "MAP_MT_EMBER_EXTERIOR",
+    "name": "Mt. Ember Exterior (Center)",
+    "encounter_region": "Mt. Ember Exterior",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "TRAINER_PKMN_RANGER_BETH_REWARD",
+      "HIDDEN_ITEM_MT_EMBER_EXTERIOR_ULTRA_BALL",
+      "TRAINER_PKMN_RANGER_LOGAN_REWARD",
+      "TRAINER_CRUSH_GIRL_JOCELYN_REWARD",
+      "ITEM_MT_EMBER_EXTERIOR_DIRE_HIT"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_MT_EMBER_EXTERIOR/SOUTH": ["Mt. Ember Exterior South Ledge (Top)", "Mt. Ember Exterior Strength Boulders (Left)"],
+      "REGION_MT_EMBER_EXTERIOR/NORTH": "Mt. Ember Exterior Center Ledge (Bottom)"
+    },
+    "warps": {
+      "MAP_MT_EMBER_EXTERIOR:2/MAP_MT_EMBER_SUMMIT_PATH_1F:0": "Mt. Ember Summit Path (Bottom)"
+    }
+  },
+  "REGION_MT_EMBER_EXTERIOR/NORTH": {
+    "parent_map": "MAP_MT_EMBER_EXTERIOR",
+    "name": "Mt. Ember Exterior (North)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_MT_EMBER_EXTERIOR_FIRE_STONE",
+      "HIDDEN_ITEM_MT_EMBER_EXTERIOR_FIRE_STONE",
+      "ITEM_MT_EMBER_EXTERIOR_ULTRA_BALL"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_MT_EMBER_EXTERIOR/CENTER": "Mt. Ember Exterior Center Ledge (Top)"
+    },
+    "warps": {
+      "MAP_MT_EMBER_EXTERIOR:3/MAP_MT_EMBER_SUMMIT_PATH_3F:1": "Mt. Ember Summit Path (Top)",
+      "MAP_MT_EMBER_EXTERIOR:4/MAP_MT_EMBER_SUMMIT:0": "Mt. Ember Summit"
+    }
+  },
+  "REGION_MT_EMBER_SUMMIT_PATH_1F/MAIN": {
+    "parent_map": "MAP_MT_EMBER_SUMMIT_PATH_1F",
+    "name": "Mt. Ember Summit Path 1F",
+    "encounter_region": "Mt. Ember Summit Path 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_EMBER_SUMMIT_PATH_1F:0/MAP_MT_EMBER_EXTERIOR:2": "Mt. Ember Summit Path 1F Exit (South)",
+      "MAP_MT_EMBER_SUMMIT_PATH_1F:1/MAP_MT_EMBER_SUMMIT_PATH_2F:0": "Mt. Ember Summit Path 1F Exit (North)"
+    }
+  },
+  "REGION_MT_EMBER_SUMMIT_PATH_2F/MAIN": {
+    "parent_map": "MAP_MT_EMBER_SUMMIT_PATH_2F",
+    "name": "Mt. Ember Summit Path 2F",
+    "encounter_region": "Mt. Ember Summit Path 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_EMBER_SUMMIT_PATH_2F:0/MAP_MT_EMBER_SUMMIT_PATH_1F:1": "Mt. Ember Summit Path 2F Exit (South)",
+      "MAP_MT_EMBER_SUMMIT_PATH_2F:1/MAP_MT_EMBER_SUMMIT_PATH_3F:0": "Mt. Ember Summit Path 2F Exit (North)"
+    }
+  },
+  "REGION_MT_EMBER_SUMMIT_PATH_3F/MAIN": {
+    "parent_map": "MAP_MT_EMBER_SUMMIT_PATH_3F",
+    "name": "Mt. Ember Summit Path 3F",
+    "encounter_region": "Mt. Ember Summit Path 3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_EMBER_SUMMIT_PATH_3F:0/MAP_MT_EMBER_SUMMIT_PATH_2F:1": "Mt. Ember Summit Path 3F Exit (West)",
+      "MAP_MT_EMBER_SUMMIT_PATH_3F:1/MAP_MT_EMBER_EXTERIOR:3": "Mt. Ember Summit Path 3F Exit (East)"
+    }
+  },
+  "REGION_MT_EMBER_SUMMIT/MAIN": {
+    "parent_map": "MAP_MT_EMBER_SUMMIT",
+    "name": "Mt. Ember Summit",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [
+      "LEGENDARY_POKEMON_MOLTRES"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_MT_EMBER_SUMMIT:0/MAP_MT_EMBER_EXTERIOR:4": "Mt. Ember Summit Exit"
+    }
+  },
+  "REGION_MT_EMBER_RUBY_PATH_1F/MAIN": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_1F",
+    "name": "Mt. Ember Ruby Path 1F",
+    "encounter_region": "Mt. Ember Ruby Path 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_MT_EMBER_RUBY_PATH_1F/NORTHEAST": "Mt. Ember Ruby Path 1F Ledge (Bottom)"
+    },
+    "warps": {
+      "MAP_MT_EMBER_RUBY_PATH_1F:0/MAP_MT_EMBER_EXTERIOR:5": "Mt. Ember Ruby Path 1F Exit",
+      "MAP_MT_EMBER_RUBY_PATH_1F:1/MAP_MT_EMBER_RUBY_PATH_B1F:0": "Mt. Ember Ruby Path 1F Northwest Ladder"
+    }
+  },
+  "REGION_MT_EMBER_RUBY_PATH_1F/NORTHEAST": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_1F",
+    "name": "Mt. Ember Ruby Path 1F (Northeast)",
+    "encounter_region": "Mt. Ember Ruby Path 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_MT_EMBER_RUBY_PATH_1F/MAIN": "Mt. Ember Ruby Path 1F Ledge (Top)"
+    },
+    "warps": {
+      "MAP_MT_EMBER_RUBY_PATH_1F:2/MAP_MT_EMBER_RUBY_PATH_B1F_STAIRS:1": "Mt. Ember Ruby Path 1F Northeast Ladder"
+    }
+  },
+  "REGION_MT_EMBER_RUBY_PATH_B1F/MAIN": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_B1F",
+    "name": "Mt. Ember Ruby Path B1F",
+    "encounter_region": "Mt. Ember Ruby Path B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_EMBER_RUBY_PATH_B1F:0/MAP_MT_EMBER_RUBY_PATH_1F:1": "Mt. Ember Ruby Path B1F South Ladder",
+      "MAP_MT_EMBER_RUBY_PATH_B1F:1/MAP_MT_EMBER_RUBY_PATH_B2F:0": "Mt. Ember Ruby Path B1F North Ladder"
+    }
+  },
+  "REGION_MT_EMBER_RUBY_PATH_B1F_STAIRS/MAIN": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_B1F_STAIRS",
+    "name": "Mt. Ember Ruby Path B1F Return",
+    "encounter_region": "Mt. Ember Ruby Path B1F Return",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_EMBER_RUBY_PATH_B1F_STAIRS:0/MAP_MT_EMBER_RUBY_PATH_B2F_STAIRS:1": "Mt. Ember Ruby Path B1F Return Northeast Ladder",
+      "MAP_MT_EMBER_RUBY_PATH_B1F_STAIRS:1/MAP_MT_EMBER_RUBY_PATH_1F:2": "Mt. Ember Ruby Path B1F Return Southwest Ladder"
+    }
+  },
+  "REGION_MT_EMBER_RUBY_PATH_B2F/WEST": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_B2F",
+    "name": "Mt. Ember Ruby Path B2F (West)",
+    "encounter_region": "Mt. Ember Ruby Path B2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_MT_EMBER_RUBY_PATH_B2F/EAST": "Mt. Ember Ruby Path B2F Strength Boulders (Left)"
+    },
+    "warps": {
+      "MAP_MT_EMBER_RUBY_PATH_B2F:0/MAP_MT_EMBER_RUBY_PATH_B1F:1": "Mt. Ember Ruby Path B2F West Ladder"
+    }
+  },
+  "REGION_MT_EMBER_RUBY_PATH_B2F/EAST": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_B2F",
+    "name": "Mt. Ember Ruby Path B2F (East)",
+    "encounter_region": "Mt. Ember Ruby Path B2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_MT_EMBER_RUBY_PATH_B2F/WEST": "Mt. Ember Ruby Path B2F Strength Boulders (Right)"
+    },
+    "warps": {
+      "MAP_MT_EMBER_RUBY_PATH_B2F:1/MAP_MT_EMBER_RUBY_PATH_B3F:0": "Mt. Ember Ruby Path B2F East Ladder"
+    }
+  },
+  "REGION_MT_EMBER_RUBY_PATH_B2F_STAIRS/MAIN": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_B2F_STAIRS",
+    "name": "Mt. Ember Ruby Path B2F Return",
+    "encounter_region": "Mt. Ember Ruby Path B2F Return",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_EMBER_RUBY_PATH_B2F_STAIRS:0/MAP_MT_EMBER_RUBY_PATH_B3F:1": "Mt. Ember Ruby Path B2F Return Northeast Ladder",
+      "MAP_MT_EMBER_RUBY_PATH_B2F_STAIRS:1/MAP_MT_EMBER_RUBY_PATH_B1F_STAIRS:0": "Mt. Ember Ruby Path B2F Return Southwest Ladder"
+    }
+  },
+  "REGION_MT_EMBER_RUBY_PATH_B3F/NORTHWEST": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_B3F",
+    "name": "Mt. Ember Ruby Path B3F (Northwest)",
+    "encounter_region": "Mt. Ember Ruby Path B3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_MT_EMBER_RUBY_PATH_B3F/CENTER": "Mt. Ember Ruby Path B3F Northwest Strength Boulder (Left)"
+    },
+    "warps": {
+      "MAP_MT_EMBER_RUBY_PATH_B3F:0/MAP_MT_EMBER_RUBY_PATH_B2F:1": "Mt. Ember Ruby Path B3F Northwest Ladder"
+    }
+  },
+  "REGION_MT_EMBER_RUBY_PATH_B3F/CENTER": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_B3F",
+    "name": "Mt. Ember Ruby Path B3F (Center)",
+    "encounter_region": "Mt. Ember Ruby Path B3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_MT_EMBER_RUBY_PATH_B3F/NORTHWEST": "Mt. Ember Ruby Path B3F Northwest Strength Boulder (Right)",
+      "REGION_MT_EMBER_RUBY_PATH_B3F/SOUTHWEST": "Mt. Ember Ruby Path B3F Southwest Strength Boulder (Right)",
+      "REGION_MT_EMBER_RUBY_PATH_B3F/SOUTHEAST": "Mt. Ember Ruby Path B3F Southeast Strength Boulder (Top)"
+    },
+    "warps": {}
+  },
+  "REGION_MT_EMBER_RUBY_PATH_B3F/SOUTHWEST": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_B3F",
+    "name": "Mt. Ember Ruby Path B3F (Southwest)",
+    "encounter_region": "Mt. Ember Ruby Path B3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_MT_EMBER_RUBY_PATH_B3F/CENTER": "Mt. Ember Ruby Path B3F Southwest Strength Boulder (Left)"
+    },
+    "warps": {
+      "MAP_MT_EMBER_RUBY_PATH_B3F:2/MAP_MT_EMBER_RUBY_PATH_B4F:1": "Mt. Ember Ruby Path B3F Southwest Ladder"
+    }
+  },
+  "REGION_MT_EMBER_RUBY_PATH_B3F/SOUTHEAST": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_B3F",
+    "name": "Mt. Ember Ruby Path B3F (Southeast)",
+    "encounter_region": "Mt. Ember Ruby Path B3F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_MT_EMBER_RUBY_PATH_B3F/CENTER": "Mt. Ember Ruby Path B3F Southeast Strength Boulder (Bottom)"
+    },
+    "warps": {
+      "MAP_MT_EMBER_RUBY_PATH_B3F:1/MAP_MT_EMBER_RUBY_PATH_B2F_STAIRS:0": "Mt. Ember Ruby Path B3F Southeast Ladder"
+    }
+  },
+  "REGION_MT_EMBER_RUBY_PATH_B4F/MAIN": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_B4F",
+    "name": "Mt. Ember Ruby Path B4F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_EMBER_RUBY_PATH_B4F:0/MAP_MT_EMBER_RUBY_PATH_B5F:0": "Mt. Ember Ruby Path B4F Southeast Ladder",
+      "MAP_MT_EMBER_RUBY_PATH_B4F:1/MAP_MT_EMBER_RUBY_PATH_B3F:2": "Mt. Ember Ruby Path B4F Northwest Ladder"
+    }
+  },
+  "REGION_MT_EMBER_RUBY_PATH_B5F/MAIN": {
+    "parent_map": "MAP_MT_EMBER_RUBY_PATH_B5F",
+    "name": "Mt. Ember Ruby Path B5F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "NPC_GIFT_GOT_RUBY"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_MT_EMBER_RUBY_PATH_B5F:0/MAP_MT_EMBER_RUBY_PATH_B4F:0": "Mt. Ember Ruby Path B5F Ladder"
+    }
+  },
+  "REGION_THREE_ISLAND_BERRY_FOREST/MAIN": {
+    "parent_map": "MAP_THREE_ISLAND_BERRY_FOREST",
+    "name": "Berry Forest",
+    "encounter_region": "Berry Forest",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_RAZZ_BERRY",
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_ORAN_BERRY",
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_PERSIM_BERRY",
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_PINAP_BERRY",
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_CHESTO_BERRY",
+      "ITEM_THREE_ISLAND_BERRY_FOREST_FULL_HEAL",
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_NANAB_BERRY",
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_CHERI_BERRY",
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_WEPEAR_BERRY",
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_BLUK_BERRY",
+      "ITEM_THREE_ISLAND_BERRY_FOREST_MAX_ETHER",
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_RAWST_BERRY",
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_ASPEAR_BERRY",
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_PECHA_BERRY",
+      "NPC_GIFT_RESCUED_LOSTELLE",
+      "HIDDEN_ITEM_THREE_ISLAND_BERRY_FOREST_LUM_BERRY"
+    ],
+    "events": [
+      "EVENT_RESCUE_LOSTELLE",
+      "STATIC_POKEMON_HYPNO"
+    ],
+    "exits": {
+      "REGION_THREE_ISLAND_BERRY_FOREST/WATER": "Berry Forest Surfing Spot",
+      "REGION_TWO_ISLAND_JOYFUL_GAME_CORNER/MAIN": "Follow Lostelle"
+    },
+    "warps": {
+      "MAP_THREE_ISLAND_BERRY_FOREST:0,1,2/MAP_THREE_ISLAND_BOND_BRIDGE:0,1": "Berry Forest Exit"
+    }
+  },
+  "REGION_THREE_ISLAND_BERRY_FOREST/WATER": {
+    "parent_map": "MAP_THREE_ISLAND_BERRY_FOREST",
+    "name": "Berry Forest (Water)",
+    "encounter_region": "Berry Forest",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "ITEM_THREE_ISLAND_BERRY_FOREST_MAX_ELIXIR"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/SOUTH": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE",
+    "name": "Icefall Cave Front (South)",
+    "encounter_region": "Icefall Cave Front",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/SOUTH_WATER": "Icefall Cave Front (South) Surfing Spot"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE:0/MAP_FOUR_ISLAND:3": "Icefall Cave Front Exit (South)"
+    }
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/SOUTH_WATER": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE",
+    "name": "Icefall Cave Front (South Water)",
+    "encounter_region": "Icefall Cave Front",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/SOUTH": "Icefall Cave Front (South) Landing Spot",
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/CENTER": "Icefall Cave Front (Center) Landing Spot",
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/NORTH_WATER": "Icefall Cave Front Waterfall (Climb)"
+    },
+    "warps": {}
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/CENTER": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE",
+    "name": "Icefall Cave Front (Center)",
+    "encounter_region": "Icefall Cave Front",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/SOUTH_WATER": "Icefall Cave Front (Center) Surfing Spot"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE:1/MAP_FOUR_ISLAND_ICEFALL_CAVE_1F:0": "Icefall Cave Front Exit (North)"
+    }
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/NORTH_WATER": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE",
+    "name": "Icefall Cave Front (North Water)",
+    "encounter_region": "Icefall Cave Front",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/SOUTH_WATER": "Icefall Cave Front Waterfall (Drop)",
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/NORTH": "Icefall Cave Front (North) Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/NORTH": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE",
+    "name": "Icefall Cave Front (North)",
+    "encounter_region": "Icefall Cave Front",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/NORTH_WATER": "Icefall Cave Front (North) Surfing Spot"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE:2/MAP_FOUR_ISLAND_ICEFALL_CAVE_1F:1": "Icefall Cave Front Ladder"
+    }
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_1F/MAIN": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_1F",
+    "name": "Icefall Cave 1F",
+    "encounter_region": "Icefall Cave 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_FOUR_ISLAND_ICEFALL_CAVE_1F_ULTRA_BALL"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_1F/EAST": "Icefall Cave 1F East Ledge (Left)",
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_1F/SOUTHEAST": "Icefall Cave 1F Southeast Ledge (Left)",
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_1F/NORTHWEST": "Icefall Cave 1F West Ledge (Bottom)",
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_B1F/WEST": "Icefall Cave 1F Drop (Bottom)",
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_B1F/NORTH": "Icefall Cave 1F Drop (Top)"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_1F:0/MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE:1": "Icefall Cave 1F Exit (South)"
+    }
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_1F/EAST": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_1F",
+    "name": "Icefall Cave 1F (East)",
+    "encounter_region": "Icefall Cave 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_1F/MAIN": "Icefall Cave 1F East Ledge (Right)"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_1F:2/MAP_FOUR_ISLAND_ICEFALL_CAVE_B1F:0": "Icefall Cave 1F East Ladder"
+    }
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_1F/NORTHEAST": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_1F",
+    "name": "Icefall Cave 1F (Northeast)",
+    "encounter_region": "Icefall Cave 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_B1F/NORTH": "Icefall Cave 1F Northeast Drop (Top)",
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_B1F/EAST": "Icefall Cave 1F Northeast Drop (Bottom)"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_1F:3/MAP_FOUR_ISLAND_ICEFALL_CAVE_B1F:1": "Icefall Cave 1F Northeast Ladder"
+    }
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_1F/SOUTHEAST": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_1F",
+    "name": "Icefall Cave 1F (Southeast)",
+    "encounter_region": "Icefall Cave 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_FOUR_ISLAND_ICEFALL_CAVE_1F_HM07"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_1F/MAIN": "Icefall Cave 1F Southeast Ledge (Right)"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_1F:4/MAP_FOUR_ISLAND_ICEFALL_CAVE_B1F:2": "Icefall Cave 1F Southeast Ladder"
+    }
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_1F/NORTHWEST": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_1F",
+    "name": "Icefall Cave 1F (Northwest)",
+    "encounter_region": "Icefall Cave 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_1F/MAIN": "Icefall Cave 1F West Ledge (Top)"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_1F:1/MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE:2": "Icefall Cave 1F Northwest Ladder",
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_1F:5/MAP_FOUR_ISLAND_ICEFALL_CAVE_BACK:0": "Icefall Cave 1F Exit (North)"
+    }
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_B1F/WEST": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_B1F",
+    "name": "Icefall Cave B1F (West)",
+    "encounter_region": "Icefall Cave B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_B1F:0/MAP_FOUR_ISLAND_ICEFALL_CAVE_1F:2": "Icefall Cave B1F West Ladder"
+    }
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_B1F/NORTH": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_B1F",
+    "name": "Icefall Cave B1F (North)",
+    "encounter_region": "Icefall Cave B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_B1F:1/MAP_FOUR_ISLAND_ICEFALL_CAVE_1F:3": "Icefall Cave B1F North Ladder"
+    }
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_B1F/EAST": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_B1F",
+    "name": "Icefall Cave B1F (East)",
+    "encounter_region": "Icefall Cave B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_FOUR_ISLAND_ICEFALL_CAVE_B1F_NEVER_MELT_ICE"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_B1F/SOUTH": "Icefall Cave B1F Sliding Ice (South)"
+    },
+    "warps": {}
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_B1F/SOUTH": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_B1F",
+    "name": "Icefall Cave B1F (South)",
+    "encounter_region": "Icefall Cave B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_FOUR_ISLAND_ICEFALL_CAVE_B1F_FULL_RESTORE"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_B1F/NORTH": "Icefall Cave B1F Sliding Ice (North)"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_B1F:2/MAP_FOUR_ISLAND_ICEFALL_CAVE_1F:4": "Icefall Cave B1F South Ladder"
+    }
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_BACK/MAIN": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_BACK",
+    "name": "Icefall Cave Back",
+    "encounter_region": "Icefall Cave Back",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_45_REWARD",
+      "NPC_GIFT_GOT_SIX_PASS"
+    ],
+    "events": [
+      "EVENT_HELP_LORELEI"
+    ],
+    "exits": {
+      "REGION_FOUR_ISLAND_ICEFALL_CAVE_BACK/WATER": "Icefall Cave Back Surfing Spot"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND_ICEFALL_CAVE_BACK:0/MAP_FOUR_ISLAND_ICEFALL_CAVE_1F:5": "Icefall Cave Back Exit"
+    }
+  },
+  "REGION_FOUR_ISLAND_ICEFALL_CAVE_BACK/WATER": {
+    "parent_map": "MAP_FOUR_ISLAND_ICEFALL_CAVE_BACK",
+    "name": "Icefall Cave Back (Water)",
+    "encounter_region": "Icefall Cave Back",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_FIVE_ISLAND_ROCKET_WAREHOUSE/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_ROCKET_WAREHOUSE",
+    "name": "Rocket Warehouse",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_FIVE_ISLAND_ROCKET_WAREHOUSE_BIG_PEARL",
+      "ITEM_FIVE_ISLAND_ROCKET_WAREHOUSE_PEARL",
+      "ITEM_FIVE_ISLAND_ROCKET_WAREHOUSE_UP_GRADE",
+      "TRAINER_TEAM_ROCKET_GRUNT_42_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_47_REWARD",
+      "HIDDEN_ITEM_FIVE_ISLAND_ROCKET_WAREHOUSE_NET_BALL",
+      "ITEM_FIVE_ISLAND_ROCKET_WAREHOUSE_TM36",
+      "TRAINER_TEAM_ROCKET_GRUNT_48_REWARD",
+      "TRAINER_TEAM_ROCKET_ADMIN_REWARD",
+      "TRAINER_TEAM_ROCKET_ADMIN_2_REWARD",
+      "TRAINER_SCIENTIST_GIDEON_REWARD",
+      "NPC_GIFT_RECOVERED_SAPPHIRE",
+      "FAME_CHECKER_GIOVANNI_6",
+      "HIDDEN_ITEM_FIVE_ISLAND_ROCKET_WAREHOUSE_NEST_BALL"
+    ],
+    "events": [
+      "EVENT_DEFEAT_TEAM_ROCKET_ADMIN"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_ROCKET_WAREHOUSE:0/MAP_FIVE_ISLAND_MEADOW:0": "Rocket Warehouse Exit"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ENTRANCE/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ENTRANCE",
+    "name": "Lost Cave 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ENTRANCE:0/MAP_FIVE_ISLAND_RESORT_GORGEOUS:0": "Lost Cave 1F Exit",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ENTRANCE:1/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:0": "Lost Cave 1F Ladder"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM1/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM1",
+    "name": "Lost Cave B1F Room 1",
+    "encounter_region": "Lost Cave B1F Room 1",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "TRAINER_RUIN_MANIAC_LAWSON_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:0/MAP_FIVE_ISLAND_LOST_CAVE_ENTRANCE:1": "Lost Cave B1F Room 1 Ladder",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:1/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:3": "Lost Cave B1F Room 1 Exit (North)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:2/MAP_FIVE_ISLAND_LOST_CAVE_ROOM2:3": "Lost Cave B1F Room 1 Exit (East)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:3/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:1": "Lost Cave B1F Room 1 Exit (South)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:4/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:2!": "Lost Cave B1F Room 1 Exit (West)"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM2/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM2",
+    "name": "Lost Cave B1F Room 2",
+    "encounter_region": "Lost Cave B1F Room 2",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM2:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM3:2!": "Lost Cave B1F Room 2 Exit (North)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM2:1/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:4!": "Lost Cave B1F Room 2 Exit (East)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM2:2/MAP_FIVE_ISLAND_LOST_CAVE_ROOM11:0": "Lost Cave B1F Room 2 Exit (South)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM2:3/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:2": "Lost Cave B1F Room 2 Exit (West)"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM3/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM3",
+    "name": "Lost Cave B1F Room 3",
+    "encounter_region": "Lost Cave B1F Room 3",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM3:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:3!": "Lost Cave B1F Room 3 Exit (North)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM3:1/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:4!": "Lost Cave B1F Room 3 Exit (East)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM3:2/MAP_FIVE_ISLAND_LOST_CAVE_ROOM4:0!": "Lost Cave B1F Room 3 Exit (South)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM3:3/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:2!": "Lost Cave B1F Room 3 Exit (West)"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM4/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM4",
+    "name": "Lost Cave B1F Room 4",
+    "encounter_region": "Lost Cave B1F Room 4",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "TRAINER_PSYCHIC_LAURA_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM4:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM12:0": "Lost Cave B1F Room 4 Exit (North)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM4:1/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:4!": "Lost Cave B1F Room 4 Exit (East)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM4:2/MAP_FIVE_ISLAND_LOST_CAVE_ROOM5:0!": "Lost Cave B1F Room 4 Exit (South)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM4:3/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:2!": "Lost Cave B1F Room 4 Exit (West)"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM5/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM5",
+    "name": "Lost Cave B1F Room 5",
+    "encounter_region": "Lost Cave B1F Room 5",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM5:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:3!": "Lost Cave B1F Room 5 Exit (North)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM5:1/MAP_FIVE_ISLAND_LOST_CAVE_ROOM6:3!": "Lost Cave B1F Room 5 Exit (East)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM5:2/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:1!": "Lost Cave B1F Room 5 Exit (South)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM5:3/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:2!": "Lost Cave B1F Room 5 Exit (West)"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM6/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM6",
+    "name": "Lost Cave B1F Room 6",
+    "encounter_region": "Lost Cave B1F Room 6",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM6:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:3!": "Lost Cave B1F Room 6 Exit (North)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM6:1/MAP_FIVE_ISLAND_LOST_CAVE_ROOM13:0": "Lost Cave B1F Room 6 Exit (East)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM6:2/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:1!": "Lost Cave B1F Room 6 Exit (South)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM6:3/MAP_FIVE_ISLAND_LOST_CAVE_ROOM7:1!": "Lost Cave B1F Room 6 Exit (West)"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM7/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM7",
+    "name": "Lost Cave B1F Room 7",
+    "encounter_region": "Lost Cave B1F Room 7",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM7:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:3!": "Lost Cave B1F Room 7 Exit (North)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM7:1/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:4!": "Lost Cave B1F Room 7 Exit (East)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM7:2/MAP_FIVE_ISLAND_LOST_CAVE_ROOM8:0!": "Lost Cave B1F Room 7 Exit (South)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM7:3/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:2!": "Lost Cave B1F Room 7 Exit (West)"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM8/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM8",
+    "name": "Lost Cave B1F Room 8",
+    "encounter_region": "Lost Cave B1F Room 8",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM8:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:3!": "Lost Cave B1F Room 8 Exit (North)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM8:1/MAP_FIVE_ISLAND_LOST_CAVE_ROOM9:3!": "Lost Cave B1F Room 8 Exit (East)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM8:2/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:1!": "Lost Cave B1F Room 8 Exit (South)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM8:3/MAP_FIVE_ISLAND_LOST_CAVE_ROOM14:0": "Lost Cave B1F Room 8 Exit (West)"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM9/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM9",
+    "name": "Lost Cave B1F Room 9",
+    "encounter_region": "Lost Cave B1F Room 9",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM9:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM10:0": "Lost Cave B1F Room 9 Exit (North)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM9:1/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:4!": "Lost Cave B1F Room 9 Exit (East)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM9:2/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:1!": "Lost Cave B1F Room 9 Exit (South)",
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM9:3/MAP_FIVE_ISLAND_LOST_CAVE_ROOM1:2!": "Lost Cave B1F Room 9 Exit (West)"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM10/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM10",
+    "name": "Lost Cave B1F Room 10",
+    "encounter_region": "Lost Cave B1F Room 10",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "TRAINER_LADY_SELPHY_REWARD",
+      "ITEM_FIVE_ISLAND_LOST_CAVE_ROOM10_SILK_SCARF"
+    ],
+    "events": [
+      "EVENT_RESCUE_SELPHY"
+    ],
+    "exits": {
+      "REGION_FIVE_ISLAND_RESORT_GORGEOUS/NEAR_RESORT": "Follow Selphy"
+    },
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM10:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM9:0": "Lost Cave B1F Room 10 Exit"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM11/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM11",
+    "name": "Lost Cave B1F Room 11",
+    "encounter_region": "Lost Cave B1F Room 11",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_FIVE_ISLAND_LOST_CAVE_ROOM11_LAX_INCENSE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM11:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM2:2": "Lost Cave B1F Room 11 Exit"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM12/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM12",
+    "name": "Lost Cave B1F Room 12",
+    "encounter_region": "Lost Cave B1F Room 12",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_FIVE_ISLAND_LOST_CAVE_ROOM12_SEA_INCENSE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM12:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM4:0": "Lost Cave B1F Room 12 Exit"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM13/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM13",
+    "name": "Lost Cave B1F Room 13",
+    "encounter_region": "Lost Cave B1F Room 13",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_FIVE_ISLAND_LOST_CAVE_ROOM13_MAX_REVIVE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM13:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM6:1": "Lost Cave B1F Room 13 Exit"
+    }
+  },
+  "REGION_FIVE_ISLAND_LOST_CAVE_ROOM14/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_LOST_CAVE_ROOM14",
+    "name": "Lost Cave B1F Room 14",
+    "encounter_region": "Lost Cave B1F Room 14",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_FIVE_ISLAND_LOST_CAVE_ROOM14_RARE_CANDY"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_LOST_CAVE_ROOM14:0/MAP_FIVE_ISLAND_LOST_CAVE_ROOM8:3": "Lost Cave B1F Room 14 Exit"
+    }
+  },
+  "REGION_SIX_ISLAND_DOTTED_HOLE_1F/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_DOTTED_HOLE_1F",
+    "name": "Dotted Hole 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SIX_ISLAND_DOTTED_HOLE_1F/EAST": "Dotted Hole 1F Ledge (Bottom)"
+    },
+    "warps": {
+      "MAP_SIX_ISLAND_DOTTED_HOLE_1F:0/MAP_SIX_ISLAND_RUIN_VALLEY:0": "Dotted Hole 1F Exit",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_1F:1/MAP_SIX_ISLAND_DOTTED_HOLE_B1F:0": "Dotted Hole 1F Drop",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_1F:3/MAP_SIX_ISLAND_DOTTED_HOLE_B1F:2": "!Dotted Hole Incorrect Drop"
+    }
+  },
+  "REGION_SIX_ISLAND_DOTTED_HOLE_1F/EAST": {
+    "parent_map": "MAP_SIX_ISLAND_DOTTED_HOLE_1F",
+    "name": "Dotted Hole 1F (East)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "NPC_GIFT_GOT_FIVE_PASS"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SIX_ISLAND_DOTTED_HOLE_1F/MAIN": "Dotted Hole 1F Ledge (Top)"
+    },
+    "warps": {
+      "MAP_SIX_ISLAND_DOTTED_HOLE_1F:2/MAP_SIX_ISLAND_DOTTED_HOLE_SAPPHIRE_ROOM:0": "Dotted Hole 1F Ladder"
+    }
+  },
+  "REGION_SIX_ISLAND_DOTTED_HOLE_B1F/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_DOTTED_HOLE_B1F",
+    "name": "Dotted Hole B1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B1F:0/MAP_SIX_ISLAND_DOTTED_HOLE_1F:1": "!Dotted Hole 1F Drop",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B1F:1/MAP_SIX_ISLAND_DOTTED_HOLE_B2F:0": "Dotted Hole B1F Drop (Top)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B1F:2/MAP_SIX_ISLAND_DOTTED_HOLE_1F:3": "Dotted Hole B1F Drop (Right)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B1F:3/MAP_SIX_ISLAND_DOTTED_HOLE_1F:3!": "Dotted Hole B1F Drop (Bottom)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B1F:4/MAP_SIX_ISLAND_DOTTED_HOLE_1F:3!": "Dotted Hole B1F Drop (Left)"
+    }
+  },
+  "REGION_SIX_ISLAND_DOTTED_HOLE_B2F/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_DOTTED_HOLE_B2F",
+    "name": "Dotted Hole B2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B2F:0/MAP_SIX_ISLAND_DOTTED_HOLE_B1F:1": "!Dotted Hole B1F Drop (Top)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B2F:1/MAP_SIX_ISLAND_DOTTED_HOLE_1F:3!": "Dotted Hole B2F Drop (Top)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B2F:2/MAP_SIX_ISLAND_DOTTED_HOLE_1F:3!": "Dotted Hole B2F Drop (Right)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B2F:3/MAP_SIX_ISLAND_DOTTED_HOLE_1F:3!": "Dotted Hole B2F Drop (Bottom)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B2F:4/MAP_SIX_ISLAND_DOTTED_HOLE_B3F:0": "Dotted Hole B2F Drop (Left)"
+    }
+  },
+  "REGION_SIX_ISLAND_DOTTED_HOLE_B3F/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_DOTTED_HOLE_B3F",
+    "name": "Dotted Hole B3F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B3F:0/MAP_SIX_ISLAND_DOTTED_HOLE_B2F:4": "!Dotted Hole B2F Drop (Left)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B3F:1/MAP_SIX_ISLAND_DOTTED_HOLE_1F:3!": "Dotted Hole B3F Drop (Top)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B3F:2/MAP_SIX_ISLAND_DOTTED_HOLE_B4F:0": "Dotted Hole B3F Drop (Right)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B3F:3/MAP_SIX_ISLAND_DOTTED_HOLE_1F:3!": "Dotted Hole B3F Drop (Bottom)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B3F:4/MAP_SIX_ISLAND_DOTTED_HOLE_1F:3!": "Dotted Hole B3F Drop (Left)"
+    }
+  },
+  "REGION_SIX_ISLAND_DOTTED_HOLE_B4F/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_DOTTED_HOLE_B4F",
+    "name": "Dotted Hole B4F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B4F:0/MAP_SIX_ISLAND_DOTTED_HOLE_B3F:2": "!Dotted Hole B3F Drop (Right)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B4F:1/MAP_SIX_ISLAND_DOTTED_HOLE_1F:3!": "Dotted Hole B4F Drop (Top)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B4F:2/MAP_SIX_ISLAND_DOTTED_HOLE_1F:3!": "Dotted Hole B4F Drop (Right)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B4F:3/MAP_SIX_ISLAND_DOTTED_HOLE_SAPPHIRE_ROOM:1": "Dotted Hole B4F Drop (Bottom)",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_B4F:4/MAP_SIX_ISLAND_DOTTED_HOLE_1F:3!": "Dotted Hole B4F Drop (Left)"
+    }
+  },
+  "REGION_SIX_ISLAND_DOTTED_HOLE_SAPPHIRE_ROOM/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_DOTTED_HOLE_SAPPHIRE_ROOM",
+    "name": "Dotted Hole Sapphire Room",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [
+      "EVENT_LEARN_ROCKET_WAREHOUSE_PASSWORD_2"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_DOTTED_HOLE_SAPPHIRE_ROOM:0/MAP_SIX_ISLAND_DOTTED_HOLE_1F:2": "Dotted Hole Sapphire Room Ladder",
+      "MAP_SIX_ISLAND_DOTTED_HOLE_SAPPHIRE_ROOM:1/MAP_SIX_ISLAND_DOTTED_HOLE_B4F:3": "!Dotted Hole B4F Drop (Bottom)"
+    }
+  },
+  "REGION_SIX_ISLAND_PATTERN_BUSH/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_PATTERN_BUSH",
+    "name": "Pattern Bush",
+    "encounter_region": "Pattern Bush",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "TRAINER_YOUNGSTER_CORDELL_REWARD",
+      "TRAINER_PKMN_BREEDER_BETHANY_REWARD",
+      "TRAINER_BUG_CATCHER_GARRET_REWARD",
+      "TRAINER_LASS_JOANA_REWARD",
+      "TRAINER_YOUNGSTER_NASH_REWARD",
+      "TRAINER_BUG_CATCHER_VANCE_REWARD",
+      "TRAINER_RUIN_MANIAC_LAYTON_REWARD",
+      "TRAINER_PICNICKER_MARCY_REWARD",
+      "TRAINER_LASS_DALIA_REWARD",
+      "TRAINER_BUG_CATCHER_JONAH_REWARD",
+      "TRAINER_PKMN_BREEDER_ALLISON_REWARD",
+      "TRAINER_CAMPER_RILEY_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_PATTERN_BUSH:0,1,2/MAP_SIX_ISLAND_GREEN_PATH:0,1": "Pattern Bush Exit (East)",
+      "MAP_SIX_ISLAND_PATTERN_BUSH:3,4,5/MAP_SIX_ISLAND_GREEN_PATH:2,3": "Pattern Bush Exit (West)"
+    }
+  },
+  "REGION_SIX_ISLAND_ALTERING_CAVE/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_ALTERING_CAVE",
+    "name": "Altering Cave",
+    "encounter_region": "Altering Cave",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_ALTERING_CAVE:0/MAP_SIX_ISLAND_OUTCAST_ISLAND:0": "Altering Cave Exit"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS_MONEAN_CHAMBER/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS_MONEAN_CHAMBER",
+    "name": "Monean Chamber",
+    "encounter_region": "Monean Chamber",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS_MONEAN_CHAMBER:0/MAP_SEVEN_ISLAND_TANOBY_RUINS:0": "Monean Chamber Exit"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS_LIPTOO_CHAMBER/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS_LIPTOO_CHAMBER",
+    "name": "Liptoo Chamber",
+    "encounter_region": "Liptoo Chamber",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS_LIPTOO_CHAMBER:0/MAP_SEVEN_ISLAND_TANOBY_RUINS:1": "Liptoo Chamber Exit"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS_WEEPTH_CHAMBER/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS_WEEPTH_CHAMBER",
+    "name": "Weepth Chamber",
+    "encounter_region": "Weepth Chamber",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS_WEEPTH_CHAMBER:0/MAP_SEVEN_ISLAND_TANOBY_RUINS:2": "Weepth Chamber Exit"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS_DILFORD_CHAMBER/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS_DILFORD_CHAMBER",
+    "name": "Dilford Chamber",
+    "encounter_region": "Dilford Chamber",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS_DILFORD_CHAMBER:0/MAP_SEVEN_ISLAND_TANOBY_RUINS:3": "Dilford Chamber Exit"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS_SCUFIB_CHAMBER/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS_SCUFIB_CHAMBER",
+    "name": "Scufib Chamber",
+    "encounter_region": "Scufib Chamber",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS_SCUFIB_CHAMBER:0/MAP_SEVEN_ISLAND_TANOBY_RUINS:4": "Scufib Chamber Exit"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS_RIXY_CHAMBER/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS_RIXY_CHAMBER",
+    "name": "Rixy Chamber",
+    "encounter_region": "Rixy Chamber",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS_RIXY_CHAMBER:0/MAP_SEVEN_ISLAND_TANOBY_RUINS:5": "Rixy Chamber Exit"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS_VIAPOIS_CHAMBER/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS_VIAPOIS_CHAMBER",
+    "name": "Viapois Chamber",
+    "encounter_region": "Viapois Chamber",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS_VIAPOIS_CHAMBER:0/MAP_SEVEN_ISLAND_TANOBY_RUINS:6": "Viapois Chamber Exit"
+    }
+  },
+  "REGION_CERULEAN_CAVE_1F/SOUTHEAST": {
+    "parent_map": "MAP_CERULEAN_CAVE_1F",
+    "name": "Cerulean Cave 1F (Southeast)",
+    "encounter_region": "Cerulean Cave 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_CERULEAN_CAVE_1F/WATER": "Cerulean Cave 1F (Southeast) Surfing Spot"
+    },
+    "warps": {
+      "MAP_CERULEAN_CAVE_1F:0/MAP_CERULEAN_CITY:8": "Cerulean Cave 1F Exit"
+    }
+  },
+  "REGION_CERULEAN_CAVE_1F/WATER": {
+    "parent_map": "MAP_CERULEAN_CAVE_1F",
+    "name": "Cerulean Cave 1F (Water)",
+    "encounter_region": "Cerulean Cave 1F",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_CERULEAN_CAVE_1F/SOUTHEAST": "Cerulean Cave 1F (Southeast) Landing Spot",
+      "REGION_CERULEAN_CAVE_1F/NORTHEAST": "Cerulean Cave 1F (Northeast) Landing Spot",
+      "REGION_CERULEAN_CAVE_1F/CENTER": "Cerulean Cave 1F (Center) Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_CERULEAN_CAVE_1F/NORTHEAST": {
+    "parent_map": "MAP_CERULEAN_CAVE_1F",
+    "name": "Cerulean Cave 1F (Northeast)",
+    "encounter_region": "Cerulean Cave 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_CERULEAN_CAVE_1F/WATER": "Cerulean Cave 1F (Northeast) Surfing Spot"
+    },
+    "warps": {
+      "MAP_CERULEAN_CAVE_1F:1/MAP_CERULEAN_CAVE_2F:0": "Cerulean Cave 1F Northeast Ladder"
+    }
+  },
+  "REGION_CERULEAN_CAVE_1F/CENTER": {
+    "parent_map": "MAP_CERULEAN_CAVE_1F",
+    "name": "Cerulean Cave 1F (Center)",
+    "encounter_region": "Cerulean Cave 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_CERULEAN_CAVE_1F_ULTRA_BALL",
+      "ITEM_CERULEAN_CAVE_1F_NUGGET",
+      "ITEM_CERULEAN_CAVE_1F_FULL_RESTORE",
+      "ITEM_CERULEAN_CAVE_1F_MAX_ELIXIR"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_CERULEAN_CAVE_1F/WATER": "Cerulean Cave 1F (Center) Surfing Spot"
+    },
+    "warps": {
+      "MAP_CERULEAN_CAVE_1F:3/MAP_CERULEAN_CAVE_2F:1": "Cerulean Cave 1F North Ladder",
+      "MAP_CERULEAN_CAVE_1F:4/MAP_CERULEAN_CAVE_2F:2": "Cerulean Cave 1F Southwest Ladder",
+      "MAP_CERULEAN_CAVE_1F:5/MAP_CERULEAN_CAVE_2F:3": "Cerulean Cave 1F East Ladder",
+      "MAP_CERULEAN_CAVE_1F:6/MAP_CERULEAN_CAVE_2F:4": "Cerulean Cave 1F Center Ladder"
+    }
+  },
+  "REGION_CERULEAN_CAVE_1F/NORTHWEST": {
+    "parent_map": "MAP_CERULEAN_CAVE_1F",
+    "name": "Cerulean Cave 1F (Northwest)",
+    "encounter_region": "Cerulean Cave 1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_CERULEAN_CAVE_1F:2/MAP_CERULEAN_CAVE_B1F:0": "Cerulean Cave 1F Northwest Ladder (Bottom)",
+      "MAP_CERULEAN_CAVE_1F:7/MAP_CERULEAN_CAVE_2F:5": "Cerulean Cave 1F Northwest Ladder (Top)"
+    }
+  },
+  "REGION_CERULEAN_CAVE_2F/NORTHEAST": {
+    "parent_map": "MAP_CERULEAN_CAVE_2F",
+    "name": "Cerulean Cave 2F (Northeast)",
+    "encounter_region": "Cerulean Cave 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_CERULEAN_CAVE_2F_FULL_RESTORE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_CERULEAN_CAVE_2F:0/MAP_CERULEAN_CAVE_1F:1": "Cerulean Cave 2F Northeast Ladder"
+    }
+  },
+  "REGION_CERULEAN_CAVE_2F/NORTHWEST": {
+    "parent_map": "MAP_CERULEAN_CAVE_2F",
+    "name": "Cerulean Cave 2F (Northwest)",
+    "encounter_region": "Cerulean Cave 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_CERULEAN_CAVE_2F:1/MAP_CERULEAN_CAVE_1F:3": "Cerulean Cave 2F North Ladder"
+    }
+  },
+  "REGION_CERULEAN_CAVE_2F/WEST": {
+    "parent_map": "MAP_CERULEAN_CAVE_2F",
+    "name": "Cerulean Cave 2F (West)",
+    "encounter_region": "Cerulean Cave 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_CERULEAN_CAVE_2F_PP_UP"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_CERULEAN_CAVE_2F:2/MAP_CERULEAN_CAVE_1F:4": "Cerulean Cave 2F West Ladder"
+    }
+  },
+  "REGION_CERULEAN_CAVE_2F/EAST": {
+    "parent_map": "MAP_CERULEAN_CAVE_2F",
+    "name": "Cerulean Cave 2F (East)",
+    "encounter_region": "Cerulean Cave 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_CERULEAN_CAVE_2F_ULTRA_BALL"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_CERULEAN_CAVE_2F:3/MAP_CERULEAN_CAVE_1F:5": "Cerulean Cave 2F East Ladder"
+    }
+  },
+  "REGION_CERULEAN_CAVE_2F/CENTER": {
+    "parent_map": "MAP_CERULEAN_CAVE_2F",
+    "name": "Cerulean Cave 2F (Center)",
+    "encounter_region": "Cerulean Cave 2F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_CERULEAN_CAVE_2F:4/MAP_CERULEAN_CAVE_1F:6": "Cerulean Cave 2F Center Ladder",
+      "MAP_CERULEAN_CAVE_2F:5/MAP_CERULEAN_CAVE_1F:7": "Cerulean Cave 2F Northwest Ladder"
+    }
+  },
+  "REGION_CERULEAN_CAVE_B1F/MAIN": {
+    "parent_map": "MAP_CERULEAN_CAVE_B1F",
+    "name": "Cerulean Cave B1F",
+    "encounter_region": "Cerulean Cave B1F",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "ITEM_CERULEAN_CAVE_B1F_MAX_REVIVE",
+      "ITEM_CERULEAN_CAVE_B1F_ULTRA_BALL"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_CERULEAN_CAVE_B1F/WATER": "Cerulean Cave B1F Surfing Spot"
+    },
+    "warps": {
+      "MAP_CERULEAN_CAVE_B1F:0/MAP_CERULEAN_CAVE_1F:2": "Cerulean Cave B1F Ladder"
+    }
+  },
+  "REGION_CERULEAN_CAVE_B1F/WATER": {
+    "parent_map": "MAP_CERULEAN_CAVE_B1F",
+    "name": "Cerulean Cave B1F (Water)",
+    "encounter_region": "Cerulean Cave B1F",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [
+      "LEGENDARY_POKEMON_MEWTWO"
+    ],
+    "exits": {},
+    "warps": {}
+  }
+}

@@ -1,0 +1,1410 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 199,
+  "name": "West Sand Hall",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Green",
+  "roomAddress": "0x7D461",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a63c",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [2, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a648",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 1, 1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Sand Entrance",
+      "nodeType": "entrance",
+      "nodeSubType": "sandpit",
+      "nodeAddress": "0x001a654",
+      "doorOrientation": "up",
+      "mapTileMask": [
+        [1, 1, 2, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Below Sand Entrance",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 2, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Left Pillar Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 1, 1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "West Sand Hall Right Evirs",
+      "enemyName": "Evir",
+      "quantity": 2,
+      "betweenNodes": [2, 4]
+    },
+    {
+      "id": "e2",
+      "groupName": "West Sand Hall Left Evir",
+      "enemyName": "Evir",
+      "quantity": 1,
+      "betweenNodes": [1, 4]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {
+          "id": 2,
+          "devNote": "This link is only for sparking and G-Mode. All other strats should go 1 -> 5 -> 4 -> 2."
+        },
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {
+          "id": 1,
+          "devNote": "This link is only for sparking and G-Mode. All other strats should go 2 -> 4 -> 5 -> 1."
+        },
+        {"id": 2},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Come In With Spark (Suitless)",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 99, "excessFrames": 5}}
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Come In With Spark (Gravity)",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        "Gravity",
+        {"shinespark": {"frames": 77, "excessFrames": 4}}
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Shinespark (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 76, "excessFrames": 4}}
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Shinespark (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 82, "excessFrames": 14}},
+        "canPlayInSand"
+      ],
+      "note": "Jump onto the platform, then hold angle-down to straight jump and move right, activating the spark when Samus is about one tile deep into the sandfall."
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Tricky Speedy Jump (Left to Right)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 19.4375,
+          "maxTiles": 19.8125
+        }
+      },
+      "requires": [
+        {"notable": "Tricky Speedy Jump (Left to Right)"},
+        "canSuitlessMaridia",
+        "canTrickyDashJump",
+        "canInsaneJump"
+      ],
+      "note": [
+        "Run into the room using exactly 20 tiles of runway (with closed ends) in the other room, or up to 6 pixels more (getting extra run speed exactly $4.4).",
+        "Jump on the last possible frame, and aim down as Samus approaches the overhang, to avoid bonking it.",
+        "If successful, Samus will land on the last pillar."
+      ],
+      "devNote": [
+        "Speeds above $4.4 cause Samus to bonk the ceiling, losing all vertical speed, or the overhang, losing all horizontal speed;",
+        "there is a significant amount of vertical speed to lose, even though it may not appear that way because of how the sandfalls push Samus down.",
+        "Speeds in the range from $4.0 - $4.3 give a spike in jump speed, resulting in a ceiling bonk even earlier.",
+        "Speeds below $4.0 are not close to enough to make it across."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Tricky Speedy Airball (Left to Right)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 19.9375,
+          "maxTiles": 20.6875
+        }
+      },
+      "requires": [
+        {"notable": "Tricky Speedy Airball (Left to Right)"},
+        "canSuitlessMaridia",
+        "canTrickyDashJump",
+        "canLateralMidAirMorph"
+      ],
+      "note": [
+        "Run into the room using exactly 20 tiles of runway (with an open end) in the other room, or up to 11 pixels more or 1 pixel less (getting extra run speed $4.5 or $4.6).",
+        "Jump toward the end of the runway, quickly aim down, and then morph when close to the ceiling.",
+        "Land on the last pillar, turning around to the left (while still morphed) to instantly cancel Samus' horizontal speed if needed."
+      ],
+      "devNote": [
+        "The reason to hold the aim-down pose is because its lower base horizontal speed makes it easier to avoid bonking the overhang when entering with speed $4.6 (the larger of the two speeds that work);",
+        "an alternative that can also work is to jump on the earlier part of the runway and do a quicker morph.",
+        "Speeds above $4.6 cause Samus to bonk the ceiling, losing all vertical speed, or the overhang, losing all horizontal speed;",
+        "there is a significant amount of vertical speed to lose, even though it may not appear that way because of how the sandfalls push Samus down.",
+        "It is technically possible to make it across with a speed of $4.4, but it requires a last-frame jump and a tight morph, and it would be easier in that case to just spin jump across and not morph.",
+        "Speeds in the range from $4.0 - $4.3 give a spike in jump speed, resulting in an early ceiling bonk."
+      ]
+    },
+    {
+      "id": 59,
+      "link": [1, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 82, "excessFrames": 13}}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "With these excess frames, Samus may only reach the final pillar or the sand in between, which may then require a sand fall bounce."
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "canTrickyDodgeEnemies",
+          "h_crouchJumpDownGrab",
+          "HiJump",
+          "Gravity",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 5],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 5],
+      "name": "Suitless SpringBall Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canTrickySpringBallJump",
+        "canPlayInSand"
+      ],
+      "note": "Time the springball jump to be just before Samus enters the sand."
+    },
+    {
+      "id": 12,
+      "link": [1, 5],
+      "name": "Insane Bomb Jump",
+      "requires": [
+        {"notable": "Insane Bomb Jump"},
+        "canTrickyJump",
+        "canSandfallBounce",
+        "h_useMorphBombs",
+        {"or": [
+          "canIBJ",
+          {"and": [
+            "HiJump",
+            "can4HighMidAirMorph"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Time a bomb to hit Samus when she is morphed, 1 pixel into the sand, inside a sandfall, and moving horizontally.",
+        "There is a setup using a Sand IBJ to rise up the sandfall from the floor and Sandfall Bounce with the correct timing.",
+        "An alternate setup places the bomb before entering the sand and jumps into it with a very fast jump morph, using HiJump."
+      ],
+      "devNote": "FIXME: A Power Bomb can be used with the jump morph.  Bombs are only listed for leniency in that case."
+    },
+    {
+      "id": 13,
+      "link": [1, 5],
+      "name": "HiJump with Momentum",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 1.4375
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump",
+        "canPlayInSand"
+      ],
+      "note": [
+        "Gain momentum in the room to the left, then jump at the edge of the runway in order to land on the first pillar.",
+        "Requires a runway of at least 2 tiles (with no open end) in the adjacent room.",
+        "Shrinking Samus' hitbox before landing makes the jump a little easier."
+      ],
+      "devNote": "This is not technically a canCrossRoomJumpIntoWater, but it is used here because of the way the momentum changes as Samus enters the water."
+    },
+    {
+      "id": 14,
+      "link": [1, 5],
+      "name": "Jump with Momentum",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": false,
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canPlayInSand",
+        "canCarefulJump"
+      ],
+      "note": [
+        "Gain momentum in the room to the left, then jump after entering this room in order to land on the first pillar. Ensure that Speed Booster is disabled."
+      ],
+      "devNote": "This is not technically a canCrossRoomJumpIntoWater, but it is used here because of the way the momentum changes as Samus enters the water."
+    },
+    {
+      "id": 15,
+      "link": [1, 5],
+      "name": "Tricky Jump with Momentum",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": false,
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canPlayInSand",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Gain momentum in the room to the left, then jump in this room in order to land on the first pillar. Ensure that Speed Booster is disabled.",
+        "With a short runway of 4 tiles (with an open end) in the adjacent room, it is required to jump as late as possible at the edge of the runway in this room.",
+        "Shrinking Samus' hitbox before landing makes the jump a little easier."
+      ],
+      "devNote": "This is not technically a canCrossRoomJumpIntoWater, but it is used here because of the way the momentum changes as Samus enters the water."
+    },
+    {
+      "id": 16,
+      "link": [1, 5],
+      "name": "Spring Fling with Momentum",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Spring Fling with Momentum"},
+        "canCrossRoomJumpIntoWater",
+        "canPlayInSand",
+        "canLateralMidAirMorph",
+        "canTrickySpringBallJump",
+        "canSpringFling"
+      ],
+      "note": [
+        "Enter with at least 1 tile of run speed from an air room, with Speedbooster unequipped.",
+        "Jump from near the end of the runway (though a jump from 1-2 tiles away from the end can still work).",
+        "Press pause while crossing the narrow first sandfall, then perform a lateral mid-air morph after exiting the sandfall.",
+        "Equip both Spring Ball and Speed Booster, and perform a mid-air Spring Ball jump at somewhere close to the maximum height.",
+        "Unequip Spring Ball while descending through the wide second sidefall."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [1, 5],
+      "name": "Cross Room Jump into Air Ball with HiJump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": false,
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canLateralMidAirMorph",
+        "canCrossRoomJumpIntoWater",
+        "HiJump",
+        "canPlayInSand"
+      ],
+      "note": [
+        "Gain momentum in the room to the left, then jump in this room in order to land on the first pillar. Ensure that Speed Booster is disabled.",
+        "Requires a runway of only approximately 0.5 tiles in the adjacent room.",
+        "Perform an air ball before hitting the ceiling in order to land on the first pillar."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 5],
+      "name": "Cross Room Jump with Bomb Boost",
+      "entranceCondition": {
+        "comeInWithBombBoost": {}
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Bomb boost through the doorway. Get the bomb boost while as close to the door transition as possible in order to get to the first pillar."
+    },
+    {
+      "id": 60,
+      "link": [1, 5],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 6, "excessFrames": 2}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 3, "excessFrames": 2}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Come In With Spark (Suitless)",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 99, "excessFrames": 5}}
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Come In With Spark (Gravity)",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        "Gravity",
+        {"shinespark": {"frames": 78, "excessFrames": 4}}
+      ]
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Shinespark (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 76, "excessFrames": 4}}
+      ]
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Shinespark (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 86, "excessFrames": 39}},
+        "canPlayInSand"
+      ],
+      "note": "Jump across to the first pillar, then hold angle-down to straight jump and move left, activating the spark up to about two tiles deep into the sandfall."
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_navigateUnderwater"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 27,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 65,
+      "link": [2, 2],
+      "name": "Suitless Bootless Evir Farm (1 Evir, Grapple)",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "canFarmWhileShooting",
+        "Grapple",
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 340}
+          ]},
+          {"and": [
+            "Wave",
+            {"disableEquipment": "Ice"},
+            "canInsaneJump",
+            "canBeVeryPatient",
+            {"cycleFrames": 680}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Evir", "count": 1}],
+      "note": [
+        "Jump out 1 tile from the ledge and fire angle-down shots at the closest Evir,",
+        "to quickly kill it before it descends too far.",
+        "Use Grapple to collect the drop.",
+        "If only Wave is used, the drop will spawn low, and in this case",
+        "use Grapple while falling right of the pillar in order to reach the drop."
+      ],
+      "detailNote": [
+        "If Plasma is available, then killing the second Evir (instead of the first) is also an option."
+      ]
+    },
+    {
+      "id": 66,
+      "link": [2, 2],
+      "name": "Evir Farm (3 Evirs)",
+      "requires": [
+        "canPlayInSand",
+        {"or": [
+          "canFarmWhileShooting",
+          {"and": [
+            "Plasma",
+            "Wave"
+          ]}
+        ]},
+        {"or": [
+          {"resetRoom": {"nodes": [2]}},
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            "Gravity",
+            {"cycleFrames": 300}
+          ]}
+        ]},
+        {"or": [
+          "Gravity",
+          {"and": [
+            "canSuitlessMaridia",
+            "HiJump",
+            {"cycleFrames": 100}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 880}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 880}
+          ]},
+          {"and": [
+            "Wave",
+            {"disableEquipment": "Ice"},
+            {"cycleFrames": 1200}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Evir", "count": 3}],
+      "note": [
+        "The Evirs must be killed quickly before they descend too far.",
+        "It can help to fire at the Evirs from a safe distance",
+        "so they will not be triggered to attack Samus."
+      ],
+      "devNote": ["FIXME: Slower methods are possible for resetting at the left door."]
+    },
+    {
+      "id": 67,
+      "link": [2, 2],
+      "name": "Evir Farm (2 Evirs, Spazer)",
+      "requires": [
+        {"or": [
+          {"resetRoom": {"nodes": [2]}},
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            "Gravity",
+            {"cycleFrames": 300}
+          ]}
+        ]},
+        {"or": [
+          "Gravity",
+          {"and": [
+            "canSuitlessMaridia",
+            "HiJump",
+            {"cycleFrames": 645}
+          ]}
+        ]},
+        "canPlayInSand",
+        "canTrickyDodgeEnemies",
+        "canInsaneJump",
+        "Spazer",
+        {"disableEquipment": "Ice"},
+        {"cycleFrames": 1440}
+      ],
+      "farmCycleDrops": [{"enemy": "Evir", "count": 2}],
+      "note": [
+        "The Evirs must be killed quickly before they descend too far.",
+        "With only Spazer available for damage, this is particularly tight.",
+        "One of the first two Evirs will need to be skipped."
+      ],
+      "devNote": ["FIXME: Slower methods are possible for resetting at the left door."]
+    },
+    {
+      "id": 28,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 29,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Evir Projectile",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Evir Projectile Suitless",
+      "requires": [
+        "canComplexGMode",
+        "canSuitlessMaridia",
+        "canTurnaroundSpinJump"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "The Evir won't shoot unless Samus is on the left tile of the platform. Getting to the transition tiles while standing before the projectile can be tricky.",
+        "Either do two quick small spin jumps, one onto it and one back, breaking spin before landing both times,",
+        "or start with Samus' toe barely on the last tile, move left then do a short spin jump to the right, also breaking spin before landing."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 32,
+      "link": [2, 4],
+      "name": "Gravity Platforming (Right to Center)",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "ScrewAttack",
+          "canCarefulJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 33,
+      "link": [2, 4],
+      "name": "Suitless HiJump (Right to Center)",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canPlayInSand",
+        {"or": [
+          "canCarefulJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 34,
+      "link": [2, 4],
+      "name": "Suitless Itemless (Right to Center)",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        "canPlayInSand"
+      ],
+      "note": "It is possible to cross this segment with nothing. Cancel spin before hitting the sand, then get a good jump off the sand in multiple places."
+    },
+    {
+      "id": 35,
+      "link": [2, 5],
+      "name": "Tricky Speedy Jump (Right to Left)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 10.4375
+        }
+      },
+      "requires": [
+        {"notable": "Tricky Speedy Jump (Right to Left)"},
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "canTrickyDashJump"
+      ],
+      "note": [
+        "Run into the room using between 11 and 12 tiles of runway in the other room (extra run speed between $2.D and $3.1).",
+        "Jump somewhat soon after entering the room, and land on the pillar just past the last Evir.",
+        "To get a controlled landing, it can help to turn around while still in spin, then break spin to stop instantly."
+      ],
+      "devNote": [
+        "A run speed of $2.C also works but requires a last-frame jump; speeds $3.2 and $3.3 can also work with a late jump.",
+        "Note that there's not a spike in the jump height at this range of values;",
+        "the 'canTrickyDashJump' is just because of the narrowness of the range that works well:",
+        "lower speeds will not make it onto the ledge, and higher speeds will catch on a ceiling overhang.",
+        "There are other, higher ranges of speed values that can also work but they are generally harder to control."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [2, 5],
+      "name": "Tricky Speedy Airball (Right to Left)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 7.5,
+          "maxTiles": 7.75
+        }
+      },
+      "requires": [
+        {"notable": "Tricky Speedy Airball (Right to Left)"},
+        "canSuitlessMaridia",
+        "canTrickyDashJump",
+        "canInsaneJump",
+        "canLateralMidAirMorph",
+        "canPlayInSand"
+      ],
+      "note": [
+        "Run into the room with an exact amount of speed, by using 7.5 tiles of runway or up to 4 pixels more (getting extra run speed exactly $2.3).",
+        "After entering the room, jump from the last tile or two of runway, perform a lateral mid-air morph, and land on the pillar just past the last Evir."
+      ],
+      "devNote": [
+        "A speed of $2.2 can also work but it requires a last-frame jump and a tight lateral mid-air morph."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [2, 5],
+      "name": "Cross Room Space Jump (Right to Left)",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": true,
+          "minTiles": 36
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Space Jump (Right to Left)"},
+        "canPreciseSpaceJump",
+        "canInsaneJump",
+        "canDownGrab"
+      ],
+      "note": [
+        "In the other room, gain run speed using at least 36 tiles (extra run speed at least $6.4), and Space Jump low through the door.",
+        "Land on the block just past the last Evir."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [3, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "HiJump",
+          "Gravity",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"or": [
+          "canInsaneJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Dodging the Evirs can be tricky. Enter on the far right side, facing left, and hold left on entry to dodge them reliably."
+    },
+    {
+      "id": 39,
+      "link": [3, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "HiJump",
+          "Gravity",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"or": [
+          "canInsaneJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Dodging the Evirs can be tricky. Enter on the far right side, facing left, and hold left on entry to dodge them reliably."
+    },
+    {
+      "id": 40,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}},
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ]
+    },
+    {
+      "id": 41,
+      "link": [3, 4],
+      "name": "Evir Dodge",
+      "requires": [
+        "canPrepareForNextRoom",
+        "canPlayInSand",
+        "canTrickyJump",
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canInsaneJump"
+        ]}
+      ],
+      "note": "Enter on the right side of the transition and move left to avoid damage.",
+      "devNote": [
+        "Entering from a non-sand room makes the suitless+hijumpless dodge only possible with a walljump.",
+        "Entering through the Toilet does not affect this dodge strat much."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 43,
+      "link": [4, 2],
+      "name": "Gravity Platforming (Center to Right)",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canPlayInSand",
+          "canUseFrozenEnemies",
+          "canCarefulJump"
+        ]},
+        {"or": [
+          "canCarefulJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 44,
+      "link": [4, 2],
+      "name": "Suitless Platforming (Center to Right)",
+      "requires": [
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "HiJump",
+        {"or": [
+          "canCarefulJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 45,
+      "link": [4, 2],
+      "name": "Suitless Bootless Spring Ball (Center to Right)",
+      "requires": [
+        {"notable": "Suitless Bootless Spring Ball"},
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "h_maxHeightSpringBallJump",
+        "canStationaryLateralMidAirMorph",
+        "canInsaneJump",
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Evir", "Evir"]],
+            "explicitWeapons": ["Super", "Missile", "PowerBombPeriphery", "Plasma"]
+          }},
+          "canTrickyDodgeEnemies"
+        ]}
+      ],
+      "note": [
+        "Perform multiple stationary lateral mid-air morphs, while avoiding the Evir projectiles, to cross the room.",
+        "It is necessary to start the jumps from the far side of the platforms in order to gain more horizontal momentum before entering the sand falls.",
+        "Falling into the sand will often result in a soft lock."
+      ],
+      "detailNote": "It is possible to use a very precise spring fling instead of a stationary lateral mid-air morph, but it is harder."
+    },
+    {
+      "id": 46,
+      "link": [4, 2],
+      "name": "Ice Only (Center to Right)",
+      "requires": [
+        {"notable": "Ice Only (Center to Right)"},
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "canTrickyJump",
+        "canTrickyUseFrozenEnemies"
+      ],
+      "note": [
+        "From the sand fall, quickly get onto the left platform to prevent the right side Evir from lowering too far.",
+        "Freeze the right Evir, then jump on the sand to the right while shooting ice over the first Evir to also freeze the second.",
+        "Freezing the first Evir very high up would also work.",
+        "As a backup, it may be possible to make them rise again by hitting them with a PB - place the PB in the air to avoid double hitting and killing them."
+      ]
+    },
+    {
+      "id": 61,
+      "link": [4, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canPlayInSand",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 6, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 47,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 48,
+      "link": [4, 5],
+      "name": "Gravity Platforming (Center to Left)",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canPlayInSand",
+          "canWalljump",
+          "h_useSpringBall",
+          "canCarefulJump"
+        ]},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            "canCarefulJump"
+          ]},
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 49,
+      "link": [4, 5],
+      "name": "Suitless Platforming (Center to Left)",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canPlayInSand",
+        {"or": [
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 50,
+      "link": [4, 5],
+      "name": "Suitless Bootless Spring Ball (Center to Left)",
+      "requires": [
+        {"notable": "Suitless Bootless Spring Ball"},
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "h_maxHeightSpringBallJump",
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Evir"], ["Evir"]],
+            "explicitWeapons": ["Super", "Missile", "PowerBombPeriphery", "Plasma"]
+          }},
+          "canTrickyDodgeEnemies"
+        ]}
+      ],
+      "note": [
+        "The first Spring Ball jump is performed farther away from the sand tile so Samus can build up momentum and height before entering the sand fall.",
+        "The second jump must be made from the right half of the solid tile (but not the rightmost pixels.)",
+        "The third jump will land on the sand and must be followed by a jump off of the sand.",
+        "Falling into the sand will often result in a soft lock.",
+        "Only the far left section of sand, near the door, can be escaped with a crouch jump."
+      ]
+    },
+    {
+      "id": 51,
+      "link": [4, 5],
+      "name": "Ice Beam Only (Center to Left)",
+      "requires": [
+        {"notable": "Ice Beam Only (Center to Left)"},
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "canTrickyJump",
+        "canTrickyUseFrozenEnemies"
+      ],
+      "note": [
+        "Freeze the Evir quickly before it descends and use it to get to the platforms.",
+        "Getting a good jump while on the right side of the floating block can get Samus to the leftmost block.",
+        "With a clean jump off of the sand, Samus can then get onto the final vertical pillar."
+      ]
+    },
+    {
+      "id": 62,
+      "link": [4, 5],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canPlayInSand",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 5, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 52,
+      "link": [4, 5],
+      "name": "Suitless Damage Boost (Center to Left)",
+      "requires": [
+        {"notable": "Suitless Damage Boost (Center to Left)"},
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "canInsaneJump",
+        {"or": [
+          "canCrouchJump",
+          "h_underwaterCrouchJumpWithFlashSuit"
+        ]},
+        "canNeutralDamageBoost",
+        {"or": [
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}},
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ],
+      "note": [
+        "Use the projectile from a fully submerged Evir to boost Samus into the sandfall, providing just enough height to make the first and hardest jump.",
+        "Time the projectile to hit Samus when at the maximum height from a jump.",
+        "The hit must be on the right side of Samus and with no inputs held, but also hold forward during the damage knockback to move through the sandfall.",
+        "Getting a good jump while on the right side of the next floating block can get Samus to the leftmost block.",
+        "With a clean jump off of the sand, Samus can then get onto the final vertical pillar."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [5, 1],
+      "name": "Base",
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "Gravity",
+          "canPlayInSand",
+          "HiJump"
+        ]}
+      ]
+    },
+    {
+      "id": 54,
+      "link": [5, 1],
+      "name": "Hidden Tunnel",
+      "requires": [
+        "canSuitlessMaridia",
+        "Morph",
+        {"or": [
+          "canSunkenTileWideWallClimb",
+          "h_crouchJumpDownGrab"
+        ]}
+      ],
+      "note": [
+        "Fall into the sand and roll all the way to the left, through an invisible tile and under the door platform.",
+        "Shoot upwards to break part of the platform, then perform a crouch jump and down grab or a tile-wide wall jump climb to escape."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [5, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canPlayInSand",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 64, "excessFrames": 13}}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "With these excess frames, Samus may only reach the final pillar or the sand in between, which would require a sand fall bounce."
+    },
+    {
+      "id": 55,
+      "link": [5, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 56,
+      "link": [5, 4],
+      "name": "Gravity Platforming (Left to Center)",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "HiJump",
+          "canPreciseWalljump",
+          "canPlayInSand"
+        ]},
+        {"or": [
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 57,
+      "link": [5, 4],
+      "name": "Suitless Platforming (Left to Center)",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canPlayInSand",
+        {"or": [
+          "canCarefulJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"or": [
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]},
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"enemyDamage": {"enemy": "Evir", "type": "particle", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 58,
+      "link": [5, 4],
+      "name": "Suitless Bootless Spring Ball (Left to Center)",
+      "requires": [
+        {"notable": "Suitless Bootless Spring Ball"},
+        "canSuitlessMaridia",
+        "canPlayInSand",
+        "h_maxHeightSpringBallJump",
+        "canStationaryLateralMidAirMorph",
+        "canInsaneJump"
+      ],
+      "note": [
+        "Perform multiple stationary lateral mid-air morphs, while avoiding the Evir projectiles, to cross the room.",
+        "It is necessary to start the jumps from the far side of the platforms in order to gain more horizontal momentum before entering the sand falls.",
+        "Falling into the sand will often result in a soft lock."
+      ]
+    },
+    {
+      "id": 64,
+      "link": [5, 4],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canPlayInSand",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 6, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Suitless Bootless Spring Ball",
+      "note": [
+        "Perform multiple stationary lateral mid-air morphs, while avoiding the Evir projectiles, to cross the room.",
+        "It is necessary to start the jumps from the far side of the platforms in order to gain more horizontal momentum before entering the sand falls.",
+        "Falling into the sand will often result in a soft lock and jumping from the top of sand may be required.",
+        "Timing a Spring Ball jump to counteract the push of a sandfall requires a more precise jump timing."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Tricky Speedy Jump (Left to Right)",
+      "note": [
+        "Run into the room using exactly 20 tiles of runway (with closed ends) in the other room, or up to 6 pixels more (getting extra run speed exactly $4.4).",
+        "Jump on the last possible frame, and aim down as Samus approaches the overhang, to avoid bonking it.",
+        "If successful, Samus will land on the last pillar."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Tricky Speedy Airball (Left to Right)",
+      "note": [
+        "Run into the room using exactly 20 tiles of runway (with an open end) in the other room, or up to 11 pixels more or 1 pixel less (getting extra run speed $4.5 or $4.6).",
+        "Jump toward the end of the runway, quickly aim down, and then morph when close to the ceiling.",
+        "Land on the last pillar, turning around to the left (while still morphed) to instantly cancel Samus' horizontal speed if needed."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Insane Bomb Jump",
+      "note": [
+        "Time a bomb to hit Samus when she is morphed, 1 pixel into the sand, inside a sandfall, and moving horizontally.",
+        "There is a setup using a Sand IBJ to rise up the sandfall from the floor and Sandfall Bounce with the correct timing.",
+        "An alternate setup places the bomb before entering the sand and jumps into it with a very fast jump morph, using HiJump."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Spring Fling with Momentum",
+      "note": [
+        "Enter with at least 1 tile of run speed from an air room, with Speedbooster unequipped.",
+        "Jump from near the end of the runway (though a jump from 1-2 tiles away from the end can still work).",
+        "Press pause while crossing the narrow first sandfall, then perform a lateral mid-air morph after exiting the sandfall.",
+        "Equip both Spring Ball and Speed Booster, and perform a mid-air Spring Ball jump at somewhere close to the maximum height.",
+        "Unequip Spring Ball while descending through the wide second sidefall."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Tricky Speedy Jump (Right to Left)",
+      "note": [
+        "Run into the room using between 11 and 12 tiles of runway in the other room (extra run speed between $2.D and $3.1).",
+        "Jump somewhat soon after entering the room, and land on the pillar just past the last Evir.",
+        "To get a controlled landing, it can help to turn around while still in spin, then break spin to stop instantly."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Tricky Speedy Airball (Right to Left)",
+      "note": [
+        "Run into the room with an exact amount of speed, by using 7.5 tiles of runway or up to 4 pixels more (getting extra run speed exactly $2.3).",
+        "After entering the room, jump from the last tile or two of runway, perform a lateral mid-air morph, and land on the pillar just past the last Evir."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Cross Room Space Jump (Right to Left)",
+      "note": [
+        "In the other room, gain run speed using at least 36 tiles (extra run speed at least $6.4), and Space Jump low through the door.",
+        "Land on the block just past the last Evir."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Ice Only (Center to Right)",
+      "note": [
+        "From the sand fall, quickly get onto the left platform to prevent the right side Evir from lowering too far.",
+        "Freeze the right Evir, then jump on the sand to the right while shooting ice over the first Evir to also freeze the second.",
+        "Freezing the first Evir very high up would also work.",
+        "As a backup, it may be possible to make them rise again by hitting them with a PB - place the PB in the air to avoid double hitting and killing them."
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Ice Beam Only (Center to Left)",
+      "note": [
+        "Freeze the Evir quickly before it descends and use it to get to the platforms.",
+        "Getting a good jump while on the right side of the floating block can get Samus to the leftmost block.",
+        "With a clean jump off of the sand, Samus can then get onto the final vertical pillar."
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Suitless Damage Boost (Center to Left)",
+      "note": [
+        "Use the projectile from a fully submerged Evir to boost Samus into the sandfall, providing just enough height to make the first and hardest jump.",
+        "Time the projectile to hit Samus when at the maximum height from a jump.",
+        "The hit must be on the right side of Samus and with no inputs held, but also hold forward during the damage knockback to move through the sandfall.",
+        "Getting a good jump while on the right side of the next floating block can get Samus to the leftmost block.",
+        "With a clean jump off of the sand, Samus can then get onto the final vertical pillar."
+      ]
+    }
+  ],
+  "nextStratId": 68,
+  "nextNotableId": 12
+}

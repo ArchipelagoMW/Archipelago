@@ -1,0 +1,1260 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 31,
+  "name": "Gauntlet Energy Tank Room",
+  "area": "Crateria",
+  "subarea": "West",
+  "roomAddress": "0x7965B",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018b1a",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018b0e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "ETank",
+      "nodeAddress": "0x78264",
+      "mapTileMask": [
+        [1, 1, 1, 1, 2, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Middle Junction (Left of Morph Tunnel)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 2, 2, 1, 1]
+      ],
+      "note": "A junction in the central part of the room, to the right of obstacle A."
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Vertical Bomb Blocks",
+      "obstacleType": "inanimate",
+      "note": "The Bomb blocks to the far right respawn and are excluded from this obstacle. The shot blocks are excluded because they are shot blocks."
+    },
+    {
+      "id": "B",
+      "name": "Runway Thick Bomb Blocks",
+      "obstacleType": "inanimate",
+      "note": "The leftmost thick wall that can be broken for passage or to extend the runway."
+    },
+    {
+      "id": "C",
+      "name": "Runway Thick Bomb Blocks (Only Left Half)",
+      "obstacleType": "inanimate",
+      "note": "The left half of the leftmost thick wall that can be broken to extend the runway. Only useful in G-Mode."
+    },
+    {
+      "id": "D",
+      "name": "Blue Suit",
+      "obstacleType": "abstract",
+      "note": "Samus has obtained a blue suit from R-Mode."
+    },
+    {
+      "id": "E",
+      "name": "Respawning Block",
+      "obstacleType": "abstract",
+      "note": "Breaking the respawning blocks with a Power Bomb to pass through it twice."
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Gauntlet E-Tank Yapping Maw",
+      "enemyName": "Yapping Maw",
+      "quantity": 1,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Gauntlet E-Tank Zebbo",
+      "enemyName": "Zebbo",
+      "quantity": 1,
+      "homeNodes": [1]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 52,
+      "link": [1, 1],
+      "name": "Leave with Partial Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [
+        "h_runOverRespawningEnemies"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 15,
+          "openEnd": 0,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "note": "Involves leaving some drops hanging after killing the enemies so they don't respawn."
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave with Runway, Broken Bomb Wall",
+      "requires": [
+        "h_runOverRespawningEnemies",
+        {"or": [
+          "h_destroyBombWalls",
+          {"obstaclesCleared": ["B"]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 19,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "note": "Involves leaving some drops hanging after killing the enemies so they don't respawn."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave with Runway, Partially Broken Bomb Wall",
+      "requires": [
+        "h_runOverRespawningEnemies",
+        {"obstaclesCleared": ["C"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 17,
+          "openEnd": 0,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "note": "Involves leaving some drops hanging after killing the enemies so they don't respawn.",
+      "devNote": "This situation can only be usefully created with G-Mode."
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Zebbo Farm",
+      "requires": [
+        {"cycleFrames": 140}
+      ],
+      "farmCycleDrops": [{"enemy": "Zebbo", "count": 1}],
+      "devNote": [
+        "We use cycleFrames here rather than simpleCycleFrames because of how the acid (and Yapping Maw) complicates the farm."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Break First Wall with Speed",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 5,
+          "openEnd": 0,
+          "steepUpTiles": 0,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Break First Wall with Speed, Kill Zebo on Entry",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 14,
+          "openEnd": 0,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        "Wave",
+        {"acidFrames": 11},
+        {"or": [
+          "Gravity",
+          {"acidFrames": 5}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "note": "To use the full runway, kill the Zebbo with Wave.",
+      "devNote": [
+        "FIXME: Running through acid doesn't stop a shinecharge, but does inhibit tapping without gravity.",
+        "And the acid frame count may change slightly with speed."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "In-Room Shinecharge, Break Left Blocks",
+      "requires": [
+        {"or": [
+          {"getBlueSpeed": {
+            "usedTiles": 14,
+            "steepUpTiles": 1,
+            "steepDownTiles": 1,
+            "openEnd": 0
+          }},
+          {"and": [
+            {"getBlueSpeed": {
+              "usedTiles": 15,
+              "steepUpTiles": 1,
+              "steepDownTiles": 1,
+              "openEnd": 0
+            }},
+            {"doorUnlockedAtNode": 1}
+          ]},
+          {"and": [
+            {"getBlueSpeed": {
+              "usedTiles": 16,
+              "steepUpTiles": 1,
+              "steepDownTiles": 1,
+              "openEnd": 0
+            }},
+            {"obstaclesCleared": ["C"]}
+          ]},
+          {"and": [
+            {"getBlueSpeed": {
+              "usedTiles": 17,
+              "steepUpTiles": 1,
+              "steepDownTiles": 1,
+              "openEnd": 0
+            }},
+            {"obstaclesCleared": ["C"]},
+            {"doorUnlockedAtNode": 1}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get hit by Zebbo",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "G-Mode Morph, Power Bomb the Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphBombs"
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": "Place a Power Bomb to the left of the Zebbo, then exit G-Mode, to break the bomb wall to the right."
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "G-Mode Morph, Bomb the Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphBombs"
+      ],
+      "clearsObstacles": ["C"],
+      "flashSuitChecked": true,
+      "note": "Carefully kill the Zebbo, then place two bombs against the right wall to break the left half of the wall to slightly increase the length of the runway."
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "R-Mode Blue Suit",
+      "entranceCondition": {
+        "comeInWithRMode": {}
+      },
+      "requires": [
+        {"notable": "R-Mode Blue Suit"},
+        "canBePatient",
+        {"or": [
+          {"canShineCharge": {
+            "usedTiles": 14,
+            "steepUpTiles": 1,
+            "steepDownTiles": 1,
+            "openEnd": 0
+          }},
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 15,
+              "steepUpTiles": 1,
+              "steepDownTiles": 1,
+              "openEnd": 0
+            }},
+            {"doorUnlockedAtNode": 1}
+          ]},
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 18,
+              "steepUpTiles": 1,
+              "steepDownTiles": 1,
+              "openEnd": 1
+            }},
+            "h_destroyBombWalls"
+          ]},
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 19,
+              "steepUpTiles": 1,
+              "steepDownTiles": 1,
+              "openEnd": 1
+            }},
+            "h_destroyBombWalls",
+            {"doorUnlockedAtNode": 1}
+          ]}
+        ]},
+        {"shinespark": {"frames": 0, "excessFrames": 0}}
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "clearsObstacles": ["B", "D"],
+      "flashSuitChecked": true,
+      "note": [
+        "Use R-Mode to get a blue suit to cross the room and get the item, or to leave the right shinecharged.",
+        "In R-Mode, fill your Reserves at the farm. Damage down again so that Samus is within 1 Zebbo hit from triggering Reserves.",
+        "Gain a shinecharge in-room without gaining more energy. It is possible to time the despawn of a drop with the acid if no ammo is owned.",
+        "Shinespark vertically, such that a Zebbo can hit Samus in the wind-up to cause a reserve trigger, giving a blue suit.",
+        "It is then fine to farm the Zebbos again."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [1, 1],
+      "name": "Gain Flash Suit (Spikesuit)",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        {"or": [
+          {"and": [
+            {"doorUnlockedAtNode": 1},
+            {"canShineCharge": {
+              "usedTiles": 19,
+              "steepUpTiles": 1,
+              "steepDownTiles": 1,
+              "openEnd": 0
+            }}
+          ]},
+          {"canShineCharge": {
+            "usedTiles": 18,
+            "steepUpTiles": 1,
+            "steepDownTiles": 1,
+            "openEnd": 0
+          }}
+        ]},
+        "h_runOverRespawningEnemies",
+        {"spikeHits": 1},
+        "canSpikeSuit",
+        {"shinespark": {"frames": 1, "excessFrames": 1}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Gain a spike suit and shinespark vertically into the spikes,",
+        "being careful not to turn around or move forward until Samus falls far enough, to avoid additional spike hits.",
+        "Position the spark as far left as possible, to be able to land on the ledge and avoid acid damage in case of failure.",
+        "After gaining the spike suit successfully, for extra safety the shinespark can be delayed to wait for the acid tide to go low."
+      ],
+      "devNote": ["Leniency is not included, because there is a farm available."]
+    },
+    {
+      "id": 50,
+      "link": [1, 2],
+      "name": "Blue Spring Ball Bounce, Temporary Blue Chain",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        {"or": [
+          {"canShineCharge": {
+            "usedTiles": 18,
+            "steepUpTiles": 1,
+            "steepDownTiles": 1,
+            "openEnd": 1
+          }},
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 19,
+              "steepUpTiles": 1,
+              "steepDownTiles": 1,
+              "openEnd": 1
+            }},
+            {"doorUnlockedAtNode": 1}
+          ]}
+        ]},
+        "canTrickySpringBallBounce",
+        "canChainTemporaryBlue"
+      ],
+      "clearsObstacles": ["A", "E"]
+    },
+    {
+      "id": 12,
+      "link": [1, 3],
+      "name": "Blue Suit",
+      "requires": [
+        {"notable": "R-Mode Blue Suit"},
+        {"obstaclesCleared": ["D"]},
+        "Morph",
+        {"or": [
+          "canTrickyJump",
+          {"acidFrames": 20}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Carefully walk through the room. It is possible but tricky to do so damageless, but it is always possible to go back and farm if needed.",
+        "While in the morph tunnel, simply unmorph to break the bomb blocks overhead."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canCarefulJump",
+          {"acidFrames": 35}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          {"obstaclesCleared": ["A", "B"]}
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 14,
+      "link": [1, 4],
+      "name": "Shinespark Entry",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        "canMidairShinespark",
+        {"shinespark": {"frames": 90, "excessFrames": 17}}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "note": "Enter through the top of the door to reach all the way to the shot block wall."
+    },
+    {
+      "id": 15,
+      "link": [1, 4],
+      "name": "Shinespark in Room",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 0,
+          "steepUpTiles": 0,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        "canMidairShinespark",
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 77, "excessFrames": 17}}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "note": "Charge the Shinespark just before getting to the bug, then Midair Shinespark to make it all the way to the shot blocks."
+    },
+    {
+      "id": 16,
+      "link": [1, 4],
+      "name": "Shinespark in Room, Kill Zebo on Entry",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 14,
+          "openEnd": 0,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        "Wave",
+        {"acidFrames": 11},
+        {"or": [
+          "Gravity",
+          {"acidFrames": 5}
+        ]},
+        "canMidairShinespark",
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 77, "excessFrames": 17}}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "note": "To use the full runway, kill the Zebbo with Wave, then Midair Shinespark to make it all the way to the shot blocks.",
+      "devNote": [
+        "FIXME: Running through acid doesn't stop a shinecharge, but does inhibit tapping without gravity.",
+        "And the acid frame count may change slightly with speed."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 4],
+      "name": "Blue SpaceJump",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 5,
+          "openEnd": 0,
+          "steepUpTiles": 0,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        "canBlueSpaceJump",
+        "canCarefulJump"
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 18,
+      "link": [1, 4],
+      "name": "Blue SpaceJump, Kill Zebo on Entry",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 14,
+          "openEnd": 0,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        "Wave",
+        {"acidFrames": 11},
+        {"or": [
+          "Gravity",
+          {"acidFrames": 5}
+        ]},
+        "canBlueSpaceJump",
+        "canCarefulJump"
+      ],
+      "clearsObstacles": ["A", "B"],
+      "note": "To use the full runway, kill the Zebbo with Wave.",
+      "devNote": [
+        "FIXME: Running through acid doesn't stop a shinecharge, but does inhibit tapping without gravity.",
+        "And the acid frame count may change slightly with speed."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [1, 4],
+      "name": "Bombs",
+      "requires": [
+        {"or": [
+          "canCarefulJump",
+          {"acidFrames": 35}
+        ]},
+        "h_useMorphBombs"
+      ],
+      "clearsObstacles": ["A", "B"],
+      "note": "When taking too much acid damage, it is always possible to return to the left and farm."
+    },
+    {
+      "id": 20,
+      "link": [1, 4],
+      "name": "Power Bombs",
+      "requires": [
+        {"or": [
+          "canCarefulJump",
+          {"acidFrames": 35}
+        ]},
+        {"or": [
+          {"and": [
+            "Morph",
+            {"ammo": {"type": "PowerBomb", "count": 2}}
+          ]},
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"or": [
+          "h_usePowerBomb",
+          {"obstaclesCleared": ["B"]}
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "note": "When taking too much acid damage, it is always possible to return to the left and farm."
+    },
+    {
+      "id": 21,
+      "link": [1, 4],
+      "name": "In-Room Shinecharge, Spark Through the Room",
+      "requires": [
+        "canHorizontalShinespark",
+        {"obstaclesCleared": ["B"]},
+        {"or": [
+          {"canShineCharge": {
+            "usedTiles": 14,
+            "steepUpTiles": 1,
+            "steepDownTiles": 1,
+            "openEnd": 0
+          }},
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 15,
+              "steepUpTiles": 1,
+              "steepDownTiles": 1,
+              "openEnd": 0
+            }},
+            {"doorUnlockedAtNode": 1}
+          ]}
+        ]},
+        {"shinespark": {"frames": 54}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "It is possible to return to the farm after sparking to regain Energy."
+    },
+    {
+      "id": 22,
+      "link": [1, 4],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 49, "excessFrames": 0}}
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 23,
+      "link": [1, 4],
+      "name": "Use Flash Suit and Power Bombs",
+      "requires": [
+        "h_usePowerBomb",
+        {"useFlashSuit": {}},
+        {"or": [
+          {"and": [
+            "canHorizontalShinespark",
+            {"shinespark": {"frames": 28, "excessFrames": 0}}
+          ]},
+          {"and": [
+            "h_additionalBomb",
+            {"shinespark": {"frames": 1, "excessFrames": 1}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Spark Master",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 8,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"notable": "Spark Master"},
+        "canSlowShortCharge",
+        "canShinechargeMovementTricky",
+        "h_usePowerBomb",
+        "HiJump",
+        "Gravity",
+        {"acidFrames": 16},
+        "canInsaneJump",
+        {"shinespark": {"frames": 93, "excessFrames": 15}}
+      ],
+      "note": [
+        "Use SpeedBooster to break the runway Bomb block and then to shinespark across the room, saving Power Bombs.",
+        "One Power Bomb is still needed to break the tunnel block.",
+        "The shinespark timer is very tight and breaking the runway block while storing the Shinespark is required as it saves movement frames."
+      ],
+      "devNote": "There are variations with Screw or Bombs that wouldn't need Gravity.  But then you can cross the room normally."
+    },
+    {
+      "id": 51,
+      "link": [2, 1],
+      "name": "Long Temporary Blue Chain, Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canTrickySpringBallBounce",
+        {"acidFrames": 5},
+        {"or": [
+          "canInsaneJump",
+          {"acidFrames": 30}
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "note": [
+        "Carry temporary blue across the room, breaking the bomb blocks along the way.",
+        "Use Spring Ball to bounce through the morph tunnel at the beginning, and across the final stretch at the end."
+      ]
+    },
+    {
+      "id": 54,
+      "link": [2, 1],
+      "name": "G-Mode Morph, Overload PLMs with the Item, Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"itemNotCollectedAtNode": 3},
+        "canRiskPermanentLossOfAccess",
+        "h_artificialMorphMovement",
+        "canInsaneJump",
+        "canOffScreenMovement",
+        "SpaceJump",
+        "ScrewAttack"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Roll through the item to overload PLMs then quickly fall into the morph tunnel, unmorph at the correct spot and jump out before the acid touches Samus.",
+        "With a careful, blind, Space Jump with Screw Attack, move through the bomb walls while avoiding the spikes."
+      ],
+      "devNote": "This strat leaves the room, as it would be unreasonable and may not be possible to do anything at 1 with the broken camera movement."
+    },
+    {
+      "id": 29,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 11,
+          "openEnd": 0,
+          "steepUpTiles": 1
+        }
+      }
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 31,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 32,
+      "link": [2, 4],
+      "name": "Speedball",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canSpeedball",
+        "canCarefulJump",
+        "canSlowShortCharge",
+        {"acidFrames": 60}
+      ],
+      "devNote": "There are 9 unusable tiles in this runway."
+    },
+    {
+      "id": 33,
+      "link": [2, 4],
+      "name": "Temporary Blue, Roll in Acid",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canTemporaryBlue",
+        "canLateralMidAirMorph",
+        {"acidFrames": 200}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "There are 5 unusable tiles in this runway."
+    },
+    {
+      "id": 34,
+      "link": [2, 4],
+      "name": "Temporary Blue, Avoid the Acid",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canTemporaryBlue",
+        "canLateralMidAirMorph",
+        {"or": [
+          "canChainTemporaryBlue",
+          "can4HighMidAirMorph"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "A quick jump morph from the top of the slope will bounce into the tunnel and avoid acid damage.",
+      "devNote": "There are 6 unusable tiles in this runway."
+    },
+    {
+      "id": 35,
+      "link": [2, 4],
+      "name": "Temporary Blue, X-Ray Turnaround",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 9,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canXRayTurnaround",
+        "canChainTemporaryBlue",
+        {"acidFrames": 27}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "There is 1 unusable tile in this runway."
+    },
+    {
+      "id": 36,
+      "link": [2, 4],
+      "name": "Stored Moonfall Clip",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        "Morph",
+        "canMoonfall"
+      ],
+      "note": [
+        "Moonfall against the Chozo statue to clip into the Morph Tunnel, past the Bomb block."
+      ]
+    },
+    {
+      "id": 55,
+      "link": [2, 4],
+      "name": "G-Mode, Overload PLMs with the Item, Fix Camera",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"itemNotCollectedAtNode": 3},
+        "canRiskPermanentLossOfAccess",
+        "Morph",
+        "canInsaneJump",
+        "canOffScreenMovement"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Roll through the item to overload PLMs then fall into the morph tunnel, unmorph at the correct spot and quickly jump out before the acid touches Samus.",
+        "Exit G-mode and roll back into the tunnel to fix the camera and return avoiding the acid again."
+      ],
+      "devNote": [
+        "Acid damage wasn't considered, as Samus needs to be in direct G-mode",
+        "FIXME: This could be done with a CF after overloading PLMs with the item."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [3, 1],
+      "name": "Blue Suit",
+      "requires": [
+        {"notable": "R-Mode Blue Suit"},
+        {"obstaclesCleared": ["D"]},
+        "Morph",
+        {"or": [
+          "canTrickyJump",
+          {"acidFrames": 10}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Carefully walk through the room. It is possible but tricky to do so damageless."
+    },
+    {
+      "id": 38,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 39,
+      "link": [3, 2],
+      "name": "Leave Shinecharged, Blue Suit",
+      "requires": [
+        {"notable": "R-Mode Blue Suit"},
+        {"obstaclesCleared": ["D"]},
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 0}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: Add a way to leave with blue suit."
+    },
+    {
+      "id": 40,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        "h_usePowerBomb"
+      ]
+    },
+    {
+      "id": 41,
+      "link": [3, 4],
+      "name": "Bombs",
+      "requires": [
+        "h_useMorphBombs",
+        {"or": [
+          "canCarefulJump",
+          {"acidFrames": 40}
+        ]}
+      ],
+      "note": [
+        "Delay breaking the runway block so that it will not respawn too quickly.",
+        "Wait for the acid to be rising to break the tunnel block, and then go through the tunnel on the next cycle."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [3, 4],
+      "name": "Quickly Return Through Respawning Blocks",
+      "requires": [
+        "canTrickyJump",
+        {"obstaclesCleared": ["E"]}
+      ],
+      "resetsObstacles": ["E"],
+      "note": "Grab the item and quickly return through the blocks before they respawn.",
+      "devNote": "This does not require the item to be there, but there is no reason to go through the tunnel twice if it's not."
+    },
+    {
+      "id": 43,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canCarefulJump",
+          {"acidFrames": 35}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            {"obstaclesCleared": ["A"]},
+            {"obstaclesCleared": ["B"]}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "devNote": "A Back-of-Gauntlet-Spark strat would require at least Screw Attack and acid Frames to be reasonable."
+    },
+    {
+      "id": 44,
+      "link": [4, 1],
+      "name": "Bombs",
+      "requires": [
+        {"or": [
+          "canCarefulJump",
+          {"acidFrames": 35}
+        ]},
+        "h_useMorphBombs",
+        {"or": [
+          "canTrickyJump",
+          {"and": [
+            "canCarefulJump",
+            "canBombHorizontally",
+            {"acidFrames": 35}
+          ]},
+          {"acidFrames": 100}
+        ]},
+        {"or": [
+          {"and": [
+            "canTrickyJump",
+            "canTrickyWalljump"
+          ]},
+          {"and": [
+            "canCarefulJump",
+            {"acidFrames": 35}
+          ]},
+          {"acidFrames": 100}
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "note": [
+        "After destroying a single bomb block, Samus can spin jump into its spot to quickly escape the acid.",
+        "To avoid the acid completely, morph quickly at the right height and place a bomb."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [4, 1],
+      "name": "Power Bombs",
+      "requires": [
+        {"or": [
+          "canCarefulJump",
+          {"acidFrames": 35}
+        ]},
+        "Morph",
+        {"ammo": {"type": "PowerBomb", "count": 3}}
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 46,
+      "link": [4, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 76, "excessFrames": 18}}
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 47,
+      "link": [4, 1],
+      "name": "Use Flash Suit and Power Bombs",
+      "requires": [
+        "h_usePowerBomb",
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 58, "excessFrames": 21}},
+          {"and": [
+            "h_additionalBomb",
+            {"shinespark": {"frames": 30, "excessFrames": 27}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 48,
+      "link": [4, 3],
+      "name": "Power Bombs",
+      "requires": [
+        "h_usePowerBomb",
+        {"or": [
+          "canCarefulJump",
+          "h_useSpringBall",
+          {"acidFrames": 5}
+        ]}
+      ],
+      "clearsObstacles": ["E"]
+    },
+    {
+      "id": 49,
+      "link": [4, 3],
+      "name": "Bombs",
+      "requires": [
+        "h_useMorphBombs",
+        {"or": [
+          "h_useSpringBall",
+          {"acidFrames": 10}
+        ]},
+        {"or": [
+          "canInsaneJump",
+          {"and": [
+            "canTrickyJump",
+            {"acidFrames": 10}
+          ]},
+          {"and": [
+            "canCarefulJump",
+            {"acidFrames": 120}
+          ]},
+          {"acidFrames": 200}
+        ]}
+      ],
+      "note": [
+        "Break the tunnel block with a Bomb and then return to safety.",
+        "Break the runway block on the next cycle.",
+        "SpringBall helps avoid acid damage.",
+        "Bombing Samus up through the runway with a second Bomb can help, or it can trap Samus in the acid if liquid physics take effect."
+      ],
+      "devNote": "Damageless is possible without SpringBall but it is very likely you end up taking more damage by attempting it."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "R-Mode Blue Suit",
+      "note": [
+        "Use R-Mode to get a blue suit to cross the room and get the item, or to leave the right shinecharged.",
+        "In R-Mode, fill your Reserves at the farm. Damage down again so that Samus is within 1 Zebbo hit from triggering Reserves.",
+        "Gain a shinecharge in-room without gaining more energy. It is possible to time the despawn of a drop with the acid if no ammo is owned.",
+        "Shinespark vertically, such that a Zebbo can hit Samus in the wind-up to cause a reserve trigger, giving a blue suit.",
+        "It is then fine to farm the Zebbos again."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Spark Master",
+      "note": [
+        "Use SpeedBooster to break the runway Bomb block and then to shinespark across the room, saving Power Bombs.",
+        "One Power Bomb is still needed to break the tunnel block.",
+        "The shinespark timer is very tight and breaking the runway block while storing the Shinespark is required as it saves movement frames."
+      ]
+    }
+  ],
+  "nextStratId": 56,
+  "nextNotableId": 3,
+  "devNote": ["FIXME: Add canLongChainTemporaryBlue left-to-right strats."]
+}

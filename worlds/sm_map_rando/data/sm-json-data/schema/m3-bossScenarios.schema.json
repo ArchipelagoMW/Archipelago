@@ -1,0 +1,205 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/vg-json-data/sm-json-data/master/schema/m3-bossScenarios.schema.json",
+  "type": "object",
+  "title": "Super Metroid Boss Scenario Schema",
+  "description": "A list of boss fight scenarios, which can each be resolved into an energy requirement",
+  "properties": {
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "title": "Scenario Object",
+        "description": "An object that describes one boss fight scenario. For a given item loadout, it can be resolved into a fight duration and an energy requirement.",
+        "required": [
+          "id",
+          "name",
+          "boss",
+          "damageWindows",
+          "requires"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Weapon ID",
+            "description": "Numerical identifier for this scenario, unique across the entire game",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "name": {
+            "type": "string",
+            "title": "Scenario Name",
+            "description": "A name for the scenario, intended to be used as a recognizable ID for customization purposes",
+            "default": "",
+            "examples": [
+              "PhantoonNintendoPower"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "boss": {
+            "type": "string",
+            "title": "Boss Name",
+            "description": "The name of the boss for which this scenario applies. Must match an entry in the bosses/main.json file.",
+            "default": "",
+            "examples": [
+              "Phantoon"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "explicitWeapons": {
+            "type": [ "array" ],
+            "title": "Explicit Weapons",
+            "description": "A list containing the only weapons that are applicable for this scenario. If this is missing, all non-situational weapons the boss takes damage from are applicable by default.",
+            "default": [],
+            "items": {
+              "type": "string",
+              "pattern": "^(.*)$"
+            }
+          },
+          "excludedWeapons": {
+            "type": [ "array" ],
+            "title": "Excluded Weapons",
+            "description": "A list containing weapons that are not applicable for this scenario, even though they would normally be based on the value of the explicitWeapons property.",
+            "default": [],
+            "items": {
+              "type": "string",
+              "pattern": "^(.*)$"
+            }
+          },
+          "requires": {
+            "$ref" : "m3-requirements.schema.json#/definitions/logicalRequirements",
+            "title": "Scenario Requirements",
+            "description": "Equipment, tech, and flag requirements for this boss scenario to even be possible"
+          },
+          "bossDodgeRate": {
+            "type": "number",
+            "title": "Boss Dodge Rate",
+            "description": "A value specific to the scenario which indicates a percentage of shots taken by Samus which are expected not to hit. This should be calculated separately from player accuracy values.",
+            "default": 0,
+            "examples": [
+              25
+            ]
+          },
+          "attackOpportunityDuration": {
+            "type": "integer",
+            "title": "Attack Opportunity Duration",
+            "description": "Serves to indicate that the damage window is broken up into opportunities that last the specified amount of frames."
+          },
+          "damageWindows": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "title": "Damage Windows",
+            "description": "An array of objects that describe how often Samus can hit the boss",
+            "default": null,
+            "items": {
+              "type": "object",
+              "title": "Damage Window Object",
+              "description": "An object that describes a percentage of total fight time where Samus can attack, and the requirements that must be met in order to be able to use it.",
+              "required": [ "name", "requires", "windowPercent" ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Damage Window Name",
+                  "description": "A name for this damage window, intended to be used as a recognizable ID for customization purposes",
+                  "default": "",
+                  "examples": [
+                    "Microwave"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "windowPercent": {
+                  "type": "number",
+                  "title": "Window Percent",
+                  "description": "An amount of percentage points by which the damage window is widened if the requirements are met"
+                },
+                "requires": {
+                  "$ref" : "m3-requirements.schema.json#/definitions/logicalRequirements",
+                  "title": "Damage Window Requirements",
+                  "description": "Equipment, tech, and flag requirements to use this damage window"
+                },
+                "note": {
+                  "$ref" : "m3-note.schema.json#/definitions/note"
+                },
+                "devNote": {
+                  "$ref" : "m3-note.schema.json#/definitions/devNote"
+                }
+              }
+            }
+          },
+          "incomingDamage":{
+            "type": [
+              "array",
+              "null"
+            ],
+            "title": "Incoming Damage",
+            "description": "An array of objects that describe attacks that are expected to hit Samus, unless she meets some requirements",
+            "default": null,
+            "items": {
+              "type": "object",
+              "title": "Incoming Damage Object",
+              "description": "An object that describes one attack that is expected to hit Samus at a specific frequency, unless requirements are met",
+              "required": ["name", "attack", "frequencyFrames", "avoidingRequires"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Incoming Damage Name",
+                  "description": "A name for this incoming damage, intended to be used as a recognizable ID for customization purposes",
+                  "default": "",
+                  "examples": [
+                    "UnavoidableFlame"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "attack": {
+                  "type": "string",
+                  "title": "Attack Name",
+                  "description": "The name of the attack that will hit Samus. Should be the name of an attack the boss has.",
+                  "default": "",
+                  "examples": [
+                    "Flame"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "frequencyFrames": {
+                  "type": "integer",
+                  "title": "Frequency Frames",
+                  "description": "Indicates the frequency (in frames) at which Samus is expected to be hit by the attack"
+                },
+                "avoidingRequires": {
+                  "$ref" : "m3-requirements.schema.json#/definitions/logicalRequirements",
+                  "title": "Avoidance Requirements",
+                  "description": "Equipment, tech, and flag requirements that are needed to avoid getting hit by the attack"
+                },
+                "note": {
+                  "$ref" : "m3-note.schema.json#/definitions/note"
+                },
+                "devNote": {
+                  "$ref" : "m3-note.schema.json#/definitions/devNote"
+                }
+              }
+            }
+          },
+          "particleFrequencyFrames": {
+            "type": "integer",
+            "title": "Particle Frequency Frames",
+            "description": "Indicates the frequency (in frames), at which Samus will destroy a farmable particle spawned by the boss. This has a chance to yield energy drops.",
+            "default": 0,
+            "examples": [
+              240
+            ]
+          },
+          "note": {
+            "$ref" : "m3-note.schema.json#/definitions/note"
+          },
+          "devNote": {
+            "$ref" : "m3-note.schema.json#/definitions/devNote"
+          }
+        }
+      }
+    }
+  }
+}

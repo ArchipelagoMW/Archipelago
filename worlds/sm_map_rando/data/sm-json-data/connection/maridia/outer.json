@@ -1,0 +1,380 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between West Glass Tube Tunnel and Glass Tunnel",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 169,
+          "roomName": "West Glass Tube Tunnel",
+          "nodeid": 2,
+          "nodeName": "West Tunnel Right Door (to Glass Tunnel)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 170,
+          "roomName": "Glass Tunnel",
+          "nodeid": 1,
+          "nodeName": "Glass Tunnel Left Door (to West Tunnel)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Glass Tunnel and Glass Tunnel Save Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 170,
+          "roomName": "Glass Tunnel",
+          "nodeid": 2,
+          "nodeName": "Glass Tunnel Bottom Right Door (to Save)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 171,
+          "roomName": "Glass Tunnel Save Room",
+          "nodeid": 1,
+          "nodeName": "Glass Tunnel Save Room Door (to Glass Tunnel)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Glass Tunnel and Main Street",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 170,
+          "roomName": "Glass Tunnel",
+          "nodeid": 4,
+          "nodeName": "Glass Tunnel Top Door (to Main Street)",
+          "position": "bottom"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 172,
+          "roomName": "Main Street",
+          "nodeid": 1,
+          "nodeName": "Main Street Bottom Door (to Glass Tunnel)",
+          "position": "top"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Glass Tunnel and Boyon Gate Hall",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 170,
+          "roomName": "Glass Tunnel",
+          "nodeid": 3,
+          "nodeName": "Glass Tunnel Top Right Door (to Boyon Gate Hall)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 200,
+          "roomName": "Boyon Gate Hall",
+          "nodeid": 1,
+          "nodeName": "Boyon Gate Hall Left Door (to Glass Tube)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Main Street and Crab Tunnel",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 172,
+          "roomName": "Main Street",
+          "nodeid": 2,
+          "nodeName": "Main Street Bottom Right Door (to Crab Tunnel)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 176,
+          "roomName": "Crab Tunnel",
+          "nodeid": 1,
+          "nodeName": "Crab Tunnel Left Door (to Main Street)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Main Street and Fish Tank ",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 172,
+          "roomName": "Main Street",
+          "nodeid": 3,
+          "nodeName": "Main Street Center Right Door (to Fish Tank)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 173,
+          "roomName": "Fish Tank",
+          "nodeid": 1,
+          "nodeName": "Fish Tank Left Door (to Main Street)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Main Street and Mt. Everest",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 172,
+          "roomName": "Main Street",
+          "nodeid": 4,
+          "nodeName": "Main Street Top Right Door (to Mt. Everest)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 174,
+          "roomName": "Mt. Everest",
+          "nodeid": 1,
+          "nodeName": "Mt. Everest Left Door (to Main Street)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalMorphTunnel",
+      "description": "Morph Passage connection between Main Street and Mt. Everest",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 172,
+          "roomName": "Main Street",
+          "nodeid": 5,
+          "nodeName": "Main Street Morph Passage (to Mt. Everest)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 174,
+          "roomName": "Mt. Everest",
+          "nodeid": 6,
+          "nodeName": "Mt. Everest Morph Passage (to Main Street)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Fish Tank and Mama Turtle Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 173,
+          "roomName": "Fish Tank",
+          "nodeid": 2,
+          "nodeName": "Fish Tank Right Door (to Mama Turtle)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 178,
+          "roomName": "Mama Turtle Room",
+          "nodeid": 1,
+          "nodeName": "Mama Turtle Room Door (to Fish Tank)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Right-side Door connection between Fish Tank and Mt. Everest",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 173,
+          "roomName": "Fish Tank",
+          "nodeid": 3,
+          "nodeName": "Fish Tank Top Right Door (to Mt. Everest Right)",
+          "position": "bottom"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 174,
+          "roomName": "Mt. Everest",
+          "nodeid": 3,
+          "nodeName": "Mt. Everest Bottom Right Door (to Fish Tank Right)",
+          "position": "top"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Left-side Door connection between Fish Tank and Mt. Everest",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 173,
+          "roomName": "Fish Tank",
+          "nodeid": 4,
+          "nodeName": "Fish Tank Top Left Door (to Mt. Everest Left)",
+          "position": "bottom"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 174,
+          "roomName": "Mt. Everest",
+          "nodeid": 2,
+          "nodeName": "Mt. Everest Bottom Left Door (to Fish Tank Left)",
+          "position": "top"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Mt. Everest and Red Fish Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 174,
+          "roomName": "Mt. Everest",
+          "nodeid": 5,
+          "nodeName": "Mt. Everest Top Door (to Red Fish Room)",
+          "position": "bottom"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 177,
+          "roomName": "Red Fish Room",
+          "nodeid": 2,
+          "nodeName": "Red Fish Room Bottom Door (to Mt. Everest)",
+          "position": "top"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Crab Tunnel and Crab Hole",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 176,
+          "roomName": "Crab Tunnel",
+          "nodeid": 2,
+          "nodeName": "Crab Tunnel Right Door (to Crab Hole)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 201,
+          "roomName": "Crab Hole",
+          "nodeid": 1,
+          "nodeName": "Crab Hole Top Left Door (to Crab Tunnel)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Crab Hole and Maridia Map Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 201,
+          "roomName": "Crab Hole",
+          "nodeid": 3,
+          "nodeName": "Crab Hole Bottom Right Door (to Map)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 203,
+          "roomName": "Maridia Map Room",
+          "nodeid": 1,
+          "nodeName": "Maridia Map Room Door (to Crab Hole)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Boyon Gate Hall and Crab Hole",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 200,
+          "roomName": "Boyon Gate Hall",
+          "nodeid": 3,
+          "nodeName": "Boyon Gate Hall Top Right Door (to Crab Hole)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 201,
+          "roomName": "Crab Hole",
+          "nodeid": 2,
+          "nodeName": "Crab Hole Bottom Left Door (to Boyon Gate Hall)",
+          "position": "right"
+        }
+      ]
+    }
+  ]
+}

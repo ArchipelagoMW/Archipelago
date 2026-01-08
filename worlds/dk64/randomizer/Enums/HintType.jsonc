@@ -1,0 +1,30 @@
+{
+    "HintType": {
+        // Hint type enum
+        "Joke": 1,
+        "KRoolOrder": 2,
+        "HelmOrder": 3,
+        "MoveLocation": 4,
+        "DirtPatch": 5,
+        "BLocker": 6,
+        "TroffNScoff": 7,
+        "KongLocation": 8,
+        "MedalsRequired": 9,
+        "Entrance": 10,
+        "EntranceV2": 11,
+        "RequiredKongHint": 12,
+        "RequiredKeyHint": 13,
+        "RequiredWinConditionHint": 14,
+        "RequiredHelmDoorHint": 15,
+        "FullShopWithItems": 16,
+        "WothLocation": 17,
+        "FoolishMove": 18,
+        "FoolishRegion": 19,
+        "ForeseenPathless": 20,
+        "Multipath": 21,
+        "RegionItemCount": 22,
+        "ItemHinting": 23,
+        "Plando": 24,
+        "RequiredSlamHint": 25
+    }
+}

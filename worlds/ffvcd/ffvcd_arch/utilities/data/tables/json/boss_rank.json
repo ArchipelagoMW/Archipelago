@@ -1,0 +1,149 @@
+{
+    "1": {
+        "boss_name": "WingRaptor"
+    },
+    "2": {
+        "boss_name": "Karlabos"
+    },
+    "3": {
+        "boss_name": "Siren"
+    },
+    "4": {
+        "boss_name": "Magisa & Forza"
+    },
+    "5": {
+        "boss_name": "Galura"
+    },
+    "6": {
+        "boss_name": "LiquiFlame"
+    },
+    "7": {
+        "boss_name": "Sergeant & DeathClaw"
+    },
+    "8": {
+        "boss_name": "Ifrit"
+    },
+    "9": {
+        "boss_name": "Shiva"
+    },
+    "10": {
+        "boss_name": "Byblos"
+    },
+    "11": {
+        "boss_name": "Crayclaw"
+    },
+    "12": {
+        "boss_name": "Sandworm"
+    },
+    "13": {
+        "boss_name": "AdamanTiMi"
+    },
+    "14": {
+        "boss_name": "Sol Cannon"
+    },
+    "15": {
+        "boss_name": "ArchaeAvis"
+    },
+    "16": {
+        "boss_name": "Chim.Brain"
+    },
+    "17": {
+        "boss_name": "Puroboros"
+    },
+    "18": {
+        "boss_name": "Titan"
+    },
+    "19": {
+        "boss_name": "Gilgamesh 1"
+    },
+    "20": {
+        "boss_name": "Gilgamesh 2"
+    },
+    "21": {
+        "boss_name": "Tyrasaurus"
+    },
+    "22": {
+        "boss_name": "Abductor"
+    },
+    "23": {
+        "boss_name": "HiryuuPlant"
+    },
+    "24": {
+        "boss_name": "Gilgamesh 3 & Enkidou"
+    },
+    "25": {
+        "boss_name": "Atmos"
+    },
+    "26": {
+        "boss_name": "Guardians"
+    },
+    "27": {
+        "boss_name": "Carbunkle"
+    },
+    "28": {
+        "boss_name": "Gilgamesh 4"
+    },
+    "29": {
+        "boss_name": "Antlion"
+    },
+    "30": {
+        "boss_name": "Gargoyles"
+    },
+    "31": {
+        "boss_name": "Ramuh"
+    },
+    "32": {
+        "boss_name": "Shoat"
+    },
+    "33": {
+        "boss_name": "Golem"
+    },
+    "34": {
+        "boss_name": "Merugene"
+    },
+    "35": {
+        "boss_name": "Stalker"
+    },
+    "36": {
+        "boss_name": "Odin"
+    },
+    "37": {
+        "boss_name": "Triton, Neregeid & Phobos"
+    },
+    "38": {
+        "boss_name": "Omniscient"
+    },
+    "39": {
+        "boss_name": "Minotauros"
+    },
+    "40": {
+        "boss_name": "Leviathan"
+    },
+    "41": {
+        "boss_name": "GoGo"
+    },
+    "42": {
+        "boss_name": "Bahamut"
+    },
+    "43": {
+        "boss_name": "Calofisteri"
+    },
+    "44": {
+        "boss_name": "Apanda"
+    },
+    "45": {
+        "boss_name": "Apocalypse"
+    },
+    "46": {
+        "boss_name": "Catastroph"
+    },
+    "47": {
+        "boss_name": "Halicarnaso"
+    },
+    "48": {
+        "boss_name": "Twin Tania"
+    },
+    "49": {
+        "boss_name": "Necrophobe"
+    }
+}

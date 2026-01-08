@@ -1,0 +1,2442 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 120,
+  "name": "Crocomire Speedway",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "West",
+  "roomAddress": "0x7A923",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+    [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top of the Shaft Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00193ae",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2],
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Far Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00193a2",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x00193d2",
+      "doorOrientation": "down",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00193c6",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00193ba",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 2],
+        [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Bottom Right Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2]
+      ]
+    },
+    {
+      "id": 7,
+      "name": "G-Mode Morph Junction (Bottom Right, Started at Right)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2]
+      ],
+      "note": "Represents being at the bottom of the right shaft with G-Mode and having entered the room from a door on the right shaft"
+    },
+    {
+      "id": 8,
+      "name": "G-Mode Morph Junction (Bottom Right, Started at Left)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2]
+      ],
+      "note": "Represents being at the bottom of the right shaft with G-Mode and having entered the room from the left side, PLMs are overloaded, and Samus is off screen"
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Right-side Speed Blocks",
+      "obstacleType": "inanimate",
+      "note": "The speed blocks on the right side of the speedway. Breaking those is needed for some leaveShinecharged strats."
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Crocomire Speedway Left Pirates",
+      "enemyName": "Red Space Pirate (standing)",
+      "quantity": 3,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Crocomire Speedway Multiviolas",
+      "enemyName": "Multiviola",
+      "quantity": 4,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e3",
+      "groupName": "Crocomire Speedway Right Pirates",
+      "enemyName": "Red Space Pirate (standing)",
+      "quantity": 2,
+      "betweenNodes": [2, 6]
+    },
+    {
+      "id": "e4",
+      "groupName": "Crocomire Speedway Cacatacs",
+      "enemyName": "Cacatac",
+      "quantity": 2,
+      "betweenNodes": [5, 6]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 5},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {
+          "id": 2,
+          "devNote": [
+            "FIXME: It is possible to stored fall speed clip through the door at 3 by using a fast run speed turnaround to slide down the stairs."
+          ]
+        },
+        {"id": 4},
+        {"id": 6},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 8,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1,
+          "gentleUpTiles": 4
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 5],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 130}
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 5],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"heatFrames": 120},
+        {"shineChargeFrames": 95}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: Entering with too little run speed causes Samus to 'trip', so the runway cannot reliably be used for short shortcharges."
+    },
+    {
+      "id": 50,
+      "link": [1, 5],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 125},
+        "canShinechargeMovementComplex",
+        {"heatFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 51,
+      "link": [1, 5],
+      "name": "Come In Shinecharged, Leave With Spark (Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        {"heatFrames": 130},
+        {"shinespark": {"frames": 2, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 52,
+      "link": [1, 5],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 110},
+        {"heatFrames": 130},
+        {"shinespark": {"frames": 2, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 76,
+      "link": [1, 7],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump over the Cacatacs. Their projectiles remain inside of them and their hitbox is a bit smaller than it appears."
+    },
+    {
+      "id": 5,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1,
+          "steepUpTiles": 6
+        }
+      },
+      "devNote": "45 tiles is roughly in front of the first red pirate."
+    },
+    {
+      "id": 6,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 72,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Multiviola, Kill Pirates",
+      "requires": [
+        {"heatFrames": 600},
+        {"or": [
+          "SpeedBooster",
+          {"heatFrames": 65}
+        ]},
+        {"or": [
+          "SpeedBooster",
+          "Plasma",
+          "ScrewAttack",
+          {"ammo": {"type": "Missile", "count": 2}},
+          {"ammo": {"type": "Super", "count": 2}},
+          {"and": [
+            "Ice",
+            "Wave",
+            "Spazer"
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              {"and": [
+                "Ice",
+                "Wave"
+              ]},
+              {"and": [
+                "Ice",
+                "Spazer"
+              ]},
+              {"and": [
+                "Wave",
+                "Spazer"
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Lure the second Multiviola to the left door. The first one will require more time and heat damage."
+    },
+    {
+      "id": 73,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Multiviola, Pirate Tank",
+      "requires": [
+        {"heatFrames": 720},
+        {"enemyDamage": {
+          "enemy": "Red Space Pirate (standing)",
+          "type": "contact",
+          "hits": 1
+        }}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Lure the second Multiviola to the left door. The first one will require more time and heat damage.",
+        "Jump over the first pirate and into the second, then jump over the again on the return."
+      ]
+    },
+    {
+      "id": 74,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Multiviola, Dodge Pirates",
+      "requires": [
+        {"heatFrames": 765},
+        "canTrickyDodgeEnemies"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Lure the second Multiviola to the left door. The first one will require more time and heat damage.",
+        "Jump over the pirates and under the first Multiviola, then return fast enough to avoid pirate lasers and contact with the second Multiviola."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [2, 2],
+      "name": "Speed Block Moondance (Leave with Stored Fall Speed)",
+      "requires": [
+        {"notable": "Speed Block Moondance"},
+        "h_heatProof",
+        "h_getBlueSpeedMaxRunway",
+        "h_CrystalFlash",
+        "canTrickyJump",
+        "canTurnaroundAimCancel",
+        "canTemporaryBlue",
+        "canMoondance",
+        "canSpeedball"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Use SpeedBooster to construct a structure for Moondancing that has 1 chest height block and 1 head height block to the right of it and no other Speed blocks.",
+        "Crystal Flash below the lower block, exactly pixel aligned with its right side, to standup and then begin Moondancing.",
+        "After Samus sinks through the bottom tile, it is possible to use Grapple to return to a crouch and wiggle right and then Turn-Around Aim Cancel to escape to the right.",
+        "Without Grapple, count to 174 Moonfalls and delicately Moonfall so as to remain crouched and then wiggle to the right.",
+        "Finally, use SpeedBooster if needed to break the remaining Speed blocks and reach the door."
+      ],
+      "devNote": "FIXME: R-Mode can be used instead of a Crystal Flash but that depends on having more Reserve Energy than Regular Energy."
+    },
+    {
+      "id": 8,
+      "link": [2, 2],
+      "name": "Speed Block Moondance (Leave with More Stored Fall Speed)",
+      "requires": [
+        {"notable": "Speed Block Moondance"},
+        "h_heatProof",
+        "h_getBlueSpeedMaxRunway",
+        "h_CrystalFlash",
+        "canTrickyJump",
+        "canTurnaroundAimCancel",
+        "canTemporaryBlue",
+        "canExtendedMoondance",
+        "canSpeedball"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Use SpeedBooster to construct a structure for Moondancing that has 1 chest height block and 1 head height block to the right of it and no other Speed blocks.",
+        "Crystal Flash below the lower block, exactly pixel aligned with its right side, to standup and then begin Moondancing.",
+        "After Samus sinks through the floor tiles, use Grapple to return to a standing position and count an additional 145 moonfalls.",
+        "Then use Grapple to return to a crouch and wiggle right and Turn-Around Aim Cancel to escape to the right.",
+        "Finally, use SpeedBooster if needed to break the remaining Speed blocks and reach the door."
+      ],
+      "devNote": "FIXME: R-Mode can be used instead of a Crystal Flash but that depends on having more Reserve Energy than Regular Energy."
+    },
+    {
+      "id": 96,
+      "link": [2, 2],
+      "name": "Multiviola Pirate Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [2]}},
+        {"cycleFrames": 1200},
+        {"or": [
+          "Plasma",
+          {"and": [
+            "Wave",
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 300}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            {"cycleFrames": 220}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Multiviola", "count": 4},
+        {"enemy": "Red Space Pirate (standing)", "count": 3}
+      ]
+    },
+    {
+      "id": 97,
+      "link": [2, 2],
+      "name": "Multiviola Pirate SpeedBooster Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [2]}},
+        {"cycleFrames": 60},
+        {"simpleCycleFrames": 560},
+        "SpeedBooster"
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Multiviola", "count": 1},
+        {"enemy": "Red Space Pirate (standing)", "count": 4}
+      ],
+      "note": "Drops do not linger long enough to kill every single Pirate."
+    },
+    {
+      "id": 98,
+      "link": [2, 2],
+      "name": "Cacatac Farm",
+      "requires": [
+        "h_heatProof",
+        "SpeedBooster",
+        {"resetRoom": {"nodes": [2]}},
+        {"cycleFrames": 350},
+        {"simpleCycleFrames": 800},
+        {"or": [
+          "Plasma",
+          {"and": [
+            "Wave",
+            {"cycleFrames": 30}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 30}
+          ]},
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 45}
+          ]},
+          {"cycleFrames": 120}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Cacatac", "count": 2}],
+      "devNote": "Some frames added to account for spike RNG."
+    },
+    {
+      "id": 75,
+      "link": [2, 4],
+      "name": "G-Mode Setup - Get Hit By Multiviola, Complex Manipulation",
+      "requires": [
+        "canTrickyGMode",
+        "h_heatProof",
+        "canBePatient",
+        "canCameraManip",
+        "SpeedBooster"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Use a complex lure to get the right-most Multiviola (which is initially moving to the left) to the bottom right door.",
+        "Break a specific set of the speed blocks and let the Multiviola bounce off of them before breaking the rest.",
+        "There are multiple ways to get the Multiviola to the right door, all of which require breaking the speed blocks to the left of the crumble bridge and some to them to the right.",
+        "Break the speed blocks in one of the following ways:",
+        "1. The first 2 columns. 2. The first 8 columns.",
+        "3. The entire first chunk (10 columns). 4. The first chunk and all but the last column of the second (leaving an isolated block).",
+        "5. The first two chunks and all but the last column of the third (leaving an isolated stack of two blocks).",
+        "Then let the Multiviola bounce several times until it is in a consistent pattern before breaking the rest.",
+        "Note that option number 3 puts the Multiviola into an odd pattern where it has two distinct alternating cycles; wait for it to hit the right of the right stalactite, then the wall, then break the remaining blocks."
+      ],
+      "devNote": [
+        "It appears that there is no way to get the multiviola to get to one of the upper doors on the shaft;",
+        "There are two known cycles to get it to start going up, but both get stuck in the same location.",
+        "The first three Multiviolas aren't able to make it to the right shaft, regardless of how the door and speed blocks are manipulated.",
+        "The fourth was tested by removing a single column of speed blocks at a time and clearing the rest before and after it gets to its cycle.",
+        "The bottom door is rarely hit, but opening it during the cycle was not always tested thoroughly.",
+        "It doesn't appear to be possible to lure it higher, but other things to try include:",
+        "breaking speed blocks less than a column at a time, breaking some of the blocks then some more (not all of the remaining), or precisely timing the breaking of the crumble blocks."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [2, 6],
+      "name": "Base",
+      "requires": [
+        "h_getBlueSpeedMaxRunway",
+        {"heatFrames": 380}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 77,
+      "link": [2, 8],
+      "name": "G-Mode with SpeedBooster",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_getBlueSpeedMaxRunway",
+        {"or": [
+          "canSpeedball",
+          "canInsaneJump",
+          "h_hasBeamUpgrade",
+          {"enemyKill": {
+            "enemies": [["Red Space Pirate (standing)"]],
+            "explicitWeapons": ["Missile", "Super", "ScrewAttack"]
+          }},
+          {"enemyDamage": {
+            "enemy": "Red Space Pirate (standing)",
+            "type": "contact",
+            "hits": 1
+          }}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Run through the speed blocks then carefully cross the crumble bridge, as it will mostly be air.",
+        "Alternatively, a speedball will prevent PLMs from overloading and Samus can roll over the bridge.",
+        "Kill the pirate after the bridge before it places its invisible lasers, preventing Samus from getting through damageless.",
+        "Samus can simply run to the right and fall through the bridge to safety below the pirate and kill it from below.",
+        "It is also possible to perform one precise jump to cross most of the bridge and kill the pirate while blue."
+      ],
+      "devNote": "It is possible to shinecharge before the bridge and spark vertically above it, then move the camera to kill the pirate with speed echoes, but this isn't really easier."
+    },
+    {
+      "id": 78,
+      "link": [2, 8],
+      "name": "G-Mode with Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canTrickyDodgeEnemies",
+          "h_usePowerBomb",
+          "ScrewAttack",
+          "h_hasBeamUpgrade",
+          {"ammo": {"type": "Missile", "count": 2}},
+          {"ammo": {"type": "Super", "count": 2}},
+          {"enemyDamage": {
+            "enemy": "Red Space Pirate (standing)",
+            "type": "contact",
+            "hits": 1
+          }}
+        ]},
+        {"or": [
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Multiviola", "type": "contact", "hits": 1}}
+        ]},
+        "Morph",
+        {"or": [
+          "h_usePowerBomb",
+          {"and": [
+            {"or": [
+              "h_useSpringBall",
+              "h_useMorphBombs"
+            ]},
+            {"or": [
+              "canLateralMidAirMorph",
+              "h_hasBeamUpgrade",
+              {"enemyKill": {
+                "enemies": [["Red Space Pirate (standing)"]],
+                "explicitWeapons": ["Missile", "Super", "ScrewAttack"]
+              }},
+              {"enemyDamage": {
+                "enemy": "Red Space Pirate (standing)",
+                "type": "contact",
+                "hits": 1
+              }}
+            ]}
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Carefully dodge or kill the enemies in the first half of the room.",
+        "With Morph, go over the first set of Speed Blocks, then kill the first Red Pirate or air ball over it.",
+        "It is also possible to kill or jump over the second pirate, but be careful to prevent it from shooting invisible lasers."
+      ]
+    },
+    {
+      "id": 79,
+      "link": [2, 8],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canTrickyDodgeEnemies",
+        {"or": [
+          {"ammo": {"type": "PowerBomb", "count": 6}},
+          {"and": [
+            "h_artificialMorphMovement",
+            {"or": [
+              "canInsaneJump",
+              "h_artificialMorphPowerBomb"
+            ]},
+            {"or": [
+              "h_artificialMorphPowerBomb",
+              "h_hasBeamUpgrade",
+              {"enemyKill": {
+                "enemies": [["Red Space Pirate (standing)"]],
+                "explicitWeapons": ["Missile", "Super", "ScrewAttack"]
+              }},
+              {"enemyDamage": {
+                "enemy": "Red Space Pirate (standing)",
+                "type": "contact",
+                "hits": 1
+              }}
+            ]}
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "While artificially morphed, carefully dodge or kill the enemies in the first half of the room.",
+        "Go over the first set of Speed Blocks, then kill the first Red Pirate with a Power Bomb or after unmorphing.",
+        "It is possible to kill or jump over the second pirate, but be careful to prevent it from shooting invisible lasers.",
+        "Without any Power Bombs, this requires precise movement with Spring Ball or very precise movement with just Bombs."
+      ],
+      "devNote": "It is possible to jump over the left bridge pirate, but it is incredibly precise and not expected."
+    },
+    {
+      "id": 10,
+      "link": [3, 2],
+      "name": "Reverse Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 35},
+        {"notable": "Reverse Spark"},
+        "canShinechargeMovement",
+        "canHorizontalShinespark",
+        {"or": [
+          {"shinespark": {"frames": 87, "excessFrames": 10}},
+          {"and": [
+            "h_heatProof",
+            "canControlShinesparkEnd",
+            {"shinespark": {"frames": 87, "excessFrames": 44}}
+          ]}
+        ]},
+        {"heatFrames": 675},
+        "h_getBlueSpeedMaxRunway",
+        {"or": [
+          "canSpeedball",
+          {"heatFrames": 15}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Spark left through the speed blocks, then run to the right and back to get speed to go through the rest.",
+        "If performing the spark with low energy, there is a risk of ending the spark above the spikes or in front of the Pirate;",
+        "to be safe, assuming Samus has heat protection and begins sparking about 3 tiles from the Speed blocks, start with between 72 and 87 energy or at least 105 energy;",
+        "with a buffered crumble jump to the right, up to 93 energy can work."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [3, 2],
+      "name": "Reverse Spark With Pause Abuse",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 35},
+        {"notable": "Reverse Spark With Pause Abuse"},
+        "canShinechargeMovementTricky",
+        "canTrickyJump",
+        "canControlShinesparkEnd",
+        "canPauseAbuse",
+        {"resourceAvailable": [{"type": "RegularEnergy", "count": 93}]},
+        {"shinespark": {"frames": 0, "excessFrames": 0}},
+        {"resourceConsumed": [{"type": "ReserveEnergy", "count": 61}]},
+        {"or": [
+          "canPreciseReserveRefill",
+          {"resourceConsumed": [{"type": "ReserveEnergy", "count": 15}]}
+        ]},
+        {"resourceAtMost": [{"type": "RegularEnergy", "count": 1}]},
+        {"heatFrames": 0}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Enter the room with between 93 and 102 energy and quickly mid-air spark to the left through the Speed blocks.",
+        "After the shinespark ends, run left and press pause before reaching zero energy, tanking the Pirate hit while at zero energy.",
+        "Refill some energy (at least 11), and continue running to the left, using i-frames to pass through the next Pirate.",
+        "Continue to pause abuse several more times.",
+        "Arm pumping may be used but is not required and has little benefit;",
+        "in any case, arm pumping should not be used until beginning to run through the Speed blocks, otherwise Samus will not obtain blue speed in time and will bonk into them."
+      ],
+      "devNote": [
+        "The zero shinespark requirement is to satisfy the tests, by marking that the shinecharge is used;",
+        "the actual shinespark energy usage is accounted for in the resourceConsumed.",
+        "This could possibly be rewritten to express the energy usage in the normal way.",
+        "We don't include a `h_ShinesparksCostEnergy` requirement here, because even if shinesparks don't cost energy, it is still possible to use heat damage to make the shinespark stop in the correct place.",
+        "FIXME: the regular energy required could be reduced in that case."
+      ]
+    },
+    {
+      "id": 68,
+      "link": [3, 2],
+      "name": "Cross Room Jump Into Speedball (HiJump)",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 9,
+          "maxHeight": 10,
+          "maxLeftPosition": 0,
+          "minRightPosition": 22
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "HiJump",
+        {"canShineCharge": {"usedTiles": 18, "openEnd": 1}},
+        "canTrickyJump",
+        "canSpeedball",
+        {"heatFrames": 505}
+      ],
+      "devNote": ["This strat is applicable only with Crocomire's Room and Indiana Jones Room."]
+    },
+    {
+      "id": 69,
+      "link": [3, 2],
+      "name": "Cross Room Jump Into Speedball (Tricky Dash Jump)",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 10,
+          "maxHeight": 10,
+          "maxLeftPosition": 0,
+          "minRightPosition": 41.5
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_getBlueSpeedMaxRunway",
+        "canTrickyDashJump",
+        "canSpeedball",
+        {"heatFrames": 392}
+      ],
+      "note": [
+        "In the room below, gain a precise amount of speed (extra run speed $6.0 or $6.1) then jump and aim down.",
+        "After the transition, perform a speedball to cross the room.",
+        "With a precisely timed unmorph and a buffered shot to open the door, it is possible to just barely make it through with no tanks.",
+        "After unmorphing, walk instead of running, to avoid bonking the door.",
+        "Coming from Crocomire's Room below, it works to use the full available runway length."
+      ],
+      "devNote": ["This strat is applicable only with Crocomire's Room."]
+    },
+    {
+      "id": 12,
+      "link": [3, 3],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shinespark": {"frames": 6, "excessFrames": 6}},
+        {"heatFrames": 120}
+      ],
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 13,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 54,
+      "link": [3, 4],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 70},
+        "canShinechargeMovementComplex",
+        {"heatFrames": 70}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 55,
+      "link": [3, 4],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 40},
+        "canShinechargeMovementComplex",
+        {"heatFrames": 70},
+        {"shinespark": {"frames": 8, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 14,
+      "link": [3, 6],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 15,
+      "link": [3, 6],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        {"shinespark": {"frames": 6}},
+        {"heatFrames": 85}
+      ],
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 80,
+      "link": [3, 7],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [4, 2],
+      "name": "Low Speed Reverse Speedball",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 1,
+          "openEnd": 0,
+          "minExtraRunSpeed": "$2.4"
+        }
+      },
+      "requires": [
+        {"notable": "Reverse Speedball"},
+        "canSpeedball",
+        {"heatFrames": 570}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Break the speed blocks by jumping over the gap with blue speed and continuing through the room with a speedball.",
+        "If entering with low speed, unmorph after killing the last Pirate at the bottom of the sloped section,",
+        "in order to run and gain more speed for the rest of the room."
+      ],
+      "devNote": [
+        "A run speed of $2.3 can also work but with greater difficulty.",
+        "FIXME: add strats for cross-room spring ball bounce (with momentum or temp blue) and Space Jump"
+      ]
+    },
+    {
+      "id": 70,
+      "link": [4, 2],
+      "name": "Full Speed Reverse Speedball",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "minExtraRunSpeed": "$7.0",
+          "unusableTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Reverse Speedball"},
+        "canTrickyJump",
+        "canSpeedball",
+        {"heatFrames": 370}
+      ],
+      "note": [
+        "Gain max run speed using a runway in the neighboring room, and jump through the door.",
+        "With this amount of speed, it is possible to make it across without any tanks."
+      ]
+    },
+    {
+      "id": 71,
+      "link": [4, 2],
+      "name": "High Speed Reverse Speedball",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "minExtraRunSpeed": "$6.5",
+          "unusableTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Reverse Speedball"},
+        "canInsaneJump",
+        "canSpeedball",
+        {"heatFrames": 392}
+      ],
+      "note": [
+        "Gain high run speed using a runway in the neighboring room, and jump through the door.",
+        "With a precisely timed unmorph and a buffered shot to open the door, it is possible to just barely make it through with no tanks.",
+        "After unmorphing, walk instead of running, to avoid bonking the door."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [4, 2],
+      "name": "Reverse Spark Near SpeedBlocks",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        {"notable": "Reverse Spark"},
+        "canShinechargeMovement",
+        "canHorizontalShinespark",
+        {"or": [
+          {"shinespark": {"frames": 84, "excessFrames": 10}},
+          {"and": [
+            "h_heatProof",
+            "canControlShinesparkEnd",
+            {"shinespark": {"frames": 84, "excessFrames": 45}}
+          ]}
+        ]},
+        {"heatFrames": 715},
+        "h_getBlueSpeedMaxRunway",
+        {"or": [
+          "canSpeedball",
+          {"heatFrames": 15}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Spark left through the speed blocks, then run to the right and back to get speed to go through the rest.",
+        "If performing the spark with low energy, there is a risk of ending the spark above the spikes or in front of the Pirate;",
+        "to be safe, assuming Samus has heat protection, begin the shinespark at the Speed blocks with between 68 and 84 energy, or at least 101 energy;",
+        "with a buffered crumble jump to the right, up to 89 energy can work."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [4, 2],
+      "name": "Reverse Spark Through Door",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "requires": [
+        {"notable": "Reverse Spark"},
+        {"or": [
+          {"shinespark": {"frames": 94, "excessFrames": 10}},
+          {"and": [
+            "h_heatProof",
+            "canControlShinesparkEnd",
+            {"shinespark": {"frames": 94, "excessFrames": 42}}
+          ]}
+        ]},
+        {"heatFrames": 650}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Spark left through the speed blocks, then run to the right and back to get speed to go through the rest.",
+        "If performing the spark with low energy, there is a risk of ending the spark above the spikes or in front of the Pirate;",
+        "to be safe, assuming Samus has heat protection, begin the shinespark at the door (in either this or the other room) with between 81 and 96 energy, or at least 113 energy;",
+        "with a buffered crumble jump to the right, up to 102 energy can work."
+      ]
+    },
+    {
+      "id": 56,
+      "link": [4, 2],
+      "name": "Reverse Spark With Pause Abuse",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "requires": [
+        {"notable": "Reverse Spark With Pause Abuse"},
+        "canShinechargeMovementTricky",
+        "canTrickyJump",
+        "canControlShinesparkEnd",
+        "canPauseAbuse",
+        {"resourceAvailable": [{"type": "RegularEnergy", "count": 94}]},
+        {"shinespark": {"frames": 0, "excessFrames": 0}},
+        {"resourceConsumed": [{"type": "ReserveEnergy", "count": 61}]},
+        {"or": [
+          "canPreciseReserveRefill",
+          {"resourceConsumed": [{"type": "ReserveEnergy", "count": 15}]}
+        ]},
+        {"resourceAtMost": [{"type": "RegularEnergy", "count": 1}]},
+        {"heatFrames": 0}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Start a shinespark on the other side of the door with between 94 and 103 energy.",
+        "After the shinespark ends, run left and press pause before reaching zero energy, tanking the Pirate hit while at zero energy.",
+        "Refill some energy (at least 11), and continue running to the left, using i-frames to pass through the next Pirate.",
+        "Continue to pause abuse several more times.",
+        "Arm pumping may be used but is not required and has little benefit;",
+        "in any case, arm pumping should not be used until beginning to run through the Speed blocks, otherwise Samus will not obtain blue speed in time and will bonk into them."
+      ],
+      "devNote": [
+        "The zero shinespark requirement is to satisfy the tests, by marking that the shinecharge is used;",
+        "the actual shinespark energy usage is accounted for in the resourceConsumed.",
+        "This could possibly be rewritten to express the energy usage in the normal way.",
+        "We don't include a `h_ShinesparksCostEnergy` requirement here, because even if shinesparks don't cost energy, it is still possible to use heat damage to make the shinespark stop in the correct place.",
+        "FIXME: the regular energy required could be reduced in that case."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [4, 2],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 20,
+      "link": [4, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 21,
+      "link": [4, 2],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 22,
+      "link": [4, 2],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 23,
+      "link": [4, 2],
+      "name": "Grapple Teleport X-Ray Climb (1 Screen)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        {"heatFrames": 1600}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [4, 2],
+      "name": "Grapple Teleport X-Ray Climb (2 Screens)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [
+        "canLongXRayClimb",
+        {"heatFrames": 2800}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 2 screens to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 57,
+      "link": [4, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 55},
+        "canShinechargeMovementComplex",
+        {"heatFrames": 55}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [4, 4],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 2,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 26,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 58,
+      "link": [4, 5],
+      "name": "Come In Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        "canBePatient",
+        {"or": [
+          {"enemyDamage": {"enemy": "Cacatac", "type": "contact", "hits": 1}},
+          "Plasma",
+          {"and": [
+            "Wave",
+            "Spazer"
+          ]}
+        ]},
+        {"shineChargeFrames": 177},
+        {"shinespark": {"frames": 10, "excessFrames": 0}},
+        {"heatFrames": 220}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "The canBePatient requirement represents the possible need to retry in case bad RNG causes a Cac spike hit to mess up the strat."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [4, 6],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 81,
+      "link": [4, 7],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 28,
+      "link": [5, 1],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 160}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 30}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 70}]
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "link": [5, 1],
+      "name": "Leave with Runway",
+      "requires": [
+        {"heatFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1,
+          "gentleUpTiles": 4
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 70}]
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "link": [5, 1],
+      "name": "Right Side Climb",
+      "requires": [
+        "canTrickyJump",
+        {"or": [
+          "HiJump",
+          "canPreciseWalljump"
+        ]},
+        {"heatFrames": 140}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 30}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 70}]
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "link": [5, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"heatFrames": 160},
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 59,
+      "link": [5, 1],
+      "name": "Carry Shinecharge (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 120},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"heatFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 60,
+      "link": [5, 1],
+      "name": "Carry Shinecharge (Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 130},
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"heatFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 61,
+      "link": [5, 1],
+      "name": "Carry Shinecharge (Ledge Grabs)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 145},
+        "canShinechargeMovementComplex",
+        {"heatFrames": 145}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 62,
+      "link": [5, 1],
+      "name": "Come In Shinecharged, Leave With Spark (HiJump, Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 70},
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"heatFrames": 120},
+        {"shinespark": {"frames": 18, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 63,
+      "link": [5, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Wall Jump, Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 90},
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"heatFrames": 135},
+        {"shinespark": {"frames": 16, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 64,
+      "link": [5, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Ledge Grabs, Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "canShinechargeMovementComplex",
+        {"heatFrames": 145},
+        {"shinespark": {"frames": 16, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 32,
+      "link": [5, 2],
+      "name": "Reverse Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"notable": "Reverse Spark"},
+        "canShinechargeMovementTricky",
+        "canTrickyJump",
+        {"or": [
+          {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 1}},
+          "canBePatient"
+        ]},
+        {"or": [
+          {"shinespark": {"frames": 88, "excessFrames": 11}},
+          {"and": [
+            "h_heatProof",
+            "canControlShinesparkEnd",
+            {"shinespark": {"frames": 88, "excessFrames": 44}}
+          ]}
+        ]},
+        {"heatFrames": 825},
+        "h_getBlueSpeedMaxRunway",
+        {"or": [
+          "canSpeedball",
+          {"heatFrames": 15}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Either jump over a Cacatac or tank a spike hit.",
+        "Perform a mid-air spark through the speed blocks.",
+        "Then run to the right and back to get speed to go through the rest.",
+        "If performing the spark with low energy, there is a risk of ending the spark above the spikes or in front of the Pirate;",
+        "to be safe, assuming Samus has heat protection, begin the shinespark with between 73 and 88 energy, or at least 106 energy;",
+        "with a buffered crumble jump to the right, up to 94 energy can work."
+      ],
+      "devNote": [
+        "The canBePatient represents retrying until RNG works out to be able to jump over one of the Cacatacs without taking a hit.",
+        "There is a possibility of getting a lucky drop from one of the two Pirates;",
+        "but since it is low probability, we don't model it.",
+        "The speedball exit is technically not a valid way to leave normally (e.g. in case the next room is heated and Samus needs to jump);",
+        "but if necessary, it is possible to unmorph near the transition."
+      ]
+    },
+    {
+      "id": 65,
+      "link": [5, 2],
+      "name": "Reverse Spark With Pause Abuse",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"notable": "Reverse Spark With Pause Abuse"},
+        "canShinechargeMovementTricky",
+        "canTrickyJump",
+        "canControlShinesparkEnd",
+        "canPauseAbuse",
+        {"resourceAvailable": [{"type": "RegularEnergy", "count": 99}]},
+        {"shinespark": {"frames": 0, "excessFrames": 0}},
+        {"resourceConsumed": [{"type": "ReserveEnergy", "count": 80}]},
+        {"or": [
+          {"resourceConsumed": [{"type": "ReserveEnergy", "count": 20}]},
+          {"and": [
+            {"resourceMissingAtMost": [{"type": "Super", "count": 0}]},
+            {"or": [
+              {"ammo": {"type": "Missile", "count": 1}},
+              "Grapple",
+              "Plasma",
+              {"and": [
+                "Wave",
+                "Spazer"
+              ]}
+            ]}
+          ]}
+        ]},
+        {"or": [
+          "canPreciseReserveRefill",
+          {"resourceConsumed": [{"type": "ReserveEnergy", "count": 15}]}
+        ]},
+        {"resourceAtMost": [{"type": "RegularEnergy", "count": 1}]},
+        {"heatFrames": 0}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Either jump over a Cacatac, tank a spike hit, or farm it if possible.",
+        "While preparing to spark left through the speed blocks, press pause so that the pause hits during the shinespark wind-up",
+        "Using reserves, try to refill to exactly 84 energy, the minimum amount needed to reliably break through the Speed blocks (assuming no heat protection).",
+        "Hold jump and left while unpausing, to buffer activating the horizontal shinespark.",
+        "After the shinespark ends, run left and press pause before reaching zero energy, tanking the Pirate hit while at zero energy.",
+        "Refill to between about 11 and 13 energy, and continue running to the left, using i-frames to pass through the next Pirate.",
+        "Continue to pause abuse 4 more times, trying to refill to between 11 and 13 energy each time except for the last.",
+        "Arm pumping may be used but is not required and has little benefit;",
+        "in any case, arm pumping should not be used until beginning to run through the Speed blocks, otherwise Samus will not obtain blue speed in time and will bonk into them."
+      ],
+      "devNote": [
+        "The zero shinespark requirement is to satisfy the tests, by marking that the shinecharge is used;",
+        "the actual shinespark energy usage is accounted for in the resourceConsumed.",
+        "This could possibly be rewritten to express the energy usage in the normal way.",
+        "We don't include a `h_ShinesparksCostEnergy` requirement here, because even if shinesparks don't cost energy, it is still possible to use heat damage to make the shinespark stop in the correct place.",
+        "FIXME: the regular energy required could be reduced in that case."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [5, 2],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 34,
+      "link": [5, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 35,
+      "link": [5, 2],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 36,
+      "link": [5, 2],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 37,
+      "link": [5, 2],
+      "name": "Grapple Teleport X-Ray Climb (1 Screen)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        {"heatFrames": 1600}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [5, 2],
+      "name": "Grapple Teleport X-Ray Climb (2 Screens)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [
+        "canLongXRayClimb",
+        {"heatFrames": 2800}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 93,
+      "link": [5, 3],
+      "name": "Extended Stored Moonfall Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        {"heatFrames": 70},
+        "canFreeFallClip"
+      ],
+      "note": [
+        "Setup a moondance such that Samus will fall through 2 tiles.",
+        "Perform a moonfall near the edge of the ledge, then quickly aim down and turn around to the right.",
+        "Use caution to avoid being hit by a Cacatac spike."
+      ],
+      "detailNote": [
+        "The horizontal position for performing the moonfall is lenient:",
+        "it does not need to be done at the very edge, just far enough left to avoid the Cac below."
+      ]
+    },
+    {
+      "id": 66,
+      "link": [5, 4],
+      "name": "Come In Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canTrickyJump",
+        {"or": [
+          {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 1}},
+          "canBePatient"
+        ]},
+        {"shinespark": {"frames": 10, "excessFrames": 0}},
+        {"heatFrames": 210}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "devNote": [
+        "The canBePatient represents retrying until RNG works out to be able to jump over one of the Cacatacs without taking a hit."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [5, 5],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 40,
+      "link": [5, 5],
+      "name": "Cacatac Farm",
+      "requires": [
+        "h_heatProof",
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 450}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [3]}},
+            {"cycleFrames": 300}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [4]}},
+            {"cycleFrames": 360}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [5]}},
+            {"cycleFrames": 200}
+          ]}
+        ]},
+        {"or": [
+          "Plasma",
+          {"and": [
+            "Wave",
+            {"cycleFrames": 30}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 30}
+          ]},
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 45}
+          ]},
+          {"cycleFrames": 120}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Cacatac", "count": 2}],
+      "devNote": "Some frames added to account for spike RNG."
+    },
+    {
+      "id": 41,
+      "link": [5, 5],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 42,
+      "link": [5, 6],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 215}
+      ]
+    },
+    {
+      "id": 82,
+      "link": [5, 7],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump over the Cacatacs. Their projectiles remain inside of them and their hitbox is a bit smaller than it appears."
+    },
+    {
+      "id": 43,
+      "link": [6, 2],
+      "name": "Base",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "h_getBlueSpeedMaxRunway",
+        {"heatFrames": 500}
+      ],
+      "devNote": "The blocks will already be broken, the blue speed is to kill the enemies."
+    },
+    {
+      "id": 44,
+      "link": [6, 3],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 50}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 70}]
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "link": [6, 3],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "h_heatProof",
+        {"obstaclesCleared": ["A"]},
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 80}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Enabled by coming in from the left and breaking the speed blocks on the way, or coming in charged and opening the path to the left."
+    },
+    {
+      "id": 46,
+      "link": [6, 4],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 50}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 30}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 70}]
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "link": [6, 4],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "h_heatProof",
+        {"obstaclesCleared": ["A"]},
+        "canShinechargeMovement",
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Enabled by coming in from the left and breaking the speed blocks on the way, or coming in charged and opening the path to the left."
+    },
+    {
+      "id": 48,
+      "link": [6, 5],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 300}
+      ]
+    },
+    {
+      "id": 49,
+      "link": [6, 5],
+      "name": "Leave With Spark",
+      "requires": [
+        "h_heatProof",
+        {"obstaclesCleared": ["A"]},
+        "canShinechargeMovementTricky",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 12}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Move very quickly to bring a shinespark from the speedway up to the Save Room door.",
+        "Preclear the Cacatacs, and it may help to not run while platforming if HiJump is not available."
+      ]
+    },
+    {
+      "id": 83,
+      "link": [7, 1],
+      "name": "G-Mode",
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump over the Cacatacs. Their projectiles remain inside of them and their hitbox is a bit smaller than it appears."
+    },
+    {
+      "id": 84,
+      "link": [7, 2],
+      "name": "G-Mode, Simple Blind Movement",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canTrickyJump",
+            "SpaceJump"
+          ]},
+          "SpeedBooster",
+          {"spikeHits": 1}
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The crumble bridge will be air. Either tank a spike hit, carefully Space Jump over it, or with SpeedBooster, use the full runway to run over the pit.",
+        "Note that there is a slight incline just before the bridge, which can be used as an indicator for where to Space Jump."
+      ],
+      "devNote": "Requires leaving the room, as Samus is off camera and shouldn't be expected to do more in-room."
+    },
+    {
+      "id": 94,
+      "link": [7, 2],
+      "name": "G-Mode, Heatproof, Fix Camera",
+      "requires": [
+        "canGMode",
+        "h_heatProof",
+        {"or": [
+          "h_bombThings",
+          "h_useSpringBall"
+        ]},
+        {"or": [
+          "h_usePowerBomb",
+          "h_hasBeamUpgrade",
+          "ScrewAttack",
+          {"ammo": {"type": "Missile", "count": 3}},
+          {"ammo": {"type": "Super", "count": 3}},
+          "canComplexGMode"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Exit G-mode before the crumble bridge, this is when the floor starts sloping up slightly.",
+        "Without a way to kill the pirates, touch the camera scroll block briefly before the bridge, then run over the bridge and through the pirates before fixing the camera, to not have to deal with the pirates.",
+        "Otherwise, it may be worth killing the pirates for some Energy to be able to tank a hit later.",
+        "Use a Bomb, Power Bomb, or Spring Ball to get over the Speed blocks. Then carefully avoid or kill the remaining enemies."
+      ]
+    },
+    {
+      "id": 95,
+      "link": [7, 2],
+      "name": "G-Mode, Fix Camera, Speedy Exit",
+      "requires": [
+        "canComplexGMode",
+        "h_heatedGMode",
+        "h_getBlueSpeedMaxRunway",
+        {"heatFrames": 375}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Exit G-mode before the crumble bridge, this is when the floor starts sloping up slightly.",
+        "Run over the bridge and through the pirates without fixing the camera, to safely run through the pirates."
+      ]
+    },
+    {
+      "id": 85,
+      "link": [7, 3],
+      "name": "G-Mode",
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 86,
+      "link": [7, 4],
+      "name": "G-Mode",
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 87,
+      "link": [7, 5],
+      "name": "G-Mode",
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump over the Cacatacs. Their projectiles remain inside of them and their hitbox is a bit smaller than it appears."
+    },
+    {
+      "id": 88,
+      "link": [8, 1],
+      "name": "G-Mode, Blind Movement",
+      "requires": [
+        "canOffScreenMovement",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The speed block platform above the bottom door will not be usable, so Samus must blindly wall jump up the first ledge or use some assist.",
+        "There is some visibility on the left side of the screen, which is useful in determining which ledge she is on.",
+        "The Cacatacs will not be able to damage Samus off screen."
+      ],
+      "devNote": [
+        "Requires leaving the room, as Samus is off camera and shouldn't be expected to do more in-room.",
+        "FIXME: It is possible to X-Ray climb from inside the speed blocks. Count shots to determine Samus' position."
+      ]
+    },
+    {
+      "id": 89,
+      "link": [8, 3],
+      "name": "G-Mode, Simple Blind Movement",
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          {"heatFrames": 160},
+          {"and": [
+            "h_useMorphBombs",
+            {"heatFrames": 85}
+          ]},
+          {"and": [
+            "canUseGrapple",
+            {"heatFrames": 50}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Walk back and forth until it is obvious Samus is on the doorshell.",
+        "Use X-Ray, jump, and shoot down at the bottom of the jump, this may take a couple attempts.",
+        "For a faster exit, place a Bomb on the door, then quickly unmorph and use X-Ray.",
+        "With Grapple it is faster still; use X-Ray while crouched, then quickly use Grapple while angling down. "
+      ],
+      "devNote": [
+        "Requires leaving the room, as Samus is off camera and shouldn't be expected to do more in-room.",
+        "It's possible to use a Bomb while still artificially morphed, but that only saves a few heat frames and is ignored."
+      ]
+    },
+    {
+      "id": 90,
+      "link": [8, 4],
+      "name": "G-Mode, Simple Blind Movement",
+      "requires": [
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "devNote": "Requires leaving the room, as Samus is off camera and shouldn't be expected to do more in-room."
+    },
+    {
+      "id": 91,
+      "link": [8, 5],
+      "name": "G-Mode, Blind Movement",
+      "requires": [
+        "canOffScreenMovement",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The speed block platform above the bottom door will not be usable, so Samus must blindly wall jump up the first ledge or use some assist.",
+        "There is some visibility on the left side of the screen, which is useful in determining which ledge she is on.",
+        "The Cacatacs will not be able to damage Samus off screen."
+      ],
+      "devNote": "Requires leaving the room, as Samus is off camera and shouldn't be expected to do more in-room."
+    },
+    {
+      "id": 92,
+      "link": [8, 6],
+      "name": "Exit G-Mode, Fix Camera",
+      "requires": [
+        "h_heatedGMode",
+        {"heatFrames": 250}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Exit G-Mode and jump back and forth to fix the camera. If Samus exits G-Mode while in the camera scroll block next to the speed blocks, the camera won't fix."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Reverse Spark",
+      "note": "Spark left through the speed blocks, then run to the right and back to get speed to go through the rest."
+    },
+    {
+      "id": 2,
+      "name": "Speed Block Moondance",
+      "note": [
+        "Use SpeedBooster to construct a structure for Moondancing that has 2 top blocks intact, 2 middle blocks removed, and the bottom left block intact but the bottom right block removed.",
+        "Clear the other unused Speed blocks and enemies.",
+        "Crystal Flash inside the middle hole to standup and then begin Moondancing.",
+        "After Samus sinks through the bottom tile, it is possible to wiggle right and then Turn-Around Aim Cancel to escape to the right."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Reverse Speedball",
+      "note": "Break the speed blocks by jumping over the gap with blue speed and continuing through the room with a speedball."
+    },
+    {
+      "id": 4,
+      "name": "Reverse Spark With Pause Abuse",
+      "note": [
+        "Spark left through the speed blocks with low energy, so that the spark stops before the first Pirate.",
+        "Then use a sequence of pause abuses with reserves to cross the room.",
+        "This can be done with a single Reserve Tank (no Energy Tanks), from any of the three doors on the right side of the room."
+      ]
+    }
+  ],
+  "nextStratId": 99,
+  "nextNotableId": 5,
+  "devNote": [
+    "FIXME: A moonfall using Multiviolas might be possible to bypass the door shell below."
+  ]
+}

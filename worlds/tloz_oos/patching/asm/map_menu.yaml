@@ -1,0 +1,348 @@
+# map pop-up icons for seed trees
+02/6c60/: db locations.horonVillageSeedTree.id - $0b
+02/6c5d/: db locations.woodsOfWinterSeedTree.id - $0b
+02/6c57/: db locations.northHoronSeedTree.id - $0b
+02/6c5a/: db locations.spoolSwampSeedTree.id - $0b
+02/6c54/: db locations.sunkenCitySeedTree.id - $0b
+02/6c51/: db locations.tarmRuinsSeedTree.id - $0b
+02/6c61/: db $2d,$44 ; New warp to cucco mountain as QOl
+
+# Store a few additional variables when checking the SELECT button to open map
+02//extendedMenuOpenCheck: |
+    ld a,(wDungeonIndex)
+    ld (wOriginalDungeonIndex),a
+    ld a,(wMinimapGroup)
+    ld (wOriginalMinimapGroup),a
+    ld a,(wKeysJustPressed)
+    ret
+# Replace the second `ld a,(wKeysJustPressed)` in b2_updateMenus by an extension
+02/4fc5/: call extendedMenuOpenCheck
+
+# When booting the map, handle a "cycling order" that can be issued using the keybinding defined
+# by above functions. Pressing that button reopens the map with another map mode,
+# and the cycling between modes is addressed by this function.
+02//extendedBootMapMenu: |
+    ; Wait for palette change to complete
+    ld a,(wPaletteThread_mode)
+    or a
+    ret nz
+    
+    ; Change the current map mode in case we are reopening the map after a "cycling order"
+    ld a,(wMinimapCycleToNextMode)
+    or a
+    jr z,@open
+    
+    ld a,(wMinimapGroup)
+    cp $04
+    jr c,@notDungeon
+    
+    @dungeon:
+    ld a,(wDungeonIndex)
+    inc a
+    cp $09
+    jr nc,@invalidDungeon
+    
+    ld (wDungeonIndex),a
+    jr @openDungeon
+    
+    @invalidDungeon:
+    xor a
+    ld (wMinimapGroup),a
+    jr @open
+    
+    @notDungeon:
+    ld a,(wMinimapGroup)
+    inc a
+    cp $02
+    jr nc,@swapToDungeon
+    
+    ld (wMinimapGroup),a
+    jr @open
+    
+    @swapToDungeon:
+    ld a,$05
+    ld (wMinimapGroup),a
+    xor a
+    ld (wDungeonIndex),a
+    
+    @openDungeon:
+    xor a
+    ld (wDungeonMapScroll),a
+    ld (wDungeonMapScrollState),a
+    
+    @open:
+    call disableLcd
+    jp $5ee3    ; mapMenu_state0
+# Change the pointer to state0 inside runMapMenu jump table
+02/5edf/: dw extendedBootMapMenu
+
+# Handle a keybinding to change map type (overworld, Subrosia, dungeons)
+02//worldMapStartButtonSupport: |
+    jp nz,$4f7b  ; _closeMenu
+    ld a,(wKeysJustPressed)
+    cp BTN_START
+    ret nz
+    
+    ; Put back the menu in "loading" state while cycling to next mode
+    ld a,$01
+    ld (wMinimapCycleToNextMode),a
+    xor a
+    ld (wMenuActiveState),a
+    call fastFadeoutToWhite
+    ret
+# Replace `jp nz,closeMenu` in @noDirectionButtonPressed by an extension (outside maps)
+02/6089/: call worldMapStartButtonSupport
+# Replace `jp nz,closeMenu` in @dungeon by an extension (dungeon maps)
+02/602c/: call worldMapStartButtonSupport
+
+# Extend the close menu procedure to reset temporarily changed variable with the value
+# they had when initially opening the map
+02//extendedMenuClose: |
+    ; Reset minimap group & dungeon index to their original value
+    ld a,(wOriginalDungeonIndex)
+    ld (wDungeonIndex),a
+    ld a,(wOriginalMinimapGroup)
+    ld (wMinimapGroup),a
+    xor a
+    ld (wMinimapCycleToNextMode),a
+    
+    ld hl,wMenuLoadState
+    ret
+# Replace `ld hl,wMenuLoadState` in menuStateFadeOutOfMenu by an extension
+02/508b/: call extendedMenuClose
+
+# Tests if player really is in the dungeon that is being looked at through the dungeon
+# map (sets flag Z if inside)
+02//checkIfInsideDungeon: |
+    ld a,(wDungeonIndex)
+    cp $ff
+    jr z,@invalid
+    
+    @valid:
+    ld b,a
+    ld a,(wOriginalDungeonIndex)
+    cp b
+    ret
+    
+    @invalid:
+    or a
+    ret
+
+# Only draw dungeon map if it's the dungeon we are currently in (because technical reasons)
+02//dontDrawDungeonIfNotInside: |
+    call checkIfInsideDungeon
+    jr nz,@done
+    call $6743      ; dungeonMap_generateScrollableTilemap
+    call $66e1      ; dungeonMap_drawFloorList
+    call $6791      ; dungeonMap_updateScroll
+    @done:
+    ret
+# replace the unique calls of the 3 functions contained inside dontDrawDungeonIfNotInside by a
+# call to it
+02/5f64/: |
+    call dontDrawDungeonIfNotInside
+    jr $04
+
+# Only draw annex sprites in dungeon map (Link icon, cursors and boss symbols...) if we currently
+# are in the dungeon
+02//dontDrawDungeonSpritesIfNotInside: |
+    call checkIfInsideDungeon
+    jr nz,@done
+    call $64a3     ; dungeonMap_drawLinkIcons
+    call $64f9     ; dungeonMap_drawCursor
+    call $6521     ; dungeonMap_drawArrows
+    call $648a     ; dungeonMap_drawBossSymbolForFloor
+    call $646e     ; dungeonMap_drawFloorCursor
+    @done:
+    ret
+# Replace the only call to dungeonMap_drawLinkIcons by the extension above
+02/63dc/: jp dontDrawDungeonSpritesIfNotInside
+
+# Prevent from scrolling floors if not inside dungeon (and therefore map is not displayed)
+02//onlyAllowScrollingIfInsideDungeon: |
+    call checkIfInsideDungeon
+    jr nz,@done
+    jp $0294    ; getInputWithAutofire
+    
+    @done:
+    pop af      ; pop return address from stack
+    ret
+# Replace first call of dungeonMap_scrollingState0 by this extension
+02/62fe/: call onlyAllowScrollingIfInsideDungeon
+
+# On overworld & Subrosia maps, don't draw the arrow if we aren't in that dimension
+02//drawWorldArrowOnlyIfInDimension: |
+    ld a,(wMinimapCycleToNextMode)
+    or a
+    jr nz,@differentDimension
+    ld a,(wFrameCounter)
+    ret
+    @differentDimension:
+    pop af      ; pop return address from stack
+    ret
+# Replace the first instruction of mapMenu_drawArrow by a call to above extension
+02/657d/: call drawWorldArrowOnlyIfInDimension
+
+# Override initialization of cursor position to set it to origin position if we have cycled
+# mode at least once
+02//initializeCursorPosition: |
+    ld (wMapMenuCursorIndex),a
+    ld a,(wMinimapCycleToNextMode)
+    or a
+    jr z,@done
+    xor a
+    ld (wMapMenuCursorIndex),a
+    @done:
+    ret
+# Replace the instruction `ld (wMapMenu.cursorIndex),a` inside mapMenu_state0 by a call to above function
+02/5f2d/: call initializeCursorPosition
+
+# If dungeon map is owned, return with flag Z unset to indicate dungeon has
+# been visited and needs to be displayed on map. Otherwise, perform the usual
+# @checkDungeonEntered which tests if dungeon has REALLY been visited
+02//extendedCheckForDungeonDisplay: |
+    ld hl,wDungeonMaps
+    call checkFlag
+    ld a,c
+    ret nz
+    jp $611a    ; @checkDungeonEntered
+# Replace the unique call to @checkDungeonEntered by a call to above extension
+02/60f3/: call extendedCheckForDungeonDisplay
+
+# ========== PORTAL TEXT HANDLING
+
+# Put a fixed "Maku Tree" text on its tile instead of being able to ask for remote advice by selecting its tile.
+# This way, we can reuse the "@specialCode0" to handle dynamic names for Subrosian Portals
+02/6ae2/: db $17
+
+# Remove the portal icon from room $aa because... it doesn't have one?
+02/6bdf/: db $9a
+
+# Stop calling func_6e06 to set portal bit when it is spawned
+15/6dfb/: |
+    nop
+    nop
+    nop
+
+# Make minimapPopupType_portalSpot always show the portal icon
+02/61e0/: |
+    ld a,e
+    ret
+
+# Generic function setting portal bit for the current room (or the matching overworld room, when in Horon basement or
+# in Temple Remains summit)
+05//playSoundAndSetPortalBit: |
+    call playSound  ; Function call which was overwritten
+    ; Call the function which was initially used to set the flag when spawning the portal
+    ld hl,$6e0b
+    ld e,$15
+    jp interBankCall
+# Set portal bit when entering a portal
+05/4c8d/: call playSoundAndSetPortalBit
+# Set portal bit when landing out of a portal
+05/4d32/: call playSoundAndSetPortalBit
+
+# Replace @specialCode0 (used in vanilla for Maku Tree text on map, which is
+# useless in rando) by dynamic portal text, showing the portal destination if
+# portal has already been visited, or "Unknown Portal" otherwise.
+# ---------------------------
+# in(c) = portal index
+# out(b) = text group
+# out(c) = text index
+02//getPortalText: |
+    ld a,(wMapMenuCursorIndex)
+    ld b,a
+    ld a,(wMapMenuMode)
+    
+    call getRoomFlags
+    bit 3,a
+    jr z,@unknownPortal
+
+    ; if "Portal visited" flag is set, show the full portal label
+    ld b,$05 ; textgroup
+    ld a,$01 ; base_textid
+    add a,c
+    ld c,a
+    ret
+
+    @unknownPortal:
+    ; otherwise, show a generic "Unknown Portal" text
+    ld bc,$0500
+    ret
+# Overwrite @specialCode0 to call above function
+02/60dd/: |
+    ld a,c
+    add a,a
+    swap a
+    and $0f
+    ld c,a
+
+    jp getPortalText
+
+
+# ========== ESSENCE SPARKLE HINTS ==================
+
+# in[c]: bit mask for that dungeon's essence in wObtainedEssences
+# out[Z]: flag is cleared if compass is owned for that dungeon, or if condition is disabled altogether
+# Note that this function alters [a]
+02//checkCompassForSparkles: |
+    ; If compasses are not required to see sparkles, always return with Z flag cleared
+    ld a,option.essenceSparklesRequireCompass
+    xor $01
+    or a
+    ret nz
+    
+    ; Otherwise, check if compass is really owned
+    push hl
+    ld hl,wDungeonCompasses
+    ld a,c
+    rlc a
+    jr nc,@lookForMapFlag
+    ; d8 is on the next byte
+    inc hl
+    @lookForMapFlag:
+    and (hl)
+    pop hl
+    ret
+
+# Replace the whole Treasure Map code with sparkles for essences
+02/662a/: |
+    ld hl,@essenceLocations
+    ld c,$01
+    
+    ; Essence has not yet been obtained, check if map currently being displayed is the right one
+    @essenceLoop:
+    ldi a,(hl)
+    cp $ff
+    ret z
+    ld b,a
+    ld a,(wMapMenuMode)
+    cp b
+    jr nz,@nextLoop
+    
+    ; Check if essence has already been obtained
+    ld a,(wEssencesObtained)
+    and c
+    jr nz,@nextLoop
+    
+    ; Check if compasses are required and, if that's the case, if we own the proper compass
+    call checkCompassForSparkles
+    jr z,@nextLoop
+    
+    ; We're on the right map, display the essence with a sparkle
+    ld a,(hl)
+    push hl
+    push bc
+    ld hl,$cec0
+    call $65a1  ; mapMenu_drawSpriteAtRoomIndex
+    pop bc
+    pop hl
+    
+    @nextLoop:
+    inc hl
+    sla c
+    jr @essenceLoop
+    
+    @essenceLocations:
+    /include essenceLocationsTable
+    db $ff

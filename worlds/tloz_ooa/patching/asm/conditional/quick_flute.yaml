@@ -1,0 +1,26 @@
+# 2 frames before the end, reactivate enemies so that Pols Voice have time to
+# witness the flute playing and die accordingly. This is a hacky fix, but it works.
+06//skipSong: |
+    call $23d6 ; itemDecCounter1
+    push bc
+    ld bc,$8f03 ; Tokkey room
+    call compareRoom
+    pop bc
+    jp z,$4dbc ; return to vanilla behavior
+
+    ld a,(hl)
+    and $1f
+    cp $02
+    jr z,@frameReactivateEnemies
+    or a
+    jp z,$4df8    ; @donePlayingSong
+    jp $4dd8      ; ++
+
+    @frameReactivateEnemies:
+    xor a
+    ld (wDisabledObjects),a
+    ret
+
+06/4db9/: |
+    jp skipSong
+

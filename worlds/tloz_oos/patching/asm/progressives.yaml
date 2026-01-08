@@ -1,0 +1,208 @@
+
+# progressive item upgrade data (old ID, old related var, new ID, new addr)
+15//progressiveUpgrades: |
+  ; Iron Shield
+  db TREASURE_SHIELD,$01,TREASURE_SHIELD
+  dw $52c1
+  ; Mirror Shield
+  db TREASURE_SHIELD,$02,TREASURE_SHIELD
+  dw $52c5
+  
+  ; Noble Sword
+  db TREASURE_SWORD,$01,TREASURE_SWORD
+  dw $52dd
+  ; Master Sword
+  db TREASURE_SWORD,$02,TREASURE_SWORD
+  dw $52e1
+  
+  ; Magic Boomerang
+  db TREASURE_BOOMERANG,$01,TREASURE_BOOMERANG
+  dw $52f5
+  
+  ; Hyper Slingshot
+  db TREASURE_SLINGSHOT,$01,TREASURE_SLINGSHOT
+  dw $5329
+  
+  ; Roc's Cape
+  db TREASURE_FEATHER,$01,TREASURE_FEATHER
+  dw $5331
+  
+  ; Satchel Upgrades
+  db TREASURE_SEED_SATCHEL,$01,TREASURE_SEED_SATCHEL 
+  dw $52b9
+  db TREASURE_SEED_SATCHEL,$02,TREASURE_SEED_SATCHEL 
+  dw $52b9
+
+  ; Switch Hook
+  db TREASURE_SWITCH_HOOK,$01,TREASURE_SWITCH_HOOK
+  dw treasureObjectData_switchHook+4
+  
+  db $ff
+
+# given a treasure id & subid in b & c, if the treasure needs to be upgraded,
+# set hl = the start of the upgraded treasure data + 1 and b = the new
+# treasure ID.
+15//getUpgradedTreasure: |
+  ; Filter out the fake "Sword spinslash" treasure given at Hero's Cave chest
+  ; and while opening Maku Tree gate solely for cosmetic purpose
+  ld a,b
+  cp TREASURE_SWORD
+  jr nz,@notSpinSlash
+  ld a,c
+  cp $03
+  ld a,b
+  ret nc
+  @notSpinSlash:
+  
+  ; Check that item was obtained before
+  call checkTreasureObtained
+  ld c,a
+  ld a,b
+  jr c,@shieldDone
+  
+  ; Shield might have been eaten, so check if we got any previously
+  cp TREASURE_SHIELD
+  ret nz
+  ld a,(wShieldLevel)
+  ld c,a
+  ld a,b
+  @shieldDone:
+
+  ; cp TREASURE_TUNE_OF_ECHOES
+  ; jr nz,@harpDone
+  ; ld a,TREASURE_TUNE_OF_CURRENTS
+  ; ld e,a
+  ; call checkTreasureObtained
+  ; jr nc,@harpDone
+  ; ld b,e
+  ; @harpDone:
+  
+  push hl
+  ld hl,progressiveUpgrades
+  ld e,$03
+  call searchDoubleKey
+  jr nc,@done
+  
+  ; We found a matching entry in progressiveUpgrades table
+  ldi a,(hl)
+  ld b,a
+  ldi a,(hl)
+  ld e,(hl)
+  pop hl
+  ld h,e
+  ld l,a
+  inc hl
+  ret
+  
+  @done:
+  pop hl
+  ret
+
+# set hl = the address of the treasure with ID b and sub ID c, accounting for
+# progressive upgrades. call through getTreasureDataBCE or
+# getTreasureDataSprite!
+15//getTreasureData_body: |
+  ld hl,$5129      ; treasureObjectData in bank 15
+  ld a,b
+  add a,a
+  rst 10
+  ld a,b
+  add a,a
+  rst 10
+  bit 7,(hl)
+  jr z,@next
+  inc hl
+  ldi a,(hl)
+  ld h,(hl)
+  ld l,a
+  @next:
+  ld a,c
+  add a,a
+  rst 18
+  inc hl
+  jp getUpgradedTreasure
+
+# load fianl treasure ID, param, and text into b, c, and e.
+15//getTreasureDataBCE: |
+  call getTreasureData_body
+  ld c,(hl)
+  inc hl
+  ld e,(hl)
+  ret
+
+# load final treasure sprite into e.
+15//getTreasureDataSprite: |
+  call getTreasureData_body
+  inc hl
+  inc hl
+  ld e,(hl)
+  ret
+
+# return treasure data address and collect mode modified as necessary, given
+# a treasure ID in dx42. lookupCollectMode must happen before upgradeTreasure
+# for multiworld things to work correctly.
+15//modifyTreasure: |
+  call lookupCollectMode
+  push af
+  call upgradeTreasure
+  pop af
+  ld b,a
+  swap a
+  ret
+15/465a/: call modifyTreasure
+
+# given a treasure at dx40, return hl = the start of the treasure data + 1,
+# accounting for progressive upgrades. also writes the new treasure ID to
+# d070, which is used to set the treasure obtained flag.
+15//upgradeTreasure: |
+  ld e,$42
+  ld a,(de)
+  ld b,a
+  inc de
+  ld a,(de)
+  ld c,a
+  ; call getMultiworldItemDest
+  ; call z,getUpgradedTreasure
+  call getUpgradedTreasure
+  ld e,$70
+  ld a,b
+  ld (de),a
+  ret
+
+# this is a replacement for giveTreasure that accounts for item progression.
+# call through giveTreasureCustom or giveTreasureCustomSilent, since this
+# function doesn't xor the a that it returns. importantly, this replacement
+# treats c as a subID, not a param, so this should *not* be called by
+# non-randomized whatevers.
+00//giveTreasureCustom_body: |
+  ld b,a
+  push hl
+  ld e,$15
+  ld hl,getTreasureDataBCE
+  call interBankCall
+  pop hl
+  ld a,b
+  jp giveTreasure
+
+# gives the treasure, plays its sound, and shows its text.
+00//giveTreasureCustom: |
+  call giveTreasureCustom_body
+  jr z,@noSound
+  push hl
+  call playSound
+  pop hl
+  @noSound:
+  ld a,e
+  cp $ff
+  ret z
+  ld c,a
+  ld b,$00
+  call showText
+  xor a
+  ret
+0a/7b93/: call giveTreasureCustom
+
+# We have to have this cross item data there to be used in progressiveUpgrades
+15//treasureObjectData_switchHook: |
+  db $38,$01,text.hook1.treasure,$68
+  db $38,$02,text.hook2.treasure,$68

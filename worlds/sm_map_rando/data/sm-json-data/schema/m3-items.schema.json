@@ -1,0 +1,189 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/vg-json-data/sm-json-data/master/schema/m3-items.schema.json",
+
+  "definitions": {
+    "consumableResource": {
+      "type": "string",
+      "enum": [
+        "regularEnergy",
+        "reserveEnergy",
+        "missile",
+        "super",
+        "powerBomb"
+      ],
+      "pattern": "^(.*)$"
+    }
+  },
+
+  "type": "object",
+  "title": "Super Metroid Items and Flags Schema",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "title": "JSON Schema Path",
+      "description": "A path to the definition of this file's JSON schema."
+    },
+    "startingRoom": {
+      "type": "string",
+      "title": "Starting Room",
+      "description": "The name of the room where the game starts",
+      "pattern": "^(.*)$"
+    },
+    "startingNode": {
+      "type": "integer",
+      "title": "Starting Node",
+      "description": "The ID (within startingRoom) of the node where the game starts"
+    },
+    "startingItems": {
+      "type": "array",
+      "title": "Starting Items",
+      "description": "A list of items that are available from game start",
+      "items": {
+        "type": "string",
+        "title": "starting Item",
+        "description": "An item that is available at game start",
+        "pattern": "^(.*)$"
+      }
+    },
+    "startingFlags": {
+      "type": "array",
+      "title": "Starting Flags",
+      "description": "A list of game flags that are active from game start",
+      "items": {
+        "type": "string",
+        "title": "Starting Flag",
+        "description": "A game flag that is active from game start",
+        "pattern": "^(.*)$"
+      }
+    },
+    "startingLocks": {
+      "type": "array",
+      "title": "Starting Locks",
+      "description": "A list of node locks that are opened from game start (referenced by name)",
+      "items": {
+        "type": "string",
+        "title": "Starting Lock",
+        "description": "The name of a node lock that is active from game start",
+        "pattern": "^(.*)$"
+      }
+    },
+    "startingResources": {
+      "type": "array",
+      "title": "Starting Resources",
+      "description": "A list of resources, and the max amount available at game start",
+      "items": {
+        "type": "object",
+        "title": "Starting Resource",
+        "description": "Describes the max amount available at game start for a resource",
+        "required": ["resource", "maxAmount"],
+        "additionalProperties": false,
+        "properties": {
+          "resource": {
+            "$ref" : "#/definitions/consumableResource",
+            "title": "Resource",
+            "description": "The resource whose starting max amount this object describes"
+          },
+          "maxAmount": {
+            "type": "integer",
+            "title": "Max Amount",
+            "description": "The starting max amount for this resource"
+          }
+        }
+      }
+    },
+    "implicitItems": {
+      "type": "array",
+      "title": "Implicit Items",
+      "description": "A list of implicit items that don't explicitly exist in the game",
+      "items": {
+        "type": "string",
+        "title": "Item Name",
+        "description": "The name of the implicit item, as it will appear in logical requirements",
+        "pattern": "^(.*)$"
+      }
+    },
+    "upgradeItems": {
+      "type": "array",
+      "title": "Upgrade Items",
+      "description": "A list of non-consumable items that upgrade the player's capabilities",
+      "items": {
+        "type": "object",
+        "title": "Upgrade Item",
+        "description": "A non-consumable item that upgrades the player's capabilities",
+        "required": [
+          "name",
+          "data"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Item Name",
+            "description": "The name of the item, as it will appear in logical requirements",
+            "pattern": "^(.*)$"
+          },
+          "data": {
+            "type": "string",
+            "title": "Item Data",
+            "description": "In-game data describing the item",
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    },
+    "expansionItems": {
+      "type": "array",
+      "title": "Expansion Items",
+      "description": "A list of expansion items, that increase the player's max value for a consumable resource",
+      "items": {
+        "type": "object",
+        "title": "Expansion Item",
+        "description": "An expansion item, that increases the player's max value for a consumable resource",
+        "required": [
+          "name",
+          "data",
+          "resource",
+          "resourceAmount"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Item Name",
+            "description": "The name of the item",
+            "pattern": "^(.*)$"
+          },
+          "data": {
+            "type": "string",
+            "title": "Item Data",
+            "description": "In-game data describing the item",
+            "pattern": "^(.*)$"
+          },
+          "resource": {
+            "$ref" : "#/definitions/consumableResource",
+            "title": "Expansion Item Resource",
+            "description": "The resource that this expansion item increases the max amount of"
+          },
+          "resourceAmount": {
+            "type": "integer",
+            "title": "Resource Amount",
+            "description": "Indicates the amount by which this expansion item increases its resource's max amount"
+          }
+        }
+      }
+    },
+    "gameFlags": {
+      "type": "array",
+      "title": "Game Flags",
+      "description": "A list of game flags, that can be obtained by interacting with certain nodes",
+      "items": {
+        "type": "string",
+        "title": "Game Flag",
+        "description": "The name of a game flag, as it will appear in requirements and in the `yields` property of nodes",
+        "pattern": "^(.*)$"
+      }
+    }
+  }
+}

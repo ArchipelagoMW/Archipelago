@@ -1,0 +1,516 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 147,
+  "name": "The Jail",
+  "area": "Norfair",
+  "subarea": "Lower",
+  "subsubarea": "East",
+  "roomAddress": "0x7B55A",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00199d2",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Top Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00199de",
+      "doorOrientation": "up",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "PowerBomb",
+      "nodeAddress": "0x78FD2",
+      "mapTileMask": [
+        [2]
+      ]
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [1, 1],
+      "name": "Direct G-Mode Morph, Power Bomb the Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_heatedGMode",
+        "canPowerBombItemOverloadPLMs",
+        {"ammo": {"type": "PowerBomb", "count": 18}},
+        {"heatFrames": 240}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Use 17 Power Bombs while pressed against the crumble blocks to overload PLMs and go through the crumble blocks.",
+        "With Morph, exit G-mode near the item then return to the left, without, exit in the middle of the room to break the crumble blocks."
+      ],
+      "detailNote": "Anywhere else in the left section of the room requires one more Power Bomb.",
+      "devNote": "Returning to the left avoids canRiskPermanentLossOfAccess. This might be useful with a crystal flash."
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Crystal Flash Clip",
+      "requires": [
+        {"notable": "Crystal Flash Clip"},
+        "h_heatProof",
+        "h_jumpIntoCrystalFlashClip",
+        "canTrickyJump"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Stand next to the Crumble Blocks and jump into a Crystal Flash Clip to briefly clip into the ceiling above those blocks.",
+        "Hold down exiting the Crystal Flash to shrink Samus' hitbox and on the next frame press forward to move above the Crumble blocks.",
+        "Holding down and mashing forward sometimes works, or X-Ray can be used at the end of the Crystal Flash to more easily time the inputs."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [1, 2],
+      "name": "G-Mode, Bomb the Crumble Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "h_artificialMorphBombs",
+        {"heatFrames": 50}
+      ],
+      "flashSuitChecked": true,
+      "note": "Bomb the side of the crumble blocks to overload PLMs and go through to the middle of the room.",
+      "devNote": "It is possible to go to 3, but then it takes extra heat frames to get out, being almost the same as ending at 2 and going to 3."
+    },
+    {
+      "id": 20,
+      "link": [1, 2],
+      "name": "Direct G-Mode Morph, Power Bomb the Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "canPowerBombItemOverloadPLMs",
+        {"itemNotCollectedAtNode": 3},
+        "canRiskPermanentLossOfAccess",
+        {"ammo": {"type": "PowerBomb", "count": 17}},
+        {"heatFrames": 50}
+      ],
+      "flashSuitChecked": true,
+      "note": "Use 17 Power Bombs while pressed against the crumble blocks to overload PLMs and go through the crumble blocks.",
+      "detailNote": "Anywhere else in the left section of the room requires one more Power Bomb.",
+      "devNote": "It is possible to go to 3, but then it takes extra heat frames to get out, being almost the same as ending at 2 and going to 3."
+    },
+    {
+      "id": 4,
+      "link": [1, 3],
+      "name": "Grapple Teleport Inside Wall",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [
+        {"notable": "Grapple Teleport Inside Wall"},
+        "Morph",
+        {"heatFrames": 180}
+      ],
+      "note": [
+        "In the previous room, avoid triggering the transition too deeply (position 238), otherwise Samus ends up stuck too far right in the wall.",
+        "After teleporting, Samus should be standing inside the wall.",
+        "Wait a moment for the acid to lower, then retract Grapple by pressing up, which will pull Samus left and down.",
+        "Hold left, and release Grapple while still holding left.",
+        "Perform a turn-around spin jump (to the right).",
+        "Then morph and roll out to the left."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Quick Drop)",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 95},
+        "canShinechargeMovementComplex",
+        "canQuickDrop",
+        {"heatFrames": 120},
+        {"shinespark": {"frames": 6, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Quick Drop)",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "canShinechargeMovementComplex",
+        "canQuickDrop",
+        {"heatFrames": 105}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "G-Mode, Bomb the Crumble Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_heatedGMode",
+        "h_artificialMorphBombs",
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "Bomb the side of the crumble blocks to overload PLMs and go through to the left door.",
+      "devNote": [
+        "FIXME: This and a few other variant could go to 3, but then it takes extra heat frames to get out, which is about the same overall,",
+        "but the item could be Varia, Gravity, or an E-Tank making it possible when entering with less Energy."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Direct G-Mode Morph, Power Bomb the Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_heatedGMode",
+        "canPowerBombItemOverloadPLMs",
+        {"itemNotCollectedAtNode": 3},
+        "canRiskPermanentLossOfAccess",
+        {"ammo": {"type": "PowerBomb", "count": 9}},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "Use 9 Power Bombs against the right crumble blocks to overload PLMs and roll through the crumble blocks on the left."
+    },
+    {
+      "id": 6,
+      "link": [2, 2],
+      "name": "Leave With Door Frame Below",
+      "requires": [
+        {"heatFrames": 70}
+      ],
+      "exitCondition": {
+        "leaveWithDoorFrameBelow": {
+          "height": 2
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [2, 2],
+      "name": "Leave With Platform Below - Basic Platform",
+      "requires": [
+        {"heatFrames": 70}
+      ],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 9,
+          "leftPosition": -2,
+          "rightPosition": 2
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [2, 2],
+      "name": "Leave With Platform Below - Left Pillar Broken",
+      "requires": [
+        {"heatFrames": 200}
+      ],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 9,
+          "leftPosition": -6,
+          "rightPosition": 2
+        }
+      },
+      "devNote": [
+        "This applies to getting onto the ledge in Red Fish Room, or onto the bottom ledge on the right side of Mt. Everest.",
+        "It does not require opening the left door.",
+        "An additional tile could be used by opening the door, but that does not yet appear to have an application."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [2, 2],
+      "name": "Carry G-Mode Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [2, 2],
+      "name": "Carry G-Mode Morph Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphIBJ",
+          "h_artificialMorphSpringBallBombJump",
+          {"and": [
+            "HiJump",
+            "h_artificialMorphSpringBall"
+          ]},
+          {"and": [
+            "canTrickyJump",
+            "h_artificialMorphSpringBall"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true,
+      "note": "It is possible to get back up with Spring Ball alone with a foosball off of the crumble block.",
+      "devNote": "This is one of the easier foosballs because it is free to retry, because there is no heat damage in G-Mode."
+    },
+    {
+      "id": 11,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 90}
+      ]
+    },
+    {
+      "id": 12,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 90}
+      ],
+      "devNote": [
+        "FIXME: Just reaching the node (as currently drawn in the room diagram) would be doable in 50 frames.",
+        "We have 90 here because getting into the door takes a bit more time than that.",
+        "Probably the room diagram should be redrawn with the node including the door only, not the platform below."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [3, 2],
+      "name": "Leave With Door Frame Below",
+      "requires": [
+        {"heatFrames": 90}
+      ],
+      "exitCondition": {
+        "leaveWithDoorFrameBelow": {
+          "height": 2
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "link": [3, 2],
+      "name": "Leave With Platform Below",
+      "requires": [
+        {"heatFrames": 90}
+      ],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 9,
+          "leftPosition": -2,
+          "rightPosition": 2
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Crystal Flash Clip",
+      "note": [
+        "Stand next to the Crumble Blocks and jump into a Crystal Flash Clip to briefly clip into the ceiling above those blocks.",
+        "Hold down exiting the Crystal Flash to shrink Samus' hitbox and on the next frame press forward to move above the Crumble blocks.",
+        "Holding down and mashing forward sometimes works, or X-Ray can be used at the end of the Crystal Flash to more easily time the inputs."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Grapple Teleport Inside Wall",
+      "note": [
+        "In the previous room, avoid triggering the transition too deeply (position 238), otherwise Samus ends up stuck too far right in the wall.",
+        "After teleporting, Samus should be standing inside the wall.",
+        "Wait a moment for the acid to lower, then retract Grapple by pressing up, which will pull Samus left and down.",
+        "Hold left, and release Grapple while still holding left.",
+        "Perform a turn-around spin jump (to the right).",
+        "Then morph and roll out to the left."
+      ]
+    }
+  ],
+  "nextStratId": 23,
+  "nextNotableId": 3
+}

@@ -1,0 +1,8 @@
+[
+    {
+        "name": "main",
+        "img": "images/main.png",
+        "location_size": 30,
+        "location_border_thickness": 2
+    }
+]

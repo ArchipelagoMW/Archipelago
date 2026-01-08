@@ -1,0 +1,119 @@
+{% extends 'randomizer/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'randomizer/_rom_base.html' %}
+    {% include 'randomizer/_rom_loader.html' %}
+
+    <div class="card border-success my-3">
+        <div class="card-header bg-success text-white">
+            <h3 class="card-title">Game Details</h3>
+        </div>
+        <div class="card-body">
+            <div id="seed-details" class="row" style="display:none">
+                <div class="col-md-6">
+                    <div role="group" class="btn-group btn-flex mr-3 mb-3">
+                    <button name="save_rom" class="btn btn-success" id="btn-save-rom" disabled>Save Rom</button>
+                    </div>
+                    <div role="group" class="btn-group btn-flex mr-3 mb-3">
+                    <button name="save_wad" class="btn btn-success" id="btn-save-wad" disabled>Save Wad</button>
+                    </div>
+                </div>
+            </div>
+            <div id="rom-select-warning" class="alert alert-warning" role="alert" style="display:none">
+                You need to upload a ROM above!
+            </div>
+            {% include 'randomizer/_rom_info.html' %}
+        </div>
+    </div>
+
+    <script>
+        function applyHash(rom) {
+            return new Promise(function (resolve, reject) {
+                $.get("/hash/{{ hash }}/" + rom.region, function (patch) {
+                    rom.applyModeChanges(patch.mode).then(() => {
+                        rom.parsePatch(patch.patch);
+                        resolve(patch);
+                    });
+                }, "json").fail(reject);
+            });
+        }
+
+        function seedApplied(patch) {
+            return new Promise(function (resolve) {
+                $("#btn-save-rom").prop("disabled", false);
+                if (wad && wad.valid) {
+                    $("#btn-save-wad").prop("disabled", false);
+                } else {
+                    $("#btn-save-wad").prop("disabled", true);
+                }
+                updateSeedDetailsFromPatch(patch);
+                rom.parseInfoFromPatch(patch);
+                resolve(rom);
+            });
+        }
+
+        function seedFailed() {
+            $('#error-message').html('Failed Creating Seed :(');
+            $('#error-box').show().delay(2000).fadeOut("slow");
+        }
+
+        // Override regular romOk function
+        function romOk(rom) {
+            checkWad();
+            $("#currently-loaded").show().find(".region").text(rom.region);
+            applyHash(rom).then(seedApplied, seedFailed);
+        }
+
+        $(function () {
+            $('#error-box, .info').hide();
+
+            // Save ROM button
+            $("#btn-save-rom").click(function () {
+                return rom.save(rom.makeFilename("sfc"));
+            });
+
+            // Save WAD button
+            $("#btn-save-wad").click(function () {
+                rom.updateChecksum().then(function () {
+                    $("#btn-save-wad").html("Generating...").prop("disabled", true);
+                    $("#btn-save-rom").prop("disabled", true);
+
+                    let fd = new FormData();
+                    fd.append("region", rom.region);
+                    fd.append("rom", rom.toBlob());
+                    fd.append("wad", wad.toBlob());
+
+                    $.ajax("{% url 'randomizer:pack' %}", {
+                        method: "POST",
+                        processData: false,
+                        contentType: false,
+                        dataType: 'binary',
+                        data: fd,
+                        xhrFields: {
+                            responseType: 'blob'
+                        },
+                        success: (result) => {
+                            let filename = rom.makeFilename("wad");
+                            saveAs(result, filename);
+                        },
+                        error: () => {
+                            $("#error-message").html("Failed Packing Wad :(");
+                            $("#error-box").show().delay(2000).fadeOut("slow");
+                        },
+                        complete: () => {
+                            $("#btn-save-wad").html("Save Wad").prop("disabled", false);
+                            $("#btn-save-rom").prop("disabled", false);
+                        }
+                    });
+                });
+            });
+
+            // Load patch meta-data initially in case they don't have a ROM loaded yet.
+            $.get("/hash/{{ hash }}/US", function (patch) {
+                updateSeedDetailsFromPatch(patch);
+                $("#seed-details").hide();
+            });
+        });
+    </script>
+{% endblock %}

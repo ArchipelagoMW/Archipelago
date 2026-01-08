@@ -1,0 +1,59 @@
+01//uncmpGfxHeader01: /copy s,$01,$6740,$06
+01//uncmpGfxHeader02: |
+  /copy s,$01,$6746,$06
+  uncmpGfxHeader03:
+  /copy s,$01,$674c,$0c
+
+01//uncmpGfxHeader38: | # Somaria cane / 1c
+  db $5a
+  /copy a,$01,$68df,$05
+01//uncmpGfxHeader39: | # Switch hook / 1f
+  db $5a
+  /copy a,$01,$68eb,$05
+01//uncmpGfxHeader3a: | # Seed shooter / 1d
+  db $5a
+  /copy a,$01,$68e5,$05
+01//uncmpGfxHeader3b: | # Flower ($c3)
+  db $40
+  dwbe spr_flowerGfx
+  dwbe $85e1
+  db $03
+01//uncmpGfxHeader3c: | # Stone flower ($d8)
+  db $40
+  dwbe spr_stoneFlowerGfx
+  dwbe $85e1
+  db $0b
+
+01/66d0/: |
+  dw uncmpGfxHeader01
+  dw uncmpGfxHeader01
+  dw uncmpGfxHeader02
+  dw uncmpGfxHeader03
+01/6740/: |
+  dw uncmpGfxHeader38
+  dw uncmpGfxHeader39
+  dw uncmpGfxHeader3a
+  dw uncmpGfxHeader3b
+  dw uncmpGfxHeader3c
+  ; $0e bytes left
+
+5a/7000/spr_cane_of_somaria: /copy a,$1a,$3000,$a0
+5a/70a0/spr_switch_hook: /copy a,$1a,$30a0,$c0
+5a/7160/spr_seed_shooter: /copy a,$1a,$3160,$a0
+40//spr_flowerGfx: db $0f,$0f,$10,$1f,$36,$3f,$49,$79,$49,$79,$76,$7f,$31,$3f,$7a,$4f,$fe,$9f,$61,$7f,$6d,$7f,$92,$f3,$92,$f3,$ed,$ff,$61,$7f,$3f,$3f,$08,$08,$9c,$94,$fc,$e4,$3c,$ec,$78,$f8,$84,$fc,$b6,$fe,$49,$cf,$49,$cf,$b7,$ff,$86,$fe,$7e,$fa,$7f,$f1,$fe,$ce,$fc,$e4,$38,$38
+40//spr_stoneFlowerGfx: db $00,$00,$03,$03,$34,$37,$48,$7f,$4d,$7f,$e7,$ff,$98,$fa,$90,$f5,$d8,$fa,$6f,$7f,$f8,$ff,$ff,$8f,$ff,$91,$7f,$63,$3e,$3e,$00,$00,$00,$00,$80,$80,$58,$d8,$24,$fc,$64,$fc,$cc,$fc,$32,$be,$12,$5e,$36,$be,$ec,$fc,$3e,$fe,$fe,$e2,$fe,$12,$fc,$8c,$f8,$f8,$00,$00
+
+# treasureDisplayData1
+3f/6d84/: |
+  db TREASURE_SWITCH_HOOK,<wSwitchHookLevel,$0c
+  db TREASURE_SHOOTER,<wShooterSelectedSeeds,$0d
+  db $00,$00,$00
+
+# Free space from 3f:6d8d to 3da0
+# treasureDisplayData2
+3f//treasureDisplayData2: |
+  /copy s,$3f,$2d87,$18
+  dw treasureDisplayData_switchHook-7
+  dw treasureDisplayData_shooter
+
+3f/4718/: dw treasureDisplayData2

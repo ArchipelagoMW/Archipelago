@@ -1,0 +1,2492 @@
+{
+  "TRAINER_SCALING_PALLET_TOWN_PROFESSOR_OAKS_LAB/MAIN": {
+    "region": "Professor Oak's Lab",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Professor Oak's Lab Rival Scaling": [
+        "TRAINER_RIVAL_OAKS_LAB_BULBASAUR",
+        "TRAINER_RIVAL_OAKS_LAB_CHARMANDER",
+        "TRAINER_RIVAL_OAKS_LAB_SQUIRTLE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE22/MAIN": {
+    "region": "Route 22 (East)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Route 22 Early Rival Scaling": [
+        "TRAINER_RIVAL_ROUTE22_EARLY_BULBASAUR",
+        "TRAINER_RIVAL_ROUTE22_EARLY_CHARMANDER",
+        "TRAINER_RIVAL_ROUTE22_EARLY_SQUIRTLE"
+      ],
+      "Route 22 Late Rival Scaling": [
+        "TRAINER_RIVAL_ROUTE22_LATE_BULBASAUR",
+        "TRAINER_RIVAL_ROUTE22_LATE_CHARMANDER",
+        "TRAINER_RIVAL_ROUTE22_LATE_SQUIRTLE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_VIRIDIAN_FOREST/MAIN": {
+    "region": "Viridian Forest",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Bug Catcher Rick Scaling": [
+        "TRAINER_BUG_CATCHER_RICK"
+      ],
+      "Bug Catcher Doug Scaling": [
+        "TRAINER_BUG_CATCHER_DOUG"
+      ],
+      "Bug Catcher Anthony Scaling": [
+        "TRAINER_BUG_CATCHER_ANTHONY"
+      ],
+      "Bug Catcher Charlie Scaling": [
+        "TRAINER_BUG_CATCHER_CHARLIE"
+      ],
+      "Bug Catcher Sammy Scaling": [
+        "TRAINER_BUG_CATCHER_SAMMY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_PEWTER_CITY_GYM/MAIN": {
+    "region": "Pewter Gym",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Pewter Gym Trainers Scaling": [
+        "TRAINER_CAMPER_LIAM",
+        "TRAINER_LEADER_BROCK"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE3/MAIN": {
+    "region": "Route 3",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Lass Janice Scaling": [
+        "TRAINER_LASS_JANICE"
+      ],
+      "Bug Catcher Colton Scaling": [
+        "TRAINER_BUG_CATCHER_COLTON"
+      ],
+      "Youngster Ben Scaling": [
+        "TRAINER_YOUNGSTER_BEN"
+      ],
+      "Bug Catcher Greg Scaling": [
+        "TRAINER_BUG_CATCHER_GREG"
+      ],
+      "Lass Sally Scaling": [
+        "TRAINER_LASS_SALLY"
+      ],
+      "Bug Catcher James Scaling": [
+        "TRAINER_BUG_CATCHER_JAMES"
+      ],
+      "Lass Robin Scaling": [
+        "TRAINER_LASS_ROBIN"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE3/BETWEEN_LEDGES": {
+    "region": "Route 3 (Between Ledges)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Youngster Calvin Scaling": [
+        "TRAINER_YOUNGSTER_CALVIN"
+      ]
+    }
+  },
+  "TRAINER_SCALING_MT_MOON_1F/MAIN": {
+    "region": "Mt. Moon 1F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Bug Catcher Kent Scaling": [
+        "TRAINER_BUG_CATCHER_KENT"
+      ],
+      "Lass Iris Scaling": [
+        "TRAINER_LASS_IRIS"
+      ],
+      "Super Nerd Jovan Scaling": [
+        "TRAINER_SUPER_NERD_JOVAN"
+      ],
+      "Bug Catcher Robby Scaling": [
+        "TRAINER_BUG_CATCHER_ROBBY"
+      ],
+      "Lass Miriam Scaling": [
+        "TRAINER_LASS_MIRIAM"
+      ],
+      "Youngster Josh Scaling": [
+        "TRAINER_YOUNGSTER_JOSH"
+      ],
+      "Hiker Marcos Scaling": [
+        "TRAINER_HIKER_MARCOS"
+      ]
+    }
+  },
+  "TRAINER_SCALING_MT_MOON_B2F/SOUTH": {
+    "region": "Mt. Moon B2F (South)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 2 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_2"
+      ]
+    }
+  },
+  "TRAINER_SCALING_MT_MOON_B2F/NORTHEAST": {
+    "region": "Mt. Moon B2F (Northeast)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 3 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_3"
+      ]
+    }
+  },
+  "TRAINER_SCALING_MT_MOON_B2F/MAIN": {
+    "region": "Mt. Moon B2F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 1 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT"
+      ],
+      "Team Rocket Grunt 4 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_4"
+      ],
+      "Super Nerd Miguel Scaling": [
+        "TRAINER_SUPER_NERD_MIGUEL"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE4/NORTHEAST": {
+    "region": "Route 4 (Northeast)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Lass Crissy Scaling": [
+        "TRAINER_LASS_CRISSY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_CERULEAN_CITY/MAIN": {
+    "region": "Cerulean City",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Cerulean City Rival Scaling": [
+        "TRAINER_RIVAL_CERULEAN_BULBASAUR",
+        "TRAINER_RIVAL_CERULEAN_CHARMANDER",
+        "TRAINER_RIVAL_CERULEAN_SQUIRTLE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_CERULEAN_CITY/OUTSKIRTS": {
+    "region": "Cerulean City (Outskirts)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 5 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_5"
+      ]
+    }
+  },
+  "TRAINER_SCALING_CERULEAN_CITY_GYM/MAIN": {
+    "region": "Cerulean Gym",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Cerulean Gym Trainers Scaling": [
+        "TRAINER_SWIMMER_MALE_LUIS",
+        "TRAINER_PICNICKER_DIANA",
+        "TRAINER_LEADER_MISTY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE24/MAIN": {
+    "region": "Route 24",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Bug Catcher Cale Scaling": [
+        "TRAINER_BUG_CATCHER_CALE"
+      ],
+      "Lass Ali Scaling": [
+        "TRAINER_LASS_ALI"
+      ],
+      "Youngster Timmy Scaling": [
+        "TRAINER_YOUNGSTER_TIMMY"
+      ],
+      "Lass Reli Scaling": [
+        "TRAINER_LASS_RELI"
+      ],
+      "Camper Ethan Scaling": [
+        "TRAINER_CAMPER_ETHAN"
+      ],
+      "Team Rocket Grunt 6 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_6"
+      ],
+      "Camper Shane Scaling": [
+        "TRAINER_CAMPER_SHANE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE25/MAIN": {
+    "region": "Route 25",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Hiker Franklin Scaling": [
+        "TRAINER_HIKER_FRANKLIN"
+      ],
+      "Hiker Wayne Scaling": [
+        "TRAINER_HIKER_WAYNE"
+      ],
+      "Youngster Joey Scaling": [
+        "TRAINER_YOUNGSTER_JOEY"
+      ],
+      "Youngster Dan Scaling": [
+        "TRAINER_YOUNGSTER_DAN"
+      ],
+      "Picnicker Kelsey Scaling": [
+        "TRAINER_PICNICKER_KELSEY"
+      ],
+      "Hiker Nob Scaling": [
+        "TRAINER_HIKER_NOB"
+      ],
+      "Camper Flint Scaling": [
+        "TRAINER_CAMPER_FLINT"
+      ],
+      "Youngster Chad Scaling": [
+        "TRAINER_YOUNGSTER_CHAD"
+      ],
+      "Lass Haley Scaling": [
+        "TRAINER_LASS_HALEY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE6/MAIN": {
+    "region": "Route 6",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Bug Catcher Keigo Scaling": [
+        "TRAINER_BUG_CATCHER_KEIGO"
+      ],
+      "Camper Ricky Scaling": [
+        "TRAINER_CAMPER_RICKY"
+      ],
+      "Picnicker Nancy Scaling": [
+        "TRAINER_PICNICKER_NANCY"
+      ],
+      "Bug Catcher Elijah Scaling": [
+        "TRAINER_BUG_CATCHER_ELIJAH"
+      ],
+      "Picnicker Isabelle Scaling": [
+        "TRAINER_PICNICKER_ISABELLE"
+      ],
+      "Camper Jeff Scaling": [
+        "TRAINER_CAMPER_JEFF"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE11/WEST": {
+    "region": "Route 11 (West)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Youngster Eddie Scaling": [
+        "TRAINER_YOUNGSTER_EDDIE"
+      ],
+      "Gamer Hugo Scaling": [
+        "TRAINER_GAMER_HUGO"
+      ],
+      "Engineer Bernie Scaling": [
+        "TRAINER_ENGINEER_BERNIE"
+      ],
+      "Youngster Dave Scaling": [
+        "TRAINER_YOUNGSTER_DAVE"
+      ],
+      "Youngster Dillon Scaling": [
+        "TRAINER_YOUNGSTER_DILLON"
+      ],
+      "Gamer Jasper Scaling": [
+        "TRAINER_GAMER_JASPER"
+      ],
+      "Engineer Braxton Scaling": [
+        "TRAINER_ENGINEER_BRAXTON"
+      ],
+      "Gamer Darian Scaling": [
+        "TRAINER_GAMER_DARIAN"
+      ],
+      "Youngster Yasu Scaling": [
+        "TRAINER_YOUNGSTER_YASU"
+      ],
+      "Gamer Dirk Scaling": [
+        "TRAINER_GAMER_DIRK"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SSANNE_1F_ROOM2/MAIN": {
+    "region": "S.S. Anne 1F Room 2",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Lass Ann Scaling": [
+        "TRAINER_LASS_ANN"
+      ],
+      "Youngster Tyler Scaling": [
+        "TRAINER_YOUNGSTER_TYLER"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SSANNE_1F_ROOM5/MAIN": {
+    "region": "S.S. Anne 1F Room 5",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Gentleman Arthur Scaling": [
+        "TRAINER_GENTLEMAN_ARTHUR"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SSANNE_1F_ROOM7/MAIN": {
+    "region": "S.S. Anne 1F Room 7",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Gentleman Thomas Scaling": [
+        "TRAINER_GENTLEMAN_THOMAS"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SSANNE_B1F_ROOM1/MAIN": {
+    "region": "S.S. Anne B1F Room 1",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Fisherman Barny Scaling": [
+        "TRAINER_FISHERMAN_BARNY"
+      ],
+      "Sailor Phillip Scaling": [
+        "TRAINER_SAILOR_PHILLIP"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SSANNE_B1F_ROOM2/MAIN": {
+    "region": "S.S. Anne B1F Room 2",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Sailor Huey Scaling": [
+        "TRAINER_SAILOR_HUEY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SSANNE_B1F_ROOM3/MAIN": {
+    "region": "S.S. Anne B1F Room 3",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Sailor Dylan Scaling": [
+        "TRAINER_SAILOR_DYLAN"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SSANNE_B1F_ROOM4/MAIN": {
+    "region": "S.S. Anne B1F Room 4",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Sailor Duncan Scaling": [
+        "TRAINER_SAILOR_DUNCAN"
+      ],
+      "Sailor Leonard Scaling": [
+        "TRAINER_SAILOR_LEONARD"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SSANNE_2F_CORRIDOR/MAIN": {
+    "region": "S.S. Anne 2F Corridor",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "S.S. Anne Rival Scaling": [
+        "TRAINER_RIVAL_SS_ANNE_BULBASAUR",
+        "TRAINER_RIVAL_SS_ANNE_CHARMANDER",
+        "TRAINER_RIVAL_SS_ANNE_SQUIRTLE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SSANNE_2F_ROOM2/MAIN": {
+    "region": "S.S. Anne 2F Room 2",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Fisherman Dale Scaling": [
+        "TRAINER_FISHERMAN_DALE"
+      ],
+      "Gentleman Brooks Scaling": [
+        "TRAINER_GENTLEMAN_BROOKS"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SSANNE_2F_ROOM4/MAIN": {
+    "region": "S.S. Anne 2F Room 4",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Lass Dawn Scaling": [
+        "TRAINER_LASS_DAWN"
+      ],
+      "Gentleman Lamar Scaling": [
+        "TRAINER_GENTLEMAN_LAMAR"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SSANNE_DECK/MAIN": {
+    "region": "S.S. Anne Deck",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Sailor Trevor Scaling": [
+        "TRAINER_SAILOR_TREVOR"
+      ],
+      "Sailor Edmond Scaling": [
+        "TRAINER_SAILOR_EDMOND"
+      ]
+    }
+  },
+  "TRAINER_SCALING_VERMILION_CITY_GYM/MAIN": {
+    "region": "Vermilion Gym",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Vermilion Gym Trainers Scaling": [
+        "TRAINER_SAILOR_DWAYNE",
+        "TRAINER_ENGINEER_BAILY",
+        "TRAINER_GENTLEMAN_TUCKER",
+        "TRAINER_LEADER_LT_SURGE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE9/WEST": {
+    "region": "Route 9 (West)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Picnicker Alicia Scaling": [
+        "TRAINER_PICNICKER_ALICIA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE9/MAIN": {
+    "region": "Route 9",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Hiker Jeremy Scaling": [
+        "TRAINER_HIKER_JEREMY"
+      ],
+      "Camper Chris Scaling": [
+        "TRAINER_CAMPER_CHRIS"
+      ],
+      "Bug Catcher Brent Scaling": [
+        "TRAINER_BUG_CATCHER_BRENT"
+      ],
+      "Hiker Alan Scaling": [
+        "TRAINER_HIKER_ALAN"
+      ],
+      "Bug Catcher Conner Scaling": [
+        "TRAINER_BUG_CATCHER_CONNER"
+      ],
+      "Camper Drew Scaling": [
+        "TRAINER_CAMPER_DREW"
+      ],
+      "Hiker Brice Scaling": [
+        "TRAINER_HIKER_BRICE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE9/EAST": {
+    "region": "Route 9 (East)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Picnicker Caitlin Scaling": [
+        "TRAINER_PICNICKER_CAITLIN"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE10/NORTH": {
+    "region": "Route 10 (North)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Picnicker Heidi Scaling": [
+        "TRAINER_PICNICKER_HEIDI"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE10/SOUTH": {
+    "region": "Route 10 (South)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Picnicker Carol Scaling": [
+        "TRAINER_PICNICKER_CAROL"
+      ],
+      "Hiker Clark Scaling": [
+        "TRAINER_HIKER_CLARK"
+      ],
+      "Hiker Trent Scaling": [
+        "TRAINER_HIKER_TRENT"
+      ],
+      "PokeManiac Herman Scaling": [
+        "TRAINER_POKEMANIAC_HERMAN"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE10/NEAR_POWER_PLANT": {
+    "region": "Route 10 (Near Power Plant)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "PokeManiac Mark Scaling": [
+        "TRAINER_POKEMANIAC_MARK"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROCK_TUNNEL_1F/NORTHEAST": {
+    "region": "Rock Tunnel 1F (Northeast)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "PokeManiac Ashton Scaling": [
+        "TRAINER_POKEMANIAC_ASHTON"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROCK_TUNNEL_1F/NORTHWEST": {
+    "region": "Rock Tunnel 1F (Northwest)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Hiker Lenny Scaling": [
+        "TRAINER_HIKER_LENNY"
+      ],
+      "Hiker Oliver Scaling": [
+        "TRAINER_HIKER_OLIVER"
+      ],
+      "Hiker Lucas Scaling": [
+        "TRAINER_HIKER_LUCAS"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROCK_TUNNEL_1F/SOUTH": {
+    "region": "Rock Tunnel 1F (South)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Picnicker Leah Scaling": [
+        "TRAINER_PICNICKER_LEAH"
+      ],
+      "Picnicker Ariana Scaling": [
+        "TRAINER_PICNICKER_ARIANA"
+      ],
+      "Picnicker Dana Scaling": [
+        "TRAINER_PICNICKER_DANA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROCK_TUNNEL_B1F/SOUTHEAST": {
+    "region": "Rock Tunnel B1F (Southeast)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "PokeManiac Winston Scaling": [
+        "TRAINER_POKEMANIAC_WINSTON"
+      ],
+      "Picnicker Martha Scaling": [
+        "TRAINER_PICNICKER_MARTHA"
+      ],
+      "PokeManiac Steve Scaling": [
+        "TRAINER_POKEMANIAC_STEVE"
+      ],
+      "Hiker Allen Scaling": [
+        "TRAINER_HIKER_ALLEN"
+      ],
+      "Hiker Eric Scaling": [
+        "TRAINER_HIKER_ERIC"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROCK_TUNNEL_B1F/NORTHWEST": {
+    "region": "Rock Tunnel B1F (Northwest)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Picnicker Sofia Scaling": [
+        "TRAINER_PICNICKER_SOFIA"
+      ],
+      "Hiker Dudley Scaling": [
+        "TRAINER_HIKER_DUDLEY"
+      ],
+      "PokeManiac Cooper Scaling": [
+        "TRAINER_POKEMANIAC_COOPER"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_TOWER_2F/MAIN": {
+    "region": "Pokemon Tower 2F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Pokemon Tower Rival Scaling": [
+        "TRAINER_RIVAL_POKEMON_TOWER_BULBASAUR",
+        "TRAINER_RIVAL_POKEMON_TOWER_CHARMANDER",
+        "TRAINER_RIVAL_POKEMON_TOWER_SQUIRTLE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_TOWER_3F/MAIN": {
+    "region": "Pokemon Tower 3F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Channeler Hope Scaling": [
+        "TRAINER_CHANNELER_HOPE"
+      ],
+      "Channeler Patricia Scaling": [
+        "TRAINER_CHANNELER_PATRICIA"
+      ],
+      "Channeler Carly Scaling": [
+        "TRAINER_CHANNELER_CARLY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_TOWER_4F/MAIN": {
+    "region": "Pokemon Tower 4F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Channeler Laurel Scaling": [
+        "TRAINER_CHANNELER_LAUREL"
+      ],
+      "Channeler Jody Scaling": [
+        "TRAINER_CHANNELER_JODY"
+      ],
+      "Channeler Paula Scaling": [
+        "TRAINER_CHANNELER_PAULA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_TOWER_5F/MAIN": {
+    "region": "Pokemon Tower 5F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Channeler Ruth Scaling": [
+        "TRAINER_CHANNELER_RUTH"
+      ],
+      "Channeler Tammy Scaling": [
+        "TRAINER_CHANNELER_TAMMY"
+      ],
+      "Channeler Karina Scaling": [
+        "TRAINER_CHANNELER_KARINA"
+      ],
+      "Channeler Janae Scaling": [
+        "TRAINER_CHANNELER_JANAE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_TOWER_6F/MAIN": {
+    "region": "Pokemon Tower 6F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Channeler Angelica Scaling": [
+        "TRAINER_CHANNELER_ANGELICA"
+      ],
+      "Channeler Jennifer Scaling": [
+        "TRAINER_CHANNELER_JENNIFER"
+      ],
+      "Channeler Emilia Scaling": [
+        "TRAINER_CHANNELER_EMILIA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_TOWER_7F/MAIN": {
+    "region": "Pokemon Tower 7F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 19 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_19"
+      ],
+      "Team Rocket Grunt 20 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_20"
+      ],
+      "Team Rocket Grunt 21 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_21"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE8/MAIN": {
+    "region": "Route 8",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Lass Julia Scaling": [
+        "TRAINER_LASS_JULIA"
+      ],
+      "Gamer Rich Scaling": [
+        "TRAINER_GAMER_RICH"
+      ],
+      "Super Nerd Glenn Scaling": [
+        "TRAINER_SUPER_NERD_GLENN"
+      ],
+      "Twins Eli & Anne Scaling": [
+        "TRAINER_TWINS_ELI_ANNE"
+      ],
+      "Lass Paige Scaling": [
+        "TRAINER_LASS_PAIGE"
+      ],
+      "Super Nerd Leslie Scaling": [
+        "TRAINER_SUPER_NERD_LESLIE"
+      ],
+      "Lass Andrea Scaling": [
+        "TRAINER_LASS_ANDREA"
+      ],
+      "Lass Megan Scaling": [
+        "TRAINER_LASS_MEGAN"
+      ],
+      "Biker Jaren Scaling": [
+        "TRAINER_BIKER_JAREN"
+      ],
+      "Biker Ricardo Scaling": [
+        "TRAINER_BIKER_RICARDO"
+      ],
+      "Gamer Stan Scaling": [
+        "TRAINER_GAMER_STAN"
+      ],
+      "Super Nerd Aidan Scaling": [
+        "TRAINER_SUPER_NERD_AIDAN"
+      ]
+    }
+  },
+  "TRAINER_SCALING_CELADON_CITY_GAME_CORNER/MAIN": {
+    "region": "Celadon Game Corner",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 7 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_7"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROCKET_HIDEOUT_B1F/NORTH": {
+    "region": "Rocket Hideout B1F (North)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 8 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_8"
+      ],
+      "Team Rocket Grunt 9 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_9"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROCKET_HIDEOUT_B1F/SOUTHWEST": {
+    "region": "Rocket Hideout B1F (Southwest)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 10 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_10"
+      ],
+      "Team Rocket Grunt 11 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_11"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROCKET_HIDEOUT_B1F/SOUTHEAST": {
+    "region": "Rocket Hideout B1F (Southeast)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 12 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_12"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROCKET_HIDEOUT_B2F/MAIN": {
+    "region": "Rocket Hideout B2F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 13 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_13"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROCKET_HIDEOUT_B3F/MAIN": {
+    "region": "Rocket Hideout B3F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 14 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_14"
+      ],
+      "Team Rocket Grunt 15 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_15"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROCKET_HIDEOUT_B4F/WEST": {
+    "region": "Rocket Hideout B4F (West)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 18 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_18"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROCKET_HIDEOUT_B4F/EAST": {
+    "region": "Rocket Hideout B4F (East)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 16 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_16"
+      ],
+      "Team Rocket Grunt 17 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_17"
+      ],
+      "Boss Giovanni 1 Scaling": [
+        "TRAINER_BOSS_GIOVANNI"
+      ]
+    }
+  },
+  "TRAINER_SCALING_CELADON_CITY_GYM/TRAINERS": {
+    "region": "Celadon Gym (Trainers)",
+    "kanto": true,
+    "connections": [
+      "Celadon Gym",
+      "Celadon Gym (Behind Trees)"
+    ],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Celadon Gym Trainers Scaling": [
+        "TRAINER_LASS_KAY",
+        "TRAINER_BEAUTY_BRIDGET",
+        "TRAINER_COOLTRAINER_MARY",
+        "TRAINER_LASS_LISA",
+        "TRAINER_PICNICKER_TINA",
+        "TRAINER_BEAUTY_LORI",
+        "TRAINER_BEAUTY_TAMIA",
+        "TRAINER_LEADER_ERIKA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE12/CENTER": {
+    "region": "Route 12 (Center)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Fisherman Ned Scaling": [
+        "TRAINER_FISHERMAN_NED"
+      ],
+      "Fisherman Chip Scaling": [
+        "TRAINER_FISHERMAN_CHIP"
+      ],
+      "Fisherman Hank Scaling": [
+        "TRAINER_FISHERMAN_HANK"
+      ],
+      "Fisherman Elliot Scaling": [
+        "TRAINER_FISHERMAN_ELLIOT"
+      ],
+      "Young Couple Gia & Jes Scaling": [
+        "TRAINER_YOUNG_COUPLE_GIA_JES"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE12/SOUTH": {
+    "region": "Route 12 (South)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Rocker Luca Scaling": [
+        "TRAINER_ROCKER_LUCA"
+      ],
+      "Fisherman Andrew Scaling": [
+        "TRAINER_FISHERMAN_ANDREW"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE12/BEHIND_NORTH_TREE": {
+    "region": "Route 12 (Behind North Tree)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Camper Justin Scaling": [
+        "TRAINER_CAMPER_JUSTIN"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE13/MAIN": {
+    "region": "Route 13",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Picnicker Alma Scaling": [
+        "TRAINER_PICNICKER_ALMA"
+      ],
+      "Bird Keeper Sebastian": [
+        "TRAINER_BIRD_KEEPER_SEBASTIAN"
+      ],
+      "Picnicker Susie Scaling": [
+        "TRAINER_PICNICKER_SUSIE"
+      ],
+      "Beauty Lola Scaling": [
+        "TRAINER_BEAUTY_LOLA"
+      ],
+      "Beauty Sheila Scaling": [
+        "TRAINER_BEAUTY_SHEILA"
+      ],
+      "Picnicker Valerie Scaling": [
+        "TRAINER_PICNICKER_VALERIE"
+      ],
+      "Picnicker Gwen Scaling": [
+        "TRAINER_PICNICKER_GWEN"
+      ],
+      "Bird Keeper Robert Scaling": [
+        "TRAINER_BIRD_KEEPER_ROBERT"
+      ],
+      "Bird Keeper Perry Scaling": [
+        "TRAINER_BIRD_KEEPER_PERRY"
+      ],
+      "Biker Jared Scaling": [
+        "TRAINER_BIKER_JARED"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE14/MAIN": {
+    "region": "Route 14",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Bird Keeper Carter Scaling": [
+        "TRAINER_BIRD_KEEPER_CARTER"
+      ],
+      "Bird Keeper Mitch Scaling": [
+        "TRAINER_BIRD_KEEPER_MITCH"
+      ],
+      "Bird Keeper Marlon Scaling": [
+        "TRAINER_BIRD_KEEPER_MARLON"
+      ],
+      "Bird Keeper Beck Scaling": [
+        "TRAINER_BIRD_KEEPER_BECK"
+      ],
+      "Bird Keeper Donald Scaling": [
+        "TRAINER_BIRD_KEEPER_DONALD"
+      ],
+      "Bird Keeper Benny Scaling": [
+        "TRAINER_BIRD_KEEPER_BENNY"
+      ],
+      "Twins Kiri & Jan Scaling": [
+        "TRAINER_TWINS_KIRI_JAN"
+      ],
+      "Biker Gerald Scaling": [
+        "TRAINER_BIKER_GERALD"
+      ],
+      "Biker Malik Scaling": [
+        "TRAINER_BIKER_MALIK"
+      ],
+      "Biker Isaac Scaling": [
+        "TRAINER_BIKER_ISAAC"
+      ],
+      "Biker Lukas Scaling": [
+        "TRAINER_BIKER_LUKAS"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE15/SOUTH": {
+    "region": "Route 15 (South)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Biker Ernest Scaling": [
+        "TRAINER_BIKER_ERNEST"
+      ],
+      "Biker Alex Scaling": [
+        "TRAINER_BIKER_ALEX"
+      ],
+      "Beauty Grace Scaling": [
+        "TRAINER_BEAUTY_GRACE"
+      ],
+      "Beauty Olivia Scaling": [
+        "TRAINER_BEAUTY_OLIVIA"
+      ],
+      "Picnicker Kindra Scaling": [
+        "TRAINER_PICNICKER_KINDRA"
+      ],
+      "Bird Keeper Chester Scaling": [
+        "TRAINER_BIRD_KEEPER_CHESTER"
+      ],
+      "Bird Keeper Edwin Scaling": [
+        "TRAINER_BIRD_KEEPER_EDWIN"
+      ],
+      "Picnicker Yazmin Scaling": [
+        "TRAINER_PICNICKER_YAZMIN"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE15/NORTH": {
+    "region": "Route 15 (North)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Picnicker Becky Scaling": [
+        "TRAINER_PICNICKER_BECKY"
+      ],
+      "Crush Kin Ron & Mya Scaling": [
+        "TRAINER_CRUSH_KIN_RON_MYA"
+      ],
+      "Picnicker Celia Scaling": [
+        "TRAINER_PICNICKER_CELIA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE16/NORTHEAST": {
+    "region": "Route 16 (Northeast)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Young Couple Lea & Jed Scaling": [
+        "TRAINER_YOUNG_COUPLE_LEA_JED"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE16/SOUTHWEST": {
+    "region": "Route 16 (Southwest)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Biker Lao Scaling": [
+        "TRAINER_BIKER_LAO"
+      ],
+      "Cue Ball Koji Scaling": [
+        "TRAINER_CUE_BALL_KOJI"
+      ],
+      "Cue Ball Luke Scaling": [
+        "TRAINER_CUE_BALL_LUKE"
+      ],
+      "Biker Hideo Scaling": [
+        "TRAINER_BIKER_HIDEO"
+      ],
+      "Biker Ruben Scaling": [
+        "TRAINER_BIKER_RUBEN"
+      ],
+      "Cue Ball Camron Scaling": [
+        "TRAINER_CUE_BALL_CAMRON"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE17/MAIN": {
+    "region": "Route 17",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Cue Ball Isaiah Scaling": [
+        "TRAINER_CUE_BALL_ISAIAH"
+      ],
+      "Biker Virgil Scaling": [
+        "TRAINER_BIKER_VIRGIL"
+      ],
+      "Cue Ball Raul Scaling": [
+        "TRAINER_CUE_BALL_RAUL"
+      ],
+      "Biker Billy Scaling": [
+        "TRAINER_BIKER_BILLY"
+      ],
+      "Cue Ball Jamal Scaling": [
+        "TRAINER_CUE_BALL_JAMAL"
+      ],
+      "Biker Nikolas Scaling": [
+        "TRAINER_BIKER_NIKOLAS"
+      ],
+      "Cue Ball Zeek Scaling": [
+        "TRAINER_CUE_BALL_ZEEK"
+      ],
+      "Cue Ball Corey Scaling": [
+        "TRAINER_CUE_BALL_COREY"
+      ],
+      "Biker Jaxon Scaling": [
+        "TRAINER_BIKER_JAXON"
+      ],
+      "Biker William Scaling": [
+        "TRAINER_BIKER_WILLIAM"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE18/EAST": {
+    "region": "Route 18 (East)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Bird Keeper Jacob Scaling": [
+        "TRAINER_BIRD_KEEPER_JACOB"
+      ],
+      "Bird Keeper Wilton Scaling": [
+        "TRAINER_BIRD_KEEPER_WILTON"
+      ],
+      "Bird Keeper Ramiro Scaling": [
+        "TRAINER_BIRD_KEEPER_RAMIRO"
+      ]
+    }
+  },
+  "TRAINER_SCALING_FUCHSIA_CITY_GYM/MAIN": {
+    "region": "Fuchsia Gym",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Fuchsia Gym Trainers Scaling": [
+        "TRAINER_JUGGLER_NATE",
+        "TRAINER_JUGGLER_KAYDEN",
+        "TRAINER_JUGGLER_KIRK",
+        "TRAINER_TAMER_EDGAR",
+        "TRAINER_TAMER_PHIL",
+        "TRAINER_JUGGLER_SHAWN",
+        "TRAINER_LEADER_KOGA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_2F/MAIN": {
+    "region": "Silph Co. 2F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 23 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_23"
+      ],
+      "Team Rocket Grunt 24 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_24"
+      ],
+      "Scientist Jerry Scaling": [
+        "TRAINER_SCIENTIST_JERRY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_2F/SOUTHWEST": {
+    "region": "Silph Co. 2F (Southwest Room)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Scientist Connor Scaling": [
+        "TRAINER_SCIENTIST_CONNOR"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_3F/MAIN": {
+    "region": "Silph Co. 3F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 25 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_25"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_3F/WEST": {
+    "region": "Silph Co. 3F (West Room)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Scientist Jose Scaling": [
+        "TRAINER_SCIENTIST_JOSE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_4F/MAIN": {
+    "region": "Silph Co. 4F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 26 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_26"
+      ],
+      "Team Rocket Grunt 27 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_27"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_4F/NORTH": {
+    "region": "Silph Co. 4F (North Room)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Scientist Rodney Scaling": [
+        "TRAINER_SCIENTIST_RODNEY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_5F/MAIN": {
+    "region": "Silph Co. 5F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 28 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_28"
+      ],
+      "Team Rocket Grunt 29 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_29"
+      ],
+      "Juggler Dalton Scaling": [
+        "TRAINER_JUGGLER_DALTON"
+      ],
+      "Scientist Beau Scaling": [
+        "TRAINER_SCIENTIST_BEAU"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_6F/MAIN": {
+    "region": "Silph Co. 6F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 30 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_30"
+      ],
+      "Team Rocket Grunt 31 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_31"
+      ],
+      "Scientist Taylor Scaling": [
+        "TRAINER_SCIENTIST_TAYLOR"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_7F/MAIN": {
+    "region": "Silph Co. 7F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 33 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_33"
+      ],
+      "Team Rocket Grunt 35 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_35"
+      ],
+      "Scientist Joshua Scaling": [
+        "TRAINER_SCIENTIST_JOSHUA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_7F/SOUTHEAST": {
+    "region": "Silph Co. 7F (Southeast Room)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 34 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_34"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_7F/NORTHWEST": {
+    "region": "Silph Co. 7F (Northwest Room)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Silph Co. Rival Scaling": [
+        "TRAINER_RIVAL_SILPH_BULBASAUR",
+        "TRAINER_RIVAL_SILPH_CHARMANDER",
+        "TRAINER_RIVAL_SILPH_SQUIRTLE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_8F/MAIN": {
+    "region": "Silph Co. 8F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 32 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_32"
+      ],
+      "Team Rocket Grunt 36 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_36"
+      ],
+      "Scientist Parker Scaling": [
+        "TRAINER_SCIENTIST_PARKER"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_9F/MAIN": {
+    "region": "Silph Co. 9F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 38 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_38"
+      ],
+      "Scientist Ed Scaling": [
+        "TRAINER_SCIENTIST_ED"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_9F/NORTHWEST": {
+    "region": "Silph Co. 9F (Northwest Room)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 37 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_37"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_10F/MAIN": {
+    "region": "Silph Co. 10F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 39 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_39"
+      ],
+      "Scientist Travis Scaling": [
+        "TRAINER_SCIENTIST_TRAVIS"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_11F/EAST": {
+    "region": "Silph Co. 11F (East)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 40 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_40"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_11F/WEST": {
+    "region": "Silph Co. 11F (West)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 41 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_41"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SILPH_CO_11F/PRESIDENTS_ROOM": {
+    "region": "Silph Co. 11F (President's Room)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Boss Giovanni 2 Scaling": [
+        "TRAINER_BOSS_GIOVANNI_2"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SAFFRON_CITY_DOJO/MAIN": {
+    "region": "Saffron Dojo",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Black Belt Hideki Scaling": [
+        "TRAINER_BLACK_BELT_HIDEKI"
+      ],
+      "Black Belt Hitoshi Scaling": [
+        "TRAINER_BLACK_BELT_HITOSHI"
+      ],
+      "Black Belt Mike Scaling": [
+        "TRAINER_BLACK_BELT_MIKE"
+      ],
+      "Black Belt Aaron Scaling": [
+        "TRAINER_BLACK_BELT_AARON"
+      ],
+      "Black Belt Koichi Scaling": [
+        "TRAINER_BLACK_BELT_KOICHI"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SAFFRON_CITY_GYM/TRAINERS": {
+    "region": "Saffron Gym (Trainers)",
+    "kanto": true,
+    "connections": [
+      "Saffron Gym (Northwest)",
+      "Saffron Gym (North)",
+      "Saffron Gym (Northeast)",
+      "Saffron Gym (West)",
+      "Saffron Gym (Center)",
+      "Saffron Gym (East)",
+      "Saffron Gym (Southwest)",
+      "Saffron Gym (Southeast)"
+    ],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Saffron Gym Trainers Scaling": [
+        "TRAINER_PSYCHIC_CAMERON",
+        "TRAINER_PSYCHIC_TYRON",
+        "TRAINER_CHANNELER_STACY",
+        "TRAINER_PSYCHIC_PRESTON",
+        "TRAINER_CHANNELER_AMANDA",
+        "TRAINER_CHANNELER_TASHA",
+        "TRAINER_PSYCHIC_JOHAN",
+        "TRAINER_LEADER_SABRINA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE19/MAIN": {
+    "region": "Route 19",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Swimmer Richard Scaling": [
+        "TRAINER_SWIMMER_MALE_RICHARD"
+      ],
+      "Swimmer Reece Scaling": [
+        "TRAINER_SWIMMER_MALE_REECE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE19/WATER": {
+    "region": "Route 19 (Water)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Swimmer Tony Scaling": [
+        "TRAINER_SWIMMER_MALE_TONY"
+      ],
+      "Swimmer David Scaling": [
+        "TRAINER_SWIMMER_MALE_DAVID"
+      ],
+      "Swimmer Douglas Scaling": [
+        "TRAINER_SWIMMER_MALE_DOUGLAS"
+      ],
+      "Swimmer Matthew Scaling": [
+        "TRAINER_SWIMMER_MALE_MATTHEW"
+      ],
+      "Sis and Bro Lia & Luc Scaling": [
+        "TRAINER_SIS_AND_BRO_LIA_LUC"
+      ],
+      "Swimmer Axle Scaling": [
+        "TRAINER_SWIMMER_MALE_AXLE"
+      ],
+      "Swimmer Alice Scaling": [
+        "TRAINER_SWIMMER_FEMALE_ALICE"
+      ],
+      "Swimmer Anya Scaling": [
+        "TRAINER_SWIMMER_FEMALE_ANYA"
+      ],
+      "Swimmer Connie Scaling": [
+        "TRAINER_SWIMMER_FEMALE_CONNIE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE20/EAST": {
+    "region": "Route 20 (East)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Swimmer Barry Scaling": [
+        "TRAINER_SWIMMER_MALE_BARRY"
+      ],
+      "Swimmer Darrin Scaling": [
+        "TRAINER_SWIMMER_MALE_DARRIN"
+      ],
+      "Swimmer Shirley Scaling": [
+        "TRAINER_SWIMMER_FEMALE_SHIRLEY"
+      ],
+      "Swimmer Tiffany Scaling": [
+        "TRAINER_SWIMMER_FEMALE_TIFFANY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE20/NEAR_SOUTH_CAVE": {
+    "region": "Route 20 (Near South Cave)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Picnicker Irene Scaling": [
+        "TRAINER_PICNICKER_IRENE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE20/WEST": {
+    "region": "Route 20 (West)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Bird Keeper Roger Scaling": [
+        "TRAINER_BIRD_KEEPER_ROGER"
+      ],
+      "Swimmer Nora Scaling": [
+        "TRAINER_SWIMMER_FEMALE_NORA"
+      ],
+      "Swimmer Dean Scaling": [
+        "TRAINER_SWIMMER_MALE_DEAN"
+      ],
+      "Picnicker Missy Scaling": [
+        "TRAINER_PICNICKER_MISSY"
+      ],
+      "Swimmer Melissa Scaling": [
+        "TRAINER_SWIMMER_FEMALE_MELISSA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_MANSION_1F/MAIN": {
+    "region": "Pokemon Mansion 1F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Youngster Johnson Scaling": [
+        "TRAINER_YOUNGSTER_JOHNSON"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_MANSION_1F/SOUTH": {
+    "region": "Pokemon Mansion 1F (South)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Scientist Ted Scaling": [
+        "TRAINER_SCIENTIST_TED"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_MANSION_2F/MAIN": {
+    "region": "Pokemon Mansion 2F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Burglar Arnie Scaling": [
+        "TRAINER_BURGLAR_ARNIE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_MANSION_3F/SOUTHWEST": {
+    "region": "Pokemon Mansion 3F (Southwest)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Burglar Simon Scaling": [
+        "TRAINER_BURGLAR_SIMON"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_MANSION_3F/SOUTHEAST": {
+    "region": "Pokemon Mansion 3F (Southeast)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Scientist Braydon Scaling": [
+        "TRAINER_SCIENTIST_BRAYDON"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_MANSION_B1F": {
+    "region": "Pokemon Mansion B1F",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Burglar Lewis Scaling": [
+        "TRAINER_BURGLAR_LEWIS"
+      ],
+      "Scientist Ivan Scaling": [
+        "TRAINER_SCIENTIST_IVAN"
+      ]
+    }
+  },
+  "TRAINER_SCALING_CINNABAR_ISLAND_GYM/MAIN": {
+    "region": "Cinnabar Gym",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Cinnabar Gym Trainers Scaling": [
+        "TRAINER_BURGLAR_QUINN",
+        "TRAINER_SUPER_NERD_ERIK",
+        "TRAINER_SUPER_NERD_AVERY",
+        "TRAINER_BURGLAR_RAMON",
+        "TRAINER_SUPER_NERD_DEREK",
+        "TRAINER_BURGLAR_DUSTY",
+        "TRAINER_SUPER_NERD_ZAC",
+        "TRAINER_LEADER_BLAINE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ROUTE21/MAIN": {
+    "region": "Route 21",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Fisherman Wade Scaling": [
+        "TRAINER_FISHERMAN_WADE"
+      ],
+      "Fisherman Ronald Scaling": [
+        "TRAINER_FISHERMAN_RONALD"
+      ],
+      "Sis and Bro Lil & Ian Scaling": [
+        "TRAINER_SIS_AND_BRO_LIL_IAN"
+      ],
+      "Swimmer Spencer Scaling": [
+        "TRAINER_SWIMMER_MALE_SPENCER"
+      ],
+      "Fisherman Claude Scaling": [
+        "TRAINER_FISHERMAN_CLAUDE"
+      ],
+      "Fisherman Nolan Scaling": [
+        "TRAINER_FISHERMAN_NOLAN"
+      ],
+      "Swimmer Jack Scaling": [
+        "TRAINER_SWIMMER_MALE_JACK"
+      ],
+      "Swimmer Roland Scaling": [
+        "TRAINER_SWIMMER_MALE_ROLAND"
+      ],
+      "Swimmer Jerome Scaling": [
+        "TRAINER_SWIMMER_MALE_JEROME"
+      ]
+    }
+  },
+  "TRAINER_SCALING_VIRIDIAN_CITY_GYM/MAIN": {
+    "region": "Viridian Gym",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Viridian Gym Trainers Scaling": [
+        "TRAINER_TAMER_COLE",
+        "TRAINER_BLACK_BELT_KIYO",
+        "TRAINER_COOLTRAINER_SAMUEL",
+        "TRAINER_COOLTRAINER_YUJI",
+        "TRAINER_BLACK_BELT_ATSUSHI",
+        "TRAINER_TAMER_JASON",
+        "TRAINER_COOLTRAINER_WARREN",
+        "TRAINER_BLACK_BELT_TAKASHI",
+        "TRAINER_LEADER_GIOVANNI"
+      ]
+    }
+  },
+  "TRAINER_SCALING_VICTORY_ROAD_1F/NORTH": {
+    "region": "Victory Road 1F (North)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Cooltrainer Naomi Scaling": [
+        "TRAINER_COOLTRAINER_NAOMI"
+      ],
+      "Cooltrainer Rolando Scaling": [
+        "TRAINER_COOLTRAINER_ROLANDO"
+      ]
+    }
+  },
+  "TRAINER_SCALING_VICTORY_ROAD_2F/CENTER": {
+    "region": "Victory Road 2F (Center)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Black Belt Daisuke Scaling": [
+        "TRAINER_BLACK_BELT_DAISUKE"
+      ],
+      "Juggler Nelson Scaling": [
+        "TRAINER_JUGGLER_NELSON"
+      ],
+      "Tamer Vincent Scaling": [
+        "TRAINER_TAMER_VINCENT"
+      ],
+      "Juggler Gregory Scaling": [
+        "TRAINER_JUGGLER_GREGORY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_VICTORY_ROAD_2F/NORTHWEST": {
+    "region": "Victory Road 2F (Northwest)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "PokeManiac Dawson Scaling": [
+        "TRAINER_POKEMANIAC_DAWSON"
+      ]
+    }
+  },
+  "TRAINER_SCALING_VICTORY_ROAD_3F/NORTH": {
+    "region": "Victory Road 3F (North)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Cooltrainer George Scaling": [
+        "TRAINER_COOLTRAINER_GEORGE"
+      ],
+      "Cooltrainer Alexa Scaling": [
+        "TRAINER_COOLTRAINER_ALEXA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_VICTORY_ROAD_3F/SOUTHWEST": {
+    "region": "Victory Road 3F (Southwest)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Cooltrainer Colby Scaling": [
+        "TRAINER_COOLTRAINER_COLBY"
+      ],
+      "Cooltrainer Caroline Scaling": [
+        "TRAINER_COOLTRAINER_CAROLINE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_VICTORY_ROAD_3F/SOUTHEAST": {
+    "region": "Victory Road 3F (Southeast)",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Cool Couple Ray & Tyra Scaling": [
+        "TRAINER_COOL_COUPLE_RAY_TYRA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_LEAGUE_ELITE_FOUR/MAIN": {
+    "region": "Elite Four",
+    "kanto": true,
+    "connections": [
+      "Lorelei's Room",
+      "Bruno's Room",
+      "Agatha's Room",
+      "Lance's Room",
+      "Champion's Room"
+    ],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Elite Four Scaling": [
+        "TRAINER_ELITE_FOUR_LORELEI",
+        "TRAINER_ELITE_FOUR_BRUNO",
+        "TRAINER_ELITE_FOUR_AGATHA",
+        "TRAINER_ELITE_FOUR_LANCE",
+        "TRAINER_CHAMPION_FIRST_BULBASAUR",
+        "TRAINER_CHAMPION_FIRST_CHARMANDER",
+        "TRAINER_CHAMPION_FIRST_SQUIRTLE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_LEAGUE_CHAMPIONS_ROOM/MAIN": {
+    "region": "Champion's Room",
+    "kanto": true,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Champion Scaling": [
+        "TRAINER_CHAMPION_FIRST_BULBASAUR",
+        "TRAINER_CHAMPION_FIRST_CHARMANDER",
+        "TRAINER_CHAMPION_FIRST_SQUIRTLE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ONE_ISLAND_TREASURE_BEACH/WATER": {
+    "region": "Treasure Beach (Water)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Swimmer Amara Scaling": [
+        "TRAINER_SWIMMER_FEMALE_AMARA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ONE_ISLAND_KINDLE_ROAD/SOUTH_WATER": {
+    "region": "Kindle Road (South Water)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Swimmer Abigail Scaling": [
+        "TRAINER_SWIMMER_FEMALE_ABIGAIL"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ONE_ISLAND_KINDLE_ROAD/CENTER": {
+    "region": "Kindle Road (Center)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Picnicker Claire Scaling": [
+        "TRAINER_PICNICKER_CLAIRE"
+      ],
+      "Crush Girl Tanya Scaling": [
+        "TRAINER_CRUSH_GIRL_TANYA"
+      ],
+      "Camper Bryce Scaling": [
+        "TRAINER_CAMPER_BRYCE"
+      ],
+      "Swimmer Garrett Scaling": [
+        "TRAINER_SWIMMER_MALE_GARRETT"
+      ],
+      "Crush Kin Mik & Kia Scaling": [
+        "TRAINER_CRUSH_KIN_MIK_KIA"
+      ],
+      "Black Belt Hugh Scaling": [
+        "TRAINER_BLACK_BELT_HUGH"
+      ],
+      "Black Belt Shea Scaling": [
+        "TRAINER_BLACK_BELT_SHEA"
+      ],
+      "Crush Girl Sharon Scaling": [
+        "TRAINER_CRUSH_GIRL_SHARON"
+      ]
+    }
+  },
+  "TRAINER_SCALING_ONE_ISLAND_KINDLE_ROAD/NORTH_WATER": {
+    "region": "Kindle Road (North Water)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Swimmer Finn Scaling": [
+        "TRAINER_SWIMMER_MALE_FINN"
+      ],
+      "Swimmer Maria Scaling": [
+        "TRAINER_SWIMMER_FEMALE_MARIA"
+      ],
+      "Fisherman Tommy Scaling": [
+        "TRAINER_FISHERMAN_TOMMY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_MT_EMBER_EXTERIOR/SOUTH": {
+    "region": "Mt. Ember Exterior (South)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 43 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_43"
+      ],
+      "Team Rocket Grunt 44 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_44"
+      ]
+    }
+  },
+  "TRAINER_SCALING_MT_EMBER_EXTERIOR/CENTER": {
+    "region": "Mt. Ember Exterior (Center)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Pokemon Ranger Beth Scaling": [
+        "TRAINER_PKMN_RANGER_BETH"
+      ],
+      "Crush Girl Jocelyn Scaling": [
+        "TRAINER_CRUSH_GIRL_JOCELYN"
+      ],
+      "Pokemon Ranger Logan Scaling": [
+        "TRAINER_PKMN_RANGER_LOGAN"
+      ]
+    }
+  },
+  "TRAINER_SCALING_THREE_ISLAND/SOUTH": {
+    "region": "Three Island Town (South)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Biker Goon 1 Scaling": [
+        "TRAINER_BIKER_GOON"
+      ],
+      "Biker Goon 2 Scaling": [
+        "TRAINER_BIKER_GOON_2"
+      ],
+      "Biker Goon 3 Scaling": [
+        "TRAINER_BIKER_GOON_3"
+      ],
+      "Cue Ball Paxton Scaling": [
+        "TRAINER_CUE_BALL_PAXTON"
+      ]
+    }
+  },
+  "TRAINER_SCALING_THREE_ISLAND_BOND_BRIDGE/MAIN": {
+    "region": "Bond Bridge",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Twins Joy & Meg Scaling": [
+        "TRAINER_TWINS_JOY_MEG"
+      ],
+      "Aroma Lady Violet Scaling": [
+        "TRAINER_AROMA_LADY_VIOLET"
+      ],
+      "Tuber Alexis Scaling": [
+        "TRAINER_TUBER_ALEXIS"
+      ],
+      "Tuber Amira Scaling": [
+        "TRAINER_TUBER_AMIRA"
+      ],
+      "Aroma Lady Nikki Scaling": [
+        "TRAINER_AROMA_LADY_NIKKI"
+      ]
+    }
+  },
+  "TRAINER_SCALING_THREE_ISLAND_BOND_BRIDGE/WATER": {
+    "region": "Bond Bridge (Water)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Swimmer Tisha Scaling": [
+        "TRAINER_SWIMMER_FEMALE_TISHA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_FOUR_ISLAND_ICEFALL_CAVE_BACK/MAIN": {
+    "region": "Icefall Cave Back",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 45 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_45"
+      ]
+    }
+  },
+  "TRAINER_SCALING_FIVE_ISLAND_MEADOW/MAIN": {
+    "region": "Five Isle Meadow",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 49 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_49"
+      ],
+      "Team Rocket Grunt 50 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_50"
+      ],
+      "Team Rocket Grunt 51 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_51"
+      ]
+    }
+  },
+  "TRAINER_SCALING_FIVE_ISLAND_ROCKET_WAREHOUSE/MAIN": {
+    "region": "Rocket Warehouse",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 42 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_42"
+      ],
+      "Team Rocket Grunt 47 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_47"
+      ],
+      "Team Rocket Grunt 48 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_48"
+      ],
+      "Team Rocket Admin 1 Scaling": [
+        "TRAINER_TEAM_ROCKET_ADMIN"
+      ],
+      "Team Rocket Admin 2 Scaling": [
+        "TRAINER_TEAM_ROCKET_ADMIN_2"
+      ],
+      "Scientist Gideon Scaling": [
+        "TRAINER_SCIENTIST_GIDEON"
+      ]
+    }
+  },
+  "TRAINER_SCALING_FIVE_ISLAND_MEMORIAL_PILLAR/MAIN": {
+    "region": "Memorial Pillar",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Bird Keeper Milo Scaling": [
+        "TRAINER_BIRD_KEEPER_MILO"
+      ],
+      "Bird Keeper Chaz Scaling": [
+        "TRAINER_BIRD_KEEPER_CHAZ"
+      ],
+      "Bird Keeper Harold Scaling": [
+        "TRAINER_BIRD_KEEPER_HAROLD"
+      ]
+    }
+  },
+  "TRAINER_SCALING_FIVE_ISLAND_WATER_LABYRINTH/MAIN": {
+    "region": "Water Labyrinth",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Pokemon Breeder Alize Scaling": [
+        "TRAINER_PKMN_BREEDER_ALIZE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_FIVE_ISLAND_RESORT_GORGEOUS/WATER": {
+    "region": "Resort Gorgeous (Water)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Painter Rayna Scaling": [
+        "TRAINER_PAINTER_RAYNA"
+      ],
+      "Swimmer Toby Scaling": [
+        "TRAINER_SWIMMER_MALE_TOBY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_FIVE_ISLAND_RESORT_GORGEOUS/NEAR_RESORT": {
+    "region": "Resort Gorgeous (Near Resort)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Lady Jacki Scaling": [
+        "TRAINER_LADY_JACKI"
+      ],
+      "Painter Celina Scaling": [
+        "TRAINER_PAINTER_CELINA"
+      ],
+      "Lady Gillian Scaling": [
+        "TRAINER_LADY_GILLIAN"
+      ],
+      "Youngster Destin": [
+        "TRAINER_YOUNGSTER_DESTIN"
+      ],
+      "Painter Daisy": [
+        "TRAINER_PAINTER_DAISY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM1/MAIN": {
+    "region": "Lost Cave B1F Room 1",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Ruin Maniac Lawson Scaling": [
+        "TRAINER_RUIN_MANIAC_LAWSON"
+      ]
+    }
+  },
+  "TRAINER_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM2/MAIN": {
+    "region": "Lost Cave B1F Room 2",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Psychic Laura Scaling": [
+        "TRAINER_PSYCHIC_LAURA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM10/MAIN": {
+    "region": "Lost Cave B1F Room 10",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Lady Selphy Scaling": [
+        "TRAINER_LADY_SELPHY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SIX_ISLAND_WATER_PATH/SOUTH": {
+    "region": "Water Path (South)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Juggler Edward Scaling": [
+        "TRAINER_JUGGLER_EDWARD"
+      ],
+      "Hiker Earl Scaling": [
+        "TRAINER_HIKER_EARL"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SIX_ISLAND_WATER_PATH/SOUTH_WATER": {
+    "region": "Water Path (South Water)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Swimmer Denise Scaling": [
+        "TRAINER_SWIMMER_FEMALE_DENISE"
+      ],
+      "Swimmer Samir Scaling": [
+        "TRAINER_SWIMMER_MALE_SAMIR"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SIX_ISLAND_WATER_PATH/NORTH": {
+    "region": "Water Path (North)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Twins Miu & Mia Scaling": [
+        "TRAINER_TWINS_MIU_MIA"
+      ],
+      "Aroma Lady Rose Scaling": [
+        "TRAINER_AROMA_LADY_ROSE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SIX_ISLAND_RUIN_VALLEY/MAIN": {
+    "region": "Ruin Valley",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Hiker Daryl Scaling": [
+        "TRAINER_HIKER_DARYL"
+      ],
+      "PokeManiac Hector Scaling": [
+        "TRAINER_POKEMANIAC_HECTOR"
+      ],
+      "Ruin Maniac Stanly Scaling": [
+        "TRAINER_RUIN_MANIAC_STANLY"
+      ],
+      "Ruin Maniac Foster Scaling": [
+        "TRAINER_RUIN_MANIAC_FOSTER"
+      ],
+      "Ruin Maniac Larry Scaling": [
+        "TRAINER_RUIN_MANIAC_LARRY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SIX_ISLAND_PATTERN_BUSH/MAIN": {
+    "region": "Pattern Bush",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Youngster Cordell Scaling": [
+        "TRAINER_YOUNGSTER_CORDELL"
+      ],
+      "Pokemon Breeder Bethany Scaling": [
+        "TRAINER_PKMN_BREEDER_BETHANY"
+      ],
+      "Bug Catcher Garret Scaling": [
+        "TRAINER_BUG_CATCHER_GARRET"
+      ],
+      "Lass Joana Scaling": [
+        "TRAINER_LASS_JOANA"
+      ],
+      "Youngster Nash Scaling": [
+        "TRAINER_YOUNGSTER_NASH"
+      ],
+      "Bug Catcher Vance Scaling": [
+        "TRAINER_BUG_CATCHER_VANCE"
+      ],
+      "Ruin Maniac Layton Scaling": [
+        "TRAINER_RUIN_MANIAC_LAYTON"
+      ],
+      "Picnicker Marcy Scaling": [
+        "TRAINER_PICNICKER_MARCY"
+      ],
+      "Bug Catcher Jonah Scaling": [
+        "TRAINER_BUG_CATCHER_JONAH"
+      ],
+      "Lass Dalia Scaling": [
+        "TRAINER_LASS_DALIA"
+      ],
+      "Pokemon Breeder Allison Scaling": [
+        "TRAINER_PKMN_BREEDER_ALLISON"
+      ],
+      "Camper Riley Scaling": [
+        "TRAINER_CAMPER_RILEY"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SIX_ISLAND_GREEN_PATH/WATER": {
+    "region": "Green Path (Water)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Psychic Jaclyn Scaling": [
+        "TRAINER_PSYCHIC_JACLYN"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SIX_ISLAND_OUTCAST_ISLAND/WATER": {
+    "region": "Outcast Island (Water)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Swimmer Nicole Scaling": [
+        "TRAINER_SWIMMER_FEMALE_NICOLE"
+      ],
+      "Sis and Bro Ava & Geb Scaling": [
+        "TRAINER_SIS_AND_BRO_AVA_GEB"
+      ],
+      "Swimmer Mymo Scaling": [
+        "TRAINER_SWIMMER_MALE_MYMO"
+      ],
+      "Fisherman Tylor Scaling": [
+        "TRAINER_FISHERMAN_TYLOR"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SIX_ISLAND_OUTCAST_ISLAND/MAIN": {
+    "region": "Outcast Island",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Team Rocket Grunt 46 Scaling": [
+        "TRAINER_TEAM_ROCKET_GRUNT_46"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SEVEN_ISLAND_SEVAULT_CANYON_ENTRANCE/MAIN": {
+    "region": "Canyon Entrance",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Aroma Lady Miah Scaling": [
+        "TRAINER_AROMA_LADY_MIAH"
+      ],
+      "Juggler Mason Scaling": [
+        "TRAINER_JUGGLER_MASON"
+      ],
+      "Pokemon Ranger Nicolas Scaling": [
+        "TRAINER_PKMN_RANGER_NICOLAS"
+      ],
+      "Pokemon Ranger Madeline Scaling": [
+        "TRAINER_PKMN_RANGER_MADELINE"
+      ],
+      "Young Couple Eve & Jon Scaling": [
+        "TRAINER_YOUNG_COUPLE_EVE_JON"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SEVEN_ISLAND_SEVAULT_CANYON/MAIN": {
+    "region": "Sevault Canyon",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Cool Couple Lex & Nya Scaling": [
+        "TRAINER_COOL_COUPLE_LEX_NYA"
+      ],
+      "Tamer Evan Scaling": [
+        "TRAINER_TAMER_EVAN"
+      ],
+      "Pokemon Ranger Jackson Scaling": [
+        "TRAINER_PKMN_RANGER_JACKSON"
+      ],
+      "Pokemon Ranger Katelyn Scaling": [
+        "TRAINER_PKMN_RANGER_KATELYN"
+      ],
+      "Crush Girl Cyndy Scaling": [
+        "TRAINER_CRUSH_GIRL_CYNDY"
+      ],
+      "Cooltrainer Leroy Scaling": [
+        "TRAINER_COOLTRAINER_LEROY"
+      ],
+      "Cooltrainer Michelle Scaling": [
+        "TRAINER_COOLTRAINER_MICHELLE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SEVEN_ISLAND_TANOBY_RUINS/MONEAN_ISLAND": {
+    "region": "Tanoby Ruins (Monean Island)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Ruin Maniac Benjamin Scaling": [
+        "TRAINER_RUIN_MANIAC_BENJAMIN"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SEVEN_ISLAND_TANOBY_RUINS/WEEPTH_ISLAND": {
+    "region": "Tanoby Ruins (Weepth Island)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Gentleman Clifford Scaling": [
+        "TRAINER_GENTLEMAN_CLIFFORD"
+      ],
+      "Painter Edna Scaling": [
+        "TRAINER_PAINTER_EDNA"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SEVEN_ISLAND_TANOBY_RUINS/SCUFIB_ISLAND": {
+    "region": "Tanoby Ruins (Scufib Island)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Ruin Maniac Brandon Scaling": [
+        "TRAINER_RUIN_MANIAC_BRANDON"
+      ]
+    }
+  },
+  "TRAINER_SCALING_SEVEN_ISLAND_TRAINER_TOWER/SOUTH": {
+    "region": "Trainer Tower Exterior (South)",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Psychic Rodette Scaling": [
+        "TRAINER_PSYCHIC_RODETTE"
+      ],
+      "Psychic Dario Scaling": [
+        "TRAINER_PSYCHIC_DARIO"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_LEAGUE_ELITE_FOUR_REMATCH/MAIN": {
+    "region": "Elite Four Rematch",
+    "kanto": false,
+    "connections": [
+      "Lorelei's Room",
+      "Bruno's Room",
+      "Agatha's Room",
+      "Lance's Room",
+      "Champion's Room"
+    ],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Elite Four Rematch Scaling": [
+        "TRAINER_ELITE_FOUR_LORELEI_2",
+        "TRAINER_ELITE_FOUR_BRUNO_2",
+        "TRAINER_ELITE_FOUR_AGATHA_2",
+        "TRAINER_ELITE_FOUR_LANCE_2",
+        "TRAINER_CHAMPION_REMATCH_BULBASAUR",
+        "TRAINER_CHAMPION_REMATCH_CHARMANDER",
+        "TRAINER_CHAMPION_REMATCH_SQUIRTLE"
+      ]
+    }
+  },
+  "TRAINER_SCALING_POKEMON_LEAGUE_CHAMPIONS_ROOM_REMATCH/MAIN": {
+    "region": "Champion's Room",
+    "kanto": false,
+    "connections": [],
+    "category": "EVENT_TRAINER_SCALING",
+    "locations": {
+      "Champion Rematch Scaling": [
+        "TRAINER_CHAMPION_REMATCH_BULBASAUR",
+        "TRAINER_CHAMPION_REMATCH_CHARMANDER",
+        "TRAINER_CHAMPION_REMATCH_SQUIRTLE"
+      ]
+    }
+  }
+}

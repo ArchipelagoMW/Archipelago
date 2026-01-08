@@ -1,0 +1,422 @@
+{
+    "0": {
+        "readable_name": "Tule MIB 1",
+        "area": "Tule",
+        "monster_chest_id": "D1322A",
+        "monster_chest_data": "A4",
+        "reward_id": "D1322B",
+        "reward_data": "C0",
+        "useable_flag": "y",
+        "key_item_allowed": "y"
+    },
+    "1": {
+        "readable_name": "Karnak MIB 1",
+        "area": "Karnak",
+        "monster_chest_id": "D132F6",
+        "monster_chest_data": "A2",
+        "reward_id": "D132F7",
+        "reward_data": "1D",
+        "useable_flag": "y",
+        "key_item_allowed": "y"
+    },
+    "2": {
+        "readable_name": "Karnak MIB 2",
+        "area": "Karnak",
+        "monster_chest_id": "D132FA",
+        "monster_chest_data": "A0",
+        "reward_id": "D132FB",
+        "reward_data": "FE",
+        "useable_flag": "y",
+        "key_item_allowed": "y"
+    },
+    "3": {
+        "readable_name": "Karnak MIB 3",
+        "area": "Karnak",
+        "monster_chest_id": "D13302",
+        "monster_chest_data": "A0",
+        "reward_id": "D13303",
+        "reward_data": "E3",
+        "useable_flag": "y",
+        "key_item_allowed": "y"
+    },
+    "4": {
+        "readable_name": "Karnak MIB 4",
+        "area": "Karnak",
+        "monster_chest_id": "D13306",
+        "monster_chest_data": "A1",
+        "reward_id": "D13307",
+        "reward_data": "E3",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "5": {
+        "readable_name": "Karnak MIB 5",
+        "area": "Karnak",
+        "monster_chest_id": "D1330A",
+        "monster_chest_data": "A0",
+        "reward_id": "D1330B",
+        "reward_data": "E3",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "6": {
+        "readable_name": "Karnak MIB 6",
+        "area": "Karnak",
+        "monster_chest_id": "D13312",
+        "monster_chest_data": "A1",
+        "reward_id": "D13313",
+        "reward_data": "E3",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "7": {
+        "readable_name": "Karnak MIB 7",
+        "area": "Karnak",
+        "monster_chest_id": "D13316",
+        "monster_chest_data": "A0",
+        "reward_id": "D13317",
+        "reward_data": "E3",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "8": {
+        "readable_name": "Karnak MIB 8",
+        "area": "Karnak",
+        "monster_chest_id": "D1331A",
+        "monster_chest_data": "A2",
+        "reward_id": "D1331B",
+        "reward_data": "95",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "9": {
+        "readable_name": "Karnak MIB 9",
+        "area": "Karnak",
+        "monster_chest_id": "D1331E",
+        "monster_chest_data": "A1",
+        "reward_id": "D1331F",
+        "reward_data": "5A",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "10": {
+        "readable_name": "Karnak MIB 10",
+        "area": "Karnak",
+        "monster_chest_id": "D13326",
+        "monster_chest_data": "A0",
+        "reward_id": "D13327",
+        "reward_data": "E3",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "11": {
+        "readable_name": "Karnak MIB 11",
+        "area": "Karnak",
+        "monster_chest_id": "D1332A",
+        "monster_chest_data": "A3",
+        "reward_id": "D1332B",
+        "reward_data": "B2",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "12": {
+        "readable_name": "Karnak MIB 12",
+        "area": "Karnak",
+        "monster_chest_id": "D1332E",
+        "monster_chest_data": "A3",
+        "reward_id": "D1332F",
+        "reward_data": "7",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "13": {
+        "readable_name": "Barrier Tower MIB 1",
+        "area": "Barrier Tower",
+        "monster_chest_id": "D13436",
+        "monster_chest_data": "A5",
+        "reward_id": "D13437",
+        "reward_data": "55",
+        "useable_flag": "y",
+        "key_item_allowed": "y"
+    },
+    "14": {
+        "readable_name": "Barrier Tower MIB 2",
+        "area": "Barrier Tower",
+        "monster_chest_id": "D13442",
+        "monster_chest_data": "A5",
+        "reward_id": "D13443",
+        "reward_data": "94",
+        "useable_flag": "y",
+        "key_item_allowed": "y"
+    },
+    "15": {
+        "readable_name": "Pyramid MIB 1",
+        "area": "Pyramid",
+        "monster_chest_id": "D13486",
+        "monster_chest_data": "A7",
+        "reward_id": "D13487",
+        "reward_data": "AC",
+        "useable_flag": "y",
+        "key_item_allowed": "y"
+    },
+    "16": {
+        "readable_name": "Pyramid MIB 2",
+        "area": "Pyramid",
+        "monster_chest_id": "D1348E",
+        "monster_chest_data": "A6",
+        "reward_id": "D1348F",
+        "reward_data": "EB",
+        "useable_flag": "y",
+        "key_item_allowed": "y"
+    },
+    "17": {
+        "readable_name": "Pyramid MIB 3",
+        "area": "Pyramid",
+        "monster_chest_id": "D13492",
+        "monster_chest_data": "AA",
+        "reward_id": "D13493",
+        "reward_data": "A0",
+        "useable_flag": "y",
+        "key_item_allowed": "y"
+    },
+    "18": {
+        "readable_name": "Pyramid MIB 4",
+        "area": "Pyramid",
+        "monster_chest_id": "D1349A",
+        "monster_chest_data": "A6",
+        "reward_id": "D1349B",
+        "reward_data": "CD",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "19": {
+        "readable_name": "Pyramid MIB 5",
+        "area": "Pyramid",
+        "monster_chest_id": "D1349E",
+        "monster_chest_data": "A6",
+        "reward_id": "D1349F",
+        "reward_data": "C4",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "20": {
+        "readable_name": "Pyramid MIB 6",
+        "area": "Pyramid",
+        "monster_chest_id": "D134A2",
+        "monster_chest_data": "A6",
+        "reward_id": "D134A3",
+        "reward_data": "EB",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "21": {
+        "readable_name": "Pyramid MIB 7",
+        "area": "Pyramid",
+        "monster_chest_id": "D134A6",
+        "monster_chest_data": "A8",
+        "reward_id": "D134A7",
+        "reward_data": "AD",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "22": {
+        "readable_name": "Pyramid MIB 8",
+        "area": "Pyramid",
+        "monster_chest_id": "D134AA",
+        "monster_chest_data": "A9",
+        "reward_id": "D134AB",
+        "reward_data": "A6",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "23": {
+        "readable_name": "Pyramid MIB 9",
+        "area": "Pyramid",
+        "monster_chest_id": "D134AE",
+        "monster_chest_data": "A6",
+        "reward_id": "D134A7",
+        "reward_data": "EB",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "24": {
+        "readable_name": "Pyramid MIB 10",
+        "area": "Pyramid",
+        "monster_chest_id": "D134B2",
+        "monster_chest_data": "A6",
+        "reward_id": "D134B3",
+        "reward_data": "EB",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "25": {
+        "readable_name": "Pyramid MIB 11",
+        "area": "Pyramid",
+        "monster_chest_id": "D134B6",
+        "monster_chest_data": "A6",
+        "reward_id": "D134B7",
+        "reward_data": "EB",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "26": {
+        "readable_name": "Pyramid MIB 12",
+        "area": "Pyramid",
+        "monster_chest_id": "D134C2",
+        "monster_chest_data": "A6",
+        "reward_id": "D134C3",
+        "reward_data": "26",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "27": {
+        "readable_name": "Pyramid MIB 13",
+        "area": "Pyramid",
+        "monster_chest_id": "D134D6",
+        "monster_chest_data": "A6",
+        "reward_id": "D134D7",
+        "reward_data": "EB",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "28": {
+        "readable_name": "Pyramid MIB 14",
+        "area": "Pyramid",
+        "monster_chest_id": "D134DE",
+        "monster_chest_data": "A6",
+        "reward_id": "D134DF",
+        "reward_data": "EB",
+        "useable_flag": null,
+        "key_item_allowed": null
+    },
+    "29": {
+        "readable_name": "Solitary Island MIB 1",
+        "area": "Solitary Island",
+        "monster_chest_id": "D134FE",
+        "monster_chest_data": "AB",
+        "reward_id": "D134FF",
+        "reward_data": "64",
+        "useable_flag": "y",
+        "key_item_allowed": "y"
+    },
+    "30": {
+        "readable_name": "Solitary Island MIB 2",
+        "area": "Solitary Island",
+        "monster_chest_id": "D13506",
+        "monster_chest_data": "AC",
+        "reward_id": "D13507",
+        "reward_data": "AF",
+        "useable_flag": "y",
+        "key_item_allowed": "y"
+    },
+    "31": {
+        "readable_name": "Phoenix Tower MIB 1",
+        "area": "Phoenix Tower",
+        "monster_chest_id": "D1357E",
+        "monster_chest_data": "AD",
+        "reward_id": "D1357F",
+        "reward_data": "E4",
+        "useable_flag": "y",
+        "key_item_allowed": null
+    },
+    "32": {
+        "readable_name": "Phoenix Tower MIB 2",
+        "area": "Phoenix Tower",
+        "monster_chest_id": "D13582",
+        "monster_chest_data": "AD",
+        "reward_id": "D13583",
+        "reward_data": "E4",
+        "useable_flag": "y",
+        "key_item_allowed": null
+    },
+    "33": {
+        "readable_name": "Phoenix Tower MIB 3",
+        "area": "Phoenix Tower",
+        "monster_chest_id": "D13586",
+        "monster_chest_data": "AD",
+        "reward_id": "D13587",
+        "reward_data": "E4",
+        "useable_flag": "y",
+        "key_item_allowed": null
+    },
+    "34": {
+        "readable_name": "Phoenix Tower MIB 4",
+        "area": "Phoenix Tower",
+        "monster_chest_id": "D1358A",
+        "monster_chest_data": "AD",
+        "reward_id": "D1358B",
+        "reward_data": "E4",
+        "useable_flag": "y",
+        "key_item_allowed": null
+    },
+    "35": {
+        "readable_name": "Phoenix Tower MIB 5",
+        "area": "Phoenix Tower",
+        "monster_chest_id": "D1358E",
+        "monster_chest_data": "AD",
+        "reward_id": "D1358F",
+        "reward_data": "E4",
+        "useable_flag": "y",
+        "key_item_allowed": null
+    },
+    "36": {
+        "readable_name": "Phoenix Tower MIB 6",
+        "area": "Phoenix Tower",
+        "monster_chest_id": "D13592",
+        "monster_chest_data": "AD",
+        "reward_id": "D13593",
+        "reward_data": "E4",
+        "useable_flag": "y",
+        "key_item_allowed": null
+    },
+    "37": {
+        "readable_name": "Phoenix Tower MIB 7",
+        "area": "Phoenix Tower",
+        "monster_chest_id": "D13596",
+        "monster_chest_data": "AD",
+        "reward_id": "D13597",
+        "reward_data": "E4",
+        "useable_flag": "y",
+        "key_item_allowed": null
+    },
+    "38": {
+        "readable_name": "Phoenix Tower MIB 8",
+        "area": "Phoenix Tower",
+        "monster_chest_id": "D1359A",
+        "monster_chest_data": "AD",
+        "reward_id": "D1359B",
+        "reward_data": "E4",
+        "useable_flag": "y",
+        "key_item_allowed": null
+    },
+    "39": {
+        "readable_name": "Phoenix Tower MIB 9",
+        "area": "Phoenix Tower",
+        "monster_chest_id": "D1359E",
+        "monster_chest_data": "AD",
+        "reward_id": "D1359F",
+        "reward_data": "E4",
+        "useable_flag": "y",
+        "key_item_allowed": null
+    },
+    "40": {
+        "readable_name": "Phoenix Tower MIB 10",
+        "area": "Phoenix Tower",
+        "monster_chest_id": "D135A2",
+        "monster_chest_data": "AD",
+        "reward_id": "D135A3",
+        "reward_data": "E4",
+        "useable_flag": "y",
+        "key_item_allowed": null
+    },
+    "41": {
+        "readable_name": "Void MIB 1",
+        "area": "Void",
+        "monster_chest_id": "D135FA",
+        "monster_chest_data": "AE",
+        "reward_id": "D135FB",
+        "reward_data": "16",
+        "useable_flag": "y",
+        "key_item_allowed": null
+    }
+}

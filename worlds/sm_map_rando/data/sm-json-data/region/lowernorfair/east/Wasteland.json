@@ -1,0 +1,2035 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 138,
+  "name": "Wasteland",
+  "area": "Norfair",
+  "subarea": "Lower",
+  "subsubarea": "East",
+  "roomAddress": "0x7B5D5",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 1],
+    [0, 1, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x0019a1a",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1],
+        [0, 2, 0, 0, 0, 0],
+        [0, 2, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019a26",
+      "doorOrientation": "up",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 2],
+        [0, 1, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "PowerBomb",
+      "nodeAddress": "0x790C0",
+      "mapTileMask": [
+        [2, 1, 1, 1, 1, 1],
+        [0, 1, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Junction Right of Power Bomb Blocks",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 2, 2, 1, 1],
+        [0, 1, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Junction Below Shot Block",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 1, 1, 1, 1],
+        [0, 1, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Junction Left of Power Bomb Blocks",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 1, 1, 1, 1],
+        [0, 1, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Junction Left of Morph Tunnel",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 2, 1, 1],
+        [0, 1, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Junction Below Top Right Door",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 1, 2, 2],
+        [0, 1, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 9,
+      "name": "G-Mode Morph Junction Left of Morph Tunnel (Off-Camera)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 2, 2, 1, 1],
+        [0, 1, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0]
+      ],
+      "note": "Represents being left of the morph tunnel with G-Mode and morph or artificial morph"
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Power Bomb Blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "B",
+      "name": "Bomb Blocks of Shame",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "C",
+      "name": "Dessgeega on PB-blocks",
+      "obstacleType": "enemies"
+    },
+    {
+      "id": "D",
+      "name": "3 Dessgeegas",
+      "obstacleType": "enemies"
+    },
+    {
+      "id": "E",
+      "name": "Shutter Under Spikes",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Wasteland Left Dessgeega",
+      "enemyName": "Dessgeega",
+      "quantity": 1,
+      "homeNodes": [4]
+    },
+    {
+      "id": "e2",
+      "groupName": "Wasteland Right Dessgeegas",
+      "enemyName": "Dessgeega",
+      "quantity": 3,
+      "betweenNodes": [4, 7]
+    },
+    {
+      "id": "e3",
+      "groupName": "Wasteland Kzans",
+      "enemyName": "Kzan",
+      "quantity": 2,
+      "betweenNodes": [1, 5]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 2},
+        {"id": 8},
+        {"id": 9}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 3},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 4},
+        {"id": 6},
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 8,
+      "to": [
+        {"id": 2},
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 9,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 7}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Wait for Kzan and Leave With Runway",
+      "requires": [
+        "canUseEnemies",
+        "canTrickyJump",
+        {"heatFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Ride Kzan and Leave With Runway",
+      "requires": [
+        "canUseEnemies",
+        {"heatFrames": 480}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Ride the Spike Platform up and back down again to more easily position for using it as a runway."
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 5],
+      "name": "Base",
+      "requires": [
+        "canUseEnemies",
+        {"or": [
+          {"and": [
+            "canWalljump",
+            {"heatFrames": 390}
+          ]},
+          {"and": [
+            "canConsecutiveWalljump",
+            "canCarefulJump",
+            {"heatFrames": 330}
+          ]},
+          {"and": [
+            "HiJump",
+            {"heatFrames": 490}
+          ]},
+          {"and": [
+            "h_crouchJumpDownGrab",
+            {"heatFrames": 610}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 5],
+      "name": "SpaceJump",
+      "requires": [
+        "SpaceJump",
+        {"or": [
+          {"heatFrames": 440},
+          {"and": [
+            "HiJump",
+            {"heatFrames": 350}
+          ]}
+        ]}
+      ],
+      "devNote": "FIXME: Heat count assumes the Kzan is blocking your path."
+    },
+    {
+      "id": 8,
+      "link": [1, 5],
+      "name": "Tricky Platforming",
+      "requires": [
+        "canTrickyJump",
+        {"heatFrames": 420}
+      ],
+      "devNote": "FIXME: Heat count assumes the Kzan is blocking your path."
+    },
+    {
+      "id": 96,
+      "link": [1, 5],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "h_usePowerBomb",
+        {"heatFrames": 0}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "flashSuitChecked": true,
+      "note": "Climb the room and place a Power Bomb near the top before exiting G-mode.",
+      "devNote": [
+        "It is possible to do this with artificial morph, but progressing anywhere else in the room requires Morph.",
+        "FIXME: It looks like the heat frames going up from 5 don't take into account that the Power Bomb blocks could already be broken."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 6],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canLongXRayClimb",
+        {"heatFrames": 2840}
+      ],
+      "note": "Climb up 2 screens."
+    },
+    {
+      "id": 10,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        {"heatFrames": 10},
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Leave With Door Frame Below",
+      "requires": [
+        {"heatFrames": 50}
+      ],
+      "exitCondition": {
+        "leaveWithDoorFrameBelow": {
+          "height": 2
+        }
+      }
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Leave With Platform Below",
+      "requires": [
+        {"heatFrames": 50}
+      ],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 6,
+          "leftPosition": -1.5,
+          "rightPosition": 1.5
+        }
+      }
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Carry G-Mode Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Carry G-Mode Morph Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphMovement"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [2, 8],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 97,
+      "link": [2, 9],
+      "name": "G-Mode Morph, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphMovement",
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": "Get into the cove next to the bomb block and carefully wiggle in that camera scroll block to overload PLMs and move to the item to the left.",
+      "devNote": [
+        "It is possible to damage boost off of the Hibashi instead of requiring artificial morph movement,",
+        "but there is no known way to get here with Energy and artificial morph (a Power Bomb will solidify the bomb block)."
+      ]
+    },
+    {
+      "id": 102,
+      "link": [2, 9],
+      "name": "G-Mode Morph, Simple Blind Movement, Activate Shutter",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphMovement",
+        "h_artificialMorphPowerBomb",
+        {"heatFrames": 0}
+      ],
+      "clearsObstacles": ["E"],
+      "flashSuitChecked": true,
+      "note": [
+        "Get into the cove next to the bomb block and carefully wiggle in that camera scroll block to overload PLMs and move to the item to the left.",
+        "Then use a Power Bomb to activate the shutter."
+      ],
+      "devNote": [
+        "It is possible to damage boost off of the Hibashi instead of requiring artificial morph movement,",
+        "but there is no known way to get here with Energy and artificial morph (a Power Bomb will solidify the bomb block)."
+      ]
+    },
+    {
+      "id": 103,
+      "link": [2, 9],
+      "name": "G-Mode, Simple Blind Movement, Activate Shutter",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          "canComplexGMode",
+          "Wave"
+        ]},
+        {"or": [
+          "canInsaneJump",
+          {"ammo": {"type": "Super", "count": 1}},
+          {"ammo": {"type": "Missile", "count": 1}},
+          "Charge",
+          "Ice",
+          "Wave",
+          "Spazer",
+          "Plasma"
+        ]},
+        {"heatFrames": 0}
+      ],
+      "clearsObstacles": ["E"],
+      "note": [
+        "Raise the shutter by shooting a missile or upgraded beam at it.",
+        "Stand on the right side of lowest safe tile and shoot diagonally down while crouched if using missiles, or standing otherwise.",
+        "A basic beam shot will work if fired vertically down, onto the side of the spike.",
+        "Then, get into the cove next to the bomb block and carefully wiggle in that camera scroll block to overload PLMs."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [3, 6],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        "Morph",
+        {"heatFrames": 120},
+        {"obstaclesCleared": ["B"]}
+      ]
+    },
+    {
+      "id": 18,
+      "link": [3, 6],
+      "name": "Bombs",
+      "requires": [
+        "h_navigateHeatRooms",
+        "h_useMorphBombs",
+        {"heatFrames": 160}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 19,
+      "link": [3, 6],
+      "name": "Power Bombs",
+      "requires": [
+        "h_usePowerBomb",
+        {"heatFrames": 180}
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 20,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        {"obstaclesCleared": ["D"]},
+        "h_heatedCrystalFlash"
+      ],
+      "clearsObstacles": ["A", "B"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [4, 4],
+      "name": "Shinespark Kill",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 25, "steepUpTiles": 4, "openEnd": 1}},
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}},
+        "canUseIFrames",
+        "canShinechargeMovementComplex",
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 40}},
+        {"heatFrames": 330}
+      ],
+      "clearsObstacles": ["D"],
+      "note": [
+        "Use i-frames from the first Dessgeega to run through the remaining enemies and store a shinespark.",
+        "1-tap Shortcharge, then run back towards the Hoppers and try to hit all three at once by shinesparking horizontally as the ceiling hopper jumps down."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": [
+        "h_usePowerBomb",
+        {"or": [
+          {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}},
+          {"and": [
+            "canHitbox",
+            "canTrickyJump"
+          ]}
+        ]},
+        {"heatFrames": 240}
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 23,
+      "link": [4, 5],
+      "name": "Clear Path",
+      "requires": [
+        {"heatFrames": 180},
+        {"obstaclesCleared": ["A", "C"]}
+      ]
+    },
+    {
+      "id": 24,
+      "link": [4, 6],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["C"]},
+          {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}}
+        ]},
+        {"heatFrames": 180}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [4, 6],
+      "name": "Screw Attack",
+      "requires": [
+        "ScrewAttack",
+        {"heatFrames": 180}
+      ],
+      "clearsObstacles": ["B", "C"]
+    },
+    {
+      "id": 26,
+      "link": [4, 6],
+      "name": "Kill Dessgeega (Fast)",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Dessgeega"]],
+          "explicitWeapons": ["Wave+Plasma", "Ice+Plasma", "Super", "Missile"]
+        }},
+        {"heatFrames": 210}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 27,
+      "link": [4, 6],
+      "name": "Kill Dessgeega (Medium)",
+      "requires": [
+        {"obstaclesCleared": ["D"]},
+        "canDodgeWhileShooting",
+        {"enemyKill": {
+          "enemies": [["Dessgeega"]],
+          "explicitWeapons": ["Ice+Wave+Spazer", "Plasma"]
+        }},
+        {"heatFrames": 270}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 28,
+      "link": [4, 6],
+      "name": "Kill Dessgeega (Slow)",
+      "requires": [
+        {"obstaclesCleared": ["D"]},
+        "canDodgeWhileShooting",
+        {"or": [
+          "Charge",
+          "Spazer"
+        ]},
+        {"heatFrames": 12000}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 29,
+      "link": [4, 6],
+      "name": "Kill Dessgeega (Power Bombs)",
+      "requires": [
+        {"obstaclesCleared": ["D"]},
+        "canDodgeWhileShooting",
+        "Morph",
+        {"ammo": {"type": "PowerBomb", "count": 2}},
+        {"or": [
+          "canHitbox",
+          {"ammo": {"type": "PowerBomb", "count": 1}}
+        ]},
+        {"heatFrames": 420}
+      ],
+      "clearsObstacles": ["A", "B", "C"]
+    },
+    {
+      "id": 30,
+      "link": [4, 7],
+      "name": "Base",
+      "requires": [
+        {"obstaclesCleared": ["D"]},
+        {"heatFrames": 120}
+      ]
+    },
+    {
+      "id": 31,
+      "link": [4, 7],
+      "name": "Tank the Damage",
+      "requires": [
+        {"heatFrames": 140},
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}}
+      ]
+    },
+    {
+      "id": 32,
+      "link": [4, 7],
+      "name": "Hitbox the Dessgeegas (Power Bombs)",
+      "requires": [
+        {"heatFrames": 150},
+        "canHitbox",
+        "h_usePowerBomb"
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 33,
+      "link": [4, 7],
+      "name": "Hitbox the Dessgeegas (Plasma)",
+      "requires": [
+        {"heatFrames": 120},
+        "canHitbox",
+        "Plasma"
+      ]
+    },
+    {
+      "id": 34,
+      "link": [4, 8],
+      "name": "Speedball",
+      "requires": [
+        {"obstaclesCleared": ["D"]},
+        {"getBlueSpeed": {"usedTiles": 20, "openEnd": 1}},
+        "canSpeedball",
+        {"or": [
+          "h_useSpringBall",
+          {"hibashiHits": 1}
+        ]},
+        {"heatFrames": 300}
+      ]
+    },
+    {
+      "id": 35,
+      "link": [5, 1],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 450}
+      ],
+      "devNote": "FIXME: Assumes the Kzans are in their default positions"
+    },
+    {
+      "id": 36,
+      "link": [5, 1],
+      "name": "Leave with Runway",
+      "requires": [
+        "canUseEnemies",
+        {"heatFrames": 430}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {"types": ["missiles"], "requires": ["never"]}
+      ],
+      "devNote": "FIXME: Assumes the Kzans are in their default positions"
+    },
+    {
+      "id": 37,
+      "link": [5, 1],
+      "name": "Spike Kzan Kago",
+      "requires": [
+        "canKago",
+        "Morph",
+        {"spikeHits": 1},
+        {"heatFrames": 270}
+      ],
+      "note": "Walk into a Spike and then Morph-Kago through the top Spike-Platform.",
+      "devNote": "About equivalent to waiting, if there is no form of damage reduction."
+    },
+    {
+      "id": 38,
+      "link": [5, 1],
+      "name": "Spike Kzan Kago, Leave with Runway",
+      "requires": [
+        "canKago",
+        "Morph",
+        "canUseEnemies",
+        {"spikeHits": 1},
+        {"heatFrames": 250}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ],
+      "note": "Walk into a Spike and then Morph-Kago through the top Spike-Platform.",
+      "devNote": "About equivalent to waiting, if there is no form of damage reduction."
+    },
+    {
+      "id": 39,
+      "link": [5, 1],
+      "name": "Kzan Double Kago",
+      "requires": [
+        "canKago",
+        "canUseIFrames",
+        "canResetFallSpeed",
+        {"enemyDamage": {"enemy": "Kzan", "type": "contact", "hits": 1}},
+        {"heatFrames": 180}
+      ],
+      "note": "Morph Kago through the top Spike platform and use the i-frames to Kago again through the second.",
+      "devNote": "Useful when enemy damage can be reduced while still taking full heat damage."
+    },
+    {
+      "id": 40,
+      "link": [5, 4],
+      "name": "The Way is Clear",
+      "requires": [
+        {"obstaclesCleared": ["A", "C", "D"]},
+        {"heatFrames": 120}
+      ]
+    },
+    {
+      "id": 41,
+      "link": [5, 4],
+      "name": "Tank the Damage",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]},
+        {"heatFrames": 240},
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}}
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 42,
+      "link": [5, 4],
+      "name": "Screw Kill",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]},
+        "ScrewAttack",
+        {"heatFrames": 270}
+      ],
+      "clearsObstacles": ["A", "B", "D"]
+    },
+    {
+      "id": 43,
+      "link": [5, 4],
+      "name": "Supers Kill",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]},
+        {"enemyKill": {
+          "enemies": [["Dessgeega"], ["Dessgeega", "Dessgeega", "Dessgeega"]],
+          "explicitWeapons": ["Super"]
+        }},
+        {"heatFrames": 600}
+      ],
+      "clearsObstacles": ["A", "B", "C", "D"]
+    },
+    {
+      "id": 44,
+      "link": [5, 4],
+      "name": "Missile Kill",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]},
+        "canDodgeWhileShooting",
+        {"enemyKill": {
+          "enemies": [["Dessgeega"], ["Dessgeega", "Dessgeega", "Dessgeega"]],
+          "explicitWeapons": ["Missile"]
+        }},
+        {"heatFrames": 720}
+      ],
+      "clearsObstacles": ["A", "B", "C", "D"],
+      "note": [
+        "Safely kill the left two Dessgeegas where the Power Bomb statue used to be.",
+        "Lure the right side Ceiling hopper to the left before dealing with it."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [5, 4],
+      "name": "Power Bomb Kill",
+      "requires": [
+        "Morph",
+        {"ammo": {"type": "PowerBomb", "count": 5}},
+        "canDodgeWhileShooting",
+        {"or": [
+          "canHitbox",
+          {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}}
+        ]},
+        {"heatFrames": 1080}
+      ],
+      "clearsObstacles": ["A", "B", "C", "D"]
+    },
+    {
+      "id": 46,
+      "link": [5, 4],
+      "name": "Beam Kill",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"or": [
+              "Ice",
+              "Wave"
+            ]},
+            {"heatFrames": 540}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            "Plasma",
+            {"heatFrames": 1020}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            "Ice",
+            "Spazer",
+            "Wave",
+            {"heatFrames": 1800}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            "Spazer",
+            {"heatFrames": 3000}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A", "B", "C", "D"],
+      "note": [
+        "Safely kill the left two Dessgeegas where the Power Bomb statue used to be.",
+        "Lure the right side Ceiling hopper to the left before dealing with it."
+      ]
+    },
+    {
+      "id": 47,
+      "link": [5, 5],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "clearsObstacles": ["A", "B"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 48,
+      "link": [5, 6],
+      "name": "The Way is Clear",
+      "requires": [
+        {"obstaclesCleared": ["A", "C"]},
+        {"heatFrames": 180}
+      ]
+    },
+    {
+      "id": 49,
+      "link": [5, 6],
+      "name": "Tank a Dessgeega Hit",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]},
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}},
+        {"heatFrames": 255}
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 50,
+      "link": [5, 6],
+      "name": "Screw Attack",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]},
+        "ScrewAttack",
+        {"heatFrames": 240}
+      ],
+      "clearsObstacles": ["A", "B", "C"]
+    },
+    {
+      "id": 51,
+      "link": [5, 6],
+      "name": "Kill Dessgeega (Fast)",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]},
+        {"enemyKill": {
+          "enemies": [["Dessgeega"]],
+          "explicitWeapons": ["Wave+Plasma", "Ice+Plasma", "Missile", "Super"]
+        }},
+        {"heatFrames": 350}
+      ],
+      "clearsObstacles": ["A", "B", "C"]
+    },
+    {
+      "id": 52,
+      "link": [5, 6],
+      "name": "Kill Dessgeega (Medium)",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]},
+        {"enemyKill": {
+          "enemies": [["Dessgeega"]],
+          "explicitWeapons": ["Ice+Wave+Spazer", "Plasma", "PowerBomb"]
+        }},
+        {"heatFrames": 420}
+      ],
+      "clearsObstacles": ["A", "B", "C"],
+      "note": "Stand crouched where the statue used to be to safely kill the Dessgeega.",
+      "devNote": "Hitboxing with a Power Bomb while breaking the statue is not reliable."
+    },
+    {
+      "id": 53,
+      "link": [5, 6],
+      "name": "Kill Dessgeega (Slow)",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb"
+        ]},
+        {"or": [
+          "Charge",
+          "Spazer"
+        ]},
+        {"heatFrames": 900}
+      ],
+      "clearsObstacles": ["A", "B", "C"],
+      "note": "Stand crouched where the statue used to be to safely kill the Dessgeega."
+    },
+    {
+      "id": 54,
+      "link": [5, 7],
+      "name": "Statue Clip Damage Boost (HiJump)",
+      "requires": [
+        {"notable": "Statue Clip Damage Boost"},
+        {"obstaclesNotCleared": ["A"]},
+        "h_usePowerBomb",
+        "HiJump",
+        "canPartialFloorClip",
+        "canCeilingClip",
+        "canHorizontalDamageBoost",
+        "canUseIFrames",
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}},
+        {"heatFrames": 225}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Break the Power Bomb statue leaving 1 row of blocks.",
+        "Partially clip beneath the Power Bomb blocks and the sold tiles beneath.",
+        "Wait for a Dessgeega to jump over head and jump into it.",
+        "The left ceiling Dessgeega works better.",
+        "Damage boost to the right and use i-frames to run through all of the enemies."
+      ]
+    },
+    {
+      "id": 55,
+      "link": [5, 7],
+      "name": "HiJumpless Statue Clip Damage Boost",
+      "requires": [
+        {"notable": "HiJumpless Statue Clip Damage Boost"},
+        {"obstaclesNotCleared": ["A"]},
+        "h_usePowerBomb",
+        "canTrickyJump",
+        "canPartialFloorClip",
+        "canCeilingClip",
+        "canHorizontalDamageBoost",
+        "canUseIFrames",
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}},
+        {"heatFrames": 225}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Break the Power Bomb statue leaving 1 row of blocks.",
+        "Partially clip beneath the Power Bomb blocks and the sold tiles beneath.",
+        "Wait for a Dessgeega to jump over head and jump into it.",
+        "The left ceiling Dessgeega works better.",
+        "Aim down after jumping in order to fully boost over the solid statue.",
+        "Damage boost to the right and use i-frames to run through all of the enemies."
+      ]
+    },
+    {
+      "id": 56,
+      "link": [5, 8],
+      "name": "Statue Clip Damage Boost (HiJump, SpeedBall)",
+      "requires": [
+        {"notable": "Statue Clip Damage Boost"},
+        {"obstaclesNotCleared": ["A"]},
+        "h_usePowerBomb",
+        "HiJump",
+        "canPartialFloorClip",
+        "canCeilingClip",
+        "canHorizontalDamageBoost",
+        "canUseIFrames",
+        {"getBlueSpeed": {"usedTiles": 16, "openEnd": 1}},
+        "canSpeedball",
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}},
+        {"heatFrames": 390},
+        {"or": [
+          "h_useSpringBall",
+          {"hibashiHits": 1}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Break the Power Bomb statue leaving 1 row of blocks.",
+        "Partially clip beneath the Power Bomb blocks and the sold tiles beneath.",
+        "Wait for a Dessgeega to jump over head and jump into it.",
+        "The left ceiling Dessgeega works better.",
+        "Damage boost to the right and use i-frames to run through all of the enemies.",
+        "Begin shortcharging while running through the Dessgeegas for a speedball.",
+        "It may help to end the damage boost early, but then it becomes more difficult to stutter for the shortcharge."
+      ]
+    },
+    {
+      "id": 57,
+      "link": [5, 8],
+      "name": "HiJumpless Statue Clip Damage Boost (SpeedBall)",
+      "requires": [
+        {"notable": "HiJumpless Statue Clip Damage Boost"},
+        {"obstaclesNotCleared": ["A"]},
+        "h_usePowerBomb",
+        "canPartialFloorClip",
+        "canCeilingClip",
+        "canTrickyJump",
+        "canHorizontalDamageBoost",
+        "canUseIFrames",
+        {"getBlueSpeed": {"usedTiles": 16, "openEnd": 1}},
+        "canSpeedball",
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}},
+        {"heatFrames": 390},
+        {"or": [
+          "h_useSpringBall",
+          {"hibashiHits": 1}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Break the Power Bomb statue leaving 1 row of blocks.",
+        "Partially clip beneath the Power Bomb blocks and the sold tiles beneath.",
+        "Wait for a Dessgeega to jump over head and jump into it.",
+        "The left ceiling Dessgeega works better.",
+        "Aim down after jumping in order to fully boost over the solid statue.",
+        "Damage boost to the right and use i-frames to run through all of the enemies.",
+        "Begin shortcharging while running through the Dessgeegas for a speedball.",
+        "It may help to end the damage boost early, but then it becomes more difficult to stutter for the shortcharge."
+      ]
+    },
+    {
+      "id": 58,
+      "link": [6, 3],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"heatFrames": 100},
+        {"obstaclesCleared": ["B"]}
+      ]
+    },
+    {
+      "id": 59,
+      "link": [6, 3],
+      "name": "Screw",
+      "requires": [
+        "ScrewAttack",
+        "Morph",
+        {"heatFrames": 120}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 60,
+      "link": [6, 3],
+      "name": "Bombs",
+      "requires": [
+        "h_useMorphBombs",
+        {"heatFrames": 150}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 61,
+      "link": [6, 3],
+      "name": "Power Bomb",
+      "requires": [
+        "h_navigateHeatRooms",
+        "h_usePowerBomb",
+        {"heatFrames": 210}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "devNote": "The xray climb would need to wait for the explosion.  Other strats may break the block earlier."
+    },
+    {
+      "id": 62,
+      "link": [6, 4],
+      "name": "Clear Path",
+      "requires": [
+        {"heatFrames": 150},
+        {"obstaclesCleared": ["C", "D"]}
+      ]
+    },
+    {
+      "id": 63,
+      "link": [6, 4],
+      "name": "Tank the Damage",
+      "requires": [
+        {"heatFrames": 170},
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}}
+      ]
+    },
+    {
+      "id": 64,
+      "link": [6, 4],
+      "name": "Screw Kill",
+      "requires": [
+        "ScrewAttack",
+        {"heatFrames": 270}
+      ],
+      "clearsObstacles": ["C", "D"]
+    },
+    {
+      "id": 65,
+      "link": [6, 4],
+      "name": "Quick Dessgeega Kill",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["C"]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Dessgeega"]],
+              "explicitWeapons": ["Super", "Missile", "Plasma", "Ice+Wave+Spazer"]
+            }},
+            {"heatFrames": 75}
+          ]}
+        ]},
+        {"or": [
+          {"obstaclesCleared": ["D"]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Dessgeega", "Dessgeega", "Dessgeega"]],
+              "explicitWeapons": ["Super", "Missile", "Plasma", "Ice+Wave+Spazer"]
+            }},
+            {"heatFrames": 315}
+          ]}
+        ]},
+        {"heatFrames": 150}
+      ],
+      "clearsObstacles": ["C", "D"]
+    },
+    {
+      "id": 66,
+      "link": [6, 4],
+      "name": "Slow Kill",
+      "requires": [
+        "h_heatProof",
+        {"or": [
+          "Charge",
+          "Spazer"
+        ]},
+        "canBePatient"
+      ],
+      "clearsObstacles": ["C", "D"]
+    },
+    {
+      "id": 67,
+      "link": [6, 5],
+      "name": "Clear Path",
+      "requires": [
+        {"heatFrames": 150},
+        {"obstaclesCleared": ["A", "C"]}
+      ]
+    },
+    {
+      "id": 68,
+      "link": [6, 5],
+      "name": "Take Damage",
+      "requires": [
+        {"or": [
+          "h_usePowerBomb",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}},
+        {"heatFrames": 240}
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 69,
+      "link": [6, 5],
+      "name": "HitBox enemy (Power Bomb)",
+      "requires": [
+        "h_usePowerBomb",
+        "canHitbox",
+        {"heatFrames": 240}
+      ],
+      "clearsObstacles": ["A", "B"]
+    },
+    {
+      "id": 70,
+      "link": [6, 5],
+      "name": "Screw Attack",
+      "requires": [
+        {"or": [
+          "h_usePowerBomb",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        "ScrewAttack",
+        {"heatFrames": 240}
+      ],
+      "clearsObstacles": ["A", "B", "C"]
+    },
+    {
+      "id": 71,
+      "link": [6, 5],
+      "name": "Fast Kill",
+      "requires": [
+        {"or": [
+          "h_usePowerBomb",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"enemyKill": {
+          "enemies": [["Dessgeega"]],
+          "explicitWeapons": ["Super", "Missile", "Plasma", "Ice+Wave+Spazer"]
+        }},
+        {"heatFrames": 360}
+      ],
+      "clearsObstacles": ["A", "B", "C"]
+    },
+    {
+      "id": 72,
+      "link": [6, 5],
+      "name": "Slow Kill",
+      "requires": [
+        "h_heatProof",
+        {"or": [
+          "h_usePowerBomb",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"or": [
+          "Charge",
+          "Spazer"
+        ]}
+      ],
+      "clearsObstacles": ["A", "B", "C"]
+    },
+    {
+      "id": 73,
+      "link": [6, 6],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash",
+        {"or": [
+          {"obstaclesCleared": ["B"]},
+          {"obstaclesCleared": ["C"]}
+        ]}
+      ],
+      "clearsObstacles": ["A", "B"],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: This can have a side effect of damaging the Dessgeega which is not modelled."
+      ]
+    },
+    {
+      "id": 74,
+      "link": [7, 4],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 120},
+        {"obstaclesCleared": ["D"]}
+      ]
+    },
+    {
+      "id": 75,
+      "link": [7, 4],
+      "name": "Tank the Damage",
+      "requires": [
+        {"heatFrames": 150},
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}}
+      ]
+    },
+    {
+      "id": 76,
+      "link": [7, 4],
+      "name": "Avoid Dessgeegas by Rolling",
+      "requires": [
+        {"notable": "Avoid Dessgeegas by Rolling"},
+        "Morph",
+        "canCameraManip",
+        {"heatFrames": 210}
+      ],
+      "note": [
+        "Roll under the Dessgeegas until all three move off camera and stop chasing Samus.",
+        "Roll directly from the Morph tunnel, past the first Dessgeega.",
+        "Stop and let it jump left of Samus, then move it off camera on the next jump.",
+        "Back away from the Left ground hopper then roll under it.",
+        "Lastly, manipulate the ceiling hopper off camera if it has followed Samus this far."
+      ]
+    },
+    {
+      "id": 77,
+      "link": [7, 4],
+      "name": "Avoid Dessgeegas (Mockball)",
+      "requires": [
+        "Morph",
+        {"or": [
+          "canTrickyJump",
+          {"and": [
+            "h_usePowerBomb",
+            "canCarefulJump",
+            "canHitbox"
+          ]}
+        ]},
+        "canMockball",
+        {"heatFrames": 210}
+      ],
+      "note": [
+        "Let the right hopper jump twice towards Samus.",
+        "At the start of the second jump, jump above where the ground Dessgeega can jump but below where the ceiling enemy can reach.",
+        "Mockball below the third hopper."
+      ],
+      "devNote": "FIXME: The Power Bomb from breaking the tunnel bomb block could be used for this strat."
+    },
+    {
+      "id": 78,
+      "link": [7, 4],
+      "name": "HeatProof Bombs Kill",
+      "requires": [
+        "h_heatProof",
+        "canBePatient",
+        "h_useMorphBombs"
+      ],
+      "clearsObstacles": ["C", "D"],
+      "note": [
+        "Lure the Ground Hoppers to the Morph Tunnel",
+        "The left ceiling Dessgeega can be safely killed above the Power Bomb statue."
+      ],
+      "devNote": "Other Slow kill methods may need to take contact damage."
+    },
+    {
+      "id": 79,
+      "link": [7, 4],
+      "name": "Screw Kill",
+      "requires": [
+        "ScrewAttack",
+        {"heatFrames": 150}
+      ],
+      "clearsObstacles": ["D"]
+    },
+    {
+      "id": 80,
+      "link": [7, 4],
+      "name": "Supers Kill",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"enemyKill": {
+          "enemies": [["Dessgeega", "Dessgeega", "Dessgeega"]],
+          "explicitWeapons": ["Super"]
+        }},
+        {"heatFrames": 420}
+      ],
+      "clearsObstacles": ["D"]
+    },
+    {
+      "id": 81,
+      "link": [7, 4],
+      "name": "Strong Beam Kill",
+      "requires": [
+        "Plasma",
+        {"or": [
+          "Ice",
+          "Wave"
+        ]},
+        {"heatFrames": 480}
+      ],
+      "clearsObstacles": ["D"]
+    },
+    {
+      "id": 82,
+      "link": [7, 4],
+      "name": "Weapon Kill (Moderate)",
+      "requires": [
+        "canDodgeWhileShooting",
+        {"enemyKill": {
+          "enemies": [["Dessgeega"], ["Dessgeega"], ["Dessgeega"]],
+          "explicitWeapons": ["Missile", "PowerBomb", "Plasma", "Charge+Ice+Wave+Spazer"]
+        }},
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 2}},
+        {"heatFrames": 1020}
+      ],
+      "clearsObstacles": ["D"]
+    },
+    {
+      "id": 83,
+      "link": [7, 6],
+      "name": "Speed Kill",
+      "requires": [
+        {"obstaclesCleared": ["D"]},
+        {"getBlueSpeed": {"usedTiles": 20, "steepDownTiles": 4, "openEnd": 1}},
+        "canCarefulJump",
+        {"heatFrames": 200}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 84,
+      "link": [7, 6],
+      "name": "Temporary Blue",
+      "requires": [
+        {"obstaclesCleared": ["C", "D"]},
+        {"getBlueSpeed": {"usedTiles": 20, "steepDownTiles": 4, "openEnd": 1}},
+        "canCarefulJump",
+        {"tech": "canChainTemporaryBlue"},
+        {"or": [
+          "canTrickyJump",
+          {"noFlashSuit": {}}
+        ]},
+        {"heatFrames": 240}
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "devNote": "It is easier to chainTemporaryBlue than to unmorph at the correct timing."
+    },
+    {
+      "id": 85,
+      "link": [7, 7],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: This can have a side effect of damaging the Dessgeega or breaking the bomb blocks, neither of which are modeled."
+      ]
+    },
+    {
+      "id": 86,
+      "link": [7, 7],
+      "name": "Shinespark Kill",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 17, "openEnd": 1}},
+        {"enemyDamage": {"enemy": "Dessgeega", "type": "contact", "hits": 1}},
+        "canUseIFrames",
+        "canMidairShinespark",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 40}},
+        {"heatFrames": 310}
+      ],
+      "clearsObstacles": ["D"],
+      "note": [
+        "Use i-frames from the first Dessgeega to run through the remaining enemies and store a shinespark.",
+        "It helps to run towards the first hopper to take damage and then not stutter.",
+        "Mid-air spark to kill all three at once."
+      ]
+    },
+    {
+      "id": 87,
+      "link": [7, 8],
+      "name": "Avoid Hibashi",
+      "requires": [
+        "h_heatResistant",
+        "h_bombThings",
+        {"or": [
+          "h_usePowerBomb",
+          {"and": [
+            "h_useMorphBombs",
+            "canInsaneJump"
+          ]},
+          {"and": [
+            "h_useMorphBombs",
+            {"obstaclesCleared": ["E"]}
+          ]}
+        ]},
+        {"heatFrames": 350}
+      ],
+      "clearsObstacles": ["E"],
+      "note": [
+        "The hibashi hit can be avoided by waiting for the shutter to go up.",
+        "That requires the use of one PB and more time than is worth unless heat proof."
+      ],
+      "devNote": "Note that if using PBs, two is required. One each from h_bombThings, h_usePowerBomb."
+    },
+    {
+      "id": 88,
+      "link": [7, 8],
+      "name": "Bombs",
+      "requires": [
+        "h_useMorphBombs",
+        {"heatFrames": 350},
+        {"hibashiHits": 1}
+      ]
+    },
+    {
+      "id": 89,
+      "link": [7, 8],
+      "name": "Power Bombs",
+      "requires": [
+        "h_navigateHeatRooms",
+        "Morph",
+        {"ammo": {"type": "PowerBomb", "count": 2}},
+        {"heatFrames": 350},
+        {"hibashiHits": 1}
+      ],
+      "clearsObstacles": ["E"]
+    },
+    {
+      "id": 90,
+      "link": [8, 2],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 60}
+      ]
+    },
+    {
+      "id": 91,
+      "link": [8, 2],
+      "name": "Leave With Door Frame Below",
+      "requires": [
+        {"heatFrames": 60}
+      ],
+      "exitCondition": {
+        "leaveWithDoorFrameBelow": {
+          "height": 2
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ]
+    },
+    {
+      "id": 92,
+      "link": [8, 2],
+      "name": "Leave With Platform Below",
+      "requires": [
+        {"heatFrames": 60}
+      ],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 6,
+          "leftPosition": -1.5,
+          "rightPosition": 1.5
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ]
+    },
+    {
+      "id": 93,
+      "link": [8, 7],
+      "name": "Morph Bombs",
+      "requires": [
+        {"or": [
+          "canCarefulJump",
+          {"hibashiHits": 1}
+        ]},
+        "h_useMorphBombs",
+        {"heatFrames": 300}
+      ]
+    },
+    {
+      "id": 94,
+      "link": [8, 7],
+      "name": "Power Bombs",
+      "requires": [
+        {"or": [
+          "canCarefulJump",
+          {"hibashiHits": 1}
+        ]},
+        "Morph",
+        {"ammo": {"type": "PowerBomb", "count": 2}},
+        {"or": [
+          {"heatFrames": 270},
+          {"and": [
+            "canPrepareForNextRoom",
+            {"heatFrames": 240}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["E"]
+    },
+    {
+      "id": 95,
+      "link": [8, 8],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "clearsObstacles": ["E"],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: This can have a side effect of damaging the Bomb block which is not modelled."
+      ]
+    },
+    {
+      "id": 104,
+      "link": [8, 8],
+      "name": "Raise Shutter",
+      "requires": [
+        "canTrickyJump",
+        {"or": [
+          {"and": [
+            "canInsaneJump",
+            {"heatFrames": 60}
+          ]},
+          {"ammo": {"type": "Super", "count": 1}},
+          {"ammo": {"type": "Missile", "count": 1}},
+          "Charge",
+          "Ice",
+          "Wave",
+          "Spazer",
+          "Plasma"
+        ]},
+        {"heatFrames": 40}
+      ],
+      "clearsObstacles": ["E"],
+      "note": [
+        "Raise the shutter by shooting a missile or upgraded beam at it.",
+        "Stand on the right side of lowest safe tile and shoot diagonally down while crouched if using missiles, or standing otherwise.",
+        "A basic beam shot will work if fired vertically down, onto the side of the spike."
+      ],
+      "devNote": ["Power Bombs is handled by another strat."]
+    },
+    {
+      "id": 98,
+      "link": [9, 1],
+      "name": "G-Mode, Collect the Item and Go Down Blind",
+      "requires": [
+        "h_heatedGMode",
+        "canOffScreenMovement",
+        "h_usePowerBomb",
+        {"or": [
+          "canTrickyGMode",
+          {"spikeHits": 1}
+        ]},
+        {"heatFrames": 550}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Exit G-mode while on the item pedestal, while off-camera, then return to the right through the Dessgeega that can't damage Samus off-screen.",
+        "Use a Power Bomb and fall down the spiky shaft and get to the door. Avoiding a spike hit is possible but tricky."
+      ],
+      "devNote": "FIXME: Strats could be added on remote acquire strats that use the item for the escape, such as Morph, explosives, or an E-Tank."
+    },
+    {
+      "id": 99,
+      "link": [9, 1],
+      "name": "G-Mode, Go Down Blind",
+      "requires": [
+        "h_heatedGMode",
+        "canOffScreenMovement",
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphMovement",
+          {"heatFrames": 100}
+        ]},
+        {"or": [
+          "canTrickyGMode",
+          {"spikeHits": 1}
+        ]},
+        {"heatFrames": 350}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "With a way to move while morphed, use a Power Bomb while on the Power Bomb blocks and quickly exit G-mode.",
+        "Otherwise, do so to the right of the Power Bomb blocks, quickly exit G-mode, and jump up and over to fall through the blocks.",
+        "Fall down the spiky shaft and get to the door. Avoiding a spike hit is possible but tricky."
+      ]
+    },
+    {
+      "id": 100,
+      "link": [9, 2],
+      "name": "G-Mode, Collect the Item and Return to the Right",
+      "requires": [
+        "h_heatedGMode",
+        "Morph",
+        {"or": [
+          {"and": [
+            "h_useMorphBombs",
+            {"heatFrames": 1000}
+          ]},
+          {"and": [
+            {"heatFrames": 850},
+            {"ammo": {"type": "PowerBomb", "count": 3}}
+          ]}
+        ]},
+        {"or": [
+          "canOffScreenMovement",
+          {"heatFrames": 200}
+        ]},
+        {"or": [
+          {"and": [
+            "canInsaneJump",
+            {"heatFrames": 60}
+          ]},
+          {"obstaclesCleared": ["E"]},
+          "h_useSpringBall",
+          {"hibashiHits": 1},
+          {"ammo": {"type": "PowerBomb", "count": 1}}
+        ]}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Exit G-mode while on the item pedestal, while off-camera, then return to the right through the Dessgeegas that can't damage Samus off-screen.",
+        "It is possible to use a Power Bomb and quickly exiting G-mode to have the bomb block broken on exit,",
+        "but this will also partially break the Power Bomb blocks and could make exit traversal less straightforward."
+      ],
+      "devNote": "FIXME: The Hibashi doesn't need a 4th PB in the power bomb case."
+    },
+    {
+      "id": 105,
+      "link": [9, 2],
+      "name": "G-Mode, Blind Temporary Blue and Speedball",
+      "requires": [
+        "canGMode",
+        "h_heatProof",
+        "canOffScreenMovement",
+        {"getBlueSpeed": {"usedTiles": 20, "steepDownTiles": 4, "openEnd": 1}},
+        "canChainTemporaryBlue",
+        "canTrickyJump",
+        "canSpeedball",
+        {"or": [
+          "canInsaneJump",
+          "h_useSpringBall",
+          {"ammo": {"type": "PowerBomb", "count": 1}},
+          {"hibashiHits": 1},
+          {"obstaclesCleared": ["E"]}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "collectsItems": [3],
+      "note": [
+        "Use Speedbooster to break the bomb block near the item to collect it and then again to speedball back to the door."
+      ]
+    },
+    {
+      "id": 101,
+      "link": [9, 7],
+      "name": "G-Mode, Collect the Item and Reset Camera in the Right Morph Tunnel",
+      "requires": [
+        "h_heatedGMode",
+        "Morph",
+        {"or": [
+          {"and": [
+            "h_useMorphBombs",
+            {"heatFrames": 800}
+          ]},
+          {"and": [
+            {"heatFrames": 700},
+            {"ammo": {"type": "PowerBomb", "count": 2}}
+          ]}
+        ]},
+        {"or": [
+          "canOffScreenMovement",
+          {"heatFrames": 200}
+        ]}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Exit G-mode while on the item pedestal, while off-camera, then return to the right through the Dessgeegas that can't damage Samus off-screen.",
+        "It is possible to use a Power Bomb and quickly exiting G-mode to have the bomb block broken on exit,",
+        "but this will also partially break the Power Bomb blocks and could make exit traversal less straightforward."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Statue Clip Damage Boost",
+      "note": [
+        "Break the Power Bomb statue leaving 1 row of blocks.",
+        "Partially clip between the Power Bomb blocks and the solid tiles beneath.",
+        "Wait for a Dessgeega to jump over head and jump into it.",
+        "The left ceiling Dessgeega works better.",
+        "Damage boost to the right and use i-frames to run through all of the enemies."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "HiJumpless Statue Clip Damage Boost",
+      "note": [
+        "Break the Power Bomb statue leaving 1 row of blocks.",
+        "Partially clip between the Power Bomb blocks and the solid tiles beneath.",
+        "Wait for a Dessgeega to jump over head and jump into it.",
+        "The left ceiling Dessgeega works better.",
+        "Aim down after jumping in order to fully boost over the solid statue.",
+        "Damage boost to the right and use i-frames to run through all of the enemies."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Avoid Dessgeegas by Rolling",
+      "note": [
+        "Roll under the Dessgeegas until all three move off camera and stop chasing Samus.",
+        "Roll directly from the Morph tunnel, past the first Dessgeega.",
+        "Stop and let it jump left of Samus, then move it off camera on the next jump.",
+        "Back away from the Left ground hopper then roll under it.",
+        "Lastly, manipulate the ceiling hopper off camera if it has followed Samus this far."
+      ]
+    }
+  ],
+  "nextStratId": 106,
+  "nextNotableId": 4
+}

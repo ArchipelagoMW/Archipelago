@@ -1,0 +1,297 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/vg-json-data/sm-json-data/master/schema/m3-enemies.schema.json",
+
+  "definitions": {
+    "enemyDrops": {
+      "type": "object",
+      "title": "Enemy Drop Rates",
+      "description": "Describes the drop table for the enemy. All individual values are out of 102.",
+      "required": [
+        "noDrop",
+        "smallEnergy",
+        "bigEnergy",
+        "missile",
+        "super",
+        "powerBomb"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "noDrop": {
+          "type": "number",
+          "title": "No Drop Rate",
+          "description": "Odds of dropping nothing (out of 102)",
+          "default": 0.0,
+          "examples": [
+            0.0
+          ]
+        },
+        "smallEnergy": {
+          "type": "number",
+          "title": "Small Energy Drop Rate",
+          "description": "Odds of dropping small energy (out of 102)",
+          "default": 0.0,
+          "examples": [
+            0.0
+          ]
+        },
+        "bigEnergy": {
+          "type": "number",
+          "title": "Big Energy Drop Rate",
+          "description": "Odds of dropping big energy (out of 102)",
+          "default": 0.0,
+          "examples": [
+            0.0
+          ]
+        },
+        "missile": {
+          "type": "number",
+          "title": "Missile Drop Rate",
+          "description": "Odds of dropping missiles (out of 102)",
+          "default": 0.0,
+          "examples": [
+            0.0
+          ]
+        },
+        "super": {
+          "type": "number",
+          "title": "Super Missile Drop Rate",
+          "description": "Odds of dropping super missiles (out of 102)",
+          "default": 0.0,
+          "examples": [
+            0.0
+          ]
+        },
+        "powerBomb": {
+          "type": "number",
+          "title": "Power Bomb Drop Rate",
+          "description": "Odds of dropping power bombs (out of 102)",
+          "default": 0.0,
+          "examples": [
+            0.0
+          ]
+        }
+      }
+    }
+  },
+
+  "type": "object",
+  "title": "Super Metroid Enemy Schema",
+  "properties": {
+    "enemies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "title": "Enemy Object",
+        "description": "An object that describes one enemy in Super Metroid",
+        "required": [
+          "id",
+          "name",
+          "attacks",
+          "hp",
+          "amountOfDrops",
+          "drops",
+          "dims",
+          "freezable",
+          "grapplable",
+          "invul",
+          "damageMultipliers"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Enemy ID",
+            "description": "Identifier for this enemy, unique across the entire game",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "name": {
+            "type": "string",
+            "title": "Enemy Name",
+            "description": "The enemy's name. Should be as it appears in the SuperMetroid.run wiki, except for enemies that are not present there. Intended to be unique and used as a recognizable ID.",
+            "default": "",
+            "examples": [
+              "Beetom"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "attacks": {
+            "type": "array",
+            "title": "Enemy Attacks",
+            "description": "An array of attacks the enemy can do",
+            "items": {
+              "type": "object",
+              "title": "Enemy Attack",
+              "description": "An attack the enemy can do",
+              "required": [
+                "name",
+                "baseDamage"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Attack Name",
+                  "default": "contact",
+                  "description": "The name of the attack",
+                  "pattern": "^(.*)$"
+                },
+                "baseDamage": {
+                  "type": "integer",
+                  "default": 0,
+                  "title": "Base Damage",
+                  "description": "The base damage (with only power suit) the attack does to Samus"
+                },
+                "affectedByVaria": {
+                  "type": "boolean",
+                  "title": "Affected by Varia",
+                  "description": "Indicates whether Varia applies a damage reduction on this attack. If missing, should be assumed to be true."
+                },
+                "affectedByGravity": {
+                  "type": "boolean",
+                  "title": "Affected by Gravity",
+                  "description": "Indicates whether Gravity Suit applies a damage reduction on this attack. If missing, should be assumed to be true."
+                }
+              }
+            }
+          },
+          "hp": {
+            "type": "integer",
+            "title": "Enemy HP",
+            "description": "Amount of health points that the Enemy has",
+            "default": 0,
+            "examples": [
+              50
+            ]
+          },
+          "amountOfDrops": {
+            "type": "integer",
+            "title": "Amount of Drops",
+            "description": "Amount of drops the enemy leaves behind",
+            "default": 1,
+            "examples": [
+              16
+            ]
+          },
+          "note": {
+            "$ref" : "m3-note.schema.json#/definitions/note"
+          },
+          "devNote": {
+            "$ref" : "m3-note.schema.json#/definitions/devNote"
+          },
+          "drops": {
+            "$ref" : "#/definitions/enemyDrops",
+            "title": "Enemy Drops",
+            "description": "Describes the drop table for the enemy. All individual values are out of 102."
+          },
+          "farmableDrops": {
+            "$ref" : "#/definitions/enemyDrops",
+            "title": "Farmable Particle Drop Rates",
+            "description": "Describes the drop table for farmable particles spawned by the enemy. All individual values are out of 102."
+          },
+          "dims": {
+            "type": "object",
+            "title": "Enemy Sprite Dimensions",
+            "description": "Dimensions in pixels",
+            "required": [
+              "w",
+              "h"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "w": {
+                "type": "integer",
+                "title": "Width",
+                "description": "Width of the enemy (in pixels)",
+                "default": 0,
+                "examples": [
+                  8
+                ]
+              },
+              "h": {
+                "type": "integer",
+                "title": "Height",
+                "description": "Height of the enemy (in pixels)",
+                "default": 0,
+                "examples": [
+                  8
+                ]
+              },
+              "note": {
+                "$ref" : "m3-note.schema.json#/definitions/note"
+              },
+              "devNote": {
+                "$ref" : "m3-note.schema.json#/definitions/devNote"
+              }
+            }
+          },
+          "freezable": {
+            "type": "boolean",
+            "title": "Freezable?",
+            "description": "Can this Enemy be frozen by Ice Beam?",
+            "default": false,
+            "examples": [
+              false
+            ]
+          },
+          "grapplable": {
+            "type": "boolean",
+            "title": "Grapplable?",
+            "description": "Can Samus latch on to this enemy using Grapple beam?",
+            "default": false
+          },
+          "invul": {
+            "type": [ "array" ],
+            "title": "Invulnerability",
+            "description": "A list containing weapons and weapon categories that can't damage this enemy",
+            "default": [],
+            "items": {
+              "type": "string",
+              "pattern": "^(.*)$"
+            }
+          },
+          "damageMultipliers": {
+            "type": "array",
+            "title": "Damage Multipliers",
+            "description": "A list containing damage multipliers for weapons and weapon categories",
+            "items": {
+              "type": "object",
+              "title": "Enemy Damage Multiplier",
+              "description": "A damage multiplier (either a vulnerability or a resistance) for an enemy",
+              "required": [
+                "weapon",
+                "value"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "weapon": {
+                  "title": "Multiplier Weapon",
+                  "description": "The name of the weapon or category for which this damage multiplier applies.",
+                  "type": "string"
+                },
+                "value": {
+                  "title": "Multiplier Value",
+                  "description": "The damage multiplier that is applied to an applicable weapon's base damage.",
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "areas": {
+            "type": "array",
+            "title": "Enemy Areas",
+            "description": "The list of areas where the enemy naturally appears",
+            "items": {
+              "title": "Enemy Area",
+              "description": "An area where the enemy naturally appears",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

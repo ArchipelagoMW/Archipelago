@@ -1,0 +1,373 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 46,
+  "name": "Brinstar Reserve Tank Room",
+  "area": "Brinstar",
+  "subarea": "Green",
+  "roomAddress": "0x79C07",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018d66",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Chozo Item",
+      "nodeType": "item",
+      "nodeSubType": "chozo",
+      "nodeItem": "ReserveTank",
+      "nodeAddress": "0x7852C",
+      "mapTileMask": [
+        [2, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Middle Visible Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78538",
+      "mapTileMask": [
+        [1, 2]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Right Hidden Item",
+      "nodeType": "item",
+      "nodeSubType": "hidden",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78532",
+      "mapTileMask": [
+        [1, 2]
+      ]
+    }
+  ],
+  "obstacles": [],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 2},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "G-mode Morph Remote Acquire",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "h_artificialMorphIBJ",
+            "canOffScreenMovement"
+          ]}
+        ]}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Blindly grab the item before PLMs are overloaded, then return and exit G-mode to remotely acquire the item.",
+        "Starting a completely blind IBJ can be somewhat tricky, even if for such a short distance."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 3],
+      "name": "G-mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true,
+      "devNote": "This is only useful if the item is Morph."
+    },
+    {
+      "id": 6,
+      "link": [1, 4],
+      "name": "Speedball Temporary Blue (Come in Blue Spinning)",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "maxExtraRunSpeed": "$3.0",
+          "unusableTiles": 4
+        }
+      },
+      "requires": [
+        "canSpeedball",
+        "canTrickyJump",
+        {"or": [
+          "canTemporaryBlue",
+          "h_useSpringBall"
+        ]}
+      ],
+      "collectsItems": [3],
+      "note": [
+        "Speedball through the morph tunnel and use it to break the bomb blocks in front of the hidden Missile location.",
+        "This can be done using Spring Ball, or by unmorphing and using temporary blue to bounce through the bomb blocks."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 4],
+      "name": "Speedball Temporary Blue (Come in Getting Blue Speed)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "maxExtraRunSpeed": "$1.6"
+        }
+      },
+      "requires": [
+        "canSpeedball",
+        "canTrickyJump",
+        {"or": [
+          "canTemporaryBlue",
+          "h_useSpringBall"
+        ]}
+      ],
+      "collectsItems": [3],
+      "note": [
+        "Speedball through the morph tunnel and use it to break the bomb blocks in front of the hidden Missile location.",
+        "This can be done using Spring Ball, or by unmorphing and using temporary blue to bounce through the bomb blocks."
+      ],
+      "devNote": [
+        "FIXME: This can be done at higher speeds, e.g. up to at least $2.4, or using a little more in-room runway, but is more difficult.",
+        "Higher speeds probably wouldn't serve a purpose worth modeling; but extra runway length could potentially matter."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 4],
+      "name": "Temporary Blue Spring Ball Bounce (Come in Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        "canChainTemporaryBlue",
+        "canSpringBallBounce",
+        "canSpringFling"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Gain temporary blue at the end of the runway.",
+        "Then spring ball bounce through the tunnel.",
+        "Press pause while exiting the tunnel.",
+        "If Samus bounced far enough right, disable spring ball (a 'spring fling') to make it directly onto the item pedestal, chaining temporary blue from there.",
+        "Otherwise, unpause without disabling spring ball, and chain temporary blue by landing on the ground."
+      ],
+      "devNote": [
+        "Technically, it is always seems possible to reach the item pedestal with a spring fling, but without a bounce far to the right it requires an earlier pause press (before exiting the tunnel);",
+        "this can be hard to prepare for since the earlier pause won't work if the bounce happens to be further right."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 4],
+      "name": "Temporary Blue Spring Ball Bounce (Come in With Temporary Blue)",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "canTrickyJump",
+        "canChainTemporaryBlue",
+        "canSpringBallBounce",
+        "canSpringFling"
+      ],
+      "collectsItems": [3],
+      "note": [
+        "Gain temporary blue at the end of the runway.",
+        "Then spring ball bounce through the tunnel.",
+        "Press pause while exiting the tunnel.",
+        "If Samus bounced far enough right, disable spring ball (a 'spring fling') to make it directly onto the item pedestal, chaining temporary blue from there.",
+        "Otherwise, unpause without disabling spring ball, and chain temporary blue by landing on the ground."
+      ],
+      "devNote": [
+        "Technically, it is always seems possible to reach the item pedestal with a spring fling, but without a bounce far to the right it requires an earlier pause press (before exiting the tunnel);",
+        "this can be hard to prepare for since the earlier pause won't work if the bounce happens to be further right."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 4],
+      "name": "Blue Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled",
+          "maxExtraRunSpeed": "$2.4"
+        }
+      },
+      "requires": [
+        "canInsaneJump"
+      ],
+      "collectsItems": [3],
+      "note": [
+        "Enter the room with a precisely positioned blue Spring Ball bounce.",
+        "Enter the tunnel and bounce all the way through.",
+        "Use a controlled bounce to break the bomb blocks."
+      ],
+      "devNote": [
+        "Technically, it is always seems possible to reach the item pedestal with a spring fling, but without a bounce far to the right it requires an earlier pause press (before exiting the tunnel);",
+        "this can be hard to prepare for since the earlier pause won't work if the bounce happens to be further right."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 12,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        "h_bombThings"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [3, 4],
+      "name": "Screw X-Ray Standup",
+      "requires": [
+        "Morph",
+        "canXRayStandUp",
+        "ScrewAttack"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": "Use Screw Attack to break the first block, roll in against the second block, X-Ray standup, then spin jump right to break the second block."
+    },
+    {
+      "id": 16,
+      "link": [3, 4],
+      "name": "Screw Attack, Tunnel Crawl",
+      "requires": [
+        "Morph",
+        "ScrewAttack",
+        "canTunnelCrawl"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Tunnel crawl with Screw Attack to break the bomb blocks.",
+        "With a very precise jump and aim down, it is possible to jump deep enough into where the first block was in order to only require a turnaround jump, but it's not easier."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 19,
+  "nextNotableId": 2
+}

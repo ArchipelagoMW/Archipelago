@@ -1,0 +1,506 @@
+{
+  "$schema": "../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "StoryMarker",
+      "description": "Story Marker connection between Landing Site and Ceres Elevator Room",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Ceres Station",
+          "subarea": "Ceres Station",
+          "roomid": 1,
+          "roomName": "Ceres Elevator Room",
+          "nodeid": 1,
+          "nodeName": "Elevator to Zebes",
+          "position": "bottom",
+          "note": "No Return"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 8,
+          "roomName": "Landing Site",
+          "nodeid": 5,
+          "nodeName": "Ship",
+          "position": "top"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Tourian Escape Room 4 and Climb",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 11,
+          "roomName": "Climb",
+          "nodeid": 2,
+          "nodeName": "Climb Bottom Left Door (from Tourian Escape)",
+          "position": "right"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 242,
+          "roomName": "Tourian Escape Room 4",
+          "nodeid": 2,
+          "nodeName": "Tourian Escape Room 4 Right Door (to Climb)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "Elevator",
+      "description": "Elevator connection between Green Brinstar Main Shaft and Green Brinstar Elevator Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 23,
+          "roomName": "Green Brinstar Elevator Room",
+          "nodeid": 2,
+          "nodeName": "Elevator to Green Brinstar",
+          "position": "top"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Green",
+          "roomid": 44,
+          "roomName": "Green Brinstar Main Shaft / Etecoon Room",
+          "nodeid": 1,
+          "nodeName": "Green Brinstar Elevator to Crateria",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "Elevator",
+      "description": "Elevator connection between Caterpillar Room and Red Brinstar Elevator Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 25,
+          "roomName": "Red Brinstar Elevator Room",
+          "nodeid": 2,
+          "nodeName": "Elevator to Red Brinstar",
+          "position": "top"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 75,
+          "roomName": "Caterpillar Room",
+          "nodeid": 6,
+          "nodeName": "Red Brinstar Elevator to Crateria",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "Elevator",
+      "description": "Elevator connection between Tourian First Room and Statues Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 27,
+          "roomName": "Statues Room",
+          "nodeid": 2,
+          "nodeName": "Elevator to Tourian",
+          "position": "top"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 224,
+          "roomName": "Tourian First Room",
+          "nodeid": 1,
+          "nodeName": "Tourian Elevator to Crateria",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Wrecked Ship Entrance and West Ocean",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 32,
+          "roomName": "West Ocean",
+          "nodeid": 5,
+          "nodeName": "West Ocean Bottom Right Door (to Wrecked Ship Entrance)",
+          "position": "left"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 154,
+          "roomName": "Wrecked Ship Entrance",
+          "nodeid": 1,
+          "nodeName": "Wrecked Ship Entrance Left Door (to West Ocean)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between West Ocean Bridge and Wrecked Ship Entrance",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 32,
+          "roomName": "West Ocean",
+          "nodeid": 8,
+          "nodeName": "Bridge Right Door (Same Connection as Lower Section - Bottom Right Door)",
+          "position": "left"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 154,
+          "roomName": "Wrecked Ship Entrance",
+          "nodeid": 1,
+          "nodeName": "Wrecked Ship Entrance Left Door (to West Ocean)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Attic and West Ocean",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 32,
+          "roomName": "West Ocean",
+          "nodeid": 2,
+          "nodeName": "West Ocean Top Right Door (to Attic)",
+          "position": "left"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 160,
+          "roomName": "Attic",
+          "nodeid": 1,
+          "nodeName": "Attic Left Door (to West Ocean)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Gravity Suit Room and West Ocean",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 32,
+          "roomName": "West Ocean",
+          "nodeid": 4,
+          "nodeName": "West Ocean Middle Right Door (from Gravity Suit Room)",
+          "position": "left"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 162,
+          "roomName": "Gravity Suit Room",
+          "nodeid": 1,
+          "nodeName": "Gravity Suit Room Left Door (to West Ocean)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Electric Death Room and East Ocean",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 34,
+          "roomName": "East Ocean",
+          "nodeid": 1,
+          "nodeName": "East Ocean Left Door (to Electric Death)",
+          "position": "right"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 166,
+          "roomName": "Electric Death Room",
+          "nodeid": 2,
+          "nodeName": "Electric Death Room Right Door (to East Ocean)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "Elevator",
+      "description": "Elevator connection between Maridia Elevator Room and Forgotten Highway Elevator",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 37,
+          "roomName": "Forgotten Highway Elevator",
+          "nodeid": 2,
+          "nodeName": "Elevator to Maridia",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 215,
+          "roomName": "Maridia Elevator Room",
+          "nodeid": 3,
+          "nodeName": "Maridia Elevator to Crateria",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "Elevator",
+      "description": "Elevator connection between Blue Brinstar Elevator Room and Morph Ball Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Blue",
+          "roomid": 38,
+          "roomName": "Morph Ball Room",
+          "nodeid": 2,
+          "nodeName": "Blue Brinstar Elevator to Crateria",
+          "position": "bottom"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 306,
+          "roomName": "Blue Brinstar Elevator Room",
+          "nodeid": 2,
+          "nodeName": "Elevator to Blue Brinstar",
+          "position": "top"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between West Glass Tube Tunnel and Below Spazer",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 70,
+          "roomName": "Below Spazer",
+          "nodeid": 2,
+          "nodeName": "Below Spazer Bottom Right Door (to West Tunnel)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 169,
+          "roomName": "West Glass Tube Tunnel",
+          "nodeid": 1,
+          "nodeName": "West Tunnel Left Door (to Below Spazer)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Boyon Gate Hall and Warehouse Entrance",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 200,
+          "roomName": "Boyon Gate Hall",
+          "nodeid": 2,
+          "nodeName": "Boyon Gate Hall Bottom Right Door (to Warehouse Entrance)",
+          "position": "left"
+        },
+        {
+          "area": "Brinstar",
+          "subarea": "Kraid",
+          "roomid": 78,
+          "roomName": "Warehouse Entrance",
+          "nodeid": 1,
+          "nodeName": "Warehouse Entrance Left Door (to Boyon Gate Hall)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Caterpillar Room and Red Fish Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Red",
+          "roomid": 75,
+          "roomName": "Caterpillar Room",
+          "nodeid": 5,
+          "nodeName": "Caterpillar Room Top Right Door (to Red Fish Room)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Outer",
+          "roomid": 177,
+          "roomName": "Red Fish Room",
+          "nodeid": 1,
+          "nodeName": "Red Fish Room Left Door (to Caterpillar Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "Elevator",
+      "description": "Elevator connection between Business Center and Warehouse Entrance",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Brinstar",
+          "subarea": "Kraid",
+          "roomid": 78,
+          "roomName": "Warehouse Entrance",
+          "nodeid": 2,
+          "nodeName": "Elevator to Business Center",
+          "position": "top"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "West",
+          "roomid": 86,
+          "roomName": "Business Center",
+          "nodeid": 7,
+          "nodeName": "Norfair Elevator to Brinstar",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Three Musketeers' Room and Single Chamber",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Norfair",
+          "subarea": "East",
+          "roomid": 103,
+          "roomName": "Single Chamber",
+          "nodeid": 5,
+          "nodeName": "Single Chamber Top Right Door (to Three Musketeers)",
+          "position": "left"
+        },
+        {
+          "area": "Lower Norfair",
+          "subarea": "East",
+          "roomid": 148,
+          "roomName": "Three Musketeers' Room",
+          "nodeid": 1,
+          "nodeName": "Three Musketeers Left Door (to Single Chamber)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Bowling Alley and Homing Geemer Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 161,
+          "roomName": "Bowling Alley",
+          "nodeid": 2,
+          "nodeName": "Bowling Alley Middle Left Door (to West Ocean Lower)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 313,
+          "roomName": "Homing Geemer Room",
+          "nodeid": 2,
+          "nodeName": "Homing Geemer Room Right Door (to Bowling Alley)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between West Ocean and Bowling Alley (top)",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "East",
+          "roomid": 32,
+          "roomName": "West Ocean",
+          "nodeid": 3,
+          "nodeName": "West Ocean Middle Right Door (to Bowling Alley Top)",
+          "position": "left"
+        },
+        {
+          "area": "Wrecked Ship",
+          "subarea": "Main",
+          "roomid": 161,
+          "roomName": "Bowling Alley",
+          "nodeid": 1,
+          "nodeName": "Bowling Alley Top Left Door (to West Ocean Upper)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "Elevator",
+      "description": "Elevator connection between Main Hall and Lower Norfair Elevator",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Lower Norfair",
+          "subarea": "East",
+          "roomid": 132,
+          "roomName": "Main Hall",
+          "nodeid": 4,
+          "nodeName": "Lower Norfair Elevator to Norfair",
+          "position": "bottom"
+        },
+        {
+          "area": "Norfair",
+          "subarea": "East",
+          "roomid": 309,
+          "roomName": "Lower Norfair Elevator",
+          "nodeid": 4,
+          "nodeName": "Elevator to Lower Norfair",
+          "position": "top"
+        }
+      ]
+    }
+  ]
+}

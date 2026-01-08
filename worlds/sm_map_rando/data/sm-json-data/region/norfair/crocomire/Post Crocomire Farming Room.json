@@ -1,0 +1,1609 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 123,
+  "name": "Post Crocomire Farming Room",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "Crocomire",
+  "roomAddress": "0x7AA82",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "red",
+      "nodeAddress": "0x001943e",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001944a",
+      "doorOrientation": "down",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019456",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1],
+        [1, 2]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019432",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "G-Mode Morph Junction (Bottom)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1],
+        [2, 2]
+      ],
+      "note": "Represents being at the bottom of the room with G-Mode Morph (artificial morph)"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Post Crocomire Farming Room Ripper 2",
+      "enemyName": "Ripper 2 (green)",
+      "quantity": 1,
+      "homeNodes": [4]
+    },
+    {
+      "id": "e2",
+      "groupName": "Post Crocomire Farming Room Gamets",
+      "enemyName": "Gamet",
+      "quantity": 5,
+      "homeNodes": [3]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 1},
+        {"id": 4}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Gamet",
+      "requires": [
+        "SpaceJump",
+        {"or": [
+          "h_trickyFrozenEnemyRunway",
+          {"and": [
+            "h_frozenEnemyRunway",
+            "Morph"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "Lure the Gamets up; it may be helpful to freeze them on the ascent to prevent them from separating and moving horizontally.",
+        "Freeze a Gamet at the correct height, and then use it as a platform to reach the door.",
+        "Positioning is much easier with Morph; simply morph on any of the stairs before they start separating.",
+        "Finally, freeze a Gamet while there is a half-tile gap between it and the runway in order to extend it as much as possible."
+      ]
+    },
+    {
+      "id": 80,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (HiJump, Tricky Dash Jump, Wall Jump)",
+      "requires": [
+        "HiJump",
+        "h_runOverRespawningEnemies",
+        {"or": [
+          {"canShineCharge": {
+            "usedTiles": 16,
+            "gentleUpTiles": 2,
+            "gentleDownTiles": 4,
+            "openEnd": 1
+          }},
+          {"and": [
+            {"doorUnlockedAtNode": 3},
+            {"canShineCharge": {
+              "usedTiles": 17,
+              "gentleUpTiles": 2,
+              "gentleDownTiles": 4,
+              "openEnd": 1
+            }}
+          ]}
+        ]},
+        "canShinechargeMovementTricky",
+        "canTrickyDashJump",
+        "canWalljump",
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"nodeId": 3, "types": ["ammo"], "requires": []}],
+      "note": [
+        "Leave Gamet drops uncollected to prevent them from respawning.",
+        "Run right-to-left to gain a shinecharge, then use between 1 and 2 tiles of remaining runway to gain speed to reach the top-left with a wall jump."
+      ]
+    },
+    {
+      "id": 81,
+      "link": [1, 1],
+      "name": "Leave With Spark (HiJump Speedy Jump, Bottom Position)",
+      "requires": [
+        "HiJump",
+        "h_runOverRespawningEnemies",
+        {"canShineCharge": {
+          "usedTiles": 18,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4,
+          "openEnd": 1
+        }},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 6, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "note": [
+        "Leave Gamet drops uncollected to prevent them from respawning.",
+        "Run left-to-right to gain a shinecharge, then run back to the left to gain speed to reach the top-left."
+      ]
+    },
+    {
+      "id": 82,
+      "link": [1, 1],
+      "name": "Leave With Spark (Tricky Dash Jump, Wall Jump, Bottom Position)",
+      "requires": [
+        "h_runOverRespawningEnemies",
+        {"canShineCharge": {
+          "usedTiles": 18,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4,
+          "openEnd": 1
+        }},
+        "canShinechargeMovementTricky",
+        "canTrickyDashJump",
+        "canWalljump",
+        {"shinespark": {"frames": 12, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "note": [
+        "Leave Gamet drops uncollected to prevent them from respawning.",
+        "Run left-to-right to gain a shinecharge, then run back to the left to gain speed to reach the top-left with a wall jump.",
+        "By leaving the right door closed and sliding into it, the frame window for the tricky dash jump will align with the last two possible frames to jump at the end of the runway."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Gamet",
+      "requires": [
+        "canComplexGMode",
+        "canTrickyUseFrozenEnemies",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Lure the Gamets to the top left door with Ice and Space Jump.",
+        "First lure the Gamets vertically using the Kamer platform and Ice, which is much easier with HiJump disabled.",
+        "Then freeze them again after they separate and are high enough to align with the door.",
+        "Space Jump to the left of them and refreeze them as they move to the left, then quickly climb back up to the top left before they thaw."
+      ]
+    },
+    {
+      "id": 88,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Gamet, Tricky Manipulation",
+      "requires": [
+        "canTrickyGMode",
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "Grapple",
+          {"and": [
+            "HiJump",
+            {"or": [
+              "SpeedBooster",
+              "canWalljump",
+              "canSpringBallJumpMidAir"
+            ]}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Lure the Gamets to the top left door with Ice and Grapple or HiJump.",
+        "First lure the Gamets vertically using the Kamer platform and Ice, which is much easier with HiJump disabled.",
+        "Then freeze them again after they separate and are high enough to align with the door.",
+        "With HiJump and another jump assist, jump to the left of the Gamets as they thaw and refreeze them a bit more to the left so that they will be on screen when Samus is on the left ledge.",
+        "It is possible with HiJump and Ice alone, but much trickier. Use the Gamets as a platform or perform a running jump from the Kamer platform to get up to the left door."
+      ],
+      "devNote": "This is possible with fewer requirements, but it is already pretty terrible."
+    },
+    {
+      "id": 8,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 5,
+      "link": [1, 4],
+      "name": "Come In With Spark",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 43, "excessFrames": 8}}
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 4],
+      "name": "Come In Shinecharged, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 45},
+        "canShinechargeMovement",
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 29, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 4],
+      "name": "Come In Shinecharged, Leave With Spark (Space Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 130},
+        "SpaceJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 6],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        {"shinespark": {"frames": 25, "excessFrames": 5}}
+      ],
+      "note": "Enter on the far right side of the doorway to reach the ledge above."
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"or": [
+          {"canShineCharge": {
+            "usedTiles": 18,
+            "gentleUpTiles": 2,
+            "gentleDownTiles": 4,
+            "openEnd": 1
+          }},
+          {"and": [
+            {"doorUnlockedAtNode": 3},
+            {"canShineCharge": {
+              "usedTiles": 19,
+              "gentleUpTiles": 2,
+              "gentleDownTiles": 4,
+              "openEnd": 1
+            }}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "left"
+        }
+      },
+      "unlocksDoors": [{"nodeId": 3, "types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Gamet Ice Moonfall Door Lock Skip",
+      "requires": [
+        "canEnemyStuckMoonfall",
+        "canFreeFallClip",
+        "canTrickyUseFrozenEnemies"
+      ],
+      "bypassesDoorShell": true,
+      "note": [
+        "Stand next to the Gamet farm on the left side.",
+        "Freeze the Gamets and destroy the second and third Gamet from the top.",
+        "Allow the first and fourth Gamets from the top to move left, and refreeze them above the door.",
+        "Perform a moonfall between them and aim down.",
+        "After gaining enough speed, move forward to fall down and clip past the door shell below.",
+        "Falling with too much speed can cause Samus to go out of bounds."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shinespark": {"frames": 15, "excessFrames": 15}}
+      ],
+      "note": "Enter on the left side of the doorway to reduce the amount of energy used.",
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 15,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 14,
+      "link": [2, 4],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 25}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 6],
+      "name": "Indirect G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphMovement"
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "It is possible to do this with direct G-mode, but it requires entering the room at the very edge of the transition, which isn't modeled.",
+        "it could be possible to get to wherever 6 is defined with Power Bombs, but there is nothing useful to do at 6, except maybe unlock door 3, which isn't modeled."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canLongIBJ",
+          "canJumpIntoIBJ"
+        ]}
+      ]
+    },
+    {
+      "id": 53,
+      "link": [3, 1],
+      "name": "Ripper Grapple",
+      "requires": [
+        "canUseEnemies",
+        "Grapple"
+      ],
+      "note": "Involves grappling off a Ripper 2."
+    },
+    {
+      "id": 54,
+      "link": [3, 1],
+      "name": "Use Frozen Enemies",
+      "requires": [
+        "canTrickyUseFrozenEnemies"
+      ],
+      "note": "Use the moving platform (Kamer) to elevate the Gamets and then freeze them."
+    },
+    {
+      "id": 55,
+      "link": [3, 1],
+      "name": "Hi Jump from Moving Platform",
+      "requires": [
+        "HiJump",
+        "canCarefulJump"
+      ],
+      "note": "Run on the moving platform (Kamer)."
+    },
+    {
+      "id": 56,
+      "link": [3, 1],
+      "name": "Speedy Jump",
+      "requires": [
+        "h_runOverRespawningEnemies",
+        "canTrickyDashJump",
+        "canWalljump"
+      ],
+      "note": [
+        "Doesn't require opening the bottom right door. Just using the available space and jumping late enough.",
+        "It does require killing the Gamets and leaving the drops there so they don't kill your momentum."
+      ]
+    },
+    {
+      "id": 57,
+      "link": [3, 1],
+      "name": "Tricky Spring Ball Jump from the Platform",
+      "requires": [
+        "canTrickyJump",
+        "canTrickySpringBallJump"
+      ],
+      "note": [
+        "Run on the the moving platform into a midair spring ball jump as far horizontal as possible.",
+        "Unmorph or spring fling to reset fall speed can help."
+      ]
+    },
+    {
+      "id": 58,
+      "link": [3, 1],
+      "name": "Shinespark",
+      "requires": [
+        "h_runOverRespawningEnemies",
+        {"or": [
+          {"canShineCharge": {
+            "usedTiles": 18,
+            "gentleUpTiles": 2,
+            "gentleDownTiles": 4,
+            "openEnd": 1
+          }},
+          {"and": [
+            {"doorUnlockedAtNode": 3},
+            {"canShineCharge": {
+              "usedTiles": 19,
+              "gentleUpTiles": 2,
+              "gentleDownTiles": 4,
+              "openEnd": 1
+            }}
+          ]}
+        ]},
+        {"shinespark": {"frames": 25, "excessFrames": 5}}
+      ],
+      "unlocksDoors": [{"nodeId": 3, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 59,
+      "link": [3, 1],
+      "name": "Damage Boost",
+      "requires": [
+        {"notable": "Damage Boost"},
+        "canTrickyJump",
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "canWalljump"
+        ]},
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Gamet", "type": "contact", "hits": 1}}
+      ],
+      "note": [
+        "Use the moving platform (Kamer) to elevate the Gamets, then damage boost off of them to get to the top left.",
+        "Alternatively, it is possible to wall jump off of the right overhang and damage boost from the ceiling Ripper, but it is likely more difficult."
+      ]
+    },
+    {
+      "id": 60,
+      "link": [3, 1],
+      "name": "Leave Shinecharged (HiJump)",
+      "requires": [
+        "HiJump",
+        "h_runOverRespawningEnemies",
+        {"canShineCharge": {
+          "usedTiles": 18,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4,
+          "openEnd": 1
+        }},
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 170}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Leave Gamet drops uncollected to prevent them from respawning.",
+        "Run left-to-right to gain a shinecharge, then run left and jump (just underneath the Kamer) to the top-left ledge without needing to wall jump."
+      ]
+    },
+    {
+      "id": 79,
+      "link": [3, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 8, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [3, 1],
+      "name": "Come In Shinecharging, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 10,
+          "openEnd": 0,
+          "gentleDownTiles": 4
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 25}}
+      ]
+    },
+    {
+      "id": 19,
+      "link": [3, 1],
+      "name": "Come In Shinecharging, Shinespark with Wave",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 18,
+          "openEnd": 1,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4
+        }
+      },
+      "requires": [
+        "Wave",
+        "canDodgeWhileShooting",
+        {"shinespark": {"frames": 25, "excessFrames": 5}}
+      ],
+      "note": "Kill the Gamets with Wave Beam when entering the room."
+    },
+    {
+      "id": 20,
+      "link": [3, 1],
+      "name": "SpaceJump up and Leave with Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 160},
+        "SpaceJump",
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [3, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged (HiJump, Tricky Dash Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 10,
+          "openEnd": 0,
+          "gentleDownTiles": 4
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementComplex",
+        "canTrickyDashJump",
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Kill the Gamets with SpeedBooster and then jump directly up to the top left door.",
+        "It helps to have low run speed while gaining the shinecharge:",
+        "this makes it easier to control the position where Samus gains the shinecharge (which should be as far right as possible while still killing the Gamets);",
+        "and it minimizes the distance that Samus slides while gaining the shinecharge, allowing more runway to gain speed for the jump."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 23,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 24,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 25,
+      "link": [3, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 61,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 62,
+      "link": [3, 2],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "h_runOverRespawningEnemies",
+        {"or": [
+          {"canShineCharge": {
+            "usedTiles": 18,
+            "gentleUpTiles": 2,
+            "gentleDownTiles": 4,
+            "openEnd": 1
+          }},
+          {"and": [
+            {"doorUnlockedAtNode": 3},
+            {"canShineCharge": {
+              "usedTiles": 19,
+              "gentleUpTiles": 2,
+              "gentleDownTiles": 4,
+              "openEnd": 1
+            }}
+          ]}
+        ]},
+        "canShinechargeMovement",
+        {"shineChargeFrames": 50}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"nodeId": 3, "types": ["ammo"], "requires": []},
+        {"types": ["ammo"], "requires": []}
+      ],
+      "note": ["Leave Gamet drops uncollected to prevent them from respawning."]
+    },
+    {
+      "id": 77,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 9,
+          "openEnd": 0,
+          "gentleUpTiles": 3
+        }
+      }
+    },
+    {
+      "id": 78,
+      "link": [3, 3],
+      "name": "Kill Enemies, Leave with Runway",
+      "requires": [
+        "h_runOverRespawningEnemies"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 19,
+          "openEnd": 1,
+          "gentleUpTiles": 4,
+          "gentleDownTiles": 2
+        }
+      },
+      "note": "Involves leaving some drops hanging after killing the Gamets so they don't respawn."
+    },
+    {
+      "id": 73,
+      "link": [3, 3],
+      "name": "Gamet Farm",
+      "requires": [
+        {"simpleCycleFrames": 90},
+        {"cycleFrames": 20}
+      ],
+      "farmCycleDrops": [{"enemy": "Gamet", "count": 5}]
+    },
+    {
+      "id": 28,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit By Gamet",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 65,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "HiJump",
+          "SpaceJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 66,
+      "link": [3, 4],
+      "name": "Ripper Grapple",
+      "requires": [
+        "canUseEnemies",
+        "Grapple"
+      ],
+      "note": "Involves grappling off a Ripper 2."
+    },
+    {
+      "id": 67,
+      "link": [3, 4],
+      "name": "Frozen Gamet Platform",
+      "requires": [
+        "canUseFrozenEnemies"
+      ],
+      "note": "Use the moving platform (Kamer) to elevate the Gamets and then freeze them."
+    },
+    {
+      "id": 68,
+      "link": [3, 4],
+      "name": "Jump Into IBJ",
+      "requires": [
+        "canJumpIntoIBJ"
+      ],
+      "note": [
+        "Jump into an IBJ from the moving platform (Kamer).",
+        "Although it is possible to do it without jumping, by starting next to the Gamet farm, it is harder and more obscure."
+      ]
+    },
+    {
+      "id": 69,
+      "link": [3, 4],
+      "name": "Crouch Jump Down Grab",
+      "requires": [
+        "h_crouchJumpDownGrab",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Crouch jump then down grab starting from the moving platform. A very fast crouch jump is necessary in order to not have lowered the platform too low."
+      ],
+      "devNote": "This is possible even with a blue suit, by crouching and quickly using X-ray, waiting for the shinecharge frames to end, and then jumping and down grabbing."
+    },
+    {
+      "id": 70,
+      "link": [3, 4],
+      "name": "Shinespark",
+      "requires": [
+        "h_runOverRespawningEnemies",
+        {"or": [
+          {"canShineCharge": {
+            "usedTiles": 18,
+            "gentleUpTiles": 2,
+            "gentleDownTiles": 4,
+            "openEnd": 1
+          }},
+          {"and": [
+            {"doorUnlockedAtNode": 3},
+            {"canShineCharge": {
+              "usedTiles": 19,
+              "gentleUpTiles": 2,
+              "gentleDownTiles": 4,
+              "openEnd": 1
+            }}
+          ]}
+        ]},
+        {"shinespark": {"frames": 25}}
+      ],
+      "unlocksDoors": [{"nodeId": 3, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 71,
+      "link": [3, 4],
+      "name": "Leave Shinecharged (HiJump)",
+      "requires": [
+        "HiJump",
+        "h_runOverRespawningEnemies",
+        {"canShineCharge": {
+          "usedTiles": 18,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4,
+          "openEnd": 1
+        }},
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Leave Gamet drops uncollected to prevent them from respawning.",
+        "Run left-to-right to gain a shinecharge.",
+        "Then use HiJump to quickly reach the top-right door."
+      ]
+    },
+    {
+      "id": 72,
+      "link": [3, 4],
+      "name": "Leave With Spark (Wall Jump, Bottom Position)",
+      "requires": [
+        "h_runOverRespawningEnemies",
+        {"canShineCharge": {
+          "usedTiles": 18,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4,
+          "openEnd": 1
+        }},
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 15, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Leave Gamet drops uncollected to prevent them from respawning.",
+        "Run left-to-right to gain a shinecharge.",
+        "Then jump onto the Kamer and use a wall jump to reach the top of the room and spark out."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [3, 4],
+      "name": "Come In Shinecharging, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 10,
+          "openEnd": 0,
+          "gentleDownTiles": 4
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 25}}
+      ]
+    },
+    {
+      "id": 30,
+      "link": [3, 4],
+      "name": "Come In Shinecharging, Shinespark with Wave",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 18,
+          "openEnd": 1,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4
+        }
+      },
+      "requires": [
+        "Wave",
+        "canDodgeWhileShooting",
+        {"shinespark": {"frames": 25}}
+      ],
+      "note": "Kill the Gamets with Wave Beam when entering the room."
+    },
+    {
+      "id": 31,
+      "link": [3, 4],
+      "name": "Come In Shinecharging, Leave Shinecharged (Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 7,
+          "openEnd": 1,
+          "gentleDownTiles": 3
+        }
+      },
+      "requires": [
+        "canWalljump",
+        "canFastWalljumpClimb",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 165}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 32,
+      "link": [3, 4],
+      "name": "Come In Shinecharging, Leave With Spark (Space Jump, Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 7,
+          "openEnd": 1,
+          "gentleDownTiles": 3
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 15}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 33,
+      "link": [3, 4],
+      "name": "Come In Shinecharging, Leave Shinecharged (HiJump)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 6,
+          "openEnd": 0,
+          "gentleDownTiles": 2
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 125}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 83,
+      "link": [3, 4],
+      "name": "Come In Shinecharging, Leave With Spark (Space Jump, Tricky Movement)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 7,
+          "openEnd": 1,
+          "gentleDownTiles": 3
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 5}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 35,
+      "link": [3, 4],
+      "name": "Shinespark Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 1},
+        {"shinespark": {"frames": 1, "excessFrames": 1}},
+        "canShinesparkDeepStuck",
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 36,
+      "link": [3, 4],
+      "name": "G-Mode Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 37,
+      "link": [3, 4],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 1 screen, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [3, 6],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 40,
+      "link": [4, 1],
+      "name": "Come In With Spark",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 43, "excessFrames": 8}}
+      ]
+    },
+    {
+      "id": 41,
+      "link": [4, 1],
+      "name": "Come In Shinecharged, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 45},
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 29, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 42,
+      "link": [4, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Space Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 130},
+        "SpaceJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 43,
+      "link": [4, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 44,
+      "link": [4, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 45,
+      "link": [4, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 46,
+      "link": [4, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door.",
+        "Samus will not be visible during the climb."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 47,
+      "link": [4, 4],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 48,
+      "link": [4, 4],
+      "name": "Leave With Runway - Frozen Gamet",
+      "requires": [
+        {"or": [
+          "h_trickyFrozenEnemyRunway",
+          {"and": [
+            "h_frozenEnemyRunway",
+            "Morph"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "note": [
+        "Lure the Gamets up; it may be helpful to freeze them on the ascent to prevent them from separating and moving horizontally.",
+        "At the top, freeze a Gamet while there is a half-tile gap between it and the runway in order to extend it as much as possible.",
+        "Positioning is much easier with Morph; simply morph on any of the stairs before they start separating.",
+        "Freezing one or two Gamets after they separate but before they start moving can help with dodging and avoiding damage."
+      ]
+    },
+    {
+      "id": 84,
+      "link": [4, 4],
+      "name": "Leave With Spark (Wall Jump, Tricky Movement)",
+      "requires": [
+        "h_runOverRespawningEnemies",
+        {"canShineCharge": {
+          "usedTiles": 18,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4,
+          "openEnd": 1
+        }},
+        "canWalljump",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 5, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "note": [
+        "Leave Gamet drops uncollected to prevent them from respawning.",
+        "Run left-to-right to gain a shinecharge.",
+        "Then jump onto the Kamer and use a wall jump to reach the top of the room and spark out."
+      ],
+      "devNote": [
+        "This is the trickier variant of the strat which allows getting close enough to the door to spark in top position."
+      ]
+    },
+    {
+      "id": 85,
+      "link": [4, 4],
+      "name": "Leave With Spark (Space Jump, Bottom Position)",
+      "requires": [
+        "SpaceJump",
+        "h_runOverRespawningEnemies",
+        {"canShineCharge": {
+          "usedTiles": 18,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4,
+          "openEnd": 1
+        }},
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 15, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "note": [
+        "Leave Gamet drops uncollected to prevent them from respawning.",
+        "Run left-to-right to gain a shinecharge.",
+        "Then jump onto the Kamer and use Space Jump to reach the top of the room and spark out."
+      ]
+    },
+    {
+      "id": 86,
+      "link": [4, 4],
+      "name": "Leave With Spark (Space Jump, Tricky Movement)",
+      "requires": [
+        "SpaceJump",
+        "h_runOverRespawningEnemies",
+        {"canShineCharge": {
+          "usedTiles": 17,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4,
+          "openEnd": 1
+        }},
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shinespark": {"frames": 5, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "note": [
+        "Leave Gamet drops uncollected to prevent them from respawning.",
+        "Run left-to-right to gain a shinecharge.",
+        "Then jump onto the Kamer and use Space Jump to reach the top of the room and spark out."
+      ],
+      "devNote": [
+        "This is the trickier variant of the strat which allows getting close enough to the door to spark in top position."
+      ]
+    },
+    {
+      "id": 87,
+      "link": [4, 4],
+      "name": "Leave With Grapple Swing",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleSwing": {
+          "blocks": [
+            {
+              "position": [2.375, 4.5625],
+              "note": "Ripper when it is as far right as possible"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 49,
+      "link": [4, 4],
+      "name": "G-Mode Setup - Get Hit By Gamet",
+      "requires": [
+        {"or": [
+          "HiJump",
+          "SpaceJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          "canTrickyUseFrozenEnemies",
+          {"and": [
+            "canTrickyJump",
+            "h_crouchJumpDownGrab"
+          ]},
+          {"and": [
+            "canInsaneJump",
+            "canPreciseGrapple"
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            "canDoubleBombJump"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Lure the Gamets while using the Kamer, then get up to the doorway with a quick crouch jump + down grab or by other means.",
+      "devNote": [
+        "A crouch jump + down grab should always be usable except when preserving a blue suit.",
+        "A flash suit is lost when using X-Ray, so it can not be kept through a G-Mode setup."
+      ]
+    },
+    {
+      "id": 51,
+      "link": [4, 6],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 74,
+      "link": [6, 1],
+      "name": "G-Mode Morph IBJ",
+      "requires": [
+        "canGMode",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          {"and": [
+            "HiJump",
+            "h_artificialMorphJumpIntoIBJ"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 75,
+      "link": [6, 4],
+      "name": "G-Mode Morph IBJ",
+      "requires": [
+        "canGMode",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]}
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 2,
+      "name": "Damage Boost",
+      "note": "Use the moving platform (Kamer) to elevate the Gamets."
+    }
+  ],
+  "nextStratId": 89,
+  "nextNotableId": 3
+}

@@ -1,0 +1,110 @@
+04/6754/: |
+  ; in applyRoomSpecificTileChangesAfterGfxLoad@group0, change the indexes of the trees and their gfx
+  db seedTree1.map, $09
+  db seedTree2.map, $0a
+  db seedTree3.map, $0b
+  db seedTree4.map, $0c
+  db seedTree5.map, seedTree5.enabled ; 0d if enabled, 0e (wagons which are disabled in rando) if disabled
+
+04/670c/: |
+  ; Replaces roomTileChangesAfterLoad 09-0d with our own to free space
+  dw roomTileChangesAfterLoadTree1
+  dw roomTileChangesAfterLoadTree2
+  dw roomTileChangesAfterLoadTree3
+  dw roomTileChangesAfterLoadTree4
+  dw roomTileChangesAfterLoadTree5
+
+04//roomTileChangesAfterLoadTree1: |
+  ld a,seedTree1.gfx
+  ld hl,seedTree1.rectangle
+  ld e,seedTree1.position
+  jp drawTree
+
+04//roomTileChangesAfterLoadTree2: |
+  ld a,seedTree2.gfx
+  ld hl,seedTree2.rectangle
+  ld e,seedTree2.position
+  jp drawTree
+
+04//roomTileChangesAfterLoadTree3: |
+  ld a,seedTree3.gfx
+  ld hl,seedTree3.rectangle
+  ld e,seedTree3.position
+  jp drawTree
+
+04//roomTileChangesAfterLoadTree4: |
+  ld a,seedTree4.gfx
+  ld hl,seedTree4.rectangle
+  ld e,seedTree4.position
+  jp drawTree
+
+04//roomTileChangesAfterLoadTree5: |
+  ; This data doesn't matter if we got duplicate embers
+  ld a,seedTree5.gfx
+  ld hl,seedTree5.rectangle
+  ld e,seedTree5.position
+  jp drawTree
+
+04//drawTree: |
+  push af
+  ld d,$d8 ; <w3VramTiles
+  ld bc,$0304 ; number of lines and columns of the rect
+  call $6a5d ; drawRectangleToVramTiles_withParameters
+  pop af
+  jp $1646 ; loadTreeGfx
+
+04//treeRect33: |
+  treeRect34:
+  ; scent / pegasus
+  db $30,$02,$31,$02,$32,$02
+  db $33,$02,$34,$02,$35,$02
+  db $36,$02,$37,$02,$38,$03
+  db $39,$03,$3a,$03,$3b,$03
+04//treeRect35: | 
+  ; gale
+  db $30,$02,$31,$02,$32,$02
+  db $33,$02,$34,$02,$35,$02
+  db $36,$02,$37,$02,$38,$04
+  db $39,$03,$3a,$03,$3b,$04
+04//treeRect36: |
+  ; mystery
+  db $30,$02,$31,$02,$32,$02
+  db $33,$02,$34,$02,$35,$02
+  db $36,$02,$37,$02,$38,$02
+  db $39,$02,$3a,$03,$3b,$02
+
+# Slightly move the seed tree graphics down so that they can be loaded at the same time as vasu's shop ring graphic
+3f/42f5/: call shiftTreeGraphics
+3f//shiftTreeGraphics: |
+  ld hl,$5d50 ; treeGfxHeaderTable
+  ld a,e
+  cp $01 ; Blaino / Vasu shop
+  jr z,@sendSmallTreeFlag
+  cp $07 ; seed trees
+  ret c
+  inc b
+  @sendSmallTreeFlag:
+  ; This is used below to load less data
+  or $80
+  ld ($cc18),a ; wLoadedTreeGfxActive
+  ret
+
+# It huts a bit to take that much space in bank 0
+00/168e/: call smallerTreeGraphics1
+00//smallerTreeGraphics1: |
+  ld a,($cc18) ; wLoadedTreeGfxActive
+  bit 7,a
+  jr z,@end
+  ld b,$0f
+  @end:
+  jp $064e ; decompressGraphics
+00/16a2/: jp smallerTreeGraphics2
+00//smallerTreeGraphics2: |
+  ld a,($cc18) ; wLoadedTreeGfxActive
+  bit 7,a
+  jr z,@end
+  ld b,$0f
+  and $0f
+  ld ($cc18),a ; wLoadedTreeGfxActive
+  @end:
+  jp $0566 ; queueDmaTransfer

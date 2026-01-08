@@ -1,0 +1,9 @@
+# Sets the flag 6 / 0x40 of the room when talked to to auto-hint
+
+10//setItemRoomFlags: |
+  call getThisRoomFlags
+  set 6,(hl)
+  jp showText
+
+10/4d73/: |
+  jp setItemRoomFlags

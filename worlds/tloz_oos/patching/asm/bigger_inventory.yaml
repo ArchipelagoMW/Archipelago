@@ -1,0 +1,136 @@
+# Move inventory from c680-c691 to c6e9-c6ff towInventoryStorage get 5 extra spaces
+
+# removeTreasureFromInventory
+3f/44b3/: ld hl,wInventoryB
+
+# addTreasureToInventory
+3f/46cc/: add a,<wInventoryB
+3f/46e3/: |
+  ld hl,wInventoryB
+  ld b,$16 ; INVENTORY_CAPACITY+2
+3f/46f0/: ld l,<wInventoryB
+3f/46f9/: sub <wInventoryStorage
+
+# loadEquippedItemGfx
+02/52ac/: ld a,(wInventoryB)
+02/52ba/: ld a,(wInventoryA)
+
+# drawItemTilesOnStatusBar
+02/5334/: ld a,(wInventoryB)
+02/533d/: ld a,(wInventoryA)
+
+# drawTreasureExtraTiles@val02 : fix summer, autumn and winter not being drawn on the middle row because of h not being decreased
+02/53df/: |
+  rst 10  ; rst_addAToHL
+  dec h
+
+# loadStatusBarMap
+02/54ac/: ld a,(wInventoryB)
+
+# inventoryMenuState1
+02/55db/: ld a,<wInventoryB
+02/55ec/: ld hl,wInventoryStorage
+02/5604/: ld hl,wInventoryStorage
+# 02/563d/: ld d,>wInventoryStorage
+02/5647/: add a,<wInventoryStorage
+02/5655/: ld l,<wInventoryB
+02/5668/: ld a,(wInventoryB)
+02/566e/: ld a,(wInventoryA)
+02/5674/: ld l,<wInventoryB
+02/567d/: ld l,<wInventoryStorage
+
+# inventorySubscreen0_drawStoredItems
+02/5ae3/: ld a,INVENTORY_CAPACITY
+02/5ae7/: ld hl,wInventoryStorage-1
+02/5af7/: |
+  ld bc,$5b15
+  call addAToBc
+  ld a,(bc)
+  ld e,a
+  call $5b0b
+02/5b0b/: |
+  ld d,$d0
+  ldh a,($8d)
+  sub $0d
+  ret c
+  inc d
+  ret
+# 3 free bytes here
+
+02/5b16/: |
+  db $63,$67,$6b,$6f
+  db $a3,$a7,$ab,$af
+  db $e3,$e7,$eb,$ef
+  db $23,$27,$2b,$2f
+  db $63,$67,$6b,$6f
+
+# inventorySubscreen0CheckDirectionButtons
+02/5849/: call inventorySubscreen0CheckDirectionButtons_wrap
+
+02//inventorySubscreen0CheckDirectionButtons_wrap: |
+  add a,(hl)
+  add a,$14
+  @loop:
+  cp $14
+  ret c
+  sub $14
+  jr @loop
+
+# inventorySubscreen0_drawCursor
+02/591c/: |
+  ld a,$ff
+  ld b,a
+  ld a,(wInventorySubmenu0CursorPos)
+  @loop:
+  inc b
+  sub $04
+  jr nc,@loop
+  add a,$04
+  swap a
+  rlca
+  ld c,a
+  ld a,b
+  call inventorySubscreen0_drawCursor_end
+
+02//inventorySubscreen0_drawCursor_end: |
+  add a,b
+  swap a
+  rrca
+  ld b,a
+  ret
+
+
+# updateParentItemButtonAssignment_body
+06/484a/: ld a,(wInventoryB)
+06/4852/: ld a,(wInventoryA)
+
+# checkUseItems@checkAB
+06/48b5/: ld de,$0100 + <wInventoryA
+06/48bb/: ld de,$0200 + <wInventoryB
+
+# checkItemUsed@punch
+06/490a/: ld l,<wInventoryB
+
+# func_4553@standingAnimation // Draw shield
+06/45e2/: ld a,(wInventoryA)
+06/45e9/: ld a,(wInventoryB)
+
+# putAwayLinksItems
+15/5cb7/: ld hl,wInventoryB
+15/5cc6/: ld l,<wInventoryA
+15/5ce2/: ld l,<wInventoryStorage
+
+# interactionCode5a@checkFightDone
+08/7eef/: ld hl,wInventoryB
+
+# interactionCode7a@movingTowardRoller
+09/45bb/: ld hl,wInventoryB
+
+# seasonsFunc_15_5cf7 (put items back in inventory from subrosian secret)
+15/5d03/: db <wInventoryB
+15/5d0a/: db <wInventoryA
+
+# Remove the use of setting wSecretXorCipherIndex, making the secrets fake and depending on what's in A and B
+03/4866/: |
+  inc hl
+  nop

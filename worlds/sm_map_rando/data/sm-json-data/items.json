@@ -1,0 +1,163 @@
+{
+  "$schema": "./schema/m3-items.schema.json",
+  "startingRoom": "Ceres Elevator Room",
+  "startingNode": 1,
+  "startingItems": [
+    "PowerBeam"
+  ],
+  "startingFlags": [ ],
+  "startingLocks": [ ],
+  "startingResources": [
+    {
+      "resource": "regularEnergy",
+      "maxAmount": 99
+    },
+    {
+      "resource": "reserveEnergy",
+      "maxAmount": 0
+    },
+    {
+      "resource": "missile",
+      "maxAmount": 0
+    },
+    {
+      "resource": "super",
+      "maxAmount": 0
+    },
+    {
+      "resource": "powerBomb",
+      "maxAmount": 0
+    }
+  ],
+  "implicitItems": [
+    "PowerBeam"
+  ],
+  "upgradeItems": [
+    {
+      "name": "Morph",
+      "data": "0xB4"
+    },
+    {
+      "name": "Bombs",
+      "data": "0xB9"
+    },
+    {
+      "name": "Charge",
+      "data": "0x8B"
+    },
+    {
+      "name": "HiJump",
+      "data": "0xB7"
+    },
+    {
+      "name": "Spazer",
+      "data": "0xBE"
+    },
+    {
+      "name": "Varia",
+      "data": "0xB2"
+    },
+    {
+      "name": "SpeedBooster",
+      "data": "0xBA"
+    },
+    {
+      "name": "Ice",
+      "data": "0xBC"
+    },
+    {
+      "name": "Grapple",
+      "data": "0xB0"
+    },
+    {
+      "name": "Wave",
+      "data": "0xBD"
+    },
+    {
+      "name": "XRayScope",
+      "data": "0xB1"
+    },
+    {
+      "name": "Gravity",
+      "data": "0xB6"
+    },
+    {
+      "name": "SpaceJump",
+      "data": "0xB8"
+    },
+    {
+      "name": "SpringBall",
+      "data": "0xB3"
+    },
+    {
+      "name": "Plasma",
+      "data": "0xBF"
+    },
+    {
+      "name": "ScrewAttack",
+      "data": "0xB5"
+    }
+  ],
+  "expansionItems": [
+    {
+      "name": "ETank",
+      "data": "0xC0",
+      "resource": "regularEnergy",
+      "resourceAmount": 100
+    },
+    {
+      "name": "Super",
+      "data": "0xC3",
+      "resource": "super",
+      "resourceAmount": 5
+    },
+    {
+      "name": "Missile",
+      "data": "0xC2",
+      "resource": "missile",
+      "resourceAmount": 5
+    },
+    {
+      "name": "ReserveTank",
+      "data": "0xC1",
+      "resource": "reserveEnergy",
+      "resourceAmount": 100
+    },
+    {
+      "name": "PowerBomb",
+      "data": "0xC4",
+      "resource": "powerBomb",
+      "resourceAmount": 5
+    }
+  ],
+  "gameFlags": [
+    "f_AnimalsSaved",
+    "f_BeatSuperMetroid",
+    "f_DefeatedBombTorizo",
+    "f_DefeatedBotwoon",
+    "f_DefeatedCeresRidley",
+    "f_DefeatedCrocomire",
+    "f_DefeatedDraygon",
+    "f_DefeatedGoldenTorizo",
+    "f_DefeatedKraid",
+    "f_DefeatedMotherBrain",
+    "f_DefeatedPhantoon",
+    "f_DefeatedRidley",
+    "f_DefeatedSporeSpawn",
+    "f_KilledMetroidRoom1",
+    "f_KilledMetroidRoom2",
+    "f_KilledMetroidRoom3",
+    "f_KilledMetroidRoom4",
+    "f_KilledZebetites1",
+    "f_KilledZebetites2",
+    "f_KilledZebetites3",
+    "f_KilledZebetites4",
+    "f_MaridiaTubeBroken",
+    "f_ShaktoolDoneDigging",
+    "f_TourianOpen",
+    "f_UsedAcidChozoStatue",
+    "f_ZebesAwake",
+    "f_ZebesSetAblaze",
+    "f_MotherBrainGlassBroken"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/vg-json-data/sm-json-data/master/schema/m3-note.schema.json",
+  "title": "Super Metroid Note Schema",
+
+  "definitions": {
+    "note": {
+      "type": ["string", "array"],
+      "title": "Note field",
+      "description": "Explanations intended for users who want to understand an element in the model.",
+      "default": "",
+      "pattern": "^(.*)$",
+      "items": {
+        "type": "string"
+      }
+    },
+    "detailNote": {
+      "type": ["string", "array"],
+      "title": "Detail note field",
+      "description": "Additional details intended for users who want to understand an element in the model.",
+      "default": "",
+      "pattern": "^(.*)$",
+      "items": {
+        "type": "string"
+      }
+    },
+    "devNote": {
+      "type": ["string", "array"],
+      "title": "Dev note field",
+      "description": "Details or explanations intended for developers of the model.",
+      "default": "",
+      "pattern": "^(.*)$",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

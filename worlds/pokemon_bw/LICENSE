@@ -1,0 +1,7 @@
+The code within the ndspy subdirectory is licensed under the GNU General Public License Version 3.
+You can view a copy of it at https://www.gnu.org/licenses/gpl-3.0.html or in the ndspy subdirectory.
+
+All the code outside of that subdirectory, however, is licensed under MIT.
+You can view a copy of it at https://opensource.org/license/mit or at the root of the Archipelago Multiworld repository.
+
+This software package, as long as it's shipped with the ndspy code, has to be published under the GNU General Public License Version 3.

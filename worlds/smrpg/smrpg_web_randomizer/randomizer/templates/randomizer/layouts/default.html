@@ -1,0 +1,95 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Standard HTML5 meta tags -->
+    <meta name="author" content="Dorkmaster Flek">
+    <meta name="description" content="Experience a non-linear open world version of the classic SNES game!">
+    <meta name="keywords" content="Super Mario RPG, SM RPG, SMRPG, speedrun, speedrunning, randomizer, rando, openworld, open world">
+
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="Super Mario RPG Open World Randomizer"/>
+    <meta property="og:description" content="Experience a non-linear open world version of the classic SNES game!"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://randomizer.smrpgspeedruns.com"/>
+    <meta property="og:image" content="https://randomizer.smrpgspeedruns.com{% static "randomizer/img/twitter_profile.png" %}"/>
+
+    <!-- Twitter meta tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@SMRPGRandomizer">
+    <meta name="twitter:creator" content="@DorkmasterFlek">
+    <meta name="twitter:title" content="Super Mario RPG Open World Randomizer">
+    <meta name="twitter:description" content="Experience a non-linear open world version of the classic SNES game!">
+    <meta name="twitter:image" content="https://randomizer.smrpgspeedruns.com{% static "randomizer/img/twitter_profile.png" %}">
+
+    <title>
+        {% if beta_site %}
+            *BETA*
+        {% endif %}
+        Super Mario RPG Open World Randomizer
+    </title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'randomizer/img/favicon.ico' %}"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap4-toggle/3.6.1/bootstrap4-toggle.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <link rel="stylesheet" href="{% static "randomizer/css/jquery.json-viewer.css" %}">
+    <link rel="stylesheet" href="{% static "randomizer/css/main.css" %}">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap4-toggle/3.6.1/bootstrap4-toggle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.7.1/localforage.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.0/spark-md5.min.js"></script>
+    <script src="{% static "randomizer/js/jquery.json-viewer.js" %}"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <!-- Logo -->
+    <a class="navbar-brand" href="{% url 'randomizer:home' %}"><img src="{% static 'randomizer/img/smrpg_logo.png' %}" alt="Super Mario RPG Randomizer"/></a>
+
+    <ul class="navbar-nav">
+        <!-- Links -->
+        <li class="nav-item {% if 'randomize' in request.path %}active{% endif %}">
+            <a class="nav-link" href="{% url 'randomizer:randomize' %}">Generate Randomized Game</a>
+        </li>
+        <li class="nav-item {% if 'resources' in request.path %}active{% endif %}">
+            <a class="nav-link" href="{% url 'randomizer:resources' %}">Discord</a>
+        </li>
+
+        <!-- Dropdown -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Help</a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item {% if 'how-to-play' in request.path %}active{% endif %}" href="{% url 'randomizer:how-to-play' %}">How To Play</a>
+                <a class="dropdown-item {% if 'options' in request.path %}active{% endif %}" href="{% url 'randomizer:options' %}">Flag & Mode Explanations</a>
+                <a class="dropdown-item {% if 'guide' in request.path %}active{% endif %}" href="{% url 'randomizer:guide' %}">Player's Guide</a>
+                <a class="dropdown-item {% if 'updates' in request.path %}active{% endif %}" href="{% url 'randomizer:updates' %}">Version History</a>
+                <a class="dropdown-item" href="https://github.com/DorkmasterFlek/smrpg_web_randomizer/issues/new" target="_blank">Report an Issue</a>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="clearfix mt-3"></div>
+{% if beta_site %}
+    <div class="alert alert-danger text-center" role="alert">
+        <div>
+            <span class="fas fa-flask"></span>
+            WARNING: THIS IS THE BETA SITE!
+            <span class="fas fa-flask"></span>
+        </div>
+        <div>
+            Everything here is for testing and will probably break at some point!  If you're looking for the current
+            stable version, <a href="https://randomizer.smrpgspeedruns.com">go here</a>!
+        </div>
+    </div>
+{% endif %}
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

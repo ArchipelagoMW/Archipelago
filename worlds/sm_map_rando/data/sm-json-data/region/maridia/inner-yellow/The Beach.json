@@ -1,0 +1,1530 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 179,
+  "name": "The Beach",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Yellow",
+  "roomAddress": "0x7D1DD",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1],
+    [1, 1, 1, 1],
+    [1, 1, 1, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a4d4",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 2, 2],
+        [2, 2, 2, 2],
+        [1, 1, 1, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a4e0",
+      "doorOrientation": "down",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [2, 2, 1, 0]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Hidden Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x7C533",
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [1, 1, 1, 1],
+        [1, 1, 2, 0]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Water Level Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [1, 2, 1, 1],
+        [1, 1, 1, 0]
+      ]
+    }
+  ],
+  "obstacles": [],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "The Beach Choots",
+      "enemyName": "Choot",
+      "quantity": 6,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "The Beach Skulteras",
+      "enemyName": "Skultera",
+      "quantity": 2,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e3",
+      "groupName": "The Beach Owtch",
+      "enemyName": "Owtch",
+      "quantity": 1,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 10,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 7,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 6,
+            "openEnd": 1
+          }
+        }
+      },
+      "note": "Use either the island platform or the ledge to the right of it, depending on the run speed needed."
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Longer Runway)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 10,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 6,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$2.8"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 10,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 6,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 10,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 6,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Controlled Spring Ball Bounce",
+      "requires": [
+        "canTrickySpringBallBounce"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 10,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 6,
+            "openEnd": 1
+          },
+          "movementType": "controlled"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 10,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {
+          "usedTiles": 22,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4,
+          "steepUpTiles": 2,
+          "steepDownTiles": 3,
+          "openEnd": 0
+        }},
+        {"or": [
+          "HiJump",
+          "canGravityJump",
+          "canTrickySpringBallJump"
+        ]},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "note": ["Destroy the Owtch using blue speed."]
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Choot Farm",
+      "requires": [
+        {"or": [
+          {"resetRoom": {"nodes": [1]}},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            "Gravity",
+            {"or": [
+              "h_crouchJumpDownGrab",
+              "canWalljump"
+            ]},
+            {"cycleFrames": 130}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 740}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 800}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 860}
+          ]},
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 890}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 960}
+          ]},
+          {"cycleFrames": 1500}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Choot", "count": 5}],
+      "devNote": [
+        "There is a sixth Choot on the far right but it's not worth going for.",
+        "FIXME: add other movement options for reaching the top of the room from node 2."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [1, 1],
+      "name": "G-Mode Morph, Remote Acquire",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          {"and": [
+            "Gravity",
+            "h_artificialMorphSpringBallBombJump"
+          ]},
+          "h_artificialMorphDoubleSpringBallJump"
+        ]}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": "Avoid moving too much between the right of the Owtch and the item to avoid overloading PLMs until after touching the item."
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "any"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 14,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Suitless Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        {"shineChargeFrames": 5},
+        {"shinespark": {"frames": 40, "excessFrames": 18}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Spark diagonally from the right side of the doorway.",
+      "devNote": [
+        "It is possible to spark through the doorway, but diagonal sparks are not supported.",
+        "There is no gravity version, as Gravity + Speedbooster is enough to get up."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Suitless Shinespark (through Toilet)",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "yes"
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 40, "excessFrames": 18}}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "Entering through Toilet will center Samus horizontally, making a few more shinecharge frames required",
+        "It possible to end spark earlier by precisely bonking the island in the center, but the energy savings do not seem important since you can farm Choots afterward anyway."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Leave Shinecharged (Wall Jump)",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        "canWalljump",
+        {"canShineCharge": {
+          "usedTiles": 28,
+          "gentleUpTiles": 4,
+          "gentleDownTiles": 4,
+          "steepUpTiles": 2,
+          "steepDownTiles": 2,
+          "openEnd": 1
+        }},
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Finish shinecharging on the raised plateau, then quickly climb up to the left door."
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Leave Shinecharged (HiJump)",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        "HiJump",
+        {"canShineCharge": {
+          "usedTiles": 33,
+          "gentleUpTiles": 4,
+          "gentleDownTiles": 6,
+          "steepUpTiles": 2,
+          "steepDownTiles": 3,
+          "openEnd": 1
+        }},
+        {"shineChargeFrames": 115}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Finish shinecharging on the raised plateau, then quickly climb up to the left door."
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Leave With Spark (HiJump)",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovement",
+        "HiJump",
+        {"canShineCharge": {
+          "usedTiles": 35,
+          "gentleUpTiles": 4,
+          "gentleDownTiles": 6,
+          "steepUpTiles": 2,
+          "steepDownTiles": 4,
+          "openEnd": 1
+        }},
+        {"shinespark": {"frames": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Finish shinecharging on the raised plateau, then climb up and spark out the left door."
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Leave Shinecharged (Space Jump)",
+      "requires": [
+        "Gravity",
+        "SpaceJump",
+        "canShinechargeMovementComplex",
+        {"canShineCharge": {
+          "usedTiles": 30,
+          "gentleUpTiles": 4,
+          "gentleDownTiles": 4,
+          "steepUpTiles": 2,
+          "steepDownTiles": 2,
+          "openEnd": 1
+        }},
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Finish shinecharging on the raised plateau, then quickly climb up to the left door."
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Leave Shinecharged (Tricky Dash Jump)",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        "canTrickyDashJump",
+        {"canShineCharge": {
+          "usedTiles": 20,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4,
+          "steepUpTiles": 1,
+          "steepDownTiles": 2,
+          "openEnd": 1
+        }},
+        {"shineChargeFrames": 165}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Shortcharge from right to left while finishing in the plants to the right of the raised plateau, then tricky dash jump up to the left door."
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Cross Room Jump - Speed Jump to the Top",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 9,
+          "maxHeight": 9,
+          "maxLeftPosition": -38.5,
+          "minRightPosition": -7
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "SpeedBooster",
+        "canTrickyJump",
+        "canInsaneJump"
+      ],
+      "note": [
+        "Using SpeedBooster in the room below and the full length of the runway (starting with Samus hanging over the edge as far as possible), run and jump precisely to make it through without bonking the door frame.",
+        "Break spin before the transition to expand Samus' hitbox and trigger the transition earlier, retaining more speed and also making it easier to avoid bonking.",
+        "Hold left through the transition to initiate a turn-around while entering the room.",
+        "Land on the small platform at the top of the room."
+      ],
+      "devNote": "This strat is applicable only with the Indiana Jones Room."
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Cross Room Jump - Tricky Dash Jump to the Top",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 9,
+          "maxHeight": 10,
+          "maxLeftPosition": -33.5,
+          "minRightPosition": -7
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "SpeedBooster",
+        "canTrickyDashJump",
+        "canInsaneJump"
+      ],
+      "note": [
+        "Using SpeedBooster in the room below, start running at a precise position to be able to jump during a spike in the speed-to-jumpHeight chart.",
+        "Break spin before the transition to expand Samus' hitbox and trigger the transition early, retaining more speed and also making it easier to avoid bonking.",
+        "Hold left through the transition to initiate a turn-around while entering the room.",
+        "Land on the small platform at the top of the room."
+      ],
+      "devNote": "This strat is applicable with Crocomire's Room and the Indiana Jones Room."
+    },
+    {
+      "id": 69,
+      "link": [2, 1],
+      "name": "G-Mode Morph, Remote Acquire",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"or": [
+              "h_artificialMorphIBJ",
+              "h_artificialMorphSpringBallBombJump"
+            ]}
+          ]},
+          "h_artificialMorphDoubleSpringBallJump"
+        ]}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [2, 2],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "Shinecharge Out Bottom",
+      "requires": [
+        "Gravity",
+        "h_shinechargeMaxRunway",
+        {"shineChargeFrames": 20}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 27,
+      "link": [2, 2],
+      "name": "Skulltera Ice Moonfall Door Lock Skip",
+      "requires": [
+        "Gravity",
+        "canEnemyStuckMoonfall",
+        "canFreeFallClip",
+        "canTrickyUseFrozenEnemies"
+      ],
+      "bypassesDoorShell": true,
+      "note": [
+        "Freeze the two Skullteras above the door to set up a moonfall between them, and aim down.",
+        "After gaining enough speed, press forward to fall down and clip past the door shell below.",
+        "Falling with too much speed can cause Samus to go out of bounds.",
+        "Gravity Suit is needed in order to gain enough fall speed before the Skullteras thaw."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [2, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shinespark": {"frames": 7, "excessFrames": 7}}
+      ],
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 29,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {
+          "usedTiles": 22,
+          "gentleUpTiles": 2,
+          "gentleDownTiles": 4,
+          "steepUpTiles": 2,
+          "steepDownTiles": 3,
+          "openEnd": 0
+        }},
+        {"or": [
+          "HiJump",
+          "canGravityJump",
+          "canTrickySpringBallJump"
+        ]},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "left"
+        }
+      },
+      "note": ["Destroy the Owtch using blue speed."]
+    },
+    {
+      "id": 70,
+      "link": [2, 2],
+      "name": "Skultera Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "canSuitlessMaridia",
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 360}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 420}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 450}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 530}
+          ]},
+          {"cycleFrames": 710}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Skultera", "count": 2}],
+      "devNote": [
+        "If Gravity is available, the Choot farm at the top of the room would be used instead."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 31,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_navigateUnderwater",
+          "Plasma",
+          {"ammo": {"type": "Super", "count": 1}}
+        ]}
+      ],
+      "note": "Wait for the fish to swim left where they can safely be killed."
+    },
+    {
+      "id": 32,
+      "link": [2, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canIBJ",
+          "SpeedBooster",
+          "h_crouchJumpDownGrab",
+          "canSpringBallJumpMidAir",
+          "canGravityJump"
+        ]}
+      ]
+    },
+    {
+      "id": 33,
+      "link": [2, 4],
+      "name": "Suitless Jump Assist",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 34,
+      "link": [2, 4],
+      "name": "Suitless Frozen Skultera",
+      "requires": [
+        "h_navigateUnderwater",
+        "canUseFrozenEnemies",
+        {"or": [
+          "canTrickyUseFrozenEnemies",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "Gravity",
+          "h_crouchJumpDownGrab"
+        ]}
+      ],
+      "note": "The fish can safely be damaged from the door until they are ready to be used as platforms."
+    },
+    {
+      "id": 35,
+      "link": [2, 4],
+      "name": "Underwater Walljump",
+      "requires": [
+        "canUnderwaterWalljump"
+      ]
+    },
+    {
+      "id": 36,
+      "link": [2, 4],
+      "name": "Suitless Shinespark to the Ledge",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        {"shineChargeFrames": 50},
+        "canSuitlessMaridia",
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 14, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Spark vertically by the first plant on the right to hit the floating island.",
+      "devNote": [
+        "It is possible to spark diagonally from the door and hit the island, requiring fewer frames remaining, but it's starting position is somewhat precise and uses a bit more energy.",
+        "There is no gravity version, as Gravity + Speedbooster is enough to get up."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [2, 4],
+      "name": "Suitless Shinespark to the Ledge (through Toilet)",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "yes"
+      },
+      "requires": [
+        {"shineChargeFrames": 60},
+        "canSuitlessMaridia",
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 14, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Spark vertically by the first plant on the right to hit the floating island.",
+      "devNote": [
+        "It is possible to spark diagonally from the door and hit the island, requiring fewer frames remaining, but it's starting position is somewhat precise and uses a bit more energy.",
+        "There is no gravity version, as Gravity + Speedbooster is enough to get up."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [2, 4],
+      "name": "Cross Room Jump - Standing Jump",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 6,
+          "maxHeight": 6,
+          "maxLeftPosition": 1,
+          "minRightPosition": 2
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "Standing on the platform in the room below, jump up and press right against the door frame through the transition."
+      ],
+      "devNote": [
+        "This strat only works for platforms that are 6 tiles below the door transition (which is the closest distance that occurs in the vanilla game).",
+        "A crouch jump can be used but is not required."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [2, 4],
+      "name": "Cross Room Jump - Running Spin Jump (through Toilet)",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 6,
+          "maxHeight": 6,
+          "maxLeftPosition": -2.5,
+          "minRightPosition": -0.5
+        },
+        "comesThroughToilet": "yes"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Gain run speed to the right and jump through the door without bonking the door frame.",
+        "After the transition, continue holding right while remaining in spin jump.",
+        "This strat could also be performed without passing through the Toilet, but a precise down-grab would be needed to get onto the ledge at the end;",
+        "in this case it would be easier to perform a standing jump instead."
+      ],
+      "devNote": [
+        "This strat only works for platforms that are 6 tiles below the door transition (which is the closest distance that occurs in the vanilla game)."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 4],
+      "name": "Cross Room Jump - Space Jump",
+      "entranceCondition": {
+        "comeInWithSpaceJumpBelow": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "Use Space Jump to enter with rightward momentum and moderate vertical speed.",
+        "This can be done by using Space Jump at an appropriate height and pressing against the right side of the door frame while entering the transition."
+      ],
+      "devNote": [
+        "FIXME: Passing through Toilet is possible, but it requires some run speed (possibly from a remote platform), which we don't yet have a way to represent here."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [2, 4],
+      "name": "Cross Room Jump - HiJump Spin Jump",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 8,
+          "maxHeight": 9,
+          "maxLeftPosition": 1,
+          "minRightPosition": 2
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump"
+      ],
+      "note": [
+        "Spin jump from the platform in the room below, pressing right against the door frame through the transition."
+      ],
+      "devNote": [
+        "For a platform 9 tiles below the door transition, a standing jump also works (instead of a spin jump)."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 4],
+      "name": "Cross Room Jump - HiJump Spin Jump (through Toilet)",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 8,
+          "maxHeight": 9,
+          "maxLeftPosition": -3,
+          "minRightPosition": 0
+        },
+        "comesThroughToilet": "yes"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": [
+        "Run and spin jump from the platform in the room below, gaining horizontal speed but without bonking the door frame.",
+        "Perform a momentum-conserving turn-around to make it around the corner of the ledge above."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [2, 4],
+      "name": "Cross Room Jump - HiJump Insane Spin Jump (through Toilet)",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 8.5,
+          "maxHeight": 9,
+          "maxLeftPosition": -1.5,
+          "minRightPosition": 1.5
+        },
+        "comesThroughToilet": "yes"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump",
+        "canMomentumConservingTurnaround",
+        "canInsaneJump"
+      ],
+      "note": [
+        "Run and spin jump from the platform in the room below, gaining horizontal speed but without bonking the door frame.",
+        "Perform a momentum-conserving turn-around to make it around the corner of the ledge above.",
+        "With limited runway for gaining horizontal speed, the timing of the jump and turn-around may be very precise."
+      ],
+      "devNote": ["This applies to Warehouse Zeela Room and Tourian Hopper Room."]
+    },
+    {
+      "id": 44,
+      "link": [2, 4],
+      "name": "Cross Room Jump - HiJump Crouch Jump",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 10,
+          "maxHeight": 10,
+          "maxLeftPosition": 1,
+          "minRightPosition": 2
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump",
+        "canCrouchJump"
+      ],
+      "note": [
+        "Standing on the platform in the room below, crouch jump up and press right against the door frame through the transition."
+      ],
+      "devNote": [
+        "This strat only works for platforms that are 10 tiles below the door transition (Crocomire's Room).",
+        "It could be done for a platform 9 tiles below the door transition, but this would require a momentum-conserving turn-around; it is easier to just do a standing jump or spin jump in that case instead of crouch jumping."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [2, 4],
+      "name": "Cross Room Jump - HiJump Speed Jump",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 10,
+          "maxHeight": 10,
+          "maxLeftPosition": 2,
+          "minRightPosition": -2
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump",
+        "SpeedBooster"
+      ],
+      "note": [
+        "Gain a small amount of speed (<1 tile is enough) and jump through the transition, pressing right against the door frame."
+      ],
+      "devNote": [
+        "This strat only works for platforms that are 10 tiles below the door transition (Crocomire's Room).",
+        "It could be done for a platform 9 tiles below the door transition, but this would require a momentum-conserving turn-around (or more horizontal speed);",
+        "it is easier to just do a standing jump or spin jump in that case."
+      ]
+    },
+    {
+      "id": 46,
+      "link": [2, 4],
+      "name": "Cross Room Jump - HiJump Speed Jump through Toilet",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 10,
+          "maxHeight": 10,
+          "maxLeftPosition": -4,
+          "minRightPosition": 0
+        },
+        "comesThroughToilet": "yes"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump",
+        "SpeedBooster",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": [
+        "Gain a few tiles of run speed and jump through the transition, without bonking against the door frame.",
+        "Perform a momentum-conserving turn-around to make it around the corner of the ledge above."
+      ]
+    },
+    {
+      "id": 47,
+      "link": [2, 4],
+      "name": "Cross Room Jump - HiJump Spin Jump Turnaround",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 7,
+          "maxHeight": 7,
+          "maxLeftPosition": 1,
+          "minRightPosition": 2
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": [
+        "Spin jump from the platform in the room below, pressing right against the door frame through the transition.",
+        "Perform a momentum-conserving turn-around to make it around the corner of the ledge above."
+      ],
+      "devNote": [
+        "This strat is for platforms that are exactly 7 tiles below the door transition.",
+        "For platforms that are 8 or 9 tiles below, no turn-around is needed."
+      ]
+    },
+    {
+      "id": 48,
+      "link": [2, 4],
+      "name": "Cross Room Jump - HiJump Running Jump (Left)",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 7,
+          "maxHeight": 7,
+          "maxLeftPosition": -5.5,
+          "minRightPosition": -1.5
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump"
+      ],
+      "note": [
+        "Run left-to-right and spin jump from the platform in the room below, passing through the transition without bonking the door."
+      ],
+      "devNote": [
+        "This is applicable using the Power Bomb block platform in Indiana Jones Room."
+      ]
+    },
+    {
+      "id": 49,
+      "link": [2, 4],
+      "name": "Cross Room Jump - HiJump Running Jump (Center)",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 7,
+          "maxHeight": 7,
+          "maxLeftPosition": -2.5,
+          "minRightPosition": 0.5
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump"
+      ],
+      "note": [
+        "Run left-to-right and spin jump from the platform in the room below, passing through the transition without bonking the door."
+      ],
+      "devNote": ["This is applicable using the platform in Tourian Escape Room 2."]
+    },
+    {
+      "id": 50,
+      "link": [2, 4],
+      "name": "Cross Room Jump - HiJump Running Jump (Center, Through Toilet)",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 7,
+          "maxHeight": 7,
+          "maxLeftPosition": -2.5,
+          "minRightPosition": 0.5
+        },
+        "comesThroughToilet": "yes"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": [
+        "Run left-to-right and spin jump from the platform in the room below, passing through the transition without bonking the door.",
+        "Pass through the Toilet, and then perform a momentum conserving turnaround to make it onto the ledge."
+      ],
+      "devNote": ["This is applicable using the platform in Tourian Escape Room 2."]
+    },
+    {
+      "id": 51,
+      "link": [2, 4],
+      "name": "Cross Room Jump - Spring Ball Jump Above",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 7,
+          "maxHeight": 7,
+          "maxLeftPosition": 1,
+          "minRightPosition": 1
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickySpringBallJump",
+        {"or": [
+          "canCrouchJump",
+          "canTrickyJump"
+        ]}
+      ],
+      "note": [
+        "Standing on the platform in the room below, jump up (crouch jump makes it easier) and press right against the door frame through the transition.",
+        "After the transition, perform a spring ball jump mid-air to reach the ledge."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [2, 4],
+      "name": "Cross Room Jump - Spring Ball Jump Below",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 9,
+          "maxHeight": 10,
+          "maxLeftPosition": 1,
+          "minRightPosition": 1
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickySpringBallJump",
+        "can4HighMidAirMorph"
+      ],
+      "note": [
+        "Standing on the platform in the room below, perform a spring ball jump mid-air a few tiles below the transition.",
+        "Hold right through the transition, and do not bonk the door frame."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [2, 4],
+      "name": "Cross Room Jump - Tricky Spring Ball Jump Below",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 8,
+          "maxHeight": 8,
+          "maxLeftPosition": 1,
+          "minRightPosition": 1
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "can4HighMidAirMorph",
+        "canTrickySpringBallJump",
+        "canInsaneJump"
+      ],
+      "note": [
+        "Standing on the platform in the room below, perform a spring ball jump mid-air a few tiles below the transition.",
+        "It is necessary to morph very quickly after jumping in order to spring ball jump as low as necessary.",
+        "Hold right through the transition, and do not bonk the door frame."
+      ]
+    },
+    {
+      "id": 54,
+      "link": [2, 4],
+      "name": "Cross Room Jump - Speed Jump",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 9,
+          "maxHeight": 10,
+          "maxLeftPosition": -34.5,
+          "minRightPosition": -7
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "SpeedBooster",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Using SpeedBooster in the room below, run and jump, pressing against the right side of the door frame through the transition without breaking spin.",
+        "It may be necessary to use less runway than is available, to avoid getting too much vertical speed."
+      ],
+      "devNote": [
+        "This strat is applicable in Crocomire's Room and the Indiana Jones Room.",
+        "Sufficient vertical speed could be obtained with fewer tiles, but it would require jumping further to the right (i.e., increasing minRightPosition) which would not work in Indiana Jones Room unless the PB blocks are broken;",
+        "since there doesn't yet appear to be any application, we don't add a separate case for that."
+      ]
+    },
+    {
+      "id": 55,
+      "link": [2, 4],
+      "name": "Cross Room Jump - Speed Jump through Toilet",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 9,
+          "maxHeight": 10,
+          "maxLeftPosition": -34.5,
+          "minRightPosition": -7
+        },
+        "comesThroughToilet": "yes"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "SpeedBooster",
+        "canInsaneJump",
+        "canMidairWiggle"
+      ],
+      "note": [
+        "Using SpeedBooster in the room below, run and jump through the door without bonking the door frame or breaking spin.",
+        "Perform a mid-air wiggle to make into onto either ledge."
+      ],
+      "devNote": ["This strat is applicable in Crocomire's Room and the Indiana Jones Room."]
+    },
+    {
+      "id": 56,
+      "link": [2, 4],
+      "name": "Cross Room Jump - Tricky Dash Jump",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 9,
+          "maxHeight": 9,
+          "maxLeftPosition": -6,
+          "minRightPosition": 2
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyDashJump"
+      ],
+      "note": [
+        "Run left-to-right in the room below using SpeedBooster over a specific distance, and jump up through the door."
+      ],
+      "devNote": [
+        "This strat is applicable to Lava Farm Tunnel, and to The Jail with the left pillar broken."
+      ]
+    },
+    {
+      "id": 57,
+      "link": [2, 4],
+      "name": "Cross Room Jump - Low Wall Jump",
+      "entranceCondition": {
+        "comeInWithWallJumpBelow": {
+          "minHeight": 3
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canPreciseWalljump"
+      ],
+      "note": [
+        "Do a wall jump from the right side of the door frame, three tiles below the door transition.",
+        "Turn back around to the right before the transition, while maintaining spin."
+      ],
+      "devNote": [
+        "This strat requires a door frame with a three-tile-high surface usable for wall jumping (not including the door transition tiles).",
+        "Many door frames only have a two-tile-high surface."
+      ]
+    },
+    {
+      "id": 58,
+      "link": [2, 4],
+      "name": "Cross Room Jump - Low Wall Jump Turnaround",
+      "entranceCondition": {
+        "comeInWithWallJumpBelow": {
+          "minHeight": 2
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        {"or": [
+          "canInsaneWalljump",
+          {"and": [
+            "canPreciseWalljump",
+            "canMomentumConservingTurnaround"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Do a low spin jump and press against the right side of the door frame.",
+        "Wall jump as low as possible, jumping as soon as possible after moving away from the wall.",
+        "Immediately turn back to the right and try to press against the door frame again before the transition, while maintaining spin.",
+        "After the transition, typically a momentum-conserving turnaround is needed to avoid bonking."
+      ],
+      "devNote": [
+        "This strat is for cases where the door frame below has only a two-tile-high surface available for wall-jumping.",
+        "If a third tile is available, the jump can be done more easily."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [2, 4],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"or": [
+              "h_artificialMorphIBJ",
+              "h_artificialMorphSpringBallBombJump"
+            ]}
+          ]},
+          "h_artificialMorphDoubleSpringBallJump"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 66,
+      "link": [2, 4],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 9, "excessFrames": 4}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 6, "excessFrames": 4}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Spark vertically in the center of the gap to save Energy."
+    },
+    {
+      "id": 68,
+      "link": [2, 4],
+      "name": "Grapple Swing",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [{"position": [-1, 5], "environment": "water", "note": "Mt. Everest"}]
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        "canTrickyJump"
+      ],
+      "note": [
+        "Swing up through the door from a Grapple block in the room below (Mt. Everest).",
+        "Fire a Grapple shot after entering the room, to allow Samus to move further right and get onto the ledge."
+      ]
+    },
+    {
+      "id": 60,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 61,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Gravity",
+          "HiJump",
+          "canTrickySpringBallJump"
+        ]}
+      ]
+    },
+    {
+      "id": 62,
+      "link": [4, 1],
+      "name": "Crouch Jump Down Grab Escape",
+      "requires": [
+        "canSuitlessMaridia",
+        "h_crouchJumpDownGrab",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Crouch jump just before the water reaches its maximum.",
+        "Wait until Samus reaches the peak of the jump;",
+        "then in quick succession press down and then forward (or diagonal down-forward).",
+        "This only works as a way out of the water on the right side."
+      ],
+      "detailNote": [
+        "The problem with pressing down pre-maturely is that it shrinks Samus' hitbox vertically,",
+        "causing Samus to escape the water, which results in a shortened jump height",
+        "because of the larger vertical acceleration that applies when Samus is in air physics."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [4, 1],
+      "name": "Wall Jump Escape",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickyWalljump"
+      ],
+      "note": "Perform a precise wall jump as the water is lowering.  Climbing up the right side of the room is slightly easier."
+    },
+    {
+      "id": 64,
+      "link": [4, 1],
+      "name": "Space Jump Bounce",
+      "requires": [
+        "canSpaceJumpWaterBounce"
+      ],
+      "note": "Kill the Choot, then space jump across the water and onto the center platform - it is slightly lower than the sides."
+    },
+    {
+      "id": 65,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": []
+    }
+  ],
+  "notables": [],
+  "nextStratId": 71,
+  "nextNotableId": 1
+}

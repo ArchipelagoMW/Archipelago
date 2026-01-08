@@ -1,0 +1,2485 @@
+{
+  "REGION_ROUTE1/MAIN": {
+    "parent_map": "MAP_ROUTE1",
+    "name": "Route 1",
+    "encounter_region": "Route 1",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "NPC_GIFT_GOT_POTION_ON_ROUTE_1"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_PALLET_TOWN/MAIN": "Route 1 Exit (South)",
+      "REGION_VIRIDIAN_CITY/SOUTH": "Route 1 Exit (North)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE2/SOUTHWEST": {
+    "parent_map": "MAP_ROUTE2",
+    "name": "Route 2 (Southwest)",
+    "encounter_region": "Route 2",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE2/SOUTHEAST": "Route 2 South Cuttable Trees (Left)",
+      "REGION_VIRIDIAN_CITY/NORTH": "Route 2 Exit (South)"
+    },
+    "warps": {
+      "MAP_ROUTE2:2,3/MAP_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE:0": "Viridian Forest South Gate"
+    }
+  },
+  "REGION_ROUTE2/NORTHWEST": {
+    "parent_map": "MAP_ROUTE2",
+    "name": "Route 2 (Northwest)",
+    "encounter_region": "Route 2",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE2/NORTHEAST": ["Route 2 North Cuttable Tree (Top)", "Route 2 Smashable Rock (Top)"],
+      "REGION_PEWTER_CITY/MAIN": "Route 2 Exit (North)"
+    },
+    "warps": {
+      "MAP_ROUTE2:0,1/MAP_ROUTE2_VIRIDIAN_FOREST_NORTH_ENTRANCE:1": "Viridian Forest North Gate"
+    }
+  },
+  "REGION_ROUTE2/NORTHEAST": {
+    "parent_map": "MAP_ROUTE2",
+    "name": "Route 2 (Northeast)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE2/NORTHWEST": ["Route 2 North Cuttable Tree (Bottom)", "Route 2 Smashable Rock (Bottom)"],
+      "REGION_ROUTE2/EAST": "Route 2 Center Cuttable Tree (Top)"
+    },
+    "warps": {
+      "MAP_ROUTE2:4/MAP_DIGLETTS_CAVE_NORTH_ENTRANCE:1": "Diglett's Cave North Entrance",
+      "MAP_ROUTE2:5/MAP_ROUTE2_HOUSE:0": "Route 2 Trade House"
+    }
+  },
+  "REGION_ROUTE2/EAST": {
+    "parent_map": "MAP_ROUTE2",
+    "name": "Route 2 (East)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE2/NORTHEAST": "Route 2 Center Cuttable Tree (Bottom)"
+    },
+    "warps": {
+      "MAP_ROUTE2:8,9/MAP_ROUTE2_EAST_BUILDING:1": "Route 2 Gate (North)"
+    }
+  },
+  "REGION_ROUTE2/SOUTHEAST": {
+    "parent_map": "MAP_ROUTE2",
+    "name": "Route 2 (Southeast)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_ROUTE2_ETHER",
+      "ITEM_ROUTE2_PARALYZE_HEAL"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE2/SOUTHWEST": "Route 2 South Cuttable Trees (Right)"
+    },
+    "warps": {
+      "MAP_ROUTE2:6,7/MAP_ROUTE2_EAST_BUILDING:0": "Route 2 Gate (South)"
+    }
+  },
+  "REGION_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE/MAIN": {
+    "parent_map": "MAP_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE",
+    "name": "Viridian Forest South Gate",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE:0/MAP_ROUTE2:2": "Viridian Forest South Gate Exit (South)",
+      "MAP_ROUTE2_VIRIDIAN_FOREST_SOUTH_ENTRANCE:1/MAP_VIRIDIAN_FOREST:1": "Viridian Forest South Gate Exit (North)"
+    }
+  },
+  "REGION_ROUTE2_VIRIDIAN_FOREST_NORTH_ENTRANCE/MAIN": {
+    "parent_map": "MAP_ROUTE2_VIRIDIAN_FOREST_NORTH_ENTRANCE",
+    "name": "Viridian Forest North Gate",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE2_VIRIDIAN_FOREST_NORTH_ENTRANCE:0/MAP_VIRIDIAN_FOREST:4": "Viridian Forest North Gate Exit (South)",
+      "MAP_ROUTE2_VIRIDIAN_FOREST_NORTH_ENTRANCE:1/MAP_ROUTE2:0": "Viridian Forest North Gate Exit (North)"
+    }
+  },
+  "REGION_ROUTE2_EAST_BUILDING/MAIN": {
+    "parent_map": "MAP_ROUTE2_EAST_BUILDING",
+    "name": "Route 2 Gate",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "NPC_GIFT_GOT_HM05"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE2_EAST_BUILDING:0/MAP_ROUTE2:6": "Route 2 Gate Exit (South)",
+      "MAP_ROUTE2_EAST_BUILDING:1/MAP_ROUTE2:8": "Route 2 Gate Exit (North)"
+    }
+  },
+  "REGION_ROUTE2_HOUSE/MAIN": {
+    "parent_map": "MAP_ROUTE2_HOUSE",
+    "name": "Route 2 Trade House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [
+      "TRADE_POKEMON_MR_MIME"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE2_HOUSE:0/MAP_ROUTE2:5": "Route 2 Trade House Exit"
+    }
+  },
+  "REGION_ROUTE3/MAIN": {
+    "parent_map": "MAP_ROUTE3",
+    "name": "Route 3",
+    "encounter_region": "Route 3",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_LASS_JANICE_REWARD",
+      "TRAINER_LASS_JANICE_2_REWARD",
+      "TRAINER_LASS_JANICE_3_REWARD",
+      "TRAINER_BUG_CATCHER_COLTON_REWARD",
+      "TRAINER_BUG_CATCHER_COLTON_2_REWARD",
+      "TRAINER_BUG_CATCHER_COLTON_3_REWARD",
+      "TRAINER_BUG_CATCHER_COLTON_4_REWARD",
+      "TRAINER_YOUNGSTER_BEN_REWARD",
+      "TRAINER_YOUNGSTER_BEN_2_REWARD",
+      "TRAINER_YOUNGSTER_BEN_3_REWARD",
+      "TRAINER_YOUNGSTER_BEN_4_REWARD",
+      "TRAINER_BUG_CATCHER_GREG_REWARD",
+      "TRAINER_LASS_SALLY_REWARD",
+      "TRAINER_BUG_CATCHER_JAMES_REWARD",
+      "TRAINER_LASS_ROBIN_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE3/BETWEEN_LEDGES": "Route 3 Ledge",
+      "REGION_PEWTER_CITY/NEAR_ROADBLOCK": "Route 3 Exit (West)",
+      "REGION_ROUTE4/WEST": "Route 3 Exit (North)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE3/BETWEEN_LEDGES": {
+    "parent_map": "MAP_ROUTE3",
+    "name": "Route 3 (Between Ledges)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE3_ORAN_BERRY",
+      "TRAINER_YOUNGSTER_CALVIN_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE4/WEST": {
+    "parent_map": "MAP_ROUTE4",
+    "name": "Route 4 (West)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "FAME_CHECKER_BROCK_4",
+      "HIDDEN_ITEM_ROUTE4_PERSIM_BERRY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE3/MAIN": "Route 4 Exit (South)"
+    },
+    "warps": {
+      "MAP_ROUTE4:0/MAP_MT_MOON_1F:3": "Mt. Moon (West)",
+      "MAP_ROUTE4:2/MAP_ROUTE4_POKEMON_CENTER_1F:0": "Route 4 Pokemon Center"
+    }
+  },
+  "REGION_ROUTE4/EAST": {
+    "parent_map": "MAP_ROUTE4",
+    "name": "Route 4 (East)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE4_GREAT_BALL",
+      "HIDDEN_ITEM_ROUTE4_RAZZ_BERRY",
+      "ITEM_ROUTE4_TM05"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE4/SOUTHEAST": "Route 4 Southeast Ledge (Top)",
+      "REGION_ROUTE4/NORTHEAST": "Route 4 Northeast Ledge (Bottom)"
+    },
+    "warps": {
+      "MAP_ROUTE4:1/MAP_MT_MOON_B1F:7": "Mt. Moon (East)"
+    }
+  },
+  "REGION_ROUTE4/SOUTHEAST": {
+    "parent_map": "MAP_ROUTE4",
+    "name": "Route 4 (Southeast)",
+    "encounter_region": "Route 4",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE4/EAST": "Route 4 Southeast Ledge (Bottom)",
+      "REGION_CERULEAN_CITY/MAIN": "Route 4 Exit (Southeast)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE4/WATER": {
+    "parent_map": "MAP_ROUTE4",
+    "name": "Route 4 (Water)",
+    "encounter_region": "Route 4",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE4/NORTHEAST": {
+    "parent_map": "MAP_ROUTE4",
+    "name": "Route 4 (Northeast)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_LASS_CRISSY_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE4/EAST": "Route 4 Northeast Ledge (Top)",
+      "REGION_CERULEAN_CITY/NEAR_CAVE": "Route 4 Exit (Northeast)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE4_POKEMON_CENTER_1F/VISIT": {
+    "parent_map": "MAP_ROUTE4_POKEMON_CENTER_1F",
+    "name": "Route 4 Pokemon Center 1F (Visit)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "FLY_UNLOCK_VISITED_ROUTE4"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE4_POKEMON_CENTER_1F/MAIN": {
+    "parent_map": "MAP_ROUTE4_POKEMON_CENTER_1F",
+    "name": "Route 4 Pokemon Center 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [
+      "GIFT_POKEMON_MAGIKARP"
+    ],
+    "exits": {
+      "REGION_ROUTE4_POKEMON_CENTER_1F/VISIT": "Visit Route 4 Pokemon Center 1F"
+    },
+    "warps": {
+      "MAP_ROUTE4_POKEMON_CENTER_1F:0/MAP_ROUTE4:2": "Route 4 Pokemon Center 1F Exit",
+      "MAP_ROUTE4_POKEMON_CENTER_1F:1/MAP_ROUTE4_POKEMON_CENTER_2F:0": "Route 4 Pokemon Center 1F Stairs"
+    }
+  },
+  "REGION_ROUTE4_POKEMON_CENTER_2F/MAIN": {
+    "parent_map": "MAP_ROUTE4_POKEMON_CENTER_2F",
+    "name": "Route 4 Pokemon Center 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE4_POKEMON_CENTER_2F:0/MAP_ROUTE4_POKEMON_CENTER_1F:1": "Route 4 Pokemon Center 2F Stairs"
+    }
+  },
+  "REGION_ROUTE5/MAIN": {
+    "parent_map": "MAP_ROUTE5",
+    "name": "Route 5",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE5/CENTER": "Route 5 North Ledge",
+      "REGION_ROUTE5/NEAR_UNDERGROUND": ["Route 5 Open Path (Top)", "Route 5 Smashable Rocks (Top)"],
+      "REGION_CERULEAN_CITY/OUTSKIRTS": "Route 5 Exit (North)"
+    },
+    "warps": {
+      "MAP_ROUTE5:2,3/MAP_ROUTE5_SOUTH_ENTRANCE:0": "Route 5 Gate (North)"
+    }
+  },
+  "REGION_ROUTE5/CENTER": {
+    "parent_map": "MAP_ROUTE5",
+    "name": "Route 5 (Center)",
+    "encounter_region": "Route 5",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE5/NEAR_DAYCARE": "Route 5 Center Ledge"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE5/NEAR_DAYCARE": {
+    "parent_map": "MAP_ROUTE5",
+    "name": "Route 5 (Near Daycare)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE5/MAIN": "Route 5 South Ledge"
+    },
+    "warps": {
+      "MAP_ROUTE5:1/MAP_ROUTE5_POKEMON_DAY_CARE:0": "Route 5 Pokemon Day Care"
+    }
+  },
+  "REGION_ROUTE5/NEAR_UNDERGROUND": {
+    "parent_map": "MAP_ROUTE5",
+    "name": "Route 5 (Near Underground)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE5/MAIN": ["Route 5 Open Path (Bottom)", "Route 5 Smashable Rocks (Bottom)"]
+    },
+    "warps": {
+      "MAP_ROUTE5:0/MAP_UNDERGROUND_PATH_NORTH_ENTRANCE:0": "Underground Path North Entrance"
+    }
+  },
+  "REGION_ROUTE5_POKEMON_DAY_CARE/MAIN": {
+    "parent_map": "MAP_ROUTE5_POKEMON_DAY_CARE",
+    "name": "Route 5 Pokemon Day Care",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE5_POKEMON_DAY_CARE:0/MAP_ROUTE5:1": "Route 5 Pokemon Day Care Exit"
+    }
+  },
+  "REGION_ROUTE5_SOUTH_ENTRANCE/NORTH": {
+    "parent_map": "MAP_ROUTE5_SOUTH_ENTRANCE",
+    "name": "Route 5 Gate (North)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE5_SOUTH_ENTRANCE/SOUTH": "Route 5 Gate Guard Checkpoint (Top)"
+    },
+    "warps": {
+      "MAP_ROUTE5_SOUTH_ENTRANCE:0/MAP_ROUTE5:2": "Route 5 Gate Exit (North)"
+    }
+  },
+  "REGION_ROUTE5_SOUTH_ENTRANCE/SOUTH": {
+    "parent_map": "MAP_ROUTE5_SOUTH_ENTRANCE",
+    "name": "Route 5 Gate (South)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE5_SOUTH_ENTRANCE/NORTH": "Route 5 Gate Guard Checkpoint (Bottom)"
+    },
+    "warps": {
+      "MAP_ROUTE5_SOUTH_ENTRANCE:1/MAP_SAFFRON_CITY:9": "Route 5 Gate Exit (South)"
+    }
+  },
+  "REGION_UNDERGROUND_PATH_NORTH_ENTRANCE/MAIN": {
+    "parent_map": "MAP_UNDERGROUND_PATH_NORTH_ENTRANCE",
+    "name": "Underground Path North Entrance",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [
+      "TRADE_POKEMON_NIDORAN"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_UNDERGROUND_PATH_NORTH_ENTRANCE:0/MAP_ROUTE5:0": "Underground Path North Entrance Exit",
+      "MAP_UNDERGROUND_PATH_NORTH_ENTRANCE:1/MAP_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL:0": "Underground Path North Entrance Stairs"
+    }
+  },
+  "REGION_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL/MAIN": {
+    "parent_map": "MAP_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL",
+    "name": "Underground Path North-South Tunnel",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL_ANTIDOTE",
+      "HIDDEN_ITEM_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL_PARALYZE_HEAL",
+      "HIDDEN_ITEM_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL_AWAKENING",
+      "HIDDEN_ITEM_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL_POTION",
+      "HIDDEN_ITEM_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL_ETHER",
+      "HIDDEN_ITEM_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL_ICE_HEAL",
+      "HIDDEN_ITEM_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL_BURN_HEAL"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL:0/MAP_UNDERGROUND_PATH_NORTH_ENTRANCE:1": "Underground Path North-South Tunnel North Stairs",
+      "MAP_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL:1/MAP_UNDERGROUND_PATH_SOUTH_ENTRANCE:1": "Underground Path North-South Tunnel South Stairs"
+    }
+  },
+  "REGION_UNDERGROUND_PATH_SOUTH_ENTRANCE/MAIN": {
+    "parent_map": "MAP_UNDERGROUND_PATH_SOUTH_ENTRANCE",
+    "name": "Underground Path South Entrance",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_UNDERGROUND_PATH_SOUTH_ENTRANCE:0/MAP_ROUTE6:0": "Underground Path South Entrance Exit",
+      "MAP_UNDERGROUND_PATH_SOUTH_ENTRANCE:1/MAP_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL:1": "Underground Path South Entrance Stairs"
+    }
+  },
+  "REGION_ROUTE6/MAIN": {
+    "parent_map": "MAP_ROUTE6",
+    "name": "Route 6",
+    "encounter_region": "Route 6",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE6_SITRUS_BERRY",
+      "HIDDEN_ITEM_ROUTE6_RARE_CANDY",
+      "TRAINER_BUG_CATCHER_KEIGO_REWARD",
+      "TRAINER_CAMPER_RICKY_REWARD",
+      "TRAINER_CAMPER_RICKY_2_REWARD",
+      "TRAINER_CAMPER_RICKY_3_REWARD",
+      "TRAINER_CAMPER_RICKY_4_REWARD",
+      "TRAINER_PICNICKER_NANCY_REWARD",
+      "TRAINER_BUG_CATCHER_ELIJAH_REWARD",
+      "TRAINER_PICNICKER_ISABELLE_REWARD",
+      "TRAINER_PICNICKER_ISABELLE_2_REWARD",
+      "TRAINER_PICNICKER_ISABELLE_3_REWARD",
+      "TRAINER_PICNICKER_ISABELLE_4_REWARD",
+      "TRAINER_CAMPER_JEFF_REWARD",
+      "TRAINER_CAMPER_JEFF_2_REWARD",
+      "TRAINER_CAMPER_JEFF_3_REWARD",
+      "TRAINER_CAMPER_JEFF_4_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE6/NEAR_UNDERGROUND": ["Route 6 Open Path (Bottom)", "Route 6 Smashable Rocks (Bottom)"],
+      "REGION_ROUTE6/WATER": "Route 6 Surfing Spot",
+      "REGION_VERMILION_CITY/MAIN": "Route 6 Exit (South)"
+    },
+    "warps": {
+      "MAP_ROUTE6:1,2/MAP_ROUTE6_NORTH_ENTRANCE:1": "Route 6 Gate (South)"
+    }
+  },
+  "REGION_ROUTE6/NEAR_UNDERGROUND": {
+    "parent_map": "MAP_ROUTE6",
+    "name": "Route 6 (Near Underground)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE6/MAIN": ["Route 6 Open Path (Top)", "Route 6 Smashable Rocks (Top)"]
+    },
+    "warps": {
+      "MAP_ROUTE6:0/MAP_UNDERGROUND_PATH_SOUTH_ENTRANCE:0": "Underground Path South Entrance"
+    }
+  },
+  "REGION_ROUTE6/WATER": {
+    "parent_map": "MAP_ROUTE6",
+    "name": "Route 6 (Water)",
+    "encounter_region": "Route 6",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE6_NORTH_ENTRANCE/SOUTH": {
+    "parent_map": "MAP_ROUTE6_NORTH_ENTRANCE",
+    "name": "Route 6 Gate (South)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE6_NORTH_ENTRANCE/NORTH": "Route 6 Gate Guard Checkpoint (Bottom)"
+    },
+    "warps": {
+      "MAP_ROUTE6_NORTH_ENTRANCE:1/MAP_ROUTE6:1": "Route 6 Gate Exit (South)"
+    }
+  },
+  "REGION_ROUTE6_NORTH_ENTRANCE/NORTH": {
+    "parent_map": "MAP_ROUTE6_NORTH_ENTRANCE",
+    "name": "Route 6 Gate (North)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE6_NORTH_ENTRANCE/SOUTH": "Route 6 Gate Guard Checkpoint (Top)"
+    },
+    "warps": {
+      "MAP_ROUTE6_NORTH_ENTRANCE:0/MAP_SAFFRON_CITY:12": "Route 6 Gate Exit (North)"
+    }
+  },
+  "REGION_ROUTE7/MAIN": {
+    "parent_map": "MAP_ROUTE7",
+    "name": "Route 7",
+    "encounter_region": "Route 7",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE7_WEPEAR_BERRY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE7/NEAR_UNDERGROUND": ["Route 7 Open Path (Top Right)", "Route 7 Smashable Rocks (Top Right)"],
+      "REGION_CELADON_CITY/MAIN": "Route 7 Exit (West)"
+    },
+    "warps": {
+      "MAP_ROUTE7:1/MAP_ROUTE7_EAST_ENTRANCE:0": "Route 7 Gate (West)"
+    }
+  },
+  "REGION_ROUTE7/NEAR_UNDERGROUND": {
+    "parent_map": "MAP_ROUTE7",
+    "name": "Route 7 (Near Underground)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE7/MAIN": ["Route 7 Open Path (Bottom Left)", "Route 7 Smashable Rocks (Bottom Left)"]
+    },
+    "warps": {
+      "MAP_ROUTE7:0/MAP_UNDERGROUND_PATH_WEST_ENTRANCE:0": "Underground Path West Entrance"
+    }
+  },
+  "REGION_ROUTE7_EAST_ENTRANCE/WEST": {
+    "parent_map": "MAP_ROUTE7_EAST_ENTRANCE",
+    "name": "Route 7 Gate (West)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE7_EAST_ENTRANCE/EAST": "Route 7 Gate Guard Checkpoint (Left)"
+    },
+    "warps": {
+      "MAP_ROUTE7_EAST_ENTRANCE:0/MAP_ROUTE7:1": "Route 7 Gate Exit (West)"
+    }
+  },
+  "REGION_ROUTE7_EAST_ENTRANCE/EAST": {
+    "parent_map": "MAP_ROUTE7_EAST_ENTRANCE",
+    "name": "Route 7 Gate (East)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE7_EAST_ENTRANCE/WEST": "Route 7 Gate Guard Checkpoint (Right)"
+    },
+    "warps": {
+      "MAP_ROUTE7_EAST_ENTRANCE:1/MAP_SAFFRON_CITY:8": "Route 7 Gate Exit (East)"
+    }
+  },
+  "REGION_UNDERGROUND_PATH_EAST_ENTRANCE/MAIN": {
+    "parent_map": "MAP_UNDERGROUND_PATH_EAST_ENTRANCE",
+    "name": "Underground Path East Entrance",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_UNDERGROUND_PATH_EAST_ENTRANCE:0/MAP_ROUTE8:0": "Underground Path East Entrance Exit",
+      "MAP_UNDERGROUND_PATH_EAST_ENTRANCE:1/MAP_UNDERGROUND_PATH_EAST_WEST_TUNNEL:0": "Underground Path East Entrance Stairs"
+    }
+  },
+  "REGION_UNDERGROUND_PATH_EAST_WEST_TUNNEL/MAIN": {
+    "parent_map": "MAP_UNDERGROUND_PATH_EAST_WEST_TUNNEL",
+    "name": "Underground Path East-West Tunnel",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_UNDERGROUND_PATH_EAST_WEST_TUNNEL_ICE_HEAL",
+      "HIDDEN_ITEM_UNDERGROUND_PATH_EAST_WEST_TUNNEL_ANTIDOTE",
+      "HIDDEN_ITEM_UNDERGROUND_PATH_EAST_WEST_TUNNEL_ETHER",
+      "HIDDEN_ITEM_UNDERGROUND_PATH_EAST_WEST_TUNNEL_BURN_HEAL",
+      "HIDDEN_ITEM_UNDERGROUND_PATH_EAST_WEST_TUNNEL_AWAKENING",
+      "HIDDEN_ITEM_UNDERGROUND_PATH_EAST_WEST_TUNNEL_PARALYZE_HEAL",
+      "HIDDEN_ITEM_UNDERGROUND_PATH_EAST_WEST_TUNNEL_POTION"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_UNDERGROUND_PATH_EAST_WEST_TUNNEL:0/MAP_UNDERGROUND_PATH_EAST_ENTRANCE:1": "Underground Path East-West Tunnel East Stairs",
+      "MAP_UNDERGROUND_PATH_EAST_WEST_TUNNEL:1/MAP_UNDERGROUND_PATH_WEST_ENTRANCE:1": "Underground Path East-West Tunnel West Stairs"
+    }
+  },
+  "REGION_UNDERGROUND_PATH_WEST_ENTRANCE/MAIN": {
+    "parent_map": "MAP_UNDERGROUND_PATH_WEST_ENTRANCE",
+    "name": "Underground Path West Entrance",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_UNDERGROUND_PATH_WEST_ENTRANCE:0/MAP_ROUTE7:0": "Underground Path West Entrance Exit",
+      "MAP_UNDERGROUND_PATH_WEST_ENTRANCE:1/MAP_UNDERGROUND_PATH_EAST_WEST_TUNNEL:1": "Underground Path West Entrance Stairs"
+    }
+  },
+  "REGION_ROUTE8/MAIN": {
+    "parent_map": "MAP_ROUTE8",
+    "name": "Route 8",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_LASS_JULIA_REWARD",
+      "TRAINER_GAMER_RICH_REWARD",
+      "TRAINER_GAMER_RICH_2_REWARD",
+      "TRAINER_SUPER_NERD_GLENN_REWARD",
+      "TRAINER_SUPER_NERD_GLENN_2_REWARD",
+      "TRAINER_TWINS_ELI_ANNE_REWARD",
+      "TRAINER_TWINS_ELI_ANNE_2_REWARD",
+      "TRAINER_LASS_PAIGE_REWARD",
+      "TRAINER_SUPER_NERD_LESLIE_REWARD",
+      "TRAINER_LASS_ANDREA_REWARD",
+      "TRAINER_LASS_MEGAN_REWARD",
+      "TRAINER_LASS_MEGAN_2_REWARD",
+      "TRAINER_LASS_MEGAN_3_REWARD",
+      "TRAINER_BIKER_JAREN_REWARD",
+      "TRAINER_BIKER_JAREN_2_REWARD",
+      "TRAINER_BIKER_RICARDO_REWARD",
+      "TRAINER_SUPER_NERD_AIDAN_REWARD",
+      "TRAINER_GAMER_STAN_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE8/BEHIND_TREES": "Route 8 Cuttable Trees",
+      "REGION_ROUTE8/NEAR_UNDERGROUND": ["Route 8 Open Path (Bottom)", "Route 8 Smashable Rocks (Bottom)"],
+      "REGION_LAVENDER_TOWN/MAIN": "Route 8 Exit (East)"
+    },
+    "warps": {
+      "MAP_ROUTE8:1/MAP_ROUTE8_WEST_ENTRANCE:1": "Route 8 Gate (East)"
+    }
+  },
+  "REGION_ROUTE8/BEHIND_TREES": {
+    "parent_map": "MAP_ROUTE8",
+    "name": "Route 8 (Behind Trees)",
+    "encounter_region": "Route 8",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE8_LUM_BERRY",
+      "HIDDEN_ITEM_ROUTE8_RAWST_BERRY",
+      "HIDDEN_ITEM_ROUTE8_LEPPA_BERRY"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE8/NEAR_UNDERGROUND": {
+    "parent_map": "MAP_ROUTE8",
+    "name": "Route 8 (Near Underground)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE8/MAIN": ["Route 8 Open Path (Top)", "Route 8 Smashable Rocks (Top)"]
+    },
+    "warps": {
+      "MAP_ROUTE8:0/MAP_UNDERGROUND_PATH_EAST_ENTRANCE:0": "Underground Path East Entrance"
+    }
+  },
+  "REGION_ROUTE8_WEST_ENTRANCE/EAST": {
+    "parent_map": "MAP_ROUTE8_WEST_ENTRANCE",
+    "name": "Route 8 Gate (East)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE8_WEST_ENTRANCE/WEST": "Route 8 Gate Guard Checkpoint (Right)"
+    },
+    "warps": {
+      "MAP_ROUTE8_WEST_ENTRANCE:1/MAP_ROUTE8:1": "Route 8 Gate Exit (East)"
+    }
+  },
+  "REGION_ROUTE8_WEST_ENTRANCE/WEST": {
+    "parent_map": "MAP_ROUTE8_WEST_ENTRANCE",
+    "name": "Route 8 Gate (West)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE8_WEST_ENTRANCE/EAST": "Route 8 Gate Guard Checkpoint (Left)"
+    },
+    "warps": {
+      "MAP_ROUTE8_WEST_ENTRANCE:0/MAP_SAFFRON_CITY:11": "Route 8 Gate Exit (West)"
+    }
+  },
+  "REGION_ROUTE9/WEST": {
+    "parent_map": "MAP_ROUTE9",
+    "name": "Route 9 (West)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_PICNICKER_ALICIA_REWARD",
+      "TRAINER_PICNICKER_ALICIA_2_REWARD",
+      "TRAINER_PICNICKER_ALICIA_3_REWARD",
+      "TRAINER_PICNICKER_ALICIA_4_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE9/MAIN": "Route 9 Southwest Ledge",
+      "REGION_CERULEAN_CITY/OUTSKIRTS": "Route 9 Exit (West)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE9/MAIN": {
+    "parent_map": "MAP_ROUTE9",
+    "name": "Route 9",
+    "encounter_region": "Route 9",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "ITEM_ROUTE9_TM40",
+      "TRAINER_HIKER_JEREMY_REWARD",
+      "TRAINER_HIKER_JEREMY_2_REWARD",
+      "TRAINER_CAMPER_CHRIS_REWARD",
+      "TRAINER_CAMPER_CHRIS_2_REWARD",
+      "TRAINER_CAMPER_CHRIS_3_REWARD",
+      "TRAINER_CAMPER_CHRIS_4_REWARD",
+      "TRAINER_BUG_CATCHER_BRENT_REWARD",
+      "HIDDEN_ITEM_ROUTE9_ETHER",
+      "TRAINER_HIKER_ALAN_REWARD",
+      "ITEM_ROUTE9_BURN_HEAL",
+      "TRAINER_BUG_CATCHER_CONNER_REWARD",
+      "TRAINER_CAMPER_DREW_REWARD",
+      "HIDDEN_ITEM_ROUTE9_CHESTO_BERRY",
+      "TRAINER_HIKER_BRICE_REWARD",
+      "HIDDEN_ITEM_ROUTE9_RARE_CANDY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE9/WEST": "Route 9 Northwest Ledge",
+      "REGION_ROUTE9/EAST": "Route 9 Northeast Ledge"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE9/EAST": {
+    "parent_map": "MAP_ROUTE9",
+    "name": "Route 9 (East)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_PICNICKER_CAITLIN_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE9/MAIN": "Route 9 Southeast Ledge",
+      "REGION_ROUTE10/NORTH": "Route 9 Exit (East)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE10/NORTH": {
+    "parent_map": "MAP_ROUTE10",
+    "name": "Route 10 (North)",
+    "encounter_region": "Route 10",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE10_PERSIM_BERRY",
+      "TRAINER_PICNICKER_HEIDI_REWARD",
+      "HIDDEN_ITEM_ROUTE10_CHERI_BERRY",
+      "HIDDEN_ITEM_ROUTE10_SUPER_POTION"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE10/NORTH_WATER": "Route 10 (North) Surfing Spot",
+      "REGION_ROUTE9/EAST": "Route 10 Exit (West)"
+    },
+    "warps": {
+      "MAP_ROUTE10:0/MAP_ROCK_TUNNEL_1F:0": "Rock Tunnel (North)",
+      "MAP_ROUTE10:3/MAP_ROUTE10_POKEMON_CENTER_1F:0": "Route 10 Pokemon Center"
+    }
+  },
+  "REGION_ROUTE10/SOUTH": {
+    "parent_map": "MAP_ROUTE10",
+    "name": "Route 10 (South)",
+    "encounter_region": "Route 10",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_PICNICKER_CAROL_REWARD",
+      "TRAINER_HIKER_CLARK_REWARD",
+      "HIDDEN_ITEM_ROUTE10_NANAB_BERRY",
+      "TRAINER_POKEMANIAC_HERMAN_REWARD",
+      "TRAINER_POKEMANIAC_HERMAN_2_REWARD",
+      "TRAINER_POKEMANIAC_HERMAN_3_REWARD",
+      "TRAINER_HIKER_TRENT_REWARD",
+      "TRAINER_HIKER_TRENT_2_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE10/SOUTH_WATER": "Route 10 (South) Surfing Spot",
+      "REGION_LAVENDER_TOWN/MAIN": "Route 10 Exit (South)"
+    },
+    "warps": {
+      "MAP_ROUTE10:1/MAP_ROCK_TUNNEL_1F:5": "Rock Tunnel (South)"
+    }
+  },
+  "REGION_ROUTE10/NORTH_WATER": {
+    "parent_map": "MAP_ROUTE10",
+    "name": "Route 10 (North Water)",
+    "encounter_region": "Route 10",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE10/NORTH": "Route 10 (North) Landing Spot",
+      "REGION_ROUTE10/SOUTH_WATER": "Route 10 Waterfall (Drop)",
+      "REGION_ROUTE10/NEAR_POWER_PLANT": "Route 10 (Near Power Plant) Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE10/SOUTH_WATER": {
+    "parent_map": "MAP_ROUTE10",
+    "name": "Route 10 (South Water)",
+    "encounter_region": "Route 10",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE10/SOUTH": "Route 10 (South) Landing Spot",
+      "REGION_ROUTE10/NORTH_WATER": "Route 10 Waterfall (Climb)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE10/NEAR_POWER_PLANT": {
+    "parent_map": "MAP_ROUTE10",
+    "name": "Route 10 (Near Power Plant)",
+    "encounter_region": "Route 10",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_POKEMANIAC_MARK_REWARD",
+      "TRAINER_POKEMANIAC_MARK_2_REWARD",
+      "TRAINER_POKEMANIAC_MARK_3_REWARD",
+      "HIDDEN_ITEM_ROUTE10_MAX_ETHER"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE10/NORTH_WATER": "Route 10 (Near Power Plant) Surfing Spot",
+      "REGION_ROUTE10/NEAR_POWER_PLANT_BACK": "Route 10 Ledge (Bottom)"
+    },
+    "warps": {
+      "MAP_ROUTE10:2/MAP_POWER_PLANT:0": "Power Plant (Front)"
+    }
+  },
+  "REGION_ROUTE10/NEAR_POWER_PLANT_BACK": {
+    "parent_map": "MAP_ROUTE10",
+    "name": "Route 10 (Near Power Plant Back)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE10/NEAR_POWER_PLANT": "Route 10 Ledge (Top)"
+    },
+    "warps": {
+      "MAP_ROUTE10:4/MAP_POWER_PLANT:1": "Power Plant (Back)"
+    }
+  },
+  "REGION_ROUTE10_POKEMON_CENTER_1F/VISIT": {
+    "parent_map": "MAP_ROUTE10_POKEMON_CENTER_1F",
+    "name": "Route 10 Pokemon Center 1F (Visit)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "FLY_UNLOCK_VISITED_ROUTE10"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE10_POKEMON_CENTER_1F/MAIN": {
+    "parent_map": "MAP_ROUTE10_POKEMON_CENTER_1F",
+    "name": "Route 10 Pokemon Center 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "NPC_GIFT_GOT_EVERSTONE_FROM_OAKS_AIDE"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE10_POKEMON_CENTER_1F/VISIT": "Visit Route 10 Pokemon Center 1F"
+    },
+    "warps": {
+      "MAP_ROUTE10_POKEMON_CENTER_1F:0/MAP_ROUTE10:3": "Route 10 Pokemon Center 1F Exit",
+      "MAP_ROUTE10_POKEMON_CENTER_1F:1/MAP_ROUTE10_POKEMON_CENTER_2F:0": "Route 10 Pokemon Center 1F Stairs"
+    }
+  },
+  "REGION_ROUTE10_POKEMON_CENTER_2F/MAIN": {
+    "parent_map": "MAP_ROUTE10_POKEMON_CENTER_2F",
+    "name": "Route 10 Pokemon Center 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE10_POKEMON_CENTER_2F:0/MAP_ROUTE10_POKEMON_CENTER_1F:1": "Route 10 Pokemon Center 2F Stairs"
+    }
+  },
+  "REGION_ROUTE11/WEST": {
+    "parent_map": "MAP_ROUTE11",
+    "name": "Route 11 (West)",
+    "encounter_region": "Route 11",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "ITEM_ROUTE11_AWAKENING",
+      "TRAINER_YOUNGSTER_EDDIE_REWARD",
+      "TRAINER_GAMER_HUGO_REWARD",
+      "TRAINER_ENGINEER_BERNIE_REWARD",
+      "TRAINER_ENGINEER_BERNIE_2_REWARD",
+      "TRAINER_YOUNGSTER_DAVE_REWARD",
+      "TRAINER_YOUNGSTER_DILLON_REWARD",
+      "TRAINER_ENGINEER_BRAXTON_REWARD",
+      "ITEM_ROUTE11_X_DEFEND",
+      "TRAINER_GAMER_JASPER_REWARD",
+      "TRAINER_YOUNGSTER_YASU_REWARD",
+      "TRAINER_YOUNGSTER_YASU_2_REWARD",
+      "TRAINER_YOUNGSTER_YASU_3_REWARD",
+      "TRAINER_GAMER_DARIAN_REWARD",
+      "TRAINER_GAMER_DARIAN_2_REWARD",
+      "HIDDEN_ITEM_ROUTE11_ESCAPE_ROPE",
+      "TRAINER_GAMER_DIRK_REWARD",
+      "ITEM_ROUTE11_GREAT_BALL"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE11/WATER": "Route 11 Surfing Spot",
+      "REGION_VERMILION_CITY/MAIN": "Route 11 Exit (West)"
+    },
+    "warps": {
+      "MAP_ROUTE11:0/MAP_DIGLETTS_CAVE_SOUTH_ENTRANCE:0": "Diglett's Cave South Entrance",
+      "MAP_ROUTE11:1/MAP_ROUTE11_EAST_ENTRANCE_1F:0": "Route 11 Gate (West)"
+    }
+  },
+  "REGION_ROUTE11/EAST": {
+    "parent_map": "MAP_ROUTE11",
+    "name": "Route 11 (East)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE12/WEST": "Route 11 Exit (East)"
+    },
+    "warps": {
+      "MAP_ROUTE11:2/MAP_ROUTE11_EAST_ENTRANCE_1F:1": "Route 11 Gate (East)"
+    }
+  },
+  "REGION_ROUTE11/WATER": {
+    "parent_map": "MAP_ROUTE11",
+    "name": "Route 11 (Water)",
+    "encounter_region": "Route 11",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE11_EAST_ENTRANCE_1F/MAIN": {
+    "parent_map": "MAP_ROUTE11_EAST_ENTRANCE_1F",
+    "name": "Route 11 Gate 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE11_EAST_ENTRANCE_1F:0/MAP_ROUTE11:1": "Route 11 Gate 1F Exit (West)",
+      "MAP_ROUTE11_EAST_ENTRANCE_1F:1/MAP_ROUTE11:2": "Route 11 Gate 1F Exit (East)",
+      "MAP_ROUTE11_EAST_ENTRANCE_1F:2/MAP_ROUTE11_EAST_ENTRANCE_2F:0": "Route 11 Gate 1F Stairs"
+    }
+  },
+  "REGION_ROUTE11_EAST_ENTRANCE_2F": {
+    "parent_map": "MAP_ROUTE11_EAST_ENTRANCE_2F",
+    "name": "Route 11 Gate 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "NPC_GIFT_GOT_ITEMFINDER"
+    ],
+    "events": [
+      "TRADE_POKEMON_NIDORINOA"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE11_EAST_ENTRANCE_2F:0/MAP_ROUTE11_EAST_ENTRANCE_1F:2": "Route 11 Gate 2F Stairs"
+    }
+  },
+  "REGION_ROUTE12/WEST": {
+    "parent_map": "MAP_ROUTE12",
+    "name": "Route 12 (West)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE12/SNORLAX_AREA": "Route 12 Play Poke Flute (Left)",
+      "REGION_ROUTE11/EAST": "Route 12 Exit (West)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE12/NORTH": {
+    "parent_map": "MAP_ROUTE12",
+    "name": "Route 12 (North)",
+    "encounter_region": "Route 12",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE12/NORTH_WATER": "Route 12 (North) Surfing Spot",
+      "REGION_LAVENDER_TOWN/MAIN": "Route 12 Exit (North)"
+    },
+    "warps": {
+      "MAP_ROUTE12:1/MAP_ROUTE12_NORTH_ENTRANCE_1F:0": "Route 12 Gate (North)"
+    }
+  },
+  "REGION_ROUTE12/NORTH_WATER": {
+    "parent_map": "MAP_ROUTE12",
+    "name": "Route 12 (North Water)",
+    "encounter_region": "Route 12",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE12/CENTER": {
+    "parent_map": "MAP_ROUTE12",
+    "name": "Route 12 (Center)",
+    "encounter_region": "Route 12",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_FISHERMAN_NED_REWARD",
+      "TRAINER_FISHERMAN_CHIP_REWARD",
+      "TRAINER_FISHERMAN_HANK_REWARD",
+      "HIDDEN_ITEM_ROUTE12_HYPER_POTION",
+      "TRAINER_FISHERMAN_ELLIOT_REWARD",
+      "TRAINER_FISHERMAN_ELLIOT_2_REWARD",
+      "TRAINER_YOUNG_COUPLE_GIA_JES_REWARD",
+      "TRAINER_YOUNG_COUPLE_GIA_JES_2_REWARD",
+      "TRAINER_YOUNG_COUPLE_GIA_JES_3_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE12/CENTER_WATER": "Route 12 (Center) Surfing Spot",
+      "REGION_ROUTE12/SNORLAX_AREA": "Route 12 Play Poke Flute (Top)"
+    },
+    "warps": {
+      "MAP_ROUTE12:2/MAP_ROUTE12_NORTH_ENTRANCE_1F:1": "Route 12 Gate (South)"
+    }
+  },
+  "REGION_ROUTE12/CENTER_WATER": {
+    "parent_map": "MAP_ROUTE12",
+    "name": "Route 12 (Center Water)",
+    "encounter_region": "Route 12",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "ITEM_ROUTE12_TM48"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE12/CENTER": "Route 12 (Center) Landing Spot",
+      "REGION_ROUTE12/SOUTH_WATER": "Route 12 Open Path (Top)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE12/SNORLAX_AREA": {
+    "parent_map": "MAP_ROUTE12",
+    "name": "Route 12 (Snorlax Area)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE12_LEFTOVERS"
+    ],
+    "events": [
+      "STATIC_POKEMON_ROUTE12_SNORLAX"
+    ],
+    "exits": {
+      "REGION_ROUTE12/WEST": "Route 12 Leave Snorlax Area (West)",
+      "REGION_ROUTE12/CENTER": "Route 12 Leave Snorlax Area (North)",
+      "REGION_ROUTE12/SOUTH": "Route 12 Leave Snorlax Area (South)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE12/SOUTH": {
+    "parent_map": "MAP_ROUTE12",
+    "name": "Route 12 (South)",
+    "encounter_region": "Route 12",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_ROCKER_LUCA_REWARD",
+      "TRAINER_ROCKER_LUCA_2_REWARD",
+      "TRAINER_FISHERMAN_ANDREW_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE12/SOUTH_WATER": "Route 12 (South) Surfing Spot",
+      "REGION_ROUTE12/BEHIND_NORTH_TREE": "Route 12 North Cuttable Tree",
+      "REGION_ROUTE12/BEHIND_SOUTH_TREE": "Route 12 South Cuttable Tree",
+      "REGION_ROUTE12/SNORLAX_AREA": "Route 12 Play Poke Flute (Bottom)",
+      "REGION_ROUTE13/MAIN": "Route 12 Exit (South)"
+    },
+    "warps": {
+      "MAP_ROUTE12:0/MAP_ROUTE12_FISHING_HOUSE:0": "Route 12 Fishing House"
+    }
+  },
+  "REGION_ROUTE12/SOUTH_WATER": {
+    "parent_map": "MAP_ROUTE12",
+    "name": "Route 12 (South Water)",
+    "encounter_region": "Route 12",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE12/SOUTH": "Route 12 (South) Landing Spot",
+      "REGION_ROUTE12/CENTER_WATER": "Route 12 Open Path (Bottom)",
+      "REGION_ROUTE13/WATER": "Route 12 (South Water) Exit (South)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE12/BEHIND_NORTH_TREE": {
+    "parent_map": "MAP_ROUTE12",
+    "name": "Route 12 (Behind North Tree)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_CAMPER_JUSTIN_REWARD",
+      "ITEM_ROUTE12_IRON"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE12/BEHIND_SOUTH_TREE": {
+    "parent_map": "MAP_ROUTE12",
+    "name": "Route 12 (Behind South Tree)",
+    "encounter_region": "Route 12",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE12_RARE_CANDY"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE12_FISHING_HOUSE/MAIN": {
+    "parent_map": "MAP_ROUTE12_FISHING_HOUSE",
+    "name": "Route 12 Fishing House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "NPC_GIFT_GOT_SUPER_ROD",
+      "NPC_GIFT_GOT_NET_BALL_FROM_ROUTE12_FISHING_HOUSE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE12_FISHING_HOUSE:0/MAP_ROUTE12:0": "Route 12 Fishing House Exit"
+    }
+  },
+  "REGION_ROUTE12_NORTH_ENTRANCE_1F/MAIN": {
+    "parent_map": "MAP_ROUTE12_NORTH_ENTRANCE_1F",
+    "name": "Route 12 Gate 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE12_NORTH_ENTRANCE_1F:0/MAP_ROUTE12:1": "Route 12 Gate 1F Exit (North)",
+      "MAP_ROUTE12_NORTH_ENTRANCE_1F:1/MAP_ROUTE12:2": "Route 12 Gate 1F Exit (South)",
+      "MAP_ROUTE12_NORTH_ENTRANCE_1F:2/MAP_ROUTE12_NORTH_ENTRANCE_2F:0": "Route 12 Gate 1F Stairs"
+    }
+  },
+  "REGION_ROUTE12_NORTH_ENTRANCE_2F/MAIN": {
+    "parent_map": "MAP_ROUTE12_NORTH_ENTRANCE_2F",
+    "name": "Route 12 Gate 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "NPC_GIFT_GOT_TM27"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE12_NORTH_ENTRANCE_2F:0/MAP_ROUTE12_NORTH_ENTRANCE_1F:2": "Route 12 Gate 2F Stairs"
+    }
+  },
+  "REGION_ROUTE13/MAIN": {
+    "parent_map": "MAP_ROUTE13",
+    "name": "Route 13",
+    "encounter_region": "Route 13",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_PICNICKER_ALMA_REWARD",
+      "TRAINER_BIRD_KEEPER_SEBASTIAN_REWARD",
+      "TRAINER_PICNICKER_SUSIE_REWARD",
+      "TRAINER_PICNICKER_SUSIE_2_REWARD",
+      "TRAINER_PICNICKER_SUSIE_3_REWARD",
+      "TRAINER_PICNICKER_SUSIE_4_REWARD",
+      "TRAINER_BEAUTY_LOLA_REWARD",
+      "TRAINER_BEAUTY_SHEILA_REWARD",
+      "TRAINER_BEAUTY_SHEILA_2_REWARD",
+      "TRAINER_PICNICKER_VALERIE_REWARD",
+      "TRAINER_PICNICKER_GWEN_REWARD",
+      "HIDDEN_ITEM_ROUTE13_PP_UP",
+      "TRAINER_BIRD_KEEPER_ROBERT_REWARD",
+      "TRAINER_BIRD_KEEPER_ROBERT_2_REWARD",
+      "TRAINER_BIRD_KEEPER_ROBERT_3_REWARD",
+      "TRAINER_BIRD_KEEPER_PERRY_REWARD",
+      "TRAINER_BIKER_JARED_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE13/WATER": "Route 13 Surfing Spot",
+      "REGION_ROUTE13/BEHIND_TREE": "Route 13 Cuttable Tree",
+      "REGION_ROUTE12/SOUTH": "Route 13 Exit (North)",
+      "REGION_ROUTE14/MAIN": "Route 13 Exit (West)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE13/BEHIND_TREE": {
+    "parent_map": "MAP_ROUTE13",
+    "name": "Route 13 (Behind Tree)",
+    "encounter_region": "Route 13",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE13/WATER": {
+    "parent_map": "MAP_ROUTE13",
+    "name": "Route 13 (Water)",
+    "encounter_region": "Route 13",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE13/MAIN": "Route 13 Landing Spot",
+      "REGION_ROUTE12/SOUTH_WATER": "Route 13 (Water) Exit (North)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE14/MAIN": {
+    "parent_map": "MAP_ROUTE14",
+    "name": "Route 14",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_BIRD_KEEPER_CARTER_REWARD",
+      "TRAINER_BIRD_KEEPER_MITCH_REWARD",
+      "TRAINER_BIRD_KEEPER_MARLON_REWARD",
+      "TRAINER_BIRD_KEEPER_MARLON_2_REWARD",
+      "TRAINER_BIRD_KEEPER_MARLON_3_REWARD",
+      "TRAINER_BIRD_KEEPER_BECK_REWARD",
+      "TRAINER_BIRD_KEEPER_DONALD_REWARD",
+      "TRAINER_BIRD_KEEPER_BENNY_REWARD",
+      "TRAINER_BIRD_KEEPER_BENNY_2_REWARD",
+      "TRAINER_BIRD_KEEPER_BENNY_3_REWARD",
+      "HIDDEN_ITEM_ROUTE14_PINAP_BERRY",
+      "TRAINER_TWINS_KIRI_JAN_REWARD",
+      "TRAINER_BIKER_LUKAS_REWARD",
+      "TRAINER_BIKER_LUKAS_2_REWARD",
+      "TRAINER_BIKER_GERALD_REWARD",
+      "TRAINER_BIKER_MALIK_REWARD",
+      "TRAINER_BIKER_ISAAC_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE14/BEHIND_TREE": ["Route 14 Ledge", "Route 14 North Cuttable Tree"],
+      "REGION_ROUTE13/MAIN": "Route 14 Exit (East)",
+      "REGION_ROUTE15/NORTH": "Route 14 South Cuttable Tree",
+      "REGION_ROUTE15/SOUTH": "Route 14 Exit (West)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE14/BEHIND_TREE": {
+    "parent_map": "MAP_ROUTE14",
+    "name": "Route 14 (Behind Tree)",
+    "encounter_region": "Route 14",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE14_ZINC"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE15/SOUTH": {
+    "parent_map": "MAP_ROUTE15",
+    "name": "Route 15 (South)",
+    "encounter_region": "Route 15",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_BIKER_ERNEST_REWARD",
+      "TRAINER_BIKER_ALEX_REWARD",
+      "TRAINER_BEAUTY_GRACE_REWARD",
+      "TRAINER_BEAUTY_GRACE_2_REWARD",
+      "TRAINER_BEAUTY_OLIVIA_REWARD",
+      "TRAINER_PICNICKER_KINDRA_REWARD",
+      "TRAINER_BIRD_KEEPER_CHESTER_REWARD",
+      "TRAINER_BIRD_KEEPER_CHESTER_2_REWARD",
+      "TRAINER_BIRD_KEEPER_CHESTER_3_REWARD",
+      "TRAINER_BIRD_KEEPER_EDWIN_REWARD",
+      "TRAINER_PICNICKER_YAZMIN_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE15/NORTH": "Route 15 Ledge",
+      "REGION_ROUTE14/MAIN": "Route 15 Exit (East)"
+    },
+    "warps": {
+      "MAP_ROUTE15:1/MAP_ROUTE15_WEST_ENTRANCE_1F:1": "Route 15 Gate (East)"
+    }
+  },
+  "REGION_ROUTE15/NORTH": {
+    "parent_map": "MAP_ROUTE15",
+    "name": "Route 15 (North)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_PICNICKER_BECKY_REWARD",
+      "TRAINER_PICNICKER_BECKY_2_REWARD",
+      "TRAINER_PICNICKER_BECKY_3_REWARD",
+      "TRAINER_PICNICKER_BECKY_4_REWARD",
+      "TRAINER_CRUSH_KIN_RON_MYA_REWARD",
+      "TRAINER_CRUSH_KIN_RON_MYA_2_REWARD",
+      "TRAINER_CRUSH_KIN_RON_MYA_3_REWARD",
+      "TRAINER_CRUSH_KIN_RON_MYA_4_REWARD",
+      "TRAINER_PICNICKER_CELIA_REWARD",
+      "ITEM_ROUTE15_TM18"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE15/SOUTHWEST": {
+    "parent_map": "MAP_ROUTE15",
+    "name": "Route 15 (Southwest)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FUCHSIA_CITY/MAIN": "Route 15 Exit (West)"
+    },
+    "warps": {
+      "MAP_ROUTE15:0/MAP_ROUTE15_WEST_ENTRANCE_1F:0": "Route 15 Gate (West)"
+    }
+  },
+  "REGION_ROUTE15_WEST_ENTRANCE_1F/MAIN": {
+    "parent_map": "MAP_ROUTE15_WEST_ENTRANCE_1F",
+    "name": "Route 15 Gate 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE15_WEST_ENTRANCE_1F:0/MAP_ROUTE15:0": "Route 15 Gate 1F Exit (West)",
+      "MAP_ROUTE15_WEST_ENTRANCE_1F:1/MAP_ROUTE15:1": "Route 15 Gate 1F Exit (East)",
+      "MAP_ROUTE15_WEST_ENTRANCE_1F:2/MAP_ROUTE15_WEST_ENTRANCE_2F:0": "Route 15 Gate 1F Stairs"
+    }
+  },
+  "REGION_ROUTE15_WEST_ENTRANCE_2F/MAIN": {
+    "parent_map": "MAP_ROUTE15_WEST_ENTRANCE_2F",
+    "name": "Route 15 Gate 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "NPC_GIFT_GOT_EXP_SHARE_FROM_OAKS_AIDE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE15_WEST_ENTRANCE_2F:0/MAP_ROUTE15_WEST_ENTRANCE_1F:2": "Route 15 Gate 2F Stairs"
+    }
+  },
+  "REGION_ROUTE16/SOUTHEAST": {
+    "parent_map": "MAP_ROUTE16",
+    "name": "Route 16 (Southeast)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE16/NORTHEAST": "Route 16 Cuttable Tree (Bottom)",
+      "REGION_ROUTE16/SNORLAX_AREA": "Route 16 Play Poke Flute (Right)",
+      "REGION_CELADON_CITY/MAIN": "Route 16 Exit (East)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE16/NORTHEAST": {
+    "parent_map": "MAP_ROUTE16",
+    "name": "Route 16 (Northeast)",
+    "encounter_region": "Route 16",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_YOUNG_COUPLE_LEA_JED_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE16/SOUTHEAST": "Route 16 Cuttable Tree (Top)",
+      "REGION_ROUTE16/CENTER": "Route 16 Smashable Rock (Top)"
+    },
+    "warps": {
+      "MAP_ROUTE16:2/MAP_ROUTE16_NORTH_ENTRANCE_1F:1": "Route 16 Gate (Northeast)"
+    }
+  },
+  "REGION_ROUTE16/NORTHWEST": {
+    "parent_map": "MAP_ROUTE16",
+    "name": "Route 16 (Northwest)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE16:0/MAP_ROUTE16_HOUSE:0": "Route 16 Fly House",
+      "MAP_ROUTE16:1/MAP_ROUTE16_NORTH_ENTRANCE_1F:0": "Route 16 Gate (Northwest)"
+    }
+  },
+  "REGION_ROUTE16/SNORLAX_AREA": {
+    "parent_map": "MAP_ROUTE16",
+    "name": "Route 16 (Snorlax Area)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE16_LEFTOVERS"
+    ],
+    "events": [
+      "STATIC_POKEMON_ROUTE16_SNORLAX"
+    ],
+    "exits": {
+      "REGION_ROUTE16/SOUTHEAST": "Route 16 Leave Snorlax Area (East)",
+      "REGION_ROUTE16/CENTER": "Route 16 Leave Snorlax Area (West)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE16/CENTER": {
+    "parent_map": "MAP_ROUTE16",
+    "name": "Route 16 (Center)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE16/NORTHEAST": "Route 16 Smashable Rock (Bottom)",
+      "REGION_ROUTE16/SNORLAX_AREA": "Route 16 Play Poke Flute (Left)"
+    },
+    "warps": {
+      "MAP_ROUTE16:4/MAP_ROUTE16_NORTH_ENTRANCE_1F:3": "Route 16 Gate (Southeast)"
+    }
+  },
+  "REGION_ROUTE16/SOUTHWEST": {
+    "parent_map": "MAP_ROUTE16",
+    "name": "Route 16 (Southwest)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_BIKER_LAO_REWARD",
+      "TRAINER_CUE_BALL_KOJI_REWARD",
+      "TRAINER_CUE_BALL_LUKE_REWARD",
+      "TRAINER_BIKER_HIDEO_REWARD",
+      "TRAINER_BIKER_RUBEN_REWARD",
+      "TRAINER_BIKER_RUBEN_2_REWARD",
+      "TRAINER_CUE_BALL_CAMRON_REWARD",
+      "TRAINER_CUE_BALL_CAMRON_2_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE17/MAIN": "Route 16 Exit (South)"
+    },
+    "warps": {
+      "MAP_ROUTE16:3/MAP_ROUTE16_NORTH_ENTRANCE_1F:2": "Route 16 Gate (Southwest)"
+    }
+  },
+  "REGION_ROUTE16_HOUSE/MAIN": {
+    "parent_map": "MAP_ROUTE16_HOUSE",
+    "name": "Route 16 Fly House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "NPC_GIFT_GOT_HM02"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE16_HOUSE:0/MAP_ROUTE16:0": "Route 16 Fly House Exit"
+    }
+  },
+  "REGION_ROUTE16_NORTH_ENTRANCE_1F/NORTH": {
+    "parent_map": "MAP_ROUTE16_NORTH_ENTRANCE_1F",
+    "name": "Route 16 Gate 1F (North)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE16_NORTH_ENTRANCE_1F:0/MAP_ROUTE16:1": "Route 16 Gate 1F Exit (Northwest)",
+      "MAP_ROUTE16_NORTH_ENTRANCE_1F:1/MAP_ROUTE16:2": "Route 16 Gate 1F Exit (Northeast)"
+    }
+  },
+  "REGION_ROUTE16_NORTH_ENTRANCE_1F/SOUTH": {
+    "parent_map": "MAP_ROUTE16_NORTH_ENTRANCE_1F",
+    "name": "Route 16 Gate 1F (South)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE16_NORTH_ENTRANCE_1F:2/MAP_ROUTE16:3": "Route 16 Gate 1F Exit (Southwest)",
+      "MAP_ROUTE16_NORTH_ENTRANCE_1F:3/MAP_ROUTE16:4": "Route 16 Gate 1F Exit (Southeast)",
+      "MAP_ROUTE16_NORTH_ENTRANCE_1F:4/MAP_ROUTE16_NORTH_ENTRANCE_2F:0": "Route 16 Gate 1F Stairs"
+    }
+  },
+  "REGION_ROUTE16_NORTH_ENTRANCE_2F": {
+    "parent_map": "MAP_ROUTE16_NORTH_ENTRANCE_2F",
+    "name": "Route 16 Gate 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "NPC_GIFT_GOT_AMULET_COIN_FROM_OAKS_AIDE"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE16_NORTH_ENTRANCE_2F:0/MAP_ROUTE16_NORTH_ENTRANCE_1F:4": "Route 16 Gate 2F Stairs"
+    }
+  },
+  "REGION_ROUTE17/MAIN": {
+    "parent_map": "MAP_ROUTE17",
+    "name": "Route 17",
+    "encounter_region": "Route 17",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_CUE_BALL_ISAIAH_REWARD",
+      "TRAINER_CUE_BALL_ISAIAH_2_REWARD",
+      "TRAINER_BIKER_VIRGIL_REWARD",
+      "TRAINER_CUE_BALL_RAUL_REWARD",
+      "TRAINER_BIKER_BILLY_REWARD",
+      "TRAINER_BIKER_NIKOLAS_REWARD",
+      "HIDDEN_ITEM_ROUTE17_FULL_RESTORE",
+      "TRAINER_CUE_BALL_JAMAL_REWARD",
+      "TRAINER_CUE_BALL_ZEEK_REWARD",
+      "HIDDEN_ITEM_ROUTE17_PP_UP",
+      "HIDDEN_ITEM_ROUTE17_RARE_CANDY",
+      "TRAINER_CUE_BALL_COREY_REWARD",
+      "TRAINER_CUE_BALL_COREY_2_REWARD",
+      "TRAINER_BIKER_JAXON_REWARD",
+      "TRAINER_BIKER_JAXON_2_REWARD",
+      "HIDDEN_ITEM_ROUTE17_MAX_REVIVE",
+      "TRAINER_BIKER_WILLIAM_REWARD",
+      "HIDDEN_ITEM_ROUTE17_MAX_ELIXIR"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE16/SOUTHWEST": "Route 17 Exit (North)",
+      "REGION_ROUTE18/WEST": "Route 17 Exit (South)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE18/WEST": {
+    "parent_map": "MAP_ROUTE18",
+    "name": "Route 18 (West)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE17/MAIN": "Route 18 Exit (North)"
+    },
+    "warps": {
+      "MAP_ROUTE18:0/MAP_ROUTE18_EAST_ENTRANCE_1F:0": "Route 18 Gate (West)"
+    }
+  },
+  "REGION_ROUTE18/EAST": {
+    "parent_map": "MAP_ROUTE18",
+    "name": "Route 18 (East)",
+    "encounter_region": "Route 18",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "TRAINER_BIRD_KEEPER_WILTON_REWARD",
+      "TRAINER_BIRD_KEEPER_JACOB_REWARD",
+      "TRAINER_BIRD_KEEPER_JACOB_2_REWARD",
+      "TRAINER_BIRD_KEEPER_JACOB_3_REWARD",
+      "TRAINER_BIRD_KEEPER_RAMIRO_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_FUCHSIA_CITY/MAIN": "Route 18 Exit (East)"
+    },
+    "warps": {
+      "MAP_ROUTE18:1/MAP_ROUTE18_EAST_ENTRANCE_1F:1": "Route 18 Gate (East)"
+    }
+  },
+  "REGION_ROUTE18_EAST_ENTRANCE_1F/MAIN": {
+    "parent_map": "MAP_ROUTE18_EAST_ENTRANCE_1F",
+    "name": "Route 18 Gate 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE18_EAST_ENTRANCE_1F:0/MAP_ROUTE18:0": "Route 18 Gate 1F Exit (West)",
+      "MAP_ROUTE18_EAST_ENTRANCE_1F:1/MAP_ROUTE18:1": "Route 18 Gate 1F Exit (East)",
+      "MAP_ROUTE18_EAST_ENTRANCE_1F:2/MAP_ROUTE18_EAST_ENTRANCE_2F:0": "Route 18 Gate 1F Stairs"
+    }
+  },
+  "REGION_ROUTE18_EAST_ENTRANCE_2F/MAIN": {
+    "parent_map": "MAP_ROUTE18_EAST_ENTRANCE_2F",
+    "name": "Route 18 Gate 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [
+      "TRADE_POKEMON_LICKITUNG"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE18_EAST_ENTRANCE_2F:0/MAP_ROUTE18_EAST_ENTRANCE_1F:2": "Route 18 Gate 2F Stairs"
+    }
+  },
+  "REGION_ROUTE19/MAIN": {
+    "parent_map": "MAP_ROUTE19",
+    "name": "Route 19",
+    "encounter_region": "Route 19",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SWIMMER_MALE_RICHARD_REWARD",
+      "TRAINER_SWIMMER_MALE_REECE_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE19/WATER": "Route 19 Surfing Spot",
+      "REGION_FUCHSIA_CITY/MAIN": "Route 19 Exit (North)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE19/WATER": {
+    "parent_map": "MAP_ROUTE19",
+    "name": "Route 19 (Water)",
+    "encounter_region": "Route 19",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SWIMMER_MALE_TONY_REWARD",
+      "TRAINER_SWIMMER_MALE_TONY_2_REWARD",
+      "TRAINER_SWIMMER_MALE_DAVID_REWARD",
+      "TRAINER_SWIMMER_MALE_DOUGLAS_REWARD",
+      "TRAINER_SWIMMER_MALE_MATTHEW_REWARD",
+      "TRAINER_SWIMMER_MALE_MATTHEW_2_REWARD",
+      "TRAINER_SIS_AND_BRO_LIA_LUC_REWARD",
+      "TRAINER_SWIMMER_FEMALE_ALICE_REWARD",
+      "TRAINER_SWIMMER_FEMALE_ALICE_2_REWARD",
+      "TRAINER_SWIMMER_FEMALE_CONNIE_REWARD",
+      "TRAINER_SWIMMER_MALE_AXLE_REWARD",
+      "TRAINER_SWIMMER_FEMALE_ANYA_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE19/MAIN": "Route 19 Landing Spot",
+      "REGION_ROUTE20/EAST": "Route 19 Exit (West)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE20/EAST": {
+    "parent_map": "MAP_ROUTE20",
+    "name": "Route 20 (East)",
+    "encounter_region": "Route 20",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SWIMMER_MALE_BARRY_REWARD",
+      "TRAINER_SWIMMER_MALE_DARRIN_REWARD",
+      "TRAINER_SWIMMER_MALE_DARRIN_2_REWARD",
+      "TRAINER_SWIMMER_FEMALE_SHIRLEY_REWARD",
+      "TRAINER_SWIMMER_FEMALE_TIFFANY_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE20/NEAR_NORTH_CAVE": "Route 20 (Near North Cave) Landing Spot",
+      "REGION_ROUTE19/WATER": "Route 20 Exit (East)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE20/NEAR_NORTH_CAVE": {
+    "parent_map": "MAP_ROUTE20",
+    "name": "Route 20 (Near North Cave)",
+    "encounter_region": "Route 20",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "FAME_CHECKER_MISTY_4"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE20/EAST": "Route 20 (Near North Cave) Surfing Spot"
+    },
+    "warps": {
+      "MAP_ROUTE20:0/MAP_SEAFOAM_ISLANDS_1F:3": "Seafoam Islands (North)"
+    }
+  },
+  "REGION_ROUTE20/NEAR_SOUTH_CAVE": {
+    "parent_map": "MAP_ROUTE20",
+    "name": "Route 20 (Near South Cave)",
+    "encounter_region": "Route 20",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_PICNICKER_IRENE_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE20/WEST": "Route 20 (Near South Cave) Surfing Spot"
+    },
+    "warps": {
+      "MAP_ROUTE20:1/MAP_SEAFOAM_ISLANDS_1F:4": "Seafoam Islands (South)"
+    }
+  },
+  "REGION_ROUTE20/WEST": {
+    "parent_map": "MAP_ROUTE20",
+    "name": "Route 20 (West)",
+    "encounter_region": "Route 20",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_SWIMMER_FEMALE_MELISSA_REWARD",
+      "TRAINER_SWIMMER_FEMALE_MELISSA_2_REWARD",
+      "TRAINER_PICNICKER_MISSY_REWARD",
+      "TRAINER_PICNICKER_MISSY_2_REWARD",
+      "TRAINER_PICNICKER_MISSY_3_REWARD",
+      "TRAINER_SWIMMER_MALE_DEAN_REWARD",
+      "HIDDEN_ITEM_ROUTE20_STARDUST",
+      "TRAINER_SWIMMER_FEMALE_NORA_REWARD",
+      "TRAINER_BIRD_KEEPER_ROGER_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE20/NEAR_SOUTH_CAVE": "Route 20 (Near South Cave) Landing Spot",
+      "REGION_CINNABAR_ISLAND/WATER": "Route 20 Exit (West)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE21/MAIN": {
+    "parent_map": "MAP_ROUTE21_NORTH",
+    "name": "Route 21",
+    "encounter_region": "Route 21",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE21/WATER": "Route 21 Surfing Spot",
+      "REGION_CINNABAR_ISLAND/MAIN": "Route 21 Exit (South)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE21/WATER": {
+    "parent_map": "MAP_ROUTE21_NORTH",
+    "name": "Route 21 (Water)",
+    "encounter_region": "Route 21",
+    "has_land": true,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_FISHERMAN_RONALD_REWARD",
+      "TRAINER_FISHERMAN_WADE_REWARD",
+      "TRAINER_FISHERMAN_WADE_2_REWARD",
+      "TRAINER_SIS_AND_BRO_LIL_IAN_REWARD",
+      "TRAINER_SIS_AND_BRO_LIL_IAN_2_REWARD",
+      "TRAINER_SIS_AND_BRO_LIL_IAN_3_REWARD",
+      "TRAINER_SWIMMER_MALE_SPENCER_REWARD",
+      "HIDDEN_ITEM_ROUTE21_NORTH_PEARL",
+      "TRAINER_FISHERMAN_CLAUDE_REWARD",
+      "TRAINER_FISHERMAN_NOLAN_REWARD",
+      "TRAINER_SWIMMER_MALE_JACK_REWARD",
+      "TRAINER_SWIMMER_MALE_JACK_2_REWARD",
+      "TRAINER_SWIMMER_MALE_ROLAND_REWARD",
+      "TRAINER_SWIMMER_MALE_JEROME_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE21/MAIN": "Route 21 Landing Spot",
+      "REGION_PALLET_TOWN/WATER": "Route 21 Exit (North)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE22/EAST": {
+    "parent_map": "MAP_ROUTE22",
+    "name": "Route 22 (East)",
+    "encounter_region": "Route 22",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_RIVAL_ROUTE22_EARLY_BULBASAUR_REWARD",
+      "TRAINER_RIVAL_ROUTE22_LATE_BULBASAUR_REWARD"
+    ],
+    "events": [
+      "EVENT_DEFEAT_ROUTE22_RIVAL"
+    ],
+    "exits": {
+      "REGION_ROUTE22/WEST": "Route 22 North Ledge",
+      "REGION_ROUTE22/WATER": "Route 22 (East) Surfing Spot",
+      "REGION_VIRIDIAN_CITY/SOUTH": "Route 22 Exit (East)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE22/WEST": {
+    "parent_map": "MAP_ROUTE22",
+    "name": "Route 22 (West)",
+    "encounter_region": "Route 22",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE22/WEST": "Route 22 South Ledge",
+      "REGION_ROUTE22/WATER": "Route 22 (West) Surfing Spot"
+    },
+    "warps": {
+      "MAP_ROUTE22:0/MAP_ROUTE22_NORTH_ENTRANCE:1": "Route 22 Gate (South)"
+    }
+  },
+  "REGION_ROUTE22/WATER": {
+    "parent_map": "MAP_ROUTE22",
+    "name": "Route 22 (Water)",
+    "encounter_region": "Route 22",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE22/EAST": "Route 22 (East) Landing Spot",
+      "REGION_ROUTE22/WEST": "Route 22 (West) Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE22_NORTH_ENTRANCE/MAIN": {
+    "parent_map": "MAP_ROUTE22_NORTH_ENTRANCE",
+    "name": "Route 22 Gate",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE22_NORTH_ENTRANCE:0/MAP_ROUTE23:2": "Route 22 Gate Exit (North)",
+      "MAP_ROUTE22_NORTH_ENTRANCE:1/MAP_ROUTE22:0": "Route 22 Gate Exit (South)"
+    }
+  },
+  "REGION_ROUTE23/SOUTH": {
+    "parent_map": "MAP_ROUTE23",
+    "name": "Route 23 (South)",
+    "encounter_region": "Route 23",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE23_LEPPA_BERRY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE23/SOUTH_WATER": "Route 23 (South) Surfing Spot"
+    },
+    "warps": {
+      "MAP_ROUTE23:2/MAP_ROUTE22_NORTH_ENTRANCE:0": "Route 22 Gate (North)"
+    }
+  },
+  "REGION_ROUTE23/SOUTH_WATER": {
+    "parent_map": "MAP_ROUTE23",
+    "name": "Route 23 (South Water)",
+    "encounter_region": "Route 23",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE23_MAX_ETHER"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE23/SOUTH": "Route 23 (South) Landing Spot",
+      "REGION_ROUTE23/NORTH_WATER": ["Route 23 South Open Path (Bottom)", "Route 23 Waterfall (Climb)"]
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE23/NORTH_WATER": {
+    "parent_map": "MAP_ROUTE23",
+    "name": "Route 23 (North Water)",
+    "encounter_region": "Route 23",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE23/SOUTH_WATER": ["Route 23 South Open Path (Top)", "Route 23 Waterfall (Drop)"],
+      "REGION_ROUTE23/NEAR_WATER": "Route 23 (Near Water) Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE23/NEAR_WATER": {
+    "parent_map": "MAP_ROUTE23",
+    "name": "Route 23 (Near Water)",
+    "encounter_region": "Route 23",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE23_ULTRA_BALL",
+      "HIDDEN_ITEM_ROUTE23_ASPEAR_BERRY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE23/NORTH_WATER": "Route 23 (Near Water) Surfing Spot",
+      "REGION_ROUTE23/CENTER": ["Route 23 North Open Path (Bottom)", "Route 23 Cuttable Trees (Bottom)"]
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE23/CENTER": {
+    "parent_map": "MAP_ROUTE23",
+    "name": "Route 23 (Center)",
+    "encounter_region": "Route 23",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE23_FULL_RESTORE"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE23/NEAR_WATER": ["Route 23 North Open Path (Top)", "Route 23 Cuttable Trees (Top)"],
+      "REGION_ROUTE23/NEAR_CAVE": "Route 23 Guard Checkpoint (Bottom)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE23/NEAR_CAVE": {
+    "parent_map": "MAP_ROUTE23",
+    "name": "Route 23 (Near Cave)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE23_SITRUS_BERRY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE23/CENTER": "Route 23 Guard Checkpoint (Top)"
+    },
+    "warps": {
+      "MAP_ROUTE23:0/MAP_VICTORY_ROAD_1F:1": "Victory Road (West)"
+    }
+  },
+  "REGION_ROUTE23/NORTH": {
+    "parent_map": "MAP_ROUTE23",
+    "name": "Route 23 (North)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_ROUTE23_LUM_BERRY",
+      "HIDDEN_ITEM_ROUTE23_MAX_ELIXIR"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_INDIGO_PLATEAU_EXTERIOR/MAIN": "Route 23 Exit (North)"
+    },
+    "warps": {
+      "MAP_ROUTE23:1/MAP_VICTORY_ROAD_2F:5": "Victory Road (East)"
+    }
+  },
+  "REGION_ROUTE24/MAIN": {
+    "parent_map": "MAP_ROUTE24",
+    "name": "Route 24",
+    "encounter_region": "Route 24",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_BUG_CATCHER_CALE_REWARD",
+      "TRAINER_LASS_ALI_REWARD",
+      "TRAINER_YOUNGSTER_TIMMY_REWARD",
+      "TRAINER_YOUNGSTER_TIMMY_2_REWARD",
+      "TRAINER_YOUNGSTER_TIMMY_3_REWARD",
+      "TRAINER_YOUNGSTER_TIMMY_4_REWARD",
+      "TRAINER_LASS_RELI_REWARD",
+      "TRAINER_LASS_RELI_2_REWARD",
+      "TRAINER_LASS_RELI_3_REWARD",
+      "TRAINER_CAMPER_ETHAN_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_6_REWARD",
+      "NPC_GIFT_GOT_NUGGET_FROM_ROCKET_GRUNT",
+      "TRAINER_CAMPER_SHANE_REWARD",
+      "ITEM_ROUTE24_TM45",
+      "HIDDEN_ITEM_ROUTE24_PECHA_BERRY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE24/WATER": "Route 24 Surfing Spot",
+      "REGION_CERULEAN_CITY/MAIN": "Route 24 Exit (South)",
+      "REGION_ROUTE25/MAIN": "Route 24 Exit (East)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE24/WATER": {
+    "parent_map": "MAP_ROUTE24",
+    "name": "Route 24 (Water)",
+    "encounter_region": "Route 24",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE24/MAIN": "Route 24 Landing Spot",
+      "REGION_CERULEAN_CITY/WATER": "Route 24 (Water) Exit (South)"
+    },
+    "warps": {}
+  },
+  "REGION_ROUTE25/MAIN": {
+    "parent_map": "MAP_ROUTE25",
+    "name": "Route 25",
+    "encounter_region": "Route 25",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [
+      "TRAINER_HIKER_FRANKLIN_REWARD",
+      "TRAINER_HIKER_FRANKLIN_2_REWARD",
+      "HIDDEN_ITEM_ROUTE25_ELIXIR",
+      "TRAINER_YOUNGSTER_JOEY_REWARD",
+      "TRAINER_HIKER_WAYNE_REWARD",
+      "TRAINER_YOUNGSTER_DAN_REWARD",
+      "TRAINER_PICNICKER_KELSEY_REWARD",
+      "TRAINER_PICNICKER_KELSEY_2_REWARD",
+      "TRAINER_PICNICKER_KELSEY_3_REWARD",
+      "TRAINER_PICNICKER_KELSEY_4_REWARD",
+      "TRAINER_HIKER_NOB_REWARD",
+      "TRAINER_CAMPER_FLINT_REWARD",
+      "ITEM_ROUTE25_TM43",
+      "HIDDEN_ITEM_ROUTE25_ORAN_BERRY",
+      "TRAINER_YOUNGSTER_CHAD_REWARD",
+      "TRAINER_YOUNGSTER_CHAD_2_REWARD",
+      "TRAINER_YOUNGSTER_CHAD_3_REWARD",
+      "TRAINER_YOUNGSTER_CHAD_4_REWARD",
+      "HIDDEN_ITEM_ROUTE25_BLUK_BERRY",
+      "TRAINER_LASS_HALEY_REWARD",
+      "FAME_CHECKER_MISTY_5",
+      "NPC_GIFT_GOT_CERULEAN_KEY",
+      "HIDDEN_ITEM_ROUTE25_ETHER"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ROUTE25/WATER": "Route 25 Surfing Spot",
+      "REGION_ROUTE24/MAIN": "Route 25 Exit (West)"
+    },
+    "warps": {
+      "MAP_ROUTE25:0/MAP_ROUTE25_SEA_COTTAGE:0": "Sea Cottage"
+    }
+  },
+  "REGION_ROUTE25/WATER": {
+    "parent_map": "MAP_ROUTE25",
+    "name": "Route 25 (Water)",
+    "encounter_region": "Route 25",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ROUTE25_SEA_COTTAGE/MAIN": {
+    "parent_map": "MAP_ROUTE25_SEA_COTTAGE",
+    "name": "Sea Cottage",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "NPC_GIFT_GOT_SS_TICKET"
+    ],
+    "events": [
+      "EVENT_SAVE_BILL"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_ROUTE25_SEA_COTTAGE:0/MAP_ROUTE25:0": "Sea Cottage Exit"
+    }
+  }
+}

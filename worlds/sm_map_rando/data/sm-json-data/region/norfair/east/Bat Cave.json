@@ -1,0 +1,637 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 100,
+  "name": "Bat Cave",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "East",
+  "roomAddress": "0x7B07A",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00197aa",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00197b6",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Gamet Farm Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2],
+        [1]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Camera Broken",
+      "obstacleType": "abstract",
+      "note": "Represents being off-camera in the top part of the room."
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Bat Cave Skrees",
+      "enemyName": "Skree",
+      "quantity": 3,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Bat Cave Gamets",
+      "enemyName": "Gamet",
+      "quantity": 5,
+      "homeNodes": [3]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 32,
+      "link": [1, 1],
+      "name": "Skree Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [1]}},
+        {"cycleFrames": 300}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Skree", "count": 3}]
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"heatFrames": 350}
+      ]
+    },
+    {
+      "id": 28,
+      "link": [1, 2],
+      "name": "Frozen Skree",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        {"heatFrames": 260}
+      ],
+      "note": ["Freeze the middle Skree mid-air to use it as a platform."]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Precise Walljump",
+      "requires": [
+        "canPreciseWalljump",
+        "canTrickyJump",
+        {"heatFrames": 220}
+      ],
+      "note": [
+        "Shoot the Skree and shotblock from the door.",
+        "While avoiding Skree projectiles, jump to the next bubble platform followed by jumping directly up where the shot block used to be."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [1, 2],
+      "name": "Tricky HiJump",
+      "requires": [
+        "HiJump",
+        "canTrickyJump",
+        {"heatFrames": 200}
+      ],
+      "note": [
+        "Shoot the Skree and shotblock from the door.",
+        "While avoiding Skree projectiles, jump to the next bubble platform followed by jumping directly up where the shot block used to be."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [1, 2],
+      "name": "Tricky Spring Ball Jump",
+      "requires": [
+        "canTrickySpringBallJump",
+        "canTrickyJump",
+        {"heatFrames": 240}
+      ],
+      "note": [
+        "Shoot the Skree and shotblock from the door.",
+        "While avoiding Skree projectiles, jump to the next bubble platform followed by jumping directly up where the shot block used to be,",
+        "performing a mid-air spring ball jump to make it up to the ledge."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [1, 2],
+      "name": "Auto Cancel Missile Tricky Dodge",
+      "requires": [
+        "canAutoCancelWeapon",
+        {"ammo": {"type": "Missile", "count": 1}},
+        "canTrickyDodgeEnemies",
+        "canInsaneJump",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"heatFrames": 160}
+          ]},
+          {"and": [
+            "canWalljump",
+            {"heatFrames": 180}
+          ]},
+          {"and": [
+            "canTrickySpringBallJump",
+            {"heatFrames": 195}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Enter the room with a Missile selected on auto-cancel, holding angle-up.",
+        "Fire a Missile shot to kill the first Skree, then run right and immediately fire a beam shot to destroy the shot block.",
+        "Run off the edge and down-grab onto the next platform.",
+        "Run and jump directly up where the shot block used to be, moving quickly enough to dodge the Skree projectiles by going under them.",
+        "Use a wall jump, HiJump, or a mid-air spring ball jump to make it up."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Jump into Respawning Block",
+      "requires": [
+        "canJumpIntoRespawningBlock",
+        {"heatFrames": 625}
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Enter Running Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        {"heatFrames": 300},
+        {"shinespark": {"frames": 14, "excessFrames": 3}}
+      ],
+      "note": "Shoot diagonally to clear the Skree and shot block before jumping and sparking diagonally mid-air to the above area."
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Enter Shinecharged and Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 80},
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        {"heatFrames": 270},
+        {"shinespark": {"frames": 13, "excessFrames": 3}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Shoot diagonally to clear the Skree and shot block before jumping and sparking diagonally mid-air to the above area."
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "HiJump",
+        {"or": [
+          {"heatFrames": 570},
+          {"and": [
+            "canXRayCancelShinecharge",
+            {"heatFrames": 420}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "link": [1, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 11,
+      "link": [1, 3],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb",
+        {"heatFrames": 1600}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"heatFrames": 230},
+          {"and": [
+            "canHorizontalDamageBoost",
+            {"heatFrames": 160},
+            {"enemyDamage": {"enemy": "Skree", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Enter Running and Leave Shinesparking",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 6,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"heatFrames": 165},
+        {"shinespark": {"frames": 15}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "Fall through the shot blocks and shoot around the Skree to open the door without falling into the lava to shinespark out of the room."
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Enter Shinecharged and Leave Shinesparking",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 115},
+        "canShinechargeMovementTricky",
+        {"heatFrames": 165},
+        {"shinespark": {"frames": 15}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Fall through the shot blocks and shoot around the Skree to open the door without falling into the lava to shinespark out of the room."
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        {"or": [
+          {"heatFrames": 550},
+          {"and": [
+            "canXRayCancelShinecharge",
+            {"heatFrames": 380}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 1
+        }
+      },
+      "devNote": [
+        "The blocks respawn, so no need to split this in two runways.",
+        "While waiting for respawn would take additional heat frames, the spawner makes that more or less inconsequential."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "Fix the Camera",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canOffScreenMovement",
+        {"heatFrames": 160}
+      ],
+      "resetsObstacles": ["A"],
+      "note": [
+        "Destroy the shot block by standing on top of it, jumping, aiming down, and shooting at the moment that you land.",
+        "This requires precision because the beam projectile will immediately despawn while off-camera.",
+        "Less precise alternatives include using a bomb, Power Bomb, or Grapple, if available.",
+        "With the shot block destroyed, fall down through the opening and jump back up, and the camera will be fixed."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 4},
+        {"or": [
+          "canPauseAbuse",
+          {"heatFrames": 50}
+        ]},
+        {"partialRefill": {"type": "Energy", "limit": 50}}
+      ],
+      "devNote": [
+        "The first farm is built into this strat to allow for the pause abuse.",
+        "Leniency replaces the need for a tech to fire an accurate shot to hit the Gamets."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [3, 2],
+      "name": "Leave with Runway",
+      "requires": [
+        {"heatFrames": 15}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "devNote": [
+        "The blocks respawn, so no need to split this in two runways.",
+        "While waiting for respawn would take additional heat frames, the spawner makes that more or less inconsequential."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [3, 2],
+      "name": "G-Mode Setup - Get Hit By Gamet",
+      "requires": [
+        {"heatFrames": 240}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [3, 3],
+      "name": "Gamet Farm",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        {"simpleHeatFrames": 90},
+        {"heatFrames": 20},
+        {"simpleCycleFrames": 90},
+        {"cycleFrames": 20}
+      ],
+      "farmCycleDrops": [{"enemy": "Gamet", "count": 5}]
+    },
+    {
+      "id": 23,
+      "link": [3, 3],
+      "name": "Off-Camera Gamet Farm",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canOffScreenMovement",
+        {"or": [
+          "ScrewAttack",
+          "h_useMorphBombs",
+          "Grapple"
+        ]},
+        {"simpleHeatFrames": 40},
+        {"heatFrames": 100},
+        {"simpleCycleFrames": 40},
+        {"cycleFrames": 100}
+      ],
+      "farmCycleDrops": [{"enemy": "Gamet", "count": 5}],
+      "note": "When off-camera, the Gamets still spawn but cannot be destroyed with beams or other projectiles."
+    }
+  ],
+  "notables": [],
+  "nextStratId": 33,
+  "nextNotableId": 1
+}

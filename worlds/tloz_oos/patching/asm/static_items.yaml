@@ -1,0 +1,200 @@
+# Format is group,room,treasure_id,treasure_subid
+0a//staticItemsReplacementsTable: |
+    # ------- Freestanding items -------
+    dwbe $00d8, locations.horonHeartPiece
+    dwbe $00af, locations.woodsOfWinterHeartPiece
+    dwbe $002d, locations.mtCuccoHeartPiece
+    dwbe $05b2, locations.windmillHeartPiece
+    dwbe $00d1, locations.graveyardHeartPiece
+    dwbe $00b1, locations.spoolSwampHeartPiece
+    dwbe $05c7, locations.templeRemainsHeartPiece
+    dwbe $0387, locations.mayorsHouseSecretRoom
+    dwbe $03a1, locations.subrosianHouse
+    dwbe $07e3, locations.subrosian2dCave
+    dwbe $0601, locations.d0HiddenBasement
+    dwbe $04e9, locations.makuTree3Essences
+    dwbe $04ea, locations.makuTree5Essences
+    dwbe $04ee, locations.makuTree7Essences
+    # ------- Digging spots -------
+    dwbe $0140, locations.subrosianWildsDiggingSpot
+    dwbe $0082, locations.spoolSwampDiggingSpot
+    dwbe $0106, locations.subrosiaBathOreDiggingSpot
+    dwbe $0157, locations.subrosiaMarketPortalOreDiggingSpot
+    dwbe $0147, locations.subrosiaWorkerOreDiggingSpot
+    dwbe $013a, locations.subrosiaTempleOreDiggingSpot
+    dwbe $0107, locations.subrosiaNorthernVolcanoesOreDiggingSpot
+    dwbe $0120, locations.subrosiaD8PortalOreDiggingSpot
+    dwbe $0142, locations.subrosiaWesternVolcanoesOreDiggingSpot
+    # ------- Drops / spawned items -------
+    dwbe $041b, locations.d1StalfosDrop
+    dwbe $0434, locations.d2RopeDrop
+    dwbe $047b, locations.d4PotPuzzle
+    dwbe $0475, locations.d4Pool
+    dwbe $04ab, locations.d6MagnetBallDrop
+    dwbe $0545, locations.d7ZolButton
+    dwbe $0535, locations.d7ArmosPuzzle
+    dwbe $053d, locations.d7DropNorthOfStairMaze
+    dwbe $0582, locations.d8EyeDrop
+    dwbe $0575, locations.d8HardhatDrop
+    dwbe $057f, locations.d8GhostArmosDrop
+    db $ff
+
+0a//staticItemsReplacementsLookup_body: |
+    push bc
+    ld a,(wActiveGroup)
+    ld b,a
+    ld a,(wActiveRoom)
+    ld c,a
+    ld e,$02
+    ld hl,staticItemsReplacementsTable
+    call searchDoubleKey
+    pop bc
+    ret nc
+    ld b,(hl)  ; item id
+    inc hl
+    ld c,(hl)  ; item subid
+    ret
+00//staticItemsReplacementsLookup: |
+    push de
+    push hl
+    ld e,$0a
+    ld hl,staticItemsReplacementsLookup_body
+    call interBankCall
+    pop hl
+    pop de
+    ret
+
+
+### FREESTANDING ITEMS ###########################################
+
+# staticHeartPiece (0x26381)
+09/6381/: call staticItemsReplacementsLookup
+# staticGashaSeed (0x26608)
+09/6608/: call staticItemsReplacementsLookup
+# sidescrollingStaticGashaSeed (0x266aa)
+09/66aa/: call staticItemsReplacementsLookup
+
+
+### DIGGABLE ITEMS ###########################################
+
+# Replace oreChunkDigSpot with generic behavior for randomized digging spot stuff
+09/6345/handleRandomizedDigSpot: |
+    call getThisRoomFlags
+    and $20
+    jp nz,interactionDelete
+
+    call staticItemsReplacementsLookup
+
+    call getFreeInteractionSlot
+    ret nz
+    ld (hl),INTERACID_TREASURE
+    inc l
+    ld (hl),b
+    inc l
+    ld (hl),c
+    call objectCopyPosition
+    jp interactionDelete
+
+# randomRingDigSpot (0x265F5)
+09/65f5/: jp handleRandomizedDigSpot
+
+
+### SPAWNED ITEMS (Drops, etc...) ###########################################
+
+0b//handleRandomizedSpawnedItem: |
+    ld (hl),INTERACID_TREASURE
+    inc l
+    jp staticItemsReplacementsLookup
+
+# Call our custom handler in scriptCmd_spawnItem
+0b/4416/: call handleRandomizedSpawnedItem
+
+# stop d4 pool item from incrementing subindex when it hits the water,
+# instead making it change behavior to item obtained when diving
+09/40f5/: |
+    ld a,$04 ; diving
+    ld l,$71 ; Interaction.var31 - collect mode
+    ld (hl),a
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+
+# Remove useless stuff that makes dive items behave wrong on small keys
+09/419e/: |
+    db $00,$00,$00
+09/41a4/: |
+    db $00,$00,$00,$00,$00
+
+# for the item dropped in the room *above* the trampoline.
+15/55d8/aboveD7ZolButtonId: db locations.d7ZolButton.id
+15/55db/aboveD7ZolButtonSubid: db locations.d7ZolButton.subid
+
+
+### MAKU TREE MISSABLE GASHA SEEDS ###########################################
+
+# Remove access to stairs behind Farore on 2 essences (this replaces the function that adds
+# a sign in front of Bipin & Blossom's house when the game is completed)
+04/6189/: |
+    call getEssenceCount
+    cp $03
+    ret nc
+    jp removeFaroreStairs
+04//removeFaroreStairs: |
+    ld hl,$cf0c
+    ld (hl),$b0
+    ret
+
+# Remove the original reference to the function above on the exterior of Bipin & Blossom house map
+04/614e/: db $00
+# Attach the modified function above to Farore's room by extending the group4 tile changer table
+04//roomTileChangerCodeGroup4DataExt: |
+    db $61,$2e
+    db $78,$02
+    db $2e,$04
+    db $64,$05
+    db $89,$06
+    db $bb,$07
+    db $e8,$08
+    db $00
+04/611c/: dw roomTileChangerCodeGroup4DataExt
+
+# Remove access to first refill room on 4 essences
+25/49d8/: db $80,$80,$80
+25/49df/: db $64
+25/49f6/: db $64
+25/4a02/: db $40
+
+# Remove access to second refill room on 6 essences
+25/560a/: db $63
+
+# Remove 3 essence original item
+11/6373/: db $4c,$02,$38,$10,$ff
+# Add an item inside the hallway (accessible at 3+ essences) that replaces the item removed above
+11//hallwayMapObjects: |
+    db $f2
+    db $6b,$19,$58,$c8
+    db $ff
+11/611d/: dw hallwayMapObjects
+
+# Remove 5 essences original item
+11/63ad/: db $4c,$02,$68,$10,$ff
+# Add an item inside the first refill pool (accessible at 5+ essences) that replaces the item removed above
+11//refillPool1Objects: |
+    db $f2
+    db $6b,$19,$80,$78
+    db $f3,$76,$40      ; spawn usual items
+    db $ff
+11/611f/: dw refillPool1Objects
+
+# Remove 7 essences original item
+11/6387/: db $4c,$02,$28,$10,$4c,$03,$18,$90,$ff
+# Add an item inside the second refill pool (accessible at 7+ essences) that replaces the item removed above
+11//refillPool2Objects: |
+    db $f2
+    db $6b,$19,$80,$78
+    db $f3,$60,$40      ; spawn usual items
+    db $ff
+11/6127/: dw refillPool2Objects

@@ -1,0 +1,1015 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 81,
+  "name": "Warehouse Kihunter Room",
+  "area": "Brinstar",
+  "subarea": "Kraid",
+  "roomAddress": "0x7A4DA",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1],
+    [0, 1, 0, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Vertical Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001916e",
+      "doorOrientation": "down",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1, 1, 1],
+        [0, 1, 0, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001917a",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [0, 2, 0, 0]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019186",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 2],
+        [0, 1, 0, 0]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Hidden Item",
+      "nodeType": "item",
+      "nodeSubType": "hidden",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x789EC",
+      "mapTileMask": [
+        [1, 1, 2, 1],
+        [0, 1, 0, 0]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Kihunter Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 2, 1],
+        [0, 1, 0, 0]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Power Bomb Blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "B",
+      "name": "Bomb Block",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "C",
+      "name": "Kihunters",
+      "obstacleType": "enemies"
+    },
+    {
+      "id": "D",
+      "name": "Floor Shot Blocks",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Warehouse Kihunters",
+      "enemyName": "Kihunter (green)",
+      "quantity": 4,
+      "homeNodes": [5]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 2},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 3},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 3},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shinespark": {"frames": 5, "excessFrames": 5}}
+      ],
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (Open Door, Shot Block Intact)",
+      "requires": [
+        {"obstaclesCleared": ["C"]},
+        {"obstaclesNotCleared": ["D"]},
+        {"canShineCharge": {"usedTiles": 27, "openEnd": 2}},
+        {"shineChargeFrames": 35}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (Open Door, Shot Block Broken)",
+      "requires": [
+        {"obstaclesCleared": ["C", "D"]},
+        {"canShineCharge": {"usedTiles": 13, "openEnd": 2}},
+        {"shineChargeFrames": 35}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"obstaclesCleared": ["C"]},
+        {"or": [
+          {"and": [
+            {"obstaclesNotCleared": ["D"]},
+            {"canShineCharge": {"usedTiles": 27, "openEnd": 1}}
+          ]},
+          {"and": [
+            {"obstaclesCleared": ["D"]},
+            {"canShineCharge": {"usedTiles": 13, "openEnd": 2}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {
+          "direction": "left"
+        }
+      }
+    },
+    {
+      "id": 46,
+      "link": [1, 1],
+      "name": "Kihunter Ice Moonfall Door Lock Skip",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "Charge",
+          "Plasma"
+        ]},
+        {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 2}},
+        "canEnemyStuckMoonfall",
+        "canFreeFallClip"
+      ],
+      "bypassesDoorShell": true,
+      "note": [
+        "Freeze two Kihunters above the door to be able to moonfall between them.",
+        "After gaining enough speed, hold backward to move forward and buffer a turnaround to clip through the door."
+      ],
+      "detailNote": [
+        "Plasma or Charge are needed in order to be able to freeze the Kihunters mid-air;",
+        "otherwise they would lose their wings and fall to the ground."
+      ],
+      "devNote": [
+        "Manipulating the Kihunters is difficult.",
+        "It might be possible to avoid enemy damage but this would be even more difficult."
+      ]
+    },
+    {
+      "id": 47,
+      "link": [1, 1],
+      "name": "Kihunter Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 360}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 360}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 390}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 390}
+          ]},
+          {"and": [
+            "Ice",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 600}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            "canTrickyDodgeEnemies",
+            {"cycleFrames": 600}
+          ]},
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"cycleFrames": 1000}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["C"],
+      "resetsObstacles": ["A", "B", "D"],
+      "farmCycleDrops": [{"enemy": "Kihunter (green)", "count": 4}]
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        {"obstaclesCleared": ["C"]},
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "devNote": "It looks like the only way to remain in the room is by starting on the right side and triggering a turnaround, with or without artificial morph."
+    },
+    {
+      "id": 8,
+      "link": [1, 3],
+      "name": "G-Mode Morph Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          "canTrickyGMode",
+          {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload the PLMs by rolling through the camera scroll blocks which are just above the shot blocks.",
+        "It is possible but tricky to do this damageless without a Power Bomb. Get the first Kihunter to swoop left twice,",
+        "then quickly move back and forth getting each other Kihunter to swoop without touching Samus.",
+        "In immobile, the Kihunters are in a worse location, but Samus starts with i-frames, so it is a similar difficulty."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 5],
+      "name": "Already Killed",
+      "requires": [
+        {"obstaclesCleared": ["C"]}
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 5],
+      "name": "Take Damage",
+      "requires": [
+        {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 1}}
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 5],
+      "name": "Tricky Dodge",
+      "requires": [
+        "canTrickyJump",
+        "canDodgeWhileShooting"
+      ],
+      "clearsObstacles": ["C"],
+      "note": [
+        "Jump between the kihunters to avoid damage.",
+        "To kill the kihunters, shoot them as they come on screen."
+      ],
+      "devNote": [
+        "This strat can avoid the kihunters well enough to reach further nodes or it can kill them.",
+        "In both cases tricky dodging and accurate shooting is used."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 5],
+      "name": "Quick Kihunter Kill",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [
+            ["Kihunter (green)", "Kihunter (green)", "Kihunter (green)", "Kihunter (green)"]
+          ],
+          "excludedWeapons": ["PowerBeam"]
+        }}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 13,
+      "link": [1, 5],
+      "name": "Power Beam Kill",
+      "requires": [
+        {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 1}},
+        {"or": [
+          "canCarefulJump",
+          {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 1}}
+        ]},
+        {"enemyKill": {
+          "enemies": [
+            ["Kihunter (green)", "Kihunter (green)", "Kihunter (green)", "Kihunter (green)"]
+          ],
+          "explicitWeapons": ["PowerBeam"]
+        }}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 9,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 48,
+      "link": [2, 2],
+      "name": "Kihunter Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "canDodgeWhileShooting",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "h_crouchJumpDownGrab",
+          "SpaceJump"
+        ]},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 480}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 570}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 660}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 660}
+          ]},
+          {"and": [
+            "Charge",
+            {"cycleFrames": 780}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 840}
+          ]},
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"cycleFrames": 1200}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["C", "D"],
+      "resetsObstacles": ["A", "B"],
+      "farmCycleDrops": [{"enemy": "Kihunter (green)", "count": 4}],
+      "note": [
+        "If Samus runs into the room and quickly destroys the shot block, a Kihunter will immediately fall down.",
+        "To avoid this, either spin jump into the room, or wait a moment before shooting the block."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [2, 5],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "HiJump",
+          "SpaceJump",
+          "canIBJ",
+          "canWalljump"
+        ]}
+      ],
+      "clearsObstacles": ["C", "D"],
+      "note": "The Kihunters can be killed from below but there is a chance one will drop down the hole.  Watch them before breaking the shot block."
+    },
+    {
+      "id": 17,
+      "link": [2, 5],
+      "name": "Crouch Jump Down Grab",
+      "requires": [
+        "h_crouchJumpDownGrab"
+      ],
+      "clearsObstacles": ["C", "D"],
+      "note": [
+        "This crouch jump down grab is a little tighter than most.",
+        "The Kihunters can be killed from below but there is a chance one will drop down the hole. Watch them before breaking the shot block."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [2, 5],
+      "name": "Damage Boost",
+      "requires": [
+        {"obstaclesNotCleared": ["C"]},
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 3}}
+      ],
+      "clearsObstacles": ["C", "D"],
+      "note": [
+        "Use a kihunter to knock Samus out of the hole at the peak of her jump",
+        "This strat may take a few attempts to get a good boost."
+      ],
+      "devNote": "2 leniency hits."
+    },
+    {
+      "id": 19,
+      "link": [2, 5],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb",
+        {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 1}}
+      ],
+      "clearsObstacles": ["C"],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen"
+    },
+    {
+      "id": 20,
+      "link": [3, 3],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 21,
+      "link": [3, 3],
+      "name": "Leave With Temporary Blue (Spring Ball Bounce)",
+      "requires": [
+        {"obstaclesCleared": ["B", "C"]},
+        {"or": [
+          {"and": [
+            {"obstaclesCleared": ["D"]},
+            {"canShineCharge": {"usedTiles": 17, "openEnd": 1}}
+          ]},
+          {"and": [
+            {"obstaclesNotCleared": ["D"]},
+            {"canShineCharge": {"usedTiles": 31, "openEnd": 1}}
+          ]}
+        ]},
+        "canChainTemporaryBlue",
+        "canSpringBallBounce"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "note": [
+        "Gain temporary blue by running left to right.",
+        "Spring ball bounce through the tunnel.",
+        "Then continue chaining temporary blue through the door."
+      ]
+    },
+    {
+      "id": 49,
+      "link": [3, 3],
+      "name": "Kihunter Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [3]}},
+        "h_useMorphBombs",
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 750}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 810}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 870}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 840}
+          ]},
+          {"and": [
+            "Charge",
+            {"cycleFrames": 945}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 1005}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 1125}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B", "C"],
+      "resetsObstacles": ["A", "D"],
+      "farmCycleDrops": [{"enemy": "Kihunter (green)", "count": 4}]
+    },
+    {
+      "id": 22,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 23,
+      "link": [3, 5],
+      "name": "Block Already Broken",
+      "requires": [
+        "Morph",
+        {"obstaclesCleared": ["B"]}
+      ],
+      "clearsObstacles": ["C"],
+      "note": "The Kihunters can be killed by retreating to the morph tunnel if needed."
+    },
+    {
+      "id": 24,
+      "link": [3, 5],
+      "name": "Bomb the Block",
+      "requires": [
+        "h_useMorphBombs"
+      ],
+      "clearsObstacles": ["B", "C"],
+      "note": "The Kihunters can be killed by retreating to the morph tunnel if needed."
+    },
+    {
+      "id": 25,
+      "link": [3, 5],
+      "name": "Power Bomb the Block",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "clearsObstacles": ["A", "B", "C"],
+      "note": [
+        "The Kihunters can be killed by retreating to the morph tunnel if needed.",
+        "Placing the Power Bomb far to the left will also destroy the shot blocks going down."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 5],
+      "name": "Speedball (Come in Getting Blue Speed)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1,
+          "maxExtraRunSpeed": "$1.8"
+        }
+      },
+      "requires": [
+        "canSpeedball"
+      ],
+      "clearsObstacles": ["B", "C"],
+      "note": "The Kihunters can be killed by retreating to the morph tunnel if needed.",
+      "devNote": [
+        "There is 1 unusable tile in this runway.",
+        "This can also work at higher run speeds, at least up to $2.A, but this is more difficult and the usable runway would be less."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [3, 5],
+      "name": "Speedball (Come in Blue Spinning)",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "minExtraRunSpeed": "$1.7",
+          "maxExtraRunSpeed": "$3.8",
+          "unusableTiles": 2
+        }
+      },
+      "requires": [
+        "canSpeedball"
+      ],
+      "clearsObstacles": ["B", "C"],
+      "note": "The Kihunters can be killed by retreating to the morph tunnel if needed."
+    },
+    {
+      "id": 28,
+      "link": [3, 5],
+      "name": "Temporary Blue Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "canTrickySpringBallBounce"
+      ],
+      "clearsObstacles": ["B", "C"],
+      "note": [
+        "Approach the morph tunnel by chaining temporary blue; then spring ball bounce through the tunnel to break the bomb block.",
+        "The Kihunters can be killed by retreating to the morph tunnel if needed."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [3, 5],
+      "name": "Blue Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled",
+          "maxExtraRunSpeed": "$2.8"
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        "canInsaneJump"
+      ],
+      "clearsObstacles": ["B", "C"],
+      "note": [
+        "Spring ball bounce directly into the tunnel to break the bomb block with blue speed.",
+        "The Kihunters can be killed by retreating to the morph tunnel if needed."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [3, 5],
+      "name": "G-Mode Morph Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true,
+      "note": [
+        "Rolling on the ground will overload PLMs by moving through camera scroll blocks.",
+        "Lure all of the Kihunters to the top right position, then quickly move left, exit g-mode and retreat to one of the other exits."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 32,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ],
+      "note": "Reaching 4 means obstacle B is open."
+    },
+    {
+      "id": 33,
+      "link": [5, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["C"]},
+          {"enemyDamage": {"enemy": "Kihunter (green)", "type": "contact", "hits": 1}}
+        ]}
+      ]
+    },
+    {
+      "id": 34,
+      "link": [5, 1],
+      "name": "Leave Shinecharged (Closed Door, Shot Block Intact)",
+      "requires": [
+        {"obstaclesCleared": ["C"]},
+        {"obstaclesNotCleared": ["D"]},
+        {"canShineCharge": {"usedTiles": 31, "openEnd": 1}},
+        {"shineChargeFrames": 75}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Use the door for additional runway then open it once the Shinecharge is complete.",
+      "devNote": [
+        "It could be useful to have a proper way to represent that this strat requires the door not to be open.",
+        "If it were a locked red or green door, you would not be able to unlock it as part of this strat unless you could reset the room."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [5, 1],
+      "name": "Leave Shinecharged (Closed Door, Shot Block Broken)",
+      "requires": [
+        {"obstaclesCleared": ["C", "D"]},
+        {"canShineCharge": {"usedTiles": 17, "openEnd": 1}},
+        {"shineChargeFrames": 75}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Use the door for additional runway then open it once the Shinecharge is complete.",
+      "devNote": [
+        "It could be useful to have a proper way to represent that this strat requires the door not to be open.",
+        "If it were a locked red or green door, you would not be able to unlock it as part of this strat unless you could reset the room."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": [],
+      "clearsObstacles": ["D"]
+    },
+    {
+      "id": 37,
+      "link": [5, 2],
+      "name": "Bottom Spark Out",
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"obstaclesCleared": ["C"]},
+        {"obstaclesNotCleared": ["D"]},
+        {"canShineCharge": {"usedTiles": 25, "openEnd": 0}},
+        {"shinespark": {"frames": 20}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "Charge a spark, then break the shot blocks, drop through, and spark out the bottom right door."
+    },
+    {
+      "id": 38,
+      "link": [5, 2],
+      "name": "Bottom Leave Shinecharged",
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"obstaclesCleared": ["C"]},
+        {"obstaclesNotCleared": ["D"]},
+        {"canShineCharge": {"usedTiles": 17, "openEnd": 1}},
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Break the shot block, then gain a shinecharge while sliding off the ledge, down toward the bottom right door."
+    },
+    {
+      "id": 39,
+      "link": [5, 3],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"or": [
+          "h_useMorphBombs",
+          {"obstaclesCleared": ["B"]}
+        ]}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 40,
+      "link": [5, 3],
+      "name": "Power Bomb the Block",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "clearsObstacles": ["A", "B", "C"],
+      "note": "Placing the Power Bomb against the right wall will not break the shot blocks going down."
+    },
+    {
+      "id": 41,
+      "link": [5, 3],
+      "name": "Speedball",
+      "requires": [
+        {"notable": "Speedball"},
+        "Morph",
+        {"obstaclesCleared": ["C"]},
+        {"obstaclesNotCleared": ["D"]},
+        {"or": [
+          {"and": [
+            "canSlowShortCharge",
+            {"getBlueSpeed": {"usedTiles": 17, "openEnd": 0}},
+            "canSpeedball"
+          ]},
+          {"and": [
+            {"canShineCharge": {"usedTiles": 30, "openEnd": 1}},
+            "canTemporaryBlue",
+            "canLateralMidAirMorph"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "note": [
+        "A very low horizontal speed is needed to drop down and break the block without hitting the corner to the left or the block above the bomb block.",
+        "Or with Temporary Blue, Samus can bounce into the bomb block."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [5, 3],
+      "name": "Tunnel Charge (Shot Block Intact)",
+      "requires": [
+        {"obstaclesCleared": ["B", "C"]},
+        {"obstaclesNotCleared": ["D"]},
+        {"canShineCharge": {"usedTiles": 31, "openEnd": 1}},
+        "canShinechargeMovementTricky",
+        "Morph",
+        {"shinespark": {"frames": 13}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "Generate a charge on the left side and carry it through the morph tunnel and out the right door."
+    },
+    {
+      "id": 43,
+      "link": [5, 3],
+      "name": "Tunnel Charge (Shot Block Broken)",
+      "requires": [
+        {"obstaclesCleared": ["B", "C", "D"]},
+        {"canShineCharge": {"usedTiles": 13, "openEnd": 2}},
+        "canShinechargeMovementTricky",
+        "Morph",
+        {"shinespark": {"frames": 13}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": "Generate a charge on the left side and carry it through the morph tunnel and out the right door."
+    },
+    {
+      "id": 44,
+      "link": [5, 4],
+      "name": "Blocks Already Broken",
+      "requires": [
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall",
+          "canIBJ"
+        ]},
+        {"obstaclesCleared": ["A"]}
+      ]
+    },
+    {
+      "id": 45,
+      "link": [5, 4],
+      "name": "Power Bomb",
+      "requires": [
+        "h_usePowerBomb",
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall",
+          "canIBJ"
+        ]}
+      ],
+      "clearsObstacles": ["A", "B", "C"]
+    }
+  ],
+  "notables": [
+    {
+      "id": 4,
+      "name": "Speedball",
+      "note": [
+        "A very low horizontal speed is needed to drop down and break the block without hitting the corner to the left or the block above the bomb block.",
+        "Or with Temporary Blue, Samus can bounce into the bomb block."
+      ]
+    }
+  ],
+  "nextStratId": 50,
+  "nextNotableId": 5,
+  "devNote": [
+    "FIXME: An ice moonfall might be possible to clip past the bottom left door shell?",
+    "FIXME: Leaving with temporary blue through the bottom door (node 2) is possible but seems really bad."
+  ]
+}

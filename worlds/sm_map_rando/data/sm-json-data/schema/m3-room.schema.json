@@ -1,0 +1,2425 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/vg-json-data/sm-json-data/master/schema/m3-room.schema.json",
+  "definitions": {
+    "runway": {
+      "type": "object",
+      "required": ["length", "openEnd"],
+      "additionalProperties": false,
+      "properties": {
+        "length": {
+          "type": "number",
+          "title": "Length",
+          "minimum": 0,
+          "maximum": 45,
+          "description": "Horizontal length of the runway in tiles."
+        },
+        "openEnd": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2,
+          "title": "Number of Open Ends",
+          "description": "The number of open ends in the runway. An open end is a runway edge that ends in a dropoff rather than a wall. Each open end adds a bit of extra room.",
+          "default": 1
+        },
+        "gentleUpTiles": {
+          "type": "integer",
+          "title": "Gentle Up Tiles",
+          "description": "Number of tiles in the runway that gently slope (half a vertical tile) upwards"
+        },
+        "gentleDownTiles": {
+          "type": "integer",
+          "title": "Gentle Down Tiles",
+          "description": "Number of tiles in the runway that gently slope (half a vertical tile) downwards"
+        },
+        "steepUpTiles": {
+          "type": "integer",
+          "title": "Steep Up Tiles",
+          "description": "Number of tiles in the runway that steeply slope (one vertical tile) upwards"
+        },
+        "steepDownTiles": {
+          "type": "integer",
+          "title": "Steep Down Tiles",
+          "description": "Number of tiles in the runway that steeply slope (one vertical tile) downwards"
+        },
+        "startingDownTiles": {
+          "type": "integer",
+          "title": "Steep Down Tiles",
+          "description": "Number of tiles at the start of the runway that steeply slope downwards, preventing a stutter."
+        }
+      }
+    },
+    "strat": {
+      "type": "object",
+      "required": [
+        "name",
+        "requires"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "integer",
+          "title": "Strat ID",
+          "description": "Identifier for this strat, unique within the room."
+        },
+        "link": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "From & to nodes ID where the strat begins and ends.",
+          "items": {
+            "type": "integer",
+            "title": "Node ID",
+            "description": "ID of node within this room where the strat begins or ends"
+          }
+        },
+        "name": {
+          "type": "string",
+          "title": "Strat Name",
+          "description": "A name for the strat",
+          "default": "Base",
+          "examples": [
+            "Base",
+            "Brinstar Reserve Hole-in-one"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "entranceCondition": {
+          "type": "object",
+          "title": "Entrance Condition",
+          "additionalProperties": false,
+          "properties": {
+            "comeInNormally": {
+              "type": "object",
+              "title": "Come In Normally",
+              "description": "Represents a requirement to come into the room through this door, with no other particular requirements.",
+              "additionalProperties": false,
+              "properties": {}
+            },
+            "comeInRunning": {
+              "type": "object",
+              "title": "Come In Running",
+              "description": "Represents a requirement to run in through this door with speed in a specified range.",
+              "required": [
+                "speedBooster",
+                "minTiles"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "speedBooster": {
+                  "type": ["boolean", "string"],
+                  "title": "Speed Booster",
+                  "description": "Whether or not this run should be performed with Speed Booster.",
+                  "enum": [
+                    true,
+                    false,
+                    "any"
+                  ]
+                },
+                "minTiles": {
+                  "type": "number",
+                  "title": "Minimum Speed in Tiles",
+                  "description": "The minimum horizontal speed that will satisfy this cross-room requirement, measured in effective runway tiles with dash held."
+                },
+                "maxTiles": {
+                  "type": "number",
+                  "title": "Maximum Speed in Tiles",
+                  "description": "The maximum horizontal speed that will satisfy this cross-room requirement, measured in effective runway tiles with dash held."
+                }
+              }
+            },
+            "comeInJumping": {
+              "type": "object",
+              "title": "Come In Jumping",
+              "description": "Represents a requirement that Samus come in by jumping through the door transition.",
+              "required": [
+                "speedBooster",
+                "minTiles"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "speedBooster": {
+                  "type": ["boolean", "string"],
+                  "title": "Speed Booster",
+                  "description": "Whether or not this run should be performed with Speed Booster.",
+                  "enum": [
+                    true,
+                    false,
+                    "any"
+                  ]
+                },
+                "minTiles": {
+                  "type": "number",
+                  "title": "Minimum Speed in Tiles",
+                  "description": "The minimum horizontal speed that will satisfy this condition, measured in effective runway tiles with dash held."
+                },
+                "maxTiles": {
+                  "type": "number",
+                  "title": "Maximum Speed in Tiles",
+                  "description": "The maximum horizontal speed that will satisfy this condition, measured in effective runway tiles with dash held."
+                }
+              }
+            },
+            "comeInSpaceJumping": {
+              "type": "object",
+              "title": "Come In Space Jumping",
+              "description": "Represents that Samus must come in by using Space Jump to jump through the bottom of this door.",
+              "required": ["speedBooster", "minTiles"],
+              "additionalProperties": false,
+              "properties": {
+                "speedBooster": {
+                  "type": ["boolean", "string"],
+                  "title": "Speed Booster",
+                  "description": "Whether or not this run should be performed with Speed Booster.",
+                  "enum": [
+                    true,
+                    false,
+                    "any"
+                  ]
+                },
+                "minTiles": {
+                  "type": "number",
+                  "title": "Minimum Speed in Tiles",
+                  "description": "The minimum horizontal speed that will satisfy this condition, measured in effective runway tiles with dash held before jumping."
+                },
+                "maxTiles": {
+                  "type": "number",
+                  "title": "Maximum Speed in Tiles",
+                  "description": "The maximum horizontal speed that will satisfy this condition, measured in effective runway tiles with dash held."
+                }
+              }
+            },
+            "comeInBlueSpaceJumping": {
+              "type": "object",
+              "title": "Come In Space Jumping",
+              "description": "Represents that Samus must come in with blue speed using Space Jump to jump through the bottom of this door.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {
+                "minExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Minimum extra run speed (in hexadecimal) which will satisfy this condition."
+                },
+                "maxExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Maximum extra run speed (in hexadecimal) which will satisfy this condition."
+                }
+              }
+            },
+            "comeInShinecharging": {
+              "type": "object",
+              "title": "Come in Shinecharging",
+              "description": "Represents a requirement to run into the room with enough space to complete a shinecharge in this room.",
+              "required": [
+                "length",
+                "openEnd"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "length": {
+                  "type": "number",
+                  "title": "Length",
+                  "minimum": 0,
+                  "maximum": 45,
+                  "description": "Length of the runway in the current room that can be used to complete the shinecharge."
+                },
+                "openEnd": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "title": "Number of Open Ends",
+                  "description": "The number of open ends in the runway. An open end is a runway edge that ends in a dropoff rather than a wall. Each open end adds a bit of extra room.",
+                  "default": 1
+                },
+                "gentleUpTiles": {
+                  "type": "integer",
+                  "title": "Gentle Up Tiles",
+                  "description": "Number of tiles in the runway that gently slope (half a vertical tile) upwards (when running away from the door)"
+                },
+                "gentleDownTiles": {
+                  "type": "integer",
+                  "title": "Gentle Down Tiles",
+                  "description": "Number of tiles in the runway that gently slope (half a vertical tile) downwards (when running away from the door)"
+                },
+                "steepUpTiles": {
+                  "type": "integer",
+                  "title": "Steep Up Tiles",
+                  "description": "Number of tiles in the runway that steeply slope (one vertical tile) upwards (when running away from the door)"
+                },
+                "steepDownTiles": {
+                  "type": "integer",
+                  "title": "Steep Down Tiles",
+                  "description": "Number of tiles in the runway that steeply slope (one vertical tile) downwards (when running away from the door)"
+                }
+              }
+            },
+            "comeInGettingBlueSpeed": {
+              "type": "object",
+              "title": "Come in Getting Blue Speed",
+              "description": "Represents a requirement to run into the room with enough space to gain blue speed in this room.",
+              "required": [
+                "length",
+                "openEnd"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "length": {
+                  "type": "number",
+                  "title": "Length",
+                  "minimum": 0,
+                  "maximum": 45,
+                  "description": "Length of the runway in the current room that can be used to finish getting blue speed."
+                },
+                "openEnd": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "title": "Number of Open Ends",
+                  "description": "The number of open ends in the runway. An open end is a runway edge that ends in a dropoff rather than a wall. Each open end adds a bit of extra room.",
+                  "default": 1
+                },
+                "gentleUpTiles": {
+                  "type": "integer",
+                  "title": "Gentle Up Tiles",
+                  "description": "Number of tiles in the runway that gently slope (half a vertical tile) upwards (when running away from the door)"
+                },
+                "gentleDownTiles": {
+                  "type": "integer",
+                  "title": "Gentle Down Tiles",
+                  "description": "Number of tiles in the runway that gently slope (half a vertical tile) downwards (when running away from the door)"
+                },
+                "steepUpTiles": {
+                  "type": "integer",
+                  "title": "Steep Up Tiles",
+                  "description": "Number of tiles in the runway that steeply slope (one vertical tile) upwards (when running away from the door)"
+                },
+                "steepDownTiles": {
+                  "type": "integer",
+                  "title": "Steep Down Tiles",
+                  "description": "Number of tiles in the runway that steeply slope (one vertical tile) downwards (when running away from the door)"
+                },
+                "minExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Minimum extra run speed (in hexadecimal) which will satisfy this condition."
+                },
+                "maxExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Maximum extra run speed (in hexadecimal) which will satisfy this condition."
+                }
+              }
+            },
+            "comeInShinecharged": {
+              "type": "object",
+              "title": "Come in Shinecharged",
+              "description": "Fulfilled by coming in through this door with a shinecharge.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {}
+            },
+            "comeInShinechargedJumping": {
+              "type": "object",
+              "title": "Come in Shinecharged and Jumping",
+              "description": "Fulfilled by jumping through this door from an air room with a shinecharge.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {}
+            },
+            "comeInWithSpark": {
+              "type": "object",
+              "title": "Come In With Spark",
+              "description": "Represents a requirement that Samus come in by shinesparking through the door.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {
+                "position": {
+                  "type": "string",
+                  "description": "Required position in the doorway while entering.",
+                  "enum": ["top", "bottom"]
+                }
+              }
+            },
+            "comeInStutterShinecharging": {
+              "type": "object",
+              "title": "Come In Stutter Shinecharging",
+              "description": "Represents that Samus must run through this door with SpeedBooster equipped, immediately after stuttering in the previous room (which must have normal physics). This can be used to set up a short water shinecharge.",
+              "required": ["minTiles"],
+              "additionalProperties": false,
+              "properties": {
+                "minTiles": {
+                  "type": "number",
+                  "title": "Minimum Speed in Tiles",
+                  "description": "The minimum amount of effective runway tiles in other room needed for this strat."
+                }
+              }
+            },
+            "comeInWithBombBoost": {
+              "type": "object",
+              "title": "Come In With Bomb Boost",
+              "description": "Represents that Samus must come through this door with a horizontal bomb boost.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {}
+            },
+            "comeInWithDoorStuckSetup": {
+              "type": "object",
+              "title": "Come In With Door Stuck Setup",
+              "description": "Represents that Samus must come through this door in a way that allows getting stuck in the door (e.g. to set up an X-ray climb).",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {}
+            },
+            "comeInSpeedballing": {
+              "type": "object",
+              "title": "Come In Speedballing",
+              "description": "Represents that Samus must enter the room either in a speedball from the previous room, or in a process of running, jumping, or falling into a speedball.",
+              "required": ["runway"],
+              "additionalProperties": false,
+              "properties": {
+                "runway": {
+                  "$ref": "#/definitions/runway",
+                  "description": "Runway in the current room that is available to complete the speedball."
+                },
+                "minExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Minimum extra run speed (in hexadecimal) while morphed which will satisfy this condition."
+                },
+                "maxExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Maximum extra run speed (in hexadecimal) while morphed which will satisfy this condition."
+                }
+              }
+            },
+            "comeInWithTemporaryBlue": {
+              "type": "object",
+              "title": "Come In With Temporary Blue",
+              "description": "Represents that Samus must come in by jumping through this door with temporary blue.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {
+                "direction": {
+                  "type": "string",
+                  "description": "Direction that Samus must be facing through the transition (applicable only to vertical transitions).",
+                  "enum": ["left", "right", "any"]
+                }
+              }
+            },
+            "comeInSpinning": {
+              "type": "object",
+              "title": "Come In Spinning",
+              "description": "Represents that Samus must come in with a spin jump through the doorway while having a certain amount of speed.",
+              "required": ["speedBooster", "unusableTiles"],
+              "additionalProperties": false,
+              "properties": {
+                "speedBooster": {
+                  "type": ["boolean", "string"],
+                  "title": "Speed Booster",
+                  "description": "Whether or not Speed Booster should be equipped when entering the room.",
+                  "enum": [
+                    true,
+                    false,
+                    "any"
+                  ]
+                },
+                "unusableTiles": {
+                  "type": "number",
+                  "title": "Unusable Tiles",
+                  "description": "For a runway connected to the door, the number of tiles before the door that are unusable for gaining speed, because of needing to jump."
+                },
+                "minExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Minimum extra run speed (in hexadecimal) which will satisfy this condition."
+                },
+                "maxExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Maximum extra run speed (in hexadecimal) which will satisfy this condition."
+                }
+              }
+            },
+            "comeInBlueSpinning": {
+              "type": "object",
+              "title": "Come In Blue Spinning",
+              "description": "Represents that Samus must come in with a spin jump through the doorway while having blue speed.",
+              "required": ["unusableTiles"],
+              "additionalProperties": false,
+              "properties": {
+                "minExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Minimum extra run speed (in hexadecimal) which will satisfy this condition."
+                },
+                "maxExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Maximum extra run speed (in hexadecimal) which will satisfy this condition."
+                },
+                "unusableTiles": {
+                  "type": "number",
+                  "title": "Unusable Tiles",
+                  "description": "For a runway connected to the door, the number of tiles before the door that are unusable for gaining blue speed, because of needing to jump."
+                }
+              }
+            },
+            "comeInWithMockball": {
+              "type": "object",
+              "title": "Come In With Mockball",
+              "description": "Represents that Samus must roll into the room in a mockball with a certain amount of speed.",
+              "required": ["speedBooster"],
+              "additionalProperties": false,
+              "properties": {
+                "speedBooster": {
+                  "type": ["boolean", "string"],
+                  "title": "Speed Booster",
+                  "description": "Whether or not Speed Booster should be equipped when entering.",
+                  "enum": [
+                    true,
+                    false,
+                    "any"
+                  ]
+                },
+                "adjacentMinTiles": {
+                  "type": "number",
+                  "title": "Minimum Tiles for Adjacent Runway",
+                  "description": "The minimum effective runway tiles available in front of the door for gaining speed and entering a mockball."
+                },
+                "remoteAndLandingMinTiles": {
+                  "type": "array",
+                  "title": "Minimum Tiles for Remote and Landing Runways",
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "anyOf": [
+                {"required": ["adjacentMinTiles"]},
+                {"required": ["remoteAndLandingMinTiles"]}
+              ]
+            },
+            "comeInWithSpringBallBounce": {
+              "type": "object",
+              "title": "Come In With Spring Ball Bounce",
+              "description": "Represents that Samus must jump into the room with a spring ball bounce in the doorway of the previous room.",
+              "required": ["speedBooster", "movementType"],
+              "additionalProperties": false,
+              "properties": {
+                "speedBooster": {
+                  "type": ["boolean", "string"],
+                  "title": "Speed Booster",
+                  "description": "Whether or not Speed Booster should be equipped when entering.",
+                  "enum": [
+                    true,
+                    false,
+                    "any"
+                  ]
+                },
+                "movementType": {
+                  "type": "string",
+                  "title": "Movement Type",
+                  "enum": ["controlled", "uncontrolled", "any"],
+                  "description": "The type of bounce to enter with."
+                },
+                "adjacentMinTiles": {
+                  "type": "number",
+                  "title": "Minimum Tiles for Adjacent Runway",
+                  "description": "The minimum effective runway tiles available in front of the door for gaining speed and jumping into a bounce."
+                },
+                "remoteAndLandingMinTiles": {
+                  "type": "array",
+                  "title": "Minimum Tiles for Remote and Landing Runways",
+                  "description": "Possible minimum values for combinations of remote runway length and landing length.",
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "anyOf": [
+                {"required": ["adjacentMinTiles"]},
+                {"required": ["remoteAndLandingMinTiles"]}
+              ]
+            },
+            "comeInWithBlueSpringBallBounce": {
+              "type": "object",
+              "title": "Come In With Blue Spring Ball Bounce",
+              "description": "Represents that Samus must jump into the room with a blue spring ball bounce in the doorway of the previous room.",
+              "required": ["movementType"],
+              "additionalProperties": false,
+              "properties": {
+                "movementType": {
+                  "type": "string",
+                  "title": "Movement Type",
+                  "enum": ["controlled", "uncontrolled", "any"],
+                  "description": "The type of bounce to enter with."
+                },
+                "minExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Minimum extra run speed (in hexadecimal) which will satisfy this condition."
+                },
+                "maxExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Maximum extra run speed (in hexadecimal) which will satisfy this condition."
+                },
+                "minLandingTiles": {
+                  "type": "number",
+                  "description": "Minimum length of landing runway which will satisfy this condition."
+                }
+              }
+            },
+            "comeInWithStoredFallSpeed": {
+              "type": "object",
+              "title": "Come in With Stored Fall Speed",
+              "description": "Represents that Samus has stored a high vertical fall speed value that will clip through the floor with the next use of Moonfall.",
+              "required": ["fallSpeedInTiles"],
+              "additionalProperties": false,
+              "properties": {
+                "fallSpeedInTiles": {
+                  "type": "integer",
+                  "title": "Fall Speed in Tiles",
+                  "description": "The number of tiles Samus would clip through by Moonfalling on top of a solid floor.",
+                  "maximum": 2
+                }
+              }
+            },
+            "comeInWithRMode": {
+              "type": "object",
+              "title": "Come in With R-Mode",
+              "description": "Represents that Samus must obtain R-mode coming through this door.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {}
+            },
+            "comeInWithGMode": {
+              "type": "object",
+              "title": "Come in With G-Mode",
+              "description": "Represents that Samus must have or obtain G-mode coming through this door.",
+              "required": [
+                "mode",
+                "morphed"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "direct",
+                    "indirect",
+                    "any"
+                  ],
+                  "title": "Mode",
+                  "description": "Whether we must come in with direct G-mode, indirect G-mode, or either"
+                },
+                "morphed": {
+                  "type": "boolean",
+                  "title": "Artificial Morph",
+                  "description": "If true, then the strat assumes entering in a morphed state, either with artificial morph or by having Morph collected."
+                },
+                "mobility": {
+                  "type": "string",
+                  "enum": [
+                    "mobile",
+                    "immobile",
+                    "any"
+                  ],
+                  "default": "any",
+                  "title": "Mobility",
+                  "description": "Whether Samus must come in mobile, immobile, or either."
+                }
+              }
+            },
+            "comeInWithWallJumpBelow": {
+              "type": "object",
+              "description": "Represents that Samus must come up through this door with momentum by wall-jumping in the door frame below.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {
+                "minHeight": {
+                  "type": "number",
+                  "description": "Minimum height of door frame (tiles below the transition tiles) that will satisfy the condition."
+                }
+              }
+            },
+            "comeInWithSpaceJumpBelow": {
+              "type": "object",
+              "description": "Represents that Samus must come up through this door with momentum by using Space Jump in the door frame below.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {}
+            },
+            "comeInWithPlatformBelow": {
+              "type": "object",
+              "description": "Represents that Samus must come up through this vertical door with momentum by jumping from a platform below, possibly with run speed.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {
+                "minHeight": {
+                  "type": "number",
+                  "description": "Minimum height of the platform that will satisfy the condition."
+                },
+                "maxHeight": {
+                  "type": "number",
+                  "description": "Maximum height of the platform that will satisfy the condition."
+                },
+                "maxLeftPosition": {
+                  "type": "number",
+                  "description": "Maximum value of the platform leftPosition that will satisfy the condition."
+                },
+                "minRightPosition": {
+                  "type": "number",
+                  "description": "Minimum value of the platform rightPosition that will satisfy the condition."
+                }
+              }
+            },
+            "comeInWithSidePlatform": {
+              "type": "object",
+              "description": "Represents that Samus must jump through this horizontal door with upward momentum, by jumping from a platform to the side of the door in the other room.",
+              "required": ["platforms"],
+              "properties": {
+                "platforms": {
+                  "type": "array",
+                  "description": "Possible platform geometries in the other room that can satisfy the condition.",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["minTiles", "speedBooster", "minHeight", "maxHeight", "obstructions"],
+                    "properties": {
+                      "minHeight": {
+                        "type": "number",
+                        "description": "Minimum height of the platform in the other room that will satisfy this condition."
+                      },
+                      "maxHeight": {
+                        "type": "number",
+                        "description": "Maximum height of the platform in the other room that will satisfy this condition."
+                      },
+                      "minTiles": {
+                        "type": "number",
+                        "description": "Minimum length of platform runway in the other room, measured in tiles, including unusable parts near an obstruction."
+                      },
+                      "speedBooster": {
+                        "type": ["boolean", "string"],
+                        "description": "Whether or not this strat should be performed with Speed Booster.",
+                        "enum": [
+                          true,
+                          false,
+                          "any"
+                        ]
+                      },
+                      "obstructions": {
+                        "type": "array",
+                        "description": "Possible obstruction locations in the other room that can satisfy the condition.",
+                        "items": {
+                          "type": "array",
+                          "description": "X and Y coordinates of an obstruction location in the other room that can satisfy this condition.",
+                          "minItems": 2,
+                          "maxItems": 2,
+                          "items": {
+                            "type": "integer",
+                            "description": "X or Y coordinate measured as a tile count, with the X value representing the horizontal distance in front the door transition in the other room, and the Y value representing the distance below the doorway."
+                          }
+                        }
+                      },
+                      "environment": {
+                        "type": "string",
+                        "description": "Environment that Samus is in while exiting the previous room.",
+                        "enum": ["water", "air", "any"],
+                        "default": "any"
+                      },
+                      "requires": {
+                        "$ref" : "m3-requirements.schema.json#/definitions/logicalRequirements",
+                        "description": "Logical requirements specific to using this platform geometry."
+                      },
+                      "note": {
+                        "$ref" : "m3-note.schema.json#/definitions/note"
+                      },
+                      "detailNote": {
+                        "$ref" : "m3-note.schema.json#/definitions/detailNote"
+                      },
+                      "devNote": {
+                        "$ref" : "m3-note.schema.json#/definitions/devNote"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "comeInWithGrappleSwing": {
+              "type": "object",
+              "description": "Represents that Samus must swing into the room using Grapple, giving Samus momentum and the ability to grapple jump.",
+              "requires": ["blocks"],
+              "additionalProperties": false,
+              "properties": {
+                "blocks": {
+                  "type": "array",
+                  "description": "A list of blocks that Samus could be grappled to, to swing out of the previous room.",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["position"],
+                    "properties": {
+                      "position": {
+                        "type": "array",
+                        "description": "Coordinates of a block that Samus could be grappled to, to swing out of the previous room.",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "description": "X or Y coordinate measured as a tile count, with 0 representing the top or left-most tile of the screen containing the door in the previous room."
+                        }
+                      },
+                      "environment": {
+                        "type": "string",
+                        "description": "Environment that Samus is in while using this block to swing out of the previous room.",
+                        "enum": ["water", "air"],
+                        "default": "air"
+                      },
+                      "obstructions": {
+                        "type": "array",
+                        "description": "Coordinates of blocks that Samus must avoid while swinging out of the previous room.",
+                        "default": [],
+                        "items": {
+                          "type": "array",
+                          "minItems": 2,
+                          "maxItems": 2,
+                          "items": {
+                            "type": "integer",
+                            "description": "X or Y coordinate measured as a tile count, with 0 representing the top or left-most tile of the screen containing the door."
+                          }
+                        }
+                      },
+                      "note": {
+                        "$ref" : "m3-note.schema.json#/definitions/note"
+                      },
+                      "devNote": {
+                        "$ref" : "m3-note.schema.json#/definitions/devNote"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "comeInWithGrappleJump": {
+              "type": "object",
+              "description": "Represents that Samus must come into the room by grapple jumping vertically through this door, with no horizontal momentum.",
+              "required": ["position"],
+              "additionalProperties": false,
+              "properties": {
+                "position": {
+                  "type": "string",
+                  "description": "Possible horizontal position in the doorway.",
+                  "enum": ["left", "right", "any"]
+                }
+              }
+            },
+            "comeInWithGrappleTeleport": {
+              "type": "object",
+              "description": "Represents that Samus must come into the room while grappling, teleporting Samus to a position in this room corresponding to the location of the (grapple) block in the other room.",
+              "required": ["blockPositions"],
+              "additionalProperties": false,
+              "properties": {
+                "blockPositions": {
+                  "type": "array",
+                  "description": "A list of tile coordinates of (grapple) blocks that Samus could be grappled to while exiting the other room.",
+                  "items": {
+                    "type": "array",
+                    "description": "Coordinates of a (grapple) block that Samus could be grappled to while exiting the other room.",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "integer",
+                      "description": "X or Y coordinate measured as a tile count, with 0 representing the top or left-most tile of the other room."
+                    }
+                  }
+                }
+              }
+            },
+            "comeInWithSamusEaterTeleport": {
+              "type": "object",
+              "description": "Represents that Samus must come into the room after teleporting to the location of a Samus Eater.",
+              "required": ["floorPositions", "ceilingPositions"],
+              "additionalProperties": false,
+              "properties": {
+                "floorPositions": {
+                  "type": "array",
+                  "description": "A list of screen-local tile coordinates of suitable floor Samus Eaters positions which will work for this strat, matching a position in a corresponding 'leaveWithSamusEaterTeleport' strat.",
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "integer",
+                      "description": "X or Y coordinate measured as a tile count, with 0 representing the top or left-most tile of the screen."
+                    }
+                  }
+                },
+                "ceilingPositions": {
+                  "type": "array",
+                  "description": "A list of screen-local tile coordinates of suitable ceiling Samus Eaters positions which will work for this strat, matching a position in a corresponding 'leaveWithSamusEaterTeleport' strat.",
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "integer",
+                      "description": "X or Y coordinate measured as a tile count, with 0 representing the top or left-most tile of the screen."
+                    }
+                  }
+                }
+              }
+            },
+            "comeInWithSuperSink": {
+              "type": "object",
+              "description": "Represents that Samus must enter through this door while morphed and continuing to gain fall speed from a super sink.",
+              "additionalProperties": false,
+              "properties": {}
+            },
+            "comesThroughToilet": {
+              "type": "string",
+              "description": "For a strat having an entranceCondition through a vertical transition, indicates whether the strat is applicable if the Toilet comes between this room and the room with the exitCondition.",
+              "default": "no",
+              "enum": [
+                "no",
+                "yes",
+                "any"
+              ]
+            },
+            "devNote": {
+              "$ref" : "m3-note.schema.json#/definitions/devNote"
+            }
+          },
+          "oneOf": [
+            {"required": ["comeInNormally"]},
+            {"required": ["comeInRunning"]},
+            {"required": ["comeInJumping"]},
+            {"required": ["comeInSpaceJumping"]},
+            {"required": ["comeInBlueSpaceJumping"]},
+            {"required": ["comeInShinecharging"]},
+            {"required": ["comeInGettingBlueSpeed"]},
+            {"required": ["comeInShinecharged"]},
+            {"required": ["comeInShinechargedJumping"]},
+            {"required": ["comeInWithSpark"]},
+            {"required": ["comeInWithBombBoost"]},
+            {"required": ["comeInStutterShinecharging"]},
+            {"required": ["comeInWithDoorStuckSetup"]},
+            {"required": ["comeInSpeedballing"]},
+            {"required": ["comeInWithTemporaryBlue"]},
+            {"required": ["comeInWithMockball"]},
+            {"required": ["comeInWithSpringBallBounce"]},
+            {"required": ["comeInWithBlueSpringBallBounce"]},
+            {"required": ["comeInSpinning"]},
+            {"required": ["comeInBlueSpinning"]},
+            {"required": ["comeInWithStoredFallSpeed"]},
+            {"required": ["comeInWithRMode"]},
+            {"required": ["comeInWithGMode"]},
+            {"required": ["comeInWithWallJumpBelow"]},
+            {"required": ["comeInWithSpaceJumpBelow"]},
+            {"required": ["comeInWithPlatformBelow"]},
+            {"required": ["comeInWithSidePlatform"]},
+            {"required": ["comeInWithGrappleSwing"]},
+            {"required": ["comeInWithGrappleJump"]},
+            {"required": ["comeInWithGrappleTeleport"]},
+            {"required": ["comeInWithSamusEaterTeleport"]},
+            {"required": ["comeInWithSuperSink"]}
+          ]
+        },
+        "startsWithShineCharge": {
+          "type": "boolean",
+          "title": "Starts With Shinecharge",
+          "description": "If true, indicates that this strat must start with shinecharge frames remaining from an earlier strat."
+        },
+        "requires": {
+          "$ref" : "m3-requirements.schema.json#/definitions/logicalRequirements",
+          "title": "Strat Requirements",
+          "description": "Equipment, tech, and flag requirements to execute this strat."
+        },
+        "exitCondition": {
+          "type": "object",
+          "title": "Exit Condition",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "maxProperties": 1,
+          "properties": {
+            "leaveNormally": {
+              "type": "object",
+              "title": "Leave Normally",
+              "description": "Represents that Samus can leave through this door in a 'normal' way, by walking, falling, or jumping.",
+              "additionalProperties": false,
+              "properties": {}
+            },
+            "leaveWithRunway": {
+              "type": "object",
+              "title": "Leave With Runway",
+              "description": "Represents that Samus can leave through this door using a runway of specified geometry. The specific way that the runway is used depends on the 'entranceCondition' in the next room.",
+              "additionalProperties": false,
+              "required": [
+                "length",
+                "openEnd"
+              ],
+              "properties": {
+                "length": {
+                  "type": "number",
+                  "title": "Length",
+                  "minimum": 0,
+                  "maximum": 45,
+                  "description": "Length of this Runway"
+                },
+                "openEnd": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "title": "Number of Open Ends",
+                  "description": "The number of open ends in the runway. An open end is a runway edge that ends in a dropoff rather than a wall. Each open end adds a bit of extra room.",
+                  "default": 1
+                },
+                "gentleUpTiles": {
+                  "type": "integer",
+                  "title": "Gentle Up Tiles",
+                  "description": "Number of tiles in the runway that gently slope (half a vertical tile) upwards (when running towards the door)"
+                },
+                "gentleDownTiles": {
+                  "type": "integer",
+                  "title": "Gentle Down Tiles",
+                  "description": "Number of tiles in the runway that gently slope (half a vertical tile) downwards (when running towards the door)"
+                },
+                "steepUpTiles": {
+                  "type": "integer",
+                  "title": "Steep Up Tiles",
+                  "description": "Number of tiles in the runway that steeply slope (one vertical tile) upwards (when running towards the door)"
+                },
+                "steepDownTiles": {
+                  "type": "integer",
+                  "title": "Steep Down Tiles",
+                  "description": "Number of tiles in the runway that steeply slope (one vertical tile) downwards (when running towards the door)"
+                },
+                "startingDownTiles": {
+                  "type": "integer",
+                  "title": "Starting Down Tiles",
+                  "description": "Number of tiles at the start of the runway (away from the door) that slope down, preventing a stutter"
+                },
+                "minExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Minimum extra run speed (in hexadecimal) with which it is possible to leave with this condition."
+                },
+                "heated": {
+                  "type": "boolean",
+                  "description": "Whether the runway is used in a heated environment. This only needs to be specified if the room is only sometimes heated (e.g. Volcano Room)."
+                }
+              }
+            },
+            "leaveShinecharged": {
+              "type": "object",
+              "title": "Leave Shinecharged",
+              "description": "Represents that Samus can leave through this door with a shinecharge.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {}
+            },
+            "leaveWithTemporaryBlue": {
+              "type": "object",
+              "title": "Leave With Temporary Blue",
+              "description": "Represents that Samus may jump through this door with temporary blue.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {
+                "direction": {
+                  "type": "string",
+                  "description": "Direction that Samus is facing through the transition (applicable only to vertical transitions).",
+                  "enum": ["left", "right", "any"]
+                }
+              }
+            },
+            "leaveWithSpark": {
+              "type": "object",
+              "title": "Leave With Spark",
+              "description": "Represents that Samus can leave through this door with a shinespark.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {
+                "position": {
+                  "type": "string",
+                  "description": "Possible positions in the doorway while exiting.",
+                  "enum": ["top", "bottom"]
+                }
+              }
+            },
+            "leaveSpinning": {
+              "type": "object",
+              "title": "Leave Spinning",
+              "description": "Represents that Samus can leave through the top or bottom of this door with a spin jump, from a runway not connected to the door.",
+              "required": ["remoteRunway"],
+              "additionalProperties": false,
+              "properties": {
+                "remoteRunway": {
+                  "$ref": "#/definitions/runway",
+                  "description": "Runway that is available to gain momentum for the spin jump."
+                },
+                "minExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Minimum extra run speed (in hexadecimal) with which it is possible to leave with this condition."
+                },
+                "maxExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Maximum extra run speed (in hexadecimal) with which it is possible to leave with this condition."
+                },
+                "blue": {
+                  "type": "string",
+                  "enum": ["yes", "no", "any"],
+                  "default": "any",
+                  "description": "Whether this setup can work for leaving with blue speed or not."
+                }
+              }
+            },
+            "leaveWithMockball": {
+              "type": "object",
+              "title": "Leave With Mockball",
+              "description": "Represents that Samus can leave through this door with a mockball.",
+              "required": ["remoteRunway", "landingRunway"],
+              "additionalProperties": false,
+              "properties": {
+                "remoteRunway": {
+                  "$ref": "#/definitions/runway",
+                  "description": "Runway that is available to gain speed before jumping into a mockball."
+                },
+                "landingRunway": {
+                  "$ref": "#/definitions/runway",
+                  "description": "Runway that is available to land while entering mockball and gain speed before the transition."
+                },
+                "minExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Minimum extra run speed (in hexadecimal) with which it is possible to leave with this condition."
+                },
+                "maxExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Maximum extra run speed (in hexadecimal) with which it is possible to leave with this condition."
+                },
+                "blue": {
+                  "type": "string",
+                  "enum": ["yes", "no", "any"],
+                  "default": "any",
+                  "description": "Whether this setup can work for leaving with blue speed or not."
+                }
+              }
+            },
+            "leaveWithSpringBallBounce": {
+              "type": "object",
+              "title": "Leave With Spring Ball Bounce",
+              "description": "Represents that Samus can leave through this door with a spring ball bounce.",
+              "required": ["remoteRunway", "landingRunway", "movementType"],
+              "additionalProperties": false,
+              "properties": {
+                "remoteRunway": {
+                  "$ref": "#/definitions/runway",
+                  "description": "Runway that is available to gain speed before jumping."
+                },
+                "landingRunway": {
+                  "$ref": "#/definitions/runway",
+                  "description": "Runway that is available for landing, either for entering a mockball, or for bouncing after an airball."
+                },
+                "minExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Minimum extra run speed (in hexadecimal) with which it is possible to leave with this condition."
+                },
+                "maxExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Maximum extra run speed (in hexadecimal) with which it is possible to leave with this condition."
+                },
+                "blue": {
+                  "type": "string",
+                  "enum": ["yes", "no", "any"],
+                  "default": "any",
+                  "description": "Whether this setup can work for leaving with blue speed or not."
+                },
+                "movementType": {
+                  "type": "string",
+                  "title": "Movement Type",
+                  "enum": ["controlled", "uncontrolled", "any"],
+                  "description": "The type of bounce to exit with."
+                }
+              }
+            },
+            "leaveSpaceJumping": {
+              "type": "object",
+              "title": "Leave With Space Jump",
+              "description": "Represents that Samus can leave through this door with a Space Jump at the bottom of the doorway.",
+              "required": ["remoteRunway"],
+              "additionalProperties": false,
+              "properties": {
+                "remoteRunway": {
+                  "$ref": "#/definitions/runway",
+                  "description": "Runway that is available to gain momentum for the Space Jump."
+                },
+                "minExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Minimum extra run speed (in hexadecimal) with which it is possible to leave with this condition."
+                },
+                "maxExtraRunSpeed": {
+                  "type": "string",
+                  "pattern": "^\\$[0-9|A-F]\\.[0-9|A-F]+$",
+                  "description": "Maximum extra run speed (in hexadecimal) with which it is possible to leave with this condition."
+                },
+                "blue": {
+                  "type": "string",
+                  "enum": ["yes", "no", "any"],
+                  "default": "any",
+                  "description": "Whether this setup can work for leaving with blue speed or not."
+                }
+              }
+            },
+            "leaveWithStoredFallSpeed": {
+              "type": "object",
+              "title": "Leave With Stored Fall Speed",
+              "description": "Represents that Samus has stored a high vertical fall speed value that will clip through the floor with the next use of Moonfall.",
+              "required": ["fallSpeedInTiles"],
+              "additionalProperties": false,
+              "properties": {
+                "fallSpeedInTiles": {
+                  "type": "integer",
+                  "title": "Fall Speed in Tiles",
+                  "description": "The number of tiles Samus would clip through by Moonfalling on top of a solid floor.",
+                  "maximum": 2
+                }
+              }
+            },
+            "leaveWithGModeSetup": {
+              "type": "object",
+              "title": "Leave With G-Mode Setup",
+              "description": "Represents that Samus can leave through this door while taking damage through the transition, in a pose that would allow using X-Ray on the first frame after the transition. This is for setting up to enter R-mode or direct G-mode in the next room.",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {
+                "knockback": {
+                  "type": "boolean",
+                  "default": true,
+                  "title": "Leaves With Knockback",
+                  "description": "If true, then Samus gets knockback frames through the transition."
+                }
+              }
+            },
+            "leaveWithGMode": {
+              "type": "object",
+              "title": "Leave With G-Mode",
+              "description": "Represents that Samus can leave through this door while in G-mode, resulting in indirect G-mode in the next room.",
+              "required": ["morphed"],
+              "additionalProperties": false,
+              "properties": {
+                "morphed": {
+                  "type": "boolean",
+                  "title": "Morphed",
+                  "description": "If true, then this strat results in leaving the room in a morphed state, either by maintaining artificial morph or by having the Morph item."
+                }
+              }
+            },
+            "leaveWithDoorFrameBelow": {
+              "type": "object",
+              "description": "Represents that Samus can leave through this door with a jump in the door frame, e.g. using a wall-jump or Space Jump.",
+              "required": ["height"],
+              "additionalProperties": false,
+              "properties": {
+                "height": {
+                  "type": "number",
+                  "description": "The number of tiles beneath the door transition usable for wall-jumping."
+                }
+              }
+            },
+            "leaveWithPlatformBelow": {
+              "type": "object",
+              "description": "Represents that Samus can leave through this door by jumping from a platform below, possibly with run speed.",
+              "required": ["leftPosition", "rightPosition", "height"],
+              "additionalProperties": false,
+              "properties": {
+                "height": {
+                  "type": "number",
+                  "description": "The number of tiles between the door transition and the platform. A horizontal slope tile counts as a half tile."
+                },
+                "leftPosition": {
+                  "type": "number",
+                  "description": "Position of the left end of the platform, measured as the number of tiles to the right of the center of the door. An open end should be represented as an extra half tile."
+                },
+                "rightPosition": {
+                  "type": "number",
+                  "description": "Position of the right end of the platform, measured as the number of tiles to the right of the center of the door. An open end should be represented as an extra half tile."
+                }
+              }
+            },
+            "leaveWithSidePlatform": {
+              "type": "object",
+              "description": "Represents that Samus can leave through this door by jumping from a platform to the side, carrying upward momentum into the next room.",
+              "required": ["runway", "height", "obstruction"],
+              "properties": {
+                "height": {
+                  "type": "number",
+                  "description": "The vertical position of the runway, measured in number of tiles below the doorway, at the location where Samus would jump."
+                },
+                "runway": {
+                  "$ref": "#/definitions/runway",
+                  "description": "Runway available to jump through the door, including unusable parts of the runway near an obstruction."
+                },
+                "obstruction": {
+                  "type": "array",
+                  "description": "Coordinates of the block that most restricts where Samus can jump, measured relative to the floor below the transition.",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "integer",
+                    "description": "X or Y coordinate measured as a tile count, with the X value representing the horizontal distance in front the door transition, and the Y value representing the distance below the doorway."
+                  }
+                }
+              }
+            },
+            "leaveWithGrappleSwing": {
+              "type": "object",
+              "description": "Represents that Samus can leave through this door by swinging using Grapple, allowing Samus to carry momentum and the ability to grapple jump in the next room.",
+              "required": ["blocks"],
+              "additionalProperties": false,
+              "properties": {
+                "blocks": {
+                  "type": "array",
+                  "description": "A list of tile coordinates of blocks that Samus could be grappled to, to swing out of the room.",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["position"],
+                    "properties": {
+                      "position": {
+                        "type": "array",
+                        "description": "Coordinates of a block that Samus could be grappled to, to swing out of the room.",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "description": "X or Y coordinate measured as a tile count, with 0 representing the top or left-most tile of the screen containing the door."
+                        }
+                      },
+                      "environment": {
+                        "type": "string",
+                        "description": "Environment that Samus is in while using this block to swing out of the room.",
+                        "enum": ["water", "air"],
+                        "default": "air"
+                      },
+                      "obstructions": {
+                        "type": "array",
+                        "description": "Coordinates of blocks that Samus must avoid while swinging out of the room.",
+                        "default": [],
+                        "items": {
+                          "type": "array",
+                          "minItems": 2,
+                          "maxItems": 2,
+                          "items": {
+                            "type": "integer",
+                            "description": "X or Y coordinate measured as a tile count, with 0 representing the top or left-most tile of the screen containing the door."
+                          }
+                        }
+                      },
+                      "note": {
+                        "$ref" : "m3-note.schema.json#/definitions/note"
+                      },
+                      "devNote": {
+                        "$ref" : "m3-note.schema.json#/definitions/devNote"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "leaveWithGrappleJump": {
+              "type": "object",
+              "description": "Represents that Samus can leave through this door by grapple jumping vertically through the door, with no horizontal momentum.",
+              "required": ["position"],
+              "additionalProperties": false,
+              "properties": {
+                "position": {
+                  "type": "string",
+                  "description": "Possible horizontal position in the doorway when exiting.",
+                  "enum": ["left", "right", "any"]
+                }
+              }
+            },
+            "leaveWithGrappleTeleport": {
+              "type": "object",
+              "description": "Represents that Samus can leave through this door while grappling, which can enable a teleport in the next room.",
+              "required": ["blockPositions"],
+              "additionalProperties": false,
+              "properties": {
+                "blockPositions": {
+                  "type": "array",
+                  "description": "A list of tile coordinates of (grapple) blocks that Samus could be grappled to while exiting the room.",
+                  "items": {
+                    "type": "array",
+                    "description": "Coordinates of a (grapple) block that Samus could be grappled to while exiting the room.",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "integer",
+                      "description": "X or Y coordinate measured as a tile count, with 0 representing the top or left-most tile of the room."
+                    }
+                  }
+                }
+              }
+            },
+            "leaveWithSamusEaterTeleport": {
+              "type": "object",
+              "description": "Represents that Samus can leave through this door immediately after exiting G-mode, in such a way that Samus is teleported to the position of a Samus Eater at the start of the transition.",
+              "required": ["floorPositions", "ceilingPositions"],
+              "additionalProperties": false,
+              "properties": {
+                "floorPositions": {
+                  "type": "array",
+                  "description": "A list of screen-local tile coordinates of floor Samus Eaters, indicating the left-most tile of the Samus Eater that Samus can interact with.",
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "integer",
+                      "description": "X or Y coordinate measured as a tile count, with 0 representing the top or left-most tile of the screen.",
+                      "minimum": 0,
+                      "maximum": 15
+                    }
+                  }
+                },
+                "ceilingPositions": {
+                  "type": "array",
+                  "description": "A list of screen-local tile coordinates of ceiling Samus Eaters, indicating the left-most tile of the Samus Eater that Samus can interact with.",
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": {
+                      "type": "integer",
+                      "description": "X or Y coordinate measured as a tile count, with 0 representing the top or left-most tile of the screen."
+                    }
+                  }
+                }
+              }
+            },
+            "leaveWithSuperSink": {
+              "type": "object",
+              "description": "Represents that Samus can leave through this door while morphed and continuing to gain fall speed from a super sink.",
+              "additionalProperties": false,
+              "properties": {}
+            }
+          }
+        },
+        "gModeRegainMobility": {
+          "type": "object",
+          "description": "Indicates that this strat allows Samus, after entering with G-mode immobile, to regain mobility (by taking knockback from an enemy) while staying in G-mode.",
+          "required": [],
+          "additionalProperties": false,
+          "properties": {}
+        },
+        "bypassesDoorShell": {
+          "type": ["boolean", "string"],
+          "enum": [
+            true,
+            false,
+            "free"
+          ],
+          "description": "Indicates that this strat allows Samus to exit through the door transition without first unlocking or opening the door.",
+          "default": false
+        },
+        "unlocksDoors": {
+          "type": "array",
+          "description": "List of possible doors that can be unlocked as part of this strat.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["types"],
+            "properties": {
+              "nodeId": {
+                "type": "integer",
+                "description": "Node ID of the door which can be unlocked by this strat. If omitted, it is assumed to be the destination node of the strat."
+              },
+              "types": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "missiles",
+                    "super",
+                    "powerbomb",
+                    "gray",
+                    "ammo"
+                  ]
+                },
+                "description": "Types of doors which can be unlocked as part of this strat, with the requirements given in this object."
+              },
+              "requires": {
+                "$ref" : "m3-requirements.schema.json#/definitions/logicalRequirements",
+                "description": "Logical requirements needed to unlock this door if it is of a matching type."
+              },
+              "useImplicitRequires": {
+                "type": "boolean",
+                "default": true,
+                "description": "Whether standard requirements should be implicitly appended to the `requires`."
+              },
+              "note": {
+                "$ref" : "m3-note.schema.json#/definitions/note"
+              },
+              "devNote": {
+                "$ref" : "m3-note.schema.json#/definitions/devNote"
+              }
+            }
+          }
+        },
+        "clearsObstacles": {
+          "type": "array",
+          "title": "Clears Obstacles",
+          "description": "The IDs of obstacles that are cleared (if not already cleared) by executing this strat.",
+          "items": {
+            "type": "string",
+            "pattern": "^(.*)$"
+          }
+        },
+        "resetsObstacles": {
+          "type": "array",
+          "title": "Resets Obstacles",
+          "description": "The IDs of obstacles that are reset (i.e. returned to their original not-cleared state) by executing this strat.",
+          "items": {
+            "type": "string",
+            "pattern": "^(.*)$"
+          }
+        },
+        "collectsItems": {
+          "type": "array",
+          "title": "Collects Items",
+          "description": "A list of node IDs of items that become collected (if not already collected) by executing this strat.",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "setsFlags": {
+          "type": "array",
+          "title": "Sets Flags",
+          "description": "A list of names of game flags that are set by executing this strat.",
+          "items": {
+            "type": "string",
+            "pattern": "^(.*)$"
+          }
+        },
+        "endsWithShineCharge": {
+          "type": "boolean",
+          "title": "Keeps Shinecharge",
+          "description": "If true, indicates that this strat ends with shinecharge frames remaining, which can be used in a subsequent strat."
+        },
+        "farmCycleDrops": {
+          "type": "array",
+          "description": "A list of enemy drops which may be collected as part of executing this strat.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "enemy": {
+                "type": "string",
+                "title": "Enemy Name",
+                "description": "The name of an enemy that drops can be collected from, as found in the enemies file."
+              },
+              "count": {
+                "type": "integer",
+                "title": "Count",
+                "description": "The number of drops that can be collected from this enemy by executing this strat."
+              }
+            }
+          }
+        },
+        "wallJumpAvoid": {
+          "type": "boolean",
+          "title": "Wall Jump Avoid",
+          "default": false,
+          "description": "If true, indicates that the strat is only useful if the wall jump ability were somehow not possible to use."
+        },
+        "flashSuitChecked": {
+          "type": "boolean",
+          "title": "Flash Suit Checked",
+          "description": "Whether this strat has been checked to be logically sound with respect to its requirements for carrying a flash suit."
+        },
+        "failures": {
+          "type": "array",
+          "title": "Strat Failures",
+          "description": "A list of ways the strat can be failed, with the consequences of that failure.",
+          "items": {
+            "type": "object",
+            "required": [ "name" ],
+            "not": {
+              "required": ["leadsToNode", "softlock"]
+            },
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Failure Name",
+                "description": "A name that identifies this strat failure.",
+                "default": "",
+                "pattern": "^(.*)$"
+              },
+              "leadsToNode": {
+                "type": "integer",
+                "title": "Leads to Node",
+                "description": "Indicates a node at which Samus ends up when this failure happens."
+              },
+              "cost": {
+                "$ref" : "m3-requirements.schema.json#/definitions/logicalRequirements",
+                "title": "Failure Cost",
+                "description": "Cost of having this failure happen. This is represented as logical requirements, but only resource requirements make sense - not items or techs."
+              },
+              "softlock": {
+                "type": "boolean",
+                "title": "Softlock",
+                "description": "Indicates whether this failure causes a softlock. If missing, this should be viewed as false."
+              },
+              "note": {
+                "$ref" : "m3-note.schema.json#/definitions/note"
+              },
+              "devNote": {
+                "$ref" : "m3-note.schema.json#/definitions/devNote"
+              }
+            }
+          }
+        },
+        "note": {
+          "$ref" : "m3-note.schema.json#/definitions/note"
+        },
+        "detailNote": {
+          "$ref" : "m3-note.schema.json#/definitions/detailNote"
+        },
+        "devNote": {
+          "$ref" : "m3-note.schema.json#/definitions/devNote"
+        }
+      }
+    },
+    "yields": {
+      "type": "array",
+      "title": "Yields",
+      "items": {
+        "type": "string"
+      }
+    },
+    "physics": {
+      "title": "Physics",
+      "description": "Indicates a kind of SuperMetroid physics",
+      "type": "string",
+      "enum": [
+        "air",
+        "water",
+        "lava",
+        "acid",
+        "normal"
+      ],
+      "pattern": "^(.*)$"
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "title": "Super Metroid Room Schema",
+  "required": [
+    "$schema",
+    "id",
+    "name",
+    "area",
+    "subarea",
+    "mapTileMask",
+    "nodes",
+    "links",
+    "strats"
+  ],
+  "allOf": [
+    {
+      "required": ["roomEnvironments"],
+      "properties": {
+        "nodes": {
+          "items": {
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "nodeType": {"const": "door"}
+                  },
+                  "not": {
+                    "properties": {
+                      "nodeSubType": {"const": "elevator"}
+                    }
+                  }
+                },
+                "then": {
+                  "required": ["doorEnvironments"]
+                }
+              },
+              {
+                "if": {
+                  "anyOf": [
+                    {
+                      "not": {
+                        "properties": {
+                          "nodeType": {"const": "door"}
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "nodeSubType": {"const": "elevator"}
+                      }
+                    }
+                  ]
+                },
+                "then": {
+                  "not":{
+                    "required": ["doorEnvironments"]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "title": "JSON Schema Path",
+      "description": "A path to the definition of this file's JSON schema."
+    },
+    "id": {
+      "type": "integer",
+      "title": "Room ID",
+      "description": "Identifier for this room, unique across the entire game",
+      "examples": [
+        7
+      ]
+    },
+    "name": {
+      "type": "string",
+      "title": "Room Name",
+      "description": "As it appears in the SuperMetroid.run wiki",
+      "examples": [
+        "Aqueduct"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "area": {
+      "type": "string",
+      "title": "Area Name",
+      "examples": [
+        "Maridia"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "subarea": {
+      "type": "string",
+      "title": "Area Subname",
+      "examples": [
+        "Inner"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "subsubarea": {
+      "type": "string",
+      "title": "Area SubSubname",
+      "examples": [
+        "Pink"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "roomAddress": {
+      "type": "string",
+      "title": "Room Address",
+      "description": "Memory address of this room.",
+      "examples": ["0x79E9F", "0x79F11"],
+      "pattern": "^(.*)$"
+    },
+    "roomEnvironments": {
+      "type": "array",
+      "title": "Room Environments",
+      "description": "An array of objects that describe the room's environment in certain circumstances. In most cases there's only one that's relevant all the time.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "title": "Room Environment",
+        "description": "An object that describes the room-wide portion of the game environment, which can optionally depend on what node Samus entered from.",
+        "required": [
+          "heated"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "heated": {
+            "title": "Heated",
+            "description": "Indicates whether the room is heated",
+            "type": "boolean"
+          },
+          "entranceNodes": {
+            "title": "Entrance Nodes",
+            "description": "The nodes from which Samus must have entered the room for this environment to be applicable. Can be left null if applicable for all nodes.",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "note": {
+            "$ref" : "m3-note.schema.json#/definitions/note"
+          },
+          "devNote": {
+            "$ref" : "m3-note.schema.json#/definitions/devNote"
+          }
+        }
+      }
+    },
+    "mapTileMask": {
+      "type": "array",
+      "title": "Room map tile mask",
+      "description": "Map tiles which are accessible in normal ways (excluding X-ray climbing, etc.)",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "enum": [0, 1]
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "title": "Nodes; Doors, Elevators, Item Locations, etc",
+      "items": {
+        "type": "object",
+        "title": "Node Object",
+        "required": [
+          "id",
+          "name",
+          "nodeType",
+          "nodeSubType",
+          "mapTileMask"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Node ID within Room",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "name": {
+            "type": "string",
+            "title": "Node Name",
+            "description": "A name that identifies this node",
+            "default": "",
+            "examples": [
+              "Top Left Door"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "nodeType": {
+            "type": "string",
+            "title": "Node Type",
+            "description": "Examples: door, item, junction",
+            "default": "",
+            "examples": [
+              "door",
+              "entrance",
+              "exit",
+              "item"
+            ],
+            "enum": [
+              "door",
+              "entrance",
+              "exit",
+              "item",
+              "junction",
+              "utility"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "nodeSubType": {
+            "type": "string",
+            "title": "Node SubType",
+            "default": "",
+            "examples": [
+              "chozo",
+              "hidden",
+              "visible"
+            ],
+            "enum": [
+              "chozo",
+              "hidden",
+              "visible",
+
+              "blue",
+              "closedWall",
+              "doorway",
+              "elevator",
+              "eye",
+              "gray",
+              "green",
+              "passage",
+              "red",
+              "sandpit",
+              "vertical",
+              "yellow",
+
+              "junction",
+              "g-mode",
+
+              "save",
+              "missile",
+              "energy",
+              "ship",
+              "map"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "nodeItem": {
+            "type": "string",
+            "title": "Vanilla Item",
+            "description": "Item that normally resides at this node in Vanilla"
+          },
+          "nodeAddress": {
+            "type": "string",
+            "title": "Memory Address",
+            "description": "Memory address of this location",
+            "examples": ["0x0019852", "0x001985e"]
+          },
+          "doorOrientation": {
+            "type": "string",
+            "title": "Door Orientation",
+            "description": "The direction that leaving the room through this door will take Samus: left, right, up, or down.",
+            "enum": ["left", "right", "up", "down"]
+          },
+          "doorEnvironments": {
+            "type": "array",
+            "title": "Door Environments",
+            "description": "An array of objects that describe the door's environment in certain circumstances. In most cases there's only one that's relevant all the time. This contains portions of the environment that are not room-wide.",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "title": "Door Environment",
+              "description": "An object that describes the portion of the game environment that can vary by door. This can optionally depend on what node Samus entered from.",
+              "required": [
+                "physics"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "physics": {
+                  "$ref" : "#/definitions/physics",
+                  "description": "Indicates what kind of physics are active at this door"
+                },
+                "entranceNodes": {
+                  "title": "Entrance Nodes",
+                  "description": "The nodes from which Samus must have entered the room for this environment to be applicable. Can be left null if applicable for all nodes.",
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "note": {
+                  "$ref" : "m3-note.schema.json#/definitions/note"
+                },
+                "devNote": {
+                  "$ref" : "m3-note.schema.json#/definitions/devNote"
+                }
+              }
+            }
+          },
+          "useImplicitLeaveNormally": {
+            "type": "boolean",
+            "description": "Whether a standard strat should implicitly be included for exiting the room at this node."
+          },
+          "useImplicitComeInNormally": {
+            "type": "boolean",
+            "description": "Whether a standard strat should implicitly be included for entering the room at this node."
+          },
+          "useImplicitComeInWithMockball": {
+            "type": "boolean",
+            "description": "Whether a standard strat should implicitly be included for entering the room at this node with a mockball."
+          },
+          "useImplicitCarryGModeBackThrough": {
+            "type": "boolean",
+            "description": "Whether a standard strat should implicitly be included for entering the room with direct G-mode (not morphed) and exiting."
+          },
+          "useImplicitCarryGModeMorphBackThrough": {
+            "type": "boolean",
+            "description": "Whether a standard strat should implicitly be included for entering the room with direct G-mode morphed and exiting."
+          },
+          "useImplicitComeInWithGrappleJump": {
+            "type": "boolean",
+            "description": "Whether a standard strat should implicitly be included for entering the room at this node with a grapple jump."
+          },
+          "useImplicitDoorUnlocks": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether a standard strat should implicitly be included for unlocking this node if it is a door node."
+          },
+          "isDoorImmediatelyClosed": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether this door is immediately closed on entry, rather than having a closing animation."
+          },
+          "locks": {
+            "type": "array",
+            "title": "Node Locks",
+            "description": "An array of corresponding lock and unlock conditions for this node",
+            "default": null,
+            "items": {
+              "type": "object",
+              "title": "Lock Object",
+              "description": "Contains corresponding lock and unlock conditions for a node. If lock condition is missing, the lock is initially active.",
+              "required": [ "lockType", "unlockStrats", "name" ],
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "title": "Lock Name",
+                  "description": "A name to describe the lock."
+                },
+                "lockType": {
+                  "type": "string",
+                  "title": "Lock Type",
+                  "default": "",
+                  "enum": [
+                    "bossFight",
+                    "coloredDoor",
+                    "cutscene",
+                    "escapeFunnel",
+                    "gameFlag",
+                    "killEnemies",
+                    "permanent"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "lock": {
+                  "$ref" : "m3-requirements.schema.json#/definitions/logicalRequirements",
+                  "title": "Lock Requirements",
+                  "description": "Equipment, tech, and flag requirements for this node to be locked"
+                },
+                "unlockStrats": {
+                  "type": "array",
+                  "title": "Unlock Strats",
+                  "description": "An array of strats that can be used to unlock the lock.",
+                  "items": {
+                    "$ref" : "#/definitions/strat"
+                  }
+                },
+                "yields": {
+                  "$ref" : "#/definitions/yields",
+                  "description": "A list of flags that are activated by unlocking with this lock."
+                },
+                "note": {
+                  "$ref" : "m3-note.schema.json#/definitions/note"
+                },
+                "devNote": {
+                  "$ref" : "m3-note.schema.json#/definitions/devNote"
+                }
+              }
+            }
+          },
+          "twinDoorAddresses": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "title": "Twin Door Addresses",
+            "description": "The in-game address of other doors that should always lead to the same destination as this door",
+            "items": {
+              "type": "object",
+              "title": "Twin Door Address",
+              "description": "The room and door address of a door that should always lead to the same destination as this door",
+              "required": ["roomAddress", "doorAddress"],
+              "additionalProperties": false,
+              "properties": {
+                "roomAddress": {
+                  "type": "string",
+                  "title": "Twin's Room Address",
+                  "pattern": "^(.*)$"
+                },
+                "doorAddress": {
+                  "type": "string",
+                  "title": "Twin's Door Address",
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
+          },
+          "utility": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "title": "Utilities",
+            "description": "Helping stations at this Node (such as save, refills, or map station)",
+            "items": {
+              "type": "string",
+              "enum": [
+                "save",
+                "missile",
+                "super",
+                "powerbomb",
+                "energy",
+                "reserve",
+                "map"
+              ]
+            }
+          },
+          "viewableNodes": {
+            "type": "array",
+            "title": "Viewable Item Nodes",
+            "description": "An array of objects describing what item nodes can be viewed from this node, and how.",
+            "items": {
+              "type": "object",
+              "title": "Viewable Node Object",
+              "description": "Describes what item nodes can be viewed from this node, and how.",
+              "required": [ "id", "strats" ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "title": "The ID of the item node that is viewable, within the room.",
+                  "default": 0,
+                  "examples": [
+                    1
+                  ]
+                },
+                "strats" : {
+                  "type": "array",
+                  "title": "Viewable Node Strats",
+                  "description": "An array of strats that can be executed to view the item.",
+                  "items": {
+                    "$ref" : "#/definitions/strat"
+                  }
+                }
+              }
+            }
+          },
+          "yields": {
+            "$ref" : "#/definitions/yields",
+            "description": "A list of flags that are activated by interacting with this node."
+          },
+          "mapTileMask": {
+            "type": "array",
+            "title": "Node map tile mask",
+            "description": "Map tiles associated with this node indicated by 2; other room tiles indicated by 1 for reference.",
+            "minItems": 1,
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "integer",
+                "enum": [0, 1, 2]
+              }
+            }
+          },
+          "note": {
+            "$ref" : "m3-note.schema.json#/definitions/note"
+          },
+          "devNote": {
+            "$ref" : "m3-note.schema.json#/definitions/devNote"
+          }
+        }
+      }
+    },
+    "obstacles": {
+      "type": "array",
+      "title": "Obstacles; Things that block your way and can be destroyed, not respawning until the room is reset",
+      "items": {
+        "type": "object",
+        "title": "Obstacle",
+        "required": [
+          "id",
+          "name",
+          "obstacleType"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Obstacle ID within Room. To reduce confusion with nodes, this should be a one-letter String",
+            "default": "",
+            "examples": ["A", "B"]
+          },
+          "name": {
+            "type": "string",
+            "title": "Obstacle Name",
+            "default": "",
+            "examples": [
+              "Top Crumble Blocks"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "obstacleType": {
+            "type": "string",
+            "title": "Obstacle Type",
+            "description": "The main type of obstacle. Examples include 'inanimate', 'enemies', and 'abstract'",
+            "default": "",
+            "examples": [
+              "inanimate",
+              "enemies",
+              "abstract"
+            ],
+            "enum": [
+              "inanimate",
+              "enemies",
+              "abstract"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "note": {
+            "$ref" : "m3-note.schema.json#/definitions/note"
+          },
+          "devNote": {
+            "$ref" : "m3-note.schema.json#/definitions/devNote"
+          }
+        }
+      }
+    },
+    "enemies": {
+      "type": "array",
+      "title": "Enemies; Things that try to kill you.",
+      "items": {
+        "type": "object",
+        "title": "Enemies",
+        "allOf": [
+          {
+            "required": [
+              "id",
+              "groupName",
+              "enemyName",
+              "quantity"
+            ]
+          },
+          {
+            "oneOf": [
+              { "required":
+                [ "homeNodes" ]
+              },
+              { "required":
+                [ "betweenNodes" ]
+              }
+            ]
+          }
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "ID",
+            "description": "A short identifier, which can be used to reference this enemy group from within the room but which isn't unique across the whole game.",
+            "default": "",
+            "examples": ["e1"]
+          },
+          "groupName": {
+            "type": "string",
+            "title": "Group name",
+            "description": "A name that identifies this enemy group uniquely across the entire game.",
+            "default": "",
+            "examples": ["Morph Ball Room Sidehoppers"]
+          },
+          "enemyName": {
+            "type": "string",
+            "title": "Enemy name",
+            "description": "The name of the enemy that this enemy group contains.",
+            "default": "",
+            "examples": [
+              "Kihunter (green)"
+            ]
+          },
+          "quantity": {
+            "type": "integer",
+            "title": "Quantity",
+            "default": "",
+            "examples": [
+              3
+            ]
+          },
+          "homeNodes": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "title": "Home Nodes",
+            "description": "At what nodes enemies normaly engage you",
+            "default": [],
+            "examples": [
+              [1, 2]
+            ]
+          },
+          "betweenNodes": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "title": "Enemies between nodes",
+            "description": "Enemies can only be reached while traveling between these two nodes",
+            "default": [],
+            "minItems": 2,
+            "maxItems": 2,
+            "examples": [
+              [1, 2]
+            ]
+          },
+          "spawn": {
+            "$ref" : "m3-requirements.schema.json#/definitions/logicalRequirements",
+            "title": "Spawn Requirements",
+            "description": "Equipment, tech, and flag requirements for this enemy to spawn. If null, enemy can spawn from game start."
+          },
+          "stopSpawn": {
+            "$ref" : "m3-requirements.schema.json#/definitions/logicalRequirements",
+            "title": "Stop Spawning Requirements",
+            "description": "Equipment, tech, and flag requirements for this enemy to stop spawning. If null, enemy can always spawn once its spawn requirements have been met."
+          },
+          "note": {
+            "$ref" : "m3-note.schema.json#/definitions/note"
+          },
+          "devNote": {
+            "$ref" : "m3-note.schema.json#/definitions/devNote"
+          }
+        }
+      }
+    },
+    "links": {
+      "type": "array",
+      "title": "Links; pathways within the Room",
+      "items": {
+        "type": "object",
+        "title": "Link",
+        "required": [
+          "from",
+          "to"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "from": {
+            "type": "integer",
+            "title": "This Link originates at this Node ID within the Room",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "to": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "title": "This Link terminates at this Node ID within the Room",
+            "items": {
+              "type": "object",
+              "title": "The Items Schema",
+              "required": [
+                "id"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "title": "Target Node ID within the Room",
+                  "examples": [
+                    2
+                  ]
+                },
+                "note": {
+                  "$ref" : "m3-note.schema.json#/definitions/note"
+                },
+                "devNote": {
+                  "$ref" : "m3-note.schema.json#/definitions/devNote"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "strats": {
+      "type": "array",
+      "title": "Room Strats",
+      "description": "An array of strats that can be used in this room.",
+      "items": {
+        "$ref": "#/definitions/strat"
+      }
+    },
+    "notables": {
+      "type": "array",
+      "title": "Array of Notable Strats",
+      "items": {
+        "type": "object",
+        "title": "Notable Strat",
+        "required": [
+          "id",
+          "name",
+          "note"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Notable ID",
+            "description": "Identifier for this reusable notable, unique among notable IDs within the room."
+          },
+          "name": {
+            "type": "string",
+            "title": "Notable Strat Name",
+            "default": "",
+            "examples": [
+              "Big Jump with Blue Speed"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "wallJumpAvoid": {
+            "type": "boolean",
+            "title": "Wall Jump Avoid",
+            "default": false,
+            "description": "If true, indicates that the notable is only useful if the wall jump ability were somehow not possible to use."
+          },
+          "note": {
+            "type": ["string", "array"],
+            "title": "Strat Description",
+            "description": "A common description for all strats that use this notable",
+            "default": "",
+            "pattern": "^(.*)$",
+            "items": {
+              "type": "string"
+            }
+          },
+          "devNote": {
+            "$ref" : "m3-note.schema.json#/definitions/devNote"
+          }
+        }
+      }
+    },
+    "nextStratId": {
+      "type": "integer",
+      "title": "Next Strat ID",
+      "description": "Identifier for the next strat ID to be sequentially assigned within the room."
+    },
+    "nextNotableId": {
+      "type": "integer",
+      "title": "Next Notable ID",
+      "description": "Identifier for the next notable ID to be sequentially assigned within the room."
+    },
+    "note": {
+      "$ref" : "m3-note.schema.json#/definitions/note"
+    },
+    "devNote": {
+      "$ref" : "m3-note.schema.json#/definitions/devNote"
+    }
+  }
+}

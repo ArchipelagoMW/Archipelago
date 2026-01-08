@@ -1,0 +1,707 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 185,
+  "name": "Botwoon's Room",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Pink",
+  "roomAddress": "0x7D95E",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001a90c",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "locks": [
+        {
+          "name": "Botwoon Gray Lock (to Botwoon Hallway)",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedBotwoon"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a918",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Botwoon 1",
+      "enemyName": "Botwoon 1",
+      "quantity": 1,
+      "homeNodes": [1],
+      "stopSpawn": ["f_DefeatedBotwoon"]
+    },
+    {
+      "id": "e2",
+      "groupName": "Botwoon 2",
+      "enemyName": "Botwoon 2",
+      "quantity": 1,
+      "homeNodes": [1],
+      "stopSpawn": ["f_DefeatedBotwoon"]
+    },
+    {
+      "id": "e3",
+      "groupName": "Reverse Botwoon 1",
+      "enemyName": "Reverse Botwoon 1",
+      "quantity": 1,
+      "homeNodes": [2],
+      "stopSpawn": ["f_DefeatedBotwoon"]
+    },
+    {
+      "id": "e4",
+      "groupName": "Reverse Botwoon 2",
+      "enemyName": "Reverse Botwoon 2",
+      "quantity": 1,
+      "homeNodes": [2],
+      "stopSpawn": ["f_DefeatedBotwoon"]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 40,
+      "link": [1, 1],
+      "name": "Leave With Side Platform (Botwoon Dead)",
+      "requires": [
+        "Gravity",
+        "f_DefeatedBotwoon"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 16,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $3.2 with spin, or $3.3 with a quick aim-down."]
+    },
+    {
+      "id": 41,
+      "link": [1, 1],
+      "name": "Leave With Side Platform (Botwoon Alive)",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 13,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $2.B with spin, or $2.C with a quick aim-down."]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "canShinechargeMovement",
+        "Gravity",
+        "f_DefeatedBotwoon",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 1}},
+        {"shineChargeFrames": 35}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "note": "Achieve a shinecharge before running into the wall, to be able to make it to the door faster."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 12,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 12,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 11,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 12,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 24,
+      "link": [1, 1],
+      "name": "Gravity Botwoon Kill",
+      "requires": [
+        "Gravity",
+        {"enemyKill": {
+          "enemies": [["Botwoon 1"]]
+        }},
+        {"enemyKill": {
+          "enemies": [["Botwoon 2"]]
+        }}
+      ],
+      "setsFlags": ["f_DefeatedBotwoon"]
+    },
+    {
+      "id": 25,
+      "link": [1, 1],
+      "name": "Suitless Kill",
+      "requires": [
+        {"notable": "Suitless Kill"},
+        "canSuitlessMaridia",
+        {"enemyKill": {
+          "enemies": [["Botwoon 1"]]
+        }},
+        {"enemyKill": {
+          "enemies": [["Botwoon 2"]]
+        }}
+      ],
+      "setsFlags": ["f_DefeatedBotwoon"],
+      "note": [
+        "Fight Botwoon without Gravity suit.",
+        "The left corner can be used to avoid most attacks and may be worth using even in the opening of the fight for safety."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [1, 1],
+      "name": "Botwoon Microwave",
+      "requires": [
+        "h_navigateUnderwater",
+        "Charge",
+        "Plasma",
+        "canXRayWaitForIFrames"
+      ],
+      "setsFlags": ["f_DefeatedBotwoon"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 23,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "f_DefeatedBotwoon"
+      ]
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "f_DefeatedBotwoon"
+      ]
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canSuitlessMaridia",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "canShinechargeMovement",
+        "Gravity",
+        "f_DefeatedBotwoon",
+        {"canShineCharge": {"usedTiles": 16, "openEnd": 0}},
+        {"shineChargeFrames": 100}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      }
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Leave Spinning",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 4,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "Leave With Mockball",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 20,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 1}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 21,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Back-Side Fight - Gravity, Charge, Wave",
+      "requires": [
+        {"notable": "Back-Side Fight with Charge and Wave"},
+        "Gravity",
+        "Charge",
+        "Wave",
+        {"or": [
+          "canDodgeWhileShooting",
+          {"enemyDamage": {"enemy": "Botwoon 1", "type": "acid", "hits": 2}}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedBotwoon"],
+      "note": ["Fight Botwoon from behind the wall."],
+      "devNote": [
+        "With Gravity, dodging the acid is pretty trivial.",
+        "Even without knowing about the distance trick expected in the suitless version."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Back-Side Fight - Suitless, Charge, Wave",
+      "requires": [
+        {"notable": "Back-Side Fight with Charge and Wave"},
+        "canSuitlessMaridia",
+        "Charge",
+        "Wave",
+        "canDodgeWhileShooting",
+        {"or": [
+          "Morph",
+          {"enemyDamage": {"enemy": "Botwoon 1", "type": "acid", "hits": 2}}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedBotwoon"],
+      "note": [
+        "Even when suitless, it's possible to stand far enough that the acid attack doesn't spawn.",
+        "Botwoon still gets hit. So there's a safe way to take no damage."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [2, 2],
+      "name": "Back-Side Microwave",
+      "requires": [
+        {"notable": "Back-Side Fight with Charge and Wave"},
+        "h_navigateUnderwater",
+        "Charge",
+        "Plasma",
+        "Wave",
+        "canXRayWaitForIFrames"
+      ],
+      "setsFlags": ["f_DefeatedBotwoon"],
+      "flashSuitChecked": true,
+      "note": ["Shoot through the wall and use the microwave trick to defeat Botwoon."]
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Back-Side Waveless Microwave",
+      "requires": [
+        {"notable": "Back-Side Magic Pixel Beam Fight"},
+        "h_navigateUnderwater",
+        "Charge",
+        "Plasma",
+        "canXRayWaitForIFrames"
+      ],
+      "setsFlags": ["f_DefeatedBotwoon"],
+      "flashSuitChecked": true,
+      "note": [
+        "Stand on the appropriate pixel for shooting diagonally through the wall and use the microwave trick to defeat Botwoon.",
+        "Using angle up, it is where Samus' front foot is on the seam in the floor.",
+        "There is not proper spacing for landing an angle down shot and xraying.",
+        "Waiting for Botwoon to peak their head through the wall works too but is less safe."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "Back-Side Magic Pixel Fight",
+      "requires": [
+        {"notable": "Back-Side Magic Pixel Beam Fight"},
+        "h_navigateUnderwater",
+        {"enemyKill": {
+          "enemies": [["Reverse Botwoon 1"], ["Reverse Botwoon 2"]],
+          "explicitWeapons": ["Charge+Plasma", "Charge+Ice+Spazer"]
+        }}
+      ],
+      "setsFlags": ["f_DefeatedBotwoon"],
+      "note": [
+        "A charge beam shot will pass right through the dividing wall if fired from the correct 2-pixel window.",
+        "Using angle down the spot is where Samus' front toe touches the wall.",
+        "Using angle up, it is where Samus' front foot is on the seam in the floor."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [2, 2],
+      "name": "Back-Side Plasma Shield Microwave",
+      "requires": [
+        {"notable": "Back-Side Plasma Shield Microwave"},
+        "h_navigateUnderwater",
+        "canSpecialBeamAttack",
+        "Plasma",
+        "canXRayWaitForIFrames",
+        {"ammo": {"type": "PowerBomb", "count": 2}}
+      ],
+      "setsFlags": ["f_DefeatedBotwoon"],
+      "flashSuitChecked": true,
+      "note": [
+        "Wait for Botwoon to spawn then use a Plasma Special Beam Attack.",
+        "Use XRay to slow time and watch for a particle to overlap Botwoons head, then proceed to Microwave."
+      ],
+      "devNote": "Killing in 1 SBA takes some luck."
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "Back-Side Plasma Shield Fight",
+      "requires": [
+        {"notable": "Back-Side Plasma Shield Fight"},
+        "h_navigateUnderwater",
+        {"enemyKill": {
+          "enemies": [["Reverse Botwoon 1"], ["Reverse Botwoon 2"]],
+          "explicitWeapons": ["Plasma Shield"]
+        }}
+      ],
+      "setsFlags": ["f_DefeatedBotwoon"],
+      "note": "Stand near the dividing wall and unleash the Plasma Special Beam Attack!"
+    },
+    {
+      "id": 36,
+      "link": [2, 2],
+      "name": "Back-Side Super Only Fight",
+      "requires": [
+        {"notable": "Back-Side Super Only Fight"},
+        "h_navigateUnderwater",
+        "canBeExtremelyPatient",
+        {"enemyKill": {
+          "enemies": [["Reverse Botwoon 1"], ["Reverse Botwoon 2"]],
+          "explicitWeapons": ["Super"]
+        }}
+      ],
+      "setsFlags": ["f_DefeatedBotwoon"],
+      "note": [
+        "Wait for the one pattern (bottom->right) where Botwoon's head passes through the dividing barrier briefly and fire a Super Missile.",
+        "This takes a long time, averaging one super per minute."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Back-Side Fight with Charge and Wave",
+      "note": "Use Charge and Wave to kill Botwoon from the right, through the wall."
+    },
+    {
+      "id": 2,
+      "name": "Back-Side Magic Pixel Beam Fight",
+      "note": [
+        "Stand on a particular two pixels to the right of the dividing wall and fight Botwoon using charge beam shots.",
+        "Using angle down the spot is where Samus' front toe touches the wall.",
+        "Using angle up, it is where Samus' front foot is on the seam in the floor."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Suitless Kill",
+      "note": [
+        "Fight Botwoon without Gravity suit.",
+        "The left corner can be used to avoid most attacks and may be worth using even in the opening of the fight for safety."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Back-Side Plasma Shield Fight",
+      "note": ["Stand near the dividing wall and unleash the Plasma Special Beam Attack!"]
+    },
+    {
+      "id": 5,
+      "name": "Back-Side Super Only Fight",
+      "note": [
+        "Wait for the one pattern (bottom->right) where Botwoon's head passes through the dividing barrier briefly and fire a Super Missile.",
+        "This takes a long time, averaging one Super per minute."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Back-Side Plasma Shield Microwave",
+      "note": [
+        "Stand on the appropriate pixel for shooting diagonally through the wall and use the microwave trick to defeat Botwoon.",
+        "Using angle up, it is where Samus' front foot is on the seam in the floor.",
+        "There is not proper spacing for landing an angle down shot and xraying.",
+        "Waiting for Botwoon to peak their head through the wall works too but is less safe."
+      ]
+    }
+  ],
+  "nextStratId": 42,
+  "nextNotableId": 7
+}

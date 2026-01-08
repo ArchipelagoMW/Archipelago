@@ -1,0 +1,1740 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 121,
+  "name": "Crocomire Escape",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "West",
+  "roomAddress": "0x7AA0E",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1, 1],
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019402",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1, 1, 1],
+        [1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001940e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 2, 2],
+        [2, 2, 2, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78BC0",
+      "mapTileMask": [
+        [1, 2, 1, 1],
+        [1, 1, 1, 1]
+      ],
+      "devNote": "Z3M3: Norfair Croc"
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Green Gate Opened",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Crocomire Escape Geruta",
+      "enemyName": "Geruta",
+      "quantity": 1,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Crocomire Escape Dragons",
+      "enemyName": "Dragon",
+      "quantity": 5,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 45,
+      "link": [1, 2],
+      "name": "G-Mode Indirect With Frozen Geruta, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "HiJump",
+          "canTrickyDodgeEnemies"
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "It is possible to lure the Geruta to be used as a platform with nothing but Ice."
+    },
+    {
+      "id": 46,
+      "link": [1, 2],
+      "name": "G-Mode Indirect With Assist, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster"
+          ]},
+          {"and": [
+            "canComplexGMode",
+            "h_lavaProof"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Go over the plateau, or under it with lava protection.",
+        "To avoid the Dragon's fireballs, be sure to kill it quickly, overload the drops with the Dragons on the left first, or exit G-mode."
+      ],
+      "devNote": "FIXME: Damage through the lava could work, or maybe a Geruta damage boost. (Energy from immobile or CF)"
+    },
+    {
+      "id": 47,
+      "link": [1, 2],
+      "name": "G-Mode Morph Indirect, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphMovement",
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 3],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 20}
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "High Speed Gate Glitch",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 34
+        }
+      },
+      "requires": [
+        {"notable": "High Speed Gate Glitch"},
+        "h_heatedGreenGateGlitch",
+        {"ammo": {"type": "Super", "count": 1}},
+        "canInsaneJump"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Build up 34 tiles worth of run speed and jump into the door on the last frame.",
+        "Hold angle up through the transition but also aim down to duck below the ceiling until Samus is past it.",
+        "Fire the Super Missile frame perfectly to open the gate."
+      ],
+      "devNote": [
+        "1 extra tile is added so that you can jump into the door, simplifying the inputs a bit."
+      ]
+    },
+    {
+      "id": 48,
+      "link": [1, 3],
+      "name": "G-Mode Indirect, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"heatFrames": 90}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "Goes to 3 because opening the gate mostly only makes sense when going back to the right for a longer runway or obtaining the item."
+    },
+    {
+      "id": 49,
+      "link": [1, 3],
+      "name": "G-Mode Indirect, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 45}
+      ]
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        {"heatFrames": 1600}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door.",
+        "Samus will not be visible during the climb."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 1],
+      "name": "G-Mode Setup - Get Hit By Geruta, Heatproof, Morph",
+      "requires": [
+        "canComplexGMode",
+        "h_heatProof",
+        "canBePatient",
+        "canCameraManip",
+        "Morph",
+        {"or": [
+          "canTrickyDodgeEnemies",
+          "SpaceJump",
+          "Charge",
+          "Ice",
+          "Plasma",
+          {"ammo": {"type": "Missile", "count": 2}},
+          {"ammo": {"type": "Super", "count": 2}},
+          {"ammo": {"type": "PowerBomb", "count": 2}},
+          {"enemyDamage": {"enemy": "Dragon", "type": "fireball", "hits": 5}},
+          {"and": [
+            "h_lavaProof",
+            {"or": [
+              "ScrewAttack",
+              "h_bombThings"
+            ]}
+          ]}
+        ]},
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            "canBeVeryPatient",
+            {"or": [
+              "canLongIBJ",
+              "canJumpIntoIBJ"
+            ]}
+          ]},
+          {"and": [
+            "canBeVeryPatient",
+            "Grapple",
+            {"or": [
+              "HiJump",
+              "canSpringBallJumpMidAir"
+            ]}
+          ]}
+        ]},
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": "Lure the Geruta to the left door. This may require many jumps to get it to swoop up onto the ledge and not get stuck.",
+      "devNote": "It's possible to avoid the item, but the Geruta will get stuck on it and usually require many swoops to get past it."
+    },
+    {
+      "id": 43,
+      "link": [2, 1],
+      "name": "G-Mode Setup - Get Hit By Geruta, Heatproof, Morphless",
+      "requires": [
+        "canComplexGMode",
+        "h_heatProof",
+        "canBePatient",
+        "canCameraManip",
+        {"or": [
+          "canInsaneJump",
+          "Ice",
+          "h_lavaProof",
+          {"enemyDamage": {"enemy": "Geruta", "type": "contact", "hits": 1}},
+          {"and": [
+            "canUseIFrames",
+            {"enemyDamage": {"enemy": "Dragon", "type": "fireball", "hits": 1}},
+            {"lavaFrames": 55}
+          ]}
+        ]},
+        {"or": [
+          "canTrickyDodgeEnemies",
+          "SpaceJump",
+          "Charge",
+          "Ice",
+          "Plasma",
+          {"ammo": {"type": "Missile", "count": 2}},
+          {"ammo": {"type": "Super", "count": 2}},
+          {"enemyDamage": {"enemy": "Dragon", "type": "fireball", "hits": 5}},
+          {"and": [
+            "h_lavaProof",
+            "ScrewAttack"
+          ]}
+        ]},
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster",
+            "canWalljump"
+          ]},
+          {"and": [
+            "canBeVeryPatient",
+            "HiJump",
+            "Grapple"
+          ]}
+        ]},
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Lure the Geruta to the left door. This may require many jumps to get it to swoop up onto the ledge and not get stuck.",
+        "To safely pass the Geruta without a hit, jump left below it, to get it to swoop left before going up."
+      ],
+      "devNote": "It's possible to avoid the item, but the Geruta will get stuck on it and usually require many swoops to get past it."
+    },
+    {
+      "id": 44,
+      "link": [2, 1],
+      "name": "G-Mode Setup - Get Hit By Geruta, Heatproof, Frozen Geruta Step",
+      "requires": [
+        "canComplexGMode",
+        "h_heatProof",
+        "canBeVeryPatient",
+        "canCameraManip",
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the Geruta to get up to the top left ledge while also getting it to swoop into the top left region.",
+        "This requires many jumps from below to get it to swoop up onto the ledge and not get stuck.",
+        "When the Geruta is heading into the right spot, use it as a platform to get up as well."
+      ],
+      "devNote": "It's possible to avoid the item, but the Geruta will get stuck on it and usually require many swoops to get past it."
+    },
+    {
+      "id": 50,
+      "link": [2, 1],
+      "name": "G-Mode Indirect With Frozen Geruta, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        "canTrickyDodgeEnemies",
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: A variant with only ice and reset fall speed could be added, but is probably unreasonable."
+    },
+    {
+      "id": 51,
+      "link": [2, 1],
+      "name": "G-Mode Indirect With Assist, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            {"notable": "SpringBall Bomb Boost"},
+            "canSpringBallJumpMidAir",
+            "canUnmorphBombBoost",
+            "h_crouchJumpDownGrab",
+            {"or": [
+              "canInsaneJump",
+              "h_additionalBomb"
+            ]}
+          ]},
+          {"and": [
+            "canHorizontalShinespark",
+            {"canShineCharge": {"usedTiles": 15, "openEnd": 2}},
+            {"shinespark": {"frames": 40, "excessFrames": 18}}
+          ]},
+          {"and": [
+            {"notable": "Ceiling Mockball Spring Fling"},
+            "SpeedBooster",
+            "canInsaneJump",
+            "canMomentumConservingMorph",
+            "canSpringFling"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 52,
+      "link": [2, 1],
+      "name": "G-Mode Indirect Morph, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Short Short Charge Leave Shinecharged",
+      "requires": [
+        "h_heatProof",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 2}},
+        {"shineChargeFrames": 165}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Frozen Geruta Shinecharge (Shinespark Out Right)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"notable": "Frozen Geruta Shinecharge"},
+        "h_trickyFrozenEnemyRunway",
+        "canCarefulJump",
+        {"canShineCharge": {"usedTiles": 17, "openEnd": 1}},
+        "canShinechargeMovementTricky",
+        {"heatFrames": 1260},
+        {"shinespark": {"frames": 2, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Enter from the right door and spin jump onto the first ledge while barely landing on the ledge in order to prevent getting the Geruta on camera.",
+        "Walk against the left wall and jump to trigger the Geruta. It should now be moving leftwards.",
+        "Stand on the next platform against the right wall and shoot the Geruta to get it one shot away from being frozen.",
+        "After a few swoops, it will come down; either freeze it or tank a hit. Then go up and stand on the corner and freeze it when it is in position.",
+        "The Geruta will be stuck below and keep swooping, so if Energy permits, Samus will have several attempts.",
+        "Quickly shinecharge left to right, kill the Geruta and spark out the bottom right door."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 62,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"heatFrames": 1180},
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 2}},
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"or": [
+          "canXRayCancelShinecharge",
+          {"heatFrames": 160}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "note": [
+        "Use the platform at the top-right of the room to gain temporary blue, then chain it through the door."
+      ]
+    },
+    {
+      "id": 65,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Geruta",
+      "requires": [
+        "canComplexGMode",
+        "h_heatProof",
+        "canBePatient",
+        {"or": [
+          {"and": [
+            "canInsaneJump",
+            "canTrickyUseFrozenEnemies"
+          ]},
+          {"enemyDamage": {"enemy": "Geruta", "type": "contact", "hits": 2}}
+        ]},
+        {"or": [
+          "canInsaneJump",
+          "canTrickyUseFrozenEnemies",
+          "Charge",
+          "Plasma",
+          "h_usePowerBomb",
+          {"ammo": {"type": "Missile", "count": 3}},
+          {"ammo": {"type": "Super", "count": 1}},
+          {"and": [
+            "ScrewAttack",
+            {"lavaFrames": 20}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "On room entry, perform a low spin jump onto the first ledge to avoid getting the Geruta to swoop to the right.",
+        "Jump against the left wall, then move right and the Geruta should come down quickly.",
+        "Move back and forth until it comes down further. This can be tricky if needing to avoid contact damage.",
+        "Quickly freezing the Geruta as it starts to come down can be used to avoid taking a hit.",
+        "Killing the Dragon on room entry can also be helpful."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [2, 2],
+      "name": "G-Mode With Frozen Geruta, Remote Acquire Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canTrickyUseFrozenEnemies",
+        "canTrickyDodgeEnemies",
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        "h_heatedDirectGModeLeaveSameDoor"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: A variant with only ice and reset fall speed could be added, but is probably unreasonable."
+    },
+    {
+      "id": 54,
+      "link": [2, 2],
+      "name": "G-Mode With Assist, Remote Acquire Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            {"notable": "SpringBall Bomb Boost"},
+            "canSpringBallJumpMidAir",
+            "canUnmorphBombBoost",
+            "h_crouchJumpDownGrab",
+            "canInsaneJump"
+          ]},
+          {"and": [
+            "canHorizontalShinespark",
+            {"canShineCharge": {"usedTiles": 15, "openEnd": 2}},
+            {"shinespark": {"frames": 40, "excessFrames": 18}}
+          ]},
+          {"and": [
+            {"notable": "Ceiling Mockball Spring Fling"},
+            "SpeedBooster",
+            "canInsaneJump",
+            "canMomentumConservingMorph",
+            "canSpringFling"
+          ]}
+        ]},
+        "h_heatedDirectGModeLeaveSameDoor"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": "Touch the item as little as possible in order to prevent PLMs from being overloaded, so the platforms below remain solid.",
+      "devNote": [
+        "There is no leniency option for using an extra Power Bomb, because it will contribute to PLM overload. (2 PBs is technically barely possible)",
+        "FIXME: A variant with shinesparking can be added. (It would require energy free sparks)"
+      ]
+    },
+    {
+      "id": 55,
+      "link": [2, 2],
+      "name": "G-Mode Morph, Remote Acquire Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]},
+        "h_heatedDirectGModeLeaveSameDoor"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 66,
+      "link": [2, 2],
+      "name": "Geruta Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "h_heatProof",
+        {"cycleFrames": 300},
+        {"or": [
+          "Plasma",
+          "ScrewAttack",
+          "Wave",
+          "Spazer",
+          "canPseudoScrew",
+          {"cycleFrames": 90}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Geruta", "count": 1}]
+    },
+    {
+      "id": 67,
+      "link": [2, 2],
+      "name": "Dragon Farm (Lava Dive)",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "h_heatProof",
+        "h_lavaProof",
+        "Gravity",
+        {"cycleFrames": 500},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "h_useMorphBombs",
+            "canFarmWhileShooting",
+            {"cycleFrames": 1700}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Dragon", "count": 5}]
+    },
+    {
+      "id": 68,
+      "link": [2, 2],
+      "name": "Dragon Farm (Avoid Lava)",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "h_heatProof",
+        {"or": [
+          {"and": [
+            "Morph",
+            "Grapple",
+            "Plasma",
+            "canCameraManip",
+            {"cycleFrames": 1620}
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster",
+            "Grapple",
+            "Plasma",
+            "canCameraManip",
+            {"cycleFrames": 1920}
+          ]},
+          {"and": [
+            "SpaceJump",
+            "Plasma",
+            "canCameraManip",
+            {"cycleFrames": 1770}
+          ]},
+          {"and": [
+            "canPreciseSpaceJump",
+            "ScrewAttack",
+            {"cycleFrames": 1440}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Dragon", "count": 5}],
+      "note": "Jump and aim down to make the Dragons active by bringing them on camera."
+    },
+    {
+      "id": 15,
+      "link": [2, 3],
+      "name": "Grapple",
+      "requires": [
+        "Grapple",
+        {"heatFrames": 600}
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 3],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 600}
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 3],
+      "name": "Speedy HiJump Wall Jump",
+      "requires": [
+        "HiJump",
+        "SpeedBooster",
+        "canWalljump",
+        {"heatFrames": 600}
+      ]
+    },
+    {
+      "id": 18,
+      "link": [2, 3],
+      "name": "Jump into IBJ",
+      "requires": [
+        "canJumpIntoIBJ",
+        "canBombHorizontally",
+        {"heatFrames": 1650}
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 3],
+      "name": "Lava IBJ",
+      "requires": [
+        "h_heatProof",
+        "h_lavaProof",
+        "Gravity",
+        "canLongIBJ"
+      ],
+      "note": "Kill the Dragon with bombs, then start the IBJ in the lava. It's an option without canJumpIntoIBJ.",
+      "devNote": "FIXME: This doesn't need heatproof."
+    },
+    {
+      "id": 20,
+      "link": [2, 3],
+      "name": "MidAir SpringBall",
+      "requires": [
+        "HiJump",
+        "canSpringBallJumpMidAir",
+        {"heatFrames": 600}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 3],
+      "name": "SpringBall Bomb Boost",
+      "requires": [
+        {"notable": "SpringBall Bomb Boost"},
+        "canSpringBallJumpMidAir",
+        "canUnmorphBombBoost",
+        "h_crouchJumpDownGrab",
+        {"heatFrames": 800},
+        {"or": [
+          "canInsaneJump",
+          {"and": [
+            {"heatFrames": 250},
+            "h_additionalBomb"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Uses a bomb boost at the end of a mid-air SpringBall jump.",
+        "Also requires a crouchjump and downgrab to complete the maneuver."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [2, 3],
+      "name": "Spring Ball Jump into Damage Boost",
+      "requires": [
+        {"notable": "Spring Ball Jump into Damage Boost"},
+        {"heatFrames": 1920},
+        "canTrickyDodgeEnemies",
+        "canTrickySpringBallJump",
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Geruta", "type": "contact", "hits": 1}}
+      ],
+      "note": [
+        "Use mid-air Spring Ball jumps to manipulate the Geruta into position near the ledge.",
+        "Then do a Spring Ball jump into a neutral damage boost (while still morphed) to reach the ledge."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 3],
+      "name": "SpringBall Freeze",
+      "requires": [
+        {"notable": "SpringBall Freeze"},
+        "canTrickyUseFrozenEnemies",
+        "canSpringBallJumpMidAir",
+        {"heatFrames": 1600},
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"and": [
+            {"heatFrames": 110},
+            {"enemyDamage": {"enemy": "Geruta", "type": "contact", "hits": 1}}
+          ]}
+        ]},
+        {"or": [
+          "canInsaneJump",
+          {"heatFrames": 700}
+        ]}
+      ],
+      "note": [
+        "Either freeze the Geruta and turn off and on Ice to quickly thaw it and save Energy, or carefully jump over it without freezing it or getting hit.",
+        "Then lure it left by jumping towards it from below with a series of mid-air SpringBall jumps. Freeze it when it performs a larger swoop and use it as a platform to get to the item.",
+        "Be careful not to jump into the Geruta's path to avoid hitting it."
+      ],
+      "devNote": "The canInsaneJump option is to represent the difference between good and bad Geruta RNG."
+    },
+    {
+      "id": 23,
+      "link": [2, 3],
+      "name": "HiJump Freeze",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        "HiJump",
+        {"heatFrames": 1050},
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"heatFrames": 110}
+        ]},
+        {"or": [
+          "canInsaneJump",
+          {"heatFrames": 500}
+        ]}
+      ],
+      "note": [
+        "Either freeze the Geruta and turn off and on Ice to quickly thaw it and save Energy, or carefully jump over it without freezing it or getting hit.",
+        "Then lure it left by jumping towards it from below. Freeze it when it performs a larger swoop and use it as a platform to get to the item."
+      ],
+      "devNote": "The canInsaneJump option is to represent the difference between good and bad Geruta RNG."
+    },
+    {
+      "id": 24,
+      "link": [2, 3],
+      "name": "Ice Only Geruta Platforming",
+      "requires": [
+        {"notable": "Ice Only Geruta Platforming"},
+        "canTrickyUseFrozenEnemies",
+        "canTrickyJump",
+        {"or": [
+          {"and": [
+            "canResetFallSpeed",
+            "canTrickyDodgeEnemies",
+            {"heatFrames": 1000},
+            {"or": [
+              "canInsaneJump",
+              {"enemyDamage": {"enemy": "Geruta", "type": "contact", "hits": 1}}
+            ]}
+          ]},
+          {"and": [
+            "canNeutralDamageBoost",
+            {"enemyDamage": {"enemy": "Geruta", "type": "contact", "hits": 3}}
+          ]}
+        ]},
+        {"heatFrames": 3000}
+      ],
+      "note": [
+        "Ride the Geruta left to reach the missile location by freezing it repeatedly.",
+        "Stay on its left side when it touches the ceiling for the enemy to continue moving forward.",
+        "It may not be possible to climb back up to the Geruta if Samus falls.",
+        "When it moves towards the ceiling, reset Samus' fall speed using an unmorph or by taking knockback damage, in order to wait for the Geruta to fall low enough to refreeze."
+      ]
+    },
+    {
+      "id": 64,
+      "link": [2, 3],
+      "name": "Ceiling Mockball Spring Fling",
+      "requires": [
+        {"notable": "Ceiling Mockball Spring Fling"},
+        "SpeedBooster",
+        "canInsaneJump",
+        {"heatFrames": 500},
+        "canMomentumConservingMorph",
+        "canSpringFling",
+        {"or": [
+          "h_heatProof",
+          "canBeVeryPatient"
+        ]}
+      ],
+      "note": [
+        "Position at the end of the runway (or up to 4 pixels away) at the top-right of the room,",
+        "gain run speed, perform a last-frame jump and ceiling mockball,",
+        "then equip or unequip Spring Ball in order to reset Samus' vertical speed",
+        "and just barely make it onto the ledge with the item."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 3],
+      "name": "Come in Shinecharged, Shinespark (Safe Geruta Manipulation)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 110},
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 70, "excessFrames": 12}},
+        "canShinechargeMovementComplex",
+        {"heatFrames": 300}
+      ],
+      "flashSuitChecked": true,
+      "note": "Run left on the middle platform before jumping right, to manipulate the Geruta into swooping left."
+    },
+    {
+      "id": 40,
+      "link": [2, 3],
+      "name": "Come in Shinecharged, Shinespark (Fast Method)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 70, "excessFrames": 12}},
+        "canShinechargeMovementTricky",
+        {"heatFrames": 290},
+        {"or": [
+          {"enemyDamage": {"enemy": "Geruta", "type": "contact", "hits": 1}},
+          "canInsaneJump"
+        ]}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Move quickly to avoid being hit by the Geruta before sparking.",
+        "Samus can still take damage from the Geruta during the shinespark wind-up;",
+        "this can be avoided by activating the spark quickly enough."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [2, 3],
+      "name": "Come In Shinecharging, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 70, "excessFrames": 12}},
+        "canShinechargeMovementComplex",
+        {"heatFrames": 310}
+      ],
+      "note": [
+        "To safely avoid Geruta damage, run left on the middle platform before jumping right, to manipulate the Geruta into swooping left.",
+        "Alternatively, activate the spark quickly enough to avoid taking a Geruta hit."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [2, 3],
+      "name": "Short Short Charge",
+      "requires": [
+        "canHorizontalShinespark",
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 2}},
+        {"shinespark": {"frames": 50}},
+        {"heatFrames": 600}
+      ]
+    },
+    {
+      "id": 28,
+      "link": [2, 3],
+      "name": "Frozen Geruta Shinecharge (Shinespark Left)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"notable": "Frozen Geruta Shinecharge"},
+        "h_trickyFrozenEnemyRunway",
+        "canCarefulJump",
+        "canHorizontalShinespark",
+        {"canShineCharge": {"usedTiles": 17, "openEnd": 1}},
+        {"heatFrames": 1050},
+        {"or": [
+          {"shinespark": {"frames": 55, "excessFrames": 15}},
+          {"and": [
+            "h_heatProof",
+            "canMidairShinespark",
+            {"shinespark": {"frames": 32, "excessFrames": 15}}
+          ]}
+        ]}
+      ],
+      "note": [
+        "Enter from the right door and spin jump onto the first ledge while barely landing on the ledge in order to prevent getting the Geruta on camera.",
+        "Walk against the left wall and jump to trigger the Geruta. It should now be moving leftwards.",
+        "Stand on the next platform against the right wall and shoot the Geruta to get it one shot away from being frozen.",
+        "After a few swoops, it will come down; either freeze it or tank a hit. Then go up and stand on the corner and freeze it when it is in position.",
+        "The Geruta will be stuck below and keep swooping, so if Energy permits, Samus will have several attempts.",
+        "With full heat protection, Samus can quickly shinecharge left to right then run and spark midair to the left to save Energy."
+      ]
+    },
+    {
+      "id": 56,
+      "link": [2, 3],
+      "name": "G-Mode With Frozen Geruta",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "canTrickyUseFrozenEnemies",
+        "canTrickyDodgeEnemies",
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: A variant with only ice and reset fall speed could be added, but is probably unreasonable."
+    },
+    {
+      "id": 57,
+      "link": [2, 3],
+      "name": "G-Mode With Assist",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            {"notable": "SpringBall Bomb Boost"},
+            "canSpringBallJumpMidAir",
+            "canUnmorphBombBoost",
+            "h_crouchJumpDownGrab",
+            {"or": [
+              "canInsaneJump",
+              "h_additionalBomb"
+            ]}
+          ]},
+          {"and": [
+            "canHorizontalShinespark",
+            {"canShineCharge": {"usedTiles": 15, "openEnd": 2}},
+            {"shinespark": {"frames": 40, "excessFrames": 18}}
+          ]},
+          {"and": [
+            {"notable": "Ceiling Mockball Spring Fling"},
+            "SpeedBooster",
+            "canInsaneJump",
+            "canMomentumConservingMorph",
+            "canSpringFling"
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: Variants with Geruta damage boost can be added. (Energy from immobile or CF)"
+    },
+    {
+      "id": 58,
+      "link": [2, 3],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 59,
+      "link": [2, 3],
+      "name": "G-Mode Indirect With Frozen Geruta, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "canTrickyUseFrozenEnemies",
+        "canTrickyDodgeEnemies",
+        {"or": [
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"heatFrames": 90}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": [
+        "Goes to 3 because opening the gate mostly only makes sense when going back to the right for a longer runway or obtaining the item.",
+        "FIXME: A variant with only ice and reset fall speed could be added, but is probably unreasonable."
+      ]
+    },
+    {
+      "id": 60,
+      "link": [2, 3],
+      "name": "G-Mode Indirect With Assist, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            "SpeedBooster",
+            "canWalljump"
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            {"notable": "SpringBall Bomb Boost"},
+            "canSpringBallJumpMidAir",
+            "canUnmorphBombBoost",
+            "h_crouchJumpDownGrab",
+            {"or": [
+              "canInsaneJump",
+              "h_additionalBomb"
+            ]}
+          ]},
+          {"and": [
+            "canHorizontalShinespark",
+            {"canShineCharge": {"usedTiles": 15, "openEnd": 2}},
+            {"shinespark": {"frames": 40, "excessFrames": 18}}
+          ]},
+          {"and": [
+            {"notable": "Ceiling Mockball Spring Fling"},
+            "SpeedBooster",
+            "canInsaneJump",
+            "canMomentumConservingMorph",
+            "canSpringFling"
+          ]}
+        ]},
+        {"heatFrames": 90}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": [
+        "Goes to 3 because opening the gate mostly only makes sense when going back to the right for a longer runway or obtaining the item.",
+        "FIXME: Variants with shinesparking or Geruta damage boost can be added. (Energy from immobile, CF, or energy free sparks)"
+      ]
+    },
+    {
+      "id": 61,
+      "link": [2, 3],
+      "name": "G-Mode Morph Indirect, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]},
+        {"heatFrames": 90}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "Goes to 3 because opening the gate mostly only makes sense when going back to the right for a longer runway or obtaining the item."
+    },
+    {
+      "id": 29,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"ammo": {"type": "Super", "count": 1}},
+            {"heatFrames": 180}
+          ]},
+          {"and": [
+            {"obstaclesCleared": ["A"]},
+            {"heatFrames": 50}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 30,
+      "link": [3, 1],
+      "name": "Leave with Runway",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"ammo": {"type": "Super", "count": 1}},
+            {"heatFrames": 160}
+          ]},
+          {"and": [
+            {"obstaclesCleared": ["A"]},
+            {"heatFrames": 50}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 17,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 70}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 120}]
+        }
+      ],
+      "collectsItems": [3]
+    },
+    {
+      "id": 41,
+      "link": [3, 1],
+      "name": "Leave with Runway, Avoid Item",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"ammo": {"type": "Super", "count": 1}},
+            {"heatFrames": 160}
+          ]},
+          {"and": [
+            {"obstaclesCleared": ["A"]},
+            {"heatFrames": 50}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 70}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 120}]
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "link": [3, 2],
+      "name": "Grapple",
+      "requires": [
+        "Grapple",
+        {"heatFrames": 500}
+      ]
+    },
+    {
+      "id": 32,
+      "link": [3, 2],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 500}
+      ]
+    },
+    {
+      "id": 33,
+      "link": [3, 2],
+      "name": "Speedjump",
+      "requires": [
+        "HiJump",
+        "SpeedBooster",
+        {"heatFrames": 500}
+      ],
+      "collectsItems": [3],
+      "note": "This can be done from the top right, single tile block."
+    },
+    {
+      "id": 34,
+      "link": [3, 2],
+      "name": "HiJump",
+      "requires": [
+        "HiJump",
+        "canWalljump",
+        {"heatFrames": 600}
+      ],
+      "note": "This can be done from the top right, single tile block."
+    },
+    {
+      "id": 35,
+      "link": [3, 2],
+      "name": "Morph",
+      "requires": [
+        "Morph",
+        {"heatFrames": 400}
+      ]
+    },
+    {
+      "id": 36,
+      "link": [3, 2],
+      "name": "Quick Lava Bath",
+      "requires": [
+        {"heatFrames": 350},
+        {"or": [
+          {"lavaFrames": 70},
+          {"and": [
+            "Gravity",
+            {"lavaFrames": 45}
+          ]}
+        ]},
+        {"or": [
+          "canCarefulJump",
+          {"enemyDamage": {"enemy": "Dragon", "type": "contact", "hits": 1}},
+          {"enemyKill": {
+            "enemies": [["Dragon"]],
+            "explicitWeapons": ["Super", "Missile", "Plasma", "ScrewAttack"]
+          }}
+        ]}
+      ]
+    },
+    {
+      "id": 37,
+      "link": [3, 2],
+      "name": "Safe Lava Bath",
+      "requires": [
+        "h_heatProof",
+        "Gravity"
+      ],
+      "note": "This strat just waits out the Dragon."
+    },
+    {
+      "id": 69,
+      "link": [3, 2],
+      "name": "Frozen Geruta Platform",
+      "requires": [
+        "h_heatProof",
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "HiJump",
+          "canTrickyDodgeEnemies"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "It is possible to lure the Geruta to be used as a platform with nothing but Ice."
+    },
+    {
+      "id": 38,
+      "link": [3, 2],
+      "name": "Reverse Shinespark",
+      "requires": [
+        "canHorizontalShinespark",
+        {"or": [
+          {"and": [
+            {"ammo": {"type": "Super", "count": 1}},
+            {"heatFrames": 90}
+          ]},
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"or": [
+          {"and": [
+            {"doorUnlockedAtNode": 1},
+            {"heatFrames": 30},
+            {"canShineCharge": {"usedTiles": 17, "openEnd": 0}}
+          ]},
+          {"canShineCharge": {"usedTiles": 16, "openEnd": 0}}
+        ]},
+        {"shinespark": {"frames": 62, "excessFrames": 20}},
+        {"heatFrames": 450}
+      ],
+      "unlocksDoors": [
+        {
+          "nodeId": 1,
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 30}]
+        },
+        {"nodeId": 1, "types": ["super"], "requires": []},
+        {
+          "nodeId": 1,
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ],
+      "clearsObstacles": ["A"],
+      "collectsItems": [3]
+    },
+    {
+      "id": 39,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Frozen Geruta Shinecharge",
+      "note": [
+        "Enter from the right door and spin jump onto the first ledge while barely landing on the ledge in order to prevent getting the Geruta on camera.",
+        "Walk against the left wall and jump to trigger the Geruta. It should now be moving leftwards.",
+        "Stand on the next platform against the right wall and shoot the Geruta to get it one shot away from being frozen.",
+        "After a few swoops, it will come down; either freeze it or tank a hit. Then go up and stand on the corner and freeze it when it is in position.",
+        "The Geruta will be stuck below and keep swooping, so if Energy permits, Samus will have several attempts."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "High Speed Gate Glitch",
+      "note": [
+        "Build up 34 tiles worth of run speed and jump into the door on the last frame.",
+        "Hold angle up through the transition but also aim down to duck below the ceiling until Samus is past it.",
+        "Fire the Super Missile frame perfectly to open the gate."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "SpringBall Bomb Boost",
+      "note": [
+        "Uses a bomb boost at the end of a mid-air SpringBall jump.",
+        "Also requires a crouchjump and downgrab to complete the maneuver.",
+        "A spring fling can help add some lenience to the bomb placement and unmorph timing;",
+        "it requires pausing early, before jumping, in order to be able to initiate another pause immediately before placing a Power Bomb."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "SpringBall Freeze",
+      "note": "Do a series of mid-air SpringBall jumps to bring the Geruta over, then freeze it and step on it."
+    },
+    {
+      "id": 5,
+      "name": "Ice Only Geruta Platforming",
+      "note": [
+        "Ride the Geruta left to reach the missile location by freezing it repeatedly.",
+        "Stay on its left side when it touches the ceiling for the enemy to continue moving forward.",
+        "It may not be possible to climb back up to the Geruta if Samus falls.",
+        "When it moves towards the ceiling, reset Samus' fall speed using an unmorph or by taking knockback damage, in order to wait for the Geruta to fall low enough to refreeze."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Ceiling Mockball Spring Fling",
+      "note": [
+        "Perform a last-frame jump and ceiling mockball,",
+        "then spring fling to just barely make it onto the ledge with the item."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Spring Ball Jump into Damage Boost",
+      "note": [
+        "Use mid-air Spring Ball jumps to manipulate the Geruta into position near the ledge.",
+        "Then do a Spring Ball jump into a neutral damage boost (while still morphed) to reach the ledge."
+      ]
+    }
+  ],
+  "nextStratId": 70,
+  "nextNotableId": 8
+}

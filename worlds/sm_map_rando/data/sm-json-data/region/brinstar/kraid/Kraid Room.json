@@ -1,0 +1,720 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 84,
+  "name": "Kraid Room",
+  "area": "Brinstar",
+  "subarea": "Kraid",
+  "roomAddress": "0x7A59F",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x00191ce",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Kraid Left Gray Lock (to Eye Room)",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedKraid"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [2, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x00191da",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Kraid Right Gray Lock (to Varia)",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedKraid"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [1, 2],
+        [1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Kraid",
+      "enemyName": "Kraid",
+      "quantity": 1,
+      "homeNodes": [1],
+      "stopSpawn": ["f_DefeatedKraid"]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 32,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "f_DefeatedKraid",
+        "SpeedBooster",
+        "canInsaneJump",
+        "canMomentumConservingMorph"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 24,
+            "openEnd": 0
+          },
+          "obstruction": [4, 0]
+        }
+      },
+      "devNote": [
+        "Max extra run speed $4.4.",
+        "Using the full runway, there is a 2-frame window for the jump,",
+        "then a 1-frame or 2-frame window for the morph depending on the jump (with a last-frame jump giving a 2-frame morph window)."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [1, 1],
+      "name": "Charge",
+      "requires": [
+        "Charge",
+        {"or": [
+          "Wave",
+          "Spazer",
+          "Plasma",
+          "canBePatient"
+        ]},
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              "canCarefulJump",
+              "h_crouchJumpDownGrab"
+            ]}
+          ]}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedKraid"],
+      "note": "Getting up during Phase 2 can be done by jumping on Kraid's projectile platforms or a well timed crouch jump + down grab."
+    },
+    {
+      "id": 30,
+      "link": [1, 1],
+      "name": "Missiles",
+      "requires": [
+        {"ammo": {"type": "Missile", "count": 2}},
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              "canCarefulJump",
+              "h_crouchJumpDownGrab"
+            ]}
+          ]}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedKraid"],
+      "note": [
+        "Only 2 Missiles are needed to get Kraid to stand up, after which they are farmable.",
+        "Getting up during Phase 2 can be done by jumping on Kraid's projectile platforms or a well timed crouch jump + down grab."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [1, 1],
+      "name": "Supers",
+      "requires": [
+        {"or": [
+          {"ammo": {"type": "Super", "count": 5}},
+          {"and": [
+            {"ammo": {"type": "Super", "count": 4}},
+            "canDodgeWhileShooting"
+          ]},
+          {"and": [
+            {"ammo": {"type": "Super", "count": 3}},
+            "canDodgeWhileShooting",
+            "canBePatient"
+          ]},
+          {"and": [
+            {"ammo": {"type": "Super", "count": 1}},
+            "canDodgeWhileShooting",
+            "canBeVeryPatient"
+          ]}
+        ]},
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "canDodgeWhileShooting",
+            {"or": [
+              "canCarefulJump",
+              "h_crouchJumpDownGrab"
+            ]}
+          ]}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedKraid"],
+      "note": [
+        "4 supers are required to kill Kraid. Only 1 is needed to get him to stand up, after which they are farmable, even though the drop rate is low.",
+        "Getting up during Phase 2 can be done by jumping on Kraid's projectile platforms or a well timed crouch jump + down grab."
+      ]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (Kraid Defeated)",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 22, "openEnd": 0}},
+        "canShinechargeMovement",
+        "f_DefeatedKraid",
+        {"shineChargeFrames": 40}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 34,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (X-Mode or Kraid Defeated)",
+      "requires": [
+        "canXMode",
+        "h_XModeThornHit",
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"canShineCharge": {"usedTiles": 22, "openEnd": 0}},
+          {"and": [
+            {"not": "f_DefeatedKraid"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]},
+        "canShinechargeMovement",
+        {"shineChargeFrames": 45},
+        {"or": [
+          "canBeVeryPatient",
+          {"and": [
+            "h_XModeThornHit",
+            {"shineChargeFrames": 20}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "If Kraid is alive, use X-mode on the thorns to gain blue speed.",
+        "Hold an angle button to turn around while retaining blue.",
+        "If needed, arm pump to get close to the ledge without touching it.",
+        "While in X-mode on the thorns, Samus' will be flashing as i-frames periodically refresh;",
+        "by timing the shinecharge and X-Ray release to happen soon after i-frames refresh,",
+        "a second thorn hit can be avoided."
+      ],
+      "devNote": [
+        "If Kraid is alive, leaving with a horizontal damage boost is also possible, but not easy to model."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [
+        "f_DefeatedKraid"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 20,
+            "openEnd": 0
+          },
+          "minExtraRunSpeed": "$1.7"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [
+        "f_DefeatedKraid"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 18,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        "f_DefeatedKraid"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 18,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "f_DefeatedKraid"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 15,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "f_DefeatedKraid",
+        {"canShineCharge": {"usedTiles": 21, "openEnd": 0}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Kraid's Talons",
+      "requires": [
+        {"not": "f_DefeatedKraid"},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          "Charge",
+          {"ammo": {"type": "Missile", "count": 2}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "The only projectiles that Kraid can hit Samus with through the transition are the spinning talons after he stands up.",
+        "This requires Kraid to not be defeated and the door to be open during the second phase."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "f_DefeatedKraid"
+      ],
+      "note": "Door is not reachable mid-fight"
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Kraid is Dead",
+      "requires": [
+        "f_DefeatedKraid"
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        {"thornHits": 1}
+      ],
+      "note": "You can actually do the Kraid fight normally if entering from the right door, but it will put Samus into the thorns."
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Prepared with Space Jump",
+      "requires": [
+        {"or": [
+          "canPrepareForNextRoom",
+          "h_KraidCameraFix"
+        ]},
+        "SpaceJump"
+      ],
+      "note": "Being prepared and space jumping through the room can prevent a thorn hit."
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip (Kraid Alive)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [
+        {"not": "f_DefeatedKraid"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position, Kraid Alive)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [
+        {"not": "f_DefeatedKraid"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "f_DefeatedKraid",
+        "SpeedBooster",
+        "canInsaneJump",
+        "canMomentumConservingMorph"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 24,
+            "openEnd": 0
+          },
+          "obstruction": [4, 0]
+        }
+      },
+      "devNote": [
+        "Max extra run speed $4.4.",
+        "Using the full runway, there is a 2-frame window for the jump,",
+        "then a 1-frame or 2-frame window for the morph depending on the jump (with a last-frame jump giving a 2-frame morph window)."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "Leave Shinecharged (Kraid Defeated)",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 22, "openEnd": 0}},
+        "canShinechargeMovement",
+        "f_DefeatedKraid",
+        {"shineChargeFrames": 40}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "Leave Shinecharged (X-Mode or Kraid Defeated)",
+      "requires": [
+        "h_KraidCameraFix",
+        "canXMode",
+        "h_XModeThornHit",
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"canShineCharge": {"usedTiles": 22, "openEnd": 0}},
+          {"and": [
+            {"not": "f_DefeatedKraid"},
+            "canRiskPermanentLossOfAccess"
+          ]}
+        ]},
+        "canShinechargeMovement",
+        {"shineChargeFrames": 45},
+        {"or": [
+          "canBeVeryPatient",
+          {"and": [
+            "h_XModeThornHit",
+            {"shineChargeFrames": 20}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "If Kraid is alive, use X-mode on the thorns to gain blue speed.",
+        "Hold an angle button to turn around while retaining blue.",
+        "If needed, arm pump to get close to the ledge without touching it.",
+        "While in X-mode on the thorns, Samus' will be flashing as i-frames periodically refresh;",
+        "by timing the shinecharge and X-Ray release to happen soon after i-frames refresh,",
+        "a second thorn hit can be avoided."
+      ],
+      "devNote": [
+        "If Kraid is alive, leaving with a horizontal damage boost is also possible, but not easy to model."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "Leave Spinning",
+      "requires": [
+        "f_DefeatedKraid"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 20,
+            "openEnd": 0
+          },
+          "minExtraRunSpeed": "$1.7"
+        }
+      }
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "Leave With Mockball",
+      "requires": [
+        "f_DefeatedKraid"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 18,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 20,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        "f_DefeatedKraid"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 18,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 4,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 21,
+      "link": [2, 2],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "f_DefeatedKraid"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 15,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "f_DefeatedKraid",
+        {"canShineCharge": {"usedTiles": 21, "openEnd": 0}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 23,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 36,
+  "nextNotableId": 1
+}

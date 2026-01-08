@@ -1,0 +1,15 @@
+# Re-cable CUTSCENE_BLACK_TOWER_ESCAPE to end of endgameCutsceneHandler_20@state16
+# to directly get warped to the Room of Rites
+03/5449/: |
+  ; Fully heal the player
+  ld hl,wLinkMaxHealth
+  ldd a,(hl)
+  ld (hl),a
+  ; Jump to warp to Room of Rites
+  jp $5b59
+
+# Make Veran give the linked game dialogue line
+10/5a70/: db $16
+
+# Make the staircase/portal at maku tree not depend on if it's a linked game
+02/7b36/: nop

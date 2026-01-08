@@ -1,0 +1,249 @@
+#0a/7b9e/: |
+#    ret
+#    nop
+#    nop
+#
+#1e/6265/TX_1704: /include text.getEmberSeeds # 1704, cutscene after d1
+#10//useEmberSeedText: |
+#    cp $e5
+#    jr nz,@done
+#    ld bc,$1704
+#    @done:
+#    jp showText
+#10/4ade/: call useEmberSeedText
+
+# Remove the mention of seeds being included with the seed satchel, since Ember was most likely
+# the wrong one in random given seed type
+#1d/5730/: db $00
+
+1e/4da5/TX_0101: /include text.lynnaShop1 # (Cutscene save impa pt1)
+1e/4e45/TX_0102: /include text.lynnaShop2 # (Cutscene save impa pt2)
+1e/4e85/TX_0103: /include text.lynnaShop3 # (Cutscene save impa pt2 - LINKED)
+1e/4fec/TX_0113: /include text.advanceShop1 # (Cutscene Unpossessed Impa pt2)
+1e/51fa/TX_0118: /include text.advanceShop2 # (Cutscene Unpossessed Impa pt3)
+1f/60b1/TX_0e24: /include text.advanceShop3 # (Original)
+1e/5067/TX_0114: /include text.syrupShop1 # (Cutscene Unpossessed Impa pt4)
+1e/519e/TX_0117: /include text.syrupShop2 # (Cutscene After Sword Given)
+1e/535b/TX_0125: /include text.syrupShop3 # (Cutscene at the entrance of the black tower pt2)
+1f/5df5/TX_0e09: /include text.hiddenShop1 # (Original)
+1e/5569/TX_012a: /include text.hiddenShop2 # (Cutscene Zelda saved)
+1e/56c3/TX_0131: /include text.hiddenShop3 # (Cutscene with zelda)
+
+1f/482b/TX_0a2c: /include text.tokayMarket1
+1f/481e/: db $2c # move where 2b point too
+1f/4822/: /include text.tokayMarket1Validation # fix 2b market validation
+1f/4894/TX_0a31: /include text.tokayMarket2
+
+# Replace First Deku meeting by essence & slate requirement
+1e/64c7/: |
+    db $04,$92,$05,$a0,$20,$09,$03 ; You need
+    db $30 + option.requiredEssences ; X
+    db $09,$00,$01,$65,$73,$73,$65,$6e,$63,$65,$73,$04,$47 ; essences to
+    db $05,$57,$04,$46,$01 ; get the
+    db $4d,$61,$6b,$75,$20,$53,$65,$65,$64,$04,$58 ; Maku Seed
+
+    db $04,$92,$05,$a0,$20,$09,$03 ; You need
+    db $30 + option.required_slates ; X
+    db $09,$00,$01,$73,$6c,$61,$74,$65,$73,$04,$57,$05,$50,$01 ; slates to open
+    db $44,$38,$20,$62,$61,$73,$65,$6d,$65,$6e,$74,$2e,$00 ; D8 basement
+
+# Crescent Island portal sign
+23/583f/portalSignText: |
+    db $0c,$00,$43,$04,$23,$73,$20,$6f,$6e,$6c,$79,$2e,$01 # Currents only.
+    db $2d,$04,$56,$4d,$61,$6e,$61,$67,$65,$6d,$65,$6e,$74,$00 # -The Management
+
+
+# replace text in script command 9a (showtextnonexitable) using
+# scriptTextReplacements: four-byte entries, first two bytes are old text
+# index, second two bytes are new text index.
+17//scriptTextReplacements: |
+    db $0e,$04,$01,$01    ; Lynna shop 1
+    db $0e,$03,$01,$02    ; Lynna shop 2
+    db $0e,$02,$01,$03    ; Lynna shop 3
+    db $0e,$1c,$01,$13    ; Advance shop 1
+    db $0e,$23,$01,$18    ; Advance shop 2
+    db $0d,$0a,$01,$14    ; Syrup shop 1
+    db $0d,$01,$01,$17    ; Syrup shop 2
+    db $0d,$05,$01,$25    ; Syrup shop 3
+    db $0e,$1d,$01,$2a    ; Hidden shop 2
+    db $0e,$2c,$01,$31    ; Hidden shop 3
+    db $ff
+17//scriptShowTextNonExitableCustom_body: |
+    ld e,$02
+    ld hl,scriptTextReplacements
+    call searchDoubleKey
+    jr nc,@done
+    ldi a,(hl)
+    ld b,a
+    ld c,(hl)
+    @done:
+    ret
+
+0c//scriptShowTextNonExitableCustom: |
+    push de
+    ld e,$17
+    ld hl,scriptShowTextNonExitableCustom_body
+    call interBankCall
+    pop de
+    jp showTextNonExitable
+
+0c/4300/: call scriptShowTextNonExitableCustom
+
+# Some required redirections
+0c/4822/: db $2c
+0c/483c/: db $1c
+
+1e/4957/getArchipelagoItemText: |
+    db $02,$7c,$20,$61,$6e,$01                          ; You found an
+    db $69,$74,$65,$6d,$05,$55,$20,$61,$6e,$03,$b9,$01  ; item for another
+    db $03,$c9,$21,$00                                  ; world!
+
+1e/47d5/KingZoraPotionText: |
+    db $02,$7c,$01                                     ; You got
+    db $4b,$69,$6e,$67,$20,$5a,$6f,$72,$61,$27,$73,$01 ; King Zora's 
+    db $09,$01,$03,$0a,$09,$00,$21,$00                 ; Magic Potion! 
+
+
+38//TX_5a00: /include text.smallKeyD0
+38//TX_5a01: /include text.smallKeyD1
+38//TX_5a02: /include text.smallKeyD2
+38//TX_5a03: /include text.smallKeyD3
+38//TX_5a04: /include text.smallKeyD4
+38//TX_5a05: /include text.smallKeyD5
+38//TX_5a06: /include text.smallKeyD6Present
+38//TX_5a07: /include text.smallKeyD7
+38//TX_5a08: /include text.smallKeyD8
+38//TX_5a09: /include text.smallKeyD6Past
+38//TX_5a0a: /include text.bossKeyD1
+38//TX_5a0b: /include text.bossKeyD2
+38//TX_5a0c: /include text.bossKeyD3
+38//TX_5a0d: /include text.bossKeyD4
+38//TX_5a0e: /include text.bossKeyD5
+38//TX_5a0f: /include text.bossKeyD6
+38//TX_5a10: /include text.bossKeyD7
+38//TX_5a11: /include text.bossKeyD8
+38//TX_5a12: /include text.dungeonMapD1
+38//TX_5a13: /include text.dungeonMapD2
+38//TX_5a14: /include text.dungeonMapD3
+38//TX_5a15: /include text.dungeonMapD4
+38//TX_5a16: /include text.dungeonMapD5
+38//TX_5a17: /include text.dungeonMapD6Present
+38//TX_5a18: /include text.dungeonMapD7
+38//TX_5a19: /include text.dungeonMapD8
+38//TX_5a1a: /include text.dungeonMapD6Past
+38//TX_5a1b: /include text.compassD1
+38//TX_5a1c: /include text.compassD2
+38//TX_5a1d: /include text.compassD3
+38//TX_5a1e: /include text.compassD4
+38//TX_5a1f: /include text.compassD5
+38//TX_5a20: /include text.compassD6Present
+38//TX_5a21: /include text.compassD7
+38//TX_5a22: /include text.compassD8
+38//TX_5a23: /include text.compassD6Past
+
+38//customTextTable: |
+    dw TX_5a00, TX_5a01, TX_5a02, TX_5a03
+    dw TX_5a04, TX_5a05, TX_5a06, TX_5a07
+    dw TX_5a08, TX_5a09, TX_5a0a, TX_5a0b
+    dw TX_5a0c, TX_5a0d, TX_5a0e, TX_5a0f
+    dw TX_5a10, TX_5a11, TX_5a12, TX_5a13
+    dw TX_5a14, TX_5a15, TX_5a16, TX_5a17
+    dw TX_5a18, TX_5a19, TX_5a1a, TX_5a1b
+    dw TX_5a1c, TX_5a1d, TX_5a1e, TX_5a1f
+    dw TX_5a20, TX_5a21, TX_5a22, TX_5a23
+
+38//setCustomBankForText: |
+    ld hl,customTextTable
+    ld a,(wTextIndexL)
+    rst 18      ; rst_addDoubleIndex
+    ldi a,(hl)
+    ld h,(hl)
+    ld l,a
+    ld a,$38    ; 0x38 is the ROM bank where custom text is located
+    ld (w7ActiveBank),a
+    ret
+    
+
+# Override getTextAddress to have a specific custom bank_id point to text somewhere else
+3f//checkCustomTextOverride: |
+    ld (w7ActiveBank),a
+    ld a,(wTextIndexH)
+    cp $5e     ; 0x5a is the custom text group, and there are 4 dictionaries before them
+    ret nz
+    ld e,$38
+    ld hl,setCustomBankForText
+    call interBankCall
+    ret
+    @textRedirect:
+
+
+3f/4faa/: call checkCustomTextOverride
+
+
+# set text index for portal sign on crescent island.
+06//setSignTextIndex: |
+    ld bc,$a900
+    call compareRoom
+    ld bc,$0901
+    ret nz
+    ld bc,$5601
+    ret
+06/40e7/: call setSignTextIndex
+
+# "Get item" text is confined to text group $00, which makes it hard to add new
+# entries without rebuilding the whole textbanks. We inject this small function
+# to check for text IDs > 0x80, in which case we unset the 7th bit and redirect
+# to our custom textbank.
+09//checkCustomTreasureTextId: |
+    cp $81
+    jr nc,@customText
+    
+    ; Usual behavior: take the specified text_id from text group 0
+    ld c,a
+    ld b,$00
+    ret
+    
+    @customText:
+    ; Custom behavior: take the specified (text_id-0x80) from custom text group
+    sub $81
+    ld c,a
+    ld b,$5a  ; CUSTOM_TEXT_GROUP_ID
+    ret
+09/4c64/: call checkCustomTreasureTextId
+
+# Insert a redirection table inside showText
+38//customTextJumpTable: |
+    dwbe 2e0d, 0564 ; maku path sign into maku tree introduction
+    db ff
+
+38//showCustomText_body: |
+    ld a,b
+    ld e,c
+    push bc
+    ld b,a
+    ld c,e
+    ld hl,customTextJumpTable
+    call searchDoubleKey
+    pop bc
+    jr c,@customText
+    ret
+    @customText:
+    ldi a,(hl)
+    ld b,a
+    ld c,(hl)
+    ret
+
+00//showCustomText: |
+    push af
+    push de
+    push hl
+    ld e,$38
+    ld hl,showCustomText_body
+    call interBankCall
+    pop hl
+    pop de
+    pop af
+    ld a,($cbae)
+    ret
+
+00/1876/: call showCustomText

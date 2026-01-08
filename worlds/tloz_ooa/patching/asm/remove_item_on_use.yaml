@@ -1,0 +1,84 @@
+# This patch injects "consumption" of some items when they are used in-game, removing them from inventory.
+# This makes sense in correlation with subscreen_1_improvement, where all owned items are displayed
+# and having a reduced set of owned items make the screen more manageable.
+# This is especially useful for items the vanilla game considered as one with different subids
+# (trade items, rusty/pirate's bell...).
+
+# Add a "remove item" script command attached to unused script byte 0xdc
+#0b/scriptCmd_removeItem: |
+#  pop hl
+#  inc hl
+#  ldi a,(hl)
+#  call loseTreasure
+#  ret
+#0b/40c1/: dw scriptCmd_removeItem
+
+## Inject removal subscripts in some unused space
+#0b/75f9/removePoeClock: |
+#  db orroomflag,40
+#  db loseitem,TREASURE_POE_CLOCK
+#  db 50,e7  # jump back to 50e7
+#0b/50e5/: db 75,f9  # jump to removePoeClock
+#
+#0b/75ff/removeStationary: |
+#  db orroomflag,40
+#  db loseitem,TREASURE_STATIONARY
+#  db 50,6b  # jump back to 506b
+#0b/5069/: db 75,ff  # jump to removeStationary
+#
+#0b/7605/removeStinkBag: |
+#  db loseitem,TREASURE_STINK_BAG
+#  db loadscript,14
+#  dw 4b8e  # lavaSoupSubrosianScript_fillPot
+#0b/6568/: db 76,05  # jump to removeStinkBag
+#
+#0b/760b/removeTastyMeat: |
+#  db orroomflag,40
+#  db loseitem,TREASURE_TASTY_MEAT
+#  db 61,d7  # jump back to 61d7
+#0b/61d5/: db 76,0b  # jump to removeTastyMeat
+#
+#0b/7611/removeDoggieMask: |
+#  db orroomflag,40
+#  db loseitem,TREASURE_DOGGIE_MASK
+#  db 63,5c  # jump back to 635c
+#0b/635a/: db 76,11  # jump to removeDoggieMask
+#
+#0b/7617/removeDumbbell: |
+#  db orroomflag,40
+#  db loseitem,TREASURE_DUMBBELL
+#  db 52,67  # jump back to 5267
+#0b/5265/: db 76,17  # jump to removeDumbbell
+#
+#0b/761d/removeCheesyMustache: |
+#  db loseitem,TREASURE_CHEESY_MUSTACHE
+#  db loadscript,14
+#  dw 49db  # talon_giveMushroomAfterWaking
+#0b/60a0/: db 76,1d  # jump to removeCheesyMustache
+#
+#0b/7623/removeFunnyJoke: |
+#  db orroomflag,40
+#  db loseitem,TREASURE_FUNNY_JOKE
+#  db 5f,49  # jump back to 5f49
+#0b/5f47/: db 76,23  # jump to removeFunnyJoke
+#
+
+05//loseTouchingBook: |
+    ld a,TREASURE_TOUCHING_BOOK
+    jp loseTreasure
+05/699a/: |
+    nop
+    call loseTouchingBook
+
+#0b/7629/removeMagicOar: |
+#  db orroomflag,40
+#  db loseitem,TREASURE_MAGIC_OAR
+#  db 52,1e  # jump back to 521e
+#0b/521c/: db 76,29  # jump to removeWoodenMagicOar
+#
+#0b/762f/removeSeaUkulele: |
+#  db orroomflag,40
+#  db loseitem,TREASURE_SEA_UKULELE
+#  db 63,e9  # jump back to 63e9
+#0b/63e7/: db 76,2f  # jump to removeSeaUkulele
+#

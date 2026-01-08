@@ -1,0 +1,10 @@
+[
+{"sections": [{"name": "Mistralton Cave - 3F north east hidden item"}], "map_locations": [{"map": "guidancechamber", "x": 464, "y": 128}]},
+{"sections": [{"name": "Mistralton Cave - 3F north east item"}], "map_locations": [{"map": "guidancechamber", "x": 384, "y": 64}]},
+{"sections": [{"name": "Mistralton Cave - 3F north west hidden item"}], "map_locations": [{"map": "guidancechamber", "x": 128, "y": 160}]},
+{"sections": [{"name": "Mistralton Cave - 3F north west item"}], "map_locations": [{"map": "guidancechamber", "x": 146, "y": 160}]},
+{"sections": [{"name": "Mistralton Cave - 3F south west item"}], "map_locations": [{"map": "guidancechamber", "x": 112, "y": 448}]},
+{"sections": [{"name": "Chargestone Cave - B2F hidden item"}], "map_locations": [{"map": "chargestonecaveb2f", "x": 406, "y": 492}]},
+{"sections": [{"name": "Castelia City - Item from scientist in building in northern street"}], "map_locations": [{"map": "casteliacity", "x": 564, "y": 186}]},
+{"sections": [{"name": "Route 10 - Item from Bianka #1"},{"name": "Route 10 - Item from Bianka #2"}], "map_locations": [{"map": "route10", "x": 824, "y": 328}]}
+]

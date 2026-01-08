@@ -1,0 +1,1456 @@
+# This file exists in both the client and the server projects.
+# Please make sure that it matches in both places.
+
+version_stamp: '0.10.0'
+
+items:
+  moon_shoes:
+    name: 'Moon Shoes'
+    flavor_text: 'All done here, let''s bounce.'
+  mongoose_in_a_combat_spacecraft:
+    name: 'Mongoose in a Combat Spacecraft'
+    flavor_text: 'Do an aileron roll!'
+  quantum_sugar_cube:
+    name: 'Quantum Sugar Cube'
+    flavor_text: 'Improbably sweet!'
+  playing_with_fire_for_dummies:
+    name: 'Playing with Fire For Dummies'
+    flavor_text: 'Required reading for any hotshot.'
+  moon_shaped_like_a_butt:
+    name: 'Moon Shaped Like a Butt'
+    flavor_text: 'haha'
+  asteroid_belt:
+    name: 'Asteroid Belt'
+    flavor_text: 'I prefer asteroid suspenders, myself.'
+  free_vowel:
+    name: 'Free Vowel'
+    flavor_text: 'A $250 value!'
+  constellation_prize:
+    name: 'Constellation Prize'
+    flavor_text: 'Please not Leo, please not Leo...'
+  foreign_coin:
+    name: 'Foreign Coin'
+    flavor_text: 'I wonder where I can spend it...'
+    auras_granted: [lucky]
+  red_matador_cape:
+    name: 'Red Matador''s Cape'
+    flavor_text: 'For not taking the bull by the horns.'
+  pharaoh_not_anti_mummy_spray:
+    name: 'Pharaoh-Not Anti-Mummy Spray'
+    flavor_text: 'Curse-free or your money back!'
+    auras_granted: [confident]
+  pile_of_scrap_metal_in_the_shape_of_a_rocket_ship:
+    name: 'Pile of Scrap Metal in the Shape of a Rocket Ship'
+    flavor_text: 'How incredibly convenient!'
+  energy_drink_that_is_pure_rocket_fuel:
+    name: 'Energy Drink that is Pure Rocket Fuel'
+    flavor_text: 'Not safe for rodent consumption...'
+  turbo_encabulator:
+    name: 'Turbo Encabulator'
+    flavor_text: 'Effectively prevents side-fumbling!'
+  map_of_the_entire_internet:
+    name: 'Map of the Entire Internet'
+    flavor_text: 'Should have taken a left at 104.20.61.247!'
+  virtual_key:
+    name: 'Virtual Key'
+    flavor_text: 'Unlocks virtually every lock!'
+  banana_peel:
+    name: 'Banana Peel'
+    flavor_text: 'Ripe for causing chaos.'
+  blue_turtle_shell:
+    name: 'Blue Turtle Shell'
+    flavor_text: 'A street-seeking missile.'
+  forklift_certification:
+    name: 'Forklift Certification'
+    flavor_text: 'Essential for having a CRATE time.'
+  fifty_cents:
+    name: 'Fifty Cents'
+    flavor_text: 'Two packs of M&Ms cost fifty cents? That''s ludicrous!'
+  childs_first_hand_axe:
+    name: 'Child''s First Hand Axe'
+    flavor_text: 'Good for left-handed and right-handed children!'
+  hammer_of_problem_solving:
+    name: 'Hammer of Problem-Solving'
+    flavor_text: 'Either way, the screen won''t be blue anymore.'
+  lost_ctrl_key:
+    name: 'Lost CTRL Key'
+    flavor_text: 'The ALT path to DELETE the problem.'
+  artificial_grass:
+    name: 'Artificial Grass'
+    flavor_text: 'Grown from just a random seed.'
+  macguffin:
+    name: 'MacGuffin'
+    flavor_text: 'I''m sure SOMEBODY''s looking for this...'
+  masterful_longsword:
+    name: 'Masterful Longsword'
+    flavor_text: 'This sword looks dangerous. Best leave it alone.'
+  legally_binding_contract:
+    name: 'Legally Binding Contract'
+    flavor_text: 'The counsel will decide your fate.'
+  fake_mouse_ears:
+    name: 'Fake Mouse Ears'
+    flavor_text: 'Needed to sneak into his clubhouse.'
+  giant_novelty_scissors:
+    name: 'Giant Novelty Scissors'
+    flavor_text: 'The natural predator of the giant novelty check.'
+  premium_can_of_prawn_food:
+    name: 'Premium Can of Prawn Food'
+    flavor_text: '20% more plankton than the leading brand!'
+  priceless_antique:
+    name: 'Priceless Antique'
+    flavor_text: 'Best I can do is five bucks.'
+
+  pack_rat:
+    name: 'Pack Rat'
+    rat_count: 1
+
+  rat_pack:
+    name: 'Rat Pack'
+    rat_count: 5
+    flavor_text: 'Five is the canonical number of rats in a Rat Pack.'
+
+  # these aren't actually special in any way except that putting them under the
+  # 'rats' section will automatically give them a rat_count of 1. you COULD set
+  # rat_count to something else to override that if you wanted
+  rats:
+    pizza_rat:
+      name: 'Pizza Rat'
+      flavor_text: 'He''s living his best life.'
+    chef_rat:
+      name: 'Chef Rat'
+      flavor_text: 'Shh... there''s a human under his hat.'
+    ninja_rat:
+      name: 'Ninja Rat'
+      flavor_text: 'Take ''em out? Sure I can!'
+    gym_rat:
+      name: 'Gym Rat'
+      flavor_text: 'They call him Monterey, because he''s JACKed.'
+    computer_rat:
+      name: 'Computer Rat'
+      flavor_text: 'Obviously superior to the computer mouse.'
+    pie_rat:
+      name: 'Pie Rat'
+      flavor_text: 'But you HAVE heard of him?'
+    ziggu_rat:
+      name: 'Ziggu Rat'
+      flavor_text: 'WANTED: Roommate. Dead or alive.'
+    acro_rat:
+      name: 'Acro Rat'
+      flavor_text: 'PARKOUR!'
+    lab_rat:
+      name: 'Lab Rat'
+      flavor_text: 'One more maze and he gets a free coffee.'
+    ratstronaut:
+      name: 'Ratstronaut'
+      flavor_text: 'She understands the gravity of the situation.'
+    notorious_r_a_t:
+      name: 'Notorious R.A.T.'
+      flavor_text: 'I gotta spit some rhymes? No biggie.'
+
+  useful_nonprogression:
+    - ['Refreshing Glass of Lemonade', [well_fed]]
+    - ['Bag of Powdered Sugar', [well_fed, energized, energized, energized]]
+    - ['Organic Apple Core', [well_fed]]
+    - ['An Entire Roast Chicken', [well_fed]]
+    - ['Plate of Spaghetti', [well_fed]]
+    - ['Freshly Baked Bread', [well_fed]]
+    - ['Taco Salad that is Only Tacos', [well_fed]]
+    - [['Subscription to the Cheese of the Month Club', 'Subscription to Spider of the Month Club'], [well_fed, well_fed, well_fed]]
+    - ['Soup with a Hair in it', [well_fed, startled]]
+    - ['Can of Spam', [well_fed]]
+    - ['Fruit Roll-Up', [well_fed]]
+    - ['Fresh-baked Apple Pie', [well_fed]]
+    - ['Dark Blue Ghost', [well_fed, confident]]
+    - ['Mundane Pickle', [well_fed]]
+    - ['Finest Potion', [energized, lucky]]
+    - ['Extra Crunchy Peanut Butter', [well_fed]]
+    - [['Cheesenado', 'Spidernado'], [well_fed, well_fed, well_fed, startled]]
+    - ['Bowl of Cereal', [well_fed]]
+    - ['Cake', [well_fed]]
+    - ['Dungeon Bread', [well_fed]]
+    - ['Gallon of Diet Soda', [well_fed, energized]]
+    - ['Apple wearing Jeans', [well_fed, stylish]]
+    - [['Macaroni and Cheese', 'Macaroni and Spiders'], [well_fed]]
+    - [['Pint of Ice Cream', 'Pint of Iced Spiders'], [well_fed]]
+    - ['Protein Shake', [well_fed, confident]]
+    - [['Tray of Lasagna', 'Tray of Spider-filled Lasagna'], [well_fed]]
+    - ['Best Burgers in Town', [well_fed, well_fed]]
+    - ['Pack of Pickled Peppers', [well_fed]]
+    - [['Sword made out of Chocolate', 'Sword made out of Spider-Based Chocolate'], [well_fed, confident]]
+    - ['Lovely Bunch of Coconuts', [well_fed]]
+    - ['Faux Dalmatian-Skin Coat', [stylish]]
+    - ['Bedazzled Cowboy Boots', [stylish]]
+    - ['Fancy Rat-sized Tophat', [stylish]]
+    - ['Tin-Foil Hat', [stylish, conspiratorial]]
+    - ['Backwards Cap', [stylish, confident]]
+    - ['Fake Moustache', [stylish]]
+    - ['Pair of 3D Glasses', [stylish, smart]]
+    - ['Comfy Shorts', [stylish]]
+    - ['Jetpack', [stylish, energized]]
+    - ['Plague Doctor''s Mask', [stylish, confident]]
+    - ['5th Ace', [lucky]]
+    - ['Get Out of Jail Free Card', [confident]]
+    - ['Winning Lottery Ticket', [lucky, lucky]]
+    - ['Holographic Draw Four Card', [lucky, lucky]]
+    - ['Letter from a Secret Admirer', [lucky]]
+    - ['Line-shaped Tetris Block', [lucky]]
+    - ['Inspiring Montage', [lucky]]
+    - ['Surprisingly Tiny Knife', [confident]]
+    - ['Packet of Ketchup', [well_fed]]
+    - ['Blue-eyes White Alligator Trading Card', [lucky]]
+    - ['Michelin Star', [lucky]]
+    - ['Damp Pineapple', [well_fed]]
+    - ['USB Containing Government Secrets', [smart]]
+    - ['Smelly Vintage T-Shirt', [stylish]]
+    - ['McRib', [well_fed]]
+    - ['Phylactery', [lucky, smart]]
+    - ['Cool Ninja Weapons', [confident]]
+    - ['Bowl of Computer Chips', [smart]]
+    - ['Golden Ticket', [lucky]]
+    - ['Enchanted Guitar Pick', [lucky, confident]]
+    - ['Hall Pass', [energized]]
+    - ['Limited Edition Vintage Superhero Lunch Box Complete with Thermos', [stylish]]
+    - ['Sweet Roadtrip Mixtape', [energized]]
+    - ['Bright Idea', [smart]]
+    - ['Pluto', [smart]]
+    - ['Autographed Copy of the Bible', [lucky]]
+    - ['Overdue Library Book', [smart]]
+    - ['Oxford Comma', [smart]]
+    - ['4th-Dimensional Hypercube', [smart]]
+    - ['RGB Lighting', [smart]]
+    - ['Rave Reviews', [confident]]
+    - ['Chaotic Emerald', [energized]]
+    - ['Brand New Car', [energized]]
+    - ['Coffee Mug Full of Pencils', [smart]]
+    - ['Squeaky Mallet', [confident]]
+    - ['Starting Equipment', [confident, stylish]]
+    - ['Someone Else''s Shoes', [stylish]]
+    - ['Magic Bath Mat', [energized]]
+    - ['Frog-shaped Chair', [stylish]]
+    - ['5 Elemental-themed Rings', [confident]]
+    - ['Wardrobe of Alternate Dimensions', [energized]]
+    - ['Sassy Robot Companion', [smart]]
+    - ['Bomb-proof Refrigerator', [confident]]
+    - ['Legally Distinct Red Laser Sword', [confident]]
+    - ['Weapons-grade Folding Chair', [confident]]
+    - ['Bribe', [confident]]
+    - ['Spilled Bag of Rice', [well_fed, distracted]]
+    - ['Pinball Wizard''s Spellbook', [smart, distracted]]
+    - ['Dino DNA', [smart]]
+    - ['Friend Ship', [confident]]
+    - ['5D Printer', [smart]]
+    - ['Lightbulb in a Briefcase', [lucky]]
+    - ['Breakfast Machine', [well_fed, well_fed, distracted]]
+    - ['Toilet-scented Perfume', [stylish]]
+    - ['Bouquet of Flour', [well_fed]]
+    - ['Pumpkin Pie Chart', [well_fed]]
+    - ['Acoustic Guitar', [confident]]
+    - ['Pear', [well_fed]]
+    - ['Pair of Pears', [well_fed, well_fed]]
+    - ['Pair of Pair of Pears', [well_fed, well_fed, well_fed]]
+    - ['Dozen Raw Eggs', [well_fed]]
+    - ['Lovely Meatloaf', [well_fed]]
+    - ['Mug of Burnt Bean Water', [energized]]
+    - ['Cup of Fancy Leaf Water', [energized]]
+    - [['Microwave Full of Brownies', 'Microwave Full of Spider-Based Brownies'], [well_fed]]
+    - ['Dreihander', [confident]]
+    - ['A Reasonably Priced Textbook', [smart]]
+    - ['Sandwich that is Literally One Mile Tall', [well_fed, well_fed, well_fed, well_fed, well_fed, well_fed, distracted]]
+    - ['Lockheed SR-71 Blackbird', [energized, energized, smart]]
+
+
+
+    - name: ['A Cookie', 'A Spider Chip Cookie']
+      auras_granted: [well_fed]
+      flavor_text: 'We all know what happens when you give a MOUSE a cookie...'
+
+    - game_specific:
+        'DLCQuest':
+          - ['Armor for Your Rat Pack', [stylish]]
+
+        'Pokemon Red and Blue':
+          - ['Very Common Candy', [well_fed]]
+          - ['Icy Blue Feather', [lucky]]
+          - ['Burning Orange Feather', [lucky]]
+          - ['Charged Yellow Feather', [lucky]]
+          - ['Vermilion City Truck Keys', [confident]]
+
+        'Kingdom Hearts 2':
+          - name: 'One-Winged Rat'
+            rat_count: 1
+          - ['Lucky Rat Emblem', [lucky]]
+
+        'Ocarina of Time':
+          - ['Silver Skulltula Token', [lucky]]
+          - ['Pickled Cucco Feet', [well_fed]]
+          - ['Song of Thyme', [well_fed]]
+          - ['Ganondorf''s Tennis Racket', [confident]]
+          - ['Goron Rock Candy', [well_fed]]
+
+        'Minecraft':
+          - ['Pie of Ender', [well_fed]]
+          - [['Structure Compass (Cheese Wheel)', 'Structure Compass (Spider Wheel)'], [smart]]
+          - ['Enchanted Netherite Fishing Rod', [confident]]
+          - ['Carbonated Potion of Swiftness II', [energized]]
+
+        'Pokemon Emerald':
+          - ['Aqua Branded Water Bottle', [well_fed]]
+          - ['Magma Branded Hot Sauce', [well_fed]]
+
+        'Stardew Valley':
+          - ['Prismatic Chard', [well_fed]]
+          - [['Cheese Seeds', 'Spider Seeds'], [well_fed]]
+          - ['JojaMart Sale Coupon', [lucky]]
+          - ['Pickled Dust Sprite', [well_fed]]
+
+        'Super Mario 64':
+          - ['Lucky MIPS Foot', [lucky]]
+          - ['Metal Moustache', [stylish]]
+          - ['Rat Cap', [stylish]]
+
+        'A Link to the Past':
+          - ['Pendant of Dim Sum', [well_fed]]
+          - ['Pendant of Flour', [well_fed]]
+          - ['Pendant of Porridge', [well_fed]]
+          - ['Titan''s Cooking Mitts', [stylish]]
+          - ['Validation Rupee', [confident]]
+
+        'Factorio':
+          - [['Cheese Science Pack', 'Spider Science Pack'], [well_fed]]
+
+        'Super Mario World':
+          - ['Charging Chuck''s Helmet', [confident]]
+          - ['Koopa Soup', [well_fed]]
+          - ['Pea Switch', [well_fed]]
+          - ['Plain Donut', [well_fed]]
+          - ['Golden Warp Pipe', [energized]]
+
+        'Dark Souls III':
+          - ['Severely Scorched Sword', [confident]]
+          - ['Siegward''s Jar of Pickled Onions', [well_fed]]
+
+        'Yacht Dice':
+          - [['Block of Swiss Carved Like A Die', 'Ball of Spiders Carved Like A Die'], [well_fed]]
+
+        'Celeste 64':
+          - ['One Raspberry', [well_fed]]
+          - ['Theo''s Winter Coat', [stylish]]
+
+        'DOOM 1993':
+          - ['Misplaced Keycard', [lucky]]
+
+        'OpenRCT2':
+          - [['Cheese Stall', 'Spider Stall'], [well_fed]]
+          - name: '1 Rat Guest'
+            rat_count: 1
+
+        'Links Awakening DX':
+          - ['Salad of the Wind Fish', [well_fed]]
+          - ['Frog''s Song of Soup', [well_fed]]
+          - ['Manbo''s Mango', [well_fed]]
+
+        'Pseudoregalia':
+          - ['20-Bean Casserole', [well_fed, well_fed]]
+
+        'Slay the Spire':
+          - ['Unmatched Power', [confident]]
+
+        'Sonic Adventure DX':
+          - name: 'Big the Rat'
+            rat_count: 1
+
+        'Super Metroid':
+          - ['Morphing Hamster Ball', [confident]]
+          - ['Soup or Missile', [well_fed, confident]]
+          - ['Mice Beam', [confident]]
+
+        'Yoshi''s Island':
+          - ['Barbecued Goonie Wings', [well_fed]]
+          - ['3 Shy Guy Omelette', [well_fed]]
+
+  trap:
+    - ['Half of a Worm', [upset_tummy]]
+    - ['Extra-Well-Done Steak', [upset_tummy]]
+    - ['Your Friendly Neighborhood Tapeworm', [upset_tummy, upset_tummy, upset_tummy]]
+    - ['Honey Roasted Packing Peanuts', [upset_tummy]]
+    - ['Rat Poison', [upset_tummy, upset_tummy, upset_tummy, unlucky, startled, startled, startled, sluggish]]
+    - ['Poisonous Mushroom', [upset_tummy, upset_tummy, unlucky]]
+    - ['Too Much Eggnog', [upset_tummy]]
+    - ['Peanut Boulder and Jelly Sandwich', [upset_tummy, sluggish]]
+    - ['Forgotten Moldy Fruit Basket', [upset_tummy]]
+    - ['Pie with a Bird Hiding Inside', [upset_tummy, startled]]
+    - ['Expired Health Potion', [upset_tummy, sluggish]]
+    - ['Gas Station Sushi', [upset_tummy]]
+    - ['Carbon Monoxide', [sluggish, startled]]
+    - ['Circus Flea', [distracted]]
+    - ['Game Bug', [conspiratorial]]
+    - ['Too Many Crabs', [startled]]
+    - ['Ticket for the Off-Broadway Musical Rats', [distracted]]
+    - ['Polybius Arcade Cabinet', [conspiratorial, distracted]]
+    - ['An Illusion', [distracted]]
+    - ['Cartoonishly Large Bomb', [startled, startled, startled]]
+    - ['Hungry Hippopotamus', [startled]]
+    - ['Malfunctioning Boomerang', [distracted, unlucky]]
+    - ['Song that Never Ends', [distracted]]
+    - ['Bubble Wrap', [distracted]]
+    - ['Box of Fireworks', [startled, startled]]
+    - ['Cabin Fever', [sluggish]]
+    - ['Self-destruct Button', [startled, startled]]
+    - ['Train with a Scary Face', [startled]]
+    - ['Greater White Shark', [startled]]
+    - ['Rude Internet Comment', [unlucky, distracted]]
+    - ['Extra Premium Currency best value', [conspiratorial, distracted]]
+    - ['Distracting Squirrel', [distracted]]
+    - ['Itchy Iron Wool Sweater', [stylish, distracted, sluggish]]
+    - ['Mail-in Rebate for 11 cents', [distracted]]
+    - ['Spicy Magazine', [distracted, upset_tummy]]
+    - ['Wooden Splinters', [sluggish]]
+    - ['Box Set of a Canceled TV Show', [distracted]]
+    - ['Burning Phone', [startled]]
+    - ['One-way Ticket to Ohio', [startled, startled, startled, distracted]]
+    - ['Deceased Pet Rock', [sluggish, unlucky]]
+    - ['Cursed Slab', [unlucky, unlucky, unlucky]]
+    - ['Microplastic Pile', [upset_tummy]]
+    - ['Copy of E.T. the Extra-Terrestrial for Atari 2600', [distracted]]
+    - ['3 Dollar Bill', [conspiratorial]]
+    - ['HD Photo of Bigfoot', [conspiratorial]]
+    - ['Yesterday''s Horoscope', [conspiratorial]]
+    - ['Actual Lava Lamp', [startled]]
+    - ['Proof that Aliens Exist', [conspiratorial]]
+    - ['Bottled Toilet Water', [upset_tummy]]
+    - ['Beanie Baby in a Pot of Chili', [upset_tummy]]
+    - ['5G Wireless Technology', [conspiratorial]]
+    - ['Real Dog Poop', [upset_tummy]]
+    - ['Aggressive Post-it Notes', [startled, distracted]]
+    - ['Little White Lie', [conspiratorial]]
+    - ['Annoying Fairy', [distracted]]
+    - ['Scary Baby Doll', [startled]]
+    - ['Probably Decommissioned Warhead', [startled]]
+    - ['Waldo''s Home Address', [conspiratorial]]
+    - ['Stapler in Jell-O', [sluggish]]
+    - ['Radioactive Green Ooze', [startled, sluggish, upset_tummy]]
+    - [['Bottle of Spilled Milk', 'Bottle of Spilled Spiders'], [unlucky]]
+    - ['Just Some Sludge', [sluggish]]
+    - ['Sticky Video Game Controller', [sluggish]]
+    - ['Lice-filled Wig', [distracted]]
+    - ['Greasy Paper Bag', [upset_tummy]]
+    - ['Squeaky Vent Flap', [startled]]
+    - ['Monkey''s Paw', [lucky, conspiratorial, startled]]
+    - ['Animatronic Mouse', [startled, distracted]]
+    - ['Soiled Rug', [sluggish]]
+    - ['Infernal Puzzle Box', [unlucky, startled, distracted, smart]]
+    - ['Human Declaration of Independence', [conspiratorial]]
+    - ['Alligator in a Vest', [startled]]
+    - ['Moist Owlet', [startled]]
+    - ['Terrible Pun', [distracted]]
+    - ['Weather Balloon', [conspiratorial]]
+
+    - game_specific:
+        'Pokemon Red and Blue':
+          - ['Item-Hider', [distracted]]
+          - ['Team Rocket Membership Card', [conspiratorial]]
+
+        'Minecraft':
+          - ['Villager''s Birthday Party Invitation', [distracted]]
+          - ['Redstone Tutorial', [distracted]]
+          - ['An Apple Covered in Actual Gold', [upset_tummy]]
+          - ['Potion of Bad Omen V', [unlucky]]
+          - ['Half-Cut Tree', [distracted]]
+          - ['Regressive Pickaxe', [sluggish]]
+
+        'Ocarina of Time':
+          - ['Overly-Talkative Fairy in a Bottle', [distracted]]
+          - [['Spoiled Lon Lon Milk', 'Spoiled Bottle of Lon Lon Skulltulas'], [upset_tummy]]
+          - ['Unhappy Mask Salesman', [startled]]
+
+        'Pokemon Emerald':
+          - ['Rabid Zigzagoon', [startled]]
+
+        'Stardew Valley':
+          - ['Rotten Parsnip', [upset_tummy]]
+          - ['Rotten Walnut', [upset_tummy]]
+          - ['Abigail''s Birth Certificate', [conspiratorial]]
+
+        'A Link to the Past':
+          - ['Cabbage-Colored Boulder', [startled]]
+          - ['Third Red Crystal', [conspiratorial]]
+
+        'Factorio':
+          - ['Eau de Pollution', [sluggish]]
+
+        'Dark Souls III':
+          - ['Asbestos Flask', [upset_tummy]]
+
+        'Super Mario World':
+          - ['Goomba Goo', [sluggish]]
+          - ['Wandering MechaKoopa', [startled]]
+          - ['An Unfortunately Placed Hidden Block', [startled]]
+
+        'Yacht Dice':
+          - ['Words of Discouragement', [sluggish]]
+
+        'Celeste 64':
+          - ['Permafrosted Strawberry', [upset_tummy]]
+
+        'DOOM 1993':
+          - ['Monster Closet', [startled]]
+
+        'OpenRCT2':
+          - ['Mouse Convention', [startled, distracted]]
+          - ['Wooden Wild Rat Coaster', [distracted]]
+
+        'Links Awakening DX':
+          - ['Poorly Tuned Wind Marimba', [unlucky]]
+          - ['Malfunctioning Trendy Game Claw', [distracted]]
+
+        'Slay the Spire':
+          - ['Exhausting Card', [sluggish]]
+
+        'Sonic Adventure DX':
+          - ['Oh No!', [startled]]
+          - ['Oh No?', [unlucky]]
+          - ['Oh No...', [sluggish]]
+
+        'Super Mario 64':
+          - ['Red-Hatted Monkey', [distracted]]
+          - ['Green Demon', [startled]]
+
+        'Super Metroid':
+          - ['Lo-Jump Boots', [sluggish]]
+          - ['Wandering Metroid', [startled]]
+
+        'Yoshi''s Island':
+          - ['Touched Fuzzy, Got Dizzy', [distracted, sluggish]]
+          - ['Hungry Poochy', [startled]]
+
+  filler:
+    - ['Empty Snail Shell', []]
+    - ['Loose Screw', []]
+    - ['Set of Car Keys', []]
+    - ['Not Very Sharp Tool', []]
+    - ['Busted Flute', []]
+    - ['Beartrap', []]
+    - ['Nonmagic 8-ball', []]
+    - ['Carpentry for Ants', []]
+    - ['Partially Used Blockbuster Gift Card', []]
+    - ['Year-supply of Calendars', []]
+    - ['Human-sized Skateboard', []]
+    - ['Loose Staples', []]
+    - ['Old Boot', []]
+    - ['Clump of Hair', []]
+    - ['Collectable Plate', []]
+    - ['Roll of Toilet Paper', []]
+    - ['Misplaced Pixel', []]
+    - ['Lost Puzzle Piece', []]
+    - ['Cubic Piece of Dirt', []]
+    - ['Plank of Wood', []]
+    - ['Scented Candle', []]
+    - ['Broken Pottery', []]
+    - ['World''s Smallest Violin', []]
+    - ['Crumpled Paper Airplane', []]
+    - ['Half-eaten Pencil', []]
+    - ['Headlight Fluid', []]
+    - ['Help I''m Trapped in This Game and this is the only Way i Know how to Contact you Please get Me Out', []]
+    - ['Broken Fishing Rod', []]
+    - ['Toy Boat Toy Boat Toy Boat', []]
+    - ['Twenty Matches', []]
+    - ['Cracked Monopoly Board', []]
+    - ['AAAAAA battery', []]
+    - ['Cat-shaped Wall Clock', []]
+    - ['Printer Driver Disc', []]
+    - ['Off-brand Soda Can', []]
+    - ['Set of Three Seashells', []]
+    - ['Chewed Bar of Soap', []]
+    - ['Generic Green Slime', []]
+    - ['Handful of Loose Marbles', []]
+    - ['Discarded Video Game Cartridge', []]
+    - ['Lit Candle', []]
+    - ['The Hit Board Game Mouse Trap', []]
+    - ['Rusty Pocketwatch', []]
+    - ['Right Sock', []]
+    - ['Shrimp in a Bottle', []]
+    - ['Not a Doll, but an Action Figure', []]
+    - ['Small chain of Islands', []]
+    - ['School Photo', []]
+    - ['Sack with a Dollar Sign Painted on it', []]
+    - ['Statue of David''s Dog', []]
+    - ['Radio Controlled Car', []]
+    - ['Dihydrogen Monoxide', []]
+    - ['Rubber Duck', []]
+    - ['98 Red Balloons', []]
+    - ['Red Balloon', []]
+    - ['My Little Capybara', []]
+    - ['The Titanic', []]
+    - ['Canned Soup', []]
+    - ['Left Sock', []]
+    - ['Nintendo 65', []]
+    - ['Fake Dog Poop', []]
+    - ['Elephant in the Room', []]
+    - ['Helical Fossil', []]
+    - ['Theodore Roosevelt Plushie', []]
+    - ['Bag of Wires You Might Need One of These Days', []]
+    - ['Naughty Coal', []]
+    - ['Mushroom Princess', []]
+    - ['Novelty Keychain', []]
+    - ['Spare Axle', []]
+    - ['Elevator Music', []]
+    - ['Radical Rock', []]
+    - ['Sizzlin Scissors', []]
+    - ['Just Paper', []]
+    - ['Trash Can Lid', []]
+    - ['Crystal Skull', []]
+    - ['Hairless Yak', []]
+    - ['Pocket', []]
+    - ['Player 2', []]
+    - ['Evil Plans', []]
+    - ['Cardboard Box', []]
+    - ['Lawn Flamingo', []]
+    - ['Withered Bonsai Tree', []]
+    - ['Defeated Punching Bag', []]
+    - ['3 Easy Payments of 19.95', []]
+    - ['Bag of Normal Beans', []]
+    - ['The Krebs Cycle', []]
+    - ['Ring of Visibility', []]
+    - ['Handful of Glitter', []]
+    - ['Signed Air Guitar', []]
+    - ['Neat Rock', []]
+    - ['Dijkstra''s Algorithm', []]
+    - ['Fire Distinguisher', []]
+    - ['Censor Bar', []]
+    - ['Extended Warranty', []]
+    - ['Whatever a Credenza Is', []]
+    - ['Corpse-pokin'' Stick', []]
+    - ['CD containing ''Sounds of the Sewer''', []]
+    - ['Rule stating that Rats Cannot Play Basketball', []]
+    - ['Hilarious Mushroom', [energized, upset_tummy]]
+    - ['Insultingly Bad Portrait', []]
+    - ['Rusted Oil Can', []]
+    - ['Sleepy Fish', []]
+    - ['Slobber-covered Ball', []]
+    - ['Two-bedroom Apartment', []]
+    - ['Stack of Cue Cards', []]
+    - ['One Photon', []]
+    - ['Freshly Squeezed Snake Oil', []]
+    - ['Bovine Credit Card', []]
+    - ['Nothing', []]
+    - ['Busted Piggy Bank', []]
+    - ['English Subtitles', []]
+    - ['I can''t believe that this isn''t a key item', []]
+    - ['Updog', []]
+    - ['Just a regular ol'' chest, trust me', []]
+    - ['Blown Fuse', []]
+    - [['Cheese Strats', 'Spider Strats'], []]
+    - ['Cosmic Ray Bit Flip', []]
+
+    - game_specific:
+        'DLCQuest':
+          - ['Autopelago: Coin Bundle', []]
+
+        'Pokemon Red and Blue':
+          - ['Oak''s Other Parcel', []]
+          - ['Silph Scoop', []]
+          - ['Mustard Ball', []]
+          - ['HM02.5 Walk', []]
+          - ['Rat Fossil', []]
+
+        'Pokemon Emerald':
+          - ['Kevin Scope', []]
+          - ['Ash-Filled Backpack', []]
+          - ['Peeko''s Boating License', []]
+
+        'Kingdom Hearts 2':
+          - [['Proof of Cheese', 'Proof of Spiders'], []]
+
+        'Minecraft':
+          - ['Gnawing III Book', []]
+          - [['Progressive Cheesecrafting', 'Progressive Spidercrafting'], []]
+          - ['Netherite Bed', []]
+          - ['Shattered Ender Pearl', []]
+          - [['Spawn Egg (Cheese Golem)', 'Spawn Egg (Spider Golem)'], []]
+
+        'Super Mario World':
+          - ['Dinosaur Land Travel Brochure', []]
+          - ['Reznor Nail Clippings', []]
+          - ['Iggy Koopa''s Rubber Ball', []]
+          - ['Wendy Koopa''s Hula Hoop', []]
+          - ['Lemmy Koopa''s Decommissioned Doppelgangers', []]
+          - ['Larry Koopa''s Pet Block-snake', []]
+          - ['Morton Koopa''s Exercise Ball-and-Chain', []]
+          - ['Ludwig von Koopa''s Piano', []]
+          - ['Roy Koopa''s Backup Sunglasses', []]
+
+        'Ocarina of Time':
+          - ['Broken Boss Key', []]
+          - ['Jabu-Jabu''s Missing Kidney', []]
+          - ['Lite Brite Arrow', []]
+
+        'Stardew Valley':
+          - ['Mayor''s Tax Returns', []]
+
+        'Super Mario 64':
+          - ['Ninth Red Coin', []]
+          - ['Key to the Castle''s Bathroom', []]
+          - ['0.5x A Presses', []]
+          - ['Cannon Unlock PPK (Princess Peach''s Kitchen)', []]
+
+        'A Link to the Past':
+          - ['The Spoon Pearl', []]
+          - ['Agahnim''s Shiny Ball', []]
+          - ['The Green Mail', []]
+          - ['Half Bottle of Pink Hair Dye', []]
+          - ['REALLY Small Key to Hyrule Castle', []]
+
+        'Factorio':
+          - ['Bottleneck', []]
+          - ['Chain of Daisies', []]
+          - ['Cuddly Little Biter', []]
+
+        'Yacht Dice':
+          - ['Preposterously Small Straight', []]
+          - ['Two Yachts', []]
+          - ['Brand New Hats for Dice', []]
+
+        'Dark Souls III':
+          - ['Soul of a Cinder Block', []]
+          - ['Treasure Chest with Several Stab Wounds', []]
+
+        'Celeste 64':
+          - ['Malfunctioning Cassette Tape', []]
+          - ['Photograph of Celeste Mountain', []]
+
+        'OpenRCT2':
+          - [['Allow Brie Removal', 'Allow Spiderweb Removal'], []]
+
+        'Links Awakening DX':
+          - ['Pocket Full of Koho Lint', []]
+          - ['Tortoise-Shaped Rock', []]
+
+        'Sonic Adventure DX':
+          - ['Frog with a Tail', []]
+
+        'Super Metroid':
+          - ['Empty E-Tank', []]
+
+        'Yoshi''s Island':
+          - ['Mouthful of Watermelon Seeds', []]
+
+
+# one MUST be called 'Menu'. ability_check_with_dc is intended to make intuitive
+# sense to those who are familiar with the basic concept outlined on:
+# https://www.5esrd.com/using-ability-scores#Ability_Checks so we can make the
+# game "feel" more "difficult" as the "player" enters the later stages.
+regions:
+  landmarks:
+    snakes_on_a_planet:
+      name: 'Snakes on a Planet'
+      flavor_text: 'There sure are a heckin'' lot of snakes on this heckin'' planet...'
+      unrandomized_item: moon_shoes
+      requires:
+        item: mongoose_in_a_combat_spacecraft
+      ability_check_dc: 24
+
+    asteroid_with_pants:
+      name: 'Asteroid with Pants'
+      flavor_text: 'Don''t you hate it when your pants are a million sizes too big?'
+      unrandomized_item: pack_rat
+      requires:
+        any:
+          - item: asteroid_belt
+          - item: moon_shaped_like_a_butt
+      ability_check_dc: 26
+      exits: []
+
+    minotaur_labyrinth:
+      name: 'Minotaur Labyrinth'
+      flavor_text: 'No worries, minotaur, we get lost in mazes all the time!'
+      unrandomized_item: pack_rat
+      requires:
+        any:
+          - item: red_matador_cape
+          - item: lab_rat
+      ability_check_dc: 23
+      exits:
+        - before_asteroid_with_pants
+        - after_minotaur_labyrinth
+
+    space_opera:
+      name: 'Space Opera'
+      flavor_text: 'It''s not over until the supermassive black hole sings!'
+      unrandomized_item: pack_rat
+      requires:
+        rat_count: 49
+      ability_check_dc: 21
+      exits:
+        - after_space_opera
+
+    seal_of_fortune:
+      name: 'Seal of Fortune'
+      flavor_text: 'Should I pick knowledge and understanding of the limitless secrets of the universe, or... door number 2?'
+      unrandomized_item: pack_rat
+      requires:
+        any:
+          - item: constellation_prize
+          - item: free_vowel
+      ability_check_dc: 23
+      exits:
+        - before_minotaur_labyrinth
+        - before_space_opera
+
+    alien_vending_machine:
+      name: 'Alien Vending Machine'
+      flavor_text: 'Surprisingly, the aliens have all the same soda brands as us!'
+      unrandomized_item: pack_rat
+      requires:
+        item: foreign_coin
+      ability_check_dc: 26
+      exits: []
+
+    frozen_assets:
+      name: 'Frozen Assets'
+      flavor_text: 'Frost-benefit analysis says to keep some of it on ice.'
+      unrandomized_item: pack_rat
+      requires:
+        item: playing_with_fire_for_dummies
+      ability_check_dc: 26
+      exits: []
+
+    homeless_mummy:
+      name: 'Homeless Mummy'
+      flavor_text: 'Those pyramid schemes will ruin you...'
+      unrandomized_item: free_vowel
+      requires:
+        any:
+          - item: ziggu_rat
+          - item: pharaoh_not_anti_mummy_spray
+      ability_check_dc: 22
+      exits:
+        - before_frozen_assets
+        - before_alien_vending_machine
+        - after_homeless_mummy
+
+    stalled_rocket_get_out_and_push:
+      name: 'Stalled Rocket'
+      flavor_text: 'Blast it! Someone will have to get out and push...'
+      unrandomized_item: constellation_prize
+      requires:
+        rat_count: 40
+      ability_check_dc: 22
+      exits:
+        - after_stalled_rocket_get_out_and_push
+
+    roboclop_the_robot_war_horse:
+      name: 'Robo-Clop: The Robot War Horse'
+      flavor_text: 'Ever since the operation, he''s been a bit un-STABLE.'
+      unrandomized_item: pack_rat
+      requires:
+        item: quantum_sugar_cube
+      ability_check_dc: 21
+      exits:
+        - before_stalled_rocket_get_out_and_push
+        - before_homeless_mummy
+
+    makeshift_rocket_ship:
+      name: 'Makeshift Rocket Ship'
+      flavor_text: 'It''s actually WAY easier than brain surgery.'
+      unrandomized_item: pack_rat
+      requires:
+        any_two:
+          - item: turbo_encabulator
+          - item: ratstronaut
+          - item: energy_drink_that_is_pure_rocket_fuel
+          - item: pile_of_scrap_metal_in_the_shape_of_a_rocket_ship
+      ability_check_dc: 19
+      exits:
+        - before_roboclop_the_robot_war_horse
+
+    secret_cache:
+      name: 'Secret Cache'
+      flavor_text: 'How secret can it be if it''s on my map right here?'
+      unrandomized_item: pack_rat
+      requires:
+        any:
+          - item: virtual_key
+          - item: map_of_the_entire_internet
+      ability_check_dc: 21
+      exits:
+        - before_makeshift_rocket_ship
+
+    rat_rap_battle:
+      name: 'Rat Rap Battle'
+      flavor_text: 'Do they REALLY spit fire? That sounds dangerous...'
+      unrandomized_item: pack_rat
+      requires:
+        any:
+          - item: fifty_cents
+          - item: notorious_r_a_t
+      ability_check_dc: 19
+      exits:
+        - after_rat_rap_battle
+
+    stack_of_crates:
+      name: 'Stack of Crates'
+      flavor_text: 'What do you mean, "just walk around them"?'
+      unrandomized_item: pack_rat
+      requires:
+        any:
+          - item: gym_rat
+          - item: forklift_certification
+      ability_check_dc: 19
+      exits:
+        - after_stack_of_crates
+
+    binary_tree:
+      name: 'Binary Tree'
+      flavor_text: 'The branches here are full of juicy pairs.'
+      unrandomized_item: pack_rat
+      requires:
+        item: childs_first_hand_axe
+      ability_check_dc: 19
+      exits:
+        - before_rat_rap_battle
+
+    room_full_of_typewriters:
+      name: 'Room Full of Typewriters'
+      flavor_text: 'I''m sure this room has a lot of KEY items!'
+      unrandomized_item: pack_rat
+      requires:
+        rat_count: 37
+      ability_check_dc: 25
+      exits: []
+
+    trapeze:
+      name: 'Trapeze'
+      flavor_text: 'Let''s dino-SOAR to victory!'
+      unrandomized_item: pack_rat
+      requires:
+        item: acro_rat
+      ability_check_dc: 24
+      exits: []
+
+    computer_ram:
+      name: 'Computer Ram'
+      flavor_text: 'Short-term memory, long-term damage.'
+      unrandomized_item: pack_rat
+      requires:
+        item: artificial_grass
+      ability_check_dc: 19
+      exits:
+        - before_stack_of_crates
+
+    copyright_mouse:
+      name: 'Copyright Mouse'
+      flavor_text: 'The locations depicted in this game are entirely fictitious. Any similarity to real-world names or properties is entirely coincidental.'
+      unrandomized_item: pack_rat
+      requires:
+        any:
+          - item: fake_mouse_ears
+          - item: legally_binding_contract
+      ability_check_dc: 18
+      exits:
+        - before_room_full_of_typewriters
+        - before_binary_tree
+
+    blue_colored_screen_interface:
+      name: 'Blue-Colored Screen Interface'
+      flavor_text: 'It works just fine on my machine...'
+      unrandomized_item: pack_rat
+      requires:
+        any:
+          - item: lost_ctrl_key
+          - item: hammer_of_problem_solving
+      ability_check_dc: 18
+      exits:
+        - before_computer_ram
+        - before_trapeze
+
+    broken_down_bus:
+      name: 'Broken-Down Bus'
+      flavor_text: 'The driver made an error and crashed, and now it''s blocking traffic!'
+      unrandomized_item: pack_rat
+      requires:
+        rat_count: 25
+      ability_check_dc: 19
+      exits:
+        - before_copyright_mouse
+
+    overweight_boulder:
+      name: 'Overweight Boulder'
+      flavor_text: 'Aww, it''s not overweight. It''s just big-stoned.'
+      unrandomized_item: pack_rat
+      requires:
+        rat_count: 25
+      ability_check_dc: 19
+      exits:
+        - before_blue_colored_screen_interface
+
+    kart_races:
+      name: 'Kart Races'
+      flavor_text: 'One of the more dangerous rat races out there.'
+      unrandomized_item: pack_rat
+      requires:
+        any:
+          - item: blue_turtle_shell
+          - item: banana_peel
+      ability_check_dc: 17
+      exits:
+        - before_broken_down_bus
+
+    daring_adventurer:
+      name: 'Daring Adventurer'
+      flavor_text: 'A kid with a sword. The mortal enemy of a rat.'
+      unrandomized_item: pack_rat
+      requires:
+        any:
+          - item: masterful_longsword
+          - item: macguffin
+      ability_check_dc: 17
+      exits:
+        - before_overweight_boulder
+
+    computer_interface:
+      name: 'Computer Interface'
+      flavor_text: 'It would take quite the hack rat to crack this code!'
+      unrandomized_item: pack_rat
+      requires:
+        item: computer_rat
+      ability_check_dc: 16
+      exits:
+        - before_daring_adventurer
+        - before_kart_races
+
+    captured_goldfish:
+      name: 'Captured Goldfish'
+      flavor_text: 'Fell for it. Hook, line, and sinker.'
+      unrandomized_item: pack_rat
+      requires:
+        item: giant_novelty_scissors
+      ability_check_dc: 16
+      exits:
+        - before_computer_interface
+
+    bowling_ball_door:
+      name: 'Bowling Ball Door'
+      flavor_text: 'Another gutter, another ball.'
+      unrandomized_item: rat_pack
+      requires:
+        rat_count: 10
+      ability_check_dc: 14
+      exits:
+        - before_captured_goldfish
+
+    restaurant:
+      name: 'Restaurant'
+      flavor_text: 'It''s surprisingly accommodating, considering...'
+      unrandomized_item: pack_rat
+      requires:
+        item: chef_rat
+      ability_check_dc: 14
+      exits:
+        - after_restaurant
+
+    pirate_bake_sale:
+      name: 'Pirate Bake Sale'
+      flavor_text: 'Better than being stranded on a DESSERTed island!'
+      unrandomized_item: pack_rat
+      requires:
+        item: pie_rat
+      ability_check_dc: 14
+      exits:
+        - after_pirate_bake_sale
+
+    angry_turtles:
+      name: 'Angry Turtles'
+      flavor_text: 'Blocking this pipe is so NOT cowabunga, dude!'
+      unrandomized_item: pack_rat
+      requires:
+        any:
+          - item: pizza_rat
+          - item: ninja_rat
+      ability_check_dc: 13
+      exits:
+        - before_restaurant
+
+    prawn_stars:
+      name: 'Prawn Stars'
+      flavor_text: 'It''s not shellfish. It''s just business.'
+      unrandomized_item: pack_rat
+      requires:
+        any:
+          - item: premium_can_of_prawn_food
+          - item: priceless_antique
+      ability_check_dc: 12
+      exits:
+        - before_pirate_bake_sale
+
+    basketball:
+      name: 'Basketball'
+      flavor_text: 'There''s no rule that says you can''t...'
+      unrandomized_item: pack_rat
+      requires:
+        rat_count: 5
+      ability_check_dc: 10
+      exits:
+        - before_prawn_stars
+        - before_angry_turtles
+
+  fillers:
+    after_minotaur_labyrinth:
+      name_template: 'After Minotaur Labyrinth #{n}'
+      unrandomized_items:
+        key:
+          - mongoose_in_a_combat_spacecraft
+        filler: 3
+        useful_nonprogression: 2
+      exits:
+        - snakes_on_a_planet
+
+    after_space_opera:
+      name_template: 'After Space Opera #{n}'
+      unrandomized_items:
+        filler: 5
+        useful_nonprogression: 2
+      exits:
+        - snakes_on_a_planet
+
+    before_asteroid_with_pants:
+      name_template: 'Before Asteroid with Pants #{n}'
+      unrandomized_items:
+        key:
+          - asteroid_belt
+          - moon_shaped_like_a_butt
+        filler: 1
+        useful_nonprogression: 1
+      ability_check_dc: 23
+      exits:
+        - asteroid_with_pants
+
+    before_space_opera:
+      name_template: 'Before Space Opera #{n}'
+      unrandomized_items:
+        filler: 4
+        useful_nonprogression: 2
+      exits:
+        - space_opera
+
+    before_minotaur_labyrinth:
+      name_template: 'Before Minotaur Labyrinth #{n}'
+      unrandomized_items:
+        key:
+          - red_matador_cape
+          - lab_rat
+        filler: 1
+        useful_nonprogression: 2
+      exits:
+        - minotaur_labyrinth
+
+    before_alien_vending_machine:
+      name_template: 'Before Alien Vending Machine #{n}'
+      unrandomized_items:
+        key:
+          - foreign_coin
+        filler: 1
+        useful_nonprogression: 2
+      ability_check_dc: 23
+      exits:
+        - alien_vending_machine
+
+    before_frozen_assets:
+      name_template: 'Before Frozen Assets #{n}'
+      unrandomized_items:
+        key:
+          - playing_with_fire_for_dummies
+        filler: 4
+        useful_nonprogression: 2
+      ability_check_dc: 23
+      exits:
+        - frozen_assets
+
+    after_homeless_mummy:
+      name_template: 'After Homeless Mummy #{n}'
+      unrandomized_items:
+        filler: 4
+        useful_nonprogression: 3
+      exits:
+        - seal_of_fortune
+
+    after_stalled_rocket_get_out_and_push:
+      name_template: 'After Stalled Rocket! #{n}'
+      unrandomized_items:
+        filler: 4
+        useful_nonprogression: 3
+      exits:
+        - seal_of_fortune
+
+    before_homeless_mummy:
+      name_template: 'Before Homeless Mummy #{n}'
+      unrandomized_items:
+        key:
+          - pharaoh_not_anti_mummy_spray
+          - ziggu_rat
+        filler: 2
+        useful_nonprogression: 2
+      exits:
+        - homeless_mummy
+
+    before_stalled_rocket_get_out_and_push:
+      name_template: 'Before Stalled Rocket! #{n}'
+      unrandomized_items:
+        filler: 4
+        useful_nonprogression: 2
+      exits:
+        - stalled_rocket_get_out_and_push
+
+    before_roboclop_the_robot_war_horse:
+      name_template: 'Before Robo-Clop: The Robot War Horse #{n}'
+      unrandomized_items:
+        key:
+          - quantum_sugar_cube
+        filler: 16
+        useful_nonprogression: 8
+      exits:
+        - roboclop_the_robot_war_horse
+
+    before_makeshift_rocket_ship:
+      name_template: 'Before Makeshift Rocket Ship #{n}'
+      unrandomized_items:
+        key:
+          - turbo_encabulator
+          - ratstronaut
+          - energy_drink_that_is_pure_rocket_fuel
+          - pile_of_scrap_metal_in_the_shape_of_a_rocket_ship
+        filler: 16
+        useful_nonprogression: 8
+      exits:
+        - makeshift_rocket_ship
+
+    after_rat_rap_battle:
+      name_template: 'After Rat Rap Battle #{n}'
+      unrandomized_items:
+        key:
+          - virtual_key
+        filler: 4
+        useful_nonprogression: 2
+      exits:
+        - secret_cache
+
+    after_stack_of_crates:
+      name_template: 'After Stack of Crates #{n}'
+      unrandomized_items:
+        key:
+          - map_of_the_entire_internet
+        filler: 4
+        useful_nonprogression: 2
+      exits:
+        - secret_cache
+
+    before_rat_rap_battle:
+      name_template: 'Before Rat Rap Battle #{n}'
+      unrandomized_items:
+        key:
+          - fifty_cents
+          - notorious_r_a_t
+        filler: 2
+        useful_nonprogression: 2
+      exits:
+        - rat_rap_battle
+
+    before_stack_of_crates:
+      name_template: 'Before Stack of Crates #{n}'
+      unrandomized_items:
+        key:
+          - gym_rat
+          - forklift_certification
+        filler: 2
+        useful_nonprogression: 2
+      exits:
+        - stack_of_crates
+
+    before_binary_tree:
+      name_template: 'Before Binary Tree #{n}'
+      unrandomized_items:
+        key:
+          - childs_first_hand_axe
+        filler: 2
+        useful_nonprogression: 2
+      exits:
+        - binary_tree
+
+    before_room_full_of_typewriters:
+      name_template: 'Before Room Full of Typewriters #{n}'
+      unrandomized_items:
+        filler: 4
+        useful_nonprogression: 2
+      ability_check_dc: 20
+      exits:
+        - room_full_of_typewriters
+
+    before_trapeze:
+      name_template: 'Before Trapeze #{n}'
+      unrandomized_items:
+        key:
+          - acro_rat
+        filler: 3
+        useful_nonprogression: 2
+      ability_check_dc: 20
+      exits:
+        - trapeze
+
+    before_computer_ram:
+      name_template: 'Before Computer Ram #{n}'
+      unrandomized_items:
+        key:
+          - artificial_grass
+        filler: 4
+        useful_nonprogression: 2
+      exits:
+        - computer_ram
+
+    before_copyright_mouse:
+      name_template: 'Before Copyright Mouse #{n}'
+      unrandomized_items:
+        key:
+          - fake_mouse_ears
+          - legally_binding_contract
+        filler: 4
+        useful_nonprogression: 2
+      exits:
+        - copyright_mouse
+
+    before_blue_colored_screen_interface:
+      name_template: 'Before Blue-Colored Screen Interface #{n}'
+      unrandomized_items:
+        key:
+          - lost_ctrl_key
+          - hammer_of_problem_solving
+        filler: 1
+        useful_nonprogression: 2
+      exits:
+        - blue_colored_screen_interface
+
+    before_broken_down_bus:
+      name_template: 'Before Broken Down Bus #{n}'
+      unrandomized_items:
+        filler: 4
+        useful_nonprogression: 2
+      exits:
+        - broken_down_bus
+
+    before_overweight_boulder:
+      name_template: 'Before Overweight Boulder #{n}'
+      unrandomized_items:
+        filler: 4
+        useful_nonprogression: 2
+      exits:
+        - overweight_boulder
+
+    before_kart_races:
+      name_template: 'Before Kart Races #{n}'
+      unrandomized_items:
+        key:
+          - blue_turtle_shell
+          - banana_peel
+        filler: 4
+        useful_nonprogression: 2
+      exits:
+        - kart_races
+
+    before_daring_adventurer:
+      name_template: 'Before Daring Adventurer #{n}'
+      unrandomized_items:
+        key:
+          - masterful_longsword
+          - macguffin
+        filler: 4
+        useful_nonprogression: 2
+      exits:
+        - daring_adventurer
+
+    before_computer_interface:
+      name_template: 'Before Computer Interface #{n}'
+      unrandomized_items:
+        key:
+          - computer_rat
+        filler: 14
+        useful_nonprogression: 2
+      exits:
+        - computer_interface
+
+    before_captured_goldfish:
+      name_template: 'Before Goldfish #{n}'
+      unrandomized_items:
+        key:
+          - giant_novelty_scissors
+        useful_nonprogression: 2
+        filler: 4
+      exits:
+        - captured_goldfish
+
+    after_restaurant:
+      name_template: 'After Restaurant #{n}'
+      unrandomized_items:
+        useful_nonprogression: 16
+        filler: 15
+      exits:
+        - bowling_ball_door
+
+    after_pirate_bake_sale:
+      name_template: 'After Pirate Bake Sale #{n}'
+      unrandomized_items:
+        useful_nonprogression: 8
+        filler: 6
+      exits:
+        - bowling_ball_door
+
+    before_restaurant:
+      name_template: 'Before Restaurant #{n}'
+      unrandomized_items:
+        key:
+          - chef_rat
+        useful_nonprogression: 2
+        filler: 6
+      exits:
+        - restaurant
+
+    before_pirate_bake_sale:
+      name_template: 'Before Pirate Bake Sale #{n}'
+      unrandomized_items:
+        key:
+          - pie_rat
+          - pack_rat
+        useful_nonprogression: 2
+        filler: 6
+      exits:
+        - pirate_bake_sale
+
+    before_angry_turtles:
+      name_template: 'Before Angry Turtles #{n}'
+      unrandomized_items:
+        key:
+          - pizza_rat
+          - ninja_rat
+        useful_nonprogression: 2
+        filler: 6
+      exits:
+        - angry_turtles
+
+    before_prawn_stars:
+      name_template: 'Before Prawn Stars #{n}'
+      unrandomized_items:
+        key:
+          - premium_can_of_prawn_food
+          - priceless_antique
+        useful_nonprogression: 2
+        filler: 6
+      exits:
+        - prawn_stars
+
+    Menu:
+      name_template: 'Before Basketball #{n}'
+      unrandomized_items:
+        key:
+          - item: pack_rat
+            count: 5
+        useful_nonprogression: 5
+        filler: 16
+      exits:
+        - basketball

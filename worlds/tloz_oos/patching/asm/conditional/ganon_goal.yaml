@@ -1,0 +1,9 @@
+# Re-cable state 0 of DIN_DESCENDING_CRYSTAL to middle of state27
+# to directly get warped to the Room of Rites
+03/5589/: |
+    ; Fully heal the player
+    ld hl,wLinkMaxHealth
+    ldd a,(hl)
+    ld (hl),a
+    ; Jump to middle of state27 (warp to Room of Rites)
+    jp $5a1f     

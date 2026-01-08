@@ -1,0 +1,1260 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 94,
+  "name": "Upper Norfair Farming Room",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "East",
+  "roomAddress": "0x7AF72",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001970e",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019726",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001971a",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Top Floating Platform Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 2],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Bottom Floating Platform Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1],
+        [2, 2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Blue Gate",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Upper Norfair Farming Room Fune",
+      "enemyName": "Fune",
+      "quantity": 1,
+      "homeNodes": [5]
+    },
+    {
+      "id": "e2",
+      "groupName": "Upper Norfair Farming Room Gamets",
+      "enemyName": "Gamet",
+      "quantity": 5,
+      "homeNodes": [5],
+      "note": "Can't be farmed quite as quickly as other spots without requirements"
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 12,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Wave",
+        "canShinechargeMovementTricky",
+        {"heatFrames": 160},
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Leave Shinecharged (In-Room Runway)",
+      "requires": [
+        {"or": [
+          "Wave",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"or": [
+          {"canShineCharge": {"usedTiles": 12, "openEnd": 1}},
+          {"and": [
+            {"canShineCharge": {"usedTiles": 13, "openEnd": 1}},
+            {"doorUnlockedAtNode": 1}
+          ]}
+        ]},
+        "canShinechargeMovementTricky",
+        {"heatFrames": 250},
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["ammo"],
+          "requires": [{"obstaclesCleared": ["A"]}]
+        }
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 51,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Wave",
+        {"or": [
+          "canXRayCancelShinecharge",
+          {"heatFrames": 160}
+        ]},
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"heatFrames": 560}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 120},
+        "canShinechargeMovementComplex",
+        {"heatFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Come in Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 80},
+        "canShinechargeMovementComplex",
+        {"heatFrames": 100},
+        {"shinespark": {"frames": 16, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 3],
+      "name": "Come in Shinecharged, Leave With Spark (Hero Shot)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 35},
+        "canShinechargeMovementTricky",
+        "canHeroShot",
+        {"heatFrames": 85},
+        {"shinespark": {"frames": 37, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"heatFrames": 155},
+        {"shineChargeFrames": 115}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 52,
+      "link": [1, 3],
+      "name": "Come In Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 12,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        {"heatFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "link": [1, 3],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "Going to the central junction is ignored, as it is likely not very useful.",
+        "FIXME: It is be possible to get to the farm with a second, frame perfect, pause abuse."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 75}
+      ]
+    },
+    {
+      "id": 53,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"or": [
+          "canXRayCancelShinecharge",
+          {"heatFrames": 160}
+        ]},
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"heatFrames": 690}
+          ]},
+          {"and": [
+            "canTrickySpringBallJump",
+            {"heatFrames": 745}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "link": [2, 2],
+      "name": "Leave with Blocked Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Open Gate and Leave with Runway",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"heatFrames": 60}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 11,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 54,
+      "link": [2, 3],
+      "name": "Come In Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 4,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"or": [
+          "canXRayCancelShinecharge",
+          {"heatFrames": 160}
+        ]},
+        "canLongChainTemporaryBlue",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"heatFrames": 680}
+          ]},
+          {"and": [
+            "canTrickySpringBallJump",
+            "canXRayTurnaround",
+            {"heatFrames": 775}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 5],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 120},
+        {"or": [
+          {"heatFrames": 30},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 58,
+      "link": [2, 5],
+      "name": "Indirect G-Mode, Despawn Gate, To the Farm",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "h_heatedGModePauseAbuse",
+          {"heatFrames": 40}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Kill the Gamets where Samus can grab the drops. Exit G-mode, then pause abuse to pick them up without dying.",
+      "devNote": "Ice clipping through the shot blocks is not considered reasonable, as Samus can't use X-ray, kill any Gamets, or likely take a hit."
+    },
+    {
+      "id": 13,
+      "link": [3, 1],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 120},
+        "canShinechargeMovementComplex",
+        {"heatFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [3, 1],
+      "name": "Come in Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 80},
+        "canShinechargeMovementComplex",
+        {"heatFrames": 100},
+        {"shinespark": {"frames": 16, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [3, 1],
+      "name": "Come in Shinecharged, Leave With Spark (Hero Shot)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 35},
+        "canShinechargeMovementTricky",
+        "canHeroShot",
+        {"heatFrames": 85},
+        {"shinespark": {"frames": 37, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [3, 1],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"heatFrames": 155},
+        {"shineChargeFrames": 115}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 55,
+      "link": [3, 1],
+      "name": "Come In Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 12,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        {"heatFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "link": [3, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "Going to the central junction is ignored, as it is likely not very useful.",
+        "FIXME: It is be possible to get to the farm with a second, frame perfect, pause abuse."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 18,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 19,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 20,
+      "link": [3, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        {"heatFrames": 1600}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled) with a horizontal position of 21 (as far right as possible).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get to the door transition above, without needing to open the door.",
+        "Samus will not be visible during the climb.",
+        "At the beginning of the climb, avoid pressing left without X-Ray being held, to prevent triggering the transition of the bottom door."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Wave",
+        "canShinechargeMovementTricky",
+        {"heatFrames": 160},
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [3, 2],
+      "name": "Leave Shinecharged (In-Room Runway)",
+      "requires": [
+        {"or": [
+          "Wave",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"or": [
+          {"canShineCharge": {"usedTiles": 12, "openEnd": 1}},
+          {"and": [
+            {"canShineCharge": {"usedTiles": 13, "openEnd": 1}},
+            {"doorUnlockedAtNode": 2}
+          ]}
+        ]},
+        "canShinechargeMovementTricky",
+        {"heatFrames": 255},
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["ammo"],
+          "requires": [{"obstaclesCleared": ["A"]}]
+        }
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 56,
+      "link": [3, 2],
+      "name": "Come In Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Wave",
+        {"or": [
+          "canXRayCancelShinecharge",
+          {"heatFrames": 160}
+        ]},
+        "canLongChainTemporaryBlue",
+        {"heatFrames": 460}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "link": [3, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 24,
+      "link": [3, 2],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 25,
+      "link": [3, 2],
+      "name": "Carry Grapple Teleport (Upper Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 26,
+      "link": [3, 2],
+      "name": "Carry Grapple Teleport (Lower Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 27,
+      "link": [3, 2],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 28,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 12,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 29,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 75}
+      ]
+    },
+    {
+      "id": 31,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 75}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 10}]
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "link": [4, 1],
+      "name": "Leave with Runway",
+      "requires": [
+        {"heatFrames": 30}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 12,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 75}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 10}]
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "link": [4, 3],
+      "name": "Leave with Runway",
+      "requires": [
+        {"heatFrames": 30}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 12,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 35,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 35}
+      ]
+    },
+    {
+      "id": 46,
+      "link": [5, 1],
+      "name": "G-Mode Setup - Get Hit By Gamet",
+      "requires": [
+        "canComplexGMode",
+        {"heatFrames": 480},
+        {"or": [
+          "canTrickyUseFrozenEnemies",
+          "canMoonwalk",
+          "canInsaneJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 85},
+        {"obstaclesCleared": ["A"]}
+      ]
+    },
+    {
+      "id": 37,
+      "link": [5, 2],
+      "name": "Leave with Runway",
+      "requires": [
+        {"heatFrames": 45},
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 11,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 47,
+      "link": [5, 2],
+      "name": "G-Mode Setup - Get Hit By Gamet",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"heatFrames": 280}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 48,
+      "link": [5, 3],
+      "name": "G-Mode Setup - Get Hit By Gamet",
+      "requires": [
+        {"heatFrames": 510}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 38,
+      "link": [5, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump"
+        ]},
+        {"heatFrames": 125}
+      ]
+    },
+    {
+      "id": 39,
+      "link": [5, 4],
+      "name": "Crouch Jump Down Grab",
+      "requires": [
+        "h_crouchJumpDownGrab",
+        {"heatFrames": 125}
+      ]
+    },
+    {
+      "id": 40,
+      "link": [5, 4],
+      "name": "IBJ",
+      "requires": [
+        "canIBJ",
+        {"heatFrames": 850}
+      ],
+      "note": "Kill a Gamet and don't pick up its drops, so that they won't spawn while performing the IBJ."
+    },
+    {
+      "id": 41,
+      "link": [5, 4],
+      "name": "Frozen Gamet",
+      "requires": [
+        "canUseFrozenEnemies",
+        {"heatFrames": 250}
+      ]
+    },
+    {
+      "id": 49,
+      "link": [5, 4],
+      "name": "Damage Boost",
+      "requires": [
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Gamet", "type": "contact", "hits": 1}},
+        {"heatFrames": 350}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "A damage boost allows getting up without a crouch jump, e.g. to preserve a flash suit."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [5, 4],
+      "name": "Spring Ball Jump",
+      "requires": [
+        "canSpringBallJumpMidAir",
+        {"heatFrames": 120}
+      ]
+    },
+    {
+      "id": 42,
+      "link": [5, 5],
+      "name": "Wave Beam the Gate",
+      "requires": [
+        {"heatFrames": 60},
+        "Wave"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 43,
+      "link": [5, 5],
+      "name": "Gate Glitch",
+      "requires": [
+        {"heatFrames": 135},
+        "h_heatedBlueGateGlitch"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 44,
+      "link": [5, 5],
+      "name": "Gate Glitch With Farming",
+      "requires": [
+        {"notable": "Gate Glitch With Farming"},
+        {"heatFrames": 300},
+        "canGateGlitch",
+        {"or": [
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Farm before, during, and after the gate glitch in order to open the gate without wasting ammo or Energy.",
+      "devNote": [
+        "There is still some leniency built in, so that perfect execution is not required, but Samus ends without losing resources.",
+        "Without leniency, this can be done with about 235 heatFrames."
+      ]
+    },
+    {
+      "id": 61,
+      "link": [5, 5],
+      "name": "Approach Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"heatFrames": 0},
+            "canPauseAbuse"
+          ]},
+          {"heatFrames": 50}
+        ]},
+        {"partialRefill": {"type": "RegularEnergy", "limit": 50}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Regain some energy in order to use the Gamet Farm."
+    },
+    {
+      "id": 45,
+      "link": [5, 5],
+      "name": "Gamet Farm",
+      "requires": [
+        {"simpleHeatFrames": 80},
+        {"heatFrames": 30},
+        {"simpleCycleFrames": 80},
+        {"cycleFrames": 30}
+      ],
+      "farmCycleDrops": [{"enemy": "Gamet", "count": 5}],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Gate Glitch With Farming",
+      "note": "Farm before, during, and after the gate glitch in order to open the gate without wasting ammo or Energy."
+    }
+  ],
+  "nextStratId": 62,
+  "nextNotableId": 2
+}

@@ -1,0 +1,1208 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 58,
+  "name": "Dachora Room",
+  "area": "Brinstar",
+  "subarea": "Pink",
+  "roomAddress": "0x79CB3",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0],
+    [1, 1, 1, 1, 1, 0, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018da2",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 2, 2, 1, 1, 1],
+        [0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 0, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018dba",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 2, 0, 0],
+        [0, 0, 0, 0, 2, 0, 0],
+        [0, 0, 0, 0, 2, 0, 0],
+        [0, 0, 0, 0, 2, 0, 0],
+        [0, 0, 0, 0, 2, 0, 0],
+        [2, 2, 2, 2, 2, 0, 0]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018dae",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 2, 2, 2],
+        [0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0],
+        [1, 1, 1, 1, 1, 0, 0]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Bomb Blockade",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Dachora Room Zeelas",
+      "enemyName": "Zeela",
+      "quantity": 2,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Dachora Room Reo",
+      "enemyName": "Reo",
+      "quantity": 3,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e3",
+      "groupName": "Dachora Room Metarees",
+      "enemyName": "Metaree",
+      "quantity": 3,
+      "homeNodes": [3]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {
+          "id": 1,
+          "devNote": "FIXME: Node 3 could be used to reset the room, with additional requirements."
+        },
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Blockade Leave with Moondance",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "h_useMorphBombs",
+        "canMoondance"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "note": [
+        "Break exactly the bottom-right and top-right Bomb Blocks and Unmorph while on the top block hole, to begin the Moondance.",
+        "Clear a path to the left in advance, as well as all enemies."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Blockade Leave with Extended Moondance",
+      "requires": [
+        {"notable": "Blockade Extended Moondance"},
+        {"obstaclesNotCleared": ["A"]},
+        "h_useMorphBombs",
+        "canExtendedMoondance"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "note": [
+        "Break exactly the bottom-right and top-right Bomb Blocks and Unmorph while on the top block hole, to begin the Moondance.",
+        "Clear a path to the left in advance, as well as all enemies.",
+        "Moonfall a total of 321 times, stopping just before Samus clips two tiles into the ground."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Zeela and Reo Farm",
+      "requires": [
+        {"or": [
+          {"resetRoom": {"nodes": [1]}},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"or": [
+              {"and": [
+                "h_getBlueSpeedMaxRunway",
+                "canCarefulJump",
+                {"cycleFrames": 500}
+              ]},
+              {"and": [
+                "ScrewAttack",
+                {"cycleFrames": 620}
+              ]},
+              {"and": [
+                "h_useMorphBombs",
+                {"cycleFrames": 1100}
+              ]}
+            ]}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 360}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 360}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 400}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 490}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 540}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Zeela", "count": 2},
+        {"enemy": "Reo", "count": 3}
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Zeela",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Zeela", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Blockade Extended Moondance Clip",
+      "requires": [
+        {"notable": "Blockade Extended Moondance"},
+        {"obstaclesNotCleared": ["A"]},
+        "h_useMorphBombs",
+        "ScrewAttack",
+        "canExtendedMoondance",
+        "canDisableEquipment"
+      ],
+      "note": [
+        "Break exactly the lower-middle-right and top-right Bomb Blocks, leaving the upper-middle-right and bottommost Blocks intact.",
+        "Clear all enemies before starting.",
+        "Unmorph while on the top block to begin the Moondance.",
+        "Exactly 145 moonfalls after clipping into the bottom block (321 total), wiggle out to the left.",
+        "The next moonfall will clip Samus down two tiles.",
+        "Re-enable Screw Attack and moonfall to break the right side blocks, then use Grapple again to become unstuck.",
+        "Finally, moonfall through the Speed Blocks to clip down to the Dachora."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Stored Moonfall Clip (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        "Grapple",
+        "ScrewAttack"
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "G-Mode Screw and Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "ScrewAttack"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Screw Attack through the bomb block wall, to instantly overload PLMs on the other side, and fall through the Speed Blocks."
+    },
+    {
+      "id": 11,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_getBlueSpeedMaxRunway",
+          "h_destroyBombWalls",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 12,
+      "link": [1, 3],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 70, "excessFrames": 63}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [1, 3],
+      "name": "Blockade Leave with Moondance",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "h_useMorphBombs",
+        "canMoondance",
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Break exactly the lower-middle-right and top-right Bomb Blocks, leaving the upper-middle-right and bottommost Blocks intact.",
+        "Clear all enemies before starting.",
+        "Unmorph while on the top block to begin the Moondance.",
+        "Wiggle out to the left and use SpeedBooster to run through to the right side door."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 3],
+      "name": "Blockade Leave with Extended Moondance",
+      "requires": [
+        {"notable": "Blockade Extended Moondance"},
+        {"obstaclesNotCleared": ["A"]},
+        "h_useMorphBombs",
+        {"or": [
+          "h_getBlueSpeedMaxRunway",
+          {"and": [
+            "ScrewAttack",
+            "canDisableEquipment"
+          ]}
+        ]},
+        "canExtendedMoondance"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Break exactly the lower-middle-right and top-right Bomb Blocks, leaving the upper-middle-right and bottommost Blocks intact.",
+        "Clear all enemies before starting.",
+        "Unmorph while on the top block to begin the Moondance.",
+        "Exactly 145 moonfalls after clipping into the bottom block (321 total), wiggle out to the left.",
+        "The next moonfall will clip Samus down two tiles.",
+        "Finally use Screw Attack or SpeedBooster to break the Bomb blocks and reach the right side door."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 3],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [1, 3],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_getBlueSpeedMaxRunway",
+          {"and": [
+            "Grapple",
+            "ScrewAttack"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "It is possible to break the Bomb blocks using Screw Attack in a Moonfall, then escape the tiles with Grapple Beam."
+    },
+    {
+      "id": 17,
+      "link": [1, 3],
+      "name": "G-Mode Morph Power Bomb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphBombThings",
+          "h_artificialMorphSpringBall",
+          {"enemyDamage": {"enemy": "Zeela", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Use a Power Bomb to destroy the bomb block wall."
+    },
+    {
+      "id": 18,
+      "link": [1, 3],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 12], [108, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 19,
+      "link": [1, 3],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[108, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 20,
+      "link": [1, 3],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[108, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canLongXRayClimb",
+        "canBeVeryPatient"
+      ],
+      "flashSuitChecked": true,
+      "note": "6 screen X-Ray climb, and global Zeelas are still active even off camera."
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb",
+        "canBeVeryPatient"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 6 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "G-Mode Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canConsecutiveWalljump",
+          "SpaceJump"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "There are camera scroll blocks just below the speed blocks, so it is easy to overload PLMs by wall jumping or space jumping into them."
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "G-Mode Morph Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphLongIBJ",
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "There are camera scroll blocks just below the speed blocks, so it is easy to overload PLMs by bouncing into them.",
+        "A single IBJ is slow enough at the top to overload them before Samus can hit the blocks."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 27,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 28,
+      "link": [2, 3],
+      "name": "Spark from Floor",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 110, "excessFrames": 3}}
+      ],
+      "note": "Diagonal spark left to save health."
+    },
+    {
+      "id": 29,
+      "link": [2, 3],
+      "name": "Spark from Speedy Jump",
+      "requires": [
+        "canShinechargeMovement",
+        "HiJump",
+        "canMidairShinespark",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 85, "excessFrames": 3}}
+      ],
+      "note": "Diagonal spark left to save health."
+    },
+    {
+      "id": 30,
+      "link": [2, 3],
+      "name": "Spark from Fast Walljumps",
+      "requires": [
+        "HiJump",
+        "canFastWalljumpClimb",
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 67, "excessFrames": 3}}
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 3],
+      "name": "Tankless Bootless Shinespark",
+      "requires": [
+        {"notable": "Tankless Bootless Shinespark"},
+        "canFastWalljumpClimb",
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 73, "excessFrames": 3}}
+      ],
+      "note": "Quickly wall jump up the right wall and shinespark up to barely get above the speed blocks without any tanks.",
+      "devNote": "At no etanks, the spark will always be cut short barely above the speed blocks."
+    },
+    {
+      "id": 32,
+      "link": [2, 3],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 103, "excessFrames": 6}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 99, "excessFrames": 6}}
+          ]},
+          {"and": [
+            {"or": [
+              "canConsecutiveWalljump",
+              "SpaceJump",
+              {"and": [
+                "canLongIBJ",
+                "canBePatient",
+                "canUnmorphBombBoost"
+              ]}
+            ]},
+            {"shinespark": {"frames": 9, "excessFrames": 7}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 33,
+      "link": [2, 3],
+      "name": "G-Mode Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canConsecutiveWalljump",
+          "SpaceJump"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "There are camera scroll blocks just below the speed blocks, so it is easy to overload PLMs by wall jumping or space jumping into them."
+    },
+    {
+      "id": 34,
+      "link": [2, 3],
+      "name": "G-Mode Morph Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphLongIBJ",
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "There are camera scroll blocks just below the speed blocks, so it is easy to overload PLMs by bouncing into them.",
+        "A single IBJ is slow enough at the top to overload them before Samus can hit the blocks."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [2, 3],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 12], [108, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 36,
+      "link": [2, 3],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[108, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 37,
+      "link": [2, 3],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[108, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[108, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 38,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"and": [
+            "h_getBlueSpeedMaxRunway",
+            "canCarefulJump"
+          ]},
+          "h_destroyBombWalls",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "To break the bomb blocks with speedbooster without falling down, stand under the lower ceiling at the right and hold run before pressing forward.",
+        "If it doesn't work, back up a little and try again."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [3, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 82, "excessFrames": 75}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 40,
+      "link": [3, 1],
+      "name": "Metaree Leave with Moondance",
+      "requires": [
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Freeze one of the Metarees at a height where Samus can become stuck and then use it to Moondance.",
+        "Stop after 175 Moonfalls, before Samus clips into the ground."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [3, 1],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 42,
+      "link": [3, 1],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_getBlueSpeedMaxRunway",
+          {"and": [
+            "Grapple",
+            "ScrewAttack"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "It is possible to break the Bomb blocks using Screw Attack in a Moonfall, then escape the tiles with Grapple Beam."
+    },
+    {
+      "id": 43,
+      "link": [3, 1],
+      "name": "G-Mode Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true,
+      "note": "Use The camera scroll blocks above the speed blocks and by the bomb wall to overload PLMs."
+    },
+    {
+      "id": 44,
+      "link": [3, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 45,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 46,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 47,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 48,
+      "link": [3, 1],
+      "name": "Grapple Teleport X-Ray Climb (1 Screen)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 60,
+      "link": [3, 1],
+      "name": "Grapple Teleport X-Ray Climb (2 Screens)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [
+        "canLongXRayClimb"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 2 screens to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 49,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        "h_getBlueSpeedMaxRunway"
+      ]
+    },
+    {
+      "id": 50,
+      "link": [3, 2],
+      "name": "Stored Moonfall Clip",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 51,
+      "link": [3, 2],
+      "name": "Stored Moonfall Clip (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 52,
+      "link": [3, 2],
+      "name": "Reo Zeela Stuck Moonfall",
+      "requires": [
+        {"notable": "Reo Zeela Stuck Moonfall"},
+        "canTrickyUseFrozenEnemies",
+        "canEnemyStuckMoonfall",
+        "canBePatient",
+        "canCameraManip",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "note": [
+        "Use a Reo (Bee) and a Zeela to perform an 'Enemy Stuck Moonfall', clipping Samus through the Speed blocks.",
+        "Break the Bomb blocks to bring enemies over to the Speed blocks.",
+        "Have a Reo wait off camera while the Zeela walks onto the Speed blocks, then freeze the Bee just above Samus' head.",
+        "Try to freeze both enemies near the same time and start the moonfall as quickly as possible."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [3, 2],
+      "name": "Metaree Moondance",
+      "requires": [
+        "canMoondance",
+        "canTrickyUseFrozenEnemies"
+      ],
+      "note": [
+        "Freeze one of the Metarees at a height where Samus can become stuck and then use it to Moondance.",
+        "After exactly 175 Moonfalls, before Samus clips into the ground, walk over to the Speed Blocks to perform the clip."
+      ]
+    },
+    {
+      "id": 54,
+      "link": [3, 2],
+      "name": "G-Mode Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true,
+      "note": "Use The camera scroll blocks above the speed blocks and by the bomb wall to overload PLMs."
+    },
+    {
+      "id": 55,
+      "link": [3, 2],
+      "name": "G-Mode Setup - Lure the Zeela Down Below",
+      "requires": [
+        {"notable": "G-Mode Setup - Lure the Zeela Down Below"},
+        "canComplexGMode",
+        "canBePatient",
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Using Speed Booster, run through and break the bomb wall to free the global Zeela.",
+        "Break the speed blocks just before the Zeela gets to them in order for it to go down to the bottom half of the room.",
+        "The speed blocks respawn very quickly, so this requires very precise timing.",
+        "Normally, it takes the Zeela a minimum of 2 minutes to setup, but a super can make it fall down the shaft, saving 30 seconds.",
+        "It may be easiest to knock the Zeela from the ceiling directly into the hole, saving another 30 seconds:",
+        "Shoot a well-timed Super diagonally at the ground just before breaking the speed blocks."
+      ]
+    },
+    {
+      "id": 56,
+      "link": [3, 3],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 57,
+      "link": [3, 3],
+      "name": "Metaree Leave with Moondance",
+      "requires": [
+        "canMoondance",
+        "canTrickyUseFrozenEnemies"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "note": [
+        "Freeze one of the Metarees at a height where Samus can become stuck and then use it to Moondance.",
+        "Stop after exactly 175 Moonfalls, before Samus clips into the ground."
+      ]
+    },
+    {
+      "id": 58,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 59,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit By Zeela or Reo",
+      "requires": [
+        {"or": [
+          "h_getBlueSpeedMaxRunway",
+          "h_destroyBombWalls",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Blockade Extended Moondance",
+      "note": [
+        "Break exactly the lower-middle-right and top-right Bomb Blocks, leaving the upper-middle-right and bottommost Blocks intact.",
+        "Clear all enemies before starting.",
+        "Unmorph while on the top block to begin the Moondance.",
+        "Exactly 145 moonfalls after clipping into the bottom block (321 total), wiggle out to the left.",
+        "The next moonfall will clip Samus down two tiles.",
+        "Finally use Screw Attack or SpeedBooster to break the Bomb blocks."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Tankless Bootless Shinespark",
+      "note": "Quickly wall jump up the right wall and shinespark up to barely get above the speed blocks without any tanks."
+    },
+    {
+      "id": 3,
+      "name": "Reo Zeela Stuck Moonfall",
+      "note": [
+        "Use a Reo (Bee) and a Zeela to perform an 'Enemy Stuck Moonfall', clipping Samus through the Speed blocks.",
+        "Break the Bomb blocks to bring enemies over to the Speed blocks.",
+        "Have a Reo wait off camera while the Zeela walks onto the Speed blocks, then freeze the Bee just above Samus' head.",
+        "Try to freeze both enemies near the same time and start the moonfall as quickly as possible."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "G-Mode Setup - Lure the Zeela Down Below",
+      "note": [
+        "Using Speed Booster, run through and break the bomb wall to free the global Zeela.",
+        "Break the speed blocks just before the Zeela gets to them in order for it to go down to the bottom half of the room.",
+        "The speed blocks respawn very quickly, so this requires very precise timing.",
+        "Normally, it takes the Zeela a minimum of 2 minutes to setup, but a super can make it fall down the shaft, saving 30 seconds.",
+        "It may be easiest to knock the Zeela from the ceiling directly into the hole, saving another 30 seconds:",
+        "Shoot a well-timed Super diagonally at the ground just before breaking the speed blocks."
+      ]
+    }
+  ],
+  "nextStratId": 61,
+  "nextNotableId": 5
+}

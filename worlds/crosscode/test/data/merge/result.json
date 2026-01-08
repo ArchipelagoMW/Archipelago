@@ -1,0 +1,26 @@
+{
+	"foo": {
+        "thing": 5,
+        "numbers": {
+            "one": 1,
+            "two": 2,
+            "three": 3,
+            "four": 4
+        },
+        "letters": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g"
+        ],
+        "extra": "secret"
+    },
+    "bar": {
+        "thing": 6,
+        "extra": "special"
+    }
+}
+

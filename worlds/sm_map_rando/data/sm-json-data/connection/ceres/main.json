@@ -1,0 +1,130 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Ceres Elevator Room and Falling Tile Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Ceres Station",
+          "subarea": "Ceres Station",
+          "roomid": 1,
+          "roomName": "Ceres Elevator Room",
+          "nodeid": 2,
+          "nodeName": "Ceres Elevator Room Door (to Falling Tile Room)",
+          "position": "left"
+        },
+        {
+          "area": "Ceres Station",
+          "subarea": "Ceres Station",
+          "roomid": 2,
+          "roomName": "Falling Tile Room",
+          "nodeid": 1,
+          "nodeName": "Falling Tile Room Left Door (to Ceres Elevator Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Falling Tile Room and Magnet Stairs Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Ceres Station",
+          "subarea": "Ceres Station",
+          "roomid": 2,
+          "roomName": "Falling Tile Room",
+          "nodeid": 2,
+          "nodeName": "Falling Tile Room Right Door (to Magnet Stairs)",
+          "position": "left"
+        },
+        {
+          "area": "Ceres Station",
+          "subarea": "Ceres Station",
+          "roomid": 3,
+          "roomName": "Magnet Stairs Room",
+          "nodeid": 1,
+          "nodeName": "Magnet Stairs Room Left Door (To Falling Tiles)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Magnet Stairs Room and Dead Scientist Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Ceres Station",
+          "subarea": "Ceres Station",
+          "roomid": 3,
+          "roomName": "Magnet Stairs Room",
+          "nodeid": 2,
+          "nodeName": "Magnet Stairs Room Right Door (to Dead Scientists)",
+          "position": "left"
+        },
+        {
+          "area": "Ceres Station",
+          "subarea": "Ceres Station",
+          "roomid": 4,
+          "roomName": "Dead Scientist Room",
+          "nodeid": 1,
+          "nodeName": "Dead Scientist Room Left Door (to Magnet Stairs)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Dead Scientist Room and 58 Escape",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Ceres Station",
+          "subarea": "Ceres Station",
+          "roomid": 4,
+          "roomName": "Dead Scientist Room",
+          "nodeid": 2,
+          "nodeName": "Dead Scientist Room Right Door (to 58 Escape)",
+          "position": "left"
+        },
+        {
+          "area": "Ceres Station",
+          "subarea": "Ceres Station",
+          "roomid": 5,
+          "roomName": "58 Escape",
+          "nodeid": 1,
+          "nodeName": "58 Escape Left Door (to Dead Scientists)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between 58 Escape and Ceres Ridley's Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Ceres Station",
+          "subarea": "Ceres Station",
+          "roomid": 5,
+          "roomName": "58 Escape",
+          "nodeid": 2,
+          "nodeName": "58 Escape Right Door (to Ceres Ridley)",
+          "position": "left"
+        },
+        {
+          "area": "Ceres Station",
+          "subarea": "Ceres Station",
+          "roomid": 6,
+          "roomName": "Ceres Ridley's Room",
+          "nodeid": 1,
+          "nodeName": "Ceres Ridley Room Door (to 58 Escape)",
+          "position": "right"
+        }
+      ]
+    }
+  ]
+}

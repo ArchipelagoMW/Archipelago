@@ -1,0 +1,1243 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 193,
+  "name": "Draygon's Room",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Pink",
+  "roomAddress": "0x7DA60",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001a978",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "locks": [
+        {
+          "name": "Draygon Left Gray Lock (to Space Jump)",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedDraygon"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [1, 1],
+        [2, 2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001a96c",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "locks": [
+        {
+          "name": "Draygon Right Gray Lock (to Precious Room)",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedDraygon"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [2, 2],
+        [1, 1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Draygon",
+      "enemyName": "Draygon",
+      "quantity": 1,
+      "homeNodes": [1],
+      "stopSpawn": ["f_DefeatedDraygon"]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 57,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "Gravity",
+        "canInsaneJump",
+        "canMomentumConservingMorph"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 22,
+            "openEnd": 0
+          },
+          "obstruction": [3, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $4.2"]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 19,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$0.8"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 18,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 17,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 19,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {"usedTiles": 21, "openEnd": 0}},
+        "canChainTemporaryBlue",
+        {"or": [
+          "f_DefeatedDraygon",
+          "h_breakOneDraygonTurret"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "devNote": "This may be possible without destroying the turret, but it might be unreliable or need other requirements."
+    },
+    {
+      "id": 45,
+      "link": [1, 1],
+      "name": "Grapple Kill",
+      "requires": [
+        {"notable": "Grapple Kill"},
+        "h_navigateUnderwater",
+        "canUseGrapple",
+        {"draygonElectricityFrames": 240},
+        {"enemyDamage": {"enemy": "Draygon", "type": "contact", "hits": 5}}
+      ],
+      "setsFlags": ["f_DefeatedDraygon"],
+      "note": [
+        "Kill Draygon by grappling to the top left turret.",
+        "Number of Draygon hits varies; 5 hits are assumed, which is close to a worst-case scenario."
+      ]
+    },
+    {
+      "id": 46,
+      "link": [1, 1],
+      "name": "Grapple Quick Kill",
+      "requires": [
+        {"notable": "Grapple Quick Kill"},
+        "h_navigateUnderwater",
+        "canPreciseGrapple",
+        "h_breakOneDraygonTurret",
+        {"draygonElectricityFrames": 240}
+      ],
+      "setsFlags": ["f_DefeatedDraygon"],
+      "note": [
+        "Kill Draygon by grappling to a bottom turret as you get grabbed.",
+        "Avoids taking all the hits from Draygon."
+      ]
+    },
+    {
+      "id": 47,
+      "link": [1, 1],
+      "name": "Shinespark Kill",
+      "requires": [
+        {"notable": "Shinespark Kill"},
+        "Gravity",
+        "canMidairShinespark",
+        "canShinechargeMovementComplex",
+        {"or": [
+          "canShinechargeMovementTricky",
+          "h_breakThreeDraygonTurrets"
+        ]},
+        {"canShineCharge": {"usedTiles": 22, "openEnd": 0}},
+        {"or": [
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Draygon", "type": "contact", "hits": 1}}
+        ]},
+        {"or": [
+          "HiJump",
+          {"enemyDamage": {"enemy": "Draygon", "type": "contact", "hits": 1}}
+        ]},
+        {"enemyDamage": {"enemy": "Draygon", "type": "contact", "hits": 2}},
+        {"shinespark": {"frames": 150}}
+      ],
+      "setsFlags": ["f_DefeatedDraygon"],
+      "note": [
+        "Shinecharge in-room, then horizontally spark through Draygon multiple times.",
+        "It takes 3 Shinesparks if that is the only source of damage onto Draygon.",
+        "Be careful of taking damage at the end of a Shinespark when near walls and on the killing Shinespark."
+      ],
+      "devNote": "150 frames is an approximate sum of all required shinesparks."
+    },
+    {
+      "id": 48,
+      "link": [1, 1],
+      "name": "Gravity Draygon",
+      "requires": [
+        "Gravity",
+        {"enemyKill": {
+          "enemies": [["Draygon"]],
+          "farmableAmmo": ["Missile", "Super"]
+        }}
+      ],
+      "setsFlags": ["f_DefeatedDraygon"]
+    },
+    {
+      "id": 49,
+      "link": [1, 1],
+      "name": "Suitless Fight",
+      "requires": [
+        {"notable": "Suitless Fight"},
+        "canSuitlessMaridia",
+        "Morph",
+        "h_breakThreeDraygonTurrets",
+        {"enemyKill": {
+          "enemies": [["Draygon"]],
+          "farmableAmmo": ["Missile", "Super"]
+        }}
+      ],
+      "setsFlags": ["f_DefeatedDraygon"],
+      "note": "Fight Draygon without gravity, but with morph.",
+      "devNote": "This will require coming into the fight with ammo to kill the turrets. Although that ammo could instead be farmed in the fight."
+    },
+    {
+      "id": 51,
+      "link": [1, 1],
+      "name": "Microwave Fight",
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"or": [
+              "Gravity",
+              "canInsaneJump",
+              {"enemyDamage": {"enemy": "Draygon", "type": "turretProjectile", "hits": 1}}
+            ]}
+          ]},
+          "h_breakThreeDraygonTurrets"
+        ]},
+        "canXRayWaitForIFrames",
+        "Charge",
+        "Plasma",
+        {"or": [
+          "canTrickyDodgeEnemies",
+          "Morph",
+          {"and": [
+            "Ice",
+            "Wave"
+          ]},
+          {"enemyDamage": {"enemy": "Draygon", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedDraygon"],
+      "flashSuitChecked": true,
+      "note": [
+        "Fire a charged Plasma shot, then use X-Ray repeatedly while the shot is in contact with Draygon, to wait out Draygon's i-frames.",
+        "It is possible to one-cycle, which is easiest with a full beam, alternatively, it is possible to Morph under the swoop and two-cycle it.",
+        "Note that if Samus is crouched when Draygon dies, she will stand up; this can be used to see when the fight has ended."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        {"or": [
+          "f_DefeatedDraygon",
+          "h_breakOneDraygonTurret"
+        ]},
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 34,
+      "link": [1, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovement",
+        {"canShineCharge": {"usedTiles": 22, "openEnd": 0}},
+        {"shineChargeFrames": 40}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"not": "f_DefeatedDraygon"},
+        "canRiskPermanentLossOfAccess",
+        {"enemyDamage": {"enemy": "Draygon", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 59,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Draygon",
+      "requires": [
+        {"not": "f_DefeatedDraygon"},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          "h_breakOneDraygonTurret",
+          {"and": [
+            "canTrickyDodgeEnemies",
+            "Gravity"
+          ]},
+          {"and": [
+            "canSuitlessMaridia",
+            "canTrickyGMode"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": "Not likely to be possible, as it requires canRiskPermanentLossOfAccess and Draygon alive with the door unlocked."
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Bottom Position)",
+      "requires": [
+        "h_breakOneDraygonTurret",
+        "Gravity",
+        "canGrappleBombHang",
+        "h_bombThings",
+        {"draygonElectricityFrames": 40},
+        {"or": [
+          "canInsaneJump",
+          {"draygonElectricityFrames": 40}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "note": [
+        "Get a boost from a Bomb or Power Bomb while grappled to the bottom half of the turret above the door.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Slightly delay the down press to extend Grapple, to avoid getting caught on the corner of the floor.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "If Samus needs to be standing in the next room (e.g. for an X-Ray climb), then be sure to touch the ground before reaching the transition;",
+        "this can be done by timing the Grapple extension early enough,",
+        "or, if enough energy is available, by doing a small bounce before going through the transition.",
+        "Samus can reach the transition at either horizontal position 20 or 21, depending on the specific timing and positioning of the swing.",
+        "Pressing diagonal up-left just before the transition (to retracting Grapple slightly) can help more consistently reach it at position 21."
+      ],
+      "devNote": [
+        "FIXME: We could model the turret as an obstacle in case it was already broken for the Draygon fight.",
+        "FIXME: Add strats with canUnmorphGrappleHang alternatives to canGrappleBombHang, also canGrappleJump and/or canInsaneJump versions for reaching the higher block position."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Top Position)",
+      "requires": [
+        "h_breakOneDraygonTurret",
+        "Gravity",
+        "canGrappleBombHang",
+        "h_bombThings",
+        {"draygonElectricityFrames": 40},
+        {"or": [
+          "canInsaneJump",
+          {"draygonElectricityFrames": 40}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "note": [
+        "Get a boost from a Bomb or Power Bomb while grappled to the top half of the turret above the door.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "If Samus needs to be standing in the next room (e.g. for an X-Ray climb), then be sure to touch the ground before reaching the transition;",
+        "this can be done by timing the Grapple extension early enough,",
+        "or, if enough energy is available, by doing a small bounce before going through the transition.",
+        "If it is needed to enter far to the right (at horizontal position 21), this can be done by pressing up to retract Grapple just before the transition."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Suitless, Bottom Position)",
+      "requires": [
+        "h_breakOneDraygonTurret",
+        "canGrappleBombHang",
+        "h_bombThings",
+        {"draygonElectricityFrames": 45},
+        {"or": [
+          "canInsaneJump",
+          {"draygonElectricityFrames": 45}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "note": [
+        "Get a boost from a Bomb or Power Bomb while grappled to the bottom half of the turret above the door.",
+        "This can be done by standing at the very edge of the ledge, jumping up into a mid-air morph, laying a bomb or Power Bomb, unmorphing, then grappling diagonally.",
+        "It can also be done with a crouch jump, without needing to be so close to the edge of the ledge.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "After the Grapple attachment, hold diagonally down-left to swing directly into the door and through the transition.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "Samus should be able to stand in the next room (e.g. in case this is needed for an X-Ray climb).",
+        "Samus may trigger the transition at either horizontal position 20 or 21, depending on the specific timing and positioning of the swing.",
+        "To reliably trigger it at position 21, press diagonally up-left just before the transition to retract Grapple slightly."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Suitless, Top Position)",
+      "requires": [
+        "h_breakOneDraygonTurret",
+        "HiJump",
+        "canGrappleBombHang",
+        "h_bombThings",
+        {"draygonElectricityFrames": 50},
+        {"or": [
+          "canInsaneJump",
+          {"draygonElectricityFrames": 50}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "note": [
+        "Get a boost from a Bomb or Power Bomb while grappled to the top half of the turret above the door.",
+        "With HiJump, this can be done by standing on the low ground a couple tiles right of the ledge, jumping up into a mid-air morph, laying a bomb or Power Bomb, unmorphing, then grappling diagonally.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Slightly delay the down press to extend Grapple, to avoid getting caught on the corner of the floor.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "Samus should be able to stand in the next room (e.g. in case this is needed for an X-Ray climb).",
+        "Samus can reach the transition at either horizontal position 20 or 21, depending on the specific timing and positioning of the swing."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [1, 1],
+      "name": "Leave With Grapple Teleport (Suitless Bootless, Top Position)",
+      "requires": [
+        "h_breakOneDraygonTurret",
+        "can4HighMidAirMorph",
+        "canGrappleBombHang",
+        "h_bombThings",
+        "canStationaryLateralMidAirMorph",
+        {"draygonElectricityFrames": 50},
+        {"or": [
+          "canInsaneJump",
+          {"draygonElectricityFrames": 50}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "note": [
+        "Get a boost from a Bomb or Power Bomb while grappled to the top half of the turret above the door.",
+        "Without HiJump, this is most easy to do by positioning as far right as possible on the ledge and performing a stationary lateral morph.",
+        "Lay the Power Bomb relatively low and continue moving right for about another half a tile.",
+        "turn around left while morphed, then unmorph after Samus begins to descend, to reset Samus' fall speed;",
+        "hold angle-up, and wait a moment after Samus is unmorphed before using Grapple (to wait until the bomb or Power Bomb is about to explode).",
+        "Press and hold down soon after the Grapple attaches.",
+        "Samus will enter a 'glitched grapple hanging' state where Samus' graphics will appear corrupted while swinging with Grapple.",
+        "Swing down, and hold left while approaching the door to trigger the transition.",
+        "Continue holding Grapple through the door transition to initiate a teleport in the next room.",
+        "Samus should be able to stand in the next room (e.g. in case this is needed for an X-Ray climb).",
+        "Samus can reach the transition at horizontal position 20, or at positions 19 or 21 by pressing up at a specific time just before reaching the transition."
+      ],
+      "devNote": [
+        "This is technically possible to do without a stationary lateral morph, but with much greater difficulty."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "SpaceJump",
+          "canLongIBJ",
+          {"and": [
+            "HiJump",
+            "canJumpIntoIBJ"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 36,
+      "link": [1, 2],
+      "name": "Gravity Jump",
+      "requires": [
+        "Gravity",
+        "canGravityJump"
+      ]
+    },
+    {
+      "id": 37,
+      "link": [1, 2],
+      "name": "Spring Ball Jump",
+      "requires": [
+        "Gravity",
+        "HiJump",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 38,
+      "link": [1, 2],
+      "name": "Speedjump",
+      "requires": [
+        "Gravity",
+        "HiJump",
+        "SpeedBooster",
+        {"or": [
+          "canWalljump",
+          "canTrickyDashJump"
+        ]}
+      ]
+    },
+    {
+      "id": 39,
+      "link": [1, 2],
+      "name": "Draygon HiJumpless Speedjump",
+      "requires": [
+        "Gravity",
+        "canTrickyDashJump",
+        "canPreciseWalljump"
+      ],
+      "note": [
+        "There is a very precise speed where the HiJumpless speedjump is doable.",
+        "Starting against the left wall, jump just to the left of the rightmost pipe sticking out of the ground."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [1, 2],
+      "name": "Draygon Springwall",
+      "requires": [
+        "Gravity",
+        "canSpringwall",
+        {"resetRoom": {"nodes": [1]}}
+      ],
+      "devNote": "The turret cannot be broken."
+    },
+    {
+      "id": 41,
+      "link": [1, 2],
+      "name": "In-Room Shinespark",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {"usedTiles": 22, "openEnd": 1}},
+        {"or": [
+          {"shinespark": {"frames": 26, "excessFrames": 5}},
+          {"and": [
+            "canMidairShinespark",
+            {"shinespark": {"frames": 20, "excessFrames": 4}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 42,
+      "link": [1, 2],
+      "name": "Turret Grapple Jump",
+      "requires": [
+        {"notable": "Turret Grapple Jump"},
+        "canSuitlessMaridia",
+        "canGrappleJump",
+        {"draygonElectricityFrames": 60},
+        "h_breakOneDraygonTurret"
+      ],
+      "note": "Performing a grapple jump off of a Draygon turret. Usually done by bouncing off the wall for momentum."
+    },
+    {
+      "id": 43,
+      "link": [1, 2],
+      "name": "Shinespark out the Right with a Gravity Jump",
+      "requires": [
+        "canGravityJump",
+        "canShinechargeMovementComplex",
+        "canTrickyJump",
+        "canMidairShinespark",
+        {"canShineCharge": {"usedTiles": 20, "openEnd": 1}},
+        {"shinespark": {"frames": 14}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "Charge a shinespark in the bottom of the room, then Gravity jump up in order to shinespark out of the right door."
+    },
+    {
+      "id": 52,
+      "link": [1, 2],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"canShineCharge": {"usedTiles": 20, "openEnd": 1}},
+        {"or": [
+          {"and": [
+            "HiJump",
+            "SpaceJump",
+            {"shineChargeFrames": 115}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"shineChargeFrames": 140}
+          ]},
+          {"and": [
+            "HiJump",
+            "canWalljump",
+            {"shineChargeFrames": 155}
+          ]},
+          {"and": [
+            "HiJump",
+            "canGravityJump",
+            "canShinechargeMovementTricky",
+            {"shineChargeFrames": 115}
+          ]},
+          {"and": [
+            "canGravityJump",
+            "canShinechargeMovementTricky",
+            {"shineChargeFrames": 140}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 44,
+      "link": [1, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 22, "excessFrames": 5}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 19, "excessFrames": 5}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 50},
+        "Gravity",
+        {"shinespark": {"frames": 25}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Suitless shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 90},
+        "canSuitlessMaridia",
+        {"shinespark": {"frames": 25}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Takes more time to setup than with Gravity, but you can spark from a bit further out because of the water physics."
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Cross Room Jump (Lenient)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "With a 3-tile runway in the other room, this has a 2-frame window to jump before the transition."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Cross Room Jump (Speed Booster Off)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 1.4375
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ],
+      "note": [
+        "With a 2-tile runway in the other room, this requires a frame-perfect jump immediately before the transition."
+      ],
+      "devNote": [
+        "FIXME: Not sure if there is a reason for this strat to exist, if there isn't a 2-tile closed-end runway setup room."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "Cross Room Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ],
+      "note": [
+        "With a 2-tile runway in the other room, this requires a frame-perfect jump immediately before the transition."
+      ],
+      "devNote": [
+        "This can be done with a slightly shorter runway (closed end), with a down grab, but that setup doesn't exist."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [1, 2],
+      "name": "Cross Room Jump with Speedbooster",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 0.4375
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "With a 1-tile runway in the other room, this has a 2-frame window to jump before the transition."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [1, 2],
+      "name": "Cross Room Jump with Air Ball",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canLateralMidAirMorph",
+        {"or": [
+          "canTrickyJump",
+          "canMomentumConservingMorph"
+        ]}
+      ],
+      "note": [
+        "Jump through the door in the previous room, and perform an air ball soon after entering.",
+        "With a last-frame jump through the door, there is a wide timing window to do the air ball.",
+        "With an earlier jump through the door, the airball must be done more precisely:",
+        "in this case buffer aim-down through the transition and morph immediately on entry,",
+        "in order to conserve momentum while contacting the overhang."
+      ],
+      "devNote": [
+        "There is a 4-frame window for the jump that can work;",
+        "jumping in the later part of that window is better as it gives a bigger window for the morph.",
+        "In water physics, an airball has higher base speed ($1.8) than spin jump ($1.6) or aim down ($1.4),",
+        "which is the other reason why doing it early helps, in addition to how it helps clear the overhang.",
+        "Doing a ceiling mockball at the top of the room can also work, but it is more difficult,",
+        "and the frame-perfect jump is required in that case."
+      ]
+    },
+    {
+      "id": 58,
+      "link": [1, 2],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 7.4375,
+              "speedBooster": false,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canInsaneJump"
+              ],
+              "note": [
+                "This applies to Warehouse Entrance.",
+                "This requires a last-frame jump and specific horizontal alignment in order to make it past the overhang in the next room.",
+                "A way to get a correct starting position is to jump, press against the ceiling overhang near the end of the runway,",
+                "land, turn around away from the door, then jump and mid-air turnaround toward the door."
+              ]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "Gain run speed using a platform below the door in the other room.",
+        "Jump through the door, carrying upward momentum into this room."
+      ],
+      "devNote": [
+        "With Morph or Speed Booster, even a 1-tile doorway runway is enough to make it up relatively easily;",
+        "therefore, we don't consider side platform strats that require either of those items."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 2],
+      "name": "Cross Room Space Jump",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ],
+      "devNote": "FIXME: with this and several other cross-room strats, it would be possible to leave with temporary blue, if we had a way to encode the requirement to come in blue."
+    },
+    {
+      "id": 53,
+      "link": [1, 2],
+      "name": "Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"}
+          ]
+        }
+      },
+      "requires": [
+        "canGrappleJump"
+      ]
+    },
+    {
+      "id": 54,
+      "link": [1, 2],
+      "name": "Precise Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [{"position": [6, 2], "note": "Lava Grapple Tunnel"}]
+        }
+      },
+      "requires": [
+        "canPreciseGrappleJump"
+      ]
+    },
+    {
+      "id": 55,
+      "link": [1, 2],
+      "name": "Tricky Grapple Jump (HiJump)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [{"position": [-1, 5], "environment": "water", "note": "Mt. Everest"}]
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canTrickyGrappleJump"
+      ]
+    },
+    {
+      "id": 56,
+      "link": [1, 2],
+      "name": "Tricky Grapple Jump (Bootless)",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {
+              "position": [5, 2],
+              "note": "The Moat, Double Chamber, Wrecked Ship Energy Tank Room"
+            },
+            {"position": [2.375, 4.5625], "note": "Post Crocomire Farming Room"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ],
+      "devNote": [
+        "Coming from Grapple Tutorial Room 2 does not work (with or without HiJump), as it's not possible to gain enough horizontal speed."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [1, 2],
+      "name": "G-Mode Morph (Draygon Defeated)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "f_DefeatedDraygon",
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          {"and": [
+            "HiJump",
+            "h_artificialMorphJumpIntoIBJ"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [1, 2],
+      "name": "G-Mode Morph (Draygon Alive)",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true,
+          "mobility": "mobile"
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          {"and": [
+            "HiJump",
+            "h_artificialMorphJumpIntoIBJ"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "There is enough time to IBJ to the top door before Draygon appears."
+    },
+    {
+      "id": 32,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Upper Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Lower Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 29,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 20, "openEnd": 1}},
+        "canGravityJump",
+        "canChainTemporaryBlue",
+        {"or": [
+          "f_DefeatedDraygon",
+          {"and": [
+            "h_breakOneDraygonTurret",
+            "h_breakOneDraygonTurret"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "devNote": "This may be possible without destroying the turrets, but it might be unreliable or need other requirements."
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "f_DefeatedDraygon",
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Turret Grapple Jump",
+      "note": "Performing a grapple jump off of a Draygon turret. Usually done by bouncing off the wall for momentum."
+    },
+    {
+      "id": 3,
+      "name": "Suitless Fight",
+      "note": "Fight Draygon without gravity, but with Morph."
+    },
+    {
+      "id": 4,
+      "name": "Shinespark Kill",
+      "note": [
+        "Shinecharge in-room, then horizontally spark through Draygon multiple times.",
+        "It takes 3 Shinesparks if that is the only source of damage onto Draygon.",
+        "Be careful of taking damage at the end of a Shinespark when near walls and on the killing Shinespark."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Grapple Kill",
+      "note": [
+        "Kill Draygon by grappling to the top left turret.",
+        "Number of Draygon hits varies; 5 hits are assumed, which is close to a worst-case scenario."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Grapple Quick Kill",
+      "note": [
+        "Kill Draygon by grappling to a bottom turret as you get grabbed.",
+        "Avoids taking all the hits from Draygon."
+      ]
+    }
+  ],
+  "nextStratId": 60,
+  "nextNotableId": 7
+}

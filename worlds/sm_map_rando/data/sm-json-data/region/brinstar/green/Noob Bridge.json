@@ -1,0 +1,594 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 55,
+  "name": "Noob Bridge",
+  "area": "Brinstar",
+  "subarea": "Green",
+  "roomAddress": "0x79FBA",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018efe",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 2, 2, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x0018f0a",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 2, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Noob Bridge Left Cacatacs",
+      "enemyName": "Cacatac",
+      "quantity": 3,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Noob Bridge Right Cacatac",
+      "enemyName": "Cacatac",
+      "quantity": 1,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e3",
+      "groupName": "Noob Bridge Zeelas",
+      "enemyName": "Zeela",
+      "quantity": 4,
+      "homeNodes": [1, 2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Zeela",
+      "requires": [
+        "h_frozenEnemyRunway",
+        "canBeVeryPatient"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "Wait for the slow global Zeelas. They take almost 4 minutes to get there."
+    },
+    {
+      "id": 31,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": "Max extra run speed $7.0."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        "canShinechargeMovement",
+        {"shineChargeFrames": 30}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "maxExtraRunSpeed": "$6.0"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Cacatac and Zeela Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"cycleFrames": 560},
+        {"or": [
+          "Plasma",
+          "Spazer",
+          "Wave",
+          "Grapple",
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 200}
+          ]},
+          {"cycleFrames": 370}
+        ]}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Zeela", "count": 4},
+        {"enemy": "Cacatac", "count": 3}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Zeela",
+      "requires": [
+        "canBeVeryPatient"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Wait for the slow global Zeelas. They take almost 4 minutes to get there."
+    },
+    {
+      "id": 12,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Zeela", "type": "contact", "hits": 1}},
+        "canBeVeryPatient"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Wait for the slow global Zeelas. They take almost 4 minutes to get there."
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "Cacatac and Zeela Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"cycleFrames": 1000},
+        {"or": [
+          "Plasma",
+          "Spazer",
+          "Wave",
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 200}
+          ]},
+          {"cycleFrames": 370}
+        ]}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Zeela", "count": 4},
+        {"enemy": "Cacatac", "count": 4}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "Leave With Runway - Frozen Zeela",
+      "requires": [
+        "h_frozenEnemyRunway",
+        "canBePatient"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "Wait for the slow global Zeelas. They take almost 2 minutes to get there."
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "SpeedBooster",
+        "canMomentumConservingMorph"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 2,
+          "runway": {
+            "length": 20,
+            "openEnd": 0
+          },
+          "obstruction": [3, 0]
+        }
+      },
+      "devNote": "Max extra run speed $3.F."
+    },
+    {
+      "id": 20,
+      "link": [2, 2],
+      "name": "Leave Shinecharged (Bridge Runway)",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        "canShinechargeMovement",
+        {"shineChargeFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [2, 2],
+      "name": "Leave With Mockball (Bridge Runway)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$6.2"
+        }
+      }
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "Leave With Controlled Spring Ball Bounce (Bridge Runway)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$1.4",
+          "movementType": "controlled"
+        }
+      },
+      "note": "Depending on the speed needed, first speedball from the bridge onto the floor and then bounce onto the ledge in front of the door."
+    },
+    {
+      "id": 23,
+      "link": [2, 2],
+      "name": "Leave Space Jumping (Bridge Runway)",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$7.0"
+        }
+      }
+    },
+    {
+      "id": 24,
+      "link": [2, 2],
+      "name": "Leave Shinecharged (Floor Runway)",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 20, "openEnd": 0}},
+        "canShinechargeMovement",
+        {"shineChargeFrames": 40}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [2, 2],
+      "name": "Leave Spinning (Floor Runway)",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 18,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "Leave With Mockball (Floor Runway)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 16,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 27,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce (Floor Runway)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 14,
+            "openEnd": 0
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 28,
+      "link": [2, 2],
+      "name": "Leave Space Jumping (Floor Runway)",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 12,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 29,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Zeela",
+      "requires": [
+        "canBePatient"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Wait for the slow global Zeelas. They take almost 2 minutes to get there."
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Zeela", "type": "contact", "hits": 1}},
+        "canBePatient"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Wait for the slow global Zeelas. They take almost 2 minutes to get there."
+    }
+  ],
+  "notables": [],
+  "nextStratId": 34,
+  "nextNotableId": 1
+}

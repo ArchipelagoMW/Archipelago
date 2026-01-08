@@ -1,0 +1,153 @@
+# Data for applyAllTileSubstitutions:
+# - room group
+# - room ID
+# - room flag mask required for the layout change to occur (00 means "always")
+# - tile position as "yx"
+# - tile to put in place of the original one
+04//tileReplacementsTable: |
+    db $00,$01,$01,$52,$04  ; Permanently remove flower outside D6 when cut
+    db $00,$9a,$00,$14,$12  ; Remove rock across pit blocking exit from D5
+    db $00,$8a,$00,$66,$64  ; Add rock at bottom of cliff to block ricky   
+    db $00,$9a,$00,$34,$04  ; Remove bush next to rosa portal  
+
+    ; Add ledge down from temple remains lower portal
+    db $00,$25,$00,$32,$3a 
+    db $00,$25,$00,$33,$cf
+    db $00,$25,$00,$34,$4b
+
+    ; Replace summer vines near d2 by stairs
+    db $00,$8e,$00,$35,$d0
+    db $00,$8e,$00,$45,$d0
+    db $00,$8e,$00,$34,$36
+    db $00,$8e,$00,$44,$51
+    db $00,$8e,$00,$36,$35
+    db $00,$8e,$00,$46,$50
+
+    ; Add walkable tile outside temple remains door and replace the rest of the tree with rocks
+    db $00,$16,$01,$18,$0f
+    db $00,$16,$01,$17,$64
+    db $00,$16,$01,$27,$64
+
+    /include additionalTileReplacements
+
+    db $ff
+
+# look up tiles in custom replacement table after loading a room. the format
+# is (group, room, bitmask, YX, tile ID), with ff ending the table. if the
+# bitmask AND the current room flags is nonzero, the replacement is not made.
+04//applyExtraTileSubstitutions: |
+    push bc
+    push de
+    call getThisRoomFlags
+    ld e,a
+    ld hl,tileReplacementsTable
+    ld a,(wActiveGroup)
+    ld b,a
+    ld a,(wActiveRoom)
+    ld c,a
+    @loop:
+    ldi a,(hl)
+    cp $ff
+    jr z,@done
+    cp b
+    jr nz,@groupMismatch
+    ldi a,(hl)
+    cp c
+    jr nz,@roomMismatch
+    ldi a,(hl)
+    or a
+    jr z,@alwaysOn
+    and e
+    jr z,@flagMismatch
+    @alwaysOn:
+    push de
+    ld d,$cf
+    ldi a,(hl)
+    ld e,a
+    ldi a,(hl)
+    ld (de),a
+    pop de
+    jr @loop
+    @groupMismatch:
+    inc hl
+    @roomMismatch:
+    inc hl
+    @flagMismatch:
+    inc hl
+    inc hl
+    jr @loop
+    @done:
+    pop de
+    pop bc
+    call $5d94    ; applyAllTileSubstitutions
+    ret
+00/3854/: call applyExtraTileSubstitutions
+
+# bank 21 = spring, 22 = summer, 23 = autumn, 24 = winter
+# Remove most snow in Woods of Winter middle room
+24/6c68/: db $04
+24/6c70/: db $04
+24/6c7e/: db $04
+24/6c71/: db $9e,$8b
+24/6c74/: db $c0,$04,$80,$81,$99,$9b,$70,$71
+
+# Change temple remains door upper-left tree tile per-layout because the generic tile replacement
+# was causing a glitched palette in winter
+21/534e/: db $70    # Spring
+22/502a/: db $70    # Summer
+23/4e08/: db $70    # Autumn
+24/4b22/: db $65    # Winter
+
+# set a room flag when the flower outside D6 is broken to make the pillar go away forever
+06//checkBreakD6Flower: |
+    push af
+    push bc
+    ld bc,$0100
+    call compareRoom
+    pop bc
+    jr nz,@done
+    ldh a,($93)     ; hBrokenTilePosition
+    cp $52
+    jr nz,@done
+    push hl
+    ld hl,$c701
+    set 0,(hl)
+    pop hl
+    @done:
+    pop af
+    jp setTile
+06/4774/: call checkBreakD6Flower
+
+# change water tiles outside d4 from deep to shallow, to prevent softlock
+# from entering without flippers or default summer.
+21/54a9/: db $fa,$6b,$6b,$53,$fa,$3f,$fa
+22/5197/: db $fa,$6b,$6b,$53,$fa,$3f,$fa
+23/4f6c/: db $fa,$6b,$6b,$53,$fa,$3f,$fa
+24/4cec/: db $dc,$00,$fc,$06,$dc,$dc,$dc,$dc
+
+# replace some currents in spool swamp in spring so that the player isn't
+# trapped by them.
+21/7ab1/: db $d3,$d3
+21/7ab6/: db $d4,$d4,$d4
+21/7abe/: db $d1
+
+## The following portion affecting the eyeglass portal island has been disabled :
+# replace the stairs outside the portal in eyeglass lake summer with a
+# railing, since if the player jumps off they fall into lost woods.
+# 22/791b/: db $40,$40,$40
+# instead add a ledge to the left side of the platform, so that entering the
+# portal without feather and resetting the season to summer isn't a softlock.
+# 22/78fd/: db $37
+# 22/7905/: db $25
+# 22/7910/: db $47
+
+# remove snow pile outside d6 to prevent softlock in default winter if statue
+# is pushed to the left.
+24/45d2/: db $04
+
+# remove the snow piles in front of holly's house so that shovel isn't
+# required to leave.
+24/646f/: db $04
+# remove some snow outside d7 for the same reason - but off the right ledge,
+# not in front of the stairs.
+24/7910/: db $2b,$a0,$b9,$2b

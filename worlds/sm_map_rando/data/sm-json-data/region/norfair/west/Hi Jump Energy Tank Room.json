@@ -1,0 +1,967 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 88,
+  "name": "Hi Jump Energy Tank Room",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "West",
+  "roomAddress": "0x7AA41",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019426",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1],
+        [2, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001941a",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "HiJump E-Tank Gray Lock (to Business Center)",
+          "lockType": "killEnemies",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": []
+            }
+          ],
+          "yields": ["f_ZebesAwake"],
+          "note": "The enemy is reachable with no requirement and killable with Power Beam."
+        }
+      ],
+      "mapTileMask": [
+        [1, 2],
+        [1, 0]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Right Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "ETank",
+      "nodeAddress": "0x78BEC",
+      "mapTileMask": [
+        [1, 2],
+        [1, 0]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Top Left Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78BE6",
+      "mapTileMask": [
+        [2, 1],
+        [1, 0]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Junction Below Right Item",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2],
+        [1, 0]
+      ],
+      "note": "Just below the Energy tank. Reachable to kill the Sova without Morph."
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Crumble blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "B",
+      "name": "E-tank bomb blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "C",
+      "name": "Missile bomb blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "D",
+      "name": "G-Mode Remote Acquire Left Item",
+      "obstacleType": "abstract"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "HiJump E-Tank Sova",
+      "enemyName": "Sova",
+      "quantity": 1,
+      "homeNodes": [1, 4, 5]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 2},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 38,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 3,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": [
+        "Max extra run speed $0.B.",
+        "This strat is included for completeness, though it apparently doesn't have any applications."
+      ]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 43,
+      "link": [1, 1],
+      "name": "Sova Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 460}
+          ]},
+          {"and": [
+            "Morph",
+            {"cycleFrames": 420}
+          ]},
+          {"cycleFrames": 530}
+        ]}
+      ],
+      "resetsObstacles": ["A", "B", "C", "D"],
+      "farmCycleDrops": [{"enemy": "Sova", "count": 1}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Note that breaking the left bomb blocks and either the crumble blocks or the other bomb blocks could make the Sova go in a loop without ever getting to the door (unless using a Super).",
+        "Because of this it is advised not to break the bomb blocks. But if breaking them is necessary, it is possible to do so, even with a Power Bomb.",
+        "Place the Power Bomb while the Sova is in the bottom left section of the room, while it is moving counter-clockwise."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "It takes the Sova about 25 seconds to hit Samus."
+    },
+    {
+      "id": 45,
+      "link": [1, 1],
+      "name": "G-Mode Morph Remote Acquire Left Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_artificialMorphSpringBallBombJump",
+        "h_additionalBomb"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": "Get to the item with two Spring Ball bomb jumps and remote acquire the item back by the left door.",
+      "devNote": "The Power Bombs will solidify the bomb block, preventing remote acquiring on the right. The Power Bombs are not going to overload many PLMs."
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "G-Mode Morph Overload PLMs",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphIBJ",
+          {"and": [
+            "h_artificialMorphSpringBallBombJump",
+            "h_additionalBomb"
+          ]},
+          {"and": [
+            "HiJump",
+            "h_artificialMorphSpringBall"
+          ]},
+          {"and": [
+            "Morph",
+            {"or": [
+              "HiJump",
+              "canWalljump",
+              "canSpringBallJumpMidAir",
+              "SpaceJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Roll through the camera scroll block in the morph tunnel at the bottom of the room to overload PLMs,",
+        "then get to the right side through the crumble blocks or bomb blocks near the left item.",
+        "This can be done with an IBJ or two Spring Ball Bomb Jumps."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Grapple Teleport Precise X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        "Morph",
+        "canOffScreenMovement"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "After teleporting, hold left and release Grapple to remain in a standing pose (and not be force crouched).",
+        "X-ray climb a specific distance, performing exactly 15 X-Ray stand-ups.",
+        "Then morph and roll out to the right.",
+        "If Bombs, Power Bombs, or Screw Attack are available, this can allow more lenience in how far to climb."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "canIBJ",
+          "canUseFrozenEnemies",
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 4],
+      "name": "Sova Boost",
+      "requires": [
+        {"notable": "Sova Boost"},
+        "Morph",
+        "canCrouchJump",
+        "canTrickyJump",
+        "canNeutralDamageBoost",
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 2}}
+      ],
+      "wallJumpAvoid": true,
+      "note": [
+        "Crouch jump and let the Sova move into Samus from the right, to get a upward boost, then hold left to boost horizontally to the ledge.",
+        "Then crouch jump from the slope on the left, and morph into a neutral damage boost."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [1, 4],
+      "name": "Temporary Blue Bounce",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "canTrickySpringBallBounce"
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 9,
+      "link": [1, 4],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphIBJ",
+          {"and": [
+            "h_artificialMorphSpringBallBombJump",
+            "h_additionalBomb"
+          ]},
+          {"and": [
+            "HiJump",
+            "h_artificialMorphSpringBall"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Artificial morph IBJ or use two bomb boost spring ball jumps.",
+      "devNote": "This is only useful if the item is Morph."
+    },
+    {
+      "id": 10,
+      "link": [1, 4],
+      "name": "G-Mode Morph Remote Acquire Left Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "h_artificialMorphIBJ",
+          {"and": [
+            "HiJump",
+            "h_artificialMorphSpringBall"
+          ]},
+          {"and": [
+            "Morph",
+            {"or": [
+              "HiJump",
+              "canWalljump",
+              "canSpringBallJumpMidAir",
+              "SpaceJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["D"],
+      "flashSuitChecked": true,
+      "note": "Get to the item without overloading PLMs by avoiding entering the morph tunnel at the bottom of the room."
+    },
+    {
+      "id": 11,
+      "link": [1, 5],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canLongIBJ",
+          "canJumpIntoIBJ",
+          {"and": [
+            "canMidAirMorph",
+            {"or": [
+              "canWalljump",
+              "SpaceJump",
+              "canUseFrozenEnemies"
+            ]}
+          ]},
+          {"and": [
+            "canUseFrozenEnemies",
+            "h_useSpringBall"
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "G-Mode through Bomb Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphMovement"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs using the camera scroll blocks in the morph tunnel. Samus can fix the camera after exiting G-mode on the left.",
+        "It is possible to wait for the Sova to appear on screen before going to the left, in order to ensure Samus won't touch it."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "G-Mode Overload PLMs with the Left Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canPowerBombItemOverloadPLMs",
+        {"itemNotCollectedAtNode": 4},
+        "canRiskPermanentLossOfAccess",
+        "h_artificialMorphPowerBomb"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Placing a Power Bomb a 0.5 to 1 tile away from the item plinth to bounce Samus onto it (where the right item usually is) while also overloading PLMs as the explosion hits the left item.",
+        "Wait for the explosion to completely finish before touching the crumble blocks or they will remain solid.",
+        "The camera will not scroll to the left side of the room, but it is possible to kill the Sova with the Power Bomb boost."
+      ],
+      "devNote": "FIXME: It is possible to avoid collecting 3 by using a second Power Bomb to boost through the item after PLMs are overloaded."
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "G-Mode Remote Acquire the Right Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"itemNotCollectedAtNode": 3},
+        "canRiskPermanentLossOfAccess",
+        {"or": [
+          "h_artificialMorphMovement",
+          "h_artificialMorphPowerBomb"
+        ]}
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Touch both the item and the camera scroll blocks in the morph tunnel before PLMs are overloaded, then use either to finish overloading them.",
+        "This will make it so that Samus can fix the camera after exiting G-mode on the left.",
+        "It is possible to wait for the Sova to appear on screen before going to the left, in order to ensure Samus won't touch it.",
+        "With only a Power Bomb boost to touch the item, it is not possible to fix the camera, but it is possible to kill the Sova."
+      ],
+      "devNote": "The only loss of access here is the camera fix, but there is another strat that can be used without."
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 20,
+      "link": [2, 2],
+      "name": "Leave with Runway (Bomb Blocks Intact)",
+      "requires": [
+        {"obstaclesNotCleared": ["B"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 40,
+      "link": [2, 2],
+      "name": "Leave with Runway (Bomb Blocks Broken)",
+      "requires": [
+        {"obstaclesCleared": ["B"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "devNote": ["This runway could be extended with a frozen Sova."]
+    },
+    {
+      "id": 21,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 44,
+      "link": [2, 2],
+      "name": "Sova Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          "canQuickDrop",
+          {"cycleFrames": 30}
+        ]},
+        {"or": [
+          {"and": [
+            "Wave",
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            "Grapple",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 240}
+          ]},
+          {"and": [
+            "Morph",
+            "canTrickyJump",
+            {"cycleFrames": 300}
+          ]},
+          {"and": [
+            "canTrivialMidAirMorph",
+            "Bombs",
+            {"cycleFrames": 1100}
+          ]},
+          {"and": [
+            "Morph",
+            {"or": [
+              {"notable": "Return Through Crumble Blocks"},
+              "Bombs"
+            ]},
+            {"or": [
+              "canWalljump",
+              {"and": [
+                "HiJump",
+                "canSpringBallJumpMidAir",
+                "h_doubleEquipmentScreenCycleFrames"
+              ]},
+              "SpaceJump"
+            ]},
+            {"cycleFrames": 510}
+          ]},
+          {"cycleFrames": 2160}
+        ]}
+      ],
+      "resetsObstacles": ["A", "B", "C", "D"],
+      "farmCycleDrops": [{"enemy": "Sova", "count": 1}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Release the Sova by breaking the crumble blocks. The Sova will then take 40 seconds to get to the door.",
+        "Note that breaking the left bomb blocks and either the crumble blocks or the other bomb blocks could make the Sova go in a loop without ever getting to the door (unless using a Super).",
+        "Because of this it is advised not to break the bomb blocks. But if breaking them is necessary, it is possible to do so, even with a Power Bomb.",
+        "Place the Power Bomb while the Sova is in the bottom left section of the room, while it is moving counter-clockwise."
+      ]
+    },
+    {
+      "id": 23,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 41,
+      "link": [2, 4],
+      "name": "Temporary Blue Bounce (Come In Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "can4HighMidAirMorph",
+        "canSpringBallBounce"
+      ],
+      "clearsObstacles": ["B", "C"]
+    },
+    {
+      "id": 42,
+      "link": [2, 4],
+      "name": "Temporary Blue Bounce (Come In With Temporary Blue)",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "canChainTemporaryBlue",
+        "can4HighMidAirMorph",
+        "canSpringBallBounce"
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 24,
+      "link": [2, 4],
+      "name": "G-Mode through Bomb Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphMovement"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs using the camera scroll blocks in the morph tunnel. Samus can fix the camera after exiting G-mode on the left.",
+        "It is possible to wait for the Sova to appear on screen before going to the left, in order to ensure Samus won't touch it."
+      ],
+      "devNote": "This is only useful if the item is Morph or if Samus has Morph but no way up to this item location."
+    },
+    {
+      "id": 46,
+      "link": [2, 4],
+      "name": "G-Mode through Bomb Blocks, Remote Acquire Right Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_artificialMorphMovement"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": [
+        "Touch both the item and the camera scroll blocks in the morph tunnel before PLMs are overloaded, then use either to finish overloading them.",
+        "This will make it so that Samus can fix the camera after exiting G-mode on the left.",
+        "It is possible to wait for the Sova to appear on screen before going to the left, in order to ensure Samus won't touch it."
+      ],
+      "devNote": "This is only useful if the item is Morph or if Samus has Morph but no way up to this item location."
+    },
+    {
+      "id": 25,
+      "link": [2, 4],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 27,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_bombThings",
+          {"obstaclesCleared": ["C"]}
+        ]},
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall",
+          "canIBJ"
+        ]}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 28,
+      "link": [3, 5],
+      "name": "Base",
+      "requires": [],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 29,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 30,
+      "link": [4, 1],
+      "name": "Remote Acquire",
+      "requires": [
+        "canComplexGMode",
+        {"obstaclesCleared": ["D"]}
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 31,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"or": [
+          "h_bombThings",
+          {"obstaclesCleared": ["C"]}
+        ]}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 32,
+      "link": [4, 3],
+      "name": "Remote Acquire",
+      "requires": [
+        "canComplexGMode",
+        {"obstaclesCleared": ["D"]}
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": "Overload PLMs by rolling through the item, then go through the bomb block and exit G-Mode to obtain the item.",
+      "devNote": "This does not include canRiskPermanentLossOfAccess as every strat that gets here could instead overload PLMs in the bottom morph tunnel."
+    },
+    {
+      "id": 33,
+      "link": [5, 1],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 34,
+      "link": [5, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_bombThings",
+          {"obstaclesCleared": ["B"]}
+        ]}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 35,
+      "link": [5, 3],
+      "name": "Return Through Crumble Blocks",
+      "requires": [
+        {"notable": "Return Through Crumble Blocks"},
+        {"obstaclesCleared": ["A"]}
+      ],
+      "note": "The crumble blocks do not respawn, so it is possible to enter from the right, obtain the left item and return, without needing to break the bomb blocks."
+    },
+    {
+      "id": 36,
+      "link": [5, 3],
+      "name": "X-Ray Clip",
+      "requires": [
+        "Morph",
+        "canXRayStandUp",
+        "canPartialFloorClip",
+        "canCeilingClip"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 37,
+      "link": [5, 3],
+      "name": "Screw X-Ray Standup",
+      "requires": [
+        "Morph",
+        "canXRayStandUp",
+        "ScrewAttack"
+      ],
+      "flashSuitChecked": true,
+      "note": "Roll under the right-most single tile ceiling, X-Ray standup, then turnaround spin jump to break the Bomb block."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Sova Boost",
+      "wallJumpAvoid": true,
+      "note": [
+        "Crouch jump and let the Sova move into Samus from the right, to get a upward boost, then hold left to boost horizontally to the ledge.",
+        "Then crouch jump from the slope on the left, and morph into a neutral damage boost."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Return Through Crumble Blocks",
+      "note": "The crumble blocks do not respawn, so it is possible to enter from the right, obtain the left item and return, without needing to break the bomb blocks."
+    }
+  ],
+  "nextStratId": 47,
+  "nextNotableId": 3
+}

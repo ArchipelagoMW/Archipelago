@@ -1,0 +1,1601 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 108,
+  "name": "Ice Beam Snake Room",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "West",
+  "roomAddress": "0x7A8B9",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 0],
+    [1, 1],
+    [1, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019372",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 0],
+        [1, 1],
+        [1, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Middle Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001937e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 0],
+        [1, 2],
+        [1, 0]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019366",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 0],
+        [1, 1],
+        [2, 0]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Junction Below Morph Tunnel",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 0],
+        [2, 1],
+        [1, 0]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Junction Above Morph Tunnel",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 0],
+        [2, 1],
+        [1, 0]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Ice Beam Snake Room Funes",
+      "enemyName": "Fune",
+      "quantity": 4,
+      "betweenNodes": [1, 3]
+    },
+    {
+      "id": "e2",
+      "groupName": "Ice Beam Snake Room Sovas",
+      "enemyName": "Sova",
+      "quantity": 3,
+      "homeNodes": [2, 3, 4]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {
+          "id": 2,
+          "devNote": "This is considered one-way even though technically you can get from 2 to 5 without falling to 5 with a tight jump using Spring Ball. This won't be expected for heat run times"
+        },
+        {"id": 4},
+        {"id": 5}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [
+        {"heatFrames": 5}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Sova",
+      "requires": [
+        "h_frozenEnemyRunway",
+        "canBePatient",
+        {"heatFrames": 4800}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 10,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Wait 80 seconds for the Sova to get into position, then freeze it to bridge the gap and significantly extend the runway.",
+        "The other Sovas can be farmed or used as a backup."
+      ],
+      "devNote": "Because the Sovas are global, strats could be added that start from the other doors to tighten the total frame count, but it will typically require heatProof either way."
+    },
+    {
+      "id": 69,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        {"heatFrames": 105}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 1,
+          "runway": {
+            "length": 2,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": "Max extra run speed $0.B"
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        {"heatFrames": 40},
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 71,
+      "link": [1, 1],
+      "name": "Sova Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          "canWalljump",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir",
+            "h_doubleEquipmentScreenCycleFrames",
+            {"cycleFrames": 40}
+          ]},
+          {"and": [
+            "Morph",
+            {"cycleFrames": 380}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "canMidAirMorph",
+            "Plasma",
+            "canTrickyJump",
+            {"cycleFrames": 600}
+          ]},
+          {"and": [
+            "canMidAirMorph",
+            "Plasma",
+            "canInsaneJump",
+            {"cycleFrames": 520}
+          ]},
+          {"and": [
+            {"or": [
+              "Wave",
+              "Spazer",
+              "Plasma",
+              "Grapple",
+              {"cycleFrames": 45}
+            ]},
+            {"cycleFrames": 700}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Sova", "count": 3}]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        "canBePatient",
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "It takes about 1.5 minutes for the Sova to get to this door and hit Samus."
+    },
+    {
+      "id": 48,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 4600},
+        "canBePatient"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Wait for the Sovas to wind around the room and reach the top door. This takes about 1 minute and 15 seconds."
+    },
+    {
+      "id": 49,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Sova, Two Supers",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 2200},
+        {"ammo": {"type": "Super", "count": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "powerbomb"], "requires": []},
+        {"types": ["super"], "requires": [], "useImplicitRequires": false}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use a Super to knock a Sova off as it exits the morph tunnel, then shoot the shot block in time to let it pass.",
+        "Use another Super to knock it off the top runway so it can climb the left wall and reach the door."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canTrivialMidAirMorph",
+        {"or": [
+          "canUsePowerBombLag",
+          {"and": [
+            "canInsaneJump",
+            "canOffScreenMovement"
+          ]}
+        ]},
+        {"heatFrames": 200},
+        {"shinespark": {"frames": 17, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "devNote": [
+        "Technically Samus isn't moving off-camera but is close to the edge;",
+        "'canOffScreenMovement' is for the difficulty of timing the unmorph, given limited visibility of the end of the passage and the Sova.",
+        "If a Power Bomb is available, then lag from the explosion can make the movement much easier."
+      ]
+    },
+    {
+      "id": 59,
+      "link": [1, 2],
+      "name": "G-Mode, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          "SpaceJump",
+          "canIBJ",
+          "canTrickyUseFrozenEnemies"
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "devNote": "It is probably possible to farm the Sovas at this door, but it would be difficult and slow and isn't expected."
+    },
+    {
+      "id": 60,
+      "link": [1, 2],
+      "name": "G-Mode Morph, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphIBJ",
+          {"and": [
+            "HiJump",
+            "h_artificialMorphSpringBall"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBallBombJump",
+            "h_additionalBomb"
+          ]}
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "devNote": "It is probably possible to farm the Sovas at this door, but it would be difficult and slow and isn't expected."
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 750}
+      ],
+      "unlocksDoors": [{"types": ["powerbomb"], "requires": []}]
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Screw Attack",
+      "requires": [
+        "ScrewAttack",
+        {"heatFrames": 525}
+      ],
+      "unlocksDoors": [{"types": ["powerbomb"], "requires": []}],
+      "devNote": "The bottom Fune shoots a fireball which wastes all of the time save of a Leave with Runway strat."
+    },
+    {
+      "id": 7,
+      "link": [1, 3],
+      "name": "Pseudo Screw",
+      "requires": [
+        "canPseudoScrew",
+        {"heatFrames": 540}
+      ],
+      "unlocksDoors": [{"types": ["powerbomb"], "requires": []}]
+    },
+    {
+      "id": 8,
+      "link": [1, 3],
+      "name": "Frozen Funes",
+      "requires": [
+        "Wave",
+        "Ice",
+        {"heatFrames": 530}
+      ],
+      "unlocksDoors": [{"types": ["powerbomb"], "requires": []}]
+    },
+    {
+      "id": 9,
+      "link": [1, 3],
+      "name": "Frozen Funes Leave with Runway",
+      "requires": [
+        "Wave",
+        "Ice",
+        {"heatFrames": 525}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 3],
+      "name": "Frozen Funes Leave with Runway - Kill Fune",
+      "requires": [
+        "Wave",
+        "Ice",
+        {"ammo": {"type": "Super", "count": 1}},
+        {"heatFrames": 545}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super", "powerbomb"], "requires": []}
+      ]
+    },
+    {
+      "id": 50,
+      "link": [1, 3],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 1200}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Avoid the fireballs while waiting for the Sovas. If the fireball is going to be at a bad cycle, it can help to kill the first Sova."
+    },
+    {
+      "id": 61,
+      "link": [1, 3],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 62,
+      "link": [1, 3],
+      "name": "G-Mode, Sova Farm",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModePauseAbuse",
+        "canFarmWhileShooting"
+      ],
+      "flashSuitChecked": true,
+      "note": "It is possible to kill the Sovas and pick up their drops during a pause abuse.",
+      "devNote": "The Sovas will not give drops if there are too many fireballs, but this shouldnt be a problem when leaving through the bottom door."
+    },
+    {
+      "id": 11,
+      "link": [1, 5],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 75}
+      ],
+      "note": [
+        "To minimize heat damage, immediately after landing use Grapple to open the door while running towards it, then jump over the gap and through the door.",
+        "If the door is grappled too late, it may interfere with the jump."
+      ]
+    },
+    {
+      "id": 51,
+      "link": [2, 1],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 4600},
+        "Morph",
+        "canBePatient"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Wait for the Sovas to wind around the room and reach the top door. This takes about 1 minute and 15 seconds."
+    },
+    {
+      "id": 52,
+      "link": [2, 1],
+      "name": "G-Mode Setup - Get Hit By Sova, Two Supers",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 2200},
+        "Morph",
+        {"ammo": {"type": "Super", "count": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles"], "requires": []},
+        {"types": ["super"], "requires": [], "useImplicitRequires": false},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use a Super to knock a Sova off as it exits the morph tunnel, get to and shoot the shot block in time to let it pass.",
+        "Use another Super to knock it off the top runway so it can climb the left wall and reach the door.",
+        "There is enough time to go around the left side of the room if Samus can't climb the right side."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [2, 1],
+      "name": "G-Mode Morph, Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphMovement",
+        "canOffScreenMovement",
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "Kill the Sovas or wait at around 25 seconds for them to get out of the way before going down and passing them while climbing to the top door.",
+      "detailNote": "It is possible to wait 2.5 minutes for the Sovas to return on camera to be sure Samus won't touch them.",
+      "devNote": [
+        "The single tile ledge at this door doesn't seem to make it any slower to exit.",
+        "It is probably possible to farm the Sovas at this door, but it would be difficult and isn't expected."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Leave With Runway - Frozen Sova",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"or": [
+          {"and": [
+            "h_heatProof",
+            "canBeVeryPatient"
+          ]},
+          {"and": [
+            "h_heatProof",
+            "canBePatient",
+            "Morph"
+          ]},
+          {"and": [
+            {"ammo": {"type": "Super", "count": 1}},
+            {"heatFrames": 2600}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Wait 3 minutes for the Sova to get into position, or 100 seconds with Morph by going ahead of them to break the shot blocks as they get there.",
+        "This can be further reduced to 45 seconds with a Super by knocking a Sova off after it exits the morph tunnel.",
+        "The other Sovas can be farmed or used as a backup."
+      ],
+      "devNote": "Because the Sovas are global, strats could be added that start from the other doors to tighten the total frame count, but it will typically require heatProof either way."
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Sova Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [2]}},
+        {"cycleFrames": 120},
+        {"or": [
+          "Wave",
+          "Spazer",
+          "Plasma",
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 35}
+          ]},
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 25}
+          ]},
+          {"cycleFrames": 60}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Sova", "count": 3}]
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          "canBePatient"
+        ]},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": [
+        "It takes about 2.5 minutes for the Sova to get to this door and hit Samus.",
+        "Alternatively, use a Super as the third Sova has started going off screen to speed it up to 40 seconds."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            {"heatFrames": 2340},
+            {"ammo": {"type": "Super", "count": 1}}
+          ]},
+          {"and": [
+            "h_heatProof",
+            "canBePatient"
+          ]},
+          {"and": [
+            "Morph",
+            "canBePatient",
+            {"heatFrames": 5925}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "It takes about 2.5 minutes for the Sova to get to this door and hit Samus.",
+        "With Morph, Samus can shoot the shot block as the Sova is coming down to save some time.",
+        "Alternatively, use a Super as the third Sova has started going off screen to speed it up to 40 seconds."
+      ]
+    },
+    {
+      "id": 54,
+      "link": [2, 3],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 1200},
+        "Morph"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Avoid the fireballs while waiting for the Sovas. If the fireball is going to be at a bad cycle, it can help to kill the first Sova."
+    },
+    {
+      "id": 64,
+      "link": [2, 3],
+      "name": "G-Mode Morph, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphMovement",
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "Kill the Sovas or wait at least 20 seconds for them to get out of the way before going to the bottom door.",
+      "detailNote": "It is slightly safer but very slow to wait 2.5 minutes for the Sovas to return on camera to be sure Samus won't touch them.",
+      "devNote": "It is probably possible to farm the Sovas at this door, but it would be difficult and isn't expected."
+    },
+    {
+      "id": 18,
+      "link": [2, 4],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 70,
+      "link": [2, 4],
+      "name": "G-Mode Morph, Blind Camera Fix",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "h_artificialMorphMovement",
+        {"heatFrames": 120}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Kill the Sovas or wait at around 25 seconds for them to get out of the way before going down.",
+        "Exit G-mode on the first ledge on the left, then jump and press against the right wall to touch the camera scroll block and fix the camera."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 330}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 25}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 40}]
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "link": [3, 1],
+      "name": "Come In Shinecharged, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        {"doorUnlockedAtNode": 1},
+        "canMidAirMorph",
+        "h_crouchJumpDownGrab",
+        "canShinechargeMovementTricky",
+        {"shinespark": {"frames": 20, "excessFrames": 0}},
+        {"heatFrames": 285}
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "devNote": [
+        "Unlocking the door would be possible but would require more than the default amount of heat frames, which would need testing."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [3, 1],
+      "name": "Come In Shinecharging, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"doorUnlockedAtNode": 1},
+        "canShinechargeMovementTricky",
+        "canMidAirMorph",
+        "h_crouchJumpDownGrab",
+        {"shinespark": {"frames": 19, "excessFrames": 0}},
+        {"heatFrames": 370}
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": ["never"]}],
+      "devNote": [
+        "Unlocking the door would be possible but would require more than the default amount of heat frames, which would need testing."
+      ]
+    },
+    {
+      "id": 55,
+      "link": [3, 1],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 4600},
+        "canBePatient"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Wait for the Sovas to wind around the room and reach the top door. This takes about 1 minute and 15 seconds."
+    },
+    {
+      "id": 56,
+      "link": [3, 1],
+      "name": "G-Mode Setup - Get Hit By Sova, Two Supers",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 2200},
+        {"ammo": {"type": "Super", "count": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles"], "requires": []},
+        {"types": ["super"], "requires": [], "useImplicitRequires": false},
+        {"types": ["powerbomb"], "requires": ["canTrickyJump"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use a Super to knock a Sova off as it exits the morph tunnel, get to and shoot the shot block in time to let it pass.",
+        "Use another Super to knock it off the top runway so it can climb the left wall and reach the door."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [3, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 75}
+      ],
+      "note": [
+        "To minimize heat damage, immediately after landing use Grapple to open the door while running towards it, then jump over the gap and through the door.",
+        "If the door is grappled too late, it may interfere with the jump."
+      ]
+    },
+    {
+      "id": 65,
+      "link": [3, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "devNote": "The single tile ledge at this door doesn't seem to make it any slower to exit."
+    },
+    {
+      "id": 66,
+      "link": [3, 1],
+      "name": "G-Mode, Sova Farm",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canBePatient",
+        "h_heatedGModePauseAbuse",
+        "canFarmWhileShooting",
+        {"or": [
+          "canTrickyJump",
+          "canTrickyUseFrozenEnemies",
+          {"ammo": {"type": "Super", "count": 1}},
+          "h_usePowerBomb"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to kill the Sovas and pick up their drops during a pause abuse, but they will only give drops if there are not too many Fune fireballs.",
+        "With a ledge grab onto the top platform, it is possible to get all the Funes off camera. Alternatively, it is possible to kill or repeatedly freeze them."
+      ],
+      "devNote": [
+        "The single tile ledge at this door doesn't seem to make it any slower to exit.",
+        "The Power Bomb kill could be done with artificial morph, but it's not worth modeling."
+      ]
+    },
+    {
+      "id": 44,
+      "link": [3, 2],
+      "name": "Come In Shinecharged, Shinespark (Tank Sova)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        "canShinechargeMovementTricky",
+        "canMidAirMorph",
+        {"shinespark": {"frames": 20, "excessFrames": 0}},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        {"heatFrames": 395}
+      ]
+    },
+    {
+      "id": 45,
+      "link": [3, 2],
+      "name": "Come In Shinecharged, Shinespark (Power Bomb Sovas)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 85},
+        "canShinechargeMovementTricky",
+        "canMidAirMorph",
+        {"shinespark": {"frames": 20, "excessFrames": 0}},
+        "h_usePowerBomb",
+        {"heatFrames": 385}
+      ]
+    },
+    {
+      "id": 46,
+      "link": [3, 2],
+      "name": "Come In Shinecharging, Shinespark (Tank Sova)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canMidAirMorph",
+        {"shinespark": {"frames": 19, "excessFrames": 0}},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        {"heatFrames": 475}
+      ]
+    },
+    {
+      "id": 47,
+      "link": [3, 2],
+      "name": "Come In Shinecharging, Shinespark (Power Bomb Sovas)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "canMidAirMorph",
+        {"shinespark": {"frames": 19, "excessFrames": 0}},
+        "h_usePowerBomb",
+        {"heatFrames": 465}
+      ]
+    },
+    {
+      "id": 58,
+      "link": [3, 2],
+      "name": "Samus Eater Teleport, X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithSamusEaterTeleport": {
+          "floorPositions": [],
+          "ceilingPositions": [[10, 3]]
+        }
+      },
+      "requires": [
+        "h_heatProof",
+        "canXRayClimb",
+        "canOffScreenMovement"
+      ],
+      "note": [
+        "Jump into the second ceiling Samus Eater in Hellway.",
+        "After teleporting and passing through the transition, X-Ray climb to reach the space above, to the right of the morph tunnel.",
+        "Samus will be off-camera, so it may not be easy to tell when the climb is done."
+      ],
+      "devNote": ["Other Samus Eaters can also probably work."]
+    },
+    {
+      "id": 67,
+      "link": [3, 2],
+      "name": "G-Mode, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          "SpaceJump",
+          "canIBJ",
+          "canTrickyUseFrozenEnemies"
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "devNote": "It is probably possible to farm the Sovas at this door, but it would be difficult and slow and isn't expected."
+    },
+    {
+      "id": 68,
+      "link": [3, 2],
+      "name": "G-Mode Morph, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphIBJ",
+          {"and": [
+            "HiJump",
+            "h_artificialMorphSpringBall"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBallBombJump",
+            "h_additionalBomb"
+          ]}
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "devNote": "It is probably possible to farm the Sovas at this door, but it would be difficult and slow and isn't expected."
+    },
+    {
+      "id": 21,
+      "link": [3, 3],
+      "name": "Leave with Runway - Fune Alive",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 12,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 22,
+      "link": [3, 3],
+      "name": "Leave with Runway - Fune Killed",
+      "requires": [
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"and": [
+            "h_usePowerBomb",
+            {"heatFrames": 190}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 23,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}},
+        {"heatFrames": 20},
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": "Kill the Fune before Crystal Flashing."
+    },
+    {
+      "id": 72,
+      "link": [3, 3],
+      "name": "Sova Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [3]}},
+        {"or": [
+          {"and": [
+            "canMidAirMorph",
+            "canTrickyJump",
+            {"or": [
+              "HiJump",
+              "canWalljump"
+            ]},
+            "Plasma",
+            {"cycleFrames": 540}
+          ]},
+          {"and": [
+            "canMidAirMorph",
+            {"or": [
+              "Wave",
+              "Spazer",
+              "Plasma",
+              "Grapple",
+              {"cycleFrames": 45}
+            ]},
+            {"cycleFrames": 690}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 1140}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Sova", "count": 3}]
+    },
+    {
+      "id": 24,
+      "link": [3, 3],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "It takes about 20 seconds for the Sova to get to this door and hit Samus."
+    },
+    {
+      "id": 57,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 1140}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "Avoid the fireballs while waiting for the Sovas. If the fireball is going to be at a bad cycle, it can help to kill the first Sova."
+    },
+    {
+      "id": 25,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canTrivialMidAirMorph",
+          {"and": [
+            "h_useSpringBall",
+            "HiJump"
+          ]}
+        ]},
+        {"heatFrames": 80}
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 5],
+      "name": "Come in Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 70},
+        "canMidAirMorph",
+        "canShinechargeMovementComplex",
+        {"heatFrames": 210},
+        {"shinespark": {"frames": 23, "excessFrames": 3}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Reaching the Morph hole can be tricky with SpeedBooster but no HiJump."
+    },
+    {
+      "id": 27,
+      "link": [4, 2],
+      "name": "Tank Damage",
+      "requires": [
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canTrivialMidAirMorph",
+              "h_useSpringBall"
+            ]}
+          ]},
+          {"and": [
+            "SpaceJump",
+            "canTrivialMidAirMorph",
+            {"heatFrames": 40}
+          ]},
+          {"and": [
+            "canWalljump",
+            "canTrivialMidAirMorph"
+          ]},
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "canJumpIntoIBJ",
+            {"heatFrames": 240}
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            "canDoubleBombJump",
+            {"heatFrames": 120}
+          ]},
+          {"and": [
+            "canDoubleBombJump",
+            {"heatFrames": 300}
+          ]}
+        ]},
+        {"heatFrames": 260},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+      ],
+      "devNote": "Base IBJ should kill the Sovas or go around."
+    },
+    {
+      "id": 28,
+      "link": [4, 2],
+      "name": "Kill Sovas",
+      "requires": [
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"or": [
+              "canTrivialMidAirMorph",
+              "h_useSpringBall"
+            ]}
+          ]},
+          {"and": [
+            "SpaceJump",
+            "canTrivialMidAirMorph",
+            {"heatFrames": 40}
+          ]},
+          {"and": [
+            "canWalljump",
+            "canTrivialMidAirMorph"
+          ]},
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "canIBJ",
+            {"heatFrames": 900}
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            {"heatFrames": 240}
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            "canDoubleBombJump",
+            {"heatFrames": 120}
+          ]},
+          {"and": [
+            "canDoubleBombJump",
+            {"heatFrames": 300}
+          ]}
+        ]},
+        {"or": [
+          "h_heatProof",
+          {"and": [
+            "Wave",
+            "Plasma"
+          ]},
+          "h_usePowerBomb"
+        ]},
+        {"heatFrames": 260}
+      ]
+    },
+    {
+      "id": 29,
+      "link": [4, 2],
+      "name": "Speedrun Ice Beam Entry",
+      "requires": [
+        "canMidAirMorph",
+        "canTrickyJump",
+        {"or": [
+          "canPreciseWalljump",
+          "HiJump"
+        ]},
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Sova"]],
+            "explicitWeapons": ["Wave", "Spazer", "Plasma", "PowerBomb"]
+          }},
+          {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+        ]},
+        {"heatFrames": 230}
+      ],
+      "note": [
+        "Smoothly jump into the morph tunnel while killing the Sovas.",
+        "Unmorph at the end of the tunnel to clear more Sovas is needed."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [4, 2],
+      "name": "Damage Boost",
+      "requires": [
+        "canCrouchJump",
+        "canMidAirMorph",
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        {"heatFrames": 420}
+      ],
+      "note": "Wait for the Sova to leave the tunnel and jump morph into them to bounce up into the hole."
+    },
+    {
+      "id": 31,
+      "link": [4, 2],
+      "name": "Sova Freeze",
+      "requires": [
+        "canMidAirMorph",
+        "canTrickyUseFrozenEnemies",
+        {"heatFrames": 840}
+      ],
+      "note": "Freeze a Sova once it enters one of the slots on the wall and then use it as a platform."
+    },
+    {
+      "id": 32,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        "Morph",
+        {"heatFrames": 100}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "link": [4, 3],
+      "name": "Leave with Runway",
+      "requires": [
+        "Morph",
+        {"heatFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 12,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 30}]
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "link": [4, 3],
+      "name": "Leave with Runway - Dead Fune",
+      "requires": [
+        "Morph",
+        {"or": [
+          {"and": [
+            {"ammo": {"type": "Super", "count": 1}},
+            {"heatFrames": 145}
+          ]},
+          {"and": [
+            {"ammo": {"type": "PowerBomb", "count": 1}},
+            {"heatFrames": 180}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {"types": ["powerbomb"], "requires": []}
+      ],
+      "devNote": "FIXME: unlocksDoors: powerbomb would not have an ammo cost as one is used as part of the strat."
+    },
+    {
+      "id": 35,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canWalljump",
+            {"heatFrames": 100}
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir",
+            {"heatFrames": 160}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"heatFrames": 180}
+          ]},
+          {"and": [
+            "SpaceJump",
+            "HiJump",
+            {"heatFrames": 120}
+          ]}
+        ]}
+      ],
+      "devNote": "It is faster to go around than to climb with Ice."
+    },
+    {
+      "id": 37,
+      "link": [5, 1],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 150}
+      ]
+    },
+    {
+      "id": 38,
+      "link": [5, 2],
+      "name": "Tank Damage",
+      "requires": [
+        "Morph",
+        {"heatFrames": 150},
+        {"or": [
+          "h_heatProof",
+          {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "note": "The Sovas should be killed if you are heat proof."
+    },
+    {
+      "id": 39,
+      "link": [5, 2],
+      "name": "Power Bombs",
+      "requires": [
+        "h_usePowerBomb",
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 40,
+      "link": [5, 4],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 73,
+      "link": [5, 5],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 74,
+  "nextNotableId": 1
+}

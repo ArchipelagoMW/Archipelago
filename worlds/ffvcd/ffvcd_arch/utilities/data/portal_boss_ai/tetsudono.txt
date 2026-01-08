@@ -1,0 +1,232 @@
+# Form 1
+    org $D0F1E0
+    00 00 00 00: Default:
+    FE:          {
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:            Attack
+    93:            GoblinPunch
+
+    D9:            Image
+    
+    FD 9F B3 9F:   {Missile, Beak, Missile}
+
+    FD F3 0D F0:   {Set Target: Self}
+    3A:             Haste
+
+    FD C6 EA 80:   {Rocket Punch, Hurricane, Fight}
+    23:             Dispel
+    
+    8E:             DeathClaw
+    3D:             Stop
+    
+    FD F7 02 F0:   {No Interupt for: 2}
+    93:            Gob
+    E8:            Jump
+    
+    FD 9F B3 9F:   {Missile, Beak, Missile}
+    
+    FD C6 EA 80:   {Rocket Punch, Hurricane, Fight}
+    
+    40:             Slow2
+    
+    D6:             {Quake}
+    
+    D7:             StrongAttack
+    
+    23:             Dispel
+
+    3F:             Comet
+    FF:          }
+
+    
+
+    
+    06 00 16 00: React on:  X-Fight
+    FE:          {
+    FD F3 2D 00:   {Set Target: Last Attacker}
+    D7:         StrongAttack
+    FE:          }
+    
+    06 00 04 00: React on:  Fight
+    FE:          {
+    FD 80 AA AA:   {Fight, Specialty, Nothing}
+    FE:          }
+
+
+    07 00 2B 00: React on:  Magic - 
+    FE:          {
+    FD 80 93 E8:   {Fight, GoblinPunch, Jump}
+    FE:        
+
+    
+    0F 00 00 00 FE FD F2 82 40 EE FF: {this is for unhiding form 2 upon death}   
+
+# Form 2
+    org $D0F2E0 
+    00 00 00 00: Default:
+    FE:          {
+    FD F7 02 F0:   {No Interupt for: 2}
+    CF:            Earth Shaker
+    93:            GoblinPunch
+
+    CA:            Atomic Ray
+    23:             Dispel
+    FD 9F B3 9F:   {Missile, Beak, Missile}
+
+    FD F3 0D F0:   {Set Target: Self}
+    3A:             Haste
+    
+    D2:             MegaFlare
+
+    23:             Dispel
+    FD C6 EA 93:   {Rocket Punch, Hurricane, Goblin}
+
+    FD F3 0D F0:   {Set Target: Self}
+    1C:             Shell
+    
+    FD 85 86 87:   {Lv3/4/2}
+    3D:             Stop
+    
+    FD F7 02 F0:   {No Interupt for: 2}
+    93:            Gob
+    E8:            Jump
+    
+    FD 9F B3 9F:   {Missile, Beak, Missile}
+
+    9E:             WhiteWind
+    
+    FD C6 EA 80:   {Rocket Punch, Hurricane, Fight}
+    
+    
+    FD F3 0D F0:   {Set Target: Self}
+    16:             Armor
+
+    
+    D7:             StrongAttack
+    
+    23:             Dispel
+
+    45:             Meteo
+
+    
+
+
+    FF:          }
+
+    
+    06 00 16 00: React on:  X-Fight
+    FE:          {
+    FD F3 2D 00:   {Set Target: Last Attacker}
+    D7:         StrongAttack
+    FE:          }
+
+    
+    06 00 04 00: React on:  Fight
+    FE:          {
+    FD 3F 93 E8:   {Comet, GoblinPunch, Jump}
+    FE:          }
+
+
+    07 00 2B 00: React on:  Magic - 
+    FE:          {
+    FD 93 33 AA:   {GoblinPunch, Flare, Nothing}
+    FE:        
+    
+    0F 00 00 00 FE FD F2 82 20 EE FF: {this is for unhiding form 3 upon death}
+    
+
+
+# Form 3
+    org $D0F3E0
+    00 00 00 00: Default:
+    FE:          {
+    FD F7 03 F0:   {No Interupt for: 3}
+    93:            GoblinPunch
+    9F:             Missile
+    93:            GoblinPunch
+
+    CA:            Atomic Ray
+    23:             Dispel
+    FD 9F B3 9F:   {Missile, Beak, Missile}
+
+    FD F3 0D F0:   {Set Target: Self}
+    9A:             MightyGuard
+    
+    
+    D7:             StrongAttack
+
+    
+    FD C6 EA 93:   {Rocket Punch, Hurricane, Goblin}
+    
+    23:             Dispel
+    
+    FD 9F B3 9F:   {Missile, Beak, Missile}
+    
+    D6:             Quake
+
+    23:             Dispel
+    
+    FD C6 EA 93:   {Rocket Punch, Hurricane, Goblin}
+    
+    FD 88 86 87:   {Lv2/3/4}
+    
+    8E:             DeathClaw
+    
+    3D:             Stop
+
+    
+    FD F7 02 F0:   {No Interupt for: 2}
+    93:            Gob
+    E8:            Jump
+    
+    FD 9F B3 9F:   {Missile, Beak, Missile}
+
+    FD F7 03 F0:   {No Interupt for: 3}
+    35:            Psych
+    35:            Psych
+    94:            DarkShock
+    
+    
+    FD C6 EA 80:   {Rocket Punch, Hurricane, Fight}
+    
+    
+    D7:             StrongAttack
+
+    9E:             WhiteWind
+    
+    23:             Dispel
+
+    45:             Meteo
+
+    
+
+
+    FF:          }
+
+    
+    06 00 16 00: React on:  X-Fight
+    FE:          {
+    FD F3 2D 00:   {Set Target: Last Attacker}
+    D7:         StrongAttack
+    FE:          }
+
+    
+    06 00 04 00: React on:  Fight
+    FE:          {
+    FD D7 93 AA:   {StrongAttack, GoblinPunch, Nothing}
+    FE:          }
+
+
+    07 00 2B 00: React on:  Magic - 
+    FE:          {
+    FD 33 34 AA:   {Flare, Doom, Nothing}
+    FE:        
+    
+    
+     ; react on death
+    0F 00 00 00 : {death sequence}
+    FE: {death sequence}
+    FD F6 05 EA; :   {Display: Byblos:  Uggh!!!}
+    AA: {death sequence}
+    FF: {death sequence}
+    

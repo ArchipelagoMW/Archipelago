@@ -1,0 +1,870 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 92,
+  "name": "Rising Tide",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "East",
+  "roomAddress": "0x7AFA3",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019732",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 2, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001973e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 2, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Rising Tide Sovas",
+      "enemyName": "Sova",
+      "quantity": 5,
+      "betweenNodes": [1, 2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Rising Tide Dragons",
+      "enemyName": "Dragon",
+      "quantity": 4,
+      "betweenNodes": [1, 2]
+    },
+    {
+      "id": "e3",
+      "groupName": "Rising Tide Squeepts",
+      "enemyName": "Squeept",
+      "quantity": 2,
+      "betweenNodes": [1, 2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Sova Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [1]}},
+        {"cycleFrames": 680},
+        {"or": [
+          "SpaceJump",
+          {"cycleFrames": 40}
+        ]},
+        {"or": [
+          "Wave",
+          "Spazer",
+          "Plasma",
+          {"cycleFrames": 360}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Sova", "count": 4}]
+    },
+    {
+      "id": 38,
+      "link": [1, 1],
+      "name": "Dragon and Sova Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        "h_heatProof",
+        "Plasma",
+        {"or": [
+          {"and": [
+            "h_lavaProof",
+            {"or": [
+              {"and": [
+                "Morph",
+                {"cycleFrames": 1170}
+              ]},
+              {"cycleFrames": 1500}
+            ]}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"cycleFrames": 1440}
+          ]},
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 1800}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Sova", "count": 5},
+        {"enemy": "Dragon", "count": 4}
+      ]
+    },
+    {
+      "id": 39,
+      "link": [1, 1],
+      "name": "Squeept Farm",
+      "requires": [
+        "h_heatProof",
+        "ScrewAttack",
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 340}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 900},
+            {"or": [
+              "SpaceJump",
+              {"cycleFrames": 320}
+            ]}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Squeept", "count": 2}]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 28,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [
+        {"heatFrames": 1500},
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"heatFrames": 2000}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Partially cross the room until a Sova falls from the ceiling, follow it back and forth across the room.",
+        "Alternatively, to save a lot of Energy, use a Super to knock off the first Sova after the one that falls, while it is on the right side of it's platform."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "SpaceJump",
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 460}
+      ],
+      "note": "Building runspeed can speed up the room a noticable amount."
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "SpaceJump with Run Speed",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 370}
+      ],
+      "note": "Building runspeed can speed up the room a noticable amount."
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Platforming",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canTrickyJump",
+            {"heatFrames": 540}
+          ]},
+          {"heatFrames": 660}
+        ]}
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Roll Under",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 0
+        }
+      },
+      "requires": [
+        "Morph",
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        {"enemyDamage": {"enemy": "Dragon", "type": "contact", "hits": 1}},
+        {"heatFrames": 480}
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Speedball Roll Under (Come in Getting Blue Speed)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$0.E",
+          "maxExtraRunSpeed": "$1.B"
+        }
+      },
+      "requires": [
+        "canSpeedball",
+        "canSlowShortCharge",
+        {"heatFrames": 350}
+      ],
+      "note": "Jump between the first and second floating platforms, to speedball through the room.",
+      "devNote": ["Some heat frames are implicit in the entrance condition."]
+    },
+    {
+      "id": 37,
+      "link": [1, 2],
+      "name": "Speedball Roll Under (Come in Blue Spinning)",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "minExtraRunSpeed": "$0.E",
+          "maxExtraRunSpeed": "$1.9",
+          "unusableTiles": 3
+        }
+      },
+      "requires": [
+        "canSpeedball",
+        "canSlowShortCharge",
+        "canInsaneJump",
+        {"heatFrames": 360}
+      ],
+      "note": [
+        "Jump into the room with blue speed,",
+        "and fall between the door ledge and the first floating platform, to speedball through the room."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canMidairShinespark",
+        {"heatFrames": 210},
+        {"shinespark": {"frames": 90, "excessFrames": 5}}
+      ],
+      "note": [
+        "Spark in line with the top of the door.",
+        "Sparking too low or too high will crash early."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Come In Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 13},
+        "canMidairShinespark",
+        {"heatFrames": 205},
+        {"shinespark": {"frames": 92, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Spark in line with the top of the door.",
+        "Sparking too low or too high will crash early."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Enter Shinesparking",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "top"
+        }
+      },
+      "requires": [
+        "canMidairShinespark",
+        {"heatFrames": 195},
+        {"shinespark": {"frames": 95, "excessFrames": 5}}
+      ],
+      "note": [
+        "Spark in line with the top of the door.",
+        "Sparking too low or too high will crash early."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [1, 2],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.2"
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        {"heatFrames": 1350}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "link": [1, 2],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [
+        {"heatFrames": 1390}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Cross the room while following the Sova that falls from the ceiling to the right door."
+    },
+    {
+      "id": 32,
+      "link": [1, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_heatedGModePauseAbuse",
+          "h_heatedGModeOpenDifferentDoor"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "To save Energy, it is possible to lure a Sova to the right door and pause abuse to grab its Energy drop on G-mode exit.",
+        "The left-most Sova falls into the lava and walks to the right.",
+        "It is important to prevent the Dragons from shooting too many fireballs, as they will eventually prevent drops from appearing.",
+        "Keeping the Sova on camera and moving a reasonable amount of the time will prevent the drops from being overloaded."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [1, 2],
+      "name": "Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": false,
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        "canInsaneJump",
+        "canBeVeryPatient",
+        {"heatFrames": 390}
+      ],
+      "note": [
+        "Use controlled Spring Ball bounces to cross the whole room while avoiding all enemy damage.",
+        "There is a significant chance of failure due to bad Squeept RNG."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "SpaceJump",
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 450}
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "SpaceJump with Run Speed",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 390}
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canMidairShinespark",
+        {"heatFrames": 210},
+        {"shinespark": {"frames": 90, "excessFrames": 3}}
+      ],
+      "note": [
+        "Spark in line with the top of the door.",
+        "Sparking too low or too high will crash early."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Come In Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 13},
+        "canMidairShinespark",
+        {"heatFrames": 205},
+        {"shinespark": {"frames": 92, "excessFrames": 3}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Spark in line with the top of the door.",
+        "Sparking too low or too high will crash early."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Enter Shinesparking",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "top"
+        }
+      },
+      "requires": [
+        "canMidairShinespark",
+        {"heatFrames": 195},
+        {"shinespark": {"frames": 95, "excessFrames": 3}}
+      ],
+      "note": [
+        "Spark in line with the top of the door.",
+        "Sparking too low or too high will crash early."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Platforming",
+      "requires": [
+        {"heatFrames": 540},
+        {"or": [
+          "canTrickyJump",
+          {"heatFrames": 160}
+        ]}
+      ],
+      "note": "Build up run speed to travel farther when jumping."
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Roll Under",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"enemyDamage": {"enemy": "Dragon", "type": "contact", "hits": 1}},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        {"heatFrames": 500},
+        {"lavaFrames": 360}
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Tricky Roll Under",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canTrickyJump",
+        "canMockball",
+        {"enemyDamage": {"enemy": "Dragon", "type": "contact", "hits": 1}},
+        {"heatFrames": 480},
+        {"lavaFrames": 240}
+      ],
+      "note": "Jump to the first long platform then use a the full platform to jump and mockball through the lava."
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$1.2"
+        }
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        {"heatFrames": 1450}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [
+        {"heatFrames": 1780},
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"heatFrames": 2050}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Cross more than half way across the room until a Sova falls from the ceiling then follow it back and forth across the room.",
+        "Alternatively, to save a lot of Energy, use a Super to knock off the Sova just before that, while it is on the right side of it's thin platform."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [2, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 34,
+      "link": [2, 1],
+      "name": "G-Mode Sova Farm",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "Plasma",
+          {"and": [
+            "Charge",
+            "Wave"
+          ]},
+          {"ammo": {"type": "Super", "count": 1}},
+          {"ammo": {"type": "Missile", "count": 9}},
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            "canTrickyJump"
+          ]}
+        ]},
+        "h_heatedGModePauseAbuse"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Lure a Sova to the left door and pause abuse to grab its Energy drop on G-mode exit.",
+        "It is important to prevent the Dragons from shooting too many fireballs, as they will eventually prevent drops from appearing.",
+        "Either use a Super to bring the left-most Sova that circles a platform, by knocking it off while it is on the right side of the platform,",
+        "or lure the left-most Sova that falls into the lava to the right and back to the left.",
+        "Without a Super, Samus must quickly kill or freeze the Dragons. Only the right 3 Dragons must be killed in order to prevent the drops from being overloaded, but killing more makes it more lenient."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [2, 1],
+      "name": "Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": false,
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        "canInsaneJump",
+        "canBeVeryPatient",
+        {"heatFrames": 390}
+      ],
+      "note": [
+        "Use controlled Spring Ball bounces to cross the whole room while avoiding all enemy damage.",
+        "There is a significant chance of failure due to bad Squeept RNG."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 40,
+      "link": [2, 2],
+      "name": "Sova Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [2]}},
+        {"cycleFrames": 720},
+        {"or": [
+          "SpaceJump",
+          {"cycleFrames": 30}
+        ]},
+        {"or": [
+          "Wave",
+          "Spazer",
+          "Plasma",
+          {"and": [
+            "canFarmWhileShooting",
+            {"cycleFrames": 30}
+          ]}
+        ]},
+        {"or": [
+          "canTrickyJump",
+          {"cycleFrames": 60}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Sova", "count": 4}],
+      "devNote": "Add canTrickyJump for catching the Sovas on their first cycles."
+    },
+    {
+      "id": 41,
+      "link": [2, 2],
+      "name": "Dragon and Sova Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "h_heatProof",
+        "Plasma",
+        {"or": [
+          {"and": [
+            "h_lavaProof",
+            {"or": [
+              {"and": [
+                "Morph",
+                {"cycleFrames": 930}
+              ]},
+              {"and": [
+                "SpaceJump",
+                {"cycleFrames": 1100}
+              ]},
+              {"cycleFrames": 1290}
+            ]}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"cycleFrames": 1230}
+          ]},
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 1680}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Sova", "count": 5},
+        {"enemy": "Dragon", "count": 4}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "requires": [
+        {"heatFrames": 1500},
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"heatFrames": 320}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Cross more than half way across the room until a Sova falls from the ceiling.",
+        "Alternatively, to save Energy, use a Super to knock off the second Sova from the right, while it is on the left side of it's platform."
+      ]
+    }
+  ],
+  "notables": [],
+  "nextStratId": 42,
+  "nextNotableId": 1
+}

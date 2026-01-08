@@ -1,0 +1,261 @@
+ # New changes: for wIsSeedShooterInUse:
+ # bit 0 when slingshot is used
+ # bit 7 when shooter is used
+
+46/4e66/parentItemCode_shooter_46: /copy a,$06,$4e66,$c7
+
+47/5b51/itemCode0f_47: /copy a,$07,$5b51,$19
+
+47/5b6a/itemCode0fPost_47: /copy a,$07,$5b6a,$22
+
+# parentItemCode_shooter_46 adjustments
+46/4e75/: call $2aab ; updateLinkDirectionFromAngle
+46/4e7e/: ld a,($cc47) ; (wLinkAngle)
+46/4e95/: |
+  ld a,($ccf1) ; (wIsSeedShooterInUse)
+  rla
+  jp c,clearParentItem_46
+46/4ea9/: call itemCreateChildWithIDAndSubid63 ; sets subid to 63 to be recognized by the seed code
+46/4eb6/: call $1794 ; decNumActiveSeeds
+46/4eb9/: call $23a5 ; itemIncState
+46/4ec2/: jp playSound
+46/4ec5/: call $2396 ; itemDecCounter2
+46/4ec9/: ld a,($cc47) ; (wLinkAngle)
+46/4ed2/: ld ($cc47),a ; (wLinkAngle)
+46/4ed5/: call $2aab ; updateLinkDirectionFromAngle
+46/4ed9/: ld ($cc47),a ; (wLinkAngle)
+46/4ee3/: ld a,($cc46) ; (wGameKeysJustPressed)
+46/4eea/: call $2396 ; itemDecCounter2
+46/4eef/: ld a,($cc47) ; (wLinkAngle)
+
+# itemCode0f_47 adjustments
+47/5b59/: ld a,$3a; UNCMP_GFXH_AGES_1d > $3a
+47/5b5b/: call $165b ; loadWeaponGfx
+47/5b66/: call $1e1e ; objectSetVisible81
+
+# itemCode0fPost_47 adjustments
+47/5b6d/: jp nz,$2c29 ; itemDelete
+
+46/5431/itemCreateChildWithIDAndSubid63: |
+  ld c,$63
+  jr itemCreateChildWithID
+
+# Update item usage table
+06/5526/: db $43
+
+06/49c5/: dw parentItemCode_shooter
+07/48c8/: dw itemCode0f
+07/493a/: dw itemCode0fPost
+
+06//parentItemCode_shooter: |
+  ld hl,parentItemCode_shooter_46
+  jr call_bank_46
+
+07//itemCode0f: |
+  ld hl,itemCode0f_47
+  jr call_bank_47
+
+07//itemCode0fPost: |
+  ld hl,itemCode0fPost_47
+  jr call_bank_47
+
+# overwrite initial max health (since they are overwritten by another function anyway) to set
+# the initial seed selection instead. first byte is low c6xx address, second is index.
+07/4190/shooterInitialSelection: db <wShooterSelectedSeeds, option.defaultSeedType - $20
+
+# Seed item code
+07/4ce2/: |
+  ld l,$02 ; item.subid
+  ld a,(hl)
+  jp newSeedBehavior
+
+07//newSeedBehavior: |
+  cp $63
+  jr z,@shooter
+  call $2c37 ; itemUpdateAngle
+  ld l,$02 ; item.subid
+  ldd a,(hl)
+  or a
+  jp nz,$4cff ; @slingshot
+  jp $4ce8 ; @satchel
+  
+  @shooter:
+  ld l,$34 ; Item.var34
+  ld (hl),$03
+  ld hl,$4d37
+  ld e,$47
+  jp interBankCall
+
+47/4d31/setShooterFlag: |
+  ld hl,$ccf1 ; (wIsSeedShooterInUse)
+  set 7,(hl)
+  ret
+47/4d37/item_seed@shooter: /copy a,$07,$4d37,$4e
+47/4d49/: |
+  call $2215 ; objectCopyPositionWithOffset
+  call setShooterFlag
+  nop
+47/4d5b/: call $042f ; getRandomNumber_noPreserveVars
+
+07/4d47/seedItemState@slingshotUpdate: call seedItemState@nonSatchelUpdate
+07//seedItemState@nonSatchelUpdate: |
+  cp $63
+  jp nz,$4fdf
+  ld hl,seedItemUpdateBouncing
+
+  safeInterBankCall_47:
+  push af
+  ldh a,(hRomBank)
+  push af
+  ld a,$47
+  jp safeInterBankCallReady
+
+47/5035/seedItemUpdateBouncing: /copy a,$07,$5035,$64
+47/5035/: call $1432 ; objectGetTileAtPosition
+47/503b/: call $1de7 ; findByteInCollisionTable
+47/5057/: call $14b5 ; objectCheckTileCollision_allowHoles
+
+47/5099/seedItemCheckDiagonalCollision: /copy a,$07,$5099,$5b
+47/50b5/: call $14bf ; checkTileCollisionAt_allowHoles
+47/50ba/: call $1435 ; getTileAtPosition
+47/50c0/: call $1de7 ; findByteInCollisionTable
+
+07/4e73/: |
+  cp $63
+  call clearSeed
+07//clearSeed: |
+  jr z,@shooter
+  ld a,$03
+  and (hl)
+  ret z
+  dec (hl)
+  ret
+  @shooter:
+  res 7,(hl)
+  ret
+
+06/4d2d/: |
+  ld hl,$cc78; wLinkSwimmingState
+  ld a,($ccf1) ; (wIsSeedShooterInUse)
+  rla ; erase the bit 7 if it exists, as c is 0
+  or (hl)
+
+47/5134/seedsDontBounceTilesTable: |
+  dw @overworld
+  dw @subrosia
+  dw @makutree
+  dw @indoors
+  dw @dungeons
+  dw @sidescrolling
+  
+  @overworld:
+  db $c4,$c5,$c6,$c7,$ca,$cb,$d8,$e5
+  @subrosia:
+  @makutree:
+  @sidescrolling:
+  db $00
+
+  @indoors:
+  @dungeons:
+  db $08 ; TILEINDEX_UNLIT_TORCH
+  db $09 ; TILEINDEX_LIT_TORCH
+  db $00
+
+02/5610/: |
+  call hasSeedSubmenu
+  nop
+
+02//hasSeedSubmenu: |
+  ret z
+  cp TREASURE_SHOOTER
+  ret z
+  cp TREASURE_SLINGSHOT
+  ret
+
+# Change text for shooter
+02/5781/: |
+  cp TREASURE_SEED_SATCHEL
+  ld a,$05
+  jr z,@end
+  ld a,$00
+  @end:
+
+02/570e/: ld hl,wShooterSelectedSeeds
+02/5714/: |
+  call incHlByItem
+  nop
+  nop
+
+02//incHlByItem: |
+  cp TREASURE_SHOOTER
+  ret z
+  inc l
+  cp TREASURE_SEED_SATCHEL
+  ret z
+  inc l
+  ret
+
+02/5793/: |
+  ld l,<wShooterSelectedSeeds
+  call incHlByItem
+  ld e,l
+  nop
+
+# gfx
+# inv icon
+# spr_item_icons_1 verion
+1b/7760/: /copy a,$19,$4020,$20
+# spr_item_icons_1_spr version, moved to spr_item_icons_3 for convenience
+# TODO: If read/write of compressed sprites is implemented, this should be replaced
+1b/7b00/: db $ff,$ff,$b9,$c7,$7e,$7e,$52,$6e,$34,$2C,$34,$2c,$3c,$3c,$4e,$7e,$b7,$cf,$b7,$cf,$cf,$ff,$ff,$ff,$7e,$7e,$52,$6e,$3c,$3c,$00,$00
+# Add the gfx entry to the interactionData
+3f/6817/: db $61,$0e,$50 ; GFX_69
+# TODO: If read/write of compressed sprites is implemented, a7 should be back to 86
+3f//treasureDisplayData_shooter: |
+  ; ember
+  db $20
+  db $a7
+  /copy a,$3f,$703d,$04
+  db text.shooter.inventory
+  
+  ; scent
+  db $21
+  db $a7
+  /copy a,$3f,$7044,$04
+  db text.shooter.inventory
+  
+  ; pegasus
+  db $22
+  db $a7
+  /copy a,$3f,$704b,$04
+  db text.shooter.inventory
+  
+  ; gale
+  db $23
+  db $a7
+  /copy a,$3f,$7052,$04
+  db text.shooter.inventory
+  
+  ; mystery
+  db $24
+  db $a7
+  /copy a,$3f,$7059,$04
+  db text.shooter.inventory
+
+02/52fa/: call changeShooterPalette
+# TODO: If read/write of compressed sprites is implemented, saving 8a on b would be useless
+02//changeShooterPalette: |
+  ld b,a
+  cp $86
+  ret c
+  cp $a7
+  scf
+  ccf
+  ret nz
+  ld a,$8a
+  ld b,a
+  scf
+  ret
+
+# treasureObjectData
+15/5167/: db text.shooter.treasure,$69

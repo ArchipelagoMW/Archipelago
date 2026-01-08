@@ -1,0 +1,37 @@
+# this file is for removal of triggers that would arbitrarily restrict the
+# game, and in some cases even cause softlocks. essences are the biggest
+# culprit, but there are some other weird things, like not/having a certain
+# item or not/having a certain global flag set (that wouldn't logically cause
+# whatever event that it causes).
+
+# initiate all these events without requiring essences:
+08/5886/: ld a,$02  # master diver
+0a/4be7/: db $18    # ^
+
+08/6c31/: cp $00  # piratian captain
+
+08/7c40/: cp $00  # subrosian at volcano
+08/7cd2/: cp $00  # ^
+
+09/4e36/: jp $4eab  # spawn moosh
+0f/7428/: jr nz,$00 # ^
+
+09/4e40/: or $57  # spawn dimitri
+
+09/4e72/: or $4f  # spawn ricky
+
+# Dimitri doesn't spawn in vanilla if you have flippers.
+09/4e55/: |
+    xor a  ; clears flag C so the following `jr nc` always jumps
+    nop
+    nop
+    nop
+    nop
+
+# Allow desert pits to work even if player has the actual bell already.
+08/73a2/: |
+    nop
+    nop
+
+# don't require rod to get items from season spirits.
+0b/4eb1/: db jumpifitemobtained,TREASURE_PUNCH

@@ -1,0 +1,63 @@
+{% extends 'randomizer/layouts/default.html' %}
+
+{% block content %}
+    <h1>What is the Super Mario RPG Open World Randomizer?</h1>
+    <div class="card card-body bg-light border my-2">
+        <p>A program that shuffles around a bunch of stuff in Super Mario RPG! The world looks the same, the game's
+            objective is the same, but plenty of things can get shuffled around &mdash; such as playable characters, monsters,
+            progression items, shop items, character/equipment/monster stats, and even Star Pieces! It's a different
+            experience every time!</p>
+        <p>This new version is an <strong>open world</strong> randomizer, inspired by other works such as the
+            <a href="http://ff4fe.com" target="_blank">FF4: Free Enterprise</a> randomizer.  This means most of the map
+            is open from the start which drastically changes the gameplay!
+        </p>
+    </div>
+    <h1>Woah cool! Where do I download this?</h1>
+    <div class="card card-body bg-light border my-2">
+        <p>You don't! This new randomizer is entirely web-based. You simply provide your original ROM to the site, and
+            it does the rest. No downloading required! Click the
+            <a href="{% url 'randomizer:randomize' %}">Generate Randomized Game</a> link to get started!
+        </p>
+    </div>
+    <h1>Sweet! How do I play this thing?</h1>
+    <div class="card card-body bg-light border my-2">
+        <p>The "<a href="{% url 'randomizer:how-to-play' %}">How To Play</a>" link provides details about
+            how to get the game working on your platform of choice (SNES, Wii, or PC emulator)! Check out the
+            "<a href="{% url 'randomizer:options' %}">Flag & Mode Explanations</a>" link for more details about the
+            changes to the game, and the "<a href="{% url 'randomizer:guide' %}">Player's Guide</a>" link to jog your
+            memory on what the game has in store!</p>
+    </div>
+    <h1>Awesome! Can I play with others?</h1>
+    <div class="card card-body bg-light border my-2">
+        <p>Yes! Join the <strong>#randomizer</strong> channel of our discord at
+            <a href="https://discord.gg/Ma2fKHg" target="_blank">http://discord.smrpgspeedruns.com</a>! If you're
+            interested in speedrunning the original game, check out our community wiki at <a
+                    href="http://www.smrpgspeedruns.com" target="_blank">http://www.smrpgspeedruns.com</a>!</p>
+    </div>
+    <h1>Just who is responsible for this thing?</h1>
+    <div class="card card-body bg-light border my-2">
+        <p>This program wouldn't have been possible without the work of several people:</p>
+        <ul>
+            <li>Big thanks to <a href="https://github.com/abyssonym" target="_blank">abyssonym</a> for making the
+                original command line version of the randomizer up to V4 and allowing us to adapt it into this new form!
+                While it has evolved far beyond his original version, this would not have been possible without his work
+                in the first place.  Check out his GitHub page for more randomizer work!
+            </li>
+            <li>Huge thanks to Alanim for all of the primary ROM hacking!  This new version would not be possible
+                without him!
+            </li>
+            <li>This new web version was written and is maintained by
+                <a href="https://github.com/DorkmasterFlek" target="_blank">Dorkmaster Flek</a>.
+            </li>
+            <li>Thanks to Swinch, Yakibomb, and
+                <a href="https://github.com/pidgezero-one" target="_blank">pidgezero_one</a> for additional ROM hacking
+                and coding work!
+            </li>
+            <li>Shoutouts to Veetorp and the <a href="http://alttpr.com/" target="_blank">Link to the Past
+                randomizer</a> community for their excellent work on web-based ROM patching, and the
+                <a href="http://ff4fe.com" target="_blank">FF4: Free Enterprise</a> community which we totally stole a
+                bunch of good ideas from!
+            </li>
+        </ul>
+    </div>
+{% endblock %}

@@ -1,0 +1,2514 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 103,
+  "name": "Single Chamber",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "East",
+  "roomAddress": "0x7AD5E",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Shaft - Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00195ca",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Left Shaft - Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00195ee",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0],
+        [2, 0, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Left Shaft - Middle Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00195e2",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0],
+        [2, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Left Shaft - Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "red",
+      "nodeAddress": "0x00195d6",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 1],
+        [2, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Far Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00195fa",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2, 2, 2, 2, 2],
+        [1, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Left Shaft - Top Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 1, 1, 1, 1, 1],
+        [2, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0]
+      ],
+      "note": "Represents the platform where Samus will land after falling from the morph tunnel when arriving from Lower Norfair."
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Single Chamber Top Alcoons",
+      "enemyName": "Alcoon",
+      "quantity": 2,
+      "homeNodes": [6]
+    },
+    {
+      "id": "e2",
+      "groupName": "Single Chamber Top Multiviola",
+      "enemyName": "Multiviola",
+      "quantity": 1,
+      "homeNodes": [6]
+    },
+    {
+      "id": "e3",
+      "groupName": "Single Chamber Middle Alcoon",
+      "enemyName": "Alcoon",
+      "quantity": 1,
+      "betweenNodes": [3, 4]
+    },
+    {
+      "id": "e4",
+      "groupName": "Single Chamber Middle Multiviola",
+      "enemyName": "Multiviola",
+      "quantity": 1,
+      "betweenNodes": [3, 4]
+    },
+    {
+      "id": "e5",
+      "groupName": "Single Chamber Bottom Alcoon",
+      "enemyName": "Alcoon",
+      "quantity": 1,
+      "betweenNodes": [2, 3]
+    },
+    {
+      "id": "e6",
+      "groupName": "Single Chamber Bottom Multiviola",
+      "enemyName": "Multiviola",
+      "quantity": 1,
+      "betweenNodes": [2, 3]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 1},
+        {"id": 4},
+        {"id": 6}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 97,
+      "link": [1, 1],
+      "name": "Single Multiviola Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [1]}},
+        {"cycleFrames": 130},
+        {"or": [
+          "Plasma",
+          "Wave",
+          "Spazer",
+          {"cycleFrames": 30}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Multiviola", "count": 1}]
+    },
+    {
+      "id": 61,
+      "link": [1, 1],
+      "name": "Alcoon and Multiviola Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          "Plasma",
+          "ScrewAttack",
+          {"and": [
+            "Wave",
+            {"cycleFrames": 90}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 205}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 315}
+          ]}
+        ]},
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "h_crouchJumpDownGrab",
+          {"and": [
+            "SpaceJump",
+            {"cycleFrames": 20}
+          ]}
+        ]},
+        {"cycleFrames": 285}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Multiviola", "count": 1},
+        {"enemy": "Alcoon", "count": 2}
+      ]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Multiviola", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 62,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Multiviola",
+      "requires": [
+        {"heatFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 65,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 7,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canXRayCancelShinecharge",
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"heatFrames": 1380}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "link": [1, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            "canFarmWhileShooting",
+            "canTrickyDodgeEnemies"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to kill a Multiviola by the door and pause abuse to grab its Energy drop on G-mode exit.",
+        "It is important avoid touching the invisible fireballs the Alcoons place, and to prevent them from shooting too many fireballs, as they will eventually prevent drops from appearing.",
+        "The Alcoons are global, so it is best to kill those at the top of the room and either kill or avoid those lower, depending on if Samus has a way to kill them quickly."
+      ]
+    },
+    {
+      "id": 66,
+      "link": [1, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 7,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canXRayCancelShinecharge",
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"heatFrames": 830}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 78,
+      "link": [1, 3],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "It is important avoid touching the invisible fireballs the Alcoons place."
+    },
+    {
+      "id": 4,
+      "link": [1, 4],
+      "name": "Come in Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 7,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "canShinechargeMovementComplex",
+            {"heatFrames": 225},
+            {"shinespark": {"frames": 15, "excessFrames": 0}}
+          ]},
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"heatFrames": 215},
+            {"shinespark": {"frames": 6, "excessFrames": 0}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 67,
+      "link": [1, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 7,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canXRayCancelShinecharge",
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"heatFrames": 505}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 79,
+      "link": [1, 4],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "It is important avoid touching the invisible fireballs the Alcoons place.",
+      "devNote": "FIXME: It is possible to kill a Multiviola in the gap in the floor, but Samus only gets one attempt, and its very difficult to escape with a small Energy drop."
+    },
+    {
+      "id": 80,
+      "link": [1, 5],
+      "name": "G-Mode, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          {"and": [
+            "canBombHorizontally",
+            "canTrickyJump"
+          ]},
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canIBJ",
+          "canTrickyUseFrozenEnemies"
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is important avoid touching the invisible fireballs the Alcoons place.",
+        "It is possible to kill them without any beam upgrades or ammo by jumping and shooting horizontally near the floor surface.",
+        "Stay near the far wall when shooting to prevent getting too close and triggering their jump.",
+        "After entering the morph tunnel, roll through the two camera scroll blocks a few times to overload PLMs.",
+        "They are at the entrance and two tiles in the tunnel. Exit G-mode and go through the room to the far right door."
+      ],
+      "devNote": "It is possible to go from 5->1 with a bomb spread, but it requires difficult off-screen movement to escape the room."
+    },
+    {
+      "id": 81,
+      "link": [1, 5],
+      "name": "G-Mode Morph, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canTrickyDodgeEnemies",
+        {"or": [
+          "h_artificialMorphBombHorizontally",
+          "h_artificialMorphJumpIntoIBJ",
+          {"and": [
+            "h_artificialMorphIBJ",
+            "h_artificialMorphPowerBomb"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump"
+          ]},
+          "h_artificialMorphSpringBallBombJump"
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is important avoid touching the invisible fireballs the Alcoons place.",
+        "It is possible to bomb from the edge of the top door runway into the hidden morph tunnel, but if Samus is not at the edge, she will bonk and fall.",
+        "After entering the morph tunnel, roll through the two camera scroll blocks a few times to overload PLMs.",
+        "They are at the entrance and two tiles in the tunnel. Exit G-mode and go through the room to the far right door."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 6],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 68,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"heatFrames": 1220}
+          ]},
+          {"and": [
+            "canTrickySpringBallJump",
+            {"heatFrames": 1440}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "link": [2, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            "canFarmWhileShooting",
+            "canTrickyDodgeEnemies"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to kill a Multiviola by the door and pause abuse to grab its Energy drop on G-mode exit.",
+        "It is important avoid touching the invisible fireballs the Alcoons place, and to prevent them from shooting too many fireballs, as they will eventually prevent drops from appearing.",
+        "One easy way to do this without any beam upgrades or ammo is to kill them before they jump. This can be done from below by jumping and shooting horizontally near the floor surface.",
+        "Stay near the far wall when shooting to prevent getting too close and triggering their jump."
+      ],
+      "devNote": [
+        "Frozen Alcoon platforms and Artificial morph IBJ are not included, as Samus can crouch jump and down grab;",
+        "they can be considered if G-mode + flash suits are added, though they are still likely not useful.",
+        "Those are also likely not compatible with preventing the Alcoons from overloading drops."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 45}
+      ]
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        {"heatFrames": 1600}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0,
+          "gentleDownTiles": 4
+        }
+      }
+    },
+    {
+      "id": 98,
+      "link": [2, 2],
+      "name": "Alcoon and Multiviola Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 25}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 40}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 100}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 220}
+          ]}
+        ]},
+        {"cycleFrames": 245}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Multiviola", "count": 1},
+        {"enemy": "Alcoon", "count": 1}
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Multiviola", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 63,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Multiviola",
+      "requires": [
+        {"heatFrames": 920}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Enter the room and crouch next to the closed door. After the Multiviola hits the door, open it and it will be on a trajectory to hit Samus the next pass."
+    },
+    {
+      "id": 13,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "h_crouchJumpDownGrab"
+        ]},
+        {"heatFrames": 280}
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 3],
+      "name": "Leave with Runway",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "h_crouchJumpDownGrab"
+        ]},
+        {"heatFrames": 260}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "link": [2, 3],
+      "name": "Enter Shinecharging, Leave Sparking",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          "HiJump",
+          "canWalljump"
+        ]},
+        {"shinespark": {"frames": 5}},
+        {"heatFrames": 230}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 3],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 11,
+          "openEnd": 1,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementComplex",
+        "canTrickyJump",
+        {"heatFrames": 150},
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Quickly ledge grab the platform to run below the Multiviola and get ahead of it.",
+      "devNote": "1 unused tile since you must jump earlier for this strat."
+    },
+    {
+      "id": 17,
+      "link": [2, 3],
+      "name": "IBJ",
+      "requires": [
+        "canIBJ",
+        {"heatFrames": 1200}
+      ]
+    },
+    {
+      "id": 18,
+      "link": [2, 3],
+      "name": "Frozen Multiviola",
+      "requires": [
+        "canUseFrozenEnemies",
+        {"heatFrames": 450}
+      ],
+      "note": "Kill the Alcoon, then freeze the Multiviola to use as a platform."
+    },
+    {
+      "id": 69,
+      "link": [2, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"heatFrames": 365}
+          ]},
+          {"and": [
+            "canTrickySpringBallJump",
+            {"heatFrames": 380}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 83,
+      "link": [2, 3],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canIBJ"
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "It is important avoid touching the invisible fireballs the Alcoons place.",
+      "devNote": [
+        "Frozen Alcoon platforms and Artificial morph IBJ are not included, as Samus can crouch jump and down grab;",
+        "they can be considered if G-mode + flash suits are added, though they are still likely not useful."
+      ]
+    },
+    {
+      "id": 70,
+      "link": [2, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 12,
+          "openEnd": 0,
+          "gentleUpTiles": 4
+        }
+      },
+      "requires": [
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"heatFrames": 700}
+          ]},
+          {"and": [
+            "canTrickySpringBallJump",
+            {"heatFrames": 840}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 84,
+      "link": [2, 4],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canIBJ"
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "It is important avoid touching the invisible fireballs the Alcoons place.",
+      "devNote": [
+        "Frozen Alcoon platforms and Artificial morph IBJ are not included, as Samus can crouch jump and down grab;",
+        "they can be considered if G-mode + flash suits are added, though they are still likely not useful.",
+        "FIXME: It is possible to kill a Multiviola in the gap in the floor, but Samus only gets one attempt, and its very difficult to escape with a small Energy drop."
+      ]
+    },
+    {
+      "id": 85,
+      "link": [2, 5],
+      "name": "G-Mode, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canIBJ",
+          {"and": [
+            "h_crouchJumpDownGrab",
+            "canBombHorizontally"
+          ]},
+          {"and": [
+            "h_crouchJumpDownGrab",
+            "canTrickyUseFrozenEnemies"
+          ]}
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is important avoid touching the invisible fireballs the Alcoons place.",
+        "It is possible to kill them without any beam upgrades or ammo by jumping and shooting horizontally near the floor surface.",
+        "Stay near the far wall when shooting to prevent getting too close and triggering their jump.",
+        "After entering the morph tunnel, roll through the two camera scroll blocks a few times to overload PLMs.",
+        "They are at the entrance and two tiles in the tunnel. Exit G-mode and go through the room to the far right door."
+      ],
+      "devNote": [
+        "Frozen Alcoon platforms and Artificial morph IBJ are not included, as Samus can crouch jump and down grab;",
+        "they can be considered if G-mode + flash suits are added, though they are still likely not useful."
+      ]
+    },
+    {
+      "id": 86,
+      "link": [2, 5],
+      "name": "G-Mode Morph, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "h_artificialMorphIBJ",
+            {"ammo": {"type": "PowerBomb", "count": 3}}
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBallBombJump",
+            {"or": [
+              "h_artificialMorphBombs",
+              {"ammo": {"type": "PowerBomb", "count": 4}}
+            ]}
+          ]}
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is important avoid touching the invisible fireballs the Alcoons place. Jump over them or kill the Alcoons with Power Bombs.",
+        "After entering the morph tunnel, roll through the two camera scroll blocks a few times to overload PLMs.",
+        "They are at the entrance and two tiles in the tunnel. Exit G-mode and go through the room to the far right door."
+      ]
+    },
+    {
+      "id": 71,
+      "link": [3, 1],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$2.0"
+        }
+      },
+      "requires": [
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"heatFrames": 890}
+          ]},
+          {"and": [
+            "canTrickySpringBallJump",
+            {"heatFrames": 1020}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ],
+      "devNote": [
+        "FIXME: This could be done with lower run speed, at the cost of more heat frames."
+      ]
+    },
+    {
+      "id": 87,
+      "link": [3, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            "canFarmWhileShooting",
+            "canTrickyDodgeEnemies"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to kill a Multiviola by the door and pause abuse to grab its Energy drop on G-mode exit.",
+        "It is important avoid touching the invisible fireballs the Alcoons place, and to prevent them from shooting too many fireballs, as they will eventually prevent drops from appearing.",
+        "One easy way to do this without any beam upgrades or ammo is to kill them before they jump. This can be done from below by jumping and shooting horizontally near the floor surface.",
+        "Stay near the far wall when shooting to prevent getting too close and triggering their jump."
+      ],
+      "devNote": [
+        "Frozen Alcoon platforms and Artificial morph IBJ are not included, as Samus can crouch jump and down grab;",
+        "they can be considered if G-mode + flash suits are added, though they are still likely not useful.",
+        "Those are also likely not compatible with preventing the Alcoons from overloading drops."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [3, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 45}
+      ]
+    },
+    {
+      "id": 20,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 21,
+      "link": [3, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        {"heatFrames": 1600}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 200}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 30}]
+        },
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 10}]
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "link": [3, 2],
+      "name": "Leave with Runway",
+      "requires": [
+        {"heatFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0,
+          "gentleDownTiles": 4
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 30}]
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"heatFrames": 180},
+        {"shineChargeFrames": 170}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 5}},
+        {"heatFrames": 220}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 2],
+      "name": "Come in Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 145},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 18}},
+        {"heatFrames": 190}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 72,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canXRayCancelShinecharge",
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"heatFrames": 610}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 88,
+      "link": [3, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          "h_heatedGModePauseAbuse"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to kill a Multiviola by the door and pause abuse to grab its Energy drop on G-mode exit.",
+        "It is important avoid touching the invisible fireballs the Alcoon places, and to prevent it from shooting too many fireballs, as they will eventually prevent drops from appearing.",
+        "Either kill the Alcoon or avoid it then kill the Multiviola near the door without too much delay."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 99,
+      "link": [3, 3],
+      "name": "Alcoon and Multiviola Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [3]}},
+        {"or": [
+          "Plasma",
+          "ScrewAttack",
+          {"and": [
+            "Wave",
+            {"cycleFrames": 90}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 90}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 285}
+          ]}
+        ]},
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "h_crouchJumpDownGrab",
+          "SpaceJump"
+        ]},
+        {"cycleFrames": 210}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Multiviola", "count": 1},
+        {"enemy": "Alcoon", "count": 1}
+      ]
+    },
+    {
+      "id": 28,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 29,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "h_crouchJumpDownGrab"
+        ]},
+        {"heatFrames": 310}
+      ]
+    },
+    {
+      "id": 30,
+      "link": [3, 4],
+      "name": "Leave with Runway",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "h_crouchJumpDownGrab"
+        ]},
+        {"heatFrames": 290}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "link": [3, 4],
+      "name": "Come in Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canTrickyJump",
+        "canShinechargeMovementTricky",
+        {"heatFrames": 170},
+        {"shineChargeFrames": 165}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 32,
+      "link": [3, 4],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 140},
+        "HiJump",
+        "canTrickyJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 9}},
+        {"heatFrames": 170}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 33,
+      "link": [3, 4],
+      "name": "IBJ",
+      "requires": [
+        "canIBJ",
+        {"heatFrames": 1950}
+      ],
+      "note": "Jump the Alcoon and kill the Multiviola, then IBJ."
+    },
+    {
+      "id": 34,
+      "link": [3, 4],
+      "name": "Frozen Enemies",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        {"heatFrames": 1300}
+      ],
+      "note": [
+        "Wait for the Alcoon to walk off the edge. Use it and the Multiviola as platforms.",
+        "Spawn the Alcoon, then run back to the right so it will not stop and fire projectiles."
+      ]
+    },
+    {
+      "id": 73,
+      "link": [3, 4],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$2.0"
+        }
+      },
+      "requires": [
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"heatFrames": 370}
+          ]},
+          {"and": [
+            "canTrickySpringBallJump",
+            {"heatFrames": 380}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ],
+      "devNote": [
+        "FIXME: This could be done with lower run speed, at the cost of more heat frames."
+      ]
+    },
+    {
+      "id": 89,
+      "link": [3, 4],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canIBJ"
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "It is important avoid touching the invisible fireballs the Alcoons place.",
+      "devNote": [
+        "Frozen Alcoon platforms and Artificial morph IBJ are not included, as Samus can crouch jump and down grab;",
+        "they can be considered if G-mode + flash suits are added, though they are still likely not useful.",
+        "FIXME: It is possible to kill a Multiviola in the gap in the floor, but Samus only gets one attempt, and its very difficult to escape with a small Energy drop."
+      ]
+    },
+    {
+      "id": 90,
+      "link": [3, 5],
+      "name": "G-Mode, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canIBJ",
+          {"and": [
+            "h_crouchJumpDownGrab",
+            "canBombHorizontally"
+          ]},
+          {"and": [
+            "h_crouchJumpDownGrab",
+            "canTrickyUseFrozenEnemies"
+          ]}
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is important avoid touching the invisible fireballs the Alcoons place.",
+        "It is possible to kill them without any beam upgrades or ammo by jumping and shooting horizontally near the floor surface.",
+        "Stay near the far wall when shooting to prevent getting too close and triggering their jump.",
+        "After entering the morph tunnel, roll through the two camera scroll blocks a few times to overload PLMs.",
+        "They are at the entrance and two tiles in the tunnel. Exit G-mode and go through the room to the far right door."
+      ],
+      "devNote": [
+        "Frozen Alcoon platforms and Artificial morph IBJ are not included, as Samus can crouch jump and down grab;",
+        "they can be considered if G-mode + flash suits are added, though they are still likely not useful."
+      ]
+    },
+    {
+      "id": 91,
+      "link": [3, 5],
+      "name": "G-Mode Morph, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "h_artificialMorphIBJ",
+            {"ammo": {"type": "PowerBomb", "count": 2}}
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBallBombJump",
+            {"or": [
+              "h_artificialMorphBombs",
+              {"ammo": {"type": "PowerBomb", "count": 3}}
+            ]}
+          ]}
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is important avoid touching the invisible fireballs the Alcoons place. Jump over them or kill the Alcoons with Power Bombs.",
+        "After entering the morph tunnel, roll through the two camera scroll blocks a few times to overload PLMs.",
+        "They are at the entrance and two tiles in the tunnel. Exit G-mode and go through the room to the far right door."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [4, 1],
+      "name": "Enter Shinecharging, Leave Sparking",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "HiJump",
+        "canTrickyJump",
+        "canShinechargeMovementComplex",
+        "canDodgeWhileShooting",
+        {"or": [
+          {"ammo": {"type": "Missile", "count": 1}},
+          "Plasma"
+        ]},
+        {"shinespark": {"frames": 14}},
+        {"heatFrames": 190}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 74,
+      "link": [4, 1],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$2.0"
+        }
+      },
+      "requires": [
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"heatFrames": 490}
+          ]},
+          {"and": [
+            "canTrickySpringBallJump",
+            {"heatFrames": 580}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ],
+      "devNote": [
+        "FIXME: This could be done with lower run speed, at the cost of more heat frames."
+      ]
+    },
+    {
+      "id": 92,
+      "link": [4, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir"
+        ]},
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            "canFarmWhileShooting",
+            "canTrickyDodgeEnemies"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to kill a Multiviola by the door and pause abuse to grab its Energy drop on G-mode exit.",
+        "It is important avoid touching the invisible fireballs the Alcoons place, and to prevent them from shooting too many fireballs, as they will eventually prevent drops from appearing.",
+        "One easy way to do this without any beam upgrades or ammo is to kill them before they jump. This can be done from below by jumping and shooting horizontally near the floor surface.",
+        "Stay near the far wall when shooting to prevent getting too close and triggering their jump."
+      ],
+      "devNote": [
+        "Frozen Alcoon platforms and Artificial morph IBJ are not included, as Samus can crouch jump and down grab;",
+        "they can be considered if G-mode + flash suits are added, though they are still likely not useful.",
+        "Those are also likely not compatible with preventing the Alcoons from overloading drops."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [4, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 45}
+      ]
+    },
+    {
+      "id": 37,
+      "link": [4, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 38,
+      "link": [4, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        {"heatFrames": 1600}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 75,
+      "link": [4, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canXRayCancelShinecharge",
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"heatFrames": 945}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 93,
+      "link": [4, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          "h_heatedGModePauseAbuse"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to kill a Multiviola by the door and pause abuse to grab its Energy drop on G-mode exit.",
+        "It is important avoid touching the invisible fireballs the Alcoons place, and to prevent them from shooting too many fireballs, as they will eventually prevent drops from appearing.",
+        "Either kill them or avoid them then kill the Multiviola near the door without too much delay."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 220}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 20}]
+        },
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 10}]
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "link": [4, 3],
+      "name": "Leave with Runway",
+      "requires": [
+        {"heatFrames": 200}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 65}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 30}]
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "canShinechargeMovementComplex",
+            {"heatFrames": 215},
+            {"shinespark": {"frames": 15, "excessFrames": 0}}
+          ]},
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"heatFrames": 195},
+            {"shinespark": {"frames": 5, "excessFrames": 0}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 76,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canXRayCancelShinecharge",
+        "canXRayTurnaround",
+        "canLongChainTemporaryBlue",
+        {"heatFrames": 500}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super", "powerbomb"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        }
+      ]
+    },
+    {
+      "id": 94,
+      "link": [4, 3],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": "It is important avoid touching the invisible fireballs the Alcoons place."
+    },
+    {
+      "id": 42,
+      "link": [4, 4],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 100,
+      "link": [4, 4],
+      "name": "Alcoon and Multiviola Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [4]}},
+        {"or": [
+          "Plasma",
+          "ScrewAttack",
+          {"and": [
+            "Wave",
+            {"cycleFrames": 20}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 90}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 260},
+            {"or": [
+              "canFarmWhileShooting",
+              {"cycleFrames": 90}
+            ]}
+          ]}
+        ]},
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "h_crouchJumpDownGrab",
+          "SpaceJump"
+        ]},
+        {"cycleFrames": 450}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Multiviola", "count": 1},
+        {"enemy": "Alcoon", "count": 2}
+      ]
+    },
+    {
+      "id": 101,
+      "link": [4, 4],
+      "name": "Single Multiviola Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [4]}},
+        {"cycleFrames": 200},
+        "canCameraManip",
+        {"or": [
+          "Plasma",
+          "Wave",
+          "Spazer",
+          {"cycleFrames": 30}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Multiviola", "count": 1}],
+      "note": "Jump and aim down two to three times to activate the Multiviola."
+    },
+    {
+      "id": 43,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 64,
+      "link": [4, 4],
+      "name": "G-Mode Setup - Get Hit By Multiviola",
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "h_crouchJumpDownGrab",
+          "Wave"
+        ]},
+        {"heatFrames": 950},
+        {"or": [
+          "canTrickyJump",
+          "Wave",
+          "Spazer",
+          "Plasma",
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}},
+          {"enemyDamage": {"enemy": "Alcoon", "type": "fireball", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Climb the room and open the top door, so that the Multiviola will reach the second door."
+    },
+    {
+      "id": 95,
+      "link": [4, 5],
+      "name": "G-Mode, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canIBJ",
+          {"and": [
+            "h_crouchJumpDownGrab",
+            "canBombHorizontally"
+          ]},
+          {"and": [
+            "h_crouchJumpDownGrab",
+            "canTrickyUseFrozenEnemies"
+          ]}
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is important avoid touching the invisible fireballs the Alcoons place.",
+        "It is possible to kill them without any beam upgrades or ammo by jumping and shooting horizontally near the floor surface.",
+        "Stay near the far wall when shooting to prevent getting too close and triggering their jump.",
+        "After entering the morph tunnel, roll through the two camera scroll blocks a few times to overload PLMs.",
+        "They are at the entrance and two tiles in the tunnel. Exit G-mode and go through the room to the far right door."
+      ],
+      "devNote": [
+        "Frozen Alcoon platforms and Artificial morph IBJ are not included, as Samus can crouch jump and down grab;",
+        "they can be considered if G-mode + flash suits are added, though they are still likely not useful."
+      ]
+    },
+    {
+      "id": 96,
+      "link": [4, 5],
+      "name": "G-Mode Morph, Simple Blind Movement",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "h_artificialMorphIBJ",
+            "h_artificialMorphPowerBomb"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBallBombJump",
+            "h_additionalBomb"
+          ]}
+        ]},
+        "h_heatedGModeOffCameraDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is important avoid touching the invisible fireballs the Alcoons place. Jump over them or kill the Alcoons with Power Bombs.",
+        "After entering the morph tunnel, roll through the two camera scroll blocks a few times to overload PLMs.",
+        "They are at the entrance and two tiles in the tunnel. Exit G-mode and go through the room to the far right door."
+      ]
+    },
+    {
+      "id": 44,
+      "link": [4, 6],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "h_crouchJumpDownGrab"
+        ]},
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 45,
+      "link": [4, 6],
+      "name": "IBJ",
+      "requires": [
+        "canIBJ",
+        {"heatFrames": 750}
+      ],
+      "note": "Kill the enemies, then IBJ."
+    },
+    {
+      "id": 46,
+      "link": [4, 6],
+      "name": "Frozen Enemies",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        {"heatFrames": 830}
+      ],
+      "note": "Wait for the Alcoon to walk off the edge. Use it and the Multiviola as platforms."
+    },
+    {
+      "id": 47,
+      "link": [5, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 45}
+      ]
+    },
+    {
+      "id": 48,
+      "link": [5, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 49,
+      "link": [5, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        {"heatFrames": 1600}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 1 screen to get up to the door transition, without needing to open the door."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [5, 5],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 51,
+      "link": [5, 5],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 52,
+      "link": [5, 6],
+      "name": "Screw",
+      "requires": [
+        "Morph",
+        "ScrewAttack",
+        {"heatFrames": 600}
+      ]
+    },
+    {
+      "id": 53,
+      "link": [5, 6],
+      "name": "Power Bomb",
+      "requires": [
+        "h_usePowerBomb",
+        {"heatFrames": 660}
+      ]
+    },
+    {
+      "id": 54,
+      "link": [5, 6],
+      "name": "Bombs",
+      "requires": [
+        "h_useMorphBombs",
+        {"heatFrames": 730}
+      ]
+    },
+    {
+      "id": 102,
+      "link": [5, 6],
+      "name": "Cross with Crystal Flash (Early Position)",
+      "requires": [
+        {"heatFrames": 250},
+        "h_heatedCrystalFlash",
+        {"heatFrames": 380}
+      ]
+    },
+    {
+      "id": 103,
+      "link": [5, 6],
+      "name": "Cross with Crystal Flash (Later Position)",
+      "requires": [
+        {"heatFrames": 450},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "h_usePowerBomb",
+            {"heatFrames": 40}
+          ]},
+          {"and": [
+            "h_useMorphBombs",
+            {"heatFrames": 80}
+          ]}
+        ]},
+        "h_heatedCrystalFlash",
+        {"heatFrames": 250}
+      ]
+    },
+    {
+      "id": 55,
+      "link": [6, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "h_crouchJumpDownGrab",
+          {"and": [
+            "SpaceJump",
+            {"heatFrames": 40}
+          ]}
+        ]},
+        {"heatFrames": 100}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 30}]
+        },
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 70}]
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "link": [6, 1],
+      "name": "Leave with Runway",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "h_crouchJumpDownGrab"
+        ]},
+        {"heatFrames": 60}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 70}]
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "link": [6, 1],
+      "name": "IBJ",
+      "requires": [
+        "canIBJ",
+        {"heatFrames": 1500}
+      ],
+      "note": "Kill the enemies, then IBJ."
+    },
+    {
+      "id": 58,
+      "link": [6, 1],
+      "name": "Frozen Enemies",
+      "requires": [
+        "canUseFrozenEnemies",
+        {"heatFrames": 600}
+      ]
+    },
+    {
+      "id": 59,
+      "link": [6, 4],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 150}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 20}]
+        },
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 20}]
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "link": [6, 4],
+      "name": "Leave with Runway",
+      "requires": [
+        {"heatFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 20}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 20}]
+        }
+      ]
+    }
+  ],
+  "notables": [],
+  "nextStratId": 104,
+  "nextNotableId": 1
+}

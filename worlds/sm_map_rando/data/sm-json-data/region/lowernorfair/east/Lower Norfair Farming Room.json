@@ -1,0 +1,845 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 141,
+  "name": "Lower Norfair Farming Room",
+  "area": "Norfair",
+  "subarea": "Lower",
+  "subsubarea": "East",
+  "roomAddress": "0x7B37A",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "eye",
+      "nodeAddress": "0x00198ca",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00198d6",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Left Farm Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Right Farm Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Lower Norfair Farming Left Zebbos",
+      "enemyName": "Zebbo",
+      "quantity": 2,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e2",
+      "groupName": "Lower Norfair Farming Middle Zebbos",
+      "enemyName": "Zebbo",
+      "quantity": 2,
+      "betweenNodes": [3, 4]
+    },
+    {
+      "id": "e3",
+      "groupName": "Lower Norfair Farming Right Zebbos",
+      "enemyName": "Zebbo",
+      "quantity": 2,
+      "homeNodes": [4]
+    },
+    {
+      "id": "e4",
+      "groupName": "Lower Norfair Farming Room Left Violas",
+      "enemyName": "Viola",
+      "quantity": 3,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e5",
+      "groupName": "Lower Norfair Farming Room Right Violas",
+      "enemyName": "Viola",
+      "quantity": 2,
+      "homeNodes": [4]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {
+          "id": 3,
+          "devNote": "FIXME: Add heat-resistant strats later if there is a use case for them."
+        },
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {
+          "id": 4,
+          "devNote": "FIXME: Add heat-resistant strats later if there is a use case for them."
+        }
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 35,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        {"heatFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 1,
+          "runway": {
+            "length": 2,
+            "openEnd": 1
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $0.D."]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}},
+        {"enemyDamage": {"enemy": "Viola", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Use a Super to knock off the Viola to regain mobility."
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Space Jump",
+      "requires": [
+        "h_navigateHeatRooms",
+        "SpaceJump",
+        {"heatFrames": 380}
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Space Jump (Come in Jumping)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        "h_navigateHeatRooms",
+        "SpaceJump",
+        "canPrepareForNextRoom",
+        {"heatFrames": 260}
+      ]
+    },
+    {
+      "id": 38,
+      "link": [1, 2],
+      "name": "Spring Ball Bounce (Come in Jumping, 5-tile runway)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        {"heatFrames": 265}
+      ]
+    },
+    {
+      "id": 39,
+      "link": [1, 2],
+      "name": "Spring Ball Bounce (Come in Jumping, 4-tile runway)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 4
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        {"heatFrames": 285}
+      ]
+    },
+    {
+      "id": 40,
+      "link": [1, 2],
+      "name": "Spring Ball Bounce (Come in Jumping, 3-tile runway)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        {"heatFrames": 315}
+      ]
+    },
+    {
+      "id": 41,
+      "link": [1, 2],
+      "name": "Spring Ball Bounce (Come in with Spring Ball Bounce)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": "any",
+          "movementType": "controlled",
+          "remoteAndLandingMinTiles": [[7, 0]]
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        {"heatFrames": 240}
+      ]
+    },
+    {
+      "id": 42,
+      "link": [1, 2],
+      "name": "Speedy Spring Ball Bounce into Spring Fling",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": false,
+          "movementType": "controlled",
+          "remoteAndLandingMinTiles": [[30, 1]]
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        "canSpringFling",
+        {"heatFrames": 140}
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 15},
+        "h_navigateHeatRooms",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 57, "excessFrames": 4}},
+        {"heatFrames": 230}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [1, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_heatedGModePauseAbuse",
+          "h_heatedGModeOpenDifferentDoor"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "It is possible to kill a Zebbo by the door and pause abuse to grab its Energy drop on G-mode exit."
+    },
+    {
+      "id": 7,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 135}
+      ]
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Space Jump",
+      "requires": [
+        "h_navigateHeatRooms",
+        "SpaceJump",
+        {"heatFrames": 320}
+      ]
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Space Jump (Come in Running)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "h_navigateHeatRooms",
+        "SpaceJump",
+        {"heatFrames": 260}
+      ]
+    },
+    {
+      "id": 43,
+      "link": [2, 1],
+      "name": "Spring Ball Bounce (Come in Running, 4-tile runway)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": false,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        {"heatFrames": 235}
+      ]
+    },
+    {
+      "id": 44,
+      "link": [2, 1],
+      "name": "Spring Ball Bounce (Come in Running, 3-tile runway)",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": false,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        {"heatFrames": 260}
+      ]
+    },
+    {
+      "id": 45,
+      "link": [2, 1],
+      "name": "Spring Ball Bounce (Come in with Spring Ball Bounce)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": "any",
+          "movementType": "controlled",
+          "remoteAndLandingMinTiles": [[7, 0]]
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        {"heatFrames": 240}
+      ]
+    },
+    {
+      "id": 46,
+      "link": [2, 1],
+      "name": "Speedy Spring Ball Bounce into Spring Fling",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "any",
+          "remoteAndLandingMinTiles": [[33, 1]]
+        }
+      },
+      "requires": [
+        "canTrickySpringBallBounce",
+        "canSpringFling",
+        {"heatFrames": 155}
+      ]
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 15},
+        "h_navigateHeatRooms",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 59, "excessFrames": 5}},
+        {"heatFrames": 190}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 45}
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 37,
+      "link": [2, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_heatedGModePauseAbuse",
+          "h_heatedGModeOpenDifferentDoor"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "It is possible to kill a Zebbo by the door and pause abuse to grab its Energy drop on G-mode exit."
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Be careful to avoid damage from the respawning Zebbos.",
+        "They will not spawn if you are close enough to the door."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Zebbo",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 70}]
+        },
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 250}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: Could maybe reduce the heat frames if coming from the farm or the left."
+    },
+    {
+      "id": 17,
+      "link": [2, 3],
+      "name": "Tricky Jumps",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canTrickyJump",
+        {"heatFrames": 215}
+      ],
+      "note": "Use the wider platforms to build run speed for jumping farther, faster."
+    },
+    {
+      "id": 18,
+      "link": [2, 4],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 45}
+      ]
+    },
+    {
+      "id": 19,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 145}
+      ]
+    },
+    {
+      "id": 20,
+      "link": [3, 1],
+      "name": "Leave With Runway - Frozen Zebbo",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"heatFrames": 1000}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "The Zebbo needs to be 2 pixels higher than where it would be if Samus was standing.",
+        "One setup is to peform a tiny hop just before the right Zebbo starts moving to the left then freeze it after it starts moving left.",
+        "Lure the Zebbo to the left and freeze it again to extend the runway while maintaining a half-tile gap between it and the runway to extend the runway as much as possible.",
+        "With more Energy, it is possible to morph on one of the medium-height pillars to align the Zebbo."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [3, 1],
+      "name": "G-Mode Setup - Get Hit By Zebbo",
+      "requires": [
+        {"heatFrames": 280}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 130}]
+        },
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 350}]
+        }
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [3, 3],
+      "name": "Heat-proof Zebbo Farm",
+      "requires": [
+        "h_heatProof",
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"simpleCycleFrames": 110},
+            {"cycleFrames": 30}
+          ]},
+          {"and": [
+            {"or": [
+              "Plasma",
+              "Wave",
+              "Spazer"
+            ]},
+            {"simpleCycleFrames": 150},
+            {"cycleFrames": 35}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            "canDodgeWhileShooting",
+            {"simpleCycleFrames": 155},
+            {"cycleFrames": 35}
+          ]},
+          {"and": [
+            "canFarmWhileShooting",
+            {"simpleCycleFrames": 120},
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"simpleCycleFrames": 240},
+            {"cycleFrames": 60}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Zebbo", "count": 2}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [3, 3],
+      "name": "Heat-proof Viola Farm",
+      "requires": [
+        "h_heatProof",
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 840}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 870}
+          ]}
+        ]},
+        {"or": [
+          "h_lavaProof",
+          "canDodgeWhileShooting"
+        ]},
+        {"or": [
+          "Grapple",
+          {"cycleFrames": 410}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Viola", "count": 5}],
+      "flashSuitChecked": true,
+      "devNote": "Taking damage isn't unlikely, but the Zebbos are here as an Energy farm."
+    },
+    {
+      "id": 23,
+      "link": [3, 3],
+      "name": "Zebbo and Viola Farm",
+      "requires": [
+        "Grapple",
+        "canFarmWhileShooting",
+        {"heatFramesWithEnergyDrops": {
+          "frames": 370,
+          "drops": [{"enemy": "Zebbo", "count": 3}]
+        }},
+        {"partialRefill": {"type": "PowerBomb", "limit": 3}},
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 47,
+      "link": [3, 3],
+      "name": "Zebbo Farm",
+      "requires": [
+        "Grapple",
+        "canFarmWhileShooting",
+        "canPauseAbuse",
+        {"simpleHeatFrames": 110},
+        {"heatFrames": 30},
+        {"simpleCycleFrames": 110},
+        {"cycleFrames": 30}
+      ],
+      "farmCycleDrops": [{"enemy": "Zebbo", "count": 2}]
+    },
+    {
+      "id": 24,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": "Be careful to avoid damage from the respawning Zebbos."
+    },
+    {
+      "id": 25,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"or": [
+          "canTrickyJump",
+          {"heatFrames": 30}
+        ]},
+        {"heatFrames": 180}
+      ]
+    },
+    {
+      "id": 26,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 60}
+      ]
+    },
+    {
+      "id": 27,
+      "link": [4, 2],
+      "name": "Leave With Runway - Frozen Zebbo",
+      "requires": [
+        "h_frozenEnemyRunway",
+        {"heatFrames": 300},
+        {"or": [
+          "canInsaneJump",
+          {"heatFrames": 300}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "The Zebbo needs to be 2 pixels higher than where it would be if Samus was standing.",
+        "One setup is to peform a tiny hop just before the left Zebbo starts moving to the right then freeze it after it starts moving right.",
+        "Get onto the runway and freeze the Zebbo again while maintaining a half-tile gap between it and the runway to extend it as much as possible.",
+        "With more Energy, it is possible to morph on one of the medium-height pillars to align the Zebbo.",
+        "With less Energy, it is possible to get the Zebbo into position by only freezing it once -",
+        "after the small hop, jump towards the door and shoot downwards to freeze it in place."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 210}
+      ]
+    },
+    {
+      "id": 31,
+      "link": [4, 4],
+      "name": "Zebbo and Viola Farm",
+      "requires": [
+        "Grapple",
+        "canFarmWhileShooting",
+        {"heatFramesWithEnergyDrops": {
+          "frames": 400,
+          "drops": [{"enemy": "Zebbo", "count": 4}]
+        }},
+        {"partialRefill": {"type": "PowerBomb", "limit": 4}},
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 32,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": "Be careful to avoid damage from the respawning Zebbos."
+    }
+  ],
+  "notables": [],
+  "nextStratId": 48,
+  "nextNotableId": 1
+}

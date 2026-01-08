@@ -1,0 +1,149 @@
+﻿# Q. What is this file?
+# A. This file contains options which allow you to configure your multiworld experience while allowing
+#    others to play how they want as well.
+#
+# Q. I've never seen a file like this before. What characters am I allowed to use?
+# A. This is a .yaml file. You are allowed to use most characters.
+#    To test if your yaml is valid or not, you can use this website:
+#        http://www.yamllint.com/
+#    You can also verify that your Archipelago options are valid at this site:
+#        https://archipelago.gg/check
+
+# Your name in-game, limited to 16 characters.
+#     {player} will be replaced with the player's slot number.
+#     {PLAYER} will be replaced with the player's slot number, if that slot number is greater than 1.
+#     {number} will be replaced with the counter value of the name.
+#     {NUMBER} will be replaced with the counter value of the name, if the counter value is greater than 1.
+name: Player{number}
+game: Ratchet & Clank 2
+requires:
+  version: 0.5.0 # Version of Archipelago required for this yaml to work as expected.
+
+Ratchet & Clank 2:
+  # Game Options
+
+  # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+  #
+  # A lower setting means more getting stuck. A higher setting means less getting stuck.
+  #
+  # Minimum value is 0
+  # Maximum value is 99
+  progression_balancing: 50
+
+  # Set rules for reachability of your items/locations.
+  #
+  # full: ensure everything can be reached and acquired.
+  #
+  # minimal: ensure what is needed to reach your goal can be acquired.
+  accessibility: full
+
+  # When you die, everyone who enabled death link dies. Of course, the reverse is true too.
+  death_link: false
+
+  # Randomize what two weapons you start the game with.
+  #
+  # vanilla: Start with the Lancer and Gravity Bomb.
+  # balanced: Start with two random weapons that are relatively balanced.
+  # non_broken: Start with two random weapons besides RYNO II and Zodiac.
+  # unrestricted: Start with any two non-upgraded weapons.
+  starting_weapons: vanilla
+
+  # Randomize what items appear at the Megacorp vendor. New items will get added as you visit more planets.
+  randomize_megacorp_vendor: false
+
+  # Randomize what items appear at the Gadgetron vendor on Barlow.
+  randomize_gadgetron_vendor: false
+
+  # Exclude RYNO II and Zodiac from the randomization leaving them at their vanilla locations.
+  # This will only take effect if the corresponding vendors are randomized.
+  exclude_very_expensive_items: true
+
+  # Skips the Wupash Nebula ship section that appears when first traveling to Maktar Nebula.
+  skip_wupash_nebula: true
+
+  # Enables the bolt multiplier feature without being in New Game+.
+  enable_bolt_multiplier: false
+
+  # In the vanilla game, rewards given when killing enemies change when you come back to a previously visited planet
+  # (bolts & experience). Enabling this option removes this behavior, making the experience and bolts obtained more
+  # stable throughout the seed.
+  no_revisit_reward_change: false
+
+  # In the vanilla game, rewards given by a specific enemy decrease each time you kill it (bolts & experience).
+  # Enabling this option removes this behavior, making the experience and bolts obtained more stable throughout
+  # the seed.
+  no_kill_reward_degradation: false
+
+  # Makes all hoverbike and spaceship challenges selectable right away, which means you don't have to win a
+  # challenge to access the next one.
+  free_challenge_selection: false
+
+  # A multiplier applied to experience gained for Nanotech levels, in percent.
+  #
+  # You can define additional values between the minimum and maximum values.
+  # Minimum value is 20
+  # Maximum value is 600
+  nanotech_xp_multiplier: 100
+
+  # A multiplier applied to experience gained for weapon levels, in percent.
+  #
+  # You can define additional values between the minimum and maximum values.
+  # Minimum value is 30
+  # Maximum value is 600
+  weapon_xp_multiplier: 100
+
+  # In the vanilla game, only the first challenge and the race challenge completed perfectly give an item as a
+  # reward. If enabled, this option makes all spaceship challenges reward an item on first completion.
+  extra_spaceship_challenge_locations: false
+
+  # If enabled, make all weapon tiers obtainable through weapon experience. This means LV2 (orange) weapons can
+  # upgrade into LV3 (yellow) weapons, which can then upgrade into LV4 (blue) weapons.
+  # This effectively makes all weapons that are usually restricted to NG+ available with enough grinding.
+  extend_weapon_progression: false
+
+  # Determines if logic should take first person mode glitches into account when evaluating which locations are reachable.
+  # Various difficulty levels can be picked:
+  # - Easy: simple climbs (e.g. getting the Platinum Bolt near Oozla scientist)
+  # - Medium: harder climbs and basic lateral movement (e.g. Getting to the Notak Worker Bots without the Heli-pack nor the Thermanator)
+  # - Hard: full navigation following walls (e.g. Getting to the Mutated Protopet only with the Infiltrator)
+  # Can be disabled with value disabled.
+  first_person_mode_glitch_in_logic: disabled
+
+  # Item & Location Options
+  local_items:
+    # Forces these items to be in their native world.
+    []
+
+  non_local_items:
+    # Forces these items to be outside their native world.
+    []
+
+  start_inventory:
+    # Start with these items.
+    {}
+
+  start_inventory_from_pool:
+    # Start with these items and don't place them in the world.
+    # 
+    # The game decides what the replacement items will be.
+    {}
+
+  start_hints:
+    # Start with these item's locations prefilled into the ``!hint`` command.
+    []
+
+  start_location_hints:
+    # Start with these locations and their item prefilled into the ``!hint`` command.
+    []
+
+  exclude_locations:
+    # Prevent these locations from having an important item.
+    []
+
+  priority_locations:
+    # Prevent these locations from having an unimportant item.
+    []
+
+  item_links:
+    # Share part of your item pool with other players.
+    []

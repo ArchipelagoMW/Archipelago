@@ -1,0 +1,988 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 153,
+  "name": "Fast Ripper Room",
+  "area": "Norfair",
+  "subarea": "Lower",
+  "subsubarea": "West",
+  "roomAddress": "0x7B2DA",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001988e",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001989a",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Junction Left of Green Gate",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 2, 1]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Green Gate",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Fast Rippers",
+      "enemyName": "Ripper 2 (red)",
+      "quantity": 6,
+      "homeNodes": [1]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [
+        {"heatFrames": 120},
+        {"or": [
+          "Morph",
+          "Ice",
+          "ScrewAttack",
+          {"ammo": {"type": "Super", "count": 2}},
+          {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      },
+      "devNote": "This assumes we must wait for the Rippers to pass (or freeze or kill them)."
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Ripper Farm",
+      "requires": [
+        "ScrewAttack",
+        {"resetRoom": {"nodes": [1]}},
+        {"heatFrames": 215},
+        {"cycleFrames": 215},
+        {"or": [
+          "canInsaneJump",
+          {"and": [
+            "canFarmWhileShooting",
+            {"heatFrames": 45},
+            {"cycleFrames": 45}
+          ]},
+          {"and": [
+            {"heatFrames": 360},
+            {"cycleFrames": 360}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Ripper 2 (red)", "count": 5}]
+    },
+    {
+      "id": 41,
+      "link": [1, 1],
+      "name": "Partial Ripper Farm (Supers)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "ScrewAttack",
+        "canDodgeWhileShooting",
+        {"heatFrames": 200},
+        {"resourceAvailable": [{"type": "Energy", "count": 50}]},
+        {"partialRefill": {"type": "Super", "limit": 5}},
+        {"heatFrames": 80}
+      ]
+    },
+    {
+      "id": 42,
+      "link": [1, 1],
+      "name": "Partial Ripper Farm (Energy)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "ScrewAttack",
+        "canFarmWhileShooting",
+        {"or": [
+          {"and": [
+            "canPauseAbuse",
+            "canInsaneJump",
+            {"heatFrames": 60}
+          ]},
+          {"heatFrames": 120}
+        ]},
+        {"or": [
+          {"and": [
+            {"resourceMissingAtMost": [{"type": "Super", "count": 0}]},
+            {"partialRefill": {"type": "Energy", "limit": 100}}
+          ]},
+          {"partialRefill": {"type": "Energy", "limit": 70}}
+        ]},
+        {"heatFrames": 60}
+      ],
+      "note": "If Supers are not full, time the collection of energy to force further Energy drops."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [1, 1],
+      "name": "Leave With Spark (Tank the Rippers)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canHorizontalDamageBoost",
+        "canTrickyJump",
+        {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 2}},
+        {"canShineCharge": {"usedTiles": 18, "openEnd": 0}},
+        "canShinechargeMovement",
+        {"heatFrames": 525},
+        {"shinespark": {"frames": 43, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [1, 1],
+      "name": "Leave With Spark (Power Bomb Ripper Kill)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "h_usePowerBomb",
+        {"canShineCharge": {"usedTiles": 18, "openEnd": 0}},
+        "canShinechargeMovement",
+        {"heatFrames": 630},
+        {"shinespark": {"frames": 43, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 23,
+      "link": [1, 1],
+      "name": "Leave With Spark (Screw Ripper Kill)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "ScrewAttack",
+        {"canShineCharge": {"usedTiles": 18, "openEnd": 0}},
+        "canShinechargeMovement",
+        {"heatFrames": 585},
+        {"or": [
+          "canTrickyJump",
+          {"heatFrames": 200}
+        ]},
+        {"shinespark": {"frames": 43, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 24,
+      "link": [1, 1],
+      "name": "Leave With Spark (Super Ripper Kill, Top Position)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"ammo": {"type": "Super", "count": 2}},
+        {"or": [
+          {"canShineCharge": {"usedTiles": 18, "openEnd": 0}},
+          {"and": [
+            {"ammo": {"type": "Super", "count": 1}},
+            {"canShineCharge": {"usedTiles": 28, "openEnd": 0}},
+            {"heatFrames": 100}
+          ]}
+        ]},
+        "canShinechargeMovement",
+        {"heatFrames": 645},
+        {"or": [
+          "canTrickyJump",
+          {"and": [
+            {"heatFrames": 200},
+            {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 2}}
+          ]}
+        ]},
+        {"or": [
+          {"shinespark": {"frames": 43, "excessFrames": 0}},
+          {"and": [
+            "canShinechargeMovementComplex",
+            {"shinespark": {"frames": 27, "excessFrames": 0}},
+            {"heatFrames": 10}
+          ]},
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"shinespark": {"frames": 17, "excessFrames": 0}},
+            {"heatFrames": 135}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [1, 1],
+      "name": "Leave With Spark (Super Ripper Kill, Open Gate, Any Position)",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"ammo": {"type": "Super", "count": 2}},
+        {"canShineCharge": {"usedTiles": 17, "openEnd": 1}},
+        "canShinechargeMovementTricky",
+        {"heatFrames": 870},
+        {"shineChargeFrames": 175},
+        {"shinespark": {"frames": 15, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Use Supers to kill all the Rippers and open the green gate.",
+        "From the right door, run right-to-left to gain a shinecharge;",
+        "use the remaining runway (at least about 10 tiles) to gain speed to jump to the left and cross the room quickly."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Ripper",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 95}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["missiles", "powerbomb"],
+          "requires": [
+            {"heatFrames": 385},
+            {"or": [
+              "Morph",
+              "canInsaneJump",
+              {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 1}}
+            ]}
+          ]
+        }
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 28,
+      "link": [1, 2],
+      "name": "Indirect G-Mode, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canInsaneJump",
+          "ScrewAttack",
+          "canUseFrozenEnemies",
+          {"and": [
+            "canTrickyDodgeEnemies",
+            "Morph"
+          ]},
+          {"ammo": {"type": "Super", "count": 2}},
+          {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 2}}
+        ]},
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            "ScrewAttack"
+          ]},
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            {"ammo": {"type": "Super", "count": 1}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Despawn the gate in indirect G-mode then cross the room while killing, freezing, dodging, or tanking the Rippers.",
+        "Dodging the Rippers without Morph, requires crouching under the first two then jumping and aiming down over the next two;",
+        "it also requires jumping over all three lower Rippers when most of the way across the room.",
+        "It is possible to kill a Ripper near the right door and pause abuse to collect its drop on G-mode exit."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [1, 2],
+      "name": "Indirect G-Mode Morph, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 1}}
+        ]},
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          {"and": [
+            "canTrickyJump",
+            "h_heatedGModePauseAbuse",
+            {"ammo": {"type": "Super", "count": 1}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Despawn the gate in indirect G-mode then Power Bomb the Rippers and cross the room.",
+        "It is possible to kill a Ripper near the right door and pause abuse to collect its drop on G-mode exit.",
+        "Timing the Power Bomb to kill some but not all of the lower three Rippers is necessary if farming on the right side of the room."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [1, 2],
+      "name": "Indirect G-Mode, Despawn Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canInsaneJump",
+          "ScrewAttack",
+          "canUseFrozenEnemies",
+          {"and": [
+            "canTrickyDodgeEnemies",
+            "Morph"
+          ]},
+          {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 3}}
+        ]},
+        {"heatFrames": 110}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Despawn the gate in indirect G-mode then exit G-mode while under it to open the gate without a Super.",
+        "This requires killing, freezing, dodging, or tanking the Rippers.",
+        "Dodging the Rippers without Morph, requires crouching under the first two then jumping and aiming down over the next two;",
+        "it also requires jumping over all three lower Rippers when most of the way across the room.",
+        "Then exiting G-mode while on the right side of the gate tile as the first Ripper approaches, so it hits the gate while it's opening.",
+        "Then run towards the door and jump and aim down over the Ripper that makes it through, before quickly using the runway."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [1, 2],
+      "name": "Indirect G-Mode Morph, Despawn Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 2}}
+        ]},
+        {"heatFrames": 110}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Despawn the gate in indirect G-mode then Power Bomb the Rippers and exit G-mode while under the gate to open it without a Super."
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "Tank the Rippers",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 450},
+        {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 3}}
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Screw Attack",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 350},
+        "ScrewAttack"
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 3],
+      "name": "Kill some Rippers",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 450},
+        {"enemyKill": {
+          "enemies": [["Ripper 2 (red)", "Ripper 2 (red)"]],
+          "explicitWeapons": ["Super", "PowerBomb"]
+        }}
+      ],
+      "note": "The time lost by setting up a few strategic kills is pretty much offset by not having damage recoil."
+    },
+    {
+      "id": 39,
+      "link": [1, 3],
+      "name": "Farm Rippers and Cross Room",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canFarmWhileShooting",
+        {"resourceMissingAtMost": [{"type": "Super", "count": 0}]},
+        {"enemyKill": {
+          "enemies": [["Ripper 2 (red)", "Ripper 2 (red)"]],
+          "explicitWeapons": ["PowerBomb"]
+        }},
+        {"heatFramesWithEnergyDrops": {
+          "frames": 280,
+          "drops": [{"enemy": "Ripper 2 (red)", "count": 5}]
+        }},
+        {"heatFrames": 170}
+      ]
+    },
+    {
+      "id": 32,
+      "link": [1, 3],
+      "name": "Direct G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "canInsaneJump",
+          "ScrewAttack",
+          "canUseFrozenEnemies",
+          {"ammo": {"type": "Super", "count": 2}},
+          {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 2}}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The room is a bit trickier to cross in direct G-mode because the Ripper cycle with the gate.",
+        "Cross the room while killing, freezing, dodging, or tanking the Rippers.",
+        "Dodging the Rippers without Morph, requires crouching under the first two then jumping and aiming down over the next two;",
+        "either way, it also requires a precise jump over all three lower Rippers when most of the way across the room, or a morph under the first and quick jump over the next two."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [1, 3],
+      "name": "Direct G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 1}}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The room is a bit trickier to cross in direct G-mode because the Ripper cycle with the gate.",
+        "Power Bomb the Rippers on entry then cross the room."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [1, 3],
+      "name": "Direct G-Mode, Immobile",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false,
+          "mobility": "immobile"
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 1}},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": "This strat just saves one Ripper hit when tanking the Rippers because of the i-frames when taking the hit to regain mobility."
+    },
+    {
+      "id": 35,
+      "link": [2, 1],
+      "name": "Indirect G-Mode, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "ScrewAttack",
+          "canUseFrozenEnemies",
+          {"and": [
+            "canInsaneJump",
+            {"ammo": {"type": "Super", "count": 1}}
+          ]},
+          {"ammo": {"type": "Super", "count": 3}},
+          {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 2}}
+        ]},
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            "ScrewAttack"
+          ]},
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            {"ammo": {"type": "Super", "count": 1}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Despawn the gate in indirect G-mode then cross the room while killing, freezing, or tanking the Rippers.",
+        "Without Morph, killing the lowest Ripper with a Super will make it possible but difficult to cross the room damageless.",
+        "It is possible to kill a Ripper near the left door and pause abuse to collect its drop on G-mode exit."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 1],
+      "name": "Indirect G-Mode, Despawn Gate, Naked Ripper Weave",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canTrickyGMode",
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            {"ammo": {"type": "Super", "count": 1}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Despawn the gate in indirect G-mode then cross the room while dodging the Rippers.",
+        "It is possible to cross the room damageless without any items.",
+        "Crouch under the first Rippers then jump with a precise timing to go over the next without hitting the highest ones.",
+        "With two small forward spin jumps, jump over the three Rippers that come from behind. Move to the first platform and jump over them again.",
+        "Cross the rest of the room while weaving through the Rippers to get to the left side.",
+        "It is possible to kill a Ripper near the left door and pause abuse to collect its drop on G-mode exit."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [2, 1],
+      "name": "Indirect G-Mode Morph, Despawn Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "canInsaneJump",
+          "h_artificialMorphPowerBomb"
+        ]},
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            {"ammo": {"type": "Super", "count": 1}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Despawn the gate in indirect G-mode then cross the room by either rolling under the Rippers then unmorphing and dodging them while while crossing the room,",
+        "or place a Power Bomb to kill all or most of them and cross the room.",
+        "It is possible to kill a Ripper near the left door and pause abuse to collect its drop on G-mode exit."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 45}
+      ]
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 11,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Leave With Runway (Gate Closed)",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 10,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Leave With Runway (Gate Open)",
+      "requires": [
+        {"or": [
+          "h_heatedGreenGateGlitch",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 2}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 29,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 27,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Ripper",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 470},
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: These heatFrames are the worst case scenario, otherwise the entire room would need to be modeled."
+    },
+    {
+      "id": 37,
+      "link": [2, 2],
+      "name": "Indirect G-Mode, Despawn Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canInsaneJump",
+          "ScrewAttack",
+          "canUseFrozenEnemies",
+          "Morph",
+          {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 1}}
+        ]},
+        {"heatFrames": 110}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Despawn the gate in indirect G-mode then exit G-mode while under it to open the gate without a Super.",
+        "This requires killing, freezing, dodging, or tanking the Rippers.",
+        "Dodging the Rippers without Morph, requires exiting G-mode while on the right side of the gate tile as the first Ripper approaches, so it hits the gate while it's opening.",
+        "Then run towards the door and jump and aim down over the Ripper that makes it through, before quickly using the runway."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [2, 2],
+      "name": "Indirect G-Mode Morph, Despawn Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb",
+        {"heatFrames": 110}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Despawn the gate in indirect G-mode then Power Bomb the Rippers and exit G-mode while under the gate to open it without a Super.",
+      "devNote": "FIXME: It would be possible to enter in direct G-mode and use a power bomb then gate glitch and cross the room without the Rippers."
+    },
+    {
+      "id": 15,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"or": [
+          "h_heatedGreenGateGlitch",
+          {"obstaclesCleared": ["A"]}
+        ]},
+        {"heatFrames": 100}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [3, 1],
+      "name": "Tank the Rippers",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 600},
+        {"enemyDamage": {"enemy": "Ripper 2 (red)", "type": "contact", "hits": 2}}
+      ]
+    },
+    {
+      "id": 17,
+      "link": [3, 1],
+      "name": "Screw Attack",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 600},
+        "ScrewAttack"
+      ]
+    },
+    {
+      "id": 18,
+      "link": [3, 1],
+      "name": "Kill some Rippers",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 600},
+        {"enemyKill": {
+          "enemies": [["Ripper 2 (red)", "Ripper 2 (red)"]],
+          "explicitWeapons": ["Super", "PowerBomb"]
+        }}
+      ],
+      "note": "It's more chaotic because the GGG's unreliability makes the room more variable, but one PB or 2 Super kills should usually do it."
+    },
+    {
+      "id": 19,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 100},
+        {"or": [
+          {"and": [
+            {"heatFrames": 50},
+            {"ammo": {"type": "Super", "count": 1}}
+          ]},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 20}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 40}]
+        }
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": ["FIXME: The gate can be opened from a distance to save some health."]
+    },
+    {
+      "id": 20,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 43,
+  "nextNotableId": 1
+}

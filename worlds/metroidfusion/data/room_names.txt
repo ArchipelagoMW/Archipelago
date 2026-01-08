@@ -1,0 +1,333 @@
+Main Deck -- Docking Bay Hangar
+Main Deck -- Docking Bay Access
+Main Deck -- Docking Bay Climb
+Main Deck -- Station Entrance
+Main Deck -- Concourse Recharge Room
+Main Deck -- Crew Quarters Navigation Room
+Main Deck -- Crew Quarters East
+Main Deck -- Habitation Deck Save Room
+Main Deck -- Crew Quarters West
+Main Deck -- Operations Deck
+Main Deck -- Concourse Ventilation
+Main Deck -- Habitation Deck Entrance
+Main Deck -- Nexus Navigation Room
+Main Deck -- Restricted Airlock
+Main Deck -- Central Nexus
+Main Deck -- Dark Stairwell
+Main Deck -- Concourse
+Main Deck -- Habitation Ventilation
+Main Deck -- Quarantine Junction
+Main Deck -- Sector Hub
+Main Deck -- Elevator to Sector 2 (TRO)
+Main Deck -- Elevator to Sector 4 (AQA)
+Main Deck -- Elevator to Sector 6 (NOC)
+Main Deck -- Elevator to Sector 1 (SRX)
+Main Deck -- Elevator to Sector 3 (PYR)
+Main Deck -- Elevator to Sector 5 (ARC)
+Main Deck -- Operations Deck Navigation Room
+Main Deck -- Concourse Save Room
+Main Deck -- Main Elevator Shaft
+Main Deck -- Operations Ventilation
+Main Deck -- Crew Quarters Save Room
+Main Deck -- Arachnus Arena
+Main Deck -- Operations Deck Data Room
+Main Deck -- Elevator to Sector Hub
+Main Deck -- Main Elevator Access
+Main Deck -- Operations Deck Save Room
+Main Deck -- Operations Ventilation Storage
+Main Deck -- Sub-Zero Containment
+Main Deck -- Genesis Speedway
+Main Deck -- Silo Entry
+Main Deck -- Central Reactor Core
+Main Deck -- Silo Catwalk
+Main Deck -- Silo Scaffolding
+Main Deck -- Silo Checkpoint
+Main Deck -- Auxiliary Power Station
+Main Deck -- Silo Tunnel
+Main Deck -- Auxiliary Navigation Room
+Main Deck -- Nexus Storage
+Main Deck -- Silo Save Room
+Main Deck -- Elevator to Crew Quarters
+Main Deck -- Elevator to Operations Deck
+Main Deck -- Back Door to Sector 6 (NOC)
+Main Deck -- Restricted Save Room
+Main Deck -- Restricted Corridor
+Main Deck -- Restricted Navigation Room
+Main Deck -- Elevator to Tourian (SRX)
+Main Deck -- Habitation Deck
+Main Deck -- Hornoad Hallway
+Main Deck -- Quarantine Bay
+Main Deck -- Cubby Hole
+Main Deck -- Main Elevator Cache
+Main Deck -- Elevator to Habitation Deck
+Main Deck -- Elevator to Central Nexus
+Main Deck -- Operations Deck Recharge Room
+Main Deck -- Operations Room
+Main Deck -- Attic
+Main Deck -- Yakuza Arena
+Sector 1 (SRX) -- Entrance Lobby
+Sector 1 (SRX) -- Entrance Save Room
+Sector 1 (SRX) -- Entrance Navigation Room
+Sector 1 (SRX) -- Yameba Corridor
+Sector 1 (SRX) -- Atmospheric Stabilizer Northwest
+Sector 1 (SRX) -- Hornoad Hole
+Sector 1 (SRX) -- Twin Junctions West
+Sector 1 (SRX) -- Moto Motorway
+Sector 1 (SRX) -- Zebesian Zig
+Sector 1 (SRX) -- Atmospheric Stabilizer Central
+Sector 1 (SRX) -- Charge Core Upper Access
+Sector 1 (SRX) -- Entrance Recharge Room
+Sector 1 (SRX) -- Moto Manor
+Sector 1 (SRX) -- Atmospheric Stabilizer Southwest
+Sector 1 (SRX) -- Stabilizer Checkpoint
+Sector 1 (SRX) -- Atmospheric Stabilizer Southeast
+Sector 1 (SRX) -- Tourian Trapdoor
+Sector 1 (SRX) -- Lava Lake
+Sector 1 (SRX) -- Tourian Tower
+Sector 1 (SRX) -- Tourian Save Room East
+Sector 1 (SRX) -- Lava Lake Annex
+Sector 1 (SRX) -- Tourian Eastern Hub
+Sector 1 (SRX) -- Gold Pirate Crossing
+Sector 1 (SRX) -- Tourian Western Hub
+Sector 1 (SRX) -- Tourian Save Room West
+Sector 1 (SRX) -- Genesis Habitation
+Sector 1 (SRX) -- Ridley Arena Access
+Sector 1 (SRX) -- Ridley Arena
+Sector 1 (SRX) -- Tourian Checkpoint
+Sector 1 (SRX) -- Yameba Pool
+Sector 1 (SRX) -- Ripper Maze
+Sector 1 (SRX) -- Elevator to Restricted Zone
+Sector 1 (SRX) -- Atmospheric Stabilizer Northeast
+Sector 1 (SRX) -- Twin Junctions East
+Sector 1 (SRX) -- Twin Junctions Save Room
+Sector 1 (SRX) -- Zebesian Zag
+Sector 1 (SRX) -- Ripper Sauna
+Sector 1 (SRX) -- Charge Core Lower Access
+Sector 1 (SRX) -- Sciser Playground
+Sector 1 (SRX) -- Antechamber
+Sector 1 (SRX) -- Charge Core Arena
+Sector 1 (SRX) -- Elevator to Main Deck
+Sector 1 (SRX) -- Central Save Room
+Sector 1 (SRX) -- Crab Rave
+Sector 1 (SRX) -- Stabilizer Storage
+Sector 1 (SRX) -- Sciser Puddle
+Sector 1 (SRX) -- Hornoad Housing
+Sector 1 (SRX) -- Watering Hole
+Sector 1 (SRX) -- Glass Tube to Sector 2 (TRO)
+Sector 1 (SRX) -- Glass Tube to Sector 3 (PYR)
+Sector 1 (SRX) -- Wall Jump Tutorial
+Sector 1 (SRX) -- Animorphs
+Sector 1 (SRX) -- Animorphs Cache
+Sector 2 (TRO) -- Entrance Lobby
+Sector 2 (TRO) -- Entrance Save Room
+Sector 2 (TRO) -- Entrance Navigation Room
+Sector 2 (TRO) -- Courtyard Access
+Sector 2 (TRO) -- Security Corridor
+Sector 2 (TRO) -- Security Access
+Sector 2 (TRO) -- Lobby Cache
+Sector 2 (TRO) -- Data Room
+Sector 2 (TRO) -- Zoro Zig-Zag
+Sector 2 (TRO) -- Cultivation Station
+Sector 2 (TRO) -- Puyo Corridor
+Sector 2 (TRO) -- Shooting Gallery
+Sector 2 (TRO) -- Cathedral
+Sector 2 (TRO) -- Cathedral Corridor
+Sector 2 (TRO) -- Cathedral Save Access
+Sector 2 (TRO) -- Cathedral Save Room
+Sector 2 (TRO) -- Zazabi Arena Access
+Sector 2 (TRO) -- Zazabi Arena
+Sector 2 (TRO) -- Cloister
+Sector 2 (TRO) -- Nettori Arena Access
+Sector 2 (TRO) -- Overgrown Cache
+Sector 2 (TRO) -- Nettori Arena
+Sector 2 (TRO) -- Kihunter Hallway
+Sector 2 (TRO) -- Overgrown Entrance
+Sector 2 (TRO) -- Oasis Storage
+Sector 2 (TRO) -- Level 1 Security Room
+Sector 2 (TRO) -- Dessgeega Dorm
+Sector 2 (TRO) -- Reo Room
+Sector 2 (TRO) -- Elevator to Main Deck
+Sector 2 (TRO) -- Data Courtyard
+Sector 2 (TRO) -- Overgrown Spire
+Sector 2 (TRO) -- Kago Room
+Sector 2 (TRO) -- Entrance Recharge Room
+Sector 2 (TRO) -- Courtyard Save Room
+Sector 2 (TRO) -- Owtch Office
+Sector 2 (TRO) -- Zazabi Save Room
+Sector 2 (TRO) -- Sanctum
+Sector 2 (TRO) -- Oasis
+Sector 2 (TRO) -- Maintenance Wing
+Sector 2 (TRO) -- Puyo Palace
+Sector 2 (TRO) -- Hidden Recharge Room
+Sector 2 (TRO) -- Nettori Save Room
+Sector 2 (TRO) -- Ripper Tower
+Sector 2 (TRO) -- Glass Tube to Sector 1 (SRX)
+Sector 2 (TRO) -- Glass Tube to Sector 4 (AQA)
+Sector 2 (TRO) -- Crumble City
+Sector 2 (TRO) -- Zazabi Speedway
+Sector 2 (TRO) -- Overgrown Hallway
+Sector 2 (TRO) -- Overgrown Checkpoint
+Sector 2 (TRO) -- Broom Closet
+Sector 3 (PYR) -- Entrance Lobby
+Sector 3 (PYR) -- Entrance Save Room
+Sector 3 (PYR) -- Entrance Navigation Room
+Sector 3 (PYR) -- Security Access
+Sector 3 (PYR) -- Level 2 Security Room
+Sector 3 (PYR) -- Checkpoint Crossing
+Sector 3 (PYR) -- Bob's Abode
+Sector 3 (PYR) -- Alcove
+Sector 3 (PYR) -- Deserted Runway
+Sector 3 (PYR) -- Red Tower
+Sector 3 (PYR) -- Lava Reservoirs
+Sector 3 (PYR) -- Lava Maze
+Sector 3 (PYR) -- Sova Suite
+Sector 3 (PYR) -- Pyrochamber Access
+Sector 3 (PYR) -- Pyrochamber
+Sector 3 (PYR) -- Boiler Access
+Sector 3 (PYR) -- Main Boiler
+Sector 3 (PYR) -- Sova Processing
+Sector 3 (PYR) -- Elevator to Main Deck
+Sector 3 (PYR) -- Data Room
+Sector 3 (PYR) -- B.O.X. Arena Access
+Sector 3 (PYR) -- B.O.X. Arena
+Sector 3 (PYR) -- Main Boiler Control Room
+Sector 3 (PYR) -- Entrance Recharge Room
+Sector 3 (PYR) -- Monkey Bars of Fire
+Sector 3 (PYR) -- Fiery Storage
+Sector 3 (PYR) -- Namihe's Lair
+Sector 3 (PYR) -- Data Recharge Room
+Sector 3 (PYR) -- Data Save Room
+Sector 3 (PYR) -- Geron's Treasure
+Sector 3 (PYR) -- Processing Access
+Sector 3 (PYR) -- Garbage Chute
+Sector 3 (PYR) -- Chute Access
+Sector 3 (PYR) -- Glass Tube to Sector 5 (ARC)
+Sector 3 (PYR) -- Glass Tube to Sector 1 (SRX)
+Sector 4 (AQA) -- Entrance Lobby
+Sector 4 (AQA) -- Entrance Save Room
+Sector 4 (AQA) -- Entrance Navigation Room
+Sector 4 (AQA) -- Powamp Playhouse
+Sector 4 (AQA) -- Data Room
+Sector 4 (AQA) -- Sciser Stall
+Sector 4 (AQA) -- Reservoir East
+Sector 4 (AQA) -- Skultera Cisterns
+Sector 4 (AQA) -- Bridge Access
+Sector 4 (AQA) -- Serris Speedway
+Sector 4 (AQA) -- Broken Bridge
+Sector 4 (AQA) -- Reservoir Save Room
+Sector 4 (AQA) -- Aquarium Speedway
+Sector 4 (AQA) -- Reservoir Vault
+Sector 4 (AQA) -- Aquarium Shaft
+Sector 4 (AQA) -- Yard Firing Range
+Sector 4 (AQA) -- Evir Enclosure
+Sector 4 (AQA) -- Aquarium Pirate Tank
+Sector 4 (AQA) -- Aquarium Hub Access
+Sector 4 (AQA) -- Aquarium Hub
+Sector 4 (AQA) -- Reservoir West
+Sector 4 (AQA) -- Pump Control Access
+Sector 4 (AQA) -- Pump Control Save Room
+Sector 4 (AQA) -- Cargo Hold to Sector 5 (ARC)
+Sector 4 (AQA) -- Cheddar Bay
+Sector 4 (AQA) -- Security Access
+Sector 4 (AQA) -- Level 4 Security Room
+Sector 4 (AQA) -- Elevator to Main Deck
+Sector 4 (AQA) -- Waterway
+Sector 4 (AQA) -- Entrance Recharge Room
+Sector 4 (AQA) -- Breeding Tank Access
+Sector 4 (AQA) -- Breeding Tank
+Sector 4 (AQA) -- Bridge Save Room
+Sector 4 (AQA) -- Pump Control Unit
+Sector 4 (AQA) -- Security Bypass
+Sector 4 (AQA) -- Powamp Shaft
+Sector 4 (AQA) -- Drain Pipe
+Sector 4 (AQA) -- Owtch Atrium
+Sector 4 (AQA) -- Aquarium Kago Storage
+Sector 4 (AQA) -- Aquarium Save Room West
+Sector 4 (AQA) -- Sciser Sanctuary
+Sector 4 (AQA) -- Sanctuary Cache
+Sector 4 (AQA) -- Serris Arena
+Sector 4 (AQA) -- Glass Tube to Sector 6 (NOC)
+Sector 4 (AQA) -- Glass Tube to Sector 2 (TRO)
+Sector 4 (AQA) -- Hideout
+Sector 4 (AQA) -- C-Cache
+Sector 4 (AQA) -- Aquarium Save Room East
+Sector 5 (ARC) -- Entrance Lobby
+Sector 5 (ARC) -- Entrance Save Room
+Sector 5 (ARC) -- Entrance Navigation Room
+Sector 5 (ARC) -- Training Grounds
+Sector 5 (ARC) -- Training Aerie
+Sector 5 (ARC) -- Arctic Containment
+Sector 5 (ARC) -- Zeela Checkpoint
+Sector 5 (ARC) -- Security Shaft West
+Sector 5 (ARC) -- Level 3 Security Room
+Sector 5 (ARC) -- Waver Ward
+Sector 5 (ARC) -- E-Tank Mimic Den
+Sector 5 (ARC) -- Frozen Tower
+Sector 5 (ARC) -- Mini-Fridge
+Sector 5 (ARC) -- Data Room
+Sector 5 (ARC) -- Ruined Corridor
+Sector 5 (ARC) -- Nightmare Hub
+Sector 5 (ARC) -- Nightmare Upper Access
+Sector 5 (ARC) -- Nightmare Arena
+Sector 5 (ARC) -- Security Shaft East
+Sector 5 (ARC) -- Ripper's Treasure
+Sector 5 (ARC) -- Cellar
+Sector 5 (ARC) -- Elevator to Main Deck
+Sector 5 (ARC) -- Ripper Road
+Sector 5 (ARC) -- Nightmare Lower Access
+Sector 5 (ARC) -- Flooded Access
+Sector 5 (ARC) -- Security Save Room
+Sector 5 (ARC) -- Magic Box
+Sector 5 (ARC) -- Glass Tube to Sector 6 (NOC)
+Sector 5 (ARC) -- Entrance Recharge Room
+Sector 5 (ARC) -- Gerubus Gully
+Sector 5 (ARC) -- Nightmare Nook
+Sector 5 (ARC) -- Data Checkpoint
+Sector 5 (ARC) -- Crow's Nest
+Sector 5 (ARC) -- Glass Tube to Sector 3 (PYR)
+Sector 5 (ARC) -- Cellar Save Room
+Sector 5 (ARC) -- Kago Roadblock
+Sector 5 (ARC) -- Kago Speedway
+Sector 5 (ARC) -- Arctic Underside
+Sector 5 (ARC) -- Subway
+Sector 5 (ARC) -- Flooded Tower
+Sector 5 (ARC) -- Zebesian Waters
+Sector 5 (ARC) -- Ruined Break Room
+Sector 5 (ARC) -- Nightmare Recharge Room
+Sector 5 (ARC) -- Nightmare Save Room
+Sector 5 (ARC) -- Flooded Airlock to Sector 4 (AQA)
+Sector 5 (ARC) -- Transmutation Trial
+Sector 6 (NOC) -- Entrance Lobby
+Sector 6 (NOC) -- Entrance Save Room
+Sector 6 (NOC) -- Entrance Navigation Room
+Sector 6 (NOC) -- Geron's Crossing
+Sector 6 (NOC) -- Nocturnal Access
+Sector 6 (NOC) -- Nocturnal Shaft
+Sector 6 (NOC) -- Blue-X Blockade
+Sector 6 (NOC) -- Forbidden Entrance
+Sector 6 (NOC) -- Nocturnal Playground
+Sector 6 (NOC) -- Clogged Cavern
+Sector 6 (NOC) -- Warehouse
+Sector 6 (NOC) -- Data Save Room
+Sector 6 (NOC) -- Data Access
+Sector 6 (NOC) -- Varia Core-X Arena
+Sector 6 (NOC) -- X-B.O.X. Arena Access
+Sector 6 (NOC) -- Zozoro Wine Cellar
+Sector 6 (NOC) -- X-B.O.X. Arena
+Sector 6 (NOC) -- Elevator to Main Deck
+Sector 6 (NOC) -- X-B.O.X. Garage
+Sector 6 (NOC) -- Bull Bend
+Sector 6 (NOC) -- Neglected Shaft
+Sector 6 (NOC) -- Neglected Save Room
+Sector 6 (NOC) -- Checkpoint to Restricted Zone
+Sector 6 (NOC) -- Cavern Save Room
+Sector 6 (NOC) -- Missile Mimic Lodge
+Sector 6 (NOC) -- Data Room
+Sector 6 (NOC) -- Catacombs
+Sector 6 (NOC) -- Weapons Testing Grounds
+Sector 6 (NOC) -- Warehouse Access
+Sector 6 (NOC) -- Entrance Recharge Room
+Sector 6 (NOC) -- Twin Caverns West
+Sector 6 (NOC) -- Twin Caverns East
+Sector 6 (NOC) -- Maintenance Wing
+Sector 6 (NOC) -- Vault

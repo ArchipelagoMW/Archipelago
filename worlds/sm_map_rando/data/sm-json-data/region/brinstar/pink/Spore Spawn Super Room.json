@@ -1,0 +1,376 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 63,
+  "name": "Spore Spawn Super Room",
+  "area": "Brinstar",
+  "subarea": "Pink",
+  "roomAddress": "0x79B5B",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [0, 1],
+    [0, 1],
+    [0, 1],
+    [0, 1],
+    [0, 1],
+    [0, 1],
+    [0, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018d2a",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2],
+        [0, 1],
+        [0, 1],
+        [0, 1],
+        [0, 1],
+        [0, 1],
+        [0, 1],
+        [0, 1],
+        [1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018d1e",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1],
+        [0, 1],
+        [0, 1],
+        [0, 1],
+        [0, 1],
+        [0, 1],
+        [0, 1],
+        [0, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "chozo",
+      "nodeItem": "Super",
+      "nodeAddress": "0x784E4",
+      "mapTileMask": [
+        [1, 1],
+        [0, 2],
+        [0, 2],
+        [0, 2],
+        [0, 2],
+        [0, 2],
+        [0, 2],
+        [0, 2],
+        [1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Spore Spawn Supers Zeb",
+      "enemyName": "Zeb",
+      "quantity": 1,
+      "homeNodes": [1]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {
+          "id": 1,
+          "devNote": "FIXME: Moondance can be setup on the slope by freezing a new bug whenever the freeze effect expires."
+        },
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Zeb Farm",
+      "requires": [
+        {"simpleCycleFrames": 85},
+        {"cycleFrames": 20}
+      ],
+      "farmCycleDrops": [{"enemy": "Zeb", "count": 1}]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 10,
+          "openEnd": 0,
+          "steepUpTiles": 2
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Zeb",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 5,
+      "link": [2, 1],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canLongXRayClimb",
+        "canBeVeryPatient"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 8 screens."
+    },
+    {
+      "id": 6,
+      "link": [2, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb",
+        "canBeVeryPatient"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 8 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "G-Mode Overload PLMS with Camera Scroll Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canConsecutiveWalljump",
+          "SpaceJump"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb the shaft and overload PLMs with the camera scroll blocks which are against the crumble blocks.",
+      "devNote": [
+        "This is mostly an alternative to the canBeVeryPatient X-Ray climb.",
+        "This is possible with an IBJ, but it's still about 3 minutes, and you can't remotely acquire the item because it's in a Chozo Ball."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "G-Mode Overload PLMS with Camera Scroll Blocks, Shinespark",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"canShineCharge": {"usedTiles": 16, "openEnd": 1}},
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 399, "excessFrames": 0}},
+        {"shinespark": {"frames": 138, "excessFrames": 6}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Shinespark multiple times up the shaft and overload PLMs with the camera scroll blocks which are against the crumble blocks.",
+        "To overload PLMs in as few as 3 Shinesparks, spark diagonally in the shaft and hold backwards when hitting the top, then spark again to get up."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Direct G-Mode Morph, Overload PLMS with Camera Scroll Blocks, CF, Shinespark",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_artificialMorphCrystalFlash",
+        {"canShineCharge": {"usedTiles": 16, "openEnd": 1}},
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 399, "excessFrames": 0}},
+        {"shinespark": {"frames": 138, "excessFrames": 6}},
+        {"or": [
+          "h_usePowerBomb",
+          {"and": [
+            "canBeVeryPatient",
+            {"autoReserveTrigger": {}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Shinespark multiple times up the shaft and overload PLMs with the camera scroll blocks which are against the crumble blocks.",
+        "To overload PLMs in as few as 3 Shinesparks, spark diagonally in the shaft and hold backwards when hitting the top, then spark again to get up.",
+        "Afterwards, exit G-mode by using another Power Bomb to enable X-Ray again, or use the bugs to trigger Reserves."
+      ],
+      "devNote": [
+        "Depending on the number of tanks, the Reserve trigger may or may not take very long. This is a worst-case scenario.",
+        "Samus is not able to Crystal Flash twice in this room in Direct G-mode."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Indirect G-Mode Morph, Overload PLMS with Camera Scroll Blocks, CF, Shinespark",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_artificialMorphCrystalFlash",
+        {"canShineCharge": {"usedTiles": 16, "openEnd": 1}},
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 399, "excessFrames": 0}},
+        {"shinespark": {"frames": 138, "excessFrames": 6}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Shinespark multiple times up the shaft and overload PLMs with the camera scroll blocks which are against the crumble blocks.",
+        "To overload PLMs in as few as 3 Shinesparks, spark diagonally in the shaft and hold backwards when hitting the top, then spark again to get up."
+      ],
+      "devNote": "Samus is not able to CF twice in this room in Indirect G-mode."
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "G-Mode Overload PLMS with Chozo Ball, Shinespark",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"itemNotCollectedAtNode": 3},
+        "canRiskPermanentLossOfAccess",
+        {"canShineCharge": {"usedTiles": 16, "openEnd": 2}},
+        "canShinechargeMovement",
+        {"or": [
+          {"shinespark": {"frames": 138, "excessFrames": 6}},
+          {"and": [
+            "h_artificialMorphCrystalFlash",
+            {"or": [
+              "Morph",
+              "canArtificialMorph"
+            ]},
+            {"shinespark": {"frames": 138, "excessFrames": 6}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Shoot the Chozo Ball multiple times to overload PLMs then Shinespark to get up."
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 9,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 17,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 10,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 12,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    }
+  ],
+  "notables": [],
+  "nextStratId": 17,
+  "nextNotableId": 1
+}

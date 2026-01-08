@@ -1,0 +1,29 @@
+# Individual Lap Modifier Enabler [Ralf]
+lap_modifier = [
+    0x04005420, 0x807D0004,
+    0x04005424, 0x88030019,
+    0x04005428, 0x28000020,
+    0x0400542C, 0x40810024,
+    0x04005430, 0x28000034,
+    0x04005434, 0x4080001C,
+    0x04005438, 0x3C808000,
+    0x0400543C, 0x6084543F,
+    0x04005440, 0x7C0400AE,
+    0x04005444, 0x28000000,
+    0x04005448, 0x41820008,
+    0x0400544C, 0x98030018,
+    0x04005450, 0x48182754,
+    0x04187BA0, 0x4BE7D880,
+]
+
+# Enable Staff Ghosts [Ralf] + Unlock Everything
+unlock_everything = [
+    0x043BC1C4, 0xFFFFFFFF,
+    0x041CD680, 0x60000000,
+    0x041CDD68, 0x60000000,
+]
+
+# Grand Prix Mode: Allow Course Selection [Ralf]
+gp_course_selection = [
+    0x04169E94, 0x41820050,
+]

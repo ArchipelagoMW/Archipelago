@@ -1,0 +1,899 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 42,
+  "name": "Blue Brinstar Boulder Room",
+  "area": "Brinstar",
+  "subarea": "Blue",
+  "roomAddress": "0x7A1AD",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018fee",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018fe2",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "useImplicitComeInNormally": false,
+      "useImplicitComeInWithMockball": false,
+      "mapTileMask": [
+        [1, 2]
+      ],
+      "devNote": "Defined as being on the door ledge, above the water."
+    },
+    {
+      "id": 3,
+      "name": "Right Door, In the Water",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Boulder Room Boulders",
+      "enemyName": "Boulder",
+      "quantity": 3,
+      "homeNodes": [1]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 19, "openEnd": 2}},
+        {"shineChargeFrames": 40}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 19, "openEnd": 1}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 13,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 0,
+            "openEnd": 1
+          },
+          "maxExtraRunSpeed": "$1.0"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "SpaceJump"
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [
+            {"ammo": {"type": "Missile", "count": 2}}
+          ]
+        },
+        {
+          "types": ["super"],
+          "requires": [
+            {"ammo": {"type": "Super", "count": 1}}
+          ]
+        },
+        {"types": ["powerbomb"], "requires": []}
+      ],
+      "devNote": "Some missed shots are expected for missile and super doors at this difficulty."
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Careful Jump",
+      "requires": [
+        "canCarefulJump"
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "It is possible to shoot open the door and jump through it without going into the water below."
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Leave Shinecharged (with Gravity)",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 19, "openEnd": 2}},
+        "canShinechargeMovement",
+        "Gravity",
+        {"shineChargeFrames": 80}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Leave Shinecharged (Suitless)",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 19, "openEnd": 1}},
+        "canShinechargeMovement",
+        "canCarefulJump",
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["powerbomb"], "requires": []},
+        {"types": ["missiles", "super"], "requires": ["canTrickyJump"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Shoot the bridge to see where it ends.",
+        "Opening the door requires a shot that is fired while Samus has some momentum from running to the right.",
+        "Charge a spark running left then run off right into a preopened door."
+      ],
+      "devNote": [
+        "Using the second openEnd means you cannot make it to the door in time.",
+        "Could attach `canMomentumShot` tech if that gets added.",
+        "Emphasis on Careful.  There is no jump."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [1, 2],
+      "name": "Leave Shinecharged (Shorter Shortcharge)",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 16, "openEnd": 1}},
+        "canShinechargeMovementTricky",
+        "canTrickyJump",
+        {"shineChargeFrames": 80}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Gain a shinecharge running left to right, leaving about 3 tiles of runway to gain speed to jump directly into the doorway."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Leave With Mockball",
+      "requires": [
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 16,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$1.2",
+          "maxExtraRunSpeed": "$3.9"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 16,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$1.2",
+          "maxExtraRunSpeed": "$3.9",
+          "movementType": "uncontrolled"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 16,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$1.5",
+          "maxExtraRunSpeed": "$3.9"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 16, "openEnd": 1}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": "With blue speed, run and jump across the water, morphing and unmorphing (while holding an angle button) to gain temporary blue without a shinecharge."
+    },
+    {
+      "id": 14,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 44,
+      "link": [2, 1],
+      "name": "Space Jump Jumping Entry",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        "canPrepareForNextRoom",
+        "SpaceJump"
+      ],
+      "devNote": "Requires a jumping entry, but any runway length and environment is fine."
+    },
+    {
+      "id": 16,
+      "link": [2, 1],
+      "name": "Jump Through the Door",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "canCarefulJump"
+      ],
+      "devNote": "This is a lenient version of the strat, with an extra tile of runway."
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Jump Through the Door Wall Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        "canPreciseWalljump"
+      ],
+      "note": "A doorsill with an open end is really all the room that's needed on the other side."
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Jump Through the Door Air Ball",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canCarefulJump",
+        "canLateralMidAirMorph"
+      ],
+      "devNote": "This is a lenient version of the strat, with an extra tile of runway."
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Tricky Jump Through the Door",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canTrickyJump"
+      ],
+      "note": "With two tiles of runway and no wall jump or items, a last-frame jump is needed to make it."
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Jump Through the Door Tricky Air Ball",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        "canLateralMidAirMorph"
+      ],
+      "note": "With only one tile of runway, a last-frame jump is needed to make it."
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Doorsill Jump",
+      "requires": [
+        "canPreciseWalljump",
+        "canTrickyJump",
+        {"or": [
+          {"spikeHits": 1},
+          "h_backIntoCorner"
+        ]}
+      ],
+      "note": "It's not necessary to jump through the door, the in-room doorsill gives enough running room to make it up."
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Spring Ball Bomb Jump",
+      "requires": [
+        "canSpringBallBombJump"
+      ],
+      "note": "Requires waiting until the last moment before SpringBall jumping."
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Speedy Airball",
+      "requires": [
+        "SpeedBooster",
+        "canLateralMidAirMorph",
+        "canCarefulJump"
+      ]
+    },
+    {
+      "id": 51,
+      "link": [2, 1],
+      "name": "Come in Shinecharged, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 15},
+        "canShinechargeMovement",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 7, "excessFrames": 1}},
+        {"or": [
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Boulder", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "note": [
+        "Sparking only to the edge of the invisible platform helps prevent taking a boulder hit.",
+        "If sparking early, a down-back can help with reaching the platform."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [2, 1],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 4,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Skree Boost Room, Screw Attack Room, and Lava Dive."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 2,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyJump"
+              ],
+              "note": ["This applies to Metal Pirates Room (Small Ledge)."],
+              "detailNote": ["With this short of runway, a frame-perfect jump is required."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 4,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "note": [
+                "This applies to Early Supers Room, Shaktool Room, Tourian Hopper Room, Bowling Alley (bottom), Dust Torizo Room, and Noob Bridge."
+              ],
+              "detailNote": ["With this longer amount of runway, the jump has a 2-frame window."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 9.4375,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "note": [
+                "This applies to Bomb Torizo Room, Pink Brinstar Wave Gate Room, Phantoon's Room, Big Boy Room, and Double Chamber."
+              ]
+            }
+          ]
+        }
+      },
+      "requires": [],
+      "devNote": [
+        "Setups having more than a 1-tile runway at the door are not considered here,",
+        "because in that case a regular cross-room jump is possible.",
+        "Likewise, doing a ceiling mockball through the transition is not considered,",
+        "since if Morph is available then an airball can be done with just 1 tile of door runway."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Use Flash Suit, Jump From the Doorsill",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 2, "excessFrames": 0}},
+          {"and": [
+            {"shinespark": {"frames": 2, "excessFrames": 2}},
+            {"or": [
+              "canMoonwalk",
+              "canMorphTurnaround"
+            ]},
+            {"or": [
+              {"and": [
+                "canTrickyJump",
+                "SpeedBooster"
+              ]},
+              "canInsaneJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump and diagonally spark to the invisible platform.",
+        "There is a small pixel range which lands on the platform and does not touch the boulder.",
+        "It is possible to do this even below 29 Energy. It requires a last frame jump and then 4 frame spark window. It is more lenient with SpeedBooster."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "G-Mode Direct Doorsill Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canPreciseWalljump",
+        "canTrickyJump",
+        {"or": [
+          {"spikeHits": 1},
+          "canMorphTurnaround",
+          "canMoonwalk",
+          {"and": [
+            "canArtificialMorph",
+            {"tech": "canMorphTurnaround"}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "In direct G-mode, the door will not close, and the in-room doorsill gives enough running room to make it up to the invisible ledge."
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "G-Mode Morph Spring Ball IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphJumpIntoIBJ",
+        "h_artificialMorphBombHorizontally"
+      ],
+      "flashSuitChecked": true,
+      "note": "Starting an IBJ from spring ball with no other items is not very precise, it just takes a bit of an odd timing."
+    },
+    {
+      "id": 47,
+      "link": [2, 1],
+      "name": "Precise Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [{"position": [13, 5], "environment": "water", "note": "Mt. Everest"}]
+        }
+      },
+      "requires": [
+        "canPreciseGrappleJump"
+      ],
+      "devNote": [
+        "This can work from other setup rooms, but it would have no purpose coming from an air room,",
+        "since you could just do a running jump through the door and airball."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 48,
+      "link": [2, 2],
+      "name": "Leave With Side Platform",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 5,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $1.2 with spin, or $1.3 with a quick aim-down."]
+    },
+    {
+      "id": 49,
+      "link": [2, 2],
+      "name": "Leave With Side Platform (Spike I-frames)",
+      "requires": [
+        "Gravity",
+        {"spikeHits": 1},
+        "canUseIFrames",
+        {"or": [
+          {"spikeHits": 2},
+          "canInsaneJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 16,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "note": [
+        "Run and jump to the left, turning around right before landing on the spikes.",
+        "Continue holding right, gaining speed to jump out through the door."
+      ],
+      "devNote": [
+        "Max extra run speed $3.3 with spin, or $3.4 with a quick aim-down.",
+        "This would not be logically valid for gaining blue speed, so we have to be sure it can't be used that way."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 45,
+      "link": [2, 3],
+      "name": "Fall Into Water",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": []
+    },
+    {
+      "id": 46,
+      "link": [2, 3],
+      "name": "Fall Into Room With Mockball",
+      "entranceCondition": {
+        "comeInWithMockball": {
+          "speedBooster": "any",
+          "adjacentMinTiles": 0,
+          "remoteAndLandingMinTiles": [[0, 0]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 35,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 36,
+      "link": [3, 1],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump",
+        {"or": [
+          "canWalljump",
+          {"and": [
+            "canSpaceJumpWaterEscape",
+            "HiJump"
+          ]}
+        ]}
+      ],
+      "devNote": "Space Jump with HiJump alone is enough if the door can be opened."
+    },
+    {
+      "id": 37,
+      "link": [3, 1],
+      "name": "Spring Ball Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallJump"
+      ],
+      "note": "It helps to begin jumping when the water level is high."
+    },
+    {
+      "id": 38,
+      "link": [3, 1],
+      "name": "WallJump Bomb Boost",
+      "requires": [
+        "canWallJumpBombBoost"
+      ]
+    },
+    {
+      "id": 39,
+      "link": [3, 1],
+      "name": "Naked Walljump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canInsaneWalljump"
+      ],
+      "note": [
+        "It's a delayed walljump while the water is low, followed by a tight walljump off the bridge.",
+        "This strat is easily bypassed by jumping through the door, or if the door can be opened."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [3, 1],
+      "name": "Bomb Boost Water Escape Into IBJ",
+      "requires": [
+        "canBombJumpWaterEscape",
+        "canJumpIntoIBJ",
+        {"or": [
+          "canTrickyCarryFlashSuit",
+          {"noFlashSuit": {}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "When the water is high, jump and place a Bomb on the descent just above the water, then very quickly crouch jump to hit the Bomb and IBJ.",
+      "devNote": "The crouch jump is not necessary, but is helpful. Preserving a flash suit is still difficult without the crouch jump."
+    },
+    {
+      "id": 40,
+      "link": [3, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 7, "excessFrames": 2}}
+      ],
+      "flashSuitChecked": true,
+      "note": "There is a small pixel range which lands on the platform and does not touch the boulder."
+    },
+    {
+      "id": 41,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        {"doorUnlockedAtNode": 2},
+        {"or": [
+          "canDownGrab",
+          "canWalljump",
+          "Gravity",
+          "HiJump",
+          "canTrickySpringBallJump"
+        ]}
+      ],
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": "It is possible to escape the water with a wall jump when the water is low, or a crouch jump and down grab when it is high.",
+      "devNote": "The crouch jump is not actually necessary but helps slightly. It is also possible to use the crouch jump while maintaining the flash suit."
+    },
+    {
+      "id": 50,
+      "link": [3, 3],
+      "name": "Gain Flash Suit (Spikesuit)",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {"usedTiles": 19, "openEnd": 2}},
+        {"spikeHits": 1},
+        "h_spikeSuitSpikeHitLeniency",
+        "canSpikeSuit",
+        {"shinespark": {"frames": 6, "excessFrames": 6}}
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [],
+  "nextStratId": 53,
+  "nextNotableId": 1
+}

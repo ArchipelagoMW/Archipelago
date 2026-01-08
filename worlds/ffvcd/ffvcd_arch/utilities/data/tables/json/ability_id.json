@@ -1,0 +1,1235 @@
+{
+    "00": {
+        "readable_name": "Other",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "01": {
+        "readable_name": "Item",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "02": {
+        "readable_name": "Row",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "03": {
+        "readable_name": "Def.",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "04": {
+        "readable_name": "Attack",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "05": {
+        "readable_name": "Guard",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "06": {
+        "readable_name": "Kick",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['Monk']",
+        "max_count": 1,
+        "progression_id": "00",
+        "tier": 1
+    },
+    "07": {
+        "readable_name": "BuildUp",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Monk']",
+        "max_count": 1,
+        "progression_id": "01",
+        "tier": 2
+    },
+    "08": {
+        "readable_name": "Mantra",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Monk']",
+        "max_count": 1,
+        "progression_id": "02",
+        "tier": 1
+    },
+    "09": {
+        "readable_name": "Escape",
+        "valid": true,
+        "value": 0,
+        "related_jobs": "['Thief']",
+        "max_count": 1,
+        "progression_id": "03",
+        "tier": 1
+    },
+    "0A": {
+        "readable_name": "Steal",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['Thief']",
+        "max_count": 1,
+        "progression_id": "04",
+        "tier": 1
+    },
+    "0B": {
+        "readable_name": "Mug",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Thief']",
+        "max_count": 1,
+        "progression_id": "05",
+        "tier": 3
+    },
+    "0C": {
+        "readable_name": "Jump",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Dragoon']",
+        "max_count": 1,
+        "progression_id": "06",
+        "tier": 2
+    },
+    "0D": {
+        "readable_name": "DrgnSwd",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Dragoon']",
+        "max_count": 1,
+        "progression_id": "07",
+        "tier": 2
+    },
+    "0E": {
+        "readable_name": "Smoke",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Ninja']",
+        "max_count": 1,
+        "progression_id": "08",
+        "tier": 1
+    },
+    "0F": {
+        "readable_name": "Image",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Ninja']",
+        "max_count": 1,
+        "progression_id": "09",
+        "tier": 4
+    },
+    "10": {
+        "readable_name": "Throw",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Ninja']",
+        "max_count": 1,
+        "progression_id": "0A",
+        "tier": 5
+    },
+    "11": {
+        "readable_name": "SwdSlap",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Samurai']",
+        "max_count": 1,
+        "progression_id": "0B",
+        "tier": 1
+    },
+    "12": {
+        "readable_name": "GilToss",
+        "valid": true,
+        "value": 100,
+        "related_jobs": "['Samurai']",
+        "max_count": 1,
+        "progression_id": "0C",
+        "tier": 9
+    },
+    "13": {
+        "readable_name": "Slash",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Samurai']",
+        "max_count": 1,
+        "progression_id": "0D",
+        "tier": 4
+    },
+    "14": {
+        "readable_name": "Animals",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Hunter']",
+        "max_count": 1,
+        "progression_id": "0E",
+        "tier": 1
+    },
+    "15": {
+        "readable_name": "Aim",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Hunter']",
+        "max_count": 1,
+        "progression_id": "0E",
+        "tier": 1
+    },
+    "16": {
+        "readable_name": "X-Fight",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Hunter']",
+        "max_count": 1,
+        "progression_id": "0E",
+        "tier": 7
+    },
+    "17": {
+        "readable_name": "Conjure",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Summoner']",
+        "max_count": 1,
+        "progression_id": "0F",
+        "tier": 3
+    },
+    "18": {
+        "readable_name": "Observe",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['BlueMage']",
+        "max_count": 1,
+        "progression_id": "10",
+        "tier": 1
+    },
+    "19": {
+        "readable_name": "Analyze",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['BlueMage']",
+        "max_count": 1,
+        "progression_id": "11",
+        "tier": 1
+    },
+    "1A": {
+        "readable_name": "Tame",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Trainer']",
+        "max_count": 1,
+        "progression_id": "12",
+        "tier": 1
+    },
+    "1B": {
+        "readable_name": "Control",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Trainer']",
+        "max_count": 1,
+        "progression_id": "13",
+        "tier": 4
+    },
+    "1C": {
+        "readable_name": "Catch",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Trainer']",
+        "max_count": 1,
+        "progression_id": "14",
+        "tier": 4
+    },
+    "1D": {
+        "readable_name": "Release",
+        "valid": false,
+        "value": 2,
+        "related_jobs": "['Trainer']",
+        "max_count": 1,
+        "progression_id": "15",
+        "tier": 0
+    },
+    "1E": {
+        "readable_name": "Mix",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Chemist']",
+        "max_count": 1,
+        "progression_id": "16",
+        "tier": 8
+    },
+    "1F": {
+        "readable_name": "Drink",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Chemist']",
+        "max_count": 1,
+        "progression_id": "17",
+        "tier": 3
+    },
+    "20": {
+        "readable_name": "Pray",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Chemist']",
+        "max_count": 1,
+        "progression_id": "18",
+        "tier": 1
+    },
+    "21": {
+        "readable_name": "Revive",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Chemist']",
+        "max_count": 1,
+        "progression_id": "19",
+        "tier": 2
+    },
+    "22": {
+        "readable_name": "Terrain",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Geomancer']",
+        "max_count": 1,
+        "progression_id": "1A",
+        "tier": 2
+    },
+    "23": {
+        "readable_name": "*Dummy01",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "24": {
+        "readable_name": "Hide",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['Bard']",
+        "max_count": 1,
+        "progression_id": "1B",
+        "tier": 2
+    },
+    "25": {
+        "readable_name": "Show",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "['Bard']",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "26": {
+        "readable_name": "*Dummy02",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "27": {
+        "readable_name": "Sing",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Bard']",
+        "max_count": 1,
+        "progression_id": "1C",
+        "tier": 4
+    },
+    "28": {
+        "readable_name": "Flirt",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Dancer']",
+        "max_count": 1,
+        "progression_id": "1D",
+        "tier": 1
+    },
+    "29": {
+        "readable_name": "Dance",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Dancer']",
+        "max_count": 1,
+        "progression_id": "1E",
+        "tier": 4
+    },
+    "2A": {
+        "readable_name": "Mimic",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Mimic']",
+        "max_count": 1,
+        "progression_id": "1F",
+        "tier": 5
+    },
+    "2B": {
+        "readable_name": "Blank18",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "2C": {
+        "readable_name": "Blank19",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "2D": {
+        "readable_name": "Blank20",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "2E": {
+        "readable_name": "Blank21",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "2F": {
+        "readable_name": "Blank22",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "30": {
+        "readable_name": "MgcSwrd Lv.1",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['MysticKnight']",
+        "max_count": 1,
+        "progression_id": "20",
+        "tier": 1
+    },
+    "31": {
+        "readable_name": "MgcSwrd Lv.2",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['MysticKnight']",
+        "max_count": 1,
+        "progression_id": "20",
+        "tier": 2
+    },
+    "32": {
+        "readable_name": "MgcSwrd Lv.3",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['MysticKnight']",
+        "max_count": 1,
+        "progression_id": "20",
+        "tier": 3
+    },
+    "33": {
+        "readable_name": "MgcSwrd Lv.4",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['MysticKnight']",
+        "max_count": 1,
+        "progression_id": "20",
+        "tier": 4
+    },
+    "34": {
+        "readable_name": "MgcSwrd Lv.5",
+        "valid": true,
+        "value": 3,
+        "related_jobs": "['MysticKnight']",
+        "max_count": 1,
+        "progression_id": "20",
+        "tier": 5
+    },
+    "35": {
+        "readable_name": "MgcSwrd Lv.6",
+        "valid": true,
+        "value": 3,
+        "related_jobs": "['MysticKnight']",
+        "max_count": 1,
+        "progression_id": "20",
+        "tier": 8
+    },
+    "36": {
+        "readable_name": "Blank23",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "37": {
+        "readable_name": "Blank24",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "38": {
+        "readable_name": "White Lv.1",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['WhiteMage']",
+        "max_count": 1,
+        "progression_id": "21",
+        "tier": 1
+    },
+    "39": {
+        "readable_name": "White Lv.2",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['WhiteMage']",
+        "max_count": 1,
+        "progression_id": "21",
+        "tier": 2
+    },
+    "3A": {
+        "readable_name": "White Lv.3",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['WhiteMage']",
+        "max_count": 1,
+        "progression_id": "21",
+        "tier": 3
+    },
+    "3B": {
+        "readable_name": "White Lv.4",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['WhiteMage']",
+        "max_count": 1,
+        "progression_id": "21",
+        "tier": 4
+    },
+    "3C": {
+        "readable_name": "White Lv.5",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['WhiteMage']",
+        "max_count": 1,
+        "progression_id": "21",
+        "tier": 5
+    },
+    "3D": {
+        "readable_name": "White Lv.6",
+        "valid": true,
+        "value": 3,
+        "related_jobs": "['WhiteMage']",
+        "max_count": 1,
+        "progression_id": "21",
+        "tier": 6
+    },
+    "3E": {
+        "readable_name": "Blank25",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "3F": {
+        "readable_name": "Blank26",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "40": {
+        "readable_name": "Black Lv.1",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['BlackMage']",
+        "max_count": 1,
+        "progression_id": "22",
+        "tier": 1
+    },
+    "41": {
+        "readable_name": "Black Lv.2",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['BlackMage']",
+        "max_count": 1,
+        "progression_id": "22",
+        "tier": 2
+    },
+    "42": {
+        "readable_name": "Black Lv.3",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['BlackMage']",
+        "max_count": 1,
+        "progression_id": "22",
+        "tier": 3
+    },
+    "43": {
+        "readable_name": "Black Lv.4",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['BlackMage']",
+        "max_count": 1,
+        "progression_id": "22",
+        "tier": 4
+    },
+    "44": {
+        "readable_name": "Black Lv.5",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['BlackMage']",
+        "max_count": 1,
+        "progression_id": "22",
+        "tier": 6
+    },
+    "45": {
+        "readable_name": "Black Lv.6",
+        "valid": true,
+        "value": 3,
+        "related_jobs": "['BlackMage']",
+        "max_count": 1,
+        "progression_id": "22",
+        "tier": 8
+    },
+    "46": {
+        "readable_name": "Blank1",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "47": {
+        "readable_name": "Blank2",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "48": {
+        "readable_name": "Time Lv.1",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['TimeMage']",
+        "max_count": 1,
+        "progression_id": "23",
+        "tier": 1
+    },
+    "49": {
+        "readable_name": "Time Lv.2",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['TimeMage']",
+        "max_count": 1,
+        "progression_id": "23",
+        "tier": 2
+    },
+    "4A": {
+        "readable_name": "Time Lv.3",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['TimeMage']",
+        "max_count": 1,
+        "progression_id": "23",
+        "tier": 3
+    },
+    "4B": {
+        "readable_name": "Time Lv.4",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['TimeMage']",
+        "max_count": 1,
+        "progression_id": "23",
+        "tier": 4
+    },
+    "4C": {
+        "readable_name": "Time Lv.5",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['TimeMage']",
+        "max_count": 1,
+        "progression_id": "23",
+        "tier": 6
+    },
+    "4D": {
+        "readable_name": "Time Lv.6",
+        "valid": true,
+        "value": 3,
+        "related_jobs": "['TimeMage']",
+        "max_count": 1,
+        "progression_id": "23",
+        "tier": 8
+    },
+    "4E": {
+        "readable_name": "Blank3",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "4F": {
+        "readable_name": "Blank4",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "50": {
+        "readable_name": "Summon Lv.1",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['Summoner']",
+        "max_count": 1,
+        "progression_id": "24",
+        "tier": 2
+    },
+    "51": {
+        "readable_name": "Summon Lv.2",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['Summoner']",
+        "max_count": 1,
+        "progression_id": "24",
+        "tier": 3
+    },
+    "52": {
+        "readable_name": "Summon Lv.3",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['Summoner']",
+        "max_count": 1,
+        "progression_id": "24",
+        "tier": 4
+    },
+    "53": {
+        "readable_name": "Summon Lv.4",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Summoner']",
+        "max_count": 1,
+        "progression_id": "24",
+        "tier": 6
+    },
+    "54": {
+        "readable_name": "Summon Lv.5",
+        "valid": true,
+        "value": 3,
+        "related_jobs": "['Summoner']",
+        "max_count": 1,
+        "progression_id": "24",
+        "tier": 8
+    },
+    "55": {
+        "readable_name": "Blank5",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "56": {
+        "readable_name": "Blank6",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "57": {
+        "readable_name": "Blank7",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "58": {
+        "readable_name": "Red Lv.1",
+        "valid": true,
+        "value": 1,
+        "related_jobs": "['RedMage']",
+        "max_count": 1,
+        "progression_id": "25",
+        "tier": 1
+    },
+    "59": {
+        "readable_name": "Red Lv.2",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['RedMage']",
+        "max_count": 1,
+        "progression_id": "25",
+        "tier": 2
+    },
+    "5A": {
+        "readable_name": "Red Lv.3",
+        "valid": true,
+        "value": 3,
+        "related_jobs": "['RedMage']",
+        "max_count": 1,
+        "progression_id": "25",
+        "tier": 3
+    },
+    "5B": {
+        "readable_name": "Blank8",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "5C": {
+        "readable_name": "Blank9",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "5D": {
+        "readable_name": "Blank10",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "5E": {
+        "readable_name": "Blank11",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "5F": {
+        "readable_name": "Blank27",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "60": {
+        "readable_name": "X-Magic",
+        "valid": true,
+        "value": 3,
+        "related_jobs": "['RedMage']",
+        "max_count": 1,
+        "progression_id": "25",
+        "tier": 8
+    },
+    "61": {
+        "readable_name": "Blue",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['BlueMage']",
+        "max_count": 1,
+        "progression_id": "26",
+        "tier": 6
+    },
+    "62": {
+        "readable_name": "Blank12",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "63": {
+        "readable_name": "Blank13",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "64": {
+        "readable_name": "Blank14",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "65": {
+        "readable_name": "Blank15",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "66": {
+        "readable_name": "Blank16",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "67": {
+        "readable_name": "Blank17",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "[]",
+        "max_count": 0,
+        "progression_id": "FF",
+        "tier": 0
+    },
+    "68": {
+        "readable_name": "Equip Shield",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Knight']",
+        "max_count": 1,
+        "progression_id": "27",
+        "tier": 2
+    },
+    "69": {
+        "readable_name": "Equip Armors",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Knight']",
+        "max_count": 1,
+        "progression_id": "28",
+        "tier": 2
+    },
+    "6A": {
+        "readable_name": "Equip Ribbon",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Dancer']",
+        "max_count": 1,
+        "progression_id": "29",
+        "tier": 3
+    },
+    "6B": {
+        "readable_name": "Equip Swords",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Knight']",
+        "max_count": 1,
+        "progression_id": "2A",
+        "tier": 4
+    },
+    "6C": {
+        "readable_name": "Equip Spears",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Dragoon']",
+        "max_count": 1,
+        "progression_id": "2B",
+        "tier": 3
+    },
+    "6D": {
+        "readable_name": "Equip Katana",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Samurai']",
+        "max_count": 1,
+        "progression_id": "2C",
+        "tier": 4
+    },
+    "6E": {
+        "readable_name": "Equip Axes",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Berserker']",
+        "max_count": 1,
+        "progression_id": "2D",
+        "tier": 3
+    },
+    "6F": {
+        "readable_name": "Equip Bows",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Hunter']",
+        "max_count": 1,
+        "progression_id": "2E",
+        "tier": 3
+    },
+    "70": {
+        "readable_name": "Equip Whips",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Trainer']",
+        "max_count": 1,
+        "progression_id": "2F",
+        "tier": 3
+    },
+    "71": {
+        "readable_name": "Equip Harps",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Bard']",
+        "max_count": 1,
+        "progression_id": "30",
+        "tier": 1
+    },
+    "72": {
+        "readable_name": "Agility",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Thief']",
+        "max_count": 1,
+        "progression_id": "31",
+        "tier": 2
+    },
+    "73": {
+        "readable_name": "HP +10%",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Monk']",
+        "max_count": 1,
+        "progression_id": "32",
+        "tier": 1
+    },
+    "74": {
+        "readable_name": "HP +20%",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Monk']",
+        "max_count": 1,
+        "progression_id": "32",
+        "tier": 1
+    },
+    "75": {
+        "readable_name": "HP +30%",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Monk']",
+        "max_count": 1,
+        "progression_id": "32",
+        "tier": 1
+    },
+    "76": {
+        "readable_name": "MP +10%",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['WhiteMage']",
+        "max_count": 1,
+        "progression_id": "33",
+        "tier": 1
+    },
+    "77": {
+        "readable_name": "MP +30%",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['BlackMage']",
+        "max_count": 1,
+        "progression_id": "33",
+        "tier": 1
+    },
+    "78": {
+        "readable_name": "Brawl",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Monk']",
+        "max_count": 1,
+        "progression_id": "34",
+        "tier": 2
+    },
+    "79": {
+        "readable_name": "Dbl Grip",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Knight']",
+        "max_count": 1,
+        "progression_id": "35",
+        "tier": 4
+    },
+    "7A": {
+        "readable_name": "2-Wield",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Ninja']",
+        "max_count": 1,
+        "progression_id": "36",
+        "tier": 5
+    },
+    "7B": {
+        "readable_name": "Medicine",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Chemist']",
+        "max_count": 1,
+        "progression_id": "37",
+        "tier": 2
+    },
+    "7C": {
+        "readable_name": "Cover",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Knight']",
+        "max_count": 1,
+        "progression_id": "38",
+        "tier": 2
+    },
+    "7D": {
+        "readable_name": "Counter",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Monk']",
+        "max_count": 1,
+        "progression_id": "39",
+        "tier": 2
+    },
+    "7E": {
+        "readable_name": "Evade",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['MysticKnight']",
+        "max_count": 1,
+        "progression_id": "3A",
+        "tier": 1
+    },
+    "7F": {
+        "readable_name": "Learning",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "['BlueMage']",
+        "max_count": 0,
+        "progression_id": "3B",
+        "tier": 0
+    },
+    "80": {
+        "readable_name": "Barrier",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['MysticKnight']",
+        "max_count": 1,
+        "progression_id": "3C",
+        "tier": 2
+    },
+    "81": {
+        "readable_name": "Berserk",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Berserker']",
+        "max_count": 1,
+        "progression_id": "3D",
+        "tier": 2
+    },
+    "82": {
+        "readable_name": "Caution",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Thief']",
+        "max_count": 1,
+        "progression_id": "3E",
+        "tier": 1
+    },
+    "83": {
+        "readable_name": "Preemptive",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Ninja']",
+        "max_count": 1,
+        "progression_id": "3F",
+        "tier": 1
+    },
+    "84": {
+        "readable_name": "Passages",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "['Knight']",
+        "max_count": 0,
+        "progression_id": "40",
+        "tier": 0
+    },
+    "85": {
+        "readable_name": "DmgFloor",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['Geomancer']",
+        "max_count": 1,
+        "progression_id": "41",
+        "tier": 2
+    },
+    "86": {
+        "readable_name": "Pitfalls",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "['Geomancer']",
+        "max_count": 0,
+        "progression_id": "42",
+        "tier": 0
+    },
+    "87": {
+        "readable_name": "Equip Rods",
+        "valid": true,
+        "value": 2,
+        "related_jobs": "['TimeMage']",
+        "max_count": 1,
+        "progression_id": "43",
+        "tier": 4
+    },
+    "88": {
+        "readable_name": "Dash",
+        "valid": false,
+        "value": 0,
+        "related_jobs": "['Thief']",
+        "max_count": 0,
+        "progression_id": "44",
+        "tier": 0
+    }
+}

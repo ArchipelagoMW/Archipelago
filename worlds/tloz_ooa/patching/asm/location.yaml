@@ -1,0 +1,138 @@
+
+
+################################
+# Generic cases
+10/750c/: dw locations.graveUnderTree
+0c/723b/: dwbe locations.chevalTest
+0c/7232/: dwbe locations.chevalInvention
+0c/7e20/: dwbe locations.tingleGift
+0c/7e7a/: dwbe locations.tingleUpgrade
+0c/757d/: dwbe locations.defeatGreatMoblin
+15/7386/: dwbe locations.goronElder
+15/66e8/: dwbe locations.targetCart1 
+0c/6e71/: dwbe locations.targetCart1 
+15/66f0/: dwbe locations.targetCart2 
+0c/698c/: dwbe locations.goronDance1
+0c/699f/: dwbe locations.goronDance2
+15/6b2c/: dwbe locations.tradeRockBrisket
+15/6b23/: dwbe locations.tradeGoronVase
+15/6742/: dwbe locations.bigBangGame
+0c/707a/: dwbe locations.bigBangGame
+15/5285/: dwbe locations.goronShootingGallery
+0c/6ee9/: dwbe locations.tradeLavaJuice
+15/54f1/: dwbe locations.rescueNayru
+0c/7ae4/: dwbe locations.kingZora
+15/5db9/: dwbe locations.libraryPresent
+15/5dd8/: dwbe locations.libraryPast
+0c/7c48/: dwbe locations.zoraReward
+15/7969/: dwbe locations.piratianCaptain
+15/4fd3/: dwbe locations.gashaFarmer
+0c/65e3/: dwbe locations.towerWorker
+15/5bbb/: dwbe locations.wildTokayGame
+15/7929/: dwbe locations.symmetryCityBrother
+15/76cf/: dwbe locations.tokkeyComposition
+0a/6077/: dw locations.d8Stalfos
+
+
+09/4509/: dwbe locations.syrupShop2
+09/450b/: dwbe locations.syrupShop3
+09/450d/: dwbe locations.syrupShop1
+09/44ff/: dwbe locations.lynnaShop1
+09/44fd/: dwbe locations.lynnaShop2
+09/44f9/: dwbe locations.lynnaShop3
+09/44f7/: dwbe locations.hiddenShop1
+09/44fb/: dwbe locations.hiddenShop2
+09/4501/: dwbe locations.hiddenShop3
+09/4513/: dwbe locations.advanceShop1
+09/4515/: dwbe locations.advanceShop2
+09/4517/: dwbe locations.advanceShop3
+
+################################
+# Seed tree types (different than in seasons)
+12/59a1/symmetryCityTreeSubId: db 35
+12/59b8/crescentIslandTreeSubId: db 17
+12/59bf/zoraVillagePresentTreeSubId: db 38
+12/5ca4/southLynnaPresentTreeSubId: db 06
+12/5e4d/rollingRidgeWestTreeSubId: db 29
+12/5e5b/ambisPalaceTreeSubId: db 1a
+12/5e62/southLynnaPastTreeSubId: db 0c
+12/5e6f/zoraVillagePastTreeSubId: db 3e
+12/5f46/rollingRidgeEastTreeSubId: db 5b
+12/6101/dekuForestTreeSubId: db 4d
+
+################################
+# Maku Tree Gift
+15/70e0/: db locations.makuTreeGift.id
+15/70e3/: db locations.makuTreeGift.subid
+15/7115/: db locations.makuTreeGift.id
+15/7118/: db locations.makuTreeGift.subid
+
+################################
+# Nayru's house spawner doesn't usually spawn
+0b//setNayruHouseItem: |
+    inc l
+    ld (hl),locations.nayruHouse.id
+    inc l
+    ld (hl),locations.nayruHouse.subid
+    ret
+
+0b/682b/: call setNayruHouseItem
+
+################################
+# Dig
+0a/5e3c/: dwbe locations.southShoreDirt
+
+################################
+# TradeItem
+15/6188/: dwbe locations.graveyardPoe
+15/5f11/: dwbe locations.postman
+0c/66ad/: dwbe locations.toiletHand
+15/5c9e/: dwbe locations.tokayChef
+15/624d/: dwbe locations.maskSaleman
+15/5e21/: dwbe locations.mamamuYan
+15/5d0d/: dwbe locations.middleMan
+15/62e5/: dwbe locations.comedian
+15/592d/: dwbe locations.sadBoi
+15/6b76/: dwbe locations.rafton
+15/61ad/: dwbe locations.oldZora
+
+################################
+# Maple Trade (TODO)
+
+##### VASU'S GIFT ###################################################
+
+# Vasu usually gives a ring, we need him to give a treasure instead
+15/42ed/: | 
+    ld bc,locations.vasuGift
+    jp spawnTreasureOnLink
+
+##### HIDDEN TOKAY ###################################################
+# make tokay who gives shield upgrade always give the same item, and in a
+# format compatible with lookupItemSprite.
+15/5b35/: |
+    ld bc,$0101
+    ld a,b
+    ld b,c
+    ld c,a
+    scf
+    nop
+    nop
+15/5b36/: dwbe locations.hiddenTokayCave
+
+### GORON TREASURE #####################################################
+# Skip wait for the goron to break the wall
+0c/6d0a/: db $c0
+
+### LYNNA SHOOTING GALERY
+15//wonShootingGalery: |
+    ld a,GLOBALFLAG_WON_LYNNA_SHOOTING_GALLERY
+    call setGlobalFlag
+    ld bc,locations.lynnaShootingGallery
+    jp spawnTreasureOnLink
+15/51d8/: |
+    db $b5
+    db GLOBALFLAG_WON_LYNNA_SHOOTING_GALLERY
+    db $e0,$51
+    db $51,$e2
+15/51f2/: db $e0
+15/51f3/: dw wonShootingGalery

@@ -1,0 +1,21 @@
+
+# Extra
+    00 00 00 00: Default:
+    FE:          {
+    FD F7 08 F0:   {No Interupt for: 8}
+    FD   :   {}
+    FD   :   {}
+    FD F3 23 F0:   {AOE}
+    $$      : {Ability}
+    FF:          }
+    
+    07 00 2B 00: React on:  Magic - 
+    FE:          {
+    FD D1 AA AA:   {Tidal Wave, Nothing, Nothing}
+    FE:          }
+    
+    07 01 2B 00: React on: NOT Magic - 
+    FE:          {
+    FD BC AA AA:   {Entangle, Nothing, Nothing}
+    FF:          }
+    FF:          }

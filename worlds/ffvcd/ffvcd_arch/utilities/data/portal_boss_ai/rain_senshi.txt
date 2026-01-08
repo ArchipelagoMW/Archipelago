@@ -1,0 +1,201 @@
+# Form 1
+    org $D0F1E0
+    00 00 00 00: Default:
+    FE:          {
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:   Attack
+    80:   Attack
+    52:   {Syldra}
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:   Attack
+    80:   Attack
+    22:   {Holy}
+    E5:    Dynamo
+    FD F7 02 F0:   {No Interupt for: 2}
+    23:            Dispel                               
+    23:            Dispel
+    FD F3 23 F0:   {AOE}
+    28:            Sleep
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:   Attack
+    80:   Attack
+    FD F7 05 F0:   {No Interupt for: 9}
+    FD F3 23 F0:   {AOE}
+    98:            Vampire
+    FD 84 84 AB:   {AquaRakex2, WindSlash}
+    8E  :   {DeathClaw}
+    FD F3 23 F0:   {AOE}
+    87:   {L2 Old}
+    FD F3 0D F0:   {Set Target: Self}
+    3A:            Haste
+    FD B0 B0 8B:   {ReaperSword x2, Flash}
+    E8:            Jump
+    FD 84 AB AB:   {AquaRake, WindSlash x2}
+    23:            Dispel
+    FF:          }
+    
+   
+    06 00 10 00: React on:  Throw
+    FE:          {
+    FD F3 2D 00:   {Set Target: Last Attacker}
+    B2:         Blaster
+    B0:
+    FE:          }
+
+    06 00 12 00: React on:  GilToss
+    FE:          {
+    FD F7 02 F0:   {No Interupt for: 2}
+    52:   {Syldra}
+    52:   {Syldra}
+    FE:          }
+    
+    0E 00 00 00: React HP Damage:
+    FE:          {
+    FD F7 04 F0:   {No Interupt for: 4}
+    FD 80 80 42:   {Specialty, Specialty, Quarter}
+    FE:          }
+
+
+    0F 00 00 00 FE FD F2 82 40 EE FF: {this is for unhiding form 2 upon death}   
+
+# Form 2
+    org $D0F2E0 
+    00 00 00 00: Default:
+    FE:          {
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:   Attack
+    80:   Attack
+    FD 23 23 42:   {Dispelx2, Quarter}
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:   Attack
+    80:   Attack
+    FD F3 23 F0:   {AOE}
+    95: Guardoff
+    FD F7 02 F0:   {No Interupt for: 3}
+    80:   Attack
+    80:   Attack
+    FD 84 AB AB:   {AquaRake, WindSlash x2}
+    FD F3 23 F0:   {AOE}
+    97: MindBlast
+    FD 23 23 42:   {Dispelx2, Quarter}
+    D6: Quake
+    FD F7 0A F0:   {No Interupt for: 10}    
+    FD F3 0D F0:   {Set Target: Self}
+    3A:            Haste
+    FD F3 0D F0:   {Set Target: Self}
+    1B:            Image
+    FF:          }
+
+    
+    06 00 10 00: React on:  Throw
+    FE:          {
+    FD F3 2D 00:   {Set Target: Last Attacker}
+    B2:         Blaster
+    B0:
+    FE:          }
+
+    06 00 12 00: React on:  GilToss
+    FE:          {
+    FD F7 02 F0:   {No Interupt for: 2}
+    52:   {Syldra}
+    52:   {Syldra}
+    FE:          }
+    
+
+    0E 00 00 00: React HP Damage:
+    FE:          {
+    FD F7 04 F0:   {No Interupt for: 4}
+    FD 80 80 42:   {Specialty, Specialty, Quarter}
+    FE:
+
+    
+    0F 00 00 00 FE FD F2 82 20 EE FF: {this is for unhiding form 3 upon death}
+    
+
+
+# Form 3
+    org $D0F3E0
+    00 00 00 00: Default:
+    FE:          {
+    52:   {Syldra}
+    FD F7 0F F0:   {No Interupt for: 15}
+    FD F3 18 F0:   {Set Target: Single Female}
+    80:   Attack
+    FD F3 18 F0:   {Set Target: Single Female}
+    80:   Attack
+    FD F3 18 F0:   {Set Target: Single Female}
+    80:   Attack
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:   Attack
+    22:   {Holy}
+    E5:    Dynamo
+    FD F7 02 F0:   {No Interupt for: 2}
+    23:            Dispel                               
+    23:            Dispel
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:   Attack
+    80:   Attack
+    55:   {Leviathan}
+    FD F7 05 F0:   {No Interupt for: 5}
+    9A:   {MightyGuard}
+    FD 31 31 32:   {Ice3 x2, Bolt3}
+    FD F7 02 F0:   {No Interupt for: 2}
+    84:   AquaRake
+    84:   AquaRake
+    8A:   TinySong
+    FD F3 23 F0:   {AOE}
+    88:   {L3 Flare}
+    FD F7 0F F0:   {No Interupt for: 15}    
+    FD F3 0D F0:   {Set Target: Self}
+    3A:            Haste
+    FD F3 0D F0:   {Set Target: Self}
+    1C:            Shell
+    FD F3 0D F0:   {Set Target: Self}
+    16:            Armor
+    FD F3 23 F0:   {AOE}
+    31:   {Ice 3}
+    FD F7 02 F0:   {No Interupt for: 2}
+    44:   Old
+    44:   Old
+    FD 84 AB AB:   {AquaRake, WindSlash x2}
+    FD F7 02 F0:   {No Interupt for: 2}
+    23:            Dispel                               
+    23:            Dispel
+    FD F3 23 F0:   {AOE}
+    98:            Vampire
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:   Attack
+    80:   Attack
+
+    FF:          }
+    
+
+    06 00 10 00: React on:  Throw
+    FE:          {
+    FD F3 2D 00:   {Set Target: Last Attacker}
+    B2:         Blaster
+    B0:
+    FE:          }
+
+    06 00 12 00: React on:  GilToss
+    FE:          {
+    FD F7 02 F0:   {No Interupt for: 2}
+    52:   {Syldra}
+    55:   {Leviathan}
+    FE:          }
+    
+    0E 00 00 00: React HP Damage:
+    FE:          {
+    FD F7 04 F0:   {No Interupt for: 4}
+    FD 80 80 42:   {Specialty, Specialty, Quarter}
+    FE:
+
+    
+    
+     ; react on death
+    0F 00 00 00 : {death sequence}
+    FE: {death sequence}
+    FD F6 05 EA; :   {Display: Byblos:  Uggh!!!}
+    AA: {death sequence}
+    FF: {death sequence}
+    

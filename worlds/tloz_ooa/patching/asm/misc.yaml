@@ -1,0 +1,261 @@
+
+# remove the entire crescent island storm / tokay theft sequence.
+09/5731/: jp $582a             # tokays stealing items
+09/5756/: jp $582a             # ^
+09/57a5/: |                    # ^
+  inc a
+  inc a         
+0a/4fe1/: jp interactionDelete # ^
+
+0b/52e3/: jp interactionDelete # storm
+12/638f/: db $f3,$57,$41,$ff   # item in chicken hut
+
+15//bombFairyCall: |
+  ld a,$1c # GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY
+  call setGlobalFlag
+  ld bc,locations.bombFairy
+  call spawnTreasureOnLink
+  ret
+
+# Bomb fairy replacement
+15/7061/: |
+  db $e0
+  dw bombFairyCall
+  db $00                  # End script
+
+# make guy in front of d2 go away if you have bombs.
+09/5242/: |
+    ld a,$03
+    call checkTreasureObtained
+    jp c,interactionDelete
+# and center him on a tile so you can't get stuck in a currents loop.
+12/611c/: db 48
+
+# stop d6 boss key chest from setting past boss key flag.
+10/793c/: | 
+  ret
+  nop
+  nop
+  
+# first and second time portals (near maku tree) are always active.
+10/7d4e/: jr nz,$00 # present -> past
+10/7d57/: jr c,$00  # past -> present
+
+# allow harvesting seeds from trees with either shooter or satchel.
+11//checkCanHarvestSeeds: |
+    call checkTreasureObtained
+    ret c
+    ld a,TREASURE_SHOOTER
+    jp checkTreasureObtained
+11/4aba/: call checkCanHarvestSeeds
+  
+# remove the usual deku soldier event (taken to palace etc).
+12/58f5/: ret
+# cut off end of soldier's text so it makes sense when giving item.
+23/6656/: db 00
+# position the "you may go now" text correctly on screen.
+23/65d8/: db 00
+
+
+# prevent bridge-building foreman from setting flag 22 so that animal/flute
+# event doesn't happen in fairies' woods.
+15/75bf/: db setglobalflag,a2 # bit 7 = unset flag
+
+
+# use different seed capacity table, so that level zero satchel can still
+# hold 20 seeds.
+3f//seedCapacityTable: |
+    db 20,20,50,99
+3f/4607/: ld hl,seedCapacityTable
+
+# don't equip sword in shooting gallery if link doesn't have it. it wouldn't
+# work anyway.
+15//setShootingGalleryEquips: |
+    ld a,TREASURE_SWORD
+    ld b,a
+    call checkTreasureObtained
+    jp c,@swordFound
+    ld a,TREASURE_BIGGORON_SWORD
+    ld b,$00
+    call checkTreasureObtained
+    jp nc,@swordFound
+    ld a,TREASURE_BIGGORON_SWORD
+    ldi (hl),a
+    ldi (hl),a
+    ret
+    @swordFound:
+    ld a,b
+    ldi (hl),a
+    ret
+15/50ae/: call setShootingGalleryEquips
+
+# Handle D8 slate staircase
+0a//d8SlateStaircaseHandle : |
+  ; Check if it's the right stair (not sure if the check is necessary)
+  ld a,(hl) 
+  and $0f
+  call getNumSetBits
+  cp option.required_slates
+  ret
+
+0a/70f9/: |
+  call d8SlateStaircaseHandle
+  nop
+  nop
+  ;ret nz
+
+0b//d8removeSlateIfStairOpen : |
+  ld a,$0a  ; What the call replaced
+  ld (de),a
+
+  call getThisRoomFlags
+  bit 6,a
+  jp nz,interactionDelete
+  ret  
+
+0b/7f80/ : |
+  call d8removeSlateIfStairOpen
+
+# Make Rafton skip the raft explanation 
+# (by checking the room flag instead of the 3rd essence)
+15/6b43/: dw $c71f
+15/6b45/: db $ff
+
+# Sea of storm specific chest. (change if in linked game)
+10/79ab/: dwbe locations.seaofstorm
+10/79ad/: dwbe locations.seaofstorm
+
+# Veran is beaten
+10//thatallfolks: |
+  ld a,GLOBALFLAG_VERAN_BEATEN
+  call setGlobalFlag
+  call incMakuTreeState
+  ret
+10/5aae/: call thatallfolks
+
+# d2: if past entrance is closed, force it open upon exit
+# d7: reset water level when exiting (see logic comments).
+# NOTE : Potentially movable to another bank ?
+38//checkDekuForestEntrance: |
+    ld a,(wWarpDestRoom)
+    cp $83
+    ret nz
+    ld a,(wWarpDestGroup)
+    cp $01
+    ret nz
+    ld a,($c883) ; room flags for d2 past entrance
+    or $80
+    ld ($c883),a
+    ret
+
+38//checkJabuJabuEntrance: |
+    ld a,(wWarpDestRoom)
+    cp $56
+    ret nz
+    ld a,(wWarpDestGroup)
+    cp $05
+    ret nz
+    ld bc,$4d05 # d7 staircase above miniboss room
+    call compareRoom
+    ret z
+    ld a,$21
+    ld (wJabuWaterLevel),a
+    ret
+
+38//handleSpecialExits_body: |
+    call checkDekuForestEntrance
+    call checkJabuJabuEntrance
+    ret
+
+00//handleSpecialExits: |
+    ld (wWarpDestRoom),a
+    push bc
+    push hl
+    ld e,$38
+    ld hl,handleSpecialExits_body
+    call interBankCall
+    pop hl
+    pop bc
+    ret
+
+04/45e8/: call handleSpecialExits
+0a/4738/: call handleSpecialExits
+
+
+# invalid tiles to time warp onto if player doesn't have flippers. the
+# vanilla game assumes you have flippers by the time you have currents, and
+# only checks against deep water tiles.
+01//noFlippersTable: |
+    db f3,00
+    db fe,00
+    db ff,00
+    db e4,00
+    db e5,00
+    db e6,00
+    db e7,00
+    db e8,00
+    db e9,00
+    db fc,01
+    db fa,00
+    db e0,00
+    db e1,00
+    db e2,00
+    db e3,00
+    db 00
+
+# check against a different set of invalid time warp destination tiles if the
+# player doesn't have flippers.
+01//preventDrowningByTimeWarp: |
+    ld hl,$6317
+    ld a,($c69f) # in wObtainedTreasureFlags
+    and $40
+    ret nz
+    ld hl,noFlippersTable
+    ret
+01/6301/: call preventDrowningByTimeWarp
+
+# Gale seed shouldn't work if you didn't visit any tree
+# z set if tree found, unset otherwise
+02//galeCheckAvailableTree_body : |
+  ld c,$00
+  ld b,$00
+  @checkTree:
+  ld a,c
+  call $66be ; getTreeWarpDataIndex
+  ldi a,(hl)
+  or a
+  ret z ; No tree found
+  push bc
+  ld c,a
+  call $6639 ; _mapMenu_checkRoomVisited
+  pop bc
+  jp nz,@treeFound
+  inc c
+  jr @checkTree
+  @treeFound:
+  ld b,$01
+  ret
+
+# Check the value returned by the body and block gale seed if no tree visited
+07//galeCheckAvailableTree: |
+  push de
+  push hl
+  ld a,($cc34) ; wTilesetFlags
+  bit 7,a
+  ld a,$00
+  jp z,@present
+  ld a,$01
+  @present:
+  ld ($cbb3),a ;mapmode
+  ld hl,galeCheckAvailableTree_body
+  ld e,$02
+  call interBankCall
+  pop hl
+  pop de
+  ld a,b
+  or a
+  jp z,$4f65 ; galeSeedUpdateAnimationAndCounter
+  ld a,($ccb5) ; wLinkGrabState2
+  jp $4fb0
+
+07/4fad/: jp galeCheckAvailableTree

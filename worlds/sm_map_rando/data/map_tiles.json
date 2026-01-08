@@ -1,0 +1,3054 @@
+{
+    "$schema": "schema/map_tiles_schema.json",
+    "rooms": [
+        {
+            "roomId": 43,
+            "roomName": "Billy Mays Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "doubleItem"}
+            ]
+        },
+        {
+            "roomId": 42,
+            "roomName": "Blue Brinstar Boulder Room",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 41,
+            "roomName": "Blue Brinstar Energy Tank Room",
+            "mapTiles": [
+                {"coords": [2, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall", "interior": "hiddenItem"},
+                {"coords": [2, 2], "left": "empty", "right": "wall", "top": "passage", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 39,
+            "roomName": "Construction Zone",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 40,
+            "roomName": "First Missile Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 38,
+            "roomName": "Morph Ball Room",
+            "mapTiles": [
+                {"coords": [5, 0], "specialType": "elevator"},
+                {"coords": [5, 1], "specialType": "elevator"},
+                {"coords": [0, 2], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 2], "left": "empty", "right": "passage", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [3, 2], "left": "passage", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 2], "left": "passage", "right": "empty", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [5, 2], "left": "empty", "right": "empty", "top": "elevatorEntrance", "bottom": "wall", "interior": "elevatorPlatformLow"},
+                {"coords": [6, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [7, 2], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 48,
+            "roomName": "Brinstar Map Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "mapStation"}
+            ]
+        },
+        {
+            "roomId": 47,
+            "roomName": "Brinstar Pre-Map Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "qolPassage", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 46,
+            "roomName": "Brinstar Reserve Tank Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "passage", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "wall", "interior": "doubleItem"}
+            ]
+        },
+        {
+            "roomId": 45,
+            "roomName": "Early Supers Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty", "interior": "item"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "passage", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [2, 1], "left": "empty", "right": "door", "top": "passage", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 51,
+            "roomName": "Etecoon Energy Tank Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "passage", "interior": "item"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "qolEmpty", "bottom": "wall"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 1], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 1], "left": "empty", "right": "qolDoor", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 315,
+            "roomName": "Etecoon Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 52,
+            "roomName": "Etecoon Super Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 50,
+            "roomName": "Green Brinstar Beetom Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 49,
+            "roomName": "Green Brinstar Fireflea Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 1], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "specialType": "black"}
+            ]
+        },
+        {
+            "roomId": 314,
+            "roomName": "Green Brinstar Main Shaft Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 44,
+            "roomName": "Green Brinstar Main Shaft",
+            "mapTiles": [
+                {"coords": [0, 0], "specialType": "elevator"},
+                {"coords": [0, 1], "specialType": "elevator"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "elevatorEntrance", "bottom": "empty", "interior": "elevatorPlatformHigh"},
+                {"coords": [0, 3], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "door", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 5], "left": "door", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 6], "left": "door", "right": "door", "top": "empty", "bottom": "passage"},
+                {"coords": [0, 7], "left": "wall", "right": "door", "top": "qolEmpty", "bottom": "empty"},
+                {"coords": [1, 7], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 7], "left": "empty", "right": "passage", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 7], "left": "empty", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [0, 8], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 8], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 9], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 9], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 10], "left": "door", "right": "passage", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 10], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 10], "left": "passage", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 11], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 316,
+            "roomName": "Green Brinstar Missile Refill",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "ammoRefill"}
+            ]
+        },
+        {
+            "roomId": 54,
+            "roomName": "Green Hill Zone",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 1], "left": "empty", "right": "passage", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 1], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty", "interior": "item"},
+                {"coords": [2, 2], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [5, 2], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [4, 3], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [5, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [6, 3], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [7, 3], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 55,
+            "roomName": "Noob Bridge",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 56,
+            "roomName": "Spore Spawn Kihunter Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "wall", "top": "door", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 57,
+            "roomName": "Spore Spawn Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "qolPassage", "bottom": "door", "interior": "event"}
+            ]
+        },
+        {
+            "roomId": 82,
+            "roomName": "Baby Kraid Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 83,
+            "roomName": "Kraid Eye Door Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "passage", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 301,
+            "roomName": "Kraid Recharge Station",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "door", "bottom": "door", "interior": "doubleRefill"}
+            ]
+        },
+        {
+            "roomId": 84,
+            "roomName": "Kraid Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 300,
+            "roomName": "Kraid Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 85,
+            "roomName": "Varia Suit Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 80,
+            "roomName": "Warehouse Energy Tank Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "hiddenItem"}
+            ]
+        },
+        {
+            "roomId": 78,
+            "roomName": "Warehouse Entrance",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "passage", "top": "wall", "bottom": "elevatorEntrance", "interior": "elevatorPlatformLow"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 1], "specialType": "elevator"},
+                {"coords": [1, 1], "left": "wall", "right": "qolWall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 81,
+            "roomName": "Warehouse Kihunter Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "door"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "passage"},
+                {"coords": [2, 0], "left": "empty", "right": "passage", "top": "wall", "bottom": "wall", "interior": "hiddenItem"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 1], "left": "wall", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 79,
+            "roomName": "Warehouse Zeela Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "passage", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "wall", "top": "door", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 318,
+            "roomName": "Big Pink Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 59,
+            "roomName": "Big Pink",
+            "mapTiles": [
+                {"coords": [1, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "passage", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 2], "left": "door", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 3], "left": "door", "right": "empty", "top": "empty", "bottom": "empty", "interior": "item"},
+                {"coords": [3, 3], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 4], "left": "door", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 4], "left": "empty", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 5], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 5], "left": "empty", "right": "passage", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 5], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 6], "left": "wall", "right": "empty", "top": "empty", "bottom": "passage", "interior": "item"},
+                {"coords": [3, 6], "left": "empty", "right": "door", "top": "empty", "bottom": "wall"},
+                {"coords": [0, 7], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 7], "left": "empty", "right": "qolEmpty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 7], "left": "passage", "right": "wall", "top": "empty", "bottom": "wall", "interior": "item"},
+                {"coords": [0, 8], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 9], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 317,
+            "roomName": "Dachora Energy Refill",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "energyRefill"}
+            ]
+        },
+        {
+            "roomId": 58,
+            "roomName": "Dachora Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "passage"},
+                {"coords": [5, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [6, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 3], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 4], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 5], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 6], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 6], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 6], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 6], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 6], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 62,
+            "roomName": "Hopper Energy Tank Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 61,
+            "roomName": "Pink Brinstar Hopper Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 60,
+            "roomName": "Pink Brinstar Power Bomb Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "passage"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall", "interior": "item"},
+                {"coords": [1, 1], "left": "empty", "right": "door", "top": "qolEmpty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 64,
+            "roomName": "Spore Spawn Farming Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 63,
+            "roomName": "Spore Spawn Super Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 3], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 4], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 5], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 6], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 7], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 8], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 8], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 65,
+            "roomName": "Waterway Energy Tank Room",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [1, 0], "left": "passage", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [6, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 76,
+            "roomName": "Alpha Power Bomb Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [1, 0], "left": "passage", "right": "qolEmpty", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 69,
+            "roomName": "Bat Room",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 70,
+            "roomName": "Below Spazer",
+            "liquidType": "water",
+            "liquidLevel": 1.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "passage", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "door", "top": "passage", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 77,
+            "roomName": "Beta Power Bomb Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "passage"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 75,
+            "roomName": "Caterpillar Room",
+            "mapTiles": [
+                {"coords": [0, 0], "specialType": "elevator"},
+                {"coords": [0, 1], "specialType": "elevator"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "elevatorEntrance", "bottom": "empty", "interior": "elevatorPlatformHigh"},
+                {"coords": [0, 3], "left": "door", "right": "passage", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 3], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 3], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 4], "left": "wall", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 5], "left": "door", "right": "wall", "top": "empty", "bottom": "passage"},
+                {"coords": [0, 6], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 7], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 320,
+            "roomName": "Caterpillar Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 74,
+            "roomName": "Hellway",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 67,
+            "roomName": "Red Brinstar Fireflea Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [5, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [6, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [7, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"},
+                {"coords": [4, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [5, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 66,
+            "roomName": "Red Tower",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "door", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 5], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 6], "left": "door", "right": "wall", "top": "empty", "bottom": "passage"},
+                {"coords": [0, 7], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 8], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 9], "left": "door", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 319,
+            "roomName": "Sloaters Refill",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "energyRefill"}
+            ]
+        },
+        {
+            "roomId": 71,
+            "roomName": "Spazer Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 68,
+            "roomName": "X-Ray Scope Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 306,
+            "roomName": "Blue Brinstar Elevator Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "elevatorEntrance", "interior": "elevatorPlatformLow"},
+                {"coords": [0, 1], "specialType": "elevator"},
+                {"coords": [0, 2], "specialType": "elevator"},
+                {"coords": [0, 3], "specialType": "elevator"}
+            ]
+        },
+        {
+            "roomId": 19,
+            "roomName": "Bomb Torizo Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 11,
+            "roomName": "Climb",
+            "mapTiles": [
+                {"coords": [1, 0], "left": "wall", "right": "passage", "top": "door", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 3], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 4], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 5], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 6], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 7], "left": "wall", "right": "passage", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 7], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 8], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 8], "left": "passage", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 15,
+            "roomName": "Crateria Map Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "mapStation"}]
+            },
+        {
+            "roomId": 28,
+            "roomName": "Crateria Power Bomb Room",
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 16,
+            "roomName": "Crateria Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 29,
+            "roomName": "Crateria Super Room",
+            "liquidType": "acid",
+            "liquidLevel": 7.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "passage", "interior": "item"},
+                {"coords": [3, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 3], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 4], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 5], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 6], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 7], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 7], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 7], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 7], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 9,
+            "roomName": "Crateria Tube",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 18,
+            "roomName": "Final Missile Bombway",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "qolPassage", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 13,
+            "roomName": "Flyway",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 8,
+            "roomName": "Landing Site",
+            "mapTiles": [
+                {"coords": [2, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [5, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [6, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [7, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [8, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [5, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [6, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [7, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [8, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 2], "left": "passage", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [5, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [6, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [7, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [8, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 3], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [5, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [6, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [7, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [8, 3], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 4], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [4, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall", "interior": "ship"},
+                {"coords": [5, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [6, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [7, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [8, 4], "left": "empty", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 10,
+            "roomName": "Parlor and Alcatraz",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "passage", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [4, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 2], "left": "door", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 2], "left": "wall", "right": "door", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 3], "left": "door", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 4], "left": "wall", "right": "wall", "top": "empty", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 12,
+            "roomName": "Pit Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "passage"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "qolEmpty", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 14,
+            "roomName": "Pre-Map Flyway",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 17,
+            "roomName": "The Final Missile",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 33,
+            "roomName": "Bowling Alley Path",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 36,
+            "roomName": "Crab Maze",
+            "liquidType": "water",
+            "liquidLevel": 1.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "wall", "top": "door", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 24,
+            "roomName": "Crateria Kihunter Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "passage"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 34,
+            "roomName": "East Ocean",
+            "liquidType": "water",
+            "liquidLevel": 5,
+            "mapTiles": [
+                {"coords": [0, 4], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 4], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 4], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 4], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [4, 4], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [5, 4], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [6, 4], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 5], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 5], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 5], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 5], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [4, 5], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [5, 5], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [6, 5], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 305,
+            "roomName": "Forgotten Highway Elbow",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 37,
+            "roomName": "Forgotten Highway Elevator",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "wall", "top": "door", "bottom": "elevatorEntrance", "interior": "elevatorPlatformLow"},
+                {"coords": [0, 1], "specialType": "elevator"},
+                {"coords": [0, 2], "specialType": "elevator"},
+                {"coords": [0, 3], "specialType": "elevator"}
+            ]
+        },
+        {
+            "roomId": 35,
+            "roomName": "Forgotten Highway Kago Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "wall", "right": "wall", "top": "empty", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 25,
+            "roomName": "Red Brinstar Elevator Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "wall", "top": "door", "bottom": "elevatorEntrance", "interior": "elevatorPlatformLow"},
+                {"coords": [0, 1], "specialType": "elevator"},
+                {"coords": [0, 2], "specialType": "elevator"},
+                {"coords": [0, 3], "specialType": "elevator"}
+            ]
+        },
+        {
+            "roomId": 7,
+            "roomName": "The Moat",
+            "liquidType": "water",
+            "liquidLevel": 0.75,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty", "interior": "item"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 32,
+            "roomName": "West Ocean",
+            "liquidType": "water",
+            "liquidLevel": 5,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty", "interior": "hiddenItem"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [5, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [6, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [7, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "qolWall"},
+                {"coords": [4, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "qolWall"},
+                {"coords": [5, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [6, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [7, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "wall"},
+                {"coords": [0, 2], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty", "interior": "item"},
+                {"coords": [1, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 2], "left": "empty", "right": "qolDoor", "top": "empty", "bottom": "empty"},
+                {"coords": [5, 2], "left": "qolDoor", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 3], "left": "empty", "right": "empty", "top": "qolWall", "bottom": "empty"},
+                {"coords": [4, 3], "left": "empty", "right": "empty", "top": "qolWall", "bottom": "empty"},
+                {"coords": [5, 3], "left": "empty", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "door", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [5, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [6, 4], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [7, 4], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 5], "left": "wall", "right": "passage", "top": "qolEmpty", "bottom": "wall", "interior": "item"},
+                {"coords": [1, 5], "left": "qolEmpty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 5], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 5], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [4, 5], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [5, 5], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [6, 5], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [7, 5], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 31,
+            "roomName": "Gauntlet Energy Tank Room",
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "qolPassage", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "qolPassage", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "qolPassage", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "qolPassage", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "passage", "right": "door", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 30,
+            "roomName": "Gauntlet Entrance",
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "qolPassage", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "qolPassage", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "qolPassage", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "qolPassage", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 23,
+            "roomName": "Green Brinstar Elevator Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "elevatorEntrance", "interior": "elevatorPlatformLow"},
+                {"coords": [0, 1], "specialType": "elevator"},
+                {"coords": [0, 2], "specialType": "elevator"},
+                {"coords": [0, 3], "specialType": "elevator"}
+            ]
+        },
+        {
+            "roomId": 21,
+            "roomName": "Green Pirates Shaft",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "passage"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "passage", "interior": "doubleItem"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "wall", "right": "door", "top": "passage", "bottom": "empty"},
+                {"coords": [0, 5], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 6], "left": "door", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 22,
+            "roomName": "Lower Mushrooms",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 26,
+            "roomName": "Statues Hallway",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 27,
+            "roomName": "Statues Room",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "qolPassage", "interior": "event"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "qolEmpty", "bottom": "elevatorEntrance", "interior": "elevatorPlatformLow"},
+                {"coords": [0, 2], "specialType": "elevator"},
+                {"coords": [0, 3], "specialType": "elevator"},
+                {"coords": [0, 4], "specialType": "elevator"}
+            ]
+        },
+        {
+            "roomId": 20,
+            "roomName": "Terminator Room",
+            "mapTiles": [
+                {"coords": [3, 0], "specialType": "slopeUpCeilingLow"},
+                {"coords": [4, 0], "specialType": "slopeUpCeilingHigh"},
+                {"coords": [5, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 1], "specialType": "slopeUpCeilingLow"},
+                {"coords": [2, 1], "specialType": "slopeUpCeilingHigh"},
+                {"coords": [3, 1], "specialType": "slopeUpFloorLow"},
+                {"coords": [4, 1], "specialType": "slopeUpFloorHigh"},
+                {"coords": [0, 2], "left": "door", "right": "empty", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [1, 2], "specialType": "slopeUpFloorLow"},
+                {"coords": [2, 2], "specialType": "slopeUpFloorHigh"}
+            ]
+        },
+        {
+            "roomId": 136,
+            "roomName": "Amphitheatre",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 4.625,
+            "mapTiles": [
+                {"coords": [1, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 3], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 4], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 133,
+            "roomName": "Fast Pillars Setup Room",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "wall", "top": "empty", "bottom": "passage"},
+                {"coords": [0, 2], "left": "door", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 147,
+            "roomName": "Lower Norfair Escape Power Bomb Room",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "door", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 141,
+            "roomName": "Lower Norfair Farming Room",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 145,
+            "roomName": "Lower Norfair Fireflea Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "passage", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 3], "left": "qolDoor", "right": "passage", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 3], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 4], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 4], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 5], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 5], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 146,
+            "roomName": "Lower Norfair Spring Ball Maze Room",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "passage", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "door"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 132,
+            "roomName": "Main Hall",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 2.625,
+            "mapTiles": [
+                {"coords": [4, 0], "specialType": "elevator"},
+                {"coords": [4, 1], "specialType": "elevator"},
+                {"coords": [0, 2], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 2], "left": "empty", "right": "empty", "top": "elevatorEntrance", "bottom": "wall", "interior": "elevatorPlatformLow"},
+                {"coords": [5, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [6, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [7, 2], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 139,
+            "roomName": "Metal Pirates Room",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 144,
+            "roomName": "Mickey Mouse Room",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [3, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 1], "left": "wall", "right": "empty", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [3, 1], "left": "passage", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 3], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 3], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 3], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 134,
+            "roomName": "Pillar Room",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "qolPassage", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "qolPassage", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "qolPassage", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 140,
+            "roomName": "Plowerhouse Room",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 312,
+            "roomName": "Red Kihunter Shaft Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 137,
+            "roomName": "Red Kihunter Shaft",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "passage"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "wall", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "wall", "right": "passage", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 4], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 4], "left": "empty", "right": "wall", "top": "wall", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 143,
+            "roomName": "Ridley Tank Room",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "hiddenItem"}
+            ]
+        },
+        {
+            "roomId": 142,
+            "roomName": "Ridley's Room",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 1.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 135,
+            "roomName": "The Worst Room In The Game",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 5], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 148,
+            "roomName": "Three Musketeers' Room",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 2.625,
+            "mapTiles": [
+                {"coords": [1, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "empty", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [1, 2], "left": "passage", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 2], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 138,
+            "roomName": "Wasteland",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 2.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [1, 0], "left": "passage", "right": "empty", "top": "wall", "bottom": "passage"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "passage", "right": "wall", "top": "door", "bottom": "wall"},
+                {"coords": [1, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 2], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 149,
+            "roomName": "Acid Statue Room",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 2.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty", "interior": "event"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "passage"},
+                {"coords": [1, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"},
+                {"coords": [0, 2], "left": "wall", "right": "empty", "top": "qolEmpty", "bottom": "wall"},
+                {"coords": [1, 2], "left": "empty", "right": "empty", "top": "qolEmpty", "bottom": "wall"},
+                {"coords": [2, 2], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 153,
+            "roomName": "Fast Ripper Room",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "qolPassage", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 152,
+            "roomName": "Golden Torizo Energy Recharge",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "energyRefill"}
+            ]
+        },
+        {
+            "roomId": 150,
+            "roomName": "Golden Torizo's Room",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "passage", "interior": "item"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty", "interior": "item"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 151,
+            "roomName": "Screw Attack Room",
+            "heated": true,
+            "liquidType": "acid",
+            "liquidLevel": 2.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "door", "top": "empty", "bottom": "passage"},
+                {"coords": [0, 2], "left": "door", "right": "wall", "top": "empty", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 210,
+            "roomName": "East Sand Hall",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "sand", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 198,
+            "roomName": "Oasis",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "wall", "top": "door", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "door", "top": "passage", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 220,
+            "roomName": "Pants Room",
+            "liquidType": "water",
+            "liquidLevel": 2.5,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 2], "left": "wall", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "door", "right": "door", "top": "passage", "bottom": "wall"},
+                {"coords": [1, 3], "left": "door", "right": "wall", "top": "passage", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 222,
+            "roomName": "Shaktool Room",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "passage", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "qolPassage", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 223,
+            "roomName": "Spring Ball Room",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 202,
+            "roomName": "West Sand Hall Tunnel",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 199,
+            "roomName": "West Sand Hall",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "sand", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 182,
+            "roomName": "Aqueduct Save Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 183,
+            "roomName": "Aqueduct",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "door", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty", "interior": "item"},
+                {"coords": [5, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty", "interior": "item"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [5, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "door", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "sand"},
+                {"coords": [2, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "sand"},
+                {"coords": [4, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [5, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 205,
+            "roomName": "Below Botwoon Energy Tank",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "sand", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "wall", "top": "sand", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 186,
+            "roomName": "Botwoon Energy Tank Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "sand"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "sand", "interior": "item"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [6, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 184,
+            "roomName": "Botwoon Hallway",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "door"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 204,
+            "roomName": "Botwoon Quicksand Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "qolSand", "bottom": "qolSand"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "qolSand", "bottom": "qolSand"}
+            ]
+        },
+        {
+            "roomId": 185,
+            "roomName": "Botwoon's Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "passage", "top": "wall", "bottom": "wall", "interior": "event"},
+                {"coords": [1, 0], "left": "qolEmpty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 189,
+            "roomName": "Colosseum",
+            "liquidType": "water",
+            "liquidLevel": 1,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [5, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [6, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [4, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [5, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [6, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 175,
+            "roomName": "Crab Shaft",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "wall", "top": "door", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "door", "right": "wall", "top": "empty", "bottom": "qolEmpty"},
+                {"coords": [0, 3], "left": "wall", "right": "empty", "top": "passage", "bottom": "wall"},
+                {"coords": [1, 3], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 190,
+            "roomName": "Draygon Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 193,
+            "roomName": "Draygon's Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 207,
+            "roomName": "East Aqueduct Quicksand Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "wall", "top": "qolSand", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "qolSand"}
+            ]
+        },
+        {
+            "roomId": 196,
+            "roomName": "East Cactus Alley Room",
+            "liquidType": "water",
+            "liquidLevel": 1,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [4, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [4, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 208,
+            "roomName": "East Sand Hole",
+            "liquidType": "water",
+            "liquidLevel": 0.75,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "sand", "bottom": "empty", "interior": "item"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "sand", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 187,
+            "roomName": "Halfie Climb Room",
+            "liquidType": "water",
+            "liquidLevel": 1,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "door", "right": "passage", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 2], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 191,
+            "roomName": "Maridia Health Refill Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "energyRefill"}
+            ]
+        },
+        {
+            "roomId": 188,
+            "roomName": "Maridia Missile Refill Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "ammoRefill"}
+            ]
+        },
+        {
+            "roomId": 194,
+            "roomName": "Space Jump Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 192,
+            "roomName": "The Precious Room",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "passage"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "wall", "interior": "hiddenItem"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 321,
+            "roomName": "Toilet Bowl",
+            "mapTiles": [
+                {"coords": [0, 0], "specialType": "tube"},
+                {"coords": [0, 1], "specialType": "tube"},
+                {"coords": [0, 2], "specialType": "tube"},
+                {"coords": [0, 3], "specialType": "tube"},
+                {"coords": [0, 4], "specialType": "tube"},
+                {"coords": [0, 5], "specialType": "tube"},
+                {"coords": [0, 6], "specialType": "tube"},
+                {"coords": [0, 7], "specialType": "tube"},
+                {"coords": [0, 8], "specialType": "tube"},
+                {"coords": [0, 9], "specialType": "tube"}
+            ]
+        },
+        {
+            "roomId": 206,
+            "roomName": "West Aqueduct Quicksand Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "wall", "top": "qolSand", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "qolSand"}
+            ]
+        },
+        {
+            "roomId": 195,
+            "roomName": "West Cactus Alley Room",
+            "liquidType": "water",
+            "liquidLevel": 0.75,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 209,
+            "roomName": "West Sand Hole",
+            "liquidType": "water",
+            "liquidLevel": 0.75,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty", "interior": "doubleItem"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "sand", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "sand"},
+                {"coords": [1, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 211,
+            "roomName": "Bug Sand Hole",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "sand"}
+            ]
+        },
+        {
+            "roomId": 213,
+            "roomName": "Butterfly Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "sand", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 216,
+            "roomName": "Forgotten Highway Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 217,
+            "roomName": "Kassiuz Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 215,
+            "roomName": "Maridia Elevator Room",
+            "liquidType": "water",
+            "liquidLevel": 5.625,
+            "mapTiles": [
+                {"coords": [0, 0], "specialType": "elevator"},
+                {"coords": [0, 1], "specialType": "elevator"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "elevatorEntrance", "bottom": "empty", "interior": "elevatorPlatformHigh"},
+                {"coords": [0, 3], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "wall", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 5], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 180,
+            "roomName": "Northwest Maridia Bug Room",
+            "liquidType": "water",
+            "liquidLevel": 1.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 1], "left": "passage", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 1], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 212,
+            "roomName": "Plasma Beach Quicksand Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "wall", "top": "qolSand", "bottom": "qolSand"}
+            ]
+        },
+        {
+            "roomId": 219,
+            "roomName": "Plasma Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 197,
+            "roomName": "Plasma Spark Room",
+            "liquidType": "water",
+            "liquidLevel": 3.625,
+            "mapTiles": [
+                {"coords": [1, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "empty", "top": "wall", "bottom": "door"},
+                {"coords": [1, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 2], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 3], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 3], "left": "empty", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 4], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 4], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 5], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 5], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 5], "left": "empty", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 218,
+            "roomName": "Plasma Tutorial Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 179,
+            "roomName": "Pseudo Plasma Spark Room",
+            "liquidType": "water",
+            "liquidLevel": 1.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"},
+                {"coords": [0, 2], "left": "wall", "right": "empty", "top": "empty", "bottom": "door"},
+                {"coords": [1, 2], "left": "empty", "right": "passage", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 214,
+            "roomName": "Thread The Needle Room",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [6, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 181,
+            "roomName": "Watering Hole",
+            "liquidType": "water",
+            "liquidLevel": 1.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "passage"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "wall", "interior": "doubleItem"}
+            ]
+        },
+        {
+            "roomId": 200,
+            "roomName": "Boyon Gate Hall",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "passage"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 1], "left": "door", "right": "door", "top": "qolEmpty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 201,
+            "roomName": "Crab Hole",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "passage"},
+                {"coords": [0, 1], "left": "door", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 176,
+            "roomName": "Crab Tunnel",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "qolPassage", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 173,
+            "roomName": "Fish Tank",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "door", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "wall", "top": "door", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"},
+                {"coords": [0, 2], "left": "door", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 2], "left": "empty", "right": "passage", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 2], "left": "empty", "right": "empty", "top": "qolEmpty", "bottom": "wall"},
+                {"coords": [3, 2], "left": "empty", "right": "door", "top": "qolEmpty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 171,
+            "roomName": "Glass Tunnel Save Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 170,
+            "roomName": "Glass Tunnel",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "wall", "top": "door", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "door", "top": "passage", "bottom": "passage"},
+                {"coords": [0, 2], "left": "wall", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 172,
+            "roomName": "Main Street",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 2], "left": "empty", "right": "passage", "top": "empty", "bottom": "empty", "interior": "item"},
+                {"coords": [2, 2], "left": "empty", "right": "qolDoor", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 3], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty", "interior": "item"},
+                {"coords": [1, 3], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 4], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 5], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 5], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 6], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 6], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 6], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 7], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 7], "left": "empty", "right": "door", "top": "empty", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 178,
+            "roomName": "Mama Turtle Room",
+            "liquidType": "water",
+            "liquidLevel": 2.625,
+            "mapTiles": [
+                {"coords": [1, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty", "interior": "item"},
+                {"coords": [2, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty", "interior": "hiddenItem"},
+                {"coords": [1, 2], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 3], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 203,
+            "roomName": "Maridia Map Room",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "mapStation"}
+            ]
+        },
+        {
+            "roomId": 174,
+            "roomName": "Mt. Everest",
+            "liquidType": "water",
+            "liquidLevel": 0,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "door", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [5, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [5, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 2], "left": "door", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 3], "left": "wall", "right": "empty", "top": "empty", "bottom": "door"},
+                {"coords": [2, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [4, 3], "left": "empty", "right": "wall", "top": "empty", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 177,
+            "roomName": "Red Fish Room",
+            "liquidType": "water",
+            "liquidLevel": 1.375,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "passage", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 169,
+            "roomName": "West Glass Tube Tunnel",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 122,
+            "roomName": "Crocomire's Room",
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "door", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall", "interior": "event"},
+                {"coords": [6, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [7, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 128,
+            "roomName": "Grapple Beam Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "door", "top": "empty", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 129,
+            "roomName": "Grapple Tutorial Room 1",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 130,
+            "roomName": "Grapple Tutorial Room 2",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 131,
+            "roomName": "Grapple Tutorial Room 3",
+            "liquidType": "water",
+            "liquidLevel": 0.75,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 123,
+            "roomName": "Post Crocomire Farming Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "door"},
+                {"coords": [1, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 127,
+            "roomName": "Post Crocomire Jump Room",
+            "liquidType": "acid",
+            "liquidLevel": 2.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "passage", "top": "wall", "bottom": "empty"},
+                {"coords": [4, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty", "interior": "item"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 1], "left": "empty", "right": "wall", "top": "passage", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [4, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [5, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [6, 2], "left": "empty", "right": "empty", "top": "door", "bottom": "wall"},
+                {"coords": [7, 2], "left": "empty", "right": "wall", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 126,
+            "roomName": "Post Crocomire Missile Room",
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "passage", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 124,
+            "roomName": "Post Crocomire Power Bomb Room",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 311,
+            "roomName": "Post Crocomire Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 125,
+            "roomName": "Post Crocomire Shaft",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "door", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "wall", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "wall", "right": "wall", "top": "empty", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 119,
+            "roomName": "Acid Snakes Tunnel",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "door", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 100,
+            "roomName": "Bat Cave",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 1.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 307,
+            "roomName": "Bubble Mountain Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 97,
+            "roomName": "Bubble Mountain",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "door", "right": "empty", "top": "empty", "bottom": "passage"},
+                {"coords": [1, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "passage"},
+                {"coords": [0, 3], "left": "door", "right": "empty", "top": "empty", "bottom": "door"},
+                {"coords": [1, 3], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 90,
+            "roomName": "Cathedral Entrance",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 1.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 91,
+            "roomName": "Cathedral",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 1.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "wall", "interior": "hiddenItem"}
+            ]
+        },
+        {
+            "roomId": 104,
+            "roomName": "Double Chamber",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty", "interior": "item"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 302,
+            "roomName": "Frog Savestation",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 93,
+            "roomName": "Frog Speedway",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [6, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [7, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 98,
+            "roomName": "Green Bubbles Missile Room",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "passage", "right": "door", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 113,
+            "roomName": "Kronic Boost Room",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 2.625,
+            "mapTiles": [
+                {"coords": [1, 0], "left": "door", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 1], "left": "passage", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 2], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 115,
+            "roomName": "Lava Dive Room",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 2], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 310,
+            "roomName": "Lower Norfair Elevator Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 309,
+            "roomName": "Lower Norfair Elevator",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "elevatorEntrance", "interior": "elevatorPlatformLow"}
+            ]
+        },
+        {
+            "roomId": 114,
+            "roomName": "Magdollite Tunnel",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 99,
+            "roomName": "Norfair Reserve Tank Room",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "wall", "interior": "doubleItem"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 308,
+            "roomName": "Nutella Refill",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "wall", "interior": "energyRefill"}
+            ]
+        },
+        {
+            "roomId": 96,
+            "roomName": "Purple Farming Room",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 95,
+            "roomName": "Purple Shaft",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "wall", "top": "door", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 118,
+            "roomName": "Red Pirate Shaft",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 92,
+            "roomName": "Rising Tide",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 103,
+            "roomName": "Single Chamber",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "passage", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 1], "left": "wall", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "wall", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 101,
+            "roomName": "Speed Booster Hall",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 1.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [5, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [4, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [5, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [6, 1], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [7, 1], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [8, 1], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [9, 1], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [10, 1], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [11, 1], "left": "empty", "right": "door", "top": "wall", "bottom": "wall", "interior": "hiddenItem"}
+            ]
+        },
+        {
+            "roomId": 102,
+            "roomName": "Speed Booster Room",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 112,
+            "roomName": "Spiky Acid Snakes Tunnel",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 117,
+            "roomName": "Spiky Platforms Tunnel",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "qolPassage", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 94,
+            "roomName": "Upper Norfair Farming Room",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 1.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 116,
+            "roomName": "Volcano Room",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 2.625,
+            "mapTiles": [
+                {"coords": [2, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 2], "left": "empty", "right": "passage", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 105,
+            "roomName": "Wave Beam Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 86,
+            "roomName": "Business Center",
+            "mapTiles": [
+                {"coords": [0, 0], "specialType": "elevator"},
+                {"coords": [0, 1], "specialType": "elevator"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "elevatorEntrance", "bottom": "empty", "interior": "elevatorPlatformHigh"},
+                {"coords": [0, 3], "left": "door", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "door", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 5], "left": "door", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 6], "left": "wall", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 121,
+            "roomName": "Crocomire Escape",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 1.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "empty", "interior": "item"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 303,
+            "roomName": "Crocomire Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 120,
+            "roomName": "Crocomire Speedway",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "specialType": "slopeDownCeilingHigh"},
+                {"coords": [4, 0], "specialType": "slopeDownCeilingLow"},
+                {"coords": [12, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 1], "specialType": "slopeDownFloorHigh"},
+                {"coords": [4, 1], "specialType": "slopeDownFloorLow"},
+                {"coords": [5, 1], "specialType": "slopeDownCeilingHigh"},
+                {"coords": [6, 1], "specialType": "slopeDownCeilingLow"},
+                {"coords": [12, 1], "left": "wall", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 2], "specialType": "black"},
+                {"coords": [5, 2], "specialType": "slopeDownFloorHigh"},
+                {"coords": [6, 2], "specialType": "slopeDownFloorLow"},
+                {"coords": [7, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [8, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [9, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [10, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [11, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [12, 2], "left": "passage", "right": "door", "top": "empty", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 111,
+            "roomName": "Crumble Shaft",
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty", "interior": "hiddenItem"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "wall", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 89,
+            "roomName": "Hi Jump Boots Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 88,
+            "roomName": "Hi Jump Energy Tank Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty", "interior": "item"},
+                {"coords": [1, 0], "left": "passage", "right": "door", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [0, 1], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 107,
+            "roomName": "Ice Beam Acid Room",
+            "heated": true,
+            "liquidType": "lava",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 106,
+            "roomName": "Ice Beam Gate Room",
+            "mapTiles": [
+                {"coords": [3, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [3, 2], "left": "door", "right": "empty", "top": "empty", "bottom": "passage"},
+                {"coords": [4, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [6, 2], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 3], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 3], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 3], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 3], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 109,
+            "roomName": "Ice Beam Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 108,
+            "roomName": "Ice Beam Snake Room",
+            "liquidType": "lava",
+            "liquidLevel": 2.625,
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "passage", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 1], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [0, 2], "left": "wall", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 110,
+            "roomName": "Ice Beam Tutorial Room",
+            "liquidType": "lava",
+            "liquidLevel": 0.625,
+            "heated": true,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "qolPassage", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 87,
+            "roomName": "Norfair Map Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "mapStation"}
+            ]
+        },
+        {
+            "roomId": 232,
+            "roomName": "Big Boy Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "qolPassage", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 230,
+            "roomName": "Blue Hopper Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "wall", "top": "door", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 231,
+            "roomName": "Dust Torizo Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 237,
+            "roomName": "Lower Tourian Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 226,
+            "roomName": "Metroid Room 1",
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 227,
+            "roomName": "Metroid Room 2",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 228,
+            "roomName": "Metroid Room 3",
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 229,
+            "roomName": "Metroid Room 4",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 238,
+            "roomName": "Mother Brain Room",
+            "liquidType": "acid",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall", "interior": "event"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 236,
+            "roomName": "Rinka Shaft",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 233,
+            "roomName": "Seaweed Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 239,
+            "roomName": "Tourian Escape Room 1",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "door"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 240,
+            "roomName": "Tourian Escape Room 2",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "wall", "top": "door", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 241,
+            "roomName": "Tourian Escape Room 3",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [5, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [3, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [4, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [5, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 242,
+            "roomName": "Tourian Escape Room 4",
+            "liquidType": "acid",
+            "liquidLevel": 5.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 1], "left": "empty", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 2], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 2], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 3], "left": "door", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 3], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 3], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 4], "left": "wall", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 4], "left": "empty", "right": "empty", "top": "empty", "bottom": "empty"},
+                {"coords": [2, 4], "left": "empty", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 5], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 5], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 5], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 235,
+            "roomName": "Tourian Eye Door Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 224,
+            "roomName": "Tourian First Room",
+            "liquidType": "acid",
+            "liquidLevel": 3.625,
+            "mapTiles": [
+                {"coords": [0, 0], "specialType": "elevator"},
+                {"coords": [0, 1], "specialType": "elevator"},
+                {"coords": [0, 2], "left": "wall", "right": "wall", "top": "elevatorEntrance", "bottom": "empty", "interior": "elevatorPlatformHigh"},
+                {"coords": [0, 3], "left": "door", "right": "door", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 234,
+            "roomName": "Tourian Recharge Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "doubleRefill"}
+            ]
+        },
+        {
+            "roomId": 225,
+            "roomName": "Tourian Map Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "mapStation"}
+            ]
+        },
+        {
+            "roomId": 168,
+            "roomName": "Assembly Line",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 160,
+            "roomName": "Attic",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "door"},
+                {"coords": [5, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [6, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 156,
+            "roomName": "Basement",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "door", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "passage", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 161,
+            "roomName": "Bowling Alley",
+            "mapTiles": [
+                {"coords": [2, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 0], "left": "empty", "right": "wall", "top": "wall", "bottom": "passage", "interior": "item"},
+                {"coords": [0, 1], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "wall", "bottom": "passage"},
+                {"coords": [2, 1], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 1], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 1], "left": "empty", "right": "wall", "top": "wall", "bottom": "wall", "interior": "event"},
+                {"coords": [5, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [1, 2], "left": "door", "right": "passage", "top": "qolEmpty", "bottom": "wall"},
+                {"coords": [2, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 2], "left": "empty", "right": "passage", "top": "wall", "bottom": "wall", "interior": "hiddenItem"},
+                {"coords": [4, 2], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [5, 2], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 166,
+            "roomName": "Electric Death Room",
+            "liquidType": "water",
+            "liquidLevel": 2.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "door", "top": "passage", "bottom": "empty"},
+                {"coords": [0, 2], "left": "door", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 162,
+            "roomName": "Gravity Suit Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "door", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 158,
+            "roomName": "Phantoon's Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "event"}
+            ]
+        },
+        {
+            "roomId": 165,
+            "roomName": "Spiky Death Room",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 164,
+            "roomName": "Sponge Bath",
+            "liquidType": "water",
+            "liquidLevel": 0.625,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 163,
+            "roomName": "Wrecked Ship East Super Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "qolPassage", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "qolEmpty", "right": "wall", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        },
+        {
+            "roomId": 167,
+            "roomName": "Wrecked Ship Energy Tank Room",
+            "liquidType": "water",
+            "liquidLevel": 0.75,
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "empty", "top": "wall", "bottom": "empty", "interior": "item"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "empty"},
+                {"coords": [2, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "empty"},
+                {"coords": [0, 1], "left": "wall", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [1, 1], "left": "empty", "right": "empty", "top": "empty", "bottom": "wall"},
+                {"coords": [2, 1], "left": "empty", "right": "wall", "top": "empty", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 154,
+            "roomName": "Wrecked Ship Entrance",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [1, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 0], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 0], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"}
+            ]
+        },
+        {
+            "roomId": 155,
+            "roomName": "Wrecked Ship Main Shaft",
+            "mapTiles": [
+                {"coords": [4, 0], "left": "wall", "right": "wall", "top": "door", "bottom": "empty"},
+                {"coords": [4, 1], "left": "wall", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 2], "left": "wall", "right": "wall", "top": "passage", "bottom": "empty"},
+                {"coords": [4, 3], "left": "door", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 4], "left": "wall", "right": "door", "top": "empty", "bottom": "empty"},
+                {"coords": [0, 5], "left": "wall", "right": "empty", "top": "wall", "bottom": "wall", "interior": "item"},
+                {"coords": [1, 5], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [2, 5], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [3, 5], "left": "empty", "right": "empty", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 5], "left": "passage", "right": "wall", "top": "empty", "bottom": "empty"},
+                {"coords": [4, 6], "left": "door", "right": "passage", "top": "empty", "bottom": "passage"},
+                {"coords": [5, 6], "left": "empty", "right": "door", "top": "wall", "bottom": "wall"},
+                {"coords": [4, 7], "left": "wall", "right": "wall", "top": "empty", "bottom": "door"}
+            ]
+        },
+        {
+            "roomId": 157,
+            "roomName": "Wrecked Ship Map Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "mapStation"}
+            ]
+        },
+        {
+            "roomId": 304,
+            "roomName": "Wrecked Ship Save Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "door", "right": "wall", "top": "wall", "bottom": "wall", "interior": "saveStation"}
+            ]
+        },
+        {
+            "roomId": 159,
+            "roomName": "Wrecked Ship West Super Room",
+            "mapTiles": [
+                {"coords": [0, 0], "left": "wall", "right": "door", "top": "wall", "bottom": "wall", "interior": "item"}
+            ]
+        }
+    ]
+}

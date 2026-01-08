@@ -1,0 +1,22 @@
+unlock_dict = {
+    "Squire": {},
+    "Chemist": {},
+    "Knight": {"Squire": 2},
+    "Archer": {"Squire": 2},
+    "Monk": {"Knight": 2},
+    "Thief": {"Archer": 2},
+    "Lancer": {"Thief": 3},
+    "Geomancer": {"Monk": 3},
+    "Samurai": {"Knight": 3, "Monk": 4, "Lancer": 2},
+    "Ninja": {"Archer": 3, "Thief": 4, "Geomancer": 2},
+    "Dancer": {"Lancer": 4, "Geomancer": 4},
+    "Priest": {"Chemist": 2},
+    "Wizard": {"Chemist": 2},
+    "Oracle": {"Priest": 2},
+    "Mediator": {"Oracle": 2},
+    "Time Mage": {"Wizard": 2},
+    "Summoner": {"Time Mage": 2},
+    "Calculator": {"Priest": 4, "Wizard": 4, "Oracle": 3, "Time Mage": 3},
+    "Bard": {"Mediator": 4, "Summoner": 4},
+    "Mime": {"Squire": 8, "Chemist": 8, "Lancer": 4, "Geomancer": 4, "Mediator": 4, "Summoner": 4}
+}

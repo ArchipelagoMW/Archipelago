@@ -1,0 +1,157 @@
+# Subscreen 1 display changes to accomodate with trade items
+# ==========================================================
+
+# Overwrite subscreen1TreasureData into a plain list of items that are allowed to be displayed
+# inside subscreen 1.
+02/5d70/subscreen1TreasureDataNew: |
+    db TREASURE_ROUND_JEWEL
+    db TREASURE_PYRAMID_JEWEL
+    db TREASURE_SQUARE_JEWEL
+    db TREASURE_X_SHAPED_JEWEL
+    db TREASURE_BOMB_FLOWER
+    db TREASURE_BOMB_FLOWER_LOWER_HALF
+    db TREASURE_GASHA_SEED
+
+    db TREASURE_CUCCODEX
+    db TREASURE_LON_LON_EGG
+    db TREASURE_GHASTLY_DOLL
+    db TREASURE_IRON_POT
+    db TREASURE_LAVA_SOUP
+    db TREASURE_GORON_VASE
+    db TREASURE_FISH
+    db TREASURE_MEGAPHONE
+    db TREASURE_MUSHROOM
+    db TREASURE_WOODEN_BIRD
+    db TREASURE_ENGINE_GREASE
+    db TREASURE_PHONOGRAPH
+    db TREASURE_SPRING_BANANA
+    db TREASURE_MASTERS_PLAQUE
+    db TREASURE_RED_ORE
+    db TREASURE_HARD_ORE
+    db TREASURE_BLUE_ORE
+    db TREASURE_GNARLED_KEY
+    db TREASURE_FLOODGATE_KEY
+    db TREASURE_DRAGON_KEY
+    db TREASURE_RUSTY_BELL
+    db TREASURE_PIRATES_BELL
+    db TREASURE_STAR_ORE
+    db TREASURE_RIBBON
+    db TREASURE_MEMBERS_CARD
+    db TREASURE_FLIPPERS
+    db TREASURE_POTION
+
+    db $00
+
+# Table containing the position on screen where to draw sprites for each slot index.
+# A position of $00 means the slot is reserved for hardcoded items (see "hardcodedPositions"), $ff means end of table
+02//slotPositionsTable: |
+    db $01,$04,$07,$0a,$00
+    db $31,$34,$37,$3a,$00
+    db $61,$64,$67,$6a,$00
+    db $ff
+
+# Table containing the hardcoded positions for a few specific items.
+# Format is : (treasure_id, screen_position, slot_index)
+02//hardcodedPositions: |
+    db TREASURE_ROUND_JEWEL,            $0d, $04
+    db TREASURE_SQUARE_JEWEL,           $0e, $04
+    db TREASURE_PYRAMID_JEWEL,          $1d, $04
+    db TREASURE_X_SHAPED_JEWEL,         $1e, $04
+    db TREASURE_BOMB_FLOWER,            $2d, $09
+    db TREASURE_BOMB_FLOWER_LOWER_HALF, $4d, $09
+    db TREASURE_GASHA_SEED,             $6d, $0e
+    db $ff
+
+# This extension procedure injected at the beginning of inventorySubscreen1_drawTreasures initializes
+# the "current slot" value in RAM with an appropriate value
+02//inventorySubscreen1_drawTreasures_setup: |
+    ld hl,subscreen1TreasureDataNew
+    xor a
+    ld (wSubscreen1CurrentSlotIndex),a
+    ret
+02/5b2b/: call inventorySubscreen1_drawTreasures_setup
+
+# Instead of reading position where to draw sprites from the input table, we are sequentially
+# drawing sprites in empty slot from left to right, top to bottom.
+# This function specifically take the "current slot index" from RAM, increment it in most cases
+# and determines the position where to draw the sprite from the ID (using the slotPositionsTable declared above).
+# It also handles a few specific cases described in the "hardcodedPositions" table.
+02//inventorySubscreen1_drawTreasures_computeAddr: |
+    ldh ($8b),a
+
+    push hl
+    dec hl
+    ld a,(hl)     ; treasure ID -> a
+    ld hl,hardcodedPositions
+    ld e,$02
+    call searchKey
+    ld a,(hl)     ; potential hardcoded position -> a
+    jr c,@return  ; match was found, return hardcoded position
+
+    ; Not a hardcoded position, draw it in the next free slot
+    @readSlotPosition:
+    ld hl,wSubscreen1CurrentSlotIndex
+    ld a,(hl)
+    inc (hl)
+
+    ld hl,slotPositionsTable
+    rst 10  ; rst_addAToHL
+    ld a,(hl)
+    or a
+    jr z,@readSlotPosition  ; A zero position means slot is reserved for hardcoded stuff, just skip it
+
+    @nonZeroPosition:
+    inc a
+    or a
+    jr z,@endOfTable  ; A $ff position means we reached end of table, stop drawing
+    dec a
+    @return:
+    pop hl
+    ret
+
+    ; We reached end of table, pop return address and jump onto next step
+    @endOfTable:
+    pop hl
+    pop de
+    jp $5b58    ; undrawRingBox
+# Replace "ldh (<hFF8B),a" by the call to our function
+02/5b39/: call inventorySubscreen1_drawTreasures_computeAddr
+
+# This extension procedure is only there to put the current slot ID in register A (two first instructions are from the base function)
+02//inventorySubscreen1_drawTreasures_setCurrentSlotForText: |
+    ld c,(hl)   ; text ID -> c
+
+    ; pop HL while preserving return address
+    pop de
+    pop hl
+    push de
+
+    ; Determine if last item position was hardcoded or used wSubscreen1CurrentSlotIndex
+    push hl
+    dec hl
+    ld a,(hl)     ; treasure ID -> a
+    ld hl,hardcodedPositions
+    ld e,$02
+    call searchKey
+    jr nc,@regularItem  ; match was found, return hardcoded position
+    
+    @hardcodedItem:
+    inc hl
+    ld a,(hl)     ; hardcoded slot index -> a
+    pop hl
+    ret
+
+    @regularItem:
+    ld a,(wSubscreen1CurrentSlotIndex)  ; current slot index -> a
+    dec a
+    pop hl
+    ret
+02/5b49/: call inventorySubscreen1_drawTreasures_setCurrentSlotForText
+
+# Remove the two "inc" instructions at the end of the function
+02/5b54/: |
+    nop
+    nop
+
+# Remove Maku Seed from the subscreen
+02/5d26/: ret

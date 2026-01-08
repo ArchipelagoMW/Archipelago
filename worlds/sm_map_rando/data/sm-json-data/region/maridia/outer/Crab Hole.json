@@ -1,0 +1,4007 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 201,
+  "name": "Crab Hole",
+  "area": "Maridia",
+  "subarea": "Outer",
+  "roomAddress": "0x7D21C",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Doorway",
+      "nodeType": "door",
+      "nodeSubType": "doorway",
+      "nodeAddress": "0x001a4f8",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a510",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "red",
+      "nodeAddress": "0x001a51c",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Top Right Doorway",
+      "nodeType": "door",
+      "nodeSubType": "doorway",
+      "nodeAddress": "0x001a504",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "G-Mode Morph Junction (Top Half)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [2],
+        [1]
+      ],
+      "note": "Represents being at the top half of the room in G-Mode, with morph or artificial morph, and movement items."
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Crab Hole Scisers",
+      "enemyName": "Sciser",
+      "quantity": 4,
+      "homeNodes": [1, 2, 3, 4],
+      "note": "They move while offscreen and can easily be reached from anywhere in the room."
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {
+          "id": 4,
+          "devNote": "This link is only for the X-Ray climb and cross room jump. All other strats should go 3 -> 2 -> 1 -> 4."
+        },
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 4}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Sciser",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Sciser Farm",
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          {"resetRoom": {"nodes": [1]}},
+          {"and": [
+            {"resetRoom": {"nodes": [4]}},
+            {"cycleFrames": 50}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "canUseGrapple",
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            "Gravity",
+            "ScrewAttack",
+            {"cycleFrames": 225}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 260}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 300}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 330}
+          ]},
+          {"and": [
+            "Gravity",
+            "canPseudoScrew",
+            {"cycleFrames": 400}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 600}
+          ]},
+          {"and": [
+            "canFarmWhileShooting",
+            {"cycleFrames": 880}
+          ]},
+          {"cycleFrames": 1500}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Sciser", "count": 3}],
+      "devNote": [
+        "One more Sciser could be farmed, but in most scenarios it seems not worth it.",
+        "Gravity can also slightly speed up some other variants but not enough to be worth modeling."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Sciser",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Carry G-Mode Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Carry G-Mode Morph Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 131,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Spark (Gravity, Sciser Hit)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "Morph",
+        "canShinechargeMovementTricky",
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}},
+        {"shinespark": {"frames": 9, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 118,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Suitless Spring Ball Bounce, Pause Remorph)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallBounce",
+        "canPauseRemorphTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use Spring Ball to bounce into the hole, then unmorph to descend.",
+        "Use a pause buffer to remorph, then chain temporary blue into the next room."
+      ]
+    },
+    {
+      "id": 119,
+      "link": [1, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Gravity, Pause Remorph)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "Morph",
+        "canPauseRemorphTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use a neutral bounce to enter the hole, then unmorph to descend.",
+        "Use a pause buffer to remorph, then chain temporary blue into the next room."
+      ],
+      "devNote": "FIXME: add a tech for bouncing into the tunnel."
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphPowerBomb",
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphBombs"
+          ]},
+          "canTrickyJump",
+          {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Roll over the two crabs before the first gets to Samus. This is easier with Gravity Suit turned off.",
+        "It is possible but difficult to roll from the doorway onto the platform with Gravity turned off.",
+        "This requires backing up slightly after entering the room then quickly rolling before the crabs. It is a bit tighter in direct G-Mode."
+      ]
+    },
+    {
+      "id": 132,
+      "link": [1, 3],
+      "name": "Come in Shinecharging, Leave With Spark (Gravity, Sciser Hit)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "Morph",
+        "canShinechargeMovementTricky",
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}},
+        {"shinespark": {"frames": 9, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 120,
+      "link": [1, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Suitless Spring Ball Bounce, Pause Remorph)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallBounce",
+        "canPauseRemorphTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use Spring Ball to bounce into the hole, then unmorph to descend.",
+        "Use a pause buffer to remorph, then chain temporary blue into the next room."
+      ]
+    },
+    {
+      "id": 121,
+      "link": [1, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Gravity, Pause Remorph)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "Morph",
+        "canPauseRemorphTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use a neutral bounce to enter the hole, then unmorph to descend.",
+        "Use a pause buffer to remorph, then chain temporary blue into the next room."
+      ],
+      "devNote": "FIXME: add a tech for bouncing into the tunnel."
+    },
+    {
+      "id": 11,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 12,
+      "link": [1, 4],
+      "name": "Spark Through Room",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"or": [
+          {"shinespark": {"frames": 24}},
+          {"and": [
+            "Gravity",
+            {"shinespark": {"frames": 21}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      }
+    },
+    {
+      "id": 133,
+      "link": [1, 4],
+      "name": "Come In Shinecharging, Leave Shinecharged (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [1, 4],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity, Less Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 100}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 134,
+      "link": [1, 4],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity, Full Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 135,
+      "link": [1, 4],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 90}
+          ]},
+          {"shineChargeFrames": 150}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 136,
+      "link": [1, 4],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 5}
+          ]},
+          {"shineChargeFrames": 10}
+        ]},
+        {"shinespark": {"frames": 23}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 137,
+      "link": [1, 4],
+      "name": "Come In Shinecharged, Leave With Spark (Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 10}
+          ]},
+          {"shineChargeFrames": 20}
+        ]},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [1, 4],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 15,
+      "link": [1, 4],
+      "name": "Carry G-Mode Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [1, 4],
+      "name": "Carry G-Mode Morph Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "Morph",
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "Gravity",
+            {"or": [
+              "h_artificialMorphLongIBJ",
+              "h_artificialMorphJumpIntoIBJ"
+            ]}
+          ]},
+          {"and": [
+            "Gravity",
+            "h_artificialMorphBombHorizontally",
+            {"or": [
+              "h_additionalBomb",
+              "canTrickyGMode",
+              {"and": [
+                "canTrickyDodgeEnemies",
+                "canGravityJump"
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "To save a bomb, it is possible to roll from the doorway onto the platform with movement similar to a Gravity jump - hold forward just before the pause to disable gravity.",
+      "devNote": [
+        "It is possible to cross with a single Power Bomb, but it requires a last pixel jump with a frame perfect forward press.",
+        "A crab hit could bounce Samus onto the middle platform, but the gravity jump is better. If Samus has a blue suit and cant pause, then she also cant boost from the crab."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 4],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 18,
+      "link": [1, 4],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 19,
+      "link": [1, 4],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canLongIBJ",
+          "canJumpIntoIBJ",
+          {"and": [
+            "SpaceJump",
+            "canMidAirMorph"
+          ]},
+          {"and": [
+            "HiJump",
+            "canWalljump",
+            "canMidAirMorph"
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Gravity Jump",
+      "requires": [
+        "canGravityJump",
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall"
+        ]}
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Suited TrickyDashJump",
+      "requires": [
+        "canMidAirMorph",
+        "Gravity",
+        "canWalljump",
+        "canTrickyDashJump"
+      ],
+      "note": "Jump the first frame after running to gain just enough spinjump height."
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Frozen Crab",
+      "requires": [
+        "canUseFrozenEnemies",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"or": [
+              "HiJump",
+              "canWalljump",
+              "canSpringBallJumpMidAir",
+              "canTrickyUseFrozenEnemies"
+            ]},
+            {"or": [
+              "canMidAirMorph",
+              "h_useSpringBall"
+            ]}
+          ]},
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir",
+            "canSuitlessMaridia"
+          ]}
+        ]}
+      ],
+      "note": [
+        "Freeze a crab on the edge of the hole in the ceiling.",
+        "Then get on top of it with Gravity and a wall jump, jump assist, or second frozen crab on the ground,",
+        "or a suitless Spring Ball jump with HiJump."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Suitless HiJump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickyUseFrozenEnemies",
+        "HiJump",
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall"
+        ]},
+        {"or": [
+          "canCrouchJump",
+          "canDownGrab",
+          "canFlatleyJump"
+        ]}
+      ],
+      "note": [
+        "Stand on a frozen crab, then freeze a second one on the edge of the hole above.",
+        "Use a crouch jump and/or down grab to get onto the crab above.",
+        "Alternatively, freeze a crab on the ceiling, overhanging the hole above, then flatley jump onto the crab."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Suitless Springball",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        {"ammo": {"type": "Super", "count": 1}},
+        "canTrickyUseFrozenEnemies",
+        "canSpringBallJumpMidAir"
+      ],
+      "note": "Use a Super to knock off a crab and freeze it mid-air. Freeze a second crab on the edge of the hole above."
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Suitless Crab Climb No Jump Assist",
+      "requires": [
+        {"notable": "Suitless Crab Climb No Jump Assist"},
+        "canMidAirMorph",
+        "canSuitlessMaridia",
+        {"ammo": {"type": "Super", "count": 1}},
+        "canTrickyUseFrozenEnemies"
+      ],
+      "note": [
+        "Use a super to knock off a crab and freeze it mid-air. Then get on that crab, possibly using a door ledge",
+        "Freeze a second crab on the edge of the hole above."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Suitless Crab Climb Superless with Springball",
+      "requires": [
+        {"notable": "Suitless Crab Climb Superless with Springball"},
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        "canTrickySpringBallJump",
+        "canTrickyUseFrozenEnemies",
+        "canStationaryLateralMidAirMorph"
+      ],
+      "note": [
+        "Freeze one crab on the lip of the overhead opening and another on the edge of a doors platform then springballjump up.",
+        "Use a Stationary Lateral Mid-Air Morph to gain enough jump height without bonking the ceiling.",
+        "It is possible with a crouch jump to not need the second crab."
+      ],
+      "devNote": "It is possible without canStationaryLateralMidAirMorph, but very precise."
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Cross Room Jump with Kago (Speedbooster)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canMidAirMorph",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround",
+        "canKago",
+        {"or": [
+          {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}},
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ],
+      "note": [
+        "Requires a runway of at least 3 tiles (with an open end) in the adjacent room.",
+        "Use a Cross Room Jump into Water followed by a delayed Momentum Conserving Turnaround to reach the Morph tunnel above.",
+        "Climbing the Left side of the center hole will run into an unavoidable Scisor that can be passed through by Morphing.",
+        "Crossing to the right from the left door requires slightly more runway and takes a more precise turnaround.",
+        "Samus must also stay near a side of the center hole to reach the Morph tunnels."
+      ],
+      "devNote": ["Extra run speeds between $1.2 and about $2.5 can work."]
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "Cross Room Jump with Kago (No Speedbooster)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 3.4375
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canMidAirMorph",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround",
+        "canKago",
+        {"or": [
+          {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}},
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ],
+      "note": [
+        "Requires a runway of at least 4 tiles (with no open end) in the adjacent room.",
+        "Use a Cross Room Jump into Water followed by a delayed Momentum Conserving Turnaround to reach the Morph tunnel above.",
+        "Climbing the Left side of the center hole will run into an unavoidable Sciser that can be passed through by Morphing.",
+        "Crossing to the right from the left door requires slightly more runway and takes a more precise turnaround.",
+        "Samus must also stay near a side of the center hole to reach the Morph tunnels."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 1],
+      "name": "Cross Room Jump Damageless Turnaround (Speedbooster)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 3.4375
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canMidAirMorph",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": [
+        "Requires a runway of at least 4 tiles (with no open end) in the adjacent room.",
+        "Use a Cross Room Jump into Water followed by a delayed Momentum Conserving Turnaround.",
+        "Then morph and move right to go through the Morph tunnel above, avoiding damage from the crab."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [2, 1],
+      "name": "Cross Room Jump Damageless Turnaround (No Speedbooster)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 5.4375
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canMidAirMorph",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround",
+        "canInsaneJump"
+      ],
+      "note": [
+        "Requires a runway of at least 6 tiles (with no open end) in the adjacent room.",
+        "Use a Cross Room Jump into Water followed by a delayed Momentum Conserving Turnaround.",
+        "Then morph and move right to go through the Morph tunnel above, avoiding damage from the crab.",
+        "With the minimal runway length, this requires precise timing."
+      ],
+      "devNote": [
+        "This strat is included for completeness, but it is technically redundant with the airball strat, which may generally be preferable due to not risking a crab hit."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [2, 1],
+      "name": "Cross Room Jump with Air Ball (Speedbooster)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingMorph"
+      ],
+      "note": [
+        "Only requires a runway of 5 tiles (with an open end) in the adjacent room.",
+        "Perform an air ball while against the ceiling to make it up and through the morph tunnel."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [2, 1],
+      "name": "Cross Room Jump with Air Ball (No Speedbooster)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 5.4375
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingMorph"
+      ],
+      "note": [
+        "Only requires a runway of 6 tiles (with no open end) in the adjacent room.",
+        "Perform an air ball while against the ceiling to make it up and through the morph tunnel.",
+        "If the runway length is minimal, the aim-down input must be delayed a bit (rather than buffered through the transition), so that Samus moves at a slightly higher horizontal speed for longer."
+      ]
+    },
+    {
+      "id": 164,
+      "link": [2, 1],
+      "name": "Side Platform Cross Room Jump (Turnaround or Ceiling Mockball)",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 5.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canMomentumConservingMorph",
+                "canInsaneJump",
+                "canInsaneMidAirMorph"
+              ],
+              "note": [
+                "This applies to Warehouse Energy Tank Room.",
+                "It is double frame-perfect, requiring a last-frame jump in the other room just before Samus would get caught on the door ledge,",
+                "and a frame-perfect morph just before Samus would bonk the ceiling.",
+                "The aim-down must be delayed until at least 4 frames after entering the room."
+              ]
+            },
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 8.4375,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canInsaneJump",
+                {"or": [
+                  "canMomentumConservingMorph",
+                  "canMomentumConservingTurnaround"
+                ]}
+              ],
+              "note": [
+                "This applies to Warehouse Entrance.",
+                "This requires a last-frame jump and specific horizontal alignment in order to avoid bonking the door frame.",
+                "A way to get a correct starting position is to jump, press against the ceiling overhang near the end of the runway,",
+                "land, turn around away from the door, then jump and mid-air turnaround toward the door."
+              ],
+              "devNote": ["Speed Booster is not required for this."]
+            },
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 17,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                {"or": [
+                  "canMomentumConservingMorph",
+                  {"and": [
+                    "canMomentumConservingTurnaround",
+                    "canTrickyJump"
+                  ]}
+                ]}
+              ],
+              "note": [
+                "This applies to Warehouse Entrance.",
+                "This can be done in three ways:",
+                "1) Jump on the last possible frame in the previous room, turn around a little before hitting the ceiling, then morph and hold right to pass through the tunnel.",
+                "2) Perform a ceiling mockball through the transition,",
+                "unmorph a little before hitting the ceiling,",
+                "hold right to press against the wall (to avoid hitting the crab), then morph and hold right to pass through the tunnel.",
+                "3) Jump on the last possible frame in the previous room, then perform a ceiling mockball to go up through the hidden space,",
+                "briefly releasing right while approaching the ceiling, in order to avoid hitting the crab."
+              ],
+              "devNote": [
+                "The turnaround method has about a 9-frame window for the turnaround.",
+                "The through-door ceiling mockball has about a 4-frame window for the jump, between a 1-frame and a 5-frame window for the morph (with later jumps giving a larger window),",
+                "and about a 7-frame window for the unmorph.",
+                "The after-transition ceiling mockball has an 8-frame for the morph.",
+                "Kagoing the crab is also possible, but it seems more difficult than all three other options, and it takes damage, so is probably pointless."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 8.4375,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canTrickyJump",
+                "canMomentumConservingTurnaround"
+              ],
+              "note": [
+                "This applies to Ridley Tank Room and Dust Torizo Room.",
+                "From Ridley Tank Room, avoid backing into the corner.",
+                "From Dust Torizo Room, it doesn't matter."
+              ],
+              "devNote": ["Speed Booster is not required for this."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 8.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0], [3, 2]],
+              "requires": [
+                {"or": [
+                  "canMomentumConservingMorph",
+                  {"and": [
+                    "canTrickyDashJump",
+                    "canMomentumConservingTurnaround"
+                  ]}
+                ]}
+              ],
+              "note": ["Applies to Big Boy Room, Mickey Mouse Room, and Metal Pirates."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 23,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canInsaneJump",
+                "canMomentumConservingMorph",
+                "canInsaneMidAirMorph"
+              ],
+              "note": [
+                "Applies to Metroid Room 1.",
+                "Use a few pixels less than the full runway.",
+                "This is double frame-perfect, requiring a last-frame jump before Samus would catch on the door ledge,",
+                "and a last-frame morph before Samus would bonk on the ceiling of the door frame.",
+                "Unmorph a little before Samus would hit the ceiling, to conserve upward momentum again.",
+                "Then quickly morph again and go through the tunnel to the right."
+              ],
+              "devNote": ["The momentum conserving unmorph is lenient, having about a 9-frame window."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 29.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canInsaneJump",
+                "canMomentumConservingMorph"
+              ],
+              "note": [
+                "Applies to Statues Hallway.",
+                "Jump through the door with a ceiling mockball, then unmorph a little before Samus would bonk the ceiling.",
+                "Morph again to pass through the tunnel to the right.",
+                "To make the strat more lenient, use less than the full available runway:",
+                "Ideally, position Samus to gain an extra run speed of $5.2 or slightly more,",
+                "which corresponds to starting 30 tiles from the end of the runway."
+              ],
+              "devNote": [
+                "There is a dropoff in Samus' jump height at an extra run speed of $5.2, which is good here.",
+                "Starting at a distance of 30 tiles, there is a 3-frame window for the jump (giving extra run speeds between $5.2 and $5.4)",
+                "and between a 1-frame and 3-frame window for the morph (with later jumps giving a larger window).",
+                "In any case, the unmorph will be lenient, having about a 9-frame window."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 29.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 0]],
+              "requires": [
+                "canInsaneJump",
+                "canMomentumConservingMorph"
+              ],
+              "note": [
+                "Applies to Flyway.",
+                "Jump through the door with a ceiling mockball.",
+                "After pressing against the wall of the hidden space, release right for a moment until after Samus bonks the ceiling,",
+                "in order to avoid damage from the crab on the right.",
+                "To make the strat more lenient, less than the full available runway should be used:",
+                "Ideally, position Samus to gain an extra run speed of $5.2 or slightly more,",
+                "which corresponds to starting 30 tiles from the end of the runway (or 8 tiles from the start)."
+              ],
+              "devNote": [
+                "There is a dropoff in Samus' jump height at an extra run speed of $5.2, which is good here.",
+                "Starting at a distance of 30 tiles, there is a 3-frame window for the jump (giving extra run speeds between $5.2 and $5.4)",
+                "and between a 1-frame and 6-frame window for the morph (with later jumps giving a larger window)."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 45,
+              "speedBooster": true,
+              "obstructions": [[4, 0]],
+              "requires": [
+                "canInsaneJump",
+                "canMomentumConservingMorph",
+                "canInsaneMidAirMorph",
+                "canKago",
+                "canBeExtremelyPatient",
+                {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}}
+              ],
+              "note": [
+                "Applies to Baby Kraid Room.",
+                "Jump through the door with a double frame-perfect ceiling mockball, with a last-frame jump and last-frame morph.",
+                "Unmorph before bonking the ceiling, then quickly morph again, kagoing the crab, and exiting through the tunnel on the right."
+              ]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "Morph"
+      ]
+    },
+    {
+      "id": 165,
+      "link": [2, 1],
+      "name": "Side Platform Cross Room Jump into Spring Ball Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 4,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canMomentumConservingTurnaround"
+              ],
+              "note": [
+                "This applies to Skree Boost Room, Grapple Tutorial Room 2, Warehouse Energy Tank Room, and Warehouse Entrance."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 8.4375,
+              "speedBooster": "any",
+              "obstructions": [[1, 0], [3, 2]],
+              "requires": [
+                {"or": [
+                  "canMomentumConservingMorph",
+                  "canMomentumConservingTurnaround"
+                ]}
+              ],
+              "note": ["Applies to Big Boy Room, Mickey Mouse Room, and Metal Pirates."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 9.4375,
+              "speedBooster": true,
+              "obstructions": [[2, 0]],
+              "requires": [
+                "canMomentumConservingMorph"
+              ],
+              "note": ["Applies to Early Supers Room."]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 35,
+      "link": [2, 1],
+      "name": "Double Springball Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "h_doubleSpringBallJumpWithHiJump"
+      ]
+    },
+    {
+      "id": 36,
+      "link": [2, 1],
+      "name": "Ice Clip",
+      "requires": [
+        {"notable": "Ice Clip"},
+        "h_navigateUnderwater",
+        "canOffScreenMovement",
+        {"or": [
+          {"and": [
+            "Gravity",
+            "h_preciseIceClip"
+          ]},
+          {"and": [
+            "HiJump",
+            "h_highPixelIceClip",
+            "canBeVeryPatient",
+            {"or": [
+              "HiJump",
+              "Gravity"
+            ]},
+            {"or": [
+              {"noFlashSuit": {}},
+              "canTrickyCarryFlashSuit"
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Freeze a crab at a very precise position in order to clip through the center Morph tunnel without a way to see.",
+        "Use a frozen crab on the opposite wall in order to better time the crab being used for clipping and as a way to climb on top of it.",
+        "Ice Beam on its own has a high chance of hitting a wall instead of the crab; straight vertical shots can help.",
+        "Gravity has a 2 pixel clip window while Suitless there is only 1 pixel up higher which requires a precise down grab to get onto the crab."
+      ],
+      "devNote": "FIXME: It is possible to crab climb with nothing but ice and walljumps."
+    },
+    {
+      "id": 37,
+      "link": [2, 1],
+      "name": "Cross Room Spring Ball Bounce Unmorph (Speedbooster)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "uncontrolled",
+          "remoteAndLandingMinTiles": [[3, 1]]
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingMorph"
+      ],
+      "note": [
+        "Unmorph just before hitting the ceiling, to conserve upward momentum.",
+        "Continue moving right to avoid a crab hit, then morph again to make it through.",
+        "If the runway is very short and the bounce is not on the last frame before the transition, then it may be necessary to perform a spring ball jump;",
+        "in this case, pause soon after entering the room in order to unequip spring ball."
+      ],
+      "devNote": [
+        "Bounce with extra run speed at least $1.2.",
+        "FIXME: In these strats we probably also need to be able to express maxExtraRunSpeed or a maxTiles; maybe this entrance condition should be changed to have the same structure as comeInWithBlueSpringBallBounce?"
+      ]
+    },
+    {
+      "id": 38,
+      "link": [2, 1],
+      "name": "Cross Room Spring Ball Bounce Unmorph (Uncontrolled, No Speedbooster)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": "any",
+          "movementType": "uncontrolled",
+          "remoteAndLandingMinTiles": [[3.5625, 1]]
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingMorph"
+      ],
+      "note": [
+        "Unmorph just before hitting the ceiling, to conserve upward momentum.",
+        "Continue moving right to avoid a crab hit, then morph again to make it through."
+      ],
+      "devNote": "Bounce with extra run speed at least $1.5."
+    },
+    {
+      "id": 39,
+      "link": [2, 1],
+      "name": "Cross Room Spring Ball Bounce Unmorph (Controlled, No Speedbooster)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": "any",
+          "movementType": "controlled",
+          "remoteAndLandingMinTiles": [[4.5625, 1]]
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingMorph"
+      ],
+      "note": [
+        "Unmorph just before hitting the ceiling, to conserve upward momentum.",
+        "Continue moving right to avoid a crab hit, then morph again to make it through."
+      ],
+      "devNote": "Bounce with extra run speed at least $1.8."
+    },
+    {
+      "id": 40,
+      "link": [2, 1],
+      "name": "Cross Room Space Jump Kago (Speedbooster)",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": true,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canPreciseSpaceJump",
+        "canMomentumConservingTurnaround",
+        "canMidAirMorph",
+        "canKago",
+        {"or": [
+          {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}},
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ],
+      "note": [
+        "Turn around to the left just before bonking the ceiling, to retain upward momentum.",
+        "Then morph while passing through the crab and go through the morph tunnel to the left."
+      ],
+      "devNote": "Jump low through the door with at least $1.2 extra run speed."
+    },
+    {
+      "id": 41,
+      "link": [2, 1],
+      "name": "Cross Room Space Jump Kago (No Speedbooster)",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": false,
+          "minTiles": 3.5625
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canPreciseSpaceJump",
+        "canMomentumConservingTurnaround",
+        "canMidAirMorph",
+        "canKago",
+        {"or": [
+          {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}},
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ],
+      "note": [
+        "Turn around to the left just before bonking the ceiling, to retain upward momentum.",
+        "Then morph while passing through the crab and go through the morph tunnel to the left."
+      ],
+      "devNote": "Jump low through the door with at least $1.4 extra run speed."
+    },
+    {
+      "id": 42,
+      "link": [2, 1],
+      "name": "Cross Room Space Jump Damageless Turnaround (Speedbooster)",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": true,
+          "minTiles": 3.5625
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canPreciseSpaceJump",
+        "canMomentumConservingTurnaround",
+        "canMidAirMorph"
+      ],
+      "note": [
+        "Turn around to the left just before bonking the ceiling, to retain upward momentum.",
+        "Then turn back to the right and go through the morph tunnel to the right, avoiding crab damage."
+      ],
+      "devNote": "Jump low through the door with at least $1.5 extra run speed."
+    },
+    {
+      "id": 43,
+      "link": [2, 1],
+      "name": "Cross Room Space Jump Damageless Turnaround (No Speedbooster)",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": false,
+          "minTiles": 6
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canPreciseSpaceJump",
+        "canMomentumConservingTurnaround",
+        "canMidAirMorph"
+      ],
+      "note": [
+        "Turn around to the left just before bonking the ceiling, to retain upward momentum.",
+        "Then turn back to the right and go through the morph tunnel to the right, avoiding crab damage."
+      ],
+      "devNote": "Jump low through the door with at least $1.D extra run speed."
+    },
+    {
+      "id": 138,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Gravity, Space Jump, Sciser Hit)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "Gravity",
+        "SpaceJump",
+        "canMidAirMorph",
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}},
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 140}
+          ]},
+          {"and": [
+            "canKago",
+            {"shineChargeFrames": 155}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Pass through the tunnel to the left, tanking a crab hit."
+    },
+    {
+      "id": 139,
+      "link": [2, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Gravity, Space Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "Gravity",
+        "SpaceJump",
+        "canMidAirMorph",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 115}
+          ]},
+          {"shineChargeFrames": 130}
+        ]},
+        {"shinespark": {"frames": 14, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Pass through the tunnel to the right, then spark to the left."
+    },
+    {
+      "id": 122,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canXRayCancelShinecharge",
+        "canXRayTurnaround",
+        "canGravityJump",
+        "canSpringBallBounce",
+        "canPauseRemorphTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Perform a gravity jump and use Spring Ball to bounce through the top of the hole.",
+        "Use a pause buffer to remorph, also taking the opportunity to equip Gravity again.",
+        "Then chain temporary blue into the next room."
+      ]
+    },
+    {
+      "id": 159,
+      "link": [2, 1],
+      "name": "Precise Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"}
+          ]
+        }
+      },
+      "requires": [
+        "canPreciseGrappleJump"
+      ]
+    },
+    {
+      "id": 160,
+      "link": [2, 1],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [{"position": [6, 4], "note": "Grapple Tutorial Room 2"}]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ]
+    },
+    {
+      "id": 161,
+      "link": [2, 1],
+      "name": "Absurd Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [6, 2], "note": "Lava Grapple Tunnel"},
+            {
+              "position": [5, 2],
+              "note": "The Moat, Double Chamber, Wrecked Ship Energy Tank Room"
+            },
+            {"position": [2.375, 4.5625], "note": "Post Crocomire Farming Room"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ]
+    },
+    {
+      "id": 44,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 2,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 45,
+      "link": [2, 2],
+      "name": "Leave With Runway - Frozen Sciser",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 46,
+      "link": [2, 2],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 47,
+      "link": [2, 2],
+      "name": "Leave With Mockball",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 2,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 48,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 2,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 49,
+      "link": [2, 2],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 50,
+      "link": [2, 2],
+      "name": "Sciser Farm",
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          {"resetRoom": {"nodes": [2]}},
+          {"and": [
+            {"resetRoom": {"nodes": [3]}},
+            {"cycleFrames": 80}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "canUseGrapple",
+            {"cycleFrames": 95}
+          ]},
+          {"and": [
+            "Gravity",
+            "ScrewAttack",
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "Gravity",
+            "canPseudoScrew",
+            {"cycleFrames": 170}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 180}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 200}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 240}
+          ]},
+          {"cycleFrames": 300}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Sciser", "count": 1}],
+      "devNote": [
+        "More than one Sciser could be farmed, but in most scenarios it seems not worth it.",
+        "Gravity can also slightly speed up some other variants but not enough to be worth modeling."
+      ]
+    },
+    {
+      "id": 51,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 52,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Sciser",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 53,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 54,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 140,
+      "link": [2, 3],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 120}
+          ]},
+          {"shineChargeFrames": 155}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 141,
+      "link": [2, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 100}
+          ]},
+          {"shineChargeFrames": 150}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 55,
+      "link": [2, 3],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 5}
+          ]},
+          {"shineChargeFrames": 10}
+        ]},
+        {"shinespark": {"frames": 23}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 142,
+      "link": [2, 3],
+      "name": "Come In Shinecharged, Leave With Spark (Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 10}
+          ]},
+          {"shineChargeFrames": 20}
+        ]},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 56,
+      "link": [2, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 143,
+      "link": [2, 4],
+      "name": "Carry Shinecharge (Gravity, Space Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "Gravity",
+        "SpaceJump",
+        "canMidAirMorph",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 135}
+          ]},
+          {"shineChargeFrames": 150}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 144,
+      "link": [2, 4],
+      "name": "Come In Shinecharged, Leave With Spark (Gravity, Space Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "Gravity",
+        "SpaceJump",
+        "canMidAirMorph",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 115}
+          ]},
+          {"shineChargeFrames": 130}
+        ]},
+        {"shinespark": {"frames": 7, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 123,
+      "link": [2, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"or": [
+          "canXRayCancelShinecharge",
+          {"enemyKill": {
+            "enemies": [["Sciser"]],
+            "explicitWeapons": ["Missile", "Super", "Grapple", "Wave", "Spazer", "Plasma", "Ice Shield"]
+          }}
+        ]},
+        "canGravityJump",
+        "canSpringBallBounce",
+        "canPauseRemorphTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Gain a shinecharge while entering, and either kill the crab before it touches Samus, or use X-Ray to cancel the shinecharge.",
+        "Perform a gravity jump and use Spring Ball to bounce through the top of the hole.",
+        "Use a pause buffer to remorph, also taking the opportunity to equip Gravity again.",
+        "Then chain temporary blue into the next room."
+      ]
+    },
+    {
+      "id": 124,
+      "link": [2, 4],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 0,
+          "openEnd": 1,
+          "maxExtraRunSpeed": "$1.A"
+        }
+      },
+      "requires": [
+        "canSpeedball",
+        "canGravityJump",
+        "canSpringBallBounce",
+        "canPauseRemorphTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Jump through the transition with blue speed.",
+        "Perform a very short speedball to kill the bottom crab and get into position below the hole.",
+        "Perform a gravity jump and use Spring Ball to bounce through the top of the hole.",
+        "Use a pause buffer to remorph, also taking the opportunity to equip Gravity again.",
+        "Then chain temporary blue into the next room."
+      ],
+      "devNote": [
+        "This can be done at higher run speeds, with greater precision or an earlier jump through the door."
+      ]
+    },
+    {
+      "id": 57,
+      "link": [2, 4],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 58,
+      "link": [2, 4],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 59,
+      "link": [2, 4],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 60,
+      "link": [2, 5],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        "h_navigateUnderwater",
+        {"or": [
+          "canGravityJump",
+          {"and": [
+            "Gravity",
+            "HiJump",
+            {"or": [
+              "canSpringBallJumpMidAir",
+              "canWalljump"
+            ]}
+          ]},
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            "HiJump",
+            "h_crouchJumpDownGrab"
+          ]},
+          {"and": [
+            {"ammo": {"type": "Super", "count": 1}},
+            "canTrickyUseFrozenEnemies",
+            "canOffScreenMovement"
+          ]},
+          {"and": [
+            "canTrickyJump",
+            "canSpringBallJumpMidAir",
+            "canTrickyUseFrozenEnemies",
+            "canOffScreenMovement"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 61,
+      "link": [2, 5],
+      "name": "G-Mode Morph IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "One method to kill the crabs is to wait on the central platform until a crab comes near, then move with it laying bombs in its path.",
+        "Another is to wait in the doorway and place three bombs to hit it while bouncing over it.",
+        "The top of the IBJ will be off camera. Starting the IBJ as far to either side as possible and holding forward once off camera will make it easier to get through the morph tunnel."
+      ]
+    },
+    {
+      "id": 62,
+      "link": [2, 5],
+      "name": "G-Mode Morph Gravity Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canGravityJump",
+        "h_artificialMorphSpringBall"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The shaft will be clear of crabs on room entry. Quickly gravity jump before the bottom crab enters the shaft and exit the left morph tunnel to be safe.",
+        "This is a bit tighter when entering in G-Mode Immobile."
+      ]
+    },
+    {
+      "id": 145,
+      "link": [3, 1],
+      "name": "Carry Shinecharge (Gravity, Space Jump, Sciser Hit)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "Gravity",
+        "SpaceJump",
+        "canMidAirMorph",
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}},
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 140}
+          ]},
+          {"and": [
+            "canKago",
+            {"shineChargeFrames": 155}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Pass through the tunnel to the left, tanking a crab hit."
+    },
+    {
+      "id": 146,
+      "link": [3, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Gravity, Space Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "Gravity",
+        "SpaceJump",
+        "canMidAirMorph",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 115}
+          ]},
+          {"shineChargeFrames": 130}
+        ]},
+        {"shinespark": {"frames": 14, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Pass through the tunnel to the right, then spark to the left."
+    },
+    {
+      "id": 125,
+      "link": [3, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canGravityJump",
+        "canSpringBallBounce",
+        "canPauseRemorphTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Perform a gravity jump and use Spring Ball to bounce through the top of the hole.",
+        "Use a pause buffer to remorph, also taking the opportunity to equip Gravity again.",
+        "Then chain temporary blue into the next room."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [3, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 64,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 65,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 66,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 67,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 147,
+      "link": [3, 2],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 110}
+          ]},
+          {"shineChargeFrames": 155}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 148,
+      "link": [3, 2],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 100}
+          ]},
+          {"shineChargeFrames": 150}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 68,
+      "link": [3, 2],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 5}
+          ]},
+          {"shineChargeFrames": 10}
+        ]},
+        {"shinespark": {"frames": 23}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 149,
+      "link": [3, 2],
+      "name": "Come In Shinecharged, Leave With Spark (Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 10}
+          ]},
+          {"shineChargeFrames": 20}
+        ]},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 69,
+      "link": [3, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 70,
+      "link": [3, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 71,
+      "link": [3, 2],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 72,
+      "link": [3, 2],
+      "name": "Carry Grapple Teleport (Upper Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 73,
+      "link": [3, 2],
+      "name": "Carry Grapple Teleport (Lower Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 74,
+      "link": [3, 2],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 75,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 2,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 76,
+      "link": [3, 3],
+      "name": "Leave With Runway - Frozen Sciser",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 77,
+      "link": [3, 3],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 78,
+      "link": [3, 3],
+      "name": "Leave With Mockball",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 2,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 79,
+      "link": [3, 3],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 2,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 80,
+      "link": [3, 3],
+      "name": "Leave Space Jumping",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 81,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit By Sciser",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 82,
+      "link": [3, 3],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 83,
+      "link": [3, 4],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 1 screen."
+    },
+    {
+      "id": 84,
+      "link": [3, 4],
+      "name": "Cross Room Jump Turnaround (Speedbooster)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canMidAirMorph",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": [
+        "Requires a runway of at least 3 tiles (with an open end) in the adjacent room.",
+        "Use a Cross Room Jump into Water followed by a delayed Momentum Conserving Turnaround to reach the Morph tunnel above.",
+        "Climbing the Left side of the center hole will run into an unavoidable Scisor.",
+        "Samus must also stay near a side of the center hole to reach the Morph tunnels."
+      ],
+      "devNote": ["Extra run speeds between $1.2 and about $2.5 can work."]
+    },
+    {
+      "id": 85,
+      "link": [3, 4],
+      "name": "Cross Room Jump Turnaround (No Speedbooster)",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 3.4375
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canMidAirMorph",
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround"
+      ],
+      "note": [
+        "Requires a runway of at least 4 tiles (with no open end) in the adjacent room.",
+        "Use a Cross Room Jump into Water followed by a delayed Momentum Conserving Turnaround to reach the Morph tunnel above.",
+        "Climbing the Left side of the center hole will run into an unavoidable Sciser.",
+        "Samus must also stay near a side of the center hole to reach the Morph tunnels."
+      ]
+    },
+    {
+      "id": 86,
+      "link": [3, 4],
+      "name": "Cross Room Spring Ball Bounce Unmorph (Speedbooster)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": true,
+          "movementType": "any",
+          "remoteAndLandingMinTiles": [[3, 1]]
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingMorph"
+      ],
+      "note": [
+        "Unmorph just before hitting the ceiling, to conserve upward momentum.",
+        "Then turn around, morph, and move through the tunnel to the right, avoiding crab damage.",
+        "If the runway is very short and the bounce is not on the last frame before the transition, then it may be necessary to perform a spring ball jump;",
+        "in this case, pause soon after entering the room in order to unequip spring ball."
+      ],
+      "devNote": ["Bounce with extra run speed at least $1.2."]
+    },
+    {
+      "id": 87,
+      "link": [3, 4],
+      "name": "Cross Room Spring Ball Bounce Unmorph (Uncontrolled, No Speedbooster)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": "any",
+          "movementType": "uncontrolled",
+          "remoteAndLandingMinTiles": [[3.5625, 1]]
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingMorph"
+      ],
+      "note": [
+        "Unmorph just before hitting the ceiling, to conserve upward momentum.",
+        "Then turn around, morph, and move through the tunnel to the right, avoiding crab damage."
+      ],
+      "devNote": ["Bounce with extra run speed at least $1.5."]
+    },
+    {
+      "id": 88,
+      "link": [3, 4],
+      "name": "Cross Room Spring Ball Bounce Unmorph (Controlled, No Speedbooster)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": "any",
+          "movementType": "controlled",
+          "remoteAndLandingMinTiles": [[4.5625, 1]]
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingMorph"
+      ],
+      "note": [
+        "Unmorph just before hitting the ceiling, to conserve upward momentum.",
+        "Then turn around, morph, and move through the tunnel to the right, avoiding crab damage."
+      ],
+      "devNote": "Bounce with extra run speed at least $1.8."
+    },
+    {
+      "id": 89,
+      "link": [3, 4],
+      "name": "Cross Room Space Jump Turnaround (Speedbooster)",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": true,
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canPreciseSpaceJump",
+        "canMomentumConservingTurnaround",
+        "canMidAirMorph"
+      ],
+      "note": [
+        "Turn around to the right just before bonking the ceiling, to retain upward momentum.",
+        "Then morph and go through the tunnel to the right."
+      ],
+      "devNote": "Jump low through the door with at least $1.2 extra run speed."
+    },
+    {
+      "id": 90,
+      "link": [3, 4],
+      "name": "Cross Room Space Jump Turnaround (No Speedbooster)",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": false,
+          "minTiles": 3.5625
+        }
+      },
+      "requires": [
+        {"notable": "Cross Room Jump Morph"},
+        "canCrossRoomJumpIntoWater",
+        "canPreciseSpaceJump",
+        "canMomentumConservingTurnaround",
+        "canMidAirMorph"
+      ],
+      "note": [
+        "Turn around to the right just before bonking the ceiling, to retain upward momentum.",
+        "Then morph and go through the tunnel to the right."
+      ],
+      "devNote": "Jump low through the door with at least $1.5 extra run speed."
+    },
+    {
+      "id": 166,
+      "link": [3, 4],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 9,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canMomentumConservingTurnaround"
+              ],
+              "note": ["This applies to Screw Attack Room and Lava Dive."],
+              "detailNote": [
+                "From Screw Attack Room, this will not work if starting from backed into corner;",
+                "instead turn around after pressing into the corner."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 9.4375,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canMomentumConservingTurnaround"
+              ],
+              "note": [
+                "This applies to Tourian Hopper Room, Bowling Alley (bottom), Dust Torizo Room, and Noob Bridge."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 9.4375,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canMomentumConservingTurnaround"
+              ],
+              "note": [
+                "This applies to Bomb Torizo Room, Pink Brinstar Wave Gate Room, Phantoon's Room, Big Boy Room, and Double Chamber."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 14.4375,
+              "speedBooster": true,
+              "obstructions": [[3, 2]],
+              "requires": [
+                "canMomentumConservingTurnaround"
+              ],
+              "note": ["This applies to Metal Pirates Room."]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "Morph"
+      ],
+      "devNote": [
+        "We don't include any cases where the setup room has a runway of 3 or more tiles connected to the door,",
+        "since a regular cross room jump could be used in that case (with Speed Booster)."
+      ]
+    },
+    {
+      "id": 167,
+      "link": [3, 4],
+      "name": "Side Platform Cross Room Jump into Spring Ball Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 4,
+              "speedBooster": true,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canMomentumConservingTurnaround"
+              ],
+              "note": ["This applies to Skree Boost Room."]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 5.4375,
+              "speedBooster": "any",
+              "obstructions": [[1, 0]],
+              "requires": [
+                "canMomentumConservingTurnaround"
+              ],
+              "note": ["This applies to Early Super Room."],
+              "detailNote": [
+                "If Speed Booster is equipped, then a momentum-conserving morph should be used instead of a turnaround."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 14.4375,
+              "speedBooster": "any",
+              "obstructions": [[3, 2]],
+              "requires": [
+                {"or": [
+                  "canMomentumConservingTurnaround",
+                  "canMomentumConservingMorph"
+                ]}
+              ],
+              "note": ["This applies to Metal Pirates Room."]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickySpringBallJump"
+      ],
+      "devNote": [
+        "A spring ball bounce could be done here instead of a side platform jump,",
+        "but this strat is still included in cases where it's a reasonable alternative."
+      ]
+    },
+    {
+      "id": 150,
+      "link": [3, 4],
+      "name": "Carry Shinecharge (Gravity, Space Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "Gravity",
+        "SpaceJump",
+        "canMidAirMorph",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 135}
+          ]},
+          {"shineChargeFrames": 150}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 151,
+      "link": [3, 4],
+      "name": "Come In Shinecharged, Leave With Spark (Gravity, Space Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        "Gravity",
+        "SpaceJump",
+        "canMidAirMorph",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 115}
+          ]},
+          {"shineChargeFrames": 130}
+        ]},
+        {"shinespark": {"frames": 7, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 126,
+      "link": [3, 4],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canXRayTurnaround",
+        "canGravityJump",
+        "canSpringBallBounce",
+        "canPauseRemorphTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Perform a gravity jump and use Spring Ball to bounce through the top of the hole.",
+        "Use a pause buffer to remorph, also taking the opportunity to equip Gravity again.",
+        "Then chain temporary blue into the next room."
+      ]
+    },
+    {
+      "id": 162,
+      "link": [3, 4],
+      "name": "Precise Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [13, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [7, 3], "note": "The Precious Room"},
+            {"position": [7, 2], "note": "The Moat"}
+          ]
+        }
+      },
+      "requires": [
+        "canPreciseGrappleJump"
+      ]
+    },
+    {
+      "id": 163,
+      "link": [3, 4],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [8, 2], "note": "Bowling Alley"},
+            {
+              "position": [7, 3],
+              "obstructions": [[6, 10]],
+              "note": "Red Brinstar Firefleas Room"
+            },
+            {
+              "position": [9, 2],
+              "note": "Climb Supers Room, Bubble Mountain, Lava Grapple Tunnel"
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ]
+    },
+    {
+      "id": 91,
+      "link": [3, 5],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        "h_navigateUnderwater",
+        {"or": [
+          "canGravityJump",
+          {"and": [
+            "Gravity",
+            "HiJump",
+            {"or": [
+              "canSpringBallJumpMidAir",
+              "canWalljump"
+            ]}
+          ]},
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            "HiJump",
+            "h_crouchJumpDownGrab"
+          ]},
+          {"and": [
+            {"ammo": {"type": "Super", "count": 1}},
+            "canTrickyUseFrozenEnemies",
+            "canOffScreenMovement"
+          ]},
+          {"and": [
+            "canTrickyJump",
+            "canSpringBallJumpMidAir",
+            "canTrickyUseFrozenEnemies",
+            "canOffScreenMovement"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 92,
+      "link": [3, 5],
+      "name": "G-Mode Morph IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "One method to kill the crabs is to wait on the central platform until a crab comes near, then move with it laying bombs in its path.",
+        "Another is to wait in the doorway and place three bombs to hit it while bouncing over it.",
+        "The top of the IBJ will be off camera. Starting the IBJ as far to either side as possible and holding forward once off camera will make it easier to get through the morph tunnel."
+      ]
+    },
+    {
+      "id": 93,
+      "link": [3, 5],
+      "name": "G-Mode Morph Gravity Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canGravityJump",
+        "h_artificialMorphSpringBall"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The shaft will be clear of crabs on room entry. Quickly gravity jump before the bottom crab enters the shaft and exit the left morph tunnel to be safe.",
+        "The same strategy works when entering in G-Mode Immobile. Move to the center platform and gravity jump shortly after getting hit."
+      ]
+    },
+    {
+      "id": 94,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 95,
+      "link": [4, 1],
+      "name": "Shinespark Through Room",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"or": [
+          {"shinespark": {"frames": 24}},
+          {"and": [
+            "Gravity",
+            {"shinespark": {"frames": 21}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      }
+    },
+    {
+      "id": 96,
+      "link": [4, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity, Less Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 100}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 152,
+      "link": [4, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged (Gravity, Full Runway)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 110}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 153,
+      "link": [4, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 154,
+      "link": [4, 1],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 90}
+          ]},
+          {"shineChargeFrames": 150}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 155,
+      "link": [4, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 5}
+          ]},
+          {"shineChargeFrames": 10}
+        ]},
+        {"shinespark": {"frames": 23}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 156,
+      "link": [4, 1],
+      "name": "Come In Shinecharged, Leave With Spark (Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 10}
+          ]},
+          {"shineChargeFrames": 20}
+        ]},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 97,
+      "link": [4, 1],
+      "name": "Come in Getting Blue Speed, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 1,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 98,
+      "link": [4, 1],
+      "name": "Carry G-Mode Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 99,
+      "link": [4, 1],
+      "name": "Carry G-Mode Morph Through Tube",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "Morph",
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          {"and": [
+            "Gravity",
+            "h_artificialMorphBombHorizontally",
+            {"or": [
+              "h_additionalBomb",
+              "canTrickyGMode",
+              {"and": [
+                "canTrickyJump",
+                "canGravityJump"
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true,
+      "note": "To save a bomb, it is possible to roll from the doorway onto the platform with similar to a Gravity jump - hold forward just before the pause to disable gravity.",
+      "devNote": [
+        "It is possible to cross with a single Power Bomb, but it requires a last pixel jump with a frame perfect forward press.",
+        "A crab hit could bounce Samus onto the middle platform, but the gravity jump is better. If Samus has a blue suit and cant pause, then she also cant boost from the crab."
+      ]
+    },
+    {
+      "id": 100,
+      "link": [4, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 101,
+      "link": [4, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 102,
+      "link": [4, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 157,
+      "link": [4, 2],
+      "name": "Come in Shinecharging, Leave With Spark (Gravity, Sciser Hit)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "Morph",
+        "canShinechargeMovementTricky",
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}},
+        {"shinespark": {"frames": 9, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 127,
+      "link": [4, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Suitless Spring Ball Bounce, Pause Remorph)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallBounce",
+        "canPauseRemorphTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use Spring Ball to bounce into the hole, then unmorph to descend.",
+        "Use a pause buffer to remorph, then chain temporary blue into the next room."
+      ]
+    },
+    {
+      "id": 128,
+      "link": [4, 2],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Gravity, Pause Remorph)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "Morph",
+        "canPauseRemorphTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use a neutral bounce to enter the hole, then unmorph to descend.",
+        "Use a pause buffer to remorph, then chain temporary blue into the next room."
+      ],
+      "devNote": "FIXME: add a tech for bouncing into the tunnel."
+    },
+    {
+      "id": 103,
+      "link": [4, 2],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 104,
+      "link": [4, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true
+    },
+    {
+      "id": 105,
+      "link": [4, 2],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 106,
+      "link": [4, 2],
+      "name": "Carry Grapple Teleport (Upper Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 107,
+      "link": [4, 2],
+      "name": "Carry Grapple Teleport (Lower Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 108,
+      "link": [4, 2],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 158,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave With Spark (Gravity, Sciser Hit)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "Gravity",
+        "Morph",
+        "canShinechargeMovementTricky",
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}},
+        {"shinespark": {"frames": 9, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 129,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Suitless Spring Ball Bounce, Pause Remorph)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallBounce",
+        "canPauseRemorphTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use Spring Ball to bounce into the hole, then unmorph to descend.",
+        "Use a pause buffer to remorph, then chain temporary blue into the next room."
+      ]
+    },
+    {
+      "id": 130,
+      "link": [4, 3],
+      "name": "Come in Shinecharging, Leave With Temporary Blue (Gravity, Pause Remorph)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 1,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "Morph",
+        "canPauseRemorphTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "note": [
+        "Use a neutral bounce to enter the hole, then unmorph to descend.",
+        "Use a pause buffer to remorph, then chain temporary blue into the next room."
+      ],
+      "devNote": "FIXME: add a tech for bouncing into the tunnel."
+    },
+    {
+      "id": 109,
+      "link": [4, 4],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 110,
+      "link": [4, 4],
+      "name": "Leave With Runway - Frozen Sciser",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 111,
+      "link": [4, 4],
+      "name": "G-Mode Setup - Get Hit By Sciser",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 112,
+      "link": [4, 4],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 113,
+      "link": [4, 4],
+      "name": "Carry G-Mode Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 114,
+      "link": [4, 4],
+      "name": "Carry G-Mode Morph Back Through",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 115,
+      "link": [5, 1],
+      "name": "Exit G-Mode",
+      "requires": [
+        "canGMode"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 116,
+      "link": [5, 1],
+      "name": "Carry G-Mode Morph Left",
+      "requires": [
+        "canGMode"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 117,
+      "link": [5, 4],
+      "name": "Carry G-Mode Morph Right",
+      "requires": [
+        "canGMode"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Cross Room Jump Morph",
+      "note": [
+        "Use a Cross Room Jump into Water followed by a delayed Momentum Conserving Turnaround to reach the Morph tunnel above.",
+        "Climbing the Left side of the center hole will run into an unavoidable Sciser.",
+        "Crossing to the right from the left door requires slightly more runway and takes a more precise turnaround or morph timing which slides along the ceiling.",
+        "Samus must also stay near a side of the center hole to reach the Morph tunnels."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Suitless Crab Climb No Jump Assist",
+      "note": [
+        "Use a super to knock off a crab and freeze it mid-air. Then get on that crab, possibly using a door ledge",
+        "Freeze a second crab on the edge of the hole above."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Suitless Crab Climb Superless with Springball",
+      "note": [
+        "Freeze one crab on the lip of the overhead opening and another on the edge of a doors platform then springballjump up.",
+        "Use a Stationary Lateral Mid-Air Morph to gain enough jump height without bonking the ceiling.",
+        "It is possible with a crouch jump to not need the second crab."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Ice Clip",
+      "note": [
+        "Freeze a crab at a very precise position in order to clip through the center Morph tunnel without a way to see.",
+        "Use a frozen crab on the opposite wall in order to better time the crab being used for clipping and as a way to climb on top of it.",
+        "Ice Beam on its own has a high chance of hitting a wall instead of the crab; straight vertical shots can help.",
+        "Gravity has a 2 pixel clip window while Suitless there is only 1 pixel up higher which requires a precise down grab to get onto the crab."
+      ]
+    }
+  ],
+  "nextStratId": 168,
+  "nextNotableId": 5
+}

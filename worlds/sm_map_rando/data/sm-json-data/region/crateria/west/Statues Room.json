@@ -1,0 +1,470 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 27,
+  "name": "Statues Room",
+  "area": "Crateria",
+  "subarea": "West",
+  "roomAddress": "0x7A66A",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1],
+    [1],
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x0019216",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Statues Room Gray Lock (to Statues Hallway)",
+          "lockType": "cutscene",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": []
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [2],
+        [1],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Elevator",
+      "nodeType": "door",
+      "nodeSubType": "elevator",
+      "nodeAddress": "0x0019222",
+      "doorOrientation": "down",
+      "useImplicitCarryGModeBackThrough": false,
+      "useImplicitCarryGModeMorphBackThrough": false,
+      "mapTileMask": [
+        [1],
+        [2],
+        [2],
+        [2],
+        [2]
+      ]
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 25,
+      "link": [1, 1],
+      "name": "Statues Cutscene",
+      "requires": [
+        "f_DefeatedKraid",
+        "f_DefeatedPhantoon",
+        "f_DefeatedDraygon",
+        "f_DefeatedRidley"
+      ],
+      "setsFlags": ["f_TourianOpen"],
+      "note": "Represents the statues sinking and opening up the path to Tourian"
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "f_TourianOpen"
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Carry Shinecharge (Gravity)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "f_TourianOpen",
+        "Gravity",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Carry Shinecharge (Suitless)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 120},
+        "f_TourianOpen",
+        "canSuitlessMaridia",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Carry G-Mode Down the Elevator",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "f_TourianOpen"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Gravity",
+      "requires": [
+        "f_TourianOpen",
+        "Gravity",
+        {"or": [
+          "HiJump",
+          "SpaceJump",
+          "canIBJ",
+          "canSpringBallJumpMidAir",
+          "canWalljump",
+          "canGravityJump"
+        ]}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Suitless Base",
+      "requires": [
+        "f_TourianOpen",
+        "canSuitlessMaridia",
+        "HiJump",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Underwater Walljump",
+      "requires": [
+        {"notable": "Underwater Walljump"},
+        "f_TourianOpen",
+        "canUnderwaterWalljump"
+      ],
+      "note": "Walljump up the elevator room walls without Gravity suit.  Space Jump helps once the waterline is reached."
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Underwater Bomb into SpringBall Jump",
+      "requires": [
+        "f_TourianOpen",
+        "canUnderwaterBombIntoSpringBallJump"
+      ],
+      "note": [
+        "Perform a double Spring Ball jump without Hi-Jump,",
+        "using a Bomb to propel Samus upward just long enough to get the second mid-air Spring Ball jump."
+      ],
+      "detailNote": [
+        "Crouch, press pause, delay the initial jump as long as possible, and perform a very quick mid-air morph;",
+        "it can help to keep holding down when crouching, to buffer the aim-down input.",
+        "Equip Spring Ball, unpause, press Start to pause again, and perform a max-height Spring Ball jump;",
+        "ideally Start should be pressed slightly before the mid-air jump.",
+        "Unequip Spring Ball, unpause, and lay a Bomb slightly after regaining control (do not buffer it).",
+        "The Bomb should be laid between 5 frames and about 10 frames after regaining control, while the screen is still fairly dark.",
+        "Then press pause between 23 and 25 frames later and buffer a second Spring Ball jump.",
+        "The end of the frame window for when the Bomb can be laid depends on how well the first part was done",
+        "(with a larger window being obtained by pausing as early as possible both times and jumping as late as possible both times);",
+        "but the delay between laying the Bomb and performing the final pause is always the same 3-frame window."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        "f_TourianOpen",
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 14, "excessFrames": 8}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 11, "excessFrames": 8}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Diagonal Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 35},
+        "f_TourianOpen",
+        "h_navigateUnderwater",
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 21, "excessFrames": 8}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump to the right side and diagonal spark left to escape the water.",
+        "To spark as quickly as possible, buffer a spin jump by holding left (or right) and jump while riding the elevator."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Vertical Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 20},
+        "f_TourianOpen",
+        "h_navigateUnderwater",
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 24, "excessFrames": 9}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Jump to either side and vertically spark out.",
+        "To spark as quickly as possible, buffer a spin jump by holding left (or right) and jump while riding the elevator."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "Carry Shinecharge (Gravity HiJump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 120},
+        "f_TourianOpen",
+        "Gravity",
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex"
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Leave With Spark (Gravity HiJump Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 95},
+        "f_TourianOpen",
+        "Gravity",
+        "HiJump",
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 9}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Leave With Spark (Gravity HiJump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "f_TourianOpen",
+        "Gravity",
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 7}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "Leave With Spark (Gravity Wall Jump)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 120},
+        "f_TourianOpen",
+        "Gravity",
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 8}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "Statues Cutscene",
+      "requires": [
+        "f_DefeatedKraid",
+        "f_DefeatedPhantoon",
+        "f_DefeatedDraygon",
+        "f_DefeatedRidley"
+      ],
+      "setsFlags": ["f_TourianOpen"],
+      "note": "Represents the statues sinking and opening up the path to Tourian, but coming from below.",
+      "devNote": [
+        "If Tourian is locked, coming in from below results in glitched graphics.",
+        "You can reach the elevator to go back down again or sit through the unlock to get up which in turn can result in persisting glitched graphics."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Carry G-Mode Back Down the Elevator",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Elevator Crystal Flash for Flash Suit",
+      "requires": [
+        {"or": [
+          "canInsaneJump",
+          {"and": [
+            "canDisableEquipment",
+            "canStationarySpinJump"
+          ]}
+        ]},
+        "h_elevatorCrystalFlash"
+      ],
+      "exitCondition": {
+        "leaveNormally": {}
+      },
+      "flashSuitChecked": true,
+      "note": "In order to align and place a Power Bomb at the correct pixel, perform a suitless stationary spin jump and hit the ceiling before starting to morph."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Underwater Walljump",
+      "note": "Walljump up the elevator room walls without Gravity suit.  Space Jump helps once the waterline is reached."
+    }
+  ],
+  "nextStratId": 27,
+  "nextNotableId": 2
+}

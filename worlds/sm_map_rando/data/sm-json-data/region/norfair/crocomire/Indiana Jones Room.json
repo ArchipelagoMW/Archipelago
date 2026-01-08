@@ -1,0 +1,1838 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 127,
+  "name": "Indiana Jones Room",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "Crocomire",
+  "roomAddress": "0x7AB8F",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1, 0, 0, 0],
+    [1, 1, 1, 1, 1, 0, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00194da",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1, 1, 1, 0, 0, 0],
+        [2, 2, 1, 1, 1, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Vertical Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00194ce",
+      "doorOrientation": "up",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 0, 0, 0],
+        [1, 1, 1, 1, 1, 0, 0, 0],
+        [1, 1, 1, 1, 1, 2, 2, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78C2A",
+      "mapTileMask": [
+        [1, 1, 2, 2, 2, 0, 0, 0],
+        [1, 1, 2, 2, 2, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Small Platforms Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 0, 0, 0],
+        [1, 1, 1, 1, 1, 0, 0, 0],
+        [2, 2, 2, 2, 2, 1, 1, 1]
+      ],
+      "note": "Represents being at the small platforms above the acid."
+    },
+    {
+      "id": 6,
+      "name": "G-Mode Morph Junction (At Speed Blocks)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 0, 0, 0],
+        [1, 1, 1, 1, 1, 0, 0, 0],
+        [1, 1, 1, 1, 2, 2, 1, 1]
+      ],
+      "note": "Represents being at the bottom of the room with G-mode and Morph or artificial morph."
+    },
+    {
+      "id": 7,
+      "name": "Direct G-Mode Morph Junction (At Speed Blocks)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1, 0, 0, 0],
+        [1, 1, 1, 1, 1, 0, 0, 0],
+        [1, 1, 1, 1, 2, 2, 1, 1]
+      ],
+      "note": "Represents being at the bottom of the room with direct G-mode and Morph or artificial morph."
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Power bomb blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "B",
+      "name": "Speed blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "E",
+      "name": "Left door open",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Indiana Jones Room Rippers 2s",
+      "enemyName": "Ripper 2 (green)",
+      "quantity": 4,
+      "betweenNodes": [1, 3]
+    },
+    {
+      "id": "e2",
+      "groupName": "Indiana Jones Room Mellas",
+      "enemyName": "Mella",
+      "quantity": 5,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 5},
+        {"id": 6}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 6},
+        {"id": 7}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 10,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 78,
+      "link": [1, 1],
+      "name": "Open Door",
+      "requires": [
+        {"doorUnlockedAtNode": 1}
+      ],
+      "clearsObstacles": ["E"]
+    },
+    {
+      "id": 88,
+      "link": [1, 1],
+      "name": "Ripper Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 880}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            "Morph",
+            {"cycleFrames": 1640}
+          ]}
+        ]},
+        "SpaceJump",
+        "ScrewAttack"
+      ],
+      "resetsObstacles": ["A", "B", "E"],
+      "farmCycleDrops": [{"enemy": "Ripper 2 (green)", "count": 4}]
+    },
+    {
+      "id": 117,
+      "link": [1, 1],
+      "name": "Leave with Super Sink",
+      "requires": [
+        "canUseEnemies",
+        {"enemyDamage": {"enemy": "Ripper 2 (green)", "type": "contact", "hits": 2}},
+        "Morph",
+        "SpringBall"
+      ],
+      "exitCondition": {
+        "leaveWithSuperSink": {}
+      },
+      "note": [
+        "Swing counter-clockwise around the left-most Ripper closely (pressing up to retract Grapple),",
+        "positioned as far left as possible while avoiding getting caught on the stalactite.",
+        "After swinging under the stalactite with high enough speed,",
+        "hold down to extend Grapple to push Samus to the left slightly,",
+        "then release Grapple while Samus is still nearly horizontal.",
+        "Quickly morph and frame-perfectly pause to equip or unequip Spring Ball.",
+        "If successful, Samus will continue gaining fall speed while on the ground morphed.",
+        "Immediately roll left through the door, which should have been opened in advance."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Full Room Space Jump Through Speed Blocks",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 9,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"notable": "Full Room Space Jump Through Speed Blocks"},
+        "canBlueSpaceJump",
+        "canPreciseSpaceJump"
+      ],
+      "clearsObstacles": ["B"],
+      "note": "The blocks can be broken if you can generate a blue suit using the previous room's runway, and carry it to the blocks by slowing floating down with Space Jump."
+    },
+    {
+      "id": 4,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "Full Speed Jump to Missile",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": true,
+          "minTiles": 29
+        }
+      },
+      "requires": [
+        "canWalljump",
+        "canCarefulJump"
+      ],
+      "note": "Jump with enough run speed to reach the wall below the Missile Item Location."
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Left-Side Enter with Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 110},
+        "canPreciseWalljump",
+        "canConsecutiveWalljump",
+        "canShinechargeMovement",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 78}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Takes three walljumps, and must shinespark at the apex."
+    },
+    {
+      "id": 7,
+      "link": [1, 3],
+      "name": "Left-Side Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 9,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canPreciseWalljump",
+        "canConsecutiveWalljump",
+        "canShinechargeMovement",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 78}}
+      ],
+      "note": "Takes three walljumps, and must shinespark at the apex."
+    },
+    {
+      "id": 8,
+      "link": [1, 3],
+      "name": "Left-Side Enter with Shinespark and HiJump",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 80},
+        {"or": [
+          {"and": [
+            "canWalljump",
+            {"shinespark": {"frames": 20}}
+          ]},
+          "canTrickyDashJump"
+        ]},
+        "HiJump",
+        "canShinechargeMovement",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 60}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Walljump or build run speed using the full runway to jump high enough for the shinespark."
+    },
+    {
+      "id": 9,
+      "link": [1, 3],
+      "name": "Left-Side HiJump Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 9,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "canWalljump",
+            {"shinespark": {"frames": 20}}
+          ]},
+          "canTrickyDashJump"
+        ]},
+        "HiJump",
+        "canShinechargeMovement",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 60}}
+      ],
+      "note": "Walljump or build run speed using the full runway to jump high enough for the shinespark."
+    },
+    {
+      "id": 10,
+      "link": [1, 3],
+      "name": "Left Side Diagonal Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 155},
+        {"notable": "Left Side Diagonal Shinespark"},
+        "canTrickyJump",
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 40}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Store a shinespark near the left door and use the remaining runway to jump as far as possible to the right.",
+        "Once near the acid platforms, Shinespark diagonally to reach the item location."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 3],
+      "name": "Indiana Jones Grapple",
+      "requires": [
+        {"notable": "Indiana Jones Grapple"},
+        "canUseEnemies",
+        "canPreciseGrapple"
+      ],
+      "note": "Grapple off several Ripper 2."
+    },
+    {
+      "id": 12,
+      "link": [1, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 89,
+      "link": [1, 6],
+      "name": "G-Mode Morph Spring Ball",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphSpringBall"
+      ],
+      "flashSuitChecked": true,
+      "note": "Spring Ball across the platforms."
+    },
+    {
+      "id": 90,
+      "link": [1, 6],
+      "name": "G-Mode Morph Long Diagonal Bomb Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "G-Mode Morph Long Diagonal Bomb Jump"},
+        "h_artificialMorphDiagonalBombJump",
+        "h_artificialMorphLongIBJ"
+      ],
+      "flashSuitChecked": true,
+      "note": "Perform a long diagonal bomb jump from the left door to the solid platforms above the acid."
+    },
+    {
+      "id": 17,
+      "link": [1, 6],
+      "name": "G-Mode Morph Acid Dive IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "Gravity",
+        "h_artificialMorphIBJ",
+        "h_artificialMorphBombHorizontally",
+        "canSuitlessLavaDive",
+        {"or": [
+          {"acidFrames": 280},
+          {"and": [
+            "canTrickyJump",
+            {"acidFrames": 220}
+          ]},
+          {"and": [
+            "canInsaneJump",
+            "h_artificialMorphDoubleBombJump",
+            {"acidFrames": 175}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Bomb boost horizontally at the top of an IBJ and land in the acid, then roll to the right and bomb out to safety.",
+        "To save some Energy, it is possible to IBJ or double IBJ out of the acid onto the first solid platform."
+      ]
+    },
+    {
+      "id": 101,
+      "link": [1, 7],
+      "name": "Direct G-Mode Morph Spring Ball",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphSpringBall"
+      ],
+      "flashSuitChecked": true,
+      "note": "Spring Ball across the platforms."
+    },
+    {
+      "id": 102,
+      "link": [1, 7],
+      "name": "Direct G-Mode Morph Long Diagonal Bomb Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"notable": "G-Mode Morph Long Diagonal Bomb Jump"},
+        "h_artificialMorphDiagonalBombJump",
+        "h_artificialMorphLongIBJ"
+      ],
+      "flashSuitChecked": true,
+      "note": "Perform a long diagonal bomb jump from the left door to the solid platforms above the acid."
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Wall Jump Shinespark to Left Door",
+      "requires": [
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"obstaclesCleared": ["B"]},
+        {"or": [
+          {"canShineCharge": {"usedTiles": 32, "gentleUpTiles": 6, "openEnd": 1}},
+          {"and": [
+            "h_shinechargeMaxRunway",
+            {"obstaclesCleared": ["A"]}
+          ]}
+        ]},
+        {"shinespark": {"frames": 85}}
+      ],
+      "note": "Fire off the shinespark at the apex of two consecutive walljumps."
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Big Jump Horizontal Shinespark",
+      "requires": [
+        {"notable": "Big Jump Shinespark"},
+        "canShinechargeMovementComplex",
+        {"obstaclesCleared": ["B"]},
+        {"canShineCharge": {"usedTiles": 32, "gentleDownTiles": 6, "openEnd": 1}},
+        {"shinespark": {"frames": 52}},
+        "canDownGrab"
+      ],
+      "note": [
+        "Charge a spark to the right, then come back, run and jump, and do a horizontal spark at the apex.",
+        "If needed, down-grab onto the ledge."
+      ]
+    },
+    {
+      "id": 79,
+      "link": [2, 1],
+      "name": "Big Jump Diagonal Shinespark",
+      "requires": [
+        {"notable": "Big Jump Shinespark"},
+        "canShinechargeMovementTricky",
+        {"obstaclesCleared": ["B"]},
+        {"canShineCharge": {"usedTiles": 23, "gentleDownTiles": 6, "openEnd": 1}},
+        {"shinespark": {"frames": 26}}
+      ],
+      "note": [
+        "Charge a spark to the right a specific distance of about 6 tiles past the broken Speed blocks.",
+        "Then turn around, run and jump, and activate a diagonal spark as late as possible.",
+        "By shortening the jump, it is possible to kill a Ripper and collect its drop while falling."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Short Run Speedjump",
+      "requires": [
+        "SpeedBooster",
+        {"obstaclesCleared": ["B"]},
+        {"or": [
+          "HiJump",
+          {"and": [
+            "canLateralMidAirMorph",
+            "canTrickySpringBallJump"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Long Run Speedjump",
+      "requires": [
+        "SpeedBooster",
+        {"or": [
+          "canCarefulJump",
+          "HiJump"
+        ]},
+        {"obstaclesCleared": ["A", "B"]}
+      ]
+    },
+    {
+      "id": 80,
+      "link": [2, 1],
+      "name": "Leave With Spark (Wall Jumps)",
+      "requires": [
+        {"obstaclesCleared": ["B", "E"]},
+        {"canShineCharge": {"usedTiles": 32, "gentleUpTiles": 6, "openEnd": 1}},
+        "canWalljump",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 85}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": [], "useImplicitRequires": false}]
+    },
+    {
+      "id": 81,
+      "link": [2, 1],
+      "name": "Leave With Spark (Short Speedy Jump)",
+      "requires": [
+        {"obstaclesCleared": ["B", "E"]},
+        {"canShineCharge": {"usedTiles": 32, "gentleDownTiles": 6, "openEnd": 1}},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 57}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": [], "useImplicitRequires": false}]
+    },
+    {
+      "id": 82,
+      "link": [2, 1],
+      "name": "Leave With Spark (Short Speedy HiJump)",
+      "requires": [
+        "HiJump",
+        {"obstaclesCleared": ["B", "E"]},
+        {"canShineCharge": {"usedTiles": 32, "gentleDownTiles": 6, "openEnd": 1}},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 56}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": [], "useImplicitRequires": false}]
+    },
+    {
+      "id": 83,
+      "link": [2, 1],
+      "name": "Leave With Spark (Long Speedy Jump)",
+      "requires": [
+        {"obstaclesCleared": ["A", "B", "E"]},
+        "h_shinechargeMaxRunway",
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 53}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": [], "useImplicitRequires": false}],
+      "note": [
+        "Store a shinecharge and start running below the left side of the vertical door, to set up the jump in a way that shinesparking at the apex of the jump approximately aligns with the top of the far door."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "Break Power Bomb Blocks",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 23,
+      "link": [2, 2],
+      "name": "Break Speed Blocks, Broken Power Bomb Blocks",
+      "requires": [
+        "h_getBlueSpeedMaxRunway",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 24,
+      "link": [2, 2],
+      "name": "Break Speed Blocks, Short Charge",
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 17, "openEnd": 0}}
+      ],
+      "clearsObstacles": ["B"],
+      "note": "Commonly known as a stutter-3, this is also doable as a 4-tap."
+    },
+    {
+      "id": 25,
+      "link": [2, 2],
+      "name": "Mella Ice Clip Door Lock Skip",
+      "requires": [
+        "canManipulateMellas",
+        "h_iceClip",
+        {"or": [
+          "Morph",
+          "canInsaneJump",
+          {"enemyDamage": {"enemy": "Mella", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Freeze a Mella at a precise distance below the door in order to crouch-jump up and clip through the door shell.",
+        "The pixel window is larger and higher with Morph and an X-Ray stand-up, in which case a standing jump is used.",
+        "It can help to moonwalk towards a Mella that has never been on screen, so that it starts swooping immediately as it first enters the screen.",
+        "This will make it so that when Samus is below it, it will always swoop and go up slightly compared to the previous swoop.",
+        "Once it is close to the right height, move away so it stops swooping, freeze it and quickly try the clip, if it doesn't work, quickly leave and try again."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [2, 2],
+      "name": "Mella Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 1020},
+            "Morph",
+            {"or": [
+              "SpaceJump",
+              {"and": [
+                "HiJump",
+                "SpeedBooster",
+                "canWalljump",
+                {"cycleFrames": 120}
+              ]},
+              {"and": [
+                "HiJump",
+                "canSpringBallJumpMidAir",
+                "h_doubleEquipmentScreenCycleFrames",
+                {"cycleFrames": 540}
+              ]},
+              {"and": [
+                "canJumpIntoIBJ",
+                {"cycleFrames": 1400}
+              ]}
+            ]}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"cycleFrames": 240}
+          ]}
+        ]},
+        {"or": [
+          "Grapple",
+          "Wave",
+          "Spazer",
+          "Plasma",
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 300}
+          ]},
+          {"and": [
+            "canFarmWhileShooting",
+            {"cycleFrames": 120}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A", "B", "E"],
+      "farmCycleDrops": [{"enemy": "Mella", "count": 5}],
+      "note": "Shoot the Mellas when they first begin to come on screen, and they will not move."
+    },
+    {
+      "id": 27,
+      "link": [2, 2],
+      "name": "Leave with Shinecharge - Power Bomb Blocks Destroyed",
+      "requires": [
+        {"obstaclesCleared": ["A", "B"]},
+        {"canShineCharge": {"usedTiles": 38, "gentleDownTiles": 6, "openEnd": 2}},
+        "canShinechargeMovement",
+        {"shineChargeFrames": 45}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Get a normal height jump by releasing run with SpeedBooster and no HiJump.",
+        "Break spin to reach the transition without a wall jump."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [2, 2],
+      "name": "Leave with Shinecharge - Power Bomb Blocks Intact",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        {"obstaclesNotCleared": ["A"]},
+        "canShinechargeMovement",
+        {"canShineCharge": {"usedTiles": 32, "gentleDownTiles": 6, "openEnd": 1}},
+        {"shineChargeFrames": 65}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Get a normal height jump by releasing run with SpeedBooster and no HiJump.",
+        "Break spin to reach the transition without a wall jump."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 30,
+      "link": [2, 2],
+      "name": "Leave With Door Frame Below",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithDoorFrameBelow": {
+          "height": 2
+        }
+      }
+    },
+    {
+      "id": 31,
+      "link": [2, 2],
+      "name": "Leave With Platform Below - Basic Platform",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 9,
+          "leftPosition": -1,
+          "rightPosition": 2
+        }
+      }
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Leave With Platform Below - Upper Left Power Bomb Block",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 7,
+          "leftPosition": -5.5,
+          "rightPosition": -1.5
+        }
+      },
+      "devNote": [
+        "With HiJump this can be used coming up Main Street, the bottom left of Mt. Everest, and The Beach.",
+        "We could add other Power Bomb block platforms too (e.g. the lower ones, and on the right side), but they don't yet appear to have any application."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "Leave With Platform Below - Power Bomb Blocks Broken",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 9,
+          "leftPosition": -23,
+          "rightPosition": 22
+        }
+      }
+    },
+    {
+      "id": 34,
+      "link": [2, 2],
+      "name": "Leave With Platform Below - Speed Blocks Broken",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 9,
+          "leftPosition": -38.5,
+          "rightPosition": -7
+        }
+      },
+      "devNote": [
+        "The tile next to the Power Bomb blocks is not counted as part of the jumpway, since using it would cause Samus to bonk.",
+        "A tricky jump is required because of the difficulty of avoiding the Power Bomb blocks and still reaching the door."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "Leave With Platform Below - Power Bomb and Speed Blocks Broken",
+      "requires": [
+        {"obstaclesCleared": ["A", "B"]}
+      ],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 9,
+          "leftPosition": -38.5,
+          "rightPosition": 22
+        }
+      },
+      "devNote": [
+        "This strat is for avoiding the canTrickyJump requirement when jumping left-to-right, if the Power Bomb blocks can be destroyed.",
+        "It also makes it possible to gain more speed by running a few tiles further, which is needed for certain strats."
+      ]
+    },
+    {
+      "id": 87,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Frozen Mella",
+      "requires": [
+        "canManipulateMellas",
+        "canUpwardGModeSetup",
+        "canTrickyUseFrozenEnemies",
+        "canInsaneJump"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "The easiest way to set up G-mode is to lure a low Mella to the door, take a hit, then jump and aim down and freeze it while it is high enough and still rising.",
+        "If the Mella is not moving upwards, there is a good chance that Samus will be in a falling state as she is hit through the transition and can't use X-Ray.",
+        "If Samus does not stay on the Mella, she can spin jump or midair morph directly onto the Mella without touching the transition.",
+        "It may be worthwhile to keep the other Mellas alive so that on a failed attempt, Samus can freeze the Mella to go farm some of the others in room."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [2, 2],
+      "name": "Carry G-Mode Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 38,
+      "link": [2, 2],
+      "name": "Carry G-Mode Morph Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphMovement"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 85,
+      "link": [2, 2],
+      "name": "G-Mode Mella Ice Clip, Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canComplexGMode",
+        "canManipulateMellas",
+        {"or": [
+          "h_preciseIceClip",
+          "h_highPixelIceClip"
+        ]},
+        "canInsaneJump",
+        {"or": [
+          "Morph",
+          "canTrickyGMode",
+          {"enemyDamage": {"enemy": "Mella", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "It can help to moonwalk towards a Mella that has never been on screen, so that it starts swooping immediately as it first enters the screen.",
+        "This will make it so that when Samus is below it, it will always swoop and go up slightly compared to the previous swoop.",
+        "Once it is close to the right height, move away so it stops swooping, freeze it and quickly try the clip, if it doesn't work, quickly leave and try again."
+      ],
+      "devNote": "This is only for indirect G-Mode, because it is trivial while in direct, and would use a different strat."
+    },
+    {
+      "id": 39,
+      "link": [2, 3],
+      "name": "Shinespark",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        "canShinechargeMovement",
+        {"or": [
+          {"canShineCharge": {"usedTiles": 32, "gentleUpTiles": 6, "openEnd": 1}},
+          {"and": [
+            "h_shinechargeMaxRunway",
+            {"obstaclesCleared": ["A"]}
+          ]}
+        ]},
+        {"shinespark": {"frames": 40}}
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 3],
+      "name": "Speedjump",
+      "requires": [
+        {"obstaclesCleared": ["B"]},
+        "SpeedBooster",
+        "HiJump",
+        {"or": [
+          "canSpringBallJumpMidAir",
+          "canWalljump"
+        ]}
+      ]
+    },
+    {
+      "id": 41,
+      "link": [2, 5],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["B"]}
+        ]}
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 5],
+      "name": "Full Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 80},
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 115}}
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": "Spark from the ground, left of the Power Bomb blocks."
+    },
+    {
+      "id": 43,
+      "link": [2, 5],
+      "name": "Shinespark Ends Over Acid",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 80},
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 115, "excessFrames": 85}},
+        {"or": [
+          "canTrickyJump",
+          {"and": [
+            {"or": [
+              "canWalljump",
+              "HiJump"
+            ]},
+            {"acidFrames": 25}
+          ]},
+          {"and": [
+            "Gravity",
+            {"acidFrames": 20}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": "Spark from the ground, left of the Power Bomb blocks."
+    },
+    {
+      "id": 73,
+      "link": [2, 5],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 98, "excessFrames": 95}}
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": "Use a flash suit to spark horizontally through the speed blocks. Samus may stop above the acid, but it should always be possible to land on one of the platforms."
+    },
+    {
+      "id": 44,
+      "link": [2, 6],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "h_artificialMorphBombs",
+            "canTrickyDodgeEnemies"
+          ]},
+          {"and": [
+            "h_artificialMorphBombs",
+            {"enemyDamage": {"enemy": "Mella", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "With Bombs, killing the Mellas can be a bit tricky;",
+        "it is recommended to use one to boost and place some midair before luring a Mella to more easily kill it."
+      ]
+    },
+    {
+      "id": 103,
+      "link": [2, 6],
+      "name": "G-Mode Morph, Power Bomb the Blocks and Mellas",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"tech": "canBombHorizontally"},
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "A single horizontal Power Bomb boost can get Samus on top of the blocks and kill most of the Mellas. The blocks will break after exiting G-mode.",
+      "devNote": "Obstacle A will not be cleared until exiting G-mode, but no G-mode strat will use that obstacle, so it should be fine clearing it now."
+    },
+    {
+      "id": 104,
+      "link": [2, 7],
+      "name": "Direct G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "h_artificialMorphBombs",
+            "canTrickyDodgeEnemies"
+          ]},
+          {"and": [
+            "h_artificialMorphBombs",
+            {"enemyDamage": {"enemy": "Mella", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "With Bombs, killing the Mellas can be a bit tricky;",
+        "it is recommended to use one to boost and place some midair before luring a Mella to more easily kill it."
+      ]
+    },
+    {
+      "id": 105,
+      "link": [2, 7],
+      "name": "Direct G-Mode Morph, Power Bomb the Blocks and Mellas",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"tech": "canBombHorizontally"},
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "A single horizontal Power Bomb boost can get Samus on top of the blocks and kill most of the Mellas. The blocks will break after exiting G-mode.",
+      "devNote": "Obstacle A will not be cleared until exiting G-mode, but no G-mode strat will use that obstacle, so it should be fine clearing it now."
+    },
+    {
+      "id": 46,
+      "link": [3, 1],
+      "name": "Indiana Jones Grapple in Reverse",
+      "requires": [
+        {"notable": "Indiana Jones Grapple"},
+        "canUseEnemies",
+        "canPreciseGrapple"
+      ],
+      "note": "Involves grappling off several Ripper 2."
+    },
+    {
+      "id": 49,
+      "link": [3, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 50,
+      "link": [5, 1],
+      "name": "Base",
+      "requires": [
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 51,
+      "link": [5, 1],
+      "name": "Jump into IBJ",
+      "requires": [
+        "canJumpIntoIBJ"
+      ]
+    },
+    {
+      "id": 52,
+      "link": [5, 1],
+      "name": "HiJump, Spring Ball Jump",
+      "requires": [
+        "HiJump",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 53,
+      "link": [5, 1],
+      "name": "Speedjump",
+      "requires": [
+        "SpeedBooster",
+        "HiJump",
+        "canWalljump",
+        "canCarefulJump"
+      ],
+      "note": "Run on the moving platform (Kamer)."
+    },
+    {
+      "id": 54,
+      "link": [5, 1],
+      "name": "Tricky Spring Wall",
+      "requires": [
+        "h_trickySpringwall"
+      ]
+    },
+    {
+      "id": 84,
+      "link": [5, 1],
+      "name": "Spring Ball Unmorph Bomb Boost",
+      "requires": [
+        {"notable": "Spring Ball Unmorph Bomb Boost"},
+        "canSpringBallJumpMidAir",
+        "canUnmorphBombBoost",
+        "h_crouchJumpDownGrab"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use an unmorph bomb boost at the end of a mid-air SpringBall jump.",
+        "Also requires a crouch-jump and down-grab to complete the maneuver.",
+        "A spring fling can help add some lenience to the bomb placement and unmorph timing;",
+        "it requires pausing early, before jumping, in order to be able to initiate another pause immediately before placing a Power Bomb."
+      ]
+    },
+    {
+      "id": 55,
+      "link": [5, 1],
+      "name": "Frozen Mella Door",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        "canManipulateMellas",
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"enemyDamage": {"enemy": "Mella", "type": "contact", "hits": 2}}
+        ]},
+        {"or": [
+          {"obstaclesCleared": ["B"]},
+          "Morph"
+        ]}
+      ],
+      "note": [
+        "Lure a Mella from the right by breaking the speed blocks or using Morph.",
+        "Then you need to manipulate it to go high enough to be used as a stepping stone once frozen."
+      ]
+    },
+    {
+      "id": 74,
+      "link": [5, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 22, "excessFrames": 13}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Jump back from the leftmost floating platform and diagonally shinespark at the peak of the jump towards the door to minimize shinespark damage."
+    },
+    {
+      "id": 56,
+      "link": [5, 1],
+      "name": "G-Mode Setup - Get Hit By Mella",
+      "requires": [
+        "canManipulateMellas",
+        "canCameraManip",
+        "canBePatient",
+        "canComplexGMode",
+        {"or": [
+          "SpaceJump",
+          "canTrickyUseFrozenEnemies",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster",
+            "canWalljump"
+          ]}
+        ]},
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"enemyDamage": {"enemy": "Mella", "type": "contact", "hits": 2}}
+        ]},
+        {"or": [
+          {"obstaclesCleared": ["B"]},
+          "Morph"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Lure a Mella from the right by breaking the speed blocks or using Morph.",
+        "Then manipulate it to go high enough to be used in the left doorway.",
+        "Raise the Mella up to just below the door's ledge and then climb up to the door.",
+        "Reposition the Mella once towards the door, and before it finishes moving, stand in the doorframe so that the next Mella movement will hit Samus.",
+        "If it drops below the camera it will be necessary to go back down and raise it again."
+      ]
+    },
+    {
+      "id": 57,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "Morph",
+          {"obstaclesCleared": ["B"]}
+        ]}
+      ]
+    },
+    {
+      "id": 58,
+      "link": [5, 2],
+      "name": "Acid Shinespark",
+      "requires": [
+        {"notable": "Acid Shinespark"},
+        "Gravity",
+        "canSuitlessLavaDive",
+        "canShinechargeMovement",
+        "canHorizontalShinespark",
+        "h_shinechargeMaxRunway",
+        {"acidFrames": 140},
+        {"shinespark": {"frames": 35}}
+      ],
+      "clearsObstacles": ["B"],
+      "note": "Gravity makes it possible to charge a spark in the acid in order to break the speed blocks."
+    },
+    {
+      "id": 75,
+      "link": [5, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 33, "excessFrames": 7}},
+          {"and": [
+            {"shinespark": {"frames": 33, "excessFrames": 30}},
+            {"enemyDamage": {"enemy": "Mella", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 76,
+      "link": [5, 2],
+      "name": "Break Speed Blocks, Insane Short Charge",
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 12, "gentleDownTiles": 6, "openEnd": 1}}
+      ],
+      "clearsObstacles": ["B"],
+      "note": "Commonly known as a stutter-3, this is also doable as a 4-tap."
+    },
+    {
+      "id": 59,
+      "link": [5, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canLongIBJ"
+        ]}
+      ]
+    },
+    {
+      "id": 60,
+      "link": [5, 3],
+      "name": "Speedjump SpringBall",
+      "requires": [
+        "HiJump",
+        "canTrickyDashJump",
+        "canTrickySpringBallJump"
+      ]
+    },
+    {
+      "id": 61,
+      "link": [5, 3],
+      "name": "Springwall",
+      "requires": [
+        {"notable": "Springwall"},
+        "HiJump",
+        "h_trickySpringwall",
+        "canPreciseWalljump",
+        "can3HighWallMidAirMorph"
+      ],
+      "note": [
+        "A particularly precise springwall.",
+        "Aim the walljump at the bottom of the second sloped wall fixture, where it looks like you cant jump off of.",
+        "Optimize pause timing, use an instant morph, and get a max height springball jump. A delayed wall jump helps."
+      ]
+    },
+    {
+      "id": 62,
+      "link": [5, 3],
+      "name": "Indy Jones Short Mella",
+      "requires": [
+        "canManipulateMellas",
+        "canTrickyUseFrozenEnemies",
+        "HiJump",
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"enemyDamage": {"enemy": "Mella", "type": "contact", "hits": 2}}
+        ]},
+        {"or": [
+          {"obstaclesCleared": ["B"]},
+          "Morph"
+        ]},
+        {"or": [
+          "canWalljump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ],
+      "note": [
+        "Lure a Mella from the right by breaking the speed blocks or using Morph.",
+        "Then you need to manipulate it to go high enough to be used as a stepping stone once frozen."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [5, 3],
+      "name": "Indy Jones Long Mella",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        "canManipulateMellas",
+        "canBePatient",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "canBeVeryPatient"
+        ]},
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"enemyDamage": {"enemy": "Mella", "type": "contact", "hits": 2}}
+        ]},
+        {"or": [
+          {"obstaclesCleared": ["B"]},
+          "Morph"
+        ]}
+      ],
+      "note": [
+        "Lure a Mella from the right by breaking the speed blocks or using Morph.",
+        "Then manipulate it to go high enough to be used as a stepping stone once frozen.",
+        "Without movement items it may be necessary to continue manipulating it from above, jumping and aiming down to freeze it."
+      ]
+    },
+    {
+      "id": 64,
+      "link": [5, 3],
+      "name": "Mella Ice Clip",
+      "requires": [
+        {"notable": "Mella Ice Clip"},
+        "Morph",
+        "canMoonwalk",
+        "canManipulateMellas",
+        "h_preciseIceClip",
+        {"or": [
+          "canConsecutiveWalljump",
+          {"and": [
+            "HiJump",
+            "canWalljump"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Freeze the Mella at a precise location in order to jump through the crumble block, then wall jump up the long channel and mid-air morph to get out.",
+        "One normalized way to do this: Kill the first two Mellas, moonwalk to the right until the third Mella just barely goes off-camera,",
+        "fire a shot, and move left to scroll the Mella back on-camera just before the shot would despawn, in order to freeze it at a specific height.",
+        "While it is frozen, kill the remaining Mellas, and press against the wall of Speed blocks.",
+        "Perform an action that changes Samus' pose (e.g., press an angle button, jump, or crouch/uncrouch) in order to be able to moonwalk from that position.",
+        "Moonwalk backwards 5 pixels, then jump straight up, and continue holding jump while pressing right, to perform a buffered turn-around spin jump to the right.",
+        "If executed correctly, the Mella will move horizontally left and will be at a good height to be able to freeze and clip through the crumble block with a crouch jump.",
+        "Get on top of the Mella with a mid-air morph, position under the crumble block, then unmorph for the crouch jump.",
+        "Quickly spin-jump to re-enter the shaft after breaking the crumble block.",
+        "Tip: if Samus moonwalks back further than 5 pixels, press against the Speed blocks again before trying to moonwalk back again, to avoid possibly getting bad subpixels."
+      ],
+      "devNote": [
+        "The manipulation can also work with moonwalking back between 6 and 10 pixels, but depending on the exact position the bug may move at a shallow angle rather than exactly horizontally;",
+        "in this case, the bug should be frozen a bit early (i.e. further right), to ensure it does not re-enter its idle animation where its height would become unpredictable.",
+        "FIXME: Investigate if there is a normalized setup for freezing in the high-pixel position.",
+        "FIXME: A freestyle version (or alternative normalized setup?) of the strat could be added, to avoid the canMoonwalk requirement, using X-Ray or a very precise freeze to get up."
+      ]
+    },
+    {
+      "id": 77,
+      "link": [5, 3],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 30, "excessFrames": 6}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 25, "excessFrames": 6}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 106,
+      "link": [6, 1],
+      "name": "G-Mode Morph Spring Ball, IBJ",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphJumpIntoIBJ"
+      ],
+      "flashSuitChecked": true,
+      "note": "Cross the room with a Spring Ball jump into IBJ from the moving platforms above the acid."
+    },
+    {
+      "id": 107,
+      "link": [6, 1],
+      "name": "G-Mode Morph Long Diagonal Bomb Jump",
+      "requires": [
+        "canGMode",
+        {"notable": "G-Mode Morph Long Diagonal Bomb Jump"},
+        "h_artificialMorphDiagonalBombJump",
+        "h_artificialMorphLongIBJ"
+      ],
+      "flashSuitChecked": true,
+      "note": "Cross the room with a long diagonal bomb jump from the solid platforms above the acid."
+    },
+    {
+      "id": 72,
+      "link": [6, 1],
+      "name": "G-Mode Morph Acid Dive IBJ",
+      "requires": [
+        "canGMode",
+        "Gravity",
+        "h_artificialMorphLongIBJ",
+        "h_artificialMorphBombHorizontally",
+        "canSuitlessLavaDive",
+        {"acidFrames": 150}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Cross the solid platforms then horizontally boost into the acid and begin an IBJ.",
+        "With more limited Energy, it is possible to IBJ high into the room and boost horizontally to fall into the acid a bit further to the left."
+      ],
+      "devNote": "A Direct G-mode variant that collects the item is not included, because there is no way to stay artificially morphed and gain Energy."
+    },
+    {
+      "id": 108,
+      "link": [6, 2],
+      "name": "Exit G-Mode (Right of Speed Blocks)",
+      "requires": [
+        "canGMode"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 86,
+      "link": [6, 2],
+      "name": "G-Mode Morph Mella Ice Clip, Door Lock Skip",
+      "requires": [
+        "canComplexGMode",
+        "canManipulateMellas",
+        {"or": [
+          "h_preciseIceClip",
+          "h_highPixelIceClip"
+        ]},
+        {"or": [
+          "Morph",
+          "canInsaneJump",
+          {"enemyDamage": {"enemy": "Mella", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "It can help to moonwalk towards a Mella that has never been on screen, so that it starts swooping immediately as it first enters the screen.",
+        "This will make it so that when Samus is below it, it will always swoop and go up slightly compared to the previous swoop.",
+        "Once it is close to the right height, move away so it stops swooping, freeze it and quickly try the clip, if it doesn't work, quickly leave and try again."
+      ]
+    },
+    {
+      "id": 109,
+      "link": [6, 3],
+      "name": "G-Mode Morph, IBJ",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphLongIBJ"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 110,
+      "link": [6, 5],
+      "name": "Exit G-Mode (Left of Speed Blocks)",
+      "requires": [
+        "canGMode"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 111,
+      "link": [6, 6],
+      "name": "G-Mode Morph, Power Bomb the Blocks",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Place a Power Bomb by the right blocks. They will break when exiting G-mode.",
+      "devNote": "Obstacle A will not be cleared until exiting G-mode, but no G-mode strat will use that obstacle, so it should be fine clearing it now."
+    },
+    {
+      "id": 112,
+      "link": [7, 1],
+      "name": "G-Mode Morph Spring Ball, IBJ, Remote Acquire",
+      "requires": [
+        "canComplexGMode",
+        "h_artificialMorphLongIBJ",
+        "h_artificialMorphJumpIntoIBJ"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": "Touch the item then cross the room with a Spring Ball jump into IBJ from the moving platforms above the acid."
+    },
+    {
+      "id": 113,
+      "link": [7, 1],
+      "name": "G-Mode Morph Long Diagonal Bomb Jump, Remote Acquire",
+      "requires": [
+        "canComplexGMode",
+        {"notable": "G-Mode Morph Long Diagonal Bomb Jump"},
+        "h_artificialMorphDiagonalBombJump",
+        "h_artificialMorphLongIBJ"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": "Touch the item then cross the room with a long diagonal bomb jump from the solid platforms above the acid."
+    },
+    {
+      "id": 114,
+      "link": [7, 2],
+      "name": "G-Mode Morph, IBJ, Remote Acquire",
+      "requires": [
+        "canComplexGMode",
+        "h_artificialMorphLongIBJ"
+      ],
+      "collectsItems": [3],
+      "flashSuitChecked": true,
+      "note": "IBJ to the item, touch it, and drop back down to the right of the speed blocks before exiting G-mode."
+    },
+    {
+      "id": 115,
+      "link": [7, 6],
+      "name": "G-Mode Morph",
+      "requires": [
+        "canGMode"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 116,
+      "link": [7, 7],
+      "name": "G-Mode Morph, Power Bomb the Blocks",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": "Place a Power Bomb by the right blocks. They will break when exiting G-mode.",
+      "devNote": "Obstacle A will not be cleared until exiting G-mode, but no G-mode strat will use that obstacle, so it should be fine clearing it now."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Indiana Jones Grapple",
+      "note": "Involves grappling off several Rippers, where falling may lead to a soft lock."
+    },
+    {
+      "id": 2,
+      "name": "G-Mode Morph Long Diagonal Bomb Jump",
+      "note": "Perform a long diagonal bomb jump from the left door to the solid platforms above the acid."
+    },
+    {
+      "id": 3,
+      "name": "Full Room Space Jump Through Speed Blocks",
+      "note": "The blocks can be broken if you can generate a blue suit using the previous room's runway, and carry it to the blocks by slowing floating down with Space Jump."
+    },
+    {
+      "id": 4,
+      "name": "Left Side Diagonal Shinespark",
+      "note": [
+        "Store a shinespark near the left door and use the remaining runway to jump as far as possible to the right.",
+        "Once near the acid platforms, Shinespark diagonally to reach the item location."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Big Jump Shinespark",
+      "note": "Charge a spark to the right, then come back, run and jump, and perform a shinespark (horizontally or diagonally) to reach the ledge."
+    },
+    {
+      "id": 6,
+      "name": "Acid Shinespark",
+      "note": "Gravity makes it possible to charge a spark in the acid in order to break the speed blocks."
+    },
+    {
+      "id": 7,
+      "name": "Springwall",
+      "note": [
+        "A particularly precise springwall.",
+        "Aim the walljump at the bottom of the second sloped wall fixture, where it looks like you cant jump off of.",
+        "Optimize pause timing, use an instant morph, and get a max height springball jump. A delayed wall jump helps."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Mella Ice Clip",
+      "note": [
+        "Freeze the Mella at a precise location in order to jump through the crumble block, then wall jump up the long channel and mid air morph to get out."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Spring Ball Unmorph Bomb Boost",
+      "note": [
+        "Use an unmorph bomb boost at the end of a mid-air SpringBall jump.",
+        "Also requires a crouchjump and downgrab to complete the maneuver.",
+        "A spring fling can help add some lenience to the bomb placement and unmorph timing;",
+        "it requires pausing early before jumping, in order to be able to initiate another pause immediately before placing a Power Bomb."
+      ]
+    }
+  ],
+  "nextStratId": 118,
+  "nextNotableId": 10
+}

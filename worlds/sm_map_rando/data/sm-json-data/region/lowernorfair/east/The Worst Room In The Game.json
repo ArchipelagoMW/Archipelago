@@ -1,0 +1,2191 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 135,
+  "name": "The Worst Room In The Game",
+  "area": "Norfair",
+  "subarea": "Lower",
+  "subsubarea": "East",
+  "roomAddress": "0x7B4AD",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1],
+    [1],
+    [1],
+    [1],
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0019972",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2],
+        [1],
+        [1],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001998a",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [2],
+        [2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001997e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [2],
+        [1],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Junction Above Bomb Blocks",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [2],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Junction Below Top Pirate",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [1],
+        [2],
+        [1],
+        [1],
+        [1]
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Bottom Platform Junction With Pirates Killed",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1],
+        [1],
+        [1],
+        [1],
+        [2],
+        [1]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Bomb Blocks",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Writg Wall Pirates",
+      "enemyName": "Yellow Space Pirate (wall)",
+      "quantity": 3,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Writg Bottom Namihe",
+      "enemyName": "Namihe",
+      "quantity": 1,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e3",
+      "groupName": "Writg Top Namihes",
+      "enemyName": "Namihe",
+      "quantity": 4,
+      "homeNodes": [4, 5]
+    },
+    {
+      "id": "e4",
+      "groupName": "Writg Standing Pirates",
+      "enemyName": "Yellow Space Pirate (standing)",
+      "quantity": 3,
+      "homeNodes": [4, 5]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {
+          "id": 4,
+          "note": "This link is for strats that don't require killing the pirates."
+        },
+        {
+          "id": 6,
+          "devNote": "This is a one-way link because the way back goes 4 -> 2."
+        }
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 2},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {
+          "id": 4,
+          "note": "This is a one-way link because the way back goes 4 -> 2."
+        },
+        {"id": 6}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canTrickyJump",
+            {"heatFrames": 130}
+          ]},
+          {"heatFrames": 170}
+        ]}
+      ]
+    },
+    {
+      "id": 66,
+      "link": [1, 3],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"or": [
+          {"and": [
+            "canDownBack",
+            "canInsaneJump",
+            {"shineChargeFrames": 125},
+            {"heatFrames": 125}
+          ]},
+          {"and": [
+            {"shineChargeFrames": 160},
+            {"heatFrames": 160}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 67,
+      "link": [1, 3],
+      "name": "Come In Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"heatFrames": 170},
+        {"shinespark": {"frames": 10, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 68,
+      "link": [1, 3],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 130},
+        {"heatFrames": 130}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 69,
+      "link": [1, 3],
+      "name": "Come In Shinecharged, Leave With Spark (Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 95},
+        {"heatFrames": 125},
+        {"shinespark": {"frames": 10, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 70,
+      "link": [1, 3],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 105},
+        {"heatFrames": 140},
+        {"shinespark": {"frames": 9, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 83,
+      "link": [1, 4],
+      "name": "Quick Pirate Avoid and Weave",
+      "requires": [
+        "canInsaneJump",
+        "canTrickyDodgeEnemies",
+        {"heatFrames": 190},
+        {"or": [
+          "canDownBack",
+          "Morph",
+          {"heatFrames": 40}
+        ]}
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 5],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["ScrewAttack", "Charge+Ice+Wave+Plasma"]
+            }},
+            {"heatFrames": 240}
+          ]},
+          {"heatFrames": 360}
+        ]}
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 5],
+      "name": "Quick Pirate Avoid",
+      "requires": [
+        "canTrickyJump",
+        {"heatFrames": 110},
+        {"or": [
+          {"and": [
+            "canInsaneJump",
+            "canTrickyDodgeEnemies"
+          ]},
+          {"heatFrames": 35}
+        ]},
+        {"or": [
+          "canDownBack",
+          "Morph",
+          {"heatFrames": 40}
+        ]}
+      ],
+      "note": [
+        "It is possible to get past the pirate without waiting by moving fast enough, or by making it turn around.",
+        "Landing on the floating platform will make the fall simpler without scrolling the camera enough to activate the pirate."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [2, 1],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_heatProof",
+        "canLongXRayClimb",
+        "canBeVeryPatient"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 5 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 75,
+      "link": [2, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "ScrewAttack",
+        "SpaceJump",
+        {"or": [
+          "Wave",
+          "h_usePowerBomb",
+          {"heatFrames": 40}
+        ]},
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          {"heatFrames": 20}
+        ]},
+        {"heatFrames": 120}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Hit the shot blocks at the top of the room with a Power Bomb or Wave before exiting G-mode to save some heat damage.",
+        "Kill the pirate while it's in its head turning phase to prevent it from placing any stationary, invisible lasers."
+      ]
+    },
+    {
+      "id": 76,
+      "link": [2, 1],
+      "name": "G-Mode, Insane Wall Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"notable": "HiJump and Only Screw"},
+        "HiJump",
+        "ScrewAttack",
+        "canInsaneWalljump",
+        "canInsaneJump",
+        "canConsecutiveWalljump",
+        "canMidairWiggle",
+        {"or": [
+          "Wave",
+          "h_usePowerBomb",
+          {"heatFrames": 40}
+        ]},
+        {"heatFrames": 120}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Break the bomb blocks with either a fully delayed max height jump from the wall, or with an instant turnaround after jumping from the lower layer of bomb blocks.",
+        "Hit the shot blocks at the top of the room with a Power Bomb or Wave before exiting G-mode to save some heat damage."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 86,
+      "link": [2, 2],
+      "name": "Yellow Space Pirates Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Charge",
+            "Plasma",
+            "Wave",
+            "Ice"
+          ]}
+        ]},
+        {"cycleFrames": 285}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Yellow Space Pirate (wall)", "count": 2}],
+      "devNote": "FIXME: There are more possible beam combinations."
+    },
+    {
+      "id": 8,
+      "link": [2, 2],
+      "name": "Crystal Flash (Frozen Namihe)",
+      "requires": [
+        "Plasma",
+        "Ice",
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": ["Refreeze the Namihe after laying the Power Bomb, to avoid taking damage."]
+    },
+    {
+      "id": 9,
+      "link": [2, 2],
+      "name": "Crystal Flash (Floating Platform)",
+      "requires": [
+        {"heatFrames": 60},
+        "h_heatedCrystalFlash",
+        {"heatFrames": 90},
+        {"resetRoom": {"nodes": [2]}}
+      ],
+      "resetsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Perform the Crystal Flash on the bottom part of the floating platform, to avoid taking damage.",
+        "Afterward, reset the room if needed to manipulate the Pirates."
+      ]
+    },
+    {
+      "id": 77,
+      "link": [2, 3],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "ScrewAttack",
+        "SpaceJump",
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            "canInsaneJump",
+            "canComplexGMode"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to kill the pirate at the top of the room and use a pause abuse on G-mode exit to collect its drops.",
+        "This requires getting somewhat lucky, as there is approximately a 70% chance that the pirate will give a large energy drop (small is not enough).",
+        "To do this, climb the room very quickly, before shots are overloaded - HiJump or wall jumps help, but are not required.",
+        "It is also possible to wait for the shots to be overloaded and then exit G-mode, pause abuse, and kill the pirate before the pause triggers, but this is generally harder."
+      ]
+    },
+    {
+      "id": 78,
+      "link": [2, 3],
+      "name": "G-Mode, Insane Wall Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"notable": "HiJump and Only Screw"},
+        "HiJump",
+        "ScrewAttack",
+        "canInsaneWalljump",
+        "canInsaneJump",
+        "canConsecutiveWalljump",
+        "canMidairWiggle",
+        {"or": [
+          "h_heatedGModeOpenDifferentDoor",
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            "canTrickyGMode"
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Break the bomb blocks with either a fully delayed max height jump from the wall, or with an instant turnaround after jumping from the lower layer of bomb blocks.",
+        "It is possible to kill the pirate at the top of the room and use a pause abuse on G-mode exit to collect its drops.",
+        "This requires getting somewhat lucky, as there is approximately a 70% chance that the pirate will give a large energy drop (small is not enough).",
+        "To do this requires not climbing the room too quickly - one or two failed attempts at breaking the bomb blocks should be plenty,",
+        "then exit G-mode, pause abuse, and kill the pirate before the pause triggers with a precisely timed spin jump into it."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [2, 4],
+      "name": "Space Jump Screw Attack",
+      "requires": [
+        "SpaceJump",
+        "ScrewAttack",
+        {"or": [
+          {"and": [
+            "canConsecutiveWalljump",
+            {"heatFrames": 240}
+          ]},
+          {"and": [
+            "HiJump",
+            {"heatFrames": 240}
+          ]},
+          {"heatFrames": 360}
+        ]}
+      ]
+    },
+    {
+      "id": 11,
+      "link": [2, 4],
+      "name": "Come In Shinecharged, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 60},
+        "canShinechargeMovement",
+        "canMidairShinespark",
+        {"or": [
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"shineChargeFrames": 10},
+            {"shinespark": {"frames": 23, "excessFrames": 2}}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"shinespark": {"frames": 36, "excessFrames": 3}}
+          ]},
+          {"and": [
+            {"enemyDamage": {"enemy": "Namihe", "type": "fireball", "hits": 1}},
+            {"shineChargeFrames": 10},
+            {"shinespark": {"frames": 22}},
+            {"heatFrames": 25}
+          ]}
+        ]},
+        {"heatFrames": 220}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Vertically Shinespark two tiles from the left on the floating platform.",
+        "Shinesparking farther right will make it very likely a fireball hits Samus during the crash animation.",
+        "There is a small position that crashes the shinespark early but does not take fireball damage."
+      ]
+    },
+    {
+      "id": 71,
+      "link": [2, 4],
+      "name": "Come In Shinecharging, Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canShinechargeMovement",
+        "canMidairShinespark",
+        {"or": [
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"shinespark": {"frames": 22, "excessFrames": 2}}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"shinespark": {"frames": 33, "excessFrames": 3}}
+          ]},
+          {"and": [
+            {"enemyDamage": {"enemy": "Namihe", "type": "fireball", "hits": 1}},
+            {"shinespark": {"frames": 22}},
+            {"heatFrames": 25}
+          ]}
+        ]},
+        {"heatFrames": 250}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Vertically Shinespark two tiles from the left on the floating platform.",
+        "Shinesparking farther right will make it very likely a fireball hits Samus during the crash animation.",
+        "There is a small position that crashes the shinespark early but does not take fireball damage."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 4],
+      "name": "New Route with HiJump, Speed, and PowerBombs",
+      "requires": [
+        {"notable": "New Route with HiJump, Speed, and PowerBombs"},
+        "HiJump",
+        "SpeedBooster",
+        "canPreciseWalljump",
+        "canTrickyDodgeEnemies",
+        "h_usePowerBomb",
+        "canTrivialMidAirMorph",
+        "canHitbox",
+        {"heatFrames": 420},
+        {"or": [
+          "h_heatResistant",
+          "canPauseAbuse",
+          {"resourceCapacity": [{"type": "RegularEnergy", "count": 149}]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Jump with some run speed to place the power bomb high enough to break the bomb blocks.",
+        "During the explosion, jump through the left wall pirate and precisely walljump to reach the upper area."
+      ],
+      "devNote": "With Reserves only, canPauseAbuse is used as a proxy for pause abuse or optimal reserve management and character movement."
+    },
+    {
+      "id": 13,
+      "link": [2, 4],
+      "name": "HiJump, Screw, and PowerBomb",
+      "requires": [
+        "h_usePowerBomb",
+        "canPreciseWalljump",
+        "canConsecutiveWalljump",
+        "canTrivialMidAirMorph",
+        "HiJump",
+        "ScrewAttack",
+        {"heatFrames": 330},
+        {"or": [
+          "h_heatResistant",
+          "canPauseAbuse",
+          {"resourceCapacity": [{"type": "RegularEnergy", "count": 149}]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Use ScrewAttack to remove the left wall pirate and walljump high enough to place a power bomb to destroy the bomb blocks",
+        "Then walljump up again to reach the upper region."
+      ],
+      "devNote": "With Reserves only, canPauseAbuse is used as a proxy for pause abuse or optimal reserve management and character movement."
+    },
+    {
+      "id": 14,
+      "link": [2, 4],
+      "name": "PowerBombs and a Jump Assist",
+      "requires": [
+        {"notable": "PowerBombs and a Jump Assist"},
+        "canPreciseWalljump",
+        "canHitbox",
+        "h_usePowerBomb",
+        "canTrivialMidAirMorph",
+        "canTrickyJump",
+        {"or": [
+          "canSpringwall",
+          "HiJump",
+          "SpaceJump"
+        ]},
+        {"heatFrames": 530},
+        {"or": [
+          "h_heatResistant",
+          "canPauseAbuse",
+          {"resourceCapacity": [{"type": "RegularEnergy", "count": 149}]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Avoid the bottom pirates and jump high enough to break the bomb blocks with a power bomb.",
+        "During the explosion, climb the right wall passing through any pirates and use a movement item to reach the top."
+      ],
+      "devNote": "With Reserves only, canPauseAbuse is used as a proxy for pause abuse or optimal reserve management and character movement."
+    },
+    {
+      "id": 15,
+      "link": [2, 4],
+      "name": "Frozen Pirate Platforms",
+      "requires": [
+        {"notable": "Frozen Pirate Platforms"},
+        "canTrickyUseFrozenEnemies",
+        "canDodgeWhileShooting",
+        "Charge",
+        "h_heatProof",
+        "canTrickyWalljump",
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "h_bombThings",
+            "canMidAirMorph"
+          ]},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Freeze the pirates to use as platforms to get up through the bomb blocks. Note that the pirates' hitboxes are larger than they seem."
+      ],
+      "devNote": [
+        "It is possible to place a PB on top of a frozen Pirate, but that requires keeping two alive or freezing one with Plasma and another beam.",
+        "The 'Low Ice' strats can be used as a way to manipulate the pirates into position and do not have h_heatProof."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 4],
+      "name": "Low Ice Pirate Freeze",
+      "requires": [
+        {"notable": "Low Ice Pirate Freeze"},
+        "canTrickyUseFrozenEnemies",
+        "Charge",
+        "canPreciseWalljump",
+        "canWalljumpWithCharge",
+        "canTrivialMidAirMorph",
+        "canTrickyDodgeEnemies",
+        {"ammo": {"type": "Missile", "count": 1}},
+        {"ammo": {"type": "Super", "count": 1}},
+        {"ammo": {"type": "PowerBomb", "count": 1}},
+        {"heatFrames": 870},
+        {"or": [
+          "h_heatResistant",
+          {"and": [
+            "canInsaneJump",
+            "canPauseAbuse"
+          ]},
+          {"resourceCapacity": [{"type": "RegularEnergy", "count": 149}]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Deal an exact amount of damage to a wall pirate to freeze it while breaking the bomb blocks with a power bomb without taking damage.",
+        "Quickly move to the right side and walljump up to the right height to power bomb out the bomb blocks, double hitting the top wall pirate.",
+        "Wait for the full power bomb effect to end and wall jump once on the right wall and hit top pirate with 1 missile and 1 super.",
+        "Jump and shoot the top pirate with a charge+ice shot.",
+        "Hold a charge and walljump up the left wall and freeze the top pirate when it jumps across.",
+        "Use the pirate to jump to the higher area."
+      ],
+      "devNote": "With Reserves only, this strat requires much more precise movement and either pause abuse or optimal reserve management."
+    },
+    {
+      "id": 17,
+      "link": [2, 4],
+      "name": "New Low Ice Pirate Freeze",
+      "requires": [
+        {"notable": "New Low Ice Pirate Freeze"},
+        "canTrickyUseFrozenEnemies",
+        "Charge",
+        "canPreciseWalljump",
+        "canResetFallSpeed",
+        "canWalljumpWithCharge",
+        "h_useMorphBombs",
+        "canWallJumpInstantMorph",
+        "canTrickyDodgeEnemies",
+        {"ammo": {"type": "Missile", "count": 4}},
+        {"ammo": {"type": "PowerBomb", "count": 1}},
+        {"heatFrames": 900},
+        {"or": [
+          "h_heatResistant",
+          {"and": [
+            "canInsaneJump",
+            "canPauseAbuse"
+          ]},
+          {"resourceCapacity": [{"type": "RegularEnergy", "count": 149}]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Deal an exact amount of damage to a wall pirate to freeze it while breaking the bomb blocks with a power bomb without taking damage.",
+        "Wait briefly on the left side of the center platform, then jump and shoot 4 missiles at the top pirate.",
+        "Walljump up the left wall such that the lower pirates are on screen long enough to jump accross to the left.",
+        "Place a Bomb on the left wall to hit the top pirate when it jumps over, followed by a power bomb.",
+        "Unmorph precisely below the middle pirate so both top pirates will jump back to the right, and begin charging Ice.",
+        "Walljump up the left wall with charge held and freeze the top pirate when it jumps over and use it to reach the upper region."
+      ],
+      "devNote": "With Reserves only, this strat requires much more precise movement and either pause abuse or optimal reserve management."
+    },
+    {
+      "id": 18,
+      "link": [2, 4],
+      "name": "Power Bomb Diagonal Bomb Jump",
+      "requires": [
+        {"notable": "Power Bomb Diagonal Bomb Jump"},
+        "canFastWalljumpClimb",
+        "canWallJumpBombBoost",
+        "canDiagonalBombJump",
+        "h_usePowerBomb",
+        {"heatFrames": 930},
+        {"or": [
+          "h_heatResistant",
+          {"and": [
+            "canInsaneJump",
+            "canPauseAbuse"
+          ]},
+          {"resourceCapacity": [{"type": "RegularEnergy", "count": 149}]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Ignore the Yellow Pirates by walljumping up the left side to start a diagonal bomb jump from the wall, including a power bomb to clear the bomb blocks.",
+        "Two quick walljumps upon entering the room can position Samus to get the left pirate to jump to the right and jump over the right pirate's lazer attack.",
+        "Jump up the left wall and begin bomb jumping starting with a power bomb."
+      ],
+      "devNote": [
+        "There is a very similar strat using an HBJ that is a little faster but more precise and overall harder.",
+        "With Reserves only, this strat requires much more precise movement and either pause abuse or optimal reserve management."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 4],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        {"notable": "X-Ray Climb"},
+        "canLongXRayClimb",
+        {"enemyDamage": {"enemy": "Namihe", "type": "fireball", "hits": 2}},
+        {"enemyDamage": {
+          "enemy": "Yellow Space Pirate (wall)",
+          "type": "contact",
+          "hits": 1
+        }},
+        {"heatFrames": 2800}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Climb the room while avoiding wall pirates and Namihe flames.",
+        "Immediately climb above the Namihe flames and wait for the wall pirate to jump across into Samus.",
+        "Once the pirate starts going up, resume X-Ray climbing.",
+        "This is a 2-screen X-Ray climb.  Watch for enemies when fixing the camera after the climb."
+      ],
+      "devNote": "Two Namihe hits as leniency."
+    },
+    {
+      "id": 20,
+      "link": [2, 6],
+      "name": "HeatProof Pirates Kill",
+      "requires": [
+        "h_heatProof",
+        {"enemyKill": {
+          "enemies": [
+            ["Yellow Space Pirate (wall)", "Yellow Space Pirate (wall)"],
+            ["Yellow Space Pirate (wall)"]
+          ],
+          "excludedWeapons": ["Bombs"]
+        }}
+      ],
+      "note": "Being heatproof allows slower kill methods.",
+      "devNote": "Bombs are still excluded because they take 30 bombs each and that's ridiculous."
+    },
+    {
+      "id": 21,
+      "link": [2, 6],
+      "name": "Screw Attack Pirates Kill",
+      "requires": [
+        "ScrewAttack",
+        {"or": [
+          {"and": [
+            "canWalljump",
+            {"heatFrames": 265}
+          ]},
+          {"and": [
+            "HiJump",
+            {"heatFrames": 240}
+          ]},
+          {"heatFrames": 430}
+        ]}
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 6],
+      "name": "Charge Plasma Pirates Kill",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [
+            ["Yellow Space Pirate (wall)", "Yellow Space Pirate (wall)"],
+            ["Yellow Space Pirate (wall)"]
+          ],
+          "explicitWeapons": ["Charge+Plasma"]
+        }},
+        {"heatFrames": 450}
+      ]
+    },
+    {
+      "id": 23,
+      "link": [2, 6],
+      "name": "Supers Pirates Kill",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (wall)"], ["Yellow Space Pirate (wall)"]],
+              "explicitWeapons": ["Super"]
+            }},
+            {"heatFrames": 395}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [
+                ["Yellow Space Pirate (wall)"],
+                ["Yellow Space Pirate (wall)"],
+                ["Yellow Space Pirate (wall)"]
+              ],
+              "explicitWeapons": ["Super"]
+            }},
+            {"heatFrames": 330}
+          ]}
+        ]}
+      ],
+      "note": "The bottom wall pirates can be killed while stacked to save ammo."
+    },
+    {
+      "id": 24,
+      "link": [2, 6],
+      "name": "Missiles Pirates Kill",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [
+            ["Yellow Space Pirate (wall)"],
+            ["Yellow Space Pirate (wall)"],
+            ["Yellow Space Pirate (wall)"]
+          ],
+          "explicitWeapons": ["Missile"]
+        }},
+        {"heatFrames": 600}
+      ],
+      "note": "The bottom wall pirates can be killed while stacked to save ammo, but it is not expected."
+    },
+    {
+      "id": 25,
+      "link": [2, 6],
+      "name": "Full Spazer Pirates Kill",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [
+            ["Yellow Space Pirate (wall)"],
+            ["Yellow Space Pirate (wall)"],
+            ["Yellow Space Pirate (wall)"]
+          ],
+          "explicitWeapons": ["Charge+Ice+Wave+Spazer"]
+        }},
+        {"heatFrames": 900}
+      ]
+    },
+    {
+      "id": 26,
+      "link": [2, 6],
+      "name": "Power Bomb Pirates Kill + Bomb Blocks",
+      "requires": [
+        "canTrivialMidAirMorph",
+        {"or": [
+          "canSpringBallJumpMidAir",
+          "SpaceJump",
+          "canWalljump",
+          "canLongIBJ",
+          "canJumpIntoIBJ",
+          {"and": [
+            "SpeedBooster",
+            "HiJump"
+          ]}
+        ]},
+        {"enemyKill": {
+          "enemies": [
+            [
+              "Yellow Space Pirate (wall)",
+              "Yellow Space Pirate (wall)",
+              "Yellow Space Pirate (wall)"
+            ]
+          ],
+          "explicitWeapons": ["PowerBombPeriphery"]
+        }},
+        {"heatFrames": 790},
+        {"or": [
+          "h_heatResistant",
+          "canPauseAbuse",
+          {"resourceCapacity": [{"type": "RegularEnergy", "count": 149}]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Jump morph from the center platform to place the first Power Bomb",
+        "Place two more on the platform itself to kill the bottom pirates",
+        "Use a fourth to break the bomb blocks while also killing the last pirate."
+      ],
+      "devNote": [
+        "It's not really possible to hit all enemies with double-PB hits while not taking damage.",
+        "Using Power Bomb Periphery is based on a strat that allows killing them and taking out the blocks with 4 PBs.",
+        "This calculation ends up taking 5, leaving a spare PB.",
+        "The movement item used does not increase heat frames except for IBJ in which case the PB can be used while IBJing.",
+        "With Reserves only, canPauseAbuse is used as a proxy for pause abuse or optimal reserve management and character movement."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        "h_heatProof"
+      ]
+    },
+    {
+      "id": 28,
+      "link": [3, 1],
+      "name": "Kill the Pirate",
+      "requires": [
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            {"heatFrames": 60},
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["Missile", "Super", "Charge+Plasma"]
+            }}
+          ]}
+        ]},
+        {"heatFrames": 300}
+      ]
+    },
+    {
+      "id": 29,
+      "link": [3, 1],
+      "name": "Avoid the Top Pirate",
+      "requires": [
+        "canDodgeWhileShooting",
+        {"or": [
+          {"and": [
+            "canTrickyJump",
+            {"heatFrames": 175}
+          ]},
+          {"and": [
+            "HiJump",
+            "canTrickyDodgeEnemies",
+            {"heatFrames": 140}
+          ]},
+          {"heatFrames": 225}
+        ]}
+      ],
+      "note": [
+        "Safely clear the shot blocks from the ground to avoid drawing fire from the space pirate.",
+        "Diagonal shots from the door effectively clear a path through the shot blocks, or firing vertically from below can work too."
+      ]
+    },
+    {
+      "id": 72,
+      "link": [3, 1],
+      "name": "Come In Shinecharging, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"or": [
+          "canWalljump",
+          "canInsaneJump"
+        ]},
+        {"heatFrames": 205},
+        {"shinespark": {"frames": 6, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 73,
+      "link": [3, 1],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 140},
+        {"heatFrames": 140}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 74,
+      "link": [3, 1],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementTricky",
+        {"or": [
+          {"and": [
+            {"shineChargeFrames": 135},
+            {"heatFrames": 170},
+            {"shinespark": {"frames": 11, "excessFrames": 0}}
+          ]},
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 125},
+            {"heatFrames": 160},
+            {"shinespark": {"frames": 7, "excessFrames": 0}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ]
+    },
+    {
+      "id": 30,
+      "link": [3, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 31,
+      "link": [3, 1],
+      "name": "Grapple Teleport X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19]]
+        }
+      },
+      "requires": [
+        "canXRayClimb",
+        {"heatFrames": 1600},
+        {"or": [
+          {"enemyDamage": {
+            "enemy": "Yellow Space Pirate (standing)",
+            "type": "laser",
+            "hits": 2
+          }},
+          {"and": [
+            "canInsaneJump",
+            {"enemyDamage": {
+              "enemy": "Yellow Space Pirate (standing)",
+              "type": "laser",
+              "hits": 1
+            }}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["Missile", "Super", "Charge+Plasma"]
+            }},
+            {"heatFrames": 120}
+          ]}
+        ]}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb to get up to the door transition, without needing to open the door.",
+        "Kill the Pirate, or climb quickly to minimize damage from it."
+      ],
+      "devNote": [
+        "It is possible to avoid all damage from the Pirate, but it's unclear if this can be done reliably or is RNG-dependent."
+      ]
+    },
+    {
+      "id": 32,
+      "link": [3, 1],
+      "name": "Grapple Teleport X-Ray Climb (2 Screens)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [
+        "canLongXRayClimb",
+        {"heatFrames": 2800},
+        {"enemyDamage": {"enemy": "Namihe", "type": "kago", "hits": 9}},
+        {"enemyDamage": {
+          "enemy": "Yellow Space Pirate (standing)",
+          "type": "laser",
+          "hits": 1
+        }}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Exit the previous room with Samus in a standing pose (while grappled).",
+        "After teleporting, press right to release Grapple while staying standing (not being forced into a crouch).",
+        "Then X-ray climb 2 screens to get up to the door transition, without needing to open the door.",
+        "Climb quickly in order to minimize damage from the Namihe and the Pirate."
+      ]
+    },
+    {
+      "id": 79,
+      "link": [3, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "Wave",
+          {"heatFrames": 40}
+        ]},
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          {"heatFrames": 20}
+        ]},
+        {"heatFrames": 120}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Hit the shot blocks at the top of the room with Wave before exiting G-mode to save some heat damage.",
+        "Stand behind the pirate only while it is looking around to prevent it from turning and placing stationary, invisible lasers."
+      ]
+    },
+    {
+      "id": 80,
+      "link": [3, 1],
+      "name": "G-Mode Morph, Power Bomb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          {"heatFrames": 20}
+        ]},
+        {"heatFrames": 120}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Hit the shot blocks at the top of the room with a Power Bomb before exiting G-mode to save some heat damage.",
+        "Stand behind the pirate only while it is looking around to prevent it from turning and placing stationary, invisible lasers."
+      ]
+    },
+    {
+      "id": 81,
+      "link": [3, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "ScrewAttack",
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 82,
+      "link": [3, 2],
+      "name": "G-Mode Morph, Power Bomb the Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          {"and": [
+            "h_artificialMorphPowerBomb",
+            "canHitbox"
+          ]},
+          "canLateralMidAirMorph",
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "canTrickyGMode",
+            "h_artificialMorphIBJ"
+          ]},
+          {"and": [
+            "Morph",
+            {"or": [
+              "Charge",
+              {"ammo": {"type": "Super", "count": 3}},
+              {"ammo": {"type": "Missile", "count": 9}},
+              {"enemyDamage": {
+                "enemy": "Yellow Space Pirate (standing)",
+                "type": "contact",
+                "hits": 1
+              }}
+            ]}
+          ]},
+          {"and": [
+            "h_artificialMorphBombs",
+            {"enemyDamage": {
+              "enemy": "Yellow Space Pirate (standing)",
+              "type": "contact",
+              "hits": 1
+            }}
+          ]}
+        ]},
+        {"heatFrames": 160}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Get to the bomb blocks while morphed, use a Power Bomb, then exit G-mode and drop to the bottom of the room.",
+        "It is possible to go through the top pirate while it is being hit by a Power Bomb explosion, otherwise it is possible to jump over it with Morph or Spring Ball.",
+        "With Bombs, it is possible but tricky to IBJ over the pirate or Bomb it many times to kill it without it placing any of its stationary, invisible lasers.",
+        "Note that the pirate will not turn towards Samus and place a laser if it is moving its head back and forth."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [3, 3],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 34,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 84,
+      "link": [3, 4],
+      "name": "Pirate Jump and Weave",
+      "requires": [
+        "canTrickyJump",
+        {"heatFrames": 175}
+      ],
+      "note": [
+        "Spin jump over the pirate; aiming down mid jump can help.",
+        "Then weave between the platforms below."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [3, 5],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["ScrewAttack"]
+            }},
+            {"heatFrames": 100}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["Super"]
+            }},
+            {"heatFrames": 150}
+          ]},
+          {"and": [
+            "Charge",
+            "Plasma",
+            "Wave",
+            {"heatFrames": 200}
+          ]},
+          {"heatFrames": 330}
+        ]}
+      ]
+    },
+    {
+      "id": 36,
+      "link": [3, 5],
+      "name": "Pirate Jump",
+      "requires": [
+        "canTrickyJump",
+        {"heatFrames": 100}
+      ],
+      "note": [
+        "Spinjump over the pirate.  Aiming down mid jump can help.",
+        "Clearing shot blocks first for more space will be slower."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [3, 5],
+      "name": "Hitbox Through Pirate",
+      "requires": [
+        "canHitbox",
+        {"or": [
+          {"and": [
+            "h_usePowerBomb",
+            {"heatFrames": 175}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            "Charge",
+            "Plasma",
+            {"heatFrames": 125}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 64,
+      "link": [3, 5],
+      "name": "Pause Abuse Pirate Hit",
+      "requires": [
+        {"heatFrames": 80},
+        "h_pauseAbuseMinimalReserveRefill",
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 38,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 180},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "h_usePowerBomb",
+            {"heatFrames": 70}
+          ]},
+          {"and": [
+            "h_useMorphBombs",
+            {"heatFrames": 200}
+          ]},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 85,
+      "link": [4, 2],
+      "name": "X-Mode Temporary Blue",
+      "requires": [
+        {"notable": "X-Mode Temporary Blue"},
+        "canLateralMidAirMorph",
+        "canXMode",
+        "h_XModeSpikeHit",
+        "h_shinechargeMaxRunway",
+        "canTemporaryBlue",
+        {"heatFrames": 290}
+      ],
+      "note": [
+        "Starting from approximately the center of the floating platform, run and jump to the left,",
+        "and perform a lateral mid-air morph to hit the spike from below (landing on the Namihe) and enter X-mode.",
+        "Hold an angle button to turn around to the right while retaining dash speed.",
+        "Arm pump a tile or two to the right, so that the Namihe is no longer below Samus.",
+        "Gain a shinecharge and continue holding down while exiting X-mode to obtain temporary blue,",
+        "and use it to break the bomb blocks below while falling through them."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 40,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 41,
+      "link": [4, 5],
+      "name": "HiJump",
+      "requires": [
+        "HiJump",
+        {"heatFrames": 150}
+      ]
+    },
+    {
+      "id": 42,
+      "link": [5, 1],
+      "name": "Wait for Pirate",
+      "requires": [
+        {"heatFrames": 520}
+      ]
+    },
+    {
+      "id": 43,
+      "link": [5, 1],
+      "name": "HiJump Pirate Dodge",
+      "requires": [
+        "HiJump",
+        "canTrickyJump",
+        "canMidAirMorph",
+        {"heatFrames": 240}
+      ],
+      "note": [
+        "Jump and Morph to pass right above the pirate.",
+        "This should be done as quickly as possible so the pirate does not have time to walk left."
+      ]
+    },
+    {
+      "id": 44,
+      "link": [5, 1],
+      "name": "HiJumpless Pirate Dodge",
+      "requires": [
+        "canWallJumpInstantMorph",
+        "canTrickyJump",
+        "canInsaneWalljump",
+        {"heatFrames": 290}
+      ],
+      "note": "Walljump using the base of the platform the pirate is walking on and then Morph over its head."
+    },
+    {
+      "id": 45,
+      "link": [5, 1],
+      "name": "HitBox",
+      "requires": [
+        "canHitbox",
+        "h_usePowerBomb",
+        {"heatFrames": 280}
+      ],
+      "unlocksDoors": [
+        {
+          "nodeId": 3,
+          "types": ["powerbomb"],
+          "requires": [],
+          "useImplicitRequires": false
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "link": [5, 1],
+      "name": "Fast Pirate Kill",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["ScrewAttack", "Charge+Ice+Wave+Plasma"]
+            }},
+            {"heatFrames": 240}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["Missile", "Charge+Plasma"]
+            }},
+            {"heatFrames": 360}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["Super"]
+            }},
+            {"heatFrames": 320}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 47,
+      "link": [5, 2],
+      "name": "ScrewFall",
+      "requires": [
+        "ScrewAttack",
+        {"or": [
+          {"and": [
+            "canMoonfall",
+            "canInsaneJump",
+            {"heatFrames": 190}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"heatFrames": 220}
+          ]}
+        ]}
+      ],
+      "note": "Fall to the bottom of the room with Screw Attack while weaving around the platforms."
+    },
+    {
+      "id": 48,
+      "link": [5, 3],
+      "name": "Wait for Pirate",
+      "requires": [
+        {"heatFrames": 520}
+      ]
+    },
+    {
+      "id": 49,
+      "link": [5, 3],
+      "name": "HiJump Pirate Dodge",
+      "requires": [
+        "HiJump",
+        "canMidAirMorph",
+        "canTrickyJump",
+        {"heatFrames": 160}
+      ],
+      "note": [
+        "Jump and Morph to pass right above the pirate.",
+        "This should be done as quickly as possible so the pirate does not have time to walk left."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [5, 3],
+      "name": "HiJumpless Pirate Dodge",
+      "requires": [
+        "canInsaneWalljump",
+        "canWallJumpInstantMorph",
+        "canTrickyJump",
+        {"heatFrames": 160}
+      ],
+      "note": "Walljump using the base of the platform the pirate is walking on and then Morph over its head."
+    },
+    {
+      "id": 51,
+      "link": [5, 3],
+      "name": "HitBox",
+      "requires": [
+        "canHitbox",
+        "h_usePowerBomb",
+        {"heatFrames": 180}
+      ],
+      "unlocksDoors": [{"types": ["powerbomb"], "requires": [], "useImplicitRequires": false}]
+    },
+    {
+      "id": 52,
+      "link": [5, 3],
+      "name": "Fast Pirate Kill",
+      "requires": [
+        {"or": [
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["ScrewAttack", "Charge+Ice+Wave+Plasma"]
+            }},
+            {"heatFrames": 180}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["Missile", "Charge+Plasma"]
+            }},
+            {"heatFrames": 280}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Yellow Space Pirate (standing)"]],
+              "explicitWeapons": ["Super"]
+            }},
+            {"heatFrames": 210}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 65,
+      "link": [5, 3],
+      "name": "Pause Abuse Pirate Hit",
+      "requires": [
+        {"heatFrames": 100},
+        "h_pauseAbuseMinimalReserveRefill",
+        {"heatFrames": 40}
+      ]
+    },
+    {
+      "id": 53,
+      "link": [5, 4],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 160}
+      ]
+    },
+    {
+      "id": 54,
+      "link": [5, 5],
+      "name": "Yellow Space Pirates Farm",
+      "requires": [
+        "h_heatProof",
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"cycleFrames": 270}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [3]}},
+            {"cycleFrames": 130}
+          ]}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "Charge",
+            "Plasma",
+            "Wave",
+            "Ice"
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Yellow Space Pirate (standing)", "count": 1}],
+      "devNote": "FIXME: There are more possible beam combinations."
+    },
+    {
+      "id": 55,
+      "link": [5, 5],
+      "name": "Crystal Flash (Frozen Namihe)",
+      "requires": [
+        "Plasma",
+        "Ice",
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": ["Refreeze the Namihe after laying the Power Bomb, to avoid taking damage."]
+    },
+    {
+      "id": 56,
+      "link": [5, 5],
+      "name": "Crystal Flash (On Top of Namihe)",
+      "requires": [
+        {"heatFrames": 40},
+        {"enemyDamage": {"enemy": "Namihe", "type": "kago", "hits": 1}},
+        "h_heatedCrystalFlash",
+        {"heatFrames": 40}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Perform the Crystal Flash on top of the Namihe.",
+        "At the start of the Crystal Flash, Samus will take one Namihe contact hit (10 energy damage without suits)."
+      ]
+    },
+    {
+      "id": 57,
+      "link": [6, 4],
+      "name": "IBJ",
+      "requires": [
+        "canLongIBJ",
+        {"or": [
+          {"and": [
+            "canJumpIntoIBJ",
+            {"heatFrames": 1460}
+          ]},
+          {"and": [
+            "canDoubleBombJump",
+            {"heatFrames": 1000}
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            "canDoubleBombJump",
+            {"heatFrames": 800}
+          ]},
+          {"heatFrames": 2000}
+        ]},
+        {"or": [
+          "canPowerBombMidIBJ",
+          {"and": [
+            "canBombAboveIBJ",
+            "canStaggeredIBJ",
+            {"heatFrames": 180}
+          ]},
+          {"and": [
+            "h_heatProof",
+            "canBePatient"
+          ]},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 58,
+      "link": [6, 4],
+      "name": "SpaceJump",
+      "requires": [
+        "SpaceJump",
+        {"or": [
+          {"and": [
+            "canConsecutiveWalljump",
+            {"heatFrames": 260}
+          ]},
+          {"heatFrames": 360}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          {"and": [
+            "canTrivialMidAirMorph",
+            "h_usePowerBomb",
+            {"or": [
+              {"and": [
+                "canWalljump",
+                {"heatFrames": 120}
+              ]},
+              {"heatFrames": 200}
+            ]}
+          ]},
+          {"and": [
+            "canMidAirMorph",
+            "h_useMorphBombs",
+            {"or": [
+              {"and": [
+                "canConsecutiveWalljump",
+                {"heatFrames": 520}
+              ]},
+              {"heatFrames": 800}
+            ]}
+          ]},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 59,
+      "link": [6, 4],
+      "name": "Springwall",
+      "requires": [
+        "h_heatedSpringwall",
+        "canConsecutiveWalljump",
+        {"heatFrames": 300},
+        {"or": [
+          {"and": [
+            "h_usePowerBomb",
+            {"heatFrames": 180}
+          ]},
+          {"and": [
+            "h_useMorphBombs",
+            {"heatFrames": 800}
+          ]},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 60,
+      "link": [6, 4],
+      "name": "HiJump Walljump",
+      "requires": [
+        "HiJump",
+        "canPreciseWalljump",
+        "canConsecutiveWalljump",
+        {"heatFrames": 300},
+        {"or": [
+          {"and": [
+            "canTrivialMidAirMorph",
+            "h_usePowerBomb",
+            {"heatFrames": 200}
+          ]},
+          {"and": [
+            "canTrickyWalljump",
+            "canWallJumpInstantMorph",
+            "h_useMorphBombs",
+            {"heatFrames": 520}
+          ]},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 61,
+      "link": [6, 4],
+      "name": "HiJumpless Walljump",
+      "requires": [
+        "canInsaneWalljump",
+        "canConsecutiveWalljump",
+        "h_heatProof",
+        {"or": [
+          {"and": [
+            "canTrivialMidAirMorph",
+            "h_usePowerBomb"
+          ]},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 62,
+      "link": [6, 4],
+      "name": "HiJump and Only Screw",
+      "requires": [
+        {"notable": "HiJump and Only Screw"},
+        "h_heatProof",
+        "HiJump",
+        "ScrewAttack",
+        "canInsaneWalljump",
+        "canInsaneJump",
+        "canConsecutiveWalljump",
+        "canMidairWiggle"
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Break the bomb blocks with extremely precise walljumps.",
+        "Either with a fully delayed max height jump from the wall, or with an instant turnaround after jumping from the lower layer of bomb blocks."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [6, 6],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "New Route with HiJump, Speed, and PowerBombs",
+      "note": [
+        "Jump with some run speed to place the power bomb high enough to break the bomb blocks.",
+        "During the explosion, jump through the left wall pirate and precisely walljump to reach the upper area."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "PowerBombs and a Jump Assist",
+      "note": [
+        "Avoid the bottom pirates and jump high enough to break the bomb blocks with a power bomb.",
+        "During the explosion, climb the right wall passing through any pirates and use a movement item to reach the top."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Frozen Pirate Platforms",
+      "note": [
+        "Freeze the pirates to use as platforms to get up through the bomb blocks. Note that the pirates' hitboxes are larger than they seem."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Low Ice Pirate Freeze",
+      "note": [
+        "Deal an exact amount of damage to a wall pirate to freeze it while breaking the bomb blocks with a power bomb without taking damage.",
+        "Quickly move to the right side and walljump up to the right height to power bomb out the bomb blocks, double hitting the top wall pirate.",
+        "Wait for the full power bomb effect to end and wall jump once on the right wall and hit top pirate with 1 missile and 1 super.",
+        "Jump and shoot the top pirate with a charge+ice shot.",
+        "Hold a charge and walljump up the left wall and freeze the top pirate when it jumps across.",
+        "Use the pirate to jump to the higher area."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "New Low Ice Pirate Freeze",
+      "note": [
+        "Deal an exact amount of damage to a wall pirate to freeze it while breaking the bomb blocks with a power bomb without taking damage.",
+        "Wait briefly on the left side of the center platform, then jump and shoot 4 missiles at the top pirate.",
+        "Walljump up the left wall such that the lower pirates are on screen long enough to jump accross to the left.",
+        "Place a Bomb on the left wall to hit the top pirate when it jumps over, followed by a power bomb.",
+        "Unmorph precisely below the middle pirate so both top pirates will jump back to the right, and begin charging Ice.",
+        "Walljump up the left wall with charge held and freeze the top pirate when it jumps over and use it to reach the upper region."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Power Bomb Diagonal Bomb Jump",
+      "note": [
+        "Ignore the Yellow Pirates by walljumping up the left side to start a diagonal bomb jump from the wall, including a power bomb to clear the bomb blocks.",
+        "Two quick walljumps upon entering the room can position Samus to get the left pirate to jump to the right and jump over the right pirate's lazer attack.",
+        "Jump up the left wall and begin bomb jumping starting with a power bomb."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "X-Ray Climb",
+      "note": [
+        "Climb Writg while avoiding wall pirates and Namihe flames.",
+        "Immediately climb above the Namihe flames and wait for the wall pirate to jump across into Samus.",
+        "Once the pirate starts going up, resume X-Ray climbing.",
+        "This is a Two screen X-Ray climb.  Watch for enemies when fixing the camera after the climb."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "HiJump and Only Screw",
+      "note": [
+        "Break the bomb blocks in The Worst Room In The Game with extremely precise walljumps.",
+        "Either with a fully delayed max height jump from the wall, or with an instant turnaround after jumping from the lower layer of bomb blocks."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "X-Mode Temporary Blue",
+      "note": [
+        "Enter X-mode using the spike above the lower left Namihe.",
+        "Use it to obtain temporary blue and fall through the bomb blocks."
+      ]
+    }
+  ],
+  "nextStratId": 87,
+  "nextNotableId": 10
+}

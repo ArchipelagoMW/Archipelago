@@ -1,0 +1,165 @@
+############################################################
+#   OBJECT DATA
+############################################################
+# Change treasure object data for trade items
+# objdata_addr = 0x5129 + (TREASURE_ID * 0x4)  => treasureObjectData
+# Write object info
+15/527d/: db $0a,$00,$5a,$70  # Cuccodex (#55)
+15/5281/: db $0a,$00,$5b,$71  # Lon Lon Egg (#56)
+15/5285/: db $0a,$00,$5c,$72  # Ghastly Doll (#57)
+15/51fd/: db $0a,$00,$5d,$73  # Iron Pot (#35)
+15/5209/: db $0a,$00,$5e,$74  # Lava Soup (#38)
+15/520d/: db $0a,$00,$5f,$75  # Goron Vase (#39)
+15/5211/: db $0a,$00,$60,$76  # Fish (#3A)
+15/5215/: db $0a,$00,$61,$77  # Megaphone (#3B)
+15/5219/: db $0a,$00,$62,$78  # Mushroom (#3C)
+15/521d/: db $0a,$00,$63,$79  # Wooden Bird (#3D)
+15/5221/: db $0a,$00,$64,$7a  # Engine Grease (#3E)
+15/5225/: db $0a,$00,$65,$7b  # Phonograph (#3F)
+15/51bd/: db $0a,$01,$56,$5c  # Pirate's Bell (#25)
+
+# Add custom palette variants for ore chunks to give more variety in values that
+# can be found as treasures, just like rupees.
+# This block changes the fixed definition for Ore Chunks by a pointer to a group of subids.
+15//oreChunksSubidsBlock: |
+    db $02,$0b,$6b,$2f  ; Ore Chunks x50 (orange sprite)
+    db $02,$0a,$58,$4e  ; Ore Chunks x25 (blue sprite)
+    db $02,$04,$4e,$4d  ; Ore Chunks x10 (red sprite)
+15/5205/: |
+    db $80
+    dw oreChunksSubidsBlock
+    db $00
+
+# Add essences as real items to enable obtaining them elsewhere
+15//essencesTreasureData: |
+    db $02,$00,$0e,$60
+    db $02,$01,$0f,$61
+    db $02,$02,$10,$62
+    db $02,$03,$11,$63
+    db $02,$04,$12,$64
+    db $02,$05,$13,$65
+    db $02,$06,$14,$66
+    db $02,$07,$15,$67
+15/522a/: dw essencesTreasureData
+
+# Add dungeon items variants to support keysanity
+15//smallKeyObjectsTable: |
+    db $00,$00,$73,option.smallKeySprite    ; D0 (Hero's Cave)
+    db $00,$01,$74,option.smallKeySprite    ; D1
+    db $00,$02,$75,option.smallKeySprite    ; D2
+    db $00,$03,$76,option.smallKeySprite    ; D3
+    db $00,$04,$77,option.smallKeySprite    ; D4
+    db $00,$05,$78,option.smallKeySprite    ; D5
+    db $00,$06,$79,option.smallKeySprite    ; D6
+    db $00,$07,$7a,option.smallKeySprite    ; D7
+    db $00,$08,$7b,option.smallKeySprite    ; D8
+15/51ea/: dw smallKeyObjectsTable
+
+15//bossKeyObjectsTable: |
+    db $00,$01,$7c,$43    ; D1
+    db $00,$02,$7d,$43    ; D2
+    db $00,$03,$7e,$43    ; D3
+    db $00,$04,$7f,$43    ; D4
+    db $00,$05,$80,$43    ; D5
+    db $00,$06,$81,$43    ; D6
+    db $00,$07,$82,$43    ; D7
+    db $00,$08,$83,$43    ; D8
+15/51ee/: dw bossKeyObjectsTable
+
+15//dungeonMapObjectsTable: |
+    db $00,$00,$18,$40    ; D0 (Hero's Cave, doesn't exist)
+    db $00,$01,$84,$40    ; D1
+    db $00,$02,$85,$40    ; D2
+    db $00,$03,$86,$40    ; D3
+    db $00,$04,$87,$40    ; D4
+    db $00,$05,$88,$40    ; D5
+    db $00,$06,$89,$40    ; D6
+    db $00,$07,$8a,$40    ; D7
+    db $00,$08,$8b,$40    ; D8
+15/51f6/: dw dungeonMapObjectsTable
+
+15//compassObjectsTable: |
+    db $00,$00,$19,$41    ; D0 (Hero's Cave, doesn't exist)
+    db $00,$01,$8c,$41    ; D1
+    db $00,$02,$8d,$41    ; D2
+    db $00,$03,$8e,$41    ; D3
+    db $00,$04,$8f,$41    ; D4
+    db $00,$05,$90,$41    ; D5
+    db $00,$06,$91,$41    ; D6
+    db $00,$07,$92,$41    ; D7
+    db $00,$08,$93,$41    ; D8
+15/51f2/: dw compassObjectsTable
+
+# Change @mode6 (compasses, maps & boss keys) to make it set the bit related
+# to their subid instead of the dungeon we're currently in
+3f/4584/: |
+    nop
+    nop
+    nop
+    nop
+
+# Change @mode7 (small keys) to make it increment the counter related to their
+# subid instead of the dungeon we're currently in
+3f/459d/: |
+    ld a,c
+    nop
+    nop
+
+############################################################
+#   INVENTORY DISPLAY DATA
+############################################################
+# Change treasure display data for trade items
+# displaydata_addr = 0x6da1 + (TREASURE_ID * 7)  => treasureDisplayData
+# Write treasure ID + display info
+3f/6ff4/: db $55,$c0,$00,$c1,$00,$ff,$09  # Cuccodex (#55)
+3f/6ffb/: db $56,$c2,$03,$c2,$23,$ff,$0a  # Lon Lon Egg (#56)
+3f/7002/: db $57,$c3,$00,$c4,$00,$ff,$0b  # Ghastly Doll (#57)
+3f/6f14/: db $35,$c5,$04,$c6,$04,$ff,$0c  # Iron Pot (#35)
+3f/6f29/: db $38,$da,$05,$db,$05,$ff,$0d  # Lava Soup (#38)
+3f/6f30/: db $39,$c7,$05,$c8,$05,$ff,$0e  # Goron Vase (#39)
+3f/6f37/: db $3a,$c9,$01,$ca,$01,$ff,$0f  # Fish (#3A)
+3f/6f3e/: db $3b,$d0,$01,$d1,$01,$ff,$10  # Megaphone (#3B)
+3f/6f45/: db $3c,$d2,$05,$d3,$05,$ff,$11  # Mushroom (#3C)
+3f/6f4c/: db $3d,$d4,$03,$d5,$03,$ff,$12  # Wooden Bird (#3D)
+3f/6f53/: db $3e,$d6,$01,$d7,$01,$ff,$13  # Engine Grease (#3E)
+3f/6f5a/: db $3f,$d8,$00,$d9,$00,$ff,$14  # Phonograph (#3F)
+3f/6ea4/: db $25,$ee,$01,$ef,$01,$ff,$49  # Pirate's Bell (#25)
+
+############################################################
+#   TREASURE ID REFERENCES
+############################################################
+
+# Change trade sequence NPC checks to look for the new treasure IDs
+0b/50c6/: db $df,TREASURE_CUCCODEX       # Cuccodex (#55)
+05/68e0/: db TREASURE_LON_LON_EGG        # Lon Lon Egg (#56)
+0b/504a/: db $df,TREASURE_GHASTLY_DOLL   # Ghastly Doll (#57)
+0b/6552/: db $df,TREASURE_IRON_POT       # Iron Pot (#35)
+0b/6192/: db $df,TREASURE_LAVA_SOUP      # Lava Soup (#38)
+0b/6332/: db $df,TREASURE_GORON_VASE     # Goron Vase (#39)
+0b/5230/: db $df,TREASURE_FISH           # Fish (#3A)
+0b/6087/: db $df,TREASURE_MEGAPHONE      # Megaphone (#3B)
+0b/5f26/: db $df,TREASURE_MUSHROOM       # Mushroom (#3C)
+0b/51fd/: db $df,TREASURE_WOODEN_BIRD    # Wooden Bird (#3D)
+0b/63b9/: db $df,TREASURE_ENGINE_GREASE  # Engine Grease (#3E)
+0b/6519/: db $df,TREASURE_PHONOGRAPH     # Phonograph (#3F)
+
+# Pirate's Bell / Rusty Bell check by Piratian Captain
+08/6c3c/: |
+    ld a,TREASURE_PIRATES_BELL
+    call checkTreasureObtained
+    ld a,$02
+    jr c,@done
+    
+    ld a,TREASURE_RUSTY_BELL
+    call checkTreasureObtained
+    ld a,$01
+    ret nc
+    ; Returning here exploits the face that var3b of the captain's interaction
+    ; defaults to 0, meaning we don't need to overwrite 0 by another 0.
+    ; This enabled saving previous bytes to avoid having to make a new function
+    ; in this bank which is already *packed* with data.
+
+    @done:
+    ld e,$7b
+    ld (de),a
+    ret

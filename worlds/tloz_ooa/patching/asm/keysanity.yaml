@@ -1,0 +1,75 @@
+16//smallKeyObjectsTable: |
+    db $00,$0d,$81,option.smallKeySprite    ; D0 
+    db $00,$01,$82,option.smallKeySprite    ; D1
+    db $00,$02,$83,option.smallKeySprite    ; D2
+    db $00,$03,$84,option.smallKeySprite    ; D3
+    db $00,$04,$85,option.smallKeySprite    ; D4
+    db $00,$05,$86,option.smallKeySprite    ; D5
+    db $00,$06,$87,option.smallKeySprite    ; D6 Present
+    db $00,$07,$88,option.smallKeySprite    ; D7
+    db $00,$08,$89,option.smallKeySprite    ; D8
+    db $00,$00,$00,$00
+    db $00,$00,$00,$00
+    db $00,$00,$00,$00
+    db $00,$0c,$8a,option.smallKeySprite    ; D6 Past
+16/53f3/: dw smallKeyObjectsTable
+
+16//bossKeyObjectsTable: |
+    db $00,$00,$00,$00
+    db $00,$01,$8b,$43    ; D1
+    db $00,$02,$8c,$43    ; D2
+    db $00,$03,$8d,$43    ; D3
+    db $00,$04,$8e,$43    ; D4
+    db $00,$05,$8f,$43    ; D5
+    db $00,$06,$90,$43    ; D6
+    db $00,$07,$91,$43    ; D7
+    db $00,$08,$92,$43    ; D8
+16/53f7/: dw bossKeyObjectsTable
+
+16//dungeonMapObjectsTable: |
+    db $00,$00,$00,$00
+    db $00,$01,$93,$40    ; D1
+    db $00,$02,$94,$40    ; D2
+    db $00,$03,$95,$40    ; D3
+    db $00,$04,$96,$40    ; D4
+    db $00,$05,$97,$40    ; D5
+    db $00,$06,$98,$40    ; D6 Present
+    db $00,$07,$99,$40    ; D7
+    db $00,$08,$9a,$40    ; D8
+    db $00,$00,$00,$00
+    db $00,$00,$00,$00
+    db $00,$00,$00,$00
+    db $00,$0c,$9b,$40    ; D6 Past
+16/53ff/: dw dungeonMapObjectsTable
+
+16//compassObjectsTable: |
+    db $00,$00,$00,$00
+    db $00,$01,$9c,$41    ; D1
+    db $00,$02,$9d,$41    ; D2
+    db $00,$03,$9e,$41    ; D3
+    db $00,$04,$9f,$41    ; D4
+    db $00,$05,$a0,$41    ; D5
+    db $00,$06,$a1,$41    ; D6 Present
+    db $00,$07,$a2,$41    ; D7
+    db $00,$08,$a3,$41    ; D8
+    db $00,$00,$00,$00
+    db $00,$00,$00,$00
+    db $00,$00,$00,$00
+    db $00,$0c,$a4,$41    ; D6 Past
+16/53fb/: dw compassObjectsTable
+
+# Change @mode6 (compasses, maps & boss keys) to make it set the bit related
+# to their subid instead of the dungeon we're currently in
+3f/457e/: |
+    nop
+    nop
+    nop
+    nop
+
+# Change @mode7 (small keys) to make it increment the counter related to their
+# subid instead of the dungeon we're currently in
+3f/4597/TEST: |
+    ld a,c
+    nop
+    nop
+

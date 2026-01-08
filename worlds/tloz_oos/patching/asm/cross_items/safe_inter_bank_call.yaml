@@ -1,0 +1,58 @@
+# interBankCall, but doesn't use af. Slower though.
+00//safeInterBankCall: |
+  push af ; argument af
+  
+  ldh a,(hRomBank)
+  push af
+  
+  ld a,e
+  safeInterBankCallReady:
+  ldh (hRomBank),a
+  ld ($2222),a
+  
+  di ; apparently GBC can break if it decides to interrupt during an sp manipulation
+
+  ; sp -> hRomBank
+  inc sp
+  inc sp
+  ; sp -> argument af
+  
+  pop af ; argument af
+  
+  ; sp -> pre-call state
+  dec sp
+  dec sp
+  ; sp -> empty
+  dec sp
+  dec sp
+  ; sp -> hRomBank
+  
+  ei
+  
+  call $00a0 ; jpHl
+  
+  di
+  
+  ; sp -> hRomBank
+  inc sp
+  inc sp
+  ; sp -> empty
+  inc sp
+  inc sp
+  ; sp -> pre-call state
+  
+  push af ; return af
+  
+  ; sp -> return af
+  dec sp
+  dec sp
+  ; sp -> hRomBank
+  
+  ei
+  
+  pop af
+  ldh (hRomBank),a
+  ld ($2222),a
+  
+  pop af ; return af value
+  ret

@@ -1,0 +1,10 @@
+{
+  // Bonus minigame type enum.
+  "MinigameType": {
+    "NoGame": 1,           // Automatically assigned value
+    "BonusBarrel": 2,       // Automatically assigned value
+    "HelmBarrelFirst": 3,   // Automatically assigned value
+    "HelmBarrelSecond": 4,  // Automatically assigned value
+    "TrainingBarrel": 5     // Automatically assigned value
+  }
+}

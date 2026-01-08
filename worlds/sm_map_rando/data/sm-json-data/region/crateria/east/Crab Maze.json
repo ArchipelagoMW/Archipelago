@@ -1,0 +1,658 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 36,
+  "name": "Crab Maze",
+  "area": "Crateria",
+  "subarea": "East",
+  "roomAddress": "0x7957D",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1],
+    [1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018a96",
+      "doorOrientation": "up",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 2],
+        [1, 1, 1, 2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018aae",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [2, 2, 1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Crab Maze Middle Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 2, 2, 1],
+        [1, 1, 2, 1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Crab Maze Top Right Sciser",
+      "enemyName": "Sciser",
+      "quantity": 1,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Crab Maze Bottom Left Scisers",
+      "enemyName": "Sciser",
+      "quantity": 3,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e3",
+      "groupName": "Crab Maze Top Left Scisers",
+      "enemyName": "Sciser",
+      "quantity": 4,
+      "homeNodes": [3]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Sciser Ice Clip Door Lock Skip",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}},
+        {"or": [
+          "h_XRayMorphIceClip",
+          "h_preciseIceClip"
+        ]}
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Shoot a Super as a Sciser crawls near the top door, then freeze it mid-air and use it to clip up past the door shell.",
+        "If you don't have Morph and X-Ray, you must shoot the Super while the Sciser is on the slope near the door, not on the door itself.",
+        "Because of the shot firing rate, it can help to crouch and shoot the Super to the side to give it a bit more time to knock the crab off."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [1, 1],
+      "name": "Sciser High Pixel Ice Clip Door Lock Skip",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}},
+        "h_highPixelIceClip"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Shoot a Super as a Sciser crawls near the top door, then freeze it mid-air and use it to clip up past the door shell.",
+        "This requires knocking off the Sciser frame-pefrectly, then freezing it frame-perfectly in position.",
+        "The Super should knock off the crab when it is barely centered on the slope, 2 pixels away from the edge of the doorframe.",
+        "Because of the shot firing rate, it can help to crouch and shoot the Super to the side to give it a bit more time to knock the crab off."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [1, 1],
+      "name": "Sciser Farm (One Sciser)",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"cycleFrames": 1080}
+      ],
+      "farmCycleDrops": [{"enemy": "Sciser", "count": 1}]
+    },
+    {
+      "id": 27,
+      "link": [1, 1],
+      "name": "Sciser Farm (Full Clear)",
+      "requires": [
+        "Morph",
+        {"resetRoom": {"nodes": [1]}},
+        {"cycleFrames": 2700},
+        {"or": [
+          "Gravity",
+          {"cycleFrames": 700}
+        ]},
+        {"or": [
+          "Wave",
+          "Spazer",
+          "Plasma",
+          "canUseGrapple",
+          {"and": [
+            "Ice",
+            {"cycleFrames": 560}
+          ]},
+          {"cycleFrames": 1550}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Sciser", "count": 8}]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Door Frame Below",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithDoorFrameBelow": {
+          "height": 2
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Platform Below",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithPlatformBelow": {
+          "height": 6,
+          "leftPosition": -2.5,
+          "rightPosition": 2.5
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Frozen Sciser",
+      "requires": [
+        "Morph",
+        "canCameraManip",
+        "canUpwardGModeSetup",
+        "canTrickyUseFrozenEnemies",
+        "canBeVeryPatient"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "The nearby Global crab can be used to exit on the left side of the door.",
+        "Exiting on the right will require travelling the Morph maze to find a local crab or two from the far left side of the room.",
+        "Without Spring Ball, freeze the crab as low as possible to where Samus can still spin jump onto it.",
+        "land on the edge of it, X-Ray turnaround or crouch, then press forward when it is about to thaw to trigger the transition."
+      ],
+      "devNote": [
+        "Global Crab (left side) takes 40 seconds, local crab (Right side) is 140. Finding two left side crabs to use together is faster.",
+        "FIXME: Adding a variant that can only be done on the left side of the door would remove many of these requirements."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Carry G-Mode Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Carry G-Mode Morph Back Up",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "h_artificialMorphMovement"
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": true
+        }
+      },
+      "bypassesDoorShell": "free",
+      "flashSuitChecked": true
+    },
+    {
+      "id": 23,
+      "link": [1, 1],
+      "name": "G-Mode Ice Clip, Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canTrickyGMode",
+        "h_preciseIceClip",
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Wait for a crab to come to this door and shoot a Super to knock it off, then quickly freeze it at the right height and use it to clip up past the door shell.",
+        "Knock the crab while it is on the sloped tiles near the top door, not on the door itself, otherwise it will never be in the correct height.",
+        "Because of the shot firing rate, it can help to crouch and shoot the Super to the side to give it a bit more time to knock the crab off."
+      ],
+      "devNote": "This is only for indirect G-Mode, because it is trivial while in direct, and would use a different strat."
+    },
+    {
+      "id": 10,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 3],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphSpringBall",
+          {"and": [
+            "h_artificialMorphBombThings",
+            "Gravity"
+          ]},
+          "h_artificialMorphIBJ"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Without Springball or Gravity, it is possible to overload PLMs with the crumble blocks with bombs.",
+        "Take the first left above the waterline. Place bombs in the single tile nook on the left."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [1, 3],
+      "name": "G-Mode Morph, Crab Boost",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "Gravity",
+        "canBePatient",
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 1}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Wait for the global crab to traverse the room and boost Samus up the ledge.",
+        "It takes just over a minute for the crab to get there."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "G-Mode Morph, Overload PLMs, Through the Crumble Block",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump",
+            "h_artificialMorphBombs"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs by placing Bombs at the far right, against the bottom of the crumble block, at the right of the low underwater ceiling.",
+        "To safely bomb the fast crab, wait just left of where it falls."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "G-Mode Morph, Crab Boost",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_artificialMorphSpringBall",
+        "h_artificialMorphBombs",
+        "canUseIFrames",
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Sciser", "type": "contact", "hits": 2}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs by placing Bombs at the far right, against the bottom of the crumble block, at the right of the low underwater ceiling.",
+        "It is okay to kill the fast crab, and leave another crab alive, off camera.",
+        "After PLMs are overloaded, lure a crab and take a hit when it is near the bottom right corner then another at the top of Samus' jump at the crumble block to boost to the right.",
+        "This requires carefully timing the first hit and jump so that Samus can get hit at the peak of her jump."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "G-Mode Morph Ice Clip, Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canBeVeryPatient",
+        "canTrickyGMode",
+        "h_artificialMorphBombs",
+        {"or": [
+          {"and": [
+            "Morph",
+            {"or": [
+              "HiJump",
+              "canSpringBallJumpMidAir",
+              "canSunkenTileWideWallClimb"
+            ]}
+          ]},
+          {"and": [
+            "Gravity",
+            "h_artificialMorphIBJ"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump"
+          ]}
+        ]},
+        "h_preciseIceClip",
+        {"ammo": {"type": "Super", "count": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithGMode": {
+          "morphed": false
+        }
+      },
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs by placing Bombs at the far right, against the bottom of the crumble block, at the right of the low underwater ceiling.",
+        "With artificial morph, safely bomb the fast crab by waiting just left of where it falls.",
+        "Lure a crab to the top door or wait for the global crab to come back around, which can take up to 2.5 minutes.",
+        "Shoot a Super to knock the crab off, then quickly freeze it at the right height and use it to clip up past the door shell.",
+        "Knock it off while it is on the sloped tiles near the top door, not on the door itself, otherwise it will never be in the correct height.",
+        "Because of the shot firing rate, it can help to crouch and shoot the Super to the side to give it a bit more time to knock the crab off."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 0,
+          "steepUpTiles": 1
+        }
+      },
+      "devNote": "Because the next tile is a slope into the water, it behaves like no open end."
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "Leave with Runway, With Gravity",
+      "requires": [
+        "Gravity"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 29,
+          "openEnd": 0,
+          "steepUpTiles": 5,
+          "steepDownTiles": 1
+        }
+      }
+    },
+    {
+      "id": 15,
+      "link": [2, 2],
+      "name": "Leave with Spark (Water Shinecharge)",
+      "requires": [
+        "canWaterShineCharge",
+        {"canShineCharge": {"usedTiles": 20, "openEnd": 1}},
+        {"or": [
+          {"shinespark": {"frames": 53}},
+          {"and": [
+            "canShinechargeMovementComplex",
+            {"shinespark": {"frames": 30}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      }
+    },
+    {
+      "id": 25,
+      "link": [2, 2],
+      "name": "Leave Shinecharged (Precise Stutter Shinecharge)",
+      "requires": [
+        "canPreciseStutterWaterShineCharge",
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shineChargeFrames": 155},
+        {"or": [
+          "canBeVeryPatient",
+          {"shineChargeFrames": 15}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "note": [
+        "The ideal setup begins by standing 5 tiles away from the water, at the top of the slope.",
+        "Run toward the water, releasing forward for 5 frames before re-pressing it on the last possible frame before entering the water.",
+        "Other positions and timings can work but will gain the shinecharge further from the door."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "canWaterShineCharge",
+        {"canShineCharge": {"usedTiles": 20, "openEnd": 1}},
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround",
+        "can4HighMidAirMorph"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "Sciser Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"cycleFrames": 270},
+        {"or": [
+          "Gravity",
+          {"cycleFrames": 270}
+        ]},
+        {"or": [
+          "Grapple",
+          {"and": [
+            "Wave",
+            {"cycleFrames": 50}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 50}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 80}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 150}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            {"cycleFrames": 180}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 270}
+          ]},
+          {"cycleFrames": 420}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Sciser", "count": 3}]
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Getting hit by Sciser",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 19,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canCarefulJump",
+          "canUseFrozenEnemies",
+          "SpaceJump",
+          {"and": [
+            "Gravity",
+            {"or": [
+              "HiJump",
+              "canWalljump",
+              "h_crouchJumpDownGrab",
+              "canIBJ",
+              "canSpringBallJumpMidAir"
+            ]}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 20,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 21,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    }
+  ],
+  "notables": [],
+  "nextStratId": 30,
+  "nextNotableId": 1
+}

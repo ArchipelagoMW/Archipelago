@@ -1,0 +1,148 @@
+# allow ring list to be accessed through the ring box icon.
+02//openRingList: |
+    ld a,(wInventorySubmenu1CursorPos)
+    cp $0f
+    ret nz
+    ld a,$81
+    ld (wRingMenu_mode),a
+    ld a,$04
+    call openMenu
+    pop hl
+    ret
+
+# auto-equip rings when selected in ring list.
+02//autoEquipRing: |
+    call $716c   ; _ringMenu_updateSelectedRingFromList
+    ld (wActiveRing),a
+    ret
+
+# don't save gfx when opening ring list from subscreen (they were already
+# saved when opening the item menu), and clear screen scroll variables (which
+# are saved anyway).
+02//ringListGfxFix: |
+    call setMusicVolume
+    ld a,(wRingMenu_mode)
+    bit 7,a
+    ret z
+    and $7f
+    ld (wRingMenu_mode),a
+    xor a
+    ldh ($a8),a    ; hCameraY
+    ldh ($aa),a    ; hCameraX
+    ld hl,wScreenOffsetY
+    ldi (hl),a
+    ldi (hl),a
+    jp $5072       ; clearMenu
+
+# put obtained rings directly into ring list (no need for appraisal), and
+# tell the player what type of ring it is.
+3f//autoAppraiseRing: |
+    ld hl,wRingsObtained
+    ld a,c
+    and $3f
+    call setFlag
+    ld a,c
+    add a,$40
+    ld ($cbb1),a    ; part of wTextSubstitutions
+    ld bc,$301c
+    call showText
+    ret
+
+# blaino normally unequips rings by setting bit 6, which turns the friendship
+# ring into the dev ring. don't do that.
+00/2376/: ld (hl),$ff
+
+02/5035/: call ringListGfxFix
+02/56a1/: call openRingList
+02/6f4a/: call autoEquipRing
+3f/461a/: |
+    nop
+    jp autoAppraiseRing
+
+# use expert's or fist ring with only one button unequipped.
+06/490e/: nop
+
+# remove regular text box when getting a ring from a gasha nut so that the
+# auto-appraisal text can display instead.
+0a//removeGashaNutRingText: |
+    ld a,c
+    cp $04
+    jp nz,showText
+    pop hl
+    ret
+0a/4863/: jp removeGashaNutRingText
+
+# skip forced ring appraisal and ring list with vasu (prevents softlock).
+0b/4a2b/: dw $394a
+
+# inject a new ring object data providing one subid per ring type to TREASURE_RING
+15//ringsObjectData: |
+    db $09,$ff,$ff,$0e
+    db $29,$ff,$ff,$0e
+    db $49,$ff,$ff,$0e
+    db $59,$ff,$ff,$0e
+    db $38,$00,$ff,$0e
+    db $38,$01,$ff,$0e
+    db $38,$02,$ff,$0e
+    db $38,$03,$ff,$0e
+    db $38,$04,$ff,$0e
+    db $38,$05,$ff,$0e
+    db $38,$06,$ff,$0e
+    db $38,$07,$ff,$0e
+    db $38,$08,$ff,$0e
+    db $38,$09,$ff,$0e
+    db $38,$0a,$ff,$0e
+    db $38,$0b,$ff,$0e
+    db $38,$0c,$ff,$0e
+    db $38,$0d,$ff,$0e
+    db $38,$0e,$ff,$0e
+    db $38,$0f,$ff,$0e
+    db $38,$10,$ff,$0e
+    db $38,$11,$ff,$0e
+    db $38,$12,$ff,$0e
+    db $38,$13,$ff,$0e
+    db $38,$14,$ff,$0e
+    db $38,$15,$ff,$0e
+    db $38,$16,$ff,$0e
+    db $38,$17,$ff,$0e
+    db $38,$18,$ff,$0e
+    db $38,$19,$ff,$0e
+    db $38,$1a,$ff,$0e
+    db $38,$1b,$ff,$0e
+    db $38,$1c,$ff,$0e
+    db $38,$1d,$ff,$0e
+    db $38,$1e,$ff,$0e
+    db $38,$1f,$ff,$0e
+    db $38,$20,$ff,$0e
+    db $38,$21,$ff,$0e
+    db $38,$22,$ff,$0e
+    db $38,$23,$ff,$0e
+    db $38,$24,$ff,$0e
+    db $38,$25,$ff,$0e
+    db $38,$26,$ff,$0e
+    db $38,$27,$ff,$0e
+    db $38,$28,$ff,$0e
+    db $38,$29,$ff,$0e
+    db $38,$2a,$ff,$0e
+    db $38,$2b,$ff,$0e
+    db $38,$2c,$ff,$0e
+    db $38,$2d,$ff,$0e
+    db $38,$2e,$ff,$0e
+    db $38,$2f,$ff,$0e
+    db $38,$30,$ff,$0e
+    db $38,$31,$ff,$0e
+    db $38,$32,$ff,$0e
+    db $38,$33,$ff,$0e
+    db $38,$34,$ff,$0e
+    db $38,$35,$ff,$0e
+    db $38,$36,$ff,$0e
+    db $38,$37,$ff,$0e
+    db $38,$38,$ff,$0e
+    db $38,$39,$ff,$0e
+    db $38,$3a,$ff,$0e
+    db $38,$3b,$ff,$0e
+    db $38,$3c,$ff,$0e
+    db $38,$3d,$ff,$0e
+    db $38,$3e,$ff,$0e
+    db $38,$3f,$ff,$0e
+15/51de/: dw ringsObjectData

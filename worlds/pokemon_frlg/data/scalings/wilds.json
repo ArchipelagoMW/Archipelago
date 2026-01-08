@@ -1,0 +1,1799 @@
+{
+  "WILD_SCALING_ROUTE1/LAND_ENCOUNTERS": {
+    "region": "Route 1 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 1 Land Scaling": [
+        "MAP_ROUTE1"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE22/LAND_ENCOUNTERS": {
+    "region": "Route 22 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 22 Land Scaling": [
+        "MAP_ROUTE22"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE2/LAND_ENCOUNTERS": {
+    "region": "Route 2 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 2 Land Scaling": [
+        "MAP_ROUTE2"
+      ]
+    }
+  },
+  "WILD_SCALING_VIRIDIAN_FOREST/LAND_ENCOUNTERS": {
+    "region": "Viridian Forest (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Viridian Forest Land Scaling": [
+        "MAP_VIRIDIAN_FOREST"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE3/LAND_ENCOUNTERS": {
+    "region": "Route 3 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 3 Land Scaling": [
+        "MAP_ROUTE3"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_MOON_1F/LAND_ENCOUNTERS": {
+    "region": "Mt. Moon 1F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Moon 1F Land Scaling": [
+        "MAP_MT_MOON_1F"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_MOON_B1F/LAND_ENCOUNTERS": {
+    "region": "Mt. Moon B1F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Moon B1F Land Scaling": [
+        "MAP_MT_MOON_B1F"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_MOON_B2F/LAND_ENCOUNTERS": {
+    "region": "Mt. Moon B2F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Moon B2F Land Scaling": [
+        "MAP_MT_MOON_B2F"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE4/LAND_ENCOUNTERS": {
+    "region": "Route 4 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 4 Land Scaling": [
+        "MAP_ROUTE4"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE24/LAND_ENCOUNTERS": {
+    "region": "Route 24 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 24 Land Scaling": [
+        "MAP_ROUTE24"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE25/LAND_ENCOUNTERS": {
+    "region": "Route 25 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 25 Land Scaling": [
+        "MAP_ROUTE25"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE5/LAND_ENCOUNTERS": {
+    "region": "Route 5 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 5 Land Scaling": [
+        "MAP_ROUTE5"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE6/LAND_ENCOUNTERS": {
+    "region": "Route 6 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 6 Land Scaling": [
+        "MAP_ROUTE6"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE11/LAND_ENCOUNTERS": {
+    "region": "Route 11 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 11 Land Scaling": [
+        "MAP_ROUTE11"
+      ]
+    }
+  },
+  "WILD_SCALING_DIGLETTS_CAVE_B1F/LAND_ENCOUNTERS": {
+    "region": "Diglett's Cave B1F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Diglett's Cave B1F Land Scaling": [
+        "MAP_DIGLETTS_CAVE_B1F"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE9/LAND_ENCOUNTERS": {
+    "region": "Route 9 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 9 Land Scaling": [
+        "MAP_ROUTE9"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE10/LAND_ENCOUNTERS": {
+    "region": "Route 10 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 10 Land Scaling": [
+        "MAP_ROUTE10"
+      ]
+    }
+  },
+  "WILD_SCALING_ROCK_TUNNEL_1F/LAND_ENCOUNTERS": {
+    "region": "Rock Tunnel 1F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Rock Tunnel 1F Land Scaling": [
+        "MAP_ROCK_TUNNEL_1F"
+      ]
+    }
+  },
+  "WILD_SCALING_ROCK_TUNNEL_B1F/LAND_ENCOUNTERS": {
+    "region": "Rock Tunnel B1F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Rock Tunnel B1F Land Scaling": [
+        "MAP_ROCK_TUNNEL_B1F"
+      ]
+    }
+  },
+  "WILD_SCALING_POWER_PLANT/LAND_ENCOUNTERS": {
+    "region": "Power Plant (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Power Plant Land Scaling": [
+        "MAP_POWER_PLANT"
+      ]
+    }
+  },
+  "WILD_SCALING_POKEMON_TOWER_3F/LAND_ENCOUNTERS": {
+    "region": "Pokemon Tower 3F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Pokemon Tower 3F Land Scaling": [
+        "MAP_POKEMON_TOWER_3F"
+      ]
+    }
+  },
+  "WILD_SCALING_POKEMON_TOWER_4F/LAND_ENCOUNTERS": {
+    "region": "Pokemon Tower 4F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Pokemon Tower 4F Land Scaling": [
+        "MAP_POKEMON_TOWER_4F"
+      ]
+    }
+  },
+  "WILD_SCALING_POKEMON_TOWER_5F/LAND_ENCOUNTERS": {
+    "region": "Pokemon Tower 5F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Pokemon Tower 5F Land Scaling": [
+        "MAP_POKEMON_TOWER_5F"
+      ]
+    }
+  },
+  "WILD_SCALING_POKEMON_TOWER_6F/LAND_ENCOUNTERS": {
+    "region": "Pokemon Tower 6F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Pokemon Tower 6F Land Scaling": [
+        "MAP_POKEMON_TOWER_6F"
+      ]
+    }
+  },
+  "WILD_SCALING_POKEMON_TOWER_7F/LAND_ENCOUNTERS": {
+    "region": "Pokemon Tower 7F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Pokemon Tower 7F Land Scaling": [
+        "MAP_POKEMON_TOWER_7F"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE8/LAND_ENCOUNTERS": {
+    "region": "Route 8 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 8 Land Scaling": [
+        "MAP_ROUTE8"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE7/LAND_ENCOUNTERS": {
+    "region": "Route 7 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 7 Land Scaling": [
+        "MAP_ROUTE7"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE12/LAND_ENCOUNTERS": {
+    "region": "Route 12 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 12 Land Scaling": [
+        "MAP_ROUTE12"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE13/LAND_ENCOUNTERS": {
+    "region": "Route 13 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 13 Land Scaling": [
+        "MAP_ROUTE13"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE14/LAND_ENCOUNTERS": {
+    "region": "Route 14 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 14 Land Scaling": [
+        "MAP_ROUTE14"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE15/LAND_ENCOUNTERS": {
+    "region": "Route 15 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 15 Land Scaling": [
+        "MAP_ROUTE15"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE16/LAND_ENCOUNTERS": {
+    "region": "Route 16 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 16 Land Scaling": [
+        "MAP_ROUTE16"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE17/LAND_ENCOUNTERS": {
+    "region": "Route 17 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 17 Land Scaling": [
+        "MAP_ROUTE17"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE18/LAND_ENCOUNTERS": {
+    "region": "Route 18 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 18 Land Scaling": [
+        "MAP_ROUTE18"
+      ]
+    }
+  },
+  "WILD_SCALING_SAFARI_ZONE_CENTER/LAND_ENCOUNTERS": {
+    "region": "Safari Zone Center Area (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Safari Zone Center Area Land Scaling": [
+        "MAP_SAFARI_ZONE_CENTER"
+      ]
+    }
+  },
+  "WILD_SCALING_SAFARI_ZONE_EAST/LAND_ENCOUNTERS": {
+    "region": "Safari Zone East Area (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Safari Zone East Area Land Scaling": [
+        "MAP_SAFARI_ZONE_EAST"
+      ]
+    }
+  },
+  "WILD_SCALING_SAFARI_ZONE_NORTH/LAND_ENCOUNTERS": {
+    "region": "Safari Zone North Area (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Safari Zone North Area Land Scaling": [
+        "MAP_SAFARI_ZONE_NORTH"
+      ]
+    }
+  },
+  "WILD_SCALING_SAFARI_ZONE_WEST/LAND_ENCOUNTERS": {
+    "region": "Safari Zone West Area (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Safari Zone West Area Land Scaling": [
+        "MAP_SAFARI_ZONE_WEST"
+      ]
+    }
+  },
+  "WILD_SCALING_SEAFOAM_ISLANDS_1F/LAND_ENCOUNTERS": {
+    "region": "Seafoam Islands 1F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Seafoam Islands 1F Land Scaling": [
+        "MAP_SEAFOAM_ISLANDS_1F"
+      ]
+    }
+  },
+  "WILD_SCALING_SEAFOAM_ISLANDS_B1F/LAND_ENCOUNTERS": {
+    "region": "Seafoam Islands B1F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Seafoam Islands B1F Land Scaling": [
+        "MAP_SEAFOAM_ISLANDS_B1F"
+      ]
+    }
+  },
+  "WILD_SCALING_SEAFOAM_ISLANDS_B2F/LAND_ENCOUNTERS": {
+    "region": "Seafoam Islands B2F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Seafoam Islands B2F Land Scaling": [
+        "MAP_SEAFOAM_ISLANDS_B2F"
+      ]
+    }
+  },
+  "WILD_SCALING_SEAFOAM_ISLANDS_B3F/LAND_ENCOUNTERS": {
+    "region": "Seafoam Islands B3F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Seafoam Islands B3F Land Scaling": [
+        "MAP_SEAFOAM_ISLANDS_B3F"
+      ]
+    }
+  },
+  "WILD_SCALING_SEAFOAM_ISLANDS_B4F/LAND_ENCOUNTERS": {
+    "region": "Seafoam Islands B4F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Seafoam Islands B4F Land Scaling": [
+        "MAP_SEAFOAM_ISLANDS_B4F"
+      ]
+    }
+  },
+  "WILD_SCALING_POKEMON_MANSION_1F/LAND_ENCOUNTERS": {
+    "region": "Pokemon Mansion 1F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Pokemon Mansion 1F Land Scaling": [
+        "MAP_POKEMON_MANSION_1F"
+      ]
+    }
+  },
+  "WILD_SCALING_POKEMON_MANSION_2F/LAND_ENCOUNTERS": {
+    "region": "Pokemon Mansion 2F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Pokemon Mansion 2F Land Scaling": [
+        "MAP_POKEMON_MANSION_2F"
+      ]
+    }
+  },
+  "WILD_SCALING_POKEMON_MANSION_3F/LAND_ENCOUNTERS": {
+    "region": "Pokemon Mansion 3F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Pokemon Mansion 3F Land Scaling": [
+        "MAP_POKEMON_MANSION_3F"
+      ]
+    }
+  },
+  "WILD_SCALING_POKEMON_MANSION_B1F/LAND_ENCOUNTERS": {
+    "region": "Pokemon Mansion B1F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Pokemon Mansion B1F Land Scaling": [
+        "MAP_POKEMON_MANSION_B1F"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE21/LAND_ENCOUNTERS": {
+    "region": "Route 21 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 21 Land Scaling": [
+        "MAP_ROUTE21_NORTH",
+        "MAP_ROUTE21_SOUTH"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE23/LAND_ENCOUNTERS": {
+    "region": "Route 23 (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 23 Land Scaling": [
+        "MAP_ROUTE23"
+      ]
+    }
+  },
+  "WILD_SCALING_VICTORY_ROAD_1F/SOUTH": {
+    "region": "Victory Road 1F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Victory Road 1F Land Scaling": [
+        "MAP_VICTORY_ROAD_1F"
+      ]
+    }
+  },
+  "WILD_SCALING_VICTORY_ROAD_2F/SOUTH": {
+    "region": "Victory Road 2F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Victory Road 2F Land Scaling": [
+        "MAP_VICTORY_ROAD_2F"
+      ]
+    }
+  },
+  "WILD_SCALING_VICTORY_ROAD_3F/SOUTH": {
+    "region": "Victory Road 3F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Victory Road 3F Land Scaling": [
+        "MAP_VICTORY_ROAD_3F"
+      ]
+    }
+  },
+  "WILD_SCALING_CERULEAN_CAVE_1F/LAND_ENCOUNTERS": {
+    "region": "Cerulean Cave 1F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Cerulean Cave 1F Land Scaling": [
+        "MAP_CERULEAN_CAVE_1F"
+      ]
+    }
+  },
+  "WILD_SCALING_CERULEAN_CAVE_2F/LAND_ENCOUNTERS": {
+    "region": "Cerulean Cave 2F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Cerulean Cave 2F Land Scaling": [
+        "MAP_CERULEAN_CAVE_2F"
+      ]
+    }
+  },
+  "WILD_SCALING_CERULEAN_CAVE_B1F/LAND_ENCOUNTERS": {
+    "region": "Cerulean Cave B1F (Land Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Cerulean Cave B1F Land Scaling": [
+        "MAP_CERULEAN_CAVE_B1F"
+      ]
+    }
+  },
+  "WILD_SCALING_PALLET_TOWN_CINNABAR_ISLAND_ROUTE19-20-21/WATER_ENCOUNTERS": {
+    "region": "Pallet/Cinnabar/Rt 19,20,21 (Water Encounters)",
+    "kanto": true,
+    "connections": [
+      "Pallet Town (Water Encounters)",
+      "Cinnabar Island (Water Encounters)",
+      "Route 19 (Water Encounters)",
+      "Route 20 (Water Encounters)",
+      "Route 21 (Water Encounters)"
+    ],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Pallet/Cinnabar/Rt 19,20,21 Water Scaling": [
+        "MAP_PALLET_TOWN",
+        "MAP_CINNABAR_ISLAND",
+        "MAP_ROUTE19",
+        "MAP_ROUTE20",
+        "MAP_ROUTE21_NORTH",
+        "MAP_ROUTE21_SOUTH"
+      ]
+    }
+  },
+  "WILD_SCALING_VIRIDIAN_CITY_ROUTE22/WATER_ENCOUNTERS": {
+    "region": "Viridian/Rt 22 (Water Encounters)",
+    "kanto": true,
+    "connections": [
+      "Viridian City (Water Encounters)",
+      "Route 22 (Water Encounters)"
+    ],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Viridian/Rt 22 Water Scaling": [
+        "MAP_VIRIDIAN_CITY",
+        "MAP_ROUTE22"
+      ]
+    }
+  },
+  "WILD_SCALING_CERULEAN_CITY_ROUTE4-24/WATER_ENCOUNTERS": {
+    "region": "Cerulean/Rt 4,24 (Water Encounters)",
+    "kanto": true,
+    "connections": [
+      "Cerulean City (Water Encounters)",
+      "Route 4 (Water Encounters)",
+      "Route 24 (Water Encounters)"
+    ],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Cerulean/Rt 4,24 Water Scaling": [
+        "MAP_CERULEAN_CITY",
+        "MAP_ROUTE4",
+        "MAP_ROUTE24"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE25/WATER_ENCOUNTERS": {
+    "region": "Route 25 (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 25 Water Scaling": [
+        "MAP_ROUTE25"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE6/WATER_ENCOUNTERS": {
+    "region": "Route 6 (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 6 Water Scaling": [
+        "MAP_ROUTE6"
+      ]
+    }
+  },
+  "WILD_SCALING_VERMILION_CITY_ROUTE_11/WATER_ENCOUNTERS": {
+    "region": "Vermilion/Rt 11 (Water Encounters)",
+    "kanto": true,
+    "connections": [
+      "Vermilion City (Water Encounters)",
+      "Route 11 (Water Encounters)"
+    ],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Vermilion/Rt 11 Water Scaling": [
+        "MAP_VERMILION_CITY",
+        "MAP_ROUTE11"
+      ]
+    }
+  },
+  "WILD_SCALING_SSANNE_EXTERIOR/WATER_ENCOUNTERS": {
+    "region": "S.S. Anne Exterior (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "S.S. Anne Exterior Water Scaling": [
+        "MAP_SSANNE_EXTERIOR"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE10/WATER_ENCOUNTERS": {
+    "region": "Route 10 (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 10 Water Scaling": [
+        "MAP_ROUTE10"
+      ]
+    }
+  },
+  "WILD_SCALING_CELADON_CITY/WATER_ENCOUNTERS": {
+    "region": "Celadon City (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Celadon City Water Scaling": [
+        "MAP_CELADON_CITY"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE_12-13/WATER_ENCOUNTERS": {
+    "region": "Rt 12,13 (Water Encounters)",
+    "kanto": true,
+    "connections": [
+      "Route 12 (Water Encounters)",
+      "Route 13 (Water Encounters)"
+    ],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Rt 12,13 Water Scaling": [
+        "MAP_ROUTE12",
+        "MAP_ROUTE13"
+      ]
+    }
+  },
+  "WILD_SCALING_FUCHSIA_CITY/WATER_ENCOUNTERS": {
+    "region": "Fuchsia City (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Fuchsia City Water Scaling": [
+        "MAP_FUCHSIA_CITY"
+      ]
+    }
+  },
+  "WILD_SCALING_SAFARI_ZONE_CENTER/WATER_ENCOUNTERS": {
+    "region": "Safari Zone Center Area (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Safari Zone Center Area Water Scaling": [
+        "MAP_SAFARI_ZONE_CENTER"
+      ]
+    }
+  },
+  "WILD_SCALING_SAFARI_ZONE_EAST/WATER_ENCOUNTERS": {
+    "region": "Safari Zone East Area (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Safari Zone East Area Water Scaling": [
+        "MAP_SAFARI_ZONE_EAST"
+      ]
+    }
+  },
+  "WILD_SCALING_SAFARI_ZONE_NORTH/WATER_ENCOUNTERS": {
+    "region": "Safari Zone North Area (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Safari Zone North Area Water Scaling": [
+        "MAP_SAFARI_ZONE_NORTH"
+      ]
+    }
+  },
+  "WILD_SCALING_SAFARI_ZONE_WEST/WATER_ENCOUNTERS": {
+    "region": "Safari Zone West Area (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Safari Zone West Area Water Scaling": [
+        "MAP_SAFARI_ZONE_WEST"
+      ]
+    }
+  },
+  "WILD_SCALING_SEAFOAM_ISLANDS_B3F/WATER_ENCOUNTERS": {
+    "region": "Seafoam Islands B3F (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Seafoam Islands B3F Water Scaling": [
+        "MAP_SEAFOAM_ISLANDS_B3F"
+      ]
+    }
+  },
+  "WILD_SCALING_SEAFOAM_ISLANDS_B4F/WATER_ENCOUNTERS": {
+    "region": "Seafoam Islands B4F (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Seafoam Islands B4F Water Scaling": [
+        "MAP_SEAFOAM_ISLANDS_B4F"
+      ]
+    }
+  },
+  "WILD_SCALING_ROUTE23/WATER_ENCOUNTERS": {
+    "region": "Route 23 (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Route 23 Water Scaling": [
+        "MAP_ROUTE23"
+      ]
+    }
+  },
+  "WILD_SCALING_CERULEAN_CAVE_1F/WATER_ENCOUNTERS": {
+    "region": "Cerulean Cave 1F (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Cerulean Cave 1F Water Scaling": [
+        "MAP_CERULEAN_CAVE_1F"
+      ]
+    }
+  },
+  "WILD_SCALING_CERULEAN_CAVE_B1F/WATER_ENCOUNTERS": {
+    "region": "Cerulean Cave B1F (Water Encounters)",
+    "kanto": true,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Cerulean Cave B1F Water Scaling": [
+        "MAP_CERULEAN_CAVE_B1F"
+      ]
+    }
+  },
+  "WILD_SCALING_WORLD/FISHING_ENCOUNTERS": {
+    "region": "Fishing Encounters",
+    "kanto": true,
+    "connections": [
+      "Pallet Town (Fishing Encounters)",
+      "Viridian City (Fishing Encounters)",
+      "Cerulean City (Fishing Encounters)",
+      "Vermilion City (Fishing Encounters)",
+      "Celadon City (Fishing Encounters)",
+      "Fuchsia City (Fishing Encounters)",
+      "Cinnabar Island (Fishing Encounters)",
+      "S.S. Anne Exterior (Fishing Encounters)",
+      "Safari Zone Center Area (Fishing Encounters)",
+      "Safari Zone East Area (Fishing Encounters)",
+      "Safari Zone North Area (Fishing Encounters)",
+      "Safari Zone West Area (Fishing Encounters)",
+      "Seafoam Islands B3F (Fishing Encounters)",
+      "Seafoam Islands B4F (Fishing Encounters)",
+      "Cerulean Cave 1F (Fishing Encounters)",
+      "Cerulean Cave B1F (Fishing Encounters)",
+      "Route 4 (Fishing Encounters)",
+      "Route 6 (Fishing Encounters)",
+      "Route 10 (Fishing Encounters)",
+      "Route 11 (Fishing Encounters)",
+      "Route 12 (Fishing Encounters)",
+      "Route 13 (Fishing Encounters)",
+      "Route 19 (Fishing Encounters)",
+      "Route 20 (Fishing Encounters)",
+      "Route 21 (Fishing Encounters)",
+      "Route 22 (Fishing Encounters)",
+      "Route 23 (Fishing Encounters)",
+      "Route 24 (Fishing Encounters)",
+      "Route 25 (Fishing Encounters)",
+      "Berry Forest (Fishing Encounters)",
+      "Icefall Cave Front (Fishing Encounters)",
+      "Icefall Cave Back (Fishing Encounters)",
+      "One Island Town (Fishing Encounters)",
+      "Treasure Beach (Fishing Encounters)",
+      "Kindle Road (Fishing Encounters)",
+      "Cape Brink (Fishing Encounters)",
+      "Bond Bridge (Fishing Encounters)",
+      "Four Island Town (Fishing Encounters)",
+      "Five Island Town (Fishing Encounters)",
+      "Five Isle Meadow (Fishing Encounters)",
+      "Memorial Pillar (Fishing Encounters)",
+      "Water Labyrinth (Fishing Encounters)",
+      "Resort Gorgeous (Fishing Encounters)",
+      "Water Path (Fishing Encounters)",
+      "Ruin Valley (Fishing Encounters)",
+      "Green Path (Fishing Encounters)",
+      "Outcast Island (Fishing Encounters)",
+      "Tanoby Ruins (Fishing Encounters)",
+      "Trainer Tower Exterior (Fishing Encounters)"
+    ],
+    "type": "FISHING",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Fishing Scaling": [
+        "MAP_PALLET_TOWN",
+        "MAP_VIRIDIAN_CITY",
+        "MAP_CERULEAN_CITY",
+        "MAP_VERMILION_CITY",
+        "MAP_CELADON_CITY",
+        "MAP_FUCHSIA_CITY",
+        "MAP_CINNABAR_ISLAND",
+        "MAP_SSANNE_EXTERIOR",
+        "MAP_SAFARI_ZONE_CENTER",
+        "MAP_SAFARI_ZONE_EAST",
+        "MAP_SAFARI_ZONE_NORTH",
+        "MAP_SAFARI_ZONE_WEST",
+        "MAP_SEAFOAM_ISLANDS_B3F",
+        "MAP_SEAFOAM_ISLANDS_B4F",
+        "MAP_CERULEAN_CAVE_1F",
+        "MAP_CERULEAN_CAVE_B1F",
+        "MAP_ROUTE4",
+        "MAP_ROUTE6",
+        "MAP_ROUTE10",
+        "MAP_ROUTE11",
+        "MAP_ROUTE12",
+        "MAP_ROUTE13",
+        "MAP_ROUTE19",
+        "MAP_ROUTE20",
+        "MAP_ROUTE21_NORTH",
+        "MAP_ROUTE21_SOUTH",
+        "MAP_ROUTE22",
+        "MAP_ROUTE23",
+        "MAP_ROUTE24",
+        "MAP_ROUTE25",
+        "MAP_THREE_ISLAND_BERRY_FOREST",
+        "MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE",
+        "MAP_FOUR_ISLAND_ICEFALL_CAVE_BACK",
+        "MAP_ONE_ISLAND",
+        "MAP_ONE_ISLAND_TREASURE_BEACH",
+        "MAP_ONE_ISLAND_KINDLE_ROAD",
+        "MAP_TWO_ISLAND_CAPE_BRINK",
+        "MAP_THREE_ISLAND_BOND_BRIDGE",
+        "MAP_FOUR_ISLAND",
+        "MAP_FIVE_ISLAND",
+        "MAP_FIVE_ISLAND_MEADOW",
+        "MAP_FIVE_ISLAND_MEMORIAL_PILLAR",
+        "MAP_FIVE_ISLAND_WATER_LABYRINTH",
+        "MAP_FIVE_ISLAND_RESORT_GORGEOUS",
+        "MAP_SIX_ISLAND_WATER_PATH",
+        "MAP_SIX_ISLAND_RUIN_VALLEY",
+        "MAP_SIX_ISLAND_GREEN_PATH",
+        "MAP_SIX_ISLAND_OUTCAST_ISLAND",
+        "MAP_SEVEN_ISLAND_TANOBY_RUINS",
+        "MAP_SEVEN_ISLAND_TRAINER_TOWER"
+      ]
+    }
+  },
+  "WILD_SCALING_ONE_ISLAND_TREASURE_BEACH/LAND_ENCOUNTERS": {
+    "region": "Treasure Beach (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Treasure Beach Land Scaling": [
+        "MAP_ONE_ISLAND_TREASURE_BEACH"
+      ]
+    }
+  },
+  "WILD_SCALING_ONE_ISLAND_KINDLE_ROAD/LAND_ENCOUNTERS": {
+    "region": "Kindle Road (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Kindle Road Land Scaling": [
+        "MAP_ONE_ISLAND_KINDLE_ROAD"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_EMBER_EXTERIOR/LAND_ENCOUNTERS": {
+    "region": "Mt. Ember Exterior (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Ember Exterior Land Scaling": [
+        "MAP_MT_EMBER_EXTERIOR"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_EMBER_SUMMIT_PATH_1F/LAND_ENCOUNTERS": {
+    "region": "Mt. Ember Summit Path 1F (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Ember Summit Path 1F Land Scaling": [
+        "MAP_MT_EMBER_SUMMIT_PATH_1F"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_EMBER_SUMMIT_PATH_2F/LAND_ENCOUNTERS": {
+    "region": "Mt. Ember Summit Path 2F (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Ember Summit Path 2F Land Scaling": [
+        "MAP_MT_EMBER_SUMMIT_PATH_2F"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_EMBER_SUMMIT_PATH_3F/LAND_ENCOUNTERS": {
+    "region": "Mt. Ember Summit Path 3F (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Ember Summit Path 3F Land Scaling": [
+        "MAP_MT_EMBER_SUMMIT_PATH_3F"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_EMBER_RUBY_PATH_1F/LAND_ENCOUNTERS": {
+    "region": "Mt. Ember Ruby Path 1F (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Ember Ruby Path 1F Land Scaling": [
+        "MAP_MT_EMBER_RUBY_PATH_1F"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_EMBER_RUBY_PATH_B1F/LAND_ENCOUNTERS": {
+    "region": "Mt. Ember Ruby Path B1F (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Ember Ruby Path B1F Land Scaling": [
+        "MAP_MT_EMBER_RUBY_PATH_B1F"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_EMBER_RUBY_PATH_B1F_STAIRS/LAND_ENCOUNTERS": {
+    "region": "Mt. Ember Ruby Path B1F Return (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Ember Ruby Path B1F Return Land Scaling": [
+        "MAP_MT_EMBER_RUBY_PATH_B1F_STAIRS"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_EMBER_RUBY_PATH_B2F/LAND_ENCOUNTERS": {
+    "region": "Mt. Ember Ruby Path B2F (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Ember Ruby Path B2F Land Scaling": [
+        "MAP_MT_EMBER_RUBY_PATH_B2F"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_EMBER_RUBY_PATH_B2F_STAIRS/LAND_ENCOUNTERS": {
+    "region": "Mt. Ember Ruby Path B2F Return (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Ember Ruby Path B2F Return Land Scaling": [
+        "MAP_MT_EMBER_RUBY_PATH_B2F_STAIRS"
+      ]
+    }
+  },
+  "WILD_SCALING_MT_EMBER_RUBY_PATH_B3F/LAND_ENCOUNTERS": {
+    "region": "Mt. Ember Ruby Path B3F (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Mt. Ember Ruby Path B3F Land Scaling": [
+        "MAP_MT_EMBER_RUBY_PATH_B3F"
+      ]
+    }
+  },
+  "WILD_SCALING_TWO_ISLAND_CAPE_BRINK/LAND_ENCOUNTERS": {
+    "region": "Cape Brink (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Cape Brink Land Scaling": [
+        "MAP_TWO_ISLAND_CAPE_BRINK"
+      ]
+    }
+  },
+  "WILD_SCALING_THREE_ISLAND_PORT/LAND_ENCOUNTERS": {
+    "region": "Three Isle Port (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Three Isle Port Land Scaling": [
+        "MAP_THREE_ISLAND_PORT"
+      ]
+    }
+  },
+  "WILD_SCALING_THREE_ISLAND_BOND_BRIDGE/LAND_ENCOUNTERS": {
+    "region": "Bond Bridge (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Bond Bridge Land Scaling": [
+        "MAP_THREE_ISLAND_BOND_BRIDGE"
+      ]
+    }
+  },
+  "WILD_SCALING_THREE_ISLAND_BERRY_FOREST/LAND_ENCOUNTERS": {
+    "region": "Berry Forest (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Berry Forest Land Scaling": [
+        "MAP_THREE_ISLAND_BERRY_FOREST"
+      ]
+    }
+  },
+  "WILD_SCALING_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/LAND_ENCOUNTERS": {
+    "region": "Icefall Cave Front (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Icefall Cave Front Land Scaling": [
+        "MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE"
+      ]
+    }
+  },
+  "WILD_SCALING_FOUR_ISLAND_ICEFALL_CAVE_1F/LAND_ENCOUNTERS": {
+    "region": "Icefall Cave 1F (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Icefall Cave 1F Land Scaling": [
+        "MAP_FOUR_ISLAND_ICEFALL_CAVE_1F"
+      ]
+    }
+  },
+  "WILD_SCALING_FOUR_ISLAND_ICEFALL_CAVE_B1F/LAND_ENCOUNTERS": {
+    "region": "Icefall Cave B1F (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Icefall Cave B1F Land Scaling": [
+        "MAP_FOUR_ISLAND_ICEFALL_CAVE_B1F"
+      ]
+    }
+  },
+  "WILD_SCALING_FOUR_ISLAND_ICEFALL_CAVE_BACK/LAND_ENCOUNTERS": {
+    "region": "Icefall Cave Back (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Icefall Cave Back Land Scaling": [
+        "MAP_FOUR_ISLAND_ICEFALL_CAVE_BACK"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_MEADOW/LAND_ENCOUNTERS": {
+    "region": "Five Isle Meadow (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Five Isle Meadow Land Scaling": [
+        "MAP_FIVE_ISLAND_MEADOW"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_MEMORIAL_PILLAR/LAND_ENCOUNTERS": {
+    "region": "Memorial Pillar (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Memorial Pillar Land Scaling": [
+        "MAP_FIVE_ISLAND_MEMORIAL_PILLAR"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM1/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 1 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 1 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM1"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM2/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 2 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 2 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM2"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM3/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 3 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 3 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM3"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM4/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 4 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 4 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM4"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM5/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 5 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 5 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM5"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM6/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 6 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 6 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM6"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM7/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 7 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 7 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM7"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM8/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 8 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 8 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM8"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM9/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 9 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 9 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM9"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM10/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 10 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 10 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM10"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM11/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 11 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 11 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM11"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM12/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 12 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 12 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM12"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM13/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 13 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 13 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM13"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND_LOST_CAVE_ROOM14/LAND_ENCOUNTERS": {
+    "region": "Lost Cave B1F Room 14 (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Lost Cave Room 14 Land Scaling": [
+        "MAP_FIVE_ISLAND_LOST_CAVE_ROOM14"
+      ]
+    }
+  },
+  "WILD_SCALING_SIX_ISLAND_WATER_PATH/LAND_ENCOUNTERS": {
+    "region": "Water Path (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Water Path Land Scaling": [
+        "MAP_SIX_ISLAND_WATER_PATH"
+      ]
+    }
+  },
+  "WILD_SCALING_SIX_ISLAND_RUIN_VALLEY/LAND_ENCOUNTERS": {
+    "region": "Ruin Valley (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Ruin Valley Land Scaling": [
+        "MAP_SIX_ISLAND_RUIN_VALLEY"
+      ]
+    }
+  },
+  "WILD_SCALING_SIX_ISLAND_PATTERN_BUSH/LAND_ENCOUNTERS": {
+    "region": "Pattern Bush (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Pattern Bush Land Scaling": [
+        "MAP_SIX_ISLAND_PATTERN_BUSH"
+      ]
+    }
+  },
+  "WILD_SCALING_SIX_ISLAND_ALTERING_CAVE/LAND_ENCOUNTERS": {
+    "region": "Altering Cave (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Altering Cave Land Scaling": [
+        "MAP_SIX_ISLAND_ALTERING_CAVE"
+      ]
+    }
+  },
+  "WILD_SCALING_SEVEN_ISLAND_SEVAULT_CANYON_ENTRANCE/LAND_ENCOUNTERS": {
+    "region": "Canyon Entrance (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Canyon Entrance Land Scaling": [
+        "MAP_SEVEN_ISLAND_SEVAULT_CANYON_ENTRANCE"
+      ]
+    }
+  },
+  "WILD_SCALING_SEVEN_ISLAND_SEVAULT_CANYON/LAND_ENCOUNTERS": {
+    "region": "Sevault Canyon (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Sevault Canyon Land Scaling": [
+        "MAP_SEVEN_ISLAND_SEVAULT_CANYON"
+      ]
+    }
+  },
+  "WILD_SCALING_SEVEN_ISLAND_TANOBY_RUINS_MONEAN_CHAMBER/LAND_ENCOUNTERS": {
+    "region": "Monean Chamber (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Monean Chamber Land Scaling": [
+        "MAP_SEVEN_ISLAND_TANOBY_RUINS_MONEAN_CHAMBER"
+      ]
+    }
+  },
+  "WILD_SCALING_SEVEN_ISLAND_TANOBY_RUINS_LIPTOO_CHAMBER/LAND_ENCOUNTERS": {
+    "region": "Liptoo Chamber (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Liptoo Chamber Land Scaling": [
+        "MAP_SEVEN_ISLAND_TANOBY_RUINS_LIPTOO_CHAMBER"
+      ]
+    }
+  },
+  "WILD_SCALING_SEVEN_ISLAND_TANOBY_RUINS_WEEPTH_CHAMBER/LAND_ENCOUNTERS": {
+    "region": "Weepth Chamber (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Weepth Chamber Land Scaling": [
+        "MAP_SEVEN_ISLAND_TANOBY_RUINS_WEEPTH_CHAMBER"
+      ]
+    }
+  },
+  "WILD_SCALING_SEVEN_ISLAND_TANOBY_RUINS_DILFORD_CHAMBER/LAND_ENCOUNTERS": {
+    "region": "Dilford Chamber (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Dilford Chamber Land Scaling": [
+        "MAP_SEVEN_ISLAND_TANOBY_RUINS_DILFORD_CHAMBER"
+      ]
+    }
+  },
+  "WILD_SCALING_SEVEN_ISLAND_TANOBY_RUINS_SCUFIB_CHAMBER/LAND_ENCOUNTERS": {
+    "region": "Scufib Chamber (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Scufib Chamber Land Scaling": [
+        "MAP_SEVEN_ISLAND_TANOBY_RUINS_SCUFIB_CHAMBER"
+      ]
+    }
+  },
+  "WILD_SCALING_SEVEN_ISLAND_TANOBY_RUINS_RIXY_CHAMBER/LAND_ENCOUNTERS": {
+    "region": "Rixy Chamber (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Rixy Chamber Land Scaling": [
+        "MAP_SEVEN_ISLAND_TANOBY_RUINS_RIXY_CHAMBER"
+      ]
+    }
+  },
+  "WILD_SCALING_SEVEN_ISLAND_TANOBY_RUINS_VIAPOIS_CHAMBER/LAND_ENCOUNTERS": {
+    "region": "Viapois Chamber (Land Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "LAND",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Viapois Chamber Land Scaling": [
+        "MAP_SEVEN_ISLAND_TANOBY_RUINS_VIAPOIS_CHAMBER"
+      ]
+    }
+  },
+  "WILD_SCALING_ONE_ISLAND/WATER_ENCOUNTERS": {
+    "region": "One Island (Water Encounters)",
+    "kanto": false,
+    "connections": [
+      "One Island Town (Water Encounters)",
+      "Treasure Beach (Water Encounters)",
+      "Kindle Road (Water Encounters)"
+    ],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "One Island Water Scaling": [
+        "MAP_ONE_ISLAND",
+        "MAP_ONE_ISLAND_TREASURE_BEACH",
+        "MAP_ONE_ISLAND_KINDLE_ROAD"
+      ]
+    }
+  },
+  "WILD_SCALING_TWO_ISLAND_CAPE_BRINK/WATER_ENCOUNTERS": {
+    "region": "Cape Brink (Water Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Cape Brink Water Scaling": [
+        "MAP_TWO_ISLAND_CAPE_BRINK"
+      ]
+    }
+  },
+  "WILD_SCALING_THREE_ISLAND_BOND_BRIDGE/WATER_ENCOUNTERS": {
+    "region": "Bond Bridge (Water Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Bond Bridge Water Scaling": [
+        "MAP_THREE_ISLAND_BOND_BRIDGE"
+      ]
+    }
+  },
+  "WILD_SCALING_THREE_ISLAND_BERRY_FOREST/WATER_ENCOUNTERS": {
+    "region": "Berry Forest (Water Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Berry Forest Water Scaling": [
+        "MAP_THREE_ISLAND_BERRY_FOREST"
+      ]
+    }
+  },
+  "WILD_SCALING_FOUR_ISLAND/WATER_ENCOUNTERS": {
+    "region": "Four Island Town (Water Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Four Island Town Water Scaling": [
+        "MAP_FOUR_ISLAND"
+      ]
+    }
+  },
+  "WILD_SCALING_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE/WATER_ENCOUNTERS": {
+    "region": "Icefall Cave Front (Water Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Icefall Cave Front Water Scaling": [
+        "MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE"
+      ]
+    }
+  },
+  "WILD_SCALING_FOUR_ISLAND_ICEFALL_CAVE_BACK/WATER_ENCOUNTERS": {
+    "region": "Icefall Cave Back (Water Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Icefall Cave Back Water Scaling": [
+        "MAP_FOUR_ISLAND_ICEFALL_CAVE_BACK"
+      ]
+    }
+  },
+  "WILD_SCALING_FIVE_ISLAND/WATER_ENCOUNTERS": {
+    "region": "Five Island (Water Encounters)",
+    "kanto": false,
+    "connections": [
+      "Five Island Town (Water Encounters)",
+      "Five Isle Meadow (Water Encounters)",
+      "Memorial Pillar (Water Encounters)",
+      "Water Labyrinth (Water Encounters)",
+      "Resort Gorgeous (Water Encounters)"
+    ],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Five Island Water Scaling": [
+        "MAP_FIVE_ISLAND",
+        "MAP_FIVE_ISLAND_MEADOW",
+        "MAP_FIVE_ISLAND_MEMORIAL_PILLAR",
+        "MAP_FIVE_ISLAND_WATER_LABYRINTH",
+        "MAP_FIVE_ISLAND_RESORT_GORGEOUS"
+      ]
+    }
+  },
+  "WILD_SCALING_SIX_ISLAND_WATER_PATH/WATER_ENCOUNTERS": {
+    "region": "Water Path (Water Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Water Path Water Scaling": [
+        "MAP_SIX_ISLAND_WATER_PATH"
+      ]
+    }
+  },
+  "WILD_SCALING_SIX_ISLAND_RUIN_VALLEY/WATER_ENCOUNTERS": {
+    "region": "Ruin Valley (Water Encounters)",
+    "kanto": false,
+    "connections": [],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Ruin Valley Water Scaling": [
+        "MAP_SIX_ISLAND_RUIN_VALLEY"
+      ]
+    }
+  },
+  "WILD_SCALING_SIX_ISLAND/WATER_ENCOUNTERS": {
+    "region": "Six Island (Water Encounters)",
+    "kanto": false,
+    "connections": [
+      "Green Path (Water Encounters)",
+      "Outcast Island (Water Encounters)"
+    ],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Six Island Water Scaling": [
+        "MAP_SIX_ISLAND_GREEN_PATH",
+        "MAP_SIX_ISLAND_OUTCAST_ISLAND"
+      ]
+    }
+  },
+  "WILD_SCALING_SEVEN_ISLAND/WATER_ENCOUNTERS": {
+    "region": "Seven Island (Water Encounters)",
+    "kanto": false,
+    "connections": [
+      "Tanoby Ruins (Water Encounters)",
+      "Trainer Tower Exterior (Water Encounters)"
+    ],
+    "type": "WATER",
+    "category": "EVENT_WILD_POKEMON_SCALING",
+    "locations": {
+      "Seven Island Water Scaling": [
+        "MAP_SEVEN_ISLAND_TANOBY_RUINS",
+        "MAP_SEVEN_ISLAND_TRAINER_TOWER"
+      ]
+    }
+  }
+}

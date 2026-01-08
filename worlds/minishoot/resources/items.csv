@@ -1,0 +1,87 @@
+﻿Name,Category,Item pool,Count,Notes
+Abyss Map,Filler,Default,1,MapPickupAbyss
+Academician,Filler,NPC,1,Academician
+Advanced Energy,Helpful,Default,1,PickupModuleBoostCost
+Ancient Astrolabe,Filler,Default,1,
+Ancient Tablet,Filler,Default,5,LorePickup1
+Bard,Progression,NPC,1,Filler if true ending is not needed
+Beach Map,Filler,Default,1,MapPickupBeach
+Blacksmith,Progression,NPC,1,
+Blue Forest Map,Filler,Default,1,MapPickupForest
+Boost,Progression,Default,1,
+Boss Key (Dungeon 1),Progression,Dungeon Big Key,1,
+Boss Key (Dungeon 2),Progression,Dungeon Big Key,1,Dungeon2BossKey
+Boss Key (Dungeon 3),Progression,Dungeon Big Key,1,Dungeon3BossKey
+Compass,Filler,Default,1,
+Crystal Bullet,Helpful,Default,1,
+Dark Heart,Progression,Default,1,PickupKeyFinalBoss
+Dark Key,Progression,Default,1,PickupKeyDarker
+Dash,Progression,Default,1,
+Desert Map,Filler,Default,1,MapPickupDesert
+Dungeon 1 Reward,Progression,Dungeon Reward,1,
+Dungeon 2 Reward,Progression,Dungeon Reward,1,
+Dungeon 3 Reward,Progression,Dungeon Reward,1,
+Dungeon 4 Reward,Progression,Dungeon Reward,1,
+Enchanted Heart,Helpful,Default,1,PickupModuleHeartCrystal
+Enchanted Powers,Helpful,Default,1,PickupModuleFreePower
+Energy Crystal Shard,Helpful,Default,8,
+Explorer,Filler,NPC,1,
+Family Child,Progression,NPC,1,Familly3
+Family Parent 1,Progression,NPC,1,Familly1
+Family Parent 2,Progression,NPC,1,Familly2
+Golden Crystal Heart,Progression,Goal,0,
+Green Map,Filler,Default,1,
+Healer,Helpful,NPC,1,Healer
+HP Crystal Shard,Helpful,Default,28,
+Idol of protection,Helpful,Default,1,PickupModuleIdolBomb!!! Sprite
+Idol of spirits,Helpful,Default,1,PickupModuleIdolAlly
+Idol of time,Helpful,Default,1,PickupModuleIdolSlow
+Junkyard Map,Filler,Default,1,MapPickupJunkyard
+Lucky Heart,Helpful,Default,1,PickupModuleHpDrop
+Merchant,Progression,NPC,1,
+Overcharge,Helpful,Default,1,PickupModuleOvercharge
+Power of protection,Progression,Default,1,CavePowerBombLevel0
+Power of spirits,Helpful,Default,1,Temple3PowerAllyLevel0
+Power of time,Helpful,Default,1,Temple2PowerSlowLevel0
+Primordial Crystal,Progression,Default,1,PickupModulePrimordialCrystal
+Primordial Scarab Dialog,Trap,Default,0,
+Progressive Cannon,Progression,Default,5,
+Progressive Dash,Progression,Default,0,
+Restoration Enhancer,Helpful,Default,1,
+Scarab,Token,Scarab,18,
+Scarab Collector,Progression,NPC,1,
+Scarab Key,Progression,Default,1,PickupKeyScarab
+Small Key (Dungeon 1),Progression,Dungeon Small Key,4,
+Small Key (Dungeon 2),Progression,Dungeon Small Key,4,Dungeon2CrystalKey0
+Small Key (Dungeon 3),Progression,Dungeon Small Key,5,Dungeon3CrystalKey0
+Spirit,Token,Spirit,8,
+Spirit Dash,Progression,Default,1,PickupModuleSpiritDash
+Sunken City Map,Filler,Default,1,MapPickupSunkenCity
+Super Crystals x2,Filler,Default,0,
+Super Crystals x5,Filler,Default,0,
+Super Crystals x10,Filler,Default,0,
+Super Crystals x15,Filler,Default,0,
+Supershot,Progression,Default,1,SkillSupershot
+Surf,Progression,Default,1,
+Swamp Map,Filler,Default,1,MapPickupSwamp
+Vengeful Talisman,Helpful,Default,1,PickupModuleRetaliation
+Village Star,Helpful,Default,1,Can be progression if Entrance Rando is a thing
+Wounded Heart,Helpful,Default,1,PickupModuleRage
+XP Crystals x5,Filler,XP Crystals,7,
+XP Crystals x10,Filler,XP Crystals,14,
+XP Crystals x15,Filler,XP Crystals,9,
+XP Crystals x20,Filler,XP Crystals,13,
+XP Crystals x25,Filler,XP Crystals,7,
+XP Crystals x30,Filler,XP Crystals,4,
+XP Crystals x35,Filler,XP Crystals,3,
+XP Crystals x40,Filler,XP Crystals,1,
+XP Crystals x45,Filler,XP Crystals,1,
+XP Crystals x50,Filler,XP Crystals,2,
+XP Crystals x55,Filler,XP Crystals,2,
+XP Crystals x60,Filler,XP Crystals,2,
+XP Crystals x65,Filler,XP Crystals,3,
+XP Crystals x70,Filler,XP Crystals,2,
+XP Crystals x75,Filler,XP Crystals,2,
+XP Crystals x85,Filler,XP Crystals,1,
+XP Crystals x100,Filler,XP Crystals,1,
+XP Crystals x140,Filler,XP Crystals,1,

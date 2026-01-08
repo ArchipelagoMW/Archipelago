@@ -1,0 +1,1605 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 34,
+  "name": "East Ocean",
+  "area": "Crateria",
+  "subarea": "East",
+  "roomAddress": "0x794FD",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018a66",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [2, 2, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018a72",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [1, 1, 1, 1, 2, 2, 2],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Junction (Left side Pit)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [1, 1, 2, 2, 1, 1, 1],
+        [2, 2, 2, 2, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Junction (Right side Pit)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0],
+        [1, 1, 1, 1, 2, 2, 1],
+        [1, 1, 1, 1, 2, 2, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Left East Ocean Bottom Choots",
+      "enemyName": "Choot",
+      "quantity": 3,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e2",
+      "groupName": "East Ocean Top Choot",
+      "enemyName": "Choot",
+      "quantity": 1,
+      "homeNodes": [1, 3]
+    },
+    {
+      "id": "e3",
+      "groupName": "Left East Ocean Skulteras",
+      "enemyName": "Skultera",
+      "quantity": 3,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e4",
+      "groupName": "Right East Ocean Skulteras",
+      "enemyName": "Skultera",
+      "quantity": 2,
+      "homeNodes": [4]
+    },
+    {
+      "id": "e5",
+      "groupName": "Right East Ocean Bottom Choot",
+      "enemyName": "Choot",
+      "quantity": 1,
+      "homeNodes": [4]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {
+          "id": 3,
+          "devNote": "All other strats go 2 -> 4 -> 3."
+        },
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1,
+          "steepUpTiles": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Spark",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {
+          "usedTiles": 20,
+          "steepUpTiles": 4,
+          "steepDownTiles": 2,
+          "startingDownTiles": 1,
+          "openEnd": 0
+        }},
+        "canShinechargeMovementTricky",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 18}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      }
+    },
+    {
+      "id": 61,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (HiJump, Long Runway)",
+      "requires": [
+        "Gravity",
+        "HiJump",
+        {"canShineCharge": {
+          "usedTiles": 20,
+          "steepUpTiles": 4,
+          "steepDownTiles": 2,
+          "startingDownTiles": 1,
+          "openEnd": 0
+        }},
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 150}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      }
+    },
+    {
+      "id": 62,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (HiJump, Short Runway)",
+      "requires": [
+        "Gravity",
+        "HiJump",
+        {"canShineCharge": {
+          "usedTiles": 12,
+          "steepUpTiles": 3,
+          "steepDownTiles": 1,
+          "openEnd": 1
+        }},
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 135}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      }
+    },
+    {
+      "id": 63,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (Wall Jump, Short Runway)",
+      "requires": [
+        "Gravity",
+        "canWalljump",
+        {"canShineCharge": {
+          "usedTiles": 12,
+          "steepUpTiles": 3,
+          "steepDownTiles": 1,
+          "openEnd": 1
+        }},
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 145}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Space Jump)",
+      "requires": [
+        "Gravity",
+        "canBlueSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 18,
+            "openEnd": 1,
+            "steepUpTiles": 1,
+            "steepDownTiles": 2
+          },
+          "landingRunway": {
+            "length": 8,
+            "openEnd": 1,
+            "steepUpTiles": 1
+          },
+          "movementType": "controlled"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Space Jump)",
+      "requires": [
+        "Gravity",
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 18,
+            "openEnd": 1,
+            "steepUpTiles": 1,
+            "steepDownTiles": 2
+          },
+          "landingRunway": {
+            "length": 8,
+            "openEnd": 1,
+            "steepUpTiles": 1
+          },
+          "maxExtraRunSpeed": "$2.F"
+        }
+      },
+      "devNote": "A bit higher speed can also work but would be more difficult"
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "Gravity",
+        "canPreciseSpaceJump",
+        "canInsaneJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 18,
+            "openEnd": 1,
+            "steepUpTiles": 1,
+            "steepDownTiles": 2
+          },
+          "minExtraRunSpeed": "$1.3",
+          "maxExtraRunSpeed": "$2.A"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {
+          "usedTiles": 20,
+          "steepUpTiles": 4,
+          "steepDownTiles": 2,
+          "startingDownTiles": 1,
+          "openEnd": 0
+        }},
+        "canLongChainTemporaryBlue",
+        "can4HighMidAirMorph",
+        {"or": [
+          "HiJump",
+          "canGravityJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Gain temporary blue using the runway on the left side of the room, using HiJump or a Gravity jump where needed to get onto the ocean platforms."
+      ],
+      "devNote": [
+        "With very precise mid-air morphs/unmorphs, it is possible to get onto the first or second ocean platform directly without HiJump or canGravityJump, by using the runway on the right side of the room."
+      ]
+    },
+    {
+      "id": 69,
+      "link": [1, 1],
+      "name": "Choot Farm (One Choot)",
+      "requires": [
+        "canDodgeWhileShooting",
+        {"cycleFrames": 215}
+      ],
+      "farmCycleDrops": [{"enemy": "Choot", "count": 1}]
+    },
+    {
+      "id": 70,
+      "link": [1, 1],
+      "name": "Choot Farm (Three Choots, Grapple)",
+      "requires": [
+        "canUseGrapple",
+        {"cycleFrames": 330}
+      ],
+      "farmCycleDrops": [{"enemy": "Choot", "count": 3}],
+      "note": [
+        "Farm 3 Choots using Grapple to collect the drops, without dipping into the water."
+      ]
+    },
+    {
+      "id": 71,
+      "link": [1, 1],
+      "name": "Choot Farm (Four Choots, Gravity)",
+      "requires": [
+        "Gravity",
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 410}
+          ]},
+          {"and": [
+            "canUseGrapple",
+            {"cycleFrames": 440}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 460}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 540}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 730}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Choot", "count": 4}]
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Speedy Springball Jump and SpaceJump",
+      "requires": [
+        "canTrickyJump",
+        {"or": [
+          {"disableEquipment": "SpeedBooster"},
+          "canTrickyDashJump"
+        ]},
+        "SpeedBooster",
+        "canSpringBallBounce",
+        "canMockball",
+        "SpaceJump"
+      ],
+      "note": [
+        "Run for 7 tiles for enough speed to springball from the submerged platform up to the platform enemy, above the water.",
+        "Turning on SpeedBooster midjump, after running 7+ tiles, will automatically hit the run speed requirement.",
+        "It is not necessary to enter the water to clear the rightmost Choot."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Springball Bounce to the Door with SpaceJump",
+      "requires": [
+        {"notable": "Springball Bounce to the Door with SpaceJump"},
+        "canTrickyJump",
+        "canSpaceJumpWaterBounce",
+        "canSpringBallBounce",
+        "canSpringFling",
+        "canMockball",
+        {"or": [
+          "canDownGrab",
+          "canWalljump"
+        ]}
+      ],
+      "note": [
+        "Build up run speed and then use controlled springball bounces to cross the ocean to the far right ledge, and then use SpaceJump to reach the door.",
+        "Mockball down the submerged ramp and begin SpringBall bouncing under water using the platforms.",
+        "Disable SpringBall after the final jump once Samus starts falling again as a way to gain extra speed."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Speedy Springball Bounce to the Door",
+      "requires": [
+        {"notable": "Speedy Springball Bounce to the Door"},
+        "canInsaneJump",
+        "SpeedBooster",
+        "canSpringBallBounce",
+        "canDoubleSpringBallJumpMidAir",
+        "canMockball"
+      ],
+      "note": [
+        "Using an exact runway size of 7 tiles; use extremely precise, controlled springball bounces to cross the ocean.",
+        "7 tiles of runspeed can freely be achieved by requipping SpeedBooster after reaching the max normal run speed.",
+        "Mockball down the submerged ramp and begin SpringBall bouncing either above the water, or under water using the platforms.",
+        "The final SpringBall bounce must be on the left edge of the rightmost underwater platform.",
+        "While the bounce is occuring, setup a mid-air SpringBall Jump to escape the water and reach the door."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Full Room Shinespark Plus SpaceJump",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 6,
+          "openEnd": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        "canCarefulJump",
+        {"or": [
+          {"and": [
+            "canMidairShinespark",
+            "canShinechargeMovementTricky",
+            "canTrickyDodgeEnemies"
+          ]},
+          {"and": [
+            {"enemyDamage": {"enemy": "Choot", "type": "contact", "hits": 1}},
+            "canNeutralDamageBoost",
+            "canBounceBall"
+          ]},
+          {"and": [
+            "canMockball",
+            {"or": [
+              "canPseudoScrew",
+              "ScrewAttack",
+              "Plasma",
+              "Wave",
+              {"ammo": {"type": "Missile", "count": 1}},
+              {"ammo": {"type": "Super", "count": 1}}
+            ]}
+          ]}
+        ]},
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 125, "excessFrames": 5}},
+        "canSpaceJumpWaterBounce",
+        {"or": [
+          {"and": [
+            "canTrickyJump",
+            "canDownGrab"
+          ]},
+          "canWalljump"
+        ]}
+      ],
+      "note": [
+        "Enter the room while building a shinespark and use it on the lowest part of the ramp to cross the room and reach a raised ledge on the right side wall.",
+        "From there, use SpaceJump to escape the water.",
+        "Carry the shinespark to the bottom of the ramp by delaying the first Choot with two Power Beam shots, killing it, or bounceballing through it.",
+        "The Choot can be shot diagonally from the middle platform, and again by running off that platform and aiming down to float above it."
+      ],
+      "devNote": "There is 1 unusable tile in this runway."
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Shinespark Water Escape",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 6,
+          "openEnd": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Shinespark Water Escape"},
+        {"or": [
+          "ScrewAttack",
+          "canPseudoScrew",
+          "Plasma",
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]},
+        {"or": [
+          "ScrewAttack",
+          "Plasma",
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"ammo": {"type": "Super", "count": 1}}
+        ]},
+        {"shinespark": {"frames": 14, "excessFrames": 5}},
+        "canShinechargeMovementComplex",
+        "SpaceJump",
+        "canTrickyJump",
+        "canMidairShinespark"
+      ],
+      "note": [
+        "Enter the room while building a shinespark and use it on the lowest part of the ramp to diagonally spark up and out of the water.",
+        "Use very low jump height space jumps to carry momentum to the far side of the submerged ramp.",
+        "Both Choots must be killed.",
+        "Using Screw Attack: stay a little bit high in the water so that it remains active for the second Choot.",
+        "Using Plasma or ammo: kill the first Choot while running down the middle platform, and the second while gliding above it after spacejumping through the water.",
+        "Then shinespark up and use SpaceJump to reach the door."
+      ],
+      "devNote": "There is 1 unusable tile in this runway."
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Shinespark Water Escape With Lower Choot Alive (Morph)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 6,
+          "openEnd": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Shinespark Water Escape With Lower Choot Alive"},
+        {"or": [
+          {"and": [
+            {"enemyDamage": {"enemy": "Choot", "type": "contact", "hits": 1}},
+            "canNeutralDamageBoost",
+            "canBounceBall"
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            "canMockball"
+          ]}
+        ]},
+        {"shinespark": {"frames": 14, "excessFrames": 5}},
+        "canShinechargeMovementComplex",
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Enter the room while building a shinespark and use it on the lowest part of the ramp to diagonally spark up and out of the water.",
+        "Unmorphing with the correct timing and positioning for the Shinespark are very precise, and there are no extra frames on the Shinespark timer to work with.",
+        "Carry the shinespark to the bottom of the ramp either with a bounce ball which takes damage from the Choot, or delay the first Choot with two shots and then use a late mockball.",
+        "Then shinespark up and use SpaceJump to reach the door."
+      ],
+      "devNote": "There is 1 unusable tile in this runway."
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Shinespark Water Escape With Lower Choot Alive (Ice Wave Spazer)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 6,
+          "openEnd": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Shinespark Water Escape With Lower Choot Alive"},
+        "Ice",
+        "Wave",
+        "Spazer",
+        "canDodgeWhileShooting",
+        {"shinespark": {"frames": 14, "excessFrames": 5}},
+        "canShinechargeMovementComplex",
+        "canMidairShinespark",
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Enter the room while building a shinespark and use it on the lowest part of the ramp to diagonally spark up and out of the water.",
+        "Use very low jump height space jumps to carry momentum to the far side of the submerged ramp.",
+        "Freeze the first Choot from the middle platform.",
+        "Either SpaceJump just right so as to pass above the second Choot, or freeze it as it touches Samus to pass through without losing speed.",
+        "Then shinespark up and use SpaceJump to reach the door."
+      ],
+      "devNote": "There is 1 unusable tile in this runway."
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "G-mode Morph IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 16,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 68,
+      "link": [2, 1],
+      "name": "G-Mode Morph, Bomb Into Spring Ball Jump",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphUnderwaterBombIntoSpringBallJump",
+        {"or": [
+          "h_artificialMorphSpringFling",
+          "canBeVeryPatient"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Pause and jump just before the fade out finishes. Turn off Spring Ball and place a Bomb just above where Samus' head would be if standing.",
+        "Pause again between 23-25 frames later and equip Spring Ball; Samus has a three frame window where she has upward momentum from the Bomb and can jump again.",
+        "The positioning of the Bomb is quite lenient, with an 11 frame window for where it can be placed.",
+        "This needs to be done multiple times to cross the room with no other items;",
+        "using Spring Flings to cross from peak to peak can reduce the required number of bomb into Spring Ball jumps to two or three."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1,
+          "steepUpTiles": 1
+        }
+      }
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 17,
+            "openEnd": 1,
+            "steepUpTiles": 3,
+            "steepDownTiles": 2,
+            "startingDownTiles": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "Leave With Mockball (Space Jump)",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 17,
+            "openEnd": 1,
+            "steepUpTiles": 3,
+            "steepDownTiles": 2,
+            "startingDownTiles": 1
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1,
+            "steepUpTiles": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 20,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce (Space Jump)",
+      "requires": [
+        "Gravity",
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 17,
+            "openEnd": 1,
+            "steepUpTiles": 3,
+            "steepDownTiles": 2,
+            "startingDownTiles": 1
+          },
+          "landingRunway": {
+            "length": 5,
+            "openEnd": 1,
+            "steepUpTiles": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 21,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue (Gravity Jump)",
+      "requires": [
+        "Gravity",
+        "HiJump",
+        {"or": [
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 21,
+              "steepUpTiles": 3,
+              "steepDownTiles": 3,
+              "startingDownTiles": 1,
+              "openEnd": 0
+            }},
+            "canXRayTurnaround"
+          ]},
+          {"canShineCharge": {
+            "usedTiles": 18,
+            "steepUpTiles": 2,
+            "steepDownTiles": 3,
+            "startingDownTiles": 1,
+            "openEnd": 0
+          }}
+        ]},
+        "canGravityJump",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue (Spring Ball Jump)",
+      "requires": [
+        "Gravity",
+        "HiJump",
+        {"or": [
+          {"and": [
+            {"canShineCharge": {
+              "usedTiles": 21,
+              "steepUpTiles": 3,
+              "steepDownTiles": 3,
+              "startingDownTiles": 1,
+              "openEnd": 0
+            }},
+            "canXRayTurnaround"
+          ]},
+          {"canShineCharge": {
+            "usedTiles": 15,
+            "steepUpTiles": 2,
+            "steepDownTiles": 3,
+            "startingDownTiles": 1,
+            "openEnd": 0
+          }}
+        ]},
+        "canSpringBallJumpMidAir",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 23,
+      "link": [2, 2],
+      "name": "Leave With Temporary Blue (Blue Space Jump)",
+      "requires": [
+        "Gravity",
+        "canBlueSpaceJump",
+        {"canShineCharge": {
+          "usedTiles": 18,
+          "steepUpTiles": 2,
+          "steepDownTiles": 2,
+          "startingDownTiles": 1,
+          "openEnd": 0
+        }},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 72,
+      "link": [2, 2],
+      "name": "Choot Farm (One Choot)",
+      "requires": [
+        "Gravity",
+        {"cycleFrames": 270},
+        {"or": [
+          "HiJump",
+          {"and": [
+            "canWalljump",
+            {"cycleFrames": 45}
+          ]}
+        ]},
+        {"or": [
+          "Plasma",
+          {"and": [
+            "canUseGrapple",
+            {"cycleFrames": 15}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 15}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 35}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 55}
+          ]},
+          {"cycleFrames": 105}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Choot", "count": 1}]
+    },
+    {
+      "id": 24,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 25,
+      "link": [2, 3],
+      "name": "Space Jump",
+      "requires": [
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 26,
+      "link": [2, 3],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 35}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Horizontally shinespark from the grassy patch on the ledge near the door, then jump across the platforms."
+    },
+    {
+      "id": 27,
+      "link": [2, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 28,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 29,
+      "link": [3, 1],
+      "name": "Base Suitless",
+      "requires": [
+        "HiJump"
+      ]
+    },
+    {
+      "id": 30,
+      "link": [3, 1],
+      "name": "Suitless with Space Jump",
+      "requires": [
+        "canSpaceJumpWaterBounce",
+        {"or": [
+          "canWalljump",
+          {"and": [
+            "canTrickyJump",
+            "canDownGrab"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 31,
+      "link": [3, 1],
+      "name": "Suitless with Ice Beam",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies"
+      ]
+    },
+    {
+      "id": 32,
+      "link": [3, 1],
+      "name": "Suitless with Spring Ball",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickySpringBallJump"
+      ]
+    },
+    {
+      "id": 33,
+      "link": [3, 1],
+      "name": "Suitless Damage Boost Water Escape",
+      "requires": [
+        {"notable": "Suitless Damage Boost Water Escape"},
+        "canSuitlessMaridia",
+        "canHorizontalDamageBoost",
+        "canCrouchJump",
+        {"enemyDamage": {"enemy": "Choot", "type": "contact", "hits": 1}}
+      ],
+      "note": "Find the Choot that is closest to the surface of the water, crouch jump under it and damage boost onto the dry platform to the left."
+    },
+    {
+      "id": 34,
+      "link": [3, 1],
+      "name": "Bomb Jump Water Escape",
+      "requires": [
+        "canBombJumpWaterEscape"
+      ]
+    },
+    {
+      "id": 35,
+      "link": [3, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canSuitlessMaridia",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 6, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 36,
+      "link": [3, 2],
+      "name": "Space Jump Water Escape with Ice and X-Ray",
+      "requires": [
+        {"notable": "Space Jump Water Escape with Ice and X-Ray"},
+        {"enemyDamage": {"enemy": "Choot", "type": "contact", "hits": 1}},
+        "canTrickyUseFrozenEnemies",
+        "Morph",
+        "canXRayStandUp",
+        "canSpaceJumpWaterBounce",
+        "canFlatleyJump",
+        "canKago"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Freeze the right-most ramp Choot in a way where Samus can climb on top of it and use Space Jump to escape the water.",
+        "Use a turn around to avoid knockback when making contact with the Choot to better time the use of Ice.",
+        "Freeze the Choot as far to the right (on its lowest swoop), but this method is less precise than the alternatives.",
+        "If Samus is inside the Choot when it is frozen, she can continuing moving freely.",
+        "Jump on top either in spinjump or in Morph Ball",
+        "Use XRay to standup, clipping partially into the above slope.",
+        "Use a flately jump to fall out of the wall while still keeping enough height to spacejump on top of the water and escape."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [3, 2],
+      "name": "Space Jump Water Escape with Ice",
+      "requires": [
+        {"notable": "Space Jump Water Escape with Ice"},
+        "canSpaceJumpWaterBounce",
+        "canTrickyUseFrozenEnemies",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Get to the right of the Choot on the rightmost platform. Spin jump up to the right, break spin while aligned with the wall, then freeze the Choot and stand on it while it is midair to the right of the stalagmite.",
+        "Jump from the Choot to the water line and space jump at the water line to the Kamer platform."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [3, 2],
+      "name": "Precise Space Jump Water Escape",
+      "requires": [
+        {"notable": "Precise Space Jump Water Escape"},
+        "canSpaceJumpWaterBounce",
+        "canPreciseSpaceJump",
+        "canPreciseWalljump",
+        "canInsaneJump",
+        "canMidairWiggle"
+      ],
+      "note": [
+        "Standing from the rightmost platform, jump to the right of the stalagmite. Perform a midair wiggle to get to the left to the stalagmite, then precisely wall jump off of it.",
+        "Then perform a frame perfect space jump at the water line to bounce on the water over to the Kamer platform."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [3, 2],
+      "name": "Use Flash Suit, Space Jump",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 10, "excessFrames": 7}},
+        "SpaceJump"
+      ],
+      "flashSuitChecked": true,
+      "note": "Shinespark from the scaffold to the moving Kamer platform. Then space jump to the right door."
+    },
+    {
+      "id": 40,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 41,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 42,
+      "link": [3, 4],
+      "name": "Base Suitless",
+      "requires": [
+        "HiJump"
+      ]
+    },
+    {
+      "id": 43,
+      "link": [3, 4],
+      "name": "Suitless with Ice Beam",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies"
+      ]
+    },
+    {
+      "id": 44,
+      "link": [3, 4],
+      "name": "Suitless with SpringBall Jump Mid Air",
+      "requires": [
+        "canSuitlessMaridia",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 45,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "SpaceJump",
+          "canLongIBJ",
+          "canJumpIntoIBJ",
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 46,
+      "link": [4, 2],
+      "name": "Gravity Jump From Ledge",
+      "requires": [
+        "canGravityJump",
+        "canCarefulJump"
+      ],
+      "note": [
+        "Gravity jump from the ledge to get up to the door.",
+        "This requires a moderately precise gravity jump and is much easier to prevent bonking while facing towards the left."
+      ]
+    },
+    {
+      "id": 47,
+      "link": [4, 2],
+      "name": "Base Suitless",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        {"or": [
+          "canTrickySpringBallJump",
+          "canSpaceJumpWaterBounce",
+          {"and": [
+            "SpaceJump",
+            "h_crouchJumpDownGrab"
+          ]}
+        ]}
+      ],
+      "note": "Escape the water with a Spring Ball Jump, Space Jump on the water line to the left, or crouch jump + down grab onto the right Kamer platform."
+    },
+    {
+      "id": 48,
+      "link": [4, 2],
+      "name": "Shinespark",
+      "requires": [
+        "Gravity",
+        {"canShineCharge": {
+          "usedTiles": 22,
+          "steepUpTiles": 3,
+          "steepDownTiles": 3,
+          "openEnd": 0
+        }},
+        {"shinespark": {"frames": 25, "excessFrames": 5}}
+      ]
+    },
+    {
+      "id": 49,
+      "link": [4, 2],
+      "name": "Suitless Frozen Choot, Spring Ball, Space Jump",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        "canTrickySpringBallJump",
+        {"or": [
+          {"and": [
+            "canResetFallSpeed",
+            "canTrickyJump"
+          ]},
+          "canStationaryLateralMidAirMorph",
+          "canSpringFling"
+        ]},
+        "canSpaceJumpWaterBounce",
+        "canWalljump"
+      ],
+      "note": [
+        "Freeze the Choot when it swings right on its jump. Quickly get on top of it by first getting onto the pillar to the left, or with a SpringBall Jump.",
+        "Perform a precise spring ball jump to get to the far right ledge, while avoiding hitting the water surface.",
+        "While on the ledge, stand on the raised ground to the right and jump to the surface, then space jump across the water to the left."
+      ]
+    },
+    {
+      "id": 60,
+      "link": [4, 2],
+      "name": "Suitless Frozen Skultera, Spring Ball, Space Jump",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies",
+        "h_maxHeightSpringBallJump",
+        "SpaceJump"
+      ],
+      "note": [
+        "In the center of the room, freeze the Skultera at the highest point in its cycle.",
+        "Then use a max height springball jump to escape the water and land on the above platform.",
+        "Use spacejump to continue to the door."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [4, 2],
+      "name": "Leave Shinecharged (HiJump, Full Runway)",
+      "requires": [
+        "canShinechargeMovementComplex",
+        "Gravity",
+        "HiJump",
+        {"canShineCharge": {
+          "usedTiles": 22,
+          "steepUpTiles": 3,
+          "steepDownTiles": 3,
+          "startingDownTiles": 1,
+          "openEnd": 0
+        }},
+        {"shineChargeFrames": 135}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 64,
+      "link": [4, 2],
+      "name": "Leave Shinecharged (HiJump, Short Runway)",
+      "requires": [
+        "canShinechargeMovementComplex",
+        "Gravity",
+        "HiJump",
+        {"canShineCharge": {
+          "usedTiles": 17,
+          "steepUpTiles": 2,
+          "steepDownTiles": 3,
+          "startingDownTiles": 1,
+          "openEnd": 0
+        }},
+        {"shineChargeFrames": 115}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 65,
+      "link": [4, 2],
+      "name": "Leave Shinecharged (Space Jump, Short Runway)",
+      "requires": [
+        "canShinechargeMovementComplex",
+        "Gravity",
+        "SpaceJump",
+        {"canShineCharge": {
+          "usedTiles": 17,
+          "steepUpTiles": 2,
+          "steepDownTiles": 3,
+          "startingDownTiles": 1,
+          "openEnd": 0
+        }},
+        {"shineChargeFrames": 135}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 66,
+      "link": [4, 2],
+      "name": "Leave With Spark (Space Jump, Full Runway)",
+      "requires": [
+        "canShinechargeMovementComplex",
+        "Gravity",
+        "SpaceJump",
+        {"canShineCharge": {
+          "usedTiles": 22,
+          "steepUpTiles": 3,
+          "steepDownTiles": 3,
+          "startingDownTiles": 1,
+          "openEnd": 0
+        }},
+        {"shinespark": {"frames": 6, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 51,
+      "link": [4, 2],
+      "name": "Leave With Spark (Wall Jump, Full Runway)",
+      "requires": [
+        "canShinechargeMovementComplex",
+        "Gravity",
+        "canWalljump",
+        {"canShineCharge": {
+          "usedTiles": 22,
+          "steepUpTiles": 3,
+          "steepDownTiles": 3,
+          "startingDownTiles": 1,
+          "openEnd": 0
+        }},
+        {"shinespark": {"frames": 10}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 67,
+      "link": [4, 2],
+      "name": "Leave Shinecharged (Wall Jump, Short Runway)",
+      "requires": [
+        "canShinechargeMovementComplex",
+        "Gravity",
+        "canWalljump",
+        {"canShineCharge": {
+          "usedTiles": 17,
+          "steepUpTiles": 2,
+          "steepDownTiles": 3,
+          "startingDownTiles": 1,
+          "openEnd": 0
+        }},
+        {"shineChargeFrames": 160}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 52,
+      "link": [4, 2],
+      "name": "Use Flash Suit, From the Overhang",
+      "requires": [
+        "canSuitlessMaridia",
+        {"or": [
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            "HiJump",
+            "canTrickyUseFrozenEnemies"
+          ]},
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            "canTrickySpringBallJump",
+            {"or": [
+              "canResetFallSpeed",
+              "canStationaryLateralMidAirMorph",
+              "canSpringFling"
+            ]}
+          ]}
+        ]},
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 11, "excessFrames": 5}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 53,
+      "link": [4, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 20, "excessFrames": 5}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 17, "excessFrames": 5}}
+          ]},
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            {"shinespark": {"frames": 14, "excessFrames": 5}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "FIXME: Some energy can be saved with SpeedBooster, SprigBall, and a mockball to get up to the first Kamer, then using a flash suit to cross."
+    },
+    {
+      "id": 54,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 55,
+      "link": [4, 3],
+      "name": "Base Suitless",
+      "requires": [
+        "HiJump"
+      ]
+    },
+    {
+      "id": 56,
+      "link": [4, 3],
+      "name": "Suitless with Ice Beam",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies"
+      ]
+    },
+    {
+      "id": 57,
+      "link": [4, 3],
+      "name": "Suitless with SpringBall Jump Mid Air",
+      "requires": [
+        "canSuitlessMaridia",
+        "canSpringBallJumpMidAir"
+      ]
+    },
+    {
+      "id": 58,
+      "link": [4, 3],
+      "name": "Suitless Damage Boost Underwater Pillar",
+      "requires": [
+        {"notable": "Suitless Damage Boost Underwater Pillar"},
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        "canNeutralDamageBoost",
+        {"or": [
+          "h_crouchJumpDownGrab",
+          {"and": [
+            "h_underwaterCrouchJumpWithFlashSuit",
+            "canDownGrab"
+          ]}
+        ]},
+        {"enemyDamage": {"enemy": "Skultera", "type": "contact", "hits": 1}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Crouch jump down grab to get over the first two pillars.",
+        "For the third pillar, crouch jump to time a damage boost on the Skultera.",
+        "Right after taking damage, switch to a down grab to land on top of the pillar.",
+        "This is made easier by taking the damage boost while Morphed."
+      ]
+    },
+    {
+      "id": 59,
+      "link": [4, 3],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canSuitlessMaridia",
+        {"or": [
+          "h_crouchJumpDownGrab",
+          {"and": [
+            "h_underwaterCrouchJumpWithFlashSuit",
+            "canDownGrab"
+          ]}
+        ]},
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 9, "excessFrames": 4}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Crouch jump down grab to get onto the first pillar. This can be done by holding shoot to prevent the use of the flash suit.",
+        "Jump out then diagonally spark back onto the platform just above the first pillar to use the least amount of Energy."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Shinespark Water Escape With Lower Choot Alive",
+      "note": [
+        "Enter the room while building a shinespark and use it on the lowest part of the ramp to diagonally spark up and out of the water.",
+        "The timing and positioning for the Shinespark are very precise, and there are no extra frames on the Shinespark timer to work with.",
+        "Carry the shinespark to the bottom of the ramp either with a bounce ball which takes damage from the Choot, with a late mockball that does not have time to decellerate, or with very precise spacejumps.",
+        "Then shinespark up and use SpaceJump to reach the door."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Springball Bounce to the Door with SpaceJump",
+      "note": [
+        "Build up run speed and then use controlled springball bounces to cross the ocean to the far right ledge, and then use SpaceJump to reach the door.",
+        "Mockball down the submerged ramp and begin SpringBall bouncing under water using the platforms.",
+        "Disable SpringBall after the final jump once Samus starts falling again as a way to gain extra speed."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Speedy Springball Bounce to the Door",
+      "note": [
+        "Using an exact runway size of 7 tiles; use extremely precise, controlled springball bounces to cross the ocean.",
+        "7 tiles of runspeed can freely be achieved by requipping SpeedBooster after reaching the max normal run speed.",
+        "Mockball down the submerged ramp and begin SpringBall bouncing either above the water, or under water using the platforms.",
+        "The final SpringBall bounce must be on the left edge of the rightmost underwater platform.",
+        "While the bounce is occuring, setup a mid-air SpringBall Jump to escape the water and reach the door."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Shinespark Water Escape",
+      "note": [
+        "Enter the room while building a shinespark and use it on the lowest part of the ramp to diagonally spark up and out of the water.",
+        "Use very low jump height space jumps to carry momentum to the far side of the submerged ramp.",
+        "Both Choots must be killed.",
+        "Using Screw Attack: stay a little bit high in the water so that it remains active for the second Choot.",
+        "Using Plasma or ammo: kill the first Choot while running down the middle platform, and the second while gliding above it after spacejumping through the water.",
+        "Then shinespark up and use SpaceJump to reach the door."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Suitless Damage Boost Water Escape",
+      "note": "Find the Choot that is closest to the surface of the water, crouch jump under it and damage boost onto the dry platform to the left."
+    },
+    {
+      "id": 6,
+      "name": "Space Jump Water Escape with Ice and X-Ray",
+      "note": [
+        "Freeze the right-most ramp Choot in a way where Samus can climb on top of it and use Space Jump to escape the water.",
+        "Use a turn around to avoid knockback when making contact with the Choot to better time the use of Ice.",
+        "Freeze the Choot as far to the right (on its lowest swoop), but this method is less precise than the alternatives.",
+        "If Samus is inside the Choot when it is frozen, she can continuing moving freely.",
+        "Jump on top either in spinjump or in Morph Ball",
+        "Use XRay to standup, clipping partially into the above slope.",
+        "Use a flately jump to fall out of the wall while still keeping enough height to spacejump on top of the water and escape."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Space Jump Water Escape with Ice",
+      "note": [
+        "Get to the right of the Choot on the rightmost platform. Spin jump up to the right, break spin while aligned with the wall, then freeze the Choot and stand on it while it is midair to the right of the stalagmite.",
+        "Jump from the Choot to the water line and space jump at the water line to the Kamer platform."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Precise Space Jump Water Escape",
+      "note": [
+        "Standing from the rightmost platform, jump to the right of the stalagmite. Perform a midair wiggle to get to the left to the stalagmite, then precisely wall jump off of it.",
+        "Then perform a frame perfect space jump at the water line to bounce on the water over to the Kamer platform."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Suitless Damage Boost Underwater Pillar",
+      "note": [
+        "Crouch jump down grab to get over the first two pillars.",
+        "For the third pillar, crouch jump to time a damage boost on the Skultera.",
+        "Right after taking damage, switch to a down grab to land on top of the pillar.",
+        "This is made easier by taking the damage boost while Morphed."
+      ]
+    }
+  ],
+  "nextStratId": 73,
+  "nextNotableId": 10
+}

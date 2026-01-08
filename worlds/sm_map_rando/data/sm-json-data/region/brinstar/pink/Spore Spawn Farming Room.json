@@ -1,0 +1,371 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 64,
+  "name": "Spore Spawn Farming Room",
+  "area": "Brinstar",
+  "subarea": "Pink",
+  "roomAddress": "0x7A0A4",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x0018f82",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018f76",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Spore Spawn Farming Room Zeelas",
+      "enemyName": "Zeela",
+      "quantity": 2,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Spore Spawn Farming Room Left Zebs",
+      "enemyName": "Zeb",
+      "quantity": 2,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e3",
+      "groupName": "Spore Spawn Farming Room Right Zeb",
+      "enemyName": "Zeb",
+      "quantity": 1,
+      "homeNodes": [1]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Zeb Farm",
+      "requires": [
+        {"simpleCycleFrames": 85},
+        {"cycleFrames": 20}
+      ],
+      "farmCycleDrops": [{"enemy": "Zeb", "count": 1}]
+    },
+    {
+      "id": 19,
+      "link": [1, 1],
+      "name": "Double Zeb Farm",
+      "requires": [
+        "canDodgeWhileShooting",
+        {"cycleFrames": 105}
+      ],
+      "farmCycleDrops": [{"enemy": "Zeb", "count": 2}],
+      "note": [
+        "Jump back and forth between the left two bug pipes to farm them simultaneously."
+      ],
+      "devNote": [
+        "We use `cycleFrames` here rather than `simpleCycleFrames` because it requires non-trivial movement to maintain the double farm pattern."
+      ]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 12,
+          "openEnd": 0,
+          "steepUpTiles": 2
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 21, "steepUpTiles": 2, "openEnd": 0}},
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 165}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Stand to the right of the right-most bug pipe, and run to the right to gain a shortcharge.",
+        "Run back to the left, jump over the bug pipes with one jump, and exit through the left door."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave Shinecharged (Space Jump)",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 21, "steepUpTiles": 2, "openEnd": 0}},
+        "SpaceJump",
+        "canShinechargeMovementComplex",
+        {"shineChargeFrames": 155}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Stand to the right of the right-most bug pipe, and run to the right to gain a shortcharge.",
+        "Run back to the left, Space Jump over the bug pipes, and exit through the left door."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave With Shinespark",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 21, "steepUpTiles": 2, "openEnd": 0}},
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 20}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "note": [
+        "Stand to the right of the right-most bug pipe, and run to the right to gain a shortcharge.",
+        "Run back to the left, jump over the bug pipes, and shinespark through the left door."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave Spinning (Space Jump)",
+      "requires": [
+        "SpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 20,
+            "openEnd": 1
+          }
+        }
+      },
+      "devNote": "A variation with 1 more runway tile could be added for if the door at node 2 is unlocked, and the same for the other remote runway strats."
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 20,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 10,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$1.6"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 20,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 20, "openEnd": 1}},
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Zeb",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 12,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 13,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 14,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 15,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Roll Under Door",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 20,
+          "openEnd": 0,
+          "minExtraRunSpeed": "$7.0"
+        }
+      },
+      "requires": [
+        {"notable": "Roll Under Door"},
+        "canSpeedball"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 45,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 7,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$7.0"
+        }
+      },
+      "bypassesDoorShell": true,
+      "note": [
+        "Build up to full run speed and speedball towards the left door.",
+        "With a little luck, Samus will accelerate through the slope tiles and pass under the door."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 22,
+          "openEnd": 0,
+          "steepUpTiles": 2
+        }
+      }
+    },
+    {
+      "id": 17,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Zeb",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Roll Under Door",
+      "note": [
+        "Build up to full run speed and speedball towards the left door.",
+        "With a little luck, Samus will accelerate through the slope tiles and pass under the door."
+      ]
+    }
+  ],
+  "nextStratId": 20,
+  "nextNotableId": 2
+}

@@ -1,0 +1,48 @@
+# locations of sparkles on treasure map
+# 02/6663/jewelCoordsRound: db $b5
+# 02/6664/jewelCoordsPyramid: db $1d
+# 02/6665/jewelCoordsSquare: db $c2
+# 02/6666/jewelCoordsXShaped: db $f4
+
+# set initial season correctly in the init variables.
+07/4188/initialSeason: db $2d,defaultSeason.EYEGLASS_LAKE
+
+# Edit @extraItemsToAddTable to set seed type given with the Seed Satchel
+3f/453b/: db option.defaultSeedType
+# Add a new entry to @extraItemsToAddTable to give the player seeds when they
+# get the slingshot. This overwrites the beginning of @itemsToRemoveTable,
+# but that table is useless in rando.
+3f/4543/: |
+    db TREASURE_SLINGSHOT
+    db option.defaultSeedType
+    db $20
+
+    db TREASURE_SHOOTER
+    db option.defaultSeedType
+    db $20
+    
+    db $00  ; End of table
+# Change the pointer of @itemsToRemoveTable to point to its end of table byte,
+# virtually emptying the table (I told you it was useless!)
+3f/44ce/: ld hl,$454d
+
+15/6233/oldManRupeeValues: |
+    db $10    ; Goron mountain
+    db $0d    ; North Horon
+    db $0c    ; D1 stump
+    db $10    ; Western Coast
+    db $0c    ; Horon
+    db $0d    ; Tarm Ruins
+    db $0b    ; Woods of Winter
+    db $0c    ; Ghastly stump
+0a/587b/oldManGiveTake: |
+    dw $7472  ; Goron mountain
+    dw $7472  ; North Horon
+    dw $7472  ; D1 stump
+    dw $7472  ; Western Coast
+    dw $7472  ; Horon
+    dw $7488  ; Tarm Ruins
+    dw $7488  ; Woods of Winter
+    dw $7488  ; Ghastly stump
+
+07/63cb/foolsOreDamage: db option.foolsOreDamage

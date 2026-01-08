@@ -1,0 +1,1942 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 8,
+  "name": "Landing Site",
+  "area": "Crateria",
+  "subarea": "Central",
+  "roomAddress": "0x791F8",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [0, 0, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001892e",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Landing Site Top Left Escape Lock (to Gauntlet)",
+          "lockType": "escapeFunnel",
+          "lock": ["f_ZebesSetAblaze"],
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "never"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [2, 2, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018916",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [2, 2, 2, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "yellow",
+      "nodeAddress": "0x001893a",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Landing Site Top Right Escape Lock (to Power Bombs)",
+          "lockType": "escapeFunnel",
+          "lock": ["f_ZebesSetAblaze"],
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "never"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [0, 0, 2, 2, 2, 2, 2, 2, 2],
+        [0, 0, 2, 2, 2, 2, 2, 2, 2],
+        [1, 1, 1, 2, 2, 2, 1, 1, 1],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x0018922",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Landing Site Bottom Right Escape Lock (to Crateria Tube)",
+          "lockType": "escapeFunnel",
+          "lock": ["f_ZebesSetAblaze"],
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "never"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 2, 2, 2],
+        [0, 0, 1, 1, 1, 1, 2, 2, 2],
+        [1, 1, 1, 1, 1, 1, 2, 2, 2]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Ship",
+      "nodeType": "utility",
+      "nodeSubType": "ship",
+      "doorOrientation": "down",
+      "utility": ["save", "missile", "super", "powerbomb", "energy", "reserve"],
+      "mapTileMask": [
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 2, 2, 2, 1, 1, 1],
+        [1, 1, 1, 2, 2, 2, 2, 1, 1]
+      ],
+      "devNote": "FIXME If there's a proper memory address to the ship/elevator it was in hiding"
+    },
+    {
+      "id": 6,
+      "name": "Escape Zebes",
+      "nodeType": "door",
+      "nodeSubType": "elevator",
+      "locks": [
+        {
+          "name": "Victory Lock",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_ZebesSetAblaze"
+              ]
+            }
+          ]
+        }
+      ],
+      "yields": ["f_BeatSuperMetroid"],
+      "mapTileMask": [
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 2, 1, 1, 1, 1]
+      ],
+      "devNote": "Not a normal elevator so no nodeaddresses to or from here"
+    },
+    {
+      "id": 7,
+      "name": "Junction (Left Ledge Below Bomb Blocks)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 2, 1, 1, 1, 1, 1, 1],
+        [0, 0, 2, 1, 1, 1, 1, 1, 1],
+        [1, 1, 2, 1, 1, 1, 1, 1, 1]
+      ],
+      "note": "Represents the ledge on the way to gauntlet, but on the right side of the bomb blocks."
+    },
+    {
+      "id": 8,
+      "name": "G-Mode Morph Junction (Ship)",
+      "nodeType": "junction",
+      "nodeSubType": "g-mode",
+      "mapTileMask": [
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 1, 2, 2, 2, 1, 1, 1],
+        [1, 1, 1, 2, 2, 2, 2, 1, 1]
+      ],
+      "note": "Represents being at the Ship with G-Mode Morph (artificial morph)"
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Gauntlet Bomb Blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "B",
+      "name": "Bottom Bomb Blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "C",
+      "name": "Gauntlet Entrance Open Door",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {
+          "id": 4,
+          "devNote": "This link is only for sparking and G-mode. All other strats should go 1 -> 7 -> 5 -> 4."
+        },
+        {"id": 5},
+        {"id": 7},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 2},
+        {"id": 4},
+        {"id": 5},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {
+          "id": 1,
+          "devNote": "This link is only for sparking, blue space jump, and G-mode. All other strats should go 4 -> 5 -> 7 -> 1."
+        },
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 8}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {
+          "id": 3,
+          "devNote": "This link is only for sparking and G-Mode. All other strats should go 5 -> 4 -> 3."
+        },
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 1},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 8,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Short Runway)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Short Runway)",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave Space Jumping (Short Runway)",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 8,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Spinning (Long Runway)",
+      "requires": [
+        "canPreciseSpaceJump",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 31,
+            "openEnd": 1,
+            "steepUpTiles": 9
+          },
+          "maxExtraRunSpeed": "$5.A"
+        }
+      },
+      "note": "Gain speed using the long runway at the top-right of room, and use Space Jump to carry it into the next room."
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Mockball (Long Runway)",
+      "requires": [
+        "canPreciseSpaceJump",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 31,
+            "openEnd": 1,
+            "steepUpTiles": 9
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "maxExtraRunSpeed": "$5.A"
+        }
+      },
+      "note": "Gain speed using the long runway at the top-right of room, and use Space Jump to carry it across the room into a mockball (or speedball) at the doorway."
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce (Long Runway)",
+      "requires": [
+        "canPreciseSpaceJump",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 31,
+            "openEnd": 1,
+            "steepUpTiles": 9
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "maxExtraRunSpeed": "$5.A",
+          "movementType": "uncontrolled"
+        }
+      },
+      "note": "Gain speed using the long runway at the top-right of room, and use Space Jump to carry it across the room into a spring ball bounce into the other room."
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave Space Jumping (Long Runway)",
+      "requires": [
+        "canPreciseSpaceJump",
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 31,
+            "openEnd": 1,
+            "steepUpTiles": 9
+          },
+          "maxExtraRunSpeed": "$5.A"
+        }
+      },
+      "note": "Gain speed using the long runway at the top-right of room, and use Space Jump to carry into the other room.",
+      "devNote": "This runway has some unusable tiles because the Space Jump descent will not work with too high speed."
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Open Door",
+      "requires": [
+        {"doorUnlockedAtNode": 1}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 92,
+      "link": [1, 1],
+      "name": "G-Mode Power Bomb the Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb",
+        {"or": [
+          "h_artificialMorphMovement",
+          "h_artificialMorphBombHorizontally"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 90,
+      "link": [1, 1],
+      "name": "G-Mode through Bomb Blocks, Ship Refill, Return",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"refill": ["Energy", "Missile", "Super", "PowerBomb"]},
+        {"or": [
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          "canTrickyWalljump",
+          {"and": [
+            "SpeedBooster",
+            "HiJump"
+          ]},
+          {"and": [
+            "SpeedBooster",
+            {"or": [
+              "HiJump",
+              "canSpringBallJumpMidAir",
+              "canWalljump"
+            ]}
+          ]},
+          {"and": [
+            "h_shinechargeMaxRunway",
+            "canMidairShinespark",
+            {"or": [
+              {"shinespark": {"frames": 29, "excessFrames": 1}},
+              {"and": [
+                "canShinechargeMovementComplex",
+                {"shinespark": {"frames": 22, "excessFrames": 1}}
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload the scroll PLMs which are one tile to the left of the bomb blocks, then pass through them.",
+        "Refill at the ship, then return."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 4],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        "canMidairShinespark",
+        {"shinespark": {"frames": 154, "excessFrames": 37}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Shinespark through the top of the door to reach the breakable blocks.",
+      "devNote": "With less Energy, Samus will drop to 5 and can get to 4 if she has SpeedBooster (she may not, i.e. elevator crystal flash)."
+    },
+    {
+      "id": 12,
+      "link": [1, 4],
+      "name": "G-Mode through Bomb Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "canComplexGMode",
+            {"refill": ["Energy", "Missile", "Super", "PowerBomb"]}
+          ]},
+          "free"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload the scroll PLMs which are one tile to the left of the bomb blocks leading to Gauntlet.",
+        "Then pass through the bomb blocks (which will have become air).",
+        "If needed, refill at the ship and/or continue on through the next set of bomb blocks to reach the bottom right door."
+      ]
+    },
+    {
+      "id": 89,
+      "link": [1, 5],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        "canMidairShinespark",
+        {"shinespark": {"frames": 154, "excessFrames": 107}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Shinespark through the top of the door to reach the breakable blocks.",
+      "devNote": "With more Energy, Samus will spark to 4, but can freely access 5 from there."
+    },
+    {
+      "id": 13,
+      "link": [1, 7],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_destroyBombWalls",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 14,
+      "link": [1, 7],
+      "name": "Come in Getting Blue Speed, Break Bomb Blocks",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"or": [
+          "canBlueSpaceJump",
+          {"and": [
+            "canSpringBallBounce",
+            "canTrickyJump"
+          ]},
+          "canLongChainTemporaryBlue"
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 15,
+      "link": [1, 7],
+      "name": "Come in With Blue Spring Ball Bounce, Break Bomb Blocks",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled"
+        }
+      },
+      "requires": [
+        "canTrickyJump"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 16,
+      "link": [1, 7],
+      "name": "Come In Blue Spinning, Space Jump Break Bomb Blocks",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "unusableTiles": 0
+        }
+      },
+      "requires": [
+        "canBlueSpaceJump"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 17,
+      "link": [1, 7],
+      "name": "Come In With Temporary Blue, Break Bomb Blocks",
+      "entranceCondition": {
+        "comeInWithTemporaryBlue": {}
+      },
+      "requires": [
+        "canLongChainTemporaryBlue",
+        "can4HighMidAirMorph"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 18,
+      "link": [1, 8],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphMovement"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload the scroll PLMs which are one tile to the left of the bomb blocks leading to Gauntlet.",
+        "Then pass through the bomb blocks (which will have become air)."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 20,
+      "link": [2, 4],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [2, 4],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_getBlueSpeedMaxRunway",
+          {"and": [
+            "ScrewAttack",
+            "Grapple"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Break the Bomb blocks using Screw Attack in a Moonfall or SpeedBooster."
+    },
+    {
+      "id": 22,
+      "link": [2, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 23,
+      "link": [2, 8],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 24,
+      "link": [3, 1],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 30,
+          "openEnd": 1,
+          "steepUpTiles": 9
+        }
+      },
+      "requires": [
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 125, "excessFrames": 33}}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 25,
+      "link": [3, 1],
+      "name": "Shinespark through Door",
+      "requires": [
+        {"obstaclesCleared": ["C"]},
+        {"or": [
+          {"canShineCharge": {"usedTiles": 30, "steepUpTiles": 9, "openEnd": 1}},
+          {"and": [
+            {"canShineCharge": {"usedTiles": 31, "steepUpTiles": 9, "openEnd": 1}},
+            {"doorUnlockedAtNode": 3}
+          ]}
+        ]},
+        {"shinespark": {"frames": 125}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": [], "useImplicitRequires": false}],
+      "devNote": [
+        "The Gauntlet Entrance door must be open, so the connecting room at 3 cannot be used.",
+        "Unlocking the door is free since the obstacle C cleared means that any lock was already taken care of."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 1],
+      "name": "Big Jump with Speed and Screw",
+      "requires": [
+        "SpeedBooster",
+        "canCarefulJump",
+        "ScrewAttack"
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 27,
+      "link": [3, 1],
+      "name": "Big Jump with Blue Speed",
+      "requires": [
+        {"notable": "Big Jump with Blue Speed"},
+        "canTrickyJump",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_bombThings"
+        ]},
+        {"getBlueSpeed": {"usedTiles": 30, "openEnd": 2}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Use the runway near the top right door to jump towards the top left bomb blocks and break them using the blue speed from SpeedBooster.",
+        "This can be done using the full runway, with a one-tap shortcharge, where the tap is at the top of the lowest slope, and the jump is at the top of the last slope.",
+        "Alternatively, a controlled release of the jump button works in place of the shortcharge, where the bottom of the thick dark line in the background at the top of the room works as a visual cue.",
+        "Aiming down or morphing before hitting the wall can help make the jump slightly less precise.",
+        "Note that it is possible to jump all the way to the ledge above the bomb blocks, place a Power Bomb, then drop down, but it isn't typically easier."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [3, 1],
+      "name": "Big Jump with Blue Speed Bounce",
+      "requires": [
+        {"notable": "Big Jump with Blue Speed"},
+        "canTrickyJump",
+        "Morph",
+        "canLateralMidAirMorph",
+        {"getBlueSpeed": {"usedTiles": 30, "openEnd": 2}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Use the runway near the top right door to jump towards the top left bomb blocks and break them using the blue speed from SpeedBooster.",
+        "This can be done using the full runway, with a one-tap shortcharge, where the tap is at the top of the lowest slope, and the jump is at the top of the last slope.",
+        "Alternatively, a controlled release of the jump button works in place of the shortcharge, where the bottom of the thick dark line in the background at the top of the room works as a visual cue.",
+        "While midair, morph once Samus begins descending to bounce through all of the Bomb blocks."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [3, 1],
+      "name": "Big Jump Leave With Temporary Blue",
+      "requires": [
+        {"notable": "Big Jump with Blue Speed"},
+        {"notable": "Big Jump Leave With Temporary Blue"},
+        "canTrickyJump",
+        "Morph",
+        "canLateralMidAirMorph",
+        {"getBlueSpeed": {"usedTiles": 30, "openEnd": 2}},
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the runway near the Power Bomb room door to jump to the left, morphing as Samus begins descending, to bounce through the Bomb blocks.",
+        "Any time while bouncing, hold an angle button and unmorph to gain temporary blue; then chain it to reach the door with temporary blue.",
+        "The jump can be set up by using the full runway with a one-tap shortcharge, with the tap being at the top of the lowest slope."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [3, 1],
+      "name": "Leave With Controlled Spring Ball Bounce (Long Runway)",
+      "requires": [
+        {"obstaclesCleared": ["A", "C"]},
+        "SpeedBooster",
+        "canInsaneJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 31,
+            "openEnd": 1,
+            "steepUpTiles": 9
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "minExtraRunSpeed": "$4.9",
+          "movementType": "controlled"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": [], "useImplicitRequires": false}],
+      "note": [
+        "Gain speed using the long runway at the top-right of room, do a big jump across the room into a mockball or speedball, then use controlled bounces to make it through the top-left door."
+      ],
+      "devNote": "Unlocking doors would be done ahead-of-time when the door is opened, i.e. when obstacle 'C' is set."
+    },
+    {
+      "id": 32,
+      "link": [3, 1],
+      "name": "Use Flash Suit, Speedy Blue Jump",
+      "requires": [
+        {"notable": "Big Jump with Blue Speed"},
+        {"getBlueSpeed": {"usedTiles": 30, "openEnd": 2}},
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 52, "excessFrames": 45}}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Use the runway near the top right door to jump towards the top left bomb blocks and break them using the blue speed from SpeedBooster.",
+        "This can be done using the full runway, with a one-tap shortcharge, where the tap is at the top of the lowest slope, and the jump is at the top of the last slope.",
+        "Alternatively, a controlled release of the jump button works in place of the shortcharge, where the bottom of the thick dark line in the background at the top of the room works as a visual cue.",
+        "Aiming down before hitting the wall can help make the jump slightly less precise.",
+        "Use a flash suit to get through the remaining blocks."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [3, 1],
+      "name": "Use Flash Suit, Horizontal Spark",
+      "requires": [
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 95, "excessFrames": 34}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 90, "excessFrames": 34}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to save a small amount of energy by jumping from the upper right ledge, instead of from the plateau.",
+        "Use the cues in the background to spark at a precise height."
+      ],
+      "devNote": "This is only useful without SpeedBooster and without a way to refill at the ship - i.e. without wall jump to get back up."
+    },
+    {
+      "id": 34,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 35,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 36,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 31,
+          "openEnd": 1,
+          "steepDownTiles": 9
+        }
+      }
+    },
+    {
+      "id": 37,
+      "link": [3, 3],
+      "name": "Gauntlet Wraparound Shot",
+      "requires": [
+        "canCameraManip",
+        "canWrapAroundShot",
+        {"doorUnlockedAtNode": 1}
+      ],
+      "unlocksDoors": [{"nodeId": 1, "types": ["ammo"], "requires": ["never"]}],
+      "clearsObstacles": ["C"],
+      "note": [
+        "Open the Gauntlet Entrance door by shooting a charged Wave shot through the right wall to wrap around to hit the door.",
+        "Near the top right door, move the right wall a bit off camera. Jump and shoot a charge shot diagonally into the floor just before landing while moving rightwards.",
+        "Listen for the door opening to ensure it worked."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 39,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 40,
+      "link": [3, 8],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 41,
+      "link": [4, 1],
+      "name": "Shinespark",
+      "requires": [
+        "canHorizontalShinespark",
+        {"canShineCharge": {
+          "usedTiles": 19,
+          "steepUpTiles": 2,
+          "steepDownTiles": 1,
+          "openEnd": 2
+        }},
+        {"shinespark": {"frames": 125, "excessFrames": 33}}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 42,
+      "link": [4, 1],
+      "name": "Shinespark through Door",
+      "requires": [
+        {"obstaclesCleared": ["C"]},
+        {"canShineCharge": {
+          "usedTiles": 19,
+          "steepUpTiles": 2,
+          "steepDownTiles": 1,
+          "openEnd": 2
+        }},
+        {"shinespark": {"frames": 125}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": [], "useImplicitRequires": false}],
+      "devNote": [
+        "Unlocking the door is free since the obstacle C cleared means that any lock was already taken care of."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [4, 1],
+      "name": "Big Jump Midair Shinespark",
+      "requires": [
+        "canMidairShinespark",
+        "canShinechargeMovementComplex",
+        {"canShineCharge": {
+          "usedTiles": 19,
+          "steepUpTiles": 2,
+          "steepDownTiles": 1,
+          "openEnd": 2
+        }},
+        {"or": [
+          {"shinespark": {"frames": 95, "excessFrames": 33}},
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"shinespark": {"frames": 87, "excessFrames": 33}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Store the spark on the right side of the ledge.  Run left and do a big jump towards the gauntlet door and then midair spark at the right time.",
+        "Do not jump to max height or Samus will run out of shinecharge frames, instead short the jump a little.",
+        "The lines in the background make for a good way to measure height."
+      ]
+    },
+    {
+      "id": 44,
+      "link": [4, 1],
+      "name": "Big Jump Midair Shinespark Through Door",
+      "requires": [
+        {"obstaclesCleared": ["C"]},
+        "canMidairShinespark",
+        "canShinechargeMovementComplex",
+        {"canShineCharge": {
+          "usedTiles": 19,
+          "steepUpTiles": 2,
+          "steepDownTiles": 1,
+          "openEnd": 2
+        }},
+        {"or": [
+          {"shinespark": {"frames": 96}},
+          {"and": [
+            "canShinechargeMovementTricky",
+            {"shinespark": {"frames": 88}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": [], "useImplicitRequires": false}],
+      "note": [
+        "Store the spark on the right side of the ledge.  Run left and do a big jump towards the gauntlet door and then midair spark at the right time.",
+        "Do not jump to max height or Samus will run out of shinecharge frames, instead short the jump a little.",
+        "The lines in the background make for a good way to measure height."
+      ],
+      "devNote": [
+        "Unlocking the door is free since the obstacle C cleared means that any lock was already taken care of."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [4, 1],
+      "name": "Blue Space Jump (Plateau)",
+      "requires": [
+        "canBlueSpaceJump",
+        {"getBlueSpeed": {
+          "usedTiles": 19,
+          "steepUpTiles": 2,
+          "steepDownTiles": 1,
+          "openEnd": 2
+        }}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Use the lines in the background to determine the height of the breakable blocks.",
+      "detailNote": [
+        "It is also possible to do this from the top right door's runway.",
+        "Although there is a larger runway available above, minimizing the speed is important,",
+        "so the runway is only slightly longer than the plateau, but the Space Jump is significantly more precise.",
+        "With at least a one-tap short charge, jump off the ledge and descend as much as possible while keeping space jump active,",
+        "by using well timed, short hops. Once approaching the wall, jump again to continue through all of the bomb blocks.",
+        "If HiJump is available, it is much easier to use the blue space jump strat from the ground than from above."
+      ]
+    },
+    {
+      "id": 46,
+      "link": [4, 1],
+      "name": "Blue Space, HiJump from Below",
+      "requires": [
+        "canBlueSpaceJump",
+        "HiJump",
+        {"getBlueSpeed": {"usedTiles": 38, "steepDownTiles": 3, "openEnd": 1}}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Starting near the right runway, run through the bomb block passage, then jump right after exiting.",
+        "Using HiJump and space jump, Samus is able to elevate enough to break through the bomb blocks blocking the Gauntlet entrance."
+      ]
+    },
+    {
+      "id": 47,
+      "link": [4, 1],
+      "name": "Blue Springball Jump",
+      "requires": [
+        "canTrickySpringBallJump",
+        "canLateralMidAirMorph",
+        "HiJump",
+        "h_getBlueSpeedMaxRunway"
+      ],
+      "note": [
+        "From the right door, run and jump while on the dirt mound directly right of the ship.",
+        "Then SpringBall Jump to reach the Bomb blocks leading to Gauntlet."
+      ]
+    },
+    {
+      "id": 48,
+      "link": [4, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 49,
+      "link": [4, 1],
+      "name": "Carry Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 34]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 50,
+      "link": [4, 1],
+      "name": "Use Flash Suit, Horizontal Spark",
+      "requires": [
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 103, "excessFrames": 34}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 99, "excessFrames": 34}}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 51,
+      "link": [4, 2],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [
+        {"getBlueSpeed": {"usedTiles": 25, "steepDownTiles": 3, "openEnd": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 52,
+      "link": [4, 2],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        {"or": [
+          {"getBlueSpeed": {"usedTiles": 25, "steepDownTiles": 3, "openEnd": 0}},
+          {"and": [
+            "ScrewAttack",
+            "Grapple"
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Break the Bomb blocks using Screw Attack in a Moonfall or SpeedBooster."
+    },
+    {
+      "id": 53,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canLongIBJ"
+        ]}
+      ]
+    },
+    {
+      "id": 54,
+      "link": [4, 3],
+      "name": "Shinespark",
+      "requires": [
+        {"canShineCharge": {
+          "usedTiles": 19,
+          "steepUpTiles": 2,
+          "steepDownTiles": 1,
+          "openEnd": 2
+        }},
+        {"shinespark": {"frames": 45, "excessFrames": 13}}
+      ]
+    },
+    {
+      "id": 55,
+      "link": [4, 3],
+      "name": "Tricky HiJump SpringBall Jump",
+      "requires": [
+        "SpeedBooster",
+        "HiJump",
+        "canTrickySpringBallJump"
+      ]
+    },
+    {
+      "id": 56,
+      "link": [4, 3],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 43, "excessFrames": 24}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 57,
+      "link": [4, 3],
+      "name": "G-Mode Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 3 screens."
+    },
+    {
+      "id": 93,
+      "link": [4, 3],
+      "name": "G-Mode Deep Stuck X-Ray Climb, Ship Refill",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "h_getBlueSpeedMaxRunway",
+          "ScrewAttack"
+        ]},
+        {"refill": ["Energy", "Missile", "Super", "PowerBomb"]},
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": "Refill at the ship then return and X-Ray climb up 3 screens."
+    },
+    {
+      "id": 58,
+      "link": [4, 3],
+      "name": "Shinespark Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 1},
+        {"shinespark": {"frames": 1, "excessFrames": 1}},
+        "canShinesparkDeepStuck",
+        "canXRayClimb",
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": "Climb up 3 screens."
+    },
+    {
+      "id": 59,
+      "link": [4, 3],
+      "name": "Crystal Flash X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        {"notable": "Crystal Flash X-Ray Climb"},
+        "canLongXRayClimb",
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Become doorstuck in the bottom right door, use a Crystal Flash to continue X-Ray climbing past the slope above the door.",
+        "Start by climbing until the slope pushed Samus down.",
+        "Then auto-spinjump towards the door, and Morph to perform the Crystal Flash.",
+        "Finally, continue X-Ray climbing to the top door.",
+        "Climb up 3 screens."
+      ],
+      "devNote": "FIXME: Requires a way to take damage."
+    },
+    {
+      "id": 60,
+      "link": [4, 3],
+      "name": "Very Deep Stuck X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 3 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 94,
+      "link": [4, 3],
+      "name": "Very Deep Stuck X-Ray Climb, Ship Refill",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "h_getBlueSpeedMaxRunway",
+          "ScrewAttack"
+        ]},
+        {"refill": ["Energy", "Missile", "Super", "PowerBomb"]},
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "bypassesDoorShell": true,
+      "flashSuitChecked": true,
+      "note": [
+        "Enter with G-mode direct, refill at the ship and return.",
+        "Back up to between 1 and 6 pixels from the door transition, and activate X-ray to get very deep stuck in the door.",
+        "Climb up 3 screens, and perform a turnaround buffered spin-jump away from the door to trigger the transition, bypassing any lock on the door."
+      ]
+    },
+    {
+      "id": 61,
+      "link": [4, 4],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 45,
+          "openEnd": 1
+        }
+      },
+      "devNote": [
+        "With SpeedBooster, climb the platforms to the ship, then run through the blocks.",
+        "Without, the runway is not as long, but it's much longer than it takes to get max run speed."
+      ]
+    },
+    {
+      "id": 91,
+      "link": [4, 4],
+      "name": "G-Mode Morph, Power Bomb the Blocks",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": "Power Bomb the blocks then exit G-mode for them to break."
+    },
+    {
+      "id": 62,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 63,
+      "link": [4, 8],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphMovement"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 64,
+      "link": [5, 1],
+      "name": "Shinespark",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        {"shinespark": {"frames": 40}},
+        {"or": [
+          "h_destroyBombWalls",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Shinespark diagonally from the small hill left of the ship to break part way into the hidden bomb wall, then use Bombs or another means to continue to the left."
+    },
+    {
+      "id": 65,
+      "link": [5, 1],
+      "name": "Speedy Jump Diagonal Spark",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        "canShinechargeMovement",
+        "canMidairShinespark",
+        {"or": [
+          {"shinespark": {"frames": 29, "excessFrames": 1}},
+          {"and": [
+            "canShinechargeMovementComplex",
+            {"shinespark": {"frames": 22, "excessFrames": 1}}
+          ]}
+        ]},
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_usePowerBomb",
+          "ScrewAttack"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Finish a shinecharge right of the ship, then run left and jump from the hill left of the ship.",
+        "Turnaround to prevent moving too far horizontally, then spark diagonally at the peak of the jump.",
+        "With a higher speed, Samus can jump higher and lose less energy, but the shinecharge is tighter."
+      ]
+    },
+    {
+      "id": 66,
+      "link": [5, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 31, "excessFrames": 2}},
+        "h_destroyBombWalls"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 67,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 68,
+      "link": [5, 3],
+      "name": "Shinespark",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        {"or": [
+          {"shinespark": {"frames": 78, "excessFrames": 11}},
+          {"and": [
+            "canShinechargeMovement",
+            {"shinespark": {"frames": 73, "excessFrames": 15}}
+          ]},
+          {"and": [
+            "canShinechargeMovement",
+            "canMidairShinespark",
+            {"shinespark": {"frames": 65, "excessFrames": 15}}
+          ]},
+          {"and": [
+            "canShinechargeMovement",
+            "canMidairShinespark",
+            "HiJump",
+            {"shinespark": {"frames": 61, "excessFrames": 14}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 69,
+      "link": [5, 4],
+      "name": "Over the Top",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "SpaceJump",
+          "canIBJ",
+          "HiJump",
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 70,
+      "link": [5, 4],
+      "name": "Through the Blocks",
+      "requires": [
+        {"or": [
+          "h_getBlueSpeedMaxRunway",
+          "h_destroyBombWalls",
+          {"obstaclesCleared": ["B"]}
+        ]}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 71,
+      "link": [5, 4],
+      "name": "Use Flash Suit, Break the Blocks",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 54, "excessFrames": 38}}
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 72,
+      "link": [5, 5],
+      "name": "Refill",
+      "requires": [
+        {"refill": ["Energy", "Missile", "Super", "PowerBomb"]}
+      ],
+      "devNote": "If the ship refill is somehow altered or removed, this needs to be updated here and on the G-mode strat from 1->4."
+    },
+    {
+      "id": 73,
+      "link": [5, 6],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 74,
+      "link": [5, 7],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "SpaceJump",
+          "canLongIBJ",
+          "SpeedBooster",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]},
+          {"and": [
+            "HiJump",
+            "canJumpIntoIBJ"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 75,
+      "link": [5, 7],
+      "name": "Gauntlet Walljumps",
+      "requires": [
+        "canTrickyWalljump",
+        {"or": [
+          "HiJump",
+          "canConsecutiveWalljump"
+        ]}
+      ]
+    },
+    {
+      "id": 76,
+      "link": [5, 7],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 20, "excessFrames": 10}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 77,
+      "link": [6, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 78,
+      "link": [7, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "SpaceJump",
+          "canLongIBJ",
+          "canJumpIntoIBJ"
+        ]},
+        {"or": [
+          "h_destroyBombWalls",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 79,
+      "link": [7, 1],
+      "name": "HiJump",
+      "requires": [
+        "HiJump",
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          "h_bombThings",
+          {"and": [
+            "ScrewAttack",
+            {"or": [
+              "canTwoTileSqueeze",
+              "SpeedBooster",
+              {"and": [
+                "canXRayStandUp",
+                "Morph"
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": "HiJump alone can only reach the lower bomb block."
+    },
+    {
+      "id": 80,
+      "link": [7, 1],
+      "name": "Spring Ball",
+      "requires": [
+        "canSpringBallJumpMidAir",
+        {"or": [
+          "h_bombThings",
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 81,
+      "link": [7, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 7, "excessFrames": 2}},
+        "h_destroyBombWalls"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 82,
+      "link": [7, 1],
+      "name": "Use Flash Suit, Horizontal Spark",
+      "requires": [
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 54, "excessFrames": 43}},
+        {"or": [
+          "canWalljump",
+          "SpaceJump",
+          {"and": [
+            "HiJump",
+            {"or": [
+              "SpeedBooster",
+              "canInsaneJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "This can be done with HiJump alone; it requires a precise spin jump and then a very precise horizontal spark at the top of the jump."
+    },
+    {
+      "id": 83,
+      "link": [7, 5],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 84,
+      "link": [8, 1],
+      "name": "G-Mode Morph Power Bomb",
+      "requires": [
+        "canGMode",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          {"and": [
+            "HiJump",
+            "h_artificialMorphJumpIntoIBJ"
+          ]}
+        ]},
+        "h_artificialMorphPowerBomb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Using IBJ to reach the Gauntlet entrance bomb blocks, place a Power Bomb and it will hit but not break the blocks.",
+        "Then IBJ up to to the left, unmorph and use X-Ray to cancel G-mode, the blocks will be broken, allowing Samus to pass through."
+      ]
+    },
+    {
+      "id": 85,
+      "link": [8, 1],
+      "name": "G-Mode Morph Screw Attack",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphLongIBJ",
+        "ScrewAttack"
+      ],
+      "flashSuitChecked": true,
+      "note": "IBJ up to to the top left of the room. Use X-Ray to cancel G-mode, then fall with Screw Attack to break the bomb blocks."
+    },
+    {
+      "id": 86,
+      "link": [8, 3],
+      "name": "G-Mode Morph IBJ",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphLongIBJ"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 87,
+      "link": [8, 4],
+      "name": "G-Mode Morph Power Bomb",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphPowerBomb"
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": "Place a Power Bomb then quickly exit G-Mode before it explodes to break the bomb blocks."
+    },
+    {
+      "id": 88,
+      "link": [8, 4],
+      "name": "G-Mode Morph IBJ",
+      "requires": [
+        "canGMode",
+        "h_artificialMorphIBJ"
+      ],
+      "flashSuitChecked": true,
+      "devNote": "IBJ over the wall."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Big Jump with Blue Speed",
+      "note": [
+        "Use the runway near the top right door to jump towards the top left bomb blocks and break them using the blue speed from SpeedBooster.",
+        "This can be done using the full runway, with a one-tap shortcharge, where the tap is at the top of the lowest slope, and the jump is at the top of the last slope.",
+        "Alternatively, a controlled release of the jump button works in place of the shortcharge, where the bottom of the thick dark line in the background at the top of the room works as a visual cue.",
+        "Aiming down or morphing before hitting the wall can help make the jump slightly less precise."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Big Jump Leave With Temporary Blue",
+      "note": [
+        "Use the runway near the Power Bomb room door to jump to the left, morphing as Samus begins descending, to bounce through the Bomb blocks.",
+        "Any time while bouncing, hold an angle button and unmorph to gain temporary blue; then chain it to reach the door with temporary blue.",
+        "The jump can be set up by using the full runway with a one-tap shortcharge, with the tap being at the top of the lowest slope."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Crystal Flash X-Ray Climb",
+      "note": [
+        "Become doorstuck in the bottom right door, use a Crystal Flash to continue X-Ray climbing past the slope above the door.",
+        "Start by climbing until the slope pushed Samus down.",
+        "Then auto-spinjump towards the door, and Morph to perform the Crystal Flash.",
+        "Finally, continue X-Ray climbing to the top door.",
+        "Climb up 3 screens."
+      ]
+    }
+  ],
+  "nextStratId": 95,
+  "nextNotableId": 6
+}

@@ -1,0 +1,161 @@
+# The following blocks are the actual compass chime sound data that describe notes
+# and modifiers being applied on the sound chip. We inject those in bank 3f since
+# there is quite some space here, (and it's still in the continuation of the sound bank)
+# Those were extracted from Stewmath's randomizer, so credit goes to whoever
+# composed those (most likely Stewmath).
+3f//sndCompassD1: |
+    db F6,02,D9,2E,06,D3,2E,06,D9,35,06,D3,35,06,60,0C,D9,34,06,D3,34,06,D9,35,06,D3,35,06,60,0C,D9,38,06,D3,38,06,D9,47,06,D3,47,06,FF
+3f//sndCompassD2: |
+    db F6,02,D9,27,06,D3,27,06,D9,27,06,D3,27,06,D9,2A,06,D3,2A,06,60,0C,D9,27,05,D3,27,01,D9,27,05,D3,27,01,D9,27,05,D3,27,01,D9,27,05,D3,27,01,D9,2A,06,D3,2A,06,60,0C,FF
+3f//sndCompassD3: |
+    db F6,02,D9,30,06,D3,30,06,60,06,D9,30,03,D3,30,03,D9,33,06,D3,33,06,D9,32,06,D3,32,06,D9,31,06,D3,31,06,D9,30,06,D3,30,06,FF
+3f//sndCompassD4: |
+    db F6,02,D9,26,05,D3,26,01,D9,27,05,D3,27,01,D9,29,05,D3,29,01,D9,2A,05,D3,2A,01,D9,2C,05,D3,2C,01,D9,2A,05,D3,2A,01,D9,29,05,D3,29,01,D9,27,05,D3,27,01,D9,26,05,D3,26,01,D9,29,05,D3,29,01,D9,2C,05,D3,2C,01,D9,2F,05,D3,2F,01,D9,2E,06,D3,2E,06,FF
+3f//sndCompassD5: |
+    db F6,02,D9,2D,06,D3,2D,06,D9,2C,06,D3,2C,06,D9,2B,06,D3,2B,06,D9,31,06,D3,31,06,D9,30,06,D3,30,06,D9,2A,06,D3,2A,06,FF
+3f//sndCompassD6: |
+    db F6,02,D9,27,06,D3,27,06,D9,29,06,D3,29,06,D9,2E,06,D3,2E,06,60,0C,D9,27,06,D3,27,06,D9,29,06,D3,29,06,D9,2F,06,D3,2F,06,FF
+3f//sndCompassD7: |
+    db F6,02,D9,28,06,D3,28,06,D9,27,06,D3,27,06,D9,29,06,D3,29,06,D9,28,06,D3,28,06,D9,26,06,D3,26,06,60,06,D9,25,03,24,03,D9,22,06,D3,22,06,D9,1F,06,D3,1F,06,FF
+3f//sndCompassD8: |
+    db F6,02,D9,14,06,D3,14,06,D9,15,06,D3,15,06,D9,14,06,D3,14,06,D9,10,06,D3,10,06,D9,14,06,D3,14,06,D9,15,06,D3,15,06,D9,14,06,D3,14,06,D9,10,06,D3,10,06,FF
+
+# The following blocks inject the description (into what would be "soundChannelPointers.s")
+# for the new dungeon-specific compass chime sound channels. The first byte describes
+# the audio channel and priority, and the word is a pointer to the actuel sound
+# data (inside the bank that was explicited in "soundPointers.s").
+# Bank 39 being extremely packed, we are forced to overwrite unused sound & music
+# data to describe those new sounds.
+
+# Injected in place of unused data(?)
+39/55b1/sndCompassD1Ptr: | 
+    db $b2
+    dw sndCompassD1
+    db $ff
+39/55b5/sndCompassD2Ptr: |
+    db $b2
+    dw sndCompassD2
+    db $ff
+39/55b9/sndCompassD3Ptr: |
+    db $b2
+    dw sndCompassD3
+    db $ff
+39/55bd/sndCompassD4Ptr: |
+    db $b2
+    dw sndCompassD4
+    db $ff
+39/55c1/sndCompassD5Ptr: |
+    db $b2
+    dw sndCompassD5
+    db $ff
+39/55c5/sndCompassD6Ptr: |
+    db $b2
+    dw sndCompassD6
+    db $ff
+39/55c9/sndCompassD7Ptr: |
+    db $b2
+    dw sndCompassD7
+    db $ff
+39/55cd/sndCompassD8Ptr: | 
+    db $b2
+    dw sndCompassD8
+    db $ff
+
+# There a 8 more unused bytes after the whole block, letting some space for another sound injection
+
+# The following blocks replace the pointers from "soundPointers.s" to make them
+# point on our new sounds data instead of dummy values.
+# The first byte corresponds to the bank where the actual sound data is (NOT the bank
+# where the second word points!), to which 0x39 is added
+39/59ca/: |  # sound id D5
+    db $06
+    dw sndCompassD1Ptr
+39/59cd/: |  # sound id D6
+    db $06
+    dw sndCompassD2Ptr
+39/59d0/: |  # sound id D7
+    db $06
+    dw sndCompassD3Ptr
+39/59d3/: |  # sound id D8
+    db $06
+    dw sndCompassD4Ptr
+39/59d6/: |  # sound id D9
+    db $06
+    dw sndCompassD5Ptr
+39/59d9/: |  # sound id DA
+    db $06
+    dw sndCompassD6Ptr
+39/59dc/: |  # sound id DB
+    db $06
+    dw sndCompassD7Ptr
+39/59df/: |  # sound id DC
+    db $06
+    dw sndCompassD8Ptr
+
+# Edit the function playing the compass sound to:
+# - use an alternate table capable of ringing compasses in any room in the game
+# - play the appropriate compass sound to indicate which dungeon it belongs to
+17//compassRoomsTable: /include compassRoomsTable
+17//compassChimeHandle: |
+    call getThisRoomFlags
+    bit 5,(hl)
+    ret nz
+
+    ld a,(wActiveGroup)
+    ld b,a
+    ld a,(wActiveRoom)
+    ld c,a
+    ld e,$01
+    ld hl,compassRoomsTable
+    call searchDoubleKey
+    ret nc
+
+    ld a,(hl)
+    ld b,a
+
+    ; Check if player owns the compass for this dungeon
+    ld hl,wDungeonCompasses
+    call checkFlag
+    ret z
+
+    ; If keysanity is not enabled, use vanilla compass chime
+    ld a,option.customCompassChimes
+    or a
+    jr z,@vanillaChime
+    
+    ; Else, try using a custom chime if relevant (= not Hero's Cave)
+    ld a,b
+    or a
+    jr z,@vanillaChime  ; if dungeon is 0 (Hero's Cave), use vanilla chime
+    cp $0c
+    jr nz,@index  ; if dungeon is c (Past mermaid cave), set index to 6
+    ld a,$6
+    @index:
+    add a,$d5  ; Sounds d5-dd are the custom compass chimes
+    jr @playSound
+    
+    @vanillaChime:
+    ld a,SND_COMPASS
+    @playSound:
+    jp playSound
+
+01/4a58/: |
+    ld e,$17
+    ld hl,compassChimeHandle
+    call interBankCall
+    ret
+
+
+# Address the issue with @skipWeirdCall described in the disasm
+39/4bfe/: | 
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop

@@ -1,0 +1,532 @@
+## edit somaria block
+# objectCollisionTable
+# copy ENEMYCOLLISION_PROJECTILE 0x06 (seasons) from ENEMYCOLLISION_PROJECTILE 0x06 (ages)
+07/6b63/: /copy a,$07,$2ddf,$01
+# copy ENEMYCOLLISION_PROJECTILE_WITH_RING_MOD 0x07 (seasons) from ENEMYCOLLISION_PROJECTILE_WITH_RING_MOD 0x07 (ages)
+07/6b83/: /copy a,$07,$2dff,$01
+# copy ENEMYCOLLISION_MERGED_TWINROVA 0x08 (seasons) from ENEMYCOLLISION_MERGED_TWINROVA 0x08 (ages)
+07/6ba3/: /copy a,$07,$2e1f,$01
+# copy ENEMYCOLLISION_TWINROVA 0x0a (seasons) from ENEMYCOLLISION_TWINROVA 0x0a (ages)
+07/6be3/: /copy a,$07,$2e5f,$01
+# copy ENEMYCOLLISION_GANON 0x0b (seasons) from ENEMYCOLLISION_GANON 0x0b (ages)
+07/6c03/: /copy a,$07,$2e7f,$01
+# copy ENEMYCOLLISION_KING_MOBLIN 0x0e (seasons) from ENEMYCOLLISION_KING_MOBLIN 0x50 (ages)
+07/6c63/: /copy a,$07,$371f,$01
+# copy ENEMYCOLLISION_MOTIONLESS_ENEMY 0x0f (seasons) from ENEMYCOLLISION_MOTIONLESS_ENEMY 0x0f (ages)
+07/6c83/: /copy a,$07,$2eff,$01
+# copy ENEMYCOLLISION_STANDARD_ENEMY 0x10 (seasons) from ENEMYCOLLISION_STANDARD_ENEMY 0x10 (ages)
+07/6ca3/: /copy a,$07,$2f1f,$01
+# copy ENEMYCOLLISION_BURNABLE_ENEMY 0x11 (seasons) from ENEMYCOLLISION_BURNABLE_ENEMY 0x11 (ages)
+07/6cc3/: /copy a,$07,$2f3f,$01
+# copy ENEMYCOLLISION_LYNEL 0x12 (seasons) from ENEMYCOLLISION_LYNEL 0x12 (ages)
+07/6ce3/: /copy a,$07,$2f5f,$01
+# copy ENEMYCOLLISION_BLADE_TRAP 0x13 (seasons) from ENEMYCOLLISION_BLADE_TRAP 0x13 (ages)
+07/6d03/: /copy a,$07,$2f7f,$01
+# copy ENEMYCOLLISION_GIBDO 0x15 (seasons) from ENEMYCOLLISION_GIBDO 0x16 (ages)
+07/6d43/: /copy a,$07,$2fdf,$01
+# copy ENEMYCOLLISION_SPARK 0x16 (seasons) from ENEMYCOLLISION_SPARK 0x17 (ages)
+07/6d63/: /copy a,$07,$2fff,$01
+# copy ENEMYCOLLISION_SPIKED_BEETLE 0x17 (seasons) from ENEMYCOLLISION_SPIKED_BEETLE 0x18 (ages)
+07/6d83/: /copy a,$07,$301f,$01
+# copy ENEMYCOLLISION_BUBBLE 0x18 (seasons) from ENEMYCOLLISION_BUBBLE 0x19 (ages)
+07/6da3/: /copy a,$07,$303f,$01
+# copy ENEMYCOLLISION_GHINI 0x19 (seasons) from ENEMYCOLLISION_GHINI 0x1a (ages)
+07/6dc3/: /copy a,$07,$305f,$01
+# copy ENEMYCOLLISION_BUZZBLOB 0x1a (seasons) from ENEMYCOLLISION_BUZZBLOB 0x1b (ages)
+07/6de3/: /copy a,$07,$307f,$01
+# copy ENEMYCOLLISION_WHISP 0x1b (seasons) from ENEMYCOLLISION_WHISP 0x1c (ages)
+07/6e03/: /copy a,$07,$309f,$01
+# copy ENEMYCOLLISION_IRON_MASK 0x1c (seasons) from ENEMYCOLLISION_IRON_MASK 0x1d (ages)
+07/6e23/: /copy a,$07,$30bf,$01
+# copy ENEMYCOLLISION_ACTIVE_RED_ARMOS 0x1d (seasons) from ENEMYCOLLISION_ACTIVE_RED_ARMOS 0x1e (ages)
+07/6e43/: /copy a,$07,$30df,$01
+# copy ENEMYCOLLISION_DARKNUT 0x1f (seasons) from ENEMYCOLLISION_DARKNUT 0x20 (ages)
+07/6e83/: /copy a,$07,$311f,$01
+# copy ENEMYCOLLISION_BURNABLE_UNDEAD 0x20 (seasons) from ENEMYCOLLISION_BURNABLE_ENEMY 0x11 (ages)
+07/6ea3/: /copy a,$07,$2f3f,$01
+# copy ENEMYCOLLISION_POLS_VOICE 0x21 (seasons) from ENEMYCOLLISION_POLS_VOICE 0x21 (ages)
+07/6ec3/: /copy a,$07,$313f,$01
+# copy ENEMYCOLLISION_LIKE_LIKE 0x22 (seasons) from ENEMYCOLLISION_LIKE_LIKE 0x22 (ages)
+07/6ee3/: /copy a,$07,$315f,$01
+# copy ENEMYCOLLISION_GOPONGA_FLOWER 0x23 (seasons) from ENEMYCOLLISION_GOPONGA_FLOWER 0x23 (ages)
+07/6f03/: /copy a,$07,$317f,$01
+# copy ENEMYCOLLISION_WALLMASTER 0x24 (seasons) from ENEMYCOLLISION_WALLMASTER 0x25 (ages)
+07/6f23/: /copy a,$07,$31bf,$01
+# copy ENEMYCOLLISION_GIANT_BLADE_TRAP 0x25 (seasons) from ENEMYCOLLISION_GIANT_BLADE_TRAP 0x26 (ages)
+07/6f43/: /copy a,$07,$31df,$01
+# copy ENEMYCOLLISION_THWIMP 0x26 (seasons) from ENEMYCOLLISION_THWIMP 0x27 (ages)
+07/6f63/: /copy a,$07,$31ff,$01
+# copy ENEMYCOLLISION_THWOMP 0x27 (seasons) from ENEMYCOLLISION_THWOMP 0x28 (ages)
+07/6f83/: /copy a,$07,$321f,$01
+# copy ENEMYCOLLISION_UNDEAD 0x28 (seasons) from ENEMYCOLLISION_STANDARD_ENEMY 0x10 (ages)
+07/6fa3/: /copy a,$07,$2f1f,$01
+# copy ENEMYCOLLISION_KEESE 0x29 (seasons) from ENEMYCOLLISION_KEESE 0x1f (ages)
+07/6fc3/: /copy a,$07,$30ff,$01
+# copy ENEMYCOLLISION_ZOL 0x2a (seasons) from ENEMYCOLLISION_ZOL 0x29 (ages)
+07/6fe3/: /copy a,$07,$323f,$01
+# copy ENEMYCOLLISION_CUCCO 0x2b (seasons) from ENEMYCOLLISION_CUCCO 0x2a (ages)
+07/7003/: /copy a,$07,$325f,$01
+# copy ENEMYCOLLISION_FIRE_KEESE 0x2c (seasons) from ENEMYCOLLISION_FIRE_KEESE 0x2b (ages)
+07/7023/: /copy a,$07,$327f,$01
+# copy ENEMYCOLLISION_GIANT_CUCCO 0x2d (seasons) from ENEMYCOLLISION_GIANT_CUCCO 0x2c (ages)
+07/7043/: /copy a,$07,$329f,$01
+# copy ENEMYCOLLISION_PEAHAT_VULNERABLE 0x2e (seasons) from ENEMYCOLLISION_PEAHAT_VULNERABLE 0x2e (ages)
+07/7063/: /copy a,$07,$32df,$01
+# copy ENEMYCOLLISION_CROW 0x30 (seasons) from ENEMYCOLLISION_CROW 0x31 (ages)
+07/70a3/: /copy a,$07,$333f,$01
+# copy ENEMYCOLLISION_GEL 0x31 (seasons) from ENEMYCOLLISION_GEL 0x33 (ages)
+07/70c3/: /copy a,$07,$337f,$01
+# copy ENEMYCOLLISION_PINCER 0x32 (seasons) from ENEMYCOLLISION_PINCER 0x34 (ages)
+07/70e3/: /copy a,$07,$339f,$01
+# copy ENEMYCOLLISION_GOHMA_GEL 0x33 (seasons) from ENEMYCOLLISION_GOHMA_GEL 0x35 (ages)
+07/7103/: /copy a,$07,$33bf,$01
+# copy ENEMYCOLLISION_SWORD_MASKED_MOBLIN 0x34 (seasons) from ENEMYCOLLISION_SWORD_MASKED_MOBLIN 0x36 (ages)
+07/7123/: /copy a,$07,$33df,$01
+# copy ENEMYCOLLISION_BALL_AND_CHAIN_SOLDIER 0x35 (seasons) from ENEMYCOLLISION_BALL_AND_CHAIN_SOLDIER 0x37 (ages)
+07/7143/: /copy a,$07,$33ff,$01
+# copy ENEMYCOLLISION_HARDHAT_BEETLE 0x36 (seasons) from ENEMYCOLLISION_HARDHAT_BEETLE 0x38 (ages)
+07/7163/: /copy a,$07,$341f,$01
+# copy ENEMYCOLLISION_ARM_MIMIC 0x37 (seasons) from ENEMYCOLLISION_ARM_MIMIC 0x39 (ages)
+07/7183/: /copy a,$07,$343f,$01
+# copy ENEMYCOLLISION_MOLDORM 0x38 (seasons) from ENEMYCOLLISION_MOLDORM 0x3a (ages)
+07/71a3/: /copy a,$07,$345f,$01
+# copy ENEMYCOLLISION_BEETLE 0x39 (seasons) from ENEMYCOLLISION_BEETLE 0x3b (ages)
+07/71c3/: /copy a,$07,$347f,$01
+# copy ENEMYCOLLISION_TWINROVA_BAT 0x3f (seasons) from ENEMYCOLLISION_TWINROVA_BAT 0x41 (ages)
+07/7283/: /copy a,$07,$353f,$01
+# copy ENEMYCOLLISION_VIRE 0x45 (seasons) from ENEMYCOLLISION_VIRE 0x46 (ages)
+07/7343/: /copy a,$07,$35df,$01
+# copy ENEMYCOLLISION_SPIKED_BEETLE_FLIPPED 0x4e (seasons) from ENEMYCOLLISION_SPIKED_BEETLE_FLIPPED 0x51 (ages)
+07/7463/: /copy a,$07,$373f,$01
+# copy ENEMYCOLLISION_UNMASKED_IRON_MASK 0x50 (seasons) from ENEMYCOLLISION_UNMASKED_IRON_MASK 0x53 (ages)
+07/74a3/: /copy a,$07,$377f,$01
+# copy ENEMYCOLLISION_ACTIVE_BLUE_ARMOS 0x51 (seasons) from ENEMYCOLLISION_ACTIVE_BLUE_ARMOS 0x54 (ages)
+07/74c3/: /copy a,$07,$379f,$01
+# copy ENEMYCOLLISION_STALFOS_BLOCKED_WITH_SWORD 0x52 (seasons) from ENEMYCOLLISION_STALFOS_BLOCKED_WITH_SWORD 0x55 (ages)
+07/74e3/: /copy a,$07,$37bf,$01
+# copy ENEMYCOLLISION_DARKNUT_BLOCKED_WITH_SWORD 0x53 (seasons) from ENEMYCOLLISION_DARKNUT_BLOCKED_WITH_SWORD 0x56 (ages)
+07/7503/: /copy a,$07,$37df,$01
+# copy ENEMYCOLLISION_BIG_GOPONGA_FLOWER 0x54 (seasons) from ENEMYCOLLISION_BIG_GOPONGA_FLOWER 0x57 (ages)
+07/7523/: /copy a,$07,$37ff,$01
+# copy ENEMYCOLLISION_SPIKED_BALL 0x6b (seasons) from ENEMYCOLLISION_SPIKED_BALL 0x74 (ages)
+07/7803/: /copy a,$07,$3b9f,$01
+# copy ENEMYCOLLISION_GANON_TRIDENT 0x70 (seasons) from ENEMYCOLLISION_GANON_TRIDENT 0x7b (ages)
+07/78a3/: /copy a,$07,$3c7f,$01
+
+# Switch hook
+# copy ENEMYCOLLISION_ITEM 0x01 (seasons) from ENEMYCOLLISION_ITEM 0x01 (ages)
+07/6abe/: /copy a,$07,$6d37,$01
+# copy ENEMYCOLLISION_PROJECTILE 0x06 (seasons) from ENEMYCOLLISION_PROJECTILE 0x06 (ages)
+07/6b5e/: /copy a,$07,$6dd7,$01
+# copy ENEMYCOLLISION_PROJECTILE_WITH_RING_MOD 0x07 (seasons) from ENEMYCOLLISION_PROJECTILE_WITH_RING_MOD 0x07 (ages)
+07/6b7e/: /copy a,$07,$6df7,$01
+# copy ENEMYCOLLISION_MERGED_TWINROVA 0x08 (seasons) from ENEMYCOLLISION_MERGED_TWINROVA 0x08 (ages)
+07/6b9e/: /copy a,$07,$6e17,$01
+# copy ENEMYCOLLISION_TWINROVA 0x0a (seasons) from ENEMYCOLLISION_TWINROVA 0x0a (ages)
+07/6bde/: /copy a,$07,$6e57,$01
+# copy ENEMYCOLLISION_GANON 0x0b (seasons) from ENEMYCOLLISION_GANON 0x0b (ages)
+07/6bfe/: /copy a,$07,$6e77,$01
+# copy ENEMYCOLLISION_KING_MOBLIN 0x0e (seasons) from ENEMYCOLLISION_KING_MOBLIN 0x50 (ages)
+07/6c5e/: /copy a,$07,$7717,$01
+# copy ENEMYCOLLISION_MOTIONLESS_ENEMY 0x0f (seasons) from ENEMYCOLLISION_MOTIONLESS_ENEMY 0x0f (ages)
+07/6c7e/: /copy a,$07,$6ef7,$01
+# copy ENEMYCOLLISION_STANDARD_ENEMY 0x10 (seasons) from ENEMYCOLLISION_STANDARD_ENEMY 0x10 (ages)
+07/6c9e/: /copy a,$07,$6f17,$01
+# copy ENEMYCOLLISION_BURNABLE_ENEMY 0x11 (seasons) from ENEMYCOLLISION_BURNABLE_ENEMY 0x11 (ages)
+07/6cbe/: /copy a,$07,$6f37,$01
+# copy ENEMYCOLLISION_LYNEL 0x12 (seasons) from ENEMYCOLLISION_LYNEL 0x12 (ages)
+07/6cde/: /copy a,$07,$6f57,$01
+# copy ENEMYCOLLISION_BLADE_TRAP 0x13 (seasons) from ENEMYCOLLISION_BLADE_TRAP 0x13 (ages)
+07/6cfe/: /copy a,$07,$6f77,$01
+# copy ENEMYCOLLISION_GIBDO 0x15 (seasons) from ENEMYCOLLISION_GIBDO 0x16 (ages)
+07/6d3e/: /copy a,$07,$6fd7,$01
+# copy ENEMYCOLLISION_SPARK 0x16 (seasons) from ENEMYCOLLISION_SPARK 0x17 (ages)
+07/6d5e/: /copy a,$07,$6ff7,$01
+# copy ENEMYCOLLISION_SPIKED_BEETLE 0x17 (seasons) from ENEMYCOLLISION_SPIKED_BEETLE 0x18 (ages)
+07/6d7e/: /copy a,$07,$7017,$01
+# copy ENEMYCOLLISION_BUBBLE 0x18 (seasons) from ENEMYCOLLISION_BUBBLE 0x19 (ages)
+07/6d9e/: /copy a,$07,$7037,$01
+# copy ENEMYCOLLISION_GHINI 0x19 (seasons) from ENEMYCOLLISION_GHINI 0x1a (ages)
+07/6dbe/: /copy a,$07,$7057,$01
+# copy ENEMYCOLLISION_BUZZBLOB 0x1a (seasons) from ENEMYCOLLISION_BUZZBLOB 0x1b (ages)
+07/6dde/: /copy a,$07,$7077,$01
+# copy ENEMYCOLLISION_WHISP 0x1b (seasons) from ENEMYCOLLISION_WHISP 0x1c (ages)
+07/6dfe/: /copy a,$07,$7097,$01
+# copy ENEMYCOLLISION_IRON_MASK 0x1c (seasons) from ENEMYCOLLISION_IRON_MASK 0x1d (ages)
+07/6e1e/: /copy a,$07,$70b7,$01
+# copy ENEMYCOLLISION_ACTIVE_RED_ARMOS 0x1d (seasons) from ENEMYCOLLISION_ACTIVE_RED_ARMOS 0x1e (ages)
+07/6e3e/: /copy a,$07,$70d7,$01
+# copy ENEMYCOLLISION_DARKNUT 0x1f (seasons) from ENEMYCOLLISION_DARKNUT 0x20 (ages)
+07/6e7e/: /copy a,$07,$7117,$01
+# copy ENEMYCOLLISION_BURNABLE_UNDEAD 0x20 (seasons) from ENEMYCOLLISION_BURNABLE_UNDEAD 0x7e (ages)
+07/6e9e/: /copy a,$07,$7cd7,$01
+# copy ENEMYCOLLISION_POLS_VOICE 0x21 (seasons) from ENEMYCOLLISION_POLS_VOICE 0x21 (ages)
+07/6ebe/: /copy a,$07,$7137,$01
+# copy ENEMYCOLLISION_LIKE_LIKE 0x22 (seasons) from ENEMYCOLLISION_LIKE_LIKE 0x22 (ages)
+07/6ede/: /copy a,$07,$7157,$01
+# copy ENEMYCOLLISION_GOPONGA_FLOWER 0x23 (seasons) from ENEMYCOLLISION_GOPONGA_FLOWER 0x23 (ages)
+07/6efe/: /copy a,$07,$7177,$01
+# copy ENEMYCOLLISION_WALLMASTER 0x24 (seasons) from ENEMYCOLLISION_WALLMASTER 0x25 (ages)
+07/6f1e/: /copy a,$07,$71b7,$01
+# copy ENEMYCOLLISION_GIANT_BLADE_TRAP 0x25 (seasons) from ENEMYCOLLISION_GIANT_BLADE_TRAP 0x26 (ages)
+07/6f3e/: /copy a,$07,$71d7,$01
+# copy ENEMYCOLLISION_THWIMP 0x26 (seasons) from ENEMYCOLLISION_THWIMP 0x27 (ages)
+07/6f5e/: /copy a,$07,$71f7,$01
+# copy ENEMYCOLLISION_THWOMP 0x27 (seasons) from ENEMYCOLLISION_THWOMP 0x28 (ages)
+07/6f7e/: /copy a,$07,$7217,$01
+# copy ENEMYCOLLISION_UNDEAD 0x28 (seasons) from ENEMYCOLLISION_UNDEAD 0x7d (ages)
+07/6f9e/: /copy a,$07,$7cb7,$01
+# copy ENEMYCOLLISION_KEESE 0x29 (seasons) from ENEMYCOLLISION_KEESE 0x1f (ages)
+07/6fbe/: /copy a,$07,$70f7,$01
+# copy ENEMYCOLLISION_ZOL 0x2a (seasons) from ENEMYCOLLISION_ZOL 0x29 (ages)
+07/6fde/: /copy a,$07,$7237,$01
+# copy ENEMYCOLLISION_CUCCO 0x2b (seasons) from ENEMYCOLLISION_CUCCO 0x2a (ages)
+07/6ffe/: /copy a,$07,$7257,$01
+# copy ENEMYCOLLISION_FIRE_KEESE 0x2c (seasons) from ENEMYCOLLISION_FIRE_KEESE 0x2b (ages)
+07/701e/: /copy a,$07,$7277,$01
+# copy ENEMYCOLLISION_GIANT_CUCCO 0x2d (seasons) from ENEMYCOLLISION_GIANT_CUCCO 0x2c (ages)
+07/703e/: /copy a,$07,$7297,$01
+# copy ENEMYCOLLISION_PEAHAT_VULNERABLE 0x2e (seasons) from ENEMYCOLLISION_PEAHAT_VULNERABLE 0x2e (ages)
+07/705e/: /copy a,$07,$72d7,$01
+# copy ENEMYCOLLISION_WIZZROBE 0x2f (seasons) from ENEMYCOLLISION_WIZZROBE 0x30 (ages)
+07/707e/: /copy a,$07,$7317,$01
+# copy ENEMYCOLLISION_CROW 0x30 (seasons) from ENEMYCOLLISION_CROW 0x31 (ages)
+07/709e/: /copy a,$07,$7337,$01
+# copy ENEMYCOLLISION_GEL 0x31 (seasons) from ENEMYCOLLISION_GEL 0x33 (ages)
+07/70be/: /copy a,$07,$7377,$01
+# copy ENEMYCOLLISION_PINCER 0x32 (seasons) from ENEMYCOLLISION_PINCER 0x34 (ages)
+07/70de/: /copy a,$07,$7397,$01
+# copy ENEMYCOLLISION_GOHMA_GEL 0x33 (seasons) from ENEMYCOLLISION_GOHMA_GEL 0x35 (ages)
+07/70fe/: /copy a,$07,$73b7,$01
+# copy ENEMYCOLLISION_SWORD_MASKED_MOBLIN 0x34 (seasons) from ENEMYCOLLISION_SWORD_MASKED_MOBLIN 0x36 (ages)
+07/711e/: /copy a,$07,$73d7,$01
+# copy ENEMYCOLLISION_BALL_AND_CHAIN_SOLDIER 0x35 (seasons) from ENEMYCOLLISION_BALL_AND_CHAIN_SOLDIER 0x37 (ages)
+07/713e/: /copy a,$07,$73f7,$01
+# copy ENEMYCOLLISION_HARDHAT_BEETLE 0x36 (seasons) from ENEMYCOLLISION_HARDHAT_BEETLE 0x38 (ages)
+07/715e/: /copy a,$07,$7417,$01
+# copy ENEMYCOLLISION_ARM_MIMIC 0x37 (seasons) from ENEMYCOLLISION_ARM_MIMIC 0x39 (ages)
+07/717e/: /copy a,$07,$7437,$01
+# copy ENEMYCOLLISION_MOLDORM 0x38 (seasons) from ENEMYCOLLISION_MOLDORM 0x3a (ages)
+07/719e/: /copy a,$07,$7457,$01
+# copy ENEMYCOLLISION_BEETLE 0x39 (seasons) from ENEMYCOLLISION_BEETLE 0x3b (ages)
+07/71be/: /copy a,$07,$7477,$01
+# copy ENEMYCOLLISION_FLYING_TILE 0x3a (seasons) from ENEMYCOLLISION_FLYING_TILE 0x3c (ages)
+07/71de/: /copy a,$07,$7497,$01
+# copy ENEMYCOLLISION_3f 0x3d (seasons) from ENEMYCOLLISION_3f 0x3f (ages)
+07/723e/: /copy a,$07,$74f7,$01
+# copy ENEMYCOLLISION_BUSH 0x3e (seasons) from ENEMYCOLLISION_BUSH 0x40 (ages)
+07/725e/: /copy a,$07,$7517,$01
+# copy ENEMYCOLLISION_TWINROVA_BAT 0x3f (seasons) from ENEMYCOLLISION_TWINROVA_BAT 0x41 (ages)
+07/727e/: /copy a,$07,$7537,$01
+# copy ENEMYCOLLISION_VIRE 0x45 (seasons) from ENEMYCOLLISION_VIRE 0x46 (ages)
+07/733e/: /copy a,$07,$75d7,$01
+# copy ENEMYCOLLISION_SPIKED_BEETLE_FLIPPED 0x4e (seasons) from ENEMYCOLLISION_SPIKED_BEETLE_FLIPPED 0x51 (ages)
+07/745e/: /copy a,$07,$7737,$01
+# copy ENEMYCOLLISION_ROCK 0x4f (seasons) from ENEMYCOLLISION_ROCK 0x52 (ages)
+07/747e/: /copy a,$07,$7757,$01
+# copy ENEMYCOLLISION_UNMASKED_IRON_MASK 0x50 (seasons) from ENEMYCOLLISION_UNMASKED_IRON_MASK 0x53 (ages)
+07/749e/: /copy a,$07,$7777,$01
+# copy ENEMYCOLLISION_ACTIVE_BLUE_ARMOS 0x51 (seasons) from ENEMYCOLLISION_ACTIVE_BLUE_ARMOS 0x54 (ages)
+07/74be/: /copy a,$07,$7797,$01
+# copy ENEMYCOLLISION_STALFOS_BLOCKED_WITH_SWORD 0x52 (seasons) from ENEMYCOLLISION_STALFOS_BLOCKED_WITH_SWORD 0x55 (ages)
+07/74de/: /copy a,$07,$77b7,$01
+# copy ENEMYCOLLISION_DARKNUT_BLOCKED_WITH_SWORD 0x53 (seasons) from ENEMYCOLLISION_DARKNUT_BLOCKED_WITH_SWORD 0x56 (ages)
+07/74fe/: /copy a,$07,$77d7,$01
+# copy ENEMYCOLLISION_BIG_GOPONGA_FLOWER 0x54 (seasons) from ENEMYCOLLISION_BIG_GOPONGA_FLOWER 0x57 (ages)
+07/751e/: /copy a,$07,$77f7,$01
+# copy ENEMYCOLLISION_PEAHAT 0x55 (seasons) from ENEMYCOLLISION_PEAHAT 0x58 (ages)
+07/753e/: /copy a,$07,$7817,$01
+
+# edit the active collision data (using Stewmat's active collision tables)
+# enemyActiveCollisions
+# 0x01
+07/6745/: db %11110010 # Replaces vanilla %11110000
+07/6746/: db %00011111 # Replaces vanilla %00001111
+# 0x02
+07/6749/: db %11000010 # Replaces vanilla %11000000
+07/674a/: db %00011110 # Replaces vanilla %00001110
+# 0x03
+07/674d/: db %01000010 # Replaces vanilla %01000000
+07/674e/: db %00011110 # Replaces vanilla %00001110
+# 0x04
+07/6751/: db %11000010 # Replaces vanilla %11000000
+07/6752/: db %00011110 # Replaces vanilla %00001110
+# 0x05
+07/6755/: db %11000010 # Replaces vanilla %11000000
+07/6756/: db %00011110 # Replaces vanilla %00001110
+# 0x06
+07/6759/: db %11110010 # Replaces vanilla %11110000
+07/675a/: db %00011111 # Replaces vanilla %00001111
+# 0x08
+07/6761/: db %11110011 # Replaces vanilla %11110001
+07/6762/: db %00011111 # Replaces vanilla %00001111
+# 0x09
+07/6765/: db %11111111 # Replaces vanilla %11111101
+07/6766/: db %00011111 # Replaces vanilla %00001111
+# 0x0a
+07/6769/: db %11111111 # Replaces vanilla %11111101
+07/676a/: db %00011111 # Replaces vanilla %00001111
+# 0x0b
+07/676d/: db %11111111 # Replaces vanilla %11111101
+07/676e/: db %00011111 # Replaces vanilla %00001111
+# 0x0c
+07/6771/: db %11111111 # Replaces vanilla %11111101
+07/6772/: db %00011111 # Replaces vanilla %00001111
+# 0x0d
+07/6775/: db %11110011 # Replaces vanilla %11110001
+07/6776/: db %00011111 # Replaces vanilla %00001111
+# 0x0e
+07/6779/: db %11001110 # Replaces vanilla %11001100
+07/677a/: db %00011110 # Replaces vanilla %00001110
+# 0x0f
+07/677d/: db %11001110 # Replaces vanilla %11001100
+07/677e/: db %00011110 # Replaces vanilla %00001110
+# 0x10
+07/6781/: db %11111111 # Replaces vanilla %11111101
+07/6782/: db %00011111 # Replaces vanilla %00001111
+# 0x11
+07/6785/: db %11010011 # Replaces vanilla %11010001
+# 0x12
+07/6789/: db %11111011 # Replaces vanilla %11111001
+07/678a/: db %00011111 # Replaces vanilla %00001111
+# 0x13
+07/678d/: db %01000010 # Replaces vanilla %01000000
+07/678e/: db %00011110 # Replaces vanilla %00001110
+# 0x14
+07/6791/: db %11000111 # Replaces vanilla %11000101
+07/6792/: db %00011111 # Replaces vanilla %00001111
+# 0x15
+07/6795/: db %00000010 # Replaces vanilla %00000000
+07/6796/: db %00011110 # Replaces vanilla %00001110
+# 0x17
+07/679d/: db %11111010 # Replaces vanilla %11111000
+07/679e/: db %00011111 # Replaces vanilla %00001111
+# 0x18
+07/67a1/: db %11010111 # Replaces vanilla %11010101
+07/67a2/: db %00011111 # Replaces vanilla %00001111
+# 0x19
+07/67a5/: db %01000010 # Replaces vanilla %01000000
+07/67a6/: db %00011110 # Replaces vanilla %00001110
+# 0x1a
+07/67a9/: db %11111111 # Replaces vanilla %11111101
+07/67aa/: db %00011111 # Replaces vanilla %00001111
+# 0x1b
+07/67ad/: db %11111111 # Replaces vanilla %11111101
+07/67ae/: db %00011111 # Replaces vanilla %00001111
+# 0x1c
+07/67b1/: db %11111111 # Replaces vanilla %11111101
+07/67b2/: db %00011111 # Replaces vanilla %00001111
+# 0x1d
+07/67b5/: db %11001111 # Replaces vanilla %11001101
+07/67b6/: db %00011111 # Replaces vanilla %00001111
+# 0x1e
+07/67b9/: db %11111011 # Replaces vanilla %11111001
+07/67ba/: db %00011111 # Replaces vanilla %00001111
+# 0x1f
+07/67bd/: db %00000010 # Replaces vanilla %00000000
+# 0x20
+07/67c1/: db %11111111 # Replaces vanilla %11111101
+07/67c2/: db %00011111 # Replaces vanilla %00001111
+# 0x21
+07/67c5/: db %11111111 # Replaces vanilla %11111101
+07/67c6/: db %00011111 # Replaces vanilla %00001111
+# 0x22
+07/67c9/: db %11111111 # Replaces vanilla %11111101
+07/67ca/: db %00011111 # Replaces vanilla %00001111
+# 0x23
+07/67cd/: db %11111111 # Replaces vanilla %11111101
+07/67ce/: db %00011111 # Replaces vanilla %00001111
+# 0x24
+07/67d1/: db %11111111 # Replaces vanilla %11111101
+07/67d2/: db %00011111 # Replaces vanilla %00001111
+# 0x25
+07/67d5/: db %11010011 # Replaces vanilla %11010001
+07/67d6/: db %00011111 # Replaces vanilla %00001111
+# 0x28
+07/67e1/: db %11111111 # Replaces vanilla %11111101
+07/67e2/: db %00011111 # Replaces vanilla %00001111
+# 0x2a
+07/67e9/: db %01001110 # Replaces vanilla %01001100
+07/67ea/: db %00011110 # Replaces vanilla %00001110
+# 0x2c
+07/67f1/: db %11111111 # Replaces vanilla %11111101
+07/67f2/: db %00011111 # Replaces vanilla %00001111
+# 0x2d
+07/67f5/: db %11000010 # Replaces vanilla %11000000
+# 0x2e
+07/67f9/: db %11001110 # Replaces vanilla %11001100
+07/67fa/: db %00011110 # Replaces vanilla %00001110
+# 0x2f
+07/67fd/: db %11001110 # Replaces vanilla %11001100
+07/67fe/: db %00011110 # Replaces vanilla %00001110
+# 0x30
+07/6801/: db %11111111 # Replaces vanilla %11111101
+07/6802/: db %00011111 # Replaces vanilla %00001111
+# 0x31
+07/6805/: db %11111111 # Replaces vanilla %11111101
+07/6806/: db %00011111 # Replaces vanilla %00001111
+# 0x32
+07/6809/: db %11111111 # Replaces vanilla %11111101
+07/680a/: db %00011111 # Replaces vanilla %00001111
+# 0x34
+07/6811/: db %11110011 # Replaces vanilla %11110001
+07/6812/: db %00011111 # Replaces vanilla %00001111
+# 0x35
+07/6815/: db %11111111 # Replaces vanilla %11111101
+07/6816/: db %00011111 # Replaces vanilla %00001111
+# 0x36
+07/6819/: db %11110011 # Replaces vanilla %11110001
+07/681a/: db %00011111 # Replaces vanilla %00001111
+# 0x39
+07/6825/: db %11011011 # Replaces vanilla %11011001
+07/6826/: db %00011111 # Replaces vanilla %00001111
+# 0x3a
+07/6829/: db %11111111 # Replaces vanilla %11111101
+07/682a/: db %00011111 # Replaces vanilla %00001111
+# 0x3b
+07/682d/: db %11110010 # Replaces vanilla %11110000
+07/682e/: db %00011111 # Replaces vanilla %00001111
+# 0x3c
+07/6831/: db %11110011 # Replaces vanilla %11110001
+07/6832/: db %00011110 # Replaces vanilla %00001110
+# 0x3d
+07/6835/: db %11111111 # Replaces vanilla %11111101
+07/6836/: db %00011111 # Replaces vanilla %00001111
+# 0x3e
+07/6839/: db %11110011 # Replaces vanilla %11110001
+07/683a/: db %00011111 # Replaces vanilla %00001111
+# 0x40
+07/6841/: db %11111111 # Replaces vanilla %11111101
+# 0x41
+07/6845/: db %11110011 # Replaces vanilla %11110001
+07/6846/: db %00011111 # Replaces vanilla %00001111
+# 0x43
+07/684d/: db %11110111 # Replaces vanilla %11110101
+07/684e/: db %00011111 # Replaces vanilla %00001111
+# 0x45
+07/6855/: db %11110011 # Replaces vanilla %11110001
+07/6856/: db %00011111 # Replaces vanilla %00001111
+# 0x46
+07/6859/: db %11110111 # Replaces vanilla %11110101
+07/685a/: db %00011111 # Replaces vanilla %00001111
+# 0x47
+07/685d/: db %11111111 # Replaces vanilla %11111101
+07/685e/: db %00011111 # Replaces vanilla %00001111
+# 0x48
+07/6861/: db %11111111 # Replaces vanilla %11111101
+07/6862/: db %00011111 # Replaces vanilla %00001111
+# 0x49
+07/6865/: db %11111111 # Replaces vanilla %11111101
+07/6866/: db %00011111 # Replaces vanilla %00001111
+# 0x4a
+07/6869/: db %11111111 # Replaces vanilla %11111101
+07/686a/: db %00011111 # Replaces vanilla %00001111
+# 0x4b
+07/686d/: db %11011111 # Replaces vanilla %11011101
+07/686e/: db %00011111 # Replaces vanilla %00001111
+# 0x4c
+07/6871/: db %11110011 # Replaces vanilla %11110001
+07/6872/: db %00011111 # Replaces vanilla %00001111
+# 0x4d
+07/6875/: db %11001111 # Replaces vanilla %11001101
+07/6876/: db %00011111 # Replaces vanilla %00001111
+# 0x4e
+07/6879/: db %11111111 # Replaces vanilla %11111101
+07/687a/: db %00011111 # Replaces vanilla %00001111
+# 0x4f
+07/687d/: db %11110111 # Replaces vanilla %11110101
+07/687e/: db %00011111 # Replaces vanilla %00001111
+# 0x51
+07/6885/: db %11111111 # Replaces vanilla %11111101
+07/6886/: db %00011111 # Replaces vanilla %00001111
+# 0x52
+07/6889/: db %11111110 # Replaces vanilla %11111100
+07/688a/: db %00011111 # Replaces vanilla %00001111
+# 0x55
+07/6895/: db %11000010 # Replaces vanilla %11000000
+07/6896/: db %00011110 # Replaces vanilla %00001110
+# 0x56
+07/6899/: db %11001010 # Replaces vanilla %11001000
+07/689a/: db %00011111 # Replaces vanilla %00001111
+# 0x57
+07/689d/: db %11110010 # Replaces vanilla %11110000
+# 0x58
+07/68a1/: db %10000010 # Replaces vanilla %10000000
+# 0x5a
+07/68a9/: db %11111010 # Replaces vanilla %11111000
+# 0x5d
+07/68b5/: db %10000010 # Replaces vanilla %10000000
+# 0x5e
+07/68b9/: db %11000010 # Replaces vanilla %11000000
+07/68ba/: db %00011111 # Replaces vanilla %00001111
+# 0x70
+07/6901/: db %11111110 # Replaces vanilla %11111100
+07/6902/: db %00011111 # Replaces vanilla %00001111
+# 0x72
+07/6909/: db %11110010 # Replaces vanilla %11110000
+07/690a/: db %00011111 # Replaces vanilla %00001111
+# 0x73
+07/690d/: db %11110010 # Replaces vanilla %11110000
+07/690e/: db %00011111 # Replaces vanilla %00001111
+# 0x74
+07/6911/: db %11110010 # Replaces vanilla %11110000
+07/6912/: db %00011111 # Replaces vanilla %00001111
+# 0x75
+07/6915/: db %11010010 # Replaces vanilla %11010000
+07/6916/: db %00011111 # Replaces vanilla %00001111
+# 0x76
+07/6919/: db %11111010 # Replaces vanilla %11111000
+07/691a/: db %00011111 # Replaces vanilla %00001111
+# 0x77
+07/691d/: db %01000010 # Replaces vanilla %01000000
+07/691e/: db %00011110 # Replaces vanilla %00001110
+# 0x78
+07/6921/: db %11110010 # Replaces vanilla %11110000
+07/6922/: db %00011111 # Replaces vanilla %00001111
+# 0x79
+07/6925/: db %11000010 # Replaces vanilla %11000000
+07/6926/: db %00011110 # Replaces vanilla %00001110
+# 0x7a
+07/6929/: db %11110010 # Replaces vanilla %11110000
+07/692a/: db %00011111 # Replaces vanilla %00001111
+# 0x7b
+07/692d/: db %11001010 # Replaces vanilla %11001000
+07/692e/: db %00011110 # Replaces vanilla %00001110
+# 0x7c
+07/6931/: db %01000010 # Replaces vanilla %01000000
+07/6932/: db %00011110 # Replaces vanilla %00001110
+# 0x7d
+07/6935/: db %11010010 # Replaces vanilla %11010000
+07/6936/: db %00011111 # Replaces vanilla %00001111
+# 0x7e
+07/6939/: db %10111010 # Replaces vanilla %10111000
+07/693a/: db %00011111 # Replaces vanilla %00001111
+# 0x7f
+07/693d/: db %11000010 # Replaces vanilla %11000000
+07/693e/: db %00011110 # Replaces vanilla %00001110
+# partActiveCollisions
+# 0x01
+07/6945/: db %11111110 # Replaces vanilla %11111100
+# 0x03
+07/694d/: db %11111110 # Replaces vanilla %11111100
+# 0x05
+07/6955/: db %11111110 # Replaces vanilla %11111100
+# 0x0b
+07/696d/: db %11111110 # Replaces vanilla %11111100
+# 0x10
+07/6981/: db %11111110 # Replaces vanilla %11111100
+# 0x14
+07/6991/: db %11111110 # Replaces vanilla %11111100
+# 0x15
+07/6995/: db %11111110 # Replaces vanilla %11111100
+# 0x28
+07/69e1/: db %11111110 # Replaces vanilla %11111100
+# 0x2a
+07/69ea/: db %00011110 # Replaces vanilla %00001110
+# 0x32
+07/6a09/: db %11111011 # Replaces vanilla %11111001
+# 0x4f
+07/6a7d/: db %11111110 # Replaces vanilla %11111100
+07/6a7e/: db %00011111 # Replaces vanilla %00001111
+# 0x50
+07/6a82/: db %00010000 # Replaces vanilla %00000000

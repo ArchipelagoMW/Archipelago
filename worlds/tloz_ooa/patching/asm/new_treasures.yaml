@@ -1,0 +1,56 @@
+############################################################
+#   OBJECT DATA
+############################################################
+# Change treasure object data for trade items
+# objdata_addr = 0x5332 + (TREASURE_ID * 0x4)  => treasureObjectData
+# Write object info
+16/5426/: db $0a,$00,$5a,$70  # Poe Clock (#3d)
+16/542a/: db $0a,$00,$5b,$71  # Stationary (#3e)
+16/542e/: db $0a,$00,$5c,$72  # Stink Bag (#3f)
+16/544e/: db $0a,$00,$5d,$73  # Tasty Meat (#47)
+16/548a/: db $0a,$00,$5e,$74  # Doggie Mask (#56)
+16/548e/: db $0a,$00,$5f,$75  # Dumbbell (#57)
+16/54ae/: db $0a,$00,$60,$76  # Cheesy Mustache (#5f)
+16/5422/: db $0a,$00,$61,$77  # Funny Joke (#3c)
+16/5406/: db $0a,$00,$62,$78  # Touching Book (#35)
+16/5412/: db $0a,$00,$63,$79  # Magic Oar (#38)
+16/5416/: db $0a,$00,$64,$7a  # Sea Ukulele (#39)
+16/541a/: db $0a,$00,$65,$7b  # Broken Sword (#3a)
+### OTHER ITEMS ###
+16/541e/: db $0a,$00,$37,$5c  # Repaired Tuni Nut (#3b)
+
+############################################################
+#   INVENTORY DISPLAY DATA
+############################################################
+# Change treasure display data for trade items
+# displaydata_addr = 0x6da1 + (TREASURE_ID * 7)  => treasureDisplayData
+# Write treasure ID + display info
+#3f/6ff4/: db $55,$c0,$00,$c1,$00,$ff,$09  # Poe Clock (#3d)
+#3f/6ffb/: db $56,$c2,$03,$c2,$23,$ff,$0a  # Stationary (#3e)
+#3f/7002/: db $57,$c3,$00,$c4,$00,$ff,$0b  # Stink Bag (#3f)
+#3f/6f14/: db $35,$c5,$04,$c6,$04,$ff,$0c  # Tasty Meat (#47)
+#3f/6f29/: db $38,$da,$05,$db,$05,$ff,$0d  # Doggie Mask (#56)
+#3f/6f30/: db $39,$c7,$05,$c8,$05,$ff,$0e  # Dumbbell (#57)
+#3f/6f37/: db $3a,$c9,$01,$ca,$01,$ff,$0f  # Cheesy Mustache (#5f)
+#3f/6f3e/: db $3b,$d0,$01,$d1,$01,$ff,$10  # Funny Joke (#3c)
+#3f/6f45/: db $3c,$d2,$05,$d3,$05,$ff,$11  # Touching Book (#35)
+#3f/6f4c/: db $3d,$d4,$03,$d5,$03,$ff,$12  # Magic Oar (#38)
+#3f/6f53/: db $3e,$d6,$01,$d7,$01,$ff,$13  # Sea Ukulele (#39)
+#3f/6f5a/: db $3f,$d8,$00,$d9,$00,$ff,$14  # Broken Sword (#3a)
+
+############################################################
+#   TREASURE ID REFERENCES
+############################################################
+
+# Change trade sequence NPC checks to look for the new treasure IDs
+15/5ef1/: db $df,TREASURE_POE_CLOCK       # Poe Clock (#3d)
+0c/6683/: db $df,TREASURE_STATIONARY      # Stationary (#3e)
+15/5c70/: db $df,TREASURE_STINK_BAG       # Stink Bag (#3f)
+15/621d/: db $df,TREASURE_TASTY_MEAT      # Tasty Meat (#47)
+15/5e08/: db $df,TREASURE_DOGGIE_MASK     # Doggie Mask (#56)
+15/5cdf/: db $df,TREASURE_DUMBBELL        # Dumbbell (#57)
+15/62cd/: db $df,TREASURE_CHEESY_MUSTACHE # Cheesy Mustache (#5f)
+15/58e2/: db $df,TREASURE_FUNNY_JOKE      # Funny Joke (#3c)
+05/6994/: db TREASURE_TOUCHING_BOOK       # Touching Book (#35)
+15/6b61/: db $df,TREASURE_MAGIC_OAR       # Magic Oar (#38)
+15/6196/: db $df,TREASURE_SEA_UKULELE     # Sea Ukulele (#39)

@@ -1,0 +1,278 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 158,
+  "name": "Phantoon's Room",
+  "area": "Wrecked Ship",
+  "subarea": "Main",
+  "roomAddress": "0x7CD13",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x001a2c4",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Phantoon Room Gray Lock (to Basement)",
+          "lockType": "gameFlag",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                "f_DefeatedPhantoon"
+              ]
+            }
+          ]
+        }
+      ],
+      "mapTileMask": [
+        [2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Phantoon",
+      "enemyName": "Phantoon",
+      "quantity": 1,
+      "homeNodes": [1],
+      "stopSpawn": ["f_DefeatedPhantoon"]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 15,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 3,
+          "runway": {
+            "length": 12,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": ["Max extra run speed $2.9."]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 9,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 7,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "Phantoon Fight (Charge)",
+      "requires": [
+        "Charge",
+        {"enemyKill": {
+          "enemies": [["Phantoon"]],
+          "explicitWeapons": ["Charge"]
+        }}
+      ],
+      "setsFlags": ["f_DefeatedPhantoon"]
+    },
+    {
+      "id": 12,
+      "link": [1, 1],
+      "name": "Phantoon Fight (Missiles)",
+      "requires": [
+        {"resourceCapacity": [{"type": "Missile", "count": 1}]},
+        {"enemyKill": {
+          "enemies": [["Phantoon"]],
+          "explicitWeapons": ["Missile"]
+        }}
+      ],
+      "setsFlags": ["f_DefeatedPhantoon"],
+      "note": "No ammo count because Missiles are farmable here."
+    },
+    {
+      "id": 13,
+      "link": [1, 1],
+      "name": "Nintendo Power Phantoon",
+      "requires": [
+        {"resourceCapacity": [{"type": "Super", "count": 1}]},
+        {"enemyKill": {
+          "enemies": [["Phantoon"]],
+          "explicitWeapons": ["Super"]
+        }}
+      ],
+      "setsFlags": ["f_DefeatedPhantoon"],
+      "note": "No ammo count because Supers are farmable here.",
+      "devNote": "FIXME add tech/energy/item requirements to survive flames."
+    },
+    {
+      "id": 14,
+      "link": [1, 1],
+      "name": "Phantoon Microwave",
+      "requires": [
+        "Charge",
+        "Plasma",
+        {"or": [
+          {"ammo": {"type": "Missile", "count": 1}},
+          {"and": [
+            {"resourceCapacity": [{"type": "Missile", "count": 1}]},
+            {"or": [
+              "canTrickyJump",
+              {"enemyDamage": {"enemy": "Phantoon", "type": "flame", "hits": 1}}
+            ]}
+          ]}
+        ]},
+        "canXRayWaitForIFrames",
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"and": [
+            "canDodgeWhileShooting",
+            {"enemyDamage": {"enemy": "Phantoon", "type": "flame", "hits": 2}},
+            {"enemyDamage": {"enemy": "Phantoon", "type": "contact", "hits": 2}}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"enemyDamage": {"enemy": "Phantoon", "type": "flame", "hits": 1}},
+            {"enemyDamage": {"enemy": "Phantoon", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedPhantoon"],
+      "flashSuitChecked": true,
+      "note": [
+        "Attack Phantoon with one or two Missile shots, then fire a charged Plasma shot when it comes back around;",
+        "use X-Ray repeatedly while the charged Plasma shot is in contact with Phantoon, to wait out Phantoon's i-frames, making it possible to kill in one cycle.",
+        "Note that using a charged Plasma shot initially (without first using Missiles) would cause Phantoon to immediately close its eye and not take any more damage during that cycle."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Phantoon",
+      "requires": [
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "devNote": [
+        "Not likely to be possible, as it requires canRiskPermanentLossOfAccess and Phantoon alive with the door unlocked."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Phantoon", "type": "contact", "hits": 1}},
+        {"not": "f_DefeatedPhantoon"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Only works when Phantoon opens his eye while on the far left side.",
+      "devNote": "This would only be useful to leave in g-mode."
+    }
+  ],
+  "notables": [],
+  "nextStratId": 16,
+  "nextNotableId": 1
+}

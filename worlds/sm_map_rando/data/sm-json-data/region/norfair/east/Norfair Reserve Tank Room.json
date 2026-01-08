@@ -1,0 +1,952 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 99,
+  "name": "Norfair Reserve Tank Room",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "East",
+  "roomAddress": "0x7AC5A",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001952e",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Chozo Ball Item",
+      "nodeType": "item",
+      "nodeSubType": "chozo",
+      "nodeItem": "ReserveTank",
+      "nodeAddress": "0x78C3E",
+      "mapTileMask": [
+        [2, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Hidden Platform Item",
+      "nodeType": "item",
+      "nodeSubType": "hidden",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78C44",
+      "mapTileMask": [
+        [2, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Junction Above Hidden Platform Item",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 1]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Lava Dragons",
+      "obstacleType": "enemies"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Norfair Reserve Dragons",
+      "enemyName": "Dragon",
+      "quantity": 3,
+      "betweenNodes": [1, 4]
+    },
+    {
+      "id": "e2",
+      "groupName": "Norfair Reserve Missile Sova",
+      "enemyName": "Sova",
+      "quantity": 1,
+      "homeNodes": [4]
+    },
+    {
+      "id": "e3",
+      "groupName": "Norfair Reserve Right Sovas",
+      "enemyName": "Sova",
+      "quantity": 2,
+      "betweenNodes": [1, 4]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Single Sova Farm",
+      "requires": [
+        "h_heatProof",
+        "canCarefulJump",
+        {"or": [
+          "Wave",
+          "Spazer",
+          "Plasma",
+          "Grapple",
+          {"and": [
+            "canTrickyJump",
+            {"cycleFrames": 50}
+          ]}
+        ]},
+        {"cycleFrames": 110}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Sova", "count": 1}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 46,
+      "link": [1, 1],
+      "name": "Triple Sova Farm",
+      "requires": [
+        "h_heatProof",
+        {"or": [
+          "h_lavaProof",
+          "canInsaneJump",
+          {"and": [
+            "canDodgeWhileShooting",
+            "Plasma"
+          ]}
+        ]},
+        {"or": [
+          "Wave",
+          "Spazer",
+          "Plasma"
+        ]},
+        {"cycleFrames": 470}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Sova", "count": 3}],
+      "flashSuitChecked": true,
+      "devNote": "Heat scaling makes up the difference in platforming ability."
+    },
+    {
+      "id": 47,
+      "link": [1, 1],
+      "name": "Full Farm",
+      "requires": [
+        "h_heatProof",
+        "h_lavaProof",
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          "ScrewAttack",
+          "Plasma",
+          {"and": [
+            "canPseudoScrew",
+            {"or": [
+              "Wave",
+              "Spazer",
+              {"cycleFrames": 420}
+            ]},
+            {"cycleFrames": 390}
+          ]}
+        ]},
+        {"cycleFrames": 300}
+      ],
+      "clearsObstacles": ["A"],
+      "farmCycleDrops": [
+        {"enemy": "Sova", "count": 3},
+        {"enemy": "Dragon", "count": 3}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 43,
+      "link": [1, 1],
+      "name": "Power Bomb with Double Damage Boost (Collect Right Item)",
+      "requires": [
+        {"notable": "Power Bomb with Damage Boost"},
+        {"enemyKill": {
+          "enemies": [["Dragon"], ["Dragon", "Dragon"]],
+          "explicitWeapons": ["PowerBomb"]
+        }},
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Dragon", "type": "fireball", "hits": 2}},
+        "canFlatleyJump",
+        "canTrickyJump",
+        {"or": [
+          {"tech": "canUsePowerBombLag"},
+          "canInsaneJump"
+        ]},
+        {"heatFrames": 400}
+      ],
+      "collectsItems": [3]
+    },
+    {
+      "id": 36,
+      "link": [1, 1],
+      "name": "Collect Both Items with Lucky Drops",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        {"or": [
+          "Wave",
+          "Plasma",
+          "Spazer",
+          "canBeVeryPatient"
+        ]},
+        {"enemyKill": {
+          "enemies": [["Sova", "Sova", "Sova", "Dragon", "Dragon"]],
+          "explicitWeapons": ["PowerBomb"]
+        }},
+        "canMockball",
+        "canPreciseWalljump",
+        "canInsaneJump",
+        "canPauseAbuse",
+        "canFarmWhileShooting",
+        "canBePatient",
+        {"resourceMissingAtMost": [
+          {"type": "Missile", "count": 0},
+          {"type": "Super", "count": 0}
+        ]},
+        {"heatFrames": 392},
+        {"resourceAtMost": [{"type": "RegularEnergy", "count": 1}]}
+      ],
+      "collectsItems": [2, 3],
+      "note": [
+        "Very quickly cross the room, collecting both items without falling into the lava.",
+        "A Power Bomb in the middle of the room sets up the Sova drops and adds lag which makes the block item easier to collect with a Flatley jump.",
+        "Farming the left sova and middle dragon increases the chances of getting enough health drops, but it may still not be possible with poor drop luck.",
+        "Pause abuse can be useful for reaching the right side drops if the left side's luck was bad."
+      ],
+      "devNote": [
+        "Not notable because it is safer to collect the items in separate trips.",
+        "The first OR block is for farming the left sova for more consistency, or resetting to retry the strat multiple times.",
+        "canBePatient indicates a chance of failure even if everything is performed correctly."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Multiviola",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}},
+        {"heatFrames": 210},
+        {"or": [
+          "canTrickyJump",
+          {"heatFrames": 70}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Carefully jump over the Dragon's fireballs while the Sova is approaching,",
+        "or wait on the edge of the platform, under the fireballs, for one second before using the Super."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"ammo": {"type": "Super", "count": 1}},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "Use a Super to knock off the Sova to regain mobility."
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "SpaceJump",
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 199}
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Running SpaceJump",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 140}
+      ]
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Space Screw Dragon Kill",
+      "requires": [
+        "SpaceJump",
+        "ScrewAttack",
+        "canTrickyJump",
+        {"heatFrames": 199}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Clear the Dragons while moving towards the items with Space Jump and Screw Attack to make for a faster exit later."
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "top"
+        }
+      },
+      "requires": [
+        "canDownGrab",
+        {"shinespark": {"frames": 39}},
+        {"heatFrames": 142}
+      ]
+    },
+    {
+      "id": 37,
+      "link": [1, 2],
+      "name": "Shinespark (Come in Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 13},
+        "canMidairShinespark",
+        {"shinespark": {"frames": 38, "excessFrames": 1}},
+        {"heatFrames": 160}
+      ]
+    },
+    {
+      "id": 38,
+      "link": [1, 2],
+      "name": "Shinespark (Come in Shinecharging)",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 3,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "canMidairShinespark",
+        {"shinespark": {"frames": 37, "excessFrames": 1}},
+        {"heatFrames": 160}
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 120}
+      ],
+      "note": [
+        "After teleporting, press down to retract Grapple and swing to the right.",
+        "Then swing to the left to the platform with the Chozo ball item.",
+        "The Sova should fall from the ceiling before Samus would hit it."
+      ]
+    },
+    {
+      "id": 33,
+      "link": [1, 2],
+      "name": "Power Bomb Damage Boost to Upper Item",
+      "requires": [
+        {"notable": "Power Bomb with Damage Boost"},
+        "canTrickyJump",
+        "canMidAirMorph",
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Dragon", "type": "fireball", "hits": 1}},
+        {"enemyKill": {
+          "enemies": [["Dragon"], ["Dragon", "Dragon"]],
+          "explicitWeapons": ["PowerBomb"]
+        }},
+        {"heatFrames": 270}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Place a Power Bomb while waiting for the middle Dragon to shoot a fireball, to clear the Sovas for later.",
+        "Place a second Power Bomb while jumping up from the lower item block to clear the remaining enemies for the return trip."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [1, 2],
+      "name": "Power Bomb Damage Boost (Collect Both Items)",
+      "requires": [
+        {"notable": "Power Bomb with Damage Boost"},
+        "canFlatleyJump",
+        "canTrickyDodgeEnemies",
+        "canMidAirMorph",
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Dragon", "type": "fireball", "hits": 1}},
+        {"enemyKill": {
+          "enemies": [["Dragon"], ["Dragon", "Dragon"]],
+          "explicitWeapons": ["PowerBomb"]
+        }},
+        {"heatFrames": 260}
+      ],
+      "clearsObstacles": ["A"],
+      "collectsItems": [3],
+      "note": [
+        "Place a Power Bomb while waiting for the middle Dragon to shoot a fireball, to clear the Sovas for later.",
+        "While the item block is breaking, turn around to perform a Flatley jump to collect the item and jump to the ledge item in one motion.",
+        "Place a second Power Bomb while jumping up from the lower item block to clear the remaining enemies for the return trip."
+      ]
+    },
+    {
+      "id": 44,
+      "link": [1, 2],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"heatFrames": 19}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        "h_lavaProof",
+        {"or": [
+          "h_heatProof",
+          {"and": [
+            {"obstaclesCleared": ["A"]},
+            {"heatFrames": 100}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 3],
+      "name": "Lava Proof",
+      "requires": [
+        "h_lavaProof",
+        {"or": [
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Dragon", "Dragon"], ["Dragon"]],
+              "explicitWeapons": ["Missile"]
+            }},
+            {"heatFrames": 280}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Dragon", "Dragon"], ["Dragon"]],
+              "explicitWeapons": ["Super", "Plasma", "ScrewAttack"]
+            }},
+            {"heatFrames": 230}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 45,
+      "link": [1, 3],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"heatFrames": 19}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "The buffered item pickup is still viable. When using it to jump to the right, it is important to have prevented the middle Dragon from shooting to the left."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"heatFrames": 35}
+          ]},
+          "canInsaneJump",
+          {"and": [
+            {"obstaclesCleared": ["A"]},
+            {"heatFrames": 60}
+          ]}
+        ]},
+        {"heatFrames": 195}
+      ]
+    },
+    {
+      "id": 39,
+      "link": [1, 4],
+      "name": "Kill Sovas while Platforming",
+      "requires": [
+        "canDodgeWhileShooting",
+        "canTrickyJump",
+        {"or": [
+          "Spazer",
+          "Wave",
+          "Plasma",
+          "ScrewAttack"
+        ]},
+        {"heatFrames": 210}
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 4],
+      "name": "SpaceJump",
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 180}
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 4],
+      "name": "Kill the Dragons",
+      "requires": [
+        {"or": [
+          {"ammo": {"type": "Super", "count": 3}},
+          "Plasma",
+          "Ice"
+        ]},
+        {"heatFrames": 570}
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": "Ice can move through the room more quickly but must spend time refreezing the dragons."
+    },
+    {
+      "id": 15,
+      "link": [1, 4],
+      "name": "Avoid Dragon Fireballs",
+      "requires": [
+        "canCameraManip",
+        "canDodgeWhileShooting",
+        {"heatFrames": 840}
+      ],
+      "note": [
+        "Clear the Sovas while standing in a safe spot from the Dragon Fireballs.",
+        "Bring each Dragon on screen one at a time so that there are fewer projectiles to avoid."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 4],
+      "name": "Avoid and Power Bomb the Dragons",
+      "requires": [
+        "canDodgeWhileShooting",
+        {"enemyKill": {
+          "enemies": [["Dragon"], ["Dragon", "Dragon"]],
+          "explicitWeapons": ["PowerBomb"]
+        }},
+        {"heatFrames": 840}
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "Bring each Dragon on screen one at a time so that there are fewer projectiles to avoid.",
+        "Place one Power Bomb on the right side to clear the right Dragon and Sovas.",
+        "Then use a second Power Bomb after waiting for the middle Dragon to finishing firing."
+      ]
+    },
+    {
+      "id": 35,
+      "link": [1, 4],
+      "name": "Power Bomb with Damage Boost to Lower Item",
+      "requires": [
+        {"notable": "Power Bomb with Damage Boost"},
+        "canTrickyJump",
+        "canMidAirMorph",
+        "canHorizontalDamageBoost",
+        {"enemyDamage": {"enemy": "Dragon", "type": "fireball", "hits": 1}},
+        {"enemyKill": {
+          "enemies": [["Dragon"]],
+          "explicitWeapons": ["PowerBomb"]
+        }},
+        {"heatFrames": 180}
+      ],
+      "note": [
+        "Place a Power Bomb while waiting for the middle Dragon to shoot a fireball, to clear the Sovas for later.",
+        "A second Power Bomb will be needed to clear the remaining Dragons for the return trip."
+      ],
+      "devNote": "Would be better if we could model 1 PB consumed + dragons half-dead."
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "SpaceJump",
+      "requires": [
+        "SpaceJump",
+        {"heatFrames": 210}
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 1],
+      "name": "Return while Farming",
+      "requires": [
+        "canFarmWhileShooting",
+        "canTrickyJump",
+        {"or": [
+          "Wave",
+          "Plasma",
+          "Spazer"
+        ]},
+        {"resourceMissingAtMost": [
+          {"type": "Missile", "count": 0},
+          {"type": "Super", "count": 0}
+        ]},
+        {"heatFramesWithEnergyDrops": {
+          "frames": 130,
+          "drops": [{"enemy": "Sova", "count": 3}]
+        }},
+        {"heatFrames": 80}
+      ],
+      "note": ["Return while collecting Sova drops."]
+    },
+    {
+      "id": 18,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 19,
+      "link": [2, 4],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 90}
+      ]
+    },
+    {
+      "id": 20,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        "h_lavaProof",
+        {"or": [
+          "h_heatProof",
+          {"and": [
+            {"obstaclesCleared": ["A"]},
+            {"heatFrames": 130}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [3, 1],
+      "name": "Lava Proof",
+      "requires": [
+        "h_lavaProof",
+        {"or": [
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Dragon", "Dragon"], ["Dragon"]],
+              "explicitWeapons": ["Missile"]
+            }},
+            {"heatFrames": 310}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Dragon", "Dragon"], ["Dragon"]],
+              "explicitWeapons": ["Super", "Plasma", "ScrewAttack"]
+            }},
+            {"heatFrames": 260}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 22,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 70},
+        {"or": [
+          {"and": [
+            {"or": [
+              "canPreciseWalljump",
+              {"and": [
+                "HiJump",
+                "canWalljump"
+              ]}
+            ]},
+            {"lavaFrames": 30}
+          ]},
+          {"and": [
+            "Gravity",
+            {"lavaFrames": 20}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 23,
+      "link": [3, 2],
+      "name": "SpringBall Jump",
+      "requires": [
+        "canSpringBallJumpMidAir",
+        {"heatFrames": 80},
+        {"lavaFrames": 25}
+      ]
+    },
+    {
+      "id": 24,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 50},
+        {"or": [
+          {"and": [
+            "canWalljump",
+            {"lavaFrames": 30}
+          ]},
+          {"and": [
+            "HiJump",
+            {"lavaFrames": 30}
+          ]},
+          {"and": [
+            "Gravity",
+            {"lavaFrames": 20}
+          ]},
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            {"obstaclesNotCleared": ["A"]},
+            {"lavaFrames": 30}
+          ]},
+          {"and": [
+            {"heatFrames": 190},
+            {"lavaFrames": 65}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [3, 4],
+      "name": "Buffered Item Pickup",
+      "requires": [
+        "canInsaneJump",
+        "canFlatleyJump",
+        {"heatFrames": 30}
+      ],
+      "note": [
+        "Time the breaking of the hidden item block with a spinjump to avoid falling into the lava.",
+        "Turnaround just before the item fanfare begins and then hold jump to buffer a spinjump."
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 4],
+      "name": "SpringBall Jump",
+      "requires": [
+        "canSpringBallJumpMidAir",
+        {"heatFrames": 80},
+        {"lavaFrames": 25}
+      ]
+    },
+    {
+      "id": 27,
+      "link": [3, 4],
+      "name": "Frozen Sova Platform",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        {"heatFrames": 30}
+      ],
+      "note": "Use Ice to freeze the Sova in a position where Samus can collect the item without falling into the lava.",
+      "devNote": "The cost comes from setting up the freeze.  Collecting the item and returning to 4 will be instantaneous."
+    },
+    {
+      "id": 28,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canTrickyJump",
+          "SpaceJump",
+          {"and": [
+            {"obstaclesCleared": ["A"]},
+            {"or": [
+              "canCarefulJump",
+              {"heatFrames": 90}
+            ]}
+          ]}
+        ]},
+        {"heatFrames": 210}
+      ]
+    },
+    {
+      "id": 29,
+      "link": [4, 1],
+      "name": "Kill the Dragons",
+      "requires": [
+        {"or": [
+          {"ammo": {"type": "Missile", "count": 9}},
+          {"ammo": {"type": "Super", "count": 3}},
+          "Plasma",
+          "Ice"
+        ]},
+        {"heatFrames": 570}
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": "Ice can move through the room more quickly but must spend time refreezing the dragons."
+    },
+    {
+      "id": 32,
+      "link": [4, 1],
+      "name": "Return Carefully",
+      "requires": [
+        "canCarefulJump",
+        {"heatFrames": 480}
+      ],
+      "note": "Return with careful jumps, avoiding Dragons."
+    },
+    {
+      "id": 41,
+      "link": [4, 1],
+      "name": "Return while Farming",
+      "requires": [
+        "canFarmWhileShooting",
+        {"or": [
+          "Wave",
+          "Plasma",
+          "Spazer"
+        ]},
+        {"resourceMissingAtMost": [
+          {"type": "Missile", "count": 0},
+          {"type": "Super", "count": 0}
+        ]},
+        {"heatFramesWithEnergyDrops": {
+          "frames": 120,
+          "drops": [{"enemy": "Sova", "count": 2}]
+        }},
+        {"heatFrames": 40}
+      ],
+      "note": ["Return while collecting Sova drops."]
+    },
+    {
+      "id": 30,
+      "link": [4, 2],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 60}
+      ]
+    },
+    {
+      "id": 31,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 0}
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Power Bomb with Damage Boost",
+      "note": [
+        "Dash jump from the door to the second ledge.",
+        "Jump forward, morph, and place a Power Bomb on the ceiling between the second and third ledges.",
+        "Press right as Samus begins falling. After falling for 1-2 blocks, unmorph.",
+        "This will place Samus precisely in the path of a Dragon fireball to damage boost left.",
+        "Samus can land on the lower item block, just before the block is destroyed in the Power Bomb explosion."
+      ]
+    }
+  ],
+  "nextStratId": 48,
+  "nextNotableId": 2
+}

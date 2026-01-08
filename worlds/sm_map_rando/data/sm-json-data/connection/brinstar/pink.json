@@ -1,0 +1,255 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType" : "HorizontalDoor",
+      "description" : "Door connection between Dachora Energy Refill and Dachora Room",
+      "direction": "Bidirectional",
+      "nodes" : [
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 317,
+          "roomName": "Dachora Energy Refill",
+          "nodeid" : 1,
+          "nodeName": "Dachora Energy Refill Door (to Dachora Room)",
+          "position" : "left"
+        },
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 58,
+          "roomName": "Dachora Room",
+          "nodeid" : 2,
+          "nodeName": "Dachora Room Bottom Left Door (to Recharge)",
+          "position" : "right"
+        }
+      ]
+    },
+    {
+      "connectionType" : "HorizontalDoor",
+      "description" : "Door connection between Dachora Room and Big Pink",
+      "direction": "Bidirectional",
+      "nodes" : [
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 58,
+          "roomName": "Dachora Room",
+          "nodeid" : 3,
+          "nodeName": "Dachora Room Right Door (to Big Pink)",
+          "position" : "left"
+        },
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 59,
+          "roomName": "Big Pink",
+          "nodeid" : 3,
+          "nodeName": "Big Pink Top Middle Left Door (to Dachora Room)",
+          "position" : "right"
+        }
+      ]
+    },
+    {
+      "connectionType" : "HorizontalDoor",
+      "description" : "Door connection between Big Pink Save Room and Big Pink",
+      "direction": "Bidirectional",
+      "nodes" : [
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 318,
+          "roomName": "Big Pink Save Room",
+          "nodeid" : 1,
+          "nodeName": "Big Pink Save Room Door (to Big Pink)",
+          "position" : "left"
+        },
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 59,
+          "roomName": "Big Pink",
+          "nodeid" : 1,
+          "nodeName": "Big Pink Top Left Door (to Save)",
+          "position" : "right"
+        }
+      ]
+    },
+    {
+      "connectionType" : "HorizontalDoor",
+      "description" : "Top door connection between Pink Brinstar Power Bomb Room and Big Pink",
+      "direction": "Bidirectional",
+      "nodes" : [
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 60,
+          "roomName": "Pink Brinstar Power Bomb Room",
+          "nodeid" : 1,
+          "nodeName": "Mission Impossible Top Right Door (to Big Pink Upper)",
+          "position" : "left"
+        },
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 59,
+          "roomName": "Big Pink",
+          "nodeid" : 4,
+          "nodeName": "Big Pink Middle Left Door (to Mission Impossible Top)",
+          "position" : "right"
+        }
+      ]
+    },
+    {
+      "connectionType" : "HorizontalDoor",
+      "description" : "Bottom door connection between Pink Brinstar Power Bomb Room and Big Pink",
+      "direction": "Bidirectional",
+      "nodes" : [
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 60,
+          "roomName": "Pink Brinstar Power Bomb Room",
+          "nodeid" : 2,
+          "nodeName": "Mission Impossible Bottom Right Door (to Big Pink Lower)",
+          "position" : "left"
+        },
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 59,
+          "roomName": "Big Pink",
+          "nodeid" : 5,
+          "nodeName": "Big Pink Bottom Middle Left Door (from Mission Impossible Bottom)",
+          "position" : "right"
+        }
+      ]
+    },
+    {
+      "connectionType" : "HorizontalDoor",
+      "description" : "Door connection between Big Pink and Pink Brinstar Hopper Room",
+      "direction": "Bidirectional",
+      "nodes" : [
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 59,
+          "roomName": "Big Pink",
+          "nodeid" : 6,
+          "nodeName": "Big Pink Top Middle Right Door (to Hoppers)",
+          "position" : "left"
+        },
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 61,
+          "roomName": "Pink Brinstar Hopper Room",
+          "nodeid" : 1,
+          "nodeName": "Pink Brinstar Hoppers Left Door (to Big Pink)",
+          "position" : "right"
+        }
+      ]
+    },
+    {
+      "connectionType" : "HorizontalDoor",
+      "description" : "Door connection between Pink Brinstar Hopper Room and Hopper Energy Tank Room",
+      "direction": "Bidirectional",
+      "nodes" : [
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 61,
+          "roomName": "Pink Brinstar Hopper Room",
+          "nodeid" : 2,
+          "nodeName": "Pink Brinstar Hoppers Right Door (to E-Tank)",
+          "position" : "left"
+        },
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 62,
+          "roomName": "Hopper Energy Tank Room",
+          "nodeid" : 1,
+          "nodeName": "Hopper E-Tank Door (to Hoppers)",
+          "position" : "right"
+        }
+      ]
+    },
+    {
+      "connectionType" : "HorizontalDoor",
+      "description" : "Door connection between Big Pink and Spore Spawn Farming Room",
+      "direction": "Bidirectional",
+      "nodes" : [
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 59,
+          "roomName": "Big Pink",
+          "nodeid" : 7,
+          "nodeName": "Big Pink Bottom Middle Right Door (to Spore Spawn Farm)",
+          "position" : "left"
+        },
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 64,
+          "roomName": "Spore Spawn Farming Room",
+          "nodeid" : 1,
+          "nodeName": "Spore Spawn Farming Room Left Door (to Big Pink)",
+          "position" : "right"
+        }
+      ]
+    },
+    {
+      "connectionType" : "HorizontalDoor",
+      "description" : "Door connection between Spore Spawn Farming Room and Spore Spawn Super Room",
+      "direction": "Bidirectional",
+      "nodes" : [
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 64,
+          "roomName": "Spore Spawn Farming Room",
+          "nodeid" : 2,
+          "nodeName": "Spore Spawn Farming Room Right Door (to Supers)",
+          "position" : "left"
+        },
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 63,
+          "roomName": "Spore Spawn Super Room",
+          "nodeid" : 2,
+          "nodeName": "Spore Spawn Supers Bottom Left Door (to Farming Room)",
+          "position" : "right"
+        }
+      ]
+    },
+    {
+      "connectionType" : "HorizontalDoor",
+      "description" : "Door connection between Waterway Energy Tank Room and Big Pink",
+      "direction": "Bidirectional",
+      "nodes" : [
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 65,
+          "roomName": "Waterway Energy Tank Room",
+          "nodeid" : 1,
+          "nodeName": "Waterway Door (to Big Pink)",
+          "position" : "left"
+        },
+        {
+          "area" : "Brinstar",
+          "subarea" : "Pink",
+          "roomid" : 59,
+          "roomName": "Big Pink",
+          "nodeid" : 9,
+          "nodeName": "Big Pink Bottom Left Door (to Waterway)",
+          "position" : "right"
+        }
+      ]
+    }
+  ]
+}

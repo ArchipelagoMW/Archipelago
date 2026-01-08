@@ -1,0 +1,147 @@
+<wiidisc version="1">
+	<id game="GAL" developer="01">
+		<region type="E"/> <!-- Only USA version supported -->
+	</id>
+	<options>
+		<section name="SSBM Archipelago Mod">
+			<option name="Player: {{ PLAYER_NAME }} | Slot: {{ SLOT_NUM }} | Seed: {{AUTH_ID }}" id="SSBM" default="1">
+				<choice name="Enabled"><patch id="SSBMAP"/></choice>
+			</option>
+		</section>
+	</options>
+	
+	<patch id="SSBMAP">
+		<!-- This section is automatically injected by Kamek -->
+		<memory offset="0x803049D8" value="68000000" />
+		<memory offset="0x803105A4" value="68000000" />
+		<memory offset="0x80310754" value="68000000" />
+		<memory offset="0x803BAC5C" value="{{ GAME_FILE_NAME}}" />
+		<!--<memory offset="0x80001800" value="{{ ENCODED_PLAYER_NAME}}" />-->
+		{% if CSTICK_SMASH_SOLO %}<memory offset="0x8016B480" value="60000000" />{% endif %}
+
+		{% if TROPHYCLASS_IN_POOL %}
+		<memory offset="0x80305898" value="0x4800001c" />
+		<memory offset="0x801741CC" value="0x60000000" />
+		<memory offset="0x801741E8" value="0x60000000" />
+		<memory offset="0x801741B0" value="0x60000000" />{% endif %}
+		
+		{% if DISABLE_TAP_JUMP %}
+		<memory offset="0x800CAF14" value="0x4800001c" />
+		<memory offset="0x800CB998" value="0x48000014" />
+		<memory offset="0x800CAFC0" value="0x48000028" />
+		<memory offset="0x800D7430" value="0x60000000" />
+		<memory offset="0x800CB828" value="0x48000014" />
+		<memory offset="0x800CB070" value="0x4800001c" />
+		{% endif %}
+		<memory offset="0x80001B00" value="A003000060008000B003000048303D044E8000203C8080456084C3941C6300027C632214A0630000706380007C8318384E8000207C651B783C8080456084C3941C6300027C632214A06300003C80800038841EBCB06400007CA32B784BFFFFB83C80800038841EBCA0640000706380004E8000203C6080456063C3941C1B00027C601A148863000070630080481BE32C3FE0804763FF9D308BFF00002C1F000C4082000C7003800048302D685403063E48302D603F0080003B181800801800003B0000017F18A0307F1800382C180000418200084825F04C4825F1C03FE080003BFF180083BF00003BE000017FFF18307FBDF8382C1D00004182000C3BE300004825DF7C4825DF6C3C6080003863180483E3000073FFFFFF2C1F0000418200084824B2B44824B2A87C6302147C781B783C60800038A0000038631E8C88C300007C06C000418200243863000138A500012C0500174180FFE838600001480223D57F03C3784824BD043C60800038631EA47C632A1488830000386000017C6420303CA0800038A5180080A500007C8428382C0400004082FFC438600003480223954824BCE07C67032E3CA0804560A5C3941C6300027CA51A148865000060630080986500004817C6304E8000201F9C000A7F9DE2144816082048000065A01D000238A000027CA500307C8528382C050000418200084822AFC83800000338600003480223314822AFB848000035708400F0A01E000238A000107CA500307C8528382C050000418200084822AAFC3800000338600003480222FD4822AAEC3C8080003884180088840000708400FE4E8000203C8080456084C20EA084000070847FFF7C8318384E8000203C8080456084C20DA084000070843FF87C8318384E80002038C000043CA0800038A5180888A50000388000017C8330307CA318382C0300004182001C7CC333783880000038A0000038E0000048303B65483105952C0600074182000C38C600014BFFFFBC3860000338C00000483160403C6080003863180888630000706300202C0300004182001C386000053880000038A0000038E0000048303B194831054938600000481C3C383C6080003863180080630000388000017C8588307CA318382C0300004182000C386000014E800020386000004E8000203C6080456063BF29886300007063001F2C03001F41820008386000004E8000203CA0800038A51810A08500002C0400004182001438600000906500003884FFFF7C832378907D002048313AF80001040C0F101112181A1C1F202122232628292A2C00000001060B050D0E1001030E10090711020B1417020A16000000" />
+		<memory offset="0x803049D8" value="68000000" />
+		<memory offset="0x803105A4" value="68000000" />
+		<memory offset="0x80310754" value="68000000" />
+		<memory offset="0x8030B2F0" value="68000000" />
+		<memory offset="0x803134C8" value="48000024" />
+		<memory offset="0x803057CC" value="4BCFC334" />
+		<memory offset="0x801BFEB4" value="4BE41CC0" />
+		<memory offset="0x8030490C" value="4BCFD284" />
+		<memory offset="0x80305680" value="70008000" />
+		<memory offset="0x803052A8" value="70008000" />
+		<memory offset="0x803056B8" value="68000000" />
+		<memory offset="0x80312470" value="60000000" />
+		<memory offset="0x80305720" value="60000000" />
+		<memory offset="0x803123C4" value="60000000" />
+		<memory offset="0x80316450" value="4BCEB6E5" />
+		<memory offset="0x803161E0" value="4BCEB981" />
+		<memory offset="0x803161E4" value="2C030000" />
+		<memory offset="0x80260C18" value="4BDA0F9C" />
+		<memory offset="0x8025FB78" value="4BDA2064" />
+		<memory offset="0x8024CEC4" value="4BDB4D44" />
+		<memory offset="0x8024CED4" value="2C1F0001" />
+		<memory offset="0x8024CEE4" value="2C1F0002" />
+		<memory offset="0x8024CEF4" value="2C1F0003" />
+		<memory offset="0x8024CF04" value="2C1F0004" />
+		<memory offset="0x8024CF40" value="2C1F0005" />
+		<memory offset="0x8024CF44" value="41810024" />
+		<memory offset="0x8024CF48" value="480000B0" />
+		<memory offset="0x8024CF70" value="2C1F0007" />
+		<memory offset="0x8024CF74" value="41820074" />
+		<memory offset="0x8024CF78" value="48000078" />
+		<memory offset="0x8024CF14" value="2C1F0008" />
+		<memory offset="0x8024CF24" value="60000000" />
+		<memory offset="0x8024D958" value="60000000" />
+		<memory offset="0x8024D964" value="4BDB42C4" />
+		<memory offset="0x8027A570" value="60000000" />
+		<memory offset="0x8027A540" value="38600064" />
+		<memory offset="0x8027A528" value="60000000" />
+		<memory offset="0x8027A4F4" value="38600064" />
+		<memory offset="0x8017E2F0" value="4BE839B4" />
+		<memory offset="0x801624F0" value="4BE9F7DC" />
+		<memory offset="0x8022CCB8" value="4BDD5020" />
+		<memory offset="0x8022C820" value="4BDD54E8" />
+		<memory offset="0x801649EC" value="80010024" />
+		<memory offset="0x80172DA0" value="38600000" />
+		<memory offset="0x80172DA8" value="38030E10" />
+		<memory offset="0x801730D4" value="38600400" />
+		<memory offset="0x801730D8" value="4BE8EC79" />
+		<memory offset="0x801730F8" value="38600020" />
+		<memory offset="0x801730FC" value="4BE8EC55" />
+		<memory offset="0x80173170" value="38600080" />
+		<memory offset="0x80173174" value="4BE8EBDD" />
+		<memory offset="0x80173194" value="38600010" />
+		<memory offset="0x80173198" value="4BE8EBB9" />
+		<memory offset="0x801731EC" value="38600001" />
+		<memory offset="0x801731F0" value="4BE8EB61" />
+		<memory offset="0x801731BC" value="38600004" />
+		<memory offset="0x801731C0" value="4BE8EB91" />
+		<memory offset="0x8017329C" value="38600008" />
+		<memory offset="0x801732A0" value="4BE8EAB1" />
+		<memory offset="0x80172ECC" value="38600008" />
+		<memory offset="0x80172ED0" value="4BE8EE81" />
+		<memory offset="0x801732EC" value="38600040" />
+		<memory offset="0x801732F0" value="4BE8EA61" />
+		<memory offset="0x80173318" value="38600200" />
+		<memory offset="0x8017331C" value="4BE8EA35" />
+		<memory offset="0x80172D90" value="38600002" />
+		<memory offset="0x80172D94" value="4BE8EFBD" />
+		<memory offset="0x80173464" value="38600100" />
+		<memory offset="0x80173470" value="4BE8E8E1" />
+		<memory offset="0x801A60B0" value="38600000" />
+		<memory offset="0x80173E5C" value="2800000A" />
+		<memory offset="0x80173658" value="28000032" />
+		<memory offset="0x801645DC" value="60000000" />
+		<memory offset="0x80172F1C" value="38600008" />
+		<memory offset="0x80172F20" value="4BE8EE49" />
+		<memory offset="0x80172F3C" value="38600010" />
+		<memory offset="0x80172F40" value="4BE8EE29" />
+		<memory offset="0x80172F5C" value="38600040" />
+		<memory offset="0x80172F60" value="4BE8EE09" />
+		<memory offset="0x80172F7C" value="38600020" />
+		<memory offset="0x80172F80" value="4BE8EDE9" />
+		<memory offset="0x801BEECC" value="38600100" />
+		<memory offset="0x801BEED0" value="4BE42E99" />
+		<memory offset="0x801734E4" value="38601000" />
+		<memory offset="0x801734E8" value="4BE8E881" />
+		<memory offset="0x8017349C" value="38602000" />
+		<memory offset="0x801734A8" value="4BE8E8C1" />
+		<memory offset="0x80173434" value="38600800" />
+		<memory offset="0x80173438" value="4BE8E931" />
+		<memory offset="0x801733A4" value="38600400" />
+		<memory offset="0x801733A8" value="4BE8E9C1" />
+		<memory offset="0x803058C4" value="38600080" />
+		<memory offset="0x803058C8" value="4BCFC4A1" />
+		<memory offset="0x8017CCF4" value="38600002" />
+		<memory offset="0x8017CCF8" value="4BE85071" />
+		<memory offset="0x803058BC" value="2C00012C" />
+		<memory offset="0x80173F24" value="48000058" />
+		<memory offset="0x80173F84" value="48000058" />
+		<memory offset="0x80173FE4" value="48000058" />
+		<memory offset="0x80174090" value="280003E8" />
+		<memory offset="0x8015EDDC" value="38600001" />
+		<memory offset="0x80304FA0" value="60000000" />
+		<memory offset="0x801741B8" value="28030005" />
+		<memory offset="0x80317E10" value="4BCE9F70" />
+		<memory offset="0x801C5A40" value="4BE3C398" />
+		<memory offset="0x80173EB8" value="38002710" />
+		<memory offset="0x80174060" value="4BE8DDE1" />
+		<memory offset="0x8031597C" value="4BCEC4E4" />
+	</patch>
+	
+</wiidisc>

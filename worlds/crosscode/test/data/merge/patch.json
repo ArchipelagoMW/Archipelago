@@ -1,0 +1,17 @@
+{
+    "foo": {
+        "numbers": {
+            "four": 4
+        },
+        "letters": [
+            "e",
+            "f",
+            "g"
+        ],
+        "extra": "secret"
+    },
+    "bar": {
+        "thing": 6,
+        "extra": "special"
+    }
+}

@@ -1,0 +1,180 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Terminator Room and Green Pirates Shaft",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 20,
+          "roomName": "Terminator Room",
+          "nodeid": 1,
+          "nodeName": "Terminator Left Door (to Green Pirates Shaft)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 21,
+          "roomName": "Green Pirates Shaft",
+          "nodeid": 2,
+          "nodeName": "Green Pirates Shaft Middle Right Door (to Terminator)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Statues Hallway and Green Pirates Shaft",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 26,
+          "roomName": "Statues Hallway",
+          "nodeid": 1,
+          "nodeName": "Statues Hallway Left Door (to Green Pirates Shaft)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 21,
+          "roomName": "Green Pirates Shaft",
+          "nodeid": 4,
+          "nodeName": "Green Pirates Shaft Bottom Right Door (to Statues Hallway)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Green Pirates Shaft and Lower Mushrooms",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 21,
+          "roomName": "Green Pirates Shaft",
+          "nodeid": 3,
+          "nodeName": "Green Pirates Shaft Bottom Left Door (to Lower Mushrooms)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 22,
+          "roomName": "Lower Mushrooms",
+          "nodeid": 2,
+          "nodeName": "Lower Mushrooms Right Door (to Green Pirates Shaft)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Lower Mushrooms and Green Brinstar Elevator Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 22,
+          "roomName": "Lower Mushrooms",
+          "nodeid": 1,
+          "nodeName": "Lower Mushrooms Left Door (to Elevator)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 23,
+          "roomName": "Green Brinstar Elevator Room",
+          "nodeid": 1,
+          "nodeName": "Green Brinstar Elevator Room Door (to Lower Mushrooms)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Statues Hallway and Statues Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 26,
+          "roomName": "Statues Hallway",
+          "nodeid": 2,
+          "nodeName": "Statues Hallway Right Door (to Statues)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 27,
+          "roomName": "Statues Room",
+          "nodeid": 1,
+          "nodeName": "Statues Room Left Door (to Statues Hallway)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Green Pirates Shaft and Gauntlet Energy Tank Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 21,
+          "roomName": "Green Pirates Shaft",
+          "nodeid": 1,
+          "nodeName": "Green Pirates Shaft Top Right Door (to Gauntlet E-Tank)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 31,
+          "roomName": "Gauntlet Energy Tank Room",
+          "nodeid": 1,
+          "nodeName": "Gauntlet E-Tank Left Door (to Green Pirates Shaft)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Gauntlet Entrance and Gauntlet Energy Tank Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 30,
+          "roomName": "Gauntlet Entrance",
+          "nodeid": 1,
+          "nodeName": "Gauntlet Entrance Left Door (to E-Tank)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "West",
+          "roomid": 31,
+          "roomName": "Gauntlet Energy Tank Room",
+          "nodeid": 2,
+          "nodeName": "Gauntlet E-Tank Right Door (to Gauntlet Entrance)",
+          "position": "left"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1076 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 30,
+  "name": "Gauntlet Entrance",
+  "area": "Crateria",
+  "subarea": "West",
+  "roomAddress": "0x792B3",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018952",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018946",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 2, 2, 2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Center Thick Bomb Blocks",
+      "obstacleType": "inanimate",
+      "note": "The centermost bomb block wall that can be destroyed to open up a new runway.",
+      "devNote": [
+        "FIXME: The room can be broken up further to mix and match power bomb usage with shinesparks, or bluesuits.",
+        "This can be done by adding obstacles on either end of this center runway, with a junction on the runway."
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Gauntlet Entrance Wavers",
+      "enemyName": "Waver",
+      "quantity": 3,
+      "betweenNodes": [1, 2]
+    },
+    {
+      "id": "e2",
+      "groupName": "Gauntlet Entrance Yapping Maws",
+      "enemyName": "Yapping Maw",
+      "quantity": 4,
+      "betweenNodes": [1, 2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 48,
+      "link": [1, 1],
+      "name": "Waver Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            "canDodgeWhileShooting",
+            {"cycleFrames": 600}
+          ]},
+          {"and": [
+            "h_bombThings",
+            "canTrickyDodgeEnemies",
+            {"cycleFrames": 850}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Waver", "count": 2}],
+      "devNote": [
+        "There is a third Waver on the right side of the room,",
+        "but generally it would not be worthwhile to cross the room for it."
+      ]
+    },
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave with Spark, Yapping Maw Alive",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canMidairShinespark",
+        "canShinechargeMovement",
+        {"canShineCharge": {
+          "usedTiles": 18,
+          "steepUpTiles": 2,
+          "steepDownTiles": 1,
+          "startingDownTiles": 0,
+          "openEnd": 1
+        }},
+        {"shinespark": {"frames": 45}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "note": [
+        "It is possible to run through the Yapping Maw while it is attacking a different direction.",
+        "But that likely requires acid damage and isn't entirely reliable."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave with Spark, Yapping Maw Dead",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canMidairShinespark",
+        {"enemyKill": {
+          "enemies": [["Yapping Maw"]]
+        }},
+        {"canShineCharge": {
+          "usedTiles": 21,
+          "steepUpTiles": 2,
+          "steepDownTiles": 2,
+          "startingDownTiles": 1,
+          "openEnd": 0
+        }},
+        {"shinespark": {"frames": 45}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Leave with Spark, Yapping Maw Frozen",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canMidairShinespark",
+        "canUseFrozenEnemies",
+        {"canShineCharge": {
+          "usedTiles": 21,
+          "steepUpTiles": 2,
+          "steepDownTiles": 2,
+          "startingDownTiles": 1,
+          "openEnd": 0
+        }},
+        {"shinespark": {"frames": 45}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "note": "Freeze the Yapping Maw while it is in the air, extended."
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get hit by Waver",
+      "requires": [
+        {"or": [
+          "h_useMorphBombs",
+          "ScrewAttack"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get hit by Waver, Using a Power Bomb",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": [], "useImplicitRequires": false}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Place a Power Bomb near the door, then wait for the Waver to get into position to hit Samus through the transition.",
+        "The Waver only moves while on camera, and needs to move around the region several times before being set up properly."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get hit by Waver, Break Blocks with Speed",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 6,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "devNote": [
+        "Freeing the Waver with a shinespark is not reliable, and depends on when and where the shinespark starts.",
+        "Most of these strats kill the Wavers or set up situations where they can't reach the door."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "ScrewAttack",
+        {"or": [
+          "canCarefulJump",
+          {"acidFrames": 15}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Bombs",
+      "requires": [
+        "h_useMorphBombs",
+        {"or": [
+          "canTrickyJump",
+          "Ice",
+          {"ammo": {"type": "Super", "count": 2}},
+          {"acidFrames": 100}
+        ]},
+        {"or": [
+          "canDodgeWhileShooting",
+          "Wave",
+          "Spazer",
+          {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 2}}
+        ]},
+        {"or": [
+          "canCarefulJump",
+          {"and": [
+            "h_useSpringBall",
+            {"acidFrames": 20}
+          ]},
+          {"and": [
+            "Gravity",
+            {"acidFrames": 20}
+          ]},
+          {"acidFrames": 60}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": "Yapping maw / Wavers / Center bomb blockade"
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Power Bombs",
+      "requires": [
+        "Morph",
+        {"ammo": {"type": "PowerBomb", "count": 3}},
+        {"or": [
+          "canDodgeWhileShooting",
+          {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 1}}
+        ]},
+        {"or": [
+          "canCarefulJump",
+          {"ammo": {"type": "PowerBomb", "count": 1}},
+          {"acidFrames": 104}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Enter Shinesparking",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 95, "excessFrames": 20}}
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Midair Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 50},
+        "canShinechargeMovement",
+        "canMidairShinespark",
+        {"shinespark": {"frames": 85, "excessFrames": 20}}
+      ],
+      "flashSuitChecked": true,
+      "note": "Shinespark below the top block or Samus will crash into a solid wall."
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Low Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 37},
+        "canShinechargeMovement",
+        "canHorizontalShinespark",
+        {"shinespark": {"frames": 70}},
+        {"or": [
+          "Morph",
+          "canTunnelCrawl",
+          "canTurnaroundAimCancel",
+          {"and": [
+            "canTwoTileSqueeze",
+            "canXRayTurnaround"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Shinespark from the end of the entry runway, just past the down slope.",
+        "Samus will crash into the last set of blocks preventing access to the opposite door."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Blue SpaceJump (Left to Right, Come in Getting Blue Speed)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 6,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Blue SpaceJump"},
+        "canBlueSpaceJump",
+        "canTrickyJump"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "This is a series of precise jumps to fit between the solid walls while clearing a path through the room.",
+        "Breaking the center blocks opens up a runway that can be used to charge a new spark in room."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Blue SpaceJump (Left to Right, Come in Blue Spinning)",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "unusableTiles": 0
+        }
+      },
+      "requires": [
+        {"notable": "Blue SpaceJump"},
+        "canBlueSpaceJump",
+        "canTrickyJump"
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "This is a series of precise jumps to fit between the solid walls while clearing a path through the room.",
+        "Breaking the center blocks opens up a runway that can be used to charge a new spark in room."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "Come In With Blue Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled",
+          "minExtraRunSpeed": "$1.2",
+          "maxExtraRunSpeed": "$2.8"
+        }
+      },
+      "requires": [
+        "canTrickyJump"
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": [
+        "FIXME: Larger speeds (as high as max speed $7.0) can also work but require greater precision",
+        "It would also be possible to stop in the middle of the room and then gain blue speed in-room to continue."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [1, 2],
+      "name": "Come In Getting Blue Speed, Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 6,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1,
+          "minExtraRunSpeed": "$1.2",
+          "maxExtraRunSpeed": "$2.8"
+        }
+      },
+      "requires": [
+        "canSlowShortCharge",
+        "canSpeedball",
+        "canSpringBallBounce",
+        "canTrickyJump"
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": [
+        "FIXME: Larger speeds (as high as max speed $7.0) can also work but require greater precision",
+        "It would also be possible to stop in the middle of the room and then gain blue speed in-room to continue."
+      ]
+    },
+    {
+      "id": 46,
+      "link": [1, 2],
+      "name": "Temporary Blue Chains",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 6,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Temporary Blue Chains"},
+        "canChainTemporaryBlue",
+        {"acidFrames": 10},
+        {"or": [
+          "canTrickyWalljump",
+          {"acidFrames": 30}
+        ]}
+      ],
+      "note": [
+        "Come in gaining blue speed, and chain temporary blue across the room, carefully avoiding the Yapping Maws and minimizing acid damage.",
+        "After breaking the center bomb blocks, perform staggered walljumps (if available) on the wall to right, to wait for the acid to lower.",
+        "Then use the runway in the center of the room to gain blue speed and continue chaining temporary blue."
+      ],
+      "devNote": [
+        "It is technically possible to do this without acid damage, even without wall jumps, but this would seem unreasonably difficult.",
+        "It can also be possible to leave with temporary blue here, but that seems unreasonable considering the length of this chain."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [1, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 86, "excessFrames": 21}}
+      ]
+    },
+    {
+      "id": 20,
+      "link": [1, 2],
+      "name": "Use Flash Suit and Power Bombs",
+      "requires": [
+        "h_usePowerBomb",
+        {"useFlashSuit": {}},
+        {"or": [
+          {"and": [
+            "canHorizontalShinespark",
+            {"shinespark": {"frames": 57, "excessFrames": 24}}
+          ]},
+          {"and": [
+            "h_additionalBomb",
+            {"shinespark": {"frames": 1, "excessFrames": 1}}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 21,
+      "link": [1, 2],
+      "name": "G-Mode Setup - Get hit by Waver, Using Power Bombs",
+      "requires": [
+        "Morph",
+        {"ammo": {"type": "PowerBomb", "count": 3}}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "This is harder when crossing the room and easier if the right door can be used to reset the room, but it will cost one extra Power Bomb.",
+        "One method is to place a Power Bomb near the first bomb wall, killing the first Waver, but keeping the second, global Waver.",
+        "Wait for the global Waver to make a couple of passes before going to the left, where Samus can safely place a second Power Bomb by the next wall.",
+        "Wait again before placing the third Power Bomb, as the Waver will soon be returning. After the third bomb, wait at the right door for the setup."
+      ]
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "ScrewAttack",
+        {"or": [
+          "canCarefulJump",
+          {"acidFrames": 15}
+        ]},
+        {"or": [
+          "canCarefulJump",
+          "Ice",
+          {"ammo": {"type": "Super", "count": 1}},
+          {"acidFrames": 100}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Bombs",
+      "requires": [
+        "h_useMorphBombs",
+        {"or": [
+          "canDodgeWhileShooting",
+          "Ice",
+          {"ammo": {"type": "Super", "count": 2}},
+          {"acidFrames": 100}
+        ]},
+        {"or": [
+          "canTrickyJump",
+          "Wave",
+          {"enemyDamage": {"enemy": "Waver", "type": "contact", "hits": 2}}
+        ]},
+        {"or": [
+          "canCarefulJump",
+          {"acidFrames": 30}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": "Yapping Maw / Waver / Left of Blockade Bomb Wall"
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Power Bombs",
+      "requires": [
+        "Morph",
+        {"ammo": {"type": "PowerBomb", "count": 3}},
+        {"or": [
+          "canDodgeWhileShooting",
+          "Ice",
+          {"ammo": {"type": "Super", "count": 1}},
+          {"acidFrames": 100}
+        ]},
+        {"or": [
+          "canCarefulJump",
+          {"ammo": {"type": "PowerBomb", "count": 1}},
+          {"acidFrames": 20}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Enter in Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {}
+      },
+      "requires": [
+        {"shinespark": {"frames": 95, "excessFrames": 13}}
+      ]
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Wait for Acid Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 6,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        "canMidairShinespark",
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 80, "excessFrames": 13}}
+      ],
+      "note": "Wait for the acid to clear before moving to shinespark on the other side of the bomb blocks."
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Blue SpaceJump (Right to Left, Come in Getting Blue Speed)",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 6,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Blue SpaceJump"},
+        "canBlueSpaceJump",
+        "canTrickyJump"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "This is a series of precise jumps to fit between the solid walls while clearing a path through the room.",
+        "Breaking the center blocks opens up a runway that can be used to charge a new spark in room."
+      ],
+      "devNote": "TODO: There is a blue SpringBall strat to investigate."
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Blue SpaceJump (Right to Left, Come in Blue Spinning)",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "unusableTiles": 0
+        }
+      },
+      "requires": [
+        {"notable": "Blue SpaceJump"},
+        "canBlueSpaceJump",
+        "canTrickyJump"
+      ],
+      "clearsObstacles": ["A"],
+      "note": [
+        "This is a series of precise jumps to fit between the solid walls while clearing a path through the room.",
+        "Breaking the center blocks opens up a runway that can be used to charge a new spark in room."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Come In With Blue Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInWithBlueSpringBallBounce": {
+          "movementType": "controlled",
+          "minExtraRunSpeed": "$2.2",
+          "maxExtraRunSpeed": "$2.8"
+        }
+      },
+      "requires": [
+        "canTrickyJump"
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": [
+        "FIXME: Larger speeds (as high as max speed $7.0) can also work but require greater precision",
+        "It would also be possible to stop in the middle of the room and then gain blue speed in-room to continue."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "Come In Getting Blue Speed, Spring Ball Bounce",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 6,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1,
+          "minExtraRunSpeed": "$2.2",
+          "maxExtraRunSpeed": "$2.8"
+        }
+      },
+      "requires": [
+        "canSpeedball",
+        "canSpringBallBounce",
+        "canTrickyJump"
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": [
+        "FIXME: Larger speeds (as high as max speed $7.0) can also work but require greater precision",
+        "It would also be possible to stop in the middle of the room and then gain blue speed in-room to continue."
+      ]
+    },
+    {
+      "id": 47,
+      "link": [2, 1],
+      "name": "Temporary Blue Chains",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 6,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [
+        {"notable": "Temporary Blue Chains"},
+        "canChainTemporaryBlue"
+      ],
+      "note": [
+        "Come in gaining blue speed, and chain temporary blue across the room, carefully avoiding the Yapping Maws and acid.",
+        "After breaking the center bomb blocks, run back to the right and wait for the acid to lower.",
+        "Then use the runway in the center of the room to gain blue speed and continue chaining temporary blue."
+      ],
+      "devNote": [
+        "It can also be possible to leave with temporary blue here, but that seems unreasonable considering the length of this chain."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 79, "excessFrames": 14}}
+      ]
+    },
+    {
+      "id": 32,
+      "link": [2, 1],
+      "name": "Use Flash Suit and Power Bombs",
+      "requires": [
+        "h_usePowerBomb",
+        "canHorizontalShinespark",
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 59, "excessFrames": 15}},
+          {"and": [
+            "h_additionalBomb",
+            {"shinespark": {"frames": 32, "excessFrames": 20}}
+          ]}
+        ]}
+      ],
+      "note": "If using two Power Bombs, shinespark after the Yapping Maw starts to retreat to prevent a game crash."
+    },
+    {
+      "id": 33,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 34,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 35,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 36,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 37,
+      "link": [2, 1],
+      "name": "G-Mode Setup - Get hit by Waver, Using Power Bombs",
+      "requires": [
+        "Morph",
+        {"ammo": {"type": "PowerBomb", "count": 3}},
+        "canBePatient"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "note": [
+        "This is harder when crossing the room and easier if the left door can be used to reset the room, but it will cost one extra Power Bomb.",
+        "Place a Power Bomb near the first and third bomb walls. One Waver will be alive by the fifth wall, which will only move while on camera.",
+        "Get it to move to the right in order to safely Power Bomb the final set of walls. Follow the Waver around the room a few times in order to get it to the left doorway."
+      ]
+    },
+    {
+      "id": 49,
+      "link": [2, 2],
+      "name": "Waver Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        "canDodgeWhileShooting",
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 420}
+          ]},
+          {"and": [
+            "h_bombThings",
+            "canTrickyDodgeEnemies",
+            {"cycleFrames": 630}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Waver", "count": 1}]
+    },
+    {
+      "id": 38,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      }
+    },
+    {
+      "id": 39,
+      "link": [2, 2],
+      "name": "Leave with Spark, Yapping Maw Alive",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canMidairShinespark",
+        {"canShineCharge": {
+          "usedTiles": 18,
+          "steepUpTiles": 1,
+          "steepDownTiles": 3,
+          "startingDownTiles": 2,
+          "openEnd": 1
+        }},
+        {"shinespark": {"frames": 45}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "devNote": "The yapping maw prevents use of an extra runway tile because it will move to grab Samus"
+    },
+    {
+      "id": 40,
+      "link": [2, 2],
+      "name": "Leave with Spark, Yapping Maw Dead",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canMidairShinespark",
+        {"enemyKill": {
+          "enemies": [["Yapping Maw"]]
+        }},
+        {"canShineCharge": {
+          "usedTiles": 22,
+          "steepUpTiles": 2,
+          "steepDownTiles": 3,
+          "startingDownTiles": 2,
+          "openEnd": 0
+        }},
+        {"shinespark": {"frames": 45}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      }
+    },
+    {
+      "id": 41,
+      "link": [2, 2],
+      "name": "Shinecharge Under Yapping Maw",
+      "requires": [
+        {"notable": "Shinecharge Under Yapping Maw"},
+        {"obstaclesCleared": ["A"]},
+        "canMidairShinespark",
+        "canCameraManip",
+        "canTrickyDodgeEnemies",
+        {"canShineCharge": {
+          "usedTiles": 22,
+          "steepUpTiles": 2,
+          "steepDownTiles": 3,
+          "startingDownTiles": 2,
+          "openEnd": 0
+        }},
+        {"shinespark": {"frames": 45}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "note": [
+        "Jump towards the Yapping Maw before it is on screen so it moves up.",
+        "Quickly move it off camera so it will be `frozen` in place.",
+        "Shortcharge like normal. If the Yapping Maw is returning to its hole, it will usually not grab Samus."
+      ]
+    },
+    {
+      "id": 42,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 43,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get hit by Waver",
+      "requires": [
+        {"or": [
+          "h_useMorphBombs",
+          "ScrewAttack"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 44,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get hit by Waver, Using a Power Bomb",
+      "requires": [
+        "h_usePowerBomb"
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": [
+        "Place a Power Bomb near the door, then wait for the Waver to get into position to hit Samus through the transition.",
+        "The Waver only moves while on camera, and needs to move around the region several times before being set up properly."
+      ]
+    },
+    {
+      "id": 45,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get hit by Waver, Break Blocks with Speed",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 6,
+          "openEnd": 1,
+          "steepUpTiles": 1,
+          "steepDownTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "devNote": [
+        "Freeing the Waver with a shinespark is not reliable, and depends on when and where the shinespark starts.",
+        "Most of these strats kill the Wavers or set up situations where they can't reach the door."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Blue SpaceJump",
+      "note": "This is a series of precise space jumps that clears a path through the room while avoiding the solid walls."
+    },
+    {
+      "id": 2,
+      "name": "Temporary Blue Chains",
+      "note": [
+        "Use a temporary blue chain to reach the center of the room, breaking the bomb blocks along the way.",
+        "Then use the newly cleared runway to set up a second temporary blue chain to cross the rest of the room."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Shinecharge Under Yapping Maw",
+      "note": [
+        "Jump towards the yapping maw before it is on screen so it moves up.",
+        "Quickly move it off camera so it will be `frozen` in place.",
+        "Shortcharge like normal.  If the Yapping Maw is returning to its hole, it will usually not grab Samus."
+      ]
+    }
+  ],
+  "nextStratId": 50,
+  "nextNotableId": 4
+}

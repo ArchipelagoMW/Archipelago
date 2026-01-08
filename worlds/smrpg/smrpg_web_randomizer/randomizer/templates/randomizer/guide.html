@@ -1,0 +1,2027 @@
+{% extends 'randomizer/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Player's Guide</h1>
+    <p>Want to know what an item or key item does? Want to know what there is to do in a location under any conditions?
+        Want to learn any of the quirks about this game’s spells and battle system? Use Ctrl+F in here to your heart’s
+        content! Old and new players of SMRPG alike may find something useful in here.
+    </p>
+    <div class="card border-info my-3" id="table-of-contents">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Contents</h3>
+        </div>
+        <div class="card-body">
+            <ol>
+                <li><a href="#basicinfo">Basic Info & Getting Around</a></li>
+                <li>
+                    <a href="#battling">Battling</a>
+                    <ol>
+                        <li><a href="#battling-commandselection">Command Selection</a></li>
+                        <li><a href="#battling-damagecalculation">Damage Calculation</a></li>
+                        <li><a href="#battling-turnorder">Turn Order</a></li>
+                        <li><a href="#battling-statuses">Status Effects & KO</a></li>
+                        <li><a href="#battling-freebies">Freebies</a></li>
+                        <li><a href="#battling-exp">EXP and spoils</a></li>
+                    </ol>
+                </li>
+                <li>
+                    <a href="#spells">Spells</a>
+                    <ol>
+                        <li><a href="#spells-yours">Your Spells</a></li>
+                        <li><a href="#spells-swap">Spell Swapping</a></li>
+                        <li><a href="#spells-enemies">Enemy Spells</a></li>
+                        <li><a href="#spells-attacks">Enemy Attacks</a></li>
+                    </ol>
+                </li>
+                <li><a href="#bosses">How Does This Boss Work?</a></li>
+                <li><a href="#leveling">Leveling Up</a></li>
+                <li><a href="#getitems">Getting Items & Equipment</a></li>
+                <li><a href="#equipment">What Equips Do</a></li>
+                <li>
+                    <a href="#regular-items">What Regular Items Do</a>
+                    <ol>
+                        <li><a href="#regular-items-healing">Healing Items</a></li>
+                        <li><a href="#regular-items-buffs">Buffing Items</a></li>
+                        <li><a href="#regular-items-offense">Offense Items</a></li>
+                        <li><a href="#regular-items-other">Other Battle Items</a></li>
+                        <li><a href="#regular-items-field">Field Items</a></li>
+                    </ol>
+                </li>
+                <li><a href="#keyitems">What Key Items Do</a></li>
+                <li><a href="#keyitemlocations">Where Key Items Are</a></li>
+                <li>
+                    <a href="#areas">What Can I Do In This Town?</a>
+                    <ol>
+                        <li><a href="#area-1">Area 1 (Mario's Pad, Mushroom Way, Mushroom Kingdom, Bandit's Way)</a>
+                        </li>
+                        <li><a href="#area-2">Area 2 (Kero Sewers, Tadpole Pond, Midas River, Rose Way, Rose Town,
+                            Forest Maze, Pipe Vault, Yo'ster Isle)</a></li>
+                        <li><a href="#area-3">Area 3 (Moleville, Booster Pass, Booster Tower, Booster Hill,
+                            Marrymore)</a></li>
+                        <li><a href="#area-4">Area 4 (Star Hill, Seaside Town, Sea, Sunken Ship)</a></li>
+                        <li><a href="#area-5">Area 5 (Land's End, Monstro Town, Bean Valley, Grate Guy's Casino)</a>
+                        </li>
+                        <li><a href="#area-6">Area 6 (Nimbus Land, Barrel Volcano)</a></li>
+                        <li><a href="#area-7">Area 7 (Vista Hill, Bowser's Keep, Factory)</a></li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="card border-info my-3" id="basicinfo">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Basic Info & Getting Around</h3>
+        </div>
+        <div class="card-body">
+            <p>The open mode randomizer starts off with the majority of map locations unlocked. You must find all the
+                Star Pieces, guarded by random area bosses and mimic chests (and the empty space on Star Hill), to
+                unlock the final dungeon and complete the game. Some boss fights are locked behind Key Items
+                (progression items).</p>
+            <p>Most cutscenes and text are removed. You do not do the initial version of Bowser’s Keep at the start.</p>
+            <p>You start off in Mario’s Pad with 3 characters, and can recruit 2 characters by completing Forest Maze
+                and Marrymore. You can use up to 3 characters in battle at a time.
+            <p>This game is a platformer-rpg, and there are no random encounters. Most areas have platforming/navigation
+                segments with enemies scattered throughout; collide with an enemy to start a battle or dodge them to
+                progress.</p>
+            <p>This guide will sometimes reference “frame windows”. SMRPG is a 60 FPS game, so a 3-frame window for
+                instance would be a 1/20th of a second time interval in which an input can be accepted.</p>
+            <p>You can only save your game by jumping onto a Save Box. These are available in all inns, and are also
+                scattered around the world generously.</p>
+        </div>
+    </div>
+
+    <a href="#table-of-contents">Back to top</a>
+
+    <div class="card border-info my-3" id="battling">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Battling</h3>
+        </div>
+        <div class="card-body">
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="battling-commandselection">Command Selection</h5>
+                </div>
+                <div class="card-body">
+                    <p>Your characters have 4 options: A (regular attack), X (items), Y (magic attack), or B (defend or
+                        run).</p>
+                    <p>Y-attacks require FP (Flower Points, this game’s version of Magic Points). In SMRPG, Flower
+                        Points are shared between your entire party, individual characters do not have their own
+                        reserves of FP.</p>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="battling-damagecalculation">Damage Calculation</h5>
+                </div>
+                <div class="card-body">
+                    <p>All damage is calculated based on the following values:</p>
+                    <ul>
+                        <li>Fighter’s attack (or magic attack) and target’s defense (or magic defense)</li>
+                        <li>Inherent base power of the weapon or spell/special attack being used</li>
+                        <li>Whether or not the target is in the Defend state</li>
+                        <li>If the fighter has an attack boost multiplier status (1.5x given by Geno Boost, Energizer,
+                            etc… 0.5x if Fear status is inflicted) and if the target has a defense boost multiplier
+                            status (2x if given by Geno Boost, Bracer, etc… 0.67x if the Fear status is inflicted) -
+                            note that 1.5x attack and 0.67 defense do not stack.
+                        </li>
+                        <li>If the attack does elemental (Ice, Fire, Lightning, or Jump) damage, and if the target is
+                            weak (2x) or resistant (0x) to that element
+                        </li>
+                        <li>Whether or not the <a
+                                href="https://sites.google.com/site/supermariorpgspeedruns/techniques/timed-hits"
+                                target="_blank">Timed Hit or Timed Block</a> was done correctly, for attacks where this
+                            is applicable. (All A attacks and some Y attacks fall under this category, and all blocks
+                            for regular enemy attacks and some special attacks do as well.) (Note the timed hits database
+                            is incomplete, please contact Pidge/BOX BOY if you would like to help with it. You do not
+                            need any special equipment to contribute.)
+                        </li>
+                        <li>Damage rolls, but only when you are the attacker, and using an A-attack with a weapon equip.
+                            Each weapon has its own RNG range. There is no RNG otherwise in any damage calculation,
+                            besides a random chance for an attack to miss.
+                        </li>
+                        <li>There are also offense items that do a set amount of damage, which is increased or decreased
+                            based on boost multipliers and elements.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="battling-turnorder">Turn Order</h5>
+                </div>
+                <div class="card-body">
+                    <p>There is no ATB system in this game. All actors on the field go once during a turn (if an enemy
+                        attacks more than once, they used a counter-attack). Your speed stats determine the order in
+                        which everyone goes.</p>
+                    <p>In the event of a speed tie between party members, the turn order goes as follows:</p>
+                    <ul>
+                        <li>3-way tie: Right > Middle > Left</li>
+                        <li>Middle and right tie: Middle > Right</li>
+                        <li>Left and right tie: Right > Left</li>
+                        <li>Left and middle tie: Middle > Left</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="battling-statuses">Status Effects & KO</h5>
+                </div>
+                <div class="card-body">
+                    <p>There are seven status effects, all of which disappear after 3 turns:</p>
+                    <ul>
+                        <li><b>Mushroom</b> - cannot choose any actions, heals a small amount, increases defenses</li>
+                        <li><b>Scarecrow</b> - can only use magic attacks</li>
+                        <li><b>Mute</b> - cannot use magic attacks</li>
+                        <li><b>Poison</b> - take damage every turn</li>
+                        <li><b>Fear</b> - multiplier to cut attack and defense cut in half</li>
+                        <li><b>Sleep</b> - cannot choose any actions, but will wake up if hit by a regular attack</li>
+                        <li><b>Berserk</b> - cannot choose any actions, randomly attack your party</li>
+                    </ul>
+                    <p>Status effects are also cured at the end of a battle. KO is also cured at the end of the battle
+                        (character is revived with 1 hp). KO is also cured during battles where the party moves from one
+                        battlefield to another (King Calamari, Cloaker/Domino, Smithy).</p>
+                    <p>Mute, Poison, Fear, and Sleep can be cast on some enemies. The spell Psychopath will show you
+                        what status effects can be used on an enemy. Scroll to the <a href="#spells-yours">Spells
+                            section</a> for information on how to read the symbols in these descriptions.</p>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="battling-freebies">Freebies</h5>
+                </div>
+                <div class="card-body">
+                    <p>When using any single-use item in battle, there is a chance the item will “Freebie”. This means
+                        that you get an extra copy of that item put back in your inventory after you use it. Most items
+                        have a 25% chance of this happening, but some (like the Red Essence) are lower.</p>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="battling-exp">EXP and spoils</h5>
+                </div>
+                <div class="card-body">
+                    <p>The EXP shown at the end of the battle is the amount given to each recruited character (including
+                        any who were not used in the fight).</p>
+                    <p>EXP can only be manipulated by using the Exp. Booster accessory, which doubles the amount the
+                        wearer receives.</p>
+                    <p>Battles can also grant you coins, and drop up to 1 item shown in the EXP/coin dialog.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <a href="#table-of-contents">Back to top</a>
+
+    <div class="card border-info my-3" id="spells">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Spells</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="spells-yours">Your Spells</h5>
+                </div>
+                <div class="card-body">
+                    <p>This is a list of all the spells your party can learn, and what they do. The base power and FP
+                        cost of a spell can be randomized, and therefore will not be listed here.</p>
+                    <ul>
+                        <li><b>Bowser Crush</b> - Damages all enemies. Mash any of the A, X, Y, or B buttons to increase
+                            your damage output (up to 16 button presses are counted). Mashes do not have to be timed or
+                            spaced out in any way.
+                        </li>
+                        <li><b>Come Back</b> - Revives one KO’ed party member. The timed hit for this has not been
+                            documented yet, but when timed correctly, the party member receives a full HP heal in
+                            addition to being revived.
+                        </li>
+                        <li><b>Crusher</b> - Damages one enemy. The timed hit for this has not been documented yet.</li>
+                        <li><b>Fire Orb</b> - Fire-elemental attack that can be used up to 18 times with correct
+                            mashing. You do not want to mash this as fast as possible; mashes should be about 8 frames
+                            apart for maximum output.
+                        </li>
+                        <li><b>Geno Beam</b> - Damages one enemy. Hold the Y button until you see 3 stationary stars in
+                            your gauge for maximum output.
+                        </li>
+                        <li><b>Geno Blast</b> - Damages all enemies. Hold the Y button until you see 3 stationary stars
+                            in your gauge for maximum output.
+                        </li>
+                        <li><b>Geno Boost</b> - Adds the 1.5x boost multiplier status to one party member’s attack &
+                            magic attack (and defense & magic defense if the timed hit is done). This also affects their
+                            item damage.
+                        </li>
+                        <li><b>Geno Flash</b> - Damages all enemies. Hold the Y button until you see 3 stationary stars
+                            in your gauge for maximum output.
+                        </li>
+                        <li><b><a href="http://pidgezero.one/timings/index.html#Geno_Whirl" target="_blank">Geno
+                            Whirl</a></b> - Damages one enemy, is a OHKO if timed correctly AND the enemy is not immune
+                            to OHKO.
+                        </li>
+                        <li><b>Group Hug</b> - Heals all party members’ HP and removes all status effects. The timed hit
+                            window for this has not been documented yet. Can be used in non-battle X menu as well.
+                            Removes the invincibility from Red Essence due to a casting bug in the vanilla game.
+                        </li>
+                        <li><b>HP Rain</b> - Heals one party member’s HP. The timed hit window for this has not been
+                            documented yet. Can be used in non-battle X menu as well.
+                        </li>
+                        <li><b><a href="http://pidgezero.one/timings/index.html#Jump" target="_blank">Jump</a></b> -
+                            Does a single Jump-elemental attack. The game keeps a counter of how many times you have
+                            used this attack since the start of your save file, and as that number increases, so does
+                            the attack’s power.
+                        </li>
+                        <li><b>Mute</b> - Attempts to cast the Mute status on all enemies. 3 X’s will fall over them if
+                            they receive the status. Accepts up to 26 D-pad inputs to increase its efficacy.
+                        </li>
+                        <li><b>Poison Gas</b> - Damages all enemies, and attempts to cast the Poison status on them. A
+                            gas cloud will appear over their head if they receive the status. Accepts up to 16 D-pad
+                            inputs to increase its output.
+                        </li>
+                        <li><b>Psych Bomb</b> - Damages all enemies. Mash any of the A, X, Y, or B buttons to increase
+                            your damage output (up to 16 button presses are counted). Mashes do not have to be timed or
+                            spaced out in any way.
+                        </li>
+                        <li>
+                            <b>Psychopath</b> - Tells you the elements that an enemy is weak or immune to, and the
+                            status effects that it is susceptible to. Messages will look something like this:<br>
+                            <img alt="psych1" src="{% static 'randomizer/img/psych1.png' %}"/>
+                            <img alt="psych2" src="{% static 'randomizer/img/psych2.png' %}"/>
+                            <br>Elements following the (<span
+                                class="picon _0x"></span>) symbol indicate the enemy's immunities (0 damage), and
+                            elements following the (<span class="picon _2x"></span>) symbol indicate weaknesses (2x
+                            damage).<br>
+                            <ul>
+                                <li><span class="picon fire"></span>- Fire</li>
+                                <li><span class="picon ice"></span>- Ice</li>
+                                <li><span class="picon lightning"></span>- Lightning</li>
+                                <li><span class="picon jump"></span>- Jump</li>
+                            </ul>
+                            The rest of the symbols indicate status effects that the enemy is susceptible to.
+                            <ul>
+                                <li><span class="picon mute"></span>- Mute</li>
+                                <li><span class="picon sleep"></span> - Sleep (Sleepy Time, Sleepy Bomb)</li>
+                                <li><span class="picon poison"></span> - Poison (Poison Gas, Bad Mushroom)</li>
+                                <li><span class="picon fear"></span> - Fear (Terrorize, Fright Bomb)</li>
+                                <li><span class="picon ko"></span><span class="picon ko"></span> - Instant Death (Geno
+                                    Whirl)
+                                </li>
+                            </ul>
+                            Sometimes you may see the same element under weaknesses and immunities. In these situations,
+                            immunity takes precedence.<br>Other times, the message will be blank. This means the boss
+                            has no elemental weaknesses or immunities, and cannot be affected by OHKO or any status
+                            effects.
+                        </li>
+                        <li><b><a href="http://pidgezero.one/timings/index.html#Shocker" target="_blank">Shocker</a></b>
+                            - Does a Lightning-elemental attack to one enemy.
+                        </li>
+                        <li><b>Sleepy Time</b> - Attempts to cast the Sleep status on all enemies. A “zzz” will appear
+                            over their head if they receive the status, and they will stop moving. Accepts up to 28
+                            D-pad inputs to increase its efficacy.
+                        </li>
+                        <li><b>Snowy</b> - Does Ice-elemental damage to all enemies on the field. Accepts up to 8 D-pad
+                            inputs to increase its output.
+                        </li>
+                        <li><b>Star Rain</b> - Does damage to all enemies on the field. Can be chained with a timed hit
+                            up to 16 times. The timed hit window for this has not been documented yet.
+                        </li>
+                        <li><b>Super Flame</b> - Fire-elemental attack that can be used up to 20 times with correct
+                            mashing. You do not want to mash this as fast as possible; mashes should be about 8 frames
+                            apart for maximum output.
+                        </li>
+                        <li><b>Super Jump</b> - Does one base Jump-elemental attack, and then up to 100 more weaker
+                            Jump-elemental attacks if timed correctly. After the 13th jump, this is reduced to a 3 frame
+                            window. You can receive a special item for achieving 30, and a special item for achieving
+                            100. This is incredibly difficult to do on anything other than an original SNES or Wii
+                            virtual console, but there are <a
+                                    href="https://sites.google.com/site/supermariorpgspeedruns/techniques/super-jumps"
+                                    target="_blank">tutorials here</a> if you’re interested in learning it.
+                        </li>
+                        <li><b>Terrorize</b> - Damages all enemies, and attempts to cast the Fear status on them. A “!”
+                            will appear over their head if they receive the status. Accepts up to 16 D-pad inputs to
+                            increase its output.
+                        </li>
+                        <li><b>Therapy</b> - Heals one party member’s HP and removes all status effects. The timed hit
+                            window for this has not been documented yet. Can be used in non-battle X menu as well.
+                        </li>
+                        <li><b><a href="http://pidgezero.one/timings/index.html#Thunderbolt"
+                                  target="_blank">Thunderbolt</a></b> - Does a Lightning-elemental attack to all enemies
+                            on the field.
+                        </li>
+                        <li><b>Ultra Flame</b> - Fire-elemental attack that can be used up to 18 times with correct
+                            mashing, but each hit will land on randomly selected enemy targets. You do not want to mash
+                            this as fast as possible; mashes should be about 8 frames apart for maximum output.
+                        </li>
+                        <li><b>Ultra Jump</b> - Does one base Jump-elemental attack, and then up to 100 more weaker
+                            Jump-elemental attacks if timed correctly, but on randomly selected enemy targets. After the
+                            18th jump, this is reduced to a 2 frame window. This is incredibly difficult to do on
+                            anything other than an original SNES or Wii virtual console.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="spells-swap">Spell Swapping</h5>
+                </div>
+                <div class="card-body">
+                    <p>You can use EXP stars to have party members learn spells that belong to another party member's spell set. This is something of an "advanced" tech, but is good to know about.</p>
+                    <p>Press X while you are jumping under an EXP star chest to hit it, and open your menu. Go to the Switch menu, and swap the character who you want to teach a spell to, with the character that already knows the spell. If the first character is about to hit the level that the second character learned the spell at, they will learn that spell during the EXP star.</p>
+					<p>Example: If Mallow naturally learns Shocker at Level 10, and Peach hits level 10 during an EXP star, you can swap Peach and Mallow to have Peach learn Shocker at Level 10.</p>
+					<p>This isn't often used during the randomizer as it takes some setup, but can be quite useful in the right circumstances.</p>
+					<p>For more information, <a href="https://sites.google.com/site/supermariorpgspeedruns/techniques/swap-glitch" target="_blank">this page</a> includes a video demonstration.</p>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="spells-enemies">Enemy Spells</h5>
+                </div>
+                <div class="card-body">
+                    <p>This is a list of all the spells enemies can use. The base power and status afflictions can be
+                        randomized, and therefore will not be listed here. Damage is calculated based on their Magic
+                        attack and your Magic defense.</p>
+                    <p>Single-target damage spells:</p>
+                    <ul>
+                        <li><b>Damage only:</b> Blast, Dark Star, Diamond Saw, Storm, Willy Wisp</li>
+                        <li><b>Fire-elemental:</b> Drain, Flame, Flame Stone, Mega Drain</li>
+                        <li><b>Ice-elemental:</b> Crystal, Ice Rock</li>
+                        <li><b>Lightning-elemental:</b> Bolt, Electroshock, Lightning Orb</li>
+                        <li><b>Self-healing:</b> Mega Recover, Recover, Weird Mushroom</li>
+                    </ul>
+                    <p>Multi-target damage spells:</p>
+                    <ul>
+                        <li><b>Damage only:</b> Arrow Rain, Big Bang, Boulder, Breaker Beam, Drain Beam, Meteor Blast,
+                            Meteor Swarm, Sledge, Spear Rain, Sword Rain, Water Blast
+                        </li>
+                        <li><b>Fire-elemental:</b> Corona, Flame Wall</li>
+                        <li><b>Ice-elemental:</b> Blizzard, Solidify</li>
+                        <li><b>Lightning-elemental:</b> Static E!</li>
+                        <li><b>Status-casting:</b> Aurora Flash, Light Beam, Petal Blast, Sand Storm</li>
+                        <li><b>Removes all your boost multipliers (unless protected by Red Essence):</b> Shredder</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="spells-attacks">Enemy Special Attacks</h5>
+                </div>
+                <div class="card-body">
+                    <p>This is a list of all the special attacks enemies can use. The base power and status afflictions
+                        can be randomized, and therefore will not be listed here. All of these are single-target only.
+                        Damage is calculated based on their their Attack and your Defense.</p>
+                    <p>NOTE: Some of the attacks here that don’t cast statuses have a small chance of casting a status
+                        if enemy effects are randomized.</p>
+                    <p>NOTE: The timed hits database is incomplete, please contact Pidge/BOX BOY if you would like to
+                        help with it. No special equipment is needed to contribute; just a computer.</p>
+                    <p><a href="http://pidgezero.one/timings/index.html" target="_blank">Blockable:</a></p>
+                    <ul>
+                        <li><b>Damage only:</b> Backfire, Body Slam, Bombs Away, Carni-Kiss (sometimes), Chomp, Claw,
+                            Fangs, Full House, Fun & Run, Grinder, Hammer Time, Jinxed, Last Shot!, Multistrike, Pierce,
+                            Quicksilver, Skewer, Terrapunch, Triple Kick, Va Va Voom, Wild Card, (unnamed bone toss),
+                            (unnamed boulder toss), (unnamed bubble bounce), (unnamed orb shot), (unnamed hammer toss),
+                            (unnamed knife throw), (unnamed shuriken toss), (unnamed spike shot)
+                        </li>
+                        <li><b>Status-casting:</b> (unnamed hammer toss)</li>
+                        <li><b>OHKO:</b> Migraine, Psyche!, Scythe, Shaker, Silver Bullet</li>
+                    </ul>
+                    <p>Unblockable:</p>
+                    <ul>
+                        <li><b>Damage only:</b> Carni-Kiss (sometimes), Ink Blast, Loco Express, Spritz Bomb, (unnamed
+                            bomb toss), (unnamed bullet shot)
+                        </li>
+                        <li><b>Status-casting:</b> Dark Claw, Deathsickle, Doom Reverb, Echofinder, Eerie Jig, Elegy,
+                            Endobubble, Flutter Hush, Funguspike, G’night, Gunk Ball, Howl, Iron Maiden, Lulla-Bye, Mush
+                            Funk, Poison, Pollen Nap, Psycho Plasm, Scream, S’crow Bell, S’crow Dust, S’scrow Fangs,
+                            S’crow Funk, Stench, Thornet, Venom Drool, Viro Plasm, (unnamed light bubble)
+                        </li>
+                        <li><b>OHKO:</b> Blazer, Fear Roulette, Magnum, Sleep-Sauce, Somnus Waltz, Spore Chimes,
+                            Sporocyst
+                        </li>
+                        <li><b>Boost multipliers on self:</b> Get Tough!, Valor Up, Vigor up!</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <a href="#table-of-contents">Back to top</a>
+
+    <div class="card border-info my-3" id="bosses">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">How Does This Boss Work?</h3>
+        </div>
+        <div class="card-body">
+            <p>With the addition of the boss randomization feature, boss stats and locations will not be listed here.
+                See the <a href="#spells-enemies">Spells/Attacks</a> section for more information on what these spells
+                and attacks do.</p>
+            <p>NOTE: Not all timed hits are documented, please contact Pidge/BOX BOY if you would like to help with it.
+                No special equipment is needed to contribute; just a computer.</p>
+
+            <h6>Axem Rangers</h6>
+            <ul>
+                <li>This is a two-phase fight.</li>
+                <li>Phase 1: Defeat all 5 Axem Rangers to advance. They cannot be revived by their teammates once
+                    disabled.
+                    <ul>
+                        <li>Axem Pink will usually either cast Recover or Mega Recover on a random Axem Ranger. She can
+                            also cast Petal Blast if at least 1 of her teammates is disabled. She has a 66% chance of
+                            countering magic attacks with a physical attack.
+                        </li>
+                        <li>Axem Black will either do a <a target="_blank"
+                                                           href="http://pidgezero.one/timings/index.html#Axem_Black_Attack">physical
+                            attack</a>, or an unblockable bomb toss. He counters magic attacks with Spritz Bomb.
+                        </li>
+                        <li>Axem Red will only attack with physical moves. He will use Vigor up! on himself if 2 or more
+                            of his teammates are disabled.
+                        </li>
+                        <li>Axem Yellow will only attack with physical moves <a
+                                href="http://pidgezero.one/timings/index.html#Axem_Yellow_Attack"
+                                target="_blank">(1)</a> <a
+                                href="http://pidgezero.one/timings/index.html#Axem_Yellow_Blob" target="_blank">(2)</a>.
+                            He will counter physical attacks with Body Slam.
+                        </li>
+                        <li>Axem Green will either do a physical attack, or cast Meteor Blast, Solidify, Static E!, or
+                            Elegy.
+                        </li>
+                    </ul>
+                </li>
+                <li>Phase 2: Defeat the single-target Axem ship.
+                    <ul>
+                        <li>This will only attack with Breaker Beam, but skips its turn in between casts to recharge.
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h6>Belome (1)</h6>
+            <ul>
+                <li>Will randomly use a <a href="http://pidgezero.one/timings/index.html#Belome_Attack" target="_blank">physical
+                    attack</a> or Sleep Sauce. After taking enough damage, will start using S'crow Funk as well.
+                </li>
+                <li>On certain turns he will disable the character in the rightmost slot.
+                </li>
+            </ul>
+
+            <h6>Belome (2)</h6>
+            <ul>
+                <li>On his first turn, will pick a random character and generate a clone of them as his ally. He will
+                    also do this as a counter to being attacked if he does not already have 2 clones on the field.
+                </li>
+                <li>The clones can be insta-killed with Pure Water.</li>
+                <li>If he summons clones, they must be defeated in order to finish the fight, even if Belome is dead.
+                </li>
+                <li>Belome attacks with a <a href="http://pidgezero.one/timings/index.html#Belome_Attack"
+                                             target="_blank">physical attack</a>, Aurora Flash, Light Beam, or
+                    Lulla-Bye.
+                </li>
+                <li>Mario Clone will only ever use one physical attack.</li>
+                <li>Mallow Clone will cast Static E!, Electroshock, Bolt, or use a physical attack.</li>
+                <li>Geno Clone will either cast Flame Stone or use a physical attack.</li>
+                <li>Bowser Clone will use one of two physical attacks.</li>
+                <li>Toadstool 2 will cast Recover, Mega Recover, or use a physical attack.</li>
+            </ul>
+
+            <h6>Birdo</h6>
+            <ul>
+                <li>Initially attacks with a <a href="http://pidgezero.one/timings/index.html#Birdo_Attack"
+                                                target="_blank">physical</a>.
+                </li>
+                <li>After you attack her 3 times, on her next turn she will shoot a single egg at you. This is
+                    unblockable unless the target is in the Defend position. When defending, the egg will ricochet and
+                    summon Eggbert; otherwise, the target will take more damage and no summon will happen.
+                </li>
+                <li>After the initial single egg shot, on each turn, she has a 2/3 chance of shooting an unblockable egg
+                    and a 1/3 chance of doing her physical move.
+                </li>
+            </ul>
+
+            <h6>Boomer</h6>
+            <ul>
+                <li>Starts off in his Red form, which is supposed to be weak to magic attacks. His Blue form is weak to
+                    physical attacks.
+                </li>
+                <li>On his turn, he will either cast Blizzard, cast Blast, cast Storm, attack with a <a
+                        href="http://pidgezero.one/timings/index.html#Boomer_Attack" target="_blank">physical</a>, or
+                    attack <a href="http://pidgezero.one/timings/index.html#Boomer_Skewer" target="_blank">Skewer</a>.
+                </li>
+                <li>He changes colour every 3 of his turns.</li>
+                <li>He also has a 33% chance of countering physical and Magic attacks with <a
+                        href="http://pidgezero.one/timings/index.html#Boomer_Shaker" target="_blank">Shaker</a>.
+                </li>
+            </ul>
+
+            <h6>Booster</h6>
+            <ul>
+                <li>This is a two-phase fight.</li>
+                <li>Phase 1: Defeat 3 Snifits. They will either cast Static E!, cast Bolt, cast Blizzard, do a <a
+                        href="http://pidgezero.one/timings/index.html#Apprentice_Attack" target="_blank">physical
+                    attack</a>, shoot an unblockable bullet, or attack with Gunk Ball.
+                </li>
+                <li>Phase 2: Defeat Booster. He will either do a <a
+                        href="http://pidgezero.one/timings/index.html#Booster_Attack" target="_blank">physical
+                    attack</a>, attack with Spritz Bomb, or attack with Loco Express.
+                </li>
+            </ul>
+
+            <h6>Bowyer</h6>
+            <ul>
+                <li>On his first turn, he will summon 3 buttons on the ground. Every second turn, he will hit one of the
+                    three buttons with an arrow, which disables any of your commands that use that button. This is based
+                    on a counter system, which is set back to 0 when he locks a button:
+                    <ul>
+                        <li>Physical attacks add 4.</li>
+                        <li>Magic attacks add 2.</li>
+                        <li>Items/defending do not add anything.</li>
+                        <li>If the counter is 16 or higher, he disables your physical attacks.</li>
+                        <li>If the counter is below 16 but 6 or higher, he disables your magic attacks.</li>
+                        <li>Otherwise, he disables your items.</li>
+                    </ul>
+                </li>
+                <li>When he disables your regular attacks, he will also cast either Static E! or Bolt.</li>
+                <li>When he disables your magic attacks, he will also either use a <a
+                        href="http://pidgezero.one/timings/index.html#Bowyer_Arrow" target="_blank">physical attack</a>
+                    or use G'Night.
+                </li>
+                <li>He will not attack you in the same turn he disables your items.</li>
+                <li>On turns where he is not locking a button, he will either use a <a
+                        href="http://pidgezero.one/timings/index.html#Bowyer_Arrow" target="_blank">physical attack</a>,
+                    cast Lightning Orb, or cast Bolt.
+                </li>
+            </ul>
+
+            <h6>Box Boy</h6>
+            <ul>
+                <li>Box Boy summons Fautso on his first turn.</li>
+                <li>Box Boy will either attack you with a physical move, attack with Carni-Kiss, or use Scream.</li>
+                <li>Box Boy will counter magic attacks with Water Blast or Blast.</li>
+                <li>Fautso will either use one of 3 blockable physical attacks, cast Aurora Flash, cast Boulder, or cast
+                    Meteor Blast.
+                </li>
+            </ul>
+
+            <h6>Bundt & Raspberry</h6>
+            <ul>
+                <li>This is a three-phase fight.</li>
+                <li>Phase 1: Deplete Bundt's HP.
+                    <ul>
+                        <li>The chefs will only use <a href="http://pidgezero.one/timings/index.html#Chef_Attack"
+                                                       target="_blank">physical attacks</a>. They cannot be killed.
+                        </li>
+                        <li>Bundt will not attack you in this phase.</li>
+                        <li>The chefs are removed from battle when Bundt's HP runs out and Phase 2 begins.</li>
+                    </ul>
+                </li>
+                <li>Phase 2: Blow out the candles.
+                    <ul>
+                        <li>You blow out a candle by using a physical attack for any amount of damage. Even if your
+                            attack misses, it will still blow out a candle.
+                        </li>
+                        <li>Magic attacks and items will not blow out candles.</li>
+                        <li>Attack Bundt when all candles are out to defeat it and advance to Phase 3.</li>
+                        <li>Bundt regenerates 1 candle on each of his turns.</li>
+                        <li>Bundt will either use a <a href="http://pidgezero.one/timings/index.html#Bundt_Attack"
+                                                       target="_blank">physical attack</a>, orb attack <a
+                                href="http://pidgezero.one/timings/index.html#Bundt_Orb_Left" target="_blank">(left)</a>
+                            <a href="http://pidgezero.one/timings/index.html#Bundt_Orb_Middle"
+                               target="_blank">(middle)</a> <a
+                                    href="http://pidgezero.one/timings/index.html#Bundt_Orb_Right" target="_blank">(right)</a>,
+                            use Lulla-Bye, cast Diamond Saw, or cast Blizzard.
+                        <li>Raspberry is attacking you as well, but cannot be targeted. Raspberry will either use a <a
+                                href="http://pidgezero.one/timings/index.html#Raspberry_Attack" target="_blank">physical
+                            attack</a>, orb attack <a href="http://pidgezero.one/timings/index.html#Raspberry_Orb_Left"
+                                                      target="_blank">(left)</a> <a
+                                href="http://pidgezero.one/timings/index.html#Raspberry_Orb_Middle" target="_blank">(middle)</a>
+                            <a href="http://pidgezero.one/timings/index.html#Raspberry_Orb_Right" target="_blank">(right)</a>,
+                            cast Sand Storm, or cast Drain Beam.
+                        </li>
+                    </ul>
+                </li>
+                <li>Phase 3: Deplete Raspberry's HP.
+                    <ul>
+                        <li>Raspberry will just continue to cast its spells from Phase 2.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h6>Clerk</h6>
+            <ul>
+                <li>Clerk will either attack you with a <a href="http://pidgezero.one/timings/index.html#Manager_Attack"
+                                                       target="_blank">physical attack</a> or an unblockable bomb.</li>
+                <li>The Mad Mallets will only use a <a href="http://pidgezero.one/timings/index.html?#Pounder_Attack">physical attack</a>.</li>
+                <li>Unlike Director and Manager, Clerk will not re-summon the Mad Mallets when they are killed.</li>
+                <li>If a Mad Mallet is the only enemy left, it will run away from the battle.</li>
+            </ul>
+
+            <h6>Cloaker & Domino</h6>
+            <ul>
+                <li>This is a two-phase fight.</li>
+                <li>Phase 1: Defeat Cloaker or Domino.
+                    <ul>
+                        <li>If you defeat Cloaker, you will advance to Phase 2 with Mad Adder.</li>
+                        <li>If you defeat Domino, you will advance to Phase 2 with Earthlink.</li>
+                        <li>Cloaker will only use physical attacks <a
+                                href="http://pidgezero.one/timings/index.html#Cloaker_Attack" target="_blank">(1)</a> <a
+                                href="http://pidgezero.one/timings/index.html#Cloaker_Rock" target="_blank">(2)</a>.
+                        </li>
+                        <li>Domino will cast any of Endobubble, Flame Stone, Lightning Orb, or Blizzard.</li>
+                    </ul>
+                </li>
+                <li>Phase 2 (Mad Adder):
+                    <ul>
+                        <li>You can target Domino, but you only need to deplete Mad Adder's HP to finish the fight.</li>
+                        <li>Mad Adder will cast Sand Storm, Storm, Water Blast, or Boulder. There is a 10% chance it
+                            will just skip its own turn.
+                        </li>
+                        <li>Domino will cast any of Diamond Saw, Light Beam, Ice Rock, Blizzard, Solidify, or Bolt.</li>
+                    </ul>
+                </li>
+                <li>Phase 2 (Earthlink):
+                    <ul>
+                        <li>You can target Cloaker, but you only need to deplete Earthlink's HP to finish the fight.
+                        </li>
+                        <li>Earthlink will use a <a href="http://pidgezero.one/timings/index.html#Earthlink_Attack"
+                                                    target="_blank">physical attack</a>, <a
+                                href="http://pidgezero.one/timings/index.html#Earthlink_Carni-kiss" target="_blank">Carni-Kiss</a>,
+                            or Poison (cannot be blocked).
+                        </li>
+                        <li>Cloaker will use <a href="http://pidgezero.one/timings/index.html#Cloaker_Attack"
+                                                target="_blank">one of his Phase 1 physicals</a> or <a
+                                href="http://pidgezero.one/timings/index.html#Cloaker_Knife" target="_blank">throw a
+                            knife</a>.
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h6>Count Down</h6>
+            <ul>
+                <li>You must defeat Count Down and both Ding-A-Lings to complete the fight.</li>
+                <li>You will get less EXP if Count Down is taken out before both Ding-A-Lings have died.</li>
+                <li>Ding-A-Lings will either use a <a href="http://pidgezero.one/timings/index.html#Ding-A-Ling_Attack"
+                                                      target="_blank">physical attack</a>, S'crow Bell, Doom Reverb,
+                    Spore Chimes, Dark Star, Fear Roulette, or use its turn to advance Count Down's clock.
+                </li>
+                <li>Count Down will advance its clock on each turn and cast the spell that belongs to its clock
+                    position. It will loop these spells in order: Crystal or Ice Rock, Recover, Aurora Flash, Mega
+                    Recover, Water Blast, (do nothing), Petal Blast, Corona.
+                </li>
+                <li>Count Down's spells can be skipped when the Ding-A-Lings advance its clock.</li>
+            </ul>
+
+            <h6>Croco (1)</h6>
+            <ul>
+                <li>Croco will either attack you with a <a href="http://pidgezero.one/timings/index.html#Croco_Attack"
+                                                           target="_blank">physical</a> or an unblockable bomb toss.
+                </li>
+                <li>He will cast Weird Mushroom on himself when he falls below a set HP.</li>
+            </ul>
+
+            <h6>Croco (2)</h6>
+            <ul>
+                <li>This is a two-phase fight.</li>
+                <li>Phase 1: Croco will either attack you with a <a
+                        href="http://pidgezero.one/timings/index.html#Croco_Attack" target="_blank">physical</a> or an
+                    unblockable bomb toss.
+                </li>
+                <li>Phase 2: After losing enough HP, Croco steals all your items, and then will only attack you with a
+                    <a href="http://pidgezero.one/timings/index.html#Croco_Attack" target="_blank">physical</a> or <a
+                            href="http://pidgezero.one/timings/index.html#Croco_Chomp" target="_blank">Chomp</a>.
+                </li>
+            </ul>
+
+            <h6>Culex</h6>
+            <ul>
+                <li>Culex will summon Fire Crystal, Water Crystal, Earth Crystal, and Wind Crystal on his first turn.
+                </li>
+                <li>You do not need to attack the crystals, but you can choose to do so if they're giving you trouble.
+                    They automatically die when Culex does.
+                </li>
+                <li>Culex casts Shredder every third turn. Otherwise, he will either do a physical attack, cast Flame
+                    Stone, cast Dark Star, or cast Meteor Blast.
+                </li>
+                <li>Fire Crystal casts Drain, Flame, Mega Drain, Flame Wall, or Corona.</li>
+                <li>Water Crystal casts Crystal, Diamond Saw, Ice Rock, Blizzard, or Solidify.</li>
+                <li>Earth Crystal casts Blast, Storm, Sand Storm, Water Blast, or Boulder.</li>
+                <li>Wind Crystal casts Lightning Orb, Bolt, Electroshock, Static E!, Light Beam, or Petal Blast.</li>
+            </ul>
+
+            <h6>Czar Dragon & Zombone</h6>
+            <ul>
+                <li>This is a two-phase fight.</li>
+                <li>Phase 1: Defeat Czar Dragon.
+                    <ul>
+                        <li>Czar Dragon may cast Water Blast or Flame Wall on his turn. If it uses a <a
+                                href="http://pidgezero.one/timings/index.html#Czar_Attack" target="_blank">physical
+                            attack</a> or Iron Maiden instead, it will also summon Helios.
+                        </li>
+                        <li>Helios self-destruct by blasting themselves into you.</li>
+                        <li>Czar Dragon has a 33% chance of countering any damage with a <a
+                                href="http://pidgezero.one/timings/index.html#Czar_Attack" target="_blank">physical
+                            attack</a>.
+                        </li>
+                    </ul>
+                </li>
+                <li>Phase 2: Defeat Zombone.
+                    <ul>
+                        <li>Zombone's first attack is always Boulder.</li>
+                        <li>On the rest of its turns, it will either cast Blast, Storm, Boulder, Scream, or use a <a
+                                href="http://pidgezero.one/timings/index.html#Zombone_Attack" target="_blank">physical
+                            attack</a>.
+                        </li>
+                        <li>Zombone will attack itself once if you use Pure Water on it.</li>
+                        <li>Zombone has a 33% chance of countering any damage with a <a
+                                href="http://pidgezero.one/timings/index.html#Zombone_Attack" target="_blank">physical
+                            attack</a>.
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+
+            <h6>Director</h6>
+            <ul>
+                <li>Director will either attack you with a <a href="http://pidgezero.one/timings/index.html#Manager_Attack"
+                                                       target="_blank">physical attack</a>, an unblockable bomb, or Spritz Bomb.</li>
+                <li>Director has a 33% chance of countering any attacks with his physical attack.</li>
+                <li>Director will increase his attack and defense power the first time all the Poundettes are killed.</li>
+                <li>Director will re-summon the Poundettes when they are all killed.</li>
+                <li>The Poundettes will use a <a href="http://pidgezero.one/timings/index.html?#Pounder_Attack">physical attack</a>, or a <a href="http://pidgezero.one/timings/index.html?#Pounder_Mallet">hammer toss</a> that sometimes inflicts a status.</li>
+            </ul>
+
+            <h6>Dodo (solo)</h6>
+            <ul>
+                <li>Dodo will either use a <a href="http://pidgezero.one/timings/index.html#Dodo_Attack"
+                                              target="_blank">physical attack</a>, <a
+                        href="http://pidgezero.one/timings/index.html#Dodo_Multistrike" target="_blank">Multistrike</a>,
+                    or Flutter Hush.
+                </li>
+                <li>Dodo has a 33% chance of countering any damage with a <a
+                        href="http://pidgezero.one/timings/index.html#Dodo_Attack" target="_blank">physical attack</a>.
+                </li>
+            </ul>
+
+            <h6>Exor</h6>
+            <ul>
+                <li>You do not need to defeat both eyes and Neosquid to finish this fight. Only Exor needs to be
+                    defeated.
+                </li>
+                <li>Exor is immune to all damage until one of the two eyes has been disabled. Then, you can deal damage
+                    to it, including Geno Whirl OHKO.
+                </li>
+                <li>Both eyes and Neosquid can be disabled by running out of HP, but they will be resurrected after 2-3
+                    turns.
+                </li>
+                <li>The Left Eye can attack with a physical, Gunk Ball, Venom Drool, or S'crow Bell.</li>
+                <li>The Right Eye can cast Bolt, Diamond Saw, Mega Drain, Flame Stone, Dark Star, or Blast.</li>
+                <li>Neosquid can use Solidify, Aurora Flash, Corona, Static E!, Flame Wall, Water Blast, Carni-Kiss,
+                    Lullabye, or a physical.
+                </li>
+                <li>Exor will not attack.</li>
+            </ul>
+
+            <h6>Gunyolk & Factory Chief</h6>
+            <ul>
+                <li>Gunyolk will use Breaker Beam every second turn.</li>
+                <li>On its other turns, Gunyolk will use physical attacks, Echofinder, Mega Drain, or Electroshock.</li>
+                <li>Factory Chief will either use one of two physical attacks, Funguspike, or Thornet.</li>
+            </ul>
+
+            <h6>Hammer Bros</h6>
+            <ul>
+                <li>Hammer Bros will only attack with <a
+                        href="http://pidgezero.one/timings/index.html#Hammer_Bros._Attack" target="_blank">a physical
+                    attack</a> or <a href="http://pidgezero.one/timings/index.html#Hammer_Time" target="_blank">Hammer
+                    Time.</a></li>
+                <li>When one Hammer Bro dies, the other will cast Valor Up.</li>
+            </ul>
+
+            <h6>Hidon</h6>
+            <ul>
+                <li>Hidon summons four Goombettes on any turn where it is the only enemy on the field.</li>
+                <li>Hidon will attack with Static E!, Willy Wisp, or Flame Stone.</li>
+                <li>Hidon will counter physical attacks with either a physical attack or Carni-Kiss.</li>
+                <li>Goombettes will only use a physical attack.</li>
+            </ul>
+
+            <h6>Jagger</h6>
+            <ul>
+                <li>Jagger will attack with physical attacks or Terrapunch.</li>
+                <li>He has a 33% chance of countering any damage with Terrapunch as well.</li>
+            </ul>
+
+            <h6>Jinx</h6>
+			<ul>
+				<li>Jinx will attack with <a href="http://pidgezero.one/timings/index.html#Jinxed"
+											 target="_blank">Jinxed</a> or Triple Kick <a
+						href="http://pidgezero.one/timings/index.html#Jinx_Triple_Kick%20-%20Full"
+						target="_blank">(1)</a> <a
+						href="http://pidgezero.one/timings/index.html#Jinx_Triple_Kick%20-%20Partial"
+						target="_blank">(2)</a>.
+				</li>
+				<li>He will use Valor Up when his hp gets low enough.</li>
+				<li>He has a 33% chance to counter all damage with <a
+						href="http://pidgezero.one/timings/index.html#Jinxed" target="_blank">Jinxed</a>.
+				</li>
+			</ul>
+
+            <h6>Jinx (2)</h6>
+			<ul>
+				<li>Jinx's first attack will be Quicksilver <a
+						href="http://pidgezero.one/timings/index.html#Jinx_Quicksilver_-%20Full"
+						target="_blank">(1)</a> <a
+						href="http://pidgezero.one/timings/index.html#Jinx_Quicksilver_-%20Partial"
+						target="_blank">(2)</a>.
+				</li>
+				<li>He will attack on the rest of his turns with <a
+						href="http://pidgezero.one/timings/index.html#Jinxed" target="_blank">Jinxed</a>, Triple
+					Kick <a href="http://pidgezero.one/timings/index.html#Jinx_Triple_Kick%20-%20Full"
+							target="_blank">(1)</a> <a
+							href="http://pidgezero.one/timings/index.html#Jinx_Triple_Kick%20-%20Partial"
+							target="_blank">(2)</a>, Quicksilver <a
+							href="http://pidgezero.one/timings/index.html#Jinx_Quicksilver_-%20Full"
+							target="_blank">(1)</a> <a
+							href="http://pidgezero.one/timings/index.html#Jinx_Quicksilver_-%20Partial"
+							target="_blank">(2)</a>, or <a
+							href="http://pidgezero.one/timings/index.html#Jinx_Silver_Bullet" target="_blank">Silver
+						Bullet</a>.
+				</li>
+				<li>He will use Valor Up when his hp gets low enough.</li>
+				<li>He has a 33% chance to counter all damage with Triple Kick <a
+						href="http://pidgezero.one/timings/index.html#Jinx_Triple_Kick%20-%20Full"
+						target="_blank">(1)</a> <a
+						href="http://pidgezero.one/timings/index.html#Jinx_Triple_Kick%20-%20Partial"
+						target="_blank">(2)</a>.
+				</li>
+			</ul>
+
+            <h6>Jinx (3)</h6>
+            <ul>
+				<li>Jinx's first attack will be <a
+						href="http://pidgezero.one/timings/index.html#Jinx_Bombs_Away" target="_blank">Bombs
+					Away</a>.
+				</li>
+				<li>He will attack on the rest of his turns with <a
+						href="http://pidgezero.one/timings/index.html#Jinxed" target="_blank">Jinxed</a>, Triple
+					Kick <a href="http://pidgezero.one/timings/index.html#Jinx_Triple_Kick%20-%20Full"
+							target="_blank">(1)</a> <a
+							href="http://pidgezero.one/timings/index.html#Jinx_Triple_Kick%20-%20Partial"
+							target="_blank">(2)</a>, Quicksilver <a
+							href="http://pidgezero.one/timings/index.html#Jinx_Quicksilver_-%20Full"
+							target="_blank">(1)</a> <a
+							href="http://pidgezero.one/timings/index.html#Jinx_Quicksilver_-%20Partial"
+							target="_blank">(2)</a>, <a
+							href="http://pidgezero.one/timings/index.html#Jinx_Silver_Bullet" target="_blank">Silver
+						Bullet</a>, or <a href="http://pidgezero.one/timings/index.html#Jinx_Bombs_Away"
+										  target="_blank">Bombs Away</a>.
+				</li>
+				<li>He will use Valor Up when his hp gets low enough.</li>
+				<li>He has a 33% chance to counter all damage with Quicksilver <a
+						href="http://pidgezero.one/timings/index.html#Jinx_Quicksilver_-%20Full"
+						target="_blank">(1)</a> <a
+						href="http://pidgezero.one/timings/index.html#Jinx_Quicksilver_-%20Partial"
+						target="_blank">(2)</a>.
+                </li>
+            </ul>
+
+            <h6>Johnny Jones</h6>
+            <ul>
+                <li>When Bandana Blues are alive, Johnny will only attack you with a <a
+                        href="http://pidgezero.one/timings/index.html#Johnny_Attack" target="_blank">physical attack</a>.
+                </li>
+                <li>Bandana Blues will attack you with <a
+                        href="http://pidgezero.one/timings/index.html#Bandana_Blue_Attack" target="_blank">physical
+                    attacks</a> and <a href="http://pidgezero.one/timings/index.html#Bandana_Blue_Pierce"
+                                       target="_blank">Pierce</a>.
+                </li>
+                <li>Johnny will use Get Tough! when his hp falls low enough.</li>
+                <li>You do not need to kill the Bandana Blues to finish the fight. They will vanish when Johnny is
+                    defeated.
+                </li>
+                <li>If you kill all the Bandana Blues, Johnny will take the
+                    character in your left slot to a 1v1 battle.
+                </li>
+                <li>In the 1v1, Johnny can use his <a href="http://pidgezero.one/timings/index.html#Johnny_Attack"
+                                                      target="_blank">physical attack</a>, Skewer, Diamond Saw, or Mega
+                    Drain. He has a 14% chance of skipping his turn.
+                </li>
+                <li>You will receive less EXP if you do the 1v1 phase.</li>
+            </ul>
+
+            <h6>King Calamari</h6>
+            <ul>
+                <li>This is a three-phase fight. In the first two phases, you fight a total of 3 left and 3 right
+                    tentacles.
+                </li>
+                <li>In the final phase, you fight a right tentacle, a left tentacle, and King Calamari.</li>
+                <li>The tentacles either use physical attacks <a
+                        href="http://pidgezero.one/timings/index.html#Bottom_Tentacle" target="_blank">(1)</a> <a
+                        href="http://pidgezero.one/timings/index.html#Mid_Tentacle" target="_blank">(2)</a> or throw a
+                    character offstage for a turn, giving them the Fear status.
+                </li>
+                <li>King Calamari will either use a physical attack or cast Ink Blast, Venom Drool, Sand Storm, or Drain
+                    Beam.
+                </li>
+            </ul>
+
+            <h6>Knife Guy & Grate Guy</h6>
+            <ul>
+                <li>Initially, Knife Guy will only use a <a
+                        href="http://pidgezero.one/timings/index.html#Knife_Guy_Attack" target="_blank">physical
+                    attack</a> or a <a href="http://pidgezero.one/timings/index.html#Knife_Guy_Knife" target="_blank">knife
+                    throw</a>, and Grate Guy will either use a <a
+                        href="http://pidgezero.one/timings/index.html#Grate_Guy_Attack" target="_blank">physical
+                    attack</a>, Echofinder, or a tiny sleep bubble.
+                </li>
+                <li>After 3 turns, they will enter their team formation. In this form, Knife Guy will always cast
+                    Blizzard or Crystal, and Grate Guy will always cast Meteor Blast.
+                </li>
+                <li>They will separate after being hit 5 times.</li>
+            </ul>
+
+            <h6>Mack</h6>
+            <ul>
+                <li>On Mack's attack turns, if there are any Bodyguards on the field, he will either do a physical
+                    attack or cast Flame or Flame Wall. He will not use physical attacks if there are no Bodyguards.
+                </li>
+                <li>On every third turn, if there are any Bodyguards on the field, Mack will exit the fight until the
+                    Bodyguards are defeated.
+                </li>
+                <li>On every fifth turn, if there are no Bodyguards on the field, Mack will summon four of them.</li>
+                <li>Mack will skip a turn if hit by the Thunderbolt spell.</li>
+                <li>Bodyguards will either use a physical attack, cast Drain, or skip their turn.</li>
+                <li>When Mack is defeated, any remaining Bodyguards must be defeated in order to finish the fight.</li>
+            </ul>
+
+            <h6>Magikoopa</h6>
+            <ul>
+                <li>Magikoopa can cast Bolt, Blast, Willy Wisp, Water Blast, Solidify, or Flame Wall.</li>
+                <li>If Magikoopa does not have a summon on the field, he will summon Bahamutt, Jinx Clone, or King Bomb.
+                    When a summon is active, Magikoopa cannot be targeted.
+                </li>
+                <li>Bahamutt uses physical attacks, Flame Wall, Flame, Drain, and Iron Maiden.</li>
+                <li>Jinx Clone attacks with <a href="http://pidgezero.one/timings/index.html#Jinxed" target="_blank">Jinxed</a>,
+                    Triple Kick <a href="http://pidgezero.one/timings/index.html#Jinx_Triple_Kick%20-%20Full"
+                                   target="_blank">(1)</a> <a
+                            href="http://pidgezero.one/timings/index.html#Jinx_Triple_Kick%20-%20Partial"
+                            target="_blank">(2)</a>, Quicksilver <a
+                            href="http://pidgezero.one/timings/index.html#Jinx_Quicksilver_-%20Full"
+                            target="_blank">(1)</a> <a
+                            href="http://pidgezero.one/timings/index.html#Jinx_Quicksilver_-%20Partial" target="_blank">(2)</a>,
+                    <a href="http://pidgezero.one/timings/index.html#Jinx_Silver_Bullet" target="_blank">Silver
+                        Bullet</a>, or <a href="http://pidgezero.one/timings/index.html#Jinx_Bombs_Away"
+                                          target="_blank">Bombs Away</a>.
+                </li>
+                <li>King Bomb does nothing for 3 turns, and then self destructs with Big Bang if you don't kill it
+                    first. If you survive Big Bang, Magikoopa will be completely disabled for the remainder of the
+                    fight, and you just deplete his HP to win.
+                </li>
+            </ul>
+
+            <h6>Manager</h6>
+            <ul>
+                <li>Manager will either attack you with a <a href="http://pidgezero.one/timings/index.html#Manager_Attack"
+                                                       target="_blank">physical attack</a>, an unblockable bomb, or Spritz Bomb.</li>
+                <li>Manager has a 33% chance of countering any attacks with his physical attack.</li>
+                <li>Manager will re-summon the Pounders when they are all killed.</li>
+                <li>The Pounders will always attack with a <a href="http://pidgezero.one/timings/index.html?#Pounder_Attack">physical attack</a> or a <a href="http://pidgezero.one/timings/index.html?#Pounder_Mallet">hammer toss</a>.</li>
+            </ul>
+
+            <h6>Megasmilax</h6>
+            <ul>
+                <li>This is a four-phase fight. In the first three phases, you fight a total of 6 Smilaxes.</li>
+                <li>In the final phase, you fight two Smilaxes and Megasmilax.</li>
+                <li>The smilaxes either use <a href="http://pidgezero.one/timings/index.html#Smilax_Attack"
+                                               target="_blank">physical attacks</a>, Pollen Nap, Drain, or Flame.
+                </li>
+                <li>Megasmilax will always use Petal Blast on its first turn, and then every fourth turn.</li>
+                <li>On its other turns, Megasmilax will either use <a
+                        href="http://pidgezero.one/timings/index.html#Megasmilax_Attack" target="_blank">physical
+                    attacks</a>, S'crow Dust, Drain, or Flame Wall.
+                </li>
+                <li>Smilaxes have a 33% chance of countering physical attacks with a <a
+                        href="http://pidgezero.one/timings/index.html#Smilax_Attack" target="_blank">physical attack</a>.
+                </li>
+                <li>Megasmilax has a 33% chance of countering physical attacks with a <a
+                        href="http://pidgezero.one/timings/index.html#Megasmilax_Attack" target="_blank">physical
+                    attack</a>.
+                </li>
+            </ul>
+
+            <h6>Pandorite</h6>
+            <ul>
+                <li>Pandorite will use Flame Wall or Flame on odd turns, and Carni Kiss, Scream, or a <a
+                        href="http://pidgezero.one/timings/index.html#Pandorite_Attack" target="_blank">physical
+                    attack</a> on even turns.
+                </li>
+            </ul>
+
+            <h6>Punchinello</h6>
+            <ul>
+                <li>Punchinello will summon Micro Bombs, Bob-Ombs, or Mezzo Bombs depending on how much HP he has
+                    left.
+                </li>
+                <li>The bombs either skip their turn, or <a
+                        href="http://pidgezero.one/timings/index.html#Medium_Bob-omb" target="_blank">self-destruct by
+                    running into you</a>.
+                </li>
+                <li>Punchinello will either use a <a href="http://pidgezero.one/timings/index.html#Punchinello_Attack"
+                                                     target="_blank">physical attack</a> or cast Sandstorm.
+                </li>
+                <li>If there are no bombs left, Punchinello skips his attack turn to summon them.</li>
+            </ul>
+
+            <h6>Valentina & Dodo</h6>
+            <ul>
+                <li>This is a two-phase fight.</li>
+                <li>Phase 1: Deal 40% of Dodo's health.
+                    <ul>
+                        <li>The character in your middle slot will be taken away to 1v1 Dodo.</li>
+                        <li>Dodo will either use a <a href="http://pidgezero.one/timings/index.html#Dodo_Attack"
+                                                      target="_blank">physical attack</a>, <a
+                                href="http://pidgezero.one/timings/index.html#Dodo_Multistrike" target="_blank">Multistrike</a>,
+                            or Flutter Hush.
+                        </li>
+                        <li>Dodo has a 33% chance of countering any damage with a <a
+                                href="http://pidgezero.one/timings/index.html#Dodo_Attack" target="_blank">physical
+                            attack</a>.
+                        </li>
+                        <li>Phase 2 begins when you deplete 40% of Dodo's HP.</li>
+                    </ul>
+                </li>
+                <li>Phase 2: Defeat Valentina.
+                    <ul>
+                        <li>Initially, your two remaining party members fight Valentina on her own.</li>
+                        <li>After you deal enough damage, Dodo and your middle party member return to the fight.</li>
+                        <li>Valentina can use a <a href="http://pidgezero.one/timings/index.html#Valentina_Attack"
+                                                   target="_blank">physical attack</a>, Petal Blast, Aurora Flash, Light
+                            Beam, Solidify, Drain Beam, Diamond Saw, Water Blast, Blizzard, or Crystal.
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h6>Yaridovich</h6>
+            <ul>
+                <li>Yaridovich's first spell is always Water Blast.</li>
+                <li>When Yaridovich is alone, he casts Flame Stone, Willy Wisp, and Water Blast.</li>
+                <li>After 4 turns, Yaridovich will summon a clone of himself.</li>
+                <li>When the clone is on the field, Yaridovich will use physical attacks <a
+                        href="http://pidgezero.one/timings/index.html#Yaridovich_Attack" target="_blank">(1)</a> <a
+                        href="http://pidgezero.one/timings/index.html#Yaridovich_Orb" target="_blank">(2)</a> or <a
+                        href="http://pidgezero.one/timings/index.html#Yaridovich_Pierce" target="_blank">Pierce</a>.
+                </li>
+                <li>The clone casts Meteor Blast, Static E!, and Bolt.</li>
+                <li>Your cursor will automatically target the real Yaridovich, unless you move it while the clone is on
+                    the field. The clone also takes significantly more damage.
+                </li>
+                <li>The clone automatically disappears after three turns, and disappears when the real Yaridovich is
+                    killed.
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+    <a href="#table-of-contents">Back to top</a>
+
+    <div class="card border-info my-3" id="leveling">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Leveling Up</h3>
+        </div>
+        <div class="card-body">
+            <p>Battles will give you EXP, but there is a definite tradeoff between skipping fights for speed and being
+                too weak to complete the final dungeon.</p>
+            <p>If you have access to the factory and fast/high damage output, you can fight Ameboids before they
+                multiply for ~17 exp.</p>
+            <p>The game also offers invincibility stars in chests, which allow you to run around an area knocking out as
+                many enemies as you can in a time limit. Every hit will give you an EXP amount determined by the chest
+                itself.</p>
+            <p>By default (without the EXP challenge turned on), chests generally trend toward giving you more EXP the
+                further along the world map you progress. Anyone with the EXP booster equipped of course will receive 2x
+                the experience from these stars.</p>
+            <p>The game also has a technique called Death Abuse. When you game over, as long as you don’t reset your
+                console, once you respawn at your last save, everything will be reloaded according to the state of the
+                world at your last save -- except your party members will still have the levels and EXP they had when
+                you died. This means you can remove all your equipment, save before a star, do the star, get into an
+                encounter, intentionally lose, and respawn to do the star again, in order to farm levels. This is known
+                as “Death Abusing”.</p>
+            <p>At each level, your character will be granted stat bonuses. On top of that, you can choose one of three
+                stat sets (attack & defense, HP, or magic attack & magic defense) to give an additional bonus to.</p>
+        </div>
+    </div>
+
+    <a href="#table-of-contents">Back to top</a>
+
+    <div class="card border-info my-3" id="getitems">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Getting Items & Equipment</h3>
+        </div>
+        <div class="card-body">
+            <p>There are a total of 22 shop locations. 14-15 are fully available from the start (1 of which is
+                permanently missable), 6-7 are locked behind quests, and 1 progressively changes based on your key
+                items.</p>
+            <p>The cap on normal coins has been increased to 9999.</p>
+            <p><a href="https://www.mariowiki.com/List_of_Surprise_Boxes_in_Super_Mario_RPG:_Legend_of_the_Seven_Stars"
+                  target="_blank">Some chests are hidden.</a> Chests may have an item, coins, a frog coin, a free party
+                heal, an EXP-granting invincibility star, a boss battle, or increase your total Flower Points. (Or, they
+                may be empty...)</p>
+            <p>Some items are also presented to you from sidequests (defeating certain bosses, returning key items,
+                etc).</p>
+            <p>Some items are granted to you at the end of a battle when dismissing the EXP window. These are usually
+                consumables (will not be a key item).</p>
+        </div>
+    </div>
+
+    <a href="#table-of-contents">Back to top</a>
+
+    <div class="card border-info my-3" id="equipment">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">What Equips Do</h3>
+        </div>
+        <div class="card-body">
+            <p>Equipment can either be a Weapon, Armor, or Accessory.</p>
+            <p>Hovering over a piece of equipment in a menu will show you information about what that equip does. All
+                menu descriptions for weapons, armor, and accessories will look like something like this:</p>
+            <p>
+                <img alt="menu1" src="{% static 'randomizer/img/menu1.png' %}"/>
+                <img alt="menu2" src="{% static 'randomizer/img/menu2.png' %}"/>
+            </p>
+            <h6>First Row</h6>
+            <p>Lists elements that the equip makes you immune (<span class="icon x0"></span>) to, and elements that you
+                will take half damage (<span class="icon x12"></span>) from. If this row is blank, that means the
+                equipment does not offer any fire/ice/lightning protections.</p>
+            <ul>
+
+                <li><span class="icon fire"></span> - Fire</li>
+
+                <li><span class="icon ice"></span> - Ice</li>
+
+                <li><span class="icon lightning"></span> - Lightning</li>
+            </ul>
+            <h6>Second Row</h6>
+            <p>Lists the amount by which your agility increases (<span class="icon agiup"></span>) or decreases (<span
+                    class="icon agidown"></span>), and status effects that the equip provides immunity to. If this row
+                only shows the agility stat, that means the equipment does not offer any status immunities.</p>
+            <ul>
+
+                <li><span class="icon mute"></span> - Mute</li>
+
+                <li><span class="icon sleep"></span> - Sleep</li>
+
+                <li><span class="icon poison"></span> - Poison</li>
+
+                <li><span class="icon fear"></span> - Fear</li>
+
+                <li><span class="icon mushroom"></span> - Mushroom</li>
+
+                <li><span class="icon scarecrow"></span> - Scarecrow</li>
+
+                <li><span class="icon ko"></span> - Instant Death</li>
+
+                <li><span class="icon berserk"></span> - Berserk (exists but unused in the original game code, is used
+                    in the randomizer)
+                </li>
+            </ul>
+            <h6>Third Row</h6>
+            <p>Physical attack increase (<span class="icon atkup"></span>) or decrease (<span
+                    class="icon atkdown"></span>), and physical defense increase (<span class="icon defup"></span>) or
+                decrease (<span class="icon defdown"></span>).</p>
+            <p><span class="icon boost"></span> indicates that the stat is also given a boost multiplier (like what Geno
+                Boost, Bracer, Power Blast, etc. gives you).</p>
+            <h6>Fourth Row</h6>
+            <p>Magic attack increase (<span class="icon matkup"></span>) or decrease (<span
+                    class="icon matkdown"></span>), and magic defense increase (<span class="icon mdefup"></span>) or
+                decrease (<span class="icon mdefdown"></span>).</p>
+            <p>Like with the third row, <span class="icon boost"></span> indicates that the stat is also given a boost
+                multiplier.</p>
+            <hr>
+            <p>Some equipment can only be equipped to certain characters. This can be randomized. However, you will not
+                be able to see if a character can or cannot equip an item if they have not been recruited yet.</p>
+                <p>The sum of your equip stats can sometimes put your character's stat below 0. This will look glitched, like Peach's Magic Defense in this screenshot:<br>
+				<img alt="psych1" src="{% static 'randomizer/img/underflow.png' %}"/><br>
+				Effectively, while this is supposed to convey a negative number, their stat is functionally treated as 0.</p>
+            <p>While the game will tell you most of the effects that each piece of equipment has, there are some that
+                have inherent special effects that are never randomized. These are:</p>
+            <ul>
+                <li><b>B’tub Ring</b> - If you have this equipped, the wearer can use the Mystery Egg item 10 times to
+                    obtain the Lamb’s Lure item.
+                </li>
+                <li><b>Coin Trick</b> - If equipped, you will receive twice the usual amount of coins in a battle.</li>
+                <li><b>Exp. Booster</b> - The wearer will receive twice the stated amount of EXP from a battle.</li>
+                <li><b>Jump Shoes</b> - If you have this equipped, all of the wearer’s Jump attacks bypass enemies’ Jump
+                    element immunities.
+                </li>
+                <li><b>Scrooge Ring</b> - The wearer’s magic attacks will only use half their regular MP cost.</li>
+                <li><b>Signal Ring</b> - If someone in the active party has this equipped, it will play a noise if you
+                    enter a room that has an invisible chest in it.
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <a href="#table-of-contents">Back to top</a>
+
+    <div class="card border-info my-3" id="regular-items">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">What Regular Items Do</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="regular-items-healing">Healing Items</h5>
+                </div>
+                <div class="card-body">
+                    <p>These can be used in battle or on the field. Cannot be used on enemies.</p>
+                    <ul>
+                        <li><b>Moldy Mush</b> - 1 HP to single target</li>
+                        <li><b>Rotten Mush</b> - 5 HP to single target</li>
+                        <li><b>Wilt Shroom</b> - 10 HP to single target</li>
+                        <li><b>Mushroom</b> - 30 HP to single target; if “but…” is in the item description, it will also
+                            give the target the Mushroom status
+                        </li>
+                        <li><b>Mid Mushroom</b> - 80 HP to single target</li>
+                        <li><b>Yoshi Candy</b> - 100 HP to single target</li>
+                        <li><b>Max Mushroom</b> - 255 (max) HP to single target</li>
+                        <li><b>FroggieDrink</b> - 30 HP to whole party</li>
+                        <li><b>Muku Cookie</b> - 69 HP (nice) to whole party, cures status effects</li>
+                        <li><b>Elixir</b> - 80 HP to whole party</li>
+                        <li><b>Megalixir</b> - 150 HP to whole party</li>
+                        <li><b>KerokeroCola</b> - All HP to whole party, and all FP</li>
+                        <li><b>Honey Syrup</b> - 10 FP</li>
+                        <li><b>Maple Syrup</b> - 40 FP</li>
+                        <li><b>Royal Syrup</b> - 99 (max) FP</li>
+                        <li><b>Pick Me Up</b> - Revives a single KOed target to full HP</li>
+                        <li><b>Able Juice</b> - Removes all negative status effects from target</li>
+                        <li><b>Freshen Up</b> - Removes all negative status effects from whole party</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="regular-items-buffs">Buffing Items</h5>
+                </div>
+                <div class="card-body">
+                    <p>These can be used in battle only. Cannot be used on enemies.</p>
+                    <ul>
+                        <li><b>Energizer</b> - 1.5x boost multiplier to single target’s attack and magic attack</li>
+                        <li><b>Bracer</b> - 1.5x boost multiplier to single target’s defense and magic defense</li>
+                        <li><b>Yoshi-ade</b> - 1.5x boost multiplier to single target’s attack, magic attack, defense,
+                            and magic defense
+                        </li>
+                        <li><b>Power Blast</b> - 1.5x boost multiplier to whole party’s attack and magic attack</li>
+                        <li><b>Crystalline</b> - 1.5x boost multiplier to whole party’s defense and magic defense</li>
+                        <li><b>Red Essence</b> - Complete invincibility for 3 turns. Protects against Shredder. Removed
+                            by Group Hug due to a casting bug in the vanilla game.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="regular-items-offense">Offense Items</h5>
+                </div>
+                <div class="card-body">
+                    <p>These can be used on enemies. All damage-dealing items are affected by boost multipliers as well
+                        as elemental weaknesses and resistances, the numbers here are the base amount assuming no
+                        multipliers.</p>
+                    <ul>
+                        <li><b>Bad Mushroom</b> - Deals 50 damage to single target and inflicts the Poison status</li>
+                        <li><b>Fright Bomb</b> - Deals 100 damage to single target and inflicts the Fear status</li>
+                        <li><b>Fire Bomb</b> - Deals 120 Fire-elemental damage to all enemies</li>
+                        <li><b>Ice Bomb</b> - Deals 140 Ice-elemental damage to all enemies</li>
+                        <li><b>Lamb’s Lure</b> - Attempts to remove one enemy from battle (you do not receive
+                            coins/experience for the removed enemy). Use 48 times to obtain the Sheep Attack.
+                        </li>
+                        <li><b>Pure Water</b> - OHKO on undead enemies</li>
+                        <li><b>Rock Candy</b> - Deals 200 damage to all enemies</li>
+                        <li><b>Sheep Attack</b> - Attempts to remove all enemies from battle (you do not receive
+                            coins/experience for the removed enemies).
+                        </li>
+                        <li><b>Sleepy Bomb</b> - Does not deal damage, but inflicts the Sleep status on all enemies.
+                        </li>
+                        <li><b>Star Egg</b> - Deals 100 damage to all enemies. Reusable.</li>
+                        <li><b>Yoshi Cookie</b> - Yoshi appears and attempts to turn the enemy into an item, or give the
+                            party a Yoshi Candy. This is also a field item.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="regular-items-other">Other Battle Items</h5>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><b>EarlierTimes</b> - Restarts the current battle. Reusable.</li>
+                        <li><b>Goodie Bag</b> - Gives you 1 coin. Reusable.</li>
+                        <li><b>Lucky Jewel</b> - You will get the Lucky! minigame at the end of the battle. Can be used
+                            10 times, then it disappears.
+                        </li>
+                        <li><b>Mystery Egg</b> - If someone has the B’Tub Ring equipped, they can use this 10 times to
+                            obtain the Lamb’s Lure.
+                        </li>
+                        <li><b>See Ya</b> - Instantly runs from battles. Reusable.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="regular-items-field">Field Items</h5>
+                </div>
+                <div class="card-body">
+                    <p>Items that are not used in battle, but are not Key Items.</p>
+                    <ul>
+                        <li><b>Bright Card</b> - Gives you access to Grate Guy’s Casino.</li>
+                        <li><b>Carbo Cookie</b> - Give this to the girl on the bucket in Moleville for access to Midas
+                            River. The second time, she will give you a Frog Coin.
+                        </li>
+                        <li><b>Fertilizer</b> - Regular item if not included in the Key Item shuffle. Trade this and the
+                            Seed to the Rose Town gardener for an equip and a weapon.
+                        </li>
+                        <li><b>Fireworks</b> - After completing the Moleville Mines, trade to the girl with the pink bow
+                            outside in Moleville for a Shiny Stone. If you buy 3 of these, the ending credits will show
+                            flower fireworks; if you buy five, it will be star fireworks.
+                        </li>
+                        <li><b>Flower Box</b> - Increases max FP by 5, heals all FP.</li>
+                        <li><b>Flower Jar</b> - Increases max FP by 3, heals all FP.</li>
+                        <li><b>Flower Tab</b> - Increases max FP by 1, heals all FP.</li>
+                        <li><b>Seed</b> - Regular item if not included in the Key Item shuffle. Trade this and the
+                            Fertilizer to the Rose Town gardener for an equip and a weapon.
+                        </li>
+                        <li><b>Shiny Stone</b> - Unseals the door to the Culex fight in Monstro Town.</li>
+                        <li><b>Wallet</b> - Trade this to a guy walking outside in Mushroom Kingdom to get a Flower Tab
+                            (and a Frog Coin, if returned after completing Marrymore).
+                        </li>
+                        <li><b>Yoshi Cookie</b> - Can use these to gamble on the races in Yoshi’s Island. Also an
+                            offense item.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#table-of-contents">Back to top</a>
+
+    <div class="card border-info my-3" id="keyitems">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">What Key Items Do</h3>
+        </div>
+        <div class="card-body">
+            <p>Key items can be found in a set number of locations, and are randomized within each other. See the “Where
+                Key Items Are” section to find out where to find them.</p>
+            <ul>
+                <li><b>Alto Card</b> - Unlocks more items in the Tadpole Pond coin shop.</li>
+                <li><b>Bambino Bomb</b> - Unlocks the second half of Moleville Mines for a boss fight and the minecart
+                    minigame.
+                </li>
+                <li><b>Big Boo Flag</b> - Trade in to the Monstro Town Inn with the Dry Bones Flag and Greaper Flag for
+                    an equip.
+                </li>
+                <li><b>Castle Key 1</b> - Unlocks the first locked door in Nimbus Castle for a boss fight.</li>
+                <li><b>Castle Key 2</b> - Unlocks the second locked door in Nimbus Castle to lead to a boss fight.</li>
+                <li><b>Cricket Jam</b> - Trade in to Frogfucius in Tadpole Pond for 10 Frog Coins.</li>
+                <li><b>Cricket Pie</b> - Trade in to Frogfucius in Tadpole Pond for an equip.</li>
+                <li><b>Dry Bones Flag</b> - Trade in to the Monstro Town Inn with the Big Boo Flag and Greaper Flag for
+                    an equip.
+                </li>
+                <li><b>Elder Key</b> - Opens the door in Booster’s Tower portrait room (contains a weapon).</li>
+                <li><b>Fertilizer</b> - Regular item if not included in the Key Item shuffle. Trade this and the Seed to
+                    the Rose Town gardener for an equip and a weapon.
+                </li>
+                <li><b>Greaper Flag</b> - Trade in to the Monstro Town Inn with the Dry Bones Flag and Big Boo Flag for
+                    an equip.
+                </li>
+                <li><b>RareFrogCoin</b> - Trade in to the Mushroom Kingdom shop for another key item.</li>
+                <li><b>Room Key</b> - Opens the door in Booster’s Tower checkerboard room (contains a chest).</li>
+                <li><b>Seed</b> - Regular item if not included in the Key Item shuffle. Trade this and the Fertilizer to
+                    the Rose Town gardener for an equip and a weapon.
+                </li>
+                <li><b>Shed Key</b> - Opens the locked shed in Seaside Town; unlocks the rest of the Seaside Town shops.
+                </li>
+                <li><b>Soprano Card</b> - Unlocks more items in the Tadpole Pond coin shop.</li>
+                <li><b>Temple Key</b> - Gets past the Belome statue in Belome Temple (blocks the doorway down the
+                    elevator if you get the “Sorry, I’m not accepting visitors past my bedtime” fortune). Contains Frog
+                    Coins, flowers, and some battle items.
+                </li>
+                <li><b>Tenor Card</b> - Unlocks more items in the Tadpole Pond coin shop.</li>
+            </ul>
+        </div>
+    </div>
+
+    <a href="#table-of-contents">Back to top</a>
+
+    <div class="card border-info my-3" id="keyitemlocations">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">Where Key Items Are</h3>
+        </div>
+        <div class="card-body">
+            <ul>
+                <li><b>Mario’s Pad</b> - Press A on the corner of the bed.</li>
+                <li><b>Mushroom Kingdom</b> - Trade in the RareFrogCoin.</li>
+                <li><b>Bandit’s Way</b> - Defeat the boss.</li>
+                <li><b>Tadpole Pond</b> - Perform song So La Mi Re Do Re Do Re (5 4 0 1 2 1 2 1)</li>
+                <li><b>Tadpole Pond</b> - After finishing the minecart minigame, perform song Mi Do So Do Re La Ti Do (0
+                    2 5 2 1 4 3 2)
+                </li>
+                <li><b>Tadpole Pond</b> - After beating the Land’s End boss, perform song La Ti Do Re So Do Re Mi (4 3 2
+                    1 5 2 1 0)
+                </li>
+                <li><b>Rose Town</b> - Press A on the right side of the wooden town flower sign.</li>
+                <li><b>Yo’ster Isle</b> - Press A between “O” and “A” on the race goalpoint.</li>
+                <li><b>Moleville Mines</b> - Defeat the first boss.</li>
+                <li><b>Booster’s Tower 2nd portrait hall</b> - Talk to the portraits in order (6-5-3-1-2-4).</li>
+                <li><b>Booster’s Tower Checkerboard Room</b> - Grab the key sprite in the checkerboard room.</li>
+		    <li><b>Booster's Tower Knife Guy Minigame</b> - Complete the minigame once after defeating the Knife Guy/Grate Guy boss location.</li>
+                <li><b>Seaside Town</b> - Defeat the boss.</li>
+                <li><b>Land’s End</b> - Go down the cave in the Sky Bridge room, knock over the barrel near the
+                    trampoline, and the trampoline will transport you to Kero Sewers. Jump to the left and grab the
+                    chest.
+                </li>
+                <li><b>Bean Valley</b> - Defeat the last boss and wait around a few seconds before leaving the room. (only when Seed/Fertilizer are
+                    included in Key Item shuffle)
+                </li>
+                <li><b>Monstro Town</b> - Talk to the Thwomp 7 times and walk outside.</li>
+                <li><b>Nimbus Land</b> - Talk to the castle guard near the save point in the left branch.</li>
+                <li><b>Nimbus Land</b> - Defeat the first boss in the castle, behind Castle Key 1.</li>
+                <li><b>Nimbus Land</b> - Defeat the final boss (behind Castle Key 2), and walk off the right side of the
+                    main outdoor area of Nimbus Land into an invisible path. (only when Seed/Fertilizer are included in
+                    Key Item shuffle)
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <a href="#table-of-contents">Back to top</a>
+
+    <div class="card border-info my-3" id="areas">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title">What Can I Do In This Town?</h3>
+        </div>
+        <div class="card-body">
+            <p>Click on a location name for a map showing navigation, chests, and boss fights.</p>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="area-1">Area 1</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Mario's Pad <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGMariosPad.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>Can heal for free by turning off the lamp.</li>
+                        <li>Press A at the bed corner for a key item.</li>
+                    </ul>
+
+                    <h6>Mushroom Way <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGMushroomWay.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>You can choose to rescue Toad for some small item rewards.</li>
+                        <li>One boss fight at the end that gives you an equip.</li>
+                    </ul>
+
+                    <h6>Mushroom Kingdom <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGMushroomKingdom.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>There is one shop here. Sells items and equips.</li>
+                        <li>You can turn in the RareFrogCoin to the shop for another key item.</li>
+                        <li>The frog coin chest has been moved to the top right corner.</li>
+                        <li>You can access the castle vault chests immediately.</li>
+                        <li>Mushroom Kingdom becomes occupied after you complete Bandit’s Way, at which point a boss
+                            fight in the throne room will be available.
+                        </li>
+                        <li>While occupied, you can get the three vault chests again, retrieve an equip from the Toad in
+                            the guest room, heal for free in Peach’s room, and retrieve reward items by rescuing people
+                            in town and in the castle.
+                        </li>
+                        <li>Defeating or <a
+                                href="https://sites.google.com/site/supermariorpgspeedruns/techniques/mack-skip"
+                                target="_blank">skipping</a> the boss returns Mushroom Kingdom to its unoccupied state.
+                            (Skipping the boss will still grant you the Star Piece if it has one.)
+                        </li>
+                        <li>If you have the Wallet, you can turn it in to a blue Toad for a reward. Do this after
+                            Marrymore to get a Frog Coin in addition to the reward.
+                        </li>
+                    </ul>
+
+                    <h6>Bandit's Way <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGBanditsWay.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>1 boss fight.</li>
+                        <li>You can attempt <a href="https://imgur.com/OPDbmnJ" target="_blank">Doge Jump</a> if you
+                            like, but if you don’t know this, don’t worry about it.
+                        </li>
+                        <li>You must sneak up on the enemy from behind 3 times to start the fight (if they don’t shake
+                            and turn around, it doesn’t count).
+                        </li>
+                        <li>Defeating the boss nets you a key item and a regular item.</li>
+                        <li>Defeating the boss switches Mushroom Kingdom to its occupied state.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="area-2">Area 2</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Kero Sewers <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGKeroSewers.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>One mimic chest and one boss fight, each may have a star piece.</li>
+                        <li>The mimic chest transforms into a 50 coin chest if you reload the room after defeating it.
+                        </li>
+                        <li>Press the green switch to drain the water, as the underwater pipe leads to the boss.</li>
+                        <li>The chest marked “Cricket Jam” on the linked map will give you a random key item if you come
+                            here after pushing the barrel over in the Land's End cave passage; otherwise it will give
+                            you a flower.
+                        </li>
+                        <li>When you defeat the boss, you can exit instead of doing Midas River.</li>
+                    </ul>
+
+                    <h6>Midas River <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGMidasRiver.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>Obstacle course minigame.</li>
+                        <li>You can’t keep any of the regular coins you find here, but you can trade 60 in for a Frog
+                            Coin.
+                        </li>
+                        <li>The toad gives you a weapon.</li>
+                    </ul>
+
+                    <h6>Tadpole Pond <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGTadpolePond.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>The left shop only accepts Frog Coins. Sells all types of equips and items.</li>
+                        <li>The right shop sells items, accepts normal coins, and adds more items for sale when you
+                            obtain the Alto, Tenor, and Soprano Card key items.
+                        </li>
+                        <li>Turn in the Cricket Pie to Frogfucius for a weapon.</li>
+                        <li>Turn in the Cricket Jam to Frogfucius for 10 frog coins.</li>
+                        <li>In Melody Bay, perform song So La Mi Re Do Re Do Re (5 4 0 1 2 1 2 1) for a key item.</li>
+                        <li>In Melody Bay, perform song Mi Do So Do Re La Ti Do (0 2 5 2 1 4 3 2) for a key item after
+                            completing the minecart minigame in Moleville.
+                        </li>
+                        <li>In Melody Bay, perform song La Ti Do Re So Do Re Mi (4 3 2 1 5 2 1 0) for a key item after
+                            defeating the boss of Land’s End.
+                        </li>
+                    </ul>
+
+                    <h6>Rose Way<a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGRoseWay.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>No bosses or shops.</li>
+                        <li>Mostly just minor spoils here.</li>
+                    </ul>
+
+                    <h6>Rose Town <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGRoseTown.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>2 shops here (one selling items, one selling equips).</li>
+                        <li>You can get a key item by pressing A on the right side of the “Welcome” sign.</li>
+                        <li>While the town is occupied, you can sleep in the inn for a free item.</li>
+                        <li>If you let the guy back into his house in the top left corner, your actions/answers will
+                            change the contents of some chests in Forest Maze.
+                        </li>
+                        <li>The gardener’s house is unlocked after completing Marrymore, and then you can turn in the
+                            Seed and the Fertilizer to get access to the equip chests above his house.
+                        </li>
+                    </ul>
+
+                    <h6>Forest Maze <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGForestMaze.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>You can perform <a href="https://www.youtube.com/watch?v=R06qW3TOqj4" target="_blank">Wiggler
+                            Jump</a> to obtain coins and frog coins.
+                        </li>
+                        <li>The contents of the group of 5 underground chests change depending on actions you took in
+                            Rose Town.
+                        </li>
+                        <li>See the map for information on how to complete the maze section.</li>
+                        <li>After defeating the area boss, you recruit a new character.</li>
+                    </ul>
+
+                    <h6>Pipe Vault <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGPipeVault.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>Completing this area unlocks Yo’ster Isle.</li>
+                        <li>The mole with the 4 pipes is the Goomba Thumpin’ minigame, which can get you item rewards
+                            and Frog Coins.
+                        </li>
+                        <li>You can get the Frog Coin under the post near the trampoline by running toward it and
+                            pressing down at the end.
+                        </li>
+                    </ul>
+
+                    <h6>Yo’ster Isle <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGYosterIsle.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>Press A between “O” and “A” on the goalpost to get a key item.</li>
+                        <li>You can beat Boshi in a race here to unlock the Yoshi Race minigame.</li>
+                        <li>Talk to one of the pink Yoshis to get 3 cookies if you have none, and then you can gamble
+                            cookies in the race minigame to get more of them.
+                        </li>
+                        <li>You can feed cookies to the baby Yoshi to turn it into Fat Yoshi.</li>
+                        <li>If you give Fat Yoshi 21+ cookies at once, you may get rare items like Yoshi-Ade and Red
+                            Essence.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="area-3">Area 3</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Moleville <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGMoleville.png"
+                           target="_blank">(map)</a> / Mines <a
+                            href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGMolevilleMines.png"
+                            target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>1 shop here (sells items and equips).</li>
+                        <li>2 boss fights in the mines.</li>
+                        <li>Defeat the first boss for a key item.</li>
+                        <li>If you have the Bambino Bomb, take it to the mole halfway through the mines to unlock the
+                            rest of the mines, where there is another boss as well as the minecart minigame.
+                        </li>
+                        <li>If you run along the long tracks in the star chest room, you will get a Frog Coin.</li>
+                        <li>See <a
+                                href="https://sites.google.com/site/supermariorpgspeedruns/world-areas/moleville-mines"
+                                target="_blank">the bottom of this page</a> for tips and tutorials on completing the
+                            minecart minigame quickly.</li>
+                        <li>Completing the minecart minigame allows you to perform the second song in Tadpole Pond for a
+                            key item, and also allows you to buy Fireworks from the mole in the upper left house.
+                        </li>
+                        <li>You can climb up to the top of the mountain from the outside after completing the Mines to
+                            play the minecart minigame again. You can choose to wager some coins and win extra if you
+                            beat your best time.
+                        </li>
+                        <li>Trade Fireworks to the girl with the pink bow outside in town to receive the Shiny Stone,
+                            which unlocks Culex’s lair in Monstro Town.
+                        </li>
+                        <li>At various points in the game, the blue Toad in the shop will sell you the Mystery Egg,
+                            Lucky Jewel, and Frying Pan.
+                        </li>
+                    </ul>
+
+                    <h6>Booster Pass <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGBoosterPass.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>Talk to the 2nd bush near the entrance marked “Start” on the map to receive a frog coin.
+                        </li>
+                        <li>The area in the top left of the first room will open after hitting the green switch in
+                            Booster Tower.
+                        </li>
+                        <li>The green switch in the second room transforms the enemies into coins.</li>
+                        <li>Some of the bushes are enemy encounters.</li>
+                    </ul>
+
+                    <h6>Booster Tower <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGBoostersTower.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>To get the equip chest with the seesaw, walk (don’t run) off the center of the platform.
+                        </li>
+                        <li>The green switch opens up part of Booster Pass, containing more chests.</li>
+                        <li>If you have the Elder Key, you can open the locked door in the second portrait room to get
+                            an equip.
+                        </li>
+                        <li>You can talk to the portraits in the order indicated on the map image to get a key item.
+                        </li>
+                        <li>To avoid hidden encounters in the checkerboard room, <a
+                                href="http://i.imgur.com/IeWgdRe.png" target="_blank"> do not step on any of the red
+                            squares in this image</a>.
+                        </li>
+                        <li>Grab the key sprite in the checkerboard room for a key item.</li>
+                        <li>If you have the Room Key, you can open the locked door in the checkerboard room for an
+                            equip.
+                        </li>
+                        <li>If you complete the curtain minigame at the top of the tower successfully, you will receive
+                            an equip and can choose to do a boss fight after; if you fail it 3 times, you will immediately do
+                            the boss fight.
+                        </li>
+                        <li>There is another boss fight on the balcony.</li>
+                        <li>You do not need to do Booster Hill after finishing.</li>
+                        <li>You can come back to the tower later to get a regular item from Knife Guy in a stairway.
+                        </li>
+                    </ul>
+
+                    <h6>Booster Hill</h6>
+                    <ul>
+                        <li>Minigame.</li>
+                        <li>Bounce off the barrels and Snifits to grab flowers from Peach.</li>
+                    </ul>
+
+                    <h6>Marrymore <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGMarrymore.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>There is a shop in the hotel selling items and equips.</li>
+                        <li>Complete the boss fight in the chapel to recruit a new character.</li>
+                        <li>If you stay in the hotel suite and overstay your visit, you must work for the hotel to make
+                            up for it. You can receive items and coins as tips from guests.
+                        </li>
+                        <li>If you stay in the hotel suite multiple times, you may get rewards from the hotel.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="area-4">Area 4</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Star Hill <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGStarHill.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>Talk to the green flowers to open the door to the next room.</li>
+                        <li>Check the top right corner of the final room to see if a star piece is there.</li>
+                    </ul>
+
+                    <h6><a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGSeasideTown.png"
+                           target="_blank">Seaside Town</a></h6>
+                    <ul>
+                        <li>The left 3-door building has a shop in the leftmost door while the town is initially
+                            occupied. This shop sells items only and becomes permanently inaccessible after Sunken Ship
+                            is completed.
+                        </li>
+                        <li>There is a frog coin shop on the second level of the house at the top of the town, and the
+                            items in this shop can only be purchased once each. This shop usually sells equips, field
+                            items, and "Other" battle items.
+                        </li>
+                        <li>There is a boss fight in the second area of this town.</li>
+                        <li>After completing the boss fight, touch the nearby key sprite to get a key item.</li>
+                        <li>If you have the Shed Key, you can unlock the shed on the left side, which unlocks four more
+                            shops (items, armor, accessories, and weapons) and gives you a Flower Box. Also unlocks the
+                            Mushroom Boy shop, which you can use for farming Rock Candy, although the success rate of
+                            trading in a mushroom for a rock candy is very low.
+                        </li>
+                    </ul>
+
+                    <h6>Sea <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGSea.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>There is a shop here that sells items and equips.</li>
+                        <li>This is also a great place to do Death Abuse when chests aren’t randomized.</li>
+                    </ul>
+
+                    <h6>Sunken Ship <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGSunkenShip.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>There are two boss fights and a mimic chest, all of which can contain a star piece.</li>
+                        <li>After defeating the mimic chest, it becomes a 100 coin chest the next time the room is
+                            loaded.
+                        </li>
+                        <li>There is a flower behind the corner of crates in the first stairway room.</li>
+                        <li>The shop is the exact same as the shop in the Sea.</li>
+                        <li>You can get various small item prizes for completing the puzzle rooms, or you can skip them
+                            entirely and enter the password of “Pearls”.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="area-5">Area 5</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Land's End <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGLandsEnd.png"
+                           target="_blank">(map)</a> / Belome Temple <a
+                            href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGBelomeTemple.png"
+                            target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>If you take the lower path in the flower mountain room, you can access a cave in the Sky
+                            Bridge room. Wait for a puff of smoke to come out of the cave, and then jump into it.
+                            Traverse the cave and knock over a barrel before the trampoline to end up back in the Kero
+                            Sewers, where you can grab a key item out of the chest to your left.
+                        </li>
+                        <li>The Sky Bridge minigame will allow you to gamble for coins, if you decide to play it.</li>
+                        <li>In the whirlpool area, you must defeat the Shoguns in battle to advance. After beating them,
+                            you can bounce on their heads for coins and frog coins.
+                        </li>
+                        <li>If chests are not shuffled, the underground area after the whirlpools is great for death
+                            abusing, especially if you have 400 coins to spend on the second chest. After that chest is
+                            depleted, you can talk to the shaman again, and then come back later to get another star
+                            chest for 800 coins.
+                        </li>
+                        <li>In Belome Temple, you can give the Shaman on the trampoline 100 coins for quick access back
+                            to the whirlpool area.
+                        </li>
+                        <li>The order in which you hit the Belome heads will determine what item you get; the
+                            quickest/best option is left/center/right. The final fortune will either take you to a boss
+                            fight and then Monstro Town (“Mmm, I’m so hungry”) or to a treasure room (“Sorry, I’m not
+                            accepting visitors”) blocked by a statue. If you have the Temple Key, you can bypass the
+                            statue to pick up some battle items, frog coins, and flowers.
+                        </li>
+                        <li>After you’ve completed Belome Temple, you unlock the Sky Troopas minigame at the Land’s End
+                            cliff (opposite direction from Belome Temple at the whirlpools). Scale the cliff in under 12
+                            seconds to get an equip; then scale it in under 11 seconds to get 5 Frog Coins or under 12
+                            seconds for 1 Frog Coin.
+                        </li>
+                    </ul>
+
+                    <h6>Monstro Town <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGMonstroTown.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>There is one shop here (items & equips).</li>
+                        <li>If you come here early, the trampoline will be missing and you cannot go through the back
+                            exit of Belome Temple.
+                        </li>
+                        <li>If you have done 30 or 100 Super Jumps, talk to the Chow to get an equip.</li>
+                        <li>Talk to the thwomp 7 times and walk outside to get a key item.</li>
+                        <li>If you have the Shiny Stone, talk to the third door to unlock a boss fight (you will receive
+                            an equip for beating it).
+                        </li>
+                        <li>If you have the three Flag key items, turn them in to the inn to get an equip.</li>
+                        <li>Go to the dojo on the upper level for four consecutive boss fights (the first and fourth ones can have Star Pieces) and to receive an equip after the fourth. You have the option to run away from these boss fights with no penalty. If you die during these fights, you will not Game Over, and can try them again.
+                        </li>
+                    </ul>
+
+                    <h6>Bean Valley <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGBeanValley.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>There is one mimic chest and one boss fight here.</li>
+                        <li>You must fight the Piranha Plants in the pipes if you wish to get to the underground
+                            areas.
+                        </li>
+                        <li>The hidden platform underground unlocks Grate Guy’s Casino.</li>
+                        <li>The slot chests can net you the following results:
+                            <ul>
+                                <li>One of each: Box Boy encounter (will not give you a star piece)</li>
+                                <li>Two mushrooms: Full heal</li>
+                                <li>Two flowers: FP flower</li>
+                                <li>Two stars: Rock candy</li>
+                                <li>Three of anything: Frog coin</li>
+                            </ul>
+                        </li>
+                        <li>Defeating the boss will make a note fall down onto the bushes behind the pipe, which you can
+                            inspect for a key item (or just the Seed, if the Seed is not in your key item pool).
+                        </li>
+                        <li>The brick block takes you to the vine area, which has some chests and coins and eventually
+                            takes you to Nimbus Land (already accessible from world map).
+                        </li>
+                    </ul>
+
+                    <h6>Grate Guy's Casino <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGGrateGuysCasino.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>You must have the Bright Card to get past the security guards.</li>
+                        <li>The slot machine in here will only reward you frog coins for 3 of a kind.</li>
+                        <li>You can play blackjack at the table.</li>
+                        <li>If you talk to Grate Guy enough times, you can play “Look the other way”, which requires
+                            only a d-pad input. If you win this 100 non-consecutive times, you obtain the Star Egg
+                            battle item. With each win you will get a random battle item, usually bad but occasionally
+                            very good.
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="area-6">Area 6</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Nimbus Land <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGNimbusLand.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>There is one shop here, selling items and equips.</li>
+                        <li>You can use the “Dream Cushion” at the inn for a chance at getting good items.</li>
+						<li>Go to the house at the top left in the Nimbus Land town area, and talk to Garro. This will initiate a minigame; you can lose it twice to initiate a boss battle, or you can win it and receive an item as well as do the boss battle optionally.
+                        </li>
+                        <li>In the castle, when you come to a room that has 3 doors in a row, you can follow the left
+                            door and talk to a castle attendant to receive a key item.
+                        </li>
+                        <li>If you have Castle Key 1, you can open the middle door for another boss fight.</li>
+                        <li>Defeat the boss fight behind Castle Key 1 for another key item.</li>
+                        <li>If you have Castle Key 2, you can open the door behind the Castle Key 1 boss to unlock the third
+                            castle boss.
+                        </li>
+                        <li>After completing the castle, you can walk off the right-hand side of the outdoor area of
+                            town to receive a key item (or just the Fertilizer, if the Fertilizer is not in your key
+                            item pool) and talk to Croco in the rightmost house to get an equip.
+                        </li>
+                        <li>The top hole in the trampoline room leads to the hot springs, which is free healing and has
+                            a cliff that goes to Barrel Volcano (already accessible from world map).
+                        </li>
+                    </ul>
+
+                    <h6>Barrel Volcano <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGBarrelVolcano.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>There are two shops (one item, one equip) and two boss fights in here.</li>
+                        <li>Some of the frog coins can be obtained by jumping in the lava.</li>
+                        <li><a href="https://www.youtube.com/watch?v=u4B6Cnz-hwk" target="_blank">You can skip both
+                            Stumpet fights.</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-info my-2">
+                <div class="card-header">
+                    <h5 class="card-title" id="area-7">Area 7</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Vista Hill</h6>
+                    <ul>
+                        <li>A cutscene.</li>
+                        <li>Nothing else.</li>
+                    </ul>
+
+                    <h6>Bowser's Keep <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGBowsersKeep.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>Croco has two shops in here (each selling items and equips).</li>
+                        <li>You must complete 4 of the 6 red doors to advance to the bosses (you can adjust this amount with the D flag); you can manipulate the door
+                            order to choose the ones you want by performing <a href="https://sites.google.com/site/supermariorpgspeedruns/techniques/bowser-door-manip#TOC-Mario-s-Pad-Manip-Beginner-" target="_blank">an easy RNG manipulation</a>. This is not particularly useful when using the Ds flag unless you plan on revisiting, but if you opt not to use that flag, the Mario's Pad manipulation will order the doors as follows:<br>
+									<ol>
+										<li><a href="https://sites.google.com/site/supermariorpgspeedruns/techniques/dr-topper-questions#TOC-U-Quiz-Answers"
+                               target="_blank">Quiz, Barrel Counting, Marathon Logic Puzzle</a></li>
+										<li><a
+                                href="https://sites.google.com/site/supermariorpgspeedruns/world-areas/bowser-s-keep-2"
+                                target="_blank">Coin Game, Button Game, Solitaire Puzzle</a> - see the “Room Strategies” section on the linked page for solutions</li>
+										<li>Gu Goomba - Shaman battle door</li>
+										<li>Invisible floor, straight line platforms, Donkey Kong platformer door</li>
+										<li>Z-axis platforms, cannonball maneuver, rotating platforms door</li>
+										<li>Terra Cotta - Chester battle door (note: Chester does not have a star piece)</li>
+									</ol>
+                        </li>
+						<li>If you die during the battles in the 6 doors, you do not Game Over, you are just transported back to the door lobby.</li>
+                        <li>The bosses in here may have star pieces if you chose to keep Bowser’s Keep open in your flag
+                            settings.
+                        </li>
+                        <li>If you die to any of the 3 bosses, you will be transported back to Mario’s Pad to avoid
+                            softlocking.
+                        </li>
+                    </ul>
+
+                    <h6>Factory <a href="https://fantasyanime.com/squaresoft/mariorpg/maps/SuperMarioRPGSmithysFactory.png"
+                           target="_blank">(map)</a></h6>
+                    <ul>
+                        <li>Unlocked when you collect all your star pieces.</li>
+                        <li>Three boss fights in total, with some forced encounters as well.</li>
+                        <li>There is one shop in here (items only).</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <a href="#table-of-contents">Back to top</a>
+{% endblock %}

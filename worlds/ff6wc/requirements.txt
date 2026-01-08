@@ -1,0 +1,2 @@
+bsdiff4>=1.2.2
+typing_extensions>=4.12.2

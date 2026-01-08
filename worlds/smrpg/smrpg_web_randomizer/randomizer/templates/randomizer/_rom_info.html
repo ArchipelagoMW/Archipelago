@@ -1,0 +1,116 @@
+<div class="row">
+<div class="col-md-6">
+    <div>Mode: <span id="info-mode"></span></div>
+    <div id="info-debug-mode" class="bg-info text-white">Debug Test Mode: <span>Yes</span></div>
+    <div>Version: <span id="info-version"></span></div>
+    <div>Flags: <span id="info-flags"></span></div>
+    <div>Seed: <span id="info-seed"></span></div>
+    <div>Race Mode: <span id="info-race-mode"></span></div>
+    <div class="text-info">File Select Character: <span id="file-select-character"></span></div>
+    <div class="text-info">File Select Hash: <span id="file-select-hash"></span></div>
+    {% if show_permalink %}
+        <div class="text-info">Permalink: <a id="info-permalink" href="" target="_blank">Link</a></div>
+    {% endif %}
+    <div id="spoiler-container">Spoiler:
+        <button class="btn btn-link p-0" type="button" data-toggle="collapse" data-target="#spoiler-collapse"
+                aria-expanded="false" aria-controls="spoiler-collapse">
+            Show/Hide Spoiler
+        </button>
+        <div class="collapse" id="spoiler-collapse">
+            <div class="card card-body" id="info-spoiler"></div>
+        </div>
+    </div>
+
+</div>
+<div class="col-md-6">
+{% for category in categories %}
+    {% for flag in category.flags %}
+        {% include 'randomizer/_show_flag_info.html' with flag=flag %}
+    {% endfor %}
+{% endfor %}
+</div>
+</div>
+
+<script>
+    function updateSeedDetailsFromPatch(patch) {
+        let seed = $('#info-seed');
+        seed.text(patch.seed);
+
+        $('#info-version').text(patch.logic);
+
+        $("#info-permalink").attr("href", patch.permalink);
+
+        // If seed is not provided in the response, just show the hash instead (i.e. on the patch-from-hash screen).
+        if (!patch.seed && patch.hash) {
+            seed.html(patch.hash);
+        }
+
+        // Show race mode enabled/disabled.
+        let race_mode = $("#info-race-mode");
+        if (patch.race_mode) {
+            race_mode.text("Enabled").addClass("text-danger");
+        } else {
+            race_mode.text("Disabled").removeClass("text-danger");
+        }
+
+        $("#info-mode").html(patch.mode.charAt(0).toUpperCase() + patch.mode.substr(1));
+        $('#info-flags').html(patch.flag_string);
+        $('#file-select-character').html(patch.file_select_character);
+        $('#file-select-hash').html(patch.file_select_hash);
+
+        // Put spoiler info in JSON viewer.
+        // FIXME: Debug only for now...
+        {% if debug_enabled %}
+            $('#spoiler-collapse').collapse('hide');
+            $('#info-spoiler').jsonViewer(patch.spoiler);
+        {% else %}
+            $('#spoiler-container').hide();
+        {% endif %}
+
+        // Debug mode seed?
+        if (patch.debug_mode) {
+            $("#info-debug-mode").show();
+        } else {
+            $("#info-debug-mode").hide();
+        }
+
+        $("#generate-container").hide();
+        $("#seed-details").show();
+
+        // Parse flag sections.
+        let flag_sections = patch.flag_string.split(" ");
+
+        let all_applied_flags = new Map();
+        flag_sections.forEach(function(section) {
+            if (section.startsWith('-')) {
+                all_applied_flags.set(section, true);
+            } else {
+                let parent_flag = section.charAt(0);
+                if (!all_applied_flags.has(parent_flag))
+                    all_applied_flags.set(parent_flag, []);
+                for (let i = 1; i < section.length; i++) {
+                    all_applied_flags.get(parent_flag).push(section.charAt(i));
+                }
+            }
+        });
+
+        // Hide all flag descriptions to start, then show the ones that are enabled.
+        $('.inline-flag-description').hide();
+        $('.disabled-inline-flag-description').show();
+
+        for (let [parent_flag, chars] of all_applied_flags) {
+            $('.inline-flag-description.flag-' + $.escapeSelector(parent_flag)).show();
+            $('.disabled-inline-flag-description.flag-' + $.escapeSelector(parent_flag)).hide();
+            if (!parent_flag.startsWith('-')) {
+                for (let char of chars) {
+                    $('.inline-flag-description.flag-' + $.escapeSelector('@' + parent_flag)).show();
+                    $('.disabled-inline-flag-description.flag-' + $.escapeSelector('@' + parent_flag)).hide();
+                    $('.inline-flag-description.flag-' + $.escapeSelector(parent_flag + char)).show();
+                    $('.disabled-inline-flag-description.flag-' + $.escapeSelector(parent_flag + char)).hide();
+                }
+            }
+        }
+    }
+
+
+</script>

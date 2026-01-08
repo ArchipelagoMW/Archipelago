@@ -1,0 +1,1285 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 200,
+  "name": "Boyon Gate Hall",
+  "area": "Maridia",
+  "subarea": "Outer",
+  "roomAddress": "0x7CF80",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1, 1],
+    [1, 0, 0, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a378",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [2, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a384",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1],
+        [2, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a390",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 2, 2, 2],
+        [1, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Farm Junction Left of Gate",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 1, 1, 1],
+        [1, 0, 0, 0]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Green Gate",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Boyon Gate Hall Left Boyon",
+      "enemyName": "Boyon",
+      "quantity": 1,
+      "homeNodes": [4]
+    },
+    {
+      "id": "e2",
+      "groupName": "Boyon Gate Hall Right Boyons",
+      "enemyName": "Boyon",
+      "quantity": 6,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e3",
+      "groupName": "Boyon Gate Hall Left Zebbo",
+      "enemyName": "Zebbo",
+      "quantity": 1,
+      "homeNodes": [4]
+    },
+    {
+      "id": "e4",
+      "groupName": "Boyon Gate Hall Middle Zebbo",
+      "enemyName": "Zebbo",
+      "quantity": 1,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e5",
+      "groupName": "Boyon Gate Hall Right Zebbo",
+      "enemyName": "Zebbo",
+      "quantity": 1,
+      "homeNodes": [3]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {
+          "id": 4,
+          "devNote": "FIXME Add shinespark options."
+        }
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave with Runway (Both Doors Open)",
+      "requires": [
+        {"doorUnlockedAtNode": 2}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"nodeId": 2, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shineChargeFrames": 20}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 59,
+      "link": [1, 2],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 55}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 9,
+      "link": [1, 3],
+      "name": "Indirect G-Mode Morph Despawn Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canOffScreenMovement",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "The gate will not spawn in indirect G-mode and is freely passable.",
+        "It is possible to exit G-Mode while under the gate to open it without a Super.",
+        "A normalized method to do this, is to jump into the right-most pit before the gate, Samus will barely be visible behind the bottom right door.",
+        "Jump and land on the corner and face left, moonwalk to the right with no beams equipped and stop moving immediately as the 11th shot fired is heard.",
+        "To fix the camera afterwards, go to the left end of the room and fall back to the bottom of the room.",
+        "Alternatively, get into the left-most pit, jump slightly to the right, move over one tile, then jump. If the camera is not fixed, move to the right a bit more and jump again."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 3],
+      "name": "Indirect G-Mode Despawn Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "SpaceJump",
+          "canLongIBJ",
+          "canJumpIntoIBJ",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]}
+        ]},
+        "canOffScreenMovement"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "The gate will not spawn in indirect G-mode and is freely passable.",
+        "It is possible to exit G-Mode while under the gate to open it without a Super.",
+        "A normalized method to do this, is to jump into the right-most pit before the gate, Samus will barely be visible behind the bottom right door.",
+        "Jump and land on the corner and face left, moonwalk to the right with no beams equipped and stop moving immediately as the 11th shot fired is heard.",
+        "To fix the camera afterwards, go to the left end of the room and fall back to the bottom of the room.",
+        "Alternatively, get into the left-most pit, jump slightly to the right, move over one tile, then jump. If the camera is not fixed, move to the right a bit more and jump again."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "SpaceJump",
+          "canLongIBJ",
+          "canJumpIntoIBJ",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 12,
+      "link": [1, 4],
+      "name": "Tricky Dash",
+      "requires": [
+        "HiJump",
+        "canTrickyDashJump"
+      ],
+      "note": "It is possible to do in-room by opening the right door and starting close to the door transition."
+    },
+    {
+      "id": 13,
+      "link": [1, 4],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 24, "excessFrames": 6}}
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 4],
+      "name": "Shinespark, Come In Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 35},
+        {"shinespark": {"frames": 24, "excessFrames": 6}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 57,
+      "link": [1, 4],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 16, "excessFrames": 6}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 12, "excessFrames": 6}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 15,
+      "link": [1, 4],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canOffScreenMovement",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "After exiting G-mode, jump just above the vertical shaft in order to fix the camera."
+    },
+    {
+      "id": 66,
+      "link": [1, 4],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"},
+            {"position": [6, 4], "note": "Grapple Tutorial Room 2"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 4],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 17,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shineChargeFrames": 20}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 60,
+      "link": [2, 1],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 55}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Come In Shinecharged, Leave Sparking",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 10},
+        {"shinespark": {"frames": 21}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [2, 1],
+      "name": "Transition with Stored Fall Speed (more speed)",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 23,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 24,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Upper Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Lower Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 27,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 13,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 28,
+      "link": [2, 2],
+      "name": "Leave with Runway (Both Doors Open)",
+      "requires": [
+        {"doorUnlockedAtNode": 1}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 14,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [{"nodeId": 1, "types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 29,
+      "link": [2, 3],
+      "name": "Indirect G-Mode Morph Despawn Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canOffScreenMovement",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "The gate will not spawn in indirect G-mode and is freely passable.",
+        "It is possible to exit G-Mode while under the gate to open it without a Super.",
+        "A normalized method to do this, is to jump into the right-most pit before the gate, Samus will barely be visible behind the bottom right door.",
+        "Jump and land on the corner and face left, moonwalk to the right with no beams equipped and stop moving immediately as the 11th shot fired is heard.",
+        "To fix the camera afterwards, go to the left end of the room and fall back to the bottom of the room.",
+        "Alternatively, get into the left-most pit, jump slightly to the right, move over one tile, then jump. If the camera is not fixed, move to the right a bit more and jump again."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [2, 3],
+      "name": "Indirect G-Mode Despawn Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "SpaceJump",
+          "canLongIBJ",
+          "canJumpIntoIBJ",
+          {"and": [
+            "HiJump",
+            "canSpringBallJumpMidAir"
+          ]}
+        ]},
+        "canOffScreenMovement"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "The gate will not spawn in indirect G-mode and is freely passable.",
+        "It is possible to exit G-Mode while under the gate to open it without a Super.",
+        "A normalized method to do this, is to jump into the right-most pit before the gate, Samus will barely be visible behind the bottom right door.",
+        "Jump and land on the corner and face left, moonwalk to the right with no beams equipped and stop moving immediately as the 11th shot fired is heard.",
+        "To fix the camera afterwards, go to the left end of the room and fall back to the bottom of the room.",
+        "Alternatively, get into the left-most pit, jump slightly to the right, move over one tile, then jump. If the camera is not fixed, move to the right a bit more and jump again."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [2, 4],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 13,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 24, "excessFrames": 6}}
+      ]
+    },
+    {
+      "id": 32,
+      "link": [2, 4],
+      "name": "Shinespark, Come In Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 45},
+        {"shinespark": {"frames": 24, "excessFrames": 6}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 33,
+      "link": [2, 4],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canOffScreenMovement",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          "h_artificialMorphJumpIntoIBJ"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "After exiting G-mode, jump just above the vertical shaft in order to fix the camera."
+    },
+    {
+      "id": 34,
+      "link": [2, 4],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 35,
+      "link": [2, 4],
+      "name": "Grapple Teleport Inside Wall",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "note": [
+        "After teleporting, retract Grapple by pressing up.",
+        "Then if necessary, wiggle right out of the wall by turning around a few times."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 37,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 38,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Upper Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 39,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Lower Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 40,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 41,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 42,
+      "link": [3, 3],
+      "name": "Leave with Runway (Deal With Boyon)",
+      "requires": [
+        {"or": [
+          "Ice",
+          {"enemyKill": {
+            "enemies": [["Boyon"]]
+          }},
+          {"and": [
+            "canUseIFrames",
+            {"enemyDamage": {"enemy": "Boyon", "type": "contact", "hits": 1}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1
+        }
+      },
+      "note": "Use the full runway by dealing with the Boyon: kill it, freeze it, or use i-frames.",
+      "devNote": [
+        "Killing the Boyon with Bombs takes several contact hits, but it's assumed Samus can farm at the nearby Zebbos.",
+        "FIXME: Using a frozen Boyon to extend the runway is not reliable, as it can only be frozen 2 pixels higher than the ground, preventing multi-stutter shortcharges.",
+        "This could, however, be used for non-shinecharge strats."
+      ]
+    },
+    {
+      "id": 61,
+      "link": [3, 3],
+      "name": "Leave With Spark (Gate Open)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 1}},
+        "canShinechargeMovementTricky",
+        {"shineChargeFrames": 175},
+        {"shinespark": {"frames": 22, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "note": ["Gain a shinecharge running right to left through the open gate."]
+    },
+    {
+      "id": 43,
+      "link": [3, 3],
+      "name": "Leave Spinning (Space Jump, Gate Open)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 15,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 44,
+      "link": [3, 3],
+      "name": "Leave With Mockball (Space Jump, Gate Open)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "SpaceJump",
+        "canTrickyJump"
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 15,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 8,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 45,
+      "link": [3, 3],
+      "name": "Leave With Controlled Spring Ball Bounce (Gate Open)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canTrickySpringBallBounce"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 15,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 8,
+            "openEnd": 1
+          },
+          "maxExtraRunSpeed": "$1.8",
+          "blue": "yes",
+          "movementType": "controlled"
+        }
+      }
+    },
+    {
+      "id": 46,
+      "link": [3, 3],
+      "name": "Leave With Spring Ball Bounce (Space Jump, Gate Open)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 15,
+            "openEnd": 2
+          },
+          "landingRunway": {
+            "length": 8,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 47,
+      "link": [3, 3],
+      "name": "Leave Space Jumping (Gate Open)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        "canPreciseSpaceJump"
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 15,
+            "openEnd": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 48,
+      "link": [3, 3],
+      "name": "Leave With Temporary Blue",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"getBlueSpeed": {"usedTiles": 15, "openEnd": 2}},
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      }
+    },
+    {
+      "id": 49,
+      "link": [3, 3],
+      "name": "Zebbo Farm",
+      "requires": [
+        {"simpleCycleFrames": 120},
+        {"cycleFrames": 30}
+      ],
+      "farmCycleDrops": [{"enemy": "Zebbo", "count": 1}]
+    },
+    {
+      "id": 67,
+      "link": [3, 3],
+      "name": "Double Zebbo Farm",
+      "requires": [
+        {"cycleFrames": 185},
+        "canDodgeWhileShooting",
+        "canTrickyJump",
+        {"or": [
+          "Wave",
+          "Spazer",
+          "Plasma",
+          "Grapple",
+          {"and": [
+            "canTrickyDodgeEnemies",
+            {"cycleFrames": 15}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Zebbo", "count": 2}]
+    },
+    {
+      "id": 50,
+      "link": [3, 3],
+      "name": "G-Mode Setup - Get Hit By Zebbo",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true,
+      "note": ["It is easier to use the middle Zebbo farm than the right one."]
+    },
+    {
+      "id": 51,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"ammo": {"type": "Super", "count": 1}},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 52,
+      "link": [3, 4],
+      "name": "Indirect G-Mode Despawn Gate, Open Gate",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "indirect",
+          "morphed": false
+        }
+      },
+      "requires": [],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "The gate will not spawn in indirect G-mode and is freely passable.",
+        "Exit G-Mode while under the gate to open it without a Super."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [3, 4],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": []
+    },
+    {
+      "id": 54,
+      "link": [3, 4],
+      "name": "Grapple Teleport Inside Wall",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "note": [
+        "After teleporting, retract Grapple by pressing up.",
+        "Then if necessary, wiggle right out of the wall by turning around a few times."
+      ]
+    },
+    {
+      "id": 55,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 62,
+      "link": [4, 1],
+      "name": "Leave With Spark (Gate Open)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 1}},
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shinespark": {"frames": 8, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Gain a shinecharge running left to right through the open gate.",
+        "Then turn back and quickly jump directly into the hidden passage to the bottom of the room, to spark out."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [4, 1],
+      "name": "Leave With Temporary Blue (Gate Open)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"getBlueSpeed": {"usedTiles": 15, "openEnd": 1}},
+        "canLongChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 64,
+      "link": [4, 2],
+      "name": "Leave With Spark (Gate Open)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 15, "openEnd": 1}},
+        "canShinechargeMovementTricky",
+        "canInsaneJump",
+        {"shinespark": {"frames": 17, "excessFrames": 0}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Gain a shinecharge running left to right through the open gate.",
+        "Then turn back and quickly jump directly into the hidden passage to the bottom of the room, to spark out."
+      ]
+    },
+    {
+      "id": 65,
+      "link": [4, 2],
+      "name": "Leave With Temporary Blue (Gate Open)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"getBlueSpeed": {"usedTiles": 15, "openEnd": 1}},
+        "canLongChainTemporaryBlue",
+        "canXRayTurnaround"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 58,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 56,
+      "link": [4, 4],
+      "name": "Zebbo Farm",
+      "requires": [
+        {"simpleCycleFrames": 120},
+        {"cycleFrames": 30}
+      ],
+      "farmCycleDrops": [{"enemy": "Zebbo", "count": 1}]
+    }
+  ],
+  "notables": [],
+  "nextStratId": 68,
+  "nextNotableId": 1
+}

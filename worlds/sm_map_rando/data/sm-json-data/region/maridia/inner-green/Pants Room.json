@@ -1,0 +1,889 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 220,
+  "name": "Pants Room",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Green",
+  "roomAddress": "0x7D646",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1],
+    [1, 1],
+    [1, 1],
+    [1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "West Leg Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a780",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 1],
+        [1, 1],
+        [1, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "East Leg Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a798",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "twinDoorAddresses": [{"roomAddress": "0x7D69A", "doorAddress": "0x001a7bc"}],
+      "mapTileMask": [
+        [1, 2],
+        [1, 2],
+        [1, 2],
+        [1, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "West Leg Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a78c",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 1],
+        [1, 1],
+        [1, 1],
+        [2, 1]
+      ],
+      "note": "The center door that is accessible from the grapple block side"
+    },
+    {
+      "id": 4,
+      "name": "West Leg Sand",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1],
+        [1, 1],
+        [1, 1],
+        [2, 1]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Junction Above Grapple Block",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [2, 1],
+        [2, 1],
+        [2, 1],
+        [1, 1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Pants Room Menus",
+      "enemyName": "Menu",
+      "quantity": 6,
+      "betweenNodes": [2, 5]
+    },
+    {
+      "id": "e2",
+      "groupName": "Pants Room Top Right Puyo",
+      "enemyName": "Puyo",
+      "quantity": 1,
+      "betweenNodes": [2, 5]
+    },
+    {
+      "id": "e3",
+      "groupName": "Pants Room Bottom Right Puyo",
+      "enemyName": "Puyo",
+      "quantity": 1,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {
+          "id": 2,
+          "note": "This link is only for the X-Ray climb, which skips the junction altogether."
+        },
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {
+          "id": 2,
+          "note": "This link is only for the X-Ray climb, which skips the junction altogether."
+        },
+        {"id": 3},
+        {"id": 4}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {
+          "id": 2,
+          "note": "This link is for strats that go directly to the top of the room. Other strats should go 5 -> 7 -> 2."
+        },
+        {"id": 3},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {
+          "id": 1,
+          "devNote": "This link assumes the grapple block has been broken from below."
+        },
+        {"id": 2},
+        {
+          "id": 4,
+          "devNote": "This link assumes the grapple block has been broken from below."
+        },
+        {"id": 5}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 39,
+      "link": [1, 1],
+      "name": "Leave With Grapple Swing",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleSwing": {
+          "blocks": [
+            {"position": [7, 3], "environment": "water", "note": "Crumbling Grapple block"}
+          ]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canLongXRayClimb",
+        "canBePatient",
+        "canOffScreenMovement",
+        {"or": [
+          "canTrickyJump",
+          "canWalljump",
+          "SpaceJump"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "This climb is from the left side of the left room, the room with the breakable grapple block.",
+        "Climb up 3 screens.",
+        "The camera will not move up to Samus while on the left wall.",
+        "Carefully jump over the pit without falling in.",
+        "It helps to step down and use the two-tile long runway."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 2],
+      "name": "Shinespark (From the Left)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 150},
+        {"notable": "Shinespark"},
+        "h_navigateUnderwater",
+        "canShinechargeMovementComplex",
+        "Grapple",
+        {"shinespark": {"frames": 65}},
+        {"or": [
+          {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}},
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Preselect Grapple and be ready to use it when entering the room. Release up or angle up before releasing grapple so the shinespark does not activate instantly.",
+        "Use the windup frames for a shinespark to extend the duration timer."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Diagonal Shinespark (From the Left)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        {"notable": "Shinespark"},
+        "h_navigateUnderwater",
+        "canShinechargeMovementTricky",
+        "canPlayInSand",
+        "Grapple",
+        {"shinespark": {"frames": 63}}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Preselect Grapple and be ready to use it when entering the room. Release up or angle up before releasing grapple so the shinespark does not activate instantly.",
+        "Fall into the sand below the Grapple block with Gravity disabled.",
+        "Sink into the sand slightly before shinesparking diagonally.",
+        "Use the windup frames for a shinespark to extend the duration timer."
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        "h_navigateUnderwater"
+      ],
+      "note": "Jump from door platform to door platform while avoiding the sand."
+    },
+    {
+      "id": 7,
+      "link": [1, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 8,
+      "link": [1, 5],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "This climb is from the left side of the left room, the room with the breakable grapple block.",
+        "Climb up 3 screens.",
+        "Then drop down to fix the camera."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 10,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Puyo",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Puyo", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "devNote": [
+        "This is not possible in vanilla, because there is no way to enter through this door.",
+        "FIXME: There is a strat from here to 5 with IBJ (Spring Ball + HiJump or ceiling bomb jump)."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        "h_navigateUnderwater"
+      ],
+      "note": "Jump from door platform to door platform while avoiding the sand."
+    },
+    {
+      "id": 14,
+      "link": [3, 2],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canLongXRayClimb",
+        "canBePatient"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "This climb is right side of the left room - the room with the breakable grapple block.",
+        "Climb up 3 screens."
+      ]
+    },
+    {
+      "id": 15,
+      "link": [3, 2],
+      "name": "Shinespark (From the Right)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 150},
+        {"notable": "Shinespark"},
+        "h_navigateUnderwater",
+        "canShinechargeMovementComplex",
+        "Grapple",
+        {"shinespark": {"frames": 65}},
+        {"or": [
+          {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}},
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Preselect Grapple and be ready to use it when entering the room. Release up or angle up before releasing grapple so the shinespark does not activate instantly.",
+        "Use the windup frames for a shinespark to extend the duration timer."
+      ]
+    },
+    {
+      "id": 16,
+      "link": [3, 3],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 17,
+      "link": [3, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 18,
+      "link": [4, 1],
+      "name": "Base",
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "canPlayInSand",
+          {"and": [
+            "HiJump",
+            "h_useSpringBall"
+          ]},
+          {"and": [
+            "Gravity",
+            {"or": [
+              "HiJump",
+              "h_useSpringBall",
+              "SpaceJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "devNote": "It is easy enough to get out of the sand without tech, because the strats only require briefly entering it, but it is there as turning around at the wrong time will make Samus sink."
+    },
+    {
+      "id": 19,
+      "link": [4, 2],
+      "name": "Grapple Jump (To The Top)",
+      "requires": [
+        {"notable": "Grapple Jump"},
+        "canSuitlessMaridia",
+        "canTrickyGrappleJump",
+        "canMidairWiggle",
+        {"or": [
+          {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}},
+          "SpaceJump",
+          {"and": [
+            "canConsecutiveWalljump",
+            {"or": [
+              "ScrewAttack",
+              "canTrickyWalljump"
+            ]}
+          ]},
+          "h_pauseAbuseMinimalReserveRefill",
+          "canTrickyDodgeEnemies"
+        ]}
+      ],
+      "note": [
+        "Use the grapple block to initiate a Grapple Jump to climb up to the higher level and above the water line.",
+        "Aiming the Grapple Jump to line up with the one tile hole is difficult and Samus is moving at high speeds.",
+        "Escaping the water is also difficult as Samus must be standing at the water line when jumping for the next part of the grapple jump.",
+        "It may be easier to jump out of the water by turning HiJump off.",
+        "A Grapple Jump can be a spin jump by running briefly before jumping and that can be used to begin Walljumping or Space Jumping."
+      ]
+    },
+    {
+      "id": 36,
+      "link": [4, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        "Grapple",
+        {"useFlashSuit": {}},
+        "canDodgeWhileShooting",
+        {"or": [
+          {"shinespark": {"frames": 53, "excessFrames": 5}},
+          {"and": [
+            "HiJump",
+            "canFlatleyJump",
+            {"shinespark": {"frames": 50, "excessFrames": 5}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Shinespark up right in order to avoid the Menus. Samus can save some Energy with HiJump and a flatley jump from the left platform."
+    },
+    {
+      "id": 20,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        "h_navigateUnderwater",
+        {"or": [
+          "canPlayInSand",
+          {"and": [
+            "HiJump",
+            "h_useSpringBall"
+          ]},
+          {"and": [
+            "Gravity",
+            {"or": [
+              "HiJump",
+              "h_useSpringBall",
+              "SpaceJump"
+            ]}
+          ]}
+        ]}
+      ],
+      "devNote": "It is easy enough to get out of the sand without tech, because the strats only require briefly entering it, but it is there as turning around at the wrong time will make Samus sink."
+    },
+    {
+      "id": 21,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        "Grapple",
+        "SpaceJump"
+      ]
+    },
+    {
+      "id": 22,
+      "link": [4, 5],
+      "name": "Gravity with HiJump",
+      "requires": [
+        "Gravity",
+        "Grapple",
+        "HiJump",
+        "canCarefulJump",
+        "canPlayInSand"
+      ],
+      "note": [
+        "Break the grapple block, then jump on the sand to get through the hole.",
+        "Break spin before touching the sand, and then spinjump to get a good jump off of the sand.",
+        "Breaking spin after jumping from the sand will remove horizontal momentum, or a stationary spinjump can help."
+      ]
+    },
+    {
+      "id": 23,
+      "link": [4, 5],
+      "name": "Gravity MidAir SpringBall Jump",
+      "requires": [
+        "Gravity",
+        "Grapple",
+        "canTrickySpringBallJump",
+        "canTrickyJump",
+        "canPlayInSand"
+      ],
+      "note": "Break spin before touching the sand, and then spinjump to get a good jump off of the sand."
+    },
+    {
+      "id": 24,
+      "link": [4, 5],
+      "name": "SandJump into IBJ",
+      "requires": [
+        "Gravity",
+        "Grapple",
+        "canPlayInSand",
+        "canJumpIntoIBJ",
+        "canTrickyJump",
+        "can4HighMidAirMorph",
+        "canStationarySpinJump"
+      ],
+      "note": "Break spin before touching the sand, and then spinjump to get a good jump off of the sand."
+    },
+    {
+      "id": 25,
+      "link": [4, 5],
+      "name": "SpringBall IBJ",
+      "requires": [
+        "Gravity",
+        "Grapple",
+        "h_useSpringBall",
+        "canJumpIntoIBJ"
+      ],
+      "note": "Springball can keep Samus out of the sand.  Place the first bomb right after Samus begins falling back towards the sand."
+    },
+    {
+      "id": 26,
+      "link": [4, 5],
+      "name": "Gravity Jump",
+      "requires": [
+        {"notable": "Gravity Jump"},
+        "Grapple",
+        "canGravityJump",
+        "canPlayInSand",
+        "canStationarySpinJump",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Gets above the grapple block by doing a well-positioned and well-timed Gravity jump following a good jump off the sand.",
+        "It is also possible to do this off of a wall jump on the side immediately followed by a gravity jump.",
+        "Break spin before touching the sand, and then spinjump to get a good jump off of the sand.",
+        "Breaking spin after jumping from the sand will remove horizontal momentum, or a stationary spinjump can help."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [4, 5],
+      "name": "Suitless MidAir SpringBall Jump with HiJump",
+      "requires": [
+        "Grapple",
+        "canSuitlessMaridia",
+        "HiJump",
+        "canSpringBallJumpMidAir",
+        "canPlayInSand",
+        "canTrickyJump"
+      ],
+      "note": [
+        "Requires a mid-air SpringBall jump off the sand.",
+        "Break spin before touching the sand, and then spinjump to get a good jump off of the sand.",
+        "A stationary spinjump or a turnaround spin jump can help but morphing will remove all horizontal momentum."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [4, 5],
+      "name": "Suitless Flatley Turnaround Climb",
+      "requires": [
+        {"notable": "Suitless Flatley Turnaround Climb"},
+        "Grapple",
+        "canSuitlessMaridia",
+        "HiJump",
+        "canFlatleyJump",
+        "canSunkenTileWideWallClimb"
+      ],
+      "note": [
+        "Use a flatley turnaround jump to get Samus inside the gap during a spinjump.",
+        "Samus must jump from the left side platform."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [4, 5],
+      "name": "Grapple Jump (Above Grapple Block)",
+      "requires": [
+        {"notable": "Grapple Jump"},
+        "canSuitlessMaridia",
+        "canTrickyGrappleJump",
+        "canMidairWiggle"
+      ],
+      "note": [
+        "Use the grapple block to initiate a Grapple Jump to climb up to the higher level.",
+        "Aiming the Grapple Jump to line up with the one tile hole is difficult and Samus is moving at high speeds."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [5, 1],
+      "name": "Avoid Sand",
+      "requires": [
+        "canSuitlessMaridia",
+        "canTrickyJump",
+        {"or": [
+          {"and": [
+            "canFlatleyJump",
+            {"or": [
+              "canInsaneJump",
+              "canDownBack"
+            ]}
+          ]},
+          "canWalljump",
+          "canResetFallSpeed"
+        ]}
+      ],
+      "note": [
+        "Using movement tricks to reduce fall speed even slightly can avoid touching the sand.",
+        "A Flatley style turnaround over the grapple block hole reduces fall speed some, but also needs a down back or a tiny jump."
+      ],
+      "devNote": "The or following canFlatleyJump has no logical relevance but indicates there are two distinct ways of using the flatley jump."
+    },
+    {
+      "id": 31,
+      "link": [5, 2],
+      "name": "Space Jump",
+      "requires": [
+        "Gravity",
+        "SpaceJump",
+        {"or": [
+          "ScrewAttack",
+          "canPseudoScrew",
+          {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}},
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ],
+      "note": "The swarm of Menus will attack Samus at the top of the room. Tank them or kill them with Screw or Pseudo Screw.",
+      "devNote": "FIXME: 5->2 strats could be added, including x-ray climb and g-mode."
+    },
+    {
+      "id": 32,
+      "link": [5, 2],
+      "name": "Wall Jump",
+      "requires": [
+        "Gravity",
+        "canConsecutiveWalljump",
+        {"or": [
+          "ScrewAttack",
+          "canTrickyWalljump",
+          "canWalljumpWithCharge",
+          {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}}
+        ]}
+      ],
+      "note": "The swarm of Menus will attack Samus at the top of the room. Tank them, carefully dodge them, or kill them with Screw or Pseudo Screw.",
+      "devNote": "The Menus prevent a reliable IBJ."
+    },
+    {
+      "id": 33,
+      "link": [5, 2],
+      "name": "Suitless",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canSpaceJumpWaterBounce",
+            "canWalljump"
+          ]},
+          "canSpaceJumpWaterEscape"
+        ]},
+        "HiJump",
+        {"or": [
+          {"enemyDamage": {"enemy": "Menu", "type": "contact", "hits": 1}},
+          "ScrewAttack",
+          "canTrickyWalljump",
+          "canPseudoScrew",
+          "h_pauseAbuseMinimalReserveRefill"
+        ]}
+      ],
+      "note": [
+        "Watch for the water level to start falling to time the jump to escape at its lowest point.",
+        "Then use SpaceJump to splash on top of the water.",
+        "Time another jump with the water level or walljump to fully escape the water."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [5, 2],
+      "name": "Bomb Jump Water Escape",
+      "requires": [
+        {"notable": "Bomb Jump Water Escape"},
+        "HiJump",
+        "h_maxHeightSpringBallJump",
+        "canSpringFling",
+        "canBombJumpWaterEscape",
+        "canJumpIntoIBJ",
+        "canLongIBJ",
+        "canDoubleBombJump"
+      ],
+      "note": [
+        "Wait the water tide to reach its peak, then crouch jump into a spring ball jump into an IBJ.",
+        "Perform the spring ball jump near max height.",
+        "Place the first bomb between about 4 and 6 frames after the spring ball jump; ideally it should be just above the water line.",
+        "Press pause between about 5 and 10 frames after placing the bomb, to disable Spring Ball (a 'spring fling', to reset fall speed).",
+        "Place the second bomb soon after regaining control, while the game is fading back in.",
+        "When close to the top, perform a spring ball jump to reach the ledge;",
+        "release jump as soon as Samus is high enough to clear the ledge, in order to avoid taking a Menu hit."
+      ],
+      "devNote": [
+        "This trick can technically be done without a 'spring fling' but is extremely precise."
+      ]
+    },
+    {
+      "id": 37,
+      "link": [5, 2],
+      "name": "Underwater Walljump Break Free",
+      "requires": [
+        "canUnderwaterWalljumpBreakFree"
+      ]
+    },
+    {
+      "id": 38,
+      "link": [5, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        "Grapple",
+        {"useFlashSuit": {}},
+        "canDodgeWhileShooting",
+        {"or": [
+          {"shinespark": {"frames": 46, "excessFrames": 5}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 42, "excessFrames": 4}}
+          ]},
+          {"and": [
+            "canGravityJump",
+            {"shinespark": {"frames": 35, "excessFrames": 4}}
+          ]},
+          {"and": [
+            "canGravityJump",
+            "HiJump",
+            {"shinespark": {"frames": 31, "excessFrames": 4}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Shinespark up right in order to avoid the Menus."
+    },
+    {
+      "id": 35,
+      "link": [5, 4],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 40,
+      "link": [5, 5],
+      "name": "Menu Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1, 3]}},
+        "Grapple",
+        "Gravity",
+        "SpaceJump",
+        "ScrewAttack",
+        "canConsecutiveWalljump",
+        {"cycleFrames": 1120}
+      ],
+      "farmCycleDrops": [{"enemy": "Menu", "count": 6}],
+      "devNote": ["FIXME: Many other options are possible for movement and weapons."]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Grapple Jump",
+      "note": [
+        "Use the grapple block to initiate a Grapple Jump to climb up to the higher level and above the water line.",
+        "Aiming the Grapple Jump to line up with the one tile hole is difficult and Samus is moving at high speeds.",
+        "Escaping the water without Gravity is also difficult as Samus must be standing at the water line when jumping for the next part of the grapple jump.",
+        "A Grapple Jump can be a spin jump by running briefly before jumping and that can be used to begin Walljumping or Space Jumping."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Shinespark",
+      "note": [
+        "Preselect Grapple and be ready to use it when entering the room. Release up or angle up before release grapple so the shinespark does not activate instantly.",
+        "Use the windup frames for a shinespark to extend the duration timer."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Gravity Jump",
+      "note": [
+        "Gets above the grapple block by doing a well-positioned and well-timed Gravity jump following a good jump off the sand.",
+        "It is also possible to do this off of a wall jump on the side immediately followed by a gravity jump.",
+        "Break spin before touching the sand, and then spinjump to get a good jump off of the sand.",
+        "Breaking spin after jumping from the sand will remove horizontal momentum, or a stationary spinjump can help."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Suitless Flatley Turnaround Climb",
+      "note": [
+        "Use a flatley turnaround jump to get Samus inside the gap during a spinjump.",
+        "Samus must jump from the left side platform."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Bomb Jump Water Escape",
+      "note": [
+        "Wait the water tide to reach its peak, then crouch jump into a spring ball jump into an IBJ.",
+        "Perform the spring ball jump near max height.",
+        "Place the first bomb between about 4 and 6 frames after the spring ball jump; ideally it should be just above the water line.",
+        "Press pause between about 5 and 10 frames after placing the bomb, to disable Spring Ball (a 'spring fling', to reset fall speed).",
+        "Place the second bomb soon after regaining control, while the game is fading back in.",
+        "When close to the top, perform a spring ball jump to reach the ledge;",
+        "release jump as soon as Samus is high enough to clear the ledge, in order to avoid taking a Menu hit."
+      ]
+    }
+  ],
+  "nextStratId": 41,
+  "nextNotableId": 6
+}

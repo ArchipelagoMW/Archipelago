@@ -1,0 +1,147 @@
+
+04//applyExtraTileSubstitutions: |
+  push bc
+  push de
+  call getThisRoomFlags
+  ld e,a
+  ld hl,tileSubTable
+  ld a,(wActiveGroup)
+  ld b,a
+  ld a,(wActiveRoom)
+  ld c,a
+  @loop:
+  ldi a,(hl)
+  cp $ff
+  jr z,@done
+  cp b
+  jr nz,@groupMismatch
+  ldi a,(hl)
+  cp c
+  jr nz,@roomMismatch
+  ldi a,(hl)
+  and e
+  jr nz,@flagMismatch
+  push de
+  ld d,$cf
+  ldi a,(hl)
+  ld e,a
+  ldi a,(hl)
+  ld (de),a
+  pop de
+  jr @loop
+  @groupMismatch:
+  inc hl
+  @roomMismatch:
+  inc hl
+  @flagMismatch:
+  inc hl
+  inc hl
+  jr @loop
+  @done:
+  pop de
+  pop bc
+  call applyAllTileSubstitutions
+  ret
+
+00/38c0/: call applyExtraTileSubstitutions
+
+# data for applyAllTileSubstitutions: group,room,flags,yx,tile
+04//tileSubTable: |
+    db 00,20,00,61,d7 # portal in talus peaks
+    db 01,48,00,45,d7 # portal south of past maku tree
+    db 00,37,02,43,d7 # portal in southeast ricky/moosh nuun
+    ; db 00,39,00,63,f0 # open chest on intro screen
+    ; db 00,39,20,63,f1 # closed chest on intro screen
+    db 00,6b,00,42,3a # removed tree in yoll graveyard
+    db 00,6b,02,42,ce # not removed tree in yoll graveyard
+    db 00,83,00,43,a4 # rock outside D2
+    db 03,0f,00,66,f9 # water in d6 past entrance
+    db 01,13,00,61,d7 # portal in symmetry city past
+    db 01,13,00,68,d7 # portal in symmetry city past
+    db 00,25,00,37,d7 # portal in nuun highlands
+    db 05,da,01,a4,b2 # tunnel to moblin keep
+    db 05,da,01,a5,b2 # cont.
+    db 05,da,01,a6,b2 # cont.
+    db 00,24,02,49,63 # other side of symmetry city bridge
+    db 00,24,02,59,63 # cont.
+    db 00,24,02,69,63 # cont.
+    db 00,24,02,79,73 # cont.
+    db 01,2c,00,70,69 # ledge in rolling ridge east past
+    db 01,2c,00,71,06 # cont.
+    db 01,2c,00,72,67 # cont.
+    db 00,a9,00,67,f2 # portal sign on crescent island
+    db 01,a5,00,35,48 # ledge by library past
+    db 01,a5,00,45,0b # cont.
+    db 01,a5,00,55,6c # cont.
+    db 00,83,00,44,d7 # portal outside D2 present
+    db 01,48,02,31,cd # past maku road: remove dirt when exiting
+    db ff
+
+# burning the first tree in yoll graveyard should set room flag 1 so that it
+# can be gone for good (see tileSubTable).
+06//removeYollTreeWhenBurned: |
+    push af
+    ld a,($ff00+8f)
+    cp $0c
+    jr nz,@done
+    push bc
+    ld bc,$6b00
+    call compareRoom
+    jr nz,@next
+    ld hl,$c76b
+    set 1,(hl)
+    @next:
+    pop bc
+    @done:
+    pop af
+    ld hl,wTotalSignsDestroyed
+    ret
+06/47aa/: call removeYollTreeWhenBurned
+
+# set room flag for tunnel behind keep when defeating great moblin (see
+# tileSubTable).
+0f//openMoblinKeepTunnel: |
+    ld hl,$c709
+    set 0,(hl)
+    ld hl,$cada
+    ret
+0f/7f3e/: call openMoblinKeepTunnel
+
+# set room flag for other side of symmetry city bridge at end of building
+# cutscene (see tileSubTable).
+15//setBridgeFlag: |
+    push hl
+    xor a
+    ld (wDisabledObjects),a
+    ld a,$25
+    call setGlobalFlag
+    ld hl,$c724
+    set 1,(hl)
+    pop hl
+    ret
+0c/7a6f/: |
+  db asm15
+  dw setBridgeFlag
+
+# put a "return bush" for long hook across from syrup's shop.
+23/7ea0/: db 27,c8
+23/7ead/: db 22
+
+# change bush type in moosh nuun (for static peg seed drop)
+26/4501/: db c8
+
+# change maku path hidden stairs tile to visible stair tile.
+# remove the object responsible for spawning the stairs.
+26/7042/: db 45
+12/6572/: |
+    db f8,09,00,14
+    db f3,68,40
+    db ff
+
+# give "goron's hiding place" bombable wall a different tile, like other
+# bombable walls have.
+28/6ac0/: db 31
+
+# Maku Path: Prevent Softlock when exiting cave (see tileSubTable)
+25/5c9a/: db 3a
+26/4a9e/: db 3a

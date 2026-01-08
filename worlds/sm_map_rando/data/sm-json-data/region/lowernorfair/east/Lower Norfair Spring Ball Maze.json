@@ -1,0 +1,1938 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 146,
+  "name": "Lower Norfair Spring Ball Maze",
+  "area": "Norfair",
+  "subarea": "Lower",
+  "subsubarea": "East",
+  "roomAddress": "0x7B510",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1, 1, 1],
+    [1, 1, 0, 0, 0]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00199ae",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1, 1, 1, 1],
+        [1, 1, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Vertical Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00199c6",
+      "doorOrientation": "down",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 2],
+        [1, 1, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Horizontal Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00199ba",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 1, 1, 1],
+        [1, 2, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Item",
+      "nodeType": "item",
+      "nodeSubType": "visible",
+      "nodeItem": "Missile",
+      "nodeAddress": "0x78FCA",
+      "mapTileMask": [
+        [1, 1, 2, 1, 1],
+        [1, 1, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Spring Ball Maze Junction (Past the Bomb Blocks)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 2, 1],
+        [1, 1, 0, 0, 0]
+      ],
+      "note": "This junction is just after the bomb blocks inside the Morph maze."
+    },
+    {
+      "id": 6,
+      "name": "Junction By Left Door (Right of Pit)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 1, 1, 1],
+        [1, 1, 0, 0, 0]
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Junction By Lower Alcoons (Left of Spike Pits)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1, 1, 1],
+        [2, 1, 0, 0, 0]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Hotarubi Runway Alcoon",
+      "obstacleType": "enemies"
+    },
+    {
+      "id": "B",
+      "name": "Hotarubi Bomb Blocks",
+      "obstacleType": "inanimate"
+    },
+    {
+      "id": "C",
+      "name": "Bottom Right Door Opened",
+      "obstacleType": "inanimate"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Lower Norfair Spring Ball Maze Room Spike Pit Alcoons",
+      "enemyName": "Alcoon",
+      "quantity": 2,
+      "betweenNodes": [3, 7]
+    },
+    {
+      "id": "e2",
+      "groupName": "Lower Norfair Spring Ball Maze Room Bottom Left Alcoon",
+      "enemyName": "Alcoon",
+      "quantity": 1,
+      "homeNodes": [7]
+    },
+    {
+      "id": "e3",
+      "groupName": "Lower Norfair Spring Ball Maze Room Top Alcoon",
+      "enemyName": "Alcoon",
+      "quantity": 1,
+      "betweenNodes": [4, 6]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 2},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5},
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 2},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 6,
+      "to": [
+        {"id": 1},
+        {"id": 4},
+        {
+          "id": 5,
+          "devNote": "This one-way link represents only the Maze Air Speedball. Anything else should go 6-> 4-> 5."
+        },
+        {"id": 6},
+        {"id": 7}
+      ]
+    },
+    {
+      "from": 7,
+      "to": [
+        {"id": 1},
+        {"id": 3},
+        {"id": 6},
+        {"id": 7}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 6,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 88,
+      "link": [1, 1],
+      "name": "Single Alcoon Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 245},
+            {"or": [
+              "Wave",
+              "Charge"
+            ]}
+          ]},
+          {"and": [
+            {"or": [
+              "Wave",
+              "ScrewAttack",
+              "Spazer",
+              "canPseudoScrew"
+            ]},
+            {"cycleFrames": 285}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 420}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "resetsObstacles": ["B", "C"],
+      "farmCycleDrops": [{"enemy": "Alcoon", "count": 1}]
+    },
+    {
+      "id": 89,
+      "link": [1, 1],
+      "name": "Partial Alcoon Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"heatFrames": 245},
+            {"or": [
+              "Wave",
+              "Charge"
+            ]}
+          ]},
+          {"and": [
+            {"or": [
+              "Wave",
+              "ScrewAttack",
+              "Spazer",
+              "canPseudoScrew"
+            ]},
+            {"heatFrames": 285}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"heatFrames": 420}
+          ]}
+        ]},
+        {"resourceAvailable": [{"type": "Energy", "count": 50}]},
+        {"partialRefill": {"type": "PowerBomb", "limit": 1}}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 75,
+      "link": [1, 1],
+      "name": "G-Mode, Remote Acquire Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canComplexGMode",
+        "h_heatedDirectGModeLeaveSameDoor"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": [
+        "Wait at least 35 seconds for the Alcoon to jump back down before returning to the door, or kill it with a Power Bomb or SBA.",
+        "Stand close to the transition and use X-Ray then hold left to leave the room before the door closes."
+      ]
+    },
+    {
+      "id": 76,
+      "link": [1, 2],
+      "name": "G-Mode, Blind Maze Traversal",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canOffScreenMovement",
+        "h_bombThings",
+        "h_heatedGModeOffCameraDoor",
+        {"heatFrames": 200}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Overload PLMs using the camera scroll blocks just right of the downard passageway by the left door.",
+        "Blindly traverse the maze until the end, where Samus will be stuck at the far right next to the shot block.",
+        "Exit G-mode just one tile to the left, Morph, use a Bomb or Power Bomb to destroy the shot block and escape through the door."
+      ]
+    },
+    {
+      "id": 77,
+      "link": [1, 2],
+      "name": "G-Mode, Blind Maze Traversal, Remote Acquire the Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canOffScreenMovement",
+        "h_bombThings",
+        "h_heatedGModeOffCameraDoor",
+        {"heatFrames": 200}
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": [
+        "Be careful not to overload PLMs with the camera scroll blocks just right of the downard passageway by the left door; use the item to finish overloading PLMs.",
+        "Blindly traverse the maze until the end, where Samus will be stuck at the far right next to the shot block.",
+        "Exit G-mode just one tile to the left, Morph, use a Bomb or Power Bomb to destroy the shot block and escape through the door."
+      ]
+    },
+    {
+      "id": 78,
+      "link": [1, 3],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 79,
+      "link": [1, 4],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 72,
+      "link": [1, 5],
+      "name": "Come In Blue Spinning, Space Jump Through Morph Tunnel",
+      "entranceCondition": {
+        "comeInBlueSpinning": {
+          "minExtraRunSpeed": "$6.E",
+          "unusableTiles": 0
+        }
+      },
+      "requires": [
+        {"notable": "Air Speedball"},
+        "canPreciseSpaceJump",
+        "canInsaneJump",
+        "canLateralMidAirMorph",
+        "canSpeedball",
+        "canMomentumConservingMorph",
+        {"heatFrames": 110}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Spacejump through the room and break the bomb blocks in the Morph tunnel with Speedbooster.",
+        "It is very helpful for the final jump to be close to the missile platform, to be as close to the tunnel as possible when Morphing."
+      ],
+      "devNote": [
+        "This is possible with less extra speed but where you jump changes with your speed and room entry."
+      ]
+    },
+    {
+      "id": 73,
+      "link": [1, 5],
+      "name": "Come In Getting Blue Speed, Space Jump Through Morph Tunnel",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 5,
+          "openEnd": 1,
+          "minExtraRunSpeed": "$5.B"
+        }
+      },
+      "requires": [
+        {"notable": "Air Speedball"},
+        "canPreciseSpaceJump",
+        "canInsaneJump",
+        "canLateralMidAirMorph",
+        "canSpeedball",
+        "canMomentumConservingMorph",
+        {"heatFrames": 110}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Spacejump through the room and break the bomb blocks in the Morph tunnel with Speedbooster.",
+        "It is very helpful for the final jump to be close to the missile platform, to be as close to the tunnel as possible when Morphing."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 6],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 60}
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 6],
+      "name": "Running Entry",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 3
+        }
+      },
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 45}
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 7],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 160}
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 7],
+      "name": "Weave",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"or": [
+          "canDownBack",
+          "canCarefulJump"
+        ]},
+        {"heatFrames": 120}
+      ]
+    },
+    {
+      "id": 8,
+      "link": [2, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shinespark": {"frames": 5, "excessFrames": 5}},
+        {"heatFrames": 120}
+      ],
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 9,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [2, 5],
+      "name": "Crystal Flash Clip",
+      "requires": [
+        {"notable": "Crystal Flash Clip"},
+        {"heatFrames": 100},
+        "h_heatedCrystalFlash",
+        "canCeilingClip",
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall"
+        ]},
+        {"heatFrames": 175}
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true,
+      "note": "Perform the crystal flash all the way against the left wall of the accessible tunnel, then jump through the ceiling.",
+      "devNote": [
+        "After the CF, a midair morph can be avoided with a single bomb, but midair morph is expected for this level.",
+        "The heat frames are based on reaching the entrance of the last morph tunnel.",
+        "FIXME: in the room diagram, draw node 5 using a smaller box to more precisely indicate this location."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [3, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[5, 3], [7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 50}
+      ]
+    },
+    {
+      "id": 12,
+      "link": [3, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12], [3, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 13,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 14,
+      "link": [3, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[3, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 80,
+      "link": [3, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "SpaceJump",
+          "canUseFrozenEnemies",
+          {"and": [
+            "canTrickyDashJump",
+            "canTrickyDodgeEnemies"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to climb up with a tricky dash jump and no wall jump.",
+        "Either kill the Alcoon before it spawns any stationary, invisible fireballs, or let the right alcoons shoot enough to overload projectiles."
+      ]
+    },
+    {
+      "id": 81,
+      "link": [3, 1],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "h_artificialMorphSpringBallBombJump"
+          ]},
+          {"and": [
+            "h_artificialMorphIBJ",
+            "h_artificialMorphBombHorizontally"
+          ]}
+        ]},
+        "h_heatedGModeOpenDifferentDoor"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 82,
+      "link": [3, 2],
+      "name": "G-Mode, Blind Maze Traversal",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canOffScreenMovement",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "SpaceJump",
+          "canUseFrozenEnemies",
+          "canIBJ",
+          {"and": [
+            "canTrickyDashJump",
+            "canTrickyDodgeEnemies"
+          ]}
+        ]},
+        "h_bombThings",
+        "h_heatedGModeOffCameraDoor",
+        {"heatFrames": 200}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "PLMs will be overloaded using the camera scroll blocks while climbing the room.",
+        "Blindly traverse the maze until the end, where Samus will be stuck at the far right next to the shot block.",
+        "Exit G-mode just one tile to the left, Morph, use a Bomb or Power Bomb to destroy the shot block and escape through the door.",
+        "Note that it is possible to climb up with a tricky dash jump and no wall jump.",
+        "Either kill the Alcoon before it spawns and stationary, invisible lasers, or let the right alcoons shoot enough to overload projectiles."
+      ]
+    },
+    {
+      "id": 83,
+      "link": [3, 2],
+      "name": "G-Mode, Blind Maze Traversal, Remote Acquire the Item",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canOffScreenMovement",
+        "canTrickyGMode",
+        {"or": [
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            "HiJump"
+          ]},
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            "h_useSpringBall"
+          ]},
+          {"and": [
+            "HiJump",
+            "h_useSpringBall"
+          ]},
+          "canSpringBallBombJump"
+        ]},
+        "h_bombThings",
+        "h_heatedGModeOffCameraDoor",
+        {"heatFrames": 200}
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": [
+        "It is tricky to climb the room without fully overloading PLMs.",
+        "With Ice and either HiJump or Spring Ball, freeze the left Alcoon to the right of where it jumps out of the ground.",
+        "With HiJump, spin jump off of it and land directly on the middle stair platform.",
+        "With Spring Ball, morph on top of the Alcoon, jump to barely land on the lowest platform while avoiding",
+        "the camera scroll blocks one tile above, then use Spring Ball again to jump to the next platform.",
+        "Alternatively, with Spring Ball and either HiJump, Bombs, or Power Bombs, jump to barely land on the lowest platform while avoiding the camera scroll blocks one tile above,",
+        "then use Spring Ball again to jump to the next platform. The first jump can be done with HiJump or a bomb boost into Spring Ball jump.",
+        "Once up above, unmorph and get onto the edge of the runway leading right, then run through the camera scroll blocks to reach the item.",
+        "This will finish overloading PLMs. Blindly traverse the maze until the end, where Samus will be stuck at the far right next to the shot block.",
+        "Exit G-mode just one tile to the left, Morph, use a Bomb or Power Bomb to destroy the shot block and escape through the door."
+      ],
+      "detailNote": "There is a row of camera scroll blocks two-tiles above the bottom left platform, and a column two-tiles away from the right of the gap in front of the left door."
+    },
+    {
+      "id": 15,
+      "link": [3, 3],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1,
+          "gentleUpTiles": 4
+        }
+      }
+    },
+    {
+      "id": 90,
+      "link": [3, 3],
+      "name": "Alcoon Farm",
+      "requires": [
+        "h_heatProof",
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"or": [
+              "canWalljump",
+              "HiJump",
+              "SpaceJump"
+            ]},
+            {"cycleFrames": 150}
+          ]},
+          {"resetRoom": {"nodes": [3]}}
+        ]},
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 400}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 360}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            {"cycleFrames": 440}
+          ]},
+          {"and": [
+            "Spazer",
+            "Wave",
+            {"cycleFrames": 560}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 910}
+          ]}
+        ]}
+      ],
+      "resetsObstacles": ["A", "B", "C"],
+      "farmCycleDrops": [{"enemy": "Alcoon", "count": 3}]
+    },
+    {
+      "id": 91,
+      "link": [3, 3],
+      "name": "Partial Alcoon Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            "Plasma",
+            {"heatFrames": 400}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"heatFrames": 360}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            {"heatFrames": 440}
+          ]},
+          {"and": [
+            "Spazer",
+            "Wave",
+            {"heatFrames": 560}
+          ]},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"heatFrames": 910}
+          ]}
+        ]},
+        {"resourceAvailable": [{"type": "Energy", "count": 50}]},
+        {"partialRefill": {"type": "PowerBomb", "limit": 3}}
+      ]
+    },
+    {
+      "id": 16,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 17,
+      "link": [3, 3],
+      "name": "Open Door",
+      "requires": [
+        {"heatFrames": 20}
+      ],
+      "clearsObstacles": ["C"]
+    },
+    {
+      "id": 18,
+      "link": [3, 3],
+      "name": "X-Mode",
+      "requires": [
+        "h_shinechargeMaxRunway",
+        "canXMode",
+        "h_XModeSpikeHit",
+        "h_XModeSpikeHit",
+        {"or": [
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Alcoon"]],
+              "explicitWeapons": ["Plasma", "Wave+Spazer", "ScrewAttack", "Missile", "Super"]
+            }},
+            {"heatFrames": 420}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Alcoon"]],
+              "explicitWeapons": ["Spazer", "Wave", "PseudoScrew", "PowerBomb"]
+            }},
+            {"heatFrames": 530}
+          ]},
+          {"and": [
+            {"enemyKill": {
+              "enemies": [["Alcoon"]],
+              "explicitWeapons": ["PowerBeam"]
+            }},
+            {"heatFrames": 620}
+          ]}
+        ]},
+        {"shineChargeFrames": 90}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "flashSuitChecked": true,
+      "note": "Clear the Alcoon then bounce into the spike patch.",
+      "devNote": "Two spike hits are expected per attempt (with any additional leniency hits being multiplied by this amount)."
+    },
+    {
+      "id": 84,
+      "link": [3, 3],
+      "name": "G-Mode, Remote Acquire Item, Frozen Alcoon",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "canTrickyGMode",
+        "canTrickyUseFrozenEnemies",
+        {"or": [
+          "HiJump",
+          "h_useSpringBall"
+        ]},
+        "h_heatedDirectGModeLeaveSameDoor"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": [
+        "It is tricky to climb the room without fully overloading PLMs.",
+        "Freeze the left Alcoon to the right of where it jumps out of the ground.",
+        "With HiJump, spin jump off of it and land directly on the middle stair platform.",
+        "With Spring Ball, morph on top of the Alcoon, jump to barely land on the lowest platform while avoiding",
+        "the camera scroll blocks one tile above, then use Spring Ball again to jump to the next platform.",
+        "Up above, get onto the edge of the runway leading right, then run through the camera scroll blocks to reach the item.",
+        "Wait at least 35 seconds for the Alcoon to jump back down before returning to the door, or kill it with a Power Bomb or SBA.",
+        "Stand close to the transition and use X-Ray then hold right to leave the room before the door closes.",
+        "Note that spending any extra frames in the camera scroll blocks will overload PLMs before reaching the item and prevent remote acuiring it."
+      ],
+      "detailNote": "There is a row of camera scroll blocks two-tiles above the bottom left platform, and a column two-tiles away from the right of the gap in front of the left door."
+    },
+    {
+      "id": 85,
+      "link": [3, 3],
+      "name": "G-Mode Morph, Remote Acquire Item, Spring Ball",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "direct",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "canTrickyGMode",
+        "h_artificialMorphSpringBall",
+        {"or": [
+          "HiJump",
+          "h_artificialMorphSpringBallBombJump"
+        ]},
+        "h_heatedDirectGModeLeaveSameDoor"
+      ],
+      "collectsItems": [4],
+      "flashSuitChecked": true,
+      "note": [
+        "It is tricky to climb the room without fully overloading PLMs.",
+        "With Spring Ball, jump to barely land on the lowest platform while avoiding the camera scroll blocks one tile above, then use Spring Ball again to jump to the next platform.",
+        "The first jump can be done with HiJump or a bomb boost into Spring Ball jump.",
+        "Up above, unmorph and get onto the edge of the runway leading right, then run through the camera scroll blocks to reach the item.",
+        "Wait at least 35 seconds for the Alcoon to jump back down before returning to the door, or kill it with a Power Bomb or SBA.",
+        "Stand close to the transition and use X-Ray then hold right to leave the room before the door closes.",
+        "Note that spending any extra frames in the camera scroll blocks will overload PLMs before reaching the item and prevent remote acuiring it."
+      ],
+      "detailNote": "There is a row of camera scroll blocks two-tiles above the bottom left platform, and a column two-tiles away from the right of the gap in front of the left door."
+    },
+    {
+      "id": 86,
+      "link": [3, 4],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "SpaceJump",
+          "canUseFrozenEnemies",
+          {"and": [
+            "canTrickyDashJump",
+            "canTrickyDodgeEnemies"
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to climb up with a tricky dash jump and no wall jump.",
+        "Either kill the Alcoon before it spawns any stationary, invisible fireballs, or let the right alcoons shoot enough to overload projectiles."
+      ]
+    },
+    {
+      "id": 87,
+      "link": [3, 4],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"or": [
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "h_artificialMorphSpringBallBombJump"
+          ]},
+          {"and": [
+            "h_artificialMorphIBJ",
+            "h_artificialMorphBombHorizontally"
+          ]}
+        ]},
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "It is possible to climb up with a tricky dash jump and no wall jump.",
+        "Either kill the Alcoon before it spawns any stationary, invisible fireballs, or let the right alcoons shoot enough to overload projectiles."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [3, 7],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        "ScrewAttack",
+        {"or": [
+          "canCarefulJump",
+          {"heatFrames": 40}
+        ]},
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 20,
+      "link": [3, 7],
+      "name": "Kill While Running",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canDodgeWhileShooting",
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Alcoon"]],
+            "explicitWeapons": ["Missile", "Super", "Wave+Plasma"]
+          }},
+          {"and": [
+            "canPrepareForNextRoom",
+            "Charge",
+            "Wave",
+            "Spazer"
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            {"heatFrames": 30}
+          ]}
+        ]},
+        {"or": [
+          "canCarefulJump",
+          {"heatFrames": 10}
+        ]},
+        {"heatFrames": 100}
+      ],
+      "note": "Kill the Alcoon without stopping."
+    },
+    {
+      "id": 21,
+      "link": [3, 7],
+      "name": "Blue Speed",
+      "entranceCondition": {
+        "comeInGettingBlueSpeed": {
+          "length": 7,
+          "openEnd": 1,
+          "gentleDownTiles": 4
+        }
+      },
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 60}
+      ],
+      "note": "Use blue speed to kill the Alcoons without stopping."
+    },
+    {
+      "id": 22,
+      "link": [3, 7],
+      "name": "Stop To Kill",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"enemyKill": {
+          "enemies": [["Alcoon", "Alcoon"]],
+          "explicitWeapons": ["Missile", "Super", "Plasma", "Wave+Spazer"]
+        }},
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 23,
+      "link": [3, 7],
+      "name": "Jump Over",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canCarefulJump",
+        {"heatFrames": 199}
+      ]
+    },
+    {
+      "id": 24,
+      "link": [3, 7],
+      "name": "Tank the Damage",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"enemyDamage": {"enemy": "Alcoon", "type": "contact", "hits": 1}},
+        {"heatFrames": 180}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [3, 7],
+      "name": "Slow Kill",
+      "requires": [
+        "h_heatProof",
+        "canDodgeWhileShooting"
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 7],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [
+        "canOffScreenMovement",
+        {"heatFrames": 80}
+      ],
+      "note": "Get out of the wall if necessary; then do a blind jump over the Alcoon."
+    },
+    {
+      "id": 27,
+      "link": [4, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 27, "gentleUpTiles": 2, "openEnd": 0}},
+        {"obstaclesCleared": ["A"]},
+        {"heatFrames": 260},
+        "canShinechargeMovement",
+        {"shineChargeFrames": 90}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 240}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 240}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "devNote": "Most of the time 1 can be unlocked on the way to 4."
+    },
+    {
+      "id": 28,
+      "link": [4, 3],
+      "name": "Leave Shinesparking - Open Door First",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 27, "gentleUpTiles": 2, "openEnd": 1}},
+        {"obstaclesCleared": ["A", "C"]},
+        {"heatFrames": 390},
+        "canShinechargeMovement",
+        {"shinespark": {"frames": 35}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 30}]
+        }
+      ],
+      "note": [
+        "Open the door to be able to spark out.",
+        "Shinecharge near the missile location, then fall back down and spark out the right door.",
+        "The door must have been opened prior in order to be able to spark out of it."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [4, 3],
+      "name": "Leave Shinesparking Through Top of Door - Open Door First",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 27, "gentleUpTiles": 2, "openEnd": 1}},
+        {"obstaclesCleared": ["A", "C"]},
+        {"heatFrames": 390},
+        "canShinechargeMovementComplex",
+        {"shinespark": {"frames": 30}}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 30}]
+        }
+      ],
+      "note": [
+        "Open the door to be able to spark out.",
+        "Shinecharge near the missile location, then fall back down and run to the right before sparking out the right door.",
+        "The Alcoons must have been cleared prior in order to be able to spark out."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [4, 3],
+      "name": "Hero Shot Shinespark through the Right Door",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 27, "gentleUpTiles": 2, "openEnd": 1}},
+        {"obstaclesCleared": ["A"]},
+        {"heatFrames": 370},
+        "canShinechargeMovementComplex",
+        "canHeroShot",
+        {"shinespark": {"frames": 31}},
+        {"doorUnlockedAtNode": 3}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Shinecharge near the missile location, then fall down and shoot a beam shot through the lower half of the large stalactite.",
+        "Shinespark to the right before the shot goes off screen, and have it open the door before Samus gets there."
+      ]
+    },
+    {
+      "id": 31,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "clearsObstacles": ["B"],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 32,
+      "link": [4, 5],
+      "name": "Blocks Broken",
+      "requires": [
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall"
+        ]},
+        {"obstaclesCleared": ["B"]},
+        {"heatFrames": 199}
+      ]
+    },
+    {
+      "id": 33,
+      "link": [4, 5],
+      "name": "Bombs",
+      "requires": [
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall"
+        ]},
+        "h_useMorphBombs",
+        {"heatFrames": 360}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 34,
+      "link": [4, 5],
+      "name": "Power Bombs",
+      "requires": [
+        {"or": [
+          "canTrivialMidAirMorph",
+          "h_useSpringBall"
+        ]},
+        "h_usePowerBomb",
+        {"heatFrames": 300}
+      ],
+      "clearsObstacles": ["B"]
+    },
+    {
+      "id": 35,
+      "link": [4, 6],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"obstaclesCleared": ["A"]},
+        {"heatFrames": 150}
+      ]
+    },
+    {
+      "id": 36,
+      "link": [4, 6],
+      "name": "Quick Kill",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"enemyKill": {
+          "enemies": [["Alcoon"]],
+          "explicitWeapons": ["Missile", "Super", "Plasma", "ScrewAttack", "PseudoScrew"]
+        }},
+        {"heatFrames": 190}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Jump over the Alcoon's fireball and kill it and run through.",
+      "devNote": "Beams that take more than two shots are generally not quick enough to justify."
+    },
+    {
+      "id": 37,
+      "link": [4, 6],
+      "name": "Tank Fireball and Run Through",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"enemyDamage": {"enemy": "Alcoon", "type": "fireball", "hits": 1}},
+        {"heatFrames": 170}
+      ]
+    },
+    {
+      "id": 38,
+      "link": [4, 6],
+      "name": "Slow Kill",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"or": [
+          {"and": [
+            "canDodgeWhileShooting",
+            {"heatFrames": 200}
+          ]},
+          {"and": [
+            "Morph",
+            {"heatFrames": 200}
+          ]},
+          {"and": [
+            {"enemyDamage": {"enemy": "Alcoon", "type": "fireball", "hits": 1}},
+            {"heatFrames": 160}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 74,
+      "link": [4, 7],
+      "name": "Gain Flash Suit (Top Runway, Spikesuit)",
+      "requires": [
+        {"obstaclesCleared": ["A"]},
+        {"canShineCharge": {"usedTiles": 27, "gentleUpTiles": 2, "openEnd": 1}},
+        {"spikeHits": 1},
+        "h_spikeSuitSpikeHitLeniency",
+        "h_heatProof",
+        "canSpikeSuit",
+        {"shinespark": {"frames": 6, "excessFrames": 6}}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "FIXME: h_heatProof isn't really required, but we don't yet have a good way to express how spike suit leniency impacts heat frames.",
+        "FIXME: using the bottom-left runway or a neighboring room would also be possible."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "h_useSpringBall",
+          {"and": [
+            "canTrivialMidAirMorph",
+            {"heatFrames": 30}
+          ]}
+        ]},
+        {"heatFrames": 520}
+      ],
+      "unlocksDoors": [{"types": ["powerbomb"], "requires": []}]
+    },
+    {
+      "id": 40,
+      "link": [5, 4],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "canTrivialMidAirMorph",
+          {"and": [
+            "HiJump",
+            "h_useSpringBall"
+          ]}
+        ]},
+        {"heatFrames": 65}
+      ],
+      "devNote": [
+        "The heat frames are based on touching the item;",
+        "from there, the amount of time required to reach the ground unmorphed is similar to the time needed to turn around for strats that approach the item node from the left."
+      ]
+    },
+    {
+      "id": 41,
+      "link": [5, 5],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 42,
+      "link": [6, 1],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 60}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 20}]
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "link": [6, 4],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"obstaclesCleared": ["A"]},
+        {"heatFrames": 120}
+      ]
+    },
+    {
+      "id": 44,
+      "link": [6, 4],
+      "name": "Avoid",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canDodgeWhileShooting",
+        {"heatFrames": 120}
+      ],
+      "note": "Run under the Alcoon as it spawns",
+      "devNote": "canDodgeWhileShooting represents the knowledge of how this Alcoon spawns and that you can run under it."
+    },
+    {
+      "id": 45,
+      "link": [6, 4],
+      "name": "Kill Without Stopping",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canDodgeWhileShooting",
+        {"enemyKill": {
+          "enemies": [["Alcoon"]],
+          "explicitWeapons": ["Missile", "Super", "Charge+Plasma"]
+        }},
+        {"heatFrames": 120}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Kill the Alcoon in one hit as it spawns."
+    },
+    {
+      "id": 46,
+      "link": [6, 4],
+      "name": "Stop and Kill",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"enemyKill": {
+          "enemies": [["Alcoon"]],
+          "explicitWeapons": [
+            "Missile",
+            "Super",
+            "Wave",
+            "Ice+Spazer",
+            "Plasma",
+            "ScrewAttack",
+            "PseudoScrew",
+            "PowerBomb"
+          ]
+        }},
+        {"heatFrames": 180}
+      ],
+      "clearsObstacles": ["A"],
+      "note": "Let the Alcoon spawn and then defeat it."
+    },
+    {
+      "id": 47,
+      "link": [6, 4],
+      "name": "Slow Kill",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"or": [
+          {"and": [
+            "canDodgeWhileShooting",
+            {"heatFrames": 200}
+          ]},
+          {"and": [
+            "Morph",
+            {"heatFrames": 200}
+          ]},
+          {"and": [
+            {"enemyDamage": {"enemy": "Alcoon", "type": "fireball", "hits": 1}},
+            {"heatFrames": 160}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 48,
+      "link": [6, 5],
+      "name": "Air Speedball",
+      "requires": [
+        {"notable": "Air Speedball"},
+        "h_navigateHeatRooms",
+        {"getBlueSpeed": {"usedTiles": 26, "gentleDownTiles": 2, "openEnd": 1}},
+        "canSpeedball",
+        "canLateralMidAirMorph",
+        "h_useSpringBall",
+        {"heatFrames": 160}
+      ],
+      "clearsObstacles": ["B"],
+      "note": "Jump and Morph with a speedball to enter the morph tunnel and then use SpringBall to break the bomb blocks."
+    },
+    {
+      "id": 49,
+      "link": [6, 6],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 50,
+      "link": [6, 7],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"heatFrames": 160}
+      ]
+    },
+    {
+      "id": 51,
+      "link": [6, 7],
+      "name": "Weave",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"or": [
+          "canDownBack",
+          "canCarefulJump"
+        ]},
+        {"heatFrames": 120}
+      ]
+    },
+    {
+      "id": 52,
+      "link": [7, 1],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "SpaceJump"
+        ]},
+        {"heatFrames": 180}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "link": [7, 1],
+      "name": "SpringBall Bomb Jump",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canSpringBallBombJump",
+        {"heatFrames": 240}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "link": [7, 1],
+      "name": "Avoid Spawning Alcoon and IBJ",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canIBJ",
+        {"or": [
+          {"and": [
+            "canBombHorizontally",
+            {"heatFrames": 840}
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            "canDoubleBombJump",
+            {"heatFrames": 290}
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            {"heatFrames": 480}
+          ]}
+        ]}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "link": [7, 1],
+      "name": "Kill Alcoon and IBJ",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canIBJ",
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Alcoon"]],
+            "explicitWeapons": ["Missile", "Super", "Plasma", "Wave+Spazer", "PseudoScrew", "ScrewAttack"]
+          }},
+          {"heatFrames": 270}
+        ]},
+        {"heatFrames": 50},
+        {"or": [
+          {"and": [
+            "canDoubleBombJump",
+            {"heatFrames": 500}
+          ]},
+          {"heatFrames": 860}
+        ]}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "link": [7, 1],
+      "name": "Tricky Dash Jump",
+      "requires": [
+        "canTrickyDashJump",
+        "h_navigateHeatRooms",
+        {"heatFrames": 200}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ],
+      "note": "Jump from the bottom of the slope with about 6 tiles of run speed."
+    },
+    {
+      "id": 57,
+      "link": [7, 1],
+      "name": "Frozen Alcoon",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canUseFrozenEnemies",
+        {"heatFrames": 330}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 60}]
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "link": [7, 3],
+      "name": "Kill While Running",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canDodgeWhileShooting",
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Alcoon"]],
+            "explicitWeapons": [
+              "Missile",
+              "Super",
+              "Wave+Plasma",
+              "PseudoScrew",
+              "ScrewAttack",
+              "Charge+Wave+Spazer",
+              "Shinespark"
+            ]
+          }},
+          {"and": [
+            "Plasma",
+            "canHitbox"
+          ]}
+        ]},
+        {"heatFrames": 120}
+      ],
+      "note": "Kill the Alcoon without stopping."
+    },
+    {
+      "id": 59,
+      "link": [7, 3],
+      "name": "Stop To Kill",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"enemyKill": {
+          "enemies": [["Alcoon", "Alcoon"]],
+          "explicitWeapons": ["Missile", "Super", "Plasma", "Wave+Spazer"]
+        }},
+        {"heatFrames": 240}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 30}]
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "link": [7, 3],
+      "name": "Jump Over",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canCarefulJump",
+        {"heatFrames": 240}
+      ]
+    },
+    {
+      "id": 61,
+      "link": [7, 3],
+      "name": "Tank the Damage",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"enemyDamage": {"enemy": "Alcoon", "type": "contact", "hits": 1}},
+        {"heatFrames": 180}
+      ],
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 30}]
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "link": [7, 3],
+      "name": "Slow Kill",
+      "requires": [
+        "h_heatProof",
+        "canDodgeWhileShooting"
+      ]
+    },
+    {
+      "id": 63,
+      "link": [7, 6],
+      "name": "Base",
+      "requires": [
+        "h_navigateHeatRooms",
+        {"or": [
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "SpaceJump"
+        ]},
+        {"heatFrames": 160}
+      ]
+    },
+    {
+      "id": 64,
+      "link": [7, 6],
+      "name": "SpringBall Bomb Jump",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canSpringBallBombJump",
+        {"heatFrames": 220}
+      ]
+    },
+    {
+      "id": 65,
+      "link": [7, 6],
+      "name": "Avoid Spawning Alcoon and IBJ",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canIBJ",
+        {"or": [
+          {"and": [
+            "canBombHorizontally",
+            {"heatFrames": 820}
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            "canDoubleBombJump",
+            {"heatFrames": 270}
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            {"heatFrames": 460}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 66,
+      "link": [7, 6],
+      "name": "Kill Alcoon and IBJ",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canIBJ",
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Alcoon"]],
+            "explicitWeapons": ["Missile", "Super", "Plasma", "Wave+Spazer", "PseudoScrew", "ScrewAttack"]
+          }},
+          {"heatFrames": 270}
+        ]},
+        {"heatFrames": 50},
+        {"or": [
+          {"and": [
+            "canDoubleBombJump",
+            {"heatFrames": 480}
+          ]},
+          {"heatFrames": 840}
+        ]}
+      ]
+    },
+    {
+      "id": 67,
+      "link": [7, 6],
+      "name": "Tricky Dash Jump",
+      "requires": [
+        "canTrickyDashJump",
+        "h_navigateHeatRooms",
+        {"heatFrames": 180}
+      ],
+      "note": "Jump from the bottom of the slope with about 6 tiles of run speed."
+    },
+    {
+      "id": 68,
+      "link": [7, 6],
+      "name": "Frozen Alcoon",
+      "requires": [
+        "h_navigateHeatRooms",
+        "canUseFrozenEnemies",
+        {"heatFrames": 310}
+      ]
+    },
+    {
+      "id": 69,
+      "link": [7, 7],
+      "name": "Alcoon Farm",
+      "requires": [
+        "h_heatProof",
+        {"or": [
+          "canDodgeWhileShooting",
+          "ScrewAttack",
+          "Wave",
+          "Ice",
+          "Spazer",
+          "Plasma"
+        ]},
+        {"refill": ["PowerBomb"]}
+      ]
+    },
+    {
+      "id": 70,
+      "link": [7, 7],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 71,
+      "link": [7, 7],
+      "name": "Open Right Door",
+      "requires": [
+        "canCarefulJump",
+        {"heatFrames": 200}
+      ],
+      "clearsObstacles": ["C"],
+      "note": "Jump over the Alcoon and shoot open the door, then return."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Crystal Flash Clip",
+      "note": "Perform the crystal flash all the way against the left wall of the accessible tunnel, then jump through the ceiling."
+    },
+    {
+      "id": 2,
+      "name": "Air Speedball",
+      "note": "Jump and Morph with a speedball to enter the morph tunnel and then use SpringBall to break the bomb blocks."
+    }
+  ],
+  "nextStratId": 92,
+  "nextNotableId": 3
+}

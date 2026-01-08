@@ -1,0 +1,506 @@
+{% extends 'randomizer/layouts/default.html' %}
+{% load static %}
+{% load levels_range %}
+
+{% block content %}
+    {% include 'randomizer/_rom_base.html' %}
+
+    <div id="generate-container">
+        {% include 'randomizer/_rom_loader.html' %}
+
+        <div class="card border-success my-3">
+            <form id="config">
+                {% csrf_token %}
+                <input type="hidden" name="region" id="region" value=""/>
+                <input type="hidden" name="flags" id="flags" value=""/>
+
+                <div class="card-header bg-success text-white">
+                    <h3 class="card-title">Generate Randomized Game (v{{ version|default:'UNKNOWN' }})</h3>
+                </div>
+                <div class="card-header bg-info text-white">
+                    <h4 class="card-title">Select Mode</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label for="mode" class="input-group-text">Mode</label>
+                                </div>
+                                <select id="mode" name="mode" class="form-control">
+                                    <option value="open">Open</option>
+                                    <option value="linear">Linear</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mode-description" id="mode-description-linear">
+                        <ul>
+                            <li>Legacy mode from the original version of the randomizer.  Plot progression is the
+                                same as the vanilla game; the map is <strong>not</strong> open from the start.</li>
+                            <li>Characters join at vanilla spots.</li>
+                            <li>Stars are awarded at their vanilla spots.</li>
+                            <li><strong>NOTE:</strong> This is a <strong>LEGACY</strong> mode! Many flags are not
+                                available in this mode, and new features are <strong>NOT</strong> being added to this
+                                mode! It is significantly different from the main open world mode, and has only been
+                                kept intact to preserve some of the experience of the original version of the randomizer
+                                made by abyssonym.</li>
+                        </ul>
+                    </div>
+                    <div class="mode-description" id="mode-description-open">
+                        <ul>
+                            <li>Non-linear progression, most of the map is open to you from the beginning.</li>
+                            <li>Collect all the missing Star Pieces to access the final area (Bowser's Keep and/or
+                                Factory, depending on your flag choice).
+                            </li>
+                            <li>Depending on your flag choice, those star pieces may not be on the bosses that
+                                originally have them.
+                            </li>
+                            <li>The game is completed when you finish the final boss of the Factory.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-header bg-info text-white">
+                    <h4 class="card-title">Select Preset (optional)</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label for="preset" class="input-group-text">Select Preset</label>
+                                </div>
+                                <select id="preset" name="preset" class="form-control">
+                                    {% for preset in presets %}
+                                        <option value="{{ preset.flags }}">{{ preset.name }}</option>
+                                    {% endfor %}
+                                    <option value="custom">Custom Flag String</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-info"
+                                            onclick="applyFlags();">Apply
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% for preset in presets %}
+                        <p class="preset-description" data-preset-flags="{{ preset.flags }}">{{ preset.description }}</p>
+                        <p class="preset-description text-info" data-preset-flags="{{ preset.flags }}">
+                            <em>{{ preset.flags }}</em>
+                        </p>
+                    {% endfor %}
+                    <div class="row" id="custom-flag-entry">
+                        <div class="col">
+                            <p>You can enter a custom flag string below.  Hit Apply when you're done.</p>
+                            <div class="input-group">
+                                <input type="text" id="quick-custom" name="quick-custom" class="form-control"
+                                       placeholder="Custom Flag String">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header bg-info text-white" id="review-flags">
+                    <h4 class="card-title">Review Flags</h4>
+                    <h6 class="card-title">Flags in <span class="text-danger">red</span> are considered "hard"
+                        settings and are not recommended for new players.
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <button type="button" class="btn btn-warning" onclick="applyFlags('');">Clear All Flags</button>
+                    </div>
+                    <div class="row">
+                        {# Show categories and flag inputs. #}
+                        {% for category in categories %}
+                            <div class="col-md-6 category-container">
+                                <div class="card border-info my-2">
+                                    <div class="card-header"><h5>{{ category.name }}</h5></div>
+                                    <div class="card-body">
+                                        {# Show flags and options here. #}
+                                        {% for flag in category.flags %}
+                                            {% include 'randomizer/_show_flag_ui.html' with flag=flag parent_value='' is_radio=False checked=False %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-header">
+                    <div class="form-group">
+                        <input type="text" id="flag-string" class="form-control form-control-lg text-center" readonly
+                               onclick="$(this).select(); document.execCommand('copy');">
+                        <label for="flag-string" class="d-none"></label>
+                    </div>
+                    <p class="font-italic">This is the flag string for this randomization. Copy and save this text if
+                        you wish to easily reapply this combination of flags for future randomizations.
+                    </p>
+                </div>
+                <div class="card-header bg-info text-white">
+                    <h4 class="card-title">Seed Settings</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label for="seed" class="input-group-text">Seed (optional)</label>
+                                </div>
+                                <input type="text" id="seed" name="seed" class="form-control" placeholder="random">
+                                <div class="input-group-append">
+                                    <button id="seed-clear" class="btn" type="button">
+                                        <span class="fas fa-trash-alt"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="race_mode">Race Mode</label>
+                                </div>
+                                <input class="form-check-input" type="checkbox" name="race_mode" id="race_mode"
+                                       data-toggle="toggle">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% include 'randomizer/_rom_settings.html' %}
+                <div class="card-footer">
+                    <div id="seed-generate" style="display:none">
+                        <div class="alert alert-danger alert-dismissible" id="generate-error-box" role="alert"
+                             style="display:none">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <span class="sr-only">Error:</span>
+                            <span class="message" id="generate-error-message">Cannot Read ROM file.</span>
+                        </div>
+                        <div class="btn-group btn-flex" role="group">
+                            <button type="button" name="generate" class="btn btn-success" id="generate-btn" disabled>Generate ROM</button>
+                        </div>
+                    </div>
+                    <div id="rom-select-warning" class="alert alert-warning" role="alert" style="display:none">
+                        You need to upload a ROM above!
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="seed-details" class="card border-success my-3" style="display:none">
+        <div class="card-header bg-success text-white">
+            <h3 class="card-title float-left">Game Details</h3>
+            <div class="btn-toolbar float-right">
+                <button role="button" class="btn btn-light text-dark border-secondary" id="generate-another">
+					Generate Another
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div role="group" class="btn-group btn-flex mr-3 mb-3">
+                        <button name="save_rom" class="btn btn-success" id="btn-save-rom" disabled>Save Rom</button>
+                    </div>
+                    <div role="group" class="btn-group btn-flex mr-3 mb-3">
+                        <button name="save_wad" class="btn btn-success" id="btn-save-wad" disabled>Save Wad</button>
+                    </div>
+                </div>
+            </div>
+            {% include 'randomizer/_rom_info.html' with show_permalink=True %}
+        </div>
+    </div>
+
+    <!-- JSON representation of flag hierarchy -->
+    {{ flags|json_script:"flags_json" }}
+
+    <script>
+        const FLAGS = JSON.parse(document.getElementById('flags_json').textContent);
+
+        function applySeed(rom) {
+            return new Promise((resolve, reject) => {
+                $("#region").val(rom.region);
+                $.post("{% url 'randomizer:generate' %}", $("#config").serialize(), (patch) => {
+                    if (patch.error) {
+                        reject(patch);
+                    } else {
+                        rom.applyModeChanges(patch.mode).then(() => {
+                            rom.parsePatch(patch.patch);
+                            resolve(patch);
+                        });
+                    }
+                }, "json").fail(reject);
+            });
+        }
+
+        function seedFailed(patch = {}) {
+            let errmsg;
+            if (patch.error) {
+                errmsg = patch.error;
+            } else {
+                errmsg = "Failed Creating Seed :(";
+            }
+
+            $("#generate-btn").html("Generate ROM").prop("disabled", false);
+            $("#generate-error-message").html(errmsg);
+            $("#generate-error-box").show().delay(2000).fadeOut("slow");
+        }
+
+        function seedApplied(patch) {
+            return new Promise((resolve) => {
+                $("#generate-btn").html("Generate").prop("disabled", false);
+                $("#btn-save-rom").prop("disabled", false);
+                if (wad.valid) {
+                    $("#btn-save-wad").prop("disabled", false);
+                } else {
+                    $("#btn-save-wad").prop("disabled", true);
+                }
+                updateSeedDetailsFromPatch(patch);
+                rom.parseInfoFromPatch(patch);
+                // Scroll back to the top after generation is done.
+                $('html').animate({scrollTop: 0}, 500);
+                resolve(rom);
+            });
+        }
+
+        // Apply custom seed flag.
+        function applyFlags(flags = null, initial_load = false) {
+            // Get flag string from selected preset if not provided.
+            if (flags === null || flags === undefined) {
+                flags = $('#preset').val();
+                if (flags === 'custom') {
+                    flags = $('#quick-custom').val();
+                }
+            }
+
+            // Clear all the checkbox options first.  Leave radio buttons alone.
+            $('.flag-form-input-checkbox').prop('checked', false);
+
+            // Parse flag string and set flags on the page.
+            for (let flag of flags.split(' ')) {
+                if (flag.startsWith('-')) {
+                    // Solo flag that begins with a dash.
+                    $('.flag-' + $.escapeSelector(flag)).prop('checked', true);
+                } else {
+                    // Flag that may have a subsection of choices and/or options.
+                    let first = flag.slice(0, 1);
+                    $('.flag-' + $.escapeSelector('@' + first)).add('.flag-' + $.escapeSelector(first))
+                        .prop('checked', true);
+                    for (let char of flag.slice(1)) {
+                        $('.flag-' + $.escapeSelector(first + char)).prop('checked', true);
+                    }
+                }
+            }
+
+            buildFlagString();
+
+            // Scroll to review flags.
+            if (!initial_load)
+                $('html').animate({scrollTop: $('#review-flags').offset().top}, 500);
+        }
+
+        // Helper function to build flag string part for a specific flag and recursively handle choices and suboptions.
+        function buildFlagStringPart(flag, mode, flagStrings, parent_value = '') {
+            let idval = '#flag-' + $.escapeSelector(flag.value);
+            if (parent_value)
+                idval += $.escapeSelector(parent_value);
+
+            if (flag.modes.includes(mode) && $(idval).is(':checked')) {
+                if (flag.value.startsWith('-')) {
+                    // Solo flag that begins with a dash.
+                    flagStrings.set(flag.value, true);
+                } else {
+                    let char;
+                    let rest = '';
+                    if (flag.value.startsWith('@')) {
+                        char = flag.value.slice(1, 2);
+                        flagStrings.get('@').push(char);
+                    } else {
+                        char = flag.value.slice(0, 1);
+                        rest = flag.value.slice(1);
+                    }
+
+                    // Check if this key is in the map yet.
+                    if (!flagStrings.has(char)) {
+                        flagStrings.set(char, []);
+                    }
+                    if (rest) {
+                        flagStrings.get(char).push(rest);
+                    }
+
+                    // Flag that may have a subsection of choices and/or options.
+                    for (let choice of flag.choices) {
+                        buildFlagStringPart(choice, mode, flagStrings, '-' + flag.value + parent_value);
+                    }
+
+                    for (let option of flag.options) {
+                        buildFlagStringPart(option, mode, flagStrings, '-' + flag.value + parent_value);
+                    }
+                }
+            }
+        }
+
+        // Build flag string based on selected flags visible for this mode.
+        function buildFlagString() {
+            let mode = $('#mode').val();
+            let flagStrings = new Map();
+            flagStrings.set('@', []);
+
+            // Check each flag if it's selected, and check choices and/or options for it.
+            for (let flag of FLAGS) {
+                buildFlagStringPart(flag, mode, flagStrings);
+            }
+
+            // Set flag string from selected flags.
+            let flagString = '';
+            for (let [key, vals] of flagStrings) {
+                if (key !== '@') {
+                    if (key.startsWith('-')) {
+                        flagString += key + ' ';
+                    } else {
+                        if (vals.length > 0 || !flagStrings.get('@').includes(key)) {
+                            flagString += key + vals.join('') + ' ';
+                        }
+                    }
+                }
+            }
+
+            $('#flag-string').val(flagString);
+            $('#flags').val(flagString);
+
+            // Save current flags in local storage.
+            localforage.setItem("rom.flags", flagString);
+        }
+
+        $(() => {
+            $("#seed-clear").click(() => {
+                $("#seed").val("");
+            });
+
+            // Randomization mode
+            $("#mode").change((event) => {
+                let mode = $(event.target).val();
+                localforage.setItem("rom.mode", mode);
+
+                // Show description for the selected mode.
+                $('.mode-description').hide();
+                $(`#mode-description-${mode}`).show();
+
+                // Show flags that are for this mode only.
+                let flags = $('.flag-container');
+                flags.not(`.flag-${mode}`).hide();
+                flags.filter(`.flag-${mode}`).show();
+
+                // Hide categories that have no visible flags for this mode.
+                $(".category-container").show().each((index, elem) => {
+                    if ($(elem).find(`.card > .card-body > .flag-${mode}`).length === 0) {
+                        $(elem).hide();
+                    } else {
+                        $(elem).show();
+                    }
+                });
+
+                // Rebuild flag string for new flags.
+                buildFlagString();
+            });
+
+            localforage.getItem("rom.mode").then((value) => {
+                let elem = $("#mode");
+                if (value === null) {
+                    value = 'open';
+                }
+                elem.val(value);
+
+                // If they had an old mode value cached, default to open mode.
+                if (elem.prop('selectedIndex') === -1) {
+                    elem.val('open');
+                }
+
+                elem.change();
+            });
+
+            // Hide quick custom input when not selected.
+            $('#preset').change((event) => {
+                let flags = $(event.target).val();
+                let descriptions = $('.preset-description');
+                descriptions.hide();
+                if (flags === 'custom') {
+                    $('#custom-flag-entry').show();
+                } else {
+                    $('#custom-flag-entry').hide();
+                    descriptions.filter(`[data-preset-flags='${flags}']`).show();
+                }
+            }).change();
+
+            // Flag javascript event handlers.
+            $(".flag-form-input").change(buildFlagString);
+
+            // Generate button
+            $("#generate-btn").click((event) => {
+                $("#seed-details").hide();
+                $(event.target).html("Generating...").prop("disabled", true);
+                resetRom().then((rom) => {
+                    applySeed(rom).then(seedApplied, seedFailed);
+                });
+            });
+
+            // Save ROM button
+            $("#btn-save-rom").click(() => {
+                return rom.save(rom.makeFilename("sfc"));
+            });
+
+            // Save WAD button
+            $("#btn-save-wad").click(() => {
+                rom.updateChecksum().then(() => {
+                    $("#btn-save-wad").html("Generating...").prop("disabled", true);
+                    $("#btn-save-rom").prop("disabled", true);
+
+                    let fd = new FormData();
+                    fd.append("region", rom.region);
+                    fd.append("rom", rom.toBlob());
+                    fd.append("wad", wad.toBlob());
+
+                    $.ajax("{% url 'randomizer:pack' %}", {
+                        method: "POST",
+                        processData: false,
+                        contentType: false,
+                        dataType: 'binary',
+                        data: fd,
+                        xhrFields: {
+                            responseType: 'blob',
+                        },
+                        success: (result) => {
+                            let filename = rom.makeFilename("wad");
+                            saveAs(result, filename);
+                        },
+                        error: () => {
+                            $("#error-message").html("Failed Packing Wad :(");
+                            $("#error-box").show().delay(2000).fadeOut("slow");
+                        },
+                        complete: () => {
+                            $("#btn-save-wad").html("Save Wad").prop("disabled", false);
+                            $("#btn-save-rom").prop("disabled", false);
+                        },
+                    });
+                });
+            });
+
+            // Generate Another button
+            $("#generate-another").click(() => {
+                $("#seed-details").hide();
+                $("#generate-container").show();
+            });
+
+            // Apply stored flags, if any.
+            localforage.getItem("rom.flags").then((value) => {
+                if (value) {
+                    applyFlags(value, true);
+                }
+            });
+        });
+    </script>
+{% endblock %}

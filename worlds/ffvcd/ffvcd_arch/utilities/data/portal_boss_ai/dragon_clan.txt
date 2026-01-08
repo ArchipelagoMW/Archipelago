@@ -1,0 +1,223 @@
+# Velocity (top)
+    org $D0F1E0
+    
+    ; for solo
+    ; C2: Maelstrom
+    
+
+    04 00 00 00: If Alone:
+    FE:          {
+    C2: Maelstrom
+    80: Attack
+    91: Aero3
+    FD CA DB DC:   {WindSlash, Flame, Thunder}    
+    DD: SurgeBeam
+    80: Attack
+    91: Aero3
+    FE:          }
+
+    01 26 00 80: If Status of Single Enemy is Death :
+    FE:          {
+    FD CC EA CC:   {Snowstorm, Hurricane, Snowstorm}
+    91: Aero3
+    FD CA DB DC:   {WindSlash, Flame, Thunder}
+    CA: AtomicRay
+    FD EA EA 9D:   {Hurricane, Hurricane, Blowfish}
+    FD B1 B2 B3:   {Beak, Blaster, Hug}
+    DD: SurgeBeam
+    80: Attack
+
+    FE:          }
+
+
+
+    00 00 00 00: Default:
+
+    FE:          {
+    FD CC EA CC:   {Snowstorm, Hurricane, Snowstorm}
+    80: Fight
+    91: Aero3
+    FD CA DB DC:   {WindSlash, Flame, Thunder}
+    80: Fight
+    CA: AtomicRay
+    92: Emission
+    FD EA EA 9D:   {Hurricane, Hurricane, Blowfish}
+    2D: Drain
+    DD: SurgeBeam
+    80: Attack
+    FF:          }
+    
+   
+
+    06 00 12 00: React on:  GilToss
+    FE:          {
+    D7:   StrongFight
+    FE:          }
+    
+    0E 00 00 00: React HP Damage:
+    FE:          {
+    FD AA 80 CA:   {Nothing, Attack, AtomicRay}
+
+
+    FF:          }
+
+# Torque (left)
+    org $D0F2E0
+    
+    
+    04 00 00 00: If Alone:
+    FE:          {
+    FD F7 02 F0:   {No Interupt for: 3}
+    80:   Attack
+    D7:   StrongFight
+    9A:   MightyGuard
+    FD F7 02 F0:   {No Interupt for: 2}
+    DC:   Thunder
+    80:   Attack
+    FD F7 0C F0:   {No Interupt for: 3}
+    FD 32 31 32:   {Bolt/Ice3}
+    FD 31 32 31:   {Bolt/Ice3}
+    FD 32 31 32:   {Bolt/Ice3}
+    FD F3 24 F0:   {Set Target: Enemy}
+    20: Berserk
+    FD F7 05 F0:   {No Interupt for: 5}
+    80:   Attack
+    FD DC CC DA:   {Snowstorm, Thunder, BreathWing}
+    
+    FE:          }
+    
+    01 26 00 80: If Status of Single Enemy is Death :
+    FE:          {
+    FD F3 21 F0:   {Set Target: All Allies}
+    FD 3A 16 1C:   {Haste, Armor, Shell}
+    40: Slow2
+    23: Dispel
+    FD F3 21 F0:   {Set Target: All Allies}
+    FD 3A 3B 1B:   {Haste, Float, Image}
+    3D: Stop
+    9E: WhiteWind
+    FE:          }
+
+
+    00 00 00 00: Default:
+    FE:          {
+
+    FD F3 22 F0:   {Set Target: Single Ally}
+    FD 3A 16 1C:   {Haste, Armor, Shell}
+
+    23:            Dispel
+    40: Slow2
+    FD F3 22 F0:   {Set Target: Single Ally}
+    FD 3A 3B 1B:   {Haste, Float, Image}
+    80: Attack
+    88: L3 Flare
+    23:            Dispel
+    FD F3 22 F0:   {Set Target: Single Ally}
+    FD 3A 16 1C:   {Haste, Armor, Shell}
+    28:            Sleep
+    3F: Comet
+    3D: Stop
+    FD 80 80 32:   {Attack x2, Bolt3}
+    9E: WhiteWind
+    FD F3 22 F0:   {Set Target: Single Ally}
+    FD 3A 3B 1B:   {Haste, Float, Image}
+
+
+    FF:          }
+    
+
+    06 00 12 00: React on:  GilToss
+    FE:          {
+    D7:   StrongFight
+    FE:          }
+    
+    01 24 02 40: If Status of Single Ally (Armor) :
+    FE:          {
+    23: Dispel
+    FE:          }
+
+    0E 00 00 00: React HP Damage:
+    FE:          {
+    FD AA 31 32:   {Nothing, Ice3, Bolt3}
+    
+    FF:          }    
+    
+
+    
+    
+# Force (right)
+    org $D0F3E0
+    
+    04 00 00 00: If Alone:
+    FE:          {
+    B6:   PoisonBreath
+    FD F7 03 F0:   {No Interupt for: 3}
+    80:   Attack
+    80:   Attack
+    AE:   Gravity
+    D6:   Quake
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:   Attack
+    80:   Attack
+    80:   Attack
+    FD F7 05 F0:   {No Interupt for: 5}
+    80:   Attack
+    FD B2 B2 B8:   {Blaster, Blaster, ZombiePowder}
+    80:   Attack
+    
+    FE:          }
+    
+    01 26 00 80: If Status of Single Enemy is Death :
+    FE:          {
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:   Attack
+    80:   Attack
+    80:   Attack
+    B6:   PoisonBreath
+    FD F7 03 F0:   {No Interupt for: 3}
+    80:   Attack
+    80:   Attack
+    AE:   Gravity
+    D6:   Quake
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:   Attack
+    FD B2 B2 B8:   {Blaster, Blaster, ZombiePowder}
+    FE:          }
+
+
+    00 00 00 00: Default:
+    FE:          {
+    80:   Attack
+    80:   Attack
+    FD 80 95 E5:   {Attack, GuardOff, Dynamo}
+    FD F7 02 F0:   {No Interupt for: 2}
+    80:   Attack
+    80:   Attack
+    80:   Attack
+    B6:   PoisonBreath
+    FD 80 95 E5:   {Attack, GuardOff, Dynamo}
+    80:   Attack
+    FD F7 02 F0:   {No Interupt for: 2}
+    E5:   Dynamo
+    80:   Attack
+    FD B2 B2 B8:   {Blaster, Blaster, ZombiePowder}
+    FD F3 0D F0:   {Set Target: Self}
+    80:   Attack
+    80:   Attack
+    1B:   Image
+    80:   Attack
+    FF:          }
+
+    
+
+    06 00 12 00: React on:  GilToss
+    FE:          {
+    D7:   StrongFight
+    FE:          }
+    
+
+    0E 00 00 00: React HP Damage:
+    FE:          {
+    FD AA 80 80:   {Nothing, Attack, Attack}
+    
+    FF:          }

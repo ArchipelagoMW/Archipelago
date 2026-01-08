@@ -1,0 +1,101 @@
+
+
+01//dungeonShuffleOpenFlagTable: |
+    dwbe 0501, drownLinkOnD7Exit # D7 Exit
+    dwbe 0003, setD4EntranceFlag # D4 entrance
+    dwbe 0004, setD5EntranceFlag # D5 entrance
+    dwbe 0303, setD6PastEntranceFlag # D6 Past entrance
+    dwbe 0106, setD6PresentEntranceFlag # D6 Present entrance
+    dwbe 0200, setD7EntranceFlag # D7 entrance
+    db ff
+
+# Attempting to enter Jabu without mermaid suit will cancel the warp and instead
+# cause Link to drown. (Could happen with dungeon entrance randomization.)
+# Credit to Stewmat
+01//drownLinkOnD7Exit: |
+  ld a,TREASURE_MERMAID_SUIT
+  call checkTreasureObtained
+  jr c,@passedUnderwaterCheck
+  ; Is leading to jabu. Replace the warp tile with a deep water tile.
+  ld h,$cf
+  ld a,($FF8D)
+  ld l,a
+  ld (hl),$fc
+  jp $619f ; noWarpInitiated
+  @passedUnderwaterCheck:
+  jp $6163 ; initiateWarp
+
+01//setD4EntranceFlag: |
+  ld a,GLOBALFLAG_TUNI_NUT_PLACED
+  call setGlobalFlag
+  ld e,$3f
+  ld hl,$7c95 # setSymmetryVillageRoomFlags
+  call interBankCall
+  jp $6163 ; initiateWarp
+
+01//setD5EntranceFlag: |
+  ld hl, $c70a
+  set 7,(hl)
+  jp $6163 ; initiateWarp
+
+01//setD6PastEntranceFlag: |
+  ld hl, $c80f
+  set 7,(hl)
+  jp $6163 ; initiateWarp
+
+01//setD6PresentEntranceFlag: |
+  ld hl, $c80e
+  set 7,(hl)
+  jp $6163 ; initiateWarp
+
+01//setD7EntranceFlag: |
+  ld hl, $c790
+  set 1,(hl)
+  jp $6163 ; initiateWarp
+
+01//checkDungeonWarp_body: |
+  ld a,(wWarpDestGroup)
+  and $7f
+  ld b,a
+  ld a,(wWarpDestRoom)
+  ld c,a
+  ld hl, dungeonShuffleOpenFlagTable
+  @loopStart:
+  ldi a,(hl)
+  cp $ff 
+  jp z,$6163 ; Not a warp that we are interested in, initiateWarp
+  cp b ; Only checking the group number here
+  ldi a,(hl)
+  jr nz,@loopEnd
+  cp c ; Actually checking the "warp dest index" not the room index
+  jr nz,@loopEnd
+  ldi a,(hl)
+  ld l,(hl)
+  ld h,a
+  jp (hl)
+  @loopEnd:
+  inc hl
+  inc hl
+  jr @loopStart
+
+01//checkDungeonWarp_head : |
+  ld ($cc49),a
+  jp checkDungeonWarp_body
+
+01/6160/ : jp checkDungeonWarp_head
+01/61cf/ : jp checkDungeonWarp_body
+
+
+# prevent surfacing from underwater without the mermaid suit. this is only
+# relevant for the sea of no return if entrances are unrandomized.
+05//checkPreventSurface: |
+    ld a,(wDisableTransitions)
+    or a
+    ret nz
+    ld a,($c6a3) # byte in wObtainedTreasureFlags
+    and $04
+    cp $04
+    ret
+05/516c/: |
+  call checkPreventSurface
+  nop

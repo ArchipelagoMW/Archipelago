@@ -1,0 +1,1198 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 195,
+  "name": "West Cactus Alley",
+  "area": "Maridia",
+  "subarea": "Inner",
+  "subsubarea": "Pink",
+  "roomAddress": "0x7D9FE",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Bottom Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a93c",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1],
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a948",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2],
+        [1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "West Cactus Alley Top Cacatacs",
+      "enemyName": "Cacatac",
+      "quantity": 2,
+      "homeNodes": [2]
+    },
+    {
+      "id": "e2",
+      "groupName": "West Cactus Alley Bottom Cacatac",
+      "enemyName": "Cacatac",
+      "quantity": 1,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e3",
+      "groupName": "West Cactus Alley Middle Cacatac",
+      "enemyName": "Cacatac",
+      "quantity": 1,
+      "betweenNodes": [1, 2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 54,
+      "link": [1, 1],
+      "name": "Cacatac Farm (1 Cacatac)",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 90}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 120}
+          ]},
+          {"and": [
+            {"or": [
+              "Spazer",
+              "Wave"
+            ]},
+            {"cycleFrames": 140}
+          ]},
+          {"cycleFrames": 160}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Cacatac", "count": 1}]
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Cacatac Farm",
+      "requires": [
+        "HiJump",
+        {"resetRoom": {"nodes": [1]}},
+        {"partialRefill": {"type": "Energy", "limit": 300}},
+        {"partialRefill": {"type": "Super", "limit": 16}}
+      ]
+    },
+    {
+      "id": 41,
+      "link": [1, 1],
+      "name": "Cacatac Farm (Gravity)",
+      "requires": [
+        {"resetRoom": {"nodes": [1, 2]}},
+        "Gravity",
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "canUseFrozenEnemies",
+          "canGravityJump",
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "SpaceJump",
+          "canIBJ",
+          "canSpringBallBombJump"
+        ]},
+        {"refill": ["Super", "Energy"]}
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_crouchJumpDownGrab",
+          "canUseFrozenEnemies",
+          "canGravityJump",
+          "canWalljump",
+          "HiJump",
+          "canSpringBallJumpMidAir",
+          "SpaceJump",
+          "canIBJ",
+          "canSpringBallBombJump"
+        ]}
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 2],
+      "name": "Gravity Damage Boost",
+      "requires": [
+        "Gravity",
+        "canHorizontalDamageBoost",
+        "canCameraManip",
+        {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 1}}
+      ],
+      "note": "Damage boost up to the higher ledge using a Cacatac spike. Spikes only exist on camera so follow a vertically fired spike up to the correct height."
+    },
+    {
+      "id": 7,
+      "link": [1, 2],
+      "name": "Suitless HiJump plus Assist",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        {"or": [
+          "canSpringBallJumpMidAir",
+          "canUseFrozenEnemies"
+        ]}
+      ]
+    },
+    {
+      "id": 42,
+      "link": [1, 2],
+      "name": "Suitless HiJump Space Jump",
+      "requires": [
+        {"notable": "Suitless HiJump Space Jump"},
+        "canSuitlessMaridia",
+        "HiJump",
+        "canSpaceJumpWaterBounce",
+        {"or": [
+          "canTrickyJump",
+          "canWalljump"
+        ]}
+      ],
+      "note": [
+        "Jump to the water surface at low tide, then Space Jump on the waterline.",
+        "The timing of the initial jump is much more lenient with a single wall jump just below the waterline."
+      ]
+    },
+    {
+      "id": 8,
+      "link": [1, 2],
+      "name": "Suitless SpringBall Frozen Cacatac",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies",
+        "canTrickySpringBallJump",
+        "canCrouchJump"
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 2],
+      "name": "X-Ray Climb",
+      "entranceCondition": {
+        "comeInWithDoorStuckSetup": {}
+      },
+      "requires": [
+        "canXRayClimb"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Once Doorstuck, do 2 turnarounds and and kill the bottom Cacatac with angle shots.",
+        "Resume the climb until you're at the second Cacatac' height and kill it.",
+        "Resume the climb until Samus' chest pokes out of the ground and wiggle out to the right."
+      ]
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Cross Room Jump, Bootless",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 4.4375
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canDisableEquipment"
+      ],
+      "note": [
+        "The lenient version requires a runway of at least 5 tiles (with no open end) in the adjacent room.",
+        "This is easier without Speed Booster and requires disabling HiJump."
+      ]
+    },
+    {
+      "id": 11,
+      "link": [1, 2],
+      "name": "Tricky Cross Room Jump, Bootless",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": false,
+          "minTiles": 1.4375
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround",
+        "canTrickyJump",
+        "canDisableEquipment"
+      ],
+      "note": [
+        "Requires a runway of at least 2 tiles (with no open end) in the adjacent room.",
+        "This is typically easier without Speed Booster depending on the exact runway length and requires disabling HiJump."
+      ],
+      "devNote": "Although speedBooster false includes canDisableEquipment, the strat still includes it to indicate disabling HiJump."
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Tricky Dash Cross Room Jump",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": true,
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround",
+        "canTrickyDashJump",
+        "canDisableEquipment"
+      ],
+      "note": [
+        "It is possible to jump to the top door using a runway of just one tile with Speed Booster and no HiJump.",
+        "Requires a last-frame jump and down press that is late but not immediately before the turnaround.",
+        "With a second-to-last-frame jump it is still possible but more precise."
+      ]
+    },
+    {
+      "id": 53,
+      "link": [1, 2],
+      "name": "Side Platform Cross Room Jump",
+      "entranceCondition": {
+        "comeInWithSidePlatform": {
+          "platforms": [
+            {
+              "minHeight": 1,
+              "maxHeight": 1,
+              "minTiles": 2.4375,
+              "speedBooster": false,
+              "obstructions": [[1, 0]],
+              "note": [
+                "This applies to Seaweed Room, Skree Boost Room, Grapple Tutorial Room 2, Warehouse Energy Tank Room, and Warehouse Entrance."
+              ],
+              "devNote": [
+                "With Speed Booster and a Spring Ball jump, this can also work with shorter runways, as in Ice Beam Snake Room and Grapple Beam Room,",
+                "but it wouldn't be very useful, because with those items there are alternative strats using the doorway runway."
+              ]
+            },
+            {
+              "minHeight": 2,
+              "maxHeight": 2,
+              "minTiles": 4,
+              "speedBooster": false,
+              "obstructions": [[1, 0]],
+              "note": ["This applies to Ridley Tank Room and Dust Torizo Room."]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 7.4375,
+              "speedBooster": false,
+              "obstructions": [[1, 0]],
+              "requires": [
+                "HiJump"
+              ],
+              "note": ["This applies to Big Boy Room and Mickey Mouse Room."],
+              "devNote": [
+                "With a momentum-conserving turnaround, this could be done with shorter runway,",
+                "but there aren't rooms in the game that it would apply to."
+              ]
+            },
+            {
+              "minHeight": 3,
+              "maxHeight": 3,
+              "minTiles": 7.4375,
+              "speedBooster": false,
+              "obstructions": [[3, 2]],
+              "requires": [
+                "HiJump",
+                "canMomentumConservingMorph"
+              ],
+              "note": ["This applies to Metal Pirates Room."],
+              "devNote": [
+                "FIXME: assuming the other room is heated based on its geometry is awkward;",
+                "consider setting up a more proper way of representing it."
+              ]
+            }
+          ]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "devNote": [
+        "We don't consider side platforms in rooms where the doorway has a 2-tile runway or more,",
+        "since in that case getting up using the doorway runway can be done itemless relatively easily,",
+        "whereas using the side platform would be difficult because of the obstruction."
+      ]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Cross Room Space Jump",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": "any",
+          "minTiles": 5
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": "Gain speed from a remote runway in the previous room, and Space Jump through the bottom of the doorway."
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Tricky Cross Room Space Jump",
+      "entranceCondition": {
+        "comeInSpaceJumping": {
+          "speedBooster": "any",
+          "minTiles": 2
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingTurnaround",
+        "canTrickyJump"
+      ],
+      "note": "Gain speed from a remote runway in the previous room, and Space Jump through the bottom of the doorway."
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Cross Room Spring Ball Bounce (Uncontrolled)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": "any",
+          "movementType": "uncontrolled",
+          "remoteAndLandingMinTiles": [[2.5625, 1]]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump"
+      ]
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Cross Room Spring Ball Bounce (Controlled)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": "any",
+          "movementType": "controlled",
+          "remoteAndLandingMinTiles": [[3.5625, 1]]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "Cross Room Tricky Spring Ball Bounce (Uncontrolled)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": false,
+          "movementType": "uncontrolled",
+          "remoteAndLandingMinTiles": [[1.5625, 1]]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyJump",
+        "canMomentumConservingMorph"
+      ],
+      "note": "Unmorph just before hitting the overhang, to conserve momentum to make it on top."
+    },
+    {
+      "id": 18,
+      "link": [1, 2],
+      "name": "Cross Room Tricky Spring Ball Bounce (Controlled)",
+      "entranceCondition": {
+        "comeInWithSpringBallBounce": {
+          "speedBooster": "any",
+          "movementType": "controlled",
+          "remoteAndLandingMinTiles": [[2.5625, 1]]
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canMomentumConservingMorph"
+      ],
+      "note": "Unmorph just before hitting the overhang, to conserve momentum to make it on top."
+    },
+    {
+      "id": 19,
+      "link": [1, 2],
+      "name": "Gravity Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 4},
+        "Gravity",
+        {"shinespark": {"frames": 20, "excessFrames": 0}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 20,
+      "link": [1, 2],
+      "name": "Suitless Shinespark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 20},
+        "canSuitlessMaridia",
+        {"shinespark": {"frames": 20, "excessFrames": 0}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 21,
+      "link": [1, 2],
+      "name": "Underwater Walljumps",
+      "requires": [
+        "canUnderwaterWalljump"
+      ],
+      "note": [
+        "It can be difficult to land on the ledge when the waterline is low.",
+        "It may be necessary to time the walljump attempts by watching the water level, or by stalling with additional walljumps as the water rises."
+      ]
+    },
+    {
+      "id": 52,
+      "link": [1, 2],
+      "name": "Underwater Bomb Into Spring Ball Jump",
+      "requires": [
+        "canDoubleSpringBallJumpMidAir",
+        "canUnderwaterBombIntoSpringBallJump"
+      ],
+      "note": [
+        "Perform a double Spring Ball jump without Hi-Jump,",
+        "using a Bomb to propel Samus upward just long enough to get the second mid-air Spring Ball jump."
+      ],
+      "detailNote": [
+        "Crouch, press pause, delay the initial jump as long as possible, and perform a very quick mid-air morph;",
+        "it can help to keep holding down when crouching, to buffer the aim-down input.",
+        "Equip Spring Ball, unpause, press Start to pause again, and perform a max-height Spring Ball jump;",
+        "ideally Start should be pressed slightly before the mid-air jump.",
+        "Unequip Spring Ball, unpause, and lay a Bomb slightly after regaining control (do not buffer it).",
+        "The Bomb should be laid between 5 frames and about 10 frames after regaining control, while the screen is still fairly dark.",
+        "Then press pause between 23 and 25 frames later and buffer a second Spring Ball jump.",
+        "The end of the frame window for when the Bomb can be laid depends on how well the first part was done",
+        "(with a larger window being obtained by pausing as early as possible both times and jumping as late as possible both times);",
+        "but the delay between laying the Bomb and performing the final pause is always the same 3-frame window."
+      ]
+    },
+    {
+      "id": 39,
+      "link": [1, 2],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 17, "excessFrames": 3}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 7, "excessFrames": 5}}
+          ]}
+        ]},
+        {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 1}}
+      ],
+      "flashSuitChecked": true,
+      "devNote": "The spike hit may be avoidable, but it shouldn't matter much."
+    },
+    {
+      "id": 40,
+      "link": [1, 2],
+      "name": "Cross Room Jump, Use Flash Suit",
+      "entranceCondition": {
+        "comeInJumping": {
+          "speedBooster": "any",
+          "minTiles": 1
+        }
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 10, "excessFrames": 5}},
+        {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 1}}
+      ],
+      "flashSuitChecked": true,
+      "devNote": [
+        "The spike hit may be avoidable, but it shouldn't matter much.",
+        "The runway could be reduced to 0.4375 tiles with SpeedBooster."
+      ]
+    },
+    {
+      "id": 43,
+      "link": [1, 2],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 0
+        }
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 120}
+          ]},
+          {"and": [
+            "canWalljump",
+            {"shineChargeFrames": 150}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 44,
+      "link": [1, 2],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 115}
+          ]},
+          {"and": [
+            "canWalljump",
+            {"shineChargeFrames": 130}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 45,
+      "link": [1, 2],
+      "name": "Come In Shinecharged, Leave With Spark (Bottom Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 90},
+            {"shinespark": {"frames": 6, "excessFrames": 0}}
+          ]},
+          {"and": [
+            "canWalljump",
+            {"shineChargeFrames": 110},
+            {"shinespark": {"frames": 5, "excessFrames": 0}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 46,
+      "link": [1, 2],
+      "name": "Come In Shinecharged, Leave With Spark (Top Position)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "Gravity",
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"shineChargeFrames": 100},
+            {"shinespark": {"frames": 5, "excessFrames": 0}}
+          ]},
+          {"and": [
+            "canWalljump",
+            {"shineChargeFrames": 110},
+            {"shinespark": {"frames": 5, "excessFrames": 0}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {
+          "position": "top"
+        }
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 47,
+      "link": [1, 2],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphDoubleSpringBallJump"
+      ],
+      "flashSuitChecked": true,
+      "note": "Be careful to avoid the stationary, invisible Cacatac spikes."
+    },
+    {
+      "id": 51,
+      "link": [1, 2],
+      "name": "Tricky Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [
+            {"position": [-1, 5], "environment": "water", "note": "Mt. Everest"},
+            {"position": [8, 3], "note": "Grapple Beam Room"},
+            {"position": [7, 3], "note": "Colosseum"},
+            {"position": [6, 4], "note": "Grapple Tutorial Room 2"}
+          ]
+        }
+      },
+      "requires": [
+        "canTrickyGrappleJump"
+      ]
+    },
+    {
+      "id": 22,
+      "link": [1, 2],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12], [12, 13]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 23,
+      "link": [1, 2],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 12]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 24,
+      "link": [1, 2],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[12, 13]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": []
+    },
+    {
+      "id": 48,
+      "link": [2, 1],
+      "name": "Come In Shinecharging, Leave Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 125}
+          ]},
+          {"shineChargeFrames": 160}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 49,
+      "link": [2, 1],
+      "name": "Carry Shinecharge",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 125}
+          ]},
+          {"shineChargeFrames": 150}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 50,
+      "link": [2, 1],
+      "name": "Come In Shinecharged, Leave With Spark",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        "canShinechargeMovementComplex",
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"shineChargeFrames": 80},
+            {"shinespark": {"frames": 9, "excessFrames": 0}}
+          ]},
+          {"and": [
+            {"shineChargeFrames": 90},
+            {"shinespark": {"frames": 8, "excessFrames": 0}}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpark": {}
+      },
+      "unlocksDoors": [
+        {"types": ["super"], "requires": []},
+        {"types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 26,
+      "link": [2, 1],
+      "name": "Come in Shinecharging, Leave With Temporary Blue",
+      "entranceCondition": {
+        "comeInShinecharging": {
+          "length": 0,
+          "openEnd": 1
+        }
+      },
+      "requires": [
+        "canTrickyJump",
+        "canChainTemporaryBlue"
+      ],
+      "exitCondition": {
+        "leaveWithTemporaryBlue": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}]
+    },
+    {
+      "id": 27,
+      "link": [2, 1],
+      "name": "Grapple Teleport Door Lock Skip",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18], [2, 19], [2, 28], [2, 29]]
+        }
+      },
+      "requires": [],
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 28,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Top Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 18]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 29,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Upper Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 19]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 30,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Lower Middle Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 28]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 31,
+      "link": [2, 1],
+      "name": "Carry Grapple Teleport (Bottom Position)",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGrappleTeleport": {
+          "blockPositions": [[2, 29]]
+        }
+      },
+      "bypassesDoorShell": true
+    },
+    {
+      "id": 32,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 3,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 33,
+      "link": [2, 2],
+      "name": "Leave Spinning",
+      "requires": [
+        {"or": [
+          "Gravity",
+          "canCarefulJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 34,
+      "link": [2, 2],
+      "name": "Leave With Mockball",
+      "requires": [
+        {"or": [
+          "Gravity",
+          "canCarefulJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 35,
+      "link": [2, 2],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        {"or": [
+          "Gravity",
+          "canCarefulJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 3,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 36,
+      "link": [2, 2],
+      "name": "Leave Space Jumping",
+      "requires": [
+        {"or": [
+          "Gravity",
+          "canCarefulJump"
+        ]}
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 55,
+      "link": [2, 2],
+      "name": "Cacatac Farm (2 Cacatac)",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 185}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 200}
+          ]},
+          {"and": [
+            {"or": [
+              "Spazer",
+              "Wave"
+            ]},
+            {"cycleFrames": 220}
+          ]},
+          {"cycleFrames": 465}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Cacatac", "count": 2}]
+    },
+    {
+      "id": 2,
+      "link": [2, 2],
+      "name": "Cacatac Farm (4 Cacatac)",
+      "requires": [
+        "Gravity",
+        {"resetRoom": {"nodes": [1, 2]}},
+        {"or": [
+          {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 1}},
+          {"and": [
+            "canDodgeWhileShooting",
+            {"cycleFrames": 100}
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"cycleFrames": 360}
+          ]},
+          {"and": [
+            "canWalljump",
+            {"cycleFrames": 390}
+          ]},
+          {"and": [
+            "h_crouchJumpDownGrab",
+            {"cycleFrames": 490}
+          ]}
+        ]},
+        {"or": [
+          "Plasma",
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 80}
+          ]},
+          {"and": [
+            {"or": [
+              "Spazer",
+              "Wave"
+            ]},
+            {"cycleFrames": 50}
+          ]},
+          {"and": [
+            "Grapple",
+            {"cycleFrames": 60}
+          ]},
+          {"and": [
+            {"cycleFrames": 180},
+            {"or": [
+              {"enemyDamage": {"enemy": "Cacatac", "type": "spike", "hits": 1}},
+              {"and": [
+                "canTrickyDodgeEnemies",
+                {"cycleFrames": 100}
+              ]}
+            ]}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Cacatac", "count": 4}]
+    },
+    {
+      "id": 38,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Suitless HiJump Space Jump",
+      "note": [
+        "Jump to the water surface at low tide, then Space Jump on the waterline.",
+        "The timing of the initial jump is much more lenient with a single wall jump just below the waterline."
+      ]
+    }
+  ],
+  "nextStratId": 56,
+  "nextNotableId": 2,
+  "devNote": ["FIXME: add 1->2 leaveWithTemporaryBlue strats."]
+}

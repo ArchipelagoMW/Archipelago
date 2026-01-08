@@ -1,0 +1,2607 @@
+{
+  "REGION_ONE_ISLAND_HARBOR/MAIN": {
+    "parent_map": "MAP_ONE_ISLAND_HARBOR",
+    "name": "One Island Harbor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAGALLOP": "Board Seagallop (One Island)"
+    },
+    "warps": {
+      "MAP_ONE_ISLAND_HARBOR:0/MAP_ONE_ISLAND:3": "One Island Harbor Exit"
+    }
+  },
+  "REGION_ONE_ISLAND/VISIT": {
+    "parent_map": "MAP_ONE_ISLAND",
+    "name": "One Island Town (Visit)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "FLY_UNLOCK_VISITED_ONE_ISLAND"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ONE_ISLAND/MAIN": {
+    "parent_map": "MAP_ONE_ISLAND",
+    "name": "One Island Town",
+    "encounter_region": "One Island Town",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ONE_ISLAND/WATER": "One Island Town Surfing Spot",
+      "REGION_ONE_ISLAND/VISIT": "Visit One Island Town",
+      "REGION_ONE_ISLAND_KINDLE_ROAD/SOUTH": "One Island Town Exit (East)"
+    },
+    "warps": {
+      "MAP_ONE_ISLAND:0/MAP_ONE_ISLAND_POKEMON_CENTER_1F:0": "One Island Pokemon Center",
+      "MAP_ONE_ISLAND:1/MAP_ONE_ISLAND_HOUSE1:0": "One Island Old Couple's House",
+      "MAP_ONE_ISLAND:2/MAP_ONE_ISLAND_HOUSE2:0": "One Island Lass' House",
+      "MAP_ONE_ISLAND:3/MAP_ONE_ISLAND_HARBOR:0": "One Island Harbor"
+    }
+  },
+  "REGION_ONE_ISLAND/WATER": {
+    "parent_map": "MAP_ONE_ISLAND",
+    "name": "One Island Town (Water)",
+    "encounter_region": "One Island Town",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ONE_ISLAND_TREASURE_BEACH/WATER": "One Island Town Exit (South)"
+    },
+    "warps": {}
+  },
+  "REGION_ONE_ISLAND_POKEMON_CENTER_1F/MAIN": {
+    "parent_map": "MAP_ONE_ISLAND_POKEMON_CENTER_1F",
+    "name": "One Island Pokemon Center 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "NPC_GIFT_GOT_METEORITE",
+      "NPC_GIFT_GOT_TRI_PASS",
+      "NPC_GIFT_GOT_RAINBOW_PASS",
+      "NPC_GIFT_GOT_SEVEN_PASS",
+      "FAME_CHECKER_BILL_4",
+      "FAME_CHECKER_BILL_5",
+      "FAME_CHECKER_BILL_6"
+    ],
+    "events": [
+      "EVENT_RESTORE_POKEMON_NETWORK_MACHINE"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_ONE_ISLAND_POKEMON_CENTER_1F:0/MAP_ONE_ISLAND:0": "One Island Pokemon Center 1F Exit",
+      "MAP_ONE_ISLAND_POKEMON_CENTER_1F:1/MAP_ONE_ISLAND_POKEMON_CENTER_2F:0": "One Island Pokemon Center 1F Stairs"
+    }
+  },
+  "REGION_ONE_ISLAND_POKEMON_CENTER_2F/MAIN": {
+    "parent_map": "MAP_ONE_ISLAND_POKEMON_CENTER_2F",
+    "name": "One Island Pokemon Center 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ONE_ISLAND_POKEMON_CENTER_2F:0/MAP_ONE_ISLAND_POKEMON_CENTER_1F:1": "One Island Pokemon Center 2F Stairs"
+    }
+  },
+  "REGION_ONE_ISLAND_HOUSE1/MAIN": {
+    "parent_map": "MAP_ONE_ISLAND_HOUSE1",
+    "name": "One Island Old Couple's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ONE_ISLAND_HOUSE1:0/MAP_ONE_ISLAND:1": "One Island Old Couple's House Exit"
+    }
+  },
+  "REGION_ONE_ISLAND_HOUSE2/MAIN": {
+    "parent_map": "MAP_ONE_ISLAND_HOUSE2",
+    "name": "One Island Lass' House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ONE_ISLAND_HOUSE2:0/MAP_ONE_ISLAND:2": "One Island Lass' House Exit"
+    }
+  },
+  "REGION_ONE_ISLAND_TREASURE_BEACH/WATER": {
+    "parent_map": "MAP_ONE_ISLAND_TREASURE_BEACH",
+    "name": "Treasure Beach (Water)",
+    "encounter_region": "Treasure Beach",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_SWIMMER_FEMALE_AMARA_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ONE_ISLAND_TREASURE_BEACH/BEACH": "Treasure Beach Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_ONE_ISLAND_TREASURE_BEACH/BEACH": {
+    "parent_map": "MAP_ONE_ISLAND_TREASURE_BEACH",
+    "name": "Treasure Beach",
+    "encounter_region": "Treasure Beach",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "HIDDEN_ITEM_ONE_ISLAND_TREASURE_BEACH_STARDUST",
+      "HIDDEN_ITEM_ONE_ISLAND_TREASURE_BEACH_ULTRA_BALL",
+      "HIDDEN_ITEM_ONE_ISLAND_TREASURE_BEACH_BIG_PEARL",
+      "HIDDEN_ITEM_ONE_ISLAND_TREASURE_BEACH_STARDUST_2",
+      "HIDDEN_ITEM_ONE_ISLAND_TREASURE_BEACH_PEARL",
+      "HIDDEN_ITEM_ONE_ISLAND_TREASURE_BEACH_STAR_PIECE",
+      "HIDDEN_ITEM_ONE_ISLAND_TREASURE_BEACH_PEARL_2",
+      "HIDDEN_ITEM_ONE_ISLAND_TREASURE_BEACH_ULTRA_BALL_2"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_ONE_ISLAND_KINDLE_ROAD/SOUTH": {
+    "parent_map": "MAP_ONE_ISLAND_KINDLE_ROAD",
+    "name": "Kindle Road (South)",
+    "encounter_region": "Kindle Road",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ONE_ISLAND_KINDLE_ROAD/SOUTH_WATER": "Kindle Road (South) Surfing Spot",
+      "REGION_ONE_ISLAND/MAIN": "Kindle Road Exit (West)"
+    },
+    "warps": {}
+  },
+  "REGION_ONE_ISLAND_KINDLE_ROAD/SOUTH_WATER": {
+    "parent_map": "MAP_ONE_ISLAND_KINDLE_ROAD",
+    "name": "Kindle Road (South Water)",
+    "encounter_region": "Kindle Road",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_SWIMMER_FEMALE_ABIGAIL_REWARD",
+      "ITEM_ONE_ISLAND_KINDLE_ROAD_MAX_REPEL"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ONE_ISLAND_KINDLE_ROAD/SOUTH": "Kindle Road (South) Landing Spot",
+      "REGION_ONE_ISLAND_KINDLE_ROAD/CENTER": "Kindle Road (Center) Landing Spot (Bottom)"
+    },
+    "warps": {}
+  },
+  "REGION_ONE_ISLAND_KINDLE_ROAD/CENTER": {
+    "parent_map": "MAP_ONE_ISLAND_KINDLE_ROAD",
+    "name": "Kindle Road (Center)",
+    "encounter_region": "Kindle Road",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_PICNICKER_CLAIRE_REWARD",
+      "TRAINER_CAMPER_BRYCE_REWARD",
+      "TRAINER_CRUSH_GIRL_TANYA_REWARD",
+      "TRAINER_CRUSH_GIRL_TANYA_2_REWARD",
+      "TRAINER_CRUSH_GIRL_TANYA_3_REWARD",
+      "ITEM_ONE_ISLAND_KINDLE_ROAD_CARBOS",
+      "TRAINER_SWIMMER_MALE_GARRETT_REWARD",
+      "ITEM_ONE_ISLAND_KINDLE_ROAD_ETHER",
+      "TRAINER_CRUSH_KIN_MIK_KIA_REWARD",
+      "TRAINER_CRUSH_KIN_MIK_KIA_2_REWARD",
+      "TRAINER_CRUSH_KIN_MIK_KIA_3_REWARD",
+      "TRAINER_BLACK_BELT_HUGH_REWARD",
+      "TRAINER_BLACK_BELT_HUGH_2_REWARD",
+      "TRAINER_BLACK_BELT_HUGH_3_REWARD",
+      "TRAINER_BLACK_BELT_SHEA_REWARD",
+      "TRAINER_BLACK_BELT_SHEA_2_REWARD",
+      "TRAINER_BLACK_BELT_SHEA_3_REWARD",
+      "TRAINER_CRUSH_GIRL_SHARON_REWARD",
+      "TRAINER_CRUSH_GIRL_SHARON_2_REWARD",
+      "TRAINER_CRUSH_GIRL_SHARON_3_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ONE_ISLAND_KINDLE_ROAD/SOUTH_WATER": "Kindle Road (Center) Surfing Spot (Bottom)",
+      "REGION_ONE_ISLAND_KINDLE_ROAD/NORTH_WATER": "Kindle Road (Center) Surfing Spot (Top)"
+    },
+    "warps": {
+      "MAP_ONE_ISLAND_KINDLE_ROAD:2/MAP_ONE_ISLAND_KINDLE_ROAD_EMBER_SPA:0": "Ember Spa"
+    }
+  },
+  "REGION_ONE_ISLAND_KINDLE_ROAD/NORTH_WATER": {
+    "parent_map": "MAP_ONE_ISLAND_KINDLE_ROAD",
+    "name": "Kindle Road (North Water)",
+    "encounter_region": "Kindle Road",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_SWIMMER_MALE_FINN_REWARD",
+      "TRAINER_SWIMMER_MALE_FINN_2_REWARD",
+      "TRAINER_SWIMMER_FEMALE_MARIA_REWARD",
+      "TRAINER_FISHERMAN_TOMMY_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_ONE_ISLAND_KINDLE_ROAD/CENTER": "Kindle Road (Center) Landing Spot (Top)",
+      "REGION_ONE_ISLAND_KINDLE_ROAD/NORTH": "Kindle Road (North) Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_ONE_ISLAND_KINDLE_ROAD/NORTH": {
+    "parent_map": "MAP_ONE_ISLAND_KINDLE_ROAD",
+    "name": "Kindle Road (North)",
+    "encounter_region": "Kindle Road",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_ONE_ISLAND_KINDLE_ROAD/NORTH_WATER": "Kindle Road (North) Surfing Spot"
+    },
+    "warps": {
+      "MAP_ONE_ISLAND_KINDLE_ROAD:0,1/MAP_MT_EMBER_EXTERIOR:0,1": "Mt. Ember"
+    }
+  },
+  "REGION_ONE_ISLAND_KINDLE_ROAD_EMBER_SPA/MAIN": {
+    "parent_map": "MAP_ONE_ISLAND_KINDLE_ROAD_EMBER_SPA",
+    "name": "Ember Spa",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "NPC_GIFT_GOT_HM06",
+      "FAME_CHECKER_BRUNO_4"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_ONE_ISLAND_KINDLE_ROAD_EMBER_SPA:0/MAP_ONE_ISLAND_KINDLE_ROAD:2": "Ember Spa Exit"
+    }
+  },
+  "REGION_TWO_ISLAND_HARBOR/MAIN": {
+    "parent_map": "MAP_TWO_ISLAND_HARBOR",
+    "name": "Two Island Harbor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAGALLOP": "Board Seagallop (Two Island)"
+    },
+    "warps": {
+      "MAP_TWO_ISLAND_HARBOR:0/MAP_TWO_ISLAND:3": "Two Island Harbor Exit"
+    }
+  },
+  "REGION_TWO_ISLAND/VISIT": {
+    "parent_map": "MAP_TWO_ISLAND",
+    "name": "Two Island Town (Visit)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "FLY_UNLOCK_VISITED_TWO_ISLAND"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_TWO_ISLAND/MAIN": {
+    "parent_map": "MAP_TWO_ISLAND",
+    "name": "Two Island Town",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_TWO_ISLAND_REVIVE",
+      "SHOP_TWO_ISLAND_1",
+      "SHOP_TWO_ISLAND_2",
+      "SHOP_TWO_ISLAND_3",
+      "SHOP_TWO_ISLAND_4",
+      "SHOP_TWO_ISLAND_5",
+      "SHOP_TWO_ISLAND_6",
+      "SHOP_TWO_ISLAND_7",
+      "SHOP_TWO_ISLAND_8",
+      "SHOP_TWO_ISLAND_9",
+      "FAME_CHECKER_BRUNO_5"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_TWO_ISLAND/VISIT": "Visit Two Island Town",
+      "REGION_TWO_ISLAND_CAPE_BRINK/MAIN": "Two Island Town Exit (North)"
+    },
+    "warps": {
+      "MAP_TWO_ISLAND:0/MAP_TWO_ISLAND_JOYFUL_GAME_CORNER:0": "Two Island Game Corner",
+      "MAP_TWO_ISLAND:1/MAP_TWO_ISLAND_HOUSE:0": "Move Maniac's House",
+      "MAP_TWO_ISLAND:2/MAP_TWO_ISLAND_POKEMON_CENTER_1F:0": "Two Island Pokemon Center",
+      "MAP_TWO_ISLAND:3/MAP_TWO_ISLAND_HARBOR:0": "Two Island Harbor"
+    }
+  },
+  "REGION_TWO_ISLAND_JOYFUL_GAME_CORNER/MAIN": {
+    "parent_map": "MAP_TWO_ISLAND_JOYFUL_GAME_CORNER",
+    "name": "Two Island Game Corner",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "NPC_GIFT_GOT_MOON_STONE_FROM_JOYFUL_GAME_CORNER"
+    ],
+    "events": [
+      "EVENT_DELIVER_METEORITE"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_TWO_ISLAND_JOYFUL_GAME_CORNER:0/MAP_TWO_ISLAND:0": "Two Island Game Corner Exit"
+    }
+  },
+  "REGION_TWO_ISLAND_HOUSE/MAIN": {
+    "parent_map": "MAP_TWO_ISLAND_HOUSE",
+    "name": "Move Maniac's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_TWO_ISLAND_HOUSE:0/MAP_TWO_ISLAND:1": "Move Maniac's House Exit"
+    }
+  },
+  "REGION_TWO_ISLAND_POKEMON_CENTER_1F/MAIN": {
+    "parent_map": "MAP_TWO_ISLAND_POKEMON_CENTER_1F",
+    "name": "Two Island Pokemon Center 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_TWO_ISLAND_POKEMON_CENTER_1F:0/MAP_TWO_ISLAND:2": "Two Island Pokemon Center 1F Exit",
+      "MAP_TWO_ISLAND_POKEMON_CENTER_1F:1/MAP_TWO_ISLAND_POKEMON_CENTER_2F:0": "Two Island Pokemon Center 1F Stairs"
+    }
+  },
+  "REGION_TWO_ISLAND_POKEMON_CENTER_2F/MAIN": {
+    "parent_map": "MAP_TWO_ISLAND_POKEMON_CENTER_2F",
+    "name": "Two Island Pokemon Center 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_TWO_ISLAND_POKEMON_CENTER_2F:0/MAP_TWO_ISLAND_POKEMON_CENTER_1F:1": "Two Island Pokemon Center 2F Stairs"
+    }
+  },
+  "REGION_TWO_ISLAND_CAPE_BRINK/MAIN": {
+    "parent_map": "MAP_TWO_ISLAND_CAPE_BRINK",
+    "name": "Cape Brink",
+    "encounter_region": "Cape Brink",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "HIDDEN_ITEM_TWO_ISLAND_CAPE_BRINK_RARE_CANDY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_TWO_ISLAND_CAPE_BRINK/WATER": "Cape Brink Surfing Spot",
+      "REGION_TWO_ISLAND/MAIN": "Cape Brink Exit (South)"
+    },
+    "warps": {
+      "MAP_TWO_ISLAND_CAPE_BRINK:0/MAP_TWO_ISLAND_CAPE_BRINK_HOUSE:0": "Starter Tutor's House"
+    }
+  },
+  "REGION_TWO_ISLAND_CAPE_BRINK/WATER": {
+    "parent_map": "MAP_TWO_ISLAND_CAPE_BRINK",
+    "name": "Cape Brink (Water)",
+    "encounter_region": "Cape Brink",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "HIDDEN_ITEM_TWO_ISLAND_CAPE_BRINK_PP_MAX"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_TWO_ISLAND_CAPE_BRINK_HOUSE/MAIN": {
+    "parent_map": "MAP_TWO_ISLAND_CAPE_BRINK_HOUSE",
+    "name": "Starter Tutor's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_TWO_ISLAND_CAPE_BRINK_HOUSE:0/MAP_TWO_ISLAND_CAPE_BRINK:0": "Starter Tutor's House Exit"
+    }
+  },
+  "REGION_THREE_ISLAND_HARBOR/MAIN": {
+    "parent_map": "MAP_THREE_ISLAND_HARBOR",
+    "name": "Three Island Harbor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAGALLOP": "Board Seagallop (Three Island)"
+    },
+    "warps": {
+      "MAP_THREE_ISLAND_HARBOR:0/MAP_THREE_ISLAND_PORT:2": "Three Island Harbor Exit"
+    }
+  },
+  "REGION_THREE_ISLAND_PORT/WEST": {
+    "parent_map": "MAP_THREE_ISLAND_PORT",
+    "name": "Three Isle Port (West)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_THREE_ISLAND/SOUTH": "Three Isle Port Exit (North)"
+    },
+    "warps": {
+      "MAP_THREE_ISLAND_PORT:0/MAP_THREE_ISLAND_DUNSPARCE_TUNNEL:0": "Three Isle Path (West)",
+      "MAP_THREE_ISLAND_PORT:2/MAP_THREE_ISLAND_HARBOR:0": "Three Island Harbor"
+    }
+  },
+  "REGION_THREE_ISLAND_PORT/EAST": {
+    "parent_map": "MAP_THREE_ISLAND_PORT",
+    "name": "Three Isle Port (East)",
+    "encounter_region": "Three Isle Port",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_THREE_ISLAND_PORT:1/MAP_THREE_ISLAND_DUNSPARCE_TUNNEL:1": "Three Isle Path (East)"
+    }
+  },
+  "REGION_THREE_ISLAND_DUNSPARCE_TUNNEL/MAIN": {
+    "parent_map": "MAP_THREE_ISLAND_DUNSPARCE_TUNNEL",
+    "name": "Three Isle Path",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "HIDDEN_ITEM_THREE_ISLAND_DUNSPARCE_TUNNEL_NUGGET",
+      "NPC_GIFT_GOT_NUGGET_FROM_DUNSPARCE_TUNNEL"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_THREE_ISLAND_DUNSPARCE_TUNNEL:0/MAP_THREE_ISLAND_PORT:0": "Three Isle Path Exit (West)",
+      "MAP_THREE_ISLAND_DUNSPARCE_TUNNEL:1/MAP_THREE_ISLAND_PORT:1": "Three Isle Path Exit (East)"
+    }
+  },
+  "REGION_THREE_ISLAND/VISIT": {
+    "parent_map": "MAP_THREE_ISLAND",
+    "name": "Three Island Town (Visit)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "FLY_UNLOCK_VISITED_THREE_ISLAND"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_THREE_ISLAND/SOUTH": {
+    "parent_map": "MAP_THREE_ISLAND",
+    "name": "Three Island Town (South)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "TRAINER_BIKER_GOON_REWARD",
+      "TRAINER_BIKER_GOON_2_REWARD",
+      "TRAINER_BIKER_GOON_3_REWARD",
+      "TRAINER_CUE_BALL_PAXTON_REWARD",
+      "NPC_GIFT_GOT_FULL_RESTORE_FROM_THREE_ISLAND_DEFENDER"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_THREE_ISLAND/VISIT": "Visit Three Island Town (South)",
+      "REGION_THREE_ISLAND/NORTH": "Three Island Town Biker Blockade",
+      "REGION_THREE_ISLAND_PORT/WEST": "Three Island Town Exit (South)"
+    },
+    "warps": {
+      "MAP_THREE_ISLAND:0/MAP_THREE_ISLAND_HOUSE1:0": "Lostelle's House",
+      "MAP_THREE_ISLAND:1/MAP_THREE_ISLAND_POKEMON_CENTER_1F:0": "Three Island Pokemon Center"
+    }
+  },
+  "REGION_THREE_ISLAND/NORTH": {
+    "parent_map": "MAP_THREE_ISLAND",
+    "name": "Three Island Town (North)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_THREE_ISLAND_ZINC",
+      "HIDDEN_ITEM_THREE_ISLAND_PP_UP"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_THREE_ISLAND/VISIT": "Visit Three Island Town (North)",
+      "REGION_THREE_ISLAND_BOND_BRIDGE/MAIN": "Three Island Town Exit (West)"
+    },
+    "warps": {
+      "MAP_THREE_ISLAND:2/MAP_THREE_ISLAND_MART:0": "Three Island Poke Mart",
+      "MAP_THREE_ISLAND:3/MAP_THREE_ISLAND_HOUSE2:0": "Sabrina Fan's House",
+      "MAP_THREE_ISLAND:4/MAP_THREE_ISLAND_HOUSE3:0": "Three Island Beauty's House",
+      "MAP_THREE_ISLAND:5/MAP_THREE_ISLAND_HOUSE4:0": "Three Island Worried Father's House",
+      "MAP_THREE_ISLAND:6/MAP_THREE_ISLAND_HOUSE5:0": "Lostelle's Friend's House"
+    }
+  },
+  "REGION_THREE_ISLAND_HOUSE1/MAIN": {
+    "parent_map": "MAP_THREE_ISLAND_HOUSE1",
+    "name": "Lostelle's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "NPC_GIFT_GOT_TWO_PASS"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_THREE_ISLAND_HOUSE1:0/MAP_THREE_ISLAND:0": "Lostelle's House Exit"
+    }
+  },
+  "REGION_THREE_ISLAND_POKEMON_CENTER_1F/MAIN": {
+    "parent_map": "MAP_THREE_ISLAND_POKEMON_CENTER_1F",
+    "name": "Three Island Pokemon Center 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_THREE_ISLAND_POKEMON_CENTER_1F:0/MAP_THREE_ISLAND:1": "Three Island Pokemon Center 1F Exit",
+      "MAP_THREE_ISLAND_POKEMON_CENTER_1F:1/MAP_THREE_ISLAND_POKEMON_CENTER_2F:0": "Three Island Pokemon Center 1F Stairs"
+    }
+  },
+  "REGION_THREE_ISLAND_POKEMON_CENTER_2F/MAIN": {
+    "parent_map": "MAP_THREE_ISLAND_POKEMON_CENTER_2F",
+    "name": "Three Island Pokemon Center 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_THREE_ISLAND_POKEMON_CENTER_2F:0/MAP_THREE_ISLAND_POKEMON_CENTER_1F:1": "Three Island Pokemon Center 2F Stairs"
+    }
+  },
+  "REGION_THREE_ISLAND_MART/MAIN": {
+    "parent_map": "MAP_THREE_ISLAND_MART",
+    "name": "Three Island Poke Mart",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "SHOP_THREE_ISLAND_1",
+      "SHOP_THREE_ISLAND_2",
+      "SHOP_THREE_ISLAND_3",
+      "SHOP_THREE_ISLAND_4",
+      "SHOP_THREE_ISLAND_5",
+      "SHOP_THREE_ISLAND_6"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_THREE_ISLAND_MART:0/MAP_THREE_ISLAND:2": "Three Island Poke Mart Exit"
+    }
+  },
+  "REGION_THREE_ISLAND_HOUSE2/MAIN": {
+    "parent_map": "MAP_THREE_ISLAND_HOUSE2",
+    "name": "Sabrina Fan's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "FAME_CHECKER_SABRINA_2"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_THREE_ISLAND_HOUSE2:0/MAP_THREE_ISLAND:3": "Sabrina Fan's House Exit"
+    }
+  },
+  "REGION_THREE_ISLAND_HOUSE3/MAIN": {
+    "parent_map": "MAP_THREE_ISLAND_HOUSE3",
+    "name": "Three Island Beauty's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_THREE_ISLAND_HOUSE3:0/MAP_THREE_ISLAND:4": "Three Island Beauty's House Exit"
+    }
+  },
+  "REGION_THREE_ISLAND_HOUSE4/MAIN": {
+    "parent_map": "MAP_THREE_ISLAND_HOUSE4",
+    "name": "Three Island Worried Father's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_THREE_ISLAND_HOUSE4:0/MAP_THREE_ISLAND:5": "Three Island Worried Father's House Exit"
+    }
+  },
+  "REGION_THREE_ISLAND_HOUSE5/MAIN": {
+    "parent_map": "MAP_THREE_ISLAND_HOUSE5",
+    "name": "Lostelle's Friend's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_THREE_ISLAND_HOUSE5:0/MAP_THREE_ISLAND:6": "Lostelle's Friend's House Exit"
+    }
+  },
+  "REGION_THREE_ISLAND_BOND_BRIDGE/MAIN": {
+    "parent_map": "MAP_THREE_ISLAND_BOND_BRIDGE",
+    "name": "Bond Bridge",
+    "encounter_region": "Bond Bridge",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_TWINS_JOY_MEG_REWARD",
+      "TRAINER_TWINS_JOY_MEG_2_REWARD",
+      "HIDDEN_ITEM_THREE_ISLAND_BOND_BRIDGE_MAX_REPEL",
+      "TRAINER_AROMA_LADY_VIOLET_REWARD",
+      "TRAINER_TUBER_ALEXIS_REWARD",
+      "HIDDEN_ITEM_THREE_ISLAND_BOND_BRIDGE_PEARL",
+      "HIDDEN_ITEM_THREE_ISLAND_BOND_BRIDGE_STARDUST",
+      "TRAINER_TUBER_AMIRA_REWARD",
+      "TRAINER_TUBER_AMIRA_2_REWARD",
+      "TRAINER_AROMA_LADY_NIKKI_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_THREE_ISLAND_BOND_BRIDGE/WATER": "Bond Bridge Surfing Spot",
+      "REGION_THREE_ISLAND/NORTH": "Bond Bridge Exit (East)"
+    },
+    "warps": {
+      "MAP_THREE_ISLAND_BOND_BRIDGE:0,1/MAP_THREE_ISLAND_BERRY_FOREST:0": "Berry Forest"
+    }
+  },
+  "REGION_THREE_ISLAND_BOND_BRIDGE/WATER": {
+    "parent_map": "MAP_THREE_ISLAND_BOND_BRIDGE",
+    "name": "Bond Bridge (Water)",
+    "encounter_region": "Bond Bridge",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_SWIMMER_FEMALE_TISHA_REWARD"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_FOUR_ISLAND_HARBOR/MAIN": {
+    "parent_map": "MAP_FOUR_ISLAND_HARBOR",
+    "name": "Four Island Harbor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAGALLOP": "Board Seagallop (Four Island)"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND_HARBOR:0/MAP_FOUR_ISLAND:6": "Four Island Harbor Exit"
+    }
+  },
+  "REGION_FOUR_ISLAND/VISIT": {
+    "parent_map": "MAP_FOUR_ISLAND",
+    "name": "Four Island Town (Visit)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "FLY_UNLOCK_VISITED_FOUR_ISLAND"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_FOUR_ISLAND/MAIN": {
+    "parent_map": "MAP_FOUR_ISLAND",
+    "name": "Four Island Town",
+    "encounter_region": "Four Island Town",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "HIDDEN_ITEM_FOUR_ISLAND_PEARL",
+      "HIDDEN_ITEM_FOUR_ISLAND_ULTRA_BALL",
+      "ITEM_FOUR_ISLAND_STAR_PIECE",
+      "FAME_CHECKER_LORELEI_5",
+      "FAME_CHECKER_LORELEI_6"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND/WATER": "Four Island Town Surfing Spot",
+      "REGION_FOUR_ISLAND/VISIT": "Visit Four Island Town"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND:0/MAP_FOUR_ISLAND_POKEMON_CENTER_1F:0": "Four Island Pokemon Center",
+      "MAP_FOUR_ISLAND:1/MAP_FOUR_ISLAND_POKEMON_DAY_CARE:0": "Four Island Pokemon Day Care",
+      "MAP_FOUR_ISLAND:2/MAP_FOUR_ISLAND_HOUSE1:0": "Four Island Move Tutor's House",
+      "MAP_FOUR_ISLAND:4/MAP_FOUR_ISLAND_LORELEIS_HOUSE:0": "Lorelei's House",
+      "MAP_FOUR_ISLAND:5/MAP_FOUR_ISLAND_HOUSE2:0": "Sticker Man's House",
+      "MAP_FOUR_ISLAND:6/MAP_FOUR_ISLAND_HARBOR:0": "Four Island Harbor",
+      "MAP_FOUR_ISLAND:7/MAP_FOUR_ISLAND_MART:0": "Four Island Poke Mart"
+    }
+  },
+  "REGION_FOUR_ISLAND/WATER": {
+    "parent_map": "MAP_FOUR_ISLAND",
+    "name": "Four Island Town (Water)",
+    "encounter_region": "Four Island Town",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "ITEM_FOUR_ISLAND_STARDUST"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND/MAIN": "Four Island Town Landing Spot",
+      "REGION_FOUR_ISLAND/NEAR_CAVE": "Four Island Town (Near Cave) Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_FOUR_ISLAND/NEAR_CAVE": {
+    "parent_map": "MAP_FOUR_ISLAND",
+    "name": "Four Island Town (Near Cave)",
+    "encounter_region": "Four Island Town",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FOUR_ISLAND/WATER": "Four Island Town (Near Cave) Surfing Spot",
+      "REGION_FOUR_ISLAND/VISIT": "Visit Four Island Town (Near Cave)"
+    },
+    "warps": {
+      "MAP_FOUR_ISLAND:3/MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE:0": "Icefall Cave"
+    }
+  },
+  "REGION_FOUR_ISLAND_POKEMON_CENTER_1F/MAIN": {
+    "parent_map": "MAP_FOUR_ISLAND_POKEMON_CENTER_1F",
+    "name": "Four Island Pokemon Center 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "FAME_CHECKER_DAISY_6"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FOUR_ISLAND_POKEMON_CENTER_1F:0/MAP_FOUR_ISLAND:0": "Four Island Pokemon Center 1F Exit",
+      "MAP_FOUR_ISLAND_POKEMON_CENTER_1F:1/MAP_FOUR_ISLAND_POKEMON_CENTER_2F:0": "Four Island Pokemon Center 1F Stairs"
+    }
+  },
+  "REGION_FOUR_ISLAND_POKEMON_CENTER_2F/MAIN": {
+    "parent_map": "MAP_FOUR_ISLAND_POKEMON_CENTER_2F",
+    "name": "Four Island Pokemon Center 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FOUR_ISLAND_POKEMON_CENTER_2F:0/MAP_FOUR_ISLAND_POKEMON_CENTER_1F:1": "Four Island Pokemon Center 2F Stairs"
+    }
+  },
+  "REGION_FOUR_ISLAND_POKEMON_DAY_CARE/MAIN": {
+    "parent_map": "MAP_FOUR_ISLAND_POKEMON_DAY_CARE",
+    "name": "Four Island Pokemon Day Care",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FOUR_ISLAND_POKEMON_DAY_CARE:0/MAP_FOUR_ISLAND:1": "Four Island Pokemon Day Care Exit"
+    }
+  },
+  "REGION_FOUR_ISLAND_HOUSE1/MAIN": {
+    "parent_map": "MAP_FOUR_ISLAND_HOUSE1",
+    "name": "Four Island Move Tutor's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FOUR_ISLAND_HOUSE1:0/MAP_FOUR_ISLAND:2": "Four Island Move Tutor's House Exit"
+    }
+  },
+  "REGION_FOUR_ISLAND_LORELEIS_HOUSE/MAIN": {
+    "parent_map": "MAP_FOUR_ISLAND_LORELEIS_HOUSE",
+    "name": "Lorelei's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FOUR_ISLAND_LORELEIS_HOUSE:0/MAP_FOUR_ISLAND:4": "Lorelei's House Exit"
+    }
+  },
+  "REGION_FOUR_ISLAND_HOUSE2/MAIN": {
+    "parent_map": "MAP_FOUR_ISLAND_HOUSE2",
+    "name": "Sticker Man's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FOUR_ISLAND_HOUSE2:0/MAP_FOUR_ISLAND:5": "Sticker Man's House Exit"
+    }
+  },
+  "REGION_FOUR_ISLAND_MART/MAIN": {
+    "parent_map": "MAP_FOUR_ISLAND_MART",
+    "name": "Four Island Poke Mart",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "SHOP_FOUR_ISLAND_1",
+      "SHOP_FOUR_ISLAND_2",
+      "SHOP_FOUR_ISLAND_3",
+      "SHOP_FOUR_ISLAND_4",
+      "SHOP_FOUR_ISLAND_5",
+      "SHOP_FOUR_ISLAND_6",
+      "SHOP_FOUR_ISLAND_7",
+      "SHOP_FOUR_ISLAND_8",
+      "FAME_CHECKER_LORELEI_3"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FOUR_ISLAND_MART:0/MAP_FOUR_ISLAND:7": "Four Island Poke Mart Exit"
+    }
+  },
+  "REGION_FIVE_ISLAND_HARBOR/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_HARBOR",
+    "name": "Five Island Harbor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAGALLOP": "Board Seagallop (Five Island)"
+    },
+    "warps": {
+      "MAP_FIVE_ISLAND_HARBOR:0/MAP_FIVE_ISLAND:0": "Five Island Harbor Exit"
+    }
+  },
+  "REGION_FIVE_ISLAND/VISIT": {
+    "parent_map": "MAP_FIVE_ISLAND",
+    "name": "Five Island Town (Visit)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "FLY_UNLOCK_VISITED_FIVE_ISLAND"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_FIVE_ISLAND/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND",
+    "name": "Five Island Town",
+    "encounter_region": "Five Island Town",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FIVE_ISLAND/WATER": "Five Island Town Surfing Spot",
+      "REGION_FIVE_ISLAND/VISIT": "Visit Five Island Town",
+      "REGION_FIVE_ISLAND_MEADOW/MAIN": "Five Island Town Exit (East)"
+    },
+    "warps": {
+      "MAP_FIVE_ISLAND:0/MAP_FIVE_ISLAND_HARBOR:0": "Five Island Harbor",
+      "MAP_FIVE_ISLAND:1/MAP_FIVE_ISLAND_POKEMON_CENTER_1F:0": "Five Island Pokemon Center",
+      "MAP_FIVE_ISLAND:2/MAP_FIVE_ISLAND_HOUSE1:0": "Five Island Couple's House",
+      "MAP_FIVE_ISLAND:3/MAP_FIVE_ISLAND_HOUSE2:0": "Five Island Old Man's House"
+    }
+  },
+  "REGION_FIVE_ISLAND/WATER": {
+    "parent_map": "MAP_FIVE_ISLAND",
+    "name": "Five Island Town (Water)",
+    "encounter_region": "Five Island Town",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FIVE_ISLAND/MAIN": "Five Island Town Landing Spot",
+      "REGION_FIVE_ISLAND_WATER_LABYRINTH/WATER": "Five Island Town Exit (North)"
+    },
+    "warps": {}
+  },
+  "REGION_FIVE_ISLAND_POKEMON_CENTER_1F/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_POKEMON_CENTER_1F",
+    "name": "Five Island Pokemon Center 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "FAME_CHECKER_LORELEI_4"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_POKEMON_CENTER_1F:0/MAP_FIVE_ISLAND:1": "Five Island Pokemon Center 1F Exit",
+      "MAP_FIVE_ISLAND_POKEMON_CENTER_1F:1/MAP_FIVE_ISLAND_POKEMON_CENTER_2F:0": "Five Island Pokemon Center 1F Stairs"
+    }
+  },
+  "REGION_FIVE_ISLAND_POKEMON_CENTER_2F/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_POKEMON_CENTER_2F",
+    "name": "Five Island Pokemon Center 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_POKEMON_CENTER_2F:0/MAP_FIVE_ISLAND_POKEMON_CENTER_1F:1": "Five Island Pokemon Center 2F Stairs"
+    }
+  },
+  "REGION_FIVE_ISLAND_HOUSE1/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_HOUSE1",
+    "name": "Five Island Couple's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_HOUSE1:0/MAP_FIVE_ISLAND:2": "Five Island Couple's House Exit"
+    }
+  },
+  "REGION_FIVE_ISLAND_HOUSE2/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_HOUSE2",
+    "name": "Five Island Old Man's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_HOUSE2:0/MAP_FIVE_ISLAND:3": "Five Island Old Man's House Exit"
+    }
+  },
+  "REGION_FIVE_ISLAND_MEADOW/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_MEADOW",
+    "name": "Five Isle Meadow",
+    "encounter_region": "Five Isle Meadow",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "ITEM_FIVE_ISLAND_MEADOW_MAX_POTION",
+      "TRAINER_TEAM_ROCKET_GRUNT_49_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_51_REWARD",
+      "TRAINER_TEAM_ROCKET_GRUNT_50_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_FIVE_ISLAND_MEADOW/WATER": "Five Isle Meadow Surfing Spot",
+      "REGION_FIVE_ISLAND/MAIN": "Five Isle Meadow Exit (West)"
+    },
+    "warps": {
+      "MAP_FIVE_ISLAND_MEADOW:0/MAP_FIVE_ISLAND_ROCKET_WAREHOUSE:0": "Rocket Warehouse"
+    }
+  },
+  "REGION_FIVE_ISLAND_MEADOW/WATER": {
+    "parent_map": "MAP_FIVE_ISLAND_MEADOW",
+    "name": "Five Isle Meadow (Water)",
+    "encounter_region": "Five Isle Meadow",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "ITEM_FIVE_ISLAND_MEADOW_PP_UP"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_FIVE_ISLAND_MEMORIAL_PILLAR/WATER": "Five Isle Meadow Exit (East)"
+    },
+    "warps": {}
+  },
+  "REGION_FIVE_ISLAND_MEMORIAL_PILLAR/WATER": {
+    "parent_map": "MAP_FIVE_ISLAND_MEMORIAL_PILLAR",
+    "name": "Memorial Pillar (Water)",
+    "encounter_region": "Memorial Pillar",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FIVE_ISLAND_MEMORIAL_PILLAR/MAIN": "Memorial Pillar Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_FIVE_ISLAND_MEMORIAL_PILLAR/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_MEMORIAL_PILLAR",
+    "name": "Memorial Pillar",
+    "encounter_region": "Memorial Pillar",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_BIRD_KEEPER_MILO_REWARD",
+      "TRAINER_BIRD_KEEPER_MILO_2_REWARD",
+      "HIDDEN_ITEM_FIVE_ISLAND_MEMORIAL_PILLAR_RAZZ_BERRY",
+      "TRAINER_BIRD_KEEPER_CHAZ_REWARD",
+      "TRAINER_BIRD_KEEPER_CHAZ_2_REWARD",
+      "HIDDEN_ITEM_FIVE_ISLAND_MEMORIAL_PILLAR_BLUK_BERRY",
+      "HIDDEN_ITEM_FIVE_ISLAND_MEMORIAL_PILLAR_SITRUS_BERRY",
+      "TRAINER_BIRD_KEEPER_HAROLD_REWARD",
+      "TRAINER_BIRD_KEEPER_HAROLD_2_REWARD",
+      "NPC_GIFT_GOT_TM42_AT_MEMORIAL_PILLAR",
+      "ITEM_FIVE_ISLAND_MEMORIAL_PILLAR_METAL_COAT",
+      "HIDDEN_ITEM_FIVE_ISLAND_MEMORIAL_PILLAR_BIG_PEARL"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_FIVE_ISLAND_WATER_LABYRINTH/WATER": {
+    "parent_map": "MAP_FIVE_ISLAND_WATER_LABYRINTH",
+    "name": "Water Labyrinth (Water)",
+    "encounter_region": "Water Labyrinth",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FIVE_ISLAND_WATER_LABYRINTH/MAIN": "Water Labyrinth Landing Spot",
+      "REGION_FIVE_ISLAND/WATER": "Water Labyrinth Exit (South)",
+      "REGION_FIVE_ISLAND_RESORT_GORGEOUS/WATER": "Water Labyrinth Exit (North)"
+    },
+    "warps": {}
+  },
+  "REGION_FIVE_ISLAND_WATER_LABYRINTH/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_WATER_LABYRINTH",
+    "name": "Water Labyrinth",
+    "encounter_region": "Water Labyrinth",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "FAME_CHECKER_DAISY_3",
+      "TRAINER_PKMN_BREEDER_ALIZE_REWARD",
+      "TRAINER_PKMN_BREEDER_ALIZE_2_REWARD"
+    ],
+    "events": [
+      "EGG_POKEMON_TOGEPI"
+    ],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_FIVE_ISLAND_RESORT_GORGEOUS/WATER": {
+    "parent_map": "MAP_FIVE_ISLAND_RESORT_GORGEOUS",
+    "name": "Resort Gorgeous (Water)",
+    "encounter_region": "Resort Gorgeous",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_PAINTER_RAYNA_REWARD",
+      "TRAINER_PAINTER_RAYNA_2_REWARD",
+      "HIDDEN_ITEM_FIVE_ISLAND_RESORT_GORGEOUS_NEST_BALL",
+      "TRAINER_SWIMMER_MALE_TOBY_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_FIVE_ISLAND_RESORT_GORGEOUS/NEAR_RESORT": "Resort Gorgeous (Near Resort) Landing Spot",
+      "REGION_FIVE_ISLAND_RESORT_GORGEOUS/NEAR_CAVE": "Resort Gorgeous (Near Cave) Landing Spot",
+      "REGION_FIVE_ISLAND_WATER_LABYRINTH/WATER": "Resort Gorgeous Exit (South)"
+    },
+    "warps": {}
+  },
+  "REGION_FIVE_ISLAND_RESORT_GORGEOUS/NEAR_RESORT": {
+    "parent_map": "MAP_FIVE_ISLAND_RESORT_GORGEOUS",
+    "name": "Resort Gorgeous (Near Resort)",
+    "encounter_region": "Resort Gorgeous",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_LADY_JACKI_REWARD",
+      "HIDDEN_ITEM_FIVE_ISLAND_RESORT_GORGEOUS_STARDUST_2",
+      "TRAINER_YOUNGSTER_DESTIN_REWARD",
+      "TRAINER_YOUNGSTER_DESTIN_2_REWARD",
+      "HIDDEN_ITEM_FIVE_ISLAND_RESORT_GORGEOUS_STARDUST",
+      "TRAINER_LADY_GILLIAN_REWARD",
+      "TRAINER_PAINTER_CELINA_REWARD",
+      "HIDDEN_ITEM_FIVE_ISLAND_RESORT_GORGEOUS_STAR_PIECE",
+      "TRAINER_PAINTER_DAISY_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_FIVE_ISLAND_RESORT_GORGEOUS/WATER": "Resort Gorgeous (Near Resort) Surfing Spot"
+    },
+    "warps": {
+      "MAP_FIVE_ISLAND_RESORT_GORGEOUS:1/MAP_FIVE_ISLAND_RESORT_GORGEOUS_HOUSE:0": "Selphy's House"
+    }
+  },
+  "REGION_FIVE_ISLAND_RESORT_GORGEOUS/NEAR_CAVE": {
+    "parent_map": "MAP_FIVE_ISLAND_RESORT_GORGEOUS",
+    "name": "Resort Gorgeous (Near Cave)",
+    "encounter_region": "Resort Gorgeous",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_FIVE_ISLAND_RESORT_GORGEOUS/WATER": "Resort Gorgeous (Near Cave) Surfing Spot"
+    },
+    "warps": {
+      "MAP_FIVE_ISLAND_RESORT_GORGEOUS:0/MAP_FIVE_ISLAND_LOST_CAVE_ENTRANCE:0": "Lost Cave"
+    }
+  },
+  "REGION_FIVE_ISLAND_RESORT_GORGEOUS_HOUSE/MAIN": {
+    "parent_map": "MAP_FIVE_ISLAND_RESORT_GORGEOUS_HOUSE",
+    "name": "Selphy's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "NPC_GIFT_GOT_LUXURY_BALL_FROM_RESORT_GORGEOUS_HOUSE",
+      "FAME_CHECKER_BLAINE_6"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_FIVE_ISLAND_RESORT_GORGEOUS_HOUSE:0/MAP_FIVE_ISLAND_RESORT_GORGEOUS:1": "Selphy's House Exit"
+    }
+  },
+  "REGION_SIX_ISLAND_HARBOR/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_HARBOR",
+    "name": "Six Island Harbor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAGALLOP": "Board Seagallop (Six Island)"
+    },
+    "warps": {
+      "MAP_SIX_ISLAND_HARBOR:0/MAP_SIX_ISLAND:0": "Six Island Harbor Exit"
+    }
+  },
+  "REGION_SIX_ISLAND/VISIT": {
+    "parent_map": "MAP_SIX_ISLAND",
+    "name": "Six Island Town (Visit)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "FLY_UNLOCK_VISITED_SIX_ISLAND"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SIX_ISLAND/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND",
+    "name": "Six Island Town",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "HIDDEN_ITEM_SIX_ISLAND_LEPPA_BERRY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SIX_ISLAND/VISIT": "Visit Six Island Town",
+      "REGION_SIX_ISLAND_WATER_PATH/SOUTH": "Six Island Town Exit (East)"
+    },
+    "warps": {
+      "MAP_SIX_ISLAND:0/MAP_SIX_ISLAND_HARBOR:0": "Six Island Harbor",
+      "MAP_SIX_ISLAND:1/MAP_SIX_ISLAND_POKEMON_CENTER_1F:0": "Six Island Pokemon Center",
+      "MAP_SIX_ISLAND:2/MAP_SIX_ISLAND_HOUSE:0": "Six Island Old Man's House",
+      "MAP_SIX_ISLAND:3/MAP_SIX_ISLAND_MART:0": "Six Island Poke Mart"
+    }
+  },
+  "REGION_SIX_ISLAND_POKEMON_CENTER_1F/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_POKEMON_CENTER_1F",
+    "name": "Six Island Pokemon Center 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_POKEMON_CENTER_1F:0/MAP_SIX_ISLAND:1": "Six Island Pokemon Center 1F Exit",
+      "MAP_SIX_ISLAND_POKEMON_CENTER_1F:1/MAP_SIX_ISLAND_POKEMON_CENTER_2F:0": "Six Island Pokemon Center 1F Stairs"
+    }
+  },
+  "REGION_SIX_ISLAND_POKEMON_CENTER_2F/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_POKEMON_CENTER_2F",
+    "name": "Six Island Pokemon Center 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_POKEMON_CENTER_2F:0/MAP_SIX_ISLAND_POKEMON_CENTER_1F:1": "Six Island Pokemon Center 2F Stairs"
+    }
+  },
+  "REGION_SIX_ISLAND_HOUSE/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_HOUSE",
+    "name": "Six Island Old Man's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_HOUSE:0/MAP_SIX_ISLAND:2": "Six Island Old Man's House Exit"
+    }
+  },
+  "REGION_SIX_ISLAND_MART/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_MART",
+    "name": "Six Island Poke Mart",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "SHOP_SIX_ISLAND_1",
+      "SHOP_SIX_ISLAND_2",
+      "SHOP_SIX_ISLAND_3",
+      "SHOP_SIX_ISLAND_4",
+      "SHOP_SIX_ISLAND_5",
+      "SHOP_SIX_ISLAND_6",
+      "SHOP_SIX_ISLAND_7",
+      "SHOP_SIX_ISLAND_8",
+      "FAME_CHECKER_AGATHA_6"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_MART:0/MAP_SIX_ISLAND:3": "Six Island Poke Mart Exit"
+    }
+  },
+  "REGION_SIX_ISLAND_WATER_PATH/SOUTH": {
+    "parent_map": "MAP_SIX_ISLAND_WATER_PATH",
+    "name": "Water Path (South)",
+    "encounter_region": "Water Path",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_JUGGLER_EDWARD_REWARD",
+      "HIDDEN_ITEM_SIX_ISLAND_WATER_PATH_PINAP_BERRY",
+      "HIDDEN_ITEM_SIX_ISLAND_WATER_PATH_ASPEAR_BERRY",
+      "TRAINER_HIKER_EARL_REWARD",
+      "TRAINER_HIKER_EARL_2_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SIX_ISLAND_WATER_PATH/SOUTH_WATER": "Water Path (South) Surfing Spot",
+      "REGION_SIX_ISLAND/MAIN": "Water Path Exit (West)",
+      "REGION_SIX_ISLAND_RUIN_VALLEY/MAIN": "Water Path Exit (Southwest)"
+    },
+    "warps": {}
+  },
+  "REGION_SIX_ISLAND_WATER_PATH/SOUTH_WATER": {
+    "parent_map": "MAP_SIX_ISLAND_WATER_PATH",
+    "name": "Water Path (South Water)",
+    "encounter_region": "Water Path",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "ITEM_SIX_ISLAND_WATER_PATH_DRAGON_SCALE",
+      "TRAINER_SWIMMER_FEMALE_DENISE_REWARD",
+      "TRAINER_SWIMMER_MALE_SAMIR_REWARD",
+      "TRAINER_SWIMMER_MALE_SAMIR_2_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SIX_ISLAND_WATER_PATH/SOUTH": "Water Path (South) Landing Spot",
+      "REGION_SIX_ISLAND_WATER_PATH/NORTH": "Water Path (North) Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_SIX_ISLAND_WATER_PATH/NORTH": {
+    "parent_map": "MAP_SIX_ISLAND_WATER_PATH",
+    "name": "Water Path (North)",
+    "encounter_region": "Water Path",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_TWINS_MIU_MIA_REWARD",
+      "TRAINER_AROMA_LADY_ROSE_REWARD",
+      "HIDDEN_ITEM_SIX_ISLAND_WATER_PATH_ORAN_BERRY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SIX_ISLAND_WATER_PATH/SOUTH_WATER": "Water Path (North) Surfing Spot (Bottom)",
+      "REGION_SIX_ISLAND_WATER_PATH/NORTH_WATER": "Water Path (North) Surfing Spot (Top)",
+      "REGION_SIX_ISLAND_GREEN_PATH/EAST": "Water Path Exit (Northwest)"
+    },
+    "warps": {
+      "MAP_SIX_ISLAND_WATER_PATH:0/MAP_SIX_ISLAND_WATER_PATH_HOUSE1:0": "Water Path Heracross Woman's House",
+      "MAP_SIX_ISLAND_WATER_PATH:1/MAP_SIX_ISLAND_WATER_PATH_HOUSE2:0": "Water Path Man's House"
+    }
+  },
+  "REGION_SIX_ISLAND_WATER_PATH/NORTH_WATER": {
+    "parent_map": "MAP_SIX_ISLAND_WATER_PATH",
+    "name": "Water Path (North Water)",
+    "encounter_region": "Water Path",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "ITEM_SIX_ISLAND_WATER_PATH_ELIXIR"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SIX_ISLAND_WATER_PATH_HOUSE1/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_WATER_PATH_HOUSE1",
+    "name": "Water Path Heracross Woman's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "NPC_GIFT_GOT_NEST_BALL_FROM_WATER_PATH_HOUSE_1"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_WATER_PATH_HOUSE1:0/MAP_SIX_ISLAND_WATER_PATH:0": "Water Path Heracross Woman's House Exit"
+    }
+  },
+  "REGION_SIX_ISLAND_WATER_PATH_HOUSE2/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_WATER_PATH_HOUSE2",
+    "name": "Water Path Man's House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SIX_ISLAND_WATER_PATH_HOUSE2:0/MAP_SIX_ISLAND_WATER_PATH:1": "Water Path Man's House Exit"
+    }
+  },
+  "REGION_SIX_ISLAND_RUIN_VALLEY/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_RUIN_VALLEY",
+    "name": "Ruin Valley",
+    "encounter_region": "Ruin Valley",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "ITEM_SIX_ISLAND_RUIN_VALLEY_SUN_STONE",
+      "ITEM_SIX_ISLAND_RUIN_VALLEY_HP_UP",
+      "TRAINER_HIKER_DARYL_REWARD",
+      "ITEM_SIX_ISLAND_RUIN_VALLEY_FULL_RESTORE",
+      "TRAINER_POKEMANIAC_HECTOR_REWARD",
+      "TRAINER_POKEMANIAC_HECTOR_2_REWARD",
+      "TRAINER_RUIN_MANIAC_STANLY_REWARD",
+      "TRAINER_RUIN_MANIAC_FOSTER_REWARD",
+      "TRAINER_RUIN_MANIAC_LARRY_REWARD",
+      "TRAINER_RUIN_MANIAC_LARRY_2_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SIX_ISLAND_RUIN_VALLEY/WATER": "Ruin Valley Surfing Spot",
+      "REGION_SIX_ISLAND_WATER_PATH/SOUTH": "Ruin Valley Exit (East)"
+    },
+    "warps": {
+      "MAP_SIX_ISLAND_RUIN_VALLEY:0/MAP_SIX_ISLAND_DOTTED_HOLE_1F:0": "Dotted Hole"
+    }
+  },
+  "REGION_SIX_ISLAND_RUIN_VALLEY/WATER": {
+    "parent_map": "MAP_SIX_ISLAND_RUIN_VALLEY",
+    "name": "Ruin Valley (Water)",
+    "encounter_region": "Ruin Valley",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SIX_ISLAND_GREEN_PATH/EAST": {
+    "parent_map": "MAP_SIX_ISLAND_GREEN_PATH",
+    "name": "Green Path (East)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SIX_ISLAND_WATER_PATH/NORTH": "Green Path Exit (East)"
+    },
+    "warps": {
+      "MAP_SIX_ISLAND_GREEN_PATH:0,1/MAP_SIX_ISLAND_PATTERN_BUSH:1": "Pattern Bush (East)"
+    }
+  },
+  "REGION_SIX_ISLAND_GREEN_PATH/WEST": {
+    "parent_map": "MAP_SIX_ISLAND_GREEN_PATH",
+    "name": "Green Path (West)",
+    "encounter_region": "Green Path",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SIX_ISLAND_GREEN_PATH/WATER": "Green Path Surfing Spot"
+    },
+    "warps": {
+      "MAP_SIX_ISLAND_GREEN_PATH:2,3/MAP_SIX_ISLAND_PATTERN_BUSH:4": "Pattern Bush (West)"
+    }
+  },
+  "REGION_SIX_ISLAND_GREEN_PATH/WATER": {
+    "parent_map": "MAP_SIX_ISLAND_GREEN_PATH",
+    "name": "Green Path (Water)",
+    "encounter_region": "Green Path",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_PSYCHIC_JACLYN_REWARD",
+      "TRAINER_PSYCHIC_JACLYN_2_REWARD",
+      "HIDDEN_ITEM_SIX_ISLAND_GREEN_PATH_ULTRA_BALL"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SIX_ISLAND_GREEN_PATH/WEST": "Green Path Landing Spot",
+      "REGION_SIX_ISLAND_OUTCAST_ISLAND/WATER": "Green Path Exit (North)"
+    },
+    "warps": {}
+  },
+  "REGION_SIX_ISLAND_OUTCAST_ISLAND/WATER": {
+    "parent_map": "MAP_SIX_ISLAND_OUTCAST_ISLAND",
+    "name": "Outcast Island (Water)",
+    "encounter_region": "Outcast Island",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_SWIMMER_FEMALE_NICOLE_REWARD",
+      "TRAINER_SWIMMER_FEMALE_NICOLE_2_REWARD",
+      "TRAINER_SIS_AND_BRO_AVA_GEB_REWARD",
+      "TRAINER_SWIMMER_MALE_MYMO_REWARD",
+      "HIDDEN_ITEM_SIX_ISLAND_OUTCAST_ISLAND_STAR_PIECE",
+      "TRAINER_FISHERMAN_TYLOR_REWARD",
+      "ITEM_SIX_ISLAND_OUTCAST_ISLAND_PP_UP"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SIX_ISLAND_OUTCAST_ISLAND/MAIN": "Outcast Island Landing Spot",
+      "REGION_SIX_ISLAND_GREEN_PATH/WATER": "Outcast Island Exit (South)"
+    },
+    "warps": {}
+  },
+  "REGION_SIX_ISLAND_OUTCAST_ISLAND/MAIN": {
+    "parent_map": "MAP_SIX_ISLAND_OUTCAST_ISLAND",
+    "name": "Outcast Island",
+    "encounter_region": "Outcast Island",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_TEAM_ROCKET_GRUNT_46_REWARD",
+      "HIDDEN_ITEM_SIX_ISLAND_OUTCAST_ISLAND_NET_BALL"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SIX_ISLAND_OUTCAST_ISLAND/WATER": "Outcast Island Surfing Spot"
+    },
+    "warps": {
+      "MAP_SIX_ISLAND_OUTCAST_ISLAND:0/MAP_SIX_ISLAND_ALTERING_CAVE:0": "Altering Cave"
+    }
+  },
+  "REGION_SEVEN_ISLAND_HARBOR/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_HARBOR",
+    "name": "Seven Island Harbor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAGALLOP": "Board Seagallop (Seven Island)"
+    },
+    "warps": {
+      "MAP_SEVEN_ISLAND_HARBOR:0/MAP_SEVEN_ISLAND:3": "Seven Island Harbor Exit"
+    }
+  },
+  "REGION_SEVEN_ISLAND/VISIT": {
+    "parent_map": "MAP_SEVEN_ISLAND",
+    "name": "Seven Island Town (Visit)",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "FLY_UNLOCK_VISITED_SEVEN_ISLAND"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {}
+  },
+  "REGION_SEVEN_ISLAND/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND",
+    "name": "Seven Island Town",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "NPC_GIFT_GOT_DEEP_SEA_SCALE",
+      "NPC_GIFT_GOT_DEEP_SEA_TOOTH"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND/VISIT": "Visit Seven Island Town",
+      "REGION_SEVEN_ISLAND_SEVAULT_CANYON_ENTRANCE/MAIN": "Seven Island Town Exit (South)",
+      "REGION_SEVEN_ISLAND_TRAINER_TOWER/SOUTH": "Seven Island Town Exit (North)"
+    },
+    "warps": {
+      "MAP_SEVEN_ISLAND:0/MAP_SEVEN_ISLAND_HOUSE_ROOM1:0": "Seven Island Trainer Battle House",
+      "MAP_SEVEN_ISLAND:1/MAP_SEVEN_ISLAND_MART:0": "Seven Island Poke Mart",
+      "MAP_SEVEN_ISLAND:2/MAP_SEVEN_ISLAND_POKEMON_CENTER_1F:0": "Seven Island Pokemon Center",
+      "MAP_SEVEN_ISLAND:3/MAP_SEVEN_ISLAND_HARBOR:0": "Seven Island Harbor"
+    }
+  },
+  "REGION_SEVEN_ISLAND_HOUSE_ROOM1/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_HOUSE_ROOM1",
+    "name": "Seven Island Trainer Battle House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_HOUSE_ROOM1:0/MAP_SEVEN_ISLAND:0": "Seven Island Trainer Battle House Exit"
+    }
+  },
+  "REGION_SEVEN_ISLAND_MART/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_MART",
+    "name": "Seven Island Poke Mart",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "SHOP_SEVEN_ISLAND_1",
+      "SHOP_SEVEN_ISLAND_2",
+      "SHOP_SEVEN_ISLAND_3",
+      "SHOP_SEVEN_ISLAND_4",
+      "SHOP_SEVEN_ISLAND_5",
+      "SHOP_SEVEN_ISLAND_6",
+      "SHOP_SEVEN_ISLAND_7",
+      "SHOP_SEVEN_ISLAND_8",
+      "SHOP_SEVEN_ISLAND_9"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_MART:0/MAP_SEVEN_ISLAND:1": "Seven Island Poke Mart Exit"
+    }
+  },
+  "REGION_SEVEN_ISLAND_POKEMON_CENTER_1F/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_POKEMON_CENTER_1F",
+    "name": "Seven Island Pokemon Center 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "FAME_CHECKER_AGATHA_4"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_POKEMON_CENTER_1F:0/MAP_SEVEN_ISLAND:2": "Seven Island Pokemon Center 1F Exit",
+      "MAP_SEVEN_ISLAND_POKEMON_CENTER_1F:1/MAP_SEVEN_ISLAND_POKEMON_CENTER_2F:0": "Seven Island Pokemon Center 1F Stairs"
+    }
+  },
+  "REGION_SEVEN_ISLAND_POKEMON_CENTER_2F/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_POKEMON_CENTER_2F",
+    "name": "Seven Island Pokemon Center 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_POKEMON_CENTER_2F:0/MAP_SEVEN_ISLAND_POKEMON_CENTER_1F:1": "Seven Island Pokemon Center 2F Stairs"
+    }
+  },
+  "REGION_SEVEN_ISLAND_SEVAULT_CANYON_ENTRANCE/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_SEVAULT_CANYON_ENTRANCE",
+    "name": "Canyon Entrance",
+    "encounter_region": "Canyon Entrance",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "TRAINER_AROMA_LADY_MIAH_REWARD",
+      "TRAINER_JUGGLER_MASON_REWARD",
+      "TRAINER_JUGGLER_MASON_2_REWARD",
+      "TRAINER_PKMN_RANGER_NICOLAS_REWARD",
+      "TRAINER_PKMN_RANGER_NICOLAS_2_REWARD",
+      "TRAINER_PKMN_RANGER_MADELINE_REWARD",
+      "TRAINER_PKMN_RANGER_MADELINE_2_REWARD",
+      "HIDDEN_ITEM_SEVEN_ISLAND_SEVAULT_CANYON_ENTRANCE_RAWST_BERRY",
+      "TRAINER_YOUNG_COUPLE_EVE_JON_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND/MAIN": "Canyon Entrance Exit (North)",
+      "REGION_SEVEN_ISLAND_SEVAULT_CANYON/MAIN": "Canyon Entrance Exit (East)"
+    },
+    "warps": {}
+  },
+  "REGION_SEVEN_ISLAND_SEVAULT_CANYON/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_SEVAULT_CANYON",
+    "name": "Sevault Canyon",
+    "encounter_region": "Sevault Canyon",
+    "has_land": true,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "TRAINER_COOL_COUPLE_LEX_NYA_REWARD",
+      "TRAINER_COOL_COUPLE_LEX_NYA_2_REWARD",
+      "ITEM_SEVEN_ISLAND_SEVAULT_CANYON_NUGGET",
+      "TRAINER_TAMER_EVAN_REWARD",
+      "TRAINER_TAMER_EVAN_2_REWARD",
+      "ITEM_SEVEN_ISLAND_SEVAULT_CANYON_MAX_ELIXIR",
+      "FAME_CHECKER_BRUNO_6",
+      "TRAINER_PKMN_RANGER_JACKSON_REWARD",
+      "TRAINER_PKMN_RANGER_JACKSON_2_REWARD",
+      "TRAINER_PKMN_RANGER_KATELYN_REWARD",
+      "TRAINER_PKMN_RANGER_KATELYN_2_REWARD",
+      "TRAINER_CRUSH_GIRL_CYNDY_REWARD",
+      "TRAINER_CRUSH_GIRL_CYNDY_2_REWARD",
+      "ITEM_SEVEN_ISLAND_SEVAULT_CANYON_KINGS_ROCK",
+      "TRAINER_COOLTRAINER_LEROY_REWARD",
+      "TRAINER_COOLTRAINER_LEROY_2_REWARD",
+      "TRAINER_COOLTRAINER_MICHELLE_REWARD",
+      "TRAINER_COOLTRAINER_MICHELLE_2_REWARD",
+      "HIDDEN_ITEM_SEVEN_ISLAND_SEVAULT_CANYON_CHERI_BERRY"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_SEVAULT_CANYON_ENTRANCE/MAIN": "Sevault Canyon Exit (West)",
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/MAIN": "Sevault Canyon Exit (South)"
+    },
+    "warps": {
+      "MAP_SEVEN_ISLAND_SEVAULT_CANYON:0/MAP_SEVEN_ISLAND_SEVAULT_CANYON_TANOBY_KEY:0": "Tanoby Key",
+      "MAP_SEVEN_ISLAND_SEVAULT_CANYON:1/MAP_SEVEN_ISLAND_SEVAULT_CANYON_HOUSE:0": "Sevault Canyon Chansey House"
+    }
+  },
+  "REGION_SEVEN_ISLAND_SEVAULT_CANYON_TANOBY_KEY": {
+    "parent_map": "MAP_SEVEN_ISLAND_SEVAULT_CANYON_TANOBY_KEY",
+    "name": "Tanoby Key",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [],
+    "events": [
+      "EVENT_UNLOCK_RUINS"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_SEVAULT_CANYON_TANOBY_KEY:0/MAP_SEVEN_ISLAND_SEVAULT_CANYON:0": "Tanoby Key Exit"
+    }
+  },
+  "REGION_SEVEN_ISLAND_SEVAULT_CANYON_HOUSE/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_SEVAULT_CANYON_HOUSE",
+    "name": "Sevault Canyon Chansey House",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "ITEM_SEVEN_ISLAND_SEVAULT_CANYON_HOUSE_LUCKY_PUNCH"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_SEVEN_ISLAND_SEVAULT_CANYON_HOUSE:0/MAP_SEVEN_ISLAND_SEVAULT_CANYON:1": "Sevault Canyon Chansey House Exit"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS/MAIN": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS",
+    "name": "Tanoby Ruins",
+    "encounter_region": "Tanoby Ruins",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/WATER": "Tanoby Ruins Surfing Spot",
+      "REGION_SEVEN_ISLAND_SEVAULT_CANYON/MAIN": "Tanoby Ruins Exit (North)"
+    },
+    "warps": {}
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS/WATER": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS",
+    "name": "Tanoby Ruins (Water)",
+    "encounter_region": "Tanoby Ruins",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "NPC_GIFT_GOT_SCANNER"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/MAIN": "Tanoby Ruins Landing Spot",
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/MONEAN_ISLAND": "Tanoby Ruins (Monean Island) Landing Spot",
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/LIPTOO_ISLAND": "Tanoby Ruins (Liptoo Island) Landing Spot",
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/WEEPTH_ISLAND": "Tanoby Ruins (Weepth Island) Landing Spot",
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/DILFORD_ISLAND": "Tanoby Ruins (Dilford Island) Landing Spot",
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/SCUFIB_ISLAND": "Tanoby Ruins (Scufib Island) Landing Spot",
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/RIXY_ISLAND": "Tanoby Ruins (Rixy Island) Landing Spot",
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/VIAPOIS_ISLAND": "Tanoby Ruins (Viapois Island) Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS/MONEAN_ISLAND": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS",
+    "name": "Tanoby Ruins (Monean Island)",
+    "encounter_region": "Tanoby Ruins",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_RUIN_MANIAC_BENJAMIN_REWARD",
+      "HIDDEN_ITEM_SEVEN_ISLAND_TANOBY_RUINS_HEART_SCALE_3"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/WATER": "Tanoby Ruins (Monean Island) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS:0/MAP_SEVEN_ISLAND_TANOBY_RUINS_MONEAN_CHAMBER:0": "Monean Chamber"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS/LIPTOO_ISLAND": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS",
+    "name": "Tanoby Ruins (Liptoo Island)",
+    "encounter_region": "Tanoby Ruins",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/WATER": "Tanoby Ruins (Liptoo Island) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS:1/MAP_SEVEN_ISLAND_TANOBY_RUINS_LIPTOO_CHAMBER:0": "Liptoo Chamber"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS/WEEPTH_ISLAND": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS",
+    "name": "Tanoby Ruins (Weepth Island)",
+    "encounter_region": "Tanoby Ruins",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_GENTLEMAN_CLIFFORD_REWARD",
+      "TRAINER_PAINTER_EDNA_REWARD",
+      "HIDDEN_ITEM_SEVEN_ISLAND_TANOBY_RUINS_HEART_SCALE_2"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/WATER": "Tanoby Ruins (Weepth Island) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS:2/MAP_SEVEN_ISLAND_TANOBY_RUINS_WEEPTH_CHAMBER:0": "Weepth Chamber"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS/DILFORD_ISLAND": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS",
+    "name": "Tanoby Ruins (Dilford Island)",
+    "encounter_region": "Tanoby Ruins",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/WATER": "Tanoby Ruins (Dilford Island) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS:3/MAP_SEVEN_ISLAND_TANOBY_RUINS_DILFORD_CHAMBER:0": "Dilford Chamber"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS/SCUFIB_ISLAND": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS",
+    "name": "Tanoby Ruins (Scufib Island)",
+    "encounter_region": "Tanoby Ruins",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_RUIN_MANIAC_BRANDON_REWARD",
+      "HIDDEN_ITEM_SEVEN_ISLAND_TANOBY_RUINS_HEART_SCALE"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/WATER": "Tanoby Ruins (Scufib Island) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS:4/MAP_SEVEN_ISLAND_TANOBY_RUINS_SCUFIB_CHAMBER:0": "Scufib Chamber"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS/RIXY_ISLAND": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS",
+    "name": "Tanoby Ruins (Rixy Island)",
+    "encounter_region": "Tanoby Ruins",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/WATER": "Tanoby Ruins (Rixy Island) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS:5/MAP_SEVEN_ISLAND_TANOBY_RUINS_RIXY_CHAMBER:0": "Rixy Chamber"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TANOBY_RUINS/VIAPOIS_ISLAND": {
+    "parent_map": "MAP_SEVEN_ISLAND_TANOBY_RUINS",
+    "name": "Tanoby Ruins (Viapois Island)",
+    "encounter_region": "Tanoby Ruins",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "HIDDEN_ITEM_SEVEN_ISLAND_TANOBY_RUINS_HEART_SCALE_4"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_TANOBY_RUINS/WATER": "Tanoby Ruins (Viapois Island) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SEVEN_ISLAND_TANOBY_RUINS:6/MAP_SEVEN_ISLAND_TANOBY_RUINS_VIAPOIS_CHAMBER:0": "Viapois Chamber"
+    }
+  },
+  "REGION_SEVEN_ISLAND_TRAINER_TOWER/SOUTH": {
+    "parent_map": "MAP_SEVEN_ISLAND_TRAINER_TOWER",
+    "name": "Trainer Tower Exterior (South)",
+    "encounter_region": "Trainer Tower Exterior",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [
+      "TRAINER_PSYCHIC_RODETTE_REWARD",
+      "TRAINER_PSYCHIC_RODETTE_2_REWARD",
+      "HIDDEN_ITEM_SEVEN_ISLAND_TRAINER_TOWER_NANAB_BERRY",
+      "HIDDEN_ITEM_SEVEN_ISLAND_TRAINER_TOWER_PEARL",
+      "HIDDEN_ITEM_SEVEN_ISLAND_TRAINER_TOWER_BIG_PEARL",
+      "TRAINER_PSYCHIC_DARIO_REWARD",
+      "TRAINER_PSYCHIC_DARIO_2_REWARD"
+    ],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_TRAINER_TOWER/WATER": "Trainer Tower Exterior (South) Surfing Spot",
+      "REGION_SEVEN_ISLAND/MAIN": "Trainer Tower Exterior Exit (South)"
+    },
+    "warps": {}
+  },
+  "REGION_SEVEN_ISLAND_TRAINER_TOWER/WATER": {
+    "parent_map": "MAP_SEVEN_ISLAND_TRAINER_TOWER",
+    "name": "Trainer Tower Exterior (Water)",
+    "encounter_region": "Trainer Tower Exterior",
+    "has_land": false,
+    "has_water": true,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_TRAINER_TOWER/SOUTH": "Trainer Tower Exterior (South) Landing Spot",
+      "REGION_SEVEN_ISLAND_TRAINER_TOWER/NORTH": "Trainer Tower Exterior (North) Landing Spot"
+    },
+    "warps": {}
+  },
+  "REGION_SEVEN_ISLAND_TRAINER_TOWER/NORTH": {
+    "parent_map": "MAP_SEVEN_ISLAND_TRAINER_TOWER",
+    "name": "Trainer Tower Exterior (North)",
+    "encounter_region": "Trainer Tower Exterior",
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": true,
+    "kanto": false,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEVEN_ISLAND_TRAINER_TOWER/WATER": "Trainer Tower Exterior (North) Surfing Spot"
+    },
+    "warps": {
+      "MAP_SEVEN_ISLAND_TRAINER_TOWER:0/MAP_TRAINER_TOWER_LOBBY:1": "Trainer Tower"
+    }
+  },
+  "REGION_TRAINER_TOWER_LOBBY/MAIN": {
+    "parent_map": "MAP_TRAINER_TOWER_LOBBY",
+    "name": "Trainer Tower Lobby",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": false,
+    "locations": [
+      "SHOP_TRAINER_TOWER_1",
+      "SHOP_TRAINER_TOWER_2",
+      "SHOP_TRAINER_TOWER_3",
+      "SHOP_TRAINER_TOWER_4",
+      "SHOP_TRAINER_TOWER_5",
+      "SHOP_TRAINER_TOWER_6",
+      "SHOP_TRAINER_TOWER_7",
+      "SHOP_TRAINER_TOWER_8",
+      "SHOP_TRAINER_TOWER_9"
+    ],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_TRAINER_TOWER_LOBBY:1/MAP_SEVEN_ISLAND_TRAINER_TOWER:0": "Trainer Tower Lobby Exit"
+    }
+  },
+  "REGION_NAVEL_ROCK_HARBOR/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_HARBOR",
+    "name": "Navel Rock Harbor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAGALLOP": "Board Seagallop (Navel Rock)"
+    },
+    "warps": {
+      "MAP_NAVEL_ROCK_HARBOR:0/MAP_NAVEL_ROCK_EXTERIOR:1": "Navel Rock Harbor Exit"
+    }
+  },
+  "REGION_NAVEL_ROCK_EXTERIOR/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_EXTERIOR",
+    "name": "Navel Rock Exterior",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_EXTERIOR:0/MAP_NAVEL_ROCK_1F:1": "Navel Rock",
+      "MAP_NAVEL_ROCK_EXTERIOR:1/MAP_NAVEL_ROCK_HARBOR:0": "Navel Rock Harbor"
+    }
+  },
+  "REGION_NAVEL_ROCK_1F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_1F",
+    "name": "Navel Rock 1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_1F:0/MAP_NAVEL_ROCK_B1F:0": "Navel Rock 1F Ladder",
+      "MAP_NAVEL_ROCK_1F:1/MAP_NAVEL_ROCK_EXTERIOR:0": "Navel Rock 1F Exit"
+    }
+  },
+  "REGION_NAVEL_ROCK_B1F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_B1F",
+    "name": "Navel Rock B1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_B1F:0/MAP_NAVEL_ROCK_1F:0": "Navel Rock B1F Northwest Ladder",
+      "MAP_NAVEL_ROCK_B1F:1/MAP_NAVEL_ROCK_FORK:0": "Navel Rock B1F Southeast Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_FORK/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_FORK",
+    "name": "Navel Rock Fork",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_FORK:0/MAP_NAVEL_ROCK_B1F:1": "Navel Rock Fork South Ladder",
+      "MAP_NAVEL_ROCK_FORK:1/MAP_NAVEL_ROCK_SUMMIT_PATH_2F:0": "Navel Rock Fork Northwest Ladder",
+      "MAP_NAVEL_ROCK_FORK:2/MAP_NAVEL_ROCK_BASE_PATH_B1F:0": "Navel Rock Fork Northeast Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_SUMMIT_PATH_2F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_SUMMIT_PATH_2F",
+    "name": "Navel Rock Summit Path 2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_SUMMIT_PATH_2F:0/MAP_NAVEL_ROCK_FORK:1": "Navel Rock Summit Path 2F Southeast Ladder",
+      "MAP_NAVEL_ROCK_SUMMIT_PATH_2F:1/MAP_NAVEL_ROCK_SUMMIT_PATH_3F:0": "Navel Rock Summit Path 2F Northwest Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_SUMMIT_PATH_3F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_SUMMIT_PATH_3F",
+    "name": "Navel Rock Summit Path 3F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_SUMMIT_PATH_3F:0/MAP_NAVEL_ROCK_SUMMIT_PATH_2F:1": "Navel Rock Summit Path 3F Northwest Ladder",
+      "MAP_NAVEL_ROCK_SUMMIT_PATH_3F:1/MAP_NAVEL_ROCK_SUMMIT_PATH_4F:0": "Navel Rock Summit Path 3F Southeast Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_SUMMIT_PATH_4F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_SUMMIT_PATH_4F",
+    "name": "Navel Rock Summit Path 4F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_SUMMIT_PATH_4F:0/MAP_NAVEL_ROCK_SUMMIT_PATH_3F:1": "Navel Rock Summit Path 4F Southeast Ladder",
+      "MAP_NAVEL_ROCK_SUMMIT_PATH_4F:1/MAP_NAVEL_ROCK_SUMMIT_PATH_5F:0": "Navel Rock Summit Path 4F Northwest Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_SUMMIT_PATH_5F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_SUMMIT_PATH_5F",
+    "name": "Navel Rock Summit Path 5F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_SUMMIT_PATH_5F:0/MAP_NAVEL_ROCK_SUMMIT_PATH_4F:1": "Navel Rock Summit Path 5F Northwest Ladder",
+      "MAP_NAVEL_ROCK_SUMMIT_PATH_5F:1/MAP_NAVEL_ROCK_SUMMIT:0": "Navel Rock Summit Path 5F Southeast Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_SUMMIT/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_SUMMIT",
+    "name": "Navel Rock Summit",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [
+      "HIDDEN_ITEM_NAVEL_ROCK_SUMMIT_SACRED_ASH"
+    ],
+    "events": [
+      "LEGENDARY_POKEMON_HO_OH"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_SUMMIT:0/MAP_NAVEL_ROCK_SUMMIT_PATH_5F:1": "Navel Rock Summit Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_BASE_PATH_B1F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BASE_PATH_B1F",
+    "name": "Navel Rock Base Path B1F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_BASE_PATH_B1F:0/MAP_NAVEL_ROCK_FORK:2": "Navel Rock Base Path B1F Northwest Ladder",
+      "MAP_NAVEL_ROCK_BASE_PATH_B1F:1/MAP_NAVEL_ROCK_BASE_PATH_B2F:0": "Navel Rock Base Path B1F Southeast Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_BASE_PATH_B2F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BASE_PATH_B2F",
+    "name": "Navel Rock Base Path B2F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_BASE_PATH_B2F:0/MAP_NAVEL_ROCK_BASE_PATH_B1F:1": "Navel Rock Base Path B2F Southeast Ladder",
+      "MAP_NAVEL_ROCK_BASE_PATH_B2F:1/MAP_NAVEL_ROCK_BASE_PATH_B3F:0": "Navel Rock Base Path B2F Northwest Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_BASE_PATH_B3F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BASE_PATH_B3F",
+    "name": "Navel Rock Base Path B3F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_BASE_PATH_B3F:0/MAP_NAVEL_ROCK_BASE_PATH_B2F:1": "Navel Rock Base Path B3F Northwest Ladder",
+      "MAP_NAVEL_ROCK_BASE_PATH_B3F:1/MAP_NAVEL_ROCK_BASE_PATH_B4F:0": "Navel Rock Base Path B3F Southeast Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_BASE_PATH_B4F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BASE_PATH_B4F",
+    "name": "Navel Rock Base Path B4F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_BASE_PATH_B4F:0/MAP_NAVEL_ROCK_BASE_PATH_B3F:1": "Navel Rock Base Path B4F Southeast Ladder",
+      "MAP_NAVEL_ROCK_BASE_PATH_B4F:1/MAP_NAVEL_ROCK_BASE_PATH_B5F:0": "Navel Rock Base Path B4F Northwest Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_BASE_PATH_B5F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BASE_PATH_B5F",
+    "name": "Navel Rock Base Path B5F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_BASE_PATH_B5F:0/MAP_NAVEL_ROCK_BASE_PATH_B4F:1": "Navel Rock Base Path B5F Northwest Ladder",
+      "MAP_NAVEL_ROCK_BASE_PATH_B5F:1/MAP_NAVEL_ROCK_BASE_PATH_B6F:0": "Navel Rock Base Path B5F Southeast Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_BASE_PATH_B6F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BASE_PATH_B6F",
+    "name": "Navel Rock Base Path B6F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_BASE_PATH_B6F:0/MAP_NAVEL_ROCK_BASE_PATH_B5F:1": "Navel Rock Base Path B6F Southeast Ladder",
+      "MAP_NAVEL_ROCK_BASE_PATH_B6F:1/MAP_NAVEL_ROCK_BASE_PATH_B7F:0": "Navel Rock Base Path B6F Northwest Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_BASE_PATH_B7F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BASE_PATH_B7F",
+    "name": "Navel Rock Base Path B7F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_BASE_PATH_B7F:0/MAP_NAVEL_ROCK_BASE_PATH_B6F:1": "Navel Rock Base Path B7F Northwest Ladder",
+      "MAP_NAVEL_ROCK_BASE_PATH_B7F:1/MAP_NAVEL_ROCK_BASE_PATH_B8F:0": "Navel Rock Base Path B7F Southeast Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_BASE_PATH_B8F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BASE_PATH_B8F",
+    "name": "Navel Rock Base Path B8F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_BASE_PATH_B8F:0/MAP_NAVEL_ROCK_BASE_PATH_B7F:1": "Navel Rock Base Path B8F Southeast Ladder",
+      "MAP_NAVEL_ROCK_BASE_PATH_B8F:1/MAP_NAVEL_ROCK_BASE_PATH_B9F:0": "Navel Rock Base Path B8F Northwest Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_BASE_PATH_B9F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BASE_PATH_B9F",
+    "name": "Navel Rock Base Path B9F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_BASE_PATH_B9F:0/MAP_NAVEL_ROCK_BASE_PATH_B8F:1": "Navel Rock Base Path B9F Northwest Ladder",
+      "MAP_NAVEL_ROCK_BASE_PATH_B9F:1/MAP_NAVEL_ROCK_BASE_PATH_B10F:0": "Navel Rock Base Path B9F Southeast Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_BASE_PATH_B10F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BASE_PATH_B10F",
+    "name": "Navel Rock Base Path B10F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_BASE_PATH_B10F:0/MAP_NAVEL_ROCK_BASE_PATH_B9F:1": "Navel Rock Base Path B10F Southeast Ladder",
+      "MAP_NAVEL_ROCK_BASE_PATH_B10F:1/MAP_NAVEL_ROCK_BASE_PATH_B11F:0": "Navel Rock Base Path B10F Northwest Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_BASE_PATH_B11F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BASE_PATH_B11F",
+    "name": "Navel Rock Base Path B11F",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_BASE_PATH_B11F:0/MAP_NAVEL_ROCK_BASE_PATH_B10F:1": "Navel Rock Base Path B11F Northwest Ladder",
+      "MAP_NAVEL_ROCK_BASE_PATH_B11F:1/MAP_NAVEL_ROCK_BASE:0": "Navel Rock Base Path B11F Southeast Ladder"
+    }
+  },
+  "REGION_NAVEL_ROCK_BASE/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BASE",
+    "name": "Navel Rock Base",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [
+      "LEGENDARY_POKEMON_LUGIA"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_NAVEL_ROCK_BASE:0/MAP_NAVEL_ROCK_BASE_PATH_B11F:1": "Navel Rock Base Ladder"
+    }
+  },
+  "REGION_BIRTH_ISLAND_HARBOR/MAIN": {
+    "parent_map": "MAP_BIRTH_ISLAND_HARBOR",
+    "name": "Birth Island Harbor",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [],
+    "exits": {
+      "REGION_SEAGALLOP": "Board Seagallop (Birth Island)"
+    },
+    "warps": {
+      "MAP_BIRTH_ISLAND_HARBOR:0/MAP_BIRTH_ISLAND_EXTERIOR:0": "Birth Island Harbor Exit"
+    }
+  },
+  "REGION_BIRTH_ISLAND_EXTERIOR/MAIN": {
+    "parent_map": "MAP_BIRTH_ISLAND_EXTERIOR",
+    "name": "Birth Island Exterior",
+    "encounter_region": null,
+    "has_land": false,
+    "has_water": false,
+    "has_fishing": false,
+    "kanto": true,
+    "locations": [],
+    "events": [
+      "LEGENDARY_POKEMON_DEOXYS"
+    ],
+    "exits": {},
+    "warps": {
+      "MAP_BIRTH_ISLAND_EXTERIOR:0/MAP_BIRTH_ISLAND_HARBOR:0": "Birth Island Harbor"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+#Tweaking the shop item script to completely ignore the shovel part
+0c/762a/: db $ff 
+0c/766e/: db $ff 
+
+15//marketTable: |
+  dwbe locations.tokayMarket1
+  dwbe locations.tokayMarket2
+
+15//createMarketTreasure: |
+  ld hl,marketTable
+  ld a,c
+  cp $02
+  jr z,@HLready
+  inc hl
+  inc hl
+  cp $03
+  jr z,@HLready
+  ld a,($d442)
+  sub $04
+  ld c,a
+  ld b,TREASURE_SHIELD
+  jr @registersReady
+  @HLready:
+  ld b,(hl)
+  inc hl
+  ld c,(hl)
+  @registersReady:
+  jp spawnTreasureOnLink
+
+# tokayShopItem_createTreasureAtLink
+15/6f77/: jp createMarketTreasure
+  
+#remove shield after buying everything
+0a/623d/: db $c3
+
+0a/62e9/: |
+  nop
+  nop
+
+#remove text when both item are bought
+0c/7689/ : |
+  db $be
+  db $00
+
+0a//checkSatchelAndShooter : |
+  call checkTreasureObtained
+  jp c,$629e
+  ld a,TREASURE_SHOOTER
+  call checkTreasureObtained
+  jp c,$629e
+  jp $62b4
+
+#Allow buy if you have seed satchel OR seed launcher
+0a/6299/ : jp checkSatchelAndShooter
+
+

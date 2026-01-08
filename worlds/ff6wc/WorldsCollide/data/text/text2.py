@@ -1,0 +1,56 @@
+text_value = {
+              '<end>'               : 0x00,
+              '<line>'              : 0x01,
+              '!'                   : 0xbe,
+              '?'                   : 0xbf,
+              '/'                   : 0xc0,
+              ':'                   : 0xc1,
+              '"'                   : 0xc2,
+              '\''                  : 0xc3,
+              '-'                   : 0xc4,
+              '.'                   : 0xc5,
+              ','                   : 0xc6,
+              '…'                   : 0xc7,
+              ';'                   : 0xc8,
+              '#'                   : 0xc9,
+              '+'                   : 0xca,
+              '('                   : 0xcb,
+              ')'                   : 0xcc,
+              '%'                   : 0xcd,
+              '~'                   : 0xce,
+              '='                   : 0xd2,
+              '<dotted line>'       : 0xd3,
+              '<N arrow>'           : 0xd4,
+              '<E arrow>'           : 0xd5,
+              '<SW arrow>'          : 0xd6,
+              '<X>'                 : 0xd7,
+              '<dirk icon>'         : 0xd8,
+              '<sword icon>'        : 0xd9,
+              '<lance icon>'        : 0xda,
+              '<knife icon>'        : 0xdb,
+              '<rod icon>'          : 0xdc,
+              '<brush icon>'        : 0xdd,
+              '<stars icon>'        : 0xde,
+              '<special icon>'      : 0xdf,
+              '<gambler icon>'      : 0xe0,
+              '<claw icon>'         : 0xe1,
+              '<shield icon>'       : 0xe2,
+              '<helmet icon>'       : 0xe3,
+              '<armor icon>'        : 0xe4,
+              '<tool icon>'         : 0xe5,
+              '<skean icon>'        : 0xe6,
+              '<relic icon>'        : 0xe7,
+              '<white magic icon>'  : 0xe8,
+              '<black magic icon>'  : 0xe9,
+              '<gray magic icon>'   : 0xea,
+              ' '                   : 0xfe,
+              '\0'                  : 0xff,
+             }
+for ascii_val in range(ord('A'), ord('Z') + 1):
+    text_value[chr(ascii_val)] = ascii_val + 0x3f
+for ascii_val in range(ord('a'), ord('z') + 1):
+    text_value[chr(ascii_val)] = ascii_val + 0x39
+for ascii_val in range(ord('0'), ord('9') + 1):
+    text_value[chr(ascii_val)] = ascii_val + 0x84
+
+value_text = {v: k for k, v in text_value.items()}

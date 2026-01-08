@@ -1,0 +1,134 @@
+# if the item buffer is nonzero, spawn the item at link and reset the buffer.
+# var INTERAC_MULTI_BYTE is used to signal the destination player number, and
+# var 71 is set to override normal collect/player properties lookup.
+05//checkNetItemBuffer: |
+    call $5e3d  ; checkLinkPushingAgainstBed 
+    push bc
+    push de
+    push hl
+    
+    ; Don't spawn the item if menu is disabled (cutscenes, etc...)
+    ld a,(wMenuDisabled)
+    or a
+    jr nz,@done
+    
+    ; Don't spawn the item if Link is grabbing something
+    ld a,(wLinkGrabState)
+    or a
+    jr nz,@done
+    
+    ; Don't spawn the item if Link is immobilized for some reason (falling down a pit, etc...)
+    ld a,(wLinkImmobilized)
+    or a
+    jr nz,@done
+    
+    ; Don't spawn the item if Link is drowning
+    ld a,(wLinkSwimmingState)
+    cp $01
+    jr z,@done
+    cp $02
+    jr z,@done
+    
+    ; Don't spawn the item if Link is riding a minecart or anything else
+    ld a,(wLinkObjectIndex)
+    cp $d0
+    jr nz,@done
+    
+    ; Don't spawn the item if Link is too close to the room border, preventing any text-warp from occuring
+    ld a,(wRoomEdgeY)
+    ld b,a
+    ld a,(w1Link.yh)
+    cp TEXT_WARP_PROTECTION_MARGIN
+    jr c,@done
+    add a,TEXT_WARP_PROTECTION_MARGIN
+    sub b
+    jr nc,@done
+    
+    ld a,(wRoomEdgeX)
+    ld b,a
+    ld a,(w1Link.xh)
+    cp TEXT_WARP_PROTECTION_MARGIN
+    jr c,@done
+    add a,TEXT_WARP_PROTECTION_MARGIN
+    sub b
+    jr nc,@done
+    
+    ; All lights are green, spawn the item
+    ld hl,wNetTreasureIn
+    ldi a,(hl)
+    or a
+    jr z,@done
+    cp $ff
+    jr nz,@notDeathlink
+    
+    ; If item in buffer is 0xFF, it's a deathlink signal so make Link die
+    ld a,$fe
+    ld (wLinkDeathTrigger),a
+    jr @done
+    
+    @notDeathlink:
+    ld b,a
+    ld c,(hl)
+    call spawnTreasureOnLink
+    jr nz,@done
+    ld l,$71  ; Set forced collect mode in var31
+    ld (hl),COLLECT_PICKUP_NOFLAG
+    
+    ld hl,wNetCountIn
+    inc (hl)
+    ldi a,(hl)
+    or a
+    jr nz,@noOverflow
+    inc (hl)
+    
+    @noOverflow:
+    ld hl,wNetTreasureIn
+    xor a
+    ldi (hl),a
+    ld (hl),a
+    
+    @done:
+    pop hl
+    pop de
+    pop bc
+    ret
+# Replace the call to checkLinkPushingAgainstBed by a call to this function
+05/5513/: call checkNetItemBuffer
+
+# run treasure state 1 code immediately following treasure state 0 code, so
+# that link can pick up items on the same frame they're spawned. this avoids
+# issues for treasures spawning on the frame before link gets warped, like
+# after subrosian dancing and when failing poe skip. maku seed visuals don't
+# quite work right this way, so don't do this for maku seed.
+09//treasureCollideImmediately: |
+    call objectSetVisiblec2
+    ld e,$70
+    ld a,(de)
+    cp TREASURE_MAKU_SEED
+    ret z
+    jp $4000    ; interactionCode60
+09/4033/: jp treasureCollideImmediately
+
+# if var 71 is already nonzero, use that as the collect mode instead of
+# whatever this is.
+15//keepNonzeroCollectMode: |
+    ld e,$71
+    ld a,(de)
+    and a
+    jr nz,@next
+    ld a,b
+    @next:
+    ld b,a
+    swap a
+    and $07
+    ld (de),a
+    ret
+15/465f/: call keepNonzeroCollectMode
+
+# don't set global flag 30 when defeating onox in multiworld
+0f/7145/: |
+    nop
+    nop
+    nop
+# don't set file to completed when saving after credits in multiworld
+15/49bc/: ret

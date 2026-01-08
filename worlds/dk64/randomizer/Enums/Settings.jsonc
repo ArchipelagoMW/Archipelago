@@ -1,0 +1,1740 @@
+{
+  /*
+    ActivateAllBananaports:
+    - Whether bananaports should start as activated, and where.
+    - off: No bananaports will be activated.
+    - all: All bananaports will be activated.
+    - isles: Only bananaports in D.K. Isles will be activated.
+  */
+  "ActivateAllBananaports": {
+    "off": 0,
+    "all": 1,
+    "isles": 2,
+    "isles_inc_helm_lobby": 3
+  },
+
+  /*
+    BananaportRando:
+    - Determines how bananaports are shuffled.
+    - off: Bananaports have their vanilla locations.
+    - in_level: Bananaports are shuffled within their own levels.
+    - crossmap_coupled: Bananaports are shuffled among all bananaports in all levels.
+    - crossmap_decoupled: Going back through one bananaport may not take you to the same location.
+  */
+  "BananaportRando": {
+    "off": 0,
+    "in_level": 1,
+    "crossmap_coupled": 2,
+    "crossmap_decoupled": 3
+  },
+
+  /*
+    BigHeadMode:
+    - Determines which big head mode setting is used.
+    - off: Normal head size.
+    - big: Very big heads.
+    - small: Very small heads.
+    - random: Head size will be random on a model-by-model basis.
+  */
+  "BigHeadMode": {
+    "off": 0,
+    "big": 1,
+    "small": 2,
+    "random": 3
+  },
+
+  /*
+    CBRando:
+    - Determines the level of CB Rando utilized.
+    - off: CB Rando is disabled.
+    - on: CB Rando is on in the main 7 levels.
+    - on_with_isles: Expanded to include isles.
+  */
+  "CBRando": {
+    "off": 1,
+    "on": 2,
+    "on_with_isles": 3
+  },
+
+  /*
+    CharacterColors:
+    - Determines the colors for the Kongs, Rambi, and Enguarde.
+    - vanilla: The character uses vanilla colors.
+    - randomized: The character uses a random color.
+    - custom: The character uses a user-provided color.
+  */
+  "CharacterColors": {
+    "vanilla": 1,
+    "randomized": 2,
+    "custom": 3
+  },
+
+  /*
+    ColorblindMode:
+    - Determines which colorblind mode setting is used.
+    - off: Normal colors.
+    - prot: Setting for protanomaly/protanopia.
+    - deut: Setting for deuteranomaly/deuteranopia.
+    - trit: Setting for tritanomaly/tritanopia.
+  */
+  "ColorblindMode": {
+    "off": 0,
+    "prot": 1,
+    "deut": 2,
+    "trit": 3
+  },
+
+  /*
+    CrownEnemyRando:
+    - DEPRECATED
+    - Determines the difficulty of enemies in Battle Arenas.
+    - off: Enemies have their vanilla difficulty.
+    - easy: Enemies are easier than vanilla.
+    - medium: Enemies have medium difficulty.
+    - hard: Enemies are harder than vanilla.
+  */
+  "CrownEnemyRando": {
+    "off": 0,
+    "easy": 1,
+    "medium": 2,
+    "hard": 3
+  },
+  
+  /*
+    CrownEnemyDifficulty:
+    - Determines the difficulty of enemies in Battle Arenas.
+    - vanilla: Enemies have their vanilla difficulty.
+    - easy: Enemies are easier than vanilla.
+    - medium: Enemies have medium difficulty.
+    - hard: Enemies are harder than vanilla.
+  */
+  "CrownEnemyDifficulty": {
+    "vanilla": 0,
+    "easy": 1,
+    "medium": 2,
+    "hard": 3,
+    "progressive": 4
+  },
+
+  /*
+    DamageAmount:
+    - The damage multiplier.
+    - default: Normal damage.
+    - double: Damage is 2x normal.
+    - quad: Damage is 4x normal.
+    - ohko: One hit kills (12x normal damage).
+  */
+  "DamageAmount": {
+    "default": 0,
+    "double": 1,
+    "quad": 2,
+    "ohko": 3
+  },
+
+  /*
+    DPadDisplays:
+    - Varying methods of displaying the D-Pad.
+    - off: Display isn't rendered.
+    - on: Display is rendered including all elements.
+    - minimal: Only the medal is rendered.
+  */
+  "DPadDisplays": {
+    "off": 0,
+    "on": 1,
+    "minimal": 2
+  },
+  
+  /*
+    DKPortalRando:
+    - Varying methods of displaying the D-Pad.
+    - off: Display isn't rendered.
+    - main_only: Only main-map locations are included.
+    - on: All locations are included.
+  */
+  "DKPortalRando": {
+    "off": 0,
+    "main_only": 1,
+    "on": 2
+  },
+
+  /*
+    ExcludedSongs:
+    - Determines the types of songs excluded.
+    - wrinkly: Excludes Wrinkly songs.
+    - transformation: Excludes transformation songs.
+    - pause_music: Excludes pause music.
+    - sub_areas: Excludes sub-area music.
+  */
+  "ExcludedSongs": {
+    "wrinkly": 1,
+    "transformation": 2,
+    "pause_music": 3,
+    "sub_areas": 4
+  },
+
+  /*
+    ExtraCutsceneSkips:
+    - Controls how extra cutscenes are handled.
+    - off: Extra cutscenes can't be skipped.
+    - press: Cutscenes can be skipped by pressing start.
+    - auto: Cutscenes are skipped automatically.
+  */
+  "ExtraCutsceneSkips": {
+    "off": 0,
+    "press": 1,
+    "auto": 2
+  },
+
+  /*
+    FasterChecksSelected:
+    - Various faster check changes that can be applied.
+  */
+  "FasterChecksSelected": {
+    "factory_toy_monster_fight": 1,
+    "factory_piano_game": 2,
+    "factory_diddy_rnd": 3,
+    "factory_arcade_round_1": 4,
+    "factory_car_race": 5,
+    "galleon_seal_race": 6,
+    "galleon_mech_fish": 7,
+    "forest_mill_conveyor": 8,
+    "forest_owl_race": 9,
+    "forest_rabbit_race": 10,
+    "caves_ice_tomato_minigame": 11,
+    "castle_minecart": 12,
+    "castle_car_race": 13,
+    "jetpac": 14,
+    "arcade": 15
+  },
+
+  /*
+    FillAlgorithm:
+    - The algorithm used for placing items.
+    - forward: Places items in available locations. Faster than assumed.
+    - assumed: Attempts to place items deeper into the seed.
+    - random: Places items with no regard for logic.
+    - careful_random: Places items with no regard for anything except coin logic.
+  */
+  "FillAlgorithm": {
+    "forward": 1,
+    "assumed": 2,
+    "random": 3,
+    "careful_random": 4
+  },
+
+  /*
+    FreeTradeSetting:
+    - Determines if Kongs can collect items assigned to other Kongs.
+    - none: Items can only be collected by their original Kong.
+    - not_blueprints: Major items can be collected by any Kong, except for blueprints.
+    - major_collectibles: Major items can be collected by any Kong.
+  */
+  "FreeTradeSetting": {
+    "none": 0,
+    "not_blueprints": 1,
+    "major_collectibles": 2
+  },
+
+  /*
+    FungiTimeSetting:
+    - Determines the starting time of day.
+    - day: Start at daytime.
+    - night: Start at nighttime.
+    - random: Random starting time.
+    - dusk: All time-specific gates are removed.
+    - progressive: Time of day progresses naturally in Fungi Forest.
+  */
+  "FungiTimeSetting": {
+    "day": 1,
+    "night": 2,
+    "random": 3,
+    "dusk": 4,
+    "progressive": 5
+  },
+
+  /*
+    GalleonWaterSetting:
+    - Determines the starting water level.
+    - lowered: Start lowered.
+    - raised: Start raised.
+    - random: Random water level.
+  */
+  "GalleonWaterSetting": {
+    "lowered": 1,
+    "raised": 2,
+    "random": 3
+  },
+  /* 
+    ClimbingStatus:
+    - Determines if and how climbing is randomized.
+    - normal: Climbing is a starting move.
+    - shuffled: Climbing is an item that can be found in the world.
+  */
+  "ClimbingStatus": {
+    "normal": 0,
+    "shuffled": 1
+  },
+  /*
+    GlitchesSelected:
+    - Glitch categories that can be selected for the seed logic.
+  */
+  "GlitchesSelected": {
+    "advanced_platforming": 1,
+    "b_locker_skips": 2,
+    "boulder_clips": 3,
+    "general_clips": 4,
+    "ledge_clips": 5,
+    "moonkicks": 6,
+    "phase_swimming": 7,
+    "phase_walking": 8,
+    "skew": 9,
+    "spawn_snags": 10,
+    "swim_through_shores": 11,
+    "tag_barrel_storage": 12,
+    "troff_n_scoff_skips": 13,
+    "moontail": 14,
+    "phasefall": 15
+  },
+
+  /*
+    HelmDoorItem:
+    - Items required to open the crown/coin doors in Hideout Helm.
+    - vanilla: The originally required item.
+    - opened: The door is automatically opened.
+    - medium_random: The door is opened by a random item (medium difficulty).
+    - req_gb: Golden Bananas are required.
+    - req_bp: Blueprints are required.
+    - req_companycoins: Company coins are required.
+    - req_key: Keys are required.
+    - req_medal: Banana Medals are required.
+    - req_crown: Battle Crowns are required.
+    - req_fairy: Banana Fairies are required.
+    - req_rainbowcoin: Rainbow Coins are required.
+    - req_bean: The bean is required.
+    - req_pearl: Pearls are required.
+    - easy_random: The door is opened by a random item (easy difficulty).
+    - hard_random: The door is opened by a random item (hard difficulty).
+  */
+  "HelmDoorItem": {
+    "vanilla": 0,
+    "opened": 1,
+    "medium_random": 2,
+    "req_gb": 3,
+    "req_bp": 4,
+    "req_companycoins": 5,
+    "req_key": 6,
+    "req_medal": 7,
+    "req_crown": 8,
+    "req_fairy": 9,
+    "req_rainbowcoin": 10,
+    "req_bean": 11,
+    "req_pearl": 12,
+    "easy_random": 13,
+    "hard_random": 14
+  },
+
+  /*
+    HelmSetting:
+    - Determines where the player starts when entering Hideout Helm.
+    - default: Player starts at the entrance.
+    - skip_start: Player starts in the Blast-O-Matic room.
+    - skip_all: Player starts at the crown door.
+  */
+  "HelmSetting": {
+    "default": 0,
+    "skip_start": 1,
+    "skip_all": 2
+  },
+
+  /*
+    HelmBonuses:
+    - Determines how many barrels are necessary to beat a helm room.
+    - zero: Room is completed by playing the instrument pad.
+    - one: Room is completed upon beating the left-most barrel.
+    - two: Both barrels are required.
+  */
+  "HelmBonuses": {
+    "zero": 0,
+    "one": 1,
+    "two": 2
+  },
+
+  /*
+    HardBossesSelected:
+    - Various hard boss changes that can be applied.
+  */
+  "HardBossesSelected": {
+    "fast_mad_jack": 1,
+    "alternative_mad_jack_kongs": 2,
+    "pufftoss_star_rando": 3,
+    "pufftoss_star_raised": 4,
+    "kut_out_phase_rando": 5,
+    "k_rool_toes_rando": 6,
+    "beta_lanky_phase": 7
+  },
+
+  /*
+    HardModeSelected:
+    - Various hard mode changes that can be applied.
+  */
+  "HardModeSelected": {
+    "null_option_0": 1,
+    "null_option_1": 2,
+    "hard_enemies": 3,
+    "water_is_lava": 4,
+    "reduced_fall_damage_threshold": 5,
+    "shuffled_jetpac_enemies": 6,
+    "lower_max_refill_amounts": 7,
+    "strict_helm_timer": 8,
+    "donk_in_the_dark_world": 9,
+    "donk_in_the_sky": 10,
+    "angry_caves": 11
+  },
+
+  /*
+    IceTrapFrequency:
+    - The attempted frequency of ice traps in the seed.
+    - rare: 4 ice traps.
+    - mild: 10 ice traps.
+    - common: 32 ice traps.
+    - frequent: 64 ice traps.
+    - pain: 100 ice traps.
+  */
+  "IceTrapFrequency": {
+    "rare": 0,
+    "mild": 1,
+    "common": 2,
+    "frequent": 3,
+    "pain": 4
+  },
+
+  /*
+    ItemRandoListSelected:
+    - Item categories that may be randomized.
+  */
+  "ItemRandoListSelected": {
+    "shop": 1,
+    "banana": 2,
+    "toughbanana": 3,
+    "crown": 4,
+    "blueprint": 5,
+    "key": 6,
+    "medal": 7,
+    "nintendocoin": 8,
+    "kong": 9,
+    "fairy": 10,
+    "rainbowcoin": 11,
+    "beanpearl": 12,
+    "fakeitem": 13,
+    "junkitem": 14,
+    "crateitem": 15,
+    "rarewarecoin": 16,
+    "shopowners": 17,
+    "hint": 18,
+    "shockwave": 19
+  },
+
+  /*
+    KasplatRandoSetting:
+    - Determines if and how Kasplats are randomized.
+    - off: Kasplats are in their original locations with original blueprints.
+    - vanilla_locations: Kasplats are shuffled between vanilla locations.
+    - location_shuffle: Kasplats are shuffled between all possible locations, including new ones.
+  */
+  "KasplatRandoSetting": {
+    "off": 0,
+    "vanilla_locations": 1,
+    "location_shuffle": 2
+  },
+
+  /*
+    RandomModels:
+    - Determines the random model level.
+  */
+  "RandomModels": {
+    "off": 1,
+    "random": 2,
+    "extreme": 3
+  },
+
+  /*
+    KrushaUi:
+    - Which Kong model will be replaced with Krusha.
+  */
+  "KrushaUi": {
+    "no_slot": 0,
+    "dk": 1,
+    "diddy": 2,
+    "lanky": 3,
+    "tiny": 4,
+    "chunky": 5,
+    "random": 6
+  },
+
+  /*
+    KongModels:
+    - Models for each Kong.
+  */
+  "KongModels": {
+    "default": 0,
+    "disco_chunky": 1,
+    "krusha": 2,
+    "krool_fight": 3,
+    "krool_cutscene": 4,
+    "cranky": 5,
+    "candy": 6,
+    "funky": 7
+  },
+
+  /*
+    LevelRandomization:
+    - Determines how entrances are randomized and placed.
+    - vanilla: Entrances are the same as the base game.
+    - level_order: Randomizes the order of the levels.
+    - loadingzone: All entrances except for Helm/Helm Lobby are shuffled.
+    - loadingzonesdecoupled: Going back through an entrance may not take you back to where you came from.
+    - level_order_complex: Same as level_order but with complex logic.
+  */
+  "LevelRandomization": {
+    "vanilla": 0,
+    "level_order": 1,
+    "loadingzone": 2,
+    "loadingzonesdecoupled": 3,
+    "level_order_complex": 4
+  },
+
+  /*
+    LogicType:
+    - The logic used to place items in the seed.
+    - glitchless: No glitches are required.
+    - glitch: Some glitches may be required.
+    - nologic: The seed may not be beatable.
+  */
+  "LogicType": {
+    "glitchless": 1,
+    "glitch": 2,
+    "nologic": 3
+  },
+
+  /*
+    MicrohintsEnabled:
+    - Adds additional hints for late-game-required items.
+    - off: No extra hints are added.
+    - base: Monkeyport and Gorilla Gone hints are added to the Krem Isle pads.
+    - all: Same as base, but instrument pads in Hideout Helm provide item hints.
+  */
+  "MicrohintsEnabled": {
+    "off": 0,
+    "base": 1,
+    "all": 2
+  },
+
+  /*
+    MinigameBarrels:
+    - Determines how minigames are shuffled between barrels.
+    - normal: Minigames are the same as in the vanilla game.
+    - skip: Minigames are auto-completed.
+    - random: Minigames are shuffled randomly.
+    - selected: Minigames are shuffled among user-selected ones.
+  */
+  "MinigameBarrels": {
+    "normal": 1,
+    "skip": 2,
+    "random": 3,
+    "selected": 4
+  },
+
+  /*
+    MinigamesListSelected:
+    - Minigame categories used for the web selector.
+  */
+  "MinigamesListSelected": {
+    "batty_barrel_bandit": 1,
+    "big_bug_bash": 2,
+    "busy_barrel_barrage": 3,
+    "mad_maze_maul": 4,
+    "minecart_mayhem": 5,
+    "beaver_bother": 6,
+    "teetering_turtle_trouble": 7,
+    "stealthy_snoop": 8,
+    "stash_snatch": 9,
+    "splish_splash_salvage": 10,
+    "speedy_swing_sortie": 11,
+    "krazy_kong_klamour": 12,
+    "searchlight_seek": 13,
+    "kremling_kosh": 14,
+    "peril_path_panic": 15,
+    "helm_minigames": 16,
+    "arenas": 17,
+    "training_minigames": 18
+  },
+
+  /*
+    MiscChangesSelected:
+    - Various quality of life fixes that can be applied.
+  */
+  "MiscChangesSelected": {
+    "auto_dance_skip": 1,
+    "fast_boot": 2,
+    "calm_caves": 3,
+    "animal_buddies_grab_items": 4,
+    "reduced_lag": 5,
+    "remove_extraneous_cutscenes": 6,
+    "hint_textbox_hold": 7,
+    "remove_wrinkly_puzzles": 8,
+    "fast_picture_taking": 9,
+    "hud_hotkey": 10,
+    "ammo_swap": 11,
+    "homing_balloons": 12,
+    "fast_transform_animation": 13,
+    "troff_n_scoff_audio_indicator": 14,
+    "lowered_aztec_lobby_bonus": 15,
+    "quicker_galleon_star": 16,
+    "vanilla_bug_fixes": 17,
+    "save_k_rool_progress": 18,
+    "small_bananas_always_visible": 19,
+    "fast_hints": 20,
+    "brighten_mad_maze_maul_enemies": 21,
+    "raise_fungi_dirt_patch": 22,
+    "global_instrument": 23,
+    "fast_pause_transitions": 24,
+    "cannon_game_better_control": 25,
+    "better_fairy_camera": 26,
+    "remove_enemy_cabin_timer": 27,
+    "remove_galleon_ship_timers": 28,
+    "japes_bridge_permanently_extended": 29,
+    "move_spring_cabin_rocketbarrel": 30
+  },
+
+  /*
+    MoveRando:
+    - Determines if and how moves are randomized.
+    - off: Moves are in their vanilla locations.
+    - on: Moves are shuffled between shops, but must still be bought by the original Kong.
+    - cross_purchase: Moves are shuffled and can be bought by any Kong.
+    - start_with: Player starts with all moves unlocked.
+    - item_shuffle: Moves are shuffled into the broader item pool.
+  */
+  "MoveRando": {
+    "off": 0,
+    "on": 1,
+    "cross_purchase": 2,
+    "start_with": 3,
+    "item_shuffle": 4
+  },
+
+  /*
+    MusicFilters:
+    - Determines how music is filtered.
+  */
+  "MusicFilters": {
+    "length": 1,
+    "location": 2
+  },
+
+  /*
+    ProgressiveHintItem:
+    - The item required to obtain hints via the progressive hint system.
+  */
+  "ProgressiveHintItem": {
+    "off": 0,
+    "req_gb": 1,
+    "req_bp": 2,
+    "req_key": 3,
+    "req_medal": 4,
+    "req_crown": 5,
+    "req_fairy": 6,
+    "req_rainbowcoin": 7,
+    "req_bean": 8,
+    "req_pearl": 9,
+    "req_cb": 10
+  },
+
+  /*
+    PuzzleRando:
+    - Determines the difficulty of puzzle rando.
+    - off: Puzzle solutions are NOT randomized.
+    - easy: Easy boundaries, no castle car race.
+    - medium: Medium boundaries, no castle car race.
+    - hard: Hard boundaries.
+    - chaos: Any value in the easy, medium, or hard bounds.
+  */
+  "PuzzleRando": {
+    "off": 0,
+    "easy": 1,
+    "medium": 2,
+    "hard": 3,
+    "chaos": 4
+  },
+
+  /*
+    RandomPrices:
+    - Determines how and if shop prices are randomized.
+    - vanilla: Shop prices are the same as the base game.
+    - free: All items are free.
+    - low: Moves cost 1-4 coins most of the time.
+    - medium: Moves cost 1-8 coins most of the time.
+    - high: Moves cost 1-12 coins most of the time.
+    - extreme: Moves cost 10+ coins most of the time.
+  */
+  "RandomPrices": {
+    "vanilla": 0,
+    "free": 1,
+    "low": 2,
+    "medium": 3,
+    "high": 4,
+    "extreme": 5
+  },
+
+  /*
+    RemovedBarriersSelected:
+    - Various barriers that can be removed.
+  */
+  "RemovedBarriersSelected": {
+    "japes_coconut_gates": 1,
+    "japes_shellhive_gate": 2,
+    "aztec_tunnel_door": 3,
+    "aztec_5dtemple_switches": 4,
+    "aztec_llama_switches": 5,
+    "factory_production_room": 6,
+    "factory_testing_gate": 7,
+    "galleon_lighthouse_gate": 8,
+    "galleon_shipyard_area_gate": 9,
+    "castle_crypt_doors": 10,
+    "galleon_seasick_ship": 11,
+    "forest_green_tunnel": 12,
+    "forest_yellow_tunnel": 13,
+    "caves_igloo_pads": 14,
+    "caves_ice_walls": 15,
+    "galleon_treasure_room": 16,
+    "aztec_tiny_temple_ice": 17
+  },
+
+  /*
+    ShockwaveStatus:
+    - Determines how Banana Fairy Isle is handled.
+    - vanilla: Camera and Shockwave are given.
+    - shuffled: Camera and Shockwave are shuffled into the move pool as a single item.
+    - shuffled_decoupled: Camera and Shockwave are shuffled separately into the move pool.
+    - start_with: Player starts with Camera and Shockwave. BFI has no reward.
+  */
+  "ShockwaveStatus": {
+    "vanilla": 0,
+    "shuffled": 1,
+    "shuffled_decoupled": 2,
+    "start_with": 3
+  },
+
+  /*
+    ShuffleLoadingZones:
+    - Determines how loading zones are shuffled.
+    - none: No loading zones are shuffled.
+    - levels: Only level entrances are shuffled.
+    - all: All loading zones are shuffled.
+  */
+  "ShuffleLoadingZones": {
+    "none": 0,
+    "levels": 1,
+    "all": 2
+  },
+
+  /*
+    ShufflePortLocations:
+    - Determines how bananaports are shuffled.
+    - off: No shuffling.
+    - vanilla_only: Only shuffles within vanilla locations.
+    - half_vanilla: One of each pair is vanilla.
+    - on: Full shuffle.
+  */
+  "ShufflePortLocations": {
+    "off": 1,
+    "vanilla_only": 2,
+    "half_vanilla": 3,
+    "on": 4
+  },
+
+  /*
+    SlamRequirement:
+    - Determines the slam requirement for a switch.
+    - green: Green Slam (Simian Slam).
+    - blue: Blue Slam (Super Simian Slam).
+    - red: Red Slam (Super Duper Simian Slam).
+    - random: Random slam color from the above.
+  */
+  "SlamRequirement": {
+    "green": 1,
+    "blue": 2,
+    "red": 3,
+    "random": 4
+  },
+
+  /*
+    SoundType:
+    - Determines the default sound mode.
+    - stereo: Default.
+    - surround: Dolby Surround.
+    - mono: Mono audio.
+  */
+  "SoundType": {
+    "stereo": 0,
+    "mono": 1,
+    "surround": 2
+  },
+
+  /*
+    SwitchsanityLevel:
+    - Determines what switches are shuffled in Switchsanity.
+    - none: No switches are altered.
+    - helm_access: Only monkeyport and gorilla gone pads on the path to Helm are shuffled.
+    - all: All switches are shuffled.
+  */
+  "SwitchsanityLevel": {
+    "off": 0,
+    "helm_access": 1,
+    "all": 2
+  },
+
+  /*
+    TrainingBarrels:
+    - Determines if and how training barrels are randomized.
+    - normal: Training barrels give vanilla moves.
+    - shuffled: Training moves are shuffled into the item pool and training barrels give four random moves.
+  */
+  "TrainingBarrels": {
+    "normal": 0,
+    "shuffled": 1
+  },
+
+  /*
+    WinCondition:
+    - The condition needed to complete the game.
+    - beat_krool: Complete the King K. Rool boss fight.
+    - get_key8: Collect key 8.
+    - all_fairies: Collect all Banana Fairies.
+    - all_blueprints: Collect all Blueprints.
+    - all_medals: Collect all Banana Medals.
+    - poke_snap: Capture a photograph of each enemy in the game.
+    - all_keys: Collect all keys.
+  */
+  "WinCondition": {
+    "beat_krool": 0,
+    "get_key8": 1,
+    "all_fairies": 2,
+    "all_blueprints": 3,
+    "all_medals": 4,
+    "poke_snap": 5,
+    "all_keys": 6
+  },
+
+  /*
+    WinConditionComplex:
+    - An iteration on the WinCondition enum with more granular items.
+  */
+  "WinConditionComplex": {
+    "beat_krool": 0,
+    "get_key8": 1,
+    "krem_kapture": 2,
+    "req_gb": 3,
+    "req_bp": 4,
+    "req_companycoins": 5,
+    "req_key": 6,
+    "req_medal": 7,
+    "req_crown": 8,
+    "req_fairy": 9,
+    "req_rainbowcoin": 10,
+    "req_bean": 11,
+    "req_pearl": 12,
+    "easy_random": 13,
+    "medium_random": 14,
+    "hard_random": 15,
+    "dk_rap_items": 16
+  },
+
+  /*
+    WrinklyHints:
+    - Determines whether Wrinkly hints are replaced with useful randomizer hints.
+    - off: Hints are the same as vanilla.
+    - standard: Normal randomizer hints.
+    - cryptic: Cryptic randomizer hints.
+    - fixed_racing: Fixed distribution, used for racing preset.
+    - item_hinting: Hints as many Kongs, Keys, and moves as possible.
+    - item_hinting_advanced: Same as item_hinting, but more vague.
+  */
+  "WrinklyHints": {
+    "off": 0,
+    "standard": 1,
+    "cryptic": 2,
+    "fixed_racing": 3,
+    "item_hinting": 4,
+    "item_hinting_advanced": 5
+  },
+
+  /*
+    SpoilerHints:
+    - Determines if spoiler-style hints are generated in the spoiler log for external trackers.
+    - off: No hints are generated.
+    - vial_colors: Hints for keys, kongs, and vials by color.
+    - points: Points are assigned to levels based on item content.
+  */
+  "SpoilerHints": {
+    "off": 0,
+    "vial_colors": 1,
+    "points": 2
+  },
+  /*
+    SettingsStringEnum:
+    Maps setting names to key values, for use in the settings string.
+
+    Changing any of the existing values will cause generated settings strings
+        to break. Only add new values.
+
+    ALL SETTINGS NEED AN ENTRY HERE!
+  */
+  "SettingsStringEnum": {
+    "activate_all_bananaports": 1,
+    "alter_switch_allocation": 2,
+    "auto_keys": 3,
+    "bananaport_rando": 4,
+    "blocker_0": 5,
+    "blocker_1": 6,
+    "blocker_2": 7,
+    "blocker_3": 8,
+    "blocker_4": 9,
+    "blocker_5": 10,
+    "blocker_6": 11,
+    "blocker_7": 12,
+    "blocker_text": 13,
+    "bonus_barrel_auto_complete": 14,
+    "bonus_barrel_rando": 15,
+    "boss_kong_rando": 16,
+    "boss_location_rando": 17,
+    "cb_rando": 18,
+    "coin_door_item": 19,
+    "coin_door_item_count": 20,
+    "crown_door_item": 21,
+    "crown_door_item_count": 22,
+    "crown_enemy_rando": 23,
+    "crown_placement_rando": 24,
+    "damage_amount": 25,
+    "disable_tag_barrels": 26,
+    "enable_shop_hints": 27,
+    "enable_tag_anywhere": 28,
+    "enemies_selected": 29,
+    "enemy_rando": 30,
+    "enemy_speed_rando": 31,
+    "faster_checks_enabled": 32,
+    "fast_start_beginning_of_game_dummy": 33,
+    "fast_warps": 34,
+    "fps_display": 35,
+    "free_trade_setting": 36,
+    "generate_spoilerlog": 37,
+    "glitches_selected": 38,
+    "hard_blockers": 39,
+    "hard_bosses": 40,
+    "hard_shooting": 41,
+    "hard_troff_n_scoff": 42,
+    "helm_hurry": 43,
+    "helm_phase_count": 44,
+    "helm_phase_order_rando": 45,
+    "helm_random": 46,
+    "helm_setting": 47,
+    "helmhurry_list_banana_medal": 48,
+    "helmhurry_list_battle_crown": 49,
+    "helmhurry_list_bean": 50,
+    "helmhurry_list_blueprint": 51,
+    "helmhurry_list_boss_key": 52,
+    "helmhurry_list_colored_bananas": 53,
+    "helmhurry_list_company_coins": 54,
+    "helmhurry_list_fairies": 55,
+    "helmhurry_list_golden_banana": 56,
+    "helmhurry_list_ice_traps": 57,
+    "helmhurry_list_kongs": 58,
+    "helmhurry_list_move": 59,
+    "helmhurry_list_pearl": 60,
+    "helmhurry_list_rainbow_coin": 61,
+    "helmhurry_list_starting_time": 62,
+    "item_rando_list_selected": 63,
+    "item_reward_previews": 64,
+    "kasplat_rando_setting": 65,
+    "key_8_helm": 66,
+    "keys_random": 67,
+    "kong_rando": 68,
+    "krool_access": 69,
+    "krool_key_count": 70,
+    "krool_phase_count": 71,
+    "krool_phase_order_rando": 72,
+    "krool_random": 73,
+    "level_randomization": 74,
+    "logic_type": 75,
+    "maximize_helm_blocker": 76,
+    "medal_cb_req": 77,
+    "medal_requirement": 78,
+    "microhints_enabled": 79,
+    "minigames_list_selected": 80,
+    "misc_changes_selected": 81,
+    "move_rando": 82,
+    "no_healing": 83,
+    "no_melons": 84,
+    "open_lobbies": 85,
+    "perma_death": 86,
+    "portal_numbers": 87,
+    "quality_of_life": 88,
+    "random_fairies": 89,
+    "random_medal_requirement": 90,
+    "random_patches": 91,
+    "random_prices": 92,
+    "random_starting_region": 93,
+    "randomize_blocker_required_amounts": 94,
+    "randomize_cb_required_amounts": 95,
+    "randomize_pickups": 96,
+    "rareware_gb_fairies": 97,
+    "select_keys": 98,
+    "shockwave_status": 99,
+    "shop_indicator": 100,
+    "shorten_boss": 101,
+    "shuffle_items": 102,
+    "shuffle_shops": 103,
+    "smaller_shops": 104,
+    "starting_keys_list_selected": 105,
+    "starting_kongs_count": 106,
+    "starting_random": 107,
+    "tns_location_rando": 108,
+    "training_barrels": 109,
+    "troff_0": 110,
+    "troff_1": 111,
+    "troff_2": 112,
+    "troff_3": 113,
+    "troff_4": 114,
+    "troff_5": 115,
+    "troff_6": 116,
+    "troff_text": 117,
+    "warp_level_list_selected": 118,
+    "warp_to_isles": 119,
+    "wrinkly_available": 120,
+    "wrinkly_hints": 121,
+    "wrinkly_location_rando": 122,
+    "coin_rando": 123,
+    "vanilla_door_rando": 124,
+    "starting_moves_count": 125,
+    "enable_plandomizer": 126,
+    "hard_mode_selected": 127,
+    "hard_mode": 128,
+    "more_cutscene_skips": 129,
+    "spoiler_hints": 130,
+    "spoiler_include_woth_count": 131,
+    "points_list_kongs": 132,
+    "points_list_keys": 133,
+    "points_list_guns": 134,
+    "points_list_instruments": 135,
+    "points_list_training_moves": 136,
+    "points_list_important_shared": 137,
+    "points_list_pad_moves": 138,
+    "points_list_barrel_moves": 139,
+    "points_list_active_moves": 140,
+    "points_list_bean": 141,
+    "random_crates": 142,
+    "starting_move_list_selected": 143,
+    "start_with_slam": 144,
+    "spoiler_include_level_order": 145,
+    "enable_progressive_hints": 146,
+    "progressive_hint_text": 147,
+    "random_starting_move_list_selected": 148,
+    "enemy_drop_rando": 149,
+    "dim_solved_hints": 150,
+    "starting_kong": 151,
+    "switchsanity": 152,
+    "fungi_time": 153,
+    "galleon_water": 154,
+    "remove_barriers_enabled": 155,
+    "remove_barriers_selected": 156,
+    "faster_checks_selected": 157,
+    "k_rool_vanilla_requirement": 158,
+    "disable_hard_minigames": 159,
+    "chaos_blockers": 160,
+    "mermaid_gb_pearls": 161,
+    "kong_model_dk": 162,
+    "kong_model_diddy": 163,
+    "kong_model_lanky": 164,
+    "kong_model_tiny": 165,
+    "kong_model_chunky": 166,
+    "helm_room_bonus_count": 167,
+    "dk_portal_location_rando": 168,
+    "serious_hints": 169,
+    "cannons_require_blast": 170,
+    "chunky_phase_slam_req": 171,
+    "shuffle_helm_location": 172,
+    "points_list_fairy_moves": 173,
+    "points_list_shopkeepers": 174,
+    "chaos_ratio": 175,
+    "krool_in_boss_pool": 176,
+    "enemy_kill_crown_timer": 177,
+    "hard_bosses_selected": 178,
+    "ice_trap_frequency": 179,
+    "ice_traps_damage": 180,
+    "puzzle_rando_difficulty": 181,
+    "win_condition_item": 182,
+    "win_condition_count": 183,
+    "bananaport_placement_rando": 184,
+    "troff_7": 185,
+    "has_password": 186,
+    "randomize_enemy_sizes": 187,
+    "starting_moves_list_1": 188,
+    "starting_moves_list_count_1": 189,
+    "starting_moves_list_2": 190,
+    "starting_moves_list_count_2": 191,
+    "starting_moves_list_3": 192,
+    "starting_moves_list_count_3": 193,
+    "starting_moves_list_4": 194,
+    "starting_moves_list_count_4": 195,
+    "starting_moves_list_5": 196,
+    "starting_moves_list_count_5": 197,
+    "progressive_hint_item": 198,
+    "mirror_mode": 199,
+    "progressive_hint_count": 200,
+    "cb_rando_enabled": 201,
+    "cb_rando_list_selected": 202,
+    "crown_enemy_difficulty": 203,
+    "dk_portal_location_rando_v2": 204,
+    "dos_door_rando": 205
+  },
+  /*
+    SettingsStringDataType:
+    Enum for mapping settings to data types for encryption/decryption
+  */
+  "SettingsStringDataType": {
+    "bool": 1,
+    // Can represent up to 16 values (-8 to 7).
+    "int4": 2,
+    // Can represent up to 256 values (-128 to 127).
+    "int8": 3,
+    // Can represent up to 65,536 values (-32,768 to 32,767).
+    "int16": 4,
+    // Will be shrunk down to the smallest possible size.
+    "var_int": 5,
+    "str": 6,
+    "list": 7,
+    // Can represent up to 65,536 values (0 to 65535)
+    "u16": 8
+  },
+  "SettingsMap": {
+    "activate_all_bananaports": { "obj": "ActivateAllBananaports" },
+    "bananaport_placement_rando": { "obj": "ShufflePortLocations" },
+    "bananaport_rando": { "obj": "BananaportRando" },
+    "big_head_mode": { "obj": "BigHeadMode" },
+    "bonus_barrels": { "obj": "MinigameBarrels" },
+    "cb_rando": { "obj": "CBRando" },
+    "chunky_colors": { "obj": "CharacterColors" },
+    "coin_door_item": { "obj": "HelmDoorItem" },
+    "colorblind_mode": { "obj": "ColorblindMode" },
+    "crown_door_item": { "obj": "HelmDoorItem" },
+    "crown_enemy_rando": { "obj": "CrownEnemyRando" },
+    "crown_enemy_difficulty": { "obj": "CrownEnemyDifficulty" },
+    "damage_amount": { "obj": "DamageAmount" },
+    "dk_portal_location_rando_v2": { "obj": "DKPortalRando" },
+    "diddy_colors": { "obj": "CharacterColors" },
+    "dk_colors": { "obj": "CharacterColors" },
+    "dpad_display": { "obj": "DPadDisplays" },
+    "enemies_selected": { "obj": "Enemies" },
+    "enguarde_colors": { "obj": "CharacterColors" },
+    "excluded_songs_selected": { "obj": "ExcludedSongs" },
+    "free_trade_setting": { "obj": "FreeTradeSetting" },
+    "fungi_time": { "obj": "FungiTimeSetting" },
+    "galleon_water": { "obj": "GalleonWaterSetting" },
+    "gb_colors": { "obj": "CharacterColors" },
+    "glitches_selected": { "obj": "GlitchesSelected" },
+    "hard_bosses_selected": { "obj": "HardBossesSelected" },
+    "hard_mode_selected": { "obj": "HardModeSelected" },
+    "helm_barrels": { "obj": "MinigameBarrels" },
+    "helm_room_bonus_count": { "obj": "HelmBonuses" },
+    "helm_setting": { "obj": "HelmSetting" },
+    "ice_trap_frequency": { "obj": "IceTrapFrequency" },
+    "item_rando_list_selected": { "obj": "ItemRandoListSelected" },
+    "kasplat_rando_setting": { "obj": "KasplatRandoSetting" },
+    "krusha_ui": { "obj": "KrushaUi" },
+    "lanky_colors": { "obj": "CharacterColors" },
+    "level_randomization": { "obj": "LevelRandomization" },
+    "logic_type": { "obj": "LogicType" },
+    "microhints_enabled": { "obj": "MicrohintsEnabled" },
+    "minigames_list_selected": { "obj": "MinigamesListSelected" },
+    "cb_rando_list_selected": { "obj": "Levels" },
+    "misc_changes_selected": { "obj": "MiscChangesSelected" },
+    "more_cutscene_skips": { "obj": "ExtraCutsceneSkips" },
+    "move_rando": { "obj": "MoveRando" },
+    "music_filtering_selected": { "obj": "MusicFilters" },
+    "rambi_colors": { "obj": "CharacterColors" },
+    "random_models": { "obj": "RandomModels" },
+    "random_prices": { "obj": "RandomPrices" },
+    "shockwave_status": { "obj": "ShockwaveStatus" },
+    "shuffle_loading_zones": { "obj": "ShuffleLoadingZones" },
+    "sound_type": { "obj": "SoundType" },
+    "starting_keys_list_selected": { "obj": "Items" },
+    "starting_move_list_selected": { "obj": "Items" },
+    "switchsanity": { "obj": "SwitchsanityLevel" },
+    "random_starting_move_list_selected": { "obj": "Items" },
+    "tiny_colors": { "obj": "CharacterColors" },
+    "training_barrels": { "obj": "TrainingBarrels" },
+    "warp_level_list_selected": { "obj": "Maps" },
+    "win_condition": { "obj": "WinCondition" },
+    "win_condition_item": { "obj": "WinConditionComplex" },
+    "wrinkly_hints": { "obj": "WrinklyHints" },
+    "spoiler_hints": { "obj": "SpoilerHints" },
+    "starting_kong": { "obj": "Kongs" },
+    "remove_barriers_selected": { "obj": "RemovedBarriersSelected" },
+    "faster_checks_selected": { "obj": "FasterChecksSelected" },
+    "kong_model_dk": { "obj": "KongModels" },
+    "kong_model_diddy": { "obj": "KongModels" },
+    "kong_model_lanky": { "obj": "KongModels" },
+    "kong_model_tiny": { "obj": "KongModels" },
+    "kong_model_chunky": { "obj": "KongModels" },
+    "chunky_phase_slam_req": { "obj": "SlamRequirement" },
+    "puzzle_rando_difficulty": { "obj": "PuzzleRando" },
+    "progressive_hint_item": { "obj": "ProgressiveHintItem" },
+    "starting_moves_list_1": { "obj": "Items" },
+    "starting_moves_list_2": { "obj": "Items" },
+    "starting_moves_list_3": { "obj": "Items" },
+    "starting_moves_list_4": { "obj": "Items" },
+    "starting_moves_list_5": { "obj": "Items" }
+  },
+  // ALL SETTINGS NEED AN ENTRY HERE!
+  // This maps settings to the data types that will be used to encode them in the
+  // settings string. Any enum-based settings should use that enum as their data
+  // type, to shrink the payload as much as possible.
+  //
+  // When adding an int setting, make sure to use the smallest int possible.
+  // This will reduce the characters added to the settings string. See the above
+  // enum for valid int values.
+  //
+  // If you are using the var_int type, you must use the addSettingIntRange()
+  // function below to specify the valid int range.
+  "SettingsStringTypeMap": {
+    "SettingsStringEnum.activate_all_bananaports": {
+      "obj": "ActivateAllBananaports"
+    },
+    "SettingsStringEnum.alter_switch_allocation": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.auto_keys": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.bananaport_placement_rando": {
+      "obj": "ShufflePortLocations"
+    },
+    "SettingsStringEnum.bananaport_rando": { "obj": "BananaportRando" },
+    "SettingsStringEnum.blocker_0": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.blocker_1": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.blocker_2": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.blocker_3": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.blocker_4": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.blocker_5": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.blocker_6": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.blocker_7": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.blocker_text": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.bonus_barrel_auto_complete": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.bonus_barrel_rando": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.boss_kong_rando": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.boss_location_rando": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.cb_rando": { "obj": "CBRando" },
+    "SettingsStringEnum.coin_door_item": { "obj": "HelmDoorItem" },
+    "SettingsStringEnum.coin_door_item_count": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.random_crates": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.crown_placement_rando": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.crown_door_item": { "obj": "HelmDoorItem" },
+    "SettingsStringEnum.crown_door_item_count": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.crown_enemy_rando": { "obj": "CrownEnemyRando" },
+    "SettingsStringEnum.crown_enemy_difficulty": { "obj": "CrownEnemyDifficulty" },
+    "SettingsStringEnum.coin_rando": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.damage_amount": { "obj": "DamageAmount" },
+    "SettingsStringEnum.disable_tag_barrels": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.dk_portal_location_rando": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.dk_portal_location_rando_v2": {
+      "obj": "DKPortalRando"
+    },
+    "SettingsStringEnum.enable_plandomizer": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.enable_shop_hints": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.enable_tag_anywhere": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.enemies_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.enemy_rando": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.enemy_speed_rando": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.faster_checks_enabled": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.fast_start_beginning_of_game_dummy": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.fast_warps": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.fps_display": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.free_trade_setting": { "obj": "FreeTradeSetting" },
+    "SettingsStringEnum.generate_spoilerlog": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.glitches_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.hard_mode": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.hard_mode_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.hard_blockers": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.hard_bosses": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.hard_bosses_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.hard_shooting": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.hard_troff_n_scoff": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.helm_hurry": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.helm_phase_count": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.helm_phase_order_rando": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.helm_random": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.helm_room_bonus_count": { "obj": "HelmBonuses" },
+    "SettingsStringEnum.helm_setting": { "obj": "HelmSetting" },
+    "SettingsStringEnum.helmhurry_list_banana_medal": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_battle_crown": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_bean": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_blueprint": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_boss_key": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_colored_bananas": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_company_coins": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_fairies": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_golden_banana": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_ice_traps": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_kongs": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_move": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_pearl": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_rainbow_coin": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.helmhurry_list_starting_time": {
+      "obj": "SettingsStringDataType.u16"
+    },
+    "SettingsStringEnum.item_rando_list_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.item_reward_previews": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.kasplat_rando_setting": {
+      "obj": "KasplatRandoSetting"
+    },
+    "SettingsStringEnum.key_8_helm": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.keys_random": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.kong_model_dk": { "obj": "KongModels" },
+    "SettingsStringEnum.kong_model_diddy": { "obj": "KongModels" },
+    "SettingsStringEnum.kong_model_lanky": { "obj": "KongModels" },
+    "SettingsStringEnum.kong_model_tiny": { "obj": "KongModels" },
+    "SettingsStringEnum.kong_model_chunky": { "obj": "KongModels" },
+    "SettingsStringEnum.kong_rando": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.krool_access": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.krool_key_count": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.krool_phase_count": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.krool_phase_order_rando": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.krool_random": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.level_randomization": { "obj": "LevelRandomization" },
+    "SettingsStringEnum.logic_type": { "obj": "LogicType" },
+    "SettingsStringEnum.maximize_helm_blocker": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.medal_cb_req": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.medal_requirement": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.microhints_enabled": { "obj": "MicrohintsEnabled" },
+    "SettingsStringEnum.minigames_list_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.cb_rando_enabled": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.cb_rando_list_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.misc_changes_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.more_cutscene_skips": { "obj": "ExtraCutsceneSkips" },
+    "SettingsStringEnum.move_rando": { "obj": "MoveRando" },
+    "SettingsStringEnum.no_healing": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.no_melons": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.open_lobbies": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.perma_death": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.portal_numbers": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.quality_of_life": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.random_fairies": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.random_medal_requirement": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.random_patches": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.random_prices": { "obj": "RandomPrices" },
+    "SettingsStringEnum.random_starting_region": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.randomize_blocker_required_amounts": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.randomize_cb_required_amounts": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.randomize_pickups": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.rareware_gb_fairies": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.select_keys": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.shockwave_status": { "obj": "ShockwaveStatus" },
+    "SettingsStringEnum.shop_indicator": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.shorten_boss": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.shuffle_items": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.shuffle_shops": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.smaller_shops": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.starting_keys_list_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.starting_kongs_count": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.starting_moves_count": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.starting_random": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.tns_location_rando": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.training_barrels": { "obj": "TrainingBarrels" },
+    "SettingsStringEnum.troff_0": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.troff_1": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.troff_2": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.troff_3": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.troff_4": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.troff_5": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.troff_6": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.troff_7": { "obj": "SettingsStringDataType.var_int" },
+    "SettingsStringEnum.troff_text": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.vanilla_door_rando": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.warp_level_list_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.warp_to_isles": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.win_condition_item": { "obj": "WinConditionComplex" },
+    "SettingsStringEnum.win_condition_count": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.wrinkly_available": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.wrinkly_hints": { "obj": "WrinklyHints" },
+    "SettingsStringEnum.wrinkly_location_rando": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.spoiler_hints": { "obj": "SpoilerHints" },
+    "SettingsStringEnum.spoiler_include_woth_count": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.points_list_kongs": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.points_list_keys": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.points_list_guns": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.points_list_instruments": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.points_list_training_moves": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.points_list_important_shared": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.points_list_pad_moves": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.points_list_barrel_moves": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.points_list_active_moves": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.points_list_bean": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.starting_move_list_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.start_with_slam": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.spoiler_include_level_order": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.enable_progressive_hints": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.progressive_hint_text": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.progressive_hint_count": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.random_starting_move_list_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.enemy_drop_rando": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.dim_solved_hints": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.starting_kong": { "obj": "Kongs" },
+    "SettingsStringEnum.switchsanity": { "obj": "SwitchsanityLevel" },
+    "SettingsStringEnum.fungi_time": { "obj": "FungiTimeSetting" },
+    "SettingsStringEnum.galleon_water": { "obj": "GalleonWaterSetting" },
+    "SettingsStringEnum.remove_barriers_enabled": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.remove_barriers_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.faster_checks_selected": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.k_rool_vanilla_requirement": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.disable_hard_minigames": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.serious_hints": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.cannons_require_blast": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.chaos_blockers": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.mermaid_gb_pearls": {
+      "obj": "SettingsStringDataType.var_int"
+    },
+    "SettingsStringEnum.chunky_phase_slam_req": { "obj": "SlamRequirement" },
+    "SettingsStringEnum.shuffle_helm_location": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.points_list_fairy_moves": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.points_list_shopkeepers": {
+      "obj": "SettingsStringDataType.int16"
+    },
+    "SettingsStringEnum.chaos_ratio": { "obj": "SettingsStringDataType.int16" },
+    "SettingsStringEnum.krool_in_boss_pool": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.enemy_kill_crown_timer": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.ice_trap_frequency": { "obj": "IceTrapFrequency" },
+    "SettingsStringEnum.ice_traps_damage": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.mirror_mode": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.puzzle_rando_difficulty": { "obj": "PuzzleRando" },
+    "SettingsStringEnum.has_password": { "obj": "SettingsStringDataType.bool" },
+    "SettingsStringEnum.randomize_enemy_sizes": {
+      "obj": "SettingsStringDataType.bool"
+    },
+    "SettingsStringEnum.progressive_hint_item": { "obj": "ProgressiveHintItem" },
+    "SettingsStringEnum.starting_moves_list_1": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.starting_moves_list_count_1": { "obj": "SettingsStringDataType.int16" },
+    "SettingsStringEnum.starting_moves_list_2": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.starting_moves_list_count_2": { "obj": "SettingsStringDataType.int16" },
+    "SettingsStringEnum.starting_moves_list_3": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.starting_moves_list_count_3": { "obj": "SettingsStringDataType.int16" },
+    "SettingsStringEnum.starting_moves_list_4": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.starting_moves_list_count_4": { "obj": "SettingsStringDataType.int16" },
+    "SettingsStringEnum.starting_moves_list_5": {
+      "obj": "SettingsStringDataType.list"
+    },
+    "SettingsStringEnum.starting_moves_list_count_5": { "obj": "SettingsStringDataType.int16" },
+    "SettingsStringEnum.dos_door_rando": { "obj": "SettingsStringDataType.bool" }
+  },
+  // ALL LIST SETTINGS NEED AN ENTRY HERE!
+  // Another map for list settings, for the underlying data type of the list.
+  "SettingsStringListTypeMap": {
+    "SettingsStringEnum.enemies_selected": { "obj": "Enemies" },
+    "SettingsStringEnum.glitches_selected": { "obj": "GlitchesSelected" },
+    "SettingsStringEnum.item_rando_list_selected": {
+      "obj": "ItemRandoListSelected"
+    },
+    "SettingsStringEnum.minigames_list_selected": {
+      "obj": "MinigamesListSelected"
+    },
+    "SettingsStringEnum.cb_rando_list_selected": {
+      "obj": "Levels"
+    },
+    "SettingsStringEnum.misc_changes_selected": {
+      "obj": "MiscChangesSelected"
+    },
+    "SettingsStringEnum.starting_keys_list_selected": { "obj": "Items" },
+    "SettingsStringEnum.warp_level_list_selected": { "obj": "Maps" },
+    "SettingsStringEnum.hard_mode_selected": { "obj": "HardModeSelected" },
+    "SettingsStringEnum.starting_move_list_selected": { "obj": "Items" },
+    "SettingsStringEnum.random_starting_move_list_selected": { "obj": "Items" },
+    "SettingsStringEnum.remove_barriers_selected": {
+      "obj": "RemovedBarriersSelected"
+    },
+    "SettingsStringEnum.faster_checks_selected": {
+      "obj": "FasterChecksSelected"
+    },
+    "SettingsStringEnum.hard_bosses_selected": { "obj": "HardBossesSelected" },
+    "SettingsStringEnum.starting_moves_list_1": { "obj": "Items" },
+    "SettingsStringEnum.starting_moves_list_2": { "obj": "Items" },
+    "SettingsStringEnum.starting_moves_list_3": { "obj": "Items" },
+    "SettingsStringEnum.starting_moves_list_4": { "obj": "Items" },
+    "SettingsStringEnum.starting_moves_list_5": { "obj": "Items" }
+  },
+  // This map specifies the minimum and maximum values for numeric settings.
+  "SettingsStringIntRangeMap": {
+    "SettingsStringEnum.blocker_0": { "max": 201, "min": 0 },
+    "SettingsStringEnum.blocker_1": { "max": 201, "min": 0 },
+    "SettingsStringEnum.blocker_2": { "max": 201, "min": 0 },
+    "SettingsStringEnum.blocker_3": { "max": 201, "min": 0 },
+    "SettingsStringEnum.blocker_4": { "max": 201, "min": 0 },
+    "SettingsStringEnum.blocker_5": { "max": 201, "min": 0 },
+    "SettingsStringEnum.blocker_6": { "max": 201, "min": 0 },
+    "SettingsStringEnum.blocker_7": { "max": 201, "min": 0 },
+    "SettingsStringEnum.blocker_text": { "max": 201, "min": 0 },
+    "SettingsStringEnum.coin_door_item_count": { "max": 201, "min": 0 },
+    "SettingsStringEnum.crown_door_item_count": { "max": 201, "min": 0 },
+    "SettingsStringEnum.helm_phase_count": { "max": 5, "min": 0 },
+    "SettingsStringEnum.krool_key_count": { "max": 8, "min": 0 },
+    "SettingsStringEnum.krool_phase_count": { "max": 5, "min": 0 },
+    "SettingsStringEnum.medal_cb_req": { "max": 100, "min": 0 },
+    "SettingsStringEnum.medal_requirement": { "max": 40, "min": 0 },
+    "SettingsStringEnum.mermaid_gb_pearls": { "max": 5, "min": 0 },
+    "SettingsStringEnum.rareware_gb_fairies": { "max": 20, "min": 0 },
+    "SettingsStringEnum.starting_kongs_count": { "max": 5, "min": 0 },
+    "SettingsStringEnum.starting_moves_count": { "max": 40, "min": 0 },
+    "SettingsStringEnum.troff_0": { "max": 500, "min": 0 },
+    "SettingsStringEnum.troff_1": { "max": 500, "min": 0 },
+    "SettingsStringEnum.troff_2": { "max": 500, "min": 0 },
+    "SettingsStringEnum.troff_3": { "max": 500, "min": 0 },
+    "SettingsStringEnum.troff_4": { "max": 500, "min": 0 },
+    "SettingsStringEnum.troff_5": { "max": 500, "min": 0 },
+    "SettingsStringEnum.troff_6": { "max": 500, "min": 0 },
+    "SettingsStringEnum.troff_7": { "max": 500, "min": 0 },
+    "SettingsStringEnum.troff_text": { "max": 500, "min": 0 },
+    "SettingsStringEnum.progressive_hint_text": { "max": 201, "min": 0 },
+    "SettingsStringEnum.progressive_hint_count": { "max": 3500, "min": 0 },
+    "SettingsStringEnum.win_condition_count": { "max": 201, "min": 0 }
+  }
+}

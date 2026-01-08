@@ -1,0 +1,282 @@
+{
+    "00": {
+        "byte1": "00",
+        "byte2": "06",
+        "byte3": "0C",
+        "byte4": "FF",
+        "name": "Fire Sword Magic"
+    },
+    "01": {
+        "byte1": "01",
+        "byte2": "07",
+        "byte3": "0D",
+        "byte4": "FF",
+        "name": "Ice Sword Magic"
+    },
+    "02": {
+        "byte1": "02",
+        "byte2": "08",
+        "byte3": "0E",
+        "byte4": "FF",
+        "name": "Bolt Sword Magic"
+    },
+    "03": {
+        "byte1": "03",
+        "byte2": "09",
+        "byte3": "0A",
+        "byte4": "FF",
+        "name": "Venom/Drain/Break Sword Magic"
+    },
+    "04": {
+        "byte1": "04",
+        "byte2": "11",
+        "byte3": "0F",
+        "byte4": "FF",
+        "name": "Mute/Psych/Holy Sword Magic"
+    },
+    "05": {
+        "byte1": "05",
+        "byte2": "0B",
+        "byte3": "10",
+        "byte4": "FF",
+        "name": "Sleep/Bio/Flare Sword Magic"
+    },
+    "06": {
+        "byte1": "12",
+        "byte2": "18",
+        "byte3": "1E",
+        "byte4": "FF",
+        "name": "Cure White Magic"
+    },
+    "07": {
+        "byte1": "16",
+        "byte2": "1C",
+        "byte3": "1F",
+        "byte4": "23",
+        "name": "Armor/Shell/Wall/Dispel White Magic"
+    },
+    "08": {
+        "byte1": "15",
+        "byte2": "17",
+        "byte3": "20",
+        "byte4": "FF",
+        "name": "Mute/Size/Bersk White Magic"
+    },
+    "09": {
+        "byte1": "14",
+        "byte2": "1B",
+        "byte3": "1D",
+        "byte4": "FF",
+        "name": "Antdt/Image/Heal White Magic"
+    },
+    "0A": {
+        "byte1": "13",
+        "byte2": "1A",
+        "byte3": "22",
+        "byte4": "FF",
+        "name": "Scan/Charm/Holy White Magic"
+    },
+    "0B": {
+        "byte1": "19",
+        "byte2": "21",
+        "byte3": "FF",
+        "byte4": "FF",
+        "name": "Life/Life2 White Magic"
+    },
+    "0C": {
+        "byte1": "24",
+        "byte2": "2A",
+        "byte3": "30",
+        "byte4": "FF",
+        "name": "Fire Black Magic"
+    },
+    "0D": {
+        "byte1": "25",
+        "byte2": "2B",
+        "byte3": "31",
+        "byte4": "FF",
+        "name": "Ice Black Magic"
+    },
+    "0E": {
+        "byte1": "26",
+        "byte2": "2C",
+        "byte3": "32",
+        "byte4": "FF",
+        "name": "Bolt Black Magic"
+    },
+    "0F": {
+        "byte1": "27",
+        "byte2": "2D",
+        "byte3": "2E",
+        "byte4": "FF",
+        "name": "Venom/Drain/Break Black Magic"
+    },
+    "10": {
+        "byte1": "28",
+        "byte2": "35",
+        "byte3": "34",
+        "byte4": "FF",
+        "name": "Sleep/Psych/Doom Black Magic"
+    },
+    "11": {
+        "byte1": "29",
+        "byte2": "2F",
+        "byte3": "33",
+        "byte4": "FF",
+        "name": "Toad/Bio/Flare Black Magic"
+    },
+    "12": {
+        "byte1": "37",
+        "byte2": "3D",
+        "byte3": "40",
+        "byte4": "FF",
+        "name": "Slow/Stop/Slow2 Time Magic"
+    },
+    "13": {
+        "byte1": "38",
+        "byte2": "3B",
+        "byte3": "41",
+        "byte4": "47",
+        "name": "Regen/Float/Reset/Xzone Time Magic"
+    },
+    "14": {
+        "byte1": "39",
+        "byte2": "3C",
+        "byte3": "42",
+        "byte4": "44",
+        "name": "Void/Demi/Qrter/Old Time Magic"
+    },
+    "15": {
+        "byte1": "3A",
+        "byte2": "3E",
+        "byte3": "43",
+        "byte4": "46",
+        "name": "Drag/Haste/Hast2/Quick Time Magic"
+    },
+    "16": {
+        "byte1": "3F",
+        "byte2": "45",
+        "byte3": "FF",
+        "byte4": "FF",
+        "name": "Comet/Meteo Time Magic"
+    },
+    "17": {
+        "byte1": "48",
+        "byte2": "4E",
+        "byte3": "4F",
+        "byte4": "53",
+        "name": "Chocob/Titan/Golem/Odin Summon Magic"
+    },
+    "18": {
+        "byte1": "49",
+        "byte2": "51",
+        "byte3": "54",
+        "byte4": "52",
+        "name": "Sylph/Crbnkl/Phenix/Syldra Summon Magic"
+    },
+    "19": {
+        "byte1": "4A",
+        "byte2": "50",
+        "byte3": "55",
+        "byte4": "FF",
+        "name": "Remora/Shoat/Levia Summon Magic"
+    },
+    "1A": {
+        "byte1": "4B",
+        "byte2": "4C",
+        "byte3": "4D",
+        "byte4": "56",
+        "name": "Shiva/Ramuh/Ifrit/Bahmut Summon Magic"
+    },
+    "1B": {
+        "byte1": "57",
+        "byte2": "59",
+        "byte3": "FF",
+        "byte4": "FF",
+        "name": "Power/Vitality Song"
+    },
+    "1C": {
+        "byte1": "58",
+        "byte2": "5C",
+        "byte3": "FF",
+        "byte4": "FF",
+        "name": "Speed/Requiem Song"
+    },
+    "1D": {
+        "byte1": "5A",
+        "byte2": "5D",
+        "byte3": "FF",
+        "byte4": "FF",
+        "name": "Magic/Love Song"
+    },
+    "1E": {
+        "byte1": "5E",
+        "byte2": "5B",
+        "byte3": "FF",
+        "byte4": "FF",
+        "name": "Charm/Hero Song"
+    },
+    "1F": {
+        "byte1": "86",
+        "byte2": "88",
+        "byte3": "87",
+        "byte4": "85",
+        "name": "L4 Qrter/L3 Flare/L2 Old/L5 Doom Blue Magic"
+    },
+    "20": {
+        "byte1": "8F",
+        "byte2": "90",
+        "byte3": "91",
+        "byte4": "FF",
+        "name": "Aero Blue Magic"
+    },
+    "21": {
+        "byte1": "89",
+        "byte2": "8A",
+        "byte3": "8D",
+        "byte4": "FF",
+        "name": "FrogSong/TinySong/MoonFlut Blue Magic"
+    },
+    "22": {
+        "byte1": "82",
+        "byte2": "83",
+        "byte3": "84",
+        "byte4": "FF",
+        "name": "Condemn/Roulette/AquaRake Blue Magic"
+    },
+    "23": {
+        "byte1": "95",
+        "byte2": "99",
+        "byte3": "9A",
+        "byte4": "FF",
+        "name": "GuardOff/Hammer/MghtyGrd Blue Magic"
+    },
+    "24": {
+        "byte1": "8B",
+        "byte2": "8C",
+        "byte3": "8E",
+        "byte4": "FF",
+        "name": "Flash/Time Slip/DethClaw Blue Magic"
+    },
+    "25": {
+        "byte1": "9C",
+        "byte2": "96",
+        "byte3": "9B",
+        "byte4": "94",
+        "name": "????/Fusion/Exploder/DrkShock Blue Magic"
+    },
+    "26": {
+        "byte1": "93",
+        "byte2": "92",
+        "byte3": "9F",
+        "byte4": "9D",
+        "name": "GblinPnch/Emission/Missile/Blowfish Blue Magic"
+    },
+    "27": {
+        "byte1": "98",
+        "byte2": "97",
+        "byte3": "9E",
+        "byte4": "FF",
+        "name": "Vampire/MindBlst/WhiteWind Blue Magic"
+    }
+}

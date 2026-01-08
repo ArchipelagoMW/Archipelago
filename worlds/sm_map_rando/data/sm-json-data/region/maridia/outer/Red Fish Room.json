@@ -1,0 +1,845 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 177,
+  "name": "Red Fish Room",
+  "area": "Maridia",
+  "subarea": "Outer",
+  "roomAddress": "0x7D104",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1, 1, 1],
+    [0, 0, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a480",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 2, 1],
+        [0, 0, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x001a474",
+      "doorOrientation": "down",
+      "doorEnvironments": [{"physics": "water"}],
+      "mapTileMask": [
+        [1, 1, 1],
+        [0, 0, 2]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Right Ledge",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 2],
+        [0, 0, 1]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Red Fish Room Zebbos",
+      "enemyName": "Zebbo",
+      "quantity": 3,
+      "homeNodes": [1]
+    },
+    {
+      "id": "e2",
+      "groupName": "Red Fish",
+      "enemyName": "Skultera",
+      "quantity": 1,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 7,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway - Frozen Zeb",
+      "requires": [
+        "h_frozenEnemyRunway"
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 11,
+          "openEnd": 0
+        }
+      },
+      "note": "Requires a pixel-perfect freeze in order to run onto and off of the frozen Zeb."
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Zebbo Farm",
+      "requires": [
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"simpleCycleFrames": 80},
+            {"cycleFrames": 50}
+          ]},
+          {"and": [
+            "Plasma",
+            {"simpleCycleFrames": 115},
+            {"cycleFrames": 30}
+          ]},
+          {"and": [
+            "Grapple",
+            {"simpleCycleFrames": 120},
+            {"cycleFrames": 30}
+          ]},
+          {"and": [
+            {"or": [
+              "Wave",
+              "Spazer"
+            ]},
+            {"simpleCycleFrames": 125},
+            {"cycleFrames": 30}
+          ]},
+          {"cycleFrames": 195}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Zebbo", "count": 3}]
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Zebbo",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 37,
+      "link": [1, 2],
+      "name": "Ice Moonfall Door Lock Skip",
+      "requires": [
+        "Morph",
+        "canTrickyUseFrozenEnemies",
+        "canEnemyStuckMoonfall",
+        "canFreeFallClip"
+      ],
+      "bypassesDoorShell": true,
+      "note": [
+        "Use two frozen Zebbos to moonfall and clip down past the door shell.",
+        "It can help to unequip Ice to synchronize the Zebbos, and freeze them while standing on the right ledge."
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        "Morph"
+      ]
+    },
+    {
+      "id": 6,
+      "link": [1, 3],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "h_artificialMorphSpringBall",
+          "h_artificialMorphBombs",
+          {"and": [
+            "h_artificialMorphBombHorizontally",
+            "h_additionalBomb",
+            "h_additionalBomb"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Use spring ball to cross the room, or use bombs to kill the Zebbos so they stop respawning. One PB can be placed at the first plant on the ground to bomb across the farm while killing the Zebbos."
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "Gravity IBJ",
+      "requires": [
+        "Gravity",
+        "canLongIBJ"
+      ]
+    },
+    {
+      "id": 8,
+      "link": [2, 1],
+      "name": "Come In With Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "no"
+      },
+      "requires": [
+        {"shinespark": {"frames": 25, "excessFrames": 6}},
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall",
+          "h_bombThings"
+        ]}
+      ],
+      "note": "Enter on the right side of the doorway to be able to get up out of the water and onto the top platform."
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Come In Shinecharged",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 5},
+        {"shinespark": {"frames": 25, "excessFrames": 6}},
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall",
+          "h_bombThings"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 34,
+      "link": [2, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 22, "excessFrames": 7}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 20, "excessFrames": 7}}
+          ]},
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            {"shinespark": {"frames": 20, "excessFrames": 7}}
+          ]}
+        ]},
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall",
+          "h_bombThings"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 38,
+      "link": [2, 1],
+      "name": "Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleJump": {
+          "position": "right"
+        },
+        "comesThroughToilet": "no"
+      },
+      "requires": []
+    },
+    {
+      "id": 10,
+      "link": [2, 1],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "Gravity",
+        {"or": [
+          "h_artificialMorphLongIBJ",
+          {"and": [
+            "h_artificialMorphIBJ",
+            "h_artificialMorphBombHorizontally"
+          ]},
+          {"and": [
+            "h_artificialMorphSpringBall",
+            "HiJump"
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": "Enter the room on the far right or left side in order to not fall back through the open doorway."
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Leave Normally",
+      "requires": [],
+      "exitCondition": {
+        "leaveNormally": {}
+      }
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shinespark": {"frames": 14, "excessFrames": 14}}
+      ],
+      "note": "Enter on the left side of the doorway to reduce the amount of energy used.",
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 41,
+      "link": [2, 2],
+      "name": "Skultera Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          {"and": [
+            "Gravity",
+            {"or": [
+              {"and": [
+                "ScrewAttack",
+                {"cycleFrames": 100}
+              ]},
+              {"and": [
+                "Plasma",
+                {"cycleFrames": 100}
+              ]},
+              {"and": [
+                "Wave",
+                {"cycleFrames": 160}
+              ]},
+              {"and": [
+                "Spazer",
+                {"cycleFrames": 210}
+              ]},
+              {"and": [
+                "Ice",
+                {"cycleFrames": 260}
+              ]},
+              {"cycleFrames": 300}
+            ]}
+          ]},
+          {"and": [
+            "Plasma",
+            {"cycleFrames": 130}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 220}
+          ]},
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 250}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 290}
+          ]},
+          {"cycleFrames": 330}
+        ]}
+      ],
+      "farmCycleDrops": [{"enemy": "Skultera", "count": 1}]
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Skultera", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "In order to not fall back into the room below, enter on the far left and face and hold left while getting hit, or enter on the far right side while facing left and turn around and hold right white getting hit."
+    },
+    {
+      "id": 15,
+      "link": [2, 3],
+      "name": "Base",
+      "requires": [
+        "Gravity"
+      ]
+    },
+    {
+      "id": 16,
+      "link": [2, 3],
+      "name": "Suitless Jump Assists",
+      "requires": [
+        "canSuitlessMaridia",
+        "HiJump",
+        {"or": [
+          {"and": [
+            "canWalljump",
+            "canCarefulJump"
+          ]},
+          "canSpringBallJumpMidAir"
+        ]}
+      ]
+    },
+    {
+      "id": 17,
+      "link": [2, 3],
+      "name": "Suitless Space Jump",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canSpaceJumpWaterBounce",
+            "canWalljump"
+          ]},
+          {"and": [
+            "canSpaceJumpWaterEscape",
+            "HiJump"
+          ]}
+        ]}
+      ],
+      "devNote": "This is potentially possible without a wall jump or hijump, but it is extremely precise"
+    },
+    {
+      "id": 18,
+      "link": [2, 3],
+      "name": "Suitless Frozen Skultera",
+      "requires": [
+        "canSuitlessMaridia",
+        "canUseFrozenEnemies",
+        {"or": [
+          "canWalljump",
+          "canSpringBallJumpMidAir",
+          {"and": [
+            "HiJump",
+            "canDownGrab"
+          ]},
+          "canBombJumpWaterEscape"
+        ]}
+      ]
+    },
+    {
+      "id": 19,
+      "link": [2, 3],
+      "name": "Space Jump Spring Ball Jump",
+      "requires": [
+        {"notable": "Space Jump Spring Ball Jump"},
+        "canSpaceJumpWaterBounce",
+        "canTrickySpringBallJump",
+        "can4HighMidAirMorph"
+      ],
+      "wallJumpAvoid": true,
+      "note": [
+        "Use a Space Jump water bounce followed by a tight mid-air morph, to get a mid-air Spring Ball jump out of the water."
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 3],
+      "name": "Space Jump Escape",
+      "requires": [
+        {"notable": "Space Jump Escape"},
+        "canSpaceJumpWaterEscape",
+        "canInsaneJump"
+      ],
+      "wallJumpAvoid": true,
+      "note": [
+        "Escape the water using a well-timed Space Jump water bounce followed by a frame-perfect Space jump just above the water, at a specific time when the tide is descending."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [2, 3],
+      "name": "Shinespark Diagonally to the Ledge",
+      "entranceCondition": {
+        "comeInShinecharged": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shineChargeFrames": 5},
+        {"shinespark": {"frames": 18, "excessFrames": 11}}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 22,
+      "link": [2, 3],
+      "name": "Cross Room Jump - Space Jump",
+      "entranceCondition": {
+        "comeInWithSpaceJumpBelow": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": ["Space Jump up through the door of the room below."]
+    },
+    {
+      "id": 23,
+      "link": [2, 3],
+      "name": "Cross Room Jump - Standing Jump",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 6,
+          "maxHeight": 6,
+          "maxLeftPosition": 1,
+          "minRightPosition": 0
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": ["Standing on the platform in the room below, jump up through the door."]
+    },
+    {
+      "id": 24,
+      "link": [2, 3],
+      "name": "Cross Room Jump - Crouch Jump Down Grab",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 7,
+          "maxHeight": 7,
+          "maxLeftPosition": 1,
+          "minRightPosition": -1.5
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "h_crouchJumpDownGrab"
+      ],
+      "note": [
+        "Standing on the platform in the room below, crouch jump up through the door transition, then down-grab onto the platform."
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 3],
+      "name": "Cross Room Jump - HiJump",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 8,
+          "maxHeight": 9,
+          "maxLeftPosition": 1,
+          "minRightPosition": 0
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump"
+      ],
+      "note": ["Standing on the platform in the room below, jump up through the door."]
+    },
+    {
+      "id": 26,
+      "link": [2, 3],
+      "name": "Cross Room Jump - HiJump Crouch Jump or Down Grab",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 10,
+          "maxHeight": 10,
+          "maxLeftPosition": 1,
+          "minRightPosition": 0
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "HiJump",
+        {"or": [
+          "canCrouchJump",
+          "canDownGrab"
+        ]}
+      ],
+      "note": [
+        "Standing on the platform in the room below, jump up through the door.",
+        "Either a crouch jump or a down grab (or both) must be used to make it onto the ledge."
+      ]
+    },
+    {
+      "id": 27,
+      "link": [2, 3],
+      "name": "Cross Room Jump - Wall Jump",
+      "entranceCondition": {
+        "comeInWithWallJumpBelow": {
+          "minHeight": 2
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater"
+      ],
+      "note": [
+        "Wall jump up through the door of the room below, using either side of the door frame."
+      ]
+    },
+    {
+      "id": 28,
+      "link": [2, 3],
+      "name": "Cross Room Jump - Speed Jump",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 9,
+          "maxHeight": 10,
+          "maxLeftPosition": -34.5,
+          "minRightPosition": -7
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "SpeedBooster"
+      ],
+      "note": [
+        "Using SpeedBooster in the room below, run left-to-right and jump, pressing against the right side of the door frame through the transition."
+      ],
+      "devNote": [
+        "This strat is applicable in Crocomire's Room and the Indiana Jones Room.",
+        "Sufficient vertical speed could be obtained with fewer tiles, but it would require jumping further to the right (i.e., increasing minRightPosition) which would not work in Indiana Jones Room unless the PB blocks are broken;",
+        "since there doesn't yet appear to be any application, we don't add a separate case for that.",
+        "Speed jumps from the right side would also be possible, but again there don't yet appear to be any applications."
+      ]
+    },
+    {
+      "id": 29,
+      "link": [2, 3],
+      "name": "Cross Room Jump - Tricky Dash Jump (From Left)",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 8,
+          "maxHeight": 9,
+          "maxLeftPosition": -6,
+          "minRightPosition": 2
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyDashJump"
+      ],
+      "note": [
+        "Run left-to-right in the room below using SpeedBooster over a specific distance, and jump up through the door."
+      ],
+      "devNote": [
+        "This strat is applicable to Lava Farm Tunnel, and to The Jail with the left pillar broken."
+      ]
+    },
+    {
+      "id": 30,
+      "link": [2, 3],
+      "name": "Cross Room Jump - Tricky Dash Jump (From Right)",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "minHeight": 8,
+          "maxHeight": 9,
+          "maxLeftPosition": -2,
+          "minRightPosition": 6
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickyDashJump"
+      ],
+      "note": [
+        "Run right-to-left in the room below using SpeedBooster over a very precise distance, jump, immediately turn back right, and break spin before reaching the transition."
+      ],
+      "devNote": ["This strat is applicable to Lava Farm Tunnel and Spore Spawn Kihunter Room."]
+    },
+    {
+      "id": 31,
+      "link": [2, 3],
+      "name": "Cross Room Jump - Spring Ball Jump",
+      "entranceCondition": {
+        "comeInWithPlatformBelow": {
+          "maxHeight": 10,
+          "maxLeftPosition": 2,
+          "minRightPosition": -2
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canCrossRoomJumpIntoWater",
+        "canTrickySpringBallJump"
+      ],
+      "note": [
+        "Standing on the platform in the room below, perform a spring ball jump mid-air just before reaching the transition."
+      ],
+      "devNote": "Crouch jumping is not needed here."
+    },
+    {
+      "id": 35,
+      "link": [2, 3],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"or": [
+          {"shinespark": {"frames": 11, "excessFrames": 7}},
+          {"and": [
+            "HiJump",
+            {"shinespark": {"frames": 9, "excessFrames": 7}}
+          ]},
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            {"shinespark": {"frames": 9, "excessFrames": 7}}
+          ]}
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 39,
+      "link": [2, 3],
+      "name": "Grapple Swing",
+      "entranceCondition": {
+        "comeInWithGrappleSwing": {
+          "blocks": [{"position": [-1, 5], "environment": "water", "note": "Mt. Everest"}]
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "canTrickyJump"
+      ],
+      "note": [
+        "Swing up through the door from a Grapple block in the room below (Mt. Everest).",
+        "Fire a Grapple shot after entering the room, to allow Samus to move further right and get onto the ledge."
+      ]
+    },
+    {
+      "id": 40,
+      "link": [2, 3],
+      "name": "Grapple Jump",
+      "entranceCondition": {
+        "comeInWithGrappleJump": {
+          "position": "left"
+        },
+        "comesThroughToilet": "any"
+      },
+      "requires": []
+    },
+    {
+      "id": 32,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          "HiJump",
+          "canWalljump",
+          "SpaceJump",
+          {"and": [
+            "canIBJ",
+            "canBombHorizontally"
+          ]},
+          "canSpringBallJumpMidAir"
+        ]},
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall",
+          "h_bombThings"
+        ]}
+      ]
+    },
+    {
+      "id": 36,
+      "link": [3, 1],
+      "name": "Use Flash Suit",
+      "requires": [
+        {"useFlashSuit": {}},
+        {"shinespark": {"frames": 11, "excessFrames": 8}},
+        {"or": [
+          "canMidAirMorph",
+          "h_useSpringBall",
+          "h_bombThings"
+        ]}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 33,
+      "link": [3, 2],
+      "name": "Base",
+      "requires": []
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Space Jump Spring Ball Jump",
+      "wallJumpAvoid": true,
+      "note": [
+        "Use a Space Jump water bounce followed by a tight mid-air morph, to get a mid-air Spring Ball jump out of the water."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Space Jump Escape",
+      "wallJumpAvoid": true,
+      "note": [
+        "Escape the water using a well-timed Space Jump water bounce followed by a frame-perfect Space jump just above the water, at a specific time when the tide is descending."
+      ]
+    }
+  ],
+  "nextStratId": 42,
+  "nextNotableId": 3
+}

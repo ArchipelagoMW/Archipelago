@@ -1,0 +1,1402 @@
+{
+  "$schema": "./schema/m3-helpers.schema.json",
+  "helperCategories": [
+    {
+      "name": "Randomizer Dependent",
+      "description": "Common parameters than may be changed based on the randomizer implementation or settings.",
+      "helpers": [
+        {
+          "name": "h_heatProof",
+          "requires": [ 
+            {"or": [
+              "Varia",
+              "Gravity"
+            ]}
+          ],
+          "devNote": "In the original game either suit provides full immunity, but many randomizers reduce Gravity's resistance."
+        },
+        {
+          "name": "h_heatResistant",
+          "requires": [ 
+            {"or": [
+              "Varia",
+              "Gravity"
+            ]}
+          ],
+          "devNote": [
+            "Half to full heat reduction.",
+            "If a randomizer wants to reduce the heat resistance of Gravity to less than 50%, they will need to double check everywhere this is used."
+          ]
+        },
+        {
+          "name": "h_lavaProof",
+          "requires": [ "Gravity" ],
+          "devNote": "In the original game Gravity provides full immunity, but some randomizers also require Varia."
+        },
+        {
+          "name": "h_fullEnemyDamageReduction",
+          "requires": [
+            "Gravity"
+          ],
+          "note": [
+            "Suit requirements in order to have 75% damage reduction from enemies."
+          ],
+          "devNote": [
+            "In the vanilla game, Gravity alone provides 75% damage reduction, but some randomizer may require both suits."
+          ]
+        },
+        {
+          "name": "h_allItemsSpawned",
+          "requires": [ "never" ],
+          "devNote": [
+            "In the original game, some items don't spawn until certain conditions are met.",
+            "These may be unintuitive to players, so randomizers may want to instead spawn all items at all times, which can be done by removing the 'never' in this helper.",
+            "Seven of the eight items in Wrecked Ship only spawn if Phantoon is defeated.",
+            "The item in 230 Missile Room, and the Power Bomb in the Morph Ball Room only spawn if Zebes is awake.",
+            "The item in the Pit Room only spawns if both Morph and Missiles have been collected.",
+            "In addition, in the original game, Morph will no longer spawn if Zebes is awake; this bug is considered never valuable and the data lists it as always spawned regardless of this helper."
+          ]
+        },
+        {
+          "name": "h_EverestMorphTunnelExpanded",
+          "requires": [ "never" ],
+          "devNote": [
+            "In order to be able to randomize the connection of the Everest/Main Street morph tunnel, the doorway needs to be expanded to a normal doorway height.",
+            "Without being expanded, Samus will get stuck in the wall upon entry unless she enters morphed at the bottom of the transition.",
+            "This is not done in vanilla, so this is 'never' by default."
+          ]
+        },
+        {
+          "name": "h_activateBombTorizo",
+          "requires": [ "Bombs" ],
+          "devNote": [
+            "In the vanilla game, Bomb Torizo is activated by having collected Bombs.",
+            "This may be changed in randomizers, e.g. to make it activate when collecting the (randomized) item in Bomb Torizo Room.",
+            "Note that this change would also require adding a 'collectsItems' to the Bomb Torizo fight (although it doesn't matter much)."
+          ]
+        },
+        {
+          "name": "h_activateAcidChozo",
+          "requires": [ "SpaceJump" ],
+          "devNote": "In Vanilla, the Acid Chozo Statue requires Space Jump to activate. This may be unintuitive in a randomizer, as many players will have never been there without Space Jump."
+        },
+        {
+          "name": "h_ShaktoolVanillaFlag",
+          "requires": [],
+          "devNote": [
+            "In Vanilla, the flag 'f_ShaktoolDoneDigging' is set when on the right side of the room, regardless of which door Samus entered through.",
+            "For the behavior where the flag is set by crossing to opposite side of the room, set this to 'never'.",
+            "See also the related helper 'h_ShaktoolSymmetricFlag' which is logically complementary to this."
+          ]
+        },
+        {
+          "name": "h_ShaktoolSymmetricFlag",
+          "requires": ["never"],
+          "devNote": [
+            "In Vanilla, the flag 'f_ShaktoolDoneDigging' is set when on the right side of the room, regardless of which door Samus entered through.",
+            "For the behavior where the flag is set by crossing to opposite side of the room, set this to an empty requirement list.",
+            "See also the related helper 'h_ShaktoolVanillaFlag' which is logically complementary to this."
+          ]
+        },
+        {
+          "name": "h_ShaktoolCameraFix",
+          "requires": [ "never" ],
+          "devNote": "In Vanilla, the camera is messed up when entering from the right. Fixing the camera changes the room behavior by allowing the snails to move."
+        },
+        {
+          "name": "h_KraidCameraFix",
+          "requires": [ "never" ],
+          "devNote": "In Vanilla, the camera is fixed to the bottom left tile if Kraid is alive. When entering from the right, Samus will spawn in the middle of the room, likely dropping into the thorns."
+        },
+        {
+          "name": "h_CrocomireCameraFix",
+          "requires": [ "never" ],
+          "devNote": "In Vanilla, the camera is messed up when entering from the left with Crocomire alive."
+        },
+        {
+          "name": "h_equipmentScreenFix",
+          "requires": [],
+          "devNote": [
+            "In Vanilla, the equipment screen behaves oddly which can cause difficulty when disabling equipment.",
+            "Most items can always be toggled, the exceptions are suits and Screw Attack;",
+            "these three can only be toggled if the player can move the cursor to the right item column.",
+            "It is always possible to move to the right column if Samus has any other item in the right column, or if she has nothing in the left column (no beams or Reserve Tanks).",
+            "It is possible to move from the Reserve Tank to either suit.",
+            "It is possible to move from any beam to either suit by rapidly pressing right; it is much easier to move to Gravity than to Varia.",
+            "Currently, this project does not support the vanilla equipment screen. To add this would require editing canGravityJump and checking all places where canDisableEquipment is used,",
+            "as well as defining all places where Samus may be expected to damage down by disabling heat protection."
+          ]
+        },
+        {
+          "name": "h_ClimbWithoutLava",
+          "requires": [
+            "h_ZebesNotAwake"
+          ],
+          "devNote": "In Vanilla, when entering the bottom left door of the Climb, there is rising Lava if Zebes is awake (this is instead acid in the escape)."
+        },
+        {
+          "name": "h_MissileRefillStationAllAmmo",
+          "requires": [ "never" ],
+          "devNote": "In Vanilla, Missile refill stations only refill Missiles. This and 'h_useMissileRefillStation' can be changed if the stations refill Missiles, Supers, and Power Bombs."
+        },
+        {
+          "name": "h_useMissileRefillStation",
+          "requires": [
+            {"refill": ["Missile"]}
+          ]
+        },
+        {
+          "name": "h_useMissileRefillAllAmmoCrystalFlash",
+          "requires": [
+            "h_MissileRefillStationAllAmmo",
+            "h_10PowerBombCrystalFlash",
+            {"refill": ["Missile", "Super", "PowerBomb"]}
+          ],
+          "devNote": "A partial refill of 1500 Energy is also included in h_10PowerBombCrystalFlash."
+        },
+        {
+          "name": "h_useEnergyRefillStation",
+          "requires": [
+            {"refill": ["RegularEnergy"]}
+          ],
+          "devNote": "In Vanilla, Energy refill stations only refill regular energy. This can be changed if the stations refill Reserve energy as well."
+        },
+        {
+          "name": "h_openTourianEscape1RightDoor",
+          "requires": [ "never" ],
+          "devNote": "In Vanilla, there is a wall preventing the player from accessing the right door."
+        },
+        {
+          "name": "h_LowerNorfairElevatorDownwardFrames",
+          "requires": [
+            {"heatFrames": 60}
+          ],
+          "devNote": "This may be changed if the elevator speed is changed."
+        },
+        {
+          "name": "h_LowerNorfairElevatorUpwardFrames",
+          "requires": [
+            {"heatFrames": 108}
+          ],
+          "devNote": "This may be changed if the elevator speed is changed."
+        },
+        {
+          "name": "h_MainHallElevatorFrames",
+          "requires": [
+            {"heatFrames": 436},
+            {"or":[
+              "h_heatResistant",
+              {"resourceCapacity": [{"type": "RegularEnergy", "count": 149}]}
+            ]}
+          ],
+          "devNote": [
+            "Samus can not manually use reserves during the elevator, so enough regular energy is needed for the elevator ride unless she is using an auto reserve strat.",
+            "This may be changed if the elevator speed is changed.",
+            "Technically it requires 1 more Energy going up than going down, but they're lumped together here."
+          ]
+        },
+        {
+          "name": "h_acidCrystalFlashRefill",
+          "requires": [
+            {"or": [
+              {"partialRefill": {"type": "Energy", "limit": 1120}},
+              {"and": [
+                "Varia",
+                {"partialRefill": {"type": "Energy", "limit": 1310}}
+              ]},
+              {"and": [
+                "Gravity",
+                {"partialRefill": {"type": "Energy", "limit": 1410}}
+              ]}
+            ]}
+          ]
+        },
+        {
+          "name": "h_heatedCrystalFlashRefill",
+          "requires": [
+            {"or": [
+              {"partialRefill": {"type": "Energy", "limit": 1440}},
+              {"and": [
+                "Varia",
+                {"partialRefill": {"type": "Energy", "limit": 1500}}
+              ]},
+              {"and": [
+                "Gravity",
+                {"partialRefill": {"type": "Energy", "limit": 1500}}
+              ]}
+            ]}
+          ]
+        },
+        {
+          "name": "h_heatedLavaCrystalFlashRefill",
+          "requires": [
+            {"or": [
+              {"partialRefill": {"type": "Energy", "limit": 1330}},
+              {"and": [
+                "Varia",
+                {"partialRefill": {"type": "Energy", "limit": 1440}}
+              ]},
+              {"and": [
+                "Gravity",
+                {"partialRefill": {"type": "Energy", "limit": 1500}}
+              ]}
+            ]}
+          ]
+        },
+        {
+          "name": "h_heatedAcidCrystalFlashRefill",
+          "requires": [
+            {"or": [
+              {"partialRefill": {"type": "Energy", "limit": 1075}},
+              {"and": [
+                "Varia",
+                {"partialRefill": {"type": "Energy", "limit": 1310}}
+              ]},
+              {"and": [
+                "Gravity",
+                {"partialRefill": {"type": "Energy", "limit": 1410}}
+              ]}
+            ]}
+          ]
+        },
+        {
+          "name": "h_doorImmediatelyClosedFix",
+          "requires": [ "never" ],
+          "devNote": [
+            "In Vanilla, there is a bug placing the closing door at the top of the Etecoon Shaft in the wrong location.",
+            "Additionally, the top right door in both Mission Impossible Room and Halfie Climb Room are immediately closed.",
+            "This affects the closing animation and prevents return through the door while in direct G-mode.",
+            "This also prevents getting doorstuck, although that doesn't seem to be important in any of these locations."
+          ]
+        },
+        {
+          "name": "h_SupersDoubleDamageMotherBrain",
+          "requires": [ "never" ],
+          "devNote": "In Vanilla, Supers do 300 damage to Mother Brain. Randomizers may want to double this to help prevent Charge being required so frequently."
+        },
+        {
+          "name": "h_bypassMotherBrainRoom",
+          "requires": [],
+          "devNote": [
+            "This helper is required on strats that completely bypass the right side of Mother Brain Room.",
+            "For example, in Map Rando these would allow initiating the Mother Brain fight without first completing the objectives."
+          ]
+        },
+        {
+          "name": "h_ShinesparksCostEnergy",
+          "requires": []
+        },
+        {
+          "name": "h_equipmentScreenCycleFrames",
+          "requires": [
+            {"cycleFrames": 300}
+          ],
+          "note": [
+            "This represents the amount of time that could be required in the pause menu to equip or unequip items."
+          ],
+          "devNote": [
+            "This is not perfectly precise as the time spent in the pause menu can vary,",
+            "depending on which items are collected and which items are being equipped or unequipped.",
+            "It is intended as a typical value for common actions such as performing a Gravity jump or mid-air Spring Ball jump."
+          ]
+        },
+        {
+          "name": "h_doubleEquipmentScreenCycleFrames",
+          "requires": [
+            "h_equipmentScreenCycleFrames",
+            "h_equipmentScreenCycleFrames"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Leniency",
+      "description": "Helpers with built in leniency where extra Energy or Ammo are used in a failure.",
+      "helpers": [
+        {
+          "name": "h_blueGateGlitchLeniency",
+          "requires": [
+            {"or": [
+              {"ammo": {"type": "Missile", "count": 1}},
+              {"ammo": {"type": "Super", "count": 1}}
+            ]}
+          ],
+          "devNote": "Ammo for a second shot for leniency."
+        },
+        {
+          "name": "h_greenGateGlitchLeniency",
+          "requires": [
+            {"ammo": {"type": "Super", "count": 1}}
+          ],
+          "devNote": "Ammo for a second shot for leniency."
+        },
+        {
+          "name": "h_heatedBlueGateGlitchLeniency",
+          "requires": [ 
+            "h_blueGateGlitchLeniency",
+            {"heatFrames": 60}
+          ],
+          "devNote": "One ammo and 60 heatFrames for a second shot for leniency."
+        },
+        {
+          "name": "h_heatedGreenGateGlitchLeniency",
+          "requires": [ 
+            "h_greenGateGlitchLeniency",
+            {"heatFrames": 60}
+          ],
+          "devNote": "One ammo and 60 heatFrames for a second shot for leniency."
+        },
+        {
+          "name": "h_openZebetitesLeniency",
+          "requires": [
+            {"or": [
+              "canDodgeWhileShooting",
+              {"ammo": {"type": "Missile", "count": 3}},
+              {"ammo": {"type": "Super", "count": 1}}
+            ]}
+          ]
+        },
+        {
+          "name": "h_bombIntoCrystalFlashClipLeniency",
+          "requires": [
+            {"ammo": {"type": "PowerBomb","count": 5}}
+          ],
+          "devNote": "1 Power bomb leniency per attempt, 5 leniency attempts."
+        },
+        {
+          "name": "h_jumpIntoCrystalFlashClipLeniency",
+          "requires": [
+            {"ammo": {"type": "PowerBomb","count": 9}}
+          ],
+          "devNote": "1 Power bomb leniency per attempt, 9 leniency attempts."
+        },
+        {
+          "name": "h_ElevatorCrystalFlashLeniency",
+          "requires": [
+            {"ammo": {"type": "PowerBomb","count": 8}}
+          ],
+          "devNote": "1 Power Bomb leniency per attempt, 8 leniency attempts."
+        },
+        {
+          "name": "h_XModeSpikeHitLeniency",
+          "requires": [
+            {"spikeHits": 1}
+          ]
+        },
+        {
+          "name": "h_XModeThornHitLeniency",
+          "requires": [
+            {"thornHits": 1}
+          ]
+        },
+        {
+          "name": "h_spikeSuitSpikeHitLeniency",
+          "requires": [
+            {"spikeHits": 2}
+          ]
+        },
+        {
+          "name": "h_spikeSuitThornHitLeniency",
+          "requires": [
+            {"thornHits": 2}
+          ]
+        },
+        {
+          "name": "h_spikeSuitSamusEaterLeniency",
+          "requires": [
+            {"samusEaterFrames": 320}
+          ]
+        },
+        {
+          "name": "h_speedKeepSpikeHitLeniency",
+          "requires": [
+            "h_XModeSpikeHitLeniency"
+          ],
+          "devNote": [
+            "Since a (spike) speed keep requires a frame-perfect unmorph with the same timing as spike X-mode,",
+            "it is a reasonable default to have them share the same lenience."
+          ]
+        },
+        {
+          "name": "h_extendedMoondanceBeetomLeniency",
+          "requires": [
+            {"enemyDamage": {
+              "enemy": "Beetom",
+              "type": "contact",
+              "hits": 3
+            }}
+          ],
+          "devNote": "Moving carefully while switching weapons makes it more likely to take random damage."
+        },
+        {
+          "name": "h_IBJFromThorns",
+          "requires": [
+            "canUseIFrames",
+            "canJumpIntoIBJ",
+            {"thornHits": 1},
+            {"or":[
+              "canTrickyJump",
+              {"thornHits": 3}
+            ]}
+          ]
+        },
+        {
+          "name": "h_IBJFromSpikes",
+          "requires": [
+            "canUseIFrames",
+            "canJumpIntoIBJ",
+            {"spikeHits": 1},
+            {"or":[
+              "canTrickyJump",
+              {"spikeHits": 3}
+            ]}
+          ]
+        },
+        {
+          "name": "h_heatedIBJFromSpikes",
+          "requires": [
+            "canUseIFrames",
+            "canJumpIntoIBJ",
+            {"spikeHits": 1},
+            {"heatFrames": 100},
+            {"or":[
+              "canTrickyJump",
+              {"and": [
+                {"spikeHits": 3},
+                {"heatFrames": 300}
+              ]}
+            ]}
+          ]
+        },
+        {
+          "name": "h_SpringwallOverSpikes",
+          "requires": [
+            "canSpringwall",
+            {"or":[
+              "canTrickyJump",
+              {"spikeHits": 2}
+            ]}
+          ],
+          "devNote": "2 extra attempts for leniency."
+        },
+        {
+          "name": "h_heatedSpringwall",
+          "requires": [
+            "canSpringwall",
+            {"or":[
+              "canTrickyJump",
+              {"heatFrames": 500}
+            ]}
+          ],
+          "devNote": "2 extra attempts for leniency."
+        }
+      ]
+    },
+    {
+      "name": "General",
+      "description": "Standard helpers used to simplify the game logic.",
+      "helpers": [
+        {
+          "name": "h_navigateHeatRooms",
+          "requires": [
+            {"or":[
+              "h_heatProof",
+              "canHeatRun"
+            ]}
+          ],
+          "devNote": [
+            "This helper is deprecated, as these requirements are now implicitly included in heatFrame requirements."
+          ]
+        },
+        {
+          "name": "h_navigateUnderwater",
+          "requires": [
+            {"or":[
+              "Gravity",
+              "canSuitlessMaridia"
+            ]}
+          ]
+        },
+        {
+          "name": "h_useMorphBombs",
+          "requires": [
+            "Morph",
+            "Bombs"
+          ]
+        },
+        {
+          "name": "h_usePowerBomb",
+          "requires": [
+            "Morph",
+            {"ammo": {"type": "PowerBomb", "count": 1}}
+          ]
+        },
+        {
+          "name": "h_bombThings",
+          "requires": [
+            "Morph",
+            {"or": [
+              "Bombs",
+              {"ammo": { "type": "PowerBomb", "count": 1}}
+            ]}
+          ]
+        },
+        {
+          "name": "h_destroyBombWalls",
+          "requires": [
+            {"or": [
+              "h_bombThings",
+              "ScrewAttack"
+            ]}
+          ]
+        },
+        {
+          "name": "h_additionalBomb",
+          "requires": [
+            {"or": [
+              "Bombs",
+              {"ammo": { "type": "PowerBomb", "count": 1}}
+            ]}
+          ]
+        },
+        {
+          "name": "h_useSpringBall",
+          "requires": [
+            "SpringBall",
+            "Morph"
+          ]
+        },
+        {
+          "name": "h_hasBeamUpgrade",
+          "requires": [
+            {"or": [
+              "Charge",
+              "Ice",
+              "Wave",
+              "Spazer",
+              "Plasma"
+            ]}
+          ]
+        },
+        {
+          "name": "h_shinechargeMaxRunway",
+          "requires": [ 
+            {"canShineCharge": {
+              "usedTiles": 45,
+              "openEnd": 1
+            }}
+          ]
+        },
+        {
+          "name": "h_getBlueSpeedMaxRunway",
+          "requires": [ 
+            {"getBlueSpeed": {
+              "usedTiles": 40,
+              "openEnd": 1
+            }}
+          ],
+          "devNote": [
+            "The longest necessary runway for blue speed is less than shinecharging, because while shinecharging Samus slides after pressing down, and then typically needs to jump again.",
+            "This helper can be used on strats with a shorter than 40 tile runway, if Samus just needs run through an enemy or speed blocks (as low as 32 tiles is expected in vanilla)."
+          ]
+        },
+        {
+          "name": "h_shinechargeSlideTemporaryBlue",
+          "requires": [
+            "canTemporaryBlue",
+            "canShinechargeMovementTricky"
+          ],
+          "devNote": [
+            "This represents sliding off the ledge while gaining a shinecharge, which leaves Samus falling with temporary blue."
+          ]
+        },
+        {
+          "name": "h_waterGetBlueSpeed",
+          "requires": [
+            {"tech": "canWaterShineCharge"},
+            "SpeedBooster"
+          ],
+          "devNote": [
+            "This is a way to require the `canWaterShineCharge` tech but gaining only blue speed, not a shinecharge.",
+            "A flash suit can be maintained through this."
+          ]
+        },
+        {
+          "name": "h_stutterWaterGetBlueSpeed",
+          "requires": [
+            {"tech": "canStutterWaterShineCharge"},
+            "SpeedBooster"
+          ],
+          "devNote": [
+            "This is a way to require the `canStutterWaterShineCharge` tech but gaining only blue speed, not a shinecharge.",
+            "A flash suit can be maintained through this."
+          ]
+        },
+        {
+          "name": "h_gateGlitch",
+          "requires": [
+            "canGateGlitch",
+            {"or": [
+              {"noFlashSuit": {}},
+              "h_useSpringBall",
+              {"and": [
+                "Morph",
+                "canInsaneJump",
+                "canTrickyCarryFlashSuit"
+              ]}
+            ]}
+          ]
+        },
+        {
+          "name": "h_blueGateGlitch",
+          "requires": [
+            "h_gateGlitch",
+            {"or": [
+              {"ammo": {"type": "Missile", "count": 1}},
+              {"ammo": {"type": "Super", "count": 1}}
+            ]},
+            "h_blueGateGlitchLeniency"
+          ]
+        },
+        {
+          "name": "h_greenGateGlitch",
+          "requires": [
+            "h_gateGlitch",
+            {"ammo": {"type": "Super", "count": 1}},
+            "h_greenGateGlitchLeniency"
+          ]
+        },
+        {
+          "name": "h_heatedBlueGateGlitch",
+          "requires": [ 
+            "h_navigateHeatRooms",
+            {"heatFrames": 100},
+            "h_gateGlitch",
+            {"or": [
+              {"ammo": {"type": "Missile", "count": 1}},
+              {"ammo": {"type": "Super", "count": 1}}
+            ]},
+            "h_heatedBlueGateGlitchLeniency"
+          ]
+        },
+        {
+          "name": "h_heatedGreenGateGlitch",
+          "requires": [ 
+            "h_navigateHeatRooms",
+            {"heatFrames": 100},
+            "h_gateGlitch",
+            {"ammo": {"type": "Super", "count": 1}},
+            "h_heatedGreenGateGlitchLeniency"
+          ]
+        },
+        {
+          "name": "h_crouchJumpDownGrab",
+          "requires": [ 
+            "canCrouchJump",
+            "canDownGrab"
+          ]
+        },
+        {
+          "name": "h_underwaterCrouchJumpWithFlashSuit",
+          "requires": [
+            {"tech": "canCrouchJump"}
+          ],
+          "devNote": [
+            "It is possible to crouch jump under water without losing a flash suit.",
+            "Hold shoot to prevent using a flash suit while still getting the increased height of the crouch jump.",
+            "Alternatively, it is possible to crouch, jump, then quickly press down to prevent the use of the flash suit."
+          ]
+        },
+        {
+          "name": "h_underwaterMaxHeightSpringBallJumpWithFlashSuit",
+          "requires": [
+            "h_underwaterCrouchJumpWithFlashSuit",
+            "canTrickySpringBallJump"
+          ]
+        },
+        {
+          "name": "h_PlasmaHitbox",
+          "requires": [
+            "Plasma",
+            "canHitbox"
+          ]
+        },
+        {
+          "name": "h_threeTileJumpMorph",
+          "requires": [
+            {"or": [
+              "can3HighWallMidAirMorph",
+              "canRJump"
+            ]}
+          ]
+        },
+        {
+          "name": "h_fourTileJumpMorph",
+          "requires": [
+            {"or": [
+              "h_threeTileJumpMorph",
+              "can4HighMidAirMorph"
+            ]}
+          ]
+        },
+        {
+          "name": "h_openZebetites",
+          "requires": [
+            {"or": [
+              {"ammo": {"type": "Missile", "count": 12}},
+              {"ammo": {"type": "Super", "count": 4}},
+              {"and": [
+                {"ammo": {"type": "Missile", "count": 3}},
+                {"ammo": {"type": "Super", "count": 3}}
+              ]},
+              {"and": [
+                {"ammo": {"type": "Missile", "count": 6}},
+                {"ammo": {"type": "Super", "count": 2}}
+              ]},
+              {"and": [
+                {"ammo": {"type": "Missile", "count": 9}},
+                {"ammo": {"type": "Super", "count": 1}}
+              ]}
+            ]},
+            "h_openZebetitesLeniency"
+          ],
+          "devNote": "Technically all of the strats that use missiles can be done with 1 fewer missile. It requires fairly precise timing and dodging to open it fast enough."
+        },
+        {
+          "name": "h_partiallyBreakMotherBrainGlass",
+          "requires": [
+            {"or": [
+              {"ammo": {"type": "Missile", "count": 1}},
+              {"ammo": {"type": "Super", "count": 1}}
+            ]},
+            {"or": [
+              {"ammo": {"type": "Missile", "count": 5}},
+              {"ammo": {"type": "Super", "count": 5}}
+            ]}
+          ],
+          "devNote": "It requires 6 shots of either ammo type to partially open the glass and 18 to fully break it."
+        },
+        {
+          "name": "h_breakOneDraygonTurret",
+          "requires" : [
+            {"or":[
+              {"ammo": {"type": "Missile", "count": 3}},
+              {"ammo": {"type": "Super", "count": 1}}
+            ]}
+          ]
+        },
+        {
+          "name": "h_breakThreeDraygonTurrets",
+          "requires" : [
+            "h_breakOneDraygonTurret",
+            "h_breakOneDraygonTurret",
+            "h_breakOneDraygonTurret"
+          ]
+        },
+        {
+          "name": "h_doubleSpringBallJumpWithHiJump",
+          "requires": [
+            "HiJump",
+            "canDoubleSpringBallJumpMidAir"
+          ]
+        },
+        {
+          "name": "h_CrystalFlash",
+          "requires": [
+            "canCrystalFlash",
+            {"partialRefill": {"type": "Energy", "limit": 1500}}
+          ]
+        },
+        {
+          "name": "h_acidCrystalFlash",
+          "requires": [
+            {"acidFrames": 185},
+            "canHeatedCrystalFlash",
+            "h_acidCrystalFlashRefill",
+            {"acidFrames": 20},
+            {"or": [
+              "Gravity",
+              {"acidFrames": 5}
+            ]}
+          ],
+          "devNote": [
+            "These requirements are tight but include time to morph before laying the Power Bomb and to land after the Crystal Flash refill completes."
+          ]
+        },
+        {
+          "name": "h_heatedCrystalFlash",
+          "requires": [
+            {"simpleHeatFrames": 185},
+            {"or": [
+              {"and": [
+                "h_heatProof",
+                "canCrystalFlash"
+              ]},
+              "canHeatedCrystalFlash"
+            ]},
+            "h_heatedCrystalFlashRefill",
+            {"simpleHeatFrames": 20}
+          ],
+          "devNote": [
+            "These requirements are tight but include time to morph before laying the Power Bomb and to land after the Crystal Flash refill completes."
+          ]
+        },
+        {
+          "name": "h_heatedLavaCrystalFlash",
+          "requires": [
+            {"simpleHeatFrames": 185},
+            {"lavaFrames": 185},
+            {"or": [
+              {"and": [
+                "h_heatProof",
+                "h_lavaProof",
+                "canCrystalFlash"
+              ]},
+              "canHeatedCrystalFlash"
+            ]},
+            "h_heatedLavaCrystalFlashRefill",
+            {"heatFrames": 20},
+            {"lavaFrames": 20},
+            {"or": [
+              "Gravity",
+              {"and": [
+                {"heatFrames": 5},
+                {"lavaFrames": 5}
+              ]}
+            ]}
+          ],
+          "devNote": [
+            "These requirements are tight but include time to morph before laying the Power Bomb and to land after the Crystal Flash refill completes."
+          ]
+        },
+        {
+          "name": "h_heatedAcidCrystalFlash",
+          "requires": [
+            {"simpleHeatFrames": 185},
+            {"acidFrames": 185},
+            "canHeatedCrystalFlash",
+            "h_heatedAcidCrystalFlashRefill",
+            {"heatFrames": 20},
+            {"acidFrames": 20},
+            {"or": [
+              "Gravity",
+              {"and": [
+                {"heatFrames": 5},
+                {"acidFrames": 5}
+              ]}
+            ]}
+          ],
+          "devNote": [
+            "These requirements are tight but include time to morph before laying the Power Bomb and to land after the Crystal Flash refill completes."
+          ]
+        },
+        {
+          "name": "h_bombIntoCrystalFlashClip",
+          "requires": [
+            {"tech": "canBombIntoCrystalFlashClip"},
+            "Bombs",
+            "h_CrystalFlash",
+            "h_bombIntoCrystalFlashClipLeniency"
+          ]
+        },
+        {
+          "name": "h_jumpIntoCrystalFlashClip",
+          "requires": [
+            {"tech": "canJumpIntoCrystalFlashClip"},
+            {"or": [
+              "SpringBall",
+              "canMidAirMorph"
+            ]},
+            "h_CrystalFlash",
+            "h_jumpIntoCrystalFlashClipLeniency"
+          ]
+        },
+        {
+          "name": "h_10PowerBombCrystalFlash",
+          "requires": [
+            "can10PowerBombCrystalFlash",
+            {"partialRefill": {"type": "Energy", "limit": 1500}}
+          ]
+        },
+        {
+          "name": "h_elevatorCrystalFlash",
+          "requires": [
+            "canElevatorCrystalFlash",
+            "h_ElevatorCrystalFlashLeniency",
+            "h_usePowerBomb",
+            {"resourceAtMost": [
+              {"type": "RegularEnergy", "count": 50},
+              {"type": "ReserveEnergy", "count": 0}
+            ]},
+            {"resourceAvailable": [
+              {"type": "Missile", "count": 10},
+              {"type": "Super", "count": 10},
+              {"type": "PowerBomb", "count": 10}
+            ]}
+          ]
+        },
+        {
+          "name": "h_heated10PowerBombCrystalFlash",
+          "requires": [
+            "can10PowerBombCrystalFlash",
+            {"or": [
+              "h_heatProof",
+              {"tech": "canHeatedCrystalFlash"}
+            ]},
+            "h_heatedCrystalFlashRefill"
+          ],
+          "devNote": "All heat frames before and after the refill are added on the strats that use the helper."
+        },
+        {
+          "name": "h_XModeSpikeHit",
+          "requires": [
+            {"spikeHits": 1},
+            "h_XModeSpikeHitLeniency"
+          ],
+          "devNote": [
+            "Some strats require multiple spike hits, in which case h_canSpikeXMode will be included multiple times.",
+            "In this case, the total leniency is the base leniency h_XModeSpikeHitLeniency multiplied by the number of hits."
+          ]
+        },
+        {
+          "name": "h_XModeThornHit",
+          "requires": [
+            {"thornHits": 1},
+            "h_XModeThornHitLeniency"
+          ],
+          "devNote": [
+            "Some strats require multiple thorn hits, in which case h_canThornXMode will be included multiple times.",
+            "In this case, the total leniency is the base leniency h_XModeThornHitLeniency multiplied by the number of hits."
+          ]
+        },
+        {
+          "name": "h_speedKeepSpikeHit",
+          "requires": [
+            {"spikeHits": 1},
+            "h_speedKeepSpikeHitLeniency"
+          ]
+        },
+        {
+          "name": "h_XRayMorphIceClip",
+          "requires": [
+            "canXRayCeilingClip",
+            "canTrickyUseFrozenEnemies"
+          ]
+        },
+        {
+          "name": "h_preciseIceClip",
+          "requires": [
+            "canTrickyUseFrozenEnemies",
+            "canPreciseCeilingClip"
+          ]
+        },
+        {
+          "name": "h_highPixelIceClip",
+          "requires": [
+            "canTrickyUseFrozenEnemies",
+            "canHighPixelCeilingClip"
+          ]
+        },
+        {
+          "name": "h_iceClip",
+          "requires": [
+            {"or":[
+              "h_XRayMorphIceClip",
+              "h_preciseIceClip",
+              "h_highPixelIceClip"
+            ]}
+          ]
+        },
+        {
+          "name": "h_flashSuitIceClip",
+          "requires": [
+            "canTrickyUseFrozenEnemies",
+            "canCeilingClip",
+            {"useFlashSuit": {}}
+          ]
+        },
+        {
+          "name": "h_maxHeightSpringBallJump",
+          "requires": [
+            "canCrouchJump",
+            "canTrickySpringBallJump",
+            "canTrickyJump"
+          ]
+        },
+        {
+          "name": "h_trickySpringwall",
+          "requires": [
+            "canTrickySpringBallJump",
+            "canSpringwall",
+            "canSpringFling",
+            "canTrickyJump"
+          ]
+        },
+        {
+          "name": "h_backIntoCorner",
+          "requires": [
+            {"or": [
+              "canMorphTurnaround",
+              "canXRayTurnaround",
+              "canMoonwalk"
+            ]}
+          ],
+          "note": [
+            "Back into a corner with Moonwalk, an X-Ray turnaround, or a precise Morph turnaround.",
+            "It is possible to turn around with Morph without moving at all, which requires a very short input."
+          ],
+          "devNote": "FIXME: Turning around with Morph could use another tech, but strats requiring pixel precision typically already require more tech."
+        },
+        {
+          "name": "h_ZebesIsAwake",
+          "requires": [
+            "canAwakenZebes",
+            "f_ZebesAwake"
+          ]
+        },
+        {
+          "name": "h_ZebesNotAwake",
+          "requires": [
+            "canAwakenZebes",
+            {"not": "f_ZebesAwake"},
+            "canRiskPermanentLossOfAccess"
+          ]
+        },
+        {
+          "name": "h_frozenEnemyRunway",
+          "requires": [
+            "canEnemyExtendRunway",
+            "canTrickyUseFrozenEnemies"
+          ]
+        },
+        {
+          "name": "h_trickyFrozenEnemyRunway",
+          "requires": [
+            "canTrickyEnemyExtendRunway",
+            "canTrickyUseFrozenEnemies"
+          ]
+        },
+        {
+          "name": "h_midAirShootUp",
+          "requires": [
+            {"or": [
+              {"noFlashSuit": {}},
+              "Morph"
+            ]}
+          ]
+        },
+        {
+          "name": "h_runOverRespawningEnemies",
+          "requires": [
+            "canCarefulJump"
+          ],
+          "devNote": "canCarefulJump is used to represent leaving the enemy drops, which isn't a propper fit, but it is a tech with a similar difficulty."
+        },
+        {
+          "name": "h_pauseAbuseMinimalReserveRefill",
+          "requires": [
+            "canPauseAbuse",
+            {"or": [
+              {"and": [
+                "canPreciseReserveRefill",
+                {"resourceAtMost": [{"type": "RegularEnergy", "count": 1}]},
+                {"resourceConsumed": [{"type": "ReserveEnergy", "count": 1}]}
+              ]},
+              {"and": [
+                {"resourceAtMost": [{"type": "RegularEnergy", "count": 4}]},
+                {"resourceConsumed": [{"type": "ReserveEnergy", "count": 4}]}
+              ]}
+            ]}
+          ],
+          "devNote": "Using a pause abuse to tank a hit and having that take Samus to 0 Energy and then be refilled with minimal Reserve Energy."
+        }
+      ]
+    },
+    {
+      "name": "Door Unlocks",
+      "description": "Ammo requirements needed to unlock different door types.",
+      "helpers": [
+        {
+          "name": "h_openRedDoor",
+          "requires": [
+            {"or": [
+              {"ammo": {"type": "Missile", "count": 5}},
+              {"ammo": {"type": "Super", "count": 1}}
+            ]}
+          ]
+        },
+        {
+          "name": "h_openGreenDoor",
+          "requires": [ {"ammo": {"type": "Super", "count": 1}} ]
+        },
+        {
+          "name": "h_openYellowDoor",
+          "requires": [ "h_usePowerBomb" ]
+        },
+        {
+          "name": "h_openEyeDoor",
+          "requires": [
+            {"or": [
+              {"ammo": {"type": "Missile", "count": 3}},   
+              {"ammo": {"type": "Super", "count": 1}}
+            ]}
+          ]
+        },
+        {
+          "name": "h_heatedGMode",
+          "requires": [
+            "canGMode",
+            {"or": [
+              "h_heatProof",
+              "canHeatedGMode"
+            ]}
+          ]
+        },
+        {
+          "name": "h_heatedGModePauseAbuse",
+          "requires": [
+            "canGMode",
+            "canPauseAbuse",
+            {"or": [
+              "h_heatProof",
+              {"and": [
+                "canComplexGMode",
+                "canHeatedGMode"
+              ]}
+            ]}
+          ]
+        },
+        {
+          "name": "h_heatedDirectGModeLeaveSameDoor",
+          "requires": [
+            "h_heatedGMode",
+            {"heatFrames": 1}
+          ],
+          "note": "Leaving the same door only adds one heat frame. This is likely only useful if remote acquiring an item or opening a yellow door."
+        },
+        {
+          "name": "h_heatedIndirectGModeOpenSameDoor",
+          "requires": [
+            "h_heatedGMode",
+            {"heatFrames": 70}
+          ],
+          "note": "This requires extra frames, because the door needs to close fully before it can be shot open."
+        },
+        {
+          "name": "h_heatedGModeOpenDifferentDoor",
+          "requires": [
+            "h_heatedGMode",
+            {"heatFrames": 35}
+          ],
+          "note": "There is a delay after using X-Ray before shooting. If PLMs are already overloaded, Samus can crouch next to the door, shoot up and very quickly use X-Ray."
+        },
+        {
+          "name": "h_heatedGModeOffCameraDoor",
+          "requires": [
+            "h_heatedGMode",
+            {"or": [
+              {"heatFrames": 70},
+              {"and": [
+                "canUseGrapple",
+                {"heatFrames": 40}
+              ]}
+            ]}
+          ],
+          "note": "There is a delay after using X-Ray before shooting, but the shot cannot be buffered, as it instantly despawns. Grapple can bypass this cooldown."
+        }
+      ]
+    },
+    {
+      "name": "Artificial Morph",
+      "description": "Helpers used in G-Mode Artificial Morph Strats.",
+      "helpers": [
+        {
+          "name": "h_artificialMorphSpringBall",
+          "requires": [
+            "SpringBall"
+          ]
+        },
+        {
+          "name": "h_artificialMorphSpringFling",
+          "requires": [
+            {"tech": "canSpringFling"},
+            "SpringBall"
+          ]
+        },
+        {
+          "name": "h_artificialMorphDoubleSpringBallJump",
+          "requires": [
+            {"tech": "canDoubleSpringBallJumpMidAir"},
+            "HiJump",
+            "SpringBall"
+          ]
+        },
+        {
+          "name": "h_artificialMorphBombThings",
+          "requires": [
+            {"or": [
+              "Bombs",
+              {"ammo": { "type": "PowerBomb", "count": 1}}
+            ]}
+          ]
+        },
+        {
+          "name": "h_artificialMorphBombs",
+          "requires": [
+            "Bombs"
+          ]
+        },
+        {
+          "name": "h_artificialMorphPowerBomb",
+          "requires": [
+            {"ammo": { "type": "PowerBomb", "count": 1}}
+          ]
+        },
+        {
+          "name": "h_artificialMorphIBJ",
+          "requires": [
+            {"tech": "canIBJ"},
+            "Bombs"
+          ]
+        },
+        {
+          "name": "h_artificialMorphLongIBJ",
+          "requires": [
+            {"tech": "canLongIBJ"},
+            "Bombs"
+          ]
+        },
+        {
+          "name": "h_artificialMorphJumpIntoIBJ",
+          "requires": [
+            {"tech": "canJumpIntoIBJ"},
+            "Bombs",
+            "SpringBall"
+          ]
+        },
+        {
+          "name": "h_artificialMorphBombAboveIBJ",
+          "requires": [
+            {"tech": "canBombAboveIBJ"},
+            "Bombs"
+          ]
+        },
+        {
+          "name": "h_artificialMorphCeilingBombJump",
+          "requires": [
+            {"tech": "canCeilingBombJump"},
+            "Bombs"
+          ]
+        },
+        {
+          "name": "h_artificialMorphLongCeilingBombJump",
+          "requires": [
+            {"tech": "canLongCeilingBombJump"},
+            "Bombs"
+          ]
+        },
+        {
+          "name": "h_artificialMorphDiagonalBombJump",
+          "requires": [
+            {"tech": "canDiagonalBombJump"},
+            "Bombs"
+          ]
+        },
+        {
+          "name": "h_artificialMorphDoubleBombJump",
+          "requires": [
+            {"tech": "canDoubleBombJump"},
+            "Bombs"
+          ]
+        },
+        {
+          "name": "h_artificialMorphStaggeredIBJ",
+          "requires": [
+            {"tech": "canStaggeredIBJ"},
+            "Bombs"
+          ]
+        },
+        {
+          "name": "h_artificialMorphBombHorizontally",
+          "requires": [
+            {"tech": "canBombHorizontally"},
+            {"or": [
+              "Bombs",
+              {"ammo": {"type": "PowerBomb", "count": 1}}
+            ]}
+          ]
+        },
+        {
+          "name": "h_artificialMorphHBJ",
+          "requires": [
+            {"tech": "canHBJ"},
+            "Bombs"
+          ]
+        },
+        {
+          "name": "h_artificialMorphResetFallSpeed",
+          "requires": [{"tech": "canResetFallSpeed"}]
+        },
+        {
+          "name": "h_artificialMorphSpringBallBombJump",
+          "requires": [
+            {"tech": "canSpringBallBombJump"},
+            "SpringBall",
+            {"or": [
+              "Bombs",
+              {"ammo": {"type": "PowerBomb", "count": 1}}
+            ]}
+          ]
+        },
+        {
+          "name": "h_artificialMorphUnderwaterBombIntoSpringBallJump",
+          "requires": [
+            {"tech": "canUnderwaterBombIntoSpringBallJump"},
+            "SpringBall",
+            "Bombs"
+          ]
+        },
+        {
+          "name": "h_artificialMorphCrystalFlash",
+          "requires": [
+            {"tech": "canCrystalFlash"},
+            {"ammo": {"type": "PowerBomb", "count": 1}},
+            {"ammo": {"type": "Missile", "count": 10}},
+            {"ammo": {"type": "Super", "count": 10}},
+            {"ammo": {"type": "PowerBomb", "count": 10}},
+            {"partialRefill": {"type": "Energy", "limit": 1500}},
+            {"noFlashSuit": {}}
+          ],
+          "devNote": "FIXME: Samus may not get a full refill, depending on the number of tanks and environment."
+        },
+        {
+          "name": "h_artificialMorphBombIntoCrystalFlashClip",
+          "requires": [
+            {"tech": "canBombIntoCrystalFlashClip"},
+            "Bombs",
+            "h_artificialMorphCrystalFlash",
+            "h_bombIntoCrystalFlashClipLeniency"
+          ]
+        },
+        {
+          "name": "h_artificialMorphMovement",
+          "requires": [
+            {"or": [
+              "h_artificialMorphSpringBall",
+              "h_artificialMorphIBJ",
+              "Morph"
+            ]}
+          ],
+          "note": [
+            "These are ways to navigate stairs and small platforms for strats assuming G-mode artificial morph.",
+            "Having Morph means we can unmorph, jump, and remorph, as using artificial morph is not needed in that case."
+          ],
+          "devNote": [
+            "Morph will not be a usable alternative to get up very constrained ledges, such as in a morph tunnel.",
+            "IBJ is not usable for underwater rooms without Gravity."
+          ]
+        }
+      ]
+    }
+  ]
+}

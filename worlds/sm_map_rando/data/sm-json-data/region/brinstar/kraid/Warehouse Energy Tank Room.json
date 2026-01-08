@@ -1,0 +1,535 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 80,
+  "name": "Warehouse Energy Tank Room",
+  "area": "Brinstar",
+  "subarea": "Kraid",
+  "roomAddress": "0x7A4B1",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "gray",
+      "nodeAddress": "0x0019162",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "locks": [
+        {
+          "name": "Warehouse E-Tank Gray Lock (to Zeelas)",
+          "lockType": "killEnemies",
+          "unlockStrats": [
+            {
+              "name": "Base",
+              "requires": [
+                {"obstaclesCleared": ["A"]}
+              ],
+              "note": "This is a softlock if no means to kill Beetoms are available."
+            }
+          ],
+          "yields": ["f_ZebesAwake"]
+        }
+      ],
+      "mapTileMask": [
+        [2]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Hidden Ceiling Item",
+      "nodeType": "item",
+      "nodeSubType": "hidden",
+      "nodeItem": "ETank",
+      "nodeAddress": "0x7899C",
+      "mapTileMask": [
+        [2]
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "id": "A",
+      "name": "Four Beetoms",
+      "obstacleType": "enemies"
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Warehouse Beetoms",
+      "enemyName": "Beetom",
+      "quantity": 4,
+      "homeNodes": [2]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Beetom Farm",
+      "requires": [
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 130}
+          ]},
+          {"and": [
+            {"or": [
+              "Ice",
+              "canTrickyDodgeEnemies",
+              {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+            ]},
+            {"or": [
+              {"resourceAvailable": [{"type": "Energy", "count": 50}]},
+              {"resourceAvailable": [{"type": "PowerBomb", "count": 4}]}
+            ]},
+            "h_usePowerBomb",
+            {"cycleFrames": 290}
+          ]},
+          {"and": [
+            "h_useMorphBombs",
+            "canTrickyDodgeEnemies",
+            "canInsaneJump",
+            {"cycleFrames": 425}
+          ]},
+          {"and": [
+            "Ice",
+            "canDodgeWhileShooting",
+            "h_useMorphBombs",
+            {"cycleFrames": 720}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "farmCycleDrops": [{"enemy": "Beetom", "count": 4}],
+      "note": [
+        "Kill the Beetoms with Screw Attack or using Bombs or Power Bombs,",
+        "either freezing them or carefully avoiding them to minimize damage."
+      ],
+      "devNote": [
+        "Health Bomb ends at 50 energy.",
+        "FIXME: One Missile or Super can be used to gain a power bomb and then power bombs can be used to farm more power bombs."
+      ]
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 1,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "Leave With Runway - Single Frozen Beetom",
+      "requires": [
+        {"obstaclesNotCleared": ["A"]},
+        "h_frozenEnemyRunway",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 2,
+          "openEnd": 1
+        }
+      },
+      "note": "Freeze a single Beetom to extend the runway. Freeze any Beetoms that latch onto Samus to minimize taking damage."
+    },
+    {
+      "id": 4,
+      "link": [1, 1],
+      "name": "Frozen Beetom Runway",
+      "requires": [
+        {"notable": "Frozen Beetom Runway"},
+        {"obstaclesNotCleared": ["A"]},
+        "canTrickyJump",
+        "h_trickyFrozenEnemyRunway",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 6}}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 4,
+          "openEnd": 1
+        }
+      },
+      "note": [
+        "Freeze multiple Beetoms to extend the runway. Continually refreeze the ones that are in a good position while manipulating the rest.",
+        "This assumes three extra tiles of runway, which can be accomplished with two perfectly placed Beetoms, three adjacent ones, or four which are partially overlapping."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [1, 1],
+      "name": "Leave With Side Platform",
+      "requires": [
+        {"or": [
+          {"obstaclesCleared": ["A"]},
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithSidePlatform": {
+          "height": 1,
+          "runway": {
+            "length": 6,
+            "openEnd": 0
+          },
+          "obstruction": [1, 0]
+        }
+      },
+      "devNote": "Max extra run speed $1.A"
+    },
+    {
+      "id": 5,
+      "link": [1, 1],
+      "name": "Leave Spinning",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpinning": {
+          "remoteRunway": {
+            "length": 5,
+            "openEnd": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "link": [1, 1],
+      "name": "Leave With Mockball",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithMockball": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "link": [1, 1],
+      "name": "Leave With Spring Ball Bounce",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveWithSpringBallBounce": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 1
+          },
+          "landingRunway": {
+            "length": 1,
+            "openEnd": 1
+          },
+          "movementType": "uncontrolled"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "link": [1, 1],
+      "name": "Leave Space Jumping",
+      "requires": [
+        {"obstaclesCleared": ["A"]}
+      ],
+      "exitCondition": {
+        "leaveSpaceJumping": {
+          "remoteRunway": {
+            "length": 6,
+            "openEnd": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 22,
+      "link": [1, 1],
+      "name": "Leave with Moondance",
+      "requires": [
+        "canMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 1
+        }
+      },
+      "note": [
+        "Freeze the Beetom while Samus is as far left as possible on the door ledge.",
+        "Moonwalk carefully and start moondancing under the Beetom.",
+        "As long as Samus is near the door, the other Beetoms won't come near."
+      ]
+    },
+    {
+      "id": 23,
+      "link": [1, 1],
+      "name": "Leave with Extended Moondance",
+      "requires": [
+        "canExtendedMoondance",
+        "canTrickyUseFrozenEnemies",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}},
+        "h_extendedMoondanceBeetomLeniency"
+      ],
+      "exitCondition": {
+        "leaveWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "note": [
+        "Freeze the Beetom while Samus is as far left as possible on the door ledge.",
+        "Moonwalk carefully and start moondancing under the Beetom.",
+        "As long as Samus is near the door, the other Beetoms won't come near."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        {"or": [
+          "canPrepareForNextRoom",
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+        ]},
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 1],
+      "name": "10 Power Bomb Crystal Flash",
+      "requires": [
+        {"or": [
+          "canPrepareForNextRoom",
+          {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 2}}
+        ]},
+        {"resetRoom": {"nodes": [1]}},
+        "h_10PowerBombCrystalFlash"
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "devNote": "Resetting the room could be required to farm a bit of energy to get above health-bomb range, to ensure a Power Bomb drop."
+    },
+    {
+      "id": 11,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Beetom",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithGModeSetup": {
+          "knockback": false
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 12,
+      "link": [1, 2],
+      "name": "Kill the Beetoms",
+      "requires": [
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Beetom", "Beetom", "Beetom", "Beetom"]]
+          }},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 13,
+      "link": [1, 2],
+      "name": "Freeze the Beetoms",
+      "requires": [
+        "Ice"
+      ]
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Tank the Damage",
+      "requires": [
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 4}}
+      ]
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Tricky Evade",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"doorUnlockedAtNode": 1},
+        "canTrickyJump",
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+      ],
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["super"], "requires": []},
+        {"nodeId": 1, "types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": [
+        "Wait by the door briefly before spin jumping over and grabbing the item.",
+        "It is also possible to do this instead by entering with run speed and quickly grabbing the item."
+      ]
+    },
+    {
+      "id": 24,
+      "link": [1, 2],
+      "name": "Very Tricky Evade",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"doorUnlockedAtNode": 1},
+        "canTrickyDodgeEnemies",
+        "canInsaneJump"
+      ],
+      "unlocksDoors": [
+        {"nodeId": 1, "types": ["super"], "requires": []},
+        {"nodeId": 1, "types": ["missiles", "powerbomb"], "requires": ["never"]}
+      ],
+      "note": ["Carefully manipulate the Beetoms to avoid all damage."]
+    },
+    {
+      "id": 16,
+      "link": [1, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {
+          "position": "bottom"
+        }
+      },
+      "requires": [
+        {"shinespark": {"frames": 20, "excessFrames": 4}}
+      ],
+      "clearsObstacles": ["A"],
+      "devNote": "Sparking into the room through the middle of the door also works."
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "G-Mode Morph Kill the Beetoms",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          {"and": [
+            "h_artificialMorphPowerBomb",
+            {"or": [
+              "canTrickyDodgeEnemies",
+              {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+            ]}
+          ]},
+          {"and": [
+            "h_artificialMorphBombs",
+            {"or": [
+              "canTrickyGMode",
+              {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 1}}
+            ]}
+          ]}
+        ]}
+      ],
+      "clearsObstacles": ["A"],
+      "flashSuitChecked": true,
+      "note": [
+        "Quickly kill the Beetoms with Bombs or a Power Bomb.",
+        "In direct G-mode, Samus has a few i-frames to place a Power Bomb, in indirect G-mode, enter and immediately roll to the left to avoid the first Beetom.",
+        "With Bombs and without taking any damage, everything is harder. It is recommended to roll in the lower section, placing Bombs, while avoiding touching a Beetom or getting Bomb boosted."
+      ]
+    },
+    {
+      "id": 18,
+      "link": [2, 1],
+      "name": "Kill the Beetoms",
+      "requires": [
+        {"or": [
+          {"enemyKill": {
+            "enemies": [["Beetom", "Beetom", "Beetom", "Beetom"]]
+          }},
+          {"obstaclesCleared": ["A"]}
+        ]}
+      ],
+      "clearsObstacles": ["A"]
+    },
+    {
+      "id": 19,
+      "link": [2, 1],
+      "name": "Freeze the Beetoms",
+      "requires": [
+        "Ice"
+      ]
+    },
+    {
+      "id": 20,
+      "link": [2, 1],
+      "name": "Tank the Damage",
+      "requires": [
+        {"enemyDamage": {"enemy": "Beetom", "type": "contact", "hits": 6}}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [2, 1],
+      "name": "Very Tricky Evade",
+      "requires": [
+        "canTrickyDodgeEnemies",
+        "canInsaneJump"
+      ],
+      "note": ["Carefully manipulate the Beetoms to avoid all damage."]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Frozen Beetom Runway",
+      "note": [
+        "Freeze multiple Beetoms to extend the runway. Continually refreeze the ones that are in a good position while manipulating the rest.",
+        "This assumes three extra tiles of runway, which can be accomplished with two perfectly placed Beetoms, three adjacent ones, or four which are partially overlapping."
+      ]
+    }
+  ],
+  "nextStratId": 26,
+  "nextNotableId": 2
+}

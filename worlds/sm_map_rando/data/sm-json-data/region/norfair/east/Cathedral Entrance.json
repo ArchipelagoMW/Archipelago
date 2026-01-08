@@ -1,0 +1,1530 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 90,
+  "name": "Cathedral Entrance",
+  "area": "Norfair",
+  "subarea": "Upper",
+  "subsubarea": "East",
+  "roomAddress": "0x7A7B3",
+  "roomEnvironments": [{"heated": true}],
+  "mapTileMask": [
+    [1, 1, 1],
+    [1, 1, 1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Left Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x00192a6",
+      "doorOrientation": "left",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2, 1, 1],
+        [1, 1, 1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Right Door",
+      "nodeType": "door",
+      "nodeSubType": "red",
+      "nodeAddress": "0x00192b2",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1, 1, 2],
+        [1, 1, 1]
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bottom Left Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1],
+        [2, 1, 1]
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Bottom Junction (Cleared Runway)",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 2, 1],
+        [1, 2, 1]
+      ],
+      "note": "This node is only considered reached if the runway is clear of enemies, to setup SpeedBooster strats."
+    },
+    {
+      "id": 5,
+      "name": "Bottom Right Junction",
+      "nodeType": "junction",
+      "nodeSubType": "junction",
+      "mapTileMask": [
+        [1, 1, 1],
+        [1, 1, 2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Cathedral Entrance Sovas",
+      "enemyName": "Sova",
+      "quantity": 4,
+      "homeNodes": [3]
+    },
+    {
+      "id": "e2",
+      "groupName": "Cathedral Entrance Small Dessgeegas",
+      "enemyName": "Sm. Dessgeega",
+      "quantity": 2,
+      "betweenNodes": [3, 5]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 3,
+      "to": [
+        {"id": 1},
+        {
+          "id": 2,
+          "devNote": "This link goes straight from 3 to 2 because waiting for the Sova is the same time, regardless of how quickly you can travel through the other nodes"
+        },
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    },
+    {
+      "from": 4,
+      "to": [
+        {"id": 1},
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {
+          "id": 5,
+          "devNote": "Node 4 is considered equivalent to 5 (though 5 isn't equivlent to 4)."
+        }
+      ]
+    },
+    {
+      "from": 5,
+      "to": [
+        {"id": 2},
+        {"id": 3},
+        {"id": 4},
+        {"id": 5}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      }
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 65,
+      "link": [1, 1],
+      "name": "Sova and Dessgeega Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [1]}},
+        {"or": [
+          {"and": [
+            "HiJump",
+            "canWalljump",
+            {"cycleFrames": 450}
+          ]},
+          {"and": [
+            "canPreciseWalljump",
+            {"cycleFrames": 600}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"cycleFrames": 660}
+          ]},
+          {"and": [
+            "h_useSpringBall",
+            {"cycleFrames": 650}
+          ]},
+          {"and": [
+            "h_useMorphBombs",
+            {"cycleFrames": 720}
+          ]}
+        ]},
+        {"or": [
+          "Plasma",
+          "Spazer",
+          "Wave",
+          {"and": [
+            "Ice",
+            {"cycleFrames": 130}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 100}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            {"cycleFrames": 130}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"cycleFrames": 160}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Sova", "count": 2},
+        {"enemy": "Sm. Dessgeega", "count": 2}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 3,
+      "link": [1, 1],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true
+    },
+    {
+      "id": 58,
+      "link": [1, 1],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"or": [
+          {"heatFrames": 560},
+          {"and": [
+            {"ammo": {"type": "Super", "count": 1}},
+            {"heatFrames": 420}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [
+        {"types": ["missiles", "super"], "requires": []},
+        {"types": ["powerbomb"], "requires": ["never"]}
+      ],
+      "flashSuitChecked": true,
+      "note": "It is possible to use a Super to speed up the Sova. Knocking it off while it is on the overhang above requires rapid switching to get to X-Ray in time.",
+      "devNote": "Generally, coming from the right works, but that would require modeling the room traversal too."
+    },
+    {
+      "id": 60,
+      "link": [1, 2],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphMovement",
+        {"or": [
+          "canTrickyJump",
+          "h_artificialMorphPowerBomb",
+          "h_hasBeamUpgrade",
+          {"enemyKill": {
+            "enemies": [["Sm. Dessgeega", "Sm. Dessgeega"]],
+            "explicitWeapons": ["Missile", "Super", "ScrewAttack"]
+          }},
+          {"enemyDamage": {"enemy": "Sm. Dessgeega", "type": "contact", "hits": 1}}
+        ]},
+        {"or": [
+          "HiJump",
+          "SpaceJump",
+          "canSpringBallJumpMidAir",
+          "canIBJ",
+          "canTrickyDashJump",
+          {"and": [
+            "canTrickyUseFrozenEnemies",
+            "canWalljump"
+          ]},
+          {"and": [
+            {"canShineCharge": {"usedTiles": 43, "openEnd": 0}},
+            {"shinespark": {"frames": 9, "excessFrames": 5}}
+          ]},
+          {"and": [
+            "canInsaneWalljump",
+            "canWallJumpInstantMorph",
+            "canUnmorphBombBoost",
+            "canDownGrab"
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            "canBePatient"
+          ]},
+          "h_heatedGModeOpenDifferentDoor"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Unmorph after exiting the morph tunnel and get to the other side of the room.",
+        "Killing the Dessgeegas can be done with no beam upgrades; Samus can jump over them while shooting the last few hits or retreat to the left.",
+        "It is possible to kill a Sova on the door and pause abuse to grab its Energy drop on G-mode exit.",
+        "Samus will likely need to wait at the door for about a minute for the global Sova gets there."
+      ],
+      "devNote": "FIXME: Methods that require a Sova damage boost could be added"
+    },
+    {
+      "id": 61,
+      "link": [1, 2],
+      "name": "G-Mode Morph, IBJ",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        "h_artificialMorphIBJ",
+        {"or": [
+          "canTrickyDodgeEnemies",
+          {"and": [
+            "h_artificialMorphPowerBomb",
+            "h_artificialMorphPowerBomb"
+          ]}
+        ]},
+        {"or": [
+          {"and": [
+            "h_heatedGModePauseAbuse",
+            "canBePatient"
+          ]},
+          "h_heatedGModeOpenDifferentDoor"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Carefully roll under the Sm. Desgeegas or kill them with a Power Bomb (while avoiding killing the Sova).",
+        "It is possible to kill a Sova on the door and pause abuse to grab its Energy drop on G-mode exit.",
+        "Samus will likely need to wait at the door for about a minute for the global Sova gets there."
+      ]
+    },
+    {
+      "id": 4,
+      "link": [1, 3],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 150}
+      ]
+    },
+    {
+      "id": 5,
+      "link": [1, 5],
+      "name": "Shinespark (Come In Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 100},
+        "canShinechargeMovement",
+        "canHorizontalShinespark",
+        {"heatFrames": 155},
+        {"shinespark": {"frames": 54, "excessFrames": 15}},
+        {"heatFrames": 105}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 6,
+      "link": [1, 5],
+      "name": "10 Power Bomb Crystal Flash",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": false,
+          "minTiles": 0.0,
+          "maxTiles": 0.0625
+        }
+      },
+      "requires": [
+        {"notable": "10 Power Bomb Crystal Flash"},
+        "canPrepareForNextRoom",
+        {"heatFrames": 570},
+        "h_heated10PowerBombCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Normalized movement through the room can be used to manipulate the Sm. Dessgeegas and do this strat reliably without heat protection.",
+        "The following is one way to do this; other approaches may also be possible.",
+        "Before entering the room, damage down to between 127 and 159 energy, and unequip Speed Booster if it is collected.",
+        "Position one pixel away from the door in the previous room.",
+        "Hold angle-down (and optionally dash), enter the door transition, then hold shot while continuing to hold forward, angle-down, and dash.",
+        "The shot block will be destroyed by the buffered shot.",
+        "Continue holding right and dash to run under both Sm. Dessgeegas.",
+        "After running under the second one, stop for a moment to prevent it from scrolling off camera.",
+        "Morph, roll all the way against the right wall and quickly lay a Power Bomb.",
+        "Move slightly to the left to avoid being bounced by the Power Bomb explosion.",
+        "As the Sm. Dessgeega approaches, roll under it to the left to avoid being hit.",
+        "Roll back to the right to collect its Power Bomb drop (which should be a ground level) and return to where the Power Bomb was laid, in time to perform the Crystal Flash inputs."
+      ],
+      "devNote": [
+        "The heat frames include about a half second of leniency to position in the previous room in case it is also heated.",
+        "FIXME: Find some way to properly express being above health bomb range, though it shouldn't be a serious problem here.",
+        "Without heat protection, this is already accounted for by the heatFrames (though this is a bit hacky).",
+        "With heat protection, it should be possible to farm a bit to get out of health bomb range."
+      ]
+    },
+    {
+      "id": 62,
+      "link": [2, 1],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "Morph",
+        {"or": [
+          "h_bombThings",
+          "h_useSpringBall",
+          {"and": [
+            "canNeutralDamageBoost",
+            {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+            {"or": [
+              {"and": [
+                "canTrickyJump",
+                "canLateralMidAirMorph"
+              ]},
+              "canBePatient",
+              {"ammo": {"type": "Super", "count": 1}}
+            ]}
+          ]}
+        ]},
+        {"or": [
+          "h_heatedGModePauseAbuse",
+          "h_heatedGModeOpenDifferentDoor"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Cross the room and go through the morph tunnel.",
+        "Without any morph movement items, carefully air ball over the Sova and use it to damage boost into the tunnel or wait for the global Sova.",
+        "It is possible to kill a Sova on the door and pause abuse to grab its Energy drop on G-mode exit."
+      ]
+    },
+    {
+      "id": 63,
+      "link": [2, 1],
+      "name": "G-Mode Morph",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": true
+        }
+      },
+      "requires": [
+        {"or": [
+          "canTrickyDodgeEnemies",
+          "h_artificialMorphPowerBomb",
+          {"enemyDamage": {"enemy": "Sm. Dessgeega", "type": "contact", "hits": 1}}
+        ]},
+        {"or": [
+          "h_artificialMorphIBJ",
+          "h_artificialMorphSpringBall"
+        ]},
+        {"or": [
+          "h_heatedGModePauseAbuse",
+          "h_heatedGModeOpenDifferentDoor"
+        ]}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Wait for the Sova to pass then carefully roll under the Sm. Desgeegas or kill them with a Power Bomb (while avoiding killing the Sova).",
+        "It is possible to kill a Sova on the door and pause abuse to grab its Energy drop on G-mode exit.",
+        "The local or global Sova can be used. To use the local one, keep it off camera when possible and horizontally boost to jump over both stairs at once.",
+        "With Spring Ball or a moderately good IBJ, Samus should be able to get through the morph tunnel before the global Sova, otherwise it takes just over a minute for it to return."
+      ]
+    },
+    {
+      "id": 7,
+      "link": [2, 1],
+      "name": "Grapple Teleport",
+      "entranceCondition": {
+        "comeInWithGrappleTeleport": {
+          "blockPositions": [[7, 2]]
+        }
+      },
+      "requires": [
+        {"heatFrames": 45}
+      ]
+    },
+    {
+      "id": 8,
+      "link": [2, 2],
+      "name": "Leave with Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 1
+        }
+      }
+    },
+    {
+      "id": 9,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 66,
+      "link": [2, 2],
+      "name": "Sova and Dessgeega Farm",
+      "requires": [
+        "h_heatProof",
+        {"resetRoom": {"nodes": [2]}},
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"cycleFrames": 550}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"cycleFrames": 610}
+          ]},
+          {"and": [
+            "h_useSpringBall",
+            "h_doubleEquipmentScreenCycleFrames",
+            {"cycleFrames": 600}
+          ]},
+          {"and": [
+            "canIBJ",
+            {"cycleFrames": 1220}
+          ]},
+          {"and": [
+            "canJumpIntoIBJ",
+            {"cycleFrames": 830}
+          ]}
+        ]},
+        {"or": [
+          "Plasma",
+          {"and": [
+            "Spazer",
+            {"cycleFrames": 50}
+          ]},
+          {"and": [
+            "Wave",
+            {"cycleFrames": 50}
+          ]},
+          {"and": [
+            "Ice",
+            {"cycleFrames": 260}
+          ]},
+          {"and": [
+            "ScrewAttack",
+            {"cycleFrames": 80}
+          ]},
+          {"and": [
+            "canPseudoScrew",
+            {"cycleFrames": 160}
+          ]},
+          {"and": [
+            "canTrickyJump",
+            {"cycleFrames": 540}
+          ]}
+        ]}
+      ],
+      "farmCycleDrops": [
+        {"enemy": "Sova", "count": 2},
+        {"enemy": "Sm. Dessgeega", "count": 2}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}}
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "note": "It takes about 20 seconds for the Sova to reach the door."
+    },
+    {
+      "id": 59,
+      "link": [2, 2],
+      "name": "G-Mode Setup - Get Hit By Sova",
+      "entranceCondition": {
+        "comeInNormally": {}
+      },
+      "requires": [
+        {"heatFrames": 1180}
+      ],
+      "exitCondition": {
+        "leaveWithGModeSetup": {}
+      },
+      "unlocksDoors": [{"types": ["ammo"], "requires": []}],
+      "flashSuitChecked": true,
+      "devNote": "Generally, coming from the left works, but that would require modeling the room traversal too."
+    },
+    {
+      "id": 11,
+      "link": [2, 3],
+      "name": "Shinespark (Come In Shinecharged)",
+      "entranceCondition": {
+        "comeInShinecharged": {}
+      },
+      "requires": [
+        {"shineChargeFrames": 105},
+        "canShinechargeMovement",
+        "canHorizontalShinespark",
+        {"heatFrames": 195},
+        {"shinespark": {"frames": 58, "excessFrames": 0}},
+        {"heatFrames": 105}
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 64,
+      "link": [2, 3],
+      "name": "G-Mode",
+      "entranceCondition": {
+        "comeInWithGMode": {
+          "mode": "any",
+          "morphed": false
+        }
+      },
+      "requires": [
+        "h_heatedGMode",
+        {"heatFrames": 0}
+      ],
+      "flashSuitChecked": true,
+      "note": "Exit G-mode below the shot blocks.",
+      "devNote": "This is just used to save Energy, when Samus doesn't have a way to get though the morph tunnel."
+    },
+    {
+      "id": 67,
+      "link": [2, 3],
+      "name": "Dessgeega Dodge",
+      "requires": [
+        {"notable": "Dessgeega Dodge (Right-to-Left)"},
+        "canTrickyDodgeEnemies",
+        "canInsaneJump",
+        {"heatFramesWithEnergyDrops": {
+          "frames": 295,
+          "drops": [{"enemy": "Sova", "count": 1}]
+        }}
+      ],
+      "note": [
+        "Manipulate the movement of the Sm. Dessgeegas by entering the room in a specific way.",
+        "Multiple setups are possible:",
+        "A relatively safe method is to walk into the room (with no dash speed, and any amount of base speed or none at all),",
+        "walk off the ledge, and press against the opposite ledge to align with it.",
+        "After landing, wait a moment, then run off the edge and across the room.",
+        "If successful, the first Sm. Dessgeega should have hopped to the right, out of Samus' way,",
+        "and the second Sm. Dessgeega should do a big hop while Samus runs under it.",
+        "A more aggressive method involves walking into the room,",
+        "and holding dash starting when Samus is about 1 tile from falling off the ledge;",
+        "start holding forward again slightly before landing on the small floating platform, while continuing to hold dash."
+      ],
+      "detailNote": [
+        "Rooms containing hopper-type enemies (including Sm. Dessgeegas) reset RNG on entry,",
+        "which makes it possible to manipulate their movement in a deterministic way.",
+        "It also means the Sova drop can be manipulated by killing it on specific frames relative to room entry.",
+        "Because the Sova is global, its position can be used as a cue for when to kill it.",
+        "If Samus is full on Missiles, there are several 3-frame windows of where it can be killed to obtain a big energy.",
+        "The exact timing required for the shot will depend on the weapon used."
+      ],
+      "devNote": [
+        "Manipulating the second Sm. Dessgeega is much more precise than manipulating the first.",
+        "The way the strat is written, manipulating the Sova drop isn't technically expected,",
+        "though in practice getting a big energy is required to make it through the room tankless."
+      ]
+    },
+    {
+      "id": 12,
+      "link": [2, 5],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 150}
+      ]
+    },
+    {
+      "id": 13,
+      "link": [2, 5],
+      "name": "10 Power Bomb Crystal Flash",
+      "entranceCondition": {
+        "comeInRunning": {
+          "speedBooster": "any",
+          "minTiles": 0.0,
+          "maxTiles": 0.0625
+        }
+      },
+      "requires": [
+        {"notable": "10 Power Bomb Crystal Flash"},
+        "canPrepareForNextRoom",
+        {"heatFrames": 420},
+        "h_heated10PowerBombCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "A normalized entrance to the room can be used to manipulate the Sm. Dessgeegas and do this strat reliably without heat protection.",
+        "The following is one way to do this; other approaches may also be possible.",
+        "Before entering the room, damage down to between 90 and 125 energy.",
+        "Position one pixel away from the door in the previous room.",
+        "Enter the door transition (with or without holding dash), then hold dash and left until falling off the platform.",
+        "Turn around and hold right, landing in the corner.",
+        "Morph and lay a Power Bomb.",
+        "Move slightly to the left to avoid being bounced by the Power Bomb explosion.",
+        "As the Sm. Dessgeega approaches, roll under it to the left to avoid being hit.",
+        "Roll back to the right to collect its Power Bomb drop (which should be a ground level) and return to where the Power Bomb was laid, in time to perform the Crystal Flash inputs."
+      ],
+      "devNote": [
+        "The heat frames include about a half second of leniency to position in the previous room in case it is also heated.",
+        "FIXME: Find some way to properly express being above health bomb range, though it shouldn't be a serious problem here.",
+        "Without heat protection, this is already accounted for by the heatFrames (though this is a bit hacky).",
+        "With heat protection, it should be possible to farm a bit to get out of health bomb range."
+      ]
+    },
+    {
+      "id": 14,
+      "link": [3, 1],
+      "name": "Base",
+      "requires": [
+        "h_bombThings",
+        {"heatFrames": 450}
+      ],
+      "note": "Only one bomb is needed after using a spinjump to get into the two tile tunnel."
+    },
+    {
+      "id": 15,
+      "link": [3, 1],
+      "name": "Base with Spring Ball",
+      "requires": [
+        "h_useSpringBall",
+        {"heatFrames": 375}
+      ]
+    },
+    {
+      "id": 16,
+      "link": [3, 1],
+      "name": "Sova Boost",
+      "requires": [
+        "canNeutralDamageBoost",
+        "Morph",
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        {"or": [
+          {"and": [
+            "canTrickyJump",
+            "canLateralMidAirMorph",
+            "canCameraManip",
+            {"heatFrames": 340}
+          ]},
+          {"and": [
+            {"ammo": {"type": "Super", "count": 1}},
+            {"heatFrames": 560}
+          ]},
+          {"heatFrames": 2700}
+        ]}
+      ],
+      "note": [
+        "Either race the nearby Sova to the morph tunnel or wait for it to come back through the morph tunnel and use a Super to knock it off behind Samus.",
+        "Alternatively, it is possible to wait for the global Sova to come around.",
+        "Build speed on the lower platform and jump towards the morph tunnel while performing a Midair Morph to reach the Sova in time.",
+        "Guiding the local Sova around through the shot block again can be faster, but is not expected."
+      ],
+      "devNote": "The global Sova is moving while the player reaches this node and this heatFrame count reflects that."
+    },
+    {
+      "id": 17,
+      "link": [3, 1],
+      "name": "Up from Below",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canPreciseWalljump",
+            {"heatFrames": 150}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"heatFrames": 210}
+          ]},
+          {"and": [
+            "HiJump",
+            "canWalljump",
+            {"heatFrames": 180}
+          ]},
+          {"and": [
+            "HiJump",
+            "SpeedBooster",
+            "canCarefulJump",
+            {"heatFrames": 100}
+          ]}
+        ]},
+        {"or": [
+          "canHeroShot",
+          {"heatFrames": 100}
+        ]}
+      ]
+    },
+    {
+      "id": 18,
+      "link": [3, 1],
+      "name": "Left Door Frozen Sova Step",
+      "requires": [
+        {"notable": "Left Door Frozen Sova Step"},
+        "canTrickyUseFrozenEnemies",
+        "canTrickyJump",
+        "canCameraManip",
+        {"heatFrames": 1100}
+      ],
+      "wallJumpAvoid": true,
+      "note": [
+        "Guide the morph tunnel Sova on top of the shot blocks by keeping it on camera.",
+        "Move the camera away once it is on top of the shot blocks.  It will not move while off camera.",
+        "Stand directly below the OffCamera Sova and fire up and jump to break the shot blocks.",
+        "Either lower its health while guiding it, or as it begins to fall, there is time.",
+        "As it falls, shoot again to freeze it at the right height.",
+        "As a backup, the same Sova can be frozen on the left wall, dropped from the shot blocks again, or frozen on the right wall."
+      ]
+    },
+    {
+      "id": 19,
+      "link": [3, 2],
+      "name": "Frozen Sova",
+      "requires": [
+        "canTrickyUseFrozenEnemies",
+        "canWalljump",
+        {"heatFrames": 950}
+      ],
+      "devNote": "FIXME: It is possible but very precise to avoid the wall jump requirement here."
+    },
+    {
+      "id": 20,
+      "link": [3, 2],
+      "name": "Sova Morph Only Boost",
+      "requires": [
+        {"notable": "Sova Morph Only Boost"},
+        "canInsaneWalljump",
+        "canMidAirMorph",
+        "canNeutralDamageBoost",
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        {"heatFrames": 1050}
+      ],
+      "note": [
+        "Use a very well timed and precise walljump into morph to hit the global Sova so that the damage bonks Samus up to the door ledge.",
+        "Aim for the lowest part of slope looking wall tile, where it does not look possible to make contact with a walljump, and fully delay the jump.",
+        "To try again, the Sova loops to the left side wall. Or a Super can knock it off the wall to climb the right side again."
+      ]
+    },
+    {
+      "id": 21,
+      "link": [3, 3],
+      "name": "Sova and Sm. Dessgeega Farm",
+      "requires": [
+        "h_heatProof",
+        {"or": [
+          "canDodgeWhileShooting",
+          "Plasma",
+          "ScrewAttack",
+          "Wave",
+          "Spazer"
+        ]},
+        {"or": [
+          {"and": [
+            {"resetRoom": {"nodes": [1]}},
+            {"or": [
+              "canWalljump",
+              "SpaceJump",
+              "h_useSpringBall"
+            ]}
+          ]},
+          {"and": [
+            {"resetRoom": {"nodes": [2]}},
+            {"or": [
+              "HiJump",
+              "SpaceJump"
+            ]}
+          ]}
+        ]},
+        {"partialRefill": {"type": "Energy", "limit": 160}},
+        {"partialRefill": {"type": "Super", "limit": 4}},
+        {"partialRefill": {"type": "Missile", "limit": 12}},
+        {"partialRefill": {"type": "PowerBomb", "limit": 10}}
+      ]
+    },
+    {
+      "id": 22,
+      "link": [3, 3],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 23,
+      "link": [3, 4],
+      "name": "Plasma Kill",
+      "requires": [
+        "Plasma",
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 24,
+      "link": [3, 4],
+      "name": "Screw Kill",
+      "requires": [
+        "ScrewAttack",
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 25,
+      "link": [3, 4],
+      "name": "Ammo Kill",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Sm. Dessgeega", "Sm. Dessgeega"]],
+          "explicitWeapons": ["Missile", "Super"]
+        }},
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 26,
+      "link": [3, 4],
+      "name": "Intermediate Beam Kill",
+      "requires": [
+        {"or": [
+          "Wave",
+          "Spazer"
+        ]},
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 27,
+      "link": [3, 4],
+      "name": "Power Beam Kill",
+      "requires": [
+        {"heatFrames": 350}
+      ]
+    },
+    {
+      "id": 28,
+      "link": [3, 5],
+      "name": "Tank a Hit",
+      "requires": [
+        {"heatFrames": 150},
+        {"enemyDamage": {"enemy": "Sm. Dessgeega", "type": "contact", "hits": 1}}
+      ]
+    },
+    {
+      "id": 29,
+      "link": [3, 5],
+      "name": "Mockball Through",
+      "requires": [
+        "canMockball",
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 30,
+      "link": [4, 1],
+      "name": "Shinespark",
+      "requires": [
+        {"canShineCharge": {"usedTiles": 43, "openEnd": 0}},
+        {"heatFrames": 500},
+        {"shinespark": {"frames": 22, "excessFrames": 3}}
+      ],
+      "note": "Jump and shoot the block, then quickly run away and back to charge the shinespark and shine through before the block respawns.",
+      "devNote": ["FIXME: Some of the heatFrames should come after the shinespark"]
+    },
+    {
+      "id": 31,
+      "link": [4, 1],
+      "name": "Shinespark With Plasma",
+      "requires": [
+        "Plasma",
+        {"canShineCharge": {"usedTiles": 43, "openEnd": 0}},
+        {"heatFrames": 250},
+        {"shinespark": {"frames": 22, "excessFrames": 3}}
+      ],
+      "note": [
+        "With plasma, it is possible to shoot the block from the ground and immediately shinespark.",
+        "Other beams will disappear off-screen before Samus has moved up enough.",
+        "A charge shot can be used instead, as it moves a bit slower, but there is a relatively small window."
+      ],
+      "devNote": ["FIXME: Some of the heatFrames should come after the shinespark"]
+    },
+    {
+      "id": 32,
+      "link": [4, 1],
+      "name": "Hero Shot Shinespark",
+      "requires": [
+        "canHeroShot",
+        {"canShineCharge": {"usedTiles": 43, "openEnd": 0}},
+        {"heatFrames": 250},
+        {"shinespark": {"frames": 22, "excessFrames": 3}}
+      ],
+      "note": [
+        "It is possible to shoot upwards from the ground then immediately as the shot is leaving the screen, press up and jump to shinespark without delay.",
+        "A Charge shot can help, as it slows down the shot."
+      ],
+      "devNote": ["FIXME: Some of the heatFrames should come after the shinespark"]
+    },
+    {
+      "id": 33,
+      "link": [4, 1],
+      "name": "Speedjump, Through the Shot Block",
+      "requires": [
+        "canTrickyDashJump",
+        {"heatFrames": 150}
+      ],
+      "note": [
+        "This is a precise strat which requires maximum run speed.",
+        "Perform a spin jump right next to the left wall.",
+        "Shoot the block as Samus is about to leap through it, and land next to the door.",
+        "A down grab makes this a little easier."
+      ]
+    },
+    {
+      "id": 34,
+      "link": [4, 1],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"canShineCharge": {"usedTiles": 43, "openEnd": 0}},
+        {"or": [
+          "canPreciseWalljump",
+          "canTrickyJump",
+          "SpaceJump"
+        ]},
+        {"heatFrames": 540},
+        {"shineChargeFrames": 145}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 240}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 40}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": "Kill the enemies, break the shot block, then use the bottom to charge a spark. Quickly climb up before the block respawns, and continue through the left door."
+    },
+    {
+      "id": 35,
+      "link": [4, 1],
+      "name": "Leave Shinecharged Hero Shot",
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementComplex",
+        "canHeroShot",
+        {"canShineCharge": {"usedTiles": 43, "openEnd": 0}},
+        {"or": [
+          "canPreciseWalljump",
+          "canTrickyJump",
+          "SpaceJump"
+        ]},
+        {"heatFrames": 310},
+        {"shineChargeFrames": 155}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 500}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 180}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": "Kill the enemies, then use the bottom to charge a spark. Shoot the shot block from the ground and follow it up so that it breaks, and continue through the left door."
+    },
+    {
+      "id": 36,
+      "link": [4, 2],
+      "name": "Shinespark",
+      "requires": [
+        "canShinechargeMovement",
+        {"canShineCharge": {"usedTiles": 43, "openEnd": 0}},
+        {"heatFrames": 380},
+        {"shinespark": {"frames": 16, "excessFrames": 4}}
+      ],
+      "devNote": ["FIXME: Some of the heatFrames should come after the shinespark"]
+    },
+    {
+      "id": 37,
+      "link": [4, 2],
+      "name": "Speedjump (Left to Right)",
+      "requires": [
+        {"notable": "Speedjump (Left to Right)"},
+        "canTrickyDashJump",
+        {"or": [
+          "canWalljump",
+          "h_heatProof",
+          "canInsaneJump"
+        ]},
+        {"heatFrames": 150}
+      ],
+      "note": [
+        "This is a precise strat which requires maximum run speed.",
+        "Jump when passing under the floating platform and barely avoid hitting the rightmost wall.",
+        "Wall jump on the horizontal spire near to the door."
+      ]
+    },
+    {
+      "id": 38,
+      "link": [4, 2],
+      "name": "Leave Shinecharged",
+      "requires": [
+        "HiJump",
+        "canShinechargeMovementComplex",
+        {"canShineCharge": {"usedTiles": 43, "openEnd": 0}},
+        {"heatFrames": 320},
+        {"shineChargeFrames": 120}
+      ],
+      "exitCondition": {
+        "leaveShinecharged": {}
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 180}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 120}]
+        }
+      ],
+      "flashSuitChecked": true,
+      "note": "Kill the enemies and use the bottom to charge a spark. Quickly climb then spark through the right door."
+    },
+    {
+      "id": 39,
+      "link": [4, 3],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 40,
+      "link": [4, 4],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 41,
+      "link": [4, 5],
+      "name": "Base",
+      "requires": [
+        {"heatFrames": 0}
+      ]
+    },
+    {
+      "id": 42,
+      "link": [5, 2],
+      "name": "Base",
+      "requires": [
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"heatFrames": 70}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"heatFrames": 125}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 43,
+      "link": [5, 2],
+      "name": "Move Assist Leave with Runway",
+      "requires": [
+        {"or": [
+          {"and": [
+            "HiJump",
+            {"heatFrames": 50}
+          ]},
+          {"and": [
+            "SpaceJump",
+            {"heatFrames": 105}
+          ]}
+        ]}
+      ],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 5,
+          "openEnd": 0
+        }
+      },
+      "unlocksDoors": [
+        {
+          "types": ["missiles"],
+          "requires": [{"heatFrames": 50}]
+        },
+        {"types": ["super"], "requires": []},
+        {
+          "types": ["powerbomb"],
+          "requires": [{"heatFrames": 110}]
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "link": [5, 2],
+      "name": "MidAir SpringBall",
+      "requires": [
+        "canSpringBallJumpMidAir",
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 45,
+      "link": [5, 2],
+      "name": "IBJ",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canIBJ",
+            {"heatFrames": 1020}
+          ]},
+          {"and": [
+            "canDoubleBombJump",
+            {"heatFrames": 510}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 46,
+      "link": [5, 2],
+      "name": "Jump into IBJ",
+      "requires": [
+        {"or": [
+          {"and": [
+            "canJumpIntoIBJ",
+            {"heatFrames": 450}
+          ]},
+          {"and": [
+            "canDoubleBombJump",
+            {"heatFrames": 300}
+          ]}
+        ]}
+      ]
+    },
+    {
+      "id": 47,
+      "link": [5, 2],
+      "name": "Walljump into Unmorph Bomb Boost",
+      "requires": [
+        "canInsaneWalljump",
+        "canWallJumpInstantMorph",
+        "canUnmorphBombBoost",
+        "canDownGrab",
+        {"heatFrames": 215}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Use a fully delayed walljump to gain enough horizontal distance to place a bomb past the lip of the overhang.",
+        "Unmorph to hover in the air above the bomb while it explodes.",
+        "Ride the explosion into a down-grab to reach the ledge."
+      ]
+    },
+    {
+      "id": 48,
+      "link": [5, 2],
+      "name": "Sova Boost (Walljump)",
+      "requires": [
+        {"notable": "Sova Boost"},
+        "canInsaneWalljump",
+        "canWallJumpInstantMorph",
+        "canNeutralDamageBoost",
+        "canCameraManip",
+        {"heatFrames": 830},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        {"heatFrames": 90}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Wait for the global Sova to begin climbing the wall below the door.",
+        "Time a walljump into instant morph where Samus boosts off of the Sova with the right timing to bounce up to the door's ledge.",
+        "The jump must be a fully delayed walljump.",
+        "Normalizing the camera can help with timing the walljump.",
+        "The damage boost can be attempted again when the Sova climbs down the left wall, or by knocking it off the wall with a Super Missile."
+      ]
+    },
+    {
+      "id": 49,
+      "link": [5, 2],
+      "name": "Sova Boost (Reserve Double Damage Boost)",
+      "requires": [
+        {"notable": "Sova Boost"},
+        "canCrouchJump",
+        "canInsaneJump",
+        {"or": [
+          "canMidAirMorph",
+          "canOffScreenMovement"
+        ]},
+        "canCameraManip",
+        "canReserveDoubleDamageBoost",
+        {"heatFrames": 830},
+        {"autoReserveTrigger": {"minReserveEnergy": 85}},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        {"heatFrames": 90}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Wait for the global Sova to begin climbing the wall below the door.",
+        "Have Reserves set to manual and couch jump up above the Sova as it turns the lip of the ledge.",
+        "Before touching the Sova, pause, so that Samus will recieve a small damage boost followed by pause screen appearing.",
+        "Set Reserves back to auto which will end Samus' i-frames enabling a second damage boost.",
+        "Without Morphball, this requires a blind damage boost."
+      ]
+    },
+    {
+      "id": 50,
+      "link": [5, 2],
+      "name": "Sova Boost (Reserve Delay Bomb Boost and Sova Boost)",
+      "requires": [
+        {"notable": "Sova Boost"},
+        "h_bombThings",
+        "canMidAirMorph",
+        "canTrickyJump",
+        "canCrouchJump",
+        "canManageReserves",
+        "canCameraManip",
+        {"heatFrames": 830},
+        {"autoReserveTrigger": {"minReserveEnergy": 85}},
+        {"enemyDamage": {"enemy": "Sova", "type": "contact", "hits": 1}},
+        {"heatFrames": 90}
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "Wait for the global Sova to begin climbing the wall below the door.",
+        "Time a crouch jump to touch the Sova as it begins to climb lip of the ledge to the door.",
+        "Just before the collision, place a Bomb or Power Bomb.",
+        "Reserves will activate which will suspend Samus in the air on top of the Bomb while it explodes.",
+        "This will give two height boosts, allowing Samus to reach the door."
+      ]
+    },
+    {
+      "id": 51,
+      "link": [5, 3],
+      "name": "Base",
+      "requires": [
+        "canDodgeWhileShooting",
+        {"heatFrames": 350}
+      ]
+    },
+    {
+      "id": 52,
+      "link": [5, 3],
+      "name": "Tank a Hit",
+      "requires": [
+        {"heatFrames": 160},
+        {"enemyDamage": {"enemy": "Sm. Dessgeega", "type": "contact", "hits": 1}}
+      ]
+    },
+    {
+      "id": 53,
+      "link": [5, 4],
+      "name": "Plasma Kill",
+      "requires": [
+        "Plasma",
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 54,
+      "link": [5, 4],
+      "name": "Screw Kill",
+      "requires": [
+        "ScrewAttack",
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 55,
+      "link": [5, 4],
+      "name": "Ammo Kill",
+      "requires": [
+        {"enemyKill": {
+          "enemies": [["Sm. Dessgeega", "Sm. Dessgeega"]],
+          "explicitWeapons": ["Missile", "Super"]
+        }},
+        {"heatFrames": 100}
+      ]
+    },
+    {
+      "id": 56,
+      "link": [5, 4],
+      "name": "Intermediate Beam Kill",
+      "requires": [
+        {"or": [
+          "Wave",
+          "Spazer"
+        ]},
+        {"heatFrames": 200}
+      ]
+    },
+    {
+      "id": 57,
+      "link": [5, 4],
+      "name": "Power Beam Kill",
+      "requires": [
+        {"heatFrames": 350}
+      ]
+    },
+    {
+      "id": 68,
+      "link": [5, 5],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_heatedCrystalFlash"
+      ],
+      "flashSuitChecked": true,
+      "note": [
+        "If the Dessgeegas are still alive, perform the Crystal Flash on the floating platform to be safe.",
+        "By performing it on the far left edge of the platform (hanging over the edge slightly),",
+        "both Dessgeegas can be killed by the Power Bomb blast."
+      ],
+      "devNote": [
+        "FIXME: Model killing the Dessgeegas using a Power Bomb or Crystal Flash here."
+      ]
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "10 Power Bomb Crystal Flash",
+      "note": [
+        "Use a Sm. Dessgeega to collect a Power Bomb, to be able to perform a Crystal Flash with a capacity of only 10 Power Bombs.",
+        "Normalized whole-room movement can be used to manipulate the Sm. Dessgeegas, to be able to do this strat reliably without heat protection.",
+        "For details, see the individual strats, as the specific technique depends on whether entering from the left or right side of the room."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Sova Boost",
+      "note": [
+        "Wait for the global Sova to begin climbing the wall below the right side door.",
+        "Jump into it just before it reaches the ledge that the door is on to gain height through a neutral damage boost.",
+        "The jump can be either a difficult walljump or a crouch jump combined with a type of Bomb and the refill effect of Reserve tanks.",
+        "Maniputlating the camera can help normalizing the timing of the jump."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Left Door Frozen Sova Step",
+      "wallJumpAvoid": true,
+      "note": [
+        "Guide the morph tunnel Sova on top of the shot blocks by keeping it on camera.",
+        "Move the camera away once it is on top of the shot blocks.  It will not move while off camera.",
+        "Stand directly below the OffCamera Sova and fire up and jump to break the shot blocks.",
+        "Either lower its health while guiding it, or as it begins to fall, there is time.",
+        "As it falls, shoot again to freeze it at the right height.",
+        "As a backup, the same Sova can be frozen on the left wall, dropped from the shot blocks again, or frozen on the right wall."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Sova Morph Only Boost",
+      "note": [
+        "Use a very well timed and precise walljump into morph to hit the global Sova so that the damage bonks Samus up to the door ledge.",
+        "Aim for the lowest part of slope looking wall tile, where it does not look possible to make contact with a walljump, and fully delay the jump.",
+        "To try again, the Sova loops to the left side wall. Or a Super can knock it off the wall to climb the right side again."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Speedjump (Left to Right)",
+      "note": [
+        "This is a precise strat which requires maximum run speed.",
+        "Jump when passing under the floating platform and barely avoid hitting the rightmost wall.",
+        "Wall jump on the horizontal spire near to the door."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Dessgeega Dodge (Right-to-Left)",
+      "note": [
+        "By entering the room in a specific way, manipulate the Sm. Dessgeegas to hop in a way that",
+        "they do not block Samus' path while traversing the room from right to left."
+      ]
+    }
+  ],
+  "nextStratId": 69,
+  "nextNotableId": 8
+}

@@ -1,0 +1,170 @@
+# this file is for removal of triggers that would arbitrarily restrict the
+# game, and in some cases even cause softlocks. essences are the biggest
+# culprit, but there are some other weird things, like not/having a certain
+# item or not/having a certain global flag set (that wouldn't logically cause
+# whatever event that it causes).
+
+# only increment the maku tree's state if on the maku tree screen, or if
+# all essences are obtained, set it to the value it would normally have at
+# that point in the game. this allows getting the maku tree's item as long
+# as you haven't collected all essences.
+00//checkMakuState: |
+    ld a,(wActiveGroup)
+    cp $02
+    jr nc,@notAtMakuTree
+    ld a,(wActiveRoom)
+    cp $38
+    jr nz,@notAtMakuTree
+    ld a,(wMakuTreeState)
+    inc a
+    cp $11
+    ret
+    @notAtMakuTree:
+    ld a,($c738)
+    and $20
+    jp z,@notAllEssences
+    ld a,(wEssencesObtained)
+    call getNumSetBits
+    cp option.requiredEssences
+    jr c,@notAllEssences
+    scf
+    ld a,$0e
+    ret
+    @notAllEssences:
+    scf
+    ld a,(wMakuTreeState)
+    ret
+    
+00/3e56/: call checkMakuState
+
+# make ricky appear if you have his gloves, even if rafton doesn't have rope.
+0a//checkShouldRickyAppear: |
+    call checkGlobalFlag
+    ret nz
+    ld a,($c6a3) # byte in wObtainedTreasureFlags
+    bit 0,a
+    ret nz
+    ld a,(wRickyState)
+    or a
+    ret
+0a/4bb8/: call checkShouldRickyAppear
+
+# require giving rafton rope before the island chart.
+0a//checkRaftonHasRope: |
+    call checkTreasureObtained
+    ret nc
+    ld a,$15
+    call checkGlobalFlag
+    ret z
+    scf
+    ret
+0a/4d5f/: call checkRaftonHasRope
+
+# initiate all these events without requiring essences:
+04/6a44/: nop        # clear rubble from rolling ridge base present
+04/6a35/: nop        # open "new" rolling ridge present tunnel
+09/5815/: jr z,$00    # dimitri
+0a/4bb2/: jr z,$00    # ^
+09/51f8/: |
+    xor a
+    ret # open palace
+09/6567/: nop        # move impa out of the way to nayru's house
+0a/4d7a/: jr $01      # rafton
+15/6261/: jr c,$00    # comedian (TODO : Check this if comedian doesn't work properly)
+
+# moosh (and ghinis) should appear in the graveyard without:
+05/78b8/: |
+    xor a
+    xor a
+    xor a # not having cheval rope
+0a/4b92/: |
+    xor a
+    xor a
+    xor a # ^
+0a/4ba3/: |
+    xor a
+    xor a
+    xor a # ^
+0a/4b85/: or $01 # essences
+0a/5943/: or $01 # ^
+0a/5dd5/: or $01 # ^
+0a/4b8c/: or $01 # talking to cheval
+0a/594b/: or $01 # ^
+0a/5ddc/: or $01 # ^
+
+# sell 150 rupee item from lynna city shop from the start
+# TODO : Shop !
+09/4333/: |
+    nop
+    nop 
+
+# saving nayru without having saved the maku tree leads to weirdness, so just
+# save the maku tree along with nayru.
+0a//saveMakuTreeWithNayru: |
+    call setGlobalFlag
+    ld a,(wMakuTreeState)
+    cp $0e
+    jr z,@next
+    ld a,$02
+    @next:
+    dec a
+    ld (wMakuTreeState),a
+    ld a,$0c
+    call setGlobalFlag
+    ld a,$12
+    call setGlobalFlag
+    ld a,$3f
+    call setGlobalFlag
+    push hl
+    ld hl,$c738
+    res 0,(hl)
+    inc h
+    set 7,(hl)
+    ld l,$48
+    set 0,(hl)
+    pop hl
+    ret
+0a/5541/: call saveMakuTreeWithNayru
+
+# skip essence checks for goron elder event.
+0c/6b1d/: |
+    db jumpifmemoryset
+    dw $cddb
+    db $00
+0c/6b83/: |
+    db jumpifmemoryset
+    dw $cddb
+    db $00
+15/735d/: |
+    db jumpifmemoryset
+    dw $cddb
+    db $00
+
+# keep black tower in initial state until the player gets the item from the
+# worker.
+10//checkBlackTowerState: |
+    ld hl,$7927
+    ret z
+    ld a,($c9e1)
+    and $20
+    ret
+10/7914/: call checkBlackTowerState
+
+# change symmetry city wives' state based on brother's item obtained, not
+# global flag (fool's ore is used as a "dummy" item id set by the brothers.
+15/784f/: db jumpifglobalflagset,GLOBALFLAG_GOT_TUNINUT_FROM_BROTHER
+# don't change symmetry city brothers' state if the tuni nut has been placed.
+15/78e5/: db jumpifroomflagset,$02
+# Ignore the fact that the player has already the tuni nut
+15/78f5/: db jumpifglobalflagset,GLOBALFLAG_GOT_TUNINUT_FROM_BROTHER
+# Rewrite symmetryNpc_getTuniNutState
+15/77ef/: |
+    ld a,GLOBALFLAG_GOT_TUNINUT_FROM_BROTHER
+    call checkGlobalFlag
+    ld b,$00
+    jr z,@notTaken
+    inc b
+    @notTaken:
+    ld a,b
+    ld ($cfc1),a
+    ret

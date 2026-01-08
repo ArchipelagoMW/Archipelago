@@ -1,0 +1,78 @@
+02//checkTreeVisited: |
+    cp STARTING_TREE_MAP_INDEX
+    jp nz,$6560     ; _mapMenu_checkRoomVisited
+    or a
+    ret
+02/5ec8/: call checkTreeVisited
+02/65e1/: call checkTreeVisited
+
+# always treat starting seed tree as visited for warping purposes.
+02//checkCursorVisited: |
+    ld a,(wMapMenuCursorIndex)
+    jp checkTreeVisited
+02/609b/: call checkCursorVisited
+
+# warp to horon village tree if holding start when opening the map screen.
+02//checkWarpToStart: |
+    ld a,(wKeysPressed)
+    and BTN_B | BTN_A
+    cp BTN_B | BTN_A
+    jp nz,$5029 ; @openMenu, we're done
+    
+    call checkLinkCollisionsEnabled ; we want to check if Link is not in the middle of an action
+    jp nc,$5029 ; @openMenu, we're done
+    
+    ld a,option.startingGroup
+    set 7,a
+    ld (wWarpDestGroup),a
+    ld a,option.startingRoom        ; Starting room ID
+    ld (wWarpDestRoom),a
+    ld a,option.startingPos         ; Position in starting room
+    ld (wWarpDestPos),a
+    ld a,$05                        ; TRANSITION_DEST_FALL
+    ld (wWarpTransition),a
+    ld a,$03
+    ld (wWarpTransition2),a
+    ld a,$ff
+    ld (wDisabledObjects),a
+    ld a,option.startingSeason
+    ld (wRoomStateModifier),a
+    
+    ; Setup respawn to prevent save-scumming
+    ld hl,wDeathRespawnBuffer
+    ld a,option.startingGroup
+    ldi (hl),a  ; Room group
+    ld a,option.startingRoom
+    ldi (hl),a  ; Room
+    ld a,option.startingSeason
+    ldi (hl),a  ; Season
+    ld a,$02
+    ldi (hl),a  ; Direction
+    ld a,option.startingPosY
+    ldi (hl),a  ; Y
+    ld a,option.startingPosX
+    ld (hl),a   ; X
+    
+    ld a,SND_TELEPORT
+    call playSound
+    
+    ld a,$03
+    call setMusicVolume
+    call clearStaticObjects
+    
+    ld a,$d0
+    ld (wLinkObjectIndex),a
+    
+    ld a,$03
+    ld (wMenuLoadState),a
+    
+    ld a,(wActiveMusic)
+    or a
+    jr nz,@noResetMusic
+    ld a,$ff
+    ld (wActiveMusic),a
+    @noResetMusic:
+    pop af      ; pop return addr from stack
+    ret
+# Replace the unique call to @openMenu by the above extension checking for warp to start
+02/501f/: call checkWarpToStart

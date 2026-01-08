@@ -1,0 +1,1199 @@
+[
+    {
+        "name": "Bannan Island",
+        "sections": [
+{"name": "Bannan Island East Grapple Chest East"},
+{"name": "Bannan Island East Grapple Chest West"},
+{"name": "Bannan Island East Grapple Dig"},
+{"name": "Bannan Island Entrance Grapple Chest"},
+{"name": "Bannan Island Wayfarer Dig"},
+{"name": "Bannan Island Cannon Game"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 374,
+                "y": 64
+            }
+        ]
+    },
+      {
+        "name": "Bannan Island Wayfarer",
+        "sections": [
+{"name": "Bannan Island Wayfarer Give Loovar"},
+{"name": "Bannan Island Wayfarer Give Rusty Swordfish"},
+{"name": "Bannan Island Wayfarer Give Legendary Neptoona"},
+{"name": "Bannan Island Wayfarer Give Stowfish"},
+{"name": "Bannan Island Give Letter to Joanne"},
+{"name": "Bannan Island Wayfarer Gift"},
+{"name": "Bannan Island Wayfarer Trade Quest Chest"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 374,
+                "y": 48
+            }
+        ]
+    },
+    {
+        "name": "Beedle's Ship",
+        "sections": [
+{"name": "Beedle Membership Bronze"},
+{"name": "Beedle Membership Gold"},
+{"name": "Beedle Membership Platinum"},
+{"name": "Beedle Membership Silver"},
+{"name": "Beedle Membership VIP"},
+{"name": "Beedle Shop Bomb Bag"},
+{"name": "Beedle Shop Wisdom Gem"},
+{"name": "Masked Beedle Courage Gem"},
+{"name": "Masked Beedle Heart Container"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 472,
+                "y": 421
+            }
+        ]
+    },
+      {
+        "name": "Fish",
+        "sections": [
+{"name": "Fishing Catch Skippyjack"},
+{"name": "Fishing Catch Toona"},
+{"name": "Fishing Catch Loovar"},
+{"name": "Fishing Catch Rusty Swordfish"},
+{"name": "Fishing Catch Legendary Neptoona"},
+{"name": "Fishing Catch Stowfish"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 472,
+                "y": 437
+            }
+        ]
+    },
+    {
+        "name": "Cannon Island",
+        "sections": [
+{"name": "Cannon Island Bee Chest"},
+{"name": "Cannon Island Bee Dig"},
+{"name": "Cannon Island Bonk Tree"},
+{"name": "Cannon Island Cannon"},
+{"name": "Cannon Island Cave Chest"},
+{"name": "Cannon Island Cliff Chest"},
+{"name": "Cannon Island East Dig"},
+{"name": "Cannon Island Salvage Arm"},
+{"name": "Cannon Island SE Dig"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 327,
+                "y": 652
+            }
+        ]
+    },
+    {
+        "name": "Dee Ess",
+        "sections": [
+{"name": "Dee Ess Blow in Microphone Chest"},
+{"name": "Dee Ess Eye Brute Chest"},
+{"name": "Dee Ess Left Speakers Dig SSW"},
+{"name": "Dee Ess Left Speakers Dig West"},
+{"name": "Dee Ess Menu Button Dig"},
+{"name": "Dee Ess Right Speakers Dig SE"},
+{"name": "Dee Ess Win Goron Game"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 842,
+                "y": 711
+            }
+        ]
+    },
+    {
+        "name": "Ghost Ship",
+        "sections": [
+{"name": "Ghost Ship B1 Entrance Chest"},
+{"name": "Ghost Ship B1 Second Sister Chest"},
+{"name": "Ghost Ship B2 Spike Chest"},
+{"name": "Ghost Ship B2 Third Sister Left Chest"},
+{"name": "Ghost Ship B2 Third Sister Right Chest"},
+{"name": "Ghost Ship B3 Chest"},
+{"name": "Cubus Sisters Ghost Key"},
+{"name": "Cubus Sisters Heart Container"},
+{"name": "Ghost Ship Rescue Tetra"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 77,
+                "y": 198
+            }
+        ]
+    },
+    {
+        "name": "GOAL: Beat Bellumbeck",
+        "sections": [
+{"name": "GOAL: Beat Bellumbeck"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 302,
+                "y": 553
+            }
+        ]
+    },
+    {
+        "name": "Goron Island",
+        "sections": [
+{"name": "Goron Island Chief Post Dungeon Item"},
+{"name": "Goron Island Goron Quiz"},
+{"name": "Goron Island Grapple Chest"},
+{"name": "Goron Island North Bombchu Switch Chest"},
+{"name": "Goron Island North Dead End Chest"},
+{"name": "Goron Island North Spike Chest"},
+{"name": "Goron Island Yellow Chu Item"},
+{"name": "Island Shop Bombchu Bag"},
+{"name": "Island Shop Heart Container"},
+{"name": "Island Shop Power Gem"},
+{"name": "Island Shop Quiver"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 685,
+                "y": 670
+            }
+        ]
+    },
+    {
+        "name": "Goron Temple",
+        "sections": [
+{"name": "Goron Temple 1F Bow Chest"},
+{"name": "Goron Temple 1F Switch Chest"},
+{"name": "Goron Temple B1 Bombchu Bag Chest"},
+{"name": "Goron Temple B1 Kill Eyeslugs Chest"},
+{"name": "Goron Temple B2 Boss Key Chest"},
+{"name": "Goron Temple B2 Kill Eyeslugs Chest"},
+{"name": "Goron Temple B3 Kill Miblins Chest"},
+{"name": "Dongorongo Boss Reward"},
+{"name": "Dongorongo Heart Container"},
+{"name": "Dongorongo Sand of Hours"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 685,
+                "y": 654
+            }
+        ]
+    },
+    {
+        "name": "Harrow Island",
+        "sections": [
+{"name": "Harrow Island Dig 1"},
+{"name": "Harrow Island Dig 2"},
+{"name": "Harrow Island Dig 3"},
+{"name": "Harrow Island Dig 4"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 694,
+                "y": 470
+            }
+        ]
+    },
+    {
+        "name": "Isle of Ember",
+        "sections": [
+{"name": "Isle of Ember Astrid after Fire Temple"},
+{"name": "Isle of Ember Astrid's Basement Dig"},
+{"name": "Isle of Ember Grapple Chest"},
+{"name": "Isle of Ember Summit Chest"},
+{"name": "Isle of Ember Summit Dig"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 424,
+                "y": 722
+            }
+        ]
+    },
+    {
+        "name": "Isle of Frost",
+        "sections": [
+{"name": "Isle of Frost Chief House Dig"},
+{"name": "Isle of Frost Estate Dobo Dig (SW)"},
+{"name": "Isle of Frost Estate SE Island Dig"},
+{"name": "Isle of Frost Estate Sign Dig"},
+{"name": "Isle of Frost Estate SW Island Dig"},
+{"name": "Isle of Frost Estate Fofo Dig (SE)"},
+{"name": "Isle of Frost Ice Field East Ledge Chest"},
+{"name": "Isle of Frost Ice Field SE Ledge Chest"},
+{"name": "Isle of Frost Ice Field South Ledge East Chest"},
+{"name": "Isle of Frost Ice Field South Ledge West Chest"},
+{"name": "Isle of Frost Nobodo Grapple Chest"},
+{"name": "Isle of Frost Stand on Peg Gift"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 930,
+                "y": 501
+            }
+        ]
+    },
+    {
+        "name": "Isle of Gust",
+        "sections": [
+{"name": "Isle of Gust East Cliff Dig"},
+{"name": "Isle of Gust Hideout Chest"},
+{"name": "Isle of Gust Miblin Cave North Chest"},
+{"name": "Isle of Gust Miblin Cave South Chest"},
+{"name": "Isle of Gust NW Dig"},
+{"name": "Isle of Gust Sandworm Chest"},
+{"name": "Isle of Gust West Cliff Chest"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 290,
+                "y": 253
+            }
+        ]
+    },
+    {
+        "name": "Isle of Ruins",
+        "sections": [
+{"name": "Isle of Ruins Upper Bonk Tree"},
+{"name": "Isle of Ruins Dodge Boulders Chest"},
+{"name": "Isle of Ruins Doylan's Item"},
+{"name": "Isle of Ruins Like-Like Dig"},
+{"name": "Isle of Ruins Lower Water Cave Chest"},
+{"name": "Isle of Ruins Maze Chest"},
+{"name": "Isle of Ruins Outside Doylan's Temple Chest"},
+{"name": "Isle of Ruins Outside Mutoh's Temple Chest"},
+{"name": "Isle of Ruins Push Boulder Chest"},
+{"name": "Isle of Ruins NW Lower Water Bonk Tree"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 701,
+                "y": 198
+            }
+        ]
+    },
+    {
+        "name": "Isle of the Dead",
+        "sections": [
+{"name": "Isle of the Dead Face Cave Chest"},
+{"name": "Isle of the Dead Face Chest"},
+{"name": "Isle of the Dead Regal Necklace Chest"},
+{"name": "Isle of the Dead Rupoor Cave 1"},
+{"name": "Isle of the Dead Rupoor Cave 2"},
+{"name": "Isle of the Dead Rupoor Cave 3"},
+{"name": "Isle of the Dead Rupoor Cave 4"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 894,
+                "y": 114
+            }
+        ]
+    },
+    {
+        "name": "Maze Island",
+        "sections": [
+{"name": "Maze Island Beginner"},
+{"name": "Maze Island Bonus Reward"},
+{"name": "Maze Island Expert"},
+{"name": "Maze Island Maze Chest"},
+{"name": "Maze Island NE Dig"},
+{"name": "Maze Island Normal"},
+{"name": "Maze Island NW Dig"},
+{"name": "Maze Island SE Dig"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 770,
+                "y": 48
+            }
+        ]
+    },
+    {
+        "name": "Mercay Island",
+        "sections": [
+{"name": "Mountain Passage Chest 1"},
+{"name": "Mountain Passage Chest 2"},
+{"name": "Mountain Passage Key Drop"},
+{"name": "Mountain Passage Rat Key"},
+{"name": "Mercay Clear Rocks"},
+{"name": "Mercay Cuccoo Chest"},
+{"name": "Mercay Freedle Gift Item"},
+{"name": "Mercay Freedle Island Chest"},
+{"name": "Mercay Freedle Tunnel Chest"},
+{"name": "Mercay Geozard Cave Chest"},
+{"name": "Mercay Geozard Cave South Chest East"},
+{"name": "Mercay Geozard Cave South Chest West"},
+{"name": "Mercay North Bonk Tree"},
+{"name": "Mercay Ojibe (Docks Guy) Item"},
+{"name": "Mercay Oshus Dig"},
+{"name": "Mercay Oshus Phantom Sword"},
+{"name": "Mercay Oshus Spirit Gem"},
+{"name": "Mercay Shipyard Chest"},
+{"name": "Mercay Sword Chest"},
+{"name": "Island Shop Bombchu Bag"},
+{"name": "Island Shop Heart Container"},
+{"name": "Island Shop Power Gem"},
+{"name": "Island Shop Quiver"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 379,
+                "y": 494
+            }
+        ]
+    },
+    {
+        "name": "Molida Island",
+        "sections": [
+{"name": "Molida Archery 1700"},
+          {"name": "Molida Archery 2000"},
+{"name": "Molida Cave Geozard Dig"},
+{"name": "Molida Cave Grapple Chest"},
+{"name": "Molida Cave Shovel Chest"},
+{"name": "Molida Cave Shovel Room Dig"},
+{"name": "Molida Cave Wayfarer Hideaway Chest"},
+{"name": "Molida Island 2nd House Chest"},
+{"name": "Molida Island Cliff Chest"},
+{"name": "Molida Island Cuccoo Grapple Small Island Dig"},
+{"name": "Molida Island Cuccoo Grapple Tree Dig"},
+{"name": "Molida Island North Dig Chest"},
+{"name": "Molida Island North Grapple Chest"},
+{"name": "Molida Island Romanos Tree Dig"},
+{"name": "Island Shop Bombchu Bag"},
+{"name": "Island Shop Heart Container"},
+{"name": "Island Shop Power Gem"},
+{"name": "Island Shop Quiver"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 128,
+                "y": 607
+            }
+        ]
+    },
+    {
+        "name": "Mutoh's Temple",
+        "sections": [
+{"name": "Mutoh's Temple 2F Like-Like Maze Chest"},
+{"name": "Mutoh's Temple 3F Hammer Chest"},
+{"name": "Mutoh's Temple B1 Boss Key Chest"},
+{"name": "Mutoh's Temple B1 Lower Water Chest"},
+{"name": "Mutoh's Temple B1 Push Boulder Chest"},
+{"name": "Mutoh's Temple B2 Ledge Chest"},
+{"name": "Mutoh's Temple B2 Spike Roller Chest"},
+{"name": "Eox Boss Reward"},
+{"name": "Eox Sand of Hours"},
+{"name": "Eox Heart Container"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 701,
+                "y": 182
+            }
+        ]
+    },
+    {
+        "name": "Ocean NE Golden Frog Square",
+        "sections": [
+{"name": "Ocean NE Golden Frog Square"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 851,
+                "y": 260
+            }
+        ]
+    },
+    {
+        "name": "Ocean NE Man of Smiles",
+        "sections": [
+{"name": "Ocean NE Man Of Smiles Item 1"},
+{"name": "Ocean NE Man Of Smiles Item 2"},
+{"name": "Ocean NE Man of Smiles Prize Postcard"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 934,
+                "y": 292
+            }
+        ]
+    },
+    {
+        "name": "Ocean NE Salvage #24 Ruins W",
+        "sections": [
+{"name": "Ocean NE Salvage #24 Ruins W"}
+
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 579,
+                "y": 199
+            }
+        ]
+    },
+    {
+        "name": "Ocean NE Salvage #25 Dead E",
+        "sections": [
+{"name": "Ocean NE Salvage #25 Dead E"}
+
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 917,
+                "y": 135
+            }
+        ]
+    },
+    {
+        "name": "Ocean NE Salvage #26 Ruins SW",
+        "sections": [
+{"name": "Ocean NE Salvage #26 Ruins SW"}
+
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 655,
+                "y": 224
+            }
+        ]
+    },
+    {
+        "name": "Ocean NE Salvage #27 Maze E",
+        "sections": [
+{"name": "Ocean NE Salvage #27 Maze E"}
+
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 802,
+                "y": 59
+            }
+        ]
+    },
+    {
+        "name": "Ocean NE Salvage #28 Ruins NW",
+        "sections": [
+{"name": "Ocean NE Salvage #28 Ruins NW"}
+
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 648,
+                "y": 141
+            }
+        ]
+    },
+    {
+        "name": "Ocean NE Salvage #29 Maze W",
+        "sections": [
+{"name": "Ocean NE Salvage #29 Maze W"}
+
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 627,
+                "y": 45
+            }
+        ]
+    },
+    {
+        "name": "Ocean NE Salvage #30 Ruins S",
+        "sections": [
+{"name": "Ocean NE Salvage #30 Ruins S"}
+
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 700,
+                "y": 305
+            }
+        ]
+    },
+    {
+        "name": "Ocean NE Salvage #31 Dead S",
+        "sections": [
+{"name": "Ocean NE Salvage #31 Dead S"}
+
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 879,
+                "y": 259
+            }
+        ]
+    },
+    {
+        "name": "Ocean NW Golden Frog N",
+        "sections": [
+{"name": "Ocean NW Golden Frog N"}
+
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 303,
+                "y": 136
+            }
+        ]
+    },
+    {
+        "name": "Ocean NW Prince of Red",
+        "sections": [
+{"name": "Ocean NW Prince of Red Lion Combat Reward"},
+{"name": "Ocean NW Prince of Red Lions Trade Quest Item"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 428,
+                "y": 286
+            }
+        ]
+    },
+    {
+        "name": "Ocean NW Salvage #10 Gusts SE",
+        "sections": [
+{"name": "Ocean NW Salvage #10 Gusts SE"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 343,
+                "y": 287
+            }
+        ]
+    },
+    {
+        "name": "Ocean NW Salvage #11 Gusts N",
+        "sections": [
+{"name": "Ocean NW Salvage #11 Gusts N"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 281,
+                "y": 187
+            }
+        ]
+    },
+    {
+        "name": "Ocean NW Salvage #19 Gusts NE",
+        "sections": [
+{"name": "Ocean NW Salvage #19 Gusts NE"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 351,
+                "y": 176
+            }
+        ]
+    },
+    {
+        "name": "Ocean NW Salvage #20 Bannan E",
+        "sections": [
+{"name": "Ocean NW Salvage #20 Bannan E"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 453,
+                "y": 63
+            }
+        ]
+    },
+    {
+        "name": "Ocean NW Salvage #3 Gusts SW",
+        "sections": [
+{"name": "Ocean NW Salvage #3 Gusts SW"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 235,
+                "y": 288
+            }
+        ]
+    },
+    {
+        "name": "Ocean NW Salvage #4 Bannan SE",
+        "sections": [
+{"name": "Ocean NW Salvage #4 Bannan SE"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 428,
+                "y": 112
+            }
+        ]
+    },
+    {
+        "name": "Ocean NW Salvage #6 Bannan W",
+        "sections": [
+{"name": "Ocean NW Salvage #6 Bannan W"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 275,
+                "y": 89
+            }
+        ]
+    },
+    {
+        "name": "Ocean NW Salvage #7 Gusts E",
+        "sections": [
+{"name": "Ocean NW Salvage #7 Gusts E"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 401,
+                "y": 252
+            }
+        ]
+    },
+    {
+        "name": "Ocean Pirate Ambush Item",
+        "sections": [
+{"name": "Ocean Miniblin Pirate Ambush Item"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 468,
+                "y": 345
+            }
+        ]
+    },
+    {
+        "name": "Ocean SE Golden Frog Omega",
+        "sections": [
+{"name": "Ocean SE Golden Frog Omega"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 805,
+                "y": 644
+            }
+        ]
+    },
+    {
+        "name": "Ocean SE Golden Frog W",
+        "sections": [
+{"name": "Ocean SE Golden Frog W"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 861,
+                "y": 460
+            }
+        ]
+    },
+    {
+        "name": "Ocean SE Hoiger Howgendoogen",
+        "sections": [
+{"name": "Ocean SE Hoiger Howgendoogen Trade Quest Item"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 840,
+                "y": 516
+            }
+        ]
+    },
+    {
+        "name": "Ocean SE Salvage #12 Dee Ess N",
+        "sections": [
+{"name": "Ocean SE Salvage #12 Dee Ess N"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 865,
+                "y": 640
+            }
+        ]
+    },
+    {
+        "name": "Ocean SE Salvage #13 Harrow E",
+        "sections": [
+{"name": "Ocean SE Salvage #13 Harrow E"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 736,
+                "y": 460
+            }
+        ]
+    },
+    {
+        "name": "Ocean SE Salvage #14 Goron NW",
+        "sections": [
+{"name": "Ocean SE Salvage #14 Goron NW"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 616,
+                "y": 598
+            }
+        ]
+    },
+    {
+        "name": "Ocean SE Salvage #15 Goron W",
+        "sections": [
+{"name": "Ocean SE Salvage #15 Goron W"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 594,
+                "y": 644
+            }
+        ]
+    },
+    {
+        "name": "Ocean SE Salvage #16 Goron NE",
+        "sections": [
+{"name": "Ocean SE Salvage #16 Goron NE"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 803,
+                "y": 581
+            }
+        ]
+    },
+    {
+        "name": "Ocean SE Salvage #17 Frost S",
+        "sections": [
+{"name": "Ocean SE Salvage #17 Frost S"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 937,
+                "y": 676
+            }
+        ]
+    },
+    {
+        "name": "Ocean SE Salvage #22 Harrow S",
+        "sections": [
+{"name": "Ocean SE Salvage #22 Harrow S"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 700,
+                "y": 523
+            }
+        ]
+    },
+    {
+        "name": "Ocean SE Salvage #23 Frost NW",
+        "sections": [
+{"name": "Ocean SE Salvage #23 Frost NW"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 891,
+                "y": 451
+            }
+        ]
+    },
+    {
+        "name": "Ocean SW Golden Frog Phi",
+        "sections": [
+{"name": "Ocean SW Golden Frog Phi"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 81,
+                "y": 536
+            }
+        ]
+    },
+    {
+        "name": "Ocean SW Golden Frog X",
+        "sections": [
+{"name": "Ocean SW Golden Frog X"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 403,
+                "y": 616
+            }
+        ]
+    },
+    {
+        "name": "Ocean SW Nyave",
+        "sections": [
+{"name": "Ocean SW Nyave Trade Quest Item"},
+{"name": "Ocean SW Nyave Treasure"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 48,
+                "y": 726
+            }
+        ]
+    },
+    {
+        "name": "Ocean SW Salvage #1 Molida SW",
+        "sections": [
+{"name": "Ocean SW Salvage #1 Molida SW"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 51,
+                "y": 660
+            }
+        ]
+    },
+    {
+        "name": "Ocean SW Salvage #18 Cannon S",
+        "sections": [
+{"name": "Ocean SW Salvage #18 Cannon S"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 314,
+                "y": 720
+            }
+        ]
+    },
+    {
+        "name": "Ocean SW Salvage #2 Mercay NE",
+        "sections": [
+{"name": "Ocean SW Salvage #2 Mercay NE"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 432,
+                "y": 451
+            }
+        ]
+    },
+    {
+        "name": "Ocean SW Salvage #21 Molida NW",
+        "sections": [
+{"name": "Ocean SW Salvage #21 Molida NW"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 53,
+                "y": 534
+            }
+        ]
+    },
+    {
+        "name": "Ocean SW Salvage #5 Molida N",
+        "sections": [
+{"name": "Ocean SW Salvage #5 Molida N"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 133,
+                "y": 561
+            }
+        ]
+    },
+    {
+        "name": "Ocean SW Salvage #8 Mercay SE",
+        "sections": [
+{"name": "Ocean SW Salvage #8 Mercay SE"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 433,
+                "y": 567
+            }
+        ]
+    },
+    {
+        "name": "Ocean SW Salvage #9 Cannon W",
+        "sections": [
+{"name": "Ocean SW Salvage #9 Cannon W"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 254,
+                "y": 682
+            }
+        ]
+    },
+    {
+        "name": "Ocean SW Salvage Courage Crest",
+        "sections": [
+{"name": "Ocean SW Salvage Courage Crest"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 277,
+                "y": 572
+            }
+        ]
+    },
+    {
+        "name": "Spirit Island",
+        "sections": [
+{"name": "Spirit Island Courage Upgrade Level 1"},
+{"name": "Spirit Island Courage Upgrade Level 2"},
+{"name": "Spirit Island Gauntlet Chest"},
+{"name": "Spirit Island Outside Chest"},
+{"name": "Spirit Island Power Upgrade Level 1"},
+{"name": "Spirit Island Power Upgrade Level 2"},
+{"name": "Spirit Island Wisdom Upgrade Level 1"},
+{"name": "Spirit Island Wisdom Upgrade Level 2"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 128,
+                "y": 706
+            }
+        ]
+    },
+    {
+        "name": "Temple of Courage",
+        "sections": [
+{"name": "Temple of Courage 1F Bomb Alcove Chest"},
+{"name": "Temple of Courage 1F Map Room Chest East"},
+{"name": "Temple of Courage 1F Map Room Chest West"},
+{"name": "Temple of Courage 1F Pols Voice Key"},
+{"name": "Temple of Courage 1F Pols Voice Key 2"},
+{"name": "Temple of Courage 1F Raised Platform Chest"},
+{"name": "Temple of Courage 2F Beamos Maze Chest"},
+{"name": "Temple of Courage 2F Boss Key Chest"},
+{"name": "Temple of Courage 2F Moving Platform Chest"},
+{"name": "Temple of Courage 2F Spike Corridor Chest"},
+{"name": "Temple of Courage 3F Before Boss Chest"},
+{"name": "Temple of Courage B1 Bow Chest"},
+{"name": "Temple of Courage B1 Maze Chest"},
+{"name": "Temple of Courage B1 Torch Room Secret Chest"},
+{"name": "Crayk Boss Reward"},
+{"name": "Crayk Sand of Hours"},
+{"name": "Crayk Heart Container"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 128,
+                "y": 591
+            }
+        ]
+    },
+    {
+        "name": "Temple of Fire",
+        "sections": [
+{"name": "Temple of Fire 1F Keese Chest"},
+{"name": "Temple of Fire 1F Maze Chest"},
+{"name": "Temple of Fire 2F Boomerang Chest"},
+{"name": "Temple of Fire 2F Fire Keese Chest"},
+{"name": "Temple of Fire 2F Rat Key"},
+{"name": "Temple of Fire 3F Boss Key Chest"},
+{"name": "Temple of Fire 3F Key Drop"},
+{"name": "Blaaz Boss Reward"},
+{"name": "Blaaz Heart Container"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 424,
+                "y": 706
+            }
+        ]
+    },
+    {
+        "name": "Temple of Ice",
+        "sections": [
+{"name": "Temple of Ice 2F Grappling Hook Chest"},
+{"name": "Temple of Ice 3F Corner Chest"},
+{"name": "Temple of Ice 3F Key Drop"},
+{"name": "Temple of Ice 3F Switch State Chest"},
+{"name": "Temple of Ice B1 Entrance Chest"},
+{"name": "Temple of Ice B1 Locked Room Chest"},
+{"name": "Temple of Ice B1 SE Chest"},
+{"name": "Temple of Ice B2 Boss Key Chest"},
+{"name": "Temple of Ice B2 Bow Bounce Chest"},
+{"name": "Temple of Ice B2 Fight Chest"},
+{"name": "Gleeok Boss Reward"},
+{"name": "Gleeok Heart Container"},
+{"name": "Gleeok Sand of Hours"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 930,
+                "y": 485
+            }
+        ]
+    },
+    {
+        "name": "Temple of the Ocean King",
+        "sections": [
+{"name": "TotOK 1F Empty Chest"},
+{"name": "TotOK 1F Linebeck Key"},
+{"name": "TotOK 1F SW Sea Chart Chest"},
+{"name": "TotOK B1 Phantom Chest"},
+{"name": "TotOK B1 Shoot Eye Chest"},
+{"name": "TotOK B1 Small Key"},
+{"name": "TotOK B10 Hammer Switch Chest"},
+{"name": "TotOK B10 Phantom Chest"},
+{"name": "TotOK B10 Phantom Eye Chest"},
+{"name": "TotOK B10 Small Key"},
+{"name": "TotOK B11 Phantom Chest"},
+{"name": "TotOK B11 Phantom Eye Chest"},
+{"name": "TotOK B12 Hammer Chest"},
+{"name": "TotOK B12 Kill Everything Chest"},
+{"name": "TotOK B12 NE Chest"},
+{"name": "TotOK B12 NW Chest"},
+{"name": "TotOK B12 Phantom Chest"},
+{"name": "TotOK B13 NE Sea Chart Chest"},
+{"name": "TotOK B2 Bombchu Chest"},
+{"name": "TotOK B2 Phantom Chest"},
+{"name": "TotOK B2 Small Key"},
+{"name": "TotOK B3 Bow Chest"},
+{"name": "TotOK B3 NW Chest"},
+{"name": "TotOK B3 NW Sea Chart Chest"},
+{"name": "TotOK B3 Phantom Chest"},
+{"name": "TotOK B3 SE Chest"},
+{"name": "TotOK B3 Small Key"},
+{"name": "TotOK B3 SW Chest"},
+{"name": "TotOK B4 Phantom Chest"},
+{"name": "TotOK B4 Phantom Eye Chest"},
+{"name": "TotOK B4 Small Key"},
+{"name": "TotOK B5 Alt Path Chest"},
+{"name": "TotOK B5 Chest"},
+{"name": "TotOK B6 Bow Chest"},
+{"name": "TotOK B6 Courage Crest"},
+{"name": "TotOK B6 Phantom Chest"},
+{"name": "TotOK B7 North Chest"},
+{"name": "TotOK B7 Peg Chest"},
+{"name": "TotOK B7 Phantom Chest"},
+{"name": "TotOK B8 2 Crystals Chest"},
+{"name": "TotOK B8 Phantom Chest"},
+{"name": "TotOK B9 NW Chest"},
+{"name": "TotOK B9 Phantom Chest"},
+{"name": "TotOK B9 Wizzrobe Chest"},
+{"name": "TotOK B9.5 SE Sea Chart Chest"},
+{"name": "TotOK Phantom Hourglass"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 379,
+                "y": 478
+            }
+        ]
+    },
+    {
+        "name": "Temple of Wind",
+        "sections": [
+{"name": "Temple of Wind 1F Boss Key Chest"},
+{"name": "Temple of Wind B1 Key Drop"},
+{"name": "Temple of Wind B1 Ledge Chest"},
+{"name": "Temple of Wind B1 SE Corner Chest"},
+{"name": "Temple of Wind B2 Bomb Bag Chest"},
+{"name": "Temple of Wind B2 Bombable Wall Item"},
+{"name": "Temple of Wind B2 Chest"},
+{"name": "Cyclok Boss Reward"},
+{"name": "Cyclok Heart Container"},
+{"name": "Cyclok Sand of Hours"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 290,
+                "y": 237
+            }
+        ]
+    },
+    {
+        "name": "Uncharted Island",
+        "sections": [
+{"name": "Uncharted Island Cyclone Slate"},
+{"name": "Uncharted Island Eye Dig"},
+{"name": "Uncharted Island Grapple Chest"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 406,
+                "y": 184
+            }
+        ]
+    },
+    {
+        "name": "Zauz's Island",
+        "sections": [
+{"name": "Zauz's Island Cuccoo Chest"},
+{"name": "Zauz's Island Phantom Blade"},
+{"name": "Zauz's Island Secret Dig"},
+{"name": "Zauz's Island Triforce Crest"}
+        ],
+        "map_locations": [
+            {
+                "map": "seamap",
+                "x": 258,
+                "y": 44
+            }
+        ]
+    }
+]

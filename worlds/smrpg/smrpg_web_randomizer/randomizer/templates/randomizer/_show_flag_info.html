@@ -1,0 +1,45 @@
+{# Recursive template to show flag info elements on ROM info page. #}
+
+{# Block when the flag is enabled, including the choices and suboptions. #}
+<div class="inline-flag-description my-1 flag-{{ flag.value }}">
+    <div class="display-cell">
+        <div>
+            {% if flag.value|slice:":1" == "@" %}
+                {{ flag.value|last }}
+            {% else %}
+                {{ flag.value }}
+            {% endif %}
+        </div>
+    </div>
+    <div class="display-cell">
+        {{ flag.description_or_name_as_markdown }}
+
+        {# Show flag choices, if any. #}
+        {% for choice in flag.choices %}
+            {% include 'randomizer/_show_flag_info.html' with flag=choice %}
+        {% endfor %}
+
+        {# Show other flag options, if any. #}
+        {% for option in flag.options %}
+            {% include 'randomizer/_show_flag_info.html' with flag=option %}
+        {% endfor %}
+    </div>
+</div>
+
+{# Block when the flag is disabled, if it has an inverse description. #}
+{% if flag.inverse_description %}
+    <div class="disabled-inline-flag-description flag-{{ flag.value }}">
+        <div class="display-cell">
+            <div>
+                {% if flag.value|slice:":1" == "@" %}
+                    {{ flag.value|last }}
+                {% else %}
+                    {{ flag.value }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="display-cell">
+            {{ flag.inverse_description_as_markdown }}
+        </div>
+    </div>
+{% endif %}

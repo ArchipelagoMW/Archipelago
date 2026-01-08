@@ -1,0 +1,110 @@
+# Format is group,room,treasure_id,treasure_subid
+0a//staticItemsReplacementsTable: |
+  # ------- Freestanding items -------
+  dwbe $0186, locations.blackTowerHP
+  dwbe $0406, locations.makuPathHP
+  dwbe $008b, locations.yollGraveyardHP
+  dwbe $05b1, locations.dekuForestHP
+  dwbe $03af, locations.restorationWallHP
+  dwbe $0011, locations.symmetryCityHP
+  dwbe $05c1, locations.ridgeWestHP
+  dwbe $000d, locations.ridgeUpperHP
+  dwbe $0605, locations.d0Basement
+  dwbe $0610, locations.d1Basement
+  dwbe $0628, locations.d2ThwompTunnel
+  dwbe $0627, locations.d2ThwompShelf
+
+  # ------- Drops / spawned items -------
+  dwbe $041e, locations.d1GhiniDrop
+  dwbe $0439, locations.d2MoblinDrop
+  dwbe $0442, locations.d2StatuePuzzle
+  dwbe $042e, locations.d2BasementDrop
+  dwbe $045e, locations.d3ArmosDrop
+  dwbe $0461, locations.d3StatueDrop
+  dwbe $0464, locations.d3SixBlocDrop
+  dwbe $044b, locations.d3MoldormDrop
+  dwbe $047b, locations.d4ColorDrop
+  dwbe $0553, locations.d7CaneDiamondPuzzle
+  dwbe $054b, locations.d7FlowerRoom
+  dwbe $0555, locations.d7DiamondPuzzle
+
+
+0a//staticItemsReplacementsLookup_body: |
+  push bc
+  ld a,(wActiveGroup)
+  ld b,a
+  ld a,(wActiveRoom)
+  ld c,a
+  ld e,$02
+  ld hl,staticItemsReplacementsTable
+  call searchDoubleKey
+  pop bc
+  ret nc
+  ld b,(hl) # item id
+  inc hl
+  ld c,(hl) # item subid
+  ret
+00//staticItemsReplacementsLookup: |
+  push de
+  push hl
+  ld e,$0a
+  ld hl,staticItemsReplacementsLookup_body
+  call interBankCall
+  pop hl
+  pop de
+  ret
+
+# staticHeartPiece
+10/74bd/: call staticItemsReplacementsLookup
+
+### SPAWNED ITEMS (Drops, etc...) ###########################################
+00//handleRandomizedSpawnedItem: |
+    ld (hl),INTERACID_TREASURE
+    inc l
+    jp staticItemsReplacementsLookup
+
+# Call our custom handler in scriptCmd_spawnItem
+0c/442e/: call handleRandomizedSpawnedItem
+
+# Call it in miscPuzzles_dropSmallKeyHere & spawnSmallKeyFromCeiling
+08/5087/: call handleRandomizedSpawnedItem
+0a/7075/: call handleRandomizedSpawnedItem
+
+###################################################################################################################
+09/6d3d/: | # Hijacking red bear code. We don't need the bear. He is dead now. Now it's the Impa gift.
+  ld a,(wActiveRoom)
+  cp $39
+  jp nz,interactionDelete
+  
+  call getThisRoomFlags
+  bit 5,(hl)
+  jp nz,interactionDelete
+
+  ld bc, locations.impaGift ; Set the item as impa gift
+  call createTreasure       ; spawn it
+  call objectCopyPosition   ; move it
+  jp interactionDelete
+
+  
+###################################################################################################################
+# dig up item on south shore regardless of ricky state
+# Dirt monticule
+04/6b71/: | 
+  call getThisRoomFlags
+  bit 5,(hl)
+  jr z,@end
+  ld a,$3a
+  ld (wRoomLayout+$24),a
+  @end:
+  ret
+# Interaction
+0a/5e29/: | 
+  call getThisRoomFlags
+  bit 5,(hl)
+  jr nz,@delete
+  ld bc, locations.southShoreDirt
+  call createTreasure
+  ret nz
+  call objectCopyPosition
+  @delete:
+  jp interactionDelete

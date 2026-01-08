@@ -1,0 +1,282 @@
+{
+    "00": {
+        "power_byte": 2,
+        "number_byte": "01",
+        "readable_amount": 100,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "01": {
+        "power_byte": 2,
+        "number_byte": "03",
+        "readable_amount": 300,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "02": {
+        "power_byte": 1,
+        "number_byte": "0F",
+        "readable_amount": 150,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "03": {
+        "power_byte": 1,
+        "number_byte": "63",
+        "readable_amount": 990,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "04": {
+        "power_byte": 3,
+        "number_byte": "01",
+        "readable_amount": 1000,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "05": {
+        "power_byte": 3,
+        "number_byte": "01",
+        "readable_amount": 1000,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "06": {
+        "power_byte": 3,
+        "number_byte": "01",
+        "readable_amount": 1000,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "07": {
+        "power_byte": 1,
+        "number_byte": "31",
+        "readable_amount": 490,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "08": {
+        "power_byte": 3,
+        "number_byte": "02",
+        "readable_amount": 2000,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "09": {
+        "power_byte": 3,
+        "number_byte": "02",
+        "readable_amount": 2000,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "0A": {
+        "power_byte": 3,
+        "number_byte": "02",
+        "readable_amount": 2000,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "0B": {
+        "power_byte": 3,
+        "number_byte": "05",
+        "readable_amount": 5000,
+        "value": 2,
+        "max_count": 1,
+        "tier": 4
+    },
+    "0C": {
+        "power_byte": 2,
+        "number_byte": "63",
+        "readable_amount": 9900,
+        "value": 2,
+        "max_count": 1,
+        "tier": 4
+    },
+    "0D": {
+        "power_byte": 3,
+        "number_byte": "08",
+        "readable_amount": 8000,
+        "value": 2,
+        "max_count": 1,
+        "tier": 4
+    },
+    "0E": {
+        "power_byte": 2,
+        "number_byte": "2C",
+        "readable_amount": 4400,
+        "value": 1,
+        "max_count": 1,
+        "tier": 4
+    },
+    "0F": {
+        "power_byte": 2,
+        "number_byte": "01",
+        "readable_amount": 100,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "10": {
+        "power_byte": 4,
+        "number_byte": "01",
+        "readable_amount": 10000,
+        "value": 2,
+        "max_count": 1,
+        "tier": 5
+    },
+    "11": {
+        "power_byte": 3,
+        "number_byte": "05",
+        "readable_amount": 5000,
+        "value": 2,
+        "max_count": 1,
+        "tier": 2
+    },
+    "12": {
+        "power_byte": 3,
+        "number_byte": "09",
+        "readable_amount": 9000,
+        "value": 2,
+        "max_count": 1,
+        "tier": 2
+    },
+    "13": {
+        "power_byte": 3,
+        "number_byte": "12",
+        "readable_amount": 18000,
+        "value": 3,
+        "max_count": 1,
+        "tier": 5
+    },
+    "14": {
+        "power_byte": 2,
+        "number_byte": "19",
+        "readable_amount": 2500,
+        "value": 1,
+        "max_count": 1,
+        "tier": 2
+    },
+    "15": {
+        "power_byte": 2,
+        "number_byte": "31",
+        "readable_amount": 4900,
+        "value": 1,
+        "max_count": 1,
+        "tier": 5
+    },
+    "16": {
+        "power_byte": 2,
+        "number_byte": "5F",
+        "readable_amount": 9500,
+        "value": 2,
+        "max_count": 1,
+        "tier": 5
+    },
+    "17": {
+        "power_byte": 3,
+        "number_byte": "09",
+        "readable_amount": 9000,
+        "value": 2,
+        "max_count": 1,
+        "tier": 5
+    },
+    "18": {
+        "power_byte": 3,
+        "number_byte": "08",
+        "readable_amount": 8000,
+        "value": 2,
+        "max_count": 1,
+        "tier": 5
+    },
+    "19": {
+        "power_byte": 4,
+        "number_byte": "01",
+        "readable_amount": 10000,
+        "value": 2,
+        "max_count": 1,
+        "tier": 4
+    },
+    "1A": {
+        "power_byte": 3,
+        "number_byte": "0C",
+        "readable_amount": 12000,
+        "value": 3,
+        "max_count": 1,
+        "tier": 4
+    },
+    "1B": {
+        "power_byte": 3,
+        "number_byte": "0C",
+        "readable_amount": 12000,
+        "value": 3,
+        "max_count": 1,
+        "tier": 4
+    },
+    "1C": {
+        "power_byte": 3,
+        "number_byte": "09",
+        "readable_amount": 9000,
+        "value": 2,
+        "max_count": 1,
+        "tier": 4
+    },
+    "1D": {
+        "power_byte": 3,
+        "number_byte": "0C",
+        "readable_amount": 12000,
+        "value": 3,
+        "max_count": 1,
+        "tier": 5
+    },
+    "1E": {
+        "power_byte": 3,
+        "number_byte": "05",
+        "readable_amount": 5000,
+        "value": 2,
+        "max_count": 1,
+        "tier": 4
+    },
+    "1F": {
+        "power_byte": 4,
+        "number_byte": "01",
+        "readable_amount": 10000,
+        "value": 3,
+        "max_count": 1,
+        "tier": 4
+    },
+    "20": {
+        "power_byte": 3,
+        "number_byte": "0F",
+        "readable_amount": 15000,
+        "value": 3,
+        "max_count": 1,
+        "tier": 5
+    },
+    "21": {
+        "power_byte": 4,
+        "number_byte": "02",
+        "readable_amount": 20000,
+        "value": 3,
+        "max_count": 1,
+        "tier": 7
+    },
+    "22": {
+        "power_byte": 3,
+        "number_byte": "19",
+        "readable_amount": 25000,
+        "value": 4,
+        "max_count": 1,
+        "tier": 7
+    }
+}

@@ -1,0 +1,456 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Tourian First Room and Upper Tourian Save Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 224,
+          "roomName": "Tourian First Room",
+          "nodeid": 3,
+          "nodeName": "Tourian First Room Right Door (to Save)",
+          "position": "left"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 225,
+          "roomName": "Upper Tourian Save Room",
+          "nodeid": 1,
+          "nodeName": "Upper Tourian Save Door (to First Tourian Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Tourian First Room and Metroid Room 1",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 224,
+          "roomName": "Tourian First Room",
+          "nodeid": 2,
+          "nodeName": "Tourian First Room Left Door (to Metroid Room 1)",
+          "position": "right"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 226,
+          "roomName": "Metroid Room 1",
+          "nodeid": 2,
+          "nodeName": "Metroid Room 1 Right Door (to First Tourian Room)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Metroid Room 1 and Metroid Room 2",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 226,
+          "roomName": "Metroid Room 1",
+          "nodeid": 1,
+          "nodeName": "Metroid Room 1 Left Door (to Metroid Room 2)",
+          "position": "right"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 227,
+          "roomName": "Metroid Room 2",
+          "nodeid": 1,
+          "nodeName": "Metroid Room 2 Top Right Door (to Metroid Room 1)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Metroid Room 2 and Metroid Room 3",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 227,
+          "roomName": "Metroid Room 2",
+          "nodeid": 2,
+          "nodeName": "Metroid Room 2 Bottom Right Door (to Metroid Room 3)",
+          "position": "left"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 228,
+          "roomName": "Metroid Room 3",
+          "nodeid": 1,
+          "nodeName": "Metroid Room 3 Left Door (to Metroid Room 2)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Metroid Room 3 and Metroid Room 4",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 228,
+          "roomName": "Metroid Room 3",
+          "nodeid": 2,
+          "nodeName": "Metroid Room 3 Right Door (to Metroid Room 4)",
+          "position": "left"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 229,
+          "roomName": "Metroid Room 4",
+          "nodeid": 1,
+          "nodeName": "Metroid Room 4 Top Left Door (to Metroid Room 3)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Metroid Room 4 and Blue Hopper Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 229,
+          "roomName": "Metroid Room 4",
+          "nodeid": 2,
+          "nodeName": "Metroid Room 4 Bottom Door (to Blue Hoppers)",
+          "position": "top"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 230,
+          "roomName": "Blue Hopper Room",
+          "nodeid": 1,
+          "nodeName": "Blue Hopper Room Top Door (to Metroid Room 4)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Blue Hopper Room and Dust Torizo Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 230,
+          "roomName": "Blue Hopper Room",
+          "nodeid": 2,
+          "nodeName": "Blue Hopper Room Left Door (to Dust Torizo)",
+          "position": "right"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 231,
+          "roomName": "Dust Torizo Room",
+          "nodeid": 2,
+          "nodeName": "Dust Torizo Room Right Door (to Blue Hoppers)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Dust Torizo Room and Big Boy Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 231,
+          "roomName": "Dust Torizo Room",
+          "nodeid": 1,
+          "nodeName": "Dust Torizo Room Left Door (to Big Boy)",
+          "position": "right"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 232,
+          "roomName": "Big Boy Room",
+          "nodeid": 2,
+          "nodeName": "Big Boy Room Right Door (to Dust Torizo)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Big Boy Room and Seaweed Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 232,
+          "roomName": "Big Boy Room",
+          "nodeid": 1,
+          "nodeName": "Big Boy Room Left Doorway (to Seaweed)",
+          "position": "right"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 233,
+          "roomName": "Seaweed Room",
+          "nodeid": 1,
+          "nodeName": "Seaweed Room Top Right Doorway (to Big Boy)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Seaweed Room and Tourian Recharge Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 233,
+          "roomName": "Seaweed Room",
+          "nodeid": 2,
+          "nodeName": "Seaweed Room Left Door (to Recharge)",
+          "position": "right"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 234,
+          "roomName": "Tourian Recharge Room",
+          "nodeid": 1,
+          "nodeName": "Tourian Recharge Room Door (to Seaweed)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Seaweed Room and Tourian Eye Door Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 233,
+          "roomName": "Seaweed Room",
+          "nodeid": 3,
+          "nodeName": "Seaweed Room Bottom Right Door (to Eye Room)",
+          "position": "left"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 235,
+          "roomName": "Tourian Eye Door Room",
+          "nodeid": 1,
+          "nodeName": "Tourian Eye Door Room Left Door (to Seaweed)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Tourian Eye Door Room and Rinka Shaft",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 235,
+          "roomName": "Tourian Eye Door Room",
+          "nodeid": 2,
+          "nodeName": "Tourian Eye Door (to Rinka Shaft)",
+          "position": "left"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 236,
+          "roomName": "Rinka Shaft",
+          "nodeid": 1,
+          "nodeName": "Rinka Shaft Top Left Door (to Eye Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Rinka Shaft and Lower Tourian Save Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 236,
+          "roomName": "Rinka Shaft",
+          "nodeid": 2,
+          "nodeName": "Rinka Shaft Middle Left Door (to Save)",
+          "position": "right"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 237,
+          "roomName": "Lower Tourian Save Room",
+          "nodeid": 1,
+          "nodeName": "Lower Tourian Save Room Door (to Rinka Shaft)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Rinka Shaft and Mother Brain Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 236,
+          "roomName": "Rinka Shaft",
+          "nodeid": 3,
+          "nodeName": "Rinka Shaft Bottom Left Door (to Mother Brain)",
+          "position": "right"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 238,
+          "roomName": "Mother Brain Room",
+          "nodeid": 2,
+          "nodeName": "Mother Brain Room Right Door (to Rinka Shaft)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Mother Brain Room and Tourian Escape Room 1",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 238,
+          "roomName": "Mother Brain Room",
+          "nodeid": 1,
+          "nodeName": "Mother Brain Room Left Blast Door (to Escape Room 1)",
+          "position": "right"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 239,
+          "roomName": "Tourian Escape Room 1",
+          "nodeid": 1,
+          "nodeName": "Tourian Escape Room 1 Right Doorway (to Mother Brain)",
+          "position": "left"
+        }
+      ],
+      "note": "This is one-way because there isn't even a door in Escape Room 1 to go back."
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Tourian Escape Room 1 and Tourian Escape Room 2",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 239,
+          "roomName": "Tourian Escape Room 1",
+          "nodeid": 2,
+          "nodeName": "Tourian Escape Room 1 Bottom Door (to Escape Room 2)",
+          "position": "top"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 240,
+          "roomName": "Tourian Escape Room 2",
+          "nodeid": 1,
+          "nodeName": "Tourian Escape Room 2 Top Door (to Escape Room 1)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Tourian Escape Room 2 and Tourian Escape Room 3",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 240,
+          "roomName": "Tourian Escape Room 2",
+          "nodeid": 2,
+          "nodeName": "Tourian Escape Room 2 Right Door (to Escape Room 3)",
+          "position": "left"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 241,
+          "roomName": "Tourian Escape Room 3",
+          "nodeid": 1,
+          "nodeName": "Tourian Escape Room 3 Left Door (to Escape Room 2)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Tourian Escape Room 3 and Tourian Escape Room 4",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 241,
+          "roomName": "Tourian Escape Room 3",
+          "nodeid": 2,
+          "nodeName": "Tourian Escape Room 3 Right Door (to Escape Room 4)",
+          "position": "left"
+        },
+        {
+          "area": "Tourian",
+          "subarea": "Main",
+          "roomid": 242,
+          "roomName": "Tourian Escape Room 4",
+          "nodeid": 1,
+          "nodeName": "Tourian Escape Room 4 Left Door (to Escape Room 3)",
+          "position": "right"
+        }
+      ]
+    }
+  ]
+}

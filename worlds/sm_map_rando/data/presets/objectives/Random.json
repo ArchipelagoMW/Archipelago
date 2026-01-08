@@ -1,0 +1,27 @@
+{
+    "preset": "Random",
+    "objective_options": [
+        {"objective": "Kraid", "setting": "Maybe"},
+        {"objective": "Phantoon", "setting": "Maybe"},
+        {"objective": "Draygon", "setting": "Maybe"},
+        {"objective": "Ridley", "setting": "Maybe"},
+        {"objective": "SporeSpawn", "setting": "Maybe"},
+        {"objective": "Crocomire", "setting": "Maybe"},
+        {"objective": "Botwoon", "setting": "Maybe"},
+        {"objective": "GoldenTorizo", "setting": "Maybe"},
+        {"objective": "BombTorizo", "setting": "Maybe"},
+        {"objective": "BowlingStatue", "setting": "Maybe"},
+        {"objective": "AcidChozoStatue", "setting": "Maybe"},
+        {"objective": "PitRoom", "setting": "Maybe"},
+        {"objective": "BabyKraidRoom", "setting": "Maybe"},
+        {"objective": "PlasmaRoom", "setting": "Maybe"},
+        {"objective": "MetalPiratesRoom", "setting": "Maybe"},
+        {"objective": "MetroidRoom1", "setting": "Maybe"},
+        {"objective": "MetroidRoom2", "setting": "Maybe"},
+        {"objective": "MetroidRoom3", "setting": "Maybe"},
+        {"objective": "MetroidRoom4", "setting": "Maybe"}
+    ],
+    "min_objectives": 4,
+    "max_objectives": 4,
+    "objective_screen": "Enabled"
+}

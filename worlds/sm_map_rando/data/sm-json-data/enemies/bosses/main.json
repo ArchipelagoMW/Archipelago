@@ -1,0 +1,820 @@
+{
+  "$schema": "../../schema/m3-enemies.schema.json",
+  "enemies": [
+    {
+      "id": 200,
+      "name": "Ceres Ridley",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 5
+        },
+        {
+          "name": "tail",
+          "baseDamage": 15
+        },
+        {
+          "name": "fireball",
+          "baseDamage": 3
+        }
+      ],
+      "hp": 18000,
+      "amountOfDrops": 0,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "dims": {
+        "w": 79,
+        "h": 89
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "Shinespark",
+        "BlueSuit",
+        "ScrewAttack",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": [
+        { "weapon": "Super", "value": 2}
+      ],
+      "note": "Actually vulnerable to Speed Echoes. Not an oversight."
+    },
+    {
+      "id": 201,
+      "name": "Bomb Torizo",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 8
+        },
+        {
+          "name": "egg",
+          "baseDamage": 8
+        },
+        {
+          "name": "laser",
+          "baseDamage": 10
+        },
+        {
+          "name": "claw",
+          "baseDamage": 10
+        }
+      ],
+      "hp": 800,
+      "amountOfDrops": 16,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "farmableDrops": {
+        "noDrop": 22,
+        "smallEnergy": 46,
+        "bigEnergy": 8,
+        "missile": 26,
+        "super": 0,
+        "powerBomb": 0
+      },
+      "dims": {
+        "w": 73,
+        "h": 90
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": [
+        { "weapon": "Super", "value": 2}
+      ],
+      "note": "Actually vulnerable to Speed Echoes. Not an oversight."
+    },
+    {
+      "id": 202,
+      "name": "Spore Spawn",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 12
+        },
+        {
+          "name": "spore",
+          "baseDamage": 4
+        }
+      ],
+      "hp": 960,
+      "amountOfDrops": 12,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "farmableDrops": {
+        "noDrop": 10,
+        "smallEnergy": 4,
+        "bigEnergy": 8,
+        "missile": 80,
+        "super": 0,
+        "powerBomb": 0
+      },
+      "dims": {
+        "w": 73,
+        "h": 90
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": [
+        { "weapon": "ChargedBeam", "value": 2}
+      ]
+    },
+    {
+      "id": 203,
+      "name": "Kraid",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 20
+        },
+        {
+          "name": "talon",
+          "baseDamage": 10
+        },
+        {
+          "name": "claw",
+          "baseDamage": 10
+        },
+        {
+          "name": "stone",
+          "baseDamage": 2
+        }
+      ],
+      "hp": 1000,
+      "amountOfDrops": 16,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "farmableDrops": {
+        "noDrop": 0,
+        "smallEnergy": 4,
+        "bigEnergy": 14,
+        "missile": 80,
+        "super": 4,
+        "powerBomb": 0
+      },
+      "dims": {
+        "w": 192,
+        "h": 303
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": []
+    },
+    {
+      "id": 204,
+      "name": "Crocomire",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 40
+        },
+        {
+          "name": "fireball",
+          "baseDamage": 20
+        }
+      ],
+      "hp": 0,
+      "amountOfDrops": 11,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "farmableDrops": {
+        "noDrop": 2,
+        "smallEnergy": 0,
+        "bigEnergy": 48,
+        "missile": 40,
+        "super": 8,
+        "powerBomb": 4
+      },
+      "dims": {
+        "w": 145,
+        "h": 118
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": [],
+      "note": "Appears to take damage from Bombs and PowerBombs, but does not react by backing away. Power Bombs seem to actually make it charge forward."
+    },
+    {
+      "id": 205,
+      "name": "Phantoon",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 40
+        },
+        {
+          "name": "flame",
+          "baseDamage": 40
+        }
+      ],
+      "hp": 2500,
+      "amountOfDrops": 16,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "farmableDrops": {
+        "noDrop": 42,
+        "smallEnergy": 8,
+        "bigEnergy": 8,
+        "missile": 40,
+        "super": 4,
+        "powerBomb": 0
+      },
+      "dims": {
+        "w": 140,
+        "h": 224
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": [
+        { "weapon": "Super", "value": 2}
+      ]
+    },
+    {
+      "id": 206,
+      "name": "Botwoon 1",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 128
+        },
+        {
+          "name": "head",
+          "baseDamage": 120
+        },
+        {
+          "name": "acid",
+          "baseDamage": 96
+        }
+      ],
+      "hp": 1500,
+      "amountOfDrops": 0,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "dims": {
+        "w": 0,
+        "h": 0
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": []
+    },
+    {
+      "id": 213,
+      "name": "Botwoon 2",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 128
+        },
+        {
+          "name": "head",
+          "baseDamage": 120
+        }
+      ],
+      "hp": 1500,
+      "amountOfDrops": 16,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "dims": {
+        "w": 0,
+        "h": 0
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": []
+    },
+    {
+      "id": 214,
+      "name": "Reverse Botwoon 1",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 128
+        },
+        {
+          "name": "head",
+          "baseDamage": 120
+        },
+        {
+          "name": "acid",
+          "baseDamage": 96
+        }
+      ],
+      "hp": 1500,
+      "amountOfDrops": 0,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "dims": {
+        "w": 0,
+        "h": 0
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": []
+    },
+    {
+      "id": 215,
+      "name": "Reverse Botwoon 2",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 128
+        },
+        {
+          "name": "head",
+          "baseDamage": 120
+        }
+      ],
+      "hp": 1500,
+      "amountOfDrops": 16,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "dims": {
+        "w": 0,
+        "h": 0
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": []
+    },
+    {
+      "id": 207,
+      "name": "Draygon",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 160
+        },
+        {
+          "name": "turretProjectile",
+          "baseDamage": 128
+        }
+      ],
+      "hp": 6000,
+      "amountOfDrops": 16,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "farmableDrops": {
+        "noDrop": 40,
+        "smallEnergy": 2,
+        "bigEnergy": 12,
+        "missile": 44,
+        "super": 2,
+        "powerBomb": 2
+      },
+      "dims": {
+        "w": 262,
+        "h": 284
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "BlueSuit",
+        "SpeedEchoes"
+      ],
+      "damageMultipliers": [],
+      "note": "Draygon is vulnerable not only to Shinespark, but also to Pseudo Screw"
+    },
+    {
+      "id": 208,
+      "name": "Golden Torizo",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 160
+        },
+        {
+          "name": "egg-explosion",
+          "baseDamage": 80
+        },
+        {
+          "name": "floor-explosion",
+          "baseDamage": 8
+        },
+        {
+          "name": "laser",
+          "baseDamage": 120
+        },
+        {
+          "name": "bird",
+          "baseDamage": 100
+        },
+        {
+          "name": "super",
+          "baseDamage": 200
+        }
+      ],
+      "hp": 13500,
+      "amountOfDrops": 16,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "farmableDrops": {
+        "noDrop": 24,
+        "smallEnergy": 12,
+        "bigEnergy": 12,
+        "missile": 20,
+        "super": 34,
+        "powerBomb": 0
+      },
+      "dims": {
+        "w": 73,
+        "h": 90
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Missile",
+        "Bombs",
+        "PowerBombBlast",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "ScrewAttack"
+      ],
+      "damageMultipliers": [
+        { "weapon": "Super", "value": 2}
+      ],
+      "note": [
+        "Golden Torizo is vulnerable to Pseudo Screw.",
+        "Golden Torizo is not truly invulnerable to Missiles, but may as well be."
+      ]
+    },
+    {
+      "id": 209,
+      "name": "Ridley",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 160
+        },
+        {
+          "name": "tail",
+          "baseDamage": 120
+        },
+        {
+          "name": "fireball",
+          "baseDamage": 60
+        }
+      ],
+      "hp": 18000,
+      "amountOfDrops": 16,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "dims": {
+        "w": 79,
+        "h": 89
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Bombs",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": [
+        { "weapon": "Super", "value": 2}
+      ]
+    },
+    {
+      "id": 210,
+      "name": "Mother Brain 1",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 120
+        },
+        {
+          "name": "glass",
+          "baseDamage": 60
+        },
+        {
+          "name": "turret",
+          "baseDamage": 20
+        }
+      ],
+      "hp": 3000,
+      "amountOfDrops": 0,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "dims": {
+        "w": 112,
+        "h": 112
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "Beam",
+        "SpecialBeamAttack",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": []
+    },
+    {
+      "id": 211,
+      "name": "Mother Brain 2",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 120
+        },
+        {
+          "name": "bomb",
+          "baseDamage": 160
+        },
+        {
+          "name": "bomb-explosion",
+          "baseDamage": 80
+        },
+        {
+          "name": "bomb-explosion-center",
+          "baseDamage": 3
+        },
+        {
+          "name": "ring",
+          "baseDamage": 80
+        },
+        {
+          "name": "laser",
+          "baseDamage": 120
+        },
+        {
+          "name": "redbeam",
+          "baseDamage": 400
+        },
+        {
+          "name": "rainbow",
+          "baseDamage": 600,
+          "affectedByGravity": false
+        }
+      ],
+      "hp": 18000,
+      "amountOfDrops": 0,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "dims": {
+        "w": 138,
+        "h": 171
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": [],
+      "note": "Shinesparking into Mother Brain not only causes no damage, but also clips into her and causes swift death"
+    },
+    {
+      "id": 212,
+      "name": "Mother Brain 3",
+      "attacks": [
+        {
+          "name": "contact",
+          "baseDamage": 120
+        }
+      ],
+      "hp": 36000,
+      "amountOfDrops": 0,
+      "drops": {
+        "noDrop": 0,
+        "smallEnergy": 20,
+        "bigEnergy": 20,
+        "missile": 20,
+        "super": 20,
+        "powerBomb": 22
+      },
+      "dims": {
+        "w": 138,
+        "h": 171
+      },
+      "freezable": false,
+      "grapplable": false,
+      "invul": [
+        "Grapple",
+        "UnchargedBeam",
+        "Bombs",
+        "PowerBombBlast",
+        "ScrewAttack",
+        "Shinespark",
+        "BlueSuit",
+        "SpeedEchoes",
+        "PseudoScrew"
+      ],
+      "damageMultipliers": [],
+      "note": "Shinesparking into Mother Brain not only causes no damage, but also clips into her and causes swift death"
+    }
+  ]
+}

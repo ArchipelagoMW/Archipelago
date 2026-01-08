@@ -1,0 +1,16 @@
+
+# Rewriting the entire @extraItemsToAddTable because the @itemsToRemoveTable is empty in ages,
+# So we can't override part of it, or we would write on the applyParameter function. Which is not good.
+3f//extraItemsToAddTableCustom: |
+    db TREASURE_SEED_SATCHEL,   option.defaultSeedType,         $20
+    db TREASURE_HEART_CONTAINER,TREASURE_HEART_REFILL,          $40
+    db TREASURE_BOMB_FLOWER,    TREASURE_BOMB_FLOWER_LOWER_HALF,$00
+    db TREASURE_TUNE_OF_ECHOES, TREASURE_HARP,                  $01
+    db TREASURE_SHOOTER,        option.defaultSeedType,         $20
+    
+    db $00  ; End of table
+3f/44e3/: ld hl,extraItemsToAddTableCustom
+
+# itemsToRemoveTable is already empty in ages
+
+#03/1116/heartBeepInterval: db $3f

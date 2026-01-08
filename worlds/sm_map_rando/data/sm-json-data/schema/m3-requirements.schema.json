@@ -1,0 +1,918 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/vg-json-data/sm-json-data/master/schema/m3-requirements.schema.json",
+  "title": "Super Metroid Logical Requirements Schema",
+
+  "definitions": {
+    "logicalRequirements": {
+      "type": "array",
+      "title": "Logical Requirements",
+      "description": "A logical condition that takes the form of equipment, tech, and flag requirements.",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ],
+        "title": "Logical element",
+        "description": "Elements are assumed to be ANDed together, except when inside an OR object.",
+        "minProperties": 1,
+        "maxProperties": 1,
+        "additionalProperties": false,
+        "properties": {
+          "and": {
+            "$ref" : "#/definitions/logicalRequirements",
+            "title": "AND Logical Element",
+            "description": "Fulfilled if all logical elements inside are fulfilled."
+          },
+          "or": {
+            "$ref" : "#/definitions/logicalRequirements",
+            "title": "OR Logical Element",
+            "description": "Fulfilled if at least one logical element inside is fulfilled."
+          },
+          "not": {
+            "type": "string",
+            "title": "NOT Logical Element",
+            "description": "Fulfilled if the logical element given is not fullfilled."
+          },
+          "ammo": {
+            "type": "object",
+            "title": "Ammo Requirement",
+            "description": "Fulfilled by spending ammo",
+            "required": [
+              "type",
+              "count"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Missile",
+                  "Super",
+                  "PowerBomb"
+                ],
+                "title": "Ammo Type",
+                "description": "The type of ammo that must be spent"
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 1,
+                "title": "Ammo Count",
+                "description": "The amount of ammo that must be spent."
+              }
+            }
+          },
+          "ammoDrain": {
+            "type": "object",
+            "title": "Ammo Drain Cost",
+            "description": "Always fulfilled, but if the ammo is present, it will be drained.",
+            "required": [
+              "type",
+              "count"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Missile",
+                  "Super",
+                  "PowerBomb"
+                ],
+                "title": "Ammo Type",
+                "description": "The type of ammo that can be drained"
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 1,
+                "title": "Ammo Count",
+                "description": "The amount of ammo that can be drained."
+              }
+            }
+          },
+          "refill": {
+            "type": "array",
+            "title": "Refill",
+            "description": "Always fulfilled, with an effect of fully refilling the listed resource types.",
+            "items": {
+              "type": "string",
+              "title": "Resource Type",
+              "description": "The name of a resource type that becomes fully refilled",
+              "enum": [
+                "Missile",
+                "Super",
+                "PowerBomb",
+                "RegularEnergy",
+                "ReserveEnergy",
+                "Energy"
+              ]
+            }
+          },
+          "partialRefill": {
+            "type": "object",
+            "title": "Partial Refill",
+            "description": "Always fulfilled, with an effect of refilling the given resource type up to a given limit.",
+            "additionalProperties": false,
+            "properties": {
+              "type": {
+                "type": "string",
+                "title": "Resource Type",
+                "description": "The name of a resource type that becomes partially refilled",
+                "enum": [
+                  "Missile",
+                  "Super",
+                  "PowerBomb",
+                  "RegularEnergy",
+                  "ReserveEnergy",
+                  "Energy"
+                ]
+              },
+              "limit": {
+                "type": "integer",
+                "title": "Limit",
+                "description": "The level of resource quantity that the partial refill stops at."
+              }
+            }
+          },
+          "enemyKill": {
+            "type": "object",
+            "title": "Enemy Kill",
+            "description": "Describes the need to be able to kill a set of enemies. By default, allows all non-situational weapons (provided they can damage the enemies)",
+            "required": ["enemies"],
+            "additionalProperties": false,
+            "properties": {
+              "enemies": {
+                "type": "array",
+                "title": "Enemy Groups",
+                "description": "An array of enemy groups that must be killed. All enemies in each group can be hit by the same attack from an area of effect weapon.",
+                "items": {
+                  "type": "array",
+                  "title": "Enemy Group",
+                  "description": "A single group of enemies that can be hit by the same attack from an area of effect weapon.",
+                  "items": {
+                    "type": "string",
+                    "title": "Enemy Name",
+                    "description": "The name of an enemy, as found in the enemies file or the boss file."
+                  }
+                }
+              },
+              "explicitWeapons": {
+                "type": "array",
+                "title": "Explicit Weapons",
+                "description": "A list of weapons. If present, this list defines the only weapons that can be used to fulfill the EnemyKill logical element.",
+                "items": {
+                  "type": "string",
+                  "title": "Weapon Name",
+                  "description": "The name of a weapon, as found in the weapons file."
+                }
+              },
+              "excludedWeapons": {
+                "type": "array",
+                "title": "Excluded Weapons",
+                "description": "A list of weapons. If present, this list defines weapons that cannot be used to fulfill this EnemyKill logical element.",
+                "items": {
+                  "type": "string",
+                  "title": "Weapon Name",
+                  "description": "The name of a weapon, as found in the weapons file."
+                }
+              },
+              "farmableAmmo": {
+                "type": "array",
+                "title": "Farmable Ammo",
+                "description": "A list of ammo types that are considered farmable during this enemy kill. It voids all ammo costs for that type, unless superseded by a boss scenario.",
+                "items": {
+                  "type": "string",
+                  "title": "Ammo Type",
+                  "description": "The name of an ammo type, which won't get spent (unless superseded by a boss scenario)."
+                }
+              }
+            }
+          },
+          "acidFrames": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Acid Frames",
+            "description": "Fulfilled by spending an amount of energy that corresponds to spending a number of frames in acid."
+          },
+          "gravitylessAcidFrames": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Gravityless Acid Frames",
+            "description": "Fulfilled by spending an amount of energy that corresponds to spending a number of frames in acid, with Gravity Suit turned off, even if available."
+          },
+          "draygonElectricityFrames": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Draygon Electricity Frames",
+            "description": "Fulfilled by spending an amount of energy that corresponds to spending a number of frames grapples to a broken Draygon turret."
+          },
+          "shineChargeFrames": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 180,
+            "title": "Shinecharge Frames",
+            "description": "Fulfilled by spending the given amount of frames with an active shinecharge."
+          },
+          "enemyDamage": {
+            "type": "object",
+            "title": "Enemy Dammage",
+            "description": "Fulfilled by spending an amount of energy that corresponds to taking a number of hits from an enemy.",
+            "required": [
+              "enemy",
+              "type",
+              "hits"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "enemy": {
+                "type": "string",
+                "title": "Enemy Name",
+                "description": "The name of an enemy that damage must be taken from, as found in the enemies file."
+              },
+              "type": {
+                "type": "string",
+                "title": "Attack Type",
+                "description": "The name of the enemy attack that damage must be taken from, as found in the enemy's list of attacks (in the enemies file)."
+              },
+              "hits": {
+                "type": "integer",
+                "minimum": 1,
+                "title": "Number of Hits",
+                "description": "The number of hits that must be taken."
+              }
+            }
+          },
+          "cycleFrames": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "Cycle Frames",
+            "description": "Fulfilled by spending an amount of time in a room, measured in in-game frames, as part of a farming cycle."
+          },
+          "simpleCycleFrames": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "Cycle Frames",
+            "description": "Fulfilled by spending an amount of time in a room, measured in in-game frames, as part of a farming cycle, doing a simple action that does not require lenience."
+          },
+          "heatFrames": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "Heat Frames",
+            "description": "Fulfilled by spending an amount of energy that corresponds to spending a number of frames in a heat room."
+          },
+          "simpleHeatFrames": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "Simple Heat Frames",
+            "description": "Fulfilled by spending an amount of energy that corresponds to spending a number of frames in a heat room, doing a simple action that does not require lenience."
+          },
+          "heatFramesWithEnergyDrops": {
+            "type": "object",
+            "title": "Heat Frames With Energy Drops",
+            "description": "Fulfilled by spending an amount of energy that corresponds to spending a number of frames in a heat room, with some or all damage offset by collecting energy drops.",
+            "additionalProperties": false,
+            "properties": {
+              "frames": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "drops": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "enemy": {
+                      "type": "string",
+                      "title": "Enemy Name",
+                      "description": "The name of an enemy that drops can be collected from, as found in the enemies file."
+                    },
+                    "count": {
+                      "type": "integer",
+                      "title": "Count",
+                      "description": "The number of drops that can be collected from this enemy by executing this strat.."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "gravitylessHeatFrames": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Gravityless Heat Frames",
+            "description": "Fulfilled by spending an amount of energy that corresponds to spending a number of frames in a heated environment, with Gravity Suit turned off, even if available."
+          },
+          "hibashiHits": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Hibashi Hits",
+            "description": "Fulfilled by spending an amount of energy that corresponds to taking a number of hits from Norfair flame pillars (called Hibashi)."
+          },
+          "lavaFrames": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Lava Frames",
+            "description": "Fulfilled by spending an amount of energy that corresponds to spending a number of frames in lava."
+          },
+          "gravitylessLavaFrames": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Gravityless Lava Frames",
+            "description": "Fulfilled by spending an amount of energy that corresponds to spending a number of frames in lava, with Gravity Suit turned off, even if available."
+          },
+          "lavaFramesWithEnergyDrops": {
+            "type": "object",
+            "title": "Lava Frames With Energy Drops",
+            "description": "Fulfilled by spending an amount of energy that corresponds to spending a number of frames in a lava, with some or all damage offset by collecting energy drops.",
+            "additionalProperties": false,
+            "properties": {
+              "frames": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "drops": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "enemy": {
+                      "type": "string",
+                      "title": "Enemy Name",
+                      "description": "The name of an enemy that drops can be collected from, as found in the enemies file."
+                    },
+                    "count": {
+                      "type": "integer",
+                      "title": "Count",
+                      "description": "The number of drops that can be collected from this enemy by executing this strat."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "samusEaterFrames": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Samus Eater Frames",
+            "description": "Fulfilled by spending an amount of energy that correlates to the number of frames captured by a Samus Eater."
+          },
+          "metroidFrames": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Metroid Frames",
+            "description": "Fulfilled by spending an amount of energy that corresponds to spending a number of frames drained by a Metroid."
+          },
+          "resourceAtMost": {
+            "type": "array",
+            "title": "Resource At Most",
+            "description": "Fulfilled by having Samus' resource count drop to a maximum of this value, regardless of how much she had before.",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "count"
+              ],
+              "minItems": 1,
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Missile",
+                    "Super",
+                    "PowerBomb",
+                    "RegularEnergy",
+                    "ReserveEnergy",
+                    "Energy"
+                  ],
+                  "title": "Resource Type",
+                  "description": "The type of resource that will be reduced."
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "title": "Resource Count",
+                  "description": "The maximum amount of the resource that Samus can keep."
+                }
+              }
+            }
+          },
+          "autoReserveTrigger": {
+            "type": "object",
+            "title": "Auto-reserve Trigger",
+            "description": "Fulfilled by taking damage to trigger auto-reserves, which results in Samus' energy becoming equal to the initial reserve energy, and reserve energy becoming zero.",
+            "additionalProperties": false,
+            "properties": {
+              "minReserveEnergy": {
+                "type": "integer",
+                "description": "Minimum energy in reserves which will satisfy this requirement",
+                "default": 1
+              },
+              "maxReserveEnergy": {
+                "type": "integer",
+                "description": "Maximum energy in reserves which will satisfy this requirement",
+                "default": 400
+              }
+            }
+          },
+          "spikeHits": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Spike Hits",
+            "description": "Fulfilled by spending an amount of energy that corresponds to taking a number of hits from spikes."
+          },
+          "thornHits": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Thorn Hits",
+            "description": "Fulfilled by spending an amount of energy that corresponds to taking a number of hits from thorns (the less damaging spikes found mainly in Brinstar)."
+          },
+          "electricityHits": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Electricity Hits",
+            "description": "Fulfilled by spending an amount of energy that corresponds to taking a number of hits from electricity found in Wrecked Ship."
+          },
+          "doorUnlockedAtNode": {
+            "type": "integer",
+            "title": "Door Unlocked at Node",
+            "description": "Fulfilled by all Lock requirements, if any, on a Door Node being already unlocked."
+          },
+          "obstaclesCleared": {
+            "type": "array",
+            "title": "Obstacles Cleared",
+            "description": "Fulfilled by having all of the listed obstacles already cleared",
+            "items": {
+              "type": "string",
+              "minItems": 1
+            }
+          },
+          "obstaclesNotCleared": {
+            "type": "array",
+            "title": "Obstacles Not Cleared",
+            "description": "Fulfilled by having all of the listed obstacles not cleared",
+            "items": {
+              "type": "string",
+              "minItems": 1
+            }
+          },
+          "resourceCapacity": {
+            "type": "array",
+            "title": "Resource Capacity",
+            "description": "Fulfilled by having at least the maximum capacity for all given resource types",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "count"
+              ],
+              "minItems": 1,
+              "maxItems": 5,
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Missile",
+                    "Super",
+                    "PowerBomb",
+                    "RegularEnergy",
+                    "ReserveEnergy"
+                  ],
+                  "title": "Resource Type",
+                  "description": "The type of resource held."
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "title": "Resource Count",
+                  "description": "The amount of resource capacity that Samus must have."
+                }
+              }
+            }
+          },
+          "resourceMaxCapacity": {
+            "type": "array",
+            "title": "Resource Max Capacity",
+            "description": "Fulfilled by having at most the given capacity for all given resource types",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "count"
+              ],
+              "minItems": 1,
+              "maxItems": 5,
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Missile",
+                    "Super",
+                    "PowerBomb",
+                    "RegularEnergy",
+                    "ReserveEnergy"
+                  ],
+                  "title": "Resource Type",
+                  "description": "The type of resource held."
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "title": "Resource Count",
+                  "description": "The amount of resource capacity that Samus must not exceed."
+                }
+              }
+            }
+          },
+          "resourceAvailable": {
+            "type": "array",
+            "title": "Resource Available",
+            "description": "Fulfilled by having at least the amount available for all given resource types",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "count"
+              ],
+              "minItems": 1,
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Missile",
+                    "Super",
+                    "PowerBomb",
+                    "RegularEnergy",
+                    "ReserveEnergy",
+                    "Energy"
+                  ],
+                  "title": "Resource Type",
+                  "description": "The type of resource held."
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "title": "Resource Count",
+                  "description": "The amount of the resource that Samus must have."
+                }
+              }
+            }
+          },
+          "resourceConsumed": {
+            "type": "array",
+            "title": "Resource Consumed",
+            "description": "Fulfilled by spending the amount for all given resource types",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "count"
+              ],
+              "minItems": 1,
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "RegularEnergy",
+                    "ReserveEnergy",
+                    "Energy"
+                  ],
+                  "title": "Resource Type",
+                  "description": "The type of resource held."
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "title": "Resource Count",
+                  "description": "The amount of the resource that Samus must spend."
+                }
+              }
+            }
+          },
+          "resourceMissingAtMost": {
+            "type": "array",
+            "title": "Resource Missing At Most",
+            "description": "Fulfilled by only missing at most the given amount from being full on a given resource type.",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "count"
+              ],
+              "minItems": 1,
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "Missile",
+                    "Super",
+                    "PowerBomb",
+                    "RegularEnergy",
+                    "ReserveEnergy",
+                    "Energy"
+                  ],
+                  "title": "Resource Type",
+                  "description": "The type of resource held."
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "title": "Resource Count",
+                  "description": "The amount of the resource that Samus must not be missing, relative to being full."
+                }
+              }
+            }
+          },
+          "canShineCharge": {
+            "type": "object",
+            "title": "Can Shine Charge",
+            "description": "Fulfilled by being able to charge a shinespark under the described conditions.",
+            "required": [
+              "usedTiles",
+              "openEnd"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "usedTiles": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 45,
+                "title": "Used Tiles",
+                "description": "The number of contiguous tiles that are available to charge a shinespark."
+              },
+              "gentleUpTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Gentle Up Tiles",
+                "description": "The number of tiles that slope gently upward (going up by half a tile)."
+              },
+              "gentleDownTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Gentle Down Tiles",
+                "description": "The number of tiles that slope gently downward (going down by half a tile)."
+              },
+              "steepUpTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Steep Up Tiles",
+                "description": "The number of tiles that slope steeply upward (going up by a tile)."
+              },
+              "steepDownTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Steep Down Tiles",
+                "description": "The number of tiles that slope steeply downward (going down by a tile)."
+              },
+              "startingDownTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Starting Down Tiles",
+                "description": "The number of tiles that slope downwards at the start of a run, preventing the execution of a stutter."
+              },
+              "openEnd": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2,
+                "title": "Number of Open Ends",
+                "description": "The number of open ends in the runway. An open end is a runway edge that ends in a dropoff rather than a wall. Each open end adds a bit of extra room."
+              }
+            }
+          },
+          "getBlueSpeed": {
+            "type": "object",
+            "title": "Get Blue Speed",
+            "description": "Fulfilled by being able to gain blue speed under the described conditions.",
+            "required": [
+              "usedTiles",
+              "openEnd"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "usedTiles": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 45,
+                "title": "Used Tiles",
+                "description": "The number of contiguous tiles that are available to gain blue speed."
+              },
+              "gentleUpTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Gentle Up Tiles",
+                "description": "The number of tiles that slope gently upward (going up by half a tile)."
+              },
+              "gentleDownTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Gentle Down Tiles",
+                "description": "The number of tiles that slope gently downward (going down by half a tile)."
+              },
+              "steepUpTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Steep Up Tiles",
+                "description": "The number of tiles that slope steeply upward (going up by a tile)."
+              },
+              "steepDownTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Steep Down Tiles",
+                "description": "The number of tiles that slope steeply downward (going down by a tile)."
+              },
+              "startingDownTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Starting Down Tiles",
+                "description": "The number of tiles that slope downwards at the start of a run, preventing the execution of a stutter."
+              },
+              "openEnd": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2,
+                "title": "Number of Open Ends",
+                "description": "The number of open ends in the runway. An open end is a runway edge that ends in a dropoff rather than a wall. Each open end adds a bit of extra room."
+              }
+            }
+          },
+          "speedBall": {
+            "type": "object",
+            "title": "Speed Ball",
+            "description": "Fulfilled by being able to gain a speedball with a specified amount of runway.",
+            "required": [
+              "length",
+              "openEnd"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "length": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 45,
+                "title": "Runway length",
+                "description": "The number of contiguous tiles that are available to gain blue speed and jump into a speedball."
+              },
+              "gentleUpTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Gentle Up Tiles",
+                "description": "The number of tiles that slope gently upward (going up by half a tile)."
+              },
+              "gentleDownTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Gentle Down Tiles",
+                "description": "The number of tiles that slope gently downward (going down by half a tile)."
+              },
+              "steepUpTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Steep Up Tiles",
+                "description": "The number of tiles that slope steeply upward (going up by a tile)."
+              },
+              "steepDownTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Steep Down Tiles",
+                "description": "The number of tiles that slope steeply downward (going down by a tile)."
+              },
+              "startingDownTiles": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Starting Down Tiles",
+                "description": "The number of tiles that slope downwards at the start of a run, preventing the execution of a stutter."
+              },
+              "openEnd": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2,
+                "title": "Number of Open Ends",
+                "description": "The number of open ends in the runway. An open end is a runway edge that ends in a dropoff rather than a wall. Each open end adds a bit of extra room."
+              }
+            }
+          },
+          "shinespark": {
+            "type": "object",
+            "title": "Shinespark",
+            "description": "Fulfilled by having sufficient energy to perform a shinespark lasting a given number of frames.",
+            "required": [
+              "frames"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "frames": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Shinespark Frames",
+                "description": "The duration (in frames) of the shinespark that must be executed. This defines the energy cost of the shinespark assuming it is not interrupted by running down to 29 energy."
+              },
+              "excessFrames": {
+                "type": "integer",
+                "minimum": 0,
+                "title": "Excess Shinespark Frames",
+                "description": "The shinespark duration (in frames) that is not required to complete the objective of the shinespark. Subtracting this from the `frames` defines the lower limit of the shinespark energy cost."
+              }
+            }
+          },
+          "resetRoom": {
+            "type": "object",
+            "title": "Reset Room",
+            "description": "Fulfilled by entering the room in a specified node, and avoid visiting barred nodes.",
+            "required": [
+              "nodes"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "nodes": {
+                "type": "array",
+                "title": "Nodes",
+                "description": "The list of nodes from which entering the room is required to fulfill this logical element.",
+                "items": {
+                  "type": "integer",
+                  "title": "Node ID",
+                  "description": "The in-room ID of a node."
+                }
+              }
+            }
+          },
+          "itemNotCollectedAtNode": {
+            "type": "integer",
+            "title": "Item Not Collected",
+            "description": "Fulfilled by an item at a given node not having been collected yet."
+          },
+          "itemCollectedAtNode": {
+            "type": "integer",
+            "title": "Item Collected",
+            "description": "Fulfilled by an item at a given node having already been collected."
+          },
+          "gainFlashSuit": {
+            "type": "object",
+            "title": "Gain Flash Suit",
+            "description": "Always fulfilled, with an effect of Samus gaining a flash suit.",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "useFlashSuit": {
+            "type": "object",
+            "title": "Use Flash Suit",
+            "description": "Fulfilled if Samus has a flash suit, with an effect of losing the flash suit.",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "noFlashSuit": {
+            "type": "object",
+            "title": "No Flash Suit",
+            "description": "Fulfilled if Samus does not have a flash suit.",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "tech": {
+            "type": "string",
+            "title": "Tech Requirement",
+            "description": "A pure tech requirement, avoiding any other requirements normally associated with a tech."
+          },
+          "notable": {
+            "type": "string",
+            "title": "Notable Requirement",
+            "description": "A notable requirement, which is like a tech requirement but specific to the room."
+          },
+          "disableEquipment": {
+            "type": "string",
+            "title": "Disable Equipment",
+            "description": "A requirement to disable a specific item."
+          },
+          "ridleyKill": {
+            "type": "object",
+            "description": "Fulfilled by killing Ridley, including ammo, energy, and skill requirements.",
+            "additionalProperties": false,
+            "properties": {
+              "powerBombs": {
+                "type": "boolean",
+                "default": true,
+                "description": "Whether Power Bombs can be used during the fight."
+              },
+              "gMode": {
+                "type": "boolean",
+                "default": false,
+                "description": "Whether the Ridley kill happens while in G-mode, preventing heat damage while making Ridley's fireballs immobile."
+              },
+              "stuck": {
+                "type": "string",
+                "enum": [null, "top", "bottom"],
+                "default": null,
+                "description": "If applicable, the part of the room where Ridley is stuck."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

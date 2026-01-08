@@ -1,0 +1,163 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/vg-json-data/sm-json-data/master/schema/m3-connection.schema.json",
+  "type": "object",
+  "title": "Super Metroid Connection Pathway Schema",
+  "description": "A list of connections between rooms, comprised of two nodes each",
+  "properties": {
+    "connections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "title": "An object that describes one connection between two Super Metroid rooms",
+        "required": [
+          "connectionType",
+          "direction",
+          "nodes"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "connectionType": {
+            "type": "string",
+            "title": "Connection Type",
+            "examples": [
+              "HorizontalDoor",
+              "VerticalDoor",
+              "HorizontalMorphTunnel",
+              "VerticalSandpit",
+              "Elevator"
+            ],
+            "enum": [
+              "HorizontalDoor",
+              "VerticalDoor",
+              "HorizontalMorphTunnel",
+              "VerticalSandpit",
+              "Elevator",
+              "StoryMarker"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "direction": {
+            "type": "string",
+            "title": "Connection Direction",
+            "description": "Forward means one-way, first node to second node. Bidirectional is both.",
+            "examples": [
+              "Bidirectional",
+              "Forward"
+            ],
+            "enum": [
+              "Bidirectional",
+              "Forward"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "description": {
+            "type": "string",
+            "title": "Connection description",
+            "description": "A textual description of the connection",
+            "default": "",
+            "pattern": "^(.*)$"
+          },
+          "nodes": {
+            "type": "array",
+            "title": "Connection nodes",
+            "description": "An array of 2 nodes that each represent one end of a Connection. Those nodes are most often doors",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "object",
+              "title": "Connection Node",
+              "description": "A node that represents one end of a Connection. This is most often a door",
+              "required": [
+                "area",
+                "subarea",
+                "roomid",
+                "roomName",
+                "nodeid",
+                "nodeName",
+                "position"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "area": {
+                  "type": "string",
+                  "title": "Area Name",
+                  "default": "",
+                  "examples": [
+                    "Brinstar"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "subarea": {
+                  "type": "string",
+                  "title": "Area Subname",
+                  "default": "",
+                  "examples": [
+                    "Blue"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "roomid": {
+                  "type": "integer",
+                  "title": "Room ID",
+                  "description": "ID of the room in which the node exists",
+                  "examples": [
+                    38
+                  ]
+                },
+                "roomName": {
+                  "type": "string",
+                  "title": "Room Name",
+                  "description": "Name of the room in which the node exists",
+                  "examples": ["Landing Site"]
+                },
+                "nodeid": {
+                  "type": "integer",
+                  "title": "Node ID",
+                  "description": "ID of the node within the room in which it exists",
+                  "examples": [1]
+                },
+                "nodeName": {
+                  "type": "string",
+                  "title": "Node Name",
+                  "description": "Name of the node",
+                  "examples": ["Landing Site Top Left Door (to Gauntlet)"]
+                },
+                "position": {
+                  "type": "string",
+                  "title": "Node position",
+                  "description": "The position of a node within a connection",
+                  "examples": [
+                    "left",
+                    "right",
+                    "top",
+                    "bottom"
+                  ],
+                  "enum": [
+                    "left",
+                    "right",
+                    "top",
+                    "bottom"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "note": {
+                  "$ref" : "m3-note.schema.json#/definitions/note"
+                },
+                "devNote": {
+                  "$ref" : "m3-note.schema.json#/definitions/devNote"
+                }
+              }
+            }
+          },
+          "note": {
+            "$ref" : "m3-note.schema.json#/definitions/note"
+          },
+          "devNote": {
+            "$ref" : "m3-note.schema.json#/definitions/devNote"
+          }
+        }
+      }
+    }
+  }
+}

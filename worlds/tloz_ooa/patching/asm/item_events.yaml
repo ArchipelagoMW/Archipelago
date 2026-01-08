@@ -1,0 +1,398 @@
+# don't set room's item flag if it's nayru's item on the maku tree screen,
+# since link still might not have taken the maku tree's item.
+09//ignoreNayruItemForRoomFlag: |
+    call getThisRoomFlags
+    push bc
+    ld bc,$c738
+    call compareHlToBc
+    pop bc
+    jr nz,@next
+    ld a,(w1Link.xh)
+    cp $50
+    ret z
+    @next:
+    set 5,(hl)
+    ret
+09/4c82/: jp ignoreNayruItemForRoomFlag
+
+# run certain actions depending on what item was picked up and where. this
+# has to be explicitly called if an item is given by an interaction other
+# than ID 60.
+#09//handleGetMultiworldItem: /include handleGetMultiworldItem
+09//handleGetItem: |
+    ; call handleGetMultiworldItem
+    ld a,b
+    ld e,a
+    ; jr nz,@outgoing
+    push de
+    ld e,$73
+    ld a,(de) # nonzero if interaction should set item room flag
+    pop de
+    and a
+    push af
+    call satchelRefillSeeds
+    call shooterAddDefaultSeed
+    call activateFlute
+    pop af
+    jr z,@incoming
+    @outgoing:
+    call tingleSetFakeId
+    call goronDanceSetFakeId
+    call kingZoraSetFakeId
+    call symmetryBrotherSetFakeId
+    @incoming:
+    call setD6BossKey
+    call checkEssencePostSavedWaifu
+    call makuSeedResetTreeState
+    ld a,e
+    jp giveTreasure
+09/4c4e/: call handleGetItem
+
+# make satchel refill seeds inherently, not as part of a scripted event.
+09//satchelRefillSeeds: |
+    ld a,e
+    cp TREASURE_SEED_SATCHEL
+    ret nz
+    push bc
+    push de
+    push hl
+    ld hl,wSeedSatchelLevel
+    inc (hl) # needed since this is run *before* the satchel is given
+    call refillSeedSatchel
+    dec (hl)
+    pop hl
+    pop de
+    pop bc
+    ret
+
+09//shooterAddDefaultSeed: |
+    ld a,e
+    cp TREASURE_SHOOTER
+    ret nz
+    push bc
+    ld a,option.defaultSeedType
+    ld c,$20
+    call giveTreasure
+    pop bc
+    ret
+
+09//checkEssencePostSavedWaifu: |
+    push bc
+    ld bc,$3800 # present
+    call compareRoom
+    pop bc
+    ret nz
+    call getThisRoomFlags
+    bit 7,a
+    ret z
+    ld a,(wEssencesObtained)
+    call getNumSetBits
+    cp option.requiredEssences
+    ret c
+    ld a,$0e
+    ld (wMakuTreeState),a
+    ret
+
+# sets flute icon and animal flags based on flute param.
+09//activateFlute: |
+    ld a,e
+    cp TREASURE_FLUTE
+    ret nz
+    ld a,c
+    sub $0a
+    ld (wFluteIcon),a
+    push hl
+    ld h,$c6
+    add a,$45
+    ld l,a
+    ld (hl),$c3
+    pop hl
+    ret
+
+# make boss key in D6 present also give it in D6 past.
+09//setD6BossKey: |
+    ld a,e
+    cp TREASURE_BOSS_KEY
+    ret nz
+    ld a,c
+    cp $06
+    jr z,@next
+    cp $0c
+    ret nz
+    @next:
+    push hl
+    ld hl,wDungeonBossKeys
+    set 6,(hl)
+    inc hl
+    set 4,(hl)
+    pop hl
+    ret
+
+# set fake item ID to track getting the "island chart" from tingle.
+09//tingleSetFakeId: |
+    push bc
+    ld bc,$7900
+    call compareRoom
+    pop bc
+    ret nz
+    push hl
+    ld a,GLOBALFLAG_GOT_SEACHART
+    call setGlobalFlag
+    pop hl
+    ret
+
+09//goronDanceSetFakeId: |
+    push bc
+    ld bc,$ed02 # present
+    call compareRoom
+    pop bc
+    jr z,@next
+    push bc
+    ld bc,$ef02 # past
+    call compareRoom
+    pop bc
+    ret nz
+    ld a,TREASURE_GORON_LETTER
+    call checkTreasureObtained
+    ld a,GLOBALFLAG_WON_LETTER_DANCE
+    jr c,@next2
+    @next:
+    ld a,GLOBALFLAG_WON_FIRST_DANCE 
+    @next2:
+    push hl
+    call setGlobalFlag
+    pop hl
+    ret
+
+# set fake item ID to track getting the "tuni nut" from a brother.
+09//symmetryBrotherSetFakeId: |
+    push bc
+    ld bc,$6e03
+    call compareRoom
+    jr z,@next
+    inc b
+    call compareRoom
+    @next:
+    pop bc
+    ret nz
+    push hl
+    ld a,GLOBALFLAG_GOT_TUNINUT_FROM_BROTHER
+    call setGlobalFlag
+    pop hl
+    ret
+
+# set fake item ID to track getting the "library key" from king zora.
+09//kingZoraSetFakeId: |
+    push bc
+    ld bc,$ab05
+    call compareRoom
+    pop bc
+    ret nz
+    push hl
+    ld a,GLOBALFLAG_REWARD_KING_ZORA
+    call setGlobalFlag
+    pop hl
+    ret
+
+# reset maku tree to state 02 after getting the maku seed. i think so that
+# you can still get the "satchel" item afterward if you haven't already.
+09//makuSeedResetTreeState: |
+    ld a,e
+    cp TREASURE_MAKU_SEED
+    ret nz
+    ld a,$02
+    ld (wMakuTreeState),a
+    ret
+
+## check fake ids to track:
+0b/5489/: |
+    ld a,GLOBALFLAG_REWARD_KING_ZORA                        # king zora
+    call checkGlobalFlag
+0c/67d7/: db jumpifglobalflagset,GLOBALFLAG_WON_LETTER_DANCE # goron dance w/ letter
+0c/6851/: db jumpifglobalflagset,GLOBALFLAG_WON_LETTER_DANCE # ^
+0c/697a/: db jumpifglobalflagset,GLOBALFLAG_WON_LETTER_DANCE # ^
+0c/67df/: db jumpifglobalflagset,GLOBALFLAG_WON_FIRST_DANCE # goron dance present
+0c/6859/: db jumpifglobalflagset,GLOBALFLAG_WON_FIRST_DANCE # ^
+0c/6982/: db jumpifglobalflagset,GLOBALFLAG_WON_FIRST_DANCE # ^
+0c/7dff/: db jumpifglobalflagset,GLOBALFLAG_GOT_SEACHART # tingle 1
+
+0b//mapleTradeHandle: |
+    ld a,GLOBALFLAG_TRADE_MAPLE
+    call setGlobalFlag
+    ld bc, locations.mapleTrade
+    call createTreasure
+    ret
+
+0b/5cde/: |
+    nop
+    nop
+    nop
+    call mapleTradeHandle
+
+# king zora check the custom potion now
+0c/7b71/: db TREASURE_ZORA_POTION
+0b/54cc/: db TREASURE_ZORA_POTION
+
+# king zora should give the item first, *then* give permission to enter jabu
+# (on another visit (as in vanilla)).
+0b//checkKingZoraSequence1: |
+    call checkGlobalFlag
+    ret z
+    ld a,GLOBALFLAG_REWARD_KING_ZORA # set by kingZoraSetFakeId
+    call checkGlobalFlag
+    ld a,$00
+    ret z
+    inc a
+    ret
+0b/5464/: call checkKingZoraSequence1
+
+# also, get permission to enter jabu even if you've already completed d7 (as
+# can happen in dungeon shuffle).
+0b//checkKingZoraSequence2: |
+    call checkGlobalFlag
+    ret z
+    ld a,$40
+    call checkTreasureObtained
+    bit 6,a
+    ret
+0b/5469/: |
+    ld a,$31
+    call checkKingZoraSequence2
+    nop
+    nop
+
+# ignore satchel level when talking to tingle for second item.
+0b/75c5/: xor a
+
+# use custom script for soldier in deku forest with sub ID 0; they should
+# give an item in exchange for mystery seeds.
+0c//script_soldierDone: |
+    db rungenericnpc
+    dw $0859
+    db scriptend
+0c//script_soldierGiveItem: |
+    db initcollisions
+    db checkabutton
+    db showtext
+    dw $0b59
+    db writec6xx,$bd,$00
+    db ormemory
+    dw wStatusBarNeedsRefresh
+    db $02
+    db giveitem
+    dwbe locations.dekuForestSoldier # item set at randomization
+    db setglobalflag,GLOBALFLAG_GAVE_MYST_SEED
+    db jumpalways
+    dw script_soldierDone
+0c//script_soldierCheckSeeds: |
+    db jumpifc6xxset,bd,ff
+    dw script_soldierGiveItem
+    db $5d,$ee # jump
+0c//script_dekuForestSoldier: |
+    db jumpifglobalflagset,GLOBALFLAG_GAVE_MYST_SEED
+    dw script_soldierDone
+    db jumpifitemobtained,TREASURE_MYSTERY_SEEDS
+    dw script_soldierCheckSeeds
+    db $5d,$ee # jump
+09/5207/: dw script_dekuForestSoldier
+
+# set room flag 6 when "boomerang" item is given in script.
+0c//script_giveTargetCartsSecondPrize: |
+    db giveitem
+    dwbe locations.targetCart2
+    db orroomflag,$40
+    db retscript
+0c/6e6e/: dw script_giveTargetCartsSecondPrize
+
+# stop tingle script from making ricky leave :(
+0c/7e2a/: |
+    db enableinput
+    dw $fe7d
+    db setdisabledobjectsto11 # ??
+# or refilling seed satchel.
+0c/7e7d/: |
+    db jumpalways
+    dw $7e80
+
+# always make "boomerang" second prize for target carts, checking room flag 6
+# to track it.
+15//getTargetCartsPrize: |
+    call getThisRoomFlags
+    bit 6,a
+    ld a,$04
+    jp z,$66bb
+    call getRandomNumber
+    jp $66a5
+15/66a2/: jp getTargetCartsPrize
+
+# skip normal boomerang check in target carts, since EOB code handles it.
+15/66ae/: jr $0b
+# remove "boomerang" from random prizes (it's guaranteed second instead).
+15/66e5/: db 03,03,03 # prize indexes in a table
+# don't give boomerang as a shooting gallery prize either.
+15/52b6/: db jumpalways,c3,52,scriptend
+
+# trade lava juice without having the mermaid key.
+15/6879/: jr nc,$00
+
+
+# Tuni nut check treasure and not subtreasure anymore
+3f/7b78/: ld a, $3b
+3f/7b81/: |
+    nop
+    nop
+# Make it loose the tuni nut treasure correctly
+3f/7c79/: db $3b
+
+# PATCH
+# Change Give item script
+15//patchGainTuniNut: |
+    ld bc, locations.patchTuni
+    call spawnTreasureOnLink
+    ld a,GLOBALFLAG_REPAIRED_TUNI
+    call setGlobalFlag
+    ld a, $4c
+    call loseTreasure
+    ret
+0c/78dc/: |
+    db $e0
+    dw patchGainTuniNut
+15//patchGainSword: |
+    ld bc, locations.patchSword
+    call spawnTreasureOnLink
+    ld a,GLOBALFLAG_REPAIRED_SWORD
+    call setGlobalFlag
+    ld a, $3a
+    call loseTreasure
+    ret
+0c/78e0/: |
+    db $e0
+    dw patchGainSword
+    db $c1 # ret script
+
+# Make patch check the proper treasure.
+0a/78dc/: db $3a
+0a/78e2/: |
+    nop
+    nop
+    nop
+    nop
+
+
+# Remove the set of the flag GLOBALFLAG_PATCH_REPAIRED_EVERYTHING
+# DONT USE IT, or patch won't fix anything anymore
+0a/7a3a/: |
+    nop
+    nop
+    nop
+
+# Set room flag 0x20 when knocking off tree seeds (mostly for tracking purpose)
+11//extendedKnockOffTree: |
+    push hl
+    call getThisRoomFlags
+    or $20
+    ld (hl),a
+    pop hl
+    ld bc,$fec0   ; original instruction replaced by injected call
+    ret
+11/4ac9/: call extendedKnockOffTree

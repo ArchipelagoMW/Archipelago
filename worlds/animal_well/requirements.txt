@@ -1,0 +1,2 @@
+Pymem>=1.13.1
+pywin32>=306; sys_platform == "win32"

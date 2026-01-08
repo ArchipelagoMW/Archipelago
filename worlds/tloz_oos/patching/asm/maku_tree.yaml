@@ -1,0 +1,68 @@
+# Syncs the room flag with the global maku tree flag set in the first room
+09/7df9/: |
+  ld a,($c80b)
+  or (hl)
+  ld (hl),a
+  ld ($c80b),a
+  ret
+
+09/7dc0/checkMakuItemObtained: |
+  call getThisRoomFlags
+  call $7df9
+  ld a,($c80b)
+  bit 5,a
+  ret z
+  set 6,(hl)
+  ret
+
+# Rework makuTree_setAppropriateStage to map a small amount of stages to all
+# possible situations in rando:
+# - Item not yet obtained
+# - Item obtained, not enough essences
+# - Item obtained, enough essences collected (give Maku Seed)
+# - Maku Seed obtained
+# - Game completed
+09/7d8b/: |
+  call checkMakuItemObtained
+  jr nz,@gnarledObtained
+  xor a
+  jr @setStage    ; If Maku Tree item was not obtained, set stage 0x0 
+  
+  @gnarledObtained:
+  ld a,$28        ; GLOBALFLAG_FINISHEDGAME
+  call checkGlobalFlag
+  jr z,@gameNotFinished
+  ld a,$0e
+  jr @setStage    ; If game is finished, set stage 0xE
+  
+  @gameNotFinished:
+  ld a,TREASURE_MAKU_SEED
+  call checkTreasureObtained
+  jr nc,@makuSeedNotObtained
+  ld a,$0c
+  jr @setStage    ; If Maku Seed was obtained, set stage 0xC
+  
+  @makuSeedNotObtained:
+  call getEssenceCount
+  cp option.requiredEssences
+  jr c,@notEnoughEssences
+  ld a,$08        ; Enough essences are owned to get Maku Seed, set stage 0x8
+  jr @setStage
+  
+  @notEnoughEssences:
+  ld a,$01        ; Not enough essences in inventory, set stage 0x1
+  
+  @setStage:
+  ld ($cc39),a
+  ret
+
+# In applyWArpDest_b04, change the variable that is checked to know in which Maku Tree room the player must be warped
+04//determineMakuTreeRoomOffset: |
+  ; Room of Rites has been visited, use $09 as a fixed room offset 
+  ld a,($c6df)
+  cp $09
+  ; Otherwise, use essence count as room offset
+  jp c,getEssenceCount
+  ret
+04/45e8/: call determineMakuTreeRoomOffset
+

@@ -1,0 +1,2562 @@
+{
+    "00": {
+        "readable_name": "<blank>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "01": {
+        "readable_name": "Empty",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "02": {
+        "readable_name": "Knife",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "[\"Knight\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"Blue Mage\", \"Red Mage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "03": {
+        "readable_name": "Dagger",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Knight\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"Blue Mage\", \"Red Mage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "04": {
+        "readable_name": "Mythril Knife",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Knight\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"Blue Mage\", \"Red Mage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "05": {
+        "readable_name": "Kunai",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Ninja']"
+    },
+    "06": {
+        "readable_name": "Mage Masher",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "[\"Knight\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"Blue Mage\", \"Red Mage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "07": {
+        "readable_name": "Guardian",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "[\"Knight\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"Blue Mage\", \"Red Mage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "08": {
+        "readable_name": "Kodachi",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "['Ninja']"
+    },
+    "09": {
+        "readable_name": "Orialcon",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "[\"Knight\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"Blue Mage\", \"Red Mage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "0A": {
+        "readable_name": "Air Knife",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 6,
+        "max_count": 3.0,
+        "tier": 6,
+        "related_jobs": "[\"Knight\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"Blue Mage\", \"Red Mage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "0B": {
+        "readable_name": "Assassin",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 7,
+        "max_count": 1.0,
+        "tier": 7,
+        "related_jobs": "[\"Knight\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"Blue Mage\", \"Red Mage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "0C": {
+        "readable_name": "Hardened Dagger",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 7,
+        "max_count": 1.0,
+        "tier": 6,
+        "related_jobs": "['Ninja']"
+    },
+    "0D": {
+        "readable_name": "Broadsword",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "[\"Knight\", \"MysticKnight\", \"BlueMage\", \"RedMage\"]"
+    },
+    "0E": {
+        "readable_name": "RegalCut",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "[\"Knight\", \"MysticKnight\", \"BlueMage\", \"RedMage\"]"
+    },
+    "0F": {
+        "readable_name": "Mythril Sword",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "[\"Knight\", \"MysticKnight\", \"BlueMage\", \"RedMage\"]"
+    },
+    "10": {
+        "readable_name": "Coral Sword",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Knight\", \"MysticKnight\", \"BlueMage\", \"RedMage\"]"
+    },
+    "11": {
+        "readable_name": "Ancient Sword",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "[\"Knight\", \"MysticKnight\", \"BlueMage\", \"RedMage\"]"
+    },
+    "12": {
+        "readable_name": "Epee Sword",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "[\"Knight\", \"MysticKnight\", \"BlueMage\", \"RedMage\"]"
+    },
+    "13": {
+        "readable_name": "Slumber Sword",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "[\"Knight\", \"MysticKnight\", \"BlueMage\", \"RedMage\"]"
+    },
+    "14": {
+        "readable_name": "Defender Sword",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knightsword",
+        "value": 6,
+        "max_count": 3.0,
+        "tier": 5,
+        "related_jobs": "['Knight']"
+    },
+    "15": {
+        "readable_name": "Excalibur",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knightsword",
+        "value": 7,
+        "max_count": 1.0,
+        "tier": 6,
+        "related_jobs": "[\"Knight\", \"MysticKnight\", \"BlueMage\", \"RedMage\"]"
+    },
+    "16": {
+        "readable_name": "Ragnarok",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knightsword",
+        "value": 8,
+        "max_count": 1.0,
+        "tier": 8,
+        "related_jobs": "['Knight']"
+    },
+    "17": {
+        "readable_name": "Javelin",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "spear",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Dragoon']"
+    },
+    "18": {
+        "readable_name": "Spear",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "spear",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Dragoon']"
+    },
+    "19": {
+        "readable_name": "Mythril Spear",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "spear",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Dragoon']"
+    },
+    "1A": {
+        "readable_name": "Trident",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "spear",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Dragoon']"
+    },
+    "1B": {
+        "readable_name": "Wind Spear",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "spear",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "['Dragoon']"
+    },
+    "1C": {
+        "readable_name": "Partisan",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "spear",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 5,
+        "related_jobs": "['Dragoon']"
+    },
+    "1D": {
+        "readable_name": "Heavy Spear",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "spear",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "['Dragoon']"
+    },
+    "1E": {
+        "readable_name": "DblLance",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "spear",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 5,
+        "related_jobs": "['Thief', 'Ninja', 'Mimic']"
+    },
+    "1F": {
+        "readable_name": "Holy Lance",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "spear",
+        "value": 7,
+        "max_count": 1.0,
+        "tier": 6,
+        "related_jobs": "['Dragoon']"
+    },
+    "20": {
+        "readable_name": "Dragoon Lance",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "spear",
+        "value": 8,
+        "max_count": 1.0,
+        "tier": 7,
+        "related_jobs": "['Dragoon']"
+    },
+    "21": {
+        "readable_name": "Battle Axe",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "axe",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Berserker']"
+    },
+    "22": {
+        "readable_name": "Mythril Hammer",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "axe",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Berserker']"
+    },
+    "23": {
+        "readable_name": "Ogre Killer",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "axe",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Berserker']"
+    },
+    "24": {
+        "readable_name": "War Hammer",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "axe",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Berserker']"
+    },
+    "25": {
+        "readable_name": "Venom Axe",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "axe",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "['Berserker']"
+    },
+    "26": {
+        "readable_name": "Earth Hammer",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "axe",
+        "value": 7,
+        "max_count": 1.0,
+        "tier": 6,
+        "related_jobs": "['Berserker']"
+    },
+    "27": {
+        "readable_name": "Rune Axe",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "axe",
+        "value": 7,
+        "max_count": 3.0,
+        "tier": 7,
+        "related_jobs": "['Berserker']"
+    },
+    "28": {
+        "readable_name": "Thor Hammer",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "axe",
+        "value": 7,
+        "max_count": 2.0,
+        "tier": 6,
+        "related_jobs": "['Berserker']"
+    },
+    "29": {
+        "readable_name": "Katana",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "katana",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Samurai']"
+    },
+    "2A": {
+        "readable_name": "Air Blade",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "katana",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Samurai']"
+    },
+    "2B": {
+        "readable_name": "Kotetsu",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "katana",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Samurai']"
+    },
+    "2C": {
+        "readable_name": "Bizen",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "katana",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Samurai']"
+    },
+    "2D": {
+        "readable_name": "Forged",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "katana",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Samurai']"
+    },
+    "2E": {
+        "readable_name": "Murasume",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "katana",
+        "value": 6,
+        "max_count": 1.0,
+        "tier": 5,
+        "related_jobs": "['Samurai']"
+    },
+    "2F": {
+        "readable_name": "Masamune",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "katana",
+        "value": 7,
+        "max_count": 1.0,
+        "tier": 8,
+        "related_jobs": "['Samurai']"
+    },
+    "30": {
+        "readable_name": "Tempest",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "katana",
+        "value": 7,
+        "max_count": 1.0,
+        "tier": 8,
+        "related_jobs": "['Samurai']"
+    },
+    "31": {
+        "readable_name": "Rod",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "rod",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['BlackMage', 'TimeMage', 'Summoner', 'RedMage', 'Mimic']"
+    },
+    "32": {
+        "readable_name": "Fire Rod",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "rod",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['BlackMage', 'TimeMage', 'Summoner', 'RedMage', 'Mimic']"
+    },
+    "33": {
+        "readable_name": "Ice Rod",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "rod",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['BlackMage', 'TimeMage', 'Summoner', 'RedMage', 'Mimic']"
+    },
+    "34": {
+        "readable_name": "Thunder Rod",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "rod",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['BlackMage', 'TimeMage', 'Summoner', 'RedMage', 'Mimic']"
+    },
+    "35": {
+        "readable_name": "Venom Rod",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "rod",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['BlackMage', 'TimeMage', 'Summoner', 'RedMage', 'Mimic']"
+    },
+    "36": {
+        "readable_name": "Lillith Rod",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "rod",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "['BlackMage', 'TimeMage', 'Summoner', 'RedMage', 'Mimic']"
+    },
+    "37": {
+        "readable_name": "Wizard Rod",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "rod",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "['BlackMage', 'TimeMage', 'Summoner', 'RedMage', 'Mimic']"
+    },
+    "38": {
+        "readable_name": "Staff",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "staff",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['WhiteMage', 'TimeMage', 'RedMage', 'Chemist', 'Mimic']"
+    },
+    "39": {
+        "readable_name": "Mythril Staff",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "staff",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['WhiteMage', 'TimeMage', 'RedMage', 'Chemist', 'Mimic']"
+    },
+    "3A": {
+        "readable_name": "Power Staff",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "staff",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['WhiteMage', 'TimeMage', 'RedMage', 'Chemist', 'Mimic']"
+    },
+    "3B": {
+        "readable_name": "Healing Staff",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "staff",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['WhiteMage', 'TimeMage', 'RedMage', 'Chemist', 'Mimic']"
+    },
+    "3C": {
+        "readable_name": "Staff of Light",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "staff",
+        "value": 5,
+        "max_count": 2.0,
+        "tier": 5,
+        "related_jobs": "['WhiteMage', 'TimeMage', 'RedMage', 'Chemist', 'Mimic']"
+    },
+    "3D": {
+        "readable_name": "Sage's Staff",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "staff",
+        "value": 7,
+        "max_count": 2.0,
+        "tier": 7,
+        "related_jobs": "['WhiteMage', 'TimeMage', 'RedMage', 'Chemist', 'Mimic']"
+    },
+    "3E": {
+        "readable_name": "Judgement Staff",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "staff",
+        "value": 7,
+        "max_count": 1.0,
+        "tier": 7,
+        "related_jobs": "['WhiteMage', 'TimeMage', 'RedMage', 'Chemist', 'Mimic']"
+    },
+    "3F": {
+        "readable_name": "Fire Bow",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bow",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Hunter']"
+    },
+    "40": {
+        "readable_name": "Ice Bow",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bow",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Hunter']"
+    },
+    "41": {
+        "readable_name": "Thunder Bow",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bow",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Hunter']"
+    },
+    "42": {
+        "readable_name": "Darkness Bow",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bow",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Hunter']"
+    },
+    "43": {
+        "readable_name": "Killer Bow",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bow",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Hunter']"
+    },
+    "44": {
+        "readable_name": "Elven Bow",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bow",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Hunter']"
+    },
+    "45": {
+        "readable_name": "Yoichi Bow",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bow",
+        "value": 4,
+        "max_count": 1.0,
+        "tier": 5,
+        "related_jobs": "['Hunter']"
+    },
+    "46": {
+        "readable_name": "Artemis Bow",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bow",
+        "value": 4,
+        "max_count": 1.0,
+        "tier": 5,
+        "related_jobs": "['Hunter']"
+    },
+    "47": {
+        "readable_name": "Silver Harp",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "harp",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Bard']"
+    },
+    "48": {
+        "readable_name": "Dream Harp",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "harp",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Bard']"
+    },
+    "49": {
+        "readable_name": "Lamia's Harp",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "harp",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Bard']"
+    },
+    "4A": {
+        "readable_name": "Apollo's Harp",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "harp",
+        "value": 7,
+        "max_count": 1.0,
+        "tier": 7,
+        "related_jobs": "['Bard']"
+    },
+    "4B": {
+        "readable_name": "Whip",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "whip",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Trainer']"
+    },
+    "4C": {
+        "readable_name": "Chain Whip",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "whip",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Trainer']"
+    },
+    "4D": {
+        "readable_name": "Thunder Whip",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "whip",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Trainer']"
+    },
+    "4E": {
+        "readable_name": "Flame Whip",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "whip",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "['Trainer']"
+    },
+    "4F": {
+        "readable_name": "Dragon's Whisker",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "whip",
+        "value": 7,
+        "max_count": 1.0,
+        "tier": 7,
+        "related_jobs": "['Trainer']"
+    },
+    "50": {
+        "readable_name": "Giyaman",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bell",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Geomancer']"
+    },
+    "51": {
+        "readable_name": "Earth Bell",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bell",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Geomancer']"
+    },
+    "52": {
+        "readable_name": "Rune Chime",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bell",
+        "value": 3,
+        "max_count": 1.0,
+        "tier": 4,
+        "related_jobs": "['Geomancer']"
+    },
+    "53": {
+        "readable_name": "Tinkerbell",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bell",
+        "value": 7,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Geomancer']"
+    },
+    "54": {
+        "readable_name": "Sabre (*Dummy)",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "55": {
+        "readable_name": "Drain Sword",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Knight']"
+    },
+    "56": {
+        "readable_name": "RuneEdge",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "[\"Knight\", \"MysticKnight\", \"BlueMage\", \"RedMage\"]"
+    },
+    "57": {
+        "readable_name": "Flametongue",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Knight']"
+    },
+    "58": {
+        "readable_name": "IceBrand",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Knight']"
+    },
+    "59": {
+        "readable_name": "Full Moon",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "flail",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "['Thief', 'Ninja', 'Mimic']"
+    },
+    "5A": {
+        "readable_name": "Shuriken",
+        "valid": true,
+        "type": "item",
+        "subtype": "throw",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Ninja']"
+    },
+    "5B": {
+        "readable_name": "Pinwheel",
+        "valid": true,
+        "type": "item",
+        "subtype": "throw",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 5,
+        "related_jobs": "['Ninja']"
+    },
+    "5C": {
+        "readable_name": "Excailbur",
+        "valid": true,
+        "type": "item",
+        "subtype": "throw",
+        "value": 1,
+        "max_count": 1.0,
+        "tier": 3,
+        "related_jobs": "[\"Knight\", \"Mystic Knight\", \"Blue Mage\", \"Red Mage\"]"
+    },
+    "5D": {
+        "readable_name": "BeastKiller",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "whip",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 5,
+        "related_jobs": "['Trainer']"
+    },
+    "5E": {
+        "readable_name": "Flail",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "flail",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['WhiteMage', 'TimeMage', 'RedMage', 'Chemist', 'Mimic']"
+    },
+    "5F": {
+        "readable_name": "Morning Star",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "flail",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['WhiteMage', 'TimeMage', 'RedMage', 'Chemist', 'Mimic']"
+    },
+    "60": {
+        "readable_name": "Wonder Wand",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "rod",
+        "value": 5,
+        "max_count": 1.0,
+        "tier": 3,
+        "related_jobs": "['Black Mage', 'Time Mage', 'Summoner', 'Red Mage', 'Mimic']"
+    },
+    "61": {
+        "readable_name": "Brave Blade",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 8,
+        "max_count": 1.0,
+        "tier": 8,
+        "related_jobs": "['Knight']"
+    },
+    "62": {
+        "readable_name": "Soot",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "flail",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Ninja']"
+    },
+    "63": {
+        "readable_name": "Chicken Knife",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 8,
+        "max_count": 1.0,
+        "tier": 8,
+        "related_jobs": "[\"Knight\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"Mystic Knight\", \"Black Mage\", \"Time Mage\", \"Summoner\", \"Blue Mage\", \"Red Mage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "64": {
+        "readable_name": "RisingSun",
+        "valid": true,
+        "type": "item",
+        "subtype": "throw",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Thief', 'Ninja', 'Mimic']"
+    },
+    "65": {
+        "readable_name": "Silver Bow",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bow",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Hunter']"
+    },
+    "66": {
+        "readable_name": "Gale Bow",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bow",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Hunter']"
+    },
+    "67": {
+        "readable_name": "AntiMagic Bow",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bow",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "['Hunter']"
+    },
+    "68": {
+        "readable_name": "Avis Killer",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "bow",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "['Hunter']"
+    },
+    "69": {
+        "readable_name": "DoomCut",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "axe",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 5,
+        "related_jobs": "['Berserker']"
+    },
+    "6A": {
+        "readable_name": "Giant's Axe",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "axe",
+        "value": 5,
+        "max_count": 2.0,
+        "tier": 6,
+        "related_jobs": "['Berserker']"
+    },
+    "6B": {
+        "readable_name": "ManEater",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 6,
+        "max_count": 3.0,
+        "tier": 6,
+        "related_jobs": "['Dancer']"
+    },
+    "6C": {
+        "readable_name": "Thief Knife",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 3,
+        "max_count": 1.0,
+        "tier": 3,
+        "related_jobs": "[\"Knight\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"Mystic Knight\", \"Black Mage\", \"Time Mage\", \"Summoner\", \"Blue Mage\", \"Red Mage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "6D": {
+        "readable_name": "Dancing Dagger",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "knife",
+        "value": 4,
+        "max_count": 1.0,
+        "tier": 4,
+        "related_jobs": "[\"Knight\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"Mystic Knight\", \"Black Mage\", \"Time Mage\", \"Summoner\", \"Blue Mage\", \"Red Mage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "6E": {
+        "readable_name": "Enhancer",
+        "valid": true,
+        "type": "weapon",
+        "subtype": "sword",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 6,
+        "related_jobs": "[\"Knight\", \"Mystic Knight\", \"Blue Mage\", \"Red Mage\"]"
+    },
+    "6F": {
+        "readable_name": "L. Hand",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "70": {
+        "readable_name": "R. Hand",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "71": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "72": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "73": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "74": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "75": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "76": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "77": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "78": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "79": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "7A": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "7B": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "7C": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "7D": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "7E": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "7F": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "80": {
+        "readable_name": "<blank>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "81": {
+        "readable_name": "Leather Shield",
+        "valid": true,
+        "type": "armor",
+        "subtype": "shield",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"BlueMage\", \"Mimic\"]"
+    },
+    "82": {
+        "readable_name": "Bronze Shield",
+        "valid": true,
+        "type": "armor",
+        "subtype": "shield",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"BlueMage\", \"Mimic\"]"
+    },
+    "83": {
+        "readable_name": "Iron Shield",
+        "valid": true,
+        "type": "armor",
+        "subtype": "shield",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"BlueMage\", \"Mimic\"]"
+    },
+    "84": {
+        "readable_name": "Mythril Shield",
+        "valid": true,
+        "type": "armor",
+        "subtype": "shield",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"BlueMage\", \"Mimic\"]"
+    },
+    "85": {
+        "readable_name": "Golden Shield",
+        "valid": true,
+        "type": "armor",
+        "subtype": "shield",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"BlueMage\", \"Mimic\"]"
+    },
+    "86": {
+        "readable_name": "Aegis Shield",
+        "valid": true,
+        "type": "armor",
+        "subtype": "shield",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 7,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"BlueMage\", \"Mimic\"]"
+    },
+    "87": {
+        "readable_name": "Diamond Shield",
+        "valid": true,
+        "type": "armor",
+        "subtype": "shield",
+        "value": 6,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"BlueMage\", \"Mimic\"]"
+    },
+    "88": {
+        "readable_name": "Crystal Shield",
+        "valid": true,
+        "type": "armor",
+        "subtype": "shield",
+        "value": 7,
+        "max_count": 3.0,
+        "tier": 6,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"BlueMage\", \"Mimic\"]"
+    },
+    "89": {
+        "readable_name": "Leather Cap",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "8A": {
+        "readable_name": "Bronze Helm",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "8B": {
+        "readable_name": "Iron Helm",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "8C": {
+        "readable_name": "Mythril Helm",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "8D": {
+        "readable_name": "Golden Helm",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "8E": {
+        "readable_name": "Diamond Helm",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "8F": {
+        "readable_name": "Crystal Helm",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 7,
+        "max_count": 3.0,
+        "tier": 6,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "90": {
+        "readable_name": "Plumed Hat",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "91": {
+        "readable_name": "Tricorn Hat",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "92": {
+        "readable_name": "Magus",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "[\"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "93": {
+        "readable_name": "Circlet",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "[\"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "94": {
+        "readable_name": "Gold Hairpin",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 4,
+        "max_count": 2.0,
+        "tier": 6,
+        "related_jobs": "[\"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "95": {
+        "readable_name": "Ribbon",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 4,
+        "max_count": 2.0,
+        "tier": 5,
+        "related_jobs": "['Dancer']"
+    },
+    "96": {
+        "readable_name": "Bandana",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Monk\", \"Thief\", \"Ninja\", \"Hunter\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "97": {
+        "readable_name": "GrnBeret",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Monk\", \"Thief\", \"Ninja\", \"Hunter\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "98": {
+        "readable_name": "DarkHood",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "[\"Monk\", \"Thief\", \"Ninja\", \"Hunter\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "99": {
+        "readable_name": "Lamia's Tiara",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "[\"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "9A": {
+        "readable_name": "Leather Armor",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "9B": {
+        "readable_name": "Bronze Armor",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "9C": {
+        "readable_name": "Iron Armor",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "9D": {
+        "readable_name": "Mythril Armor",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "9E": {
+        "readable_name": "Golden Armor",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "9F": {
+        "readable_name": "Diamond Armor",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 5,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "A0": {
+        "readable_name": "Crystal Armor",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 7,
+        "max_count": 3.0,
+        "tier": 6,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "A1": {
+        "readable_name": "CopperPlt",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "[\"Knight\", \"Monk\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "A2": {
+        "readable_name": "Training Suit",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Knight\", \"Monk\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "A3": {
+        "readable_name": "Silver Plate",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "[\"Knight\", \"Monk\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "A4": {
+        "readable_name": "Stealth Suit",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "[\"Knight\", \"Monk\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "A5": {
+        "readable_name": "DiamndPlt",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 5,
+        "related_jobs": "[\"Knight\", \"Monk\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "A6": {
+        "readable_name": "DarkSuit",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 6,
+        "max_count": 3.0,
+        "tier": 6,
+        "related_jobs": "[\"Knight\", \"Monk\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "A7": {
+        "readable_name": "Cotton Robe",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "[\"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "A8": {
+        "readable_name": "Silk robe",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "A9": {
+        "readable_name": "Gaia Gear",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "[\"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "AA": {
+        "readable_name": "Bard's Surplice",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "[\"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "AB": {
+        "readable_name": "Lumina Robe",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 5,
+        "related_jobs": "[\"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "AC": {
+        "readable_name": "Black Robe",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 6,
+        "max_count": 3.0,
+        "tier": 6,
+        "related_jobs": "[\"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "AD": {
+        "readable_name": "White Robe",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 6,
+        "max_count": 3.0,
+        "tier": 6,
+        "related_jobs": "[\"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "AE": {
+        "readable_name": "Mirage Vest",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 7,
+        "max_count": 2.0,
+        "tier": 8,
+        "related_jobs": "[\"Knight\", \"Monk\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "AF": {
+        "readable_name": "Guard Ring",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 7,
+        "max_count": 2.0,
+        "tier": 7,
+        "related_jobs": "['All']"
+    },
+    "B0": {
+        "readable_name": "Thief's Glove",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Thief', 'Mimic']"
+    },
+    "B1": {
+        "readable_name": "Giant's Gloves",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 3,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "B2": {
+        "readable_name": "Elf Cape",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 6,
+        "max_count": 2.0,
+        "tier": 6,
+        "related_jobs": "['All']"
+    },
+    "B3": {
+        "readable_name": "Cursed Ring",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 1,
+        "max_count": 1.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "B4": {
+        "readable_name": "Glasses",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "B5": {
+        "readable_name": "Running Shoes",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 7,
+        "max_count": 2.0,
+        "tier": 9,
+        "related_jobs": "['All']"
+    },
+    "B6": {
+        "readable_name": "Mythril Glove",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "B7": {
+        "readable_name": "Silver Armlet",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Monk\", \"Thief\", \"Ninja\", \"Hunter\", \"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "B8": {
+        "readable_name": "Diamond Armlet",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 3,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Monk\", \"Thief\", \"Ninja\", \"Hunter\", \"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "B9": {
+        "readable_name": "Strength",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "[\"Knight\", \"Monk\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "BA": {
+        "readable_name": "Power Wrist",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 4,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Monk\", \"Thief\", \"Ninja\", \"Hunter\", \"WhiteMage\", \"BlackMage\", \"TimeMage\", \"Summoner\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Geomancer\", \"Bard\", \"Dancer\", \"Mimic\"]"
+    },
+    "BB": {
+        "readable_name": "Angel Gwn",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "['Chemist', 'Mimic']"
+    },
+    "BC": {
+        "readable_name": "Angel Ring",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 7,
+        "max_count": 1.0,
+        "tier": 6,
+        "related_jobs": "['All']"
+    },
+    "BD": {
+        "readable_name": "Flame Ring",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 7,
+        "max_count": 2.0,
+        "tier": 7,
+        "related_jobs": "['All']"
+    },
+    "BE": {
+        "readable_name": "Coral Ring",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 7,
+        "max_count": 2.0,
+        "tier": 7,
+        "related_jobs": "['All']"
+    },
+    "BF": {
+        "readable_name": "Bone Mail",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 6,
+        "max_count": 1.0,
+        "tier": 8,
+        "related_jobs": "[\"Knight\", \"Monk\", \"Thief\", \"Dragoon\", \"Ninja\", \"Samurai\", \"Berserker\", \"Hunter\", \"MysticKnight\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "C0": {
+        "readable_name": "Leather Shoes",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "C1": {
+        "readable_name": "Kaiser Knuckles",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 2,
+        "max_count": 2.0,
+        "tier": 3,
+        "related_jobs": "['All']"
+    },
+    "C2": {
+        "readable_name": "Gauntlets",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "C3": {
+        "readable_name": "Tiger Mask",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 2,
+        "max_count": 3.0,
+        "tier": 2,
+        "related_jobs": "[\"Monk\", \"Thief\", \"Ninja\", \"Hunter\", \"BlueMage\", \"RedMage\", \"Trainer\", \"Chemist\", \"Dancer\", \"Mimic\"]"
+    },
+    "C4": {
+        "readable_name": "Flame Shield",
+        "valid": true,
+        "type": "armor",
+        "subtype": "shield",
+        "value": 3,
+        "max_count": 2.0,
+        "tier": 5,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"BlueMage\", \"Mimic\"]"
+    },
+    "C5": {
+        "readable_name": "CornaJar",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 3,
+        "max_count": 1.0,
+        "tier": 3,
+        "related_jobs": "['All']"
+    },
+    "C6": {
+        "readable_name": "Genji Shield",
+        "valid": true,
+        "type": "armor",
+        "subtype": "shield",
+        "value": 8,
+        "max_count": 2.0,
+        "tier": 8,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"BlueMage\", \"Mimic\"]"
+    },
+    "C7": {
+        "readable_name": "Genji Helm",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 8,
+        "max_count": 1.0,
+        "tier": 8,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "C8": {
+        "readable_name": "Genji Armor",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 8,
+        "max_count": 1.0,
+        "tier": 7,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "C9": {
+        "readable_name": "Genji Gloves",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 8,
+        "max_count": 1.0,
+        "tier": 6,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "CA": {
+        "readable_name": "Wall Ring",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 6,
+        "max_count": 2.0,
+        "tier": 5,
+        "related_jobs": "['All']"
+    },
+    "CB": {
+        "readable_name": "Hypno Helm",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 4,
+        "related_jobs": "['All']"
+    },
+    "CC": {
+        "readable_name": "Thornlet",
+        "valid": true,
+        "type": "armor",
+        "subtype": "helm",
+        "value": 5,
+        "max_count": 1.0,
+        "tier": 4,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"Mimic\"]"
+    },
+    "CD": {
+        "readable_name": "Ice Shield",
+        "valid": true,
+        "type": "armor",
+        "subtype": "shield",
+        "value": 6,
+        "max_count": 2.0,
+        "tier": 5,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"BlueMage\", \"Mimic\"]"
+    },
+    "CE": {
+        "readable_name": "Cursed Shield",
+        "valid": true,
+        "type": "armor",
+        "subtype": "shield",
+        "value": 1,
+        "max_count": 1.0,
+        "tier": 1,
+        "related_jobs": "[\"Knight\", \"Dragoon\", \"Samurai\", \"Berserker\", \"MysticKnight\", \"BlueMage\", \"Mimic\"]"
+    },
+    "CF": {
+        "readable_name": "Rainbow Dress",
+        "valid": true,
+        "type": "armor",
+        "subtype": "armor",
+        "value": 5,
+        "max_count": 1.0,
+        "tier": 5,
+        "related_jobs": "['Dancer']"
+    },
+    "D0": {
+        "readable_name": "Red Shoes",
+        "valid": true,
+        "type": "armor",
+        "subtype": "acc",
+        "value": 5,
+        "max_count": 1.0,
+        "tier": 5,
+        "related_jobs": "['Dancer']"
+    },
+    "D1": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "D2": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "D3": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "D4": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "D5": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "D6": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "D7": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "D8": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "D9": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "DA": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "DB": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "DC": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "DD": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "DE": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "DF": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "E0": {
+        "readable_name": "Potion",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": 9.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "E1": {
+        "readable_name": "HiPotion",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": 9.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "E2": {
+        "readable_name": "Ether",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": 9.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "E3": {
+        "readable_name": "Elixir",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": 9.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "E4": {
+        "readable_name": "Phoenix Down",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": 9.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "E5": {
+        "readable_name": "Maiden's Kiss",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": 9.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "E6": {
+        "readable_name": "Revivify",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": 9.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "E7": {
+        "readable_name": "TurtleShell",
+        "valid": true,
+        "type": "item",
+        "subtype": "mix",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 6,
+        "related_jobs": "['Chemist']"
+    },
+    "E8": {
+        "readable_name": "Antidote",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": 9.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "E9": {
+        "readable_name": "Eyedrop",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": 9.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "EA": {
+        "readable_name": "DragonFang",
+        "valid": true,
+        "type": "item",
+        "subtype": "mix",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 6,
+        "related_jobs": "['Chemist']"
+    },
+    "EB": {
+        "readable_name": "DarkMatter",
+        "valid": true,
+        "type": "item",
+        "subtype": "mix",
+        "value": 5,
+        "max_count": 3.0,
+        "tier": 6,
+        "related_jobs": "['Chemist']"
+    },
+    "EC": {
+        "readable_name": "Soft",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": 9.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "ED": {
+        "readable_name": "LuckMallet",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": 9.0,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "EE": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    },
+    "EF": {
+        "readable_name": "Magic Lamp",
+        "valid": true,
+        "type": "item",
+        "subtype": "special",
+        "value": 7,
+        "max_count": 1.0,
+        "tier": 7,
+        "related_jobs": "['All']"
+    },
+    "F0": {
+        "readable_name": "Tent",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": null,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "F1": {
+        "readable_name": "Cabin",
+        "valid": true,
+        "type": "item",
+        "subtype": "restore",
+        "value": 1,
+        "max_count": null,
+        "tier": 1,
+        "related_jobs": "['All']"
+    },
+    "F2": {
+        "readable_name": "Giant Drink",
+        "valid": true,
+        "type": "item",
+        "subtype": "mix",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Chemist']"
+    },
+    "F3": {
+        "readable_name": "Power Drink",
+        "valid": true,
+        "type": "item",
+        "subtype": "mix",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Chemist']"
+    },
+    "F4": {
+        "readable_name": "Speed Drink",
+        "valid": true,
+        "type": "item",
+        "subtype": "mix",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Chemist']"
+    },
+    "F5": {
+        "readable_name": "Protect Drink",
+        "valid": true,
+        "type": "item",
+        "subtype": "mix",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Chemist']"
+    },
+    "F6": {
+        "readable_name": "Hero Drink",
+        "valid": true,
+        "type": "item",
+        "subtype": "mix",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Chemist']"
+    },
+    "F7": {
+        "readable_name": "DrgnCrest",
+        "valid": false,
+        "type": "item",
+        "subtype": "special",
+        "value": 1,
+        "max_count": 0.0,
+        "tier": 1,
+        "related_jobs": "[]"
+    },
+    "F8": {
+        "readable_name": "OmegaMedl",
+        "valid": false,
+        "type": "item",
+        "subtype": "special",
+        "value": 1,
+        "max_count": 0.0,
+        "tier": 1,
+        "related_jobs": "[]"
+    },
+    "F9": {
+        "readable_name": "Ramuh",
+        "valid": true,
+        "type": "item",
+        "subtype": "summon",
+        "value": 2,
+        "max_count": 1.0,
+        "tier": 2,
+        "related_jobs": "['Summoner']"
+    },
+    "FA": {
+        "readable_name": "Shoat",
+        "valid": true,
+        "type": "item",
+        "subtype": "summon",
+        "value": 4,
+        "max_count": 1.0,
+        "tier": 4,
+        "related_jobs": "['Summoner']"
+    },
+    "FB": {
+        "readable_name": "Golem",
+        "valid": true,
+        "type": "item",
+        "subtype": "summon",
+        "value": 4,
+        "max_count": 1.0,
+        "tier": 5,
+        "related_jobs": "['Summoner']"
+    },
+    "FC": {
+        "readable_name": "Flame Scroll",
+        "valid": true,
+        "type": "item",
+        "subtype": "throw",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Ninja']"
+    },
+    "FD": {
+        "readable_name": "Water Scroll",
+        "valid": true,
+        "type": "item",
+        "subtype": "throw",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Ninja']"
+    },
+    "FE": {
+        "readable_name": "Thunder Scroll",
+        "valid": true,
+        "type": "item",
+        "subtype": "throw",
+        "value": 1,
+        "max_count": 3.0,
+        "tier": 1,
+        "related_jobs": "['Ninja']"
+    },
+    "FF": {
+        "readable_name": "<dummy>",
+        "valid": false,
+        "type": "dummy",
+        "subtype": "dummy",
+        "value": 0,
+        "max_count": 0.0,
+        "tier": 0,
+        "related_jobs": "[]"
+    }
+}

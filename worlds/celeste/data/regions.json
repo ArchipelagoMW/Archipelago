@@ -1,0 +1,132 @@
+[
+    {
+        "level": 1,
+        "side": 0,
+        "region_name": "Chapter 1: Forsaken City A-Side"
+    },
+    {
+        "level": 2,
+        "side": 0,
+        "region_name": "Chapter 2: Old Site A-Side"
+    },
+    {
+        "level": 3,
+        "side": 0,
+        "region_name": "Chapter 3: Celestial Resort A-Side"
+    },
+    {
+        "level": 4,
+        "side": 0,
+        "region_name": "Chapter 4: Golden Ridge A-Side"
+    },
+    {
+        "level": 5,
+        "side": 0,
+        "region_name": "Chapter 5: Mirror Temple A-Side"
+    },
+    {
+        "level": 6,
+        "side": 0,
+        "region_name": "Chapter 6: Reflection A-Side"
+    },
+    {
+        "level": 7,
+        "side": 0,
+        "region_name": "Chapter 7: The Summit A-Side"
+    },
+    {
+        "level": 8,
+        "side": 0,
+        "region_name": "Epilogue"
+    },
+    {
+        "level": 9,
+        "side": 0,
+        "region_name": "Chapter 8: Core A-Side"
+    },
+    {
+        "level": 10,
+        "side": 0,
+        "region_name": "Chapter 9: Farewell A-Side"
+    },
+    {
+        "level": 1,
+        "side": 1,
+        "region_name": "Chapter 1: Forsaken City B-Side"
+    },
+    {
+        "level": 2,
+        "side": 1,
+        "region_name": "Chapter 2: Old Site B-Side"
+    },
+    {
+        "level": 3,
+        "side": 1,
+        "region_name": "Chapter 3: Celestial Resort B-Side"
+    },
+    {
+        "level": 4,
+        "side": 1,
+        "region_name": "Chapter 4: Golden Ridge B-Side"
+    },
+    {
+        "level": 5,
+        "side": 1,
+        "region_name": "Chapter 5: Mirror Temple B-Side"
+    },
+    {
+        "level": 6,
+        "side": 1,
+        "region_name": "Chapter 6: Reflection B-Side"
+    },
+    {
+        "level": 7,
+        "side": 1,
+        "region_name": "Chapter 7: The Summit B-Side"
+    },
+    {
+        "level": 9,
+        "side": 1,
+        "region_name": "Chapter 8: Core B-Side"
+    },
+    {
+        "level": 1,
+        "side": 2,
+        "region_name": "Chapter 1: Forsaken City C-Side"
+    },
+    {
+        "level": 2,
+        "side": 2,
+        "region_name": "Chapter 2: Old Site C-Side"
+    },
+    {
+        "level": 3,
+        "side": 2,
+        "region_name": "Chapter 3: Celestial Resort C-Side"
+    },
+    {
+        "level": 4,
+        "side": 2,
+        "region_name": "Chapter 4: Golden Ridge C-Side"
+    },
+    {
+        "level": 5,
+        "side": 2,
+        "region_name": "Chapter 5: Mirror Temple C-Side"
+    },
+    {
+        "level": 6,
+        "side": 2,
+        "region_name": "Chapter 6: Reflection C-Side"
+    },
+    {
+        "level": 7,
+        "side": 2,
+        "region_name": "Chapter 7: The Summit C-Side"
+    },
+    {
+        "level": 9,
+        "side": 2,
+        "region_name": "Chapter 8: Core C-Side"
+    }
+]

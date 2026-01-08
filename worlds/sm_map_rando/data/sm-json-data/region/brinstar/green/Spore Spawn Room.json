@@ -1,0 +1,318 @@
+{
+  "$schema": "../../../schema/m3-room.schema.json",
+  "id": 57,
+  "name": "Spore Spawn Room",
+  "area": "Brinstar",
+  "subarea": "Green",
+  "roomAddress": "0x79DC7",
+  "roomEnvironments": [{"heated": false}],
+  "mapTileMask": [
+    [1],
+    [1],
+    [1]
+  ],
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Top Right Door",
+      "nodeType": "door",
+      "nodeSubType": "blue",
+      "nodeAddress": "0x0018e4a",
+      "doorOrientation": "right",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [2],
+        [2],
+        [1]
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bottom Door",
+      "nodeType": "door",
+      "nodeSubType": "green",
+      "nodeAddress": "0x0018e56",
+      "doorOrientation": "down",
+      "doorEnvironments": [{"physics": "air"}],
+      "mapTileMask": [
+        [1],
+        [1],
+        [2]
+      ]
+    }
+  ],
+  "enemies": [
+    {
+      "id": "e1",
+      "groupName": "Spore Spawn",
+      "enemyName": "Spore Spawn",
+      "quantity": 1,
+      "homeNodes": [2],
+      "stopSpawn": ["f_DefeatedSporeSpawn"]
+    }
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    },
+    {
+      "from": 2,
+      "to": [
+        {"id": 1},
+        {"id": 2}
+      ]
+    }
+  ],
+  "strats": [
+    {
+      "id": 1,
+      "link": [1, 1],
+      "name": "Leave With Runway",
+      "requires": [],
+      "exitCondition": {
+        "leaveWithRunway": {
+          "length": 8,
+          "openEnd": 1
+        }
+      },
+      "flashSuitChecked": true
+    },
+    {
+      "id": 2,
+      "link": [1, 1],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 10,
+      "link": [1, 2],
+      "name": "Base",
+      "requires": [
+        "f_DefeatedSporeSpawn"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 14,
+      "link": [1, 2],
+      "name": "Plasma SBA Kill from Above (Patient)",
+      "requires": [
+        {"notable": "Plasma SBA Kill from Above"},
+        "Plasma",
+        "canSpecialBeamAttack",
+        {"ammo": {"type": "PowerBomb", "count": 2}},
+        "canBePatient"
+      ],
+      "setsFlags": ["f_DefeatedSporeSpawn"],
+      "note": [
+        "Use the Plasma Special Beam Attack to kill Spore Spawn from above.",
+        "Spore Spawn will move out of range after the first hit and it will take 9 cycles to come back into range.",
+        "Stand on the left side of the lowest part of the upper area, facing left for the first hit.",
+        "9 cycles later, shoot again from the same spot while crouching to kill Spore Spawn."
+      ],
+      "devNote": "2 Power Bombs total."
+    },
+    {
+      "id": 15,
+      "link": [1, 2],
+      "name": "Plasma SBA Kill from Above (Microwave)",
+      "requires": [
+        {"notable": "Plasma SBA Kill from Above"},
+        "Plasma",
+        "canSpecialBeamAttack",
+        {"ammo": {"type": "PowerBomb", "count": 1}},
+        "canXRayWaitForIFrames"
+      ],
+      "setsFlags": ["f_DefeatedSporeSpawn"],
+      "note": [
+        "Use the Plasma Special Beam Attack to kill Spore Spawn from above.",
+        "Stand in the middle of the second lowest platform above Spore Spawn, facing left and crouched.",
+        "Then quickly use X-Ray to kill Spore Spawn in 1 cycle.",
+        "Jumping against the ledge above then rotating to the left after landing will put Samus into a good position."
+      ]
+    },
+    {
+      "id": 3,
+      "link": [1, 2],
+      "name": "Moondance Clip",
+      "entranceCondition": {
+        "comeInWithStoredFallSpeed": {
+          "fallSpeedInTiles": 2
+        }
+      },
+      "requires": [
+        {"notable": "Moondance Clip"},
+        "canFreeFallClip",
+        {"enemyDamage": {"enemy": "Spore Spawn", "type": "contact", "hits": 1}}
+      ],
+      "note": [
+        "Prepare an extended Moondance and wait for SporeSpawn to move to a side.",
+        "In quick succession, Moonfall, turn left, and turn right while holding a spin break button to clip down into the fight arena."
+      ],
+      "devNote": [
+        "Even though the fight is active, node 2 can freely enter the fight or leave the room.",
+        "FIXME: A different exact fall speed value changes the movements needed for the clip."
+      ]
+    },
+    {
+      "id": 17,
+      "link": [1, 2],
+      "name": "Super Sink",
+      "entranceCondition": {
+        "comeInWithSuperSink": {}
+      },
+      "requires": [],
+      "note": [
+        "Enter the room with a super sink, in order to clip down into the fight arena."
+      ]
+    },
+    {
+      "id": 9,
+      "link": [2, 1],
+      "name": "Base",
+      "requires": [
+        "f_DefeatedSporeSpawn"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 5,
+      "link": [2, 2],
+      "name": "Shinespark",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        {"shinespark": {"frames": 16, "excessFrames": 16}}
+      ],
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 6,
+      "link": [2, 2],
+      "name": "Shinespark, Spore Spawn Dead",
+      "entranceCondition": {
+        "comeInWithSpark": {},
+        "comesThroughToilet": "any"
+      },
+      "requires": [
+        "f_DefeatedSporeSpawn",
+        {"shinespark": {"frames": 3, "excessFrames": 3}}
+      ],
+      "devNote": "This strat is not useful in-room, but can satisfy a strat in the room before with an exit shinespark."
+    },
+    {
+      "id": 7,
+      "link": [2, 2],
+      "name": "Crystal Flash",
+      "requires": [
+        "h_CrystalFlash"
+      ],
+      "flashSuitChecked": true
+    },
+    {
+      "id": 11,
+      "link": [2, 2],
+      "name": "Charge",
+      "requires": [
+        "Charge",
+        {"or": [
+          {"and": [
+            "Ice",
+            "Wave"
+          ]},
+          {"and": [
+            "Ice",
+            "Spazer"
+          ]},
+          {"and": [
+            "Spazer",
+            "Wave"
+          ]},
+          {"and": [
+            "canBePatient",
+            {"or": [
+              "Ice",
+              "Wave",
+              "Spazer"
+            ]}
+          ]},
+          "Plasma",
+          "canBeVeryPatient"
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedSporeSpawn"]
+    },
+    {
+      "id": 12,
+      "link": [2, 2],
+      "name": "Missiles",
+      "requires": [
+        {"resourceCapacity": [{"type": "Missile", "count": 1}]},
+        {"or": [
+          "canDodgeWhileShooting",
+          "canBePatient"
+        ]}
+      ],
+      "setsFlags": ["f_DefeatedSporeSpawn"],
+      "devNote": "No ammo count because Missiles are farmable here."
+    },
+    {
+      "id": 13,
+      "link": [2, 2],
+      "name": "Supers",
+      "requires": [
+        {"or": [
+          "canDodgeWhileShooting",
+          {"resourceCapacity": [{"type": "Missile", "count": 1}]},
+          {"ammo": {"type": "Super", "count": 2}}
+        ]},
+        {"ammo": {"type": "Super", "count": 4}}
+      ],
+      "setsFlags": ["f_DefeatedSporeSpawn"],
+      "note": "Spore Spawn's pollen does not drop Supers. The fight requires 4 Supers, where many misses could lead to a softlock."
+    },
+    {
+      "id": 16,
+      "link": [2, 2],
+      "name": "G-Mode Regain Mobility",
+      "requires": [
+        {"enemyDamage": {"enemy": "Spore Spawn", "type": "contact", "hits": 1}},
+        {"not": "f_DefeatedSporeSpawn"},
+        "canRiskPermanentLossOfAccess"
+      ],
+      "gModeRegainMobility": {},
+      "flashSuitChecked": true,
+      "devNote": "This would only be useful to leave in g-mode."
+    }
+  ],
+  "notables": [
+    {
+      "id": 1,
+      "name": "Moondance Clip",
+      "note": [
+        "Prepare an extended Moondance and wait for Spore Spawn to move to a side.",
+        "In quick succession, Moonfall, turn left, and turn right while holding a spin break button to clip down into the fight arena."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Plasma SBA Kill from Above",
+      "note": [
+        "Use the Plasma Special Beam Attack to kill Spore Spawn from above.",
+        "Spore Spawn will move out of range after the first hit and it will take 9 cycles to come back into range.",
+        "Alternatively, Xray can be used to kill Spore Spawn in 1 cycle."
+      ]
+    }
+  ],
+  "nextStratId": 18,
+  "nextNotableId": 3
+}

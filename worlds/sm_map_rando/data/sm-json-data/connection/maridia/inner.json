@@ -1,0 +1,1254 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Pseudo Plasma Spark Room and Crab Shaft",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 179,
+          "roomName": "Pseudo Plasma Spark Room",
+          "nodeid": 2,
+          "nodeName": "Pseudo Plasma Spark Room Bottom Door (to Crab Shaft)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 175,
+          "roomName": "Crab Shaft",
+          "nodeid": 3,
+          "nodeName": "Crab Shaft Top Door (to Pseudo Plasma Spark)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Aqueduct and Crab Shaft",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 183,
+          "roomName": "Aqueduct",
+          "nodeid": 1,
+          "nodeName": "Aqueduct Top Left Door (to Crab Shaft)",
+          "position": "right"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 175,
+          "roomName": "Crab Shaft",
+          "nodeid": 2,
+          "nodeName": "Crab Shaft Right Door (to Aqueduct)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Pseudo Plasma Spark Room and Nortwest Maridia Bug Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 179,
+          "roomName": "Pseudo Plasma Spark Room",
+          "nodeid": 1,
+          "nodeName": "Pseudo Plasma Spark Room Left Door (to Bug Room)",
+          "position": "right"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 180,
+          "roomName": "Northwest Maridia Bug Room",
+          "nodeid": 2,
+          "nodeName": "Northwest Maridia Bug Room Right Door (to Pseudo Plasma Spark)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Northwest Maridia Bug Room and Watering Hole",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 180,
+          "roomName": "Northwest Maridia Bug Room",
+          "nodeid": 1,
+          "nodeName": "Northwest Maridia Bug Room Left Door (to Watering Hole)",
+          "position": "right"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 181,
+          "roomName": "Watering Hole",
+          "nodeid": 1,
+          "nodeName": "Watering Hole Door (to Bug Room)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Aqueduct Save Room and Aqueduct",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 182,
+          "roomName": "Aqueduct Save Room",
+          "nodeid": 1,
+          "nodeName": "Aqueduct Save Room Door (to Aqueduct)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 183,
+          "roomName": "Aqueduct",
+          "nodeid": 2,
+          "nodeName": "Aqueduct Bottom Left Door (to Save)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalSandpit",
+      "description": "Sandpit connection between Aqueduct and West Aqueduct Quicksand Room",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 183,
+          "roomName": "Aqueduct",
+          "nodeid": 3,
+          "nodeName": "Aqueduct Left Sand Pit (to West Quicksand Room)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 206,
+          "roomName": "West Aqueduct Quicksand Room",
+          "nodeid": 1,
+          "nodeName": "West Aqueduct Quicksand Room Top Sand Entrance (From Aqueduct Left)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalSandpit",
+      "description": "Sandpit connection between Aqueduct and East Aqueduct Quicksand Room",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 183,
+          "roomName": "Aqueduct",
+          "nodeid": 4,
+          "nodeName": "Aqueduct Right Sand Pit (to East Quicksand Room)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 207,
+          "roomName": "East Aqueduct Quicksand Room",
+          "nodeid": 1,
+          "nodeName": "East Aqueduct Quicksand Room Top Sand Entrance (from Aqueduct Right)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Aqueduct and Below Botwoon Energy Tank",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 183,
+          "roomName": "Aqueduct",
+          "nodeid": 5,
+          "nodeName": "Aqueduct Right Door (to Below Botwoon E-Tank)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 205,
+          "roomName": "Below Botwoon Energy Tank",
+          "nodeid": 1,
+          "nodeName": "Below Botwoon E-Tank Door (to Aqueduct)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Aqueduct and Botwoon Hallway",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 183,
+          "roomName": "Aqueduct",
+          "nodeid": 6,
+          "nodeName": "Aqueduct Top Door (to Botwoon Hallway)",
+          "position": "bottom"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 184,
+          "roomName": "Botwoon Hallway",
+          "nodeid": 1,
+          "nodeName": "Botwoon Hallway Bottom Door (to Aqueduct)",
+          "position": "top"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Botwoon Hallway and Botwoon's Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 184,
+          "roomName": "Botwoon Hallway",
+          "nodeid": 2,
+          "nodeName": "Botwoon Hallway Right Door (to Botwoon)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 185,
+          "roomName": "Botwoon's Room",
+          "nodeid": 1,
+          "nodeName": "Botwoon Left Door (to Botwoon Hallway)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Botwoon's Room and Botwoon Energy Tank Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 185,
+          "roomName": "Botwoon's Room",
+          "nodeid": 2,
+          "nodeName": "Botwoon Right Door (to E-Tank)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 186,
+          "roomName": "Botwoon Energy Tank Room",
+          "nodeid": 1,
+          "nodeName": "Botwoon E-Tank Left Door (to Botwoon)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalSandpit",
+      "description": "Left-side Sandpit connection between Botwoon Energy Tank Room and Botwoon Quicksand Room",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 186,
+          "roomName": "Botwoon Energy Tank Room",
+          "nodeid": 2,
+          "nodeName": "Botwoon E-Tank Left Sand Pit (to Botwoon Quicksand Left)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 204,
+          "roomName": "Botwoon Quicksand Room",
+          "nodeid": 1,
+          "nodeName": "Botwoon Quicksand Top Left Sand Entrance (from E-Tank Left)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalSandpit",
+      "description": "Right-side Sandpit connection between Botwoon Energy Tank Room and Botwoon Quicksand Room",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 186,
+          "roomName": "Botwoon Energy Tank Room",
+          "nodeid": 3,
+          "nodeName": "Botwoon E-Tank Right Sand Pit (to Botwoon Quicksand Right)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 204,
+          "roomName": "Botwoon Quicksand Room",
+          "nodeid": 3,
+          "nodeName": "Botwoon Quicksand Top Right Sand Entrance (from E-Tank Right)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Botwoon Energy Tank Room and Halfie Climb Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 186,
+          "roomName": "Botwoon Energy Tank Room",
+          "nodeid": 4,
+          "nodeName": "Botwoon E-Tank Right Door (to Halfie Climb)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 187,
+          "roomName": "Halfie Climb Room",
+          "nodeid": 2,
+          "nodeName": "Halfie Climb Bottom Left Door (to Botwoon E-Tank)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Halfie Climb Room and East Cactus Alley Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 187,
+          "roomName": "Halfie Climb Room",
+          "nodeid": 1,
+          "nodeName": "Halfie Climb Top Left Door (to East Cactus Alley)",
+          "position": "right"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 196,
+          "roomName": "East Cactus Alley Room",
+          "nodeid": 2,
+          "nodeName": "East Cactus Alley Right Door (to Halfie Climb)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Halfie Climb Room and Maridia Missile Refill Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 187,
+          "roomName": "Halfie Climb Room",
+          "nodeid": 3,
+          "nodeName": "Halfie Climb Bottom Right Door (to Recharge)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 188,
+          "roomName": "Maridia Missile Refill Room",
+          "nodeid": 1,
+          "nodeName": "Maridia Missile Refill Room Door (to Halfie Climb)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Halfie Climb Room and Colosseum",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 187,
+          "roomName": "Halfie Climb Room",
+          "nodeid": 4,
+          "nodeName": "Halfie Climb Top Right Door (to Colosseum)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 189,
+          "roomName": "Colosseum",
+          "nodeid": 1,
+          "nodeName": "Colosseum Left Door (to Halfie Climb)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Colosseum and The Precious Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 189,
+          "roomName": "Colosseum",
+          "nodeid": 2,
+          "nodeName": "Colosseum Bottom Right Door (to Precious Room)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 192,
+          "roomName": "The Precious Room",
+          "nodeid": 1,
+          "nodeName": "Precious Room Top Left Door (to Colosseum)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Colosseum and Draygon Save Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 189,
+          "roomName": "Colosseum",
+          "nodeid": 3,
+          "nodeName": "Colosseum Top Right Door (to Save)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 190,
+          "roomName": "Draygon Save Room",
+          "nodeid": 1,
+          "nodeName": "Draygon Save Room Left Door (to Colosseum)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Draygon Save Room and Maridia Health Refill Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 190,
+          "roomName": "Draygon Save Room",
+          "nodeid": 2,
+          "nodeName": "Draygon Save Room Right Door (to Recharge)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 191,
+          "roomName": "Maridia Health Refill Room",
+          "nodeid": 1,
+          "nodeName": "Maridia Health Refill Room Door (to Save)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between The Precious Room and Draygon's Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 192,
+          "roomName": "The Precious Room",
+          "nodeid": 2,
+          "nodeName": "Draygon Eye Door",
+          "position": "right"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 193,
+          "roomName": "Draygon's Room",
+          "nodeid": 2,
+          "nodeName": "Draygon Right Door (to Precious Room)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Draygon's Room and Space Jump Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 193,
+          "roomName": "Draygon's Room",
+          "nodeid": 1,
+          "nodeName": "Draygon Left Door (to Space Jump)",
+          "position": "right"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 194,
+          "roomName": "Space Jump Room",
+          "nodeid": 1,
+          "nodeName": "Space Jump Room Door (to Draygon)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between West Cactus Alley Room and Butterfly Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 195,
+          "roomName": "West Cactus Alley Room",
+          "nodeid": 1,
+          "nodeName": "West Cactus Alley Left Door (to Butterfly Room)",
+          "position": "right"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 213,
+          "roomName": "Butterfly Room",
+          "nodeid": 2,
+          "nodeName": "Butterfly Room Right Door (to West Cactus Alley)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between West Cactus Alley Room and East Cactus Alley Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 195,
+          "roomName": "West Cactus Alley Room",
+          "nodeid": 2,
+          "nodeName": "West Cactus Alley Right Door (to East Cactus Alley)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 196,
+          "roomName": "East Cactus Alley Room",
+          "nodeid": 1,
+          "nodeName": "East Cactus Alley Left Door (to West Cactus Alley)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Plasma Spark Room and Toilet Bowl",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 197,
+          "roomName": "Plasma Spark Room",
+          "nodeid": 1,
+          "nodeName": "Plasma Spark Room Left Door (to Toilet)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 321,
+          "roomName": "Toilet Bowl",
+          "nodeid": 1,
+          "nodeName": "Toilet Bowl Top Door (to Plasma Spark)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Toilet Bowl and Oasis",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 321,
+          "roomName": "Toilet Bowl",
+          "nodeid": 2,
+          "nodeName": "Toilet Bowl Bottom Door (to Oasis)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 198,
+          "roomName": "Oasis",
+          "nodeid": 3,
+          "nodeName": "Oasis Top Door (to Toilet)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Plasma Spark Room and Butterfly Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 197,
+          "roomName": "Plasma Spark Room",
+          "nodeid": 2,
+          "nodeName": "Plasma Spark Room Bottom Right Door (to Butterfly Room)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 213,
+          "roomName": "Butterfly Room",
+          "nodeid": 1,
+          "nodeName": "Butterfly Room Left Door (to Plasma Spark Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Plasma Spark Room and Bug Sand Hole",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 197,
+          "roomName": "Plasma Spark Room",
+          "nodeid": 3,
+          "nodeName": "Plasma Spark Room Center Right Door (to Bug Sand Hole)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 211,
+          "roomName": "Bug Sand Hole",
+          "nodeid": 1,
+          "nodeName": "Bug Sand Hole Left Door (to Plasma Spark Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Plasma Spark Room and Kassiuz Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 197,
+          "roomName": "Plasma Spark Room",
+          "nodeid": 4,
+          "nodeName": "Plasma Spark Room Top Right Door (to Kassiuz Room)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 217,
+          "roomName": "Kassiuz Room",
+          "nodeid": 1,
+          "nodeName": "Kassiuz Room Left Door (to Plasma Spark Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Oasis and West Sand Hall",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 198,
+          "roomName": "Oasis",
+          "nodeid": 1,
+          "nodeName": "Oasis Left Door (to West Sand Hall)",
+          "position": "right"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 199,
+          "roomName": "West Sand Hall",
+          "nodeid": 2,
+          "nodeName": "West Sand Hall Right Door (to Oasis)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Oasis and East Sand Hall",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 198,
+          "roomName": "Oasis",
+          "nodeid": 2,
+          "nodeName": "Oasis Right Door (to East Sand Hall)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 210,
+          "roomName": "East Sand Hall",
+          "nodeid": 1,
+          "nodeName": "East Sand Hall Left Door (to Oasis)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between West Sand Hall and West Sand Hall Tunnel",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 199,
+          "roomName": "West Sand Hall",
+          "nodeid": 1,
+          "nodeName": "West Sand Hall Left Door (to West Sand Hall Tunnel)",
+          "position": "right"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 202,
+          "roomName": "West Sand Hall Tunnel",
+          "nodeid": 2,
+          "nodeName": "West Sand Hall Tunnel Right Door (to West Sand Hall)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalSandpit",
+      "description": "Sandpit connection between West Sand Hall and West Sand Hole",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 209,
+          "roomName": "West Sand Hole",
+          "nodeid": 2,
+          "nodeName": "West Sand Hole Bottom Sand Exit (to West Sand Hall)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 199,
+          "roomName": "West Sand Hall",
+          "nodeid": 3,
+          "nodeName": "West Sand Hall Sand Entrance (from West Sand Hole)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalSandpit",
+      "description": "Left-side Sandpit connection between Botwoon Quicksand Room and Below Botwoon Energy Tank",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 204,
+          "roomName": "Botwoon Quicksand Room",
+          "nodeid": 2,
+          "nodeName": "Botwoon Quicksand Bottom Left Sand Exit (to Below E-Tank Left)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 205,
+          "roomName": "Below Botwoon Energy Tank",
+          "nodeid": 2,
+          "nodeName": "Below Botwoon E-Tank Left Sand Entrance (from Botwoon Quicksand Left)",
+          "position": "bottom"
+        }
+      ]
+    },  {
+      "connectionType": "VerticalSandpit",
+      "description": "Right-side Sandpit connection between Botwoon Quicksand Room and Below Botwoon Energy Tank",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 204,
+          "roomName": "Botwoon Quicksand Room",
+          "nodeid": 4,
+          "nodeName": "Botwoon Quicksand Bottom Right Sand Exit (to Below E-Tank Right)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 205,
+          "roomName": "Below Botwoon Energy Tank",
+          "nodeid": 3,
+          "nodeName": "Below Botwoon E-Tank Right Sand Entrance (from Botwoon Quicksand Right)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalSandpit",
+      "description": "Sandpit connection between West Aqueduct Quicksand Room and West Sand Hole",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 206,
+          "roomName": "West Aqueduct Quicksand Room",
+          "nodeid": 2,
+          "nodeName": "West Aqueduct Quicksand Room Bottom Sand Exit (to West Sand Hole)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 209,
+          "roomName": "West Sand Hole",
+          "nodeid": 1,
+          "nodeName": "West Sand Hole Top Sand Entrance (from West Aqueduct Quicksand Room)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalSandpit",
+      "description": "Sandpit connection between East Aqueduct Quicksand Room and East Sand Hole",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 207,
+          "roomName": "East Aqueduct Quicksand Room",
+          "nodeid": 2,
+          "nodeName": "East Aqueduct Quicksand Room Bottom Sand Exit (to East Sand Hole)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 208,
+          "roomName": "East Sand Hole",
+          "nodeid": 1,
+          "nodeName": "East Sand Hole Top Sand Entrance (From East Aqueduct Quicksand Room)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalSandpit",
+      "description": "Sandpit connection between East Sand Hole and East Sand Hall",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 208,
+          "roomName": "East Sand Hole",
+          "nodeid": 2,
+          "nodeName": "East Sand Hole Bottom Sand Exit (to East Sand Hall)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 210,
+          "roomName": "East Sand Hall",
+          "nodeid": 3,
+          "nodeName": "East Sand Hall Top Sand Entrance (from East Sand Hole)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between East Sand Hall and Pants Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 210,
+          "roomName": "East Sand Hall",
+          "nodeid": 2,
+          "nodeName": "East Sand Hall Right Door (to Pants Room)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 220,
+          "roomName": "Pants Room",
+          "nodeid": 1,
+          "nodeName": "Pants Room Left Door (to East Sand Hall)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalSandpit",
+      "description": "Sandpit connection between Bug Sand Hole and Plasma Beach Quicksand Room",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 211,
+          "roomName": "Bug Sand Hole",
+          "nodeid": 2,
+          "nodeName": "Bug Sand Hole Sand Exit (to Plasma Beach Quicksand Room)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 212,
+          "roomName": "Plasma Beach Quicksand Room",
+          "nodeid": 1,
+          "nodeName": "Plasma Beach Quicksand Room Top Sand Entrance (from Bug Sand Hole)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Bug Sand Hole and Thread The Needle Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 211,
+          "roomName": "Bug Sand Hole",
+          "nodeid": 3,
+          "nodeName": "Bug Sand Hole Right Door (to Thread the Needle Room)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 214,
+          "roomName": "Thread The Needle Room",
+          "nodeid": 1,
+          "nodeName": "Thread The Needle Room Left Door (to Bug Sand Hole)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalSandpit",
+      "description": "Sandpit connection between Plasma Beach Quicksand Room and Butterfly Room",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 212,
+          "roomName": "Plasma Beach Quicksand Room",
+          "nodeid": 2,
+          "nodeName": "Plasma Beach Quicksand Room Bottom Sand Exit (to Butterfly Room)",
+          "position": "top"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 213,
+          "roomName": "Butterfly Room",
+          "nodeid": 3,
+          "nodeName": "Butterfly Room Top Sand Entrance (from Plasma Beach Quicksand Room)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Thread The Needle Room and Maridia Elevator Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 214,
+          "roomName": "Thread The Needle Room",
+          "nodeid": 2,
+          "nodeName": "Thread The Needle Room Right Door (to Elevator)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 215,
+          "roomName": "Maridia Elevator Room",
+          "nodeid": 1,
+          "nodeName": "Maridia Elevator Room Left Door (to Thread the Needle Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Maridia Elevator Room and Forgotten Highway Save Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 215,
+          "roomName": "Maridia Elevator Room",
+          "nodeid": 2,
+          "nodeName": "Maridia Elevator Room Right Door (to Save)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 216,
+          "roomName": "Forgotten Highway Save Room",
+          "nodeid": 1,
+          "nodeName": "Forgotten Highway Save Room Door (to Elevator)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Kassiuz Room and Plasma Tutorial Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 217,
+          "roomName": "Kassiuz Room",
+          "nodeid": 2,
+          "nodeName": "Kassiuz Room Right Door (to Plasma Tutorial)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 218,
+          "roomName": "Plasma Tutorial Room",
+          "nodeid": 1,
+          "nodeName": "Plasma Tutorial Room Left Door (to Kassiuz Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Plasma Tutorial Room and Plasma Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 218,
+          "roomName": "Plasma Tutorial Room",
+          "nodeid": 2,
+          "nodeName": "Plasma Tutorial Room Right Door (to Plasma)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 219,
+          "roomName": "Plasma Room",
+          "nodeid": 1,
+          "nodeName": "Plasma Room Door (to Plasma Tutorial)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Pants Room and East Pants Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 220,
+          "roomName": "Pants Room",
+          "nodeid": 3,
+          "nodeName": "Pants Room Left Leg Right Door (to East Pants Room)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 322,
+          "roomName": "East Pants Room",
+          "nodeid": 1,
+          "nodeName": "East Pants Room Left Door (to Pants Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Pants Room and Shaktool Room",
+      "direction": "Forward",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 220,
+          "roomName": "Pants Room",
+          "nodeid": 2,
+          "nodeName": "Pants Room Right Door (to Shaktool)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 222,
+          "roomName": "Shaktool Room",
+          "nodeid": 1,
+          "nodeName": "Shaktool Left Door (to East Pants Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between East Pants Room and Shaktool Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 322,
+          "roomName": "East Pants Room",
+          "nodeid": 2,
+          "nodeName": "East Pants Room Right Door (to Shaktool)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 222,
+          "roomName": "Shaktool Room",
+          "nodeid": 1,
+          "nodeName": "Shaktool Left Door (to East Pants Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Shaktool Room and Spring Ball Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 222,
+          "roomName": "Shaktool Room",
+          "nodeid": 2,
+          "nodeName": "Shaktool Right Door (to Spring Ball)",
+          "position": "left"
+        },
+        {
+          "area": "Maridia",
+          "subarea": "Inner",
+          "roomid": 223,
+          "roomName": "Spring Ball Room",
+          "nodeid": 1,
+          "nodeName": "Spring Ball Room Door (to Shaktool)",
+          "position": "right"
+        }
+      ]
+    }
+  ]
+}

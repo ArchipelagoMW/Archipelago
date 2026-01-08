@@ -1,0 +1,380 @@
+{
+  "$schema": "../../schema/m3-connection.schema.json",
+  "connections": [
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Landing Site and Crateria Tube",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 8,
+          "roomName": "Landing Site",
+          "nodeid": 4,
+          "nodeName": "Landing Site Bottom Right Door (to Crateria Tube)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 9,
+          "roomName": "Crateria Tube",
+          "nodeid": 1,
+          "nodeName": "Crateria Tube Left Doorway (to Landing Site)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Landing Site and Parlor and Alcatraz",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 8,
+          "roomName": "Landing Site",
+          "nodeid": 2,
+          "nodeName": "Landing Site Bottom Left Door (to Parlor)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 10,
+          "roomName": "Parlor and Alcatraz",
+          "nodeid": 4,
+          "nodeName": "Parlor Top Right Door (to Landing Site)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "VerticalDoor",
+      "description": "Door connection between Parlor and Alcatraz and Climb",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 10,
+          "roomName": "Parlor and Alcatraz",
+          "nodeid": 7,
+          "nodeName": "Parlor Bottom Door (to Climb)",
+          "position": "top"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 11,
+          "roomName": "Climb",
+          "nodeid": 1,
+          "nodeName": "Climb Top Door (to Parlor)",
+          "position": "bottom"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Climb and Pit Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 11,
+          "roomName": "Climb",
+          "nodeid": 5,
+          "nodeName": "Climb Bottom Right Door (to Pit Room)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 12,
+          "roomName": "Pit Room",
+          "nodeid": 1,
+          "nodeName": "Pit Room Left Door (to Climb)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Pit Room and Blue Brinstar Elevator Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 12,
+          "roomName": "Pit Room",
+          "nodeid": 2,
+          "nodeName": "Pit Room Right Door (to Elevator)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 306,
+          "roomName": "Blue Brinstar Elevator Room",
+          "nodeid": 1,
+          "nodeName": "Blue Brinstar Elevator Room Door (to Pit Room)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Parlor and Alcatraz and Flyway",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 10,
+          "roomName": "Parlor and Alcatraz",
+          "nodeid": 5,
+          "nodeName": "Alcatraz Door (to Flyway)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 13,
+          "roomName": "Flyway",
+          "nodeid": 1,
+          "nodeName": "Flyway Left Door (to Alcatraz)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Parlor and Alcatraz and Pre-Map Flyway",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 10,
+          "roomName": "Parlor and Alcatraz",
+          "nodeid": 6,
+          "nodeName": "Parlor Bottom Right Door (to Pre-Map)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 14,
+          "roomName": "Pre-Map Flyway",
+          "nodeid": 1,
+          "nodeName": "Pre-Map Flyway Left Door (to Parlor)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Pre-Map Flyway and Crateria Map Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 14,
+          "roomName": "Pre-Map Flyway",
+          "nodeid": 2,
+          "nodeName": "Pre-Map Flyway Right Door (to Map)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 15,
+          "roomName": "Crateria Map Room",
+          "nodeid": 1,
+          "nodeName": "Crateria Map Room Door (to Pre-Map)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Parlor and Alcatraz and Crateria Save Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 10,
+          "roomName": "Parlor and Alcatraz",
+          "nodeid": 2,
+          "nodeName": "Parlor Middle Left Door (to Save)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 16,
+          "roomName": "Crateria Save Room",
+          "nodeid": 1,
+          "nodeName": "Crateria Save Room Door (to Parlor)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between The Final Missile and Final Missile Bombway",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 17,
+          "roomName": "The Final Missile",
+          "nodeid": 1,
+          "nodeName": "Final Missile Door (to Final Missile Bombway)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 18,
+          "roomName": "Final Missile Bombway",
+          "nodeid": 1,
+          "nodeName": "Final Missile Bombway Left Door (to Final Missile)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Parlor and Alcatraz and Final Missile Bombway",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 10,
+          "roomName": "Parlor and Alcatraz",
+          "nodeid": 3,
+          "nodeName": "Parlor Bottom Left Door (to Final Missile Bombway)",
+          "position": "right"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 18,
+          "roomName": "Final Missile Bombway",
+          "nodeid": 2,
+          "nodeName": "Final Missile Bombway Right Door (to Parlor)",
+          "position": "left"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Flyway and Bomb Torizo Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 13,
+          "roomName": "Flyway",
+          "nodeid": 2,
+          "nodeName": "Flyway Right Door (to Bomb Torizo)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 19,
+          "roomName": "Bomb Torizo Room",
+          "nodeid": 1,
+          "nodeName": "Bomb Torizo Room Door (to Flyway)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection between Landing Site and Crateria Power Bomb Room",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 8,
+          "roomName": "Landing Site",
+          "nodeid": 3,
+          "nodeName": "Landing Site Top Right Door (to Power Bombs)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 28,
+          "roomName": "Crateria Power Bomb Room",
+          "nodeid": 1,
+          "nodeName": "Crateria Power Bomb Room Door (to Landing Site)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection from Climb to Crateria Super Room (bottom)",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 11,
+          "roomName": "Climb",
+          "nodeid": 4,
+          "nodeName": "Climb Middle Right Door (to Crateria Supers Bottom)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 29,
+          "roomName": "Crateria Super Room",
+          "nodeid": 2,
+          "nodeName": "Crateria Super Room Bottom Left Door (to Climb Middle)",
+          "position": "right"
+        }
+      ]
+    },
+    {
+      "connectionType": "HorizontalDoor",
+      "description": "Door connection to Climb from Crateria Super Room (top)",
+      "direction": "Bidirectional",
+      "nodes": [
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 11,
+          "roomName": "Climb",
+          "nodeid": 3,
+          "nodeName": "Climb Top Right Door (from Crateria Supers Top)",
+          "position": "left"
+        },
+        {
+          "area": "Crateria",
+          "subarea": "Central",
+          "roomid": 29,
+          "roomName": "Crateria Super Room",
+          "nodeid": 1,
+          "nodeName": "Crateria Super Room Top Left Door (to Climb Top)",
+          "position": "right"
+        }
+      ]
+    }
+  ]
+}
