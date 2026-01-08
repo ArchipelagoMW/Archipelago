@@ -490,7 +490,7 @@ class FactorioBobs(World):
                     ingredient_raw = sum((count for ingredient, count in ingredient_recipe.get_raw_ingredients().items()))
                     ingredient_energy = ingredient_recipe.total_energy
                 else:
-                    self.logger.warning("no best recipe for ingredient", ingredient.name)
+                    self.logger.warning(f"no best recipe for ingredient: {ingredient.name}")
             else:
                 # assume simple ore TODO: remove if tree when mining data is harvested from Factorio
                 ingredient_energy = 2

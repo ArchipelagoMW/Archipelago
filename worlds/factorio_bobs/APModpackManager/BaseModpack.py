@@ -24,7 +24,7 @@ class BaseModpack:
             raise FileNotFoundError(f"Pack doesn't have header: {self.__packPath}", e)
         except Exception as e:
             raise Exception(f"Occurred loading pack in: {self.__packPath}") from e
-        self.logger = logging.getLogger(f"APModpackManager - factorio with modpacks: {self.packName}")
+        self.logger = logging.getLogger(f"Factorio with modpacks: {self.packName}")
 
         self.__has_fully_initialized = False
 
