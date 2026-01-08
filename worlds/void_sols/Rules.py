@@ -19,7 +19,6 @@ def set_rules(world: World):
 
     # Place Victory item at world spark beyond Zenith
     try:
-        world.multiworld.get_location(LocationName.apex_world_spark_interacted, player).place_locked_item(world.create_item(ItemName.victory))
         set_rule(world.multiworld.get_location(LocationName.apex_world_spark_interacted, player),
                  lambda state: state.has(ItemName.apex_zenith_defeated_event, player))
     except KeyError:
@@ -275,8 +274,6 @@ def set_rules(world: World):
     
     # Warden
     try:
-        world.multiworld.get_location(LocationName.prison_warden_defeated_event, player).place_locked_item(
-            world.create_item(ItemName.prison_warden_defeated_event))
         # Rule: Can reach the physical boss location (which requires Prison Key)
         set_rule(world.multiworld.get_location(LocationName.prison_warden_defeated_event, player),
                  lambda state: state.has(ItemName.prison_key, player))
@@ -285,8 +282,6 @@ def set_rules(world: World):
 
     # Poacher
     try:
-        world.multiworld.get_location(LocationName.forest_poacher_defeated_event, player).place_locked_item(
-            world.create_item(ItemName.forest_poacher_defeated_event))
         # Rule: Can reach the physical boss location (which requires Forest Bridge Key)
         set_rule(world.multiworld.get_location(LocationName.forest_poacher_defeated_event, player),
                  lambda state: state.has(ItemName.forest_bridge_key, player))
@@ -295,8 +290,6 @@ def set_rules(world: World):
 
     # Groundskeeper
     try:
-        world.multiworld.get_location(LocationName.mountain_groundskeeper_defeated_event, player).place_locked_item(
-            world.create_item(ItemName.mountain_groundskeeper_defeated_event))
         # Rule: Can reach the physical boss location (Mountain Outpost Key)
         set_rule(world.multiworld.get_location(LocationName.mountain_groundskeeper_defeated_event, player),
                  lambda state: state.has(ItemName.mountain_outpost_key, player))
@@ -305,8 +298,6 @@ def set_rules(world: World):
 
     # Greater Void Worm
     try:
-        world.multiworld.get_location(LocationName.mines_worm_defeated_event, player).place_locked_item(
-            world.create_item(ItemName.greater_void_worm_defeated_event))
         # Rule: Can reach the physical boss location (Pit Catwalk Key)
         set_rule(world.multiworld.get_location(LocationName.mines_worm_defeated_event, player),
                  lambda state: state.has(ItemName.pit_catwalk_key, player))
@@ -315,8 +306,6 @@ def set_rules(world: World):
 
     # Amalgamate
     try:
-        world.multiworld.get_location(LocationName.cultist_amalgamate_defeated_event, player).place_locked_item(
-            world.create_item(ItemName.cultist_amalgamate_defeated_event))
         # Rule: Can reach the physical boss location (Central Cell Key + Minor Cell Key + False Book)
         set_rule(world.multiworld.get_location(LocationName.cultist_amalgamate_defeated_event, player),
                  lambda state: state.has(ItemName.central_cell_key, player) and state.has(ItemName.minor_cell_key, player)
@@ -326,8 +315,6 @@ def set_rules(world: World):
 
     # Infernal Warden
     try:
-        world.multiworld.get_location(LocationName.supermax_prison_infernal_warden_defeated_event, player).place_locked_item(
-            world.create_item(ItemName.supermax_prison_infernal_warden_defeated_event))
         # Rule: Can reach the physical boss location (East Wing Key)
         set_rule(world.multiworld.get_location(LocationName.supermax_prison_infernal_warden_defeated_event, player),
                  lambda state: state.has(ItemName.east_wing_key, player))
@@ -336,8 +323,6 @@ def set_rules(world: World):
 
     # Immaculate
     try:
-        world.multiworld.get_location(LocationName.factory_immaculate_defeated_event, player).place_locked_item(
-            world.create_item(ItemName.factory_immaculate_defeated_event))
         # Rule: Can reach the physical boss location (Poacher Defeated)
         set_rule(world.multiworld.get_location(LocationName.factory_immaculate_defeated_event, player),
                  lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
@@ -346,8 +331,6 @@ def set_rules(world: World):
 
     # Gatekeeper
     try:
-        world.multiworld.get_location(LocationName.apex_gatekeeper_defeated_event, player).place_locked_item(
-            world.create_item(ItemName.apex_gatekeeper_defeated_event))
         # Rule: Can reach the physical boss location (Apex Outskirts Key)
         set_rule(world.multiworld.get_location(LocationName.apex_gatekeeper_defeated_event, player),
                  lambda state: state.has(ItemName.apex_outskirts_key, player))
@@ -356,8 +339,6 @@ def set_rules(world: World):
 
     # Zenith
     try:
-        world.multiworld.get_location(LocationName.apex_zenith_defeated_event, player).place_locked_item(
-            world.create_item(ItemName.apex_zenith_defeated_event))
         # Rule: Can reach the physical boss location (Gatekeeper Defeated)
         set_rule(world.multiworld.get_location(LocationName.apex_zenith_defeated_event, player),
                  lambda state: state.has(ItemName.apex_gatekeeper_defeated_event, player) and

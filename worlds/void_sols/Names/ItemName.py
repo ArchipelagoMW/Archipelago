@@ -158,6 +158,12 @@ relics_improved = "Relics Improved"
 fish_tokens_x2 = "Fish Tokens x2"
 strange_curio = "Strange Curio"
 
+sols_1 = "1 Sols"
+sols_25 = "25 Sols"
+sols_50 = "50 Sols"
+sols_100 = "100 Sols"
+sols_250 = "250 Sols"
+
 victory = "Victory"
 
 # Boss Events (Logic Only)

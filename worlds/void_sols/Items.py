@@ -12,9 +12,9 @@ class ItemData:
 
 item_data_table = {
     # Weapons
-    ItemName.sword: ItemData(1, ItemClassification.useful),
-    ItemName.dagger: ItemData(2, ItemClassification.useful),
-    ItemName.great_hammer: ItemData(3, ItemClassification.useful),
+    ItemName.sword: ItemData(1, ItemClassification.progression),
+    ItemName.dagger: ItemData(2, ItemClassification.progression),
+    ItemName.great_hammer: ItemData(3, ItemClassification.progression),
     ItemName.pickaxe: ItemData(4, ItemClassification.useful),
     ItemName.halberd: ItemData(5, ItemClassification.useful),
     ItemName.katana: ItemData(6, ItemClassification.useful),
@@ -30,9 +30,9 @@ item_data_table = {
     ItemName.great_bow: ItemData(102, ItemClassification.useful),
     ItemName.fishing_rod: ItemData(103, ItemClassification.progression),
     ItemName.hunters_bow: ItemData(104, ItemClassification.useful),
-    ItemName.fire_talisman: ItemData(105, ItemClassification.useful),
-    ItemName.blizzard_talisman: ItemData(106, ItemClassification.useful),
-    ItemName.lightning_talisman: ItemData(107, ItemClassification.useful),
+    ItemName.fire_talisman: ItemData(105, ItemClassification.progression),
+    ItemName.blizzard_talisman: ItemData(106, ItemClassification.progression),
+    ItemName.lightning_talisman: ItemData(107, ItemClassification.progression),
     ItemName.crossbow: ItemData(108, ItemClassification.useful),
     ItemName.heavy_shield: ItemData(109, ItemClassification.useful),
 
@@ -46,7 +46,7 @@ item_data_table = {
     ItemName.golden_clover: ItemData(206, ItemClassification.useful),
     ItemName.emerald_phial: ItemData(207, ItemClassification.useful),
     ItemName.topaz_phial: ItemData(208, ItemClassification.useful),
-    ItemName.silver_pouch: ItemData(209, ItemClassification.useful),
+    ItemName.silver_pouch: ItemData(209, ItemClassification.progression),
     ItemName.brass_knuckles: ItemData(210, ItemClassification.useful),
     ItemName.garnet_aegis: ItemData(211, ItemClassification.useful),
     ItemName.brass_knuckles_plus: ItemData(212, ItemClassification.useful),
@@ -180,6 +180,13 @@ item_data_table = {
     ItemName.relics_improved: ItemData(907, ItemClassification.useful, quantity=5),
     ItemName.fish_tokens_x2: ItemData(908, ItemClassification.progression, quantity=9),
     ItemName.strange_curio: ItemData(909, ItemClassification.progression, quantity=4),
+    
+    # Sols
+    ItemName.sols_1: ItemData(910, ItemClassification.filler, quantity=0),
+    ItemName.sols_25: ItemData(911, ItemClassification.filler, quantity=0),
+    ItemName.sols_50: ItemData(912, ItemClassification.filler, quantity=0),
+    ItemName.sols_100: ItemData(913, ItemClassification.filler, quantity=0),
+    ItemName.sols_250: ItemData(914, ItemClassification.filler, quantity=0),
     
     ItemName.victory: ItemData(1000, ItemClassification.progression),
     

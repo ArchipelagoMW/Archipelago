@@ -64,8 +64,9 @@ class TestRegions(VoidSolsTestBase):
         self.collect_by_name(ItemName.gate_key)
         
         # Forest -> Apex Outskirts (Requires Apex Outskirts Key OR Dynamite)
+        # Use dynamite to reach outskirts without getting the key (which would trigger the event)
         self.assertFalse(self.can_reach_region("Apex Outskirts"))
-        self.collect_by_name(ItemName.apex_outskirts_key)
+        self.collect_by_name(ItemName.dynamite_x1)
         self.assertTrue(self.can_reach_region("Apex Outskirts"))
         
         # Apex Outskirts -> Apex (Requires Gatekeeper Defeated Event)

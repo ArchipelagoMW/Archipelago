@@ -112,6 +112,9 @@ def create_regions(world: World, active_locations):
         elif location_name.startswith("Apex - "):
             if "Outskirts" in location_name or location_name == LocationName.apex_gatekeeper_defeated_event:
                 locations_by_region["Apex Outskirts"].append(location_name)
+            elif location_name == LocationName.apex_blow_horn:
+                # Apex Blow Horn is in Apex Outskirts, but requires Blizzard Talisman
+                locations_by_region["Apex Outskirts"].append(location_name)
             else:
                 # Default everything else (Hub, Castle, King, etc.) to the main Hub
                 locations_by_region["Apex"].append(location_name)

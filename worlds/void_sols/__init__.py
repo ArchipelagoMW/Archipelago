@@ -6,7 +6,7 @@ from .Items import all_items, item_data_table, VoidSolsItem
 from .Locations import all_locations, setup_locations
 from .Regions import create_regions, connect_regions
 from .Rules import set_rules
-from .Names import ItemName
+from .Names import ItemName, LocationName
 
 class VoidSolsWeb(WebWorld):
     theme = "party"
@@ -74,6 +74,26 @@ class VoidSolsWorld(World):
         if starting_weapon_name:
             self.multiworld.push_precollected(self.create_item(starting_weapon_name))
 
+        # Place Victory Item
+        self.multiworld.get_location(LocationName.apex_world_spark_interacted, self.player).place_locked_item(
+            self.create_item(ItemName.victory))
+
+        # Place Boss Event Items
+        boss_events = {
+            LocationName.prison_warden_defeated_event: ItemName.prison_warden_defeated_event,
+            LocationName.forest_poacher_defeated_event: ItemName.forest_poacher_defeated_event,
+            LocationName.mountain_groundskeeper_defeated_event: ItemName.mountain_groundskeeper_defeated_event,
+            LocationName.mines_worm_defeated_event: ItemName.greater_void_worm_defeated_event,
+            LocationName.cultist_amalgamate_defeated_event: ItemName.cultist_amalgamate_defeated_event,
+            LocationName.supermax_prison_infernal_warden_defeated_event: ItemName.supermax_prison_infernal_warden_defeated_event,
+            LocationName.factory_immaculate_defeated_event: ItemName.factory_immaculate_defeated_event,
+            LocationName.apex_gatekeeper_defeated_event: ItemName.apex_gatekeeper_defeated_event,
+            LocationName.apex_zenith_defeated_event: ItemName.apex_zenith_defeated_event,
+        }
+
+        for loc_name, item_name in boss_events.items():
+            self.multiworld.get_location(loc_name, self.player).place_locked_item(self.create_item(item_name))
+
         itempool = []
         for name, data in item_data_table.items():
             quantity = data.quantity
@@ -82,18 +102,32 @@ class VoidSolsWorld(World):
             if name == starting_weapon_name:
                 quantity -= 1
             
-            if data.classification != ItemClassification.filler and data.code is not None:
+            # Skip Victory as it is placed manually
+            if name == ItemName.victory:
+                continue
+
+            if data.code is not None and quantity > 0:
                 for _ in range(quantity):
                     itempool.append(self.create_item(name))
 
-        total_locations = len(self.multiworld.get_unfilled_locations(self.player))
+        # Filter out filled locations and event locations
+        unfilled_locations = [loc for loc in self.multiworld.get_unfilled_locations(self.player) 
+                              if loc.item is None and loc.address is not None]
+        
+        total_locations = len(unfilled_locations)
         needed_fillers = total_locations - len(itempool)
         
-        filler_items = [name for name, data in item_data_table.items() if data.classification == ItemClassification.filler]
+        sols_items = [
+            ItemName.sols_1,
+            ItemName.sols_25,
+            ItemName.sols_50,
+            ItemName.sols_100,
+            ItemName.sols_250,
+        ]
         
         if needed_fillers > 0:
             for _ in range(needed_fillers):
-                filler_name = self.random.choice(filler_items)
+                filler_name = self.random.choice(sols_items)
                 itempool.append(self.create_item(filler_name))
         elif needed_fillers < 0:
             raise Exception(f"Too many items! {len(itempool)} items for {total_locations} locations.")
