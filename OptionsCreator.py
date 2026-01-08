@@ -509,8 +509,10 @@ class OptionsCreator(ThemedApp):
                     self.options[name] = "random-" + str(self.options[name])
                 else:
                     self.options[name] = self.options[name].replace("random-", "")
-                    if self.options[name].isnumeric() or self.options[name] in ("True", "False"):
-                        self.options[name] = eval(self.options[name])
+                    if self.options[name].isnumeric():
+                        self.options[name] = int(self.options[name])
+                    elif self.options[name] in ("True", "False"):
+                        self.options[name] = self.options[name] == "True"
 
                 base_object = instance.parent.parent
                 label_object = instance.parent
