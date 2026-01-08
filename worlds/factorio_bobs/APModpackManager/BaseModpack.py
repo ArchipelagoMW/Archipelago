@@ -40,6 +40,9 @@ class BaseModpack:
         logger.debug(f'PackWorld subclass: {cls.__name__}, starting import of packs')
         init_modpacks(cls)
 
+    def __repr__(self):
+        return f"<{self.__class__.__name__}: {self.packName}>"
+
     def _add_item(self, name: str, item_id: int | None = None, groups: set[str] | None = None) -> None:
         item_id = add_item(name, item_id=item_id, groups=groups)
         self.items_to_id[name] = item_id
