@@ -11,7 +11,7 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.items import create_item, create_itempool, get_filler_item_selection, starting_weapons
 from worlds.rac3.locations import (get_level_locations, get_location_names, get_regions, get_total_locations,
                                    location_groups)
-from worlds.rac3.rac3options import RaC3Options, rac3_option_groups
+from worlds.rac3.rac3options import rac3_option_groups, RaC3Options
 from worlds.rac3.regions import create_regions
 from worlds.rac3.rules import set_rules
 from worlds.rac3.universal_tracker import setup_options_from_slot_data, tracker_world
@@ -26,7 +26,9 @@ components.append(Component(f"{RAC3OPTION.GAME_TITLE_FULL} Client",
                             func=run_client,
                             component_type=Type.CLIENT,
                             file_identifier=SuffixIdentifier(".aprac3"),
-                            icon="uya_icon"))
+                            icon="uya_icon",
+                            description="Launch the Client for connecting to Ratchet & Clank 3 [PlayStation 2]",
+                            ))
 
 icon_paths["uya_icon"] = f"ap:{__name__}/images/uya_icon.png"
 
@@ -42,6 +44,8 @@ class RaC3Web(WebWorld):
         "setup/en",
         ["Bread"]
     )]
+    bug_report_page = "https://github.com/Taoshix/Archipelago-RaC3/issues"
+    rich_text_options_doc = True
     option_groups = rac3_option_groups
 
 

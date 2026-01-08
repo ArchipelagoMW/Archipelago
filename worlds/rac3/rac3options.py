@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 
-from Options import OptionGroup, StartInventoryPool, ProgressionBalancing, Accessibility
+from Options import Accessibility, OptionGroup, ProgressionBalancing, StartInventoryPool
 from worlds.AutoWorld import PerGameCommonOptions
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.options.arena_options import Arena
+from worlds.rac3.options.armor_upgrade_options import ArmorUpgrade
 from worlds.rac3.options.deathlink_options import Deathlink
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
-from worlds.rac3.options.armor_upgrade_options import ArmorUpgrade
 from worlds.rac3.options.filler_weight_options import FillerWeight
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
 from worlds.rac3.options.nanotech_limitation_options import NanotechLimitation
@@ -74,21 +74,20 @@ rac3_option_groups = [
         ProgressionBalancing,
         Accessibility,
         Deathlink,
-        RAC3ExcludeLocations
+        RAC3ExcludeLocations,
     ]),
-    OptionGroup("Game Options", [
-        #StartInventoryPool,
-        StartingWeapons,
+    OptionGroup("RAC3 Game Options", [
         BoltAndXPMultiplier,
-        EnableProgressiveWeapons,
-        ArmorUpgrade
     ]),
-    OptionGroup("Trap and Filler Options", [
+    OptionGroup("RAC3 Item Options", [
+        StartingWeapons,
+        EnableProgressiveWeapons,
+        ArmorUpgrade,
         EnableTraps,
         TrapWeight,
-        FillerWeight
+        FillerWeight,
     ]),
-    OptionGroup("Location Options", [
+    OptionGroup("RAC3 Location Options", [
         WeaponVendors,
         SkillPoints,
         Trophies,
@@ -96,20 +95,18 @@ rac3_option_groups = [
         Rangers,
         VidComics,
         VRChallenges,
-        Arena
-    ]),
-    OptionGroup("Sanity Options", [
+        Arena,
         SewerCrystals,
         SewerLimitation,
         NanotechMilestones,
-        NanotechLimitation
+        NanotechLimitation,
     ]),
-    OptionGroup("Cosmetic Options", [
+    OptionGroup("RAC3 Cosmetic Options", [
         ShipNose,
         ShipWings,
         ShipSkin,
-        RatchetSkin
-    ])
+        RatchetSkin,
+    ]),
 ]
 
 slot_data_options: list[str] = [

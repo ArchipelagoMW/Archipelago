@@ -4,7 +4,8 @@ from worlds.rac3 import RAC3OPTION
 
 class Deathlink(Choice):
     """
-    If the current player character dies, other players with "Death Link" enabled with also die, and vice versa.
+    Any players with "Death Link" who die in their game will \n
+    cause all other players with this option enabled to also die
     """
     display_name = RAC3OPTION.DEATHLINK
     option_off = 0

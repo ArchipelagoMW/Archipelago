@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import Location, Region
+from worlds.rac3 import RAC3LOCATION
 from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.nanotech import RAC3NANOTECH
@@ -12,14 +13,14 @@ from worlds.rac3.constants.locations.trophies import RAC3TROPHY
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 from worlds.rac3.rac3options import RaC3Options
-from worlds.rac3 import RAC3LOCATION
 
 if TYPE_CHECKING:
-    from worlds.rac3 import RaC3World, RAC3LOCATION
+    from worlds.rac3 import RaC3World
 
 
 class GameLocation(Location):
     game = RAC3OPTION.GAME_TITLE_FULL
+
 
 every_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_11,
@@ -113,8 +114,6 @@ every_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_99,
     RAC3NANOTECH.LEVEL_100,
 ]
-
-# Making an array with every 5 nanotech
 every_5_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_15,
     RAC3NANOTECH.LEVEL_20,
@@ -135,8 +134,6 @@ every_5_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_95,
     RAC3NANOTECH.LEVEL_100,
 ]
-
-# Making an array with every 10 nanotech
 every_10_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_20,
     RAC3NANOTECH.LEVEL_30,
@@ -148,8 +145,6 @@ every_10_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_90,
     RAC3NANOTECH.LEVEL_100,
 ]
-
-# Making an array with every 20 nanotech
 every_20_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_20,
     RAC3NANOTECH.LEVEL_40,
@@ -260,7 +255,6 @@ every_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_99,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
-
 every_5_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_5,
     RAC3SEWER.TRADE_10,
@@ -284,7 +278,6 @@ every_5_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_99,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
-
 every_10_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_10,
     RAC3SEWER.TRADE_20,
@@ -298,7 +291,6 @@ every_10_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_99,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
-
 every_20_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_20,
     RAC3SEWER.TRADE_40,
@@ -307,6 +299,7 @@ every_20_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_99,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
+
 annihilation_nation_1: list[str] = [
     RAC3TBOLT.NATION_CLIFF,
     RAC3SKILLPOINT.NATION_CAMERA,
@@ -353,6 +346,7 @@ annihilation_nation_2: list[str] = [
     RAC3LOCATION.NATION_CREMATION_STATION,
     RAC3LOCATION.NATION_THE_ANNIHILATOR,
 ]
+
 extra_ranger: list[str] = [
     RAC3LOCATION.TYHRRANOSIS_RANGERS_1,
     RAC3LOCATION.TYHRRANOSIS_RANGERS_2,
@@ -371,6 +365,7 @@ veldin_weapons: list[str] = [
     RAC3LOCATION.VELDIN_FIRST_RANGER,
     RAC3LOCATION.VELDIN_SECOND_RANGER,
 ]
+
 
 def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
@@ -515,6 +510,8 @@ def create_region_and_connect(world: "RaC3World", name: str, entrance_name: str,
 
 def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> bool:
     """Return False if the location should be skipped based on options."""
+    all_skill_points = all(options.skill_points.values())
+    loc = LOCATION_FROM_AP_CODE[data.AP_CODE]
     for tag in data.TAGS:
         match tag:
             case RAC3TAG.UNSTABLE:  # Skip all unstable locations
@@ -523,49 +520,41 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if not options.trophies.value:  # Skip trophy locations if trophies are disabled
                     return True
             case RAC3TAG.LONG_TROPHY:
-                all_skill_points = all(options.skill_points.values())
                 if options.trophies.value < 2:  # Skip long term trophies if not set to every trophy
                     return True
-                elif not all_skill_points and LOCATION_FROM_AP_CODE[data.AP_CODE] is RAC3TROPHY.PHOENIX_SKILL_MASTER:
+                elif not all_skill_points and loc == RAC3TROPHY.PHOENIX_SKILL_MASTER:
                     return True
             case RAC3TAG.SKILLPOINT:
-                key = LOCATION_FROM_AP_CODE[data.AP_CODE]
-                if not options.skill_points[SKILLPOINT_LOCATION_TO_NAME[key]]:
-                    return True # Skips the skill points which the player didn't choose
-           # case RAC3TAG.HARD_SKILLPOINT:
-           #     if options.skill_points.value == 1:  # Skip skill points not in the simple list
-           #         return True
+                if not options.skill_points[SKILLPOINT_LOCATION_TO_NAME[loc]]:
+                    return True  # Skips the skill points which the player didn't choose
             case RAC3TAG.T_BOLT:
                 if options.titanium_bolts.value == 0:
                     return True  # Skip titanium bolt locations if titanium bolt option is disabled
             case RAC3TAG.NANOTECH:
-                nanotech = LOCATION_FROM_AP_CODE[data.AP_CODE]
-                if nanotech in every_nanotech[options.nanotech_limitation.value - 10::]:
+                if loc in every_nanotech[options.nanotech_limitation.value - 10::]:
                     return True  # Place nanotech milestone amount specified in nanotech_limitation
                 if options.nanotech_milestones.value == 0:
                     return True  # Skip nanotech milestone locations if nanotech milestones option is disabled
-                elif options.nanotech_milestones.value == 1 and nanotech not in every_20_nanotech:
+                elif options.nanotech_milestones.value == 1 and loc not in every_20_nanotech:
                     return True  # Skips nanotech milestones that are not in every 20
-                elif options.nanotech_milestones.value == 2 and nanotech not in every_10_nanotech:
+                elif options.nanotech_milestones.value == 2 and loc not in every_10_nanotech:
                     return True  # Skips nanotech milestones that are not in every 10
-                elif options.nanotech_milestones.value == 3 and nanotech not in every_5_nanotech:
+                elif options.nanotech_milestones.value == 3 and loc not in every_5_nanotech:
                     return True  # Skips nanotech milestones that are not in every 5
             case RAC3TAG.RANGERS:
-                ranger = LOCATION_FROM_AP_CODE[data.AP_CODE]
                 if options.rangers.value == 0:
                     return True  # Skips ranger missions locations if rangers option is none
-                elif options.rangers.value == 1 and ranger in extra_ranger:
-                    return True # Skips optional ranger missions locations if set to story_missions
-                elif options.rangers.value == 2 and ranger not in extra_ranger:
-                    return True # Skips story ranger missions locations if set to optional_missions
+                elif options.rangers.value == 1 and loc in extra_ranger:
+                    return True  # Skips optional ranger missions locations if set to story_missions
+                elif options.rangers.value == 2 and loc not in extra_ranger:
+                    return True  # Skips story ranger missions locations if set to optional_missions
             case RAC3TAG.ARENA:
-                arena = LOCATION_FROM_AP_CODE[data.AP_CODE]
                 if options.arena.value == 0:
                     return True  # Skips arena challenges locations if arena option is none
-                elif options.arena.value == 1 and arena not in annihilation_nation_1:
-                    return True  # Skips AN2 challenge locations if arena option is set to first_part
-                elif options.arena.value == 2 and arena not in annihilation_nation_2:
-                    return True  # Skips AN1 challenge locations if arena option is set to second_part
+                elif options.arena.value == 1 and loc not in annihilation_nation_1:
+                    return True  # Skips AN2 challenge locations if arena option is set to first_only
+                elif options.arena.value == 2 and loc not in annihilation_nation_2:
+                    return True  # Skips AN1 challenge locations if arena option is set to second_only
             case RAC3TAG.VIDCOMIC:
                 if options.vidcomics.value == 0:
                     return True  # Skips vidcomic locations if vidcomics option is disabled
@@ -573,19 +562,18 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if options.vr_challenges.value == 0:
                     return True  # Skips vr challenges locations if vr_challenges option is disabled
             case RAC3TAG.SEWER:
-                crystal = LOCATION_FROM_AP_CODE[data.AP_CODE]
-                if crystal in every_sewer_crystals[options.sewer_limitation.value::]:
+                if loc in every_sewer_crystals[options.sewer_limitation.value::]:
                     return True  # Place sewer crystal amount specified in sewer_limitations
                 elif options.sewer_crystals.value == 0:
                     return True  # Skip sewer crystal locations if sewer crystals option is disabled
-                elif options.sewer_crystals.value == 1 and crystal not in every_20_sewer_crystals:
+                elif options.sewer_crystals.value == 1 and loc not in every_20_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 20
-                elif options.sewer_crystals.value == 2 and crystal not in every_10_sewer_crystals:
+                elif options.sewer_crystals.value == 2 and loc not in every_10_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 10
-                elif options.sewer_crystals.value == 3 and crystal not in every_5_sewer_crystals:
+                elif options.sewer_crystals.value == 3 and loc not in every_5_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 5
             case RAC3TAG.WEAPONS:
-                if options.weapon_vendors.value == 0 and LOCATION_FROM_AP_CODE[data.AP_CODE] not in veldin_weapons:
-                    return True # Skips every weapon vendor checks except the Veldin ones
+                if options.weapon_vendors.value == 0 and loc not in veldin_weapons:
+                    return True  # Skips every weapon vendor checks except the Veldin ones
             # Add more conditions here if needed in the future
     return False

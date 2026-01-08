@@ -1,6 +1,6 @@
 from Options import ItemDict
-from worlds.rac3 import RAC3OPTION, RAC3ITEM
-from worlds.rac3.constants.data.item import filler_data, RAC3ITEMDATA
+from worlds.rac3 import RAC3ITEM, RAC3OPTION
+from worlds.rac3.constants.data.item import filler_data
 
 
 class FillerWeight(ItemDict):
@@ -14,10 +14,9 @@ class FillerWeight(ItemDict):
     max = 100
     valid_keys = filler_data.keys()
     default = {
-        #RAC3ITEM.TITANIUM_BOLT: 0,
+        # RAC3ITEM.TITANIUM_BOLT: 0,
         RAC3ITEM.WEAPON_XP: 5,
         RAC3ITEM.PLAYER_XP: 5,
         RAC3ITEM.BOLTS: 10,
-        # RAC3ITEM.INFERNO_MODE: 1,
         RAC3ITEM.JACKPOT: 10,
     }
