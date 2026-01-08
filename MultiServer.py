@@ -14,6 +14,7 @@ import logging
 import math
 import operator
 import pickle
+import queue
 import random
 import shlex
 import threading
@@ -45,6 +46,9 @@ from Utils import version_tuple, restricted_loads, Version, async_start, get_int
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType, LocationStore, MultiData, Hint, HintStatus
 from BaseClasses import ItemClassification
+from WebHostLib.models import Room
+from Webhook import Webhook
+from base64 import urlsafe_b64encode
 
 
 min_client_version = Version(0, 5, 0)
@@ -69,12 +73,6 @@ def remove_from_list(container, value):
 
 
 def pop_from_container(container, value):
-    if isinstance(container, list) and isinstance(value, int) and len(container) <= value:
-        return container
-
-    if isinstance(container, dict) and value not in container:
-        return container
-
     try:
         container.pop(value)
     except ValueError:
@@ -251,6 +249,9 @@ class Context:
     """ each sphere is { player: { location_id, ... } } """
     logger: logging.Logger
 
+    # Ashipelago customization
+    dynx: Ashipelago
+
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
                  countdown_mode: str = "auto", remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, 
@@ -329,6 +330,9 @@ class Context:
         self.non_hintable_names = collections.defaultdict(frozenset)
 
         self._load_game_data()
+
+        # Ashipelago customization
+        self.dynx = Ashipelago(self)
 
     # Data package retrieval
     def _load_game_data(self):
@@ -653,12 +657,14 @@ class Context:
 
     def get_save(self) -> dict:
         self.recheck_hints()
+        # Ashipelago customization
         d = {
             "version": self.save_version,
             "connect_names": self.connect_names,
             "received_items": self.received_items,
             "hints_used": dict(self.hints_used),
             "hints": dict(self.hints),
+            "room_hints_used": self.dynx.room_hints_used,
             "location_checks": dict(self.location_checks),
             "name_aliases": self.name_aliases,
             "client_game_state": dict(self.client_game_state),
@@ -674,7 +680,8 @@ class Context:
                              "release_mode": self.release_mode,
                              "remaining_mode": self.remaining_mode, "collect_mode": self.collect_mode,
                              "countdown_mode": self.countdown_mode,
-                             "item_cheat": self.item_cheat, "compatibility": self.compatibility}
+                             "item_cheat": self.item_cheat, "compatibility": self.compatibility,
+                             "use_room_hints": self.dynx.use_room_hints}
 
         }
 
@@ -688,6 +695,11 @@ class Context:
         self.received_items = savedata["received_items"]
         self.hints_used.update(savedata["hints_used"])
         self.hints.update(savedata["hints"])
+        # Ashipelago customization
+        if "room_hints_used" in savedata:
+            self.dynx.room_hints_used = savedata["room_hints_used"]
+        else:
+            self.dynx.room_hints_used = 0
 
         self.name_aliases.update(savedata["name_aliases"])
         self.client_game_state.update(savedata["client_game_state"])
@@ -711,6 +723,11 @@ class Context:
             self.countdown_mode = savedata["game_options"].get("countdown_mode", self.countdown_mode)
             self.item_cheat = savedata["game_options"]["item_cheat"]
             self.compatibility = savedata["game_options"]["compatibility"]
+            # Ashipelago customization
+            if "use_room_hints" in savedata["game_options"]:
+                self.dynx.use_room_hints = savedata["game_options"]["use_room_hints"]
+            else:
+                self.dynx.use_room_hints = False
 
         if "group_collected" in savedata:
             self.group_collected = savedata["group_collected"]
@@ -800,8 +817,9 @@ class Context:
         else:
             return self.player_names[team, slot]
 
+    # Ashipelago customization
     def notify_hints(self, team: int, hints: typing.List[Hint], only_new: bool = False,
-                     persist_even_if_found: bool = False, recipients: typing.Sequence[int] = None):
+                     persist_even_if_found: bool = False, recipients: typing.Sequence[int] = None, is_scout: bool = False):
         """Send and remember hints."""
         if only_new:
             hints = [hint for hint in hints if hint not in self.hints[team, hint.finding_player]]
@@ -829,6 +847,9 @@ class Context:
                         new_hint_events.add(player)
 
             self.logger.info("Notice (Team #%d): %s" % (team + 1, format_hint(self, team, hint)))
+
+            # Ashipelago customization
+            self.dynx.push_hint(self, hint, team, recipients, is_scout)
         for slot in new_hint_events:
             self.on_new_hint(team, slot)
         for slot, hint_data in concerns.items():
@@ -863,6 +884,9 @@ class Context:
             release_player(self, client.team, client.slot)
         self.save()  # save goal completion flag
 
+        # Ashipelago customization
+        self.dynx.push_goal_completion(client)
+
     def on_new_hint(self, team: int, slot: int):
         self.on_changed_hints(team, slot)
         self.broadcast(self.clients[team][slot], [{
@@ -882,6 +906,375 @@ class Context:
         if targets:
             self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.client_game_state[team, slot]}])
 
+from pony.orm import db_session
+class Ashipelago:
+
+    webhook_active = False
+    webhook_queue: queue.SimpleQueue
+    room_id: int
+    room_url: str
+    seed_url: str
+    admin_password: str
+    ctx: Context
+    webhook_url = ""
+    webhook_is_debug = False
+    webhook_thread: WebhookThread
+    use_room_hints = False
+    room_hints_used = 0
+    max_size: int = 16 * 1024 * 1024
+    server = None
+    server_task: typing.Optional["asyncio.Task[None]"] = None
+
+    def __init__(self, ctx: Context):
+        self.ctx = ctx
+        self.webhook_queue = queue.SimpleQueue()
+
+    # Initializes required fields needed to properly manage the newly started room
+    def start_room(self, room: Room, is_tracked: int, webhook_settings: dict, admin_password):
+        self.room_id = room.id
+        self.room_url = urlsafe_b64encode(room.id.bytes).rstrip(b'=').decode('ascii')
+        self.seed_url = urlsafe_b64encode(room.seed.id.bytes).rstrip(b'=').decode('ascii')
+        self.admin_password = admin_password
+        if "WEBHOOK_URL" in webhook_settings:
+            self.webhook_url = webhook_settings["WEBHOOK_URL"]
+        if "WEBHOOK_DEBUG" in webhook_settings:
+            self.webhook_is_debug = webhook_settings["WEBHOOK_DEBUG"]
+
+        if is_tracked > 0:
+            if webhook_settings["WEBHOOK_AUTO_START"]:
+                self.webhook_active = True
+                self.webhook_thread = self.WebhookThread(self.ctx, self.webhook_url, self.webhook_is_debug)
+                self.webhook_thread.start()
+                # Start of websocket connection to replace webhook
+                # server_task = asyncio.create_task(self._dynxbot_socket(), name="Dynx Loop")
+
+            self._push_player_list(room.is_new, is_tracked)
+            if room.is_new:
+                #Get generation data
+                #Build shared point pool map
+                #Update multisave with point pool for future use
+                self._push_game_item_information()
+                room.is_new = webhook_settings["WEBHOOK_DEBUG"]
+
+    # Shuts down a room that has been closed
+    def shutdown_room(self):
+        connection = {
+            "event": "shutdown_room",
+            "room": self.room_url,
+            "seed": self.seed_url
+        }
+        self._push_to_webhook(connection)
+        self.webhook_active = False
+
+    # Custom client command used to gift a hint from one player to another
+    def gift_hint(self, player_name: str, client_processor: ClientMessageProcessor) -> bool:
+        if self.use_room_hints:
+            client_processor.output(f"The room is currently set to using a shared pool of hints. There is no need to gift any hints, just use the !hint command as needed!")
+            return False
+
+        seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
+        if usable:
+            points_available = get_client_points(self.ctx, client_processor.client)
+            cost = self.ctx.get_hint_cost(client_processor.client.slot)
+            if (points_available // cost) > 0:
+                self.ctx.hints_used[client_processor.client.team, client_processor.client.slot] += 1
+                team, slot = self.ctx.player_name_lookup[seeked_player]
+                self.ctx.hints_used[team, slot] -= 1
+                self.ctx.broadcast_text_all(self.ctx.get_aliased_name(client_processor.client.team,
+                                                                      client_processor.client.slot) + ' gifted ' + self.ctx.get_aliased_name(
+                    team, slot) + ' a hint!', {"type": "CommandResult"})
+
+                self._push_gifted_hint(
+                    self.ctx.player_names[client_processor.client.team, client_processor.client.slot],
+                    self.ctx.player_names[team, slot])
+                return True
+            else:
+                client_processor.output(f"You do not have enough points to gift a hint {points_available}/{cost}")
+                return False
+        else:
+            client_processor.output(response)
+            return False
+
+    # Custom client command used to retrieve item flag information about a desired item
+    def item_info(self, item: str, client_processor: ClientMessageProcessor):
+        game_items: dict[str, int] = {}
+
+        for slot, game in self.ctx.games.items():
+            if game in game_items:
+                continue
+            names = self.ctx.all_item_and_group_names[game]
+            item_name, usable, response = get_intended_text(item, names)
+            if usable:
+                game_items[game] = 0b0000
+                if item_name in self.ctx.item_names_for_game(game):
+                    seeked_item_id = item if isinstance(item, int) else self.ctx.item_names_for_game(game)[
+                        item_name]
+                    slots: typing.Set[int] = {slot}
+                    for finding_player, location_id, item_id, receiving_player, item_flags \
+                            in self.ctx.locations.find_item(slots, seeked_item_id):
+                        game_items[game] |= item_flags
+
+        for game, flag in game_items.items():
+            item_classification = []
+            if flag == ItemClassification.filler:
+                item_classification.append("Filler")
+            if flag & ItemClassification.progression:
+                item_classification.append("Progression")
+            if flag & ItemClassification.useful:
+                item_classification.append("Useful")
+            if flag & ItemClassification.trap:
+                item_classification.append("Trap")
+            if flag & ItemClassification.skip_balancing:
+                item_classification.append("Skip_Balancing")
+
+            split = ", "
+            client_processor.output(
+                f"Found {item} in {game} that has the following flags {split.join(item_classification)}")
+
+    # Pushes a Goal Complete event to Dynxbot
+    def push_goal_completion(self, client: Client):
+        goal = {
+            "event": "goal_complete",
+            "room": self.room_url,
+            "seed": self.seed_url,
+            "player": self.ctx.player_names[client.team, client.slot],
+            "released": "auto" in self.ctx.release_mode
+        }
+        self._push_to_webhook(goal)
+
+    # Pushes a Hint event to Dynxbot
+    def push_hint(self, ctx: Context, hint: NetUtils.Hint, team: int, recipients: typing.Sequence[int], is_scout: bool):
+        if not hint.found and recipients is None:
+            hint_information = {
+                "event": "hint",
+                "room": self.room_url,
+                "seed": self.seed_url,
+                "receiver": ctx.player_names[team, hint.receiving_player],
+                "item": ctx.item_names[ctx.slot_info[hint.receiving_player].game][hint.item],
+                "location": ctx.location_names[ctx.slot_info[hint.finding_player].game][hint.location],
+                "finder": ctx.player_names[team, hint.finding_player],
+                "is_scout": is_scout
+            }
+            if hint.entrance:
+                hint_information["entrance"] = hint.entrance
+            self._push_to_webhook(hint_information)
+
+    # Pushes an Item event to Dynxbot
+    def push_item_information(self, item: NetworkItem, team: int, target_player, released: bool):
+        item_information = {
+            "event": "item",
+            "room": self.room_url,
+            "seed": self.seed_url,
+            "sender": self.ctx.player_names[(team, item.player)],
+            "item": self.ctx.item_names[self.ctx.slot_info[target_player].game][item.item],
+            "receiver": self.ctx.player_names[(team, target_player)],
+            "location": self.ctx.location_names[self.ctx.slot_info[item.player].game][item.location],
+            "released": released
+        }
+        item_classification = "Filler"
+
+        if item.flags == ItemClassification.progression:
+            item_classification = "Progression"
+        elif item.flags == ItemClassification.useful:
+            item_classification = "Useful"
+        elif item.flags == ItemClassification.progression | ItemClassification.useful:
+            item_classification = "Progression"
+        elif item.flags == ItemClassification.trap:
+            item_classification = "Trap"
+        elif item.flags == ItemClassification.skip_balancing:
+            item_classification = "Skip_Balancing"
+        elif item.flags == ItemClassification.progression_skip_balancing:
+            item_classification = "Progression_Skip_Balancing"
+
+        item_information["item_classification"] = item_classification
+        self._push_to_webhook(item_information)
+
+    # Pushes a player connection list to Dynxbot
+    def push_player_connection(self):
+        player_list = []
+        for team, clients in self.ctx.clients.items():
+            for slot, connected_clients in clients.items():
+                if connected_clients:
+                    player_list.append(self.ctx.player_names[team, slot])
+
+        connection = {
+            "event": "player_connection",
+            "room": self.room_url,
+            "seed": self.seed_url,
+            "players": player_list
+        }
+        self._push_to_webhook(connection)
+
+    # Manually refreshes the room timeout
+    def refresh_room(self):
+        with db_session:
+            room = Room.get(id=self.room_id)
+            room.multisave = pickle.dumps(self.ctx.get_save())
+            room.last_activity = datetime.datetime.utcnow()
+
+    # Helper function used to enqueue a message to be pushed to Dynxbot
+    def _push_to_webhook(self, message: typing.Dict[str, typing.Any]):
+        if not self.webhook_active:
+            return
+
+        self.webhook_queue.put(message)
+
+        if self.webhook_thread is None or not self.webhook_thread.is_alive():
+            self.webhook_thread = self.WebhookThread(self.ctx, self.webhook_url, self.webhook_is_debug)
+            self.webhook_thread.start()
+
+    # Helper function used to push the player list when a new room is started
+    def _push_player_list(self, is_new: bool, is_tracked: int):
+        if is_new:
+            player_list = []
+            game_list = {}
+            for player in self.ctx.player_names.values():
+                player_list.append(player)
+            for slot, game in self.ctx.games.items():
+                game_list[slot] = game
+            connection = {
+                "event": "create_room",
+                "room": self.room_url,
+                "seed": self.seed_url,
+                "players": player_list,
+                "games": game_list,
+                "is_tracked": is_tracked
+            }
+        else:
+            connection = {
+                "event": "start_room",
+                "room": self.room_url,
+                "seed": self.seed_url
+            }
+
+        self._push_to_webhook(connection)
+
+    # Helper function used to push a Gift Hint event to Dynxbot
+    def _push_gifted_hint(self, sender: str, receiver: str):
+        gift_hint = {
+            "event": "gift_hint",
+            "room": self.room_url,
+            "seed": self.seed_url,
+            "gifter": sender,
+            "giftee": receiver
+        }
+        self._push_to_webhook(gift_hint)
+
+    # Helper function used to push game item data to Dynxbot for local saving
+    def _push_game_item_information(self):
+        games = []
+        for slot, game in self.ctx.games.items():
+            if game in games:
+                continue
+
+            games.append(game)
+            game_items: dict[str, int] = {}
+            names = self.ctx.all_item_and_group_names[game]
+
+            for item_name in names:
+                game_items[item_name] = 0b0000
+                if item_name in self.ctx.item_names_for_game(game):
+                    seeked_item_id = self.ctx.item_names_for_game(game)[item_name]
+                    slots: typing.Set[int] = {slot}
+                    for finding_player, location_id, item_id, receiving_player, item_flags \
+                            in self.ctx.locations.find_item(slots, seeked_item_id):
+                        game_items[item_name] |= item_flags
+
+            information = {
+                "event": "item_information",
+                "room": self.room_url,
+                "seed": self.seed_url,
+                "game": game,
+                "items": game_items
+            }
+            self._push_to_webhook(information)
+
+    # Helper function used to calculate the amount of room points currently available
+    def get_room_points(self, team) -> int:
+        result = 0
+        locations = 0
+        for slot, connected_clients in self.ctx.clients[team].items():
+            result = result + (self.ctx.location_check_points * len(self.ctx.location_checks[team, slot]))
+            locations = locations + len(self.ctx.locations[slot])
+
+        hint_cost = max(1, int(self.ctx.hint_cost * 0.01 * locations / len(self.ctx.clients[team])))
+        return result - hint_cost * self.room_hints_used
+
+    # Helper function used to calculate the cost of a hint using a room point value
+    def get_room_hint_cost(self, team) -> int:
+        if self.ctx.hint_cost:
+            locations = 0
+            for slot, connected_clients in self.ctx.clients[team].items():
+                locations = locations + len(self.ctx.locations[slot])
+            return max(1, int(self.ctx.hint_cost * 0.01 * locations / len(self.ctx.clients[team])))
+
+        return 0
+
+    async def _dynxbot_socket(self):
+        try:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            port = 9922
+            address = "127.0.0.1"
+            socket = await websockets.connect(f"ws://{address}:{port}/discord", ping_timeout=None, ping_interval=None,
+                                        ssl=None,
+                                        max_size=self.max_size)
+            self.server = Endpoint(socket)
+            self.ctx.logger.info('Connected to DynxBot')
+            async for data in self.server.socket:
+                await self.process_dynxbot_message(decode(data))
+            self.ctx.logger.warning(f"Disconnected from DynxBot server")
+        except ConnectionRefusedError:
+            self.ctx.logger.warning("Connection refused by the server. "
+                                    "May not be running Archipelago on that address or port.")
+        except websockets.InvalidURI:
+            self.ctx.logger.warning("Failed to connect to the multiworld server (invalid URI)")
+        except OSError:
+            self.ctx.logger.warning("Failed to connect to the multiworld server")
+        except Exception as e:
+            self.ctx.logger.warning(f"Lost connection to the multiworld server: {e}")
+        finally:
+            self.ctx.logger.warning(f"Closing connection with DynxBot")
+            await self.connection_closed()
+
+    async def process_dynxbot_message(self, msg):
+        self.ctx.logger.info(f"Got a message from DynxBot {msg['data']}")
+
+    async def connection_closed(self):
+        if self.server and self.server.socket is not None:
+            await self.server.socket.close()
+
+    # Webhook class used to multithread the webhook messages so that the main thread is not stalled
+    class WebhookThread(threading.Thread):
+        ctx: Context
+        url: str
+        is_debug: bool
+
+        def __init__(self, ctx: Context, url: str, is_debug: bool):
+            threading.Thread.__init__(self)
+            self.name = "Webhook"
+            self.ctx = ctx
+            self.url = url
+            self.is_debug = is_debug
+
+        def run(self):
+            while self.ctx.dynx.webhook_active and not self.ctx.exit_event.is_set():
+                time.sleep(1)
+                while 1:
+                    try:
+                        message = self.ctx.dynx.webhook_queue.get_nowait()
+                    except queue.Empty:
+                        break
+                    else:
+                        if message is None:
+                            return
+
+                        message["debug"] = self.is_debug
+                        try:
+                            Webhook(self.url, content=message).execute()
+                        except Exception as e:
+                            self.ctx.dynx.webhook_queue.put(message)
+                            return
 
 def update_aliases(ctx: Context, team: int):
     cmd = ctx.dumper([{"cmd": "RoomUpdate",
@@ -989,6 +1382,9 @@ async def on_client_joined(ctx: Context, client: Client):
                                   "client's developer.")
     ctx.client_connection_timers[client.team, client.slot] = datetime.datetime.now(datetime.timezone.utc)
 
+    # Ashipelago customization
+    ctx.dynx.push_player_connection()
+    ctx.dynx.refresh_room()
 
 async def on_client_left(ctx: Context, client: Client):
     if len(ctx.clients[client.team][client.slot]) < 1:
@@ -1008,6 +1404,9 @@ async def on_client_left(ctx: Context, client: Client):
         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has {final_verb} the game. "
         f"Client({version_str}), {client.tags}.",
         {"type": "Part", "team": client.team, "slot": client.slot})
+
+    # Ashipelago customization
+    ctx.dynx.push_player_connection()
 
 
 async def countdown(ctx: Context, timer: int):
@@ -1099,7 +1498,8 @@ def release_player(ctx: Context, team: int, slot: int):
     ctx.broadcast_text_all("%s (Team #%d) has released all remaining items from their world."
                            % (ctx.player_names[(team, slot)], team + 1),
                            {"type": "Release", "team": team, "slot": slot})
-    register_location_checks(ctx, team, slot, all_locations)
+    # Ashipelago customization
+    register_location_checks(ctx, team, slot, all_locations, False, True, True)
     update_checked_locations(ctx, team, slot)
 
 
@@ -1111,7 +1511,8 @@ def collect_player(ctx: Context, team: int, slot: int, is_group: bool = False):
                            % (ctx.player_names[(team, slot)], team + 1),
                            {"type": "Collect", "team": team, "slot": slot})
     for source_player, location_ids in all_locations.items():
-        register_location_checks(ctx, team, source_player, location_ids, count_activity=False)
+        # Ashipelago customization
+        register_location_checks(ctx, team, source_player, location_ids, count_activity=False, push_webhook=False)
         update_checked_locations(ctx, team, source_player)
 
     if not is_group:
@@ -1127,16 +1528,21 @@ def get_remaining(ctx: Context, team: int, slot: int) -> typing.List[typing.Tupl
     return ctx.locations.get_remaining(ctx.location_checks, team, slot)
 
 
-def send_items_to(ctx: Context, team: int, target_slot: int, *items: NetworkItem):
+# Ashipelago customization
+def send_items_to(ctx: Context, team: int, target_slot: int, push_webhook: bool, released: bool, *items: NetworkItem):
     for target in ctx.slot_set(target_slot):
         for item in items:
             if item.player != target_slot:
                 get_received_items(ctx, team, target, False).append(item)
             get_received_items(ctx, team, target, True).append(item)
+            # Ashipelago customization
+            if push_webhook:
+                ctx.dynx.push_item_information(item, team, target, released)
 
 
+# Ashipelago customization
 def register_location_checks(ctx: Context, team: int, slot: int, locations: typing.Iterable[int],
-                             count_activity: bool = True):
+                             count_activity: bool = True, push_webhook: bool = True, released: bool = False):
     slot_locations = ctx.locations[slot]
     new_locations = set(locations) - ctx.location_checks[team, slot]
     new_locations.intersection_update(slot_locations)  # ignore location IDs unknown to this multidata
@@ -1154,7 +1560,8 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
         info_texts: list[dict[str, typing.Any]] = []
         for target_player, item_id, location, flags in sorted(sortable):
             new_item = NetworkItem(item_id, location, slot, flags)
-            send_items_to(ctx, team, target_player, new_item)
+            # Ashipelago customization
+            send_items_to(ctx, team, target_player, push_webhook, released, new_item)
 
             ctx.logger.info('(Team #%d) %s sent %s to %s (%s)' % (
                 team + 1, ctx.player_names[(team, slot)], ctx.item_names[ctx.slot_info[target_player].game][item_id],
@@ -1453,9 +1860,11 @@ class ClientMessageProcessor(CommonCommandProcessor):
         self.ctx.broadcast_text_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + output,
                                     {"type": "Chat", "team": self.client.team, "slot": self.client.slot, "message": output})
 
-        if not self.ctx.server_password:
-            self.output("Sorry, Remote administration is disabled")
-            return False
+        # Ashipelago customization
+        # Disabling this for our version of Arch and allowing for us to have a manual admin password
+        # if not self.ctx.server_password:
+        #    self.output("Sorry, Remote administration is disabled")
+        #    return False
 
         if not command:
             if self.is_authenticated():
@@ -1466,7 +1875,8 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return True
 
         if command.startswith("login "):
-            if command == f"login {self.ctx.server_password}":
+            # Ashipelago customization
+            if command == f"login {self.ctx.dynx.admin_password}":
                 self.output("Login successful. You can now issue server side commands.")
                 self.ctx.commandprocessor.client = self.client
                 return True
@@ -1656,6 +2066,16 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return True
         return False
 
+    # Ashipelago customization
+    @mark_raw
+    def _cmd_gift_hint(self, player_name: str) -> bool:
+        return self.ctx.dynx.gift_hint(player_name, self)
+
+    # Ashipelago customization
+    @mark_raw
+    def _cmd_item_info(self, item: str):
+        self.ctx.dynx.item_info(item, self)
+
     @mark_raw
     def _cmd_getitem(self, item_name: str) -> bool:
         """Cheat in an item, if it is enabled on this server"""
@@ -1683,14 +2103,21 @@ class ClientMessageProcessor(CommonCommandProcessor):
             return False
 
     def get_hints(self, input_text: str, for_location: bool = False) -> bool:
-        points_available = get_client_points(self.ctx, self.client)
-        cost = self.ctx.get_hint_cost(self.client.slot)
+        # Ashipelago customization
+        if self.ctx.dynx.use_room_hints:
+            points_available = self.ctx.dynx.get_room_points(self.client.team)
+            cost = self.ctx.dynx.get_room_hint_cost(self.client.team)
+        else:
+            points_available = get_client_points(self.ctx, self.client)
+            cost = self.ctx.get_hint_cost(self.client.slot)
+
+        auto_status = HintStatus.HINT_UNSPECIFIED if for_location else HintStatus.HINT_PRIORITY
         if not input_text:
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
             self.ctx.notify_hints(self.client.team, list(hints), recipients=(self.client.slot,))
-            self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
+            self.output(f"A hint costs {cost} points. "
                         f"You have {points_available} points.")
             if hints and Utils.version_tuple < (0, 5, 0):
                 self.output("It was recently changed, so that the above hints are only shown to you. "
@@ -1779,23 +2206,32 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     hint = not_found_hints.pop()
                     hints.append(hint)
                     can_pay -= 1
-                    self.ctx.hints_used[self.client.team, self.client.slot] += 1
+                    # Ashipelago customization
+                    if self.ctx.dynx.use_room_hints:
+                        self.ctx.dynx.room_hints_used += 1
+                    else:
+                        self.ctx.hints_used[self.client.team, self.client.slot] += 1
 
                 self.ctx.notify_hints(self.client.team, hints)
                 if not_found_hints:
-                    points_available = get_client_points(self.ctx, self.client)
+                    # Ashipelago customization
+                    if self.ctx.dynx.use_room_hints:
+                        points_available = self.ctx.dynx.get_room_points(self.client.team)
+                    else:
+                        points_available = get_client_points(self.ctx, self.client)
+
                     if hints and cost and int((points_available // cost) == 0):
                         self.output(
                             f"There may be more hintables, however, you cannot afford to pay for any more. "
                             f" You have {points_available} and need at least "
-                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
+                            f"{cost}.")
                     elif hints:
                         self.output(
                             "There may be more hintables, you can rerun the command to find more.")
                     else:
                         self.output(f"You can't afford the hint. "
                                     f"You have {points_available} points and need at least "
-                                    f"{self.ctx.get_hint_cost(self.client.slot)}.")
+                                    f"{cost}.")
                 self.ctx.save()
                 return True
 
@@ -1810,7 +2246,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             else:
                 self.output(f"You can't afford the hint. "
                             f"You have {points_available} points and need at least "
-                            f"{self.ctx.get_hint_cost(self.client.slot)}.")
+                            f"{cost}.")
             return False
 
     @mark_raw
@@ -2023,7 +2459,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 if create_as_hint:
                     hints.extend(collect_hint_location_id(ctx, client.team, client.slot, location))
                 locs.append(NetworkItem(target_item, location, target_player, flags))
-            ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2, persist_even_if_found=True)
+            # Ashipelago customization
+            ctx.notify_hints(client.team, hints, only_new=create_as_hint == 2, persist_even_if_found=True, is_scout=True)
             if locs and create_as_hint:
                 ctx.save()
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
@@ -2079,7 +2516,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             # As of writing this code, only_new=True does not update status for existing hints
             ctx.notify_hints(client.team, hints, only_new=True, persist_even_if_found=True)
             ctx.save()
-        
+
         elif cmd == 'UpdateHint':
             location = args["location"]
             player = args["player"]
@@ -2255,6 +2692,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.ctx.server.ws_server.close()
         finally:
             self.ctx.exit_event.set()
+            # Ashipelago customization
+            self.ctx.webhook_active = False
         return True
 
     @mark_raw
@@ -2377,7 +2816,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
                 if amount > 100:
                     raise ValueError(f"{amount} is invalid. Maximum is 100.")
                 new_items = [NetworkItem(names[item_name], -1, 0) for _ in range(int(amount))]
-                send_items_to(self.ctx, team, slot, *new_items)
+                # Ashipelago customization
+                send_items_to(self.ctx, team, slot, True, True, *new_items)
 
                 send_new_items(self.ctx)
                 self.ctx.broadcast_text_all(
@@ -2652,6 +3092,8 @@ async def auto_shutdown(ctx, to_cancel=None):
             for task in to_cancel:
                 task.cancel()
         ctx.logger.info("Shutting down due to inactivity.")
+        # Ashipelago customization
+        ctx.dynx.shutdown_room()
 
     while not ctx.exit_event.is_set():
         if not ctx.client_activity_timers.values():

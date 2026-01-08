@@ -18,6 +18,11 @@
     margin-bottom: 2px;
     text-transform: none;
 }
+#games h2, #games details summary.exp{
+    color: #f58505;
+    margin-bottom: 2px;
+    text-transform: none;
+}
 
 #games a{
     font-size: 16px;

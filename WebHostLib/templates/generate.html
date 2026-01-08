@@ -17,7 +17,7 @@
                 which you can find on the <a href="{{ url_for("games") }}">supported games list</a>.
             </p>
             <p>
-                Note: This website will always generate games using the current release version of Archipelago,
+                Note: This website will always generate games using the current release version of Ashipelago,
                 currently {{ version }}.
             </p>
             <p>
@@ -167,6 +167,21 @@ Warning: playthrough can take a significant amount of time for larger multiworld
                                     </tr>
                                     <tr>
                                         <td>
+                                            <label for="use_room_hints">Use shared room hints
+                                                <span class="interactive" data-tooltip="Allows for the players in a room to pool their hints into a global hint pool for the room.">
+                                                    (?)
+                                            </span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <select name="use_room_hints" id="use_room_hints">
+                                                <option value="0">Disabled</option>
+                                                <option value="1">Enabled</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
                                             <label for="server_password">Server Password:
                                                 <span class="interactive" data-tooltip="Allows for issuing of server console commands from any text client or in-game client using the !admin command.">
                                                     (?)
@@ -175,6 +190,27 @@ Warning: playthrough can take a significant amount of time for larger multiworld
                                         </td>
                                         <td>
                                             <input id="server_password" name="server_password">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="track_in_discord">Track Room in Discord
+                                                <span class="interactive" data-tooltip="Allows for the room to be tracked via DynxBot in the Aces Wilds server.">
+                                                       (?)
+                                                </span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <select name="track_in_discord" id="track_in_discord">
+                                            {% if race -%}
+                                                <option value="0">Disabled in Race mode</option>
+                                            {%- else -%}
+                                                <option value="0">Disabled</option>
+                                                <option value="1">Enabled</option>
+                                                <option value="2">Official Async</option>
+                                                <option value="3">Race</option>
+                                            {%- endif -%}
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>

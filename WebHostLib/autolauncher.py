@@ -190,15 +190,22 @@ class MultiworldInstance():
         self.rooms_to_start = multiprocessing.Queue()
         self.rooms_shutting_down = multiprocessing.Queue()
         self.name = f"MultiHoster{id}"
+        # Ashipelago customization
+        self.webhook_url = config["WEBHOOK_URL"]
+        self.webhook_autostart = config["WEBHOOK_AUTO_START"]
+        self.webhook_debug = config["WEBHOOK_DEBUG"]
+        self.admin_password = config["ADMIN_PASSWORD"]
 
     def start(self):
         if self.process and self.process.is_alive():
             return False
 
+        # Ashipelago customization
+        webhook_settings = {"WEBHOOK_URL": self.webhook_url, "WEBHOOK_AUTO_START": self.webhook_autostart, "WEBHOOK_DEBUG": self.webhook_debug}
         process = multiprocessing.Process(group=None, target=run_server_process,
                                           args=(self.name, self.ponyconfig, get_static_server_data(),
                                                 self.cert, self.key, self.host,
-                                                self.rooms_to_start, self.rooms_shutting_down),
+                                                self.rooms_to_start, self.rooms_shutting_down, webhook_settings, self.admin_password),
                                           name=self.name)
         process.start()
         self.process = process

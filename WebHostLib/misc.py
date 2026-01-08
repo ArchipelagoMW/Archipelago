@@ -114,7 +114,7 @@ def tutorial_redirect(game: str, file: str, lang: str):
     return redirect(url_for("tutorial", game=game, file=f"{file}_{lang}"), code=301)
 
 
-@app.route('/tutorial/')
+@app.route('/tutorial')
 @cache.cached()
 def tutorial_landing():
     tutorials = {}

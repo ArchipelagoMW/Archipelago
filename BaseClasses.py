@@ -1633,6 +1633,11 @@ class Item:
     def flags(self) -> int:
         return self.classification.as_flag()
 
+    # Ashipelago customization
+    @property
+    def raw_flags(self) -> int:
+        return int(self.classification)
+
     @property
     def is_event(self) -> bool:
         return self.code is None

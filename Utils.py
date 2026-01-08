@@ -22,6 +22,7 @@ from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
+from enum import IntEnum
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
@@ -48,7 +49,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.6"
+__version__ = "0.6.5"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -467,7 +468,9 @@ class RestrictedUnpickler(pickle.Unpickler):
                 self.generic_properties_module = importlib.import_module("worlds.generic")
             return getattr(self.generic_properties_module, name)
         # pep 8 specifies that modules should have "all-lowercase names" (options, not Options)
-        if module.lower().endswith("options"):
+        if (module.lower().endswith("options")
+                # Ashipelago customization
+                or "games" in module.lower()):
             if module == "Options":
                 mod = self.options_module
             else:
@@ -475,6 +478,9 @@ class RestrictedUnpickler(pickle.Unpickler):
             obj = getattr(mod, name)
             if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection,
                                 self.options_module.PlandoItem, self.options_module.PlandoText)):
+                return obj
+            # Ashipelago customization
+            if issubclass(obj, IntEnum):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
@@ -586,8 +592,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
                 sys.__excepthook__(exc_type, exc_value, exc_traceback)
                 return
             logging.getLogger(exception_logger).exception("Uncaught exception",
-                                                          exc_info=(exc_type, exc_value, exc_traceback),
-                                                          extra={"NoStream": exception_logger is None})
+                                                          exc_info=(exc_type, exc_value, exc_traceback))
             return orig_hook(exc_type, exc_value, exc_traceback)
 
         handle_exception._wrapped = True
@@ -1222,35 +1227,3 @@ class DaemonThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):
             t.start()
             self._threads.add(t)
             # NOTE: don't add to _threads_queues so we don't block on shutdown
-
-
-def get_full_typename(t: type) -> str:
-    """Returns the full qualified name of a type, including its module (if not builtins)."""
-    module = t.__module__
-    if module and module != "builtins":
-        return f"{module}.{t.__qualname__}"
-    return t.__qualname__
-
-
-def get_all_causes(ex: Exception) -> str:
-    """Return a string describing the recursive causes of this exception.
-
-    :param ex: The exception to be described.
-    :return A multiline string starting with the initial exception on the first line and each resulting exception
-            on subsequent lines with progressive indentation.
-
-            For example:
-
-            ```
-            Exception: Invalid value 'bad'.
-             Which caused: Options.OptionError: Error generating option
-              Which caused: ValueError: File bad.yaml is invalid.
-            ```
-    """
-    cause = ex
-    causes = [f"{get_full_typename(type(ex))}: {ex}"]
-    while cause := cause.__cause__:
-        causes.append(f"{get_full_typename(type(cause))}: {cause}")
-    top = causes[-1]
-    others = "".join(f"\n{' ' * (i + 1)}Which caused: {c}" for i, c in enumerate(reversed(causes[:-1])))
-    return f"{top}{others}"

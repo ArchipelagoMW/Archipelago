@@ -277,7 +277,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 def precollect_hint(location: Location, auto_status: HintStatus):
                     entrance = er_hint_data.get(location.player, {}).get(location.address, "")
                     hint = NetUtils.Hint(location.item.player, location.player, location.address,
-                                         location.item.code, False, entrance, location.item.flags, auto_status)
+                                         location.item.code, False, entrance, location.item.raw_flags, auto_status)
                     precollected_hints[location.player].add(hint)
                     if location.item.player not in multiworld.groups:
                         precollected_hints[location.item.player].add(hint)
@@ -295,7 +295,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                             f"Locations with duplicate address. {location} and "
                             f"{locations_data[location.player][location.address]}")
                         locations_data[location.player][location.address] = \
-                            location.item.code, location.item.player, location.item.flags
+                            location.item.code, location.item.player, location.item.raw_flags
                         auto_status = HintStatus.HINT_AVOID if location.item.trap else HintStatus.HINT_PRIORITY
                         if location.name in multiworld.worlds[location.player].options.start_location_hints:
                             if not location.item.trap:  # Unspecified status for location hints, except traps

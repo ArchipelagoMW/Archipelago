@@ -4,6 +4,7 @@ import asyncio
 import collections
 import datetime
 import functools
+import json
 import logging
 import multiprocessing
 import pickle
@@ -62,6 +63,8 @@ class DBCommandProcessor(ServerCommandProcessor):
 
 class WebHostContext(Context):
     room_id: int
+    # Ashipelago customization
+    room_is_tracked: int
 
     def __init__(self, static_server_data: dict, logger: logging.Logger):
         # static server data is used during _load_game_data to load required data,
@@ -123,6 +126,13 @@ class WebHostContext(Context):
         self.location_name_groups = {"Archipelago": static_location_name_groups.get("Archipelago", {})}
         missing_checksum = False
 
+        # Ashipelago customization
+        self.room_is_tracked = multidata["server_options"]["track_in_discord"]
+        if "use_room_hints" in multidata["server_options"]:
+            self.dynx.use_room_hints = multidata["server_options"]["use_room_hints"]
+        else:
+            self.dynx.use_room_hints = False
+
         for game in list(multidata.get("datapackage", {})):
             game_data = multidata["datapackage"][game]
             if "checksum" in game_data:
@@ -177,7 +187,8 @@ class WebHostContext(Context):
 
 
 def get_random_port():
-    return random.randint(49152, 65535)
+    # Ashipelago customization
+    return random.randint(52500, 52700)
 
 
 @cache_argsless
@@ -229,9 +240,10 @@ def set_up_logging(room_id) -> logging.Logger:
     return logger
 
 
+# Ashipelago customization
 def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                        cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
-                       host: str, rooms_to_run: multiprocessing.Queue, rooms_shutting_down: multiprocessing.Queue):
+                       host: str, rooms_to_run: multiprocessing.Queue, rooms_shutting_down: multiprocessing.Queue, webhook: dict, admin_password):
     from setproctitle import setproctitle
 
     setproctitle(name)
@@ -312,6 +324,8 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                     with db_session:
                         room = Room.get(id=ctx.room_id)
                         room.last_port = port
+                        # Ashipelago customization
+                        ctx.dynx.start_room(room, ctx.room_is_tracked, webhook, admin_password)
                     del room
                 else:
                     ctx.logger.exception("Could not determine port. Likely hosting failure.")
