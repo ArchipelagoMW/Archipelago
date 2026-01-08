@@ -1,17 +1,42 @@
 import asyncio
+import time
+import sys
+import traceback
 import typing
 
 from typing import TYPE_CHECKING, Any
+from copy import deepcopy
 
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 
+from ..items import ITEM_TABLE, ITEM_NAME_TO_ID, ITEM_ID_TO_NAME, PSOItemType
+
 import dolphin_memory_engine
 
-from ..strings.client_strings import ConnectionStatus
+from ..helpers import write_short, read_short, read_string, write_bit
+from ..strings.client_strings import ConnectionStatus, get_death_message
+from ..strings.item_names import Item
 
 if TYPE_CHECKING:
     import kvui
+
+# The memory address where the player's current health is stored
+CURRENT_HEALTH_ADDRESS = 0x80DA65CC
+
+# These addresses appear to be unused throughout the game
+# Use it to track the index of the last item the game knows it has received for the player
+LAST_RECEIVED_ITEM_ADDRESS = 0x80C5CBA0
+
+# The memory address to check to see if the player is currently in game
+# Technically, this is the memory address for a Mothmant, which is loaded
+# when the character 'sparks' in for the first time
+IS_INGAME_ADDRESS = 0x805D4AA0
+
+# The memory address for the Ruins Entrance after Vol Opt
+RUINS_DOOR_ADDRESS = 0x805127FD
+
+PILLAR_NAMES = {Item.FOREST_PILLAR, Item.CAVES_PILLAR, Item.MINES_PILLAR}
 
 class PSOCommandProcessor(ClientCommandProcessor):
     """
@@ -63,9 +88,7 @@ class PSOContext(CommonContext):
     async def disconnect(self, *args: Any, **kwargs: Any) -> None:
         """
         Disconnect the client from the server and reset game state variables
-
-        :param allow_autoreconnect: whether the client should auto-reconnect to the server; defaults to `False`
-         """
+        """
         self.auth = None
         self.current_stage_name = None
         await super().disconnect(*args, **kwargs)
@@ -110,50 +133,31 @@ class PSOContext(CommonContext):
 
     def make_gui(self) -> type["kvui.GameManager"]:
         """
-        Initialize the GUI for The Wind Waker client.
+        Initialize the GUI for the PSO Archipelago client.
 
         :return: The client's GUI.
         """
         ui = super().make_gui()
-        ui.base_title = "Archipelago The Wind Waker Client"
+        ui.base_title = "Archipelago Phantasy Star Online Episode I&II Plus Client"
         return ui
-#
-#     async def update_visited_stages(self, newly_visited_stage_name: str) -> None:
-#         """
-#         Update the server's data storage of the visited stage names to include the newly visited stage name.
-#
-#         :param newly_visited_stage_name: The name of the stage recently visited.
-#         """
-#         if self.slot is not None:
-#             visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
-#             await self.send_msgs(
-#                 [
-#                     {
-#                         "cmd": "Set",
-#                         "key": visited_stages_key,
-#                         "default": {},
-#                         "want_reply": False,
-#                         "operations": [{"operation": "update", "value": {newly_visited_stage_name: True}}],
-#                     }
-#                 ]
-#             )
-#
-#     def update_salvage_locations_map(self) -> None:
-#         """
-#         Update the client's mapping of salvage locations to their bitfield bit.
-#
-#         This is necessary for the client to handle randomized charts correctly.
-#         """
-#         self.salvage_locations_map = {}
-#         for offset in range(49):
-#             island_name = ISLAND_NUMBER_TO_NAME[offset + 1]
-#             salvage_bit = ISLAND_NAME_TO_SALVAGE_BIT[island_name]
-#
-#             shuffled_island_number = read_short(CHARTS_MAPPING_ADDR + offset * 2)
-#             shuffled_island_name = ISLAND_NUMBER_TO_NAME[shuffled_island_number]
-#             salvage_location_name = f"{shuffled_island_name} - Sunken Treasure"
-#
-#             self.salvage_locations_map[salvage_location_name] = salvage_bit
+
+async def check_death(ctx: PSOContext) -> None:
+    """
+    When DeathLink is on, check if the player is currently dead in-game
+    then notify the server of the player's death
+
+    :param ctx: the Context object from CommonClient for PSO
+    """
+    if ctx.slot is not None and check_ingame():
+        current_health = read_short(CURRENT_HEALTH_ADDRESS)
+        if current_health <= 0:
+            if not ctx.has_send_death and time.time() >= ctx.last_death_link + 3:
+                ctx.has_send_death = True
+                # Choose a random death message to send to the server
+                death_message = get_death_message()
+                await ctx.send_death(ctx.player_names[ctx.slot] + death_message)
+        else:
+            ctx.has_send_death = False
 
 def _give_death(ctx: PSOContext) -> None:
     """
@@ -161,12 +165,266 @@ def _give_death(ctx: PSOContext) -> None:
 
     :param ctx: the Context object from CommonClient for PSO
     """
-    # TODO: Implement DeathLink (below code is from TWW)
-    # if (
-    #     ctx.slot is not None
-    #     and dolphin_memory_engine.is_hooked()
-    #     and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS
-    #     and check_ingame()
-    # ):
-    #     ctx.has_send_death = True
-    #     write_short(CURR_HEALTH_ADDR, 0)
+    if (
+        ctx.slot is not None
+        and dolphin_memory_engine.is_hooked()
+        and ctx.dolphin_status == ConnectionStatus.CONNECTED
+        and check_ingame()
+    ):
+        ctx.has_send_death = True
+        # TODO: Validate this actually works
+        write_short(CURRENT_HEALTH_ADDRESS, 0)
+
+
+def check_ingame() -> bool:
+    """
+    Returns True if the player is currently loaded into the game on a character
+    """
+    return read_short(IS_INGAME_ADDRESS) != 0
+
+
+def check_ruins_door(ctx: PSOContext) -> None:
+    """
+    If the player has all 3 Pillars items, unlock the Ruins Entrance
+    Otherwise, ensure it's locked
+    """
+    received_items = ctx.items_received
+
+    # Create a list of all received items that are pillars
+    found_pillars = [item for item in received_items if ITEM_ID_TO_NAME[item.item] in PILLAR_NAMES]
+    # Technically, we may not have to relock / unlock every time this runs, but it's fairly cheap and
+    # good insurance for the time being
+    if len(found_pillars) == 3:
+        write_bit(RUINS_DOOR_ADDRESS, 0, 1)
+    else:
+        write_bit(RUINS_DOOR_ADDRESS, 0, 0)
+
+    return
+
+def check_pillars(ctx: PSOContext) -> None:
+    """
+    When sending the checks from Pillar locations, check if all 3 pillar have been sent.
+    If the player doesn't have all 3 pillar items received, re-lock the pillar door, as the game
+    will unlock it automatically when the 3rd one is triggered.
+    """
+    checked_locations = ctx.locations_checked
+    # TODO: Decide if we want to hard code the pillars
+    pillar_location_codes = {20, 21, 22}
+    if not pillar_location_codes.issubset(checked_locations):
+        # All the pillars haven't been activated by the player; no need to check anything else
+        return
+
+    check_ruins_door(ctx)
+    return
+
+
+def _give_item(ctx: PSOContext, item_name: str) -> bool:
+    """
+    Give an item to the player in-game
+
+    :param ctx: the Context object from CommonClient for PSO
+    :param code: the unique ID code for the item being given
+    :return: whether the item was successfully given
+    """
+    # TODO: Determine if this can get stuck
+    if not check_ingame():
+        return False
+
+    item = ITEM_TABLE[item_name]
+    match item.type:
+        case PSOItemType.AREA:
+            if not item.ram_data.bit_position:
+                # All of our AREAs should have RAM data in the current implementation
+                logger.error(f"Item {item_name} is classified as an AREA but has no ram data")
+                return False
+            write_bit(item.ram_data.ram_addr, item.ram_data.bit_position, 1)
+            return True
+
+        case PSOItemType.SWITCH:
+            if not item.ram_data.bit_position:
+                # All of our SWITCHs should have RAM data in the current implementation
+                logger.error(f"Item {item_name} is classified as an SWITCH but has no ram data")
+                return False
+
+            if item_name in PILLAR_NAMES:
+                check_pillars(ctx)
+            else:
+                logger.warning(f"Non-Pillar SWITCH {item_name} found – this may have unexpected behavior")
+                write_bit(item.ram_data.ram_addr, item.ram_data.bit_position, 1)
+            return True
+
+        case _:
+            logger.error(f"Unhandled {item.type} item not added to game: {item_name}")
+
+
+    return False
+
+async def give_items(ctx: PSOContext) -> None:
+    """
+    Give the player all outstanding items they have yet to receive
+
+    :param ctx: the Context object from CommonClient for PSO
+    """
+    if not check_ingame():
+        return
+
+    # Read the index of the last item the game knows we received
+    # Use this value to compare with w
+    last_item_idx = read_short(LAST_RECEIVED_ITEM_ADDRESS)
+
+    # Fetch the list of received items
+    received_items = ctx.items_received
+    if len(received_items) <= last_item_idx:
+        # No new items
+        return
+
+    # Iterate through the new items and give them to the player
+    for idx, item_to_add in enumerate(received_items[last_item_idx:], start=last_item_idx + 1):
+        # Lookup the item from the Context and attempt to give it to the player
+        while not _give_item(ctx, ITEM_ID_TO_NAME[item_to_add.item]):
+            await asyncio.sleep(0.01)
+
+        # Update the last received item index to the item that was just sent
+        write_short(LAST_RECEIVED_ITEM_ADDRESS, idx)
+
+
+
+
+# TODO: Is this done? Probably not
+
+
+
+async def check_locations(ctx: PSOContext) -> None:
+    # We make a deepcopy to avoid unexpected mutations of missing_locations during our checks
+    local_missing_locations = deepcopy(ctx.missing_locations)
+    for missing_location in local_missing_locations:
+
+
+
+
+async def dolphin_sync_task(ctx: PSOContext) -> None:
+    """
+    The task loop for managing the connection to Dolphin
+
+    While connected, we can read the emulator's memory for any relevant changes made by the player in the game
+
+    :param ctx: the Context object from CommonClient for PSO
+    """
+    logger.info("Starting Dolphin connector. Use /dolphin for status information.")
+    sleep_time = 0.0
+    while not ctx.exit_event.is_set():
+        if sleep_time > 0.0:
+            try:
+                # ctx.watcher_event gets set when receiving ReceivedItems or LocationInfo, or when shutting down.
+                await asyncio.wait_for(ctx.watcher_event.wait(), sleep_time)
+            except asyncio.TimeoutError:
+                pass
+            sleep_time = 0.0
+        ctx.watcher_event.clear()
+
+        try:
+            if dolphin_memory_engine.is_hooked() and ctx.dolphin_status == ConnectionStatus.CONNECTED:
+                if not check_ingame():
+                    sleep_time = 0.1
+                    continue
+                if ctx.slot:
+                    if "DeathLink" in ctx.tags:
+                        await check_death(ctx)
+                    await give_items(ctx)
+                    await check_locations(ctx)
+                    await check_current_stage_changed(ctx)
+                else:
+                    if not ctx.auth:
+                        ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
+                    if ctx.awaiting_rom:
+                        await ctx.server_auth()
+                sleep_time = 0.1
+            else:
+                if ctx.dolphin_status == ConnectionStatus.CONNECTED:
+                    logger.info("Connection to Dolphin lost, reconnecting...")
+                    ctx.dolphin_status = ConnectionStatus.LOST
+                logger.info("Attempting to connect to Dolphin...")
+                dolphin_memory_engine.hook()
+                if dolphin_memory_engine.is_hooked():
+                    if dolphin_memory_engine.read_bytes(0x80000000, 6) != b"GZLE99":
+                        logger.info(ConnectionStatus.REFUSED_GAME)
+                        ctx.dolphin_status = ConnectionStatus.REFUSED_GAME
+                        dolphin_memory_engine.un_hook()
+                        sleep_time = 5
+                    else:
+                        logger.info(ConnectionStatus.CONNECTED)
+                        ctx.dolphin_status = ConnectionStatus.CONNECTED
+                        ctx.locations_checked = set()
+                else:
+                    logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
+                    ctx.dolphin_status = ConnectionStatus.LOST
+                    await ctx.disconnect()
+                    sleep_time = 5
+                    continue
+        except Exception:
+            dolphin_memory_engine.un_hook()
+            logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
+            logger.error(traceback.format_exc())
+            ctx.dolphin_status = ConnectionStatus.LOST
+            await ctx.disconnect()
+            sleep_time = 5
+            continue
+
+
+def async_main(connect: str | None = None, password: str | None = None) -> None:
+    """
+    Run the main async loop for the PSO client
+
+    :param connect: the address of the Archipelago server
+    :param password: the password for authenticating to the Archipelago server
+    """
+
+    async def _main(connect: str | None, password: str | None) -> None:
+        ctx = PSOContext(connect, password)
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+        if gui_enabled:
+            ctx.run_gui()
+        ctx.run_cli()
+        await asyncio.sleep(1)
+
+        ctx.dolphin_sync_task = asyncio.create_task(dolphin_sync_task(ctx), name="PSODolphinSync")
+
+        await ctx.exit_event.wait()
+        # Wake the sync task, if it is currently sleeping, so it can start shutting down when it sees that the
+        # exit_event is set.
+        # TODO: Determine if we need these (not in MMXCM)
+        ctx.watcher_event.set()
+        ctx.server_address = None
+
+        await ctx.shutdown()
+
+        if ctx.dolphin_sync_task:
+            await ctx.dolphin_sync_task
+
+    import colorama
+
+    colorama.init()
+    asyncio.run(_main(connect, password))
+    colorama.deinit()
+
+def sync_main(*launch_args: str):
+    Utils.init_logging("Phantasy Star Online Episode I&II Plus Client")
+
+    parser = get_base_parser()
+    parser.add_argument('appso_file', default="", type=str, nargs="?", help='Path to an APPSO file')
+    args = parser.parse_args(launch_args)
+
+    if args.appso_file:
+        # TODO: Write the patcher
+        logger.error("Patcher is not yet implemented")
+        # from .MMXCMPatcher import MMXCMPatcher
+        # pso_patch = MMXCMPatcher(args.apmmxcm_file)
+        # pso_patch.create_patch()
+
+
+    async_main(args.connect, args.password)
+
+if __name__ == "__main__":
+    sync_main(*sys.argv[1:])
+
+

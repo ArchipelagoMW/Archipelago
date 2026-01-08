@@ -36,6 +36,7 @@ class PSOItemData(NamedTuple):
     type: PSOItemType
     classification: IC
     code: int | None
+    ram_data: PSORamData
 
 
 # Each Item instance must correctly report the "game" it belongs to.
@@ -46,32 +47,32 @@ class PSOItem(Item):
 
 # We comment out the boss unlocks for now to keep the checks low while we figure stuff out
 ITEM_TABLE: dict[str, PSOItemData] = {
-    ItemName.UNLOCK_FOREST_1:     PSOItemData(PSOItemType.AREA, IC.progression, 1),
-    ItemName.UNLOCK_FOREST_2:     PSOItemData(PSOItemType.AREA, IC.progression, 2),
-    ItemName.UNLOCK_DRAGON:       PSOItemData(PSOItemType.AREA, IC.progression, 3),
-    ItemName.UNLOCK_CAVES_1:      PSOItemData(PSOItemType.AREA, IC.progression, 4),
-    ItemName.UNLOCK_CAVES_2:      PSOItemData(PSOItemType.AREA, IC.progression, 5),
-    ItemName.UNLOCK_CAVES_3:      PSOItemData(PSOItemType.AREA, IC.progression, 6),
-    ItemName.UNLOCK_DE_ROL_LE:    PSOItemData(PSOItemType.AREA, IC.progression, 7),
-    ItemName.UNLOCK_MINES_1:      PSOItemData(PSOItemType.AREA, IC.progression, 8),
-    ItemName.UNLOCK_MINES_2:      PSOItemData(PSOItemType.AREA, IC.progression, 9),
-    ItemName.UNLOCK_VOL_OPT:      PSOItemData(PSOItemType.AREA, IC.progression, 10),
-    ItemName.UNLOCK_RUINS_1:      PSOItemData(PSOItemType.AREA, IC.progression, 11),
-    ItemName.UNLOCK_RUINS_2:      PSOItemData(PSOItemType.AREA, IC.progression, 12),
-    ItemName.UNLOCK_RUINS_3:      PSOItemData(PSOItemType.AREA, IC.progression, 13),
-    ItemName.UNLOCK_DARK_FALZ:    PSOItemData(PSOItemType.AREA, IC.progression, 14),
+#    ItemName.UNLOCK_FOREST_1:     PSOItemData(PSOItemType.AREA,     IC.progression,                   1, PSORamData()),
+#    ItemName.UNLOCK_FOREST_2:     PSOItemData(PSOItemType.AREA,     IC.progression,                   2, PSORamData()),
+#    ItemName.UNLOCK_DRAGON:       PSOItemData(PSOItemType.AREA,     IC.progression,                   3, PSORamData()),
+    ItemName.UNLOCK_CAVES_1:      PSOItemData(PSOItemType.AREA,     IC.progression,                   4, PSORamData(0x805127FB, 7)),
+#    ItemName.UNLOCK_CAVES_2:      PSOItemData(PSOItemType.AREA,     IC.progression,                   5, PSORamData()),
+#    ItemName.UNLOCK_CAVES_3:      PSOItemData(PSOItemType.AREA,     IC.progression,                   6, PSORamData()),
+#    ItemName.UNLOCK_DE_ROL_LE:    PSOItemData(PSOItemType.AREA,     IC.progression,                   7, PSORamData()),
+    ItemName.UNLOCK_MINES_1:      PSOItemData(PSOItemType.AREA,     IC.progression,                   8, PSORamData(0x805127FC, 6)),
+#    ItemName.UNLOCK_MINES_2:      PSOItemData(PSOItemType.AREA,     IC.progression,                   9, PSORamData()),
+#    ItemName.UNLOCK_VOL_OPT:      PSOItemData(PSOItemType.AREA,     IC.progression,                  10, PSORamData()),
+#    ItemName.UNLOCK_RUINS_1:      PSOItemData(PSOItemType.AREA,     IC.progression,                  11, PSORamData(0x805127FE, 7)),
+#    ItemName.UNLOCK_RUINS_2:      PSOItemData(PSOItemType.AREA,     IC.progression,                  12, PSORamData()),
+#    ItemName.UNLOCK_RUINS_3:      PSOItemData(PSOItemType.AREA,     IC.progression,                  13, PSORamData()),
+#    ItemName.UNLOCK_DARK_FALZ:    PSOItemData(PSOItemType.AREA,     IC.progression,                  14, PSORamData()),
 
-    ItemName.FOREST_PILLAR:       PSOItemData(PSOItemType.SWITCH, IC.progression, 15),
-    ItemName.CAVES_PILLAR:        PSOItemData(PSOItemType.SWITCH, IC.progression, 16),
-    ItemName.MINES_PILLAR:        PSOItemData(PSOItemType.SWITCH, IC.progression, 17),
+    ItemName.FOREST_PILLAR:       PSOItemData(PSOItemType.SWITCH,   IC.progression,                  15, PSORamData(0x805127FD, 3)),
+    ItemName.CAVES_PILLAR:        PSOItemData(PSOItemType.SWITCH,   IC.progression,                  16, PSORamData(0x805127FD, 2)),
+    ItemName.MINES_PILLAR:        PSOItemData(PSOItemType.SWITCH,   IC.progression,                  17, PSORamData(0x805127FD, 1)),
 
-    "Lavis Blade":                PSOItemData(PSOItemType.WEAPON,   IC.filler | IC.useful,           18),
+    "Lavis Blade":                PSOItemData(PSOItemType.WEAPON,   IC.filler | IC.useful,           18, PSORamData()),
 
-    ItemName.VICTORY:             PSOItemData(PSOItemType.EVENT, IC.progression, None),
+    ItemName.VICTORY:             PSOItemData(PSOItemType.EVENT,    IC.progression,                None, PSORamData()),
 }
 
 
-def get_item_name_to_id_dict(item_table: dict[str, PSOItemData]) -> dict[str, int | None]:
+def make_item_name_to_id_dict(item_table: dict[str, PSOItemData]) -> dict[str, int | None]:
     name = item_table.keys()
     *_, code = zip(*item_table.values())
     return dict(zip(name, code))
@@ -79,7 +80,17 @@ def get_item_name_to_id_dict(item_table: dict[str, PSOItemData]) -> dict[str, in
 # Every item must have a unique integer ID associated with it.
 # We will have a lookup from item name to ID here that, in world.py, we will import and bind to the world class.
 # Even if an item doesn't exist on specific options, it must be present in this lookup.
-ITEM_NAME_TO_ID: dict[str, int | None] = get_item_name_to_id_dict(ITEM_TABLE)
+ITEM_NAME_TO_ID: dict[str, int | None] = make_item_name_to_id_dict(ITEM_TABLE)
+
+
+def make_id_to_item_name_dict(item_table: dict[str, PSOItemData]) -> dict[int, str]:
+    name = item_table.keys()
+    *_, code = zip(*item_table.values())
+    return dict(zip(code, name))
+
+# We have a reverse lookup table for getting item name from ID as well
+# It's possible we don't need this, but it may be a performance trade-off given the number of items this game has
+ITEM_ID_TO_NAME: dict[int, str] = make_id_to_item_name_dict(ITEM_TABLE)
 
 
 # Ontop of our regular itempool, our world must be able to create arbitrary amounts of filler as requested by core.
