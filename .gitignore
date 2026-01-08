@@ -41,6 +41,8 @@ dist
 README.html
 .vs/
 EnemizerCLI/
+enemizer.zip
+VC_redist.x64.exe
 /Players/
 /SNI/
 /sni-*/
@@ -63,7 +65,6 @@ Output Logs/
 /installdelete.iss
 /data/user.kv
 /datapackage
-/datapackage_export.json
 /custom_worlds
 
 # Byte-compiled / optimized / DLL files
@@ -196,3 +197,6 @@ _speedups.html
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
+
+# World files that need to be added but devs have named them improperly...
+!worlds/metroidprime/lib
