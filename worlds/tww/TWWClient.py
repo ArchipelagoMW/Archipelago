@@ -733,7 +733,3 @@ def main(*args: str) -> None:
     colorama.init()
     asyncio.run(_main(parsed_args.connect, parsed_args.password))
     colorama.deinit()
-
-
-if __name__ == "__main__":
-    main()
