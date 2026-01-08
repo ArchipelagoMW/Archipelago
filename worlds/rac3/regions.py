@@ -11,6 +11,7 @@ from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
 from worlds.rac3.constants.locations.trophies import RAC3TROPHY
 from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.player_type import RAC3PLAYERTYPE
 from worlds.rac3.constants.region import RAC3REGION
 from worlds.rac3.rac3options import RaC3Options
 
@@ -576,4 +577,7 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if options.weapon_vendors.value == 0 and loc not in veldin_weapons:
                     return True  # Skips every weapon vendor checks except the Veldin ones
             # Add more conditions here if needed in the future
+            case RAC3TAG.ONE_HP_UNSTABLE:
+                if options.one_hp_challenge.value[RAC3PLAYERTYPE.RATCHET]:
+                    return True  # Skip all unstable locations in One HP Challenge
     return False

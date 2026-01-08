@@ -40,6 +40,7 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.nanotech_limitation.value = world.passthrough[RAC3OPTION.NANOTECH_LIMITATION]
             world.options.weapon_vendors.value = world.passthrough[RAC3OPTION.WEAPON_VENDORS]
             world.options.filler_weight.value = world.passthrough[RAC3OPTION.FILLER_WEIGHT]
+            world.options.one_hp_challenge.value = world.passthrough[RAC3OPTION.ONE_HP_CHALLENGE]
         else:
             world.using_ut = False
     else:

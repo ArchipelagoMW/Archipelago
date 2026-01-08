@@ -11,6 +11,7 @@ from worlds.rac3.options.filler_weight_options import FillerWeight
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
 from worlds.rac3.options.nanotech_limitation_options import NanotechLimitation
 from worlds.rac3.options.nanotech_options import NanotechMilestones
+from worlds.rac3.options.one_hp_options import OneHpChallenge
 from worlds.rac3.options.prog_weapons_options import EnableProgressiveWeapons
 from worlds.rac3.options.rangers_options import Rangers
 from worlds.rac3.options.ratchet_skins_options import RatchetSkin
@@ -67,6 +68,7 @@ class RaC3Options(PerGameCommonOptions):
     ship_wings: ShipWings
     ship_skin: ShipSkin
     skin: RatchetSkin
+    one_hp_challenge: OneHpChallenge
 
 
 rac3_option_groups = [
@@ -78,6 +80,7 @@ rac3_option_groups = [
     ]),
     OptionGroup("RAC3 Game Options", [
         BoltAndXPMultiplier,
+        OneHpChallenge,
     ]),
     OptionGroup("RAC3 Item Options", [
         StartingWeapons,
@@ -136,4 +139,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.SEWER_LIMITATION,
     RAC3OPTION.WEAPON_VENDORS,
     RAC3OPTION.FILLER_WEIGHT,
+    RAC3OPTION.ONE_HP_CHALLENGE,
 ]

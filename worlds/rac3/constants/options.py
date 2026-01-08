@@ -32,3 +32,4 @@ class RAC3OPTION:
     NANOTECH_LIMITATION = "Nanotech Limitation"
     WEAPON_VENDORS = "Weapon Vendors"
     FILLER_WEIGHT = "Filler Weight"
+    ONE_HP_CHALLENGE = "One HP Challenge"

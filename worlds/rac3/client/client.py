@@ -16,6 +16,7 @@ from worlds.rac3.constants.data.item import ITEM_FROM_AP_CODE
 from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.player_type import ONE_HP_CHALLENGE_CHARACTERS
 from worlds.rac3.constants.region import RAC3REGION
 
 # Load Universal Tracker modules with aliases
@@ -161,15 +162,32 @@ class CommandProcessor(ClientCommandProcessor):
             else:
                 self.output(f'RYNO max upgrade is Lv5')
 
-    def _cmd_messagebox(self, message: str):
+    def _cmd_messagebox(self, *args):
         """Displays a message box in-game with the specified message."""
         if not self.verify(4):
             return
         if isinstance(self.ctx, Rac3Context):
+            message = " ".join(args)
             self.ctx.game_interface.notification_queue.append((message[:225:], RAC3BOXTHEME.DEFAULT))
             if len(message) > 225:
                 self.output(f'Message longer than 225 characters, truncated to fit in message box.')
             self.output(f'Message box displayed with message: {message[:225:]}')
+    
+    def _cmd_one_hp(self, *args):
+        """Toggles One HP Challenge for the specified character."""
+        if not self.verify(4):
+            return
+        if isinstance(self.ctx, Rac3Context):
+            character = " ".join(args).lower()
+            valid_characters = {name.lower(): name for name in ONE_HP_CHALLENGE_CHARACTERS}
+            if character in valid_characters:
+                char_name = valid_characters[character]
+                current_state = self.ctx.game_interface.one_hp_challenge.get(char_name, False)
+                new_state = not current_state
+                self.ctx.game_interface.one_hp_challenge[char_name] = new_state
+                self.output(f'One HP Challenge for {char_name} set to {new_state}')
+            else:
+                self.output(f'Invalid character name. Valid options are: {", ".join(ONE_HP_CHALLENGE_CHARACTERS)}')
 
 
 class Rac3Context(CommonContext):

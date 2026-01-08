@@ -17,6 +17,7 @@ from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
 from worlds.rac3.constants.deaths import CLANK_DEATH_FROM_ACTION, DEATH_FROM_ACTION
 from worlds.rac3.constants.input import RAC3INPUT
+from worlds.rac3.constants.instruction import RAC3INSTRUCTION
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
@@ -248,6 +249,7 @@ class Rac3Interface(GameInterface):
     notification_merge_count: int = 1
     message_display: bool = False
     ship_slot_limit: int = 0
+    one_hp_challenge: dict[str, bool] = None
 
     # Called at once when client started
     def init(self):
@@ -297,6 +299,7 @@ class Rac3Interface(GameInterface):
         # Proc Options
         self.multiplier_cycler()
         self.overflow_fix()
+        self.health_cycler()
         if self.weaponLevelLockFlag:
             self.weapon_exp_cycler()
         # Logic Fixes
@@ -324,6 +327,7 @@ class Rac3Interface(GameInterface):
         self.ship = slot_data[RAC3OPTION.SHIP_NOSE] + slot_data[RAC3OPTION.SHIP_WINGS]
         self.ship_skin = slot_data[RAC3OPTION.SHIP_SKIN]
         self.skin = slot_data[RAC3OPTION.SKIN]
+        self.one_hp_challenge = slot_data[RAC3OPTION.ONE_HP_CHALLENGE]
 
     def map_switch(self) -> tuple[str, str]:
         planet = RAC3_REGION_DATA_TABLE[self.planet].ID
@@ -888,6 +892,45 @@ class Rac3Interface(GameInterface):
         # for trap_name, status_address in trap_to_status.items():
         #     if trap_name not in self.trap_timers and trap_name != RAC3ITEM.LOCK_TRAP:
         #         self._write8(status_address, 0)
+
+    def health_cycler(self):
+        """
+        Enforces one HP challenge for player and vehicle if enabled in settings
+        Sets health to 1 if above 1 for the current character
+        """
+        character = self.player_type
+        if character == RAC3PLAYERTYPE.TYHRRANOID:
+            character = RAC3PLAYERTYPE.RATCHET # Treat Tyhrranoid as Ratchet for one HP challenge
+        # Check for one HP challenge for current character
+        if self.one_hp_challenge.get(character, False):
+            if character == RAC3PLAYERTYPE.GIANT:
+                if self._read32(RAC3STATUS.GIANT_CLANK_HEALTH) > 1:
+                    self._write32(RAC3STATUS.GIANT_CLANK_HEALTH, 1)
+            else:
+                # Applies to Ratchet, Clank, Qwark
+                # Ban shield charger usage if one HP challenge is active for Ratchet
+                if character == RAC3PLAYERTYPE.RATCHET:
+                    self._write8(non_prog_weapon_data[RAC3ITEM.SHIELD_CHARGER].AMMO_ADDRESS, 0)
+                if self._read8(RAC3STATUS.HEALTH) > 1:
+                    self._write8(RAC3STATUS.HEALTH, 1)
+                    self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
+                if character == RAC3PLAYERTYPE.RATCHET and self.planet == RAC3REGION.ANNIHILATION_NATION and not self.pause_state:
+                    # Patch out sleeping gas health reduction to prevent death
+                    self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000) # addiu v0,v0,0x0
+                    # Patch out health refill to prevent auto losing One Hit Wonder challenge
+                    self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0x00000000) # nop
+
+        # Vehicle one HP challenge is independent of player_type
+        if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
+            health_addr = self._read32(self._read32(self.vehicle + 0x68))
+            if self._read_float(health_addr) > 5.0:
+                # This displays as 1 HP in-game for vehicles
+                self._write_float(health_addr, 5)
+        
+        if not self.one_hp_challenge.get(character, False) and self.planet == RAC3REGION.ANNIHILATION_NATION and not self.pause_state:
+            # Restore sleeping gas health reduction if one HP challenge is not active for Ratchet
+            self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x2442FFFF) # addiu v0,v0,-0x1
+            self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0xAC652850) # sw a1,0x2850(v1)
 
     def overflow_fix(self):
         nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
