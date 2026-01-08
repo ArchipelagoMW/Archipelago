@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
 
 class EnemyRandomization(DefaultOnToggle):
     """Toggle whether enemies are randomized or vanilla."""
@@ -47,3 +47,4 @@ class VoidSolsOptions(PerGameCommonOptions):
     sparks_checks: SparksChecks
     torch_checks: TorchChecks
     hidden_walls_checks: HiddenWallsChecks
+    death_link: DeathLink

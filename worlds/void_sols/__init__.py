@@ -141,4 +141,5 @@ class VoidSolsWorld(World):
             "sparks_checks": self.options.sparks_checks.value,
             "torch_checks": self.options.torch_checks.value,
             "hidden_walls_checks": self.options.hidden_walls_checks.value,
+            "death_link": self.options.death_link.value,
         }
