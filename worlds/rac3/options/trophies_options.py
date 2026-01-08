@@ -8,6 +8,7 @@ class Trophies(Choice):
     None: No trophies are locations.
     Collectables: Only the collectable trophies found on various planets are locations.
     Every Trophy: All special trophies that do not require NG+ are now also locations.
+    Long Term Trophy: Skill Master is only included in the pool if all 30 skill points are in the world.
     """
     display_name = RAC3OPTION.TROPHIES
     option_none = 0

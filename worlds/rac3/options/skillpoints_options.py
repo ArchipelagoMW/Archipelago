@@ -1,37 +1,45 @@
-from Options import Choice
+from Options import OptionCounter
 from worlds.rac3 import RAC3OPTION
+from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT, SKILLPOINT_LOCATION_TO_NAME
 
 
-class SkillPoints(Choice):
+class SkillPoints(OptionCounter):
     """
     Determines which skill points are locations in the world.
-    None: No skill points are locations.
-    Simple: 18 simple skill points are locations, 12 of the more challenging or time-consuming skill points are
-    removed. Any Skill Points locked behind other locations such as Ranger Missions require those options to be enabled.
-    These are the skill points enabled:
-    - Stay Squeaky Clean
-    - Monkeying around
-    - Beat Helga's best time
-    - Turn Up The Heat
-    - Reflect on how to score
-    - Lights, camera action!
-    - Search for sunken treasure
-    - Be a sharpshooter
-    - Bugs to Birdie
-    - Get to the belt
-    - Bash the party
-    - 2002 was a good year in the city
-    - Aim High
-    - Zap back at ya'
-    - Go for hang time
-    - Break the Dan
-    - You break it, you win it
-    - Spread your germs
-    Every Skill Point: All 30 Skill Points are added as locations. Any Skill Points locked behind other locations
-    such as Ranger Missions require those options to be enabled
+    Any Skill Points locked behind other locations such as Ranger Missions require those options to be enabled
     """
     display_name = RAC3OPTION.SKILL_POINTS
-    option_none = 0
-    option_simple = 1
-    option_every_skill_point = 2
-    default = 1
+    min = 0
+    default = {
+        RAC3SKILLPOINT.ARIDIA_HANG_TIME_SHORT: 1,
+        RAC3SKILLPOINT.FLORANA_PATH_SHORT: 0,
+        RAC3SKILLPOINT.PHOENIX_ARCADE_SHORT: 0,
+        RAC3SKILLPOINT.PHOENIX_VR_TRAINING_SHORT: 1,
+        RAC3SKILLPOINT.PHOENIX_ARMOR_SHORT: 1,
+        RAC3SKILLPOINT.PHOENIX_MONKEY_SHORT: 1,
+        RAC3SKILLPOINT.MARCADIA_REFLECT_SHORT: 1,
+        RAC3SKILLPOINT.DAXX_BUGS_SHORT: 1,
+        RAC3SKILLPOINT.NATION_BASH_SHORT: 0,
+        RAC3SKILLPOINT.NATION_EIGHT_SHORT: 0,
+        RAC3SKILLPOINT.NATION_FLEE_SHORT: 0,
+        RAC3SKILLPOINT.NATION_CAMERA_SHORT: 1,
+        RAC3SKILLPOINT.AQUATOS_SUNKEN_SHORT: 1,
+        RAC3SKILLPOINT.TYHRRANOSIS_SHARPSHOOTER_SHORT: 1,
+        RAC3SKILLPOINT.GEMINI_BELT_SHORT: 1,
+        RAC3SKILLPOINT.BLACKWATER_BASH_SHORT: 1,
+        RAC3SKILLPOINT.HOLOSTAR_LUCKY_SHORT: 0,
+        RAC3SKILLPOINT.KOROS_BREAK_SHORT: 1,
+        RAC3SKILLPOINT.METROPOLIS_GOOD_YEAR_SHORT: 1,
+        RAC3SKILLPOINT.CRASH_SITE_SUCK_SHORT: 1,
+        RAC3SKILLPOINT.CRASH_SITE_AIM_HIGH_SHORT: 1,
+        RAC3SKILLPOINT.ARIDIA_ZAP_SHORT: 1,
+        RAC3SKILLPOINT.HIDEOUT_DAN_SHORT: 1,
+        RAC3SKILLPOINT.COMMAND_CENTER_GERMS_SHORT: 1,
+        RAC3SKILLPOINT.SEWER_MOTHERLOAD_SHORT: 0,
+        RAC3SKILLPOINT.PHOENIX_COMIC_1_SHORT: 0,
+        RAC3SKILLPOINT.PHOENIX_COMIC_4_SHORT: 0,
+        RAC3SKILLPOINT.PHOENIX_COMIC_2_SHORT: 0,
+        RAC3SKILLPOINT.PHOENIX_COMIC_3_SHORT: 0,
+        RAC3SKILLPOINT.PHOENIX_COMIC_5_SHORT: 0,
+    }
+    valid_keys = SKILLPOINT_LOCATION_TO_NAME.values()

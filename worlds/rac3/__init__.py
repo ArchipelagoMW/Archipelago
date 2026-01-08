@@ -11,7 +11,7 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.items import create_item, create_itempool, get_filler_item_selection, starting_weapons
 from worlds.rac3.locations import (get_level_locations, get_location_names, get_regions, get_total_locations,
                                    location_groups)
-from worlds.rac3.rac3options import RaC3Options
+from worlds.rac3.rac3options import rac3_option_groups, RaC3Options
 from worlds.rac3.regions import create_regions
 from worlds.rac3.rules import set_rules
 from worlds.rac3.universal_tracker import setup_options_from_slot_data, tracker_world
@@ -26,7 +26,9 @@ components.append(Component(f"{RAC3OPTION.GAME_TITLE_FULL} Client",
                             func=run_client,
                             component_type=Type.CLIENT,
                             file_identifier=SuffixIdentifier(".aprac3"),
-                            icon="uya_icon"))
+                            icon="uya_icon",
+                            description="Launch the Client for connecting to Ratchet & Clank 3 [PlayStation 2]",
+                            ))
 
 icon_paths["uya_icon"] = f"ap:{__name__}/images/uya_icon.png"
 
@@ -42,6 +44,9 @@ class RaC3Web(WebWorld):
         "setup/en",
         ["Bread"]
     )]
+    bug_report_page = "https://github.com/Taoshix/Archipelago-RaC3/issues"
+    rich_text_options_doc = True
+    option_groups = rac3_option_groups
 
 
 rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)
@@ -132,7 +137,7 @@ class RaC3World(World):
             RAC3OPTION.STARTING_WEAPONS: self.options.starting_weapons.value,
             RAC3OPTION.BOLT_AND_XP_MULTIPLIER: self.options.bolt_and_xp_multiplier.value,
             RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS: self.options.enable_progressive_weapons.value,
-            RAC3OPTION.EXTRA_ARMOR_UPGRADE: self.options.extra_armor_upgrade.value,
+            RAC3OPTION.ARMOR_UPGRADE: self.options.armor_upgrade.value,
             RAC3OPTION.SKILL_POINTS: self.options.skill_points.value,
             RAC3OPTION.TROPHIES: self.options.trophies.value,
             RAC3OPTION.TITANIUM_BOLTS: self.options.titanium_bolts.value,
@@ -152,6 +157,8 @@ class RaC3World(World):
             RAC3OPTION.SEWER_CRYSTALS: self.options.sewer_crystals.value,
             RAC3OPTION.SEWER_LIMITATION: self.options.sewer_limitation.value,
             RAC3OPTION.NANOTECH_LIMITATION: self.options.nanotech_limitation.value,
+            RAC3OPTION.WEAPON_VENDORS: self.options.weapon_vendors.value,
+            RAC3OPTION.FILLER_WEIGHT: self.options.filler_weight.value,
             RAC3OPTION.ONE_HP_CHALLENGE: self.options.one_hp_challenge.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }

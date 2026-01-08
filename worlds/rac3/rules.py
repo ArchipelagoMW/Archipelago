@@ -200,8 +200,8 @@ def set_rules(world: "RaC3World"):
             lambda state: state.can_reach_location(RAC3LOCATION.MARCADIA_RANGERS_4, player=world.player),
         RAC3LOCATION.MARCADIA_REFRACTOR:
             lambda state: state.can_reach_location(RAC3LOCATION.MARCADIA_RANGERS_5, player=world.player),
-        RAC3SKILLPOINT.MARCADIA_REFLECT: 
-            lambda state: state.has(RAC3ITEM.REFRACTOR, world.player) 
+        RAC3SKILLPOINT.MARCADIA_REFLECT:
+            lambda state: state.has(RAC3ITEM.REFRACTOR, world.player)
                           and state.can_reach_location(RAC3LOCATION.MARCADIA_REFRACTOR, world.player),
         RAC3TBOLT.MARCADIA_LAST_REFRACTOR:
             lambda state: state.has_all([RAC3ITEM.REFRACTOR, RAC3ITEM.GRAV_BOOTS], world.player)
@@ -209,7 +209,7 @@ def set_rules(world: "RaC3World"):
         RAC3TBOLT.MARCADIA_BEFORE_AL:
             lambda state: state.has_all([RAC3ITEM.REFRACTOR, RAC3ITEM.GRAV_BOOTS], world.player)
                           and state.can_reach_location(RAC3LOCATION.MARCADIA_REFRACTOR, world.player),
-        RAC3LOCATION.MARCADIA_MEET_AL: 
+        RAC3LOCATION.MARCADIA_MEET_AL:
             lambda state: state.has(RAC3ITEM.REFRACTOR, world.player)
                           and state.can_reach_location(RAC3LOCATION.MARCADIA_REFRACTOR, world.player),
 
@@ -226,7 +226,7 @@ def set_rules(world: "RaC3World"):
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_GRAND_PRIZE_BOUT, player=world.player),
         RAC3LOCATION.NATION_TWO_MINUTE_WARNING:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_THE_TERRIBLE_TWO, player=world.player),
-        RAC3LOCATION.NATION_90_SECONDS: 
+        RAC3LOCATION.NATION_90_SECONDS:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_ROBOT_RAMPAGE, player=world.player),
         RAC3LOCATION.NATION_ONSLAUGHT:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_90_SECONDS, player=world.player),
@@ -496,7 +496,8 @@ def set_rules(world: "RaC3World"):
         # RAC3TBOLT.CRASH_SITE
         # RAC3TROPHY.CRASH_NEFARIOUS
         RAC3SKILLPOINT.CRASH_SITE_SUCK:
-            lambda state: state.has_any([RAC3ITEM.SUCK_CANNON, RAC3ITEM.PROGRESSIVE_SUCK_CANNON], world.player),
+            lambda state: state.has(RAC3ITEM.SUCK_CANNON, world.player)
+                          or state.has(RAC3ITEM.PROGRESSIVE_SUCK_CANNON, world.player, 3),
         RAC3SKILLPOINT.CRASH_SITE_AIM_HIGH:
             lambda state: state.has_any([RAC3ITEM.FLUX_RIFLE, RAC3ITEM.PROGRESSIVE_FLUX_RIFLE], world.player),
         RAC3LOCATION.CRASH_SITE_NANO_PAK:
@@ -513,8 +514,9 @@ def set_rules(world: "RaC3World"):
                                                state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_2, world.player),
         RAC3SKILLPOINT.ARIDIA_HANG_TIME:
             lambda state: state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_2, world.player),
-        RAC3LOCATION.ARIDIA_RANGERS_3:
-            lambda state: state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_2, world.player),
+        RAC3LOCATION.ARIDIA_RANGERS_3: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player) and
+                                                     state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_2,
+                                                                              world.player),
         RAC3LOCATION.ARIDIA_RANGERS_4:
             lambda state: state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_3, world.player),
         RAC3TBOLT.ARIDIA_BASE: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player) and

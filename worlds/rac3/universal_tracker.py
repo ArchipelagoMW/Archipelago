@@ -18,7 +18,7 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.starting_weapons.value = world.passthrough[RAC3OPTION.STARTING_WEAPONS]
             world.options.bolt_and_xp_multiplier.value = world.passthrough[RAC3OPTION.BOLT_AND_XP_MULTIPLIER]
             world.options.enable_progressive_weapons.value = world.passthrough[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]
-            world.options.extra_armor_upgrade.value = world.passthrough[RAC3OPTION.EXTRA_ARMOR_UPGRADE]
+            world.options.armor_upgrade.value = world.passthrough[RAC3OPTION.ARMOR_UPGRADE]
             world.options.skill_points.value = world.passthrough[RAC3OPTION.SKILL_POINTS]
             world.options.trophies.value = world.passthrough[RAC3OPTION.TROPHIES]
             world.options.titanium_bolts.value = world.passthrough[RAC3OPTION.TITANIUM_BOLTS]
@@ -38,6 +38,8 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.sewer_crystals.value = world.passthrough[RAC3OPTION.SEWER_CRYSTALS]
             world.options.sewer_limitation.value = world.passthrough[RAC3OPTION.SEWER_LIMITATION]
             world.options.nanotech_limitation.value = world.passthrough[RAC3OPTION.NANOTECH_LIMITATION]
+            world.options.weapon_vendors.value = world.passthrough[RAC3OPTION.WEAPON_VENDORS]
+            world.options.filler_weight.value = world.passthrough[RAC3OPTION.FILLER_WEIGHT]
             world.options.one_hp_challenge.value = world.passthrough[RAC3OPTION.ONE_HP_CHALLENGE]
         else:
             world.using_ut = False

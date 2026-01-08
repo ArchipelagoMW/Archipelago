@@ -56,7 +56,7 @@ def create_itempool(world: "RaC3World") -> list[Item]:
         if RAC3ITEMTAG.ARMOR in item_tags:
             if name != RAC3ITEM.PROGRESSIVE_ARMOR:
                 continue
-            item_amount += options.extra_armor_upgrade.value
+            item_amount = options.armor_upgrade.value
 
         # Catch accidental duplicates
         if item_amount is None:
@@ -90,17 +90,9 @@ def create_item(world: "RaC3World", name: str) -> Item:
 
 
 def get_filler_item_selection(world: "RaC3World"):
-    frequencies: dict[str, int] = {
-        RAC3ITEM.TITANIUM_BOLT: 0,
-        RAC3ITEM.WEAPON_XP: 0,
-        RAC3ITEM.PLAYER_XP: 5,
-        RAC3ITEM.BOLTS: 10,
-        # RAC3ITEM.INFERNO_MODE: 1,
-        RAC3ITEM.JACKPOT: 10,
-    }
-    if not world.options.enable_progressive_weapons.value:
-        weapon_exp: dict[str, int] = {RAC3ITEM.WEAPON_XP: 5}
-        frequencies.update(weapon_exp)
+    frequencies = world.options.filler_weight.value
+    if world.options.enable_progressive_weapons.value:
+        frequencies[RAC3ITEM.WEAPON_XP] = 0
     if world.options.traps_enabled.value:
         traps = world.options.trap_weight.value
         frequencies.update(traps)
