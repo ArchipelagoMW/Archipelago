@@ -65,7 +65,7 @@ class RecipeEngine:
             self.__raw_cost: dict[str, float] = raw_settings["raw_cost"]
             self.__invalid_ingredients: set[str] = raw_settings["invalid_ingredients"]
             self.__req_machines_for_category: dict[Category, str] = raw_settings["req_machines_for_category"]
-            self.__excluded_automation_ingredients: set[str] = raw_settings["excluded_automation_ingredients"]
+            self.__excluded_automation_ingredients: set[str] = raw_settings.get("excluded_automation_ingredients", set())
 
     def __register_iternal_items(self) -> None:
         invalid_items = {"pistol", "fluid-unknown"} | {f"parameter-{i}" for i in range(10)}
@@ -149,8 +149,11 @@ class RecipeEngine:
         del raw_recipes
         self.__imported_recipes: dict[str, Recipe] = self.__recipes.copy()
 
-        with self.modpack.open_file("customRecipes.json") as file:
-            raw_custom = json.load(file)
+        try:
+            with self.modpack.open_file("customRecipes.json") as file:
+                raw_custom = json.load(file)
+        except FileNotFoundError:
+            raw_custom = {}
 
         self.__pack_custom_recipes: dict[str, Recipe] = {}
         for recipe_name, recipe_data in raw_custom.items():
@@ -342,7 +345,7 @@ class InternalItem(FactorioElement):
         if len(self.recipes) == 0:
             # must be an unknown method for item to spontaneously exist
             if self.name not in self.recipeEngine.raw_cost:
-                print(f"spontaneously existing item ({self.name}) doesn't have a cost, defaulting to 1")
+                self.recipeEngine.modpack.logger.warning(f"spontaneously existing item ({self.name}) doesn't have a cost, defaulting to 1")
             self.non_recursive_raw_ingredients = {self: 1}
             self.__raw_ingredients = {self: 1}
             return self.__raw_ingredients, None, set(), set()
