@@ -193,6 +193,9 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     # append easyflight setting
     randoseed_parts.append(f"           Ob.easyflight = {_lua_bool(self.options.EasyFlightMode)}\n")
 
+    # append betterDowsingRod setting
+    randoseed_parts.append(f"           Ob.betterDowsingRod = {_lua_bool(self.options.BetterDowsingRod)}\n")
+
     # append itemmodel setting
     randoseed_parts.append(f"           Ob.apItemModel = {self.options.OtherItemsModel.value}\n")
 

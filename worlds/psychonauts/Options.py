@@ -52,7 +52,12 @@ class EasyMillaRace(Toggle):
 class EasyFlightMode(Toggle):
     """Replicate the Levitation Flight Glitch by simply holding down float in the air. No more button mashing.
     WARNING: Makes getting locations out of logic VERY easy."""
-    display_name = "Easy Flight Mode"  
+    display_name = "Easy Flight Mode" 
+
+
+class BetterDowsingRod(Toggle): 
+    """Makes the Dowsing Rod gauge fill faster to collect Deep Arrowheads easier."""
+    display_name = "Better Dowsing Rod"
 
 
 class OtherItemsModel(Choice): 
@@ -207,6 +212,7 @@ class PsychonautsOptions(PerGameCommonOptions):
     VaultCount: VaultCount
     EasyMillaRace: EasyMillaRace
     EasyFlightMode: EasyFlightMode
+    BetterDowsingRod: BetterDowsingRod
     OtherItemsModel: OtherItemsModel
     EnemyDamageMultiplier: EnemyDamageMultiplier
     InstantDeathMode: InstantDeathMode
@@ -234,6 +240,7 @@ SLOT_DATA_OPTIONS: List[str] = [
     "VaultCount",
     "EasyMillaRace",
     "EasyFlightMode",
+    "BetterDowsingRod",
     "OtherItemsModel",
     "EnemyDamageMultiplier",
     "InstantDeathMode",
@@ -267,7 +274,7 @@ OPTION_GROUPS: list [OptionGroup] = [
         BrainsRequired,
         RequireMeatCircus,
     ]),
-    OptionGroup("Location Options", [
+    OptionGroup("Extra Location Options", [
         RankSanity,
         FigmentPercentageChecks,
         DeepArrowheadShuffle,
@@ -285,6 +292,7 @@ OPTION_GROUPS: list [OptionGroup] = [
     OptionGroup("Difficulty Options", [
         EasyFlightMode,
         EasyMillaRace,
+        BetterDowsingRod,
         EnemyDamageMultiplier,
         InstantDeathMode,        
     ]),
