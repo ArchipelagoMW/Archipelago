@@ -68,3 +68,5 @@ def handle_trap(trap_name: str) -> str:
         return "script FizzlePortalTrap()\n"
     elif trap_name == butter_fingers_trap:
         return "script ButterFingersTrap()\n"
+    elif trap_name == cube_confetti_trap:
+        return "script CubeConfettiTrap()\n"

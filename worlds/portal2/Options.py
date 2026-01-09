@@ -45,6 +45,11 @@ class ButterFingersTrapWeight(BaseTrapWeight):
     """
     display_name = butter_fingers_trap + " Weight"
 
+class CubeConfettiTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes an explosion of colorful cubes at your feet
+    """
+    display_name = cube_confetti_trap + " Weight"
 
 # class StoryAchievementSanity(Toggle):
 #     """
@@ -66,7 +71,8 @@ portal2_option_groups = [
         TrapFillPercentage,
         MotionBlurTrapWeight,
         FizzlePortalTrapWeight,
-        ButterFingersTrapWeight
+        ButterFingersTrapWeight,
+        CubeConfettiTrapWeight
     ])
 ]
 
@@ -89,4 +95,5 @@ class Portal2Options(PerGameCommonOptions):
     motion_blur_trap_weight: MotionBlurTrapWeight
     fizzle_portal_trap_weight: FizzlePortalTrapWeight
     butter_fingers_trap_weight: ButterFingersTrapWeight
+    cube_confetti_trap_weight: CubeConfettiTrapWeight
     

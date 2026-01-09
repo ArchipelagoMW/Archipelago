@@ -34,3 +34,4 @@ slice_of_cake = "Slice of Cake"
 motion_blur_trap = "Motion Blur Trap" # Adds blur effect to screen for 20 seconds
 fizzle_portal_trap = "Fizzle Portal Trap" # Instantly Fizzles all places portals
 butter_fingers_trap = "Butter Fingers Trap" # Persistently drops held items for 30 seconds
+cube_confetti_trap = "Cube Confetti Trap" # An explosion of colorful cubes at the feet of the player

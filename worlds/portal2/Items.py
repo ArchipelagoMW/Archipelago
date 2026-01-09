@@ -86,6 +86,7 @@ trap_items_table: dict[str, Portal2ItemData] = {
     motion_blur_trap: Portal2ItemData(classification = ItemClassification.trap),
     fizzle_portal_trap: Portal2ItemData(classification = ItemClassification.trap),
     butter_fingers_trap: Portal2ItemData(classification = ItemClassification.trap),
+    cube_confetti_trap: Portal2ItemData(classification = ItemClassification.trap),
 }
 
 item_table: dict[str, Portal2ItemData] = game_item_table.copy() # Shallow copy okay as we aren't changing any data
