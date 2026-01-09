@@ -231,6 +231,33 @@ class EarthBoundClient(SNIClient):
         if inbox:
             gift_item_name = "None"
             key, gift = next(iter(inbox.items()))
+            amount = gift.get("amount", gift.get("Amount"))
+
+            if amount > 1:
+                # EarthBound really shouldn't handle high-quanity gifts, so reject any count above 1
+                guid = str(uuid.uuid4())
+                recipient = gift.get("sender_slot", gift.get("SenderSlot"))
+                outgoing_gift = {
+                                guid: {
+                                    "id": guid,
+                                    "item_name": gift.get("item_name", gift.get("ItemName")),
+                                    "amount": amount - 1,
+                                    "item_value": gift.get("value", gift.get("Value")),
+                                    "traits": gift.get("traits", gift.get("Traits")),
+                                    "sender_slot": ctx.slot,
+                                    "receiver_slot": recipient,
+                                    "sender_team": ctx.team,
+                                    "receiver_team": ctx.team,
+                                    "is_refund": True}}
+
+                await ctx.send_msgs([{
+                            "cmd": "Set",
+                            "key": f"GiftBox;{ctx.team};{recipient}",  # Receiver team here too
+                            "want_reply": True,
+                            "default": {},
+                            "operations": [{"operation": "update", "value": outgoing_gift}]
+                        }])
+
             if "item_name" in gift or "ItemName" in gift:
                 gift_item_name = gift.get("item_name", gift.get("ItemName"))
             if gift_item_name in item_id_table and gift_item_name not in gift_exclusions:
@@ -313,7 +340,7 @@ class EarthBoundClient(SNIClient):
                             guid: {
                                 "id": guid,
                                 "item_name": gift.name,
-                                "amount": 1,
+                                "amount": 2, # Change back to 1
                                 "item_value": gift.value,
                                 "traits": gift.traits,
                                 "sender_slot": ctx.slot,
@@ -432,9 +459,6 @@ class EarthBoundClient(SNIClient):
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
             await snes_write(ctx, [(WRAM_START + 0x0770, bytes([0]))])
 
-        if item_received[0] or special_received[0] != 0x00 or money_received[0] != 0x00:  # If processing any item from the server
-            return
-
         is_energylink_enabled = await snes_read(ctx, IS_ENERGYLINK_ENABLED, 1)
         is_requesting_energy = await snes_read(ctx, WRAM_START + 0x0790, 1)
         energy_withdrawal = await snes_read(ctx, WRAM_START + 0x0796, 4)
@@ -482,6 +506,9 @@ class EarthBoundClient(SNIClient):
                         [{"operation": "add", "value": (withdrawal * -1)},
                             {"operation": "max", "value": 0}]}])
                 await snes_write(ctx, [(WRAM_START + 0x079A, energy_success.to_bytes(1, byteorder="little"))])  # Signal the game to continue
+
+        if item_received[0] or special_received[0] != 0x00 or money_received[0] != 0x00:  # If processing any item from the server
+            return
 
         if cur_script[0]:  # Stop items during cutscenes
             return
