@@ -67,10 +67,10 @@ def clear_bit(value, bit):
 
 def write_bit(console_address: int, bit_position: int, value: int) -> None:
     """
-    Write to a single bit to a specific position in a byte of Dolphin memory.
+    Write to a single bit to a specific position in a byte of Dolphin memory
 
-    :param console_address: Address to write to.
-    :param bit_position: Position of the bit in the Dolphin memory.
+    :param console_address: Address to write to
+    :param bit_position: Position of the bit in the Dolphin memory
     :param value: Value to write – 0 or 1
     """
     # If we don't get a binary value, throw an error
@@ -88,3 +88,17 @@ def write_bit(console_address: int, bit_position: int, value: int) -> None:
 
     # Write the new value back to the original address
     write_byte(console_address, byte_value)
+
+def check_bit(console_address: int, bit_position: int) -> bool:
+    """
+    Check the value of a single bit in a specific position in a byte of Dolphin memory
+    Returns True if the bit is set (1)
+
+    :param console_address: Address to write to
+    :param bit_position: Position of the bit in the Dolphin memory
+    """
+    # Grab the current full 8-bit value
+    byte_value = read_byte(console_address)
+    # If the value in the byte's bit_position is set (1), the AND comparison will return a value
+    # Otherwise, if it's not set, the expression will evaluate to 0 (and by extension, False)
+    return byte_value & (1 << bit_position) > 0

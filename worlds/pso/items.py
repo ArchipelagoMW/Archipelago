@@ -83,10 +83,13 @@ def make_item_name_to_id_dict(item_table: dict[str, PSOItemData]) -> dict[str, i
 ITEM_NAME_TO_ID: dict[str, int | None] = make_item_name_to_id_dict(ITEM_TABLE)
 
 
+# TODO: This doesn't fix the issue of Victory being None
 def make_id_to_item_name_dict(item_table: dict[str, PSOItemData]) -> dict[int, str]:
     name = item_table.keys()
     *_, code = zip(*item_table.values())
-    return dict(zip(code, name))
+
+    # We don't add the last element of the array, since it's the Victory table
+    return dict(zip(code[:-1], name[:-1]))
 
 # We have a reverse lookup table for getting item name from ID as well
 # It's possible we don't need this, but it may be a performance trade-off given the number of items this game has
@@ -133,6 +136,8 @@ def create_all_items(world: PSOWorld) -> None:
     for name in progression_item_names:
         # Keep the Victory item out of the drop pool, otherwise things might get wonky
         if name == ItemName.VICTORY:
+            # Instead, we place it specifically on the goal, of which there is only one option right now
+            world.get_location("Defeat Dark Falz").place_locked_item(world.create_item(name))
             continue
         itempool.append(world.create_item(name))
 

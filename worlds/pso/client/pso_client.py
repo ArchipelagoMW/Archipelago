@@ -9,12 +9,14 @@ from copy import deepcopy
 
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
+from NetUtils import ClientStatus
+from worlds.pso.locations import LOCATION_TABLE
 
 from ..items import ITEM_TABLE, ITEM_NAME_TO_ID, ITEM_ID_TO_NAME, PSOItemType
 
 import dolphin_memory_engine
 
-from ..helpers import write_short, read_short, read_string, write_bit
+from ..helpers import write_short, read_short, read_string, write_bit, check_bit
 from ..strings.client_strings import ConnectionStatus, get_death_message
 from ..strings.item_names import Item
 
@@ -253,11 +255,22 @@ def _give_item(ctx: PSOContext, item_name: str) -> bool:
                 write_bit(item.ram_data.ram_addr, item.ram_data.bit_position, 1)
             return True
 
+        case PSOItemType.EVENT:
+            if item_name == Item.VICTORY:
+                # To my knowledge, we don't have to do anything here
+                logger.info("Victory item has been sent")
+            else:
+                logger.error(f"EVENT item {item_name} is not specifically handled – this may have unexpected behavior")
+            return True
+
+        case PSOItemType.WEAPON:
+            logger.error(f"Tried to give {item_name} - This hasn't been fully explored")
+            return True
+
         case _:
             logger.error(f"Unhandled {item.type} item not added to game: {item_name}")
-
-
     return False
+
 
 async def give_items(ctx: PSOContext) -> None:
     """
@@ -288,18 +301,26 @@ async def give_items(ctx: PSOContext) -> None:
         write_short(LAST_RECEIVED_ITEM_ADDRESS, idx)
 
 
-
-
-# TODO: Is this done? Probably not
-
-
-
 async def check_locations(ctx: PSOContext) -> None:
+    # Check to make sure the player hasn't beaten the game
+    win_condition_data = LOCATION_TABLE["Defeat Dark Falz"].ram_data
+    if check_bit(win_condition_data.ram_addr, win_condition_data.bit_position):
+        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+        ctx.finished_game = True
+
     # We make a deepcopy to avoid unexpected mutations of missing_locations during our checks
     local_missing_locations = deepcopy(ctx.missing_locations)
     for missing_location in local_missing_locations:
+        location_name = ctx.location_names.lookup(missing_location)
+        location_data = LOCATION_TABLE[location_name].ram_data
+        if check_bit(location_data.ram_addr, location_data.bit_position):
+            ctx.locations_checked.add(missing_location)
+    await ctx.check_locations(ctx.locations_checked)
 
-
+    # Send the list of newly-checked locations to the server.
+    locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
+    if locations_checked:
+        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
 
 async def dolphin_sync_task(ctx: PSOContext) -> None:

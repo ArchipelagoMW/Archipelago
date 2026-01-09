@@ -99,9 +99,9 @@ LOCATION_TABLE: dict[str, PSOLocationData] = {
     #     23, RegionName.forest_1, PSOLocationType.ITEM, PSORamData(0x801042A4)
     # ),
 
-    # TODO: Get actual data for this check
+    # This is specifically for Dark Falz 2nd Form. We'll need to expand this if we open up more than Normal mode
     "Defeat Dark Falz": PSOLocationData(
-        None, RegionName.DARK_FALZ, PSOLocationType.EVENT, PSORamData(0xFFFFFFFF)
+        None, RegionName.DARK_FALZ, PSOLocationType.EVENT, PSORamData(0x805127FE, 2)
     )
 }
 
@@ -116,6 +116,11 @@ def get_location_name_to_id_dict(location_table: dict[str, PSOLocationData]) -> 
     return dict(zip(name, code))
 
 LOCATION_NAME_TO_ID: dict[str, int | None] = get_location_name_to_id_dict(LOCATION_TABLE)
+
+def get_location_id_to_name_dict(location_table: dict[str, PSOLocationData]) -> dict[str, int | None]:
+    name = location_table.keys()
+    code, *_ = zip(*location_table.values())
+    return dict(zip(code, name))
 
 # Each Location instance must correctly report the "game" it belongs to.
 # To make this simple, it is common practice to subclass the basic Location class and override the "game" field.
