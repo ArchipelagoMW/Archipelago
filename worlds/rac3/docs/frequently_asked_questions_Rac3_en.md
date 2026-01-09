@@ -63,6 +63,13 @@ You can run the /death_link command in the Ratchet and Clank 3 client to toggle 
 
 If the game is paused, you are in a menu, selecting a mission etc the game cannot display the message box we use to show these messages.
 
+## How can I contribute to the project?
 
+- **As a player**: The best way to contribute to the project as a player is to report every issue you encounter with the most details possible.
+These submissions should be sent to the `[PS2] Ratchet and Clank 3: Up Your Arsenal` channel on the Archipelago discord. When you encounter an issue, make sure to use the `/rac3_info` command in your Ratchet and Clank 3 client and send the result of that
+command into the discord channel as well.
+- **As a developer**: If you wish to contribute to the implementation
+itself then fork this repository on Github, make a new branch based of the `staging` branch of the project and make your changes there. Then open a pull request with a detailed description of your changes.
+If the changes made in the pull request are acceptable, then they will be merged. **Make sure your pull request targets the repository's `staging` branch!**
 
 
