@@ -86,7 +86,7 @@ CLIFF_PLATEAU_ISLES_HIGHEST_ISLE_SPAWN_ID = 1  # As a note, the lower isle's spa
 CLIFF_PLATEAU_ISLES_HIGHEST_ISLE_DUMMY_STAGE_NAME = "CliPlaH"
 
 # Data storage key
-AP_VISITED_STAGE_NAMES_KEY_FORMAT = "tww_visited_stages_%i"
+AP_VISITED_STAGE_NAMES_KEY_FORMAT = "tww_visited_stages_%i_%i"
 
 
 class TWWCommandProcessor(ClientCommandProcessor):
@@ -207,13 +207,13 @@ class TWWContext(CommonContext):
             if "death_link" in args["slot_data"]:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
             # Request the connected slot's dictionary (used as a set) of visited stages.
-            visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
+            visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % (self.slot, self.team)
             Utils.async_start(self.send_msgs([{"cmd": "Get", "keys": [visited_stages_key]}]))
         elif cmd == "Retrieved":
             requested_keys_dict = args["keys"]
             # Read the connected slot's dictionary (used as a set) of visited stages.
             if self.slot is not None:
-                visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
+                visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % (self.slot, self.team)
                 if visited_stages_key in requested_keys_dict:
                     visited_stages = requested_keys_dict[visited_stages_key]
                     # If it has not been set before, the value in the response will be `None`.
@@ -259,7 +259,7 @@ class TWWContext(CommonContext):
             messages_to_send = []
 
             # Message 1: Update the visited_stages dict (for PopTracker)
-            visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
+            visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % (self.slot, self.team)
             messages_to_send.append({
                 "cmd": "Set",
                 "key": visited_stages_key,
