@@ -12,11 +12,11 @@ from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser,
 from NetUtils import ClientStatus
 from worlds.pso.locations import LOCATION_TABLE
 
-from ..items import ITEM_TABLE, ITEM_NAME_TO_ID, ITEM_ID_TO_NAME, PSOItemType
+from ..items import ITEM_TABLE, ITEM_ID_TO_NAME, PSOItemType
 
 import dolphin_memory_engine
 
-from ..helpers import write_short, read_short, read_string, write_bit, check_bit
+from ..helpers import write_short, read_short, write_bit, check_bit
 from ..strings.client_strings import ConnectionStatus, get_death_message
 from ..strings.item_names import Item
 
@@ -92,7 +92,7 @@ class PSOContext(CommonContext):
         Disconnect the client from the server and reset game state variables
         """
         self.auth = None
-        self.current_stage_name = None
+        # self.current_stage_name = None
         await super().disconnect(*args, **kwargs)
 
     async def server_auth(self, password_requested: bool = False) -> None:
@@ -225,7 +225,7 @@ def _give_item(ctx: PSOContext, item_name: str) -> bool:
     Give an item to the player in-game
 
     :param ctx: the Context object from CommonClient for PSO
-    :param code: the unique ID code for the item being given
+    :param item_name: the name of the item being given
     :return: whether the item was successfully given
     """
     # TODO: Determine if this can get stuck
@@ -353,10 +353,18 @@ async def dolphin_sync_task(ctx: PSOContext) -> None:
                         await check_death(ctx)
                     await give_items(ctx)
                     await check_locations(ctx)
-                    await check_current_stage_changed(ctx)
                 else:
                     if not ctx.auth:
-                        ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
+                        # TODO: Get the Slot Name Address
+                        # For now, we just disconnect and inform the user
+                        # ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
+                        ctx.auth = None
+                        ctx.dolphin_status = ConnectionStatus.NO_SLOT_NAME
+                        logger.info(ctx.dolphin_status)
+                        dolphin_memory_engine.un_hook()
+                        await asyncio.sleep(5)
+                        continue
+
                     if ctx.awaiting_rom:
                         await ctx.server_auth()
                 sleep_time = 0.1
