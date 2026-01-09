@@ -44,6 +44,10 @@ class RecipeEngine:
         self.__current_recipe_path: list[tuple[InternalItem, Recipe]] = []
 
     def full_init(self) -> None:
+        if self.__valid_ingredients is None:
+            self.__register_iternal_items()
+        if self.__recipes is None:
+            self.__register_recipes()
         try:
             with self.modpack.open_file("Cache/precalc.json") as file:
                 precalc = json.load(file)
@@ -344,7 +348,7 @@ class InternalItem(FactorioElement):
 
         if len(self.recipes) == 0:
             # must be an unknown method for item to spontaneously exist
-            if self.name not in self.recipeEngine.raw_cost:
+            if self.name not in self.recipeEngine.raw_cost and self.name not in self.recipeEngine.invalid_ingredients:
                 self.recipeEngine.modpack.logger.warning(f"spontaneously existing item ({self.name}) doesn't have a cost, defaulting to 1")
             self.non_recursive_raw_ingredients = {self: 1}
             self.__raw_ingredients = {self: 1}
