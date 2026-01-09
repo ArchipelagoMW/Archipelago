@@ -468,6 +468,11 @@ class Rac3Interface(GameInterface):
                         already_no_clank = self._read8(RAC3STATUS.NO_CLANK)
                         if already_no_clank == 0:
                             self.timers[name] = int(time.time() + uniform(5, 20))
+            case RAC3ITEM.INVISIBLE_TRAP:
+                if self.timers.get(name, False):
+                    self.timers[name] += randint(3, 5)
+                else:
+                    self.timers[name] = int(time.time() + uniform(3, 5))
         if name in non_prog_weapon_data.keys():
             if non_prog_weapon_data[name].AMMO:
                 self._write8(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
@@ -865,7 +870,7 @@ class Rac3Interface(GameInterface):
                         case RAC3STATUS.BLACK_SCREEN:
                             self._write16(status, 0)
                         case _:
-                            self._write8(status, 1)
+                            self._write8(status, 2)
             else:
                 self.timers.pop(name)
                 if 'Jackpot' in name:
@@ -886,6 +891,8 @@ class Rac3Interface(GameInterface):
                         self._write16(RAC3STATUS.BLACK_SCREEN, 0x8C)
                     case RAC3ITEM.NO_CLANK_TRAP:
                         self._write8(RAC3STATUS.NO_CLANK, 0)
+                    case RAC3ITEM.INVISIBLE_TRAP:
+                        self._write8(RAC3STATUS.INVISIBLE, 0)
 
         # Remove trap effects for traps not in the timer dictionary to prevent any stuck effects
         # Prevent not having lock trap from unlocking weapon during arena weapon specific challenges every cycle
