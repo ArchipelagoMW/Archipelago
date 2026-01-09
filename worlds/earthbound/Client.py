@@ -340,7 +340,7 @@ class EarthBoundClient(SNIClient):
                             guid: {
                                 "id": guid,
                                 "item_name": gift.name,
-                                "amount": 2, # Change back to 1
+                                "amount": 1,
                                 "item_value": gift.value,
                                 "traits": gift.traits,
                                 "sender_slot": ctx.slot,
