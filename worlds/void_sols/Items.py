@@ -179,14 +179,17 @@ item_data_table = {
     ItemName.strange_totem: ItemData(906, ItemClassification.progression),
     ItemName.relics_improved: ItemData(907, ItemClassification.useful, quantity=5),
     ItemName.fish_tokens_x2: ItemData(908, ItemClassification.progression, quantity=9),
-    ItemName.strange_curio: ItemData(909, ItemClassification.progression, quantity=4),
-    
+    ItemName.strange_curio_1: ItemData(909, ItemClassification.progression),
+    ItemName.strange_curio_2: ItemData(910, ItemClassification.progression),
+    ItemName.strange_curio_3: ItemData(911, ItemClassification.progression),
+    ItemName.strange_curio_4: ItemData(912, ItemClassification.progression),
+
     # Sols
-    ItemName.sols_1: ItemData(910, ItemClassification.filler, quantity=0),
-    ItemName.sols_25: ItemData(911, ItemClassification.filler, quantity=0),
-    ItemName.sols_50: ItemData(912, ItemClassification.filler, quantity=0),
-    ItemName.sols_100: ItemData(913, ItemClassification.filler, quantity=0),
-    ItemName.sols_250: ItemData(914, ItemClassification.filler, quantity=0),
+    ItemName.sols_1: ItemData(913, ItemClassification.filler, quantity=0),
+    ItemName.sols_25: ItemData(914, ItemClassification.filler, quantity=0),
+    ItemName.sols_50: ItemData(915, ItemClassification.filler, quantity=0),
+    ItemName.sols_100: ItemData(916, ItemClassification.filler, quantity=0),
+    ItemName.sols_250: ItemData(917, ItemClassification.filler, quantity=0),
     
     ItemName.victory: ItemData(1000, ItemClassification.progression),
     

@@ -52,13 +52,13 @@ def create_regions(world: World, active_locations):
             LocationName.prison_item_pickup_caltrops
         ]:
             locations_by_region["Prison Portal Room"].append(location_name)
-        elif location_name.startswith("Prison Yard - "):
+        elif location_name.startswith(LocationName.PRISON_YARD_PREFIX):
             locations_by_region["Prison Yard"].append(location_name)
-        elif location_name.startswith("Prison - "):
+        elif location_name.startswith(LocationName.PRISON_PREFIX):
             locations_by_region["Prison"].append(location_name)
 
         # -- FOREST AREA --
-        elif location_name.startswith("Forest - "):
+        elif location_name.startswith(LocationName.FOREST_PREFIX):
             locations_by_region["Forest"].append(location_name)
 
         # -- VILLAGE AREA --
@@ -71,45 +71,45 @@ def create_regions(world: World, active_locations):
             LocationName.village_relics_improved_5,
         ]:
             locations_by_region["Village Undercroft Forgotten Reliquary"].append(location_name)
-        elif location_name.startswith("Village - "):
+        elif location_name.startswith(LocationName.VILLAGE_PREFIX):
             locations_by_region["Village"].append(location_name)
 
         # -- MOUNTAIN AREA --
-        elif location_name.startswith("Mountain Underpass - "):
+        elif location_name.startswith(LocationName.MOUNTAIN_UNDERPASS_PREFIX):
             locations_by_region["Mountain Underpass"].append(location_name)
-        elif location_name.startswith("Mountain - "):
+        elif location_name.startswith(LocationName.MOUNTAIN_PREFIX):
             locations_by_region["Mountain"].append(location_name)
 
         # -- MINES AREA --
-        elif location_name.startswith("Mines 0F - ") or location_name.startswith("Mines 1F - "):
+        elif location_name.startswith(LocationName.MINES_0F_PREFIX) or location_name.startswith(LocationName.MINES_1F_PREFIX):
             locations_by_region["Mines Floor 1"].append(location_name)
-        elif location_name.startswith("Mines 2F - "):
+        elif location_name.startswith(LocationName.MINES_2F_PREFIX):
             locations_by_region["Mines Floor 2"].append(location_name)
-        elif location_name.startswith("Mines 3F - "):
+        elif location_name.startswith(LocationName.MINES_3F_PREFIX):
             locations_by_region["Mines Floor 3"].append(location_name)
-        elif location_name.startswith("Mines 4F - "):
+        elif location_name.startswith(LocationName.MINES_4F_PREFIX):
             locations_by_region["Mines Floor 4"].append(location_name)
 
         # -- CULTIST AREA --
-        elif location_name.startswith("Cultist - ") or location_name.startswith("Cultist Compound - "):
+        elif location_name.startswith(LocationName.CULTIST_PREFIX) or location_name.startswith(LocationName.CULTIST_COMPOUND_PREFIX):
             locations_by_region["Cultist Compound"].append(location_name)
 
         # -- SUPERMAX AREA --
-        elif location_name.startswith("Supermax Prison West - "):
+        elif location_name.startswith(LocationName.SUPERMAX_WEST_PREFIX):
             locations_by_region["Supermax Prison West"].append(location_name)
-        elif location_name.startswith("Supermax Prison East - "):
+        elif location_name.startswith(LocationName.SUPERMAX_EAST_PREFIX):
             locations_by_region["Supermax Prison East"].append(location_name)
 
         # -- FACTORY & SWAMP --
-        elif location_name.startswith("Factory - "):
+        elif location_name.startswith(LocationName.FACTORY_PREFIX):
             locations_by_region["Factory"].append(location_name)
-        elif location_name.startswith("Swamp - "):
+        elif location_name.startswith(LocationName.SWAMP_PREFIX):
             locations_by_region["Swamp"].append(location_name)
 
         # -- APEX AREA (Split logic) --
-        elif location_name.startswith("Apex Outskirts - "):
+        elif location_name.startswith(LocationName.APEX_OUTSKIRTS_PREFIX):
             locations_by_region["Apex Outskirts"].append(location_name)
-        elif location_name.startswith("Apex - "):
+        elif location_name.startswith(LocationName.APEX_PREFIX):
             if "Outskirts" in location_name or location_name == LocationName.apex_gatekeeper_defeated_event:
                 locations_by_region["Apex Outskirts"].append(location_name)
             elif location_name == LocationName.apex_blow_horn:

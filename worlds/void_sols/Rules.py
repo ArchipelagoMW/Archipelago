@@ -597,14 +597,14 @@ def set_rules(world: World):
 
     # Apex Outskirts Light Spark
     try:
-        set_rule(world.multiworld.get_location(LocationName.apex_outskirts_spark, player),
+        set_rule(world.multiworld.get_location(LocationName.apex_spark_outskirts, player),
                  lambda state: state.has(ItemName.apex_outskirts_key, player))
     except KeyError:
         pass
 
     # Apex Unknown Light Spark
     try:
-        set_rule(world.multiworld.get_location(LocationName.apex_unknown_spark, player),
+        set_rule(world.multiworld.get_location(LocationName.apex_spark_unknown, player),
                  lambda state: state.has(ItemName.data_disc_r, player) and
                                state.has(ItemName.data_disc_g, player) and
                                state.has(ItemName.data_disc_b, player))
