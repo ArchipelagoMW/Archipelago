@@ -257,7 +257,7 @@ class RAC3ITEM:
     MIRROR_TRAP = "Mirror Trap"
     OHKO_TRAP = "1-Hit KO Trap"
     LOCK_TRAP = "Item Lock Trap"
-    WRENCH_TRAP = "Wrench Trap"
+    WRENCH_ONLY_TRAP = "Wrench Only Trap"
     PANCAKE_TRAP = "Pancake Trap"
     LAVA_TRAP = "Lava Trap"
     NO_AMMO_TRAP = "No Ammo Trap"

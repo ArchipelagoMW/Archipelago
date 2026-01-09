@@ -82,3 +82,4 @@ class RAC3STATUS:
     BLACK_SCREEN = 0x001422F0
     INVISIBLE = 0x001A71C5
     DISARM = 0x001A71CD
+    WRENCH_ONLY = 0x001A71C8 # Used when Ratchet is in water, but only allows wrench on land.
