@@ -11,7 +11,7 @@ from Utils import async_start, init_logging
 
 from ..mod_helpers.ItemHandling import handle_item, handle_trap
 from ..mod_helpers.MapMenu import Menu
-from ..Locations import location_names_to_map_codes, map_codes_to_location_names
+from ..Locations import location_names_to_map_codes, map_codes_to_location_names, all_locations_table
 from .. import Portal2World
 
 if __name__ == "__main__":
@@ -21,7 +21,7 @@ logger = logging.getLogger("Portal2Client")
 
 class Portal2CommandProcessor(ClientCommandProcessor):
 
-    def _cmd_checkcon(self):
+    def _cmd_check_connection(self):
         """Responds with the status of the client's connection to the Portal 2 mod"""
         self.ctx.alert_game_connection()
 
@@ -35,11 +35,11 @@ class Portal2CommandProcessor(ClientCommandProcessor):
         self.ctx.update_death_link(self.ctx.death_link_active)
         self.output(f"Death link has been {"enabled" if self.ctx.death_link_active else "disabled"}")
 
-    def _cmd_refreshmenu(self):
+    def _cmd_refresh_menu(self):
         """Refreshed the in game menu in case of maps being inaccessible when they should be"""
         self.ctx.refresh_menu()
 
-    def _cmd_messageingame(self, message: str, *color_string):
+    def _cmd_message_in_game(self, message: str, *color_string):
         """Send a message to be displayed in game (only works while in a map). 
         message can be any text 
         color_string is an optional RGB string e.g. 255 100 0"""
@@ -47,6 +47,24 @@ class Portal2CommandProcessor(ClientCommandProcessor):
             self.ctx.add_to_in_game_message_queue(message, ' '.join(color_string))
         else:
             self.ctx.add_to_in_game_message_queue(message)
+
+    def _cmd_needed(self, *location_name):
+        """Get the requirements for the map separated by all requirements and ones not yet acquired"""
+        # Check if map name is in the list of map names
+        message = "Location not found, use /locations to get a list of locations"
+        location_name = ' '.join(location_name)
+        for location in location_names_to_map_codes.keys():
+            if location_name in location:
+                requirements = all_locations_table[location].required_items
+                requirements_not_collected = list(set(self.ctx.item_list) & set(requirements))
+                requirements.sort()
+                requirements_not_collected.sort()
+
+                message = ("Required Items: \n"
+                           f"{", ".join(requirements)}\n"
+                           f"{"All items acquired" if not requirements_not_collected else "Still needed: \n" + ", ".join(requirements_not_collected)}")
+                break
+        self.output(message)
 
 class Portal2Context(CommonContext):
     command_processor = Portal2CommandProcessor
