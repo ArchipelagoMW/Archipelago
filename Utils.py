@@ -48,7 +48,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.5"
+__version__ = "0.6.6"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -1222,3 +1222,35 @@ class DaemonThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):
             t.start()
             self._threads.add(t)
             # NOTE: don't add to _threads_queues so we don't block on shutdown
+
+
+def get_full_typename(t: type) -> str:
+    """Returns the full qualified name of a type, including its module (if not builtins)."""
+    module = t.__module__
+    if module and module != "builtins":
+        return f"{module}.{t.__qualname__}"
+    return t.__qualname__
+
+
+def get_all_causes(ex: Exception) -> str:
+    """Return a string describing the recursive causes of this exception.
+
+    :param ex: The exception to be described.
+    :return A multiline string starting with the initial exception on the first line and each resulting exception
+            on subsequent lines with progressive indentation.
+
+            For example:
+
+            ```
+            Exception: Invalid value 'bad'.
+             Which caused: Options.OptionError: Error generating option
+              Which caused: ValueError: File bad.yaml is invalid.
+            ```
+    """
+    cause = ex
+    causes = [f"{get_full_typename(type(ex))}: {ex}"]
+    while cause := cause.__cause__:
+        causes.append(f"{get_full_typename(type(cause))}: {cause}")
+    top = causes[-1]
+    others = "".join(f"\n{' ' * (i + 1)}Which caused: {c}" for i, c in enumerate(reversed(causes[:-1])))
+    return f"{top}{others}"
