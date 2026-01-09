@@ -41,7 +41,7 @@ item_data_table = {
     ItemName.obsidian_arrowhead: ItemData(201, ItemClassification.useful),
     ItemName.ruby_phial: ItemData(202, ItemClassification.useful),
     ItemName.bismuth_claw: ItemData(203, ItemClassification.useful),
-    ItemName.iron_pineapple: ItemData(204, ItemClassification.useful),
+    ItemName.iron_pineapple: ItemData(204, ItemClassification.progression),
     ItemName.jasper_chalice: ItemData(205, ItemClassification.useful),
     ItemName.golden_clover: ItemData(206, ItemClassification.useful),
     ItemName.emerald_phial: ItemData(207, ItemClassification.useful),
@@ -79,7 +79,7 @@ item_data_table = {
 
     # Usable Items
     ItemName.glitterstone_x1: ItemData(500, ItemClassification.filler, quantity=2),
-    ItemName.glitterstone_x2: ItemData(501, ItemClassification.filler, quantity=2),
+    ItemName.glitterstone_x2: ItemData(501, ItemClassification.filler),
     ItemName.snare_trap_x2: ItemData(502, ItemClassification.filler),
     ItemName.flaming_torch_x1: ItemData(503, ItemClassification.progression),
     ItemName.flaming_torch_x2: ItemData(504, ItemClassification.progression),
@@ -94,8 +94,8 @@ item_data_table = {
     ItemName.bursting_bubble_x1: ItemData(513, ItemClassification.filler),
     ItemName.caltrops_x2: ItemData(514, ItemClassification.filler),
     ItemName.stale_bread_x1: ItemData(515, ItemClassification.filler),
-    ItemName.stale_bread_x2: ItemData(516, ItemClassification.filler, quantity=2),
-    ItemName.pocket_barrel_x1: ItemData(517, ItemClassification.filler),
+    ItemName.stale_bread_x2: ItemData(516, ItemClassification.filler),
+    ItemName.pocket_barrel_x1: ItemData(517, ItemClassification.filler, quantity=5),
     ItemName.pet_worm_x3: ItemData(518, ItemClassification.filler),
 
     # Fish
@@ -171,8 +171,8 @@ item_data_table = {
 
     # Misc
     ItemName.potion_mixing_unlocked: ItemData(900, ItemClassification.progression),
-    ItemName.metamorphic_alloy: ItemData(901, ItemClassification.useful, quantity=6),
-    ItemName.sol_alembic: ItemData(902, ItemClassification.useful, quantity=5),
+    ItemName.metamorphic_alloy: ItemData(901, ItemClassification.progression, quantity=6),
+    ItemName.sol_alembic: ItemData(902, ItemClassification.progression, quantity=5),
     ItemName.potions_increased: ItemData(903, ItemClassification.useful, quantity=6),
     ItemName.minor_sol_shard: ItemData(904, ItemClassification.filler, quantity=34),
     ItemName.major_sol_shard: ItemData(905, ItemClassification.filler, quantity=12),

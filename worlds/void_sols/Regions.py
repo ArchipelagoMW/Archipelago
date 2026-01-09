@@ -188,10 +188,16 @@ def connect_regions(world: World):
     connect(world, "Mountain Underpass", "Cultist Compound")
 
     # Forest -> Supermax Prison (Locked by Greater Void Worm Defeated)
-    connect(world, "Forest", "Supermax Prison West", lambda state: state.has(ItemName.greater_void_worm_defeated_event, player))
+    # Require East Wing Key to enter to prevent softlock (one-way entrance)
+    connect(world, "Forest", "Supermax Prison West",
+            lambda state: state.has(ItemName.greater_void_worm_defeated_event, player) and
+                          state.has(ItemName.east_wing_key, player))
 
     # Supermax Prison West -> Supermax Prison East (Locked by East Wing Key)
     connect(world, "Supermax Prison West", "Supermax Prison East", lambda state: state.has(ItemName.east_wing_key, player))
+
+    # Supermax Prison East -> Forest (Exit)
+    connect(world, "Supermax Prison East", "Forest")
     
     connect(world, "Village", "Swamp", lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
     connect(world, "Village", "Factory", lambda state: state.has(ItemName.forest_poacher_defeated_event, player))

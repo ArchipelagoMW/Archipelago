@@ -157,6 +157,23 @@ class TestRules(VoidSolsTestBase):
         items = [base_items + [ItemName.infernal_key, ItemName.sword, ItemName.dagger, ItemName.great_hammer]]
         self.assertAccessDependency(locations, items, only_check_listed=True)
 
+    def test_trader_trades(self) -> None:
+        """Test Trader Trades which require specific fish"""
+        # Forest Access
+        base_items = [ItemName.prison_key, ItemName.prison_warden_defeated_event, ItemName.gate_key, ItemName.flaming_torch_x1]
+        
+        # Test Star Fish trade
+        self.collect_by_name(base_items + [ItemName.star_fish])
+        self.assertTrue(self.can_reach_location(LocationName.forest_trader_trade_star_fish))
+        self.remove_by_name([ItemName.star_fish])
+        self.assertFalse(self.can_reach_location(LocationName.forest_trader_trade_star_fish))
+        
+        # Test Flying Fish trade
+        self.collect_by_name([ItemName.flying_fish])
+        self.assertTrue(self.can_reach_location(LocationName.forest_trader_trade_flying_fish))
+        self.remove_by_name([ItemName.flying_fish])
+        self.assertFalse(self.can_reach_location(LocationName.forest_trader_trade_flying_fish))
+
     def test_trader_items(self) -> None:
         """Test Trader Items which require Fire AND Fish Tokens"""
         location = LocationName.forest_trader_item_potions_increased
@@ -178,3 +195,94 @@ class TestRules(VoidSolsTestBase):
         
         # Slot 4 requires 4 Curios
         self.assertAccessDependency([LocationName.village_relics_improved_4], [base_items + [ItemName.strange_curio] * 4], only_check_listed=True)
+
+    def test_zenith_access(self) -> None:
+        """Test Zenith access requires all 3 data discs"""
+        locations = [
+            LocationName.apex_zenith_defeated,
+            LocationName.apex_zenith_defeated_event,
+        ]
+        # Apex Hub requires Gatekeeper Event
+        base_items = self.world_access_items + [ItemName.apex_gatekeeper_defeated_event]
+        
+        # Should require all 3 data discs
+        items = [base_items + [ItemName.data_disc_r, ItemName.data_disc_g, ItemName.data_disc_b]]
+        self.assertAccessDependency(locations, items, only_check_listed=True)
+
+    def test_supermax_prison_access(self) -> None:
+        """Test that Supermax Prison West requires East Wing Key and has an exit"""
+        locations = [LocationName.supermax_prison_item_pickup_map_a]
+        
+        # Should require East Wing Key + Greater Void Worm
+        base_items = [ItemName.prison_warden_defeated_event, ItemName.gate_key, ItemName.greater_void_worm_defeated_event]
+        items = [base_items + [ItemName.east_wing_key]]
+        self.assertAccessDependency(locations, items, only_check_listed=True)
+        
+        # Verify region access directly
+        self.collect_all_but([ItemName.east_wing_key])
+        self.assertFalse(self.can_reach_region("Supermax Prison West"))
+        self.collect_by_name([ItemName.east_wing_key])
+        self.assertTrue(self.can_reach_region("Supermax Prison West"))
+        self.assertTrue(self.can_reach_region("Supermax Prison East"))
+
+    def test_iron_pineapple_access(self) -> None:
+        """Test locations that require Iron Pineapple"""
+        locations = [
+            LocationName.iron_pineapple_breaking_item_1,
+            LocationName.iron_pineapple_breaking_item_2,
+            LocationName.iron_pineapple_breaking_item_3,
+            LocationName.iron_pineapple_breaking_item_4,
+            LocationName.iron_pineapple_breaking_item_5,
+        ]
+        # We also need access to the Village (Gate Key + Warden Event)
+        base_items = [ItemName.prison_warden_defeated_event, ItemName.gate_key]
+        items = [base_items + [ItemName.iron_pineapple]]
+        self.assertAccessDependency(locations, items, only_check_listed=True)
+
+    def test_alchemist_upgrade_requirements(self) -> None:
+        """Test Alchemist Upgrades require Sol Alembics"""
+        base_items = [
+            ItemName.prison_warden_defeated_event, ItemName.gate_key,
+            ItemName.forest_bridge_key, ItemName.alchemist_cage_key,
+            ItemName.potion_mixing_unlocked
+        ]
+        # Upgrade 1 requires 1 Alembic
+        self.assertAccessDependency([LocationName.village_alchemist_upgrade_1], 
+                                    [base_items + [ItemName.sol_alembic]], only_check_listed=True)
+        # Upgrade 3 requires 3 Alembics
+        self.assertAccessDependency([LocationName.village_alchemist_upgrade_3], 
+                                    [base_items + [ItemName.sol_alembic] * 3], only_check_listed=True)
+
+    def test_blacksmith_upgrade_requirements(self) -> None:
+        """Test Blacksmith Upgrades require Metamorphic Alloys"""
+        base_items = [ItemName.prison_warden_defeated_event, ItemName.gate_key]
+        # Upgrade 1 requires 1 Alloy
+        self.assertAccessDependency([LocationName.village_blacksmith_upgrade_1], 
+                                    [base_items + [ItemName.metamorphic_alloy]], only_check_listed=True)
+        # Upgrade 2 requires 3 Alloys
+        self.assertAccessDependency([LocationName.village_blacksmith_upgrade_2], 
+                                    [base_items + [ItemName.metamorphic_alloy] * 3], only_check_listed=True)
+        # Upgrade 3 requires 6 Alloys
+        self.assertAccessDependency([LocationName.village_blacksmith_upgrade_3], 
+                                    [base_items + [ItemName.metamorphic_alloy] * 6], only_check_listed=True)
+
+    def test_hall_of_heroes_restored_access(self) -> None:
+        """Test Hall of Heroes Restored requires Greater Void Worm Defeated"""
+        locations = [
+            LocationName.village_misc_hall_of_heroes_restored,
+            LocationName.village_torch_hall_of_heroes,
+        ]
+        # Village Access
+        base_items = [ItemName.prison_warden_defeated_event, ItemName.gate_key]
+        
+        # Check Village access generally
+        self.collect_by_name(base_items)
+        self.assertTrue(self.can_reach_region("Village"))
+        self.assertTrue(self.can_reach_location(LocationName.village_item_pickup_map))
+
+        for loc in locations:
+             self.assertFalse(self.can_reach_location(loc), f"{loc} should not be reachable without Worm Defeated")
+        
+        self.collect_by_name([ItemName.greater_void_worm_defeated_event])
+        for loc in locations:
+             self.assertTrue(self.can_reach_location(loc), f"{loc} should be reachable with Worm Defeated")

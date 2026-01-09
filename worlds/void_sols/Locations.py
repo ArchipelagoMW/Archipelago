@@ -481,7 +481,12 @@ misc_table = {
     LocationName.cultist_tamper_armament: 2007,
     LocationName.factory_misc_brute_encounter: 2008,
     LocationName.apex_blow_horn: 2009,
-     LocationName.apex_world_spark_interacted: 2010,
+    LocationName.apex_world_spark_interacted: 2010,
+    LocationName.iron_pineapple_breaking_item_1: 2011,
+    LocationName.iron_pineapple_breaking_item_2: 2012,
+    LocationName.iron_pineapple_breaking_item_3: 2013,
+    LocationName.iron_pineapple_breaking_item_4: 2014,
+    LocationName.iron_pineapple_breaking_item_5: 2015,
 }
 
 all_locations = {
