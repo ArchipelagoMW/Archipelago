@@ -264,6 +264,7 @@ class RAC3ITEM:
     BLACK_SCREEN_TRAP = "Black Screen Trap"
     NO_CLANK_TRAP = "No Clank Trap"
     INVISIBLE_TRAP = "Invisible Trap"
+    DISARM_TRAP = "Disarm Trap"
 
     QUICK_SELECT_0 = "Quick Select 0"
     QUICK_SELECT_1 = "Quick Select 1"
