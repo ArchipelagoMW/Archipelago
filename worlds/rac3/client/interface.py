@@ -470,19 +470,19 @@ class Rac3Interface(GameInterface):
                             self.timers[name] = int(time.time() + uniform(5, 20))
             case RAC3ITEM.INVISIBLE_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(3, 5)
+                    self.timers[name] += randint(3, 10)
                 else:
-                    self.timers[name] = int(time.time() + uniform(3, 5))
+                    self.timers[name] = int(time.time() + uniform(3, 10))
             case RAC3ITEM.DISARM_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(3, 5)
+                    self.timers[name] += randint(3, 7)
                 else:
-                    self.timers[name] = int(time.time() + uniform(3, 5))
+                    self.timers[name] = int(time.time() + uniform(3, 7))
             case RAC3ITEM.WRENCH_ONLY_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(3, 5)
+                    self.timers[name] += randint(3, 7)
                 else:
-                    self.timers[name] = int(time.time() + uniform(3, 5))
+                    self.timers[name] = int(time.time() + uniform(3, 7))
         if name in non_prog_weapon_data.keys():
             if non_prog_weapon_data[name].AMMO:
                 self._write8(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
