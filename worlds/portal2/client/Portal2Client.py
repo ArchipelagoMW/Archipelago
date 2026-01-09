@@ -314,6 +314,8 @@ class Portal2Context(CommonContext):
                 elif args["type"] == "Goal":
                     text = self.parse_message(args["data"])
                 else:
+                    if args["type"] == "Collect":
+                        self.update_menu()
                     return # Don't send text to game
                 self.add_to_in_game_message_queue(text)
 
