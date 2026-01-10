@@ -19,7 +19,11 @@ class BaseModpack:
         self.__is_zip = False
         try:
             with open(self.__packPath/"header.json") as header:
-                self.packName = json.load(header)["packName"]
+                raw_header = json.load(header)
+                self.packName: str = raw_header["packName"]
+                self.version: str = raw_header["version"]
+                self.formatVersion: str = raw_header["formatVersion"]
+                self.downloadLocation: str = raw_header["downloadLocation"]
         except FileNotFoundError as e:
             raise FileNotFoundError(f"Pack doesn't have header: {self.__packPath}", e)
         except Exception as e:

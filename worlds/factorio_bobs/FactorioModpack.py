@@ -195,7 +195,7 @@ class FactorioModpack(BaseModpack):
         return self.__recipe_engine
 
     @cached_property
-    def defaultOptions(self):
+    def default_options(self):
         try:
             with self.open_file("defaultOptions.json") as file:
                 default_raw = json.load(file)
@@ -208,3 +208,9 @@ class FactorioModpack(BaseModpack):
             for complexity, rules in raw_additional_logic.values():
                 defaults["additional_logic"][int(complexity)] = rules
         return defaults
+
+    @cached_property
+    def mod_settings(self) -> dict[str, dict[str, Any]]:
+        with self.open_file("modSettings.json") as file:
+            mod_settings_raw = json.load(file)
+        return mod_settings_raw

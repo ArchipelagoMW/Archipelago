@@ -1,5 +1,5 @@
 """Outputs a Factorio Mod to facilitate integration with Archipelago"""
-
+import copy
 import dataclasses
 import json
 import os
@@ -23,6 +23,7 @@ data_final_template: Optional[jinja2.Template] = None
 locale_template: Optional[jinja2.Template] = None
 control_template: Optional[jinja2.Template] = None
 settings_template: Optional[jinja2.Template] = None
+settings_final_template: Optional[jinja2.Template] = None
 
 template_load_lock = threading.Lock()
 
@@ -35,27 +36,7 @@ base_info = {
     "factorio_version": "2.0",
     "dependencies": [
         "base >= 2.0.28",
-        "bobassembly",
-        "bobelectronics",
-        "bobenemies",
-        "bobequipment",
-        "bobgreenhouse",
-        "bobinserters",
-        "boblibrary",
-        "boblogistics",
-        "bobmining",
-        "bobmodules",
-        "bobores",
-        "bobplates",
-        "bobpower",
-        "bobrevamp",
-        "bobtech",
-        "bobvehicleequipment",
-        "bobwarfare",
         "? quality >= 2.0.28",
-        "! space-age",
-        "? science-not-invited",
-        "? factory-levels"
     ]
 }
 
@@ -108,7 +89,7 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
     multiworld = world.multiworld
     random = world.random
 
-    global data_final_template, locale_template, control_template, data_template, settings_template
+    global data_final_template, locale_template, control_template, data_template, settings_template, settings_final_template
     with template_load_lock:
         if not data_final_template:
             def load_template(name: str):
@@ -124,6 +105,7 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
             locale_template = template_env.get_template(r"locale/en/locale.cfg")
             control_template = template_env.get_template("control.lua")
             settings_template = template_env.get_template("settings.lua")
+            settings_final_template = template_env.get_template(r"settings-final-fixes.lua")
     # get data for templates
     locations = [(location, location.item)
                  for location in world.science_locations]
@@ -170,6 +152,7 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
         "all_ingredients": world.modpack.recipe_engine.all_ingredients,
         "want_progressives": world.want_progressives,
         "chunk_shuffle": 0,
+        "mod_settings": world.modpack.mod_settings
     }
 
     for factorio_option, factorio_option_instance in dataclasses.asdict(world.options).items():
@@ -213,11 +196,14 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
                                       control_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings.lua",
                                       settings_template.render(**template_data)))
+    mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings-final-fixes.lua",
+                                      settings_final_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/locale/en/locale.cfg",
                                       locale_template.render(**template_data)))
 
-    info = base_info.copy()
+    info = copy.deepcopy(base_info)
     info["name"] = mod_name
+    info["dependencies"].extend([dep_name for dep_name in world.modpack.mod_settings])
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/info.json",
                                       json.dumps(info, indent=4)))
 

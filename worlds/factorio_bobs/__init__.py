@@ -182,7 +182,7 @@ class FactorioBobs(World):
         elif self.options.additional_logic.value == self.options.additional_logic.option_default:
             self.additional_logic = {complexity:
                                         process_yaml_rule(yaml_rule, self.modpack)
-                                     for complexity, yaml_rule in self.modpack.defaultOptions["additional_logic"].items()}
+                                     for complexity, yaml_rule in self.modpack.default_options["additional_logic"].items()}
         elif self.options.additional_logic.value == self.options.additional_logic.option_custom:
             self.additional_logic = {complexity:
                                         process_yaml_rule(yaml_rule, self.modpack)

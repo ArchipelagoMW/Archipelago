@@ -272,7 +272,7 @@ technologies["rocket-silo"].enabled = false
 technologies["rocket-silo"].visible_when_disabled = false
 {%- endif %}
 
--- tweaks for bob's mods
+-- add all science packs to all labs
 for lab in pairs(data.raw["lab"]) do
     data.raw["lab"][lab].inputs = {{ variable_to_lua(ordered_science_packs) }}
 end
