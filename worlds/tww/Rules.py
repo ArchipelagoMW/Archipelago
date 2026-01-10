@@ -111,8 +111,6 @@ def mix_in_universal_tracker_logic() -> None:
             raise Exception(f"{k} must be present on TWWLogic")
         if not hasattr(CollectionState, k):
             raise Exception(f"{k} must be present on CollectionState")
-        if getattr(CollectionState, k) is not getattr(TWWLogic, k):
-            raise Exception(f"CollectionState.{k} should be TWWLogic.{k}")
         # Replace the normal mixed-in method with the Universal Tracker version.
         setattr(CollectionState, k, v)
 
