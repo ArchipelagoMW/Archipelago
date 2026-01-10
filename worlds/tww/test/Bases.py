@@ -1,5 +1,7 @@
 from test.bases import WorldTestBase
 
+from ..Rules import mix_in_universal_tracker_logic
+
 class WindWakerTestBase(WorldTestBase):
     game = "The Wind Waker"
     glitches_item_name = "Glitched"
@@ -10,4 +12,9 @@ class WindWakerTestBase(WorldTestBase):
 
         Also automatically award the item for convenience sake.
         """
+        # Mix in Universal Tracker logic so glitched item checks work
+        if not getattr(self.__class__, "_ut_logic_mixed_in", False):
+            mix_in_universal_tracker_logic()
+            self.__class__._ut_logic_mixed_in = True
+
         self.collect(self.world.create_item("Glitched"))

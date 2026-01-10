@@ -3,7 +3,7 @@
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
-from BaseClasses import MultiWorld
+from BaseClasses import CollectionState, MultiWorld
 from worlds.AutoWorld import LogicMixin
 from worlds.generic.Rules import set_rule
 
@@ -54,25 +54,63 @@ class TWWLogic(LogicMixin):
         return not self.multiworld.worlds[player].logic_in_required_bosses_mode
 
     def _tww_obscure_1(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_obscure_1 or self.has("Glitched", player, 1)
+        return self.multiworld.worlds[player].logic_obscure_1
 
     def _tww_obscure_2(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_obscure_2 or self.has("Glitched", player, 1)
+        return self.multiworld.worlds[player].logic_obscure_2
 
     def _tww_obscure_3(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_obscure_3 or self.has("Glitched", player, 1)
+        return self.multiworld.worlds[player].logic_obscure_3
 
     def _tww_precise_1(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_precise_1 or self.has("Glitched", player, 1)
+        return self.multiworld.worlds[player].logic_precise_1
 
     def _tww_precise_2(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_precise_2 or self.has("Glitched", player, 1)
+        return self.multiworld.worlds[player].logic_precise_2
 
     def _tww_precise_3(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_precise_3 or self.has("Glitched", player, 1)
+        return self.multiworld.worlds[player].logic_precise_3
 
     def _tww_tuner_logic_enabled(self, player: int) -> bool:
         return self.multiworld.worlds[player].logic_tuner_logic_enabled
+
+def mix_in_universal_tracker_logic() -> None:
+    """
+    Mix in Universal Tracker-specific logic methods that include glitched item checks.
+    This replaces the normal logic difficulty methods with UT versions on the CollectionState class.
+    """
+    def _tww_obscure_1(self, player: int) -> bool:
+        return self.multiworld.worlds[player].logic_obscure_1 or self.has("Glitched", player)
+
+    def _tww_obscure_2(self, player: int) -> bool:
+        return self.multiworld.worlds[player].logic_obscure_2 or self.has("Glitched", player)
+
+    def _tww_obscure_3(self, player: int) -> bool:
+        return self.multiworld.worlds[player].logic_obscure_3 or self.has("Glitched", player)
+
+    def _tww_precise_1(self, player: int) -> bool:
+        return self.multiworld.worlds[player].logic_precise_1 or self.has("Glitched", player)
+
+    def _tww_precise_2(self, player: int) -> bool:
+        return self.multiworld.worlds[player].logic_precise_2 or self.has("Glitched", player)
+
+    def _tww_precise_3(self, player: int) -> bool:
+        return self.multiworld.worlds[player].logic_precise_3 or self.has("Glitched", player)
+
+    mix_in_methods = {k: v for k, v in locals().items() if k.startswith("_tww_")}
+
+    if len(mix_in_methods) != 6:
+        raise Exception(f"Expected 6 mix-in methods to replace, but got {len(mix_in_methods)}")
+
+    for k, v in mix_in_methods.items():
+        if not hasattr(TWWLogic, k):
+            raise Exception(f"{k} must be present on TWWLogic")
+        if not hasattr(CollectionState, k):
+            raise Exception(f"{k} must be present on CollectionState")
+        if getattr(CollectionState, k) is not getattr(TWWLogic, k):
+            raise Exception(f"CollectionState.{k} should be TWWLogic.{k}")
+        # Replace the normal mixed-in method with the Universal Tracker version.
+        setattr(CollectionState, k, v)
 
 
 def set_rules(world: "TWWWorld") -> None:  # noqa: F405

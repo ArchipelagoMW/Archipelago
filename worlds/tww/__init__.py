@@ -17,7 +17,7 @@ from .Items import ISLAND_NUMBER_TO_CHART_NAME, ITEM_TABLE, TWWItem, item_name_g
 from .Locations import LOCATION_TABLE, TWWFlag, TWWLocation
 from .Options import TWWOptions, tww_option_groups
 from .Presets import tww_options_presets
-from .Rules import set_rules
+from .Rules import mix_in_universal_tracker_logic, set_rules
 from .randomizers.Charts import ISLAND_NUMBER_TO_NAME, ChartRandomizer
 from .randomizers.Dungeons import Dungeon, create_dungeons
 from .randomizers.Entrances import ALL_EXITS, BOSS_EXIT_TO_DUNGEON, MINIBOSS_EXIT_TO_DUNGEON, EntranceRandomizer
@@ -497,6 +497,11 @@ class TWWWorld(World):
             # Restore options from slot_data during UT regeneration
             slot_data: dict[str, Any] = re_gen_passthrough[self.game]
             self._restore_options_from_ut_slot_data(slot_data)
+
+            # Mix in Universal Tracker-specific logic that includes glitched item checks
+            if not getattr(self.__class__, "_ut_logic_mixed_in", False):
+                mix_in_universal_tracker_logic()
+                self.__class__._ut_logic_mixed_in = True
 
         # Now continue with normal generation using the restored (or default) options
         options = self.options
