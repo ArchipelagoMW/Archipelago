@@ -20,7 +20,7 @@ class BaseModpack:
         try:
             with open(self.__packPath/"header.json") as header:
                 raw_header = json.load(header)
-                self.packName: str = raw_header["packName"]
+                self.packName: str = raw_header["packName"].lower()
                 self.version: str = raw_header["version"]
                 self.formatVersion: str = raw_header["formatVersion"]
                 self.downloadLocation: str = raw_header["downloadLocation"]
