@@ -499,9 +499,9 @@ class TWWWorld(World):
             self._restore_options_from_ut_slot_data(slot_data)
 
             # Mix in Universal Tracker-specific logic that includes glitched item checks
-            if not getattr(self.__class__, "_ut_logic_mixed_in", False):
+            if not getattr(self.__class__, "_tww_ut_logic_mixed_in", False):
                 mix_in_universal_tracker_logic()
-                self.__class__._ut_logic_mixed_in = True
+                self.__class__._tww_ut_logic_mixed_in = True
 
         # Now continue with normal generation using the restored (or default) options
         options = self.options

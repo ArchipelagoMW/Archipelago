@@ -80,7 +80,7 @@ def mix_in_universal_tracker_logic() -> None:
     This replaces the normal logic difficulty methods with UT versions on the CollectionState class.
     """
     # If already mixed in (CollectionState methods have been replaced), return early
-    if getattr(CollectionState, "_ut_logic_mixed_in", False):
+    if getattr(CollectionState, "_tww_ut_logic_mixed_in", False):
         return
 
     def _tww_obscure_1(self, player: int) -> bool:
@@ -117,7 +117,7 @@ def mix_in_universal_tracker_logic() -> None:
         setattr(CollectionState, k, v)
 
     # Mark that mixing has been completed
-    CollectionState._ut_logic_mixed_in = True
+    CollectionState._tww_ut_logic_mixed_in = True
 
 
 def set_rules(world: "TWWWorld") -> None:  # noqa: F405

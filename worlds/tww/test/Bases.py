@@ -13,8 +13,8 @@ class WindWakerTestBase(WorldTestBase):
         Also automatically award the item for convenience sake.
         """
         # Mix in Universal Tracker logic so glitched item checks work
-        if not getattr(self.__class__, "_ut_logic_mixed_in", False):
+        if not getattr(self.__class__, "_tww_ut_logic_mixed_in", False):
             mix_in_universal_tracker_logic()
-            self.__class__._ut_logic_mixed_in = True
+            self.__class__._tww_ut_logic_mixed_in = True
 
         self.collect(self.world.create_item("Glitched"))

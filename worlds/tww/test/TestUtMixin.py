@@ -21,7 +21,7 @@ class TestUniversalTrackerMixin(unittest.TestCase):
     def test_mix_in_logic_replaces_methods(self) -> None:
         """Verify that the mix-in function replaces methods on CollectionState."""
         # Reset the idempotent flag to ensure the mix-in runs
-        CollectionState._ut_logic_mixed_in = False
+        CollectionState._tww_ut_logic_mixed_in = False
 
         # Store original methods (which should be from TWWLogic at this point)
         original_obscure_1 = CollectionState._tww_obscure_1
