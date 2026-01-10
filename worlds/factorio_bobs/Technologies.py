@@ -35,7 +35,7 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
 
     def useful(self) -> bool:
         if self.name in self.modpack.force_useless_technologies:
-            return self.modpack.override_useless_technologies[self.name]
+            return self.modpack.force_useless_technologies[self.name]
         return self.has_modifier or self.unlocks
 
 

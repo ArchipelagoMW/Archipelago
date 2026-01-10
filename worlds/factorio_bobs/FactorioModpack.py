@@ -190,7 +190,7 @@ class FactorioModpack(BaseModpack):
     @cached_property
     def force_useless_technologies(self) -> dict[str, bool]:
         try:
-            with self.open_file("techOverride.json") as file:
+            with self.open_file("techsOverride.json") as file:
                 override_raw = json.load(file)
         except FileNotFoundError:
             return {}
