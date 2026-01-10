@@ -2,11 +2,11 @@ import os
 import zipfile
 from base64 import b64encode
 from collections.abc import Mapping
-from typing import Any, ClassVar, NamedTuple
+from typing import Any, ClassVar
 
 import yaml
 
-from BaseClasses import CollectionState, Item, ItemClassification as IC, MultiWorld, Region, Tutorial
+from BaseClasses import Item, ItemClassification as IC, MultiWorld, Region, Tutorial
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
 from worlds.Files import APPlayerContainer
@@ -18,17 +18,12 @@ from .Locations import LOCATION_TABLE, TWWFlag, TWWLocation
 from .Options import TWWOptions, tww_option_groups
 from .Presets import tww_options_presets
 from .Rules import mix_in_universal_tracker_logic, set_rules
+from .Tracker import DatastorageParsed, parse_datastorage_key, should_defer_entrances
 from .randomizers.Charts import ISLAND_NUMBER_TO_NAME, ChartRandomizer
 from .randomizers.Dungeons import Dungeon, create_dungeons
 from .randomizers.Entrances import ALL_EXITS, BOSS_EXIT_TO_DUNGEON, MINIBOSS_EXIT_TO_DUNGEON, EntranceRandomizer
 from .randomizers.ItemPool import generate_itempool
 from .randomizers.RequiredBosses import RequiredBossesRandomizer
-
-class DatastorageParsed(NamedTuple):
-    """Parsed datastorage key for deferred entrance tracking."""
-    team: int
-    player: int
-    stage_name: str
 
 
 VERSION: tuple[int, int, int] = (3, 0, 0)
@@ -922,17 +917,7 @@ class TWWWorld(World):
         :param key: The datastorage key to parse.
         :return: DatastorageParsed with team, player, stage_name, or None if invalid.
         """
-        parts = key.split("_")
-        min_parts = 4
-        if len(parts) < min_parts or parts[0] != "tww":
-            return None
-        try:
-            team = int(parts[1])
-            player = int(parts[2])
-            stage_name = "_".join(parts[3:])
-            return DatastorageParsed(team=team, player=player, stage_name=stage_name)
-        except (ValueError, IndexError):
-            return None
+        return parse_datastorage_key(key)
 
     def connect_entrances(self) -> None:
         """
@@ -950,21 +935,8 @@ class TWWWorld(World):
 
         :return: True if entrances should be deferred, False otherwise.
         """
-        # Only defer entrances during UT regeneration
-        if not hasattr(self.multiworld, "generation_is_fake"):
-            return False
-
-        # Check if server has deferred connections enabled
-        deferred_enabled = getattr(
-            self.multiworld,
-            "enforce_deferred_connections",
-            None
-        ) in ("on", "default")
-
-        # Only defer if entrances are actually randomized
         has_randomized_entrances = bool(self.entrances.done_entrances_to_exits)
-
-        return deferred_enabled and has_randomized_entrances
+        return should_defer_entrances(self.multiworld, has_randomized_entrances)
 
     def _disconnect_entrances(self) -> None:
         """
