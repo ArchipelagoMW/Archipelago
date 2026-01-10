@@ -46,7 +46,7 @@ class CustomTechnology(Technology):
     def __init__(self, origin: Technology, world, allowed_packs: Set[str], player: int):
         ingredients = allowed_packs
         self.player = player
-        if origin.name not in world.multiworld.forced_locations.keys():
+        if origin.name not in origin.modpack.forced_locations.keys():
             ingredients = set(world.random.sample(list(ingredients), world.random.randint(1, len(ingredients))))
         self.ingredients = ingredients
         super(CustomTechnology, self).__init__(origin.name, origin.modpack)
