@@ -111,6 +111,16 @@ class FactorioModpack(BaseModpack):
 
         self.__technology_table.update(self.__progressive_technology_table)
 
+    def __load_world_settings(self):
+        with self.open_file("world_settings.json") as file:
+            raw_settings = json.load(file)
+        self.__forced_locations: dict[str, int] = {}
+        if raw_settings["forced_locations"]:
+            for index, location in enumerate(raw_settings["forced_locations"]["start"], start=0):
+                self.__forced_locations[location] = index
+            for index, location in enumerate(raw_settings["forced_locations"]["end"], start=1):
+                self.__forced_locations[location] = -index
+
     @property
     def required_technologies(self) -> dict[str, FrozenSet[Technology]]:
         if self.__required_technologies is None:
@@ -214,3 +224,9 @@ class FactorioModpack(BaseModpack):
         with self.open_file("modSettings.json") as file:
             mod_settings_raw = json.load(file)
         return mod_settings_raw
+
+    @property
+    def forced_locations(self):
+        if self.__forced_locations is None:
+            self.__load_world_settings()
+        return self.__forced_locations

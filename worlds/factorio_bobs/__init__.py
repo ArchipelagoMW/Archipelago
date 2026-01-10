@@ -23,6 +23,8 @@ from .Shapes import get_shapes
 from .FactorioSettings import FactorioSettings
 from .Technologies import Technology
 
+modpacks: dict[str, FactorioModpack]
+
 def launch_client(*args: str):
     from .Client import launch
     launch_component(launch, name="Factorio Bob's Client", args=args)
@@ -61,7 +63,6 @@ class FactorioBobs(World):
     logger: logging.Logger
 
     game = "Factorio Bob's"
-    special_nodes = {"automation", "electronics", "rocket-silo"}
     location_pool: list[FactorioScienceLocation]
 
     item_name_to_id = get_items()
@@ -279,9 +280,7 @@ class FactorioBobs(World):
                                                           f"{trap_name.lower().replace(' ', '_')}_traps")))
 
         cost_sorted_locations = sorted(self.science_locations, key=lambda location: (location.complexity, location.rel_cost))
-        special_index = {"automation": 0,
-                         "electronics": 1,
-                         "rocket-silo": -1}
+        special_index = self.modpack.forced_locations
         loc: FactorioScienceLocation
         if self.options.tech_tree_information == TechTreeInformation.option_full:
             # mark all locations as pre-hinted
