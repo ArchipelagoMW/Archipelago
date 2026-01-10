@@ -24,6 +24,8 @@ class FactorioModpack(BaseModpack):
 
         self.__recipe_engine: RecipeEngine | None = None
 
+        self.__forced_locations: dict[str, int] | None = None
+
         self.location_pools: list[list[str]] | None = None
 
     def _init_pack(self):
@@ -112,7 +114,7 @@ class FactorioModpack(BaseModpack):
         self.__technology_table.update(self.__progressive_technology_table)
 
     def __load_world_settings(self):
-        with self.open_file("world_settings.json") as file:
+        with self.open_file("worldSettings.json") as file:
             raw_settings = json.load(file)
         self.__forced_locations: dict[str, int] = {}
         if raw_settings["forced_locations"]:
