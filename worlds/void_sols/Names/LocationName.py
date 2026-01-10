@@ -125,7 +125,6 @@ factory_torch_catwalk_operations_a = FACTORY_PREFIX + "Catwalk Operations A Torc
 factory_torch_catwalk_operations_b = FACTORY_PREFIX + "Catwalk Operations B Torch"
 factory_torch_central_biolab = FACTORY_PREFIX + "Central Biolab Torch"
 factory_torch_eastern_gate = FACTORY_PREFIX + "Eastern Gate Torch"
-factory_torch_generator_room = FACTORY_PREFIX + "Generator Room Torch"
 factory_torch_loading_bay = FACTORY_PREFIX + "Loading Bay Torch"
 swamp_torch_abandoned_huts = SWAMP_PREFIX + "Abandoned Huts Torch"
 swamp_torch_desecrated_valley = SWAMP_PREFIX + "Desecrated Valley Torch"
