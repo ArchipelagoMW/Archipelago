@@ -18,6 +18,7 @@ from .Items import AP_ITEM_OFFSET, REVERSE_ITEM_DICTIONARY
 from .Locations import AP_LOCATION_OFFSET, PSYCHOSEED_LOCATION_IDS
 from .PsychoSeed import gen_psy_ids, PSY_NON_LOCAL_ID_START
 from .PsychoRandoItems import PSYCHORANDO_ITEM_LOOKUP, PSYCHORANDO_BASE_ITEM_IDS
+from .WorldVersion import AP_WORLD_VERSION_FOR_RANDOSEED
 
 logger = logging.getLogger("Client")
 
@@ -33,6 +34,18 @@ from CommonClient import (
     CommonContext,
     server_loop
 )
+
+# Load Universal Tracker modules with aliases
+tracker_loaded: bool = False
+try:
+    from worlds.tracker.TrackerClient import (TrackerCommandProcessor as ClientCommandProcessor,
+                                              TrackerGameContext as CommonContext, UT_VERSION)
+
+    tracker_loaded = True
+except ImportError:
+    from CommonClient import ClientCommandProcessor, CommonContext
+
+    print("ERROR: Universal Tracker is not loaded")
 
 # Included when sending items to Psychonauts specify whether the item is from a local or non-local source.
 LOCAL_ITEM_IDENTIFIER = 0
@@ -139,6 +152,16 @@ class PsychonautsContext(CommonContext):
         # save our root_directory for later use
         self.moddata_folder = find_moddata_folder(root_directory)
 
+    def make_gui(self):
+        ui = super().make_gui()
+        ui.base_title = f"Psychonauts Client v{AP_WORLD_VERSION_FOR_RANDOSEED}"
+        if tracker_loaded:
+            ui.base_title += f" | Universal Tracker {UT_VERSION}"
+
+        # AP version is added behind this automatically
+        ui.base_title += " | Archipelago"
+        return ui
+    
     def reset_server_state(self):
         super().reset_server_state()
         # Disconnecting and reconnecting aside, the client could instead get connected to a different server to before,
@@ -292,6 +315,7 @@ class PsychonautsContext(CommonContext):
                     shutil.rmtree(os.path.join(root, directory))
 
     def on_package(self, cmd: str, args: dict):
+        super().on_package(cmd, args)
         if cmd == "Connected":
             # self.game_communication_path: files go in this path to pass data between us and the actual game
             seed_folder = f"AP-{self.seed_name}-P{self.slot}"
@@ -347,19 +371,6 @@ class PsychonautsContext(CommonContext):
                         for index, network_item in self.pending_received_items:
                             self.receive_item(index, network_item)
                         self.pending_received_items.clear()
-
-    def run_gui(self):
-        """Import kivy UI system and start running it as self.ui_task."""
-        from kvui import GameManager
-
-        class PsychonautsManager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
-            base_title = "Archipelago Psychonauts Client"
-
-        self.ui = PsychonautsManager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     def on_deathlink(self, data: Dict[str, Any]):
         self.got_deathlink = True
@@ -512,6 +523,14 @@ def launch():
     async def main(args: Namespace):
         ctx = PsychonautsContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+
+        # Runs Universal Tracker's internal generator
+        if tracker_loaded:
+            ctx.run_generator()
+            ctx.tags.remove("Tracker")
+        else:
+            logger.warning("Could not find Universal Tracker.")
+
         if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()

@@ -92,7 +92,8 @@ class PSYWorld(World):
 
     skip_balancing_if_duplicate: Set[str]
 
-    ut_can_gen_without_yaml = True
+    using_ut: bool  # so we can check if we're using UT only once
+    ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -132,6 +133,7 @@ class PSYWorld(World):
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "Psychonauts" in self.multiworld.re_gen_passthrough:
+                self.using_ut = True
                 passthrough = self.multiworld.re_gen_passthrough["Psychonauts"]
 
                 self.options.Goal.value = passthrough["Goal"]
@@ -143,7 +145,10 @@ class PSYWorld(World):
                 self.options.MentalCobwebShuffle.value = passthrough["MentalCobwebShuffle"]
                 self.options.ProgressiveBaggage.value = passthrough["ProgressiveBaggage"]
                 self.options.MaximumProgressiveBaggage.value = passthrough["MaximumProgressiveBaggage"]
-
+            else: 
+                self.using_ut = False
+        else:
+            self.using_ut = False
 
     # For the universal tracker, doesn't get called in standard gen
     # Returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
