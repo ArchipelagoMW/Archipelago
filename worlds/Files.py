@@ -288,6 +288,22 @@ class APAutoPatchInterface(APPatch, abc.ABC, metaclass=AutoPatchRegister):
     def patch(self, target: str) -> None:
         """ create the output file with the file name `target` """
 
+    def verify_version(self) -> None:
+        """
+        Verify compatibility between a game's currently installed
+        world version and the version used for generation.
+        Warns the user or raises an IncompatiblePatchError if the versions are too different.
+        """
+        from Utils import messagebox
+        from .AutoWorld import AutoWorldRegister
+        game_version = AutoWorldRegister.world_types[self.game].world_version if self.game else None
+        if game_version and self.world_version and game_version != self.world_version:
+            info_msg = "This patch was generated with " \
+                       f"{self.game} version {self.world_version.as_simple_string()}, " \
+                       f"but its currently installed version is {game_version.as_simple_string()}. " \
+                       "You may encounter errors while patching or connecting."
+            messagebox("APWorld version mismatch", info_msg, False)
+
 
 class APProcedurePatch(APAutoPatchInterface):
     """

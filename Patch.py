@@ -9,8 +9,6 @@ if __name__ == "__main__":
     ModuleUpdate.update()
 
 from worlds.Files import AutoPatchRegister, APAutoPatchInterface
-from worlds.AutoWorld import AutoWorldRegister
-from Utils import messagebox
 
 
 class RomMeta(TypedDict):
@@ -19,18 +17,20 @@ class RomMeta(TypedDict):
     player_name: str
 
 
+class IncompatiblePatchError(Exception):
+    """
+    Used to report a version mismatch between a patch's world version and
+    a user's installed world version that is too important to be compatible
+    """
+    pass
+
+
 def create_rom_file(patch_file: str) -> Tuple[RomMeta, str]:
     auto_handler = AutoPatchRegister.get_handler(patch_file)
     if auto_handler:
         handler: APAutoPatchInterface = auto_handler(patch_file)
         handler.read()
-        game_version = AutoWorldRegister.world_types[handler.game].world_version if handler.game else None
-        if game_version and handler.world_version and game_version != handler.world_version:
-            info_msg = "This patch was generated with " \
-                       f"{handler.game} version {handler.world_version.as_simple_string()}, " \
-                       f"but its currently installed version is {game_version.as_simple_string()}. " \
-                       "You may encounter errors while patching or connecting."
-            messagebox("APWorld version mismatch", info_msg, False)
+        handler.verify_version()
         target = os.path.splitext(patch_file)[0]+handler.result_file_ending
         handler.patch(target)
         return {"server": handler.server,
