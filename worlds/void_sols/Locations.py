@@ -119,7 +119,6 @@ torches_table = {
     LocationName.factory_torch_eastern_gate: 1179,
     LocationName.factory_torch_generator_room: 1180,
     LocationName.factory_torch_loading_bay: 1181,
-    LocationName.factory_torch_specimen_containment: 1182,
     LocationName.swamp_torch_abandoned_huts: 1183,
     LocationName.swamp_torch_desecrated_valley: 1184,
     LocationName.swamp_torch_market_square: 1185,
