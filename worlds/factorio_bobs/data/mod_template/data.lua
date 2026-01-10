@@ -38,7 +38,7 @@ energy_bridge_recipe.enabled = {% if energy_link %}true{% else %}false{% endif %
 energy_bridge_recipe.localised_name = "Archipelago EnergyLink Bridge"
 data.raw["recipe"]["ap-energy-bridge"] = energy_bridge_recipe
 
-data.raw["map-gen-presets"].default["archipelago"] = {{ dict_to_lua({"default": False, "order": "a", "basic_settings": world_gen["basic"], "advanced_settings": world_gen["advanced"]}) }}
+data.raw["map-gen-presets"].default["archipelago"] = {{ dict_to_lua({"default": False, "order": "a", "basic_settings": world_gen_settings["basic"], "advanced_settings": world_gen_settings["advanced"]}) }}
 if mods["science-not-invited"] then
     local weights = {
         ["automation-science-pack"] =   0, -- Red science

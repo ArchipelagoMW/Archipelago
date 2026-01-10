@@ -347,11 +347,22 @@ class InventorySpillTrapCount(TrapCount):
     """Trap items that when received trigger dropping your main inventory and trash inventory onto the ground."""
     display_name = "Inventory Spill Traps"
 
+class WorldGen(Choice):
+    """World gen settings for the factorio world
+    If you use custom, you must define the logic in custom_world_generation
+    World Generation settings. Overview of options at https://wiki.factorio.com/Map_generator,
+    with in-depth documentation at https://lua-api.factorio.com/latest/concepts/MapGenSettings.html
+    An example for this can be found: https://discord.com/channels/731205301247803413/1426234278462750860/1459637472496586905"""
+    display_name = "World Generation"
+    default = 0
 
-class FactorioWorldGen(OptionDict):
+    option_custom = -1
+    option_default = 0
+
+class CustomWorldGen(OptionDict):
     """World Generation settings. Overview of options at https://wiki.factorio.com/Map_generator,
     with in-depth documentation at https://lua-api.factorio.com/latest/concepts/MapGenSettings.html"""
-    display_name = "World Generation"
+    display_name = "Custom World Generation"
     # FIXME: do we want default be a rando-optimized default or in-game DS?
     value: dict[str, dict[str, typing.Any]]
     default = {
@@ -478,6 +489,8 @@ class FactorioWorldGen(OptionDict):
         }
     })
 
+    visibility = Visibility.spoiler
+
     def __init__(self, value: dict[str, typing.Any]):
         advanced = {"pollution", "enemy_evolution", "enemy_expansion"}
         self.value = {
@@ -497,7 +510,7 @@ class FactorioWorldGen(OptionDict):
         optional_min_lte_max(enemy_expansion, "min_expansion_cooldown", "max_expansion_cooldown")
 
     @classmethod
-    def from_any(cls, data: dict[str, typing.Any]) -> FactorioWorldGen:
+    def from_any(cls, data: dict[str, typing.Any]) -> CustomWorldGen:
         if type(data) == dict:
             return cls(data)
         else:
@@ -523,8 +536,6 @@ class AdditionalLogic(Choice):
     option_custom = -1
     option_none = 0
     option_default = 1
-
-test = {}
 
 class CustomAdditionalLogic(OptionDict):
     """Custom logic: hidden
@@ -561,7 +572,8 @@ class FactorioOptions(PackOptions):
     recipe_ingredients: RecipeIngredients
     recipe_ingredients_offset: RecipeIngredientsOffset
     imported_blueprints: ImportedBlueprint
-    world_gen: FactorioWorldGen
+    world_gen: WorldGen
+    custom_world_gen: CustomWorldGen
     progressive: Progressive
     teleport_traps: TeleportTrapCount
     grenade_traps: GrenadeTrapCount

@@ -226,7 +226,75 @@ class FactorioModpack(BaseModpack):
         return mod_settings_raw
 
     @property
-    def forced_locations(self):
+    def forced_locations(self) -> dict[str, int]:
         if self.__forced_locations is None:
             self.__load_world_settings()
         return self.__forced_locations
+
+    @cached_property
+    def world_gen(self):
+        world_gen: dict[str, None|int|dict] = {"autoplace_controls": {},
+            "seed": None,
+        "starting_area": 1,
+        "peaceful_mode": False,
+        "no_enemies_mode": False,
+        "cliff_settings": {
+            "name": "cliff",
+            "cliff_elevation_0": 10,
+            "cliff_elevation_interval": 40,
+            "richness": 1
+        },
+        "property_expression_names": {
+            "control-setting:moisture:bias": 0,
+            "control-setting:moisture:frequency:multiplier": 1,
+            "control-setting:aux:bias": 0,
+            "control-setting:aux:frequency:multiplier": 1
+        },
+        "pollution": {
+            "enabled": True,
+            "diffusion_ratio": 0.02,
+            "ageing": 1,
+            "enemy_attack_pollution_consumption_modifier": 1,
+            "min_pollution_to_damage_trees": 60,
+            "pollution_restored_per_tree_damage": 10
+        },
+        "enemy_evolution": {
+            "enabled": True,
+            "time_factor": 40.0e-7,
+            "destroy_factor": 200.0e-5,
+            "pollution_factor": 9.0e-7
+        },
+        "enemy_expansion": {
+            "enabled": True,
+            "max_expansion_distance": 7,
+            "settler_group_min_size": 5,
+            "settler_group_max_size": 20,
+            "min_expansion_cooldown": 14400,
+            "max_expansion_cooldown": 216000
+        }}
+        with self.open_file("autoplace.json") as file:
+            autoplace_raw = json.load(file)
+
+        for name, settings in autoplace_raw.items():
+            if settings["category"] == "resource":
+                world_gen["autoplace_controls"][name] = {"frequency": 1, "size": 3, "richness": 6}
+            else:
+                world_gen["autoplace_controls"][name] = {"frequency": 1, "size": 1, "richness": 1}
+
+        advanced = {"pollution", "enemy_evolution", "enemy_expansion"}
+        value = {
+            "basic": {k: v for k, v in world_gen.items() if k not in advanced},
+            "advanced": {k: v for k, v in world_gen.items() if k in advanced}
+        }
+
+        # verify min_values <= max_values
+        def optional_min_lte_max(container, min_key, max_key):
+            min_val = container.get(min_key, None)
+            max_val = container.get(max_key, None)
+            if min_val is not None and max_val is not None and min_val > max_val:
+                raise ValueError(f"{min_key} can't be bigger than {max_key}")
+
+        enemy_expansion = value["advanced"].get("enemy_expansion", {})
+        optional_min_lte_max(enemy_expansion, "settler_group_min_size", "settler_group_max_size")
+        optional_min_lte_max(enemy_expansion, "min_expansion_cooldown", "max_expansion_cooldown")
+        return value

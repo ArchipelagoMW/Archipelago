@@ -124,6 +124,16 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
                 return base - (base - low) * distance
         return random.uniform(low, high)
 
+    if world.options.world_gen.value == world.options.world_gen.option_default:
+        world_gen_settings = world.modpack.world_gen
+    else:
+        world_gen_settings = world.options.custom_world_gen.value
+
+    map_basic_settings = world_gen_settings["basic"]
+    if map_basic_settings.get("seed", None) is None:  # allow seed 0
+        # 32 bit uint
+        map_basic_settings["seed"] = world.random.randint(0, 2 ** 32 - 1)
+
     template_data = {
         "locations": locations,
         "player_names": multiworld.player_name,
@@ -152,7 +162,8 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
         "all_ingredients": world.modpack.recipe_engine.all_ingredients,
         "want_progressives": world.want_progressives,
         "chunk_shuffle": 0,
-        "mod_settings": world.modpack.mod_settings
+        "mod_settings": world.modpack.mod_settings,
+        "world_gen_settings": world_gen_settings
     }
 
     for factorio_option, factorio_option_instance in dataclasses.asdict(world.options).items():

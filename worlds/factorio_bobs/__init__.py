@@ -366,11 +366,6 @@ class FactorioBobs(World):
             else self.modpack.recipe_engine.all_ingredients[name]
 
     def generate_basic(self):
-        map_basic_settings = self.options.world_gen.value["basic"]
-        if map_basic_settings.get("seed", None) is None:  # allow seed 0
-            # 32 bit uint
-            map_basic_settings["seed"] = self.random.randint(0, 2 ** 32 - 1)
-
         start_location_hints: typing.Set[str] = self.options.start_location_hints.value
 
         for loc in self.science_locations:
