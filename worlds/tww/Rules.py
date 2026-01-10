@@ -79,6 +79,10 @@ def mix_in_universal_tracker_logic() -> None:
     Mix in Universal Tracker-specific logic methods that include glitched item checks.
     This replaces the normal logic difficulty methods with UT versions on the CollectionState class.
     """
+    # If already mixed in (CollectionState methods have been replaced), return early
+    if getattr(CollectionState, "_ut_logic_mixed_in", False):
+        return
+
     def _tww_obscure_1(self, player: int) -> bool:
         return self.multiworld.worlds[player].logic_obscure_1 or self.has("Glitched", player)
 
@@ -111,6 +115,9 @@ def mix_in_universal_tracker_logic() -> None:
             raise Exception(f"CollectionState.{k} should be TWWLogic.{k}")
         # Replace the normal mixed-in method with the Universal Tracker version.
         setattr(CollectionState, k, v)
+
+    # Mark that mixing has been completed
+    CollectionState._ut_logic_mixed_in = True
 
 
 def set_rules(world: "TWWWorld") -> None:  # noqa: F405
