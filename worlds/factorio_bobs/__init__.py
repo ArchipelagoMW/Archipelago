@@ -131,7 +131,7 @@ class FactorioBobs(World):
     ut_can_gen_without_yaml = True
 
     def generate_early(self) -> None:
-        modpack_name = self.options.packname.value
+        modpack_name = self.options.packname.current_key
         if modpack_name not in modpacks:
             raise Exception(f"Modpack name '{modpack_name}' not found.")
         self.modpack = modpacks[modpack_name]
