@@ -166,13 +166,10 @@ def set_rules(world: World):
         LocationName.forest_trader_item_silver_pouch: 3,
     }
 
-    for loc, cost in trader_items_costs.items():
-        # Note: fish_tokens_x2 gives 2 tokens. We need to check if player has enough tokens.
-        # Since the item is "Fish Tokens x2", state.count(ItemName.fish_tokens_x2, player) returns the number of items,
-        # so total tokens = count * 2.
+    for loc in trader_items_costs:
         try:
             set_rule(world.multiworld.get_location(loc, player),
-                     lambda state, c=cost: can_light_fire(state, player) and (state.count(ItemName.fish_tokens_x2, player) * 2) >= c)
+                     lambda state: can_light_fire(state, player) and state.has(ItemName.fish_tokens_x2, player, 9))
         except KeyError:
             pass
 
