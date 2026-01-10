@@ -8,7 +8,6 @@ SLOT_NAME = "{{ slot_name }}"
 SEED_NAME = "{{ seed_name }}"
 FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
 TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
-MAX_SCIENCE_PACK = {{ max_science_pack }}
 GOAL = {{ goal }}
 ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
 ARCHIPELAGO_ENERGY_LINK_SETTING = "archipelago-energy-link-{{ slot_player }}-{{ seed_name }}"
