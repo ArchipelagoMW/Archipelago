@@ -949,8 +949,7 @@ class Rac3Interface(GameInterface):
         """Detects if the game is currently being reloaded, and updates death data"""
         if self.is_reloading and not self.reloading_handled and not self.self_respawning:
             self.last_death_state = self.action
-            if self._read32(RAC3STATUS.VEHICLE_POINTER + 4) != 0:
-                self.died_in_vehicle = True
+            self.died_in_vehicle = bool(self._read8(RAC3STATUS.IN_VEHICLE))
             self.reloading_handled = True
             logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state},'
                          f' death count: {self.last_death_count}')
