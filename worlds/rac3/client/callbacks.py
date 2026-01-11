@@ -158,7 +158,7 @@ async def handle_respawn(ctx: 'Context', skip_inputs: bool = False) -> bool:
     return False
 
 async def handle_sequence_break(ctx: 'Context') -> None:
-    """Handles sequence breaks"""
+    """Undos the flags for infobot locations when sequence breaking if you havent checked the corresponding location yet"""
     if ctx.slot_data is None:
         return
 
