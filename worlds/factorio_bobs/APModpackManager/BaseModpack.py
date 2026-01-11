@@ -2,6 +2,7 @@ import json
 import logging
 from io import TextIOWrapper
 from pathlib import Path
+from zipfile import ZipFile, Path as ZipPath
 
 from .ItemLocations import add_item, add_location
 from .PackLoader import init_modpacks
@@ -14,11 +15,17 @@ class BaseModpack:
     relative paths should be relative to ap root but should not be within an ap world
     """
 
-    def __init__(self, packPath: Path):
+    def __init__(self, packPath: Path, is_zip=False):
         self.__packPath = packPath
-        self.__is_zip = False
+        if is_zip:
+            self.__zip = ZipFile(packPath)
+            self.__root: Path | ZipPath = ZipPath(self._zip)
+        else:
+            self.__zip = None
+            self.__root: Path | ZipPath = packPath
+
         try:
-            with open(self.__packPath/"header.json") as header:
+            with self.open_file("header.json") as header:
                 raw_header = json.load(header)
                 self.packName: str = raw_header["packName"].lower()
                 self.version: str = raw_header["version"]
@@ -66,7 +73,9 @@ class BaseModpack:
             pass
         ```
         """
-        return open(self.__packPath/relative_path, "r")
+        path = self.__root / relative_path
+
+        return path.open("r")
 
     def init_items(self):
         """

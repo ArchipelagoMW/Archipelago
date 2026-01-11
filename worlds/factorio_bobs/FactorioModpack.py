@@ -11,9 +11,8 @@ from .APModpackManager import BaseModpack
 MAX_LOCATIONS_PER_SCIENCE_PACK = 999
 
 class FactorioModpack(BaseModpack):
-
-    def __init__(self, packPath: Path):
-        super().__init__(packPath)
+    def __init__(self, packPath: Path, is_zip=False):
+        super().__init__(packPath, is_zip=is_zip)
 
         self.__technology_table: dict[str, Technology] | None = None
         self.__base_technology_table: dict[str, Technology] | None = None
