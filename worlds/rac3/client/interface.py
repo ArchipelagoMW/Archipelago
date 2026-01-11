@@ -927,6 +927,8 @@ class Rac3Interface(GameInterface):
             target_health = 5.0
             if self.planet == RAC3REGION.TYHRRANOSIS_RANGERS or self.planet == RAC3REGION.MARCADIA:
                 target_health = 1.0  # For some reason these vehicles have 100 max health instead of 500
+            elif self.planet == RAC3REGION.TYHRRANOSIS:
+                target_health = 0.6 # For some reason the turboslider on Tyhrranosis has 60 max health
             if self._read_float(health_addr) > target_health:
                 # This displays as 1 HP in-game for vehicles with 500 max health
                 self._write_float(health_addr, target_health)
@@ -957,11 +959,11 @@ class Rac3Interface(GameInterface):
             self.has_died = self.death_count > self.last_death_count
             self.last_death_count = self.death_count
             self.reloading_handled = False
-            self.died_in_vehicle = False
             logger.debug(f'{self.player_type} has Respawned, death count: {self.death_count}, has died?'
                          f' {self.has_died}')
         else:
             self.has_died = False
+            self.died_in_vehicle = False
 
     def pause_check(self):
         if self.planet not in RAC3_REGION_DATA_TABLE.keys():
