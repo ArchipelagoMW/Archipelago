@@ -43,7 +43,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 2: Laser Stairs Completion": Portal2LocationData("sp_a2_laser_stairs", LocationType.MAP_COMPLETION, [ portal_gun_2, reflection_cube, floor_button, laser, laser_catcher]),
     "Chapter 2: Dual Lasers Completion": Portal2LocationData("sp_a2_dual_lasers", LocationType.MAP_COMPLETION, [ portal_gun_2, reflection_cube, laser, laser_catcher]),
     "Chapter 2: Laser Over Goo Completion": Portal2LocationData("sp_a2_laser_over_goo", LocationType.MAP_COMPLETION, [button, weighted_cube,  portal_gun_2, laser, laser_catcher]),
-    "Chapter 2: Catapult Intro Completion": Portal2LocationData("sp_a2_catapult_intro", LocationType.MAP_COMPLETION, [ portal_gun_2, faith_plate, button, weighted_cube]),
+    "Chapter 2: Catapult Intro Completion": Portal2LocationData("sp_a2_catapult_intro", LocationType.MAP_COMPLETION, [faith_plate, button, weighted_cube, floor_button]),
     "Chapter 2: Trust Fling Completion": Portal2LocationData("sp_a2_trust_fling", LocationType.MAP_COMPLETION, [ portal_gun_2, faith_plate, button, weighted_cube, floor_button]),
     "Chapter 2: Pit Flings Completion": Portal2LocationData("sp_a2_pit_flings", LocationType.MAP_COMPLETION, [ portal_gun_2, weighted_cube, laser, laser_catcher, floor_button]),
     "Chapter 2: Fizzler Intro Completion": Portal2LocationData("sp_a2_fizzler_intro", LocationType.MAP_COMPLETION, [ portal_gun_2, laser, reflection_cube, laser_catcher]),
@@ -55,7 +55,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 3: Turret Intro Completion": Portal2LocationData("sp_a2_turret_intro", LocationType.MAP_COMPLETION, [turrets, weighted_cube, floor_button]),
     "Chapter 3: Laser Relays Completion": Portal2LocationData("sp_a2_laser_relays", LocationType.MAP_COMPLETION, [ portal_gun_2, laser, reflection_cube, laser_relays]),
     "Chapter 3: Turret Blocker Completion": Portal2LocationData("sp_a2_turret_blocker", LocationType.MAP_COMPLETION, [ portal_gun_2, bridge, turrets, faith_plate, button, weighted_cube]),
-    "Chapter 3: Laser Vs. Turret Completion": Portal2LocationData("sp_a2_laser_vs_turret", LocationType.MAP_COMPLETION, [ portal_gun_2, turrets, laser, laser_catcher, weighted_cube, reflection_cube]),
+    "Chapter 3: Laser Vs. Turret Completion": Portal2LocationData("sp_a2_laser_vs_turret", LocationType.MAP_COMPLETION, [ portal_gun_2, turrets, laser, laser_catcher, weighted_cube, reflection_cube, floor_button]),
     "Chapter 3: Pull The Rug Completion": Portal2LocationData("sp_a2_pull_the_rug", LocationType.MAP_COMPLETION, [ portal_gun_2, bridge, weighted_cube, floor_button, laser, laser_catcher]),
     # Chapter 4
     "Chapter 4: Column Blocker Completion": Portal2LocationData("sp_a2_column_blocker", LocationType.MAP_COMPLETION, [ portal_gun_2, bridge, laser, laser_catcher, laser_relays, button, reflection_cube, turrets, faith_plate]),
@@ -73,7 +73,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 6: Cave Johnson Completion": Portal2LocationData("sp_a3_03", LocationType.MAP_COMPLETION, [ portal_gun_2]),
     "Chapter 6: Repulsion Intro Completion": Portal2LocationData("sp_a3_jump_intro", LocationType.MAP_COMPLETION, [ portal_gun_2, paint, old_button, old_button, antique_cube]),
     "Chapter 6: Bomb Flings Completion": Portal2LocationData("sp_a3_bomb_flings", LocationType.MAP_COMPLETION, [ portal_gun_2, old_button, paint]),
-    "Chapter 6: Crazy Box Completion": Portal2LocationData("sp_a3_crazy_box", LocationType.MAP_COMPLETION, [ portal_gun_2, old_button, paint, old_button, paint, antique_cube, old_floor_button]),
+    "Chapter 6: Crazy Box Completion": Portal2LocationData("sp_a3_crazy_box", LocationType.MAP_COMPLETION, [ portal_gun_2, old_button, paint, antique_cube, old_floor_button]),
     "Chapter 6: PotatOS Completion": Portal2LocationData("sp_a3_transition01", LocationType.MAP_COMPLETION, [ portal_gun_2, potatos]),
     # Chapter 7
     "Chapter 7: Propulsion Intro Completion": Portal2LocationData("sp_a3_speed_ramp", LocationType.MAP_COMPLETION, [ portal_gun_2, paint, antique_cube, old_floor_button, old_button]),

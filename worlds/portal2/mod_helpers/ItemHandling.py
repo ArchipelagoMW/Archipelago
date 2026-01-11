@@ -70,3 +70,5 @@ def handle_trap(trap_name: str) -> str:
         return "script ButterFingersTrap()\n"
     elif trap_name == cube_confetti_trap:
         return "script CubeConfettiTrap()\n"
+    elif trap_name == slippery_floor_trap:
+        return "script SlipperyFloorTrap()\n"

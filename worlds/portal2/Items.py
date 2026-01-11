@@ -40,7 +40,7 @@ game_item_table: dict[str, Portal2ItemData] = {
     # Cubes (GetModelName())
     weighted_cube: Portal2ItemData("prop_weighted_cube", "models/props/metal_box.mdl", ItemTag.DELETE | ItemTag.CUBE, ItemClassification.progression),
     reflection_cube: Portal2ItemData("prop_weighted_cube", "models/props/reflection_cube.mdl", ItemTag.DELETE | ItemTag.CUBE, ItemClassification.progression),
-    spherical_cube: Portal2ItemData("prop_weighted_cube", "models/props_gameplay/mp_ball.mdl", ItemTag.DELETE | ItemTag.CUBE, ItemClassification.progression),
+    spherical_cube: Portal2ItemData("prop_weighted_cube", "models/props_gameplay/mp_ball.mdl", ItemTag.DELETE | ItemTag.CUBE, ItemClassification.filler),
     antique_cube: Portal2ItemData("prop_weighted_cube", "models/props_underground_underground_weighted_cube.mdl", ItemTag.DELETE | ItemTag.CUBE, ItemClassification.progression),
 
     # Buttons
@@ -48,8 +48,6 @@ game_item_table: dict[str, Portal2ItemData] = {
     old_button: Portal2ItemData("prop_under_button", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
     floor_button: Portal2ItemData("prop_floor_button", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
     old_floor_button: Portal2ItemData("prop_under_floor_button", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
-    cube_button: Portal2ItemData("prop_floor_cube_button", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
-    ball_button: Portal2ItemData("prop_floor_ball_button", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
 
     # Puzzle Elements
     frankenturret: Portal2ItemData("prop_monster_box", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
