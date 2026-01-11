@@ -243,6 +243,7 @@ class Rac3Interface(GameInterface):
     last_death_count: int = 0
     last_death_state: int = 0
     has_died: bool = False
+    died_in_vehicle: bool = False
     inside_hacker_puzzle: bool = False
     notification_queue: list[tuple] = []
     notification_time: float | None = None
@@ -946,6 +947,8 @@ class Rac3Interface(GameInterface):
         """Detects if the game is currently being reloaded, and updates death data"""
         if self.is_reloading and not self.reloading_handled and not self.self_respawning:
             self.last_death_state = self.action
+            if self._read32(RAC3STATUS.VEHICLE_POINTER + 4) != 0:
+                self.died_in_vehicle = True
             self.reloading_handled = True
             logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state},'
                          f' death count: {self.last_death_count}')
@@ -954,6 +957,7 @@ class Rac3Interface(GameInterface):
             self.has_died = self.death_count > self.last_death_count
             self.last_death_count = self.death_count
             self.reloading_handled = False
+            self.died_in_vehicle = False
             logger.debug(f'{self.player_type} has Respawned, death count: {self.death_count}, has died?'
                          f' {self.has_died}')
         else:
@@ -1030,7 +1034,7 @@ class Rac3Interface(GameInterface):
                 CLANK_DEATH_FROM_ACTION.get(self.last_death_state, 'ran out of nanotech.'))
             
             # Vehicle pointer becomes 0 during reload, but the address next to it gets a value during reload after vehicle death
-            if self._read32(RAC3STATUS.VEHICLE_POINTER + 4) != 0:
+            if self.died_in_vehicle:
                 # Vehicle death uses state 34 which is the same as getting eaten by a shark
                 death = 'Didn\'t leave the vehicle in time.'
             return False, f"{self.player_type} {death}"
