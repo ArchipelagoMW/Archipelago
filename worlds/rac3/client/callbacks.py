@@ -164,11 +164,11 @@ async def handle_sequence_break(ctx: 'Context') -> None:
 
     current_planet = ctx.game_interface.planet
     infobot_location = REGION_TO_INFOBOT_LOCATION.get(current_planet, None)
-    if infobot_location is not None:
+    if (infobot_location is not None and infobot_location in RAC3_LOCATION_DATA_TABLE):
         infobot_flag = LOCATION_TO_INFOBOT_FLAG.get(infobot_location, None)
-        if (infobot_flag is not None 
-            and not ctx.game_interface.is_location_checked(RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE)):
-            ctx.game_interface._write8(infobot_flag, 0) 
+        if (infobot_flag is not None
+            and not RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE in ctx.checked_locations):
+            ctx.game_interface._write8(infobot_flag, 0)
 
 async def handle_check_goal(ctx: 'Context') -> None:
     """Checks if the goal is completed"""
