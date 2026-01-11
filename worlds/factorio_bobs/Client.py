@@ -619,7 +619,7 @@ def launch(*new_args: str):
             if not os.path.exists(config_file):
                 logger.info(f"Could not find {config_file} for config file. Attempting to create it.")
                 with open(config_file, 'w') as f:
-                    f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={write_directory}")
+                    f.write(f"[path]\nread-data=__PATH__executable__/../../data\nwrite-data={write_directory}")
 
     mod_directory = args.mod_directory if args.mod_directory \
         else getattr(settings, "mod_directory", None)
