@@ -6,6 +6,7 @@ from NetUtils import ClientStatus
 from worlds.rac3 import RAC3OPTION
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.texthelper import get_rich_item_name
+from worlds.rac3.constants.data.location import LOCATION_TO_INFOBOT_FLAG, RAC3_LOCATION_DATA_TABLE, REGION_TO_INFOBOT_LOCATION
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_color import RAC3TEXTCOLOR
@@ -38,6 +39,8 @@ async def update(ctx: 'Context') -> None:
     await handle_planet_changed(ctx)
     # Check player respawn
     await handle_respawn(ctx, False)
+    # Check sequence breaks
+    await handle_sequence_break(ctx)
     ctx.game_interface.late_update()
 
     # logger.info(f"Update is called")
@@ -154,6 +157,18 @@ async def handle_respawn(ctx: 'Context', skip_inputs: bool = False) -> bool:
             return True
     return False
 
+async def handle_sequence_break(ctx: 'Context') -> None:
+    """Handles sequence breaks"""
+    if ctx.slot_data is None:
+        return
+
+    current_planet = ctx.game_interface.planet
+    infobot_location = REGION_TO_INFOBOT_LOCATION.get(current_planet, None)
+    if infobot_location is not None:
+        infobot_flag = LOCATION_TO_INFOBOT_FLAG.get(infobot_location, None)
+        if (infobot_flag is not None 
+            and not ctx.game_interface.is_location_checked(RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE)):
+            ctx.game_interface._write8(infobot_flag, 0) 
 
 async def handle_check_goal(ctx: 'Context') -> None:
     """Checks if the goal is completed"""
