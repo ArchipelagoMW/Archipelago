@@ -952,7 +952,7 @@ class Rac3Interface(GameInterface):
             self.died_in_vehicle = bool(self._read8(RAC3STATUS.IN_VEHICLE))
             self.reloading_handled = True
             logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state},'
-                         f' death count: {self.last_death_count}')
+                         f' death count: {self.last_death_count}, in vehicle? {self.died_in_vehicle}')
         if not self.is_reloading and self.reloading_handled:
             self.death_count = self._read32(RAC3STATUS.DEATH_COUNT)
             self.has_died = self.death_count > self.last_death_count
