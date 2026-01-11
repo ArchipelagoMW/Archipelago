@@ -1026,8 +1026,11 @@ class Rac3Interface(GameInterface):
             self.last_death_count = self.death_count
             logger.debug(f'Death Detected! (death count increased)')
             is_clank = self.player_type == RAC3PLAYERTYPE.CLANK
-            death = DEATH_FROM_ACTION.get(self.last_death_state, 'Died') if not is_clank else (
-                CLANK_DEATH_FROM_ACTION.get(self.last_death_state, 'Died'))
+            death = DEATH_FROM_ACTION.get(self.last_death_state, 'Ran out of nanotech.') if not is_clank else (
+                CLANK_DEATH_FROM_ACTION.get(self.last_death_state, 'Ran out of nanotech.'))
+            if self.vehicle != 0:
+                # Vehicle death uses state 34 which is the same as getting eaten by a shark
+                death = 'Didn\'t leave the vehicle in time.'
             return False, f"{self.player_type} {death}"
 
         logger.debug(f'{self.player_type} is Alive')
