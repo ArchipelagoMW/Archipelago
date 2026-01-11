@@ -19,7 +19,7 @@ class BaseModpack:
         self.__packPath = packPath
         if is_zip:
             self.__zip = ZipFile(packPath)
-            self.__root: Path | ZipPath = ZipPath(self._zip)
+            self.__root: Path | ZipPath = ZipPath(self.__zip)
         else:
             self.__zip = None
             self.__root: Path | ZipPath = packPath

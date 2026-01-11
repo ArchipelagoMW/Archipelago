@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from zipfile import ZipFile
+from zipfile import ZipFile, Path as ZipPath
 
 from . import BaseModpack
 
@@ -30,7 +30,8 @@ def init_modpacks(modpackType: type[BaseModpack]) -> None:
             modpacks[modpack.packName] = modpack
         for zip_path in directory.glob("*.zip"):
             with ZipFile(zip_path) as zip_filesystem:
-                if "header.json" not in zip_filesystem.namelist():
+                root = ZipPath(zip_filesystem)
+                if not (root / "header.json").exists():
                     continue
             modpack = modpackType(zip_path, is_zip=True)
             if modpack.packName in modpacks:
