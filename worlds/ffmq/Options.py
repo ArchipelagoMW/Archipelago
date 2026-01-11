@@ -64,6 +64,44 @@ class ProgressiveGear(Toggle):
     display_name = "Progressive Gear"
 
 
+class SeedVendors(Choice):
+    """Set Seed Vendors requirements.
+    Standard: No requirement for Fireburg Vendor, Windia Vendor needs Dullahan to be defeated.
+    No Vendors: No vendors sell seeds. This includes the vendor on Mac Ship.
+    Defeat Jinn: Fireburg Vendor requires Jinn to be defeated, Windia Vendor still requires Dullahan.
+    Random Bosses: Both Vendors require a random boss to be defeated."""
+    display_name = "Seed Vendors"
+    default = 0
+    option_standard = 0
+    option_no_vendors = 1
+    option_defeat_jinn = 2
+    option_random_bosses = 3
+
+
+class WorldSeedSupply(Choice):
+    """Set the number of locations containing Seeds. Regardless of the option selected, the Hero Chest before the
+    Dark King will always contain Seeds and isn't included in the count."""
+    display_name = "World Seed Supply"
+    option_zero = 0
+    option_one = 1
+    option_two = 2
+    option_five = 5
+    option_ten = 6
+    option_twenty_five = 7
+    option_random_two_to_ten = 8
+    option_random_zero_to_twenty_five = 9
+
+
+class BoxesDontReset(Toggle):
+    """If enabled, brown boxes don't reset once opened."""
+    default = False
+
+
+class DisableDuping(Toggle):
+    """Fix the bug allowing you to duplicate consumable items when cancelling the command and running away from battle."""
+    default = False
+
+
 class EnemiesDensity(Choice):
     """Set how many of the original enemies are on each map."""
     display_name = "Enemies Density"
@@ -178,11 +216,17 @@ class DoomCastle(Choice):
     option_dark_king_only = 2
 
 
-class DoomCastleShortcut(Toggle):
-    """Create a shortcut granting access from the start to Doom Castle at Focus Tower's entrance.
-    Also modify the Desert floor, so it can be navigated without the Mega Grenades and the Dragon Claw."""
-    display_name = "Doom Castle Shortcut"
-
+class DoomCastleAccess(Toggle):
+    """Set how accessible Doom Castle is.
+    Standard: You need to free Mac's Ship with the Mega Grenades and give Mac his cap to reach Doom Castle.
+    Freed Ship: Mac's Ship is already freed, you just need the Captain Cap.
+    Focus Tower Shortcut: Create a shortcut granting access from the start to Doom Castle at Focus Tower's entrance.
+    The Freed Ship and Shortcut options also modify the Desert floor so it can be navigated without the Mega Grenades
+    and the Dragon Claw."""
+    display_name = "Doom Castle Access"
+    option_standard = 0
+    option_freed_ship = 1
+    option_focus_tower_shortcut = 2
 
 class TweakFrustratingDungeons(Toggle):
     """Make some small changes to a few of the most annoying dungeons. Ice Pyramid: Add 3 shortcuts on the 1st floor.
@@ -361,6 +405,10 @@ class FFMQOptions(PerGameCommonOptions):
     starting_weapon: StartingWeapon
     shuffle_steel_armor: ShuffleSteelArmor
     progressive_gear: ProgressiveGear
+    boxes_dont_reset: BoxesDontReset
+    seed_vendors: SeedVendors
+    world_seed_supply: WorldSeedSupply
+    disable_duping: DisableDuping
     leveling_curve: LevelingCurve
     starting_companion: StartingCompanion
     available_companions: AvailableCompanions
@@ -380,7 +428,7 @@ class FFMQOptions(PerGameCommonOptions):
     shuffle_enemies_position: ShuffleEnemiesPositions
     progressive_formations: ProgressiveFormations
     doom_castle_mode: DoomCastle
-    doom_castle_shortcut: DoomCastleShortcut
+    doom_castle_access: DoomCastleAccess
     tweak_frustrating_dungeons: TweakFrustratingDungeons
     overworld_shuffle: OverworldShuffle
     map_shuffle: MapShuffle

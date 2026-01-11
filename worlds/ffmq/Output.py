@@ -10,6 +10,19 @@ from worlds.Files import APPatch
 settings_template = Utils.parse_yaml(pkgutil.get_data(__name__, "data/settings.yaml"))
 
 
+option_mapping = {
+    "_": "",  # Order matters here
+    "OverworldAndDungeons": "OverworldDungeons",
+    "MobsAndBosses": "MobsBosses",
+    "MobsBossesAndDarkKing": "MobsBossesDK",
+    "BenjaminLevelPlus": "BenPlus",
+    "BenjaminLevel": "BenPlus0",
+    "RandomCompanion": "Random",
+    "RandomTwoToTen": "Random210",
+    "RandomZeroToTwentyFive": "Random025",
+}
+
+
 def generate_output(self, output_directory):
     def output_item_name(item, progressive_offset=0):
         if item.player == self.player:
@@ -35,10 +48,10 @@ def generate_output(self, output_directory):
                                    "item_name": location.item.name})
 
     def cc(option):
-        return option.current_key.title().replace("_", "").replace("OverworldAndDungeons",
-            "OverworldDungeons").replace("MobsAndBosses", "MobsBosses").replace("MobsBossesAndDarkKing",
-            "MobsBossesDK").replace("BenjaminLevelPlus", "BenPlus").replace("BenjaminLevel", "BenPlus0").replace(
-            "RandomCompanion", "Random")
+        current_option = option.current_key.title()
+        for a, b in option_mapping.items():
+            current_option = current_option.replace(a, b)
+        return current_option
 
     def tf(option):
         return True if option else False
@@ -69,7 +82,6 @@ def generate_output(self, output_directory):
         "progressive_gear": tf(self.options.progressive_gear),
         "tweaked_dungeons": tf(self.options.tweak_frustrating_dungeons),
         "doom_castle_mode": cc(self.options.doom_castle_mode),
-        "doom_castle_shortcut": tf(self.options.doom_castle_shortcut),
         "sky_coin_mode": cc(self.options.sky_coin_mode),
         "sky_coin_fragments_qty": cc(self.options.shattered_sky_coin_quantity),
         "disable_spoilers": True,
@@ -88,10 +100,19 @@ def generate_output(self, output_directory):
                                  "Three", "Four"][self.options.available_companions.value],
         "companions_locations": cc(self.options.companions_locations),
         "kaelis_mom_fight_minotaur": tf(self.options.kaelis_mom_fight_minotaur),
-        "hint_mode": cc(self.options.hint_mode)
+        "hint_mode": cc(self.options.hint_mode),
+        "disable_duping": tf(self.options.disable_duping),
+        "seed_quantity": cc(self.options.world_seed_supply),
+        "boxes_dont_reset": tf(self.options.boxes_dont_reset),
+        "seed_vendors_setting": cc(self.options.seed_vendors),
+        "doom_castle_access": cc(self.options.doom_castle_access),
+        "hidden_flags": False
     }
 
     for option, data in option_writes.items():
+        if data is None:
+            data = "None"
+        assert data in options["Final Fantasy Mystic Quest"][option]
         options["Final Fantasy Mystic Quest"][option][data] = 1
 
     rom_name = f'MQ{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed_name:11}'[:21]
@@ -99,7 +120,7 @@ def generate_output(self, output_directory):
                               'utf8')
     self.rom_name_available_event.set()
 
-    setup = {"version": "1.6", "name": self.multiworld.player_name[self.player], "romname": rom_name, "seed":
+    setup = {"version": "1.7", "name": self.multiworld.player_name[self.player], "romname": rom_name, "seed":
              hex(self.random.randint(0, 0xFFFFFFFF)).split("0x")[1].upper()}
 
     progressives = {item: 0 for item in self.item_name_to_id if item.startswith("Progressive")}
@@ -134,7 +155,6 @@ def generate_output(self, output_directory):
             zf.writestr("externalplacement.yaml", yaml.dump(hint_data))
 
         APMQ.write_contents(zf)
-
 
 class APMQFile(APPatch):
     game = "Final Fantasy Mystic Quest"
