@@ -35,3 +35,4 @@ motion_blur_trap = "Motion Blur Trap" # Adds blur effect to screen for 20 second
 fizzle_portal_trap = "Fizzle Portal Trap" # Instantly Fizzles all places portals
 butter_fingers_trap = "Butter Fingers Trap" # Persistently drops held items for 30 seconds
 cube_confetti_trap = "Cube Confetti Trap" # An explosion of colorful cubes at the feet of the player
+slippery_floor_trap = "Slippery Floor Trap" # Makes the player have 0 friction with the floor

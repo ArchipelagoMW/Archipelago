@@ -51,6 +51,12 @@ class CubeConfettiTrapWeight(BaseTrapWeight):
     """
     display_name = cube_confetti_trap + " Weight"
 
+class SlipperyFloorTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes Chell slip and slide
+    """
+    display_name = slippery_floor_trap + " Weight"
+
 # class StoryAchievementSanity(Toggle):
 #     """
 #     Determines whether completing story achievements send location checks
@@ -72,7 +78,8 @@ portal2_option_groups = [
         MotionBlurTrapWeight,
         FizzlePortalTrapWeight,
         ButterFingersTrapWeight,
-        CubeConfettiTrapWeight
+        CubeConfettiTrapWeight,
+        SlipperyFloorTrapWeight
     ])
 ]
 
@@ -96,4 +103,5 @@ class Portal2Options(PerGameCommonOptions):
     fizzle_portal_trap_weight: FizzlePortalTrapWeight
     butter_fingers_trap_weight: ButterFingersTrapWeight
     cube_confetti_trap_weight: CubeConfettiTrapWeight
+    slippery_floor_trap_weight: SlipperyFloorTrapWeight
     
