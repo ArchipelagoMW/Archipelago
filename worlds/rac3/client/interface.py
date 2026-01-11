@@ -962,7 +962,6 @@ class Rac3Interface(GameInterface):
                          f' {self.has_died}')
         else:
             self.has_died = False
-            self.died_in_vehicle = False
 
     def pause_check(self):
         if self.planet not in RAC3_REGION_DATA_TABLE.keys():
