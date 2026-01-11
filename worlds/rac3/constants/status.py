@@ -82,6 +82,8 @@ class RAC3STATUS:
     BLACK_SCREEN = 0x001422F0
     INFOBOT_BASE = 0x001D5530
     VISITED_BASE = 0x001D5570
+    HIDE_WEAPON = 0x001A71D0
+    FALL_TIMER = 0x001A4F4E
     INVISIBLE = 0x001A71C5
     DISARM = 0x001A71CD
     WRENCH_ONLY = 0x001A71C8 # Used when Ratchet is in water, but only allows wrench on land.

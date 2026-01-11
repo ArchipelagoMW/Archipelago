@@ -11,6 +11,7 @@ from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_color import RAC3TEXTCOLOR
 from worlds.rac3.constants.region import RAC3REGION
+from worlds.rac3.constants.status import RAC3STATUS
 
 ##################################################
 # Only change point: Change filename/Class name  #
@@ -58,6 +59,7 @@ async def handle_planet_changed(ctx: 'Context') -> None:
     planet = ctx.current_planet
     ctx.current_planet, _map = ctx.game_interface.map_switch()
     if planet is not ctx.current_planet:
+        ctx.game_interface.respawn_gadget(ctx.current_planet)
 
         if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
             ctx.game_interface.tyhrranosis_fix()
@@ -167,7 +169,8 @@ async def handle_sequence_break(ctx: 'Context') -> None:
     if (infobot_location is not None and infobot_location in RAC3_LOCATION_DATA_TABLE):
         infobot_flag = LOCATION_TO_INFOBOT_FLAG.get(infobot_location, None)
         if (infobot_flag is not None
-            and not RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE in ctx.checked_locations):
+            and not RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE in ctx.checked_locations
+            and infobot_flag != RAC3STATUS.ALLOW_SHIP):
             ctx.game_interface._write8(infobot_flag, 0)
 
 async def handle_check_goal(ctx: 'Context') -> None:

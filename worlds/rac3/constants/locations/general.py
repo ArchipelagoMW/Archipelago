@@ -124,6 +124,7 @@ class RAC3LOCATION:
     SKIDD_CAPTURED = "Galaxy Burger: Skidd is captured"
     DRACO_COURTNEY = "Obani Draco: Defeat Courtney Gears"
     ZELDRIN_STARPORT_ITEM = "Zeldrin Starport: Received Bolt Grabber V2"
+    ZELDRIN_STARPORT_ITEM2 = "Zeldrin Starport: Received Box Breaker"
     ZELDRIN_STARPORT_SHIP = "Zeldrin Starport: Escape the Exploding Ship"
     METROPOLIS_METAL_NOIDS = "Metropolis: Metal-Noids"
     METROPOLIS_DEFEAT_KLUNK = "Metropolis: Defeat Klunk"

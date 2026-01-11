@@ -63,6 +63,10 @@ You can run the /death_link command in the Ratchet and Clank 3 client to toggle 
 
 If the game is paused, you are in a menu, selecting a mission etc the game cannot display the message box we use to show these messages.
 
+## A Gadget didn't spawn in the world when I haven't checked the location yet
+
+We remove your gadget to make the game think you haven't picked it up yet in order to make it respawn in the world. If it fails to respawn, teleport to the ship to force a reload of the planet and there is a good chance it should have spawned then. If not, repeat until it has appeared. Should take more than 1-2 times at most.
+
 ## How can I contribute to the project?
 
 - **As a player**: The best way to contribute to the project as a player is to report every issue you encounter with the most details possible.
