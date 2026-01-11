@@ -121,7 +121,6 @@ class RAC3LOCATION:
     BLACKWATER_CITY_RANGERS_3 = "Blackwater City: Operation BLACK TIDE 3: Counterattack"
     BLACKWATER_CITY_COMPLETE = "Blackwater City: Received Gravity Boots"
     HOLOSTAR_FILM_EPISODE = "Holostar: Film Secret Agent Clank Episode"
-    HOLOSTAR_RETURN_SHIP = "Holostar: Infobot: Zeldrin Starport"
     SKIDD_CAPTURED = "Galaxy Burger: Skidd is captured"
     DRACO_COURTNEY = "Obani Draco: Defeat Courtney Gears"
     ZELDRIN_STARPORT_ITEM = "Zeldrin Starport: Received Bolt Grabber V2"
