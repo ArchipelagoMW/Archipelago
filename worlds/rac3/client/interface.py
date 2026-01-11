@@ -923,9 +923,12 @@ class Rac3Interface(GameInterface):
         # Vehicle one HP challenge is independent of player_type
         if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
             health_addr = self._read32(self._read32(self.vehicle + 0x68))
-            if self._read_float(health_addr) > 5.0:
-                # This displays as 1 HP in-game for vehicles
-                self._write_float(health_addr, 5)
+            target_health = 5.0
+            if self.planet == RAC3REGION.TYHRRANOSIS_RANGERS or self.planet == RAC3REGION.MARCADIA:
+                target_health = 1.0  # For some reason these vehicles have 100 max health instead of 500
+            if self._read_float(health_addr) > target_health:
+                # This displays as 1 HP in-game for vehicles with 500 max health
+                self._write_float(health_addr, target_health)
         
         if not self.one_hp_challenge.get(character, False) and self.planet == RAC3REGION.ANNIHILATION_NATION and not self.pause_state:
             # Restore sleeping gas health reduction if one HP challenge is not active for Ratchet
