@@ -49,7 +49,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 2: Fizzler Intro Completion": Portal2LocationData("sp_a2_fizzler_intro", LocationType.MAP_COMPLETION, [ portal_gun_2, laser, reflection_cube, laser_catcher]),
     # Chapter 3
     "Chapter 3: Ceiling Catapult Completion": Portal2LocationData("sp_a2_sphere_peek", LocationType.MAP_COMPLETION, [ portal_gun_2, faith_plate, button, reflection_cube, laser, laser_catcher]),
-    "Chapter 3: Ricochet Completion": Portal2LocationData("sp_a2_ricochet", LocationType.MAP_COMPLETION, [ portal_gun_2, faith_plate, weighted_cube, laser, laser_catcher, reflection_cube, floor_button]),
+    "Chapter 3: Ricochet Completion": Portal2LocationData("sp_a2_ricochet", LocationType.MAP_COMPLETION, [ portal_gun_2, faith_plate, weighted_cube, laser, laser_catcher, reflection_cube, floor_button, button]),
     "Chapter 3: Bridge Intro Completion": Portal2LocationData("sp_a2_bridge_intro", LocationType.MAP_COMPLETION, [ portal_gun_2, bridge, floor_button, button, weighted_cube]),
     "Chapter 3: Bridge the Gap Completion": Portal2LocationData("sp_a2_bridge_the_gap", LocationType.MAP_COMPLETION, [ portal_gun_2, bridge, floor_button, button, weighted_cube]),
     "Chapter 3: Turret Intro Completion": Portal2LocationData("sp_a2_turret_intro", LocationType.MAP_COMPLETION, [turrets, weighted_cube, floor_button]),
