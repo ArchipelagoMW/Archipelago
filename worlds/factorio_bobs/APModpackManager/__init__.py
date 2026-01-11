@@ -1,7 +1,7 @@
 import logging
 
 from .BaseModpack import BaseModpack
-from .ItemLocations import items_to_id, locations_to_id, item_groups
+from .ItemLocations import items_to_id, locations_to_id, item_groups, location_groups
 from .PackLoader import modpacks
 
 
@@ -34,5 +34,5 @@ def get_locations() -> dict[str, int]:
 
 def get_location_groups() -> dict[str, set[str]]:
     if not items_to_id:
-        get_items() # forces items to initialize if not already
-    return item_groups
+        get_locations() # forces locations to initialize if not already
+    return location_groups
