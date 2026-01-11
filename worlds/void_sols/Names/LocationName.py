@@ -151,7 +151,7 @@ apex_torch_sparring_hall = APEX_PREFIX + "Sparring Hall Torch"
 # Bosses
 prison_warden_defeated = PRISON_PREFIX + "Warden Defeated"
 forest_poacher_defeated = FOREST_PREFIX + "Poacher Defeated"
-mountain_groundskeeper_defeated = MOUNTAIN_PREFIX + "Groundskeeper Defeated"
+mountain_groundskeeper_defeated = MOUNTAIN_PREFIX + "Groundskeeper Resolved"
 mines_worm_defeated = MINES_4F_PREFIX + "Greater Void Worm Defeated"
 cultist_amalgamate_defeated = CULTIST_PREFIX + "Amalgamate Defeated"
 supermax_prison_infernal_warden_defeated = SUPERMAX_EAST_PREFIX + "Infernal Warden Defeated"
@@ -218,6 +218,7 @@ village_item_pickup_minor_sol_shard_5 = VILLAGE_PREFIX + "Minor Sol Shard #5 Ite
 village_item_pickup_minor_sol_shard_6 = VILLAGE_PREFIX + "Minor Sol Shard #6 Item Pickup"
 village_item_pickup_strange_totem = VILLAGE_PREFIX + "Strange Totem Item Pickup"
 village_item_pickup_quiver_of_holding = VILLAGE_PREFIX + "Quiver of Holding Item Pickup"
+village_item_pickup_essence_hero = VILLAGE_PREFIX + "Essence of a Hero Item Pickup"
 
 village_item_pickup_stale_bread = VILLAGE_PREFIX + "Stale Bread Item Pickup"
 
@@ -367,7 +368,6 @@ apex_item_pickup_minor_sol_shard_25 = APEX_PREFIX + "Minor Sol Shard #25 Item Pi
 apex_item_pickup_minor_sol_shard_26 = APEX_PREFIX + "Minor Sol Shard #26 Item Pickup"
 
 apex_item_pickup_hub_map = APEX_PREFIX + "Hub Map Item Pickup"
-apex_item_pickup_metamorphic_alloy_BACKUP = APEX_PREFIX + "Metamorphic Alloy Item Pickup"
 apex_item_pickup_minor_sol_shard_27 = APEX_PREFIX + "Minor Sol Shard #27 Item Pickup"
 
 apex_item_pickup_data_disc_r = APEX_PREFIX + "Data Disc R Item Pickup"
@@ -504,6 +504,7 @@ cultist_tamper_armament = CULTIST_PREFIX + "Tamper Armament"
 factory_misc_brute_encounter = FACTORY_PREFIX + "Brute Encounter"
 apex_blow_horn = APEX_PREFIX + "Blow Horn"
 apex_world_spark_interacted = APEX_PREFIX + "World Spark Interacted With"
+misc_potion_mixing_unlocked = VILLAGE_PREFIX + "Potion Mixing Unlocked"
     
 iron_pineapple_breaking_item_1 = VILLAGE_PREFIX + "Iron Pineapple Breaking Item #1"
 iron_pineapple_breaking_item_2 = VILLAGE_PREFIX + "Iron Pineapple Breaking Item #2"

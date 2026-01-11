@@ -211,10 +211,26 @@ def set_rules(world: World):
 
     # Alchemist Upgrades (Village)
     # Requires freeing the alchemist (Forest Bridge Key + Alchemist Cage Key) AND Potion Mixing Unlocked
+
+    # Alchemist Release Rewards
+    # These are available when the Alchemist is released and moves to the Village
+    alchemist_release_rewards = [
+        LocationName.misc_potion_mixing_unlocked,
+        LocationName.village_item_pickup_essence_hero,
+    ]
+
+    for loc in alchemist_release_rewards:
+        try:
+            set_rule(world.multiworld.get_location(loc, player),
+                     lambda state: state.has(ItemName.forest_bridge_key, player) and
+                                   state.has(ItemName.alchemist_cage_key, player))
+        except KeyError:
+            pass
+
     alchemist_upgrades = {
-        LocationName.village_alchemist_upgrade_1: 1,
+        LocationName.village_alchemist_upgrade_1: 0,
         LocationName.village_alchemist_upgrade_2: 2,
-        LocationName.village_alchemist_upgrade_3: 3,
+        LocationName.village_alchemist_upgrade_3: 5,
     }
     
     for loc, count in alchemist_upgrades.items():
@@ -457,6 +473,7 @@ def set_rules(world: World):
         LocationName.cultist_torch_infinity_chasm,
         LocationName.cultist_compound_wall_elevator,
         LocationName.cultist_compound_item_pickup_garnet_aegis,
+        LocationName.cultist_compound_item_pickup_minor_sol_shard_12
     ]
     for loc_name in cultist_minor_cell_locked_locations:
         try:
@@ -656,7 +673,7 @@ def set_rules(world: World):
 
     # Apex Restricted Access Key Rules
     restricted_access_locked_locations = [
-        LocationName.apex_item_pickup_minor_sol_shard_30,
+        LocationName.apex_item_pickup_major_sol_shard_28,
         LocationName.apex_item_pickup_minor_sol_shard_33,
         LocationName.apex_item_pickup_brass_knuckles_plus,
         LocationName.apex_torch_sparring_hall,

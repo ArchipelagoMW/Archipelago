@@ -345,7 +345,6 @@ item_pickups_table = {
     LocationName.apex_item_pickup_minor_sol_shard_25: 1563,
     LocationName.apex_item_pickup_minor_sol_shard_26: 1564,
     LocationName.apex_item_pickup_hub_map: 1565,
-    LocationName.apex_item_pickup_metamorphic_alloy_BACKUP: 1566,
     LocationName.apex_item_pickup_minor_sol_shard_27: 1567,
     LocationName.apex_item_pickup_data_disc_r: 1568,
     LocationName.apex_item_pickup_east_wing_key: 1569,
@@ -367,6 +366,12 @@ item_pickups_table = {
     LocationName.apex_item_pickup_potions_increased_6: 1585,
     LocationName.apex_item_pickup_data_disc_g: 1586,
     LocationName.apex_item_pickup_east_map: 1587,
+    LocationName.village_item_pickup_essence_hero: 1588,
+    LocationName.village_relics_improved_1: 1589,
+    LocationName.village_relics_improved_2: 1590,
+    LocationName.village_relics_improved_3: 1591,
+    LocationName.village_relics_improved_4: 1592,
+    LocationName.village_relics_improved_5: 1593,
 }
 
 # Fish
@@ -413,11 +418,6 @@ upgrades_table = {
     LocationName.village_alchemist_upgrade_1: 1803,
     LocationName.village_alchemist_upgrade_2: 1804,
     LocationName.village_alchemist_upgrade_3: 1805,
-    LocationName.village_relics_improved_1: 1806,
-    LocationName.village_relics_improved_2: 1807,
-    LocationName.village_relics_improved_3: 1808,
-    LocationName.village_relics_improved_4: 1809,
-    LocationName.village_relics_improved_5: 1810,
 }
 
 # Breakable Walls
@@ -485,6 +485,7 @@ misc_table = {
     LocationName.iron_pineapple_breaking_item_3: 2013,
     LocationName.iron_pineapple_breaking_item_4: 2014,
     LocationName.iron_pineapple_breaking_item_5: 2015,
+    LocationName.misc_potion_mixing_unlocked: 2016,
 }
 
 all_locations = {
