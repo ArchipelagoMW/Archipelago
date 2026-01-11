@@ -200,3 +200,4 @@ Thumbs.db
 
 # World files that need to be added but devs have named them improperly...
 !worlds/metroidprime/lib
+!worlds/subversion/data/*/*.*

@@ -1,5 +1,4 @@
 pillow
-cherrypy
 jinja2
 pymongo
 chardet

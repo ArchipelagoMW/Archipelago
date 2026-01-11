@@ -36,7 +36,7 @@ class BingoContext(CommonContext):
     command_processor = BingoClientCommandProcessor
 
     def __init__(self, server_address: Optional[str], password: Optional[str]) -> None:
-        super().__init__(server_address, password)
+        super(BingoContext, self).__init__(server_address, password)
 
         self.game = "APBingo"
         self.previous_received = []

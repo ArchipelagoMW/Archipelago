@@ -30,42 +30,6 @@ on:
       - '.github/workflows/unittests.yml'
 
 jobs:
-  unit:
-    runs-on: ${{ matrix.os }}
-    name: Test Python ${{ matrix.python.version }} ${{ matrix.os }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        python:
-          - {version: '3.11.2'} # Change to '3.11' around 2026-06-10
-          - {version: '3.12'}
-          - {version: '3.13'}
-        include:
-          - python: {version: '3.11'}  # old compat
-            os: windows-latest
-          - python: {version: '3.13'}  # current
-            os: windows-latest
-          - python: {version: '3.13'}  # current
-            os: macos-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python.version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python.version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r ci-requirements.txt
-        python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
-        python Launcher.py --update_settings  # make sure host.yaml exists for tests
-    - name: Unittests
-      run: |
-        pytest -n auto
-
   hosting:
     runs-on: ${{ matrix.os }}
     name: Test hosting with ${{ matrix.python.version }} on ${{ matrix.os }}

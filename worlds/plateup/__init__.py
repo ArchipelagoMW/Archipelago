@@ -1,2 +1,0 @@
-
-from .World import PlateUpWorld

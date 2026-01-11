@@ -1,4 +1,5 @@
 import asyncio
+from codecs import StreamReader, StreamWriter
 from dataclasses import dataclass
 import hashlib
 import io
@@ -14,7 +15,6 @@ from typing import List, Tuple, Union
 import zipfile
 import bsdiff4
 import atexit
-
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, gui_enabled, \
@@ -104,7 +104,7 @@ def patch_rom(rom_path, dst_path, patch_path):
       swapped[i+1] = rom[i]
     rom = bytes(swapped)
   elif md5 != "40e98faa24ac3ebe1d25cb5e5ddf49e4":
-    logger.error(f"Unknown ROM! Please use /patch or restart the {game_name} Client to try again.")
+    logger.error(f"Unknown ROM! Please use /patch or restart the Banjo Tooie Client to try again.")
     return False
   with open_world_file(patch_path) as f:
     patch = f.read()
