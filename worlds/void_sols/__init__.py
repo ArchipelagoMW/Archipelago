@@ -136,7 +136,7 @@ class VoidSolsWorld(World):
 
     def fill_slot_data(self) -> dict:
         return {
-            "game_seed": self.multiworld.random.randint(0, 1000000000),
+            "game_seed": self.random.randint(0, 1000000000),
             "enemy_randomization": self.options.enemy_randomization.value,
             "starting_weapon": self.starting_weapon_id,
             "sparks_checks": self.options.sparks_checks.value,
