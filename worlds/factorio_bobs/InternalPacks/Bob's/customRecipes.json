@@ -1,0 +1,9 @@
+{
+  "bob-small-alien-artifact": {"ingredients": {"bob-laser-rifle-battery": 1}, "products": {"bob-small-alien-artifact": 1}, "category": "advanced-crafting", "energy": 5},
+  "bob-small-alien-artifact-red": {"ingredients": {"bob-laser-rifle-battery-ruby": 1}, "products": {"bob-small-alien-artifact-red": 1}, "category": "advanced-crafting", "energy": 5},
+  "bob-small-alien-artifact-orange": {"ingredients": {"bob-laser-rifle-battery-topaz": 1}, "products": {"bob-small-alien-artifact-orange": 1}, "category": "advanced-crafting", "energy": 5},
+  "bob-small-alien-artifact-yellow": {"ingredients": {"bob-laser-rifle-battery-diamond": 1}, "products": {"bob-small-alien-artifact-yellow": 1}, "category": "advanced-crafting", "energy": 5},
+  "bob-small-alien-artifact-green": {"ingredients": {"bob-laser-rifle-battery-emerald": 1}, "products": {"bob-small-alien-artifact-green": 1}, "category": "advanced-crafting", "energy": 5},
+  "bob-small-alien-artifact-blue": {"ingredients": {"bob-laser-rifle-battery-sapphire": 1}, "products": {"bob-small-alien-artifact-blue": 1}, "category": "advanced-crafting", "energy": 5},
+  "bob-small-alien-artifact-purple": {"ingredients": {"bob-laser-rifle-battery-amethyst": 1}, "products": {"bob-small-alien-artifact-purple": 1}, "category": "advanced-crafting", "energy": 5}
+}

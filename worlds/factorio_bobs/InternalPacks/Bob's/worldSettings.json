@@ -1,0 +1,6 @@
+{
+  "forced_locations": {
+    "start": ["automation", "electronics"],
+    "end": ["rocket-silo"]
+  }
+}

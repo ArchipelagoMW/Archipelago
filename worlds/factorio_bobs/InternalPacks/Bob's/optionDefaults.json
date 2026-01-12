@@ -1,0 +1,147 @@
+{
+  "default": {
+    "base": null,
+    "additional_logic": {
+      "2": [
+        {
+          "item": "gun-turret"
+        }
+      ],
+      "3": [
+        {
+          "item": "lab"
+        },
+        {
+          "item": "transport-belt"
+        },
+        {
+          "item": "electric-mining-drill"
+        },
+        {
+          "item": "bob-void-pump"
+        },
+        {
+          "recipe": "bob-basic-greenhouse-cycle"
+        },
+        {
+          "tech": "bob-long-inserters-1"
+        }
+      ],
+      "5": [
+        {
+          "item": "modular-armor"
+        },
+        {
+          "item": "personal-roboport-equipment"
+        },
+        {
+          "item": "solar-panel-equipment"
+        },
+        {
+          "item": "battery-equipment"
+        },
+        {
+          "item": "construction-robot"
+        },
+        {
+          "item": "constant-combinator"
+        },
+        {
+          "tech": "bob-long-inserters-2"
+        },
+        {
+          "or": [
+            {
+              "and": [
+                {
+                  "item": "train-stop"
+                },
+                {
+                  "item": "rail-signal"
+                },
+                {
+                  "item": "rail"
+                },
+                {
+                  "item": "locomotive"
+                },
+                {
+                  "item": "cargo-wagon"
+                },
+                {
+                  "item": "fluid-wagon"
+                }
+              ]
+            },
+            {
+              "and": [
+                {
+                  "item": "roboport"
+                },
+                {
+                  "item": "logistic-robot"
+                },
+                {
+                  "item": "storage-chest"
+                },
+                {
+                  "item": "requester-chest"
+                },
+                {
+                  "item": "passive-provider-chest"
+                },
+                {
+                  "item": "buffer-chest"
+                },
+                {
+                  "item": "active-provider-chest"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "7": [
+        {
+          "item": "train-stop"
+        },
+        {
+          "item": "rail-signal"
+        },
+        {
+          "item": "rail"
+        },
+        {
+          "item": "locomotive"
+        },
+        {
+          "item": "cargo-wagon"
+        },
+        {
+          "item": "fluid-wagon"
+        },
+        {
+          "item": "roboport"
+        },
+        {
+          "item": "logistic-robot"
+        },
+        {
+          "item": "storage-chest"
+        },
+        {
+          "item": "requester-chest"
+        },
+        {
+          "item": "passive-provider-chest"
+        },
+        {
+          "item": "buffer-chest"
+        },
+        {
+          "item": "active-provider-chest"
+        }
+      ]
+    }
+  }
+}
