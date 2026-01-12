@@ -46,13 +46,13 @@ class PaintWorld(World):
             self.options.logic_percent <= 55 and self.multiworld.players == 1:
             raise OptionError("Logic Percent must be greater than 55 when generating a single-player world with "
                                 "Canvas Size Increment below 50.")
-        if self.options.aspect_ratio == 2 or self.options.orientation == 0:
+        if self.options.aspect_ratio <= 2:
             self.final_width = 800
-        elif self.options.aspect_ratio == 1:
+        elif self.options.aspect_ratio == 4:
             self.final_width = 450
         else:
             self.final_width = 600
-        if self.options.aspect_ratio == 2 or self.options.orientation == 1:
+        if self.options.aspect_ratio >= 2:
             self.final_height = 800
         elif self.options.aspect_ratio == 1:
             self.final_height = 450

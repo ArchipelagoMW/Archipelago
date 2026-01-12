@@ -80,19 +80,14 @@ class CanvasHeightIncrement(Choice):
 
 class AspectRatio(Choice):
     """Sets the aspect ratio of your final image. Useful when using a custom goal image, also affects game length.
-    Possible options are fullscreen (800x600), widescreen (800x450), or square (800x800)."""
+    Possible options are fullscreen (800x600), widescreen (800x450), square (800x800), fullscreen vertical (600x800),
+    and widescreen vertical (450x800)."""
     display_name = "Aspect Ratio"
     option_fullscreen = 0
     option_widescreen = 1
     option_square = 2
-    default = 0
-
-
-class Orientation(Choice):
-    """Sets the orientation of your final image. Useful when using a custom goal image.
-    Does nothing if aspect ratio is square."""
-    option_horizontal = 0
-    option_vertical = 1
+    option_fullscreen_vertical = 3
+    option_widescreen_vertical = 4
     default = 0
 
 
@@ -146,7 +141,6 @@ class PaintOptions(PerGameCommonOptions):
     canvas_width_increment: CanvasWidthIncrement
     canvas_height_increment: CanvasHeightIncrement
     aspect_ratio: AspectRatio
-    orientation: Orientation
     goal_image: GoalImage
     starting_tool: StartingTool
     trap_count: TrapCount
