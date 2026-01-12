@@ -684,7 +684,7 @@ class Rac3Interface(GameInterface):
                 case RAC3REGION.CRASH_SITE:
                     self._write8(gadget_data[RAC3ITEM.NANO_PAK].UNLOCK_ADDRESS, 0)
     
-    def can_cycle_gadgets(self) -> bool:
+    def should_cycle_gadgets(self) -> bool:
         """Check if it's safe to cycle gadgets
         used to ensure gadgets can respawn without the cycler interfering"""
         if (self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE 
@@ -699,7 +699,8 @@ class Rac3Interface(GameInterface):
 
     def gadget_cycler(self):
         
-        if not self.can_cycle_gadgets():
+        if not self.should_cycle_gadgets():
+            self.respawn_gadgets()
             return
         
         for name in gadget_data.keys():
@@ -1008,26 +1009,24 @@ class Rac3Interface(GameInterface):
             self.notification_queue.append((f'Negative Nanotech EXP detected! Resetting EXP to 0', RAC3BOXTHEME.WARNING))
         # If other stuff needs overflow fixing, add here
     
-    def respawn_gadget(self, planet):
-        """Respawn gadget if the associated location isn't checked but the item is unlocked by AP"""
-        match planet:
-            case RAC3REGION.MARCADIA:
-                if (self.UnlockItem[RAC3ITEM.REFRACTOR].status and
-                        not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.MARCADIA_REFRACTOR].AP_CODE)):
-                    self._write8(gadget_data[RAC3ITEM.REFRACTOR].UNLOCK_ADDRESS, 0)
-            case RAC3REGION.DAXX:
-                if (self.UnlockItem[RAC3ITEM.CHARGE_BOOTS].status and
-                        not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.DAXX_CHARGE_BOOTS].AP_CODE)):
-                    self._write8(gadget_data[RAC3ITEM.CHARGE_BOOTS].UNLOCK_ADDRESS, 0)
-            case RAC3REGION.CRASH_SITE:
-                if (self.UnlockItem[RAC3ITEM.NANO_PAK].status and
-                        not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.CRASH_SITE_NANO_PAK].AP_CODE)):
-                    self._write8(gadget_data[RAC3ITEM.NANO_PAK].UNLOCK_ADDRESS, 0)
-            case RAC3REGION.ZELDRIN_STARPORT:
-                if ((self.UnlockItem[RAC3ITEM.BOLT_GRABBER].status or self.UnlockItem[RAC3ITEM.BOX_BREAKER].status) and
-                        not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.ZELDRIN_STARPORT_ITEM].AP_CODE)):
-                    self._write8(gadget_data[RAC3ITEM.BOLT_GRABBER].UNLOCK_ADDRESS, 0)
-                    self._write8(gadget_data[RAC3ITEM.BOX_BREAKER].UNLOCK_ADDRESS, 0)
+    def respawn_gadgets(self):
+        """Respawn gadget if the associated location isn't checked but the gadget is unlocked through AP"""
+        if (self.UnlockItem[RAC3ITEM.REFRACTOR].status and
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.MARCADIA_REFRACTOR].AP_CODE)):
+            self._write8(gadget_data[RAC3ITEM.REFRACTOR].UNLOCK_ADDRESS, 0)
+
+        if (self.UnlockItem[RAC3ITEM.CHARGE_BOOTS].status and
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.DAXX_CHARGE_BOOTS].AP_CODE)):
+            self._write8(gadget_data[RAC3ITEM.CHARGE_BOOTS].UNLOCK_ADDRESS, 0)
+
+        if (self.UnlockItem[RAC3ITEM.NANO_PAK].status and
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.CRASH_SITE_NANO_PAK].AP_CODE)):
+            self._write8(gadget_data[RAC3ITEM.NANO_PAK].UNLOCK_ADDRESS, 0)
+
+        if ((self.UnlockItem[RAC3ITEM.BOLT_GRABBER].status or self.UnlockItem[RAC3ITEM.BOX_BREAKER].status) and
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.ZELDRIN_STARPORT_ITEM].AP_CODE)):
+            self._write8(gadget_data[RAC3ITEM.BOLT_GRABBER].UNLOCK_ADDRESS, 0)
+            self._write8(gadget_data[RAC3ITEM.BOX_BREAKER].UNLOCK_ADDRESS, 0)
 
     def reload_check(self):
         """Detects if the game is currently being reloaded, and updates death data"""
@@ -1035,7 +1034,6 @@ class Rac3Interface(GameInterface):
             self.last_death_state = self.action
             self.died_in_vehicle = bool(self._read8(RAC3STATUS.IN_VEHICLE))
             self.reloading_handled = True
-            self.respawn_gadget(self.planet)
             logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state},'
                          f' death count: {self.last_death_count}, in vehicle? {self.died_in_vehicle}')
         if not self.is_reloading and self.reloading_handled:
@@ -1107,7 +1105,6 @@ class Rac3Interface(GameInterface):
     def force_respawn(self):
         self.self_respawning = True
         self._write8(RAC3STATUS.FORCE_RELOAD, 1)
-        self.respawn_gadget(self.planet)
 
     def teleport_to_coords(self):
         self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))

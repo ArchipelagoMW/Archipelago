@@ -59,7 +59,6 @@ async def handle_planet_changed(ctx: 'Context') -> None:
     planet = ctx.current_planet
     ctx.current_planet, _map = ctx.game_interface.map_switch()
     if planet is not ctx.current_planet:
-        ctx.game_interface.respawn_gadget(ctx.current_planet)
 
         if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
             ctx.game_interface.tyhrranosis_fix()
