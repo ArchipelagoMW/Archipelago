@@ -1024,7 +1024,7 @@ class Rac3Interface(GameInterface):
             self._write8(gadget_data[RAC3ITEM.NANO_PAK].UNLOCK_ADDRESS, 0)
 
         if ((self.UnlockItem[RAC3ITEM.BOLT_GRABBER].status or self.UnlockItem[RAC3ITEM.BOX_BREAKER].status) and
-                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.ZELDRIN_STARPORT_ITEM].AP_CODE)):
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.ZELDRIN_STARPORT_BOLT_GRABBER].AP_CODE)):
             self._write8(gadget_data[RAC3ITEM.BOLT_GRABBER].UNLOCK_ADDRESS, 0)
             self._write8(gadget_data[RAC3ITEM.BOX_BREAKER].UNLOCK_ADDRESS, 0)
 
