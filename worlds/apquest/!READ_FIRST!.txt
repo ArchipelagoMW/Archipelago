@@ -1,0 +1,46 @@
+This apworld is meant as a learning tool for new apworld devs.
+It is a completely standalone resource, but there will be links to additional resources when appropriate.
+
+#################
+# Prerequisites #
+#################
+
+APQuest will only explain how to write the generation-side code for your game, not how to write a client or mod for it.
+For a more zoomed out view of how to add a game to Archipelago, you can read this document:
+https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/adding%20games.md
+
+APQuest assumes you already vaguely know what an apworld is.
+If you don't know, read this first:
+https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/apworld%20specification.md
+
+To write an apworld, you need to be running Archipelago from source (Python) instead of using e.g. the .exe build.
+Here's an explanation for how to do that.
+https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/running%20from%20source.md
+
+#######################
+# How to read APQuest #
+#######################
+
+You'll want to start with __init__.py, then move to world.py.
+If you also want to learn how to write unit tests, go to test/__init__.py.
+
+You can ignore the game/ folder, it contains the actual game code, graphics and music.
+
+The client/ folder is NOT meant for teaching.
+While the client was written to the best of its author's ability, it does not meet the same standard as the world code.
+The client code is also lacking the explanatory comments.
+Copy from it at your own risk.
+
+###################
+# Further reading #
+###################
+
+APQuest is a very simple game, so not every edge case will be covered.
+The world API document goes a lot more in-depth on certain topics:
+https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md
+
+There is also the "APWorld dev FAQ" document with common emergent problems:
+https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/apworld_dev_faq.md
+
+In general, but especially if you want your apworld to be verified by core, you should follow our style guide:
+https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/style.md

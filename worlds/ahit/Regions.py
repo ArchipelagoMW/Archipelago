@@ -243,7 +243,7 @@ guaranteed_first_acts = [
     "Time Rift - Mafia of Cooks",
     "Time Rift - Dead Bird Studio",
     "Time Rift - Sleepy Subcon",
-    "Time Rift - Alpine Skyline"
+    "Time Rift - Alpine Skyline",
     "Time Rift - Tour",
     "Time Rift - Rumbi Factory",
 ]

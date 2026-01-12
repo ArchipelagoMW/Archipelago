@@ -6,7 +6,7 @@ import typing
 from schema import Schema, Optional, And, Or, SchemaError
 
 from Options import Choice, OptionDict, OptionSet, DefaultOnToggle, Range, DeathLink, Toggle, \
-    StartInventoryPool, PerGameCommonOptions, OptionGroup
+    StartInventoryPool, PerGameCommonOptions, OptionGroup, NamedRange
 
 
 # schema helpers
@@ -58,6 +58,20 @@ class Goal(Choice):
     option_rocket = 0
     option_satellite = 1
     default = 0
+
+
+class CraftSanity(NamedRange):
+    """Choose a number of researches to require crafting a specific item rather than with science packs.
+    May be capped based on the total number of locations.
+    There will always be at least 2 Science Pack research locations for automation and logistics, and 1 for rocket-silo
+    if the Rocket Silo option is not set to Spawn."""
+    display_name = "CraftSanity"
+    default = 0
+    range_start = 0
+    range_end = 183
+    special_range_names = {
+        "disabled": 0
+    }
 
 
 class TechCost(Range):
@@ -345,6 +359,7 @@ class FactorioWorldGen(OptionDict):
         "seed": None,
         "starting_area": 1,
         "peaceful_mode": False,
+        "no_enemies_mode": False,
         "cliff_settings": {
             "name": "cliff",
             "cliff_elevation_0": 10,
@@ -394,6 +409,7 @@ class FactorioWorldGen(OptionDict):
             Optional("height"): And(int, lambda n: n >= 0),
             Optional("starting_area"): FloatRange(0.166, 6),
             Optional("peaceful_mode"): LuaBool,
+            Optional("no_enemies_mode"): LuaBool,
             Optional("cliff_settings"): {
                 "name": str, "cliff_elevation_0": FloatRange(0, 99),
                 "cliff_elevation_interval": FloatRange(0.066, 241),  # 40/frequency
@@ -473,6 +489,7 @@ class EnergyLink(Toggle):
 class FactorioOptions(PerGameCommonOptions):
     max_science_pack: MaxSciencePack
     goal: Goal
+    craftsanity: CraftSanity
     tech_tree_layout: TechTreeLayout
     min_tech_cost: MinTechCost
     max_tech_cost: MaxTechCost

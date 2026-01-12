@@ -150,7 +150,10 @@ def generate_era_location_table() -> Dict[str, Dict[str, CivVILocationData]]:
         location = CivVILocationData(
             boost.Type, 0, 0, id_base, boost.EraType, CivVICheckType.BOOST
         )
-        era_locations["ERA_ANCIENT"][boost.Type] = location
+        # If EraRequired is True, place the boost in its actual era
+        # Otherwise, place it in ERA_ANCIENT for early access
+        target_era = boost.EraType if boost.EraRequired else "ERA_ANCIENT"
+        era_locations[target_era][boost.Type] = location
         id_base += 1
 
     return era_locations

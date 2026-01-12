@@ -134,13 +134,13 @@ class KH1Context(CommonContext):
                 os.makedirs(self.game_communication_path)
             for ss in self.checked_locations:
                 filename = f"send{ss}"
-                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                with open(os.path.join(self.game_communication_path, filename), 'w', encoding='utf-8') as f:
                     f.close()
             
             # Handle Slot Data
             self.slot_data = args['slot_data']
             for key in list(args['slot_data'].keys()):
-                with open(os.path.join(self.game_communication_path, key + ".cfg"), 'w') as f:
+                with open(os.path.join(self.game_communication_path, key + ".cfg"), 'w', encoding='utf-8') as f:
                     f.write(str(args['slot_data'][key]))
                     f.close()
                 if key == "remote_location_ids":
@@ -161,7 +161,7 @@ class KH1Context(CommonContext):
                             found = True
                     if not found:
                         if (NetworkItem(*item).player == self.slot and (NetworkItem(*item).location in self.remote_location_ids) or (NetworkItem(*item).location < 0)) or NetworkItem(*item).player != self.slot:
-                            with open(os.path.join(self.game_communication_path, item_filename), 'w') as f:
+                            with open(os.path.join(self.game_communication_path, item_filename), 'w', encoding='utf-8') as f:
                                 f.write(str(NetworkItem(*item).item) + "\n" + str(NetworkItem(*item).location) + "\n" + str(NetworkItem(*item).player))
                                 f.close()
                                 self.item_num += 1
@@ -170,7 +170,7 @@ class KH1Context(CommonContext):
             if "checked_locations" in args:
                 for ss in self.checked_locations:
                     filename = f"send{ss}"
-                    with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                    with open(os.path.join(self.game_communication_path, filename), 'w', encoding='utf-8') as f:
                         f.close()
 
         if cmd in {"PrintJSON"} and "type" in args:
@@ -195,7 +195,7 @@ class KH1Context(CommonContext):
                     filename = "msg"
                     if message != "":
                         if not os.path.exists(self.game_communication_path + "/" + filename):
-                            with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                            with open(os.path.join(self.game_communication_path, filename), 'w', encoding='utf-8') as f:
                                 f.write(message)
                                 f.close()
             if args["type"] == "ItemCheat":
@@ -207,7 +207,7 @@ class KH1Context(CommonContext):
                     filename = "msg"
                     message = "Received " + itemName + "\nfrom server"
                     if not os.path.exists(self.game_communication_path + "/" + filename):
-                        with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                        with open(os.path.join(self.game_communication_path, filename), 'w', encoding='utf-8') as f:
                             f.write(message)
                             f.close()
 
@@ -218,7 +218,7 @@ class KH1Context(CommonContext):
             logger.info(f"DeathLink: {text}")
         else:
             logger.info(f"DeathLink: Received from {data['source']}")
-        with open(os.path.join(self.game_communication_path, 'dlreceive'), 'w') as f:
+        with open(os.path.join(self.game_communication_path, 'dlreceive'), 'w', encoding='utf-8') as f:
             f.write(str(int(data["time"])))
             f.close()
 

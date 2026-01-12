@@ -859,6 +859,10 @@ commands.add_command("toggle-ap-send-filter", "Toggle filtering of item sends th
     log("Player command toggle-ap-send-filter") -- notifies client
 end)
 
+commands.add_command("toggle-ap-connection-change-filter", "Toggle filtering of players joining or parting", function(call)
+    log("Player command toggle-ap-connection-change-filter") -- notifies client
+end)
+
 commands.add_command("toggle-ap-chat", "Toggle sending of chat messages from players on the Factorio server to Archipelago.", function(call)
     log("Player command toggle-ap-chat") -- notifies client
 end)
