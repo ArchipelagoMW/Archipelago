@@ -71,7 +71,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
     # Chapter 6
     "Chapter 6: Underground Completion": Portal2LocationData("sp_a3_01", LocationType.MAP_COMPLETION, [ portal_gun_2]),
     "Chapter 6: Cave Johnson Completion": Portal2LocationData("sp_a3_03", LocationType.MAP_COMPLETION, [ portal_gun_2]),
-    "Chapter 6: Repulsion Intro Completion": Portal2LocationData("sp_a3_jump_intro", LocationType.MAP_COMPLETION, [ portal_gun_2, paint, old_button, old_button, antique_cube]),
+    "Chapter 6: Repulsion Intro Completion": Portal2LocationData("sp_a3_jump_intro", LocationType.MAP_COMPLETION, [ portal_gun_2, paint, old_button, old_floor_button, antique_cube]),
     "Chapter 6: Bomb Flings Completion": Portal2LocationData("sp_a3_bomb_flings", LocationType.MAP_COMPLETION, [ portal_gun_2, old_button, paint]),
     "Chapter 6: Crazy Box Completion": Portal2LocationData("sp_a3_crazy_box", LocationType.MAP_COMPLETION, [ portal_gun_2, old_button, paint, antique_cube, old_floor_button]),
     "Chapter 6: PotatOS Completion": Portal2LocationData("sp_a3_transition01", LocationType.MAP_COMPLETION, [ portal_gun_2, potatos]),
