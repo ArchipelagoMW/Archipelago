@@ -236,6 +236,45 @@ elif self.options.weapon.current_key in {"none", "hammer"}:
 elif self.options.weapon in ("none", "hammer"):
     do_something_else()
 ```
+
+### Reserved Option Names
+The following option names are reserved by core and should not be used by worlds. Options marked with an asterisk (*)
+may be overridden but should only be used to modify core behavior as described in the **Generic Option Classes**
+section below.
+- `accessibility` (*)
+- `csv_output`
+- `exclude_locations` (*)
+- `game`
+- `item_links` (*)
+- `local_items` (*)
+- `log_level`
+- `log_time`
+- `meta_file_path`
+- `multi`
+- `name`
+- `non_local_items` (*)
+- `outputname`
+- `outputpath`
+- `plando`
+- `plando_items`
+- `player_files_path`
+- `player_options`
+- `priority_locations` (*)
+- `progression_balancing` (*)
+- `race`
+- `sameoptions`
+- `seed`
+- `skip_output`
+- `skip_prog_balancing`
+- `spoiler`
+- `spoiler_only`
+- `sprite`
+- `sprite_pool`
+- `start_hints` (*)
+- `start_inventory` (*)
+- `start_location_hints` (*)
+- `weights_file_path`
+
 ## Generic Option Classes
 These options are generically available to every game automatically, but can be overridden for slightly different
 behavior, if desired. See `worlds/soe/Options.py` for an example.
