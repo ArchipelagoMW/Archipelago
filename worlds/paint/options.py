@@ -51,6 +51,49 @@ class CanvasSizeIncrement(Choice):
     option_50 = 50
     option_100 = 100
     default = 100
+    visibility = Visibility.none
+
+
+class CanvasWidthIncrement(Choice):
+    """Sets the number of pixels the canvas will expand for each width item received.
+    Ensure an adequate number of locations are generated if setting this below 50."""
+    display_name = "Canvas Width Increment"
+    # option_10 = 10
+    # option_20 = 20
+    option_25 = 25
+    option_50 = 50
+    option_100 = 100
+    default = 100
+
+
+class CanvasHeightIncrement(Choice):
+    """Sets the number of pixels the canvas will expand for each height item received.
+    Ensure an adequate number of locations are generated if setting this below 50."""
+    display_name = "Canvas Height Increment"
+    # option_10 = 10
+    # option_20 = 20
+    option_25 = 25
+    option_50 = 50
+    option_100 = 100
+    default = 100
+
+
+class AspectRatio(Choice):
+    """Sets the aspect ratio of your final image. Useful when using a custom goal image, also affects game length.
+    Possible options are fullscreen (800x600), widescreen (800x450), or square (800x800)."""
+    display_name = "Aspect Ratio"
+    option_fullscreen = 0
+    option_widescreen = 1
+    option_square = 2
+    default = 0
+
+
+class Orientation(Choice):
+    """Sets the orientation of your final image. Useful when using a custom goal image.
+    Does nothing if aspect ratio is square."""
+    option_horizontal = 0
+    option_vertical = 1
+    default = 0
 
 
 class GoalImage(Range):
@@ -100,6 +143,10 @@ class PaintOptions(PerGameCommonOptions):
     half_percent_checks: HalfPercentChecks
     quarter_percent_checks: QuarterPercentChecks
     canvas_size_increment: CanvasSizeIncrement
+    canvas_width_increment: CanvasWidthIncrement
+    canvas_height_increment: CanvasHeightIncrement
+    aspect_ratio: AspectRatio
+    orientation: Orientation
     goal_image: GoalImage
     starting_tool: StartingTool
     trap_count: TrapCount

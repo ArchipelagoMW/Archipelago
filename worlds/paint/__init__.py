@@ -1,4 +1,5 @@
 from typing import Dict, Any
+from math import ceil
 
 from BaseClasses import CollectionState, Item, MultiWorld, Tutorial, Region
 from Options import OptionError
@@ -36,15 +37,28 @@ class PaintWorld(World):
     item_name_to_id = item_table
     origin_region_name = "Canvas"
 
+    final_width: int
+    final_height: int
     per_pixel_logic_percent: float
 
     def generate_early(self) -> None:
-        if self.options.canvas_size_increment < 50 and self.options.logic_percent <= 55:
-            if self.multiworld.players == 1:
-                raise OptionError("Logic Percent must be greater than 55 when generating a single-player world with "
-                                  "Canvas Size Increment below 50.")
-        # The full canvas size is 800*600, so 480000 pixels.
-        self.per_pixel_logic_percent = self.options.logic_percent.value / 480000
+        if self.options.canvas_width_increment < 50 and self.options.canvas_height_increment < 50 and \
+            self.options.logic_percent <= 55 and self.multiworld.players == 1:
+            raise OptionError("Logic Percent must be greater than 55 when generating a single-player world with "
+                                "Canvas Size Increment below 50.")
+        if self.options.aspect_ratio == 2 or self.options.orientation == 0:
+            self.final_width = 800
+        elif self.options.aspect_ratio == 1:
+            self.final_width = 450
+        else:
+            self.final_width = 600
+        if self.options.aspect_ratio == 2 or self.options.orientation == 1:
+            self.final_height = 800
+        elif self.options.aspect_ratio == 1:
+            self.final_height = 450
+        else:
+            self.final_height = 600
+        self.per_pixel_logic_percent = self.options.logic_percent.value / (self.final_width * self.final_height)
 
     def get_filler_item_name(self) -> str:
         if self.random.randint(0, 99) >= self.options.trap_count:
@@ -65,8 +79,10 @@ class PaintWorld(World):
         self.push_precollected(self.create_item(starting_tools.pop(self.options.starting_tool)))
         items_to_create = ["Free-Form Select", "Select", "Fill With Color", "Pick Color", "Text", "Curve", "Polygon"]
         items_to_create += starting_tools
-        items_to_create += ["Progressive Canvas Width"] * (400 // self.options.canvas_size_increment)
-        items_to_create += ["Progressive Canvas Height"] * (300 // self.options.canvas_size_increment)
+        items_to_create += ["Progressive Canvas Width"] * ceil(self.final_width /\
+                                                               (self.options.canvas_width_increment * 2))
+        items_to_create += ["Progressive Canvas Height"] * ceil(self.final_height /\
+                                                                (self.options.canvas_height_increment * 2))
         depth_items = ["Progressive Color Depth (Red)", "Progressive Color Depth (Green)",
                        "Progressive Color Depth (Blue)"]
         for item in depth_items:
@@ -100,8 +116,10 @@ class PaintWorld(World):
         set_completion_rules(self, self.player)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return dict(self.options.as_dict("logic_percent", "goal_percent", "goal_image", "death_link",
-                                         "canvas_size_increment"), version="0.5.2")
+        return dict(self.options.as_dict("logic_percent", "goal_percent", "death_link", "canvas_width_increment",
+                                         "canvas_height_increment"),
+                    final_width=self.final_width, final_height=self.final_height,
+                    version=self.world_version.as_simple_string())
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)

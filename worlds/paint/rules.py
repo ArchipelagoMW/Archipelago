@@ -54,8 +54,8 @@ def calculate_paint_percent_available(state: CollectionState, world: "PaintWorld
     # (expected score per pixel) * (pixels currently available) * (logic percent from options) / (total pixel count)
     # The expected score and logic percent per pixel are calculated elsewhere for efficiency.
     return (SINGLE_PIXEL_SCORE_LOOKUP[r, g, b] *
-            min(400 + w * world.options.canvas_size_increment.value, 800) *
-            min(300 + h * world.options.canvas_size_increment.value, 600) *
+            min(world.final_width // 2 + w * world.options.canvas_width_increment.value, world.final_width) *
+            min(world.final_height // 2 + h * world.options.canvas_height_increment.value, world.final_height) *
             world.per_pixel_logic_percent)
 
 
