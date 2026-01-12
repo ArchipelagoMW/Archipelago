@@ -465,8 +465,8 @@ def set_rules(world: "RaC3World"):
 
         # RAC3TBOLT.ZELDRIN_STARPORT_1
         RAC3TBOLT.ZELDRIN_STARPORT_2: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
-        RAC3LOCATION.ZELDRIN_STARPORT_ITEM: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
-        RAC3LOCATION.ZELDRIN_STARPORT_ITEM2: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
+        RAC3LOCATION.ZELDRIN_STARPORT_BOLT_GRABBER: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
+        RAC3LOCATION.ZELDRIN_STARPORT_BOX_BREAKER: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
         # RAC3LOCATION.ZELDRIN_STARPORT_SHIP
 
         RAC3SKILLPOINT.METROPOLIS_GOOD_YEAR: lambda state: state.has_any(
