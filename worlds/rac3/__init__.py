@@ -92,6 +92,8 @@ class RaC3World(World):
         rac3_logger.warning("INCOMPLETE WORLD! Slot '%s' may require send_location/send_item for completion!",
                             self.player_name)
         self.preplaced_items = [RAC3ITEM.VELDIN]
+        if self.options.clank_options == 0:
+            self.preplaced_items += [RAC3ITEM.CLANK] #If Clank is set to vanilla, start with him
         # implement .yaml-less Universal Tracker support
         setup_options_from_slot_data(self)
         create_regions(self)
@@ -160,6 +162,7 @@ class RaC3World(World):
             RAC3OPTION.WEAPON_VENDORS: self.options.weapon_vendors.value,
             RAC3OPTION.FILLER_WEIGHT: self.options.filler_weight.value,
             RAC3OPTION.ONE_HP_CHALLENGE: self.options.one_hp_challenge.value,
+            RAC3OPTION.CLANK_OPTIONS: self.options.clank_options.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }
 

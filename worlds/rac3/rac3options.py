@@ -5,6 +5,7 @@ from worlds.AutoWorld import PerGameCommonOptions
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.options.arena_options import Arena
 from worlds.rac3.options.armor_upgrade_options import ArmorUpgrade
+from worlds.rac3.options.clank_options import ClankOptions
 from worlds.rac3.options.deathlink_options import Deathlink
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
 from worlds.rac3.options.filler_weight_options import FillerWeight
@@ -69,6 +70,7 @@ class RaC3Options(PerGameCommonOptions):
     ship_skin: ShipSkin
     skin: RatchetSkin
     one_hp_challenge: OneHpChallenge
+    clank_options:ClankOptions
 
 
 rac3_option_groups = [
@@ -86,6 +88,7 @@ rac3_option_groups = [
         StartingWeapons,
         EnableProgressiveWeapons,
         ArmorUpgrade,
+        ClankOptions,
         EnableTraps,
         TrapWeight,
         FillerWeight,
@@ -140,4 +143,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.WEAPON_VENDORS,
     RAC3OPTION.FILLER_WEIGHT,
     RAC3OPTION.ONE_HP_CHALLENGE,
+    RAC3OPTION.CLANK_OPTIONS,
 ]
