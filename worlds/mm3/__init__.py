@@ -1,5 +1,6 @@
 import hashlib
 import logging
+from copy import deepcopy
 from typing import Any, Sequence, ClassVar
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
@@ -98,7 +99,7 @@ class MM3World(World):
         self.rom_name = bytearray()
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
-        self.weapon_damage = weapon_damage.copy()
+        self.weapon_damage = deepcopy(weapon_damage)
         self.wily_4_weapons: dict[int, list[int]] = {}
 
     def create_regions(self) -> None:
