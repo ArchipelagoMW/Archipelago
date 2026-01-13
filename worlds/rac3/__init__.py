@@ -92,7 +92,7 @@ class RaC3World(World):
         setup_options_from_slot_data(self)
         create_regions(self)
 
-        self.preplaced_items = [RAC3ITEM.VELDIN, RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK]
+        self.preplaced_items = [RAC3ITEM.VELDIN]
         for item in self.preplaced_items:
             self.push_precollected(self.create_item(item))
         self.preplaced_items.extend(process_start_inventory(self))

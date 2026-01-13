@@ -13,8 +13,7 @@ from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_
                                              ITEM_NAME_FROM_ID, non_prog_weapon_data, PROG_TO_NAME_DICT,
                                              RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data, weapon_upgrade_data)
 from worlds.rac3.constants.data.location import (LOCATION_FROM_AP_CODE, LOCATION_TO_INFOBOT_FLAG,
-                                                 RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA,
-                                                 REGION_TO_INFOBOT_LOCATION)
+                                                 RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA, REGION_TO_INFOBOT_LOCATION)
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
 from worlds.rac3.constants.deaths import CLANK_DEATH_FROM_ACTION, DEATH_FROM_ACTION
@@ -303,6 +302,7 @@ class Rac3Interface(GameInterface):
         self.timer_cycler()
         self.verify_quick_select_and_last_used()
         self.notification_cycler()
+        self.clank_cycler()
         # Proc Options
         self.multiplier_cycler()
         self.overflow_fix()
@@ -571,6 +571,7 @@ class Rac3Interface(GameInterface):
         self.weapon_exp_cycler()
         self.timer_cycler()
         self.notification_cycler()
+        self.clank_cycler()
 
     def undo_collections(self):
         self.health = self._read8(RAC3STATUS.HEALTH)
@@ -1392,6 +1393,16 @@ class Rac3Interface(GameInterface):
         if not self._read8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID):
             return True
         return False
+
+    def clank_cycler(self):
+        if self.UnlockItem[RAC3ITEM.CLANK].status:
+            if self.UnlockItem[RAC3ITEM.CLANK].unlock_delay:
+                self._write16(RAC3STATUS.NO_CLANK, 0)
+                self.UnlockItem[RAC3ITEM.CLANK].unlock_delay = 0
+            else:
+                self.UnlockItem[RAC3ITEM.CLANK].unlock_delay += 1
+        else:
+            self._write16(RAC3STATUS.NO_CLANK, 1)
 
     def set_flag(self, data: list[RAC3ADDRESSDATA]):
         """Sets the bit flags for a given location"""
