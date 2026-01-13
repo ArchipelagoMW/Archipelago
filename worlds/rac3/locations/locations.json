@@ -577,6 +577,10 @@
           {
             "name": "117",
             "item_count": 1
+          },
+          {
+            "name": "397",
+            "itme_count": 1
           }
         ]
       },
@@ -812,6 +816,10 @@
         "sections": [
           {
             "name": "80",
+            "item_count": 1
+          },
+          {
+            "name": "398",
             "item_count": 1
           },
           {
@@ -3148,6 +3156,22 @@
             "item_count": 1
           }
         ]
+      },
+      {
+        "name": "9",
+        "map_locations": [
+          {
+            "map": "Aquatos Base",
+            "x": 455,
+            "y": 310
+          }
+        ],
+        "sections": [
+          {
+            "name": "397",
+            "itme_count": 1
+          }
+        ]
       }
     ]
   },
@@ -5105,6 +5129,10 @@
         "sections": [
           {
             "name": "80",
+            "item_count": 1
+          },
+          {
+            "name": "398",
             "item_count": 1
           }
         ]
