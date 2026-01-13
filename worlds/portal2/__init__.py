@@ -4,7 +4,7 @@ from BaseClasses import ItemClassification, MultiWorld, Region, Tutorial
 from Options import PerGameCommonOptions
 import settings
 from worlds.generic.Rules import add_item_rule
-from .Options import CutsceneSanity, Portal2Options, portal2_option_groups, portal2_option_presets
+from .Options import CutsceneLevels, Portal2Options, portal2_option_groups, portal2_option_presets
 from .Items import Portal2Item, game_item_table, item_table, junk_items, trap_items
 from .Locations import Portal2Location, map_complete_table, cutscene_completion_table, all_locations_table
 from worlds.AutoWorld import WebWorld, World
@@ -231,7 +231,7 @@ class Portal2World(World):
     def fill_slot_data(self):
         # Return the chapter map orders e.g. {chapter1: ['sp_a1_intro2', 'sp_a1_intro5', ...], chapter2: [...], ...}
         # This is for generating and updating the Extras menu (level select screen) in portal 2 at the start and when checks are made
-        excluded_option_names = [CutsceneSanity]
+        excluded_option_names = [CutsceneLevels]
         generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
         excluded_option_names += generic_option_names
         included_option_names: list[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names]

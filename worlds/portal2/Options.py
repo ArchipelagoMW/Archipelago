@@ -2,11 +2,11 @@ from dataclasses import dataclass
 from Options import Choice, OptionGroup, Range, Toggle, DeathLink, PerGameCommonOptions
 from .ItemNames import *
 
-class CutsceneSanity(Toggle):
+class CutsceneLevels(Toggle):
     """
-    Determines whether cutscene maps send location checks
+    Determines whether cutscene maps are added to the map pool
     """
-    display_name = "CutsceneSanity"
+    display_name = "CutsceneLevels"
 
 class TrapFillPercentage(Range):
     """
@@ -71,7 +71,7 @@ class SlipperyFloorTrapWeight(BaseTrapWeight):
 
 portal2_option_groups = [
     OptionGroup("Location Options", [
-        CutsceneSanity
+        CutsceneLevels
     ]),
     OptionGroup("Trap Options", [
         TrapFillPercentage,
@@ -94,7 +94,7 @@ portal2_option_presets = {
 class Portal2Options(PerGameCommonOptions):
     death_link: DeathLink
 
-    cutscenesanity: CutsceneSanity
+    cutscenelevels: CutsceneLevels
     # storyachievementsanity: StoryAchievementSanity
     # monitorsanity: MonitorSanity
 
