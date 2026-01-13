@@ -21,7 +21,7 @@ Weapons, Planets, Gadgets, Titanium bolts, Trophies, Weapon upgrades, Sewer Crys
 20 different weapons, 4 progressive upgrades per weapon are available, 10 different gadgets, 17 post-planet completions
 that unlock other planets, 4 progressive armors, 35 titanium bolts, 15 trophies, and Bolts/Weapon EXP along with Inferno
 Mode and Jackpot get shuffled in as filler.
-Addtional locations may be included through yaml options: Annihilation Nation missions, The Ranger missions, Phoenix VR
+Addtional locations may be included through .yaml options: Annihilation Nation missions, The Ranger missions, Phoenix VR
 missions, Sewer Crystals and Nanotech Levels.
 
 ## Which items can be in another player's world?

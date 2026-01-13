@@ -31,7 +31,7 @@ jackpot mode, bolts).
 ## X check is in logic, but when I go there I don't receive it, why?
 
 Currently, there are some checks that doesn't work with sequence breaking (Example Obani Gemini: Infobot: Blackwater
-City) these are collected into a location group called  `Unstable`. If you generate the yaml for yourself make sure it
+City) these are collected into a location group called  `Unstable`. If you generate the .yaml for yourself make sure it
 is in the **excluded locations** section (it should be there by default along with some ones).
 Due to how problematic this has become, the locations in the `Unstable` group have straight up been skipped during generation to prevent issues until a solution has been found.
 
@@ -55,13 +55,13 @@ and the hacker. For Hideout, you need to have the refractor to avoid being softl
 
 The client tells you to reload the save file as soon you start the game on Veldin. To reapply cosmetics, restart the client and reconnect, then reload your save file without saving first.
 
-## How do i toggle death link?
+## How do I toggle death link?
 
 You can run the /death_link command in the Ratchet and Clank 3 client to toggle it.
 
 ## Sometimes the message popup does not show when I send/receive items
 
-If the game is paused, you are in a menu, selecting a mission etc the game cannot display the message box we use to show these messages.
+If the game is paused, you are in a menu, selecting a mission, and in other situations, the game cannot display the message box we use to show these messages.
 
 ## How can I contribute to the project?
 
@@ -69,7 +69,7 @@ If the game is paused, you are in a menu, selecting a mission etc the game canno
 These submissions should be sent to the `[PS2] Ratchet and Clank 3: Up Your Arsenal` channel on the Archipelago discord. When you encounter an issue, make sure to use the `/rac3_info` command in your Ratchet and Clank 3 client and send the result of that
 command into the discord channel as well.
 - **As a developer**: If you wish to contribute to the implementation
-itself then fork this repository on Github, make a new branch based of the `staging` branch of the project and make your changes there. Then open a pull request with a detailed description of your changes.
+itself then fork this repository on GitHub, make a new branch based of the `staging` branch of the project and make your changes there. Then open a pull request with a detailed description of your changes.
 If the changes made in the pull request are acceptable, then they will be merged. **Make sure your pull request targets the repository's `staging` branch!**
 
 
