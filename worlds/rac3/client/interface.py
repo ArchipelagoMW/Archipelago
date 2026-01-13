@@ -683,6 +683,8 @@ class Rac3Interface(GameInterface):
                     self._write8(gadget_data[RAC3ITEM.BOX_BREAKER].UNLOCK_ADDRESS, 0)
                 case RAC3REGION.CRASH_SITE:
                     self._write8(gadget_data[RAC3ITEM.NANO_PAK].UNLOCK_ADDRESS, 0)
+                case RAC3REGION.QWARKS_HIDEOUT:
+                    self._write8(gadget_data[RAC3ITEM.PDA].UNLOCK_ADDRESS, 0)
     
     def should_cycle_gadgets(self) -> bool:
         """Check if it's safe to cycle gadgets
