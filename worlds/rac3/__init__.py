@@ -91,7 +91,7 @@ class RaC3World(World):
             self.player_name)
         rac3_logger.warning("INCOMPLETE WORLD! Slot '%s' may require send_location/send_item for completion!",
                             self.player_name)
-        self.preplaced_items = [RAC3ITEM.VELDIN, RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK]
+        self.preplaced_items = [RAC3ITEM.VELDIN]
         # implement .yaml-less Universal Tracker support
         setup_options_from_slot_data(self)
         create_regions(self)

@@ -202,6 +202,7 @@ class RAC3ITEM:
     ADAMANTINE = "Adamantine armor"
     AEGIS = "Aegis Mark V armor"
     INFERNOX = "Infernox armor"
+    CLANK = "Clank"
 
     PROGRESSIVE_SHOCK_BLASTER = "Progressive Shock Blaster"
     PROGRESSIVE_NITRO_LAUNCHER = "Progressive Nitro Launcher"

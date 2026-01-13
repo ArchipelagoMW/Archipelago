@@ -296,6 +296,7 @@ class Rac3Interface(GameInterface):
         self.timer_cycler()
         self.verify_quick_select_and_last_used()
         self.notification_cycler()
+        self.clank_cycler()
         # Proc Options
         self.multiplier_cycler()
         self.overflow_fix()
@@ -548,6 +549,7 @@ class Rac3Interface(GameInterface):
         self.weapon_exp_cycler()
         self.timer_cycler()
         self.notification_cycler()
+        self.clank_cycler()
 
     def undo_collections(self):
         self.health = self._read8(RAC3STATUS.HEALTH)
@@ -1188,3 +1190,12 @@ class Rac3Interface(GameInterface):
                         (self.UnlockItem[RAC3ITEM.HACKER].status == 0 or
                         self.UnlockItem[RAC3ITEM.HYPERSHOT].status == 0))
         return False
+    def clank_cycler(self):
+        if self.UnlockItem[RAC3ITEM.CLANK].status:
+            if self.UnlockItem[RAC3ITEM.CLANK].unlock_delay:
+                self._write16(RAC3STATUS.NO_CLANK, 0)
+                self.UnlockItem[RAC3ITEM.CLANK].unlock_delay = 0
+            else:
+                self.UnlockItem[RAC3ITEM.CLANK].unlock_delay += 1
+        else:
+            self._write16(RAC3STATUS.NO_CLANK, 1)
