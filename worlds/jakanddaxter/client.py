@@ -15,13 +15,11 @@ from typing import Awaitable
 
 # Misc imports
 import colorama
-from .agents.PyMemoryEditor import OpenProcess, ProcessNotFoundError
 from psutil import NoSuchProcess
 
 # Archipelago imports
 import ModuleUpdate
 import Utils
-
 from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui_enabled
 from NetUtils import ClientStatus
 
@@ -30,8 +28,8 @@ from .game_id import jak1_name, jak1_gk, jak1_goalc
 from .options import EnableOrbsanity
 from .agents.memory_reader import JakAndDaxterMemoryReader
 from .agents.repl_client import JakAndDaxterReplClient
-from . import JakAndDaxterWorld
 from .agents.PyMemoryEditor import OpenProcess, ProcessNotFoundError
+from . import JakAndDaxterWorld
 
 
 ModuleUpdate.update()
@@ -354,6 +352,7 @@ class JakAndDaxterContext(CommonContext):
             except NoSuchProcess:
                 self.on_log_info(logger, "Memory reader process lost. Restarting Memory reader loop.")
 
+
 def find_root_directory(ctx: JakAndDaxterContext):
 
     # The path to this file is platform-dependent.
@@ -558,7 +557,6 @@ async def run_game(ctx: JakAndDaxterContext):
                         stderr=log_file
                     )
 
-
         if not goalc_running:
             # For the OpenGOAL Compiler, the existence of the "data" subfolder indicates you are running it from
             # a built package. This subfolder is treated as its proj_path.
@@ -611,7 +609,7 @@ async def run_game(ctx: JakAndDaxterContext):
             if Utils.is_windows:
                 goalc_process = subprocess.Popen(goalc_args, creationflags=subprocess.CREATE_NEW_CONSOLE)
             elif Utils.is_linux:
-                terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm')
+                terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('konsole') or which('xterm')
                 if terminal:
                     goalc_process = subprocess.Popen([terminal, '-e', shlex.join(goalc_args)])
                 else:
@@ -619,6 +617,7 @@ async def run_game(ctx: JakAndDaxterContext):
                            f"We support the following options:\n"
                            f"   x-terminal-emulator\n"
                            f"   gnome-terminal\n"
+                           f"   konsole\n"
                            f"   xterm\n"
                            f"Please install one of these and try again.")
                     ctx.on_log_error(logger, msg)

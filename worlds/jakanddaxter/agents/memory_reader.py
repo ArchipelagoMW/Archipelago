@@ -4,7 +4,6 @@ import struct
 import sys
 from typing import ByteString, Callable
 import json
-from pymem import pattern, Pymem
 from .PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
 from dataclasses import dataclass
 
@@ -283,43 +282,24 @@ class JakAndDaxterMemoryReader:
             self.connected = False
             return
 
-        # PyMemoryEditor is extremely slow to find the right memory address on Windows, but it works fine once we know
-        # what it is. So we will use a temporary Pymem object to find the address on Windows, while on Linux we will
-        # use the real instance of PME's OpenProcess.
-        if Utils.is_windows:
-            gk_pymem = Pymem(jak1_gk)  # The GOAL Kernel
-
-            # If we don't find the marker in the first loaded module, we've failed.
-            modules = list(gk_pymem.list_modules())
-            marker_address = pattern.pattern_scan_module(gk_pymem.process_handle, modules[0], self.marker)
-            if marker_address:
-                # At this address is another address that contains the struct we're looking for: the game's state.
-                # From here we need to add the length in bytes for the marker and 4 bytes of padding,
-                # and the struct address is 8 bytes long (it's an uint64).
-                goal_pointer = marker_address + len(self.marker) + 4
-                self.goal_address = int.from_bytes(
-                    gk_pymem.read_bytes(goal_pointer, sizeof_uint64),
-                    byteorder="little",
-                    signed=False)
-                logger.debug("Found the archipelago memory address on Windows: " + str(self.goal_address))
-                await self.verify_memory_version()
-            else:
-                self.log_error(logger, "Could not find the Archipelago marker address on Windows!")
-                self.connected = False
-
-        elif Utils.is_linux:
+        if Utils.is_windows or Utils.is_linux:
             marker_addresses = list(self.gk_process.search_by_value(bytes, len(self.marker), self.marker,
                                                                     writeable_only=True))
             if len(marker_addresses) > 0:
+                # If we don't find the marker in the first loaded module, we've failed.
                 goal_pointer = marker_addresses[0] + len(self.marker) + 4
+
+                # At this address is another address that contains the struct we're looking for: the game's state.
+                # From here we need to add the length in bytes for the marker and 4 bytes of padding,
+                # and the struct address is 8 bytes long (it's an uint64).
                 self.goal_address = int.from_bytes(
                     self.gk_process.read_process_memory(goal_pointer, bytes, sizeof_uint64),
                     byteorder="little",
                     signed=False)
-                logger.debug("Found the archipelago memory address on Linux: " + str(self.goal_address))
+                logger.debug("Found the archipelago memory address: " + str(self.goal_address))
                 await self.verify_memory_version()
             else:
-                self.log_error(logger, "Could not find the Archipelago marker address on Linux!")
+                self.log_error(logger, "Could not find the Archipelago marker address!")
                 self.connected = False
 
         else:
