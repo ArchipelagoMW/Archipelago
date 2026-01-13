@@ -305,6 +305,7 @@ def set_rules(world: "RaC3World"):
             lambda state: state.can_reach(RAC3REGION.COMMAND_CENTER, player=world.player),
         RAC3VENDOR.AQUATOS_BOUNCER: lambda state: state.can_reach(RAC3REGION.QWARKS_HIDEOUT, player=world.player),
         RAC3VENDOR.AQUATOS_PLASMA_COIL: lambda state: state.can_reach(RAC3REGION.KOROS, player=world.player),
+        # RAC3LOCATION.AQUATOS_BASE
         RAC3TBOLT.SEWER_PIPE: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
         RAC3TBOLT.SEWER_SWING: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.GRAV_BOOTS], world.player),
         # RAC3SEWER.TRADE_1: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
