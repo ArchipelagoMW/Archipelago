@@ -7,6 +7,7 @@ from BaseClasses import Item, ItemClassification as IC
 from enum import Enum, auto
 
 from .helpers import PSORamData
+from .options import Goal
 
 from .strings.item_names import Item as ItemName
 
@@ -47,7 +48,7 @@ class PSOItem(Item):
 
 # We comment out the boss unlocks for now to keep the checks low while we figure stuff out
 ITEM_TABLE: dict[str, PSOItemData] = {
-#    ItemName.UNLOCK_FOREST_1:     PSOItemData(PSOItemType.AREA,     IC.progression,                   1, PSORamData()),
+    ItemName.UNLOCK_FOREST_1:     PSOItemData(PSOItemType.AREA,     IC.progression,                   1, PSORamData()),
 #    ItemName.UNLOCK_FOREST_2:     PSOItemData(PSOItemType.AREA,     IC.progression,                   2, PSORamData()),
 #    ItemName.UNLOCK_DRAGON:       PSOItemData(PSOItemType.AREA,     IC.progression,                   3, PSORamData()),
     ItemName.UNLOCK_CAVES_1:      PSOItemData(PSOItemType.AREA,     IC.progression,                   4, PSORamData(0x805127FB, 7)),
@@ -136,8 +137,14 @@ def create_all_items(world: PSOWorld) -> None:
     for name in progression_item_names:
         # Keep the Victory item out of the drop pool, otherwise things might get wonky
         if name == ItemName.VICTORY:
-            # Instead, we place it specifically on the goal, of which there is only one option right now
-            world.get_location("Defeat Dark Falz").place_locked_item(world.create_item(name))
+            # Instead, we place it specifically on the goal
+            goal_location: str
+            if world.options.goal == Goal.option_defeat_the_dragon:
+                goal_location = "Defeat Dragon"
+            else:
+                goal_location = "Defeat Dark Falz"
+
+            world.get_location(goal_location).place_locked_item(world.create_item(name))
             continue
         itempool.append(world.create_item(name))
 
@@ -149,7 +156,8 @@ def create_all_items(world: PSOWorld) -> None:
 
     world.multiworld.itempool += itempool
 
-    starting_inventory: list[PSOItem] = []
+    # We start with Forest 1 unlocked by default
+    starting_inventory: list[PSOItem] = [create_item_with_correct_classification(world, ItemName.UNLOCK_FOREST_1)]
 
     if world.options.start_with_lavis_blade:
         starting_inventory.append(world.create_item("Lavis Blade"))
