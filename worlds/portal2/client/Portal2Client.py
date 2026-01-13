@@ -279,6 +279,9 @@ class Portal2Context(CommonContext):
             self.refresh_menu()
         else:
             raise Exception("chapter_dict not found in slot data")
+        
+        if "open_world" in slot_data:
+            self.menu.is_open_world = slot_data["open_world"]
 
     def on_package(self, cmd, args):
         def update_item_list():

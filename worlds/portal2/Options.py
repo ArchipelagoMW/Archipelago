@@ -2,11 +2,19 @@ from dataclasses import dataclass
 from Options import Choice, OptionGroup, Range, Toggle, DeathLink, PerGameCommonOptions
 from .ItemNames import *
 
+class OpenWorld(Toggle):
+    """
+    If all maps are accessible from the start.
+    Default is false, only 1 map from each chapter is accessible and maps are unlocked through completing previous ones.
+    If true all maps are accessible from the start. This makes it easier to play but does break intended level progression logic
+    """
+    display_name = "Open World"
+
 class CutsceneLevels(Toggle):
     """
     Determines whether cutscene maps are added to the map pool
     """
-    display_name = "CutsceneLevels"
+    display_name = "Cutscene Levels"
 
 class TrapFillPercentage(Range):
     """
@@ -71,6 +79,7 @@ class SlipperyFloorTrapWeight(BaseTrapWeight):
 
 portal2_option_groups = [
     OptionGroup("Location Options", [
+        OpenWorld,
         CutsceneLevels
     ]),
     OptionGroup("Trap Options", [
@@ -86,7 +95,8 @@ portal2_option_groups = [
 portal2_option_presets = {
     "default": {
         "death_link": False,
-        "cutscenesanity": True,
+        "map_layout": "normal",
+        "cutscenelevels": True,
     }
 }
 
@@ -94,6 +104,7 @@ portal2_option_presets = {
 class Portal2Options(PerGameCommonOptions):
     death_link: DeathLink
 
+    open_world: OpenWorld
     cutscenelevels: CutsceneLevels
     # storyachievementsanity: StoryAchievementSanity
     # monitorsanity: MonitorSanity

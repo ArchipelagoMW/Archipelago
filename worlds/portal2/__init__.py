@@ -153,7 +153,7 @@ class Portal2World(World):
     def generate_early(self):
         self.maps_in_use = set(map_complete_table.keys())
         # Cutscene sanity option
-        if self.options.cutscenesanity:
+        if self.options.cutscenelevels:
             self.maps_in_use.update(cutscene_completion_table.keys())
 
         # Universal Tracker Support
