@@ -2,11 +2,19 @@ from dataclasses import dataclass
 from Options import Choice, OptionGroup, Range, Toggle, DeathLink, PerGameCommonOptions
 from .ItemNames import *
 
-class CutsceneSanity(Toggle):
+class OpenWorld(Toggle):
     """
-    Determines whether cutscene maps send location checks
+    If all maps are accessible from the start.
+    Default is false, only 1 map from each chapter is accessible and maps are unlocked through completing previous ones.
+    If true all maps are accessible from the start. This makes it easier to play but does break intended level progression logic
     """
-    display_name = "CutsceneSanity"
+    display_name = "Open World"
+
+class CutsceneLevels(Toggle):
+    """
+    Determines whether cutscene maps are added to the map pool
+    """
+    display_name = "Cutscene Levels"
 
 class TrapFillPercentage(Range):
     """
@@ -45,6 +53,17 @@ class ButterFingersTrapWeight(BaseTrapWeight):
     """
     display_name = butter_fingers_trap + " Weight"
 
+class CubeConfettiTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes an explosion of colorful cubes at your feet
+    """
+    display_name = cube_confetti_trap + " Weight"
+
+class SlipperyFloorTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes Chell slip and slide
+    """
+    display_name = slippery_floor_trap + " Weight"
 
 # class StoryAchievementSanity(Toggle):
 #     """
@@ -60,20 +79,24 @@ class ButterFingersTrapWeight(BaseTrapWeight):
 
 portal2_option_groups = [
     OptionGroup("Location Options", [
-        CutsceneSanity
+        OpenWorld,
+        CutsceneLevels
     ]),
     OptionGroup("Trap Options", [
         TrapFillPercentage,
         MotionBlurTrapWeight,
         FizzlePortalTrapWeight,
-        ButterFingersTrapWeight
+        ButterFingersTrapWeight,
+        CubeConfettiTrapWeight,
+        SlipperyFloorTrapWeight
     ])
 ]
 
 portal2_option_presets = {
     "default": {
         "death_link": False,
-        "cutscenesanity": True,
+        "map_layout": "normal",
+        "cutscenelevels": True,
     }
 }
 
@@ -81,7 +104,8 @@ portal2_option_presets = {
 class Portal2Options(PerGameCommonOptions):
     death_link: DeathLink
 
-    cutscenesanity: CutsceneSanity
+    open_world: OpenWorld
+    cutscenelevels: CutsceneLevels
     # storyachievementsanity: StoryAchievementSanity
     # monitorsanity: MonitorSanity
 
@@ -89,4 +113,6 @@ class Portal2Options(PerGameCommonOptions):
     motion_blur_trap_weight: MotionBlurTrapWeight
     fizzle_portal_trap_weight: FizzlePortalTrapWeight
     butter_fingers_trap_weight: ButterFingersTrapWeight
+    cube_confetti_trap_weight: CubeConfettiTrapWeight
+    slippery_floor_trap_weight: SlipperyFloorTrapWeight
     

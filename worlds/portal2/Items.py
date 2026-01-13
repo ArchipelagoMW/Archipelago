@@ -35,12 +35,12 @@ class Portal2Item(Item):
 game_item_table: dict[str, Portal2ItemData] = {
     # Portal Guns
     portal_gun_2: Portal2ItemData("weapon_portalgun", "CanFirePortal2", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression | ItemClassification.useful),
-    potatos: Portal2ItemData("weapon_portalgun", "potato", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression), # Currently no logic set for this in game or in generation
+    #potatos: Portal2ItemData("weapon_portalgun", "potato", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression), # Currently no logic set for this in game or in generation
 
     # Cubes (GetModelName())
     weighted_cube: Portal2ItemData("prop_weighted_cube", "models/props/metal_box.mdl", ItemTag.DELETE | ItemTag.CUBE, ItemClassification.progression),
     reflection_cube: Portal2ItemData("prop_weighted_cube", "models/props/reflection_cube.mdl", ItemTag.DELETE | ItemTag.CUBE, ItemClassification.progression),
-    spherical_cube: Portal2ItemData("prop_weighted_cube", "models/props_gameplay/mp_ball.mdl", ItemTag.DELETE | ItemTag.CUBE, ItemClassification.progression),
+    spherical_cube: Portal2ItemData("prop_weighted_cube", "models/props_gameplay/mp_ball.mdl", ItemTag.DELETE | ItemTag.CUBE, ItemClassification.filler),
     antique_cube: Portal2ItemData("prop_weighted_cube", "models/props_underground_underground_weighted_cube.mdl", ItemTag.DELETE | ItemTag.CUBE, ItemClassification.progression),
 
     # Buttons
@@ -48,8 +48,6 @@ game_item_table: dict[str, Portal2ItemData] = {
     old_button: Portal2ItemData("prop_under_button", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
     floor_button: Portal2ItemData("prop_floor_button", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
     old_floor_button: Portal2ItemData("prop_under_floor_button", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
-    cube_button: Portal2ItemData("prop_floor_cube_button", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
-    ball_button: Portal2ItemData("prop_floor_ball_button", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
 
     # Puzzle Elements
     frankenturret: Portal2ItemData("prop_monster_box", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
@@ -80,13 +78,15 @@ junk_items_table: dict[str, Portal2ItemData] = {
     slice_of_cake: Portal2ItemData(classification = ItemClassification.filler)
 }
 
-trap_items = [motion_blur_trap, fizzle_portal_trap, butter_fingers_trap]
-
 trap_items_table: dict[str, Portal2ItemData] = {
     motion_blur_trap: Portal2ItemData(classification = ItemClassification.trap),
     fizzle_portal_trap: Portal2ItemData(classification = ItemClassification.trap),
     butter_fingers_trap: Portal2ItemData(classification = ItemClassification.trap),
+    cube_confetti_trap: Portal2ItemData(classification = ItemClassification.trap),
+    slippery_floor_trap: Portal2ItemData(classification = ItemClassification.trap),
 }
+
+trap_items = [trap for trap in trap_items_table.keys()]
 
 item_table: dict[str, Portal2ItemData] = game_item_table.copy() # Shallow copy okay as we aren't changing any data
 item_table.update(junk_items_table)

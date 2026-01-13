@@ -3,7 +3,8 @@ import sys
 from BaseClasses import ItemClassification, MultiWorld, Region, Tutorial
 from Options import PerGameCommonOptions
 import settings
-from .Options import CutsceneSanity, Portal2Options, portal2_option_groups, portal2_option_presets
+from worlds.generic.Rules import add_item_rule
+from .Options import CutsceneLevels, Portal2Options, portal2_option_groups, portal2_option_presets
 from .Items import Portal2Item, game_item_table, item_table, junk_items, trap_items
 from .Locations import Portal2Location, map_complete_table, cutscene_completion_table, all_locations_table
 from worlds.AutoWorld import WebWorld, World
@@ -54,7 +55,6 @@ class Portal2World(World):
     options_dataclass = Portal2Options  # options the player can set
     options: Portal2Options  # typing hints for option results
     settings: Portal2Settings
-    topology_present = True  # show path to required location checks in spoiler
     web = Portal2WebWorld()
 
     BASE_ID = 98275000
@@ -67,7 +67,8 @@ class Portal2World(World):
     location_count = 0
     item_count= 0
 
-    maps_in_use: list[str] = list(map_complete_table.keys())
+    maps_in_use: set[str] = set()
+    chapter_maps_dict = {}
     
     for key, value in item_table.items():
         item_name_to_id[key] = value.id
@@ -106,7 +107,7 @@ class Portal2World(World):
         # Maps with no requirements
         map_pool += [name for name in possible_maps if len(all_locations_table[name].required_items) == 0]
         pick_maps(3)
-
+        
         # Maps with just portal gun upgrade
         map_pool += [name for name in possible_maps if all_locations_table[name].required_items == [portal_gun_2]]
         pick_maps(3)
@@ -150,14 +151,26 @@ class Portal2World(World):
     # Overridden methods called by Main.py in execution order
 
     def generate_early(self):
-        if self.options.cutscenesanity.value:
-            self.maps_in_use += list(cutscene_completion_table.keys())
+        self.maps_in_use = set(map_complete_table.keys())
+        # Cutscene sanity option
+        if self.options.cutscenelevels:
+            self.maps_in_use.update(cutscene_completion_table.keys())
+
+        # Universal Tracker Support
+        re_gen_passthrough = getattr(self.multiworld, "re_gen_passthrough", {})
+        if re_gen_passthrough and self.game in re_gen_passthrough:
+            slot_data: dict[str, any] = re_gen_passthrough[self.game]
+
+            if "chapter_dict" in slot_data:
+                self.chapter_maps_dict = slot_data.get("chapter_dict", [])
+            return
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
 
-        self.chapter_maps_dict = self.create_randomized_maps()
+        if not self.chapter_maps_dict:
+            self.chapter_maps_dict = self.create_randomized_maps()
         # Add chapters to those regions
         for i in range(1,9):
             if randomize_maps:
@@ -190,11 +203,13 @@ class Portal2World(World):
             self.multiworld.itempool.append(self.create_item(item))
 
         fill_count = self.location_count - self.item_count
-        trap_percentage = self.options.trap_fill_percentage.value
+        trap_percentage = self.options.trap_fill_percentage
         trap_fill_number = round(trap_percentage/100 * fill_count)
-        trap_weights = [self.options.motion_blur_trap_weight.value, 
-                        self.options.fizzle_portal_trap_weight.value, 
-                        self.options.butter_fingers_trap_weight.value] # in the same order as the traps appear in trap_items list
+        trap_weights = [self.options.motion_blur_trap_weight, 
+                        self.options.fizzle_portal_trap_weight, 
+                        self.options.butter_fingers_trap_weight,
+                        self.options.cube_confetti_trap_weight,
+                        self.options.slippery_floor_trap_weight] # in the same order as the traps appear in trap_items list
 
         if sum(trap_weights) > 0 and trap_fill_number > 0:
             traps = self.random.choices(trap_items, weights=trap_weights, k=trap_fill_number)
@@ -207,11 +222,16 @@ class Portal2World(World):
         filler_name = self.get_filler_item_name()
         for _ in range(fill_count - trap_fill_number):
             self.multiworld.itempool.append(self.create_item(filler_name))
+
+    def set_rules(self):
+        # Stop any progression items from being in the final location
+        add_item_rule(self.multiworld.get_location(self.goal_location, self.player), 
+                      lambda item: item.name not in game_item_table or item.player != self.player)
     
     def fill_slot_data(self):
         # Return the chapter map orders e.g. {chapter1: ['sp_a1_intro2', 'sp_a1_intro5', ...], chapter2: [...], ...}
         # This is for generating and updating the Extras menu (level select screen) in portal 2 at the start and when checks are made
-        excluded_option_names = [CutsceneSanity]
+        excluded_option_names = [CutsceneLevels]
         generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
         excluded_option_names += generic_option_names
         included_option_names: list[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names]
@@ -221,4 +241,8 @@ class Portal2World(World):
             "location_name_to_id": self.location_name_to_id,
             "chapter_dict": {int(name[-1]): values for name, values in self.chapter_maps_dict.items()}
         })
+        return slot_data
+    
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, any]) -> dict[str, any]:
         return slot_data
