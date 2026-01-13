@@ -1,12 +1,7 @@
 from math import ceil
 from typing import TYPE_CHECKING
 from . import names
-from .locations import (needle_man_locations, magnet_man_locations, gemini_man_locations, hard_man_locations,
-                        top_man_locations, snake_man_locations, spark_man_locations, shadow_man_locations,
-                        doc_air_locations, doc_crash_locations, doc_flash_locations, doc_bubble_locations,
-                        doc_wood_locations, doc_heat_locations, doc_metal_locations, doc_quick_locations,
-                        wily_1_locations, wily_2_locations, wily_3_locations, wily_5_locations,
-                        wily_6_locations, energy_pickups, etank_1ups, break_man_location)
+from .locations import get_boss_locations, get_oneup_locations, get_energy_locations
 from worlds.generic.Rules import add_rule
 
 if TYPE_CHECKING:
@@ -262,28 +257,28 @@ def set_rules(world: "MM3World") -> None:
             world.wily_4_weapons = {boss: sorted(weapons) for boss, weapons in used_weapons.items()}
 
     for i, boss_locations in zip(range(22), [
-        needle_man_locations,
-        magnet_man_locations,
-        gemini_man_locations,
-        hard_man_locations,
-        top_man_locations,
-        snake_man_locations,
-        spark_man_locations,
-        shadow_man_locations,
-        doc_metal_locations,
-        doc_quick_locations,
-        doc_air_locations,
-        doc_crash_locations,
-        doc_flash_locations,
-        doc_bubble_locations,
-        doc_wood_locations,
-        doc_heat_locations,
-        break_man_location,
-        wily_1_locations,
-        wily_2_locations,
-        wily_3_locations,
-        wily_5_locations,
-        wily_6_locations
+        get_boss_locations("Needle Man Stage"),
+        get_boss_locations("Magnet Man Stage"),
+        get_boss_locations("Gemini Man Stage"),
+        get_boss_locations("Hard Man Stage"),
+        get_boss_locations("Top Man Stage"),
+        get_boss_locations("Snake Man Stage"),
+        get_boss_locations("Spark Man Stage"),
+        get_boss_locations("Shadow Man Stage"),
+        get_boss_locations("Doc Robot (Spark) - Metal"),
+        get_boss_locations("Doc Robot (Spark) - Quick"),
+        get_boss_locations("Doc Robot (Needle) - Air"),
+        get_boss_locations("Doc Robot (Needle) - Crash"),
+        get_boss_locations("Doc Robot (Gemini) - Flash"),
+        get_boss_locations("Doc Robot (Gemini) - Bubble"),
+        get_boss_locations("Doc Robot (Shadow) - Wood"),
+        get_boss_locations("Doc Robot (Shadow) - Heat"),
+        get_boss_locations("Break Man"),
+        get_boss_locations("Wily Stage 1"),
+        get_boss_locations("Wily Stage 2"),
+        get_boss_locations("Wily Stage 3"),
+        get_boss_locations("Wily Stage 5"),
+        get_boss_locations("Wily Stage 6")
     ]):
         if world.weapon_damage[0][i] > 0:
             continue  # this can always be in logic
@@ -319,10 +314,10 @@ def set_rules(world: "MM3World") -> None:
         add_rule(entrance_object, lambda state, loc=location: state.can_reach(loc, "Location", world.player))
 
     # finally, real logic
-    for location in hard_man_locations:
+    for location in get_boss_locations("Hard Man Stage"):
         add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
 
-    for location in gemini_man_locations:
+    for location in get_boss_locations("Gemini Man Stage"):
         add_rule(world.get_location(location), lambda state: has_any_rush(state, world.player))
 
     add_rule(world.get_entrance("To Doc Robot (Spark) - Metal"),
@@ -335,10 +330,10 @@ def set_rules(world: "MM3World") -> None:
     add_rule(world.get_entrance("To Doc Robot (Gemini) - Bubble"),
              lambda state: has_rush_vertical(state, world.player) and can_traverse_long_water(state, world.player))
 
-    for location in wily_1_locations:
+    for location in get_boss_locations("Wily Stage 1"):
         add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
 
-    for location in wily_2_locations:
+    for location in get_boss_locations("Wily Stage 2"):
         add_rule(world.get_location(location), lambda state: has_rush_jet(state, world.player))
 
     # Wily 3 technically needs vertical
@@ -354,7 +349,7 @@ def set_rules(world: "MM3World") -> None:
                                or state.has_any([names.gemini_laser, names.shadow_blade], world.player))
         for location in (names.gemini_man_c6, names.gemini_man_c7, names.gemini_man_c10):
             add_rule(world.get_location(location), lambda state: has_any_rush(state, world.player))
-        for location in etank_1ups["Hard Man Stage"]:
+        for location in get_oneup_locations("Hard Man Stage"):
             add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
         add_rule(world.get_location(names.top_man_c6), lambda state: has_rush_vertical(state, world.player))
         add_rule(world.get_location(names.doc_needle_c2), lambda state: has_rush_jet(state, world.player))
@@ -364,7 +359,7 @@ def set_rules(world: "MM3World") -> None:
         add_rule(world.get_location(names.wily_1_c8), lambda state: has_rush_vertical(state, world.player))
         for location in [names.wily_1_c4, names.wily_1_c8]:
             add_rule(world.get_location(location), lambda state: state.has(names.hard_knuckle, world.player))
-        for location in etank_1ups["Wily Stage 2"]:
+        for location in get_oneup_locations("Wily Stage 2"):
             if location == names.wily_2_c3:
                 continue
             add_rule(world.get_location(location), lambda state: has_rush_jet(state, world.player))
@@ -375,7 +370,7 @@ def set_rules(world: "MM3World") -> None:
         add_rule(world.get_location(names.gemini_man_c5), lambda state: has_rush_vertical(state, world.player))
         for location in (names.gemini_man_c8, names.gemini_man_c9):
             add_rule(world.get_location(location), lambda state: has_any_rush(state, world.player))
-        for location in energy_pickups["Hard Man Stage"]:
+        for location in get_energy_locations("Hard Man Stage"):
             if location == names.hard_man_c1:
                 continue
             add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
@@ -387,7 +382,7 @@ def set_rules(world: "MM3World") -> None:
             add_rule(world.get_location(location), lambda state: state.has(names.hard_knuckle, world.player))
         for location in [names.wily_1_c6, names.wily_1_c7, names.wily_1_c11, names.wily_1_c12]:
             add_rule(world.get_location(location), lambda state: has_rush_vertical(state, world.player))
-        for location in energy_pickups["Wily Stage 2"]:
+        for location in get_energy_locations("Wily Stage 2"):
             if location in (names.wily_2_c1, names.wily_2_c2, names.wily_2_c4):
                 continue
             add_rule(world.get_location(location), lambda state: has_rush_jet(state, world.player))

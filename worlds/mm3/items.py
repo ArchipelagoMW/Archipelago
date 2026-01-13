@@ -19,42 +19,42 @@ class MM3Item(Item):
 
 
 robot_master_weapon_table = {
-    needle_cannon: ItemData(0x890001, True),
-    magnet_missile: ItemData(0x890002, True, True),
-    gemini_laser: ItemData(0x890003, True),
-    hard_knuckle: ItemData(0x890004, True),
-    top_spin: ItemData(0x890005, True, True),
-    search_snake: ItemData(0x890006, True),
-    spark_shock: ItemData(0x890007, True),
-    shadow_blade: ItemData(0x890008, True, True),
+    needle_cannon: ItemData(0x0001, True),
+    magnet_missile: ItemData(0x0002, True, True),
+    gemini_laser: ItemData(0x0003, True),
+    hard_knuckle: ItemData(0x0004, True),
+    top_spin: ItemData(0x0005, True, True),
+    search_snake: ItemData(0x0006, True),
+    spark_shock: ItemData(0x0007, True),
+    shadow_blade: ItemData(0x0008, True, True),
 }
 
 stage_access_table = {
-    needle_man_stage: ItemData(0x890101, True),
-    magnet_man_stage: ItemData(0x890102, True),
-    gemini_man_stage: ItemData(0x890103, True),
-    hard_man_stage: ItemData(0x890104, True),
-    top_man_stage: ItemData(0x890105, True),
-    snake_man_stage: ItemData(0x890106, True),
-    spark_man_stage: ItemData(0x890107, True),
-    shadow_man_stage: ItemData(0x890108, True),
-    doc_needle_stage: ItemData(0x890111, True, True),
-    doc_gemini_stage: ItemData(0x890113, True, True),
-    doc_spark_stage: ItemData(0x890117, True, True),
-    doc_shadow_stage: ItemData(0x890118, True, True),
+    needle_man_stage: ItemData(0x0101, True),
+    magnet_man_stage: ItemData(0x0102, True),
+    gemini_man_stage: ItemData(0x0103, True),
+    hard_man_stage: ItemData(0x0104, True),
+    top_man_stage: ItemData(0x0105, True),
+    snake_man_stage: ItemData(0x0106, True),
+    spark_man_stage: ItemData(0x0107, True),
+    shadow_man_stage: ItemData(0x0108, True),
+    doc_needle_stage: ItemData(0x0111, True, True),
+    doc_gemini_stage: ItemData(0x0113, True, True),
+    doc_spark_stage: ItemData(0x0117, True, True),
+    doc_shadow_stage: ItemData(0x0118, True, True),
 }
 
 rush_item_table = {
-    rush_coil: ItemData(0x890011, True, True),
-    rush_marine: ItemData(0x890012, True),
-    rush_jet: ItemData(0x890013, True, True),
+    rush_coil: ItemData(0x0011, True, True),
+    rush_marine: ItemData(0x0012, True),
+    rush_jet: ItemData(0x0013, True, True),
 }
 
 filler_item_table = {
-    one_up: ItemData(0x890020, False),
-    weapon_energy: ItemData(0x890021, False),
-    health_energy: ItemData(0x890022, False),
-    e_tank: ItemData(0x890023, False, True),
+    one_up: ItemData(0x0020, False),
+    weapon_energy: ItemData(0x0021, False),
+    health_energy: ItemData(0x0022, False),
+    e_tank: ItemData(0x0023, False, True),
 }
 
 filler_item_weights = {

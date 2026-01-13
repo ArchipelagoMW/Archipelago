@@ -3,13 +3,12 @@ import logging
 from typing import Any, Sequence, ClassVar
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
-from Utils import version_tuple
 from worlds.AutoWorld import World, WebWorld
 from .names import (gamma, gemini_man_stage, needle_man_stage, hard_man_stage, magnet_man_stage, top_man_stage,
                     snake_man_stage, spark_man_stage, shadow_man_stage, rush_marine, rush_jet, rush_coil)
 from .items import (item_table, item_names, MM3Item, filler_item_weights, robot_master_weapon_table,
                     stage_access_table, rush_item_table, lookup_item_to_id)
-from .locations import (MM3Location, mm3_regions, MM3Region, energy_pickups, etank_1ups, lookup_location_to_id,
+from .locations import (MM3Location, mm3_regions, MM3Region, lookup_location_to_id,
                         location_groups)
 from .rom import patch_rom, MM3ProcedurePatch, MM3LCHASH, MM3VCHASH, PROTEUSHASH, MM3NESHASH
 from .options import MM3Options, Consumables
@@ -106,31 +105,22 @@ class MM3World(World):
         menu = MM3Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu)
         location: MM3Location
-        for region in mm3_regions:
-            stage = MM3Region(region, self.player, self.multiworld)
-            required_items = mm3_regions[region][0]
-            stage_locations = mm3_regions[region][1]
-            prev_stage = mm3_regions[region][2]
-            if prev_stage is None:
-                menu.connect(stage, f"To {region}",
-                             lambda state, req=required_items: state.has_all(req, self.player))
+        for name, region in mm3_regions.items():
+            stage = MM3Region(name, self.player, self.multiworld)
+            if not region.parent:
+                menu.connect(stage, f"To {name}",
+                             lambda state, req=tuple(region.required_items): state.has_all(req, self.player))
             else:
-                old_stage = self.get_region(prev_stage)
-                old_stage.connect(stage, f"To {region}",
-                                  lambda state, req=required_items: state.has_all(req, self.player))
-            stage.add_locations(stage_locations)
+                old_stage = self.get_region(region.parent)
+                old_stage.connect(stage, f"To {name}",
+                                  lambda state, req=tuple(region.required_items): state.has_all(req, self.player))
+            stage.add_locations({loc: data.location_id for loc, data in region.locations.items()
+                                 if (not data.energy or self.options.consumables.value in (Consumables.option_weapon_health, Consumables.option_all))
+                                 and (not data.oneup_tank or self.options.consumables.value in (Consumables.option_1up_etank, Consumables.option_all))})
             for location in stage.get_locations():
                 if location.address is None and location.name != gamma:
                     location.place_locked_item(MM3Item(location.name, ItemClassification.progression,
                                                        None, self.player))
-            if self.options.consumables in (Consumables.option_1up_etank,
-                                            Consumables.option_all):
-                if region in etank_1ups:
-                    stage.add_locations(etank_1ups[region], MM3Location)
-            if self.options.consumables in (Consumables.option_weapon_health,
-                                            Consumables.option_all):
-                if region in energy_pickups:
-                    stage.add_locations(energy_pickups[region], MM3Location)
             self.multiworld.regions.append(stage)
         goal_location = self.get_location(gamma)
         goal_location.place_locked_item(MM3Item("Victory", ItemClassification.progression, None, self.player))
@@ -153,7 +143,7 @@ class MM3World(World):
     def create_items(self) -> None:
         itempool = []
         # grab first robot master
-        robot_master = self.item_id_to_name[0x890101 + self.options.starting_robot_master.value]
+        robot_master = self.item_id_to_name[0x0101 + self.options.starting_robot_master.value]
         self.multiworld.push_precollected(self.create_item(robot_master))
         itempool.extend([self.create_item(name) for name in stage_access_table.keys()
                          if name != robot_master])
@@ -241,7 +231,7 @@ class MM3World(World):
                                  and item.player == self.player]
                 placed_weapon = self.random.choice(valid_weapons)
                 weapon_name = next(name for name, idx in lookup_location_to_id.items()
-                                   if idx == 0x890101 + self.options.starting_robot_master.value)
+                                   if idx == 0x0101 + self.options.starting_robot_master.value)
                 weapon_location = self.get_location(weapon_name)
                 weapon_location.place_locked_item(placed_weapon)
                 prog_item_pool.remove(placed_weapon)
