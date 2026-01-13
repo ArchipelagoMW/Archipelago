@@ -31,8 +31,8 @@ class Portal2CommandProcessor(ClientCommandProcessor):
 
     def _cmd_deathlink(self):
         """Toggles death link for this client"""
-        self.ctx.death_link_active != self.ctx.death_link_active
-        self.ctx.update_death_link(self.ctx.death_link_active)
+        self.ctx.death_link_active = not self.ctx.death_link_active
+        async_start(self.ctx.update_death_link(self.ctx.death_link_active), "set_deathlink")
         self.output(f"Death link has been {"enabled" if self.ctx.death_link_active else "disabled"}")
 
     def _cmd_refresh_menu(self):
