@@ -1,0 +1,1836 @@
+{
+    "Welcome To Hyland Point 1, open Phone": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 1
+    },
+    "Welcome To Hyland Point 2, talk to U.N at payphone": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 2
+    },
+    "Welcome To Hyland Point 3, collect stash near fountain": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 3
+    },
+    "welcome To Hyland Point 4, collect stage near canal": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 4
+    },
+    "Welcome To Hyland Point 5, collect stash behind supermarket": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 5
+    },
+    "Welcome To Hyland Point 6, head back to RV": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 6
+    },
+    "Welcome To Hyland Point 7, investigate the explosion": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 7
+    },
+    "Welcome To Hyland Point 8, read the note": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 8
+    },
+    "welcome To Hyland Point 9, talk on payphone": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 9
+    },
+    "Getting Started 1, talk to the manager in motel": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 10
+    },
+    "Getting Started 2, rent a motel room": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 11
+    },
+    "Getting Started 3, check out the motel room": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 12
+    },
+    "Gearing up 1, go to the hardware store ": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 13
+    },
+    "Gearing up 2, buy 1x grow tent": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 14
+    },
+    "Gearing up 3, buy 1x soil": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 15
+    },
+    "Gearing up 4, buy 1x watering can": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 16
+    },
+    "Gearing up 5, head back to motel room": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 17
+    },
+    "Gearing up 6, place the grow tent and fill it with soil": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 18
+    },
+    "Gearing up 7, talk to uncle nelson on the phone": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 19
+    },
+    "Gearing up 8, Order 1x OG Kush Seed from Albert Hoover": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 20
+    },
+    "Gearing up 9, Wait for the dead drop": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 21
+    },
+    "Gearing up 10, Collect the dead drop": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 22
+    },
+    "Gearing up 11, Sow a weed seed": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 23
+    },
+    "Gearing up 12, Water the weed plant": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 24
+    },
+    "Gearing up 13, Harvest the weed plant once fully grown": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 25
+    },
+    "Gearing up 14, Package at least 3x weed": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 26
+    },
+    "Gearing up 15, List OG Kush for sale": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 27
+    },
+    "Packin 1, Buy 1x plant trimmers": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 28
+    },
+    "Packin 2, Buy 1x packaging station": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 29
+    },
+    "Packin 3, Buy 10x baggies": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 30
+    },
+    "packin 4, Place the packaging station in the motel room": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 31
+    },
+    "Keepin it fresh 1, Place the soil bag and vial in trash can": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 32
+    },
+    "Keepin it fresh 2, Buy a trash bag from the hardware store": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 33
+    },
+    "Keepin it fresh 3, Bag the contents of the trash can": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 34
+    },
+    "Keepin it fresh 4, Dispose of the trash bag": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 35
+    },
+    "On the Grind 1, Wait for a message from a customer": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 36
+    },
+    "On the Grind 2, Schedule your first deal": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 37
+    },
+    "On the Grind 3, Complete your first deal": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 38
+    },
+    "On the Grind 4, Buy and place another grow tent": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 39
+    },
+    "On the Grind 5, Complete 3 deals": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 40
+    },
+    "On the Grind 6, Talk to Uncle Nelson at a payphone": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 41
+    },
+    "On the Grind 7, Open the contacts app": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 42
+    },
+    "On the Grind 8, Select a friend of an unlocked customer in app": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 43
+    },
+    "On the Grind 9, Open the map app to see your potential customers": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 44
+    },
+    "On the Grind 10, Offer a free sample to a potential customer": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 45
+    },
+    "Moving up 1, Save $800 for a new property": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 46
+    },
+    "Moving up 2, Talk to Mrs. Ming at the Chinese restaurant": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 47
+    },
+    "Moving up 3, Purchase the room above the Chinese Restaurant": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 48
+    },
+    "Moving up 4, Move the grow tents and packaging station to the new room": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 49
+    },
+    "Moving up 5, Unlock 10 customers": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 50
+    },
+    "Dodgy Dealing 1, Talk to Uncle Nelson at a payphone": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 51
+    },
+    "Dodgy Dealing 2, Unlock Chloe, Ludwig, or Beth as customers": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 52
+    },
+    "Dodgy Dealing 3, friendly status with Chloe, Ludwig, or Beth": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 53
+    },
+    "Dodgy Dealing 4, Talk to Benji Coleman in Motel Room #2": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 54
+    },
+    "Dodgy Dealing 5, Recruit Benji Coleman as a dealer": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 55
+    },
+    "Dodgy Dealing 6, Provide Benji with at least 10x Weed": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 56
+    },
+    "Dodgy Dealing 7, Assign at least 3 customers to Benji": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 57
+    },
+    "Dodgy Dealing 8, Wait for Benji to complete a deal": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 58
+    },
+    "Dodgy Dealing 9, Collect the cash from Benji": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 59
+    },
+    "Mixing Mania 1, Talk to Uncle Nelson at a payphone": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 60
+    },
+    "Mixing Mania 2, Purchase a mixing station from the hardware store": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 61
+    },
+    "Mixing Mania 3, Place the mixing station": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 62
+    },
+    "Mixing Mania 4, Go to Gas-Mart": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 63
+    },
+    "Mixing Mania 5, Purchase at least one mixing ingredient": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 64
+    },
+    "Mixing Mania 6, Start a new mix at the mixing station": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 65
+    },
+    "Mixing Mania 7, Wait for the mix to complete": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 66
+    },
+    "Mixing Mania 8, Collect the new product": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 67
+    },
+    "Mixing Mania 9, Talk to Uncle Nelson at a payphone": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 68
+    },
+    "Mixing Mania 10, Mix a strain worth at least $60": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 69
+    },
+    "Making the Rounds 1, Talk to the real estate agent": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 70
+    },
+    "Making the Rounds 2, Talk to the dealership manager": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 71
+    },
+    "Making the Rounds 3, Talk to the mechanic": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 72
+    },
+    "Needin the Green, Earn $10,000": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 73
+    },
+    "Wretched Hive of Scum and Villany 1, Talk to Uncle Nelson at a payphone": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 74
+    },
+    "Wretched Hive of Scum and Villany 2, Gain access to the warehouse": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 75
+    },
+    "Wretched Hive of Scum and Villany 3, Talk to the merchant": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 76
+    },
+    "Wretched Hive of Scum and Villany 4, Talk to the arms dealer": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 77
+    },
+    "Wretched Hive of Scum and Villany 5, Talk to the fixer": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 78
+    },
+    "We Need to Cook 1, Talk to Uncle Nelson at a payphone": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 79
+    },
+    "We Need to Cook 2, Unlock the pseudo supplier in Westville": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 80
+    },
+    "We Need to Cook 3, Purchase a chemistry station from Oscar": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 81
+    },
+    "We Need to Cook 4, Purchase a lab oven from Oscar": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 82
+    },
+    "We Need to Cook 5, Purchase acid from Oscar": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 83
+    },
+    "We Need to Cook 6, Purchase phosphorus from Oscar": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 84
+    },
+    "We Need to Cook 7, Message Shirley about buying some pseudo": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 85
+    },
+    "We Need to Cook 8, Cook liquid meth at the chemistry station": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 86
+    },
+    "We Need to Cook 9, Bake the liquid meth with the lab oven": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 87
+    },
+    "Money Management, Deposit cash at an ATM": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 88
+    },
+    "Clean Cash 1, Talk to Uncle Nelson at a payphone": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 89
+    },
+    "Clean Cash 2, Purchase a business at Ray's Realty": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 90
+    },
+    "Clean Cash 3, Go to your new business": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 91
+    },
+    "Clean Cash 4, Use the laundering station": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 92
+    },
+    "Clean Cash 5, Wait for the laundering operation to complete": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 93
+    },
+    "Vibin' on the 'Cybin 1, Purchase a grain bag": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 94
+    },
+    "Vibin' on the 'Cybin 2, Purchase a spore syringe": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 95
+    },
+    "Vibin' on the 'Cybin 3, Purchase a mushroom spawn station": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 96
+    },
+    "Vibin' on the 'Cybin 4, Use the mushroom spawn station to inocculate a grain bag": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 97
+    },
+    "Vibin' on the 'Cybin 5, Purchase a mushroom bed from Oscar": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 98
+    },
+    "Vibin' on the 'Cybin 6, Purchase mushroom substrate from Fungal Phil": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 99
+    },
+    "Vibin' on the 'Cybin 7, Mix the shroom spawn into a mushroom bed": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 100
+    },
+    "Vibin' on the 'Cybin 8, Purchase an AC unit from a hardware store": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 101
+    },
+    "Vibin' on the 'Cybin 9, Use the AC unit to cool the mushroom bed": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 102
+    },
+    "Vibin' on the 'Cybin 10, Harvest the shrooms once fully grown": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 103
+    },
+    "Clearners 1, assign the cleaner to a locker": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 104
+    },
+    "Clearners 2, Assign a trash can to the cleaner": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 105
+    },
+    "Clearners 3, Place cash in the locker of the cleaner": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 106
+    },
+    "Botanists 1, assign the botanist to a locker": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 107
+    },
+    "Botanists 2, Assign a supplies source to the botanist": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 108
+    },
+    "Botanists 3, Assign a pot or grow tent to the botanist": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 109
+    },
+    "Botanists 4, Set the pot/grow tent destination": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 110
+    },
+    "Botanists 5, Place cash in the locker of the botanist": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 111
+    },
+    "Handlers 1, assign the packager to a locker": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 112
+    },
+    "Handlers 2, Assign a packaging station to the packager": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 113
+    },
+    "Handlers 3, Place cash in the locker of the packager": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 114
+    },
+    "Chemists 1, assign the chemist to a locker": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 115
+    },
+    "Chemists 2, Assign a station to the chemist": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 116
+    },
+    "Chemists 3, Place cash in the locker of the chemist": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 117
+    },
+    "Unfavorable Agreements 1, Read the message from the unknown contact": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 118
+    },
+    "Unfavorable Agreements 2, Meet the stranger at the parking lot next to Taco Ticklers": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 119
+    },
+    "Finishing the job 1, Talk to Uncle Nelson at a payphone": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 120
+    },
+    "Finishing the job 2, Talk to Billy about buying explosives": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 121
+    },
+    "Finishing the job 3, Trade Billy 20x cocaine in return for RDX": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 122
+    },
+    "Finishing the job 4, Get Sam to dig access to the tunnel under Hyland Manor": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 123
+    },
+    "Finishing the job 5, Wait for Sam to dig access to the tunnel": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 124
+    },
+    "Finishing the job 6, Talk to Stan about turning the RDX into a bomb": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 125
+    },
+    "Finishing the job 7, Kill Stan's theif in docks at night": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 126
+    },
+    "Finishing the job 8, Get Stan to turn the RDX into a bomb": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 127
+    },
+    "Finishing the job 9, Plant the bomb under Hyland Manor": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 128
+    },
+    "Finishing the job 10, Wait for the bomb to detonate": {
+        "region": "Missions",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 129
+    },
+    "Rank Street Rat III": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 130
+    },
+    "Rank Street Rat IV": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 131
+    },
+    "Rank Street Rat V": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 132
+    },
+    "Rank Hoodlum I": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 133
+    },
+    "Rank Hoodlum II": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 134
+    },
+    "Rank Hoodlum III": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 135
+    },
+    "Rank Hoodlum IV": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 136
+    },
+    "Rank Hoodlum V": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 137
+    },
+    "Rank Peddler I": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 138
+    },
+    "Rank Peddler II": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 139
+    },
+    "Rank Peddler III": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 140
+    },
+    "Rank Peddler IV": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 141
+    },
+    "Rank Peddler V": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 142
+    },
+    "Rank Hustler I": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 143
+    },
+    "Rank Hustler II": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 144
+    },
+    "Rank Hustler III": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 145
+    },
+    "Bagman V": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 146
+    },
+    "Enforcer I": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 147
+    },
+    "Block Boss I": {
+        "region": "Level Unlocks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 148
+    },
+    "Westville cartel influence 1": {
+        "region": "Cartel Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 149
+    },
+    "Westville cartel influence 2": {
+        "region": "Cartel Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 150
+    },
+    "Westville cartel influence 3": {
+        "region": "Cartel Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 151
+    },
+    "Westville cartel influence 4": {
+        "region": "Cartel Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 152
+    },
+    "Westville cartel influence 5": {
+        "region": "Cartel Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 153
+    },
+    "Westville cartel influence 6": {
+        "region": "Cartel Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 154
+    },
+    "Westville cartel influence 7": {
+        "region": "Cartel Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 155
+    },
+    "Downtown cartel influence 1": {
+        "region": "Cartel Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 156
+    },
+    "Downtown cartel influence 2": {
+        "region": "Cartel Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 157
+    },
+    "Downtown cartel influence 3": {
+        "region": "Cartel Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 158
+    },
+    "Downtown cartel influence 4": {
+        "region": "Cartel Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 159
+    },
+    "Downtown cartel influence 5": {
+        "region": "Cartel Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 160
+    },
+    "Downtown cartel influence 6": {
+        "region": "Cartel Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 161
+    },
+    "Downtown cartel influence 7": {
+        "region": "Cartel Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 162
+    },
+    "Docks cartel influence 1": {
+        "region": "Cartel Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 163
+    },
+    "Docks cartel influence 2": {
+        "region": "Cartel Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 164
+    },
+    "Docks cartel influence 3": {
+        "region": "Cartel Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 165
+    },
+    "Docks cartel influence 4": {
+        "region": "Cartel Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 166
+    },
+    "Docks cartel influence 5": {
+        "region": "Cartel Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 167
+    },
+    "Docks cartel influence 6": {
+        "region": "Cartel Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 168
+    },
+    "Docks cartel influence 7": {
+        "region": "Cartel Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 169
+    },
+    "Suburbia cartel influence 1": {
+        "region": "Cartel Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 170
+    },
+    "Suburbia cartel influence 2": {
+        "region": "Cartel Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 171
+    },
+    "Suburbia cartel influence 3": {
+        "region": "Cartel Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 172
+    },
+    "Suburbia cartel influence 4": {
+        "region": "Cartel Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 173
+    },
+    "Suburbia cartel influence 5": {
+        "region": "Cartel Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 174
+    },
+    "Suburbia cartel influence 6": {
+        "region": "Cartel Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 175
+    },
+    "Suburbia cartel influence 7": {
+        "region": "Cartel Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 176
+    },
+    "Uptown cartel influence 1": {
+        "region": "Cartel Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 177
+    },
+    "Uptown cartel influence 2": {
+        "region": "Cartel Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 178
+    },
+    "Uptown cartel influence 3": {
+        "region": "Cartel Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 179
+    },
+    "Uptown cartel influence 4": {
+        "region": "Cartel Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 180
+    },
+    "Uptown cartel influence 5": {
+        "region": "Cartel Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 181
+    },
+    "Uptown cartel influence 6": {
+        "region": "Cartel Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 182
+    },
+    "Uptown cartel influence 7": {
+        "region": "Cartel Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 183
+    },
+    "Realtor Purchase, Barn": {
+        "region": "Realtor",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": ["Drug Making Property"],
+        "modern_id": 184
+    },
+    "Realtor Purchase, Bungalow": {
+        "region": "Realtor",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": ["Drug Making Property"],
+        "modern_id": 185
+    },
+    "Realtor Purchase, Docks Warehouse": {
+        "region": "Realtor",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": ["Drug Making Property"],
+        "modern_id": 186
+    },
+    "Realtor Purchase, Storage Unit": {
+        "region": "Realtor",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": ["Drug Making Property"],
+        "modern_id": 189
+    },
+    "Realtor Purchase, Car Wash": {
+        "region": "Realtor",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": ["Business Property"],
+        "modern_id": 191
+    },
+    "Realtor Purchase, Laundromat": {
+        "region": "Realtor",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": ["Business Property"],
+        "modern_id": 192
+    },
+    "Realtor Purchase, Post Office": {
+        "region": "Realtor",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": ["Business Property"],
+        "modern_id": 193
+    },
+    "Realtor Purchase, Taco Ticklers": {
+        "region": "Realtor",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": ["Business Property"],
+        "modern_id": 194
+    },
+    "Unlock Northtown Customer: Austin Steiner": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 305
+    },
+    "Unlock Northtown Customer: Beth Penn": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 306
+    },
+    "Unlock Northtown Customer: Chloe Bowers": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 307
+    },
+    "Unlock Northtown Customer: Donna Martin": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 308
+    },
+    "Unlock Northtown Customer: Geraldine Poon": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 309
+    },
+    "Unlock Northtown Customer: Jessi Waters": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 310
+    },
+    "Unlock Northtown Customer: Kathy Henderson": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 311
+    },
+    "Unlock Northtown Customer: Kyle Cooley": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 312
+    },
+    "Unlock Northtown Customer: Ludwig Meyer": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 313
+    },
+    "Unlock Northtown Customer: Mick Lubbin": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 314
+    },
+    "Unlock Northtown Customer: Mrs. Ming": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 315
+    },
+    "Unlock Northtown Customer: Peggy Myers": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 316
+    },
+    "Unlock Northtown Customer: Peter File": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 317
+    },
+    "Unlock Northtown Customer: Sam Thompson": {
+        "region": "Customer Northtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 318
+    },
+    "Unlock Westville Customer: Charles Rowland": {
+        "region": "Customer Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 319
+    },
+    "Unlock Westville Customer: Dean Webster": {
+        "region": "Customer Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 320
+    },
+    "Unlock Westville Customer: Doris Lubbin": {
+        "region": "Customer Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 321
+    },
+    "Unlock Westville Customer: George Greene": {
+        "region": "Customer Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 322
+    },
+    "Unlock Westville Customer: Jerry Montero": {
+        "region": "Customer Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 323
+    },
+    "Unlock Westville Customer: Joyce Ball": {
+        "region": "Customer Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 324
+    },
+    "Unlock Westville Customer: Keith Wagner": {
+        "region": "Customer Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 325
+    },
+    "Unlock Westville Customer: Kim Delaney": {
+        "region": "Customer Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 326
+    },
+    "Unlock Westville Customer: Meg Cooley": {
+        "region": "Customer Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 327
+    },
+    "Unlock Westville Customer: Trent Sherman": {
+        "region": "Customer Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 328
+    },
+    "Unlock Downtown Customer: Bruce Norton": {
+        "region": "Customer Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 329
+    },
+    "Unlock Downtown Customer: Elizabeth Homley": {
+        "region": "Customer Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 330
+    },
+    "Unlock Downtown Customer: Eugene Buckley": {
+        "region": "Customer Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 331
+    },
+    "Unlock Downtown Customer: Greg Figgle": {
+        "region": "Customer Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 332
+    },
+    "Unlock Downtown Customer: Jeff Gilmore": {
+        "region": "Customer Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 333
+    },
+    "Unlock Downtown Customer: Jennifer Rivera": {
+        "region": "Customer Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 334
+    },
+    "Unlock Downtown Customer: Kevin Oakley": {
+        "region": "Customer Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 335
+    },
+    "Unlock Downtown Customer: Louis Fourier": {
+        "region": "Customer Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 336
+    },
+    "Unlock Downtown Customer: Philip Wentworth": {
+        "region": "Customer Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 337
+    },
+    "Unlock Downtown Customer: Randy Caulfield": {
+        "region": "Customer Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 338
+    },
+    "Unlock Downtown Customer: Lucy Pennington": {
+        "region": "Customer Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 339
+    },
+    "Unlock Docks Customer: Anna Chesterfield": {
+        "region": "Customer Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 340
+    },
+    "Unlock Docks Customer: Billy Kramer": {
+        "region": "Customer Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 341
+    },
+    "Unlock Docks Customer: Cranky Frank": {
+        "region": "Customer Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 342
+    },
+    "Unlock Docks Customer: Genghis Barn": {
+        "region": "Customer Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 343
+    },
+    "Unlock Docks Customer: Javier Perez": {
+        "region": "Customer Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 344
+    },
+    "Unlock Docks Customer: Kelly Reynolds": {
+        "region": "Customer Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 345
+    },
+    "Unlock Docks Customer: Lisa Gardner": {
+        "region": "Customer Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 346
+    },
+    "Unlock Docks Customer: Mac Cooper": {
+        "region": "Customer Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 347
+    },
+    "Unlock Docks Customer: Marco Barone": {
+        "region": "Customer Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 348
+    },
+    "Unlock Docks Customer: Melissa Wood": {
+        "region": "Customer Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 349
+    },
+    "Unlock Docks Customer: Sherman Giles": {
+        "region": "Customer Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 350
+    },
+    "Unlock Suburbia Customer: Alison Knight": {
+        "region": "Customer Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 351
+    },
+    "Unlock Suburbia Customer: Carl Bundy": {
+        "region": "Customer Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 352
+    },
+    "Unlock Suburbia Customer: Chris Sullivan": {
+        "region": "Customer Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 353
+    },
+    "Unlock Suburbia Customer: Dennis Kennedy": {
+        "region": "Customer Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 354
+    },
+    "Unlock Suburbia Customer: Hank Stevenson": {
+        "region": "Customer Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 355
+    },
+    "Unlock Suburbia Customer: Harold Colt": {
+        "region": "Customer Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 356
+    },
+    "Unlock Suburbia Customer: Jack Knight": {
+        "region": "Customer Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 357
+    },
+    "Unlock Suburbia Customer: Jackie Stevenson": {
+        "region": "Customer Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 358
+    },
+    "Unlock Suburbia Customer: Jeremy Wilkinson": {
+        "region": "Customer Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 359
+    },
+    "Unlock Suburbia Customer: Karen Kennedy": {
+        "region": "Customer Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 360
+    },
+    "Unlock Uptown Customer: Fiona Hancock": {
+        "region": "Customer Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 361
+    },
+    "Unlock Uptown Customer: Herbert Bleuball": {
+        "region": "Customer Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 362
+    },
+    "Unlock Uptown Customer: Irene Meadows": {
+        "region": "Customer Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 363
+    },
+    "Unlock Uptown Customer: Jen Heard": {
+        "region": "Customer Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 364
+    },
+    "Unlock Uptown Customer: Lily Turner": {
+        "region": "Customer Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 365
+    },
+    "Unlock Uptown Customer: Michael Boog": {
+        "region": "Customer Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 366
+    },
+    "Unlock Uptown Customer: Pearl Moore": {
+        "region": "Customer Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 367
+    },
+    "Unlock Uptown Customer: Ray Hoffman": {
+        "region": "Customer Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 368
+    },
+    "Unlock Uptown Customer: Tobias Wentworth": {
+        "region": "Customer Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 369
+    },
+    "Unlock Uptown Customer: Walter Cussler": {
+        "region": "Customer Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 370
+    },
+    "Recruit Westville Dealer: Molly Presley": {
+        "region": "Customer Westville",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 372
+    },
+    "Recruit Downtown Dealer: Brad Crosby": {
+        "region": "Customer Downtown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 373
+    },
+    "Recruit Docks Dealer: Jane Lucero": {
+        "region": "Customer Docks",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 374
+    },
+    "Recruit Suburbia Dealer: Wei Long": {
+        "region": "Customer Suburbia",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 375
+    },
+    "Recruit Uptown Dealer: Leo Rivers": {
+        "region": "Customer Uptown",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": [],
+        "modern_id": 376
+    }
+}

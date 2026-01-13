@@ -5,7 +5,7 @@ from typing import Any
 from worlds.AutoWorld import World
 
 # Imports of your world's files must be relative.
-from . import items, locations, options, regions, rules, web_world
+from . import items, locations, options, regions, rules, web_world, json_data
 
 # APQuest will go through all the parts of the world api one step at a time,
 # with many examples and comments across multiple files.
@@ -42,6 +42,9 @@ class Schedule1World(World):
 
     # Our world class must have a static location_name_to_id and item_name_to_id defined.
     # We define these in regions.py and items.py respectively, so we just set them here.
+    # Load items from json into needed dicts.
+    items.load_items_data(json_data.schedule1_item_data)
+    locations.load_locations_data(json_data.schedule1_location_data)
     location_name_to_id = locations.LOCATION_NAME_TO_ID
     item_name_to_id = items.ITEM_NAME_TO_ID
 
@@ -54,13 +57,13 @@ class Schedule1World(World):
     # For better structure and readability, we put each of these in their own file.
     def create_regions(self) -> None:
         regions.create_and_connect_regions(self)
-        locations.create_all_locations(self)
+        locations.create_all_locations(self, json_data.schedule1_location_data, json_data.schedule1_event_data)
 
     def set_rules(self) -> None:
-        rules.set_all_rules(self)
+        rules.set_all_rules(self, json_data.schedule1_location_data, json_data.schedule1_event_data)
 
     def create_items(self) -> None:
-        items.create_all_items(self)
+        items.create_all_items(self, json_data.schedule1_item_data)
 
     # Our world class must also have a create_item function that can create any one of our items by name at any time.
     # We also put this in a different file, the same one that create_items is in.
@@ -73,7 +76,7 @@ class Schedule1World(World):
     # You must override this function and return this infinitely repeatable item's name.
     # In our case, we defined a function called get_random_filler_item_name for this purpose in our items.py.
     def get_filler_item_name(self) -> str:
-        return items.get_random_filler_item_name(self)
+        return items.get_random_filler_item_name(self, json_data.schedule1_item_data)
 
     # There may be data that the game client will need to modify the behavior of the game.
     # This is what slot_data exists for. Upon every client connection, the slot's slot_data is sent to the client.

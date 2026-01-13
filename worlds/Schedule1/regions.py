@@ -79,10 +79,6 @@ def create_all_regions(world: Schedule1World) -> None:
         realtor = Region("Realtor", world.player, world.multiworld)
         regions.append(realtor)
 
-    if world.options.cash_for_trash > 0:
-        cash_for_trash_region = Region("Cash for Trash", world.player, world.multiworld)
-        regions.append(cash_for_trash_region)
-
     # We now need to add these regions to multiworld.regions so that AP knows about their existence.
     world.multiworld.regions += regions
 
@@ -103,7 +99,6 @@ def connect_regions(world: Schedule1World) -> None:
     if world.options.randomize_level_unlocks:
         level_unlocks = world.get_region("Level Unlocks")
     
-
     customer_region_northtown = world.get_region("Customer Northtown")
     customer_region_westville = world.get_region("Customer Westville")
     customer_region_downtown = world.get_region("Customer Downtown")
@@ -112,7 +107,6 @@ def connect_regions(world: Schedule1World) -> None:
     customer_region_uptown = world.get_region("Customer Uptown")
 
     overworld.connect(missions, "Overworld to Missions")
-
 
     overworld.connect(customer_region_northtown, "Overworld to Customer Northtown")
     if not world.options.randomize_cartel_influence:
@@ -156,7 +150,3 @@ def connect_regions(world: Schedule1World) -> None:
     if world.options.randomize_business_properties or world.options.randomize_drug_making_properties:
         realtor = world.get_region("Realtor")
         overworld.connect(realtor, "Overworld to Realtor")
-
-    if world.options.cash_for_trash > 0:
-        cash_for_trash_region = world.get_region("Cash for Trash")
-        overworld.connect(cash_for_trash_region, "Overworld to Cash for Trash")

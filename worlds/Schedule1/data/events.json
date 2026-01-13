@@ -1,0 +1,55 @@
+{
+    "Westville Cartel Cleared": {
+        "region": "Overworld",
+        "itemName" : "Downtown Customers Unlocked",
+        "locationName": "Westville Cartel Cleared",
+        "requirements": {"Cartel Influence, Westville": 7},
+        "requirements_alt": {"Westville Region Unlock" : 1},
+        "tags": ["Permanent", "Cartel Influence"]
+    },
+    "Downtown Cartel Cleared": {
+        "region": "Overworld",
+        "itemName" : "Downtown Customers Unlocked",
+        "locationName": "Downtown Cartel Cleared",
+        "requirements": {"Cartel Influence, Downtown": 7},
+        "requirements_alt": {"Downtown Customers Unlocked" : 1},
+        "tags": ["Permanent", "Cartel Influence"]
+    },
+    "Docks Cartel Cleared": {
+        "region": "Overworld",
+        "itemName" : "Suburbia Customers Unlocked",
+        "locationName": "Docks Cartel Cleared",
+        "requirements": {"Cartel Influence, Docks": 7},
+        "requirements_alt": {"Docks Customers Unlocked" : 1},
+        "tags": ["Permanent", "Cartel Influence"]
+    },
+    "Suburbia Cartel Cleared": {
+        "region": "Overworld",
+        "itemName" : "Uptown Customers Unlocked",
+        "locationName": "Suburbia Cartel Cleared",
+        "requirements": {"Cartel Influence, Suburbia": 7},
+        "requirements_alt": {"Suburbia Customers Unlocked" : 1},
+        "tags": ["Permanent", "Cartel Influence"]
+    },
+    "Cartel Defeated": {
+        "region": "Missions",
+        "itemName" : "Cartel Defeated",
+        "locationName": "Cartel Defeated",
+        "requirements": {"Uptown Customers Unlocked" : 1,
+                            "Coca Seed Unlock" : 1,
+                            "Cauldron Unlock" : 1,
+                            "Lab Oven Unlock" : 1,
+                            "Gasoline Unlock" : 1,
+                            "Warehouse Access" : 1},
+        "requirements_alt": {},
+        "tags": ["Cartel"]
+    },
+    "Networth Goal Reached" : {
+        "region": "Overworld",
+        "itemName" : "Networth Goal Reached",
+        "locationName": "Networth Goal Reached",
+        "requirements": {},
+        "requirements_alt": {},
+        "tags": ["Networth"]
+    }
+}

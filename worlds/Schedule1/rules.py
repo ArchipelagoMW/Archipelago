@@ -9,14 +9,14 @@ if TYPE_CHECKING:
     from .world import Schedule1World
 
 
-def set_all_rules(world: Schedule1World) -> None:
+def set_all_rules(world: Schedule1World, locationData, eventData) -> None:
     # In order for AP to generate an item layout that is actually possible for the player to complete,
     # we need to define rules for our Entrances and Locations.
     # Note: Regions do not have rules, the Entrances connecting them do!
     # We'll do entrances first, then locations, and then finally we set our victory condition.
 
     set_all_entrance_rules(world)
-    set_all_location_rules(world)
+    set_all_location_rules(world, locationData, eventData)
     set_completion_condition(world)
 
 
@@ -57,10 +57,6 @@ def set_all_entrance_rules(world: Schedule1World) -> None:
     if world.options.randomize_business_properties or world.options.randomize_drug_making_properties:
         overworld_to_realtor = world.get_entrance("Overworld to Realtor")
 
-    if world.options.cash_for_trash > 0:
-        overworld_to_cash_for_trash = world.get_entrance("Overworld to Cash for Trash")
-
-         
     
     # An access rule is a function. We can define this function like any other function.
     # This function must accept exactly one parameter: A "CollectionState".
@@ -128,10 +124,10 @@ def set_all_entrance_rules(world: Schedule1World) -> None:
     def can_access_meth_recipe_checks(state: CollectionState) -> bool:
         if world.options.randomize_level_unlocks:
             if state.has_all(("Low-Quality Pseudo Unlock",
-                              "Acid Warehouse Unlock",
-                              "Phosphorus Warehouse Unlock",
-                              "Chemistry Station Warehouse Unlock",
-                              "Lab Oven Warehouse Unlock"), world.player):
+                              "Acid Unlock",
+                              "Phosphorus Unlock",
+                              "Chemistry Station Unlock",
+                              "Lab Oven Unlock"), world.player):
                 return True
             else:
                 return False
@@ -139,8 +135,8 @@ def set_all_entrance_rules(world: Schedule1World) -> None:
     
     def can_access_shrooms_recipe_checks(state: CollectionState) -> bool:
         if world.options.randomize_customers:
-            if state.has_any(("Downtown Customer Unlocked: Elizabeth Homley",
-                              "Downtown Customer Unlocked: Kevin Oakley"), world.player):
+            if state.has_any(("Elizabeth Homley Unlocked",
+                              "Kevin Oakley Unlocked"), world.player):
                 return True
             else:
                 return False
@@ -148,12 +144,12 @@ def set_all_entrance_rules(world: Schedule1World) -> None:
     
     def can_access_cocaine_recipe_checks(state: CollectionState) -> bool:
         if world.options.randomize_level_unlocks and world.options.randomize_customers:
-            if state.has_any(("Docks Customer Unlocked: Mac Cooper",
-                              "Docks Customer Unlocked: Javier Perez"), world.player):
+            if state.has_any(("Mac Cooper Unlocked",
+                              "Javier Perez Unlocked"), world.player):
                 if state.has_all(("Coca Seed Unlock",
-                                  "Cauldron Warehouse Unlock",
-                                  "Lab Oven Warehouse Unlock",
-                                  "Gasoline Gas Mart Unlock"), world.player):
+                                  "Cauldron Unlock",
+                                  "Lab Oven Unlock",
+                                  "Gasoline Unlock"), world.player):
                     return True
                 else:
                     return False
@@ -161,15 +157,15 @@ def set_all_entrance_rules(world: Schedule1World) -> None:
                 return False
         elif world.options.randomize_level_unlocks:
             if state.has_all(("Coca Seed Unlock",
-                              "Cauldron Warehouse Unlock",
-                              "Lab Oven Warehouse Unlock",
-                              "Gasoline Gas Mart Unlock"), world.player):
+                              "Cauldron Unlock",
+                              "Lab Oven Unlock",
+                              "Gasoline Unlock"), world.player):
                 return True
             else:
                 return False
         elif world.options.randomize_customers:
-            if state.has_any(("Docks Customer Unlocked: Mac Cooper",
-                              "Docks Customer Unlocked: Javier Perez"), world.player):
+            if state.has_any(("Mac Cooper Unlocked",
+                              "Javier Perez Unlocked"), world.player):
                 return True
             else:
                 return False
@@ -219,63 +215,55 @@ def set_all_entrance_rules(world: Schedule1World) -> None:
     if world.options.randomize_business_properties or world.options.randomize_drug_making_properties:
         set_rule(overworld_to_realtor, can_access_realtor)
     
-    if world.options.cash_for_trash > 0:
-        set_rule(overworld_to_cash_for_trash, can_access_cash_for_trash)
 
-def set_all_location_rules(world: Schedule1World) -> None:
-    # can't get beat the cartel without uptown customers item
-    westville_cartel_cleared = world.get_location("Westville Cartel Cleared")
-    downtown_cartel_cleared = world.get_location("Downtown Cartel Cleared")
-    docks_cartel_cleared = world.get_location("Docks Cartel Cleared")
-    suburbia_cartel_cleared = world.get_location("Suburbia Cartel Cleared")
-    uptown_cartel_cleared = world.get_location("Uptown Cartel Cleared")
-    finishing_the_job = world.get_location("Finishing the job 10, Wait for the bomb to detonate")
+def set_all_location_rules(world: Schedule1World, locationData, eventData) -> None:
+    
+    # Reference for relevant locations
+    locations = {}
+
+    for event in eventData.events.values():
+        if "Permanent" in event.tags:
+            locations[event.locationName] = world.get_location(event.locationName)
 
     if world.options.goal != 1:
-        cartel_defeated = world.get_location("Cartel Defeated")
+        for event in eventData.events.values():
+            if "Cartel" in event.tags:
+                locations[event.locationName] = world.get_location(event.locationName)
     
     if world.options.goal < 2:
-        networth_goal_reached = world.get_location("Networth Goal Reached")
+        for event in eventData.events.values():
+            if "Networth" in event.tags:
+                locations[event.locationName] = world.get_location(event.locationName)
     
     if world.options.randomize_cartel_influence:
-        set_rule(westville_cartel_cleared, lambda state: state.has_all_counts(
-            {"Cartel Influence, Westville": 7}, world.player))
-        set_rule(downtown_cartel_cleared, lambda state: state.has_all_counts(
-            {"Cartel Influence, Downtown": 7}, world.player))
-        set_rule(docks_cartel_cleared, lambda state: state.has_all_counts(
-            {"Cartel Influence, Docks": 7}, world.player))
-        set_rule(suburbia_cartel_cleared, lambda state: state.has_all_counts(
-            {"Cartel Influence, Suburbia": 7}, world.player))
-        set_rule(uptown_cartel_cleared, lambda state: state.has_all_counts(
-            {"Cartel Influence, Uptown": 7}, world.player))
+        for event in eventData.events.values():
+            if "Cartel Influence" in event.tags:
+                set_rule(locations[event.locationName], lambda state: state.has_all_counts(
+                    event.requirements, world.player))
     else:
-        # Linear unlocking customer regions.
-        set_rule(westville_cartel_cleared, lambda state: state.has("Westville Region Unlock", world.player))
-        set_rule(downtown_cartel_cleared, lambda state: state.has("Downtown Customers Unlocked", world.player)) 
-        set_rule(docks_cartel_cleared, lambda state: state.has("Docks Customers Unlocked", world.player)) 
-        set_rule(suburbia_cartel_cleared, lambda state: state.has("Suburbia Customers Unlocked", world.player)) 
-        set_rule(uptown_cartel_cleared, lambda state: state.has("Suburbia Customers Unlocked", world.player)) 
+        # Use alternate requirements if cartel influence is not randomized
+        for event in eventData.events.values():
+            if "Cartel Influence" in event.tags:
+                set_rule(locations[event.locationName], lambda state: state.has_all_counts(
+                    event.requirements_alt, world.player))
     
-    # Need uptown, cocaine, and warehouse before you can beat the cartel, 
-    set_rule(finishing_the_job, lambda state: state.has_all(("Finishing The Job Mission Available",
-                                                             "Coca Seed Unlock",
-                                                             "Cauldron Warehouse Unlock",
-                                                             "Lab Oven Warehouse Unlock",
-                                                             "Gasoline Gas Mart Unlock",
-                                                             "Warehouse Access"), world.player))
+    # Only need uptown unlocked to start cartel mission
+    # Need 20 cocaine to finish it however
     if world.options.goal != 1:
-        set_rule(cartel_defeated, lambda state: state.has_all(("Finishing The Job Mission Available",
-                                                               "Coca Seed Unlock",
-                                                               "Cauldron Warehouse Unlock",
-                                                               "Lab Oven Warehouse Unlock",
-                                                               "Gasoline Gas Mart Unlock",
-                                                               "Warehouse Access"), world.player))
+        for event in eventData.events.values():
+            if event.locationName == "Cartel Defeated":
+                set_rule(locations[event.locationName], lambda state: state.has_all_counts(
+                    event.requirements, world.player
+                ))
     if world.options.goal < 2:
         # Always accessible because money is always obtainable.
         # Maybe we should say you need to unlock cocaine recipe checks to get money?
-        set_rule(networth_goal_reached, lambda state: True)  
+        # Will stay hardcoded until requirements are made if any
+        set_rule(locations["Networth Goal Reached"], lambda state: True)  
 
 def set_completion_condition(world: Schedule1World) -> None:
+    # We'll keep this hardcoded as well for now.
+    # There shouldn't be too many differences in how victory is achieved.
     if world.options.goal == 0:
         world.multiworld.completion_condition[world.player] = lambda state: state.has_all(
             ("Cartel Defeated", "Networth Goal Reached"), world.player)
