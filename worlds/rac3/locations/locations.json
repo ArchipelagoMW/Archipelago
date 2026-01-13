@@ -505,7 +505,7 @@
         "map_locations": [
           {
             "map": "Galaxy",
-            "x": 390,
+            "x": 380,
             "y": 242
           }
         ],
@@ -2752,6 +2752,11 @@
             "map": "Aquatos Sewers",
             "x": 39,
             "y": 295
+          },
+          {
+            "map": "Galaxy",
+            "x": 400,
+            "y": 242
           }
         ],
         "sections": [
@@ -3149,6 +3154,14 @@
           },
           {
             "name": "396",
+            "item_count": 1
+          },
+          {
+            "name": "399",
+            "item_count": 1
+          },
+          {
+            "name": "400",
             "item_count": 1
           },
           {
