@@ -113,7 +113,6 @@ item_data_table = {
     ItemName.prison_map_a: ItemData(700, ItemClassification.filler),
     ItemName.prison_map_b: ItemData(701, ItemClassification.filler),
     ItemName.prison_yard_map: ItemData(702, ItemClassification.filler),
-    ItemName.world_map: ItemData(703, ItemClassification.filler),
     ItemName.forest_map_a: ItemData(704, ItemClassification.filler),
     ItemName.forest_map_b: ItemData(705, ItemClassification.filler),
     ItemName.village_map: ItemData(706, ItemClassification.filler),
