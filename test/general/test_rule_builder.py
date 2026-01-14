@@ -53,7 +53,7 @@ class FreeTextOption(FreeText):
 
 class SetOption(OptionSet):
     auto_display_name = True
-    valid_keys = {"one", "two", "three"}  # noqa: RUF012
+    valid_keys: ClassVar[set[str]] = {"one", "two", "three"}  # pyright: ignore[reportIncompatibleVariableOverride]
 
 
 @dataclass
@@ -256,8 +256,8 @@ class TestSimplify(unittest.TestCase):
         (ChoiceOption, 1, "in", ("first", "second"), True),
         (FreeTextOption, "no", "eq", "yes", False),
         (FreeTextOption, "yes", "eq", "yes", True),
-        (SetOption, {"one", "two"}, "contains", "three", False),
-        (SetOption, {"one", "two"}, "contains", "two", True),
+        (SetOption, ("one", "two"), "contains", "three", False),
+        (SetOption, ("one", "two"), "contains", "two", True),
     )
 )
 class TestOptions(unittest.TestCase):
@@ -273,8 +273,7 @@ class TestOptions(unittest.TestCase):
 
         for field in fields(world.options_dataclass):
             if field.type is option_cls:
-                opt = getattr(world.options, field.name)
-                opt.value = world_value
+                setattr(world.options, field.name, option_cls.from_any(world_value))
                 break
 
         option_filter = OptionFilter(option_cls, filter_value, operator)
