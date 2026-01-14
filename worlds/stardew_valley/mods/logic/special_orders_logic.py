@@ -57,7 +57,7 @@ class ModSpecialOrderLogic(BaseLogic):
                 ModSpecialOrder.dwarf_scroll: self.logic.has_all(*(Artifact.dwarf_scroll_i, Artifact.dwarf_scroll_ii, Artifact.dwarf_scroll_iii,
                                                                    Artifact.dwarf_scroll_iv,)),
                 ModSpecialOrder.geode_order: self.logic.has_all(*(Geode.geode, Geode.frozen, Geode.magma, Geode.omni,)) &
-                                             self.logic.relationship.has_hearts(ModNPC.jasper, 8)
+                                             self.logic.relationship.has_hearts(ModNPC.jasper, 8) & self.logic.special_order.can_complete_special_order(SpecialOrder.fragments_of_the_past)
             })
 
         return special_orders
