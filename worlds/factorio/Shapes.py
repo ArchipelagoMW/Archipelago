@@ -242,6 +242,29 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
             for choice in choices:
                 prerequisites[choice] = {source}
             current_choices.extendleft(choices)
+    elif layout == TechTreeLayout.option_irregular:
+        
+        #Made by: CosmicWolf @brattycosmicwolf
+        #I am going by `sort(key=_sorter)` and then branching the tech tree out. So no issues should arrise AFAIK with getting things stuck.
+        #This is the same method also used by the other tech tree methods.
+
+        locations.sort(key=_sorter)
+        current_choices = locations[:5] # remove the first 5 techs from my actions
+        locations = locations[5:]
+        while len(locations) >= 1: #Loop through all remaining techs
+            victim = locations.pop(0)
+            list = []
+            rand_num = int(str(victim).split("-")[2]) #use the last number of the tech as random number. Not sure if it is random, but oh well.
+            while (True):
+                list.append(current_choices[int(rand_num % len(current_choices))]) #Take one of the already processed techs as its prerequisite.
+                if (rand_num/float(2) % 1 != 0): #Give it a 50% chance to take an extra tech as prerequisite
+                    #or to be more accurate. Check if a /2 gives a .5. And if that is the case. Break.
+                    break
+                rand_num /= 2
+
+            current_choices.append(victim)
+            prerequisites[victim] = set(list) #set the list as is apropiate.
+
     else:
         raise NotImplementedError(f"Layout {layout} is not implemented.")
 
