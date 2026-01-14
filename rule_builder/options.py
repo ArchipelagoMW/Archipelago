@@ -2,15 +2,15 @@ import dataclasses
 import importlib
 import operator
 from collections.abc import Callable, Iterable
-from typing import Any, Generic, Literal, Self, cast
+from typing import Any, Final, Literal, Self, cast
 
-from typing_extensions import TypeVar, override
+from typing_extensions import override
 
 from Options import CommonOptions, Option
 
-Operator = Literal["eq", "ne", "gt", "lt", "ge", "le", "contains"]
+Operator = Literal["eq", "ne", "gt", "lt", "ge", "le", "contains", "in"]
 
-OPERATORS: dict[Operator, Callable[..., bool]] = {
+OPERATORS: Final[dict[Operator, Callable[..., bool]]] = {
     "eq": operator.eq,
     "ne": operator.ne,
     "gt": operator.gt,
@@ -18,8 +18,9 @@ OPERATORS: dict[Operator, Callable[..., bool]] = {
     "ge": operator.ge,
     "le": operator.le,
     "contains": operator.contains,
+    "in": operator.contains,
 }
-operator_strings: dict[Operator, str] = {
+OPERATOR_STRINGS: Final[dict[Operator, str]] = {
     "eq": "==",
     "ne": "!=",
     "gt": ">",
@@ -27,14 +28,13 @@ operator_strings: dict[Operator, str] = {
     "ge": ">=",
     "le": "<=",
 }
-
-T = TypeVar("T")
+REVERSE_OPERATORS: Final[tuple[Operator, ...]] = ("in",)
 
 
 @dataclasses.dataclass(frozen=True)
-class OptionFilter(Generic[T]):
-    option: type[Option[T]]
-    value: T
+class OptionFilter:
+    option: type[Option[Any]]
+    value: Any
     operator: Operator = "eq"
 
     def to_dict(self) -> dict[str, Any]:
@@ -57,7 +57,8 @@ class OptionFilter(Generic[T]):
         if opt is None:
             raise ValueError(f"Invalid option: {option_name}")
 
-        return OPERATORS[self.operator](opt, self.value)
+        fn = OPERATORS[self.operator]
+        return fn(self.value, opt) if self.operator in REVERSE_OPERATORS else fn(opt, self.value)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
@@ -80,11 +81,11 @@ class OptionFilter(Generic[T]):
         return cls(option=cast(type[Option[Any]], option), value=value, operator=operator)
 
     @classmethod
-    def multiple_from_dict(cls, data: Iterable[dict[str, Any]]) -> tuple["OptionFilter[Any]", ...]:
+    def multiple_from_dict(cls, data: Iterable[dict[str, Any]]) -> tuple[Self, ...]:
         """Returns a tuple of OptionFilters instances from an iterable of dict representations"""
         return tuple(cls.from_dict(o) for o in data)
 
     @override
     def __str__(self) -> str:
-        op = operator_strings.get(self.operator, self.operator)
+        op = OPERATOR_STRINGS.get(self.operator, self.operator)
         return f"{self.option.__name__} {op} {self.value}"

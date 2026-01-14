@@ -1,12 +1,12 @@
 import unittest
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from typing import Any, ClassVar
 
 from typing_extensions import override
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from NetUtils import JSONMessagePart
-from Options import Choice, Option, PerGameCommonOptions, Toggle
+from Options import Choice, FreeText, Option, OptionSet, PerGameCommonOptions, Toggle
 from rule_builder.cached_world import CachedRuleBuilderWorld
 from rule_builder.options import Operator, OptionFilter
 from rule_builder.rules import (
@@ -40,16 +40,28 @@ class ToggleOption(Toggle):
 
 
 class ChoiceOption(Choice):
+    auto_display_name = True
     option_first = 0
     option_second = 1
     option_third = 2
     default = 0
 
 
+class FreeTextOption(FreeText):
+    auto_display_name = True
+
+
+class SetOption(OptionSet):
+    auto_display_name = True
+    valid_keys = {"one", "two", "three"}  # noqa: RUF012
+
+
 @dataclass
 class RuleBuilderOptions(PerGameCommonOptions):
     toggle_option: ToggleOption
     choice_option: ChoiceOption
+    text_option: FreeTextOption
+    set_option: SetOption
 
 
 GAME_NAME = "Rule Builder Test Game"
@@ -231,17 +243,25 @@ class TestSimplify(unittest.TestCase):
 
 @classvar_matrix(
     cases=(
-        (ToggleOption, 0, 0, "eq", True),
-        (ToggleOption, 0, 1, "eq", False),
-        (ToggleOption, 0, 0, "ne", False),
-        (ToggleOption, 0, 1, "ne", True),
-        (ChoiceOption, 0, 1, "gt", False),
-        (ChoiceOption, 1, 1, "gt", False),
-        (ChoiceOption, 2, 1, "gt", True),
+        (ToggleOption, 0, "eq", 0, True),
+        (ToggleOption, 0, "eq", 1, False),
+        (ToggleOption, 0, "ne", 0, False),
+        (ToggleOption, 0, "ne", 1, True),
+        (ChoiceOption, 0, "gt", 1, False),
+        (ChoiceOption, 1, "gt", 1, False),
+        (ChoiceOption, 2, "gt", 1, True),
+        (ChoiceOption, 0, "ge", "second", False),
+        (ChoiceOption, 1, "ge", "second", True),
+        (ChoiceOption, 1, "in", (0, 1), True),
+        (ChoiceOption, 1, "in", ("first", "second"), True),
+        (FreeTextOption, "no", "eq", "yes", False),
+        (FreeTextOption, "yes", "eq", "yes", True),
+        (SetOption, {"one", "two"}, "contains", "three", False),
+        (SetOption, {"one", "two"}, "contains", "two", True),
     )
 )
 class TestOptions(unittest.TestCase):
-    cases: ClassVar[tuple[type[Option[Any]], Any, Any, Operator, bool]]
+    cases: ClassVar[tuple[type[Option[Any]], Any, Operator, Any, bool]]
     multiworld: MultiWorld  # pyright: ignore[reportUninitializedInstanceVariable]
     world: RuleBuilderWorld  # pyright: ignore[reportUninitializedInstanceVariable]
 
@@ -249,16 +269,17 @@ class TestOptions(unittest.TestCase):
         multiworld = setup_solo_multiworld(RuleBuilderWorld, steps=("generate_early",), seed=0)
         world = multiworld.worlds[1]
         assert isinstance(world, RuleBuilderWorld)
-        option_cls, world_value, filter_value, operator, result = self.cases
-        expected = True_.Resolved(player=1) if result else False_.Resolved(player=1)
-        if option_cls is ToggleOption:
-            world.options.toggle_option.value = world_value
-        elif option_cls is ChoiceOption:
-            world.options.choice_option.value = world_value
+        option_cls, world_value, operator, filter_value, expected = self.cases
 
-        rule = True_(options=[OptionFilter(option_cls, filter_value, operator)])
-        resolved_rule = rule.resolve(world)
-        self.assertEqual(resolved_rule, expected)
+        for field in fields(world.options_dataclass):
+            if field.type is option_cls:
+                opt = getattr(world.options, field.name)
+                opt.value = world_value
+                break
+
+        option_filter = OptionFilter(option_cls, filter_value, operator)
+        result = option_filter.check(world.options)
+        self.assertEqual(result, expected, f"Expected {result} for option={option_filter} with value={world_value}")
 
 
 @classvar_matrix(
