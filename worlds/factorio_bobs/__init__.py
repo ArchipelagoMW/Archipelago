@@ -662,6 +662,11 @@ class FactorioBobs(World):
 
 
     def create_item(self, name: str) -> FactorioItem:
+        if not self.modpack:
+            return FactorioItem(name,
+                                ItemClassification.filler,
+                                items_to_id[name], self.player)
+
         if name in self.modpack.technology_table.keys():  # is a Technology
             if self.modpack.technology_table[name] in self.progression_technologies:
                 classification = ItemClassification.progression
