@@ -57,7 +57,7 @@ class OptionFilter(Generic[T]):
         if opt is None:
             raise ValueError(f"Invalid option: {option_name}")
 
-        return OPERATORS[self.operator](opt.value, self.value)
+        return OPERATORS[self.operator](opt, self.value)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:

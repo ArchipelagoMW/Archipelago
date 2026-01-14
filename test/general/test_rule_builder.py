@@ -6,9 +6,9 @@ from typing_extensions import override
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from NetUtils import JSONMessagePart
-from Options import Choice, PerGameCommonOptions, Toggle
+from Options import Choice, Option, PerGameCommonOptions, Toggle
 from rule_builder.cached_world import CachedRuleBuilderWorld
-from rule_builder.options import OptionFilter
+from rule_builder.options import Operator, OptionFilter
 from rule_builder.rules import (
     And,
     CanReachEntrance,
@@ -229,38 +229,36 @@ class TestSimplify(unittest.TestCase):
         self.assertEqual(resolved_rule, expected, f"\n{resolved_rule}\n{expected}")
 
 
+@classvar_matrix(
+    cases=(
+        (ToggleOption, 0, 0, "eq", True),
+        (ToggleOption, 0, 1, "eq", False),
+        (ToggleOption, 0, 0, "ne", False),
+        (ToggleOption, 0, 1, "ne", True),
+        (ChoiceOption, 0, 1, "gt", False),
+        (ChoiceOption, 1, 1, "gt", False),
+        (ChoiceOption, 2, 1, "gt", True),
+    )
+)
 class TestOptions(unittest.TestCase):
+    cases: ClassVar[tuple[type[Option[Any]], Any, Any, Operator, bool]]
     multiworld: MultiWorld  # pyright: ignore[reportUninitializedInstanceVariable]
     world: RuleBuilderWorld  # pyright: ignore[reportUninitializedInstanceVariable]
 
-    @override
-    def setUp(self) -> None:
-        self.multiworld = setup_solo_multiworld(RuleBuilderWorld, steps=("generate_early",), seed=0)
-        world = self.multiworld.worlds[1]
+    def test_simplify(self) -> None:
+        multiworld = setup_solo_multiworld(RuleBuilderWorld, steps=("generate_early",), seed=0)
+        world = multiworld.worlds[1]
         assert isinstance(world, RuleBuilderWorld)
-        self.world = world
-        return super().setUp()
+        option_cls, world_value, filter_value, operator, result = self.cases
+        expected = True_.Resolved(player=1) if result else False_.Resolved(player=1)
+        if option_cls is ToggleOption:
+            world.options.toggle_option.value = world_value
+        elif option_cls is ChoiceOption:
+            world.options.choice_option.value = world_value
 
-    def test_option_filtering(self) -> None:
-        rule = Or(Has("A", options=[OptionFilter(ToggleOption, 0)]), Has("B", options=[OptionFilter(ToggleOption, 1)]))
-
-        self.world.options.toggle_option.value = 0
-        self.assertEqual(rule.resolve(self.world), Has.Resolved("A", player=1))
-
-        self.world.options.toggle_option.value = 1
-        self.assertEqual(rule.resolve(self.world), Has.Resolved("B", player=1))
-
-    def test_gt_filtering(self) -> None:
-        rule = Or(Has("A", options=[OptionFilter(ChoiceOption, 1, operator="gt")]), False_())
-
-        self.world.options.choice_option.value = 0
-        self.assertEqual(rule.resolve(self.world), False_.Resolved(player=1))
-
-        self.world.options.choice_option.value = 1
-        self.assertEqual(rule.resolve(self.world), False_.Resolved(player=1))
-
-        self.world.options.choice_option.value = 2
-        self.assertEqual(rule.resolve(self.world), Has.Resolved("A", player=1))
+        rule = True_(options=[OptionFilter(option_cls, filter_value, operator)])
+        resolved_rule = rule.resolve(world)
+        self.assertEqual(resolved_rule, expected)
 
 
 @classvar_matrix(
