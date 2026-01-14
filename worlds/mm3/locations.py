@@ -306,7 +306,7 @@ location_groups = {
         names.get_rush_marine,
         names.get_rush_jet,
     },
-    **{name: {location for location in region.locations} for name, region in mm3_regions.items()}
+    **{name: {location for location, data in region.locations.items() if data.location_id} for name, region in mm3_regions.items()}
 }
 
 lookup_location_to_id: dict[str, int] = {location: idx for location, idx in location_table.items() if idx is not None}
