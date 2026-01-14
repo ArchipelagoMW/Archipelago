@@ -1,10 +1,10 @@
 from collections import defaultdict
-from typing import ClassVar
+from typing import ClassVar, cast
 
 from typing_extensions import override
 
 from BaseClasses import CollectionState, Item, MultiWorld, Region
-from worlds.AutoWorld import World
+from worlds.AutoWorld import LogicMixin, World
 
 from .rules import Rule
 
@@ -80,7 +80,7 @@ class CachedRuleBuilderWorld(World):
     def collect(self, state: CollectionState, item: Item) -> bool:
         changed = super().collect(state, item)
         if changed and self.rule_item_dependencies:
-            player_results = state.rule_cache[self.player]
+            player_results = cast(dict[int, bool], state.rule_builder_cache[self.player])  # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType]
             mapped_name = self.item_mapping.get(item.name, "")
             rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
             for rule_id in rule_ids:
@@ -95,7 +95,7 @@ class CachedRuleBuilderWorld(World):
         if not changed:
             return changed
 
-        player_results = state.rule_cache[self.player]
+        player_results = cast(dict[int, bool], state.rule_builder_cache[self.player])  # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType]
         if self.rule_item_dependencies:
             mapped_name = self.item_mapping.get(item.name, "")
             rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
@@ -126,6 +126,21 @@ class CachedRuleBuilderWorld(World):
     def reached_region(self, state: CollectionState, region: Region) -> None:
         super().reached_region(state, region)
         if self.rule_region_dependencies:
-            player_results = state.rule_cache[self.player]
+            player_results = cast(dict[int, bool], state.rule_builder_cache[self.player])  # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType]
             for rule_id in self.rule_region_dependencies[region.name]:
                 player_results.pop(rule_id, None)
+
+
+class CachedRuleBuilderLogicMixin(LogicMixin):
+    multiworld: MultiWorld  # pyright: ignore[reportUninitializedInstanceVariable]
+    rule_builder_cache: dict[int, dict[int, bool]]  # pyright: ignore[reportUninitializedInstanceVariable]
+
+    def init_mixin(self, multiworld: "MultiWorld") -> None:
+        players = multiworld.get_all_ids()
+        self.rule_builder_cache = {player: {} for player in players}
+
+    def copy_mixin(self, new_state: "CachedRuleBuilderLogicMixin") -> "CachedRuleBuilderLogicMixin":
+        new_state.rule_builder_cache = {
+            player: player_results.copy() for player, player_results in self.rule_builder_cache.items()
+        }
+        return new_state

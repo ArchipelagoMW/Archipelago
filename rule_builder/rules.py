@@ -205,12 +205,13 @@ class Rule(Generic[TWorld]):
             if not self.caching_enabled:
                 return self._evaluate(state)
 
-            cached_result = state.rule_cache[self.player].get(id(self))
+            player_results = cast(dict[int, bool], state.rule_builder_cache[self.player])  # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType]
+            cached_result = player_results.get(id(self))
             if cached_result is not None:
                 return cached_result
 
             result = self._evaluate(state)
-            state.rule_cache[self.player][id(self)] = result
+            player_results[id(self)] = result
             return result
 
         def _evaluate(self, state: CollectionState) -> bool:

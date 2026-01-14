@@ -1,6 +1,6 @@
 import unittest
 from dataclasses import dataclass, fields
-from typing import Any, ClassVar
+from typing import Any, ClassVar, cast
 
 from typing_extensions import override
 
@@ -33,6 +33,10 @@ from test.general import setup_solo_multiworld
 from test.param import classvar_matrix
 from worlds import network_data_package
 from worlds.AutoWorld import WebWorld, World
+
+
+class CachedCollectionState(CollectionState):
+    rule_builder_cache: dict[int, dict[int, bool]]  # pyright: ignore[reportUninitializedInstanceVariable]
 
 
 class ToggleOption(Toggle):
@@ -366,7 +370,7 @@ class TestHashes(unittest.TestCase):
 class TestCaching(unittest.TestCase):
     multiworld: MultiWorld  # pyright: ignore[reportUninitializedInstanceVariable]
     world: RuleBuilderCachedWorld  # pyright: ignore[reportUninitializedInstanceVariable]
-    state: CollectionState  # pyright: ignore[reportUninitializedInstanceVariable]
+    state: CachedCollectionState  # pyright: ignore[reportUninitializedInstanceVariable]
     player: int = 1
 
     @override
@@ -375,7 +379,7 @@ class TestCaching(unittest.TestCase):
         world = self.multiworld.worlds[1]
         assert isinstance(world, RuleBuilderCachedWorld)
         self.world = world
-        self.state = self.multiworld.state
+        self.state = cast(CachedCollectionState, self.multiworld.state)
 
         region1 = Region("Region 1", self.player, self.multiworld)
         region2 = Region("Region 2", self.player, self.multiworld)
@@ -405,61 +409,61 @@ class TestCaching(unittest.TestCase):
         self.state.collect(self.world.create_item("Item 1"))  # access to region 2
         self.state.collect(self.world.create_item("Item 2"))  # item directly needed
         self.assertFalse(location.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_cache[1][id(location.access_rule)])
+        self.assertFalse(self.state.rule_builder_cache[1][id(location.access_rule)])
 
         self.state.collect(self.world.create_item("Item 3"))  # clears cache, item directly needed
-        self.assertNotIn(id(location.access_rule), self.state.rule_cache[1])
+        self.assertNotIn(id(location.access_rule), self.state.rule_builder_cache[1])
         self.assertTrue(location.can_reach(self.state))
-        self.assertTrue(self.state.rule_cache[1][id(location.access_rule)])
+        self.assertTrue(self.state.rule_builder_cache[1][id(location.access_rule)])
         self.state.collect(self.world.create_item("Item 3"))  # does not clear cache as rule is already true
-        self.assertTrue(self.state.rule_cache[1][id(location.access_rule)])
+        self.assertTrue(self.state.rule_builder_cache[1][id(location.access_rule)])
 
     def test_region_cache_busting(self) -> None:
         location = self.world.get_location("Location 2")
         self.state.collect(self.world.create_item("Item 2"))  # item directly needed for location rule
         self.assertFalse(location.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_cache[1][id(location.access_rule)])
+        self.assertFalse(self.state.rule_builder_cache[1][id(location.access_rule)])
 
         self.state.collect(self.world.create_item("Item 1"))  # clears cache, item only needed for region 2 access
         # cache gets cleared during the can_reach
         self.assertTrue(location.can_reach(self.state))
-        self.assertTrue(self.state.rule_cache[1][id(location.access_rule)])
+        self.assertTrue(self.state.rule_builder_cache[1][id(location.access_rule)])
 
     def test_location_cache_busting(self) -> None:
         location = self.world.get_location("Location 5")
         self.state.collect(self.world.create_item("Item 1"))  # access to region 2
         self.state.collect(self.world.create_item("Item 3"))  # access to region 3
         self.assertFalse(location.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_cache[1][id(location.access_rule)])
+        self.assertFalse(self.state.rule_builder_cache[1][id(location.access_rule)])
 
         self.state.collect(self.world.create_item("Item 2"))  # clears cache, item only needed for location 2 access
-        self.assertNotIn(id(location.access_rule), self.state.rule_cache[1])
+        self.assertNotIn(id(location.access_rule), self.state.rule_builder_cache[1])
         self.assertTrue(location.can_reach(self.state))
 
     def test_entrance_cache_busting(self) -> None:
         location = self.world.get_location("Location 6")
         self.state.collect(self.world.create_item("Item 2"))  # item directly needed for location rule
         self.assertFalse(location.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_cache[1][id(location.access_rule)])
+        self.assertFalse(self.state.rule_builder_cache[1][id(location.access_rule)])
 
         self.state.collect(self.world.create_item("Item 1"))  # clears cache, item only needed for entrance access
-        self.assertNotIn(id(location.access_rule), self.state.rule_cache[1])
+        self.assertNotIn(id(location.access_rule), self.state.rule_builder_cache[1])
         self.assertTrue(location.can_reach(self.state))
 
     def test_has_skips_cache(self) -> None:
         entrance = self.world.get_entrance("Region 1 -> Region 2")
         self.assertFalse(entrance.can_reach(self.state))  # does not populates cache
-        self.assertNotIn(id(entrance.access_rule), self.state.rule_cache[1])
+        self.assertNotIn(id(entrance.access_rule), self.state.rule_builder_cache[1])
 
         self.state.collect(self.world.create_item("Item 1"))  # no need to clear cache, item directly needed
-        self.assertNotIn(id(entrance.access_rule), self.state.rule_cache[1])
+        self.assertNotIn(id(entrance.access_rule), self.state.rule_builder_cache[1])
         self.assertTrue(entrance.can_reach(self.state))
 
 
 class TestCacheDisabled(unittest.TestCase):
     multiworld: MultiWorld  # pyright: ignore[reportUninitializedInstanceVariable]
     world: RuleBuilderWorld  # pyright: ignore[reportUninitializedInstanceVariable]
-    state: CollectionState  # pyright: ignore[reportUninitializedInstanceVariable]
+    state: CachedCollectionState  # pyright: ignore[reportUninitializedInstanceVariable]
     player: int = 1
 
     @override
@@ -468,7 +472,7 @@ class TestCacheDisabled(unittest.TestCase):
         world = self.multiworld.worlds[1]
         assert isinstance(world, RuleBuilderWorld)
         self.world = world
-        self.state = self.multiworld.state
+        self.state = cast(CachedCollectionState, self.multiworld.state)
 
         region1 = Region("Region 1", self.player, self.multiworld)
         region2 = Region("Region 2", self.player, self.multiworld)
@@ -494,41 +498,41 @@ class TestCacheDisabled(unittest.TestCase):
     def test_item_logic(self) -> None:
         entrance = self.world.get_entrance("Region 1 -> Region 2")
         self.assertFalse(entrance.can_reach(self.state))
-        self.assertFalse(self.state.rule_cache[1])
+        self.assertFalse(self.state.rule_builder_cache[1])
 
         self.state.collect(self.world.create_item("Item 1"))  # item directly needed
-        self.assertFalse(self.state.rule_cache[1])
+        self.assertFalse(self.state.rule_builder_cache[1])
         self.assertTrue(entrance.can_reach(self.state))
 
     def test_region_logic(self) -> None:
         location = self.world.get_location("Location 2")
         self.state.collect(self.world.create_item("Item 2"))  # item directly needed for location rule
         self.assertFalse(location.can_reach(self.state))
-        self.assertFalse(self.state.rule_cache[1])
+        self.assertFalse(self.state.rule_builder_cache[1])
 
         self.state.collect(self.world.create_item("Item 1"))  # item only needed for region 2 access
         self.assertTrue(location.can_reach(self.state))
-        self.assertFalse(self.state.rule_cache[1])
+        self.assertFalse(self.state.rule_builder_cache[1])
 
     def test_location_logic(self) -> None:
         location = self.world.get_location("Location 5")
         self.state.collect(self.world.create_item("Item 1"))  # access to region 2
         self.state.collect(self.world.create_item("Item 3"))  # access to region 3
         self.assertFalse(location.can_reach(self.state))
-        self.assertFalse(self.state.rule_cache[1])
+        self.assertFalse(self.state.rule_builder_cache[1])
 
         self.state.collect(self.world.create_item("Item 2"))  # item only needed for location 2 access
-        self.assertFalse(self.state.rule_cache[1])
+        self.assertFalse(self.state.rule_builder_cache[1])
         self.assertTrue(location.can_reach(self.state))
 
     def test_entrance_logic(self) -> None:
         location = self.world.get_location("Location 6")
         self.state.collect(self.world.create_item("Item 2"))  # item directly needed for location rule
         self.assertFalse(location.can_reach(self.state))
-        self.assertFalse(self.state.rule_cache[1])
+        self.assertFalse(self.state.rule_builder_cache[1])
 
         self.state.collect(self.world.create_item("Item 1"))  # item only needed for entrance access
-        self.assertFalse(self.state.rule_cache[1])
+        self.assertFalse(self.state.rule_builder_cache[1])
         self.assertTrue(location.can_reach(self.state))
 
 
