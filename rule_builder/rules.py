@@ -1,6 +1,6 @@
 import dataclasses
 from collections.abc import Callable, Iterable, Mapping
-from typing import TYPE_CHECKING, Any, ClassVar, Generic, Never, Self, cast
+from typing import TYPE_CHECKING, Any, ClassVar, Final, Generic, Never, Self, cast
 
 from typing_extensions import TypeVar, dataclass_transform, override
 
@@ -14,8 +14,6 @@ if TYPE_CHECKING:
 
     TWorld = TypeVar("TWorld", bound=World, contravariant=True, default=World)  # noqa: PLC0105
 else:
-    World = object
-
     TWorld = TypeVar("TWorld")
 
 
@@ -117,7 +115,7 @@ class Rule(Generic[TWorld]):
         }
 
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         """Returns a new instance of this rule from a serialized dict representation"""
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
         return cls(**data.get("args", {}), options=options)
@@ -320,7 +318,7 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         children = [world_cls.rule_from_dict(c) for c in data.get("children", ())]
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
         return cls(*children, options=options)
@@ -582,7 +580,7 @@ class WrapperRule(Rule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         child = data.get("child")
         if child is None:
             raise ValueError("Child rule cannot be None")
@@ -750,7 +748,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         args = {**data.get("args", {})}
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
@@ -863,7 +861,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         args = {**data.get("args", {})}
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
@@ -1191,7 +1189,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         args = {**data.get("args", {})}
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
@@ -1319,7 +1317,7 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         args = {**data.get("args", {})}
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
@@ -1766,8 +1764,8 @@ class CanReachEntrance(Rule[TWorld], game="Archipelago"):
             return f"Can reach entrance {self.entrance_name}"
 
 
-DEFAULT_RULES = {
-    rule_name: cast(type[Rule[World]], rule_class)
+DEFAULT_RULES: "Final[dict[str, type[Rule[World]]]]" = {
+    rule_name: cast("type[Rule[World]]", rule_class)
     for rule_name, rule_class in locals().items()
     if isinstance(rule_class, type) and issubclass(rule_class, Rule) and rule_class is not Rule
 }
