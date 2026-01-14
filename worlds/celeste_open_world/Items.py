@@ -84,7 +84,7 @@ celeste_base_id: int = 0xCA10000
 
 
 class CelesteItem(Item):
-    game = "Celeste"
+    game = "Celeste (Open World)"
 
 
 class CelesteItemData(NamedTuple):
