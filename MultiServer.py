@@ -2536,8 +2536,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def _cmd_location_groups(self, player_name: str, *key: str) -> bool:
         """
         List all location group names for the specified player.
-        :param key: Which location group to filter to. Will log all groups if empty.
 
+        :param key: Which location group to filter to. Will log all groups if empty.
         """
         seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
         if usable:
