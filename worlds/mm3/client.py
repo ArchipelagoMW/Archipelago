@@ -303,8 +303,8 @@ def cmd_pool(self: "BizHawkClientCommandProcessor") -> None:
 
 
 def cmd_request(self: "BizHawkClientCommandProcessor", amount: str, target: str) -> None:
-    from worlds._bizhawk.context import BizHawkClientContext
     """Request a refill from EnergyLink."""
+    from worlds._bizhawk.context import BizHawkClientContext
     if self.ctx.game != "Mega Man 3":
         logger.warning("This command can only be used when playing Mega Man 3.")
         return
