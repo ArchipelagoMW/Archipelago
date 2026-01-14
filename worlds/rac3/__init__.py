@@ -116,7 +116,7 @@ class RaC3World(World):
     def create_items(self):
         itempool = create_itempool(self)
         self.multiworld.itempool.extend(itempool)
-        location_count = len(self.multiworld.get_unfilled_locations())
+        location_count = len(self.multiworld.get_unfilled_locations(self.player))
         item_count = len(itempool)
         if location_count - item_count >= 0:
             filler = [self.create_filler() for _ in range(location_count - item_count)]
