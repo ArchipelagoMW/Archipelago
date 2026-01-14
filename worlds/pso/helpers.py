@@ -2,6 +2,8 @@ from typing import NamedTuple
 
 from dolphin_memory_engine import read_byte, read_bytes, write_byte, write_bytes
 
+CLIENT_VERSION = "v0.0.1"
+
 class PSORamData(NamedTuple):
     """
     Keep our RAM data organized
