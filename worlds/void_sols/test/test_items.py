@@ -18,7 +18,10 @@ class TestItems(VoidSolsTestBase):
             ItemName.fishing_rod,
             ItemName.flaming_torch_x1,
             ItemName.dynamite_x1,
-            ItemName.strange_curio,
+            ItemName.strange_curio_1,
+            ItemName.strange_curio_2,
+            ItemName.strange_curio_3,
+            ItemName.strange_curio_4,
         ]
         
         for item_name in progression_items:

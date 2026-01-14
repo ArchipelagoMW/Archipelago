@@ -190,11 +190,18 @@ class TestRules(VoidSolsTestBase):
         # Village Access (Forest Access)
         base_items = [ItemName.prison_warden_defeated_event, ItemName.gate_key]
         
-        # Slot 1 requires 1 Curio
-        self.assertAccessDependency([LocationName.village_relics_improved_1], [base_items + [ItemName.strange_curio]], only_check_listed=True)
-        
-        # Slot 4 requires 4 Curios
-        self.assertAccessDependency([LocationName.village_relics_improved_4], [base_items + [ItemName.strange_curio] * 4], only_check_listed=True)
+        # Slot 1 requires Curio 1
+        self.assertAccessDependency([LocationName.village_relics_improved_1], [base_items + [ItemName.strange_curio_1]], only_check_listed=True)
+        # Slot 2 requires Curio 2
+        self.assertAccessDependency([LocationName.village_relics_improved_2], [base_items + [ItemName.strange_curio_2]], only_check_listed=True)
+        # Slot 3 requires Curio 3
+        self.assertAccessDependency([LocationName.village_relics_improved_3], [base_items + [ItemName.strange_curio_3]], only_check_listed=True)
+        # Slot 4 requires Curio 4
+        self.assertAccessDependency([LocationName.village_relics_improved_4], [base_items + [ItemName.strange_curio_4]], only_check_listed=True)
+
+        # Slot 5 requires all 4 Curios
+        all_curios = [ItemName.strange_curio_1, ItemName.strange_curio_2, ItemName.strange_curio_3, ItemName.strange_curio_4]
+        self.assertAccessDependency([LocationName.village_relics_improved_5], [base_items + all_curios], only_check_listed=True)
 
     def test_zenith_access(self) -> None:
         """Test Zenith access requires all 3 data discs"""
@@ -270,19 +277,22 @@ class TestRules(VoidSolsTestBase):
         """Test Hall of Heroes Restored requires Greater Void Worm Defeated"""
         locations = [
             LocationName.village_misc_hall_of_heroes_restored,
-            LocationName.village_torch_hall_of_heroes,
+            LocationName.village_torch_forgotten_reliquary,
         ]
         # Village Access
-        base_items = [ItemName.prison_warden_defeated_event, ItemName.gate_key]
+        base_items = [ItemName.prison_warden_defeated_event, ItemName.gate_key, ItemName.prison_key]
         
         # Check Village access generally
         self.collect_by_name(base_items)
         self.assertTrue(self.can_reach_region("Village"))
         self.assertTrue(self.can_reach_location(LocationName.village_item_pickup_map))
 
+        # Re-initialize state to be sure
+        self.remove(self.get_item_by_name(ItemName.greater_void_worm_defeated_event))
+
         for loc in locations:
              self.assertFalse(self.can_reach_location(loc), f"{loc} should not be reachable without Worm Defeated")
         
         self.collect_by_name([ItemName.greater_void_worm_defeated_event])
         for loc in locations:
-             self.assertTrue(self.can_reach_location(loc), f"{loc} should be reachable with Worm Defeated")
+             self.assertTrue(self.can_reach_location(loc), f"{loc} should be reachable with Worm Defeated. Region: {self.multiworld.get_location(loc, self.player).parent_region}")
