@@ -252,6 +252,7 @@ class Rac3Interface(GameInterface):
     message_display: bool = False
     ship_slot_limit: int = 0
     one_hp_challenge: dict[str, bool] = None
+    pda_vendor: int = 0
 
     # Called at once when client started
     def init(self):
@@ -303,6 +304,7 @@ class Rac3Interface(GameInterface):
         self.multiplier_cycler()
         self.overflow_fix()
         self.health_cycler()
+        self.pda_vendor_cycler()
         if self.weaponLevelLockFlag:
             self.weapon_exp_cycler()
         # Logic Fixes
@@ -681,6 +683,8 @@ class Rac3Interface(GameInterface):
             # but this timer is set to 1 during that time, so we use that to know when the initial load is happening
             or self._read16(RAC3STATUS.FALL_TIMER) == 1):
             return False
+        if self.distance_to_pda_vendor() < 12.0:
+            return False
         return True
 
     def gadget_cycler(self):
@@ -969,6 +973,42 @@ class Rac3Interface(GameInterface):
             self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x2442FFFF) # addiu v0,v0,-0x1
             self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0xAC652850) # sw a1,0x2850(v1)
 
+    def pda_vendor_cycler(self):
+        """Handles PDA vendor logic: finding, resetting, and repurchasing on Qwark's Hideout."""
+        if self.planet != RAC3REGION.QWARKS_HIDEOUT:
+            # reset PDA vendor when leaving Qwarks Hideout
+            self.pda_vendor = 0
+            return
+
+        # Wait until Qwarks Hideout is fully loaded and PDA is unlocked
+        if not self.should_cycle_gadgets() or self.UnlockItem[RAC3ITEM.PDA].status == 0:
+            return
+
+        # Find PDA Vendor if not already found
+        if self.pda_vendor == 0:
+            self.pda_vendor = self.find_pda_vendor()
+            # If not found, don't continue
+            if self.pda_vendor == 0:
+                return
+
+        # If Ratchet has the PDA but has not checked the PDA location, reset the vendor if close
+        if (self.UnlockItem[RAC3ITEM.PDA].status == 1 and
+            not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.HIDEOUT_PDA].AP_CODE)):
+            distance = self.distance_to_pda_vendor()
+            logger.debug(f'Ratchet has PDA and PDA location unchecked, distance to PDA Vendor: {distance:.2f}')
+            if distance < 12.0:
+                logger.debug(f'Ratchet is close to PDA Vendor (Distance: {distance:.2f}), resetting vendor')
+                self.reset_pda_vendor()
+    
+    def reset_pda_vendor(self):
+        """Reset PDA Vendor to initial state to allow repurchasing the PDA"""
+        if self.pda_vendor == 0:
+            logger.debug('PDA Vendor not found, cannot reset')
+            return
+        self._write8(self.pda_vendor + 0x7C, 1) # Put PDA back in vendor
+        self._write8(self.pda_vendor + 0x94, 0) # Set bought flag to 0
+        self._write8(self.pda_vendor + 0x20, 1) # Reset interaction state
+
     def overflow_fix(self):
         nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
         if nanotech_exp > 0x7FFFFFFF:
@@ -994,6 +1034,9 @@ class Rac3Interface(GameInterface):
                 not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.ZELDRIN_STARPORT_BOLT_GRABBER].AP_CODE)):
             self._write8(gadget_data[RAC3ITEM.BOLT_GRABBER].UNLOCK_ADDRESS, 0)
             self._write8(gadget_data[RAC3ITEM.BOX_BREAKER].UNLOCK_ADDRESS, 0)
+        if (self.UnlockItem[RAC3ITEM.PDA].status and
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.HIDEOUT_PDA].AP_CODE)):
+            self._write8(gadget_data[RAC3ITEM.PDA].UNLOCK_ADDRESS, 0)
 
     def reload_check(self):
         """Detects if the game is currently being reloaded, and updates death data"""
@@ -1245,3 +1288,42 @@ class Rac3Interface(GameInterface):
                         (self.UnlockItem[RAC3ITEM.HACKER].status == 0 or
                         self.UnlockItem[RAC3ITEM.HYPERSHOT].status == 0))
         return False
+    
+    def find_pda_vendor(self) -> int | str:
+        """Traverse the moby linked list on Qwarks Hideout to find the PDA vendor moby and return its address"""
+        table_start = RAC3STATUS.HIDEOUT_MOBY_TABLE_START
+        target_moby_id = RAC3STATUS.PDA_VENDOR_MOBY_ID
+        moby_offset = 0
+        current_id = 0
+        for traversal in range(1, 10001):
+            if current_id == target_moby_id:
+                # once vendor has been found, save address
+                pda_vendor_addr = table_start + moby_offset
+                logger.debug(f'PDA Vendor found at address: {hex(pda_vendor_addr)} after {traversal} traversals')
+                return pda_vendor_addr
+            next_ptr = self._read32(table_start + 0x28 + moby_offset)
+            if next_ptr == 0: # Null pointer found
+                logger.debug(f'PDA Vendor not found after {traversal} traversals, reached null pointer')
+                return 0
+            moby_offset = next_ptr - table_start
+            if moby_offset < 0:
+                logger.debug(f'PDA Vendor not found after {traversal} traversals, invalid offset detected')
+                return 0
+            current_id = self._read16(table_start + 0xB2 + moby_offset)
+        return 0
+    
+    def distance_to_pda_vendor(self) -> float:
+        """Calculate the distance from the player to the PDA vendor"""
+        if self.pda_vendor == 0 or self.planet != RAC3REGION.QWARKS_HIDEOUT:
+            return float('inf')
+        
+        player_pos = (self._read_float(RAC3STATUS.POS_X),
+                      self._read_float(RAC3STATUS.POS_Y),
+                      self._read_float(RAC3STATUS.POS_Z))
+        vendor_pos = (self._read_float(self.pda_vendor + 0x10),
+                      self._read_float(self.pda_vendor + 0x14),
+                      self._read_float(self.pda_vendor + 0x18))
+        distance = ((player_pos[0] - vendor_pos[0]) ** 2 +
+                    (player_pos[1] - vendor_pos[1]) ** 2 +
+                    (player_pos[2] - vendor_pos[2]) ** 2) ** 0.5
+        return distance
