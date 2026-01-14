@@ -253,17 +253,17 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
         locations = locations[5:]
         while len(locations) >= 1: #Loop through all remaining techs
             victim = locations.pop(0)
-            list = []
+            chains = []
             rand_num = int(str(victim).split("-")[2]) #use the last number of the tech as random number. Not sure if it is random, but oh well.
             while (True):
-                list.append(current_choices[int(rand_num % len(current_choices))]) #Take one of the already processed techs as its prerequisite.
+                chains.append(current_choices[int(rand_num % len(current_choices))]) #Take one of the already processed techs as its prerequisite.
                 if (rand_num/float(2) % 1 != 0): #Give it a 50% chance to take an extra tech as prerequisite
                     #or to be more accurate. Check if a /2 gives a .5. And if that is the case. Break.
                     break
                 rand_num /= 2
 
             current_choices.append(victim)
-            prerequisites[victim] = set(list) #set the list as is apropiate.
+            prerequisites[victim] = set(chains) #set the list as is apropiate.
 
     else:
         raise NotImplementedError(f"Layout {layout} is not implemented.")
