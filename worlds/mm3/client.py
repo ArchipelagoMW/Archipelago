@@ -173,7 +173,7 @@ MM3_CONSUMABLE_TABLE: dict[int, dict[int, tuple[int, int]]] = {
         0x0253: (3, 7)
     },
     13: {
-        0x0254: (0, 4),
+        0x0254: (0, 3),
         0x0255: (0, 6),
         0x0256: (1, 0),
         0x0257: (3, 0),
