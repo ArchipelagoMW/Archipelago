@@ -673,7 +673,8 @@ class Rac3Interface(GameInterface):
                 self._write8(RAC3STATUS.EQUIPPED, last_3)
 
     def cutscene_gadget_fix(self):
-        """Temporarily removing a gadget when grabbing it during a cutscene to make sure the location check address gets checked"""
+        """Temporarily removing a gadget when grabbing it during a cutscene to make sure the location check address
+        gets checked"""
         if bool(self._read8(RAC3STATUS.HIDE_WEAPON)):
             match self.planet:
                 case RAC3REGION.MARCADIA:
@@ -687,19 +688,20 @@ class Rac3Interface(GameInterface):
                     self._write8(gadget_data[RAC3ITEM.NANO_PAK].UNLOCK_ADDRESS, 0)
                 case RAC3REGION.QWARKS_HIDEOUT:
                     self._write8(gadget_data[RAC3ITEM.PDA].UNLOCK_ADDRESS, 0)
-    
+
     def should_cycle_gadgets(self) -> bool:
         """Check if it's safe to cycle gadgets
         used to ensure gadgets can respawn without the cycler interfering"""
-        if (self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE 
-            or self.is_reloading 
-            or self.self_respawning 
-            or bool(self._read8(RAC3STATUS.HIDE_WEAPON))
-            # for some reason during the initial planet load, pause state and action are all 0s and are therefore useless
-            # but this timer is set to 1 during that time, so we use that to know when the initial load is happening
-            or self._read16(RAC3STATUS.FALL_TIMER) == 1):
+        if (self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE
+                or self.is_reloading
+                or self.self_respawning
+                or bool(self._read8(RAC3STATUS.HIDE_WEAPON))
+                # for some reason during the initial planet load, pause state and action are all 0s and are therefore
+                # useless but this timer is set to 1 during that time, so we use that to know when the initial load is
+                # happening
+                or self._read16(RAC3STATUS.FALL_TIMER) == 1):
             return False
-        if self.distance_to_pda_vendor() < 12.0:
+        if self.planet != RAC3REGION.QWARKS_HIDEOUT or self.distance_to_moby(self.pda_vendor) < 12.0:
             return False
         return True
 
@@ -1027,13 +1029,12 @@ class Rac3Interface(GameInterface):
 
         # If Ratchet has the PDA but has not checked the PDA location, reset the vendor if close
         if (self.UnlockItem[RAC3ITEM.PDA].status == 1 and
-            not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.HIDEOUT_PDA].AP_CODE)):
-            distance = self.distance_to_pda_vendor()
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.HIDEOUT_PDA].AP_CODE)):
+            distance = self.distance_to_moby(self.pda_vendor)
             logger.debug(f'Ratchet has PDA and PDA location unchecked, distance to PDA Vendor: {distance:.2f}')
             if distance < 12.0:
                 logger.debug(f'Ratchet is close to PDA Vendor (Distance: {distance:.2f}), resetting vendor')
                 self.reset_pda_vendor()
-
     def reset_pda_vendor(self):
         """Reset PDA Vendor to initial state to allow repurchasing the PDA"""
         if self.pda_vendor == 0:
@@ -1342,7 +1343,7 @@ class Rac3Interface(GameInterface):
                 logger.debug(f'PDA Vendor found at address: {hex(pda_vendor_addr)} after {traversal} traversals')
                 return pda_vendor_addr
             next_ptr = self._read32(table_start + 0x28 + moby_offset)
-            if next_ptr == 0: # Null pointer found
+            if next_ptr == 0:  # Null pointer found
                 logger.debug(f'PDA Vendor not found after {traversal} traversals, reached null pointer')
                 return 0
             moby_offset = next_ptr - table_start
@@ -1352,18 +1353,19 @@ class Rac3Interface(GameInterface):
             current_id = self._read16(table_start + 0xB2 + moby_offset)
         return 0
 
-    def distance_to_pda_vendor(self) -> float:
-        """Calculate the distance from the player to the PDA vendor"""
-        if self.pda_vendor == 0 or self.planet != RAC3REGION.QWARKS_HIDEOUT:
+    def distance_to_moby(self, moby) -> float:
+        """Calculate the distance from the player to the moby"""
+        if not moby:
             return float('inf')
-
+        assert RAC3STATUS.HIDEOUT_MOBY_TABLE_START < moby < RAC3STATUS.HIDEOUT_MOBY_TABLE_START + 0x00100000, \
+            "Moby not in the typical moby range"
         player_pos = (self._read_float(RAC3STATUS.POS_X),
                       self._read_float(RAC3STATUS.POS_Y),
                       self._read_float(RAC3STATUS.POS_Z))
-        vendor_pos = (self._read_float(self.pda_vendor + 0x10),
-                      self._read_float(self.pda_vendor + 0x14),
-                      self._read_float(self.pda_vendor + 0x18))
-        distance = ((player_pos[0] - vendor_pos[0]) ** 2 +
-                    (player_pos[1] - vendor_pos[1]) ** 2 +
-                    (player_pos[2] - vendor_pos[2]) ** 2) ** 0.5
+        moby_pos = (self._read_float(moby + 0x10),
+                      self._read_float(moby + 0x14),
+                      self._read_float(moby + 0x18))
+        distance = ((player_pos[0] - moby_pos[0]) ** 2 +
+                    (player_pos[1] - moby_pos[1]) ** 2 +
+                    (player_pos[2] - moby_pos[2]) ** 2) ** 0.5
         return distance
