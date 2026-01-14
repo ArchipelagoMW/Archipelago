@@ -168,7 +168,7 @@ class TechTreeLayout(Choice):
     Funnels: Several bottom halves of diamonds (6/10/15 nodes each)
     Trees: Several trees
     Choices: A single balanced binary tree
-    irregular: starts wtih the 5 tech unlocked and randomly assigns dependencies to techs after.
+    Irregular: Starts with the 5 tech unlocked and randomly assigns dependencies to techs after
     """
     display_name = "Technology Tree Layout"
     option_single = 0
