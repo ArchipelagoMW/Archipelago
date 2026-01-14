@@ -111,4 +111,4 @@ def starting_weapons(world: "RaC3World", dictionary: dict[str, int]) -> list[str
         else:
             weapon_list.append(name)
     world.random.shuffle(weapon_list)
-    return [weapon_list[0], weapon_list[1]]
+    return weapon_list[:2]
