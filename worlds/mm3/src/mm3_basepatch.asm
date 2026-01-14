@@ -157,6 +157,24 @@ FixPseudoRush:
   JMP CheckRushWeapon
   NOP
 
+%org($BF80, $02)
+CheckRushWeapon:
+  AND #$01
+  BNE .Rush
+  JMP $A3CF
+  .Rush:
+  LDA $A1
+  CLC
+  ADC $B4
+  TAY
+  LDA $00A2, Y
+  BNE .Skip
+  DEC $A1
+  .Skip:
+  JMP $A477
+
+; don't even try to go past this point
+
 %org($802F, $0B)
 HookBreakMan:
   JSR SetBreakMan
@@ -761,18 +779,3 @@ EnergyLink:
   RTS
 
 ; out of room here :(
-
-%org($FFCF, $3F)
-CheckRushWeapon:
-  AND #$01
-  BNE .DontHave
-  JMP $A3CF
-  .DontHave:
-  LDA $A1
-  AND #$01
-  BNE .Skip
-  DEC $A1
-  .Skip:
-  JMP $A477
-
-; don't even try to go past this point

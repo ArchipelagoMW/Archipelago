@@ -1,5 +1,5 @@
 import pkgutil
-from typing import TYPE_CHECKING, Iterable, Sequence
+from typing import TYPE_CHECKING, Iterable
 import hashlib
 import Utils
 import os
@@ -113,31 +113,9 @@ enemy_addresses: dict[str, int] = {
 }
 
 # addresses printed when assembling basepatch
-consumables_ptr: int = 0x7FDEA
 wily_4_ptr: int = 0x7F570
+consumables_ptr: int = 0x7FDEA
 energylink_ptr: int = 0x7FDF9
-
-
-class RomData:
-    def __init__(self, file: bytes, name: str = "") -> None:
-        self.file = bytearray(file)
-        self.name = name
-
-    def read_byte(self, offset: int) -> int:
-        return self.file[offset]
-
-    def read_bytes(self, offset: int, length: int) -> bytearray:
-        return self.file[offset:offset + length]
-
-    def write_byte(self, offset: int, value: int) -> None:
-        self.file[offset] = value
-
-    def write_bytes(self, offset: int, values: Sequence[int]) -> None:
-        self.file[offset:offset + len(values)] = values
-
-    def write_to_file(self, file: str) -> None:
-        with open(file, 'wb') as outfile:
-            outfile.write(self.file)
 
 
 class MM3ProcedurePatch(APProcedurePatch, APTokenMixin):
