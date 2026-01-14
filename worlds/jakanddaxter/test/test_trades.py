@@ -7,7 +7,9 @@ class TradesCostNothingTest(JakAndDaxterTestBase):
         "global_orbsanity_bundle_size": 10,
         "citizen_orb_trade_amount": 0,
         "oracle_orb_trade_amount": 0,
-        "start_inventory": {"Power Cell": 100},
+        "fire_canyon_cell_count": 0,
+        "mountain_pass_cell_count": 0,
+        "lava_tube_cell_count": 0,
     }
 
     def test_orb_items_are_filler(self):
@@ -26,7 +28,9 @@ class TradesCostEverythingTest(JakAndDaxterTestBase):
         "global_orbsanity_bundle_size": 10,
         "citizen_orb_trade_amount": 120,
         "oracle_orb_trade_amount": 150,
-        "start_inventory": {"Power Cell": 100},
+        "fire_canyon_cell_count": 0,
+        "mountain_pass_cell_count": 0,
+        "lava_tube_cell_count": 0,
     }
 
     def test_orb_items_are_progression(self):

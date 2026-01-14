@@ -11,7 +11,7 @@ on:
       - "!.github/workflows/**"
       - ".github/workflows/docker.yml"
     branches:
-      - "*"
+      - "main"
     tags:
       - "v?[0-9]+.[0-9]+.[0-9]*"
   workflow_dispatch:
