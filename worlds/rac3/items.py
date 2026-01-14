@@ -2,6 +2,7 @@ from logging import DEBUG, getLogger
 from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
+from Options import OptionError
 from worlds.rac3.constants.data.item import (goal_data, item_counts, item_table, NAME_TO_PROG_DICT,
                                              non_prog_weapon_data, prog_weapon_data, progressive_data, RAC3ITEMDATA)
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
@@ -96,6 +97,14 @@ def get_filler_item_selection(world: "RaC3World"):
     if world.options.traps_enabled.value:
         traps = world.options.trap_weight.value
         frequencies.update(traps)
+
+    if not frequencies or all(count == 0 for count in frequencies.values()):
+        error = "No filler items available. Please enable some filler items."
+        if world.options.enable_progressive_weapons.value:
+            error += " Progressive Weapons option is enabled, so 'Weapon XP' cannot be used as a filler item."
+        if world.options.traps_enabled.value is False:
+            error += " Traps are disabled, so no trap items can be used as filler."
+        raise OptionError(error)
     return [name for name, count in frequencies.items() for _ in range(count)]
 
 
