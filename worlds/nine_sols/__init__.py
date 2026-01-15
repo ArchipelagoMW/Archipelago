@@ -96,6 +96,7 @@ class NineSolsWorld(World):
                     slot_data = self.multiworld.re_gen_passthrough["Nine Sols"]
                     self.options.seals_for_eigong.value = slot_data['seals_for_eigong']
                     self.options.seals_for_prison.value = slot_data['seals_for_prison']
+                    self.options.prevent_weakened_prison_state.value = slot_data.get('prevent_weakened_prison_state', 0)
                     self.options.seals_for_ethereal.value = slot_data['seals_for_ethereal']
                     self.options.skip_soulscape_platforming.value = slot_data['skip_soulscape_platforming']
                     self.options.first_root_node = FirstRootNode.from_text(slot_data['first_root_node_name'])
