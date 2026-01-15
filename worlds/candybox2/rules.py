@@ -311,6 +311,7 @@ class CandyBox2RulesPackage(JSONEncoder):
     room_rules: dict["CandyBox2Room", CandyBox2RulesPackageRuleExpression]
     location_parents: dict["CandyBox2LocationName", CandyBox2Room]
     room_exits: dict["CandyBox2Room", list["CandyBox2Room"]]
+    goal_rule: CandyBox2RulesPackageRuleExpression
 
     def __init__(
         self,
@@ -341,6 +342,10 @@ class CandyBox2RulesPackage(JSONEncoder):
         self.room_rules = {}
         self.location_parents = {}
         self.room_exits = {}
+        self.goal_rule = CandyBox2RulesPackageRuleConstantExpression(True)
+
+    def set_goal_rule(self, goal_rule: CandyBox2RulesPackageRuleExpression):
+        self.goal_rule = goal_rule
 
     def add_location_rule(
         self,
@@ -372,6 +377,7 @@ class CandyBox2RulesPackage(JSONEncoder):
                 "locations": {o.locations[location].id: rule.default() for location, rule in o.location_rules.items()},
                 "rooms": {room: rule.default() for room, rule in o.room_rules.items()},
             },
+            "goal": o.goal_rule.default(),
         }
 
     def apply_location_rules(self, world: "CandyBox2World", player: int):
@@ -602,6 +608,7 @@ def generate_rules_package():
     generate_rules_package_location_rules(rules_package)
     generate_rules_package_room_rules(rules_package)
     generate_rules_package_exits(rules_package)
+    generate_rules_package_goal_rule(rules_package)
 
     return rules_package
 
@@ -1154,3 +1161,13 @@ def generate_rules_package_exits(rules_package: CandyBox2RulesPackage):
         ],
     )
     rules_package.assign_room_exits(CandyBox2Room.DRAGON, [CandyBox2Room.QUEST_THE_DEVELOPER, CandyBox2Room.QUEST_HELL])
+
+def generate_rules_package_goal_rule(rules_package: CandyBox2RulesPackage):
+    rules_package.set_goal_rule(
+        rule_room(CandyBox2Room.TOWER) &
+        rule_item(CandyBox2ItemName.P_STONE) &
+        rule_item(CandyBox2ItemName.L_STONE) &
+        rule_item(CandyBox2ItemName.A_STONE) &
+        rule_item(CandyBox2ItemName.Y_STONE) &
+        rule_item(CandyBox2ItemName.LOCKED_CANDY_BOX)
+    )
