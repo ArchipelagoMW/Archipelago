@@ -189,9 +189,10 @@ def connect_regions(world: World):
 
     # Forest -> Supermax Prison (Locked by Greater Void Worm Defeated)
     # Require East Wing Key to enter to prevent softlock (one-way entrance)
+    # However, since East Wing Key is now placed in Supermax Prison West, we remove the key requirement
+    # so the player can enter, get the key, and then proceed.
     connect(world, "Forest", "Supermax Prison West",
-            lambda state: state.has(ItemName.greater_void_worm_defeated_event, player) and
-                          state.has(ItemName.east_wing_key, player))
+            lambda state: state.has(ItemName.greater_void_worm_defeated_event, player))
 
     # Supermax Prison West -> Supermax Prison East (Locked by East Wing Key)
     connect(world, "Supermax Prison West", "Supermax Prison East", lambda state: state.has(ItemName.east_wing_key, player))

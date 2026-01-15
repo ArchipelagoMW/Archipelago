@@ -78,6 +78,40 @@ class VoidSolsWorld(World):
         self.multiworld.get_location(LocationName.apex_world_spark_interacted, self.player).place_locked_item(
             self.create_item(ItemName.victory))
 
+        # Place East Wing Key manually in Supermax Prison West
+        # It can be any of the locations in Supermax Prison West that is not hidden by the codebearer puzzle rules
+        east_wing_key_candidates = [
+            LocationName.supermax_prison_spark_cell,
+            LocationName.supermax_prison_torch_north_wing_office,
+            LocationName.supermax_prison_torch_observation_platform,
+            LocationName.supermax_prison_torch_supermax_cell,
+            LocationName.supermax_prison_torch_supermax_guard_room,
+            LocationName.supermax_prison_item_pickup_strange_curio_4,
+            LocationName.supermax_prison_item_pickup_east_wing_key,
+            LocationName.supermax_prison_item_pickup_map_a,
+            LocationName.supermax_prison_item_pickup_major_sol_shard_16,
+            LocationName.supermax_prison_item_pickup_major_sol_shard_17,
+            LocationName.supermax_prison_item_pickup_flaming_torch,
+            LocationName.supermax_prison_wall_observation_platform_1,
+            LocationName.supermax_prison_wall_observation_platform_2,
+        ]
+
+        # Filter candidates to only those that exist in the world (respecting options)
+        valid_candidates = []
+        for loc_name in east_wing_key_candidates:
+            try:
+                self.multiworld.get_location(loc_name, self.player)
+                valid_candidates.append(loc_name)
+            except KeyError:
+                pass # Location disabled by options
+
+        if valid_candidates:
+            chosen_location = self.random.choice(valid_candidates)
+            self.multiworld.get_location(chosen_location, self.player).place_locked_item(
+                self.create_item(ItemName.east_wing_key))
+        else:
+            raise Exception("No valid location found for East Wing Key in Supermax Prison West")
+
         # Place Boss Event Items
         boss_events = {
             LocationName.prison_warden_defeated_event: ItemName.prison_warden_defeated_event,
@@ -104,6 +138,10 @@ class VoidSolsWorld(World):
             
             # Skip Victory as it is placed manually
             if name == ItemName.victory:
+                continue
+
+            # Skip East Wing Key as it is placed manually
+            if name == ItemName.east_wing_key:
                 continue
 
             if data.code is not None and quantity > 0:
