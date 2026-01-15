@@ -176,16 +176,7 @@ class CandyBox2World(World):
         self.rules_package.apply_location_rules(self, self.player)
 
     def completion_rule(self, state: CollectionState):
-        return can_reach_room(state, CandyBox2Room.TOWER, self.player) and state.has_all(
-            [
-                CandyBox2ItemName.P_STONE,
-                CandyBox2ItemName.L_STONE,
-                CandyBox2ItemName.A_STONE,
-                CandyBox2ItemName.Y_STONE,
-                CandyBox2ItemName.LOCKED_CANDY_BOX,
-            ],
-            self.player,
-        )
+        return self.rules_package.goal_rule.evaluate(self, state, self.player)
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         spoiler_handle.write(f"\nCandy Box 2 Entrance randomisation for {self.player_name}:\n")
