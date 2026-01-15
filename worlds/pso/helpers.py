@@ -4,6 +4,9 @@ from dolphin_memory_engine import read_byte, read_bytes, write_byte, write_bytes
 
 CLIENT_VERSION = "v0.0.1"
 
+# TODO: Get a real address for this - hopefully this doesn't crash anything...
+SLOT_NAME_ADDR = 0xFFFFFFAF
+
 class PSORamData(NamedTuple):
     """
     Keep our RAM data organized
@@ -91,6 +94,7 @@ def write_bit(console_address: int, bit_position: int, value: int) -> None:
     # Write the new value back to the original address
     write_byte(console_address, byte_value)
 
+
 def check_bit(console_address: int, bit_position: int) -> bool:
     """
     Check the value of a single bit in a specific position in a byte of Dolphin memory
@@ -104,3 +108,22 @@ def check_bit(console_address: int, bit_position: int) -> bool:
     # If the value in the byte's bit_position is set (1), the AND comparison will return a value
     # Otherwise, if it's not set, the expression will evaluate to 0 (and by extension, False)
     return byte_value & (1 << bit_position) > 0
+
+
+def string_to_bytes(user_string: str, encoded_byte_length: int) -> bytes:
+    """
+    Encodes a provided string to UTF-8 format. Adds padding until the expected length is reached.
+    If provided string is longer than expected length, raise an exception
+
+    :param user_string: String that needs to be encoded to bytes.
+    :param encoded_byte_length: Expected length of the provided string.
+    """
+    encoded_string = user_string.encode('utf-8')
+
+    if len(encoded_string) < encoded_byte_length:
+        encoded_string += b'\x00' * (encoded_byte_length - len(encoded_string))
+    elif len(encoded_string) > encoded_byte_length:
+        raise Exception("Provided string '" + user_string + "' was longer than the expected byte length of '" +
+                        str(encoded_byte_length) + "', which will not be accepted by the info file.")
+
+    return encoded_string

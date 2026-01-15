@@ -2,7 +2,6 @@ import asyncio
 import time
 import sys
 import traceback
-import typing
 
 from typing import TYPE_CHECKING, Any
 from copy import deepcopy
@@ -16,7 +15,7 @@ from ..items import ITEM_TABLE, ITEM_ID_TO_NAME, PSOItemType
 
 import dolphin_memory_engine
 
-from ..helpers import write_short, read_short, write_bit, check_bit
+from ..helpers import SLOT_NAME_ADDR, read_string, write_short, read_short, write_bit, check_bit
 from ..strings.client_strings import ConnectionStatus, get_death_message
 from ..strings.item_names import Item
 
@@ -355,9 +354,7 @@ async def dolphin_sync_task(ctx: PSOContext) -> None:
                     await check_locations(ctx)
                 else:
                     if not ctx.auth:
-                        # TODO: Get the Slot Name Address
-                        # For now, we just disconnect and inform the user
-                        # ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
+                        ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
                         ctx.auth = None
                         ctx.dolphin_status = ConnectionStatus.NO_SLOT_NAME
                         logger.info(ctx.dolphin_status)
@@ -444,12 +441,9 @@ def sync_main(*launch_args: str):
     args = parser.parse_args(launch_args)
 
     if args.appso_file:
-        # TODO: Write the patcher
-        logger.error("Patcher is not yet implemented")
-        # from .MMXCMPatcher import MMXCMPatcher
-        # pso_patch = MMXCMPatcher(args.apmmxcm_file)
-        # pso_patch.create_patch()
-
+        from worlds.pso.patcher.pso_patcher import PSOPatcher
+        pso_patch = PSOPatcher(args.appso_file)
+        pso_patch.create_patch()
 
     async_main(args.connect, args.password)
 

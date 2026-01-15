@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Callable
 
-from BaseClasses import Entrance, Region, CollectionState
+from BaseClasses import Region, CollectionState
 from .strings.region_names import Region as RegionName
 from .strings.entrance_names import Entrance as EntranceName
 from .strings.item_names import Item

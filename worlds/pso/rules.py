@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule

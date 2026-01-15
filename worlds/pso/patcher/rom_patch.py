@@ -66,7 +66,7 @@ class PSOPatch(APPatch, metaclass=AutoPatchRegister):
         return lib_path
 
     def __get_temp_folder_name(self) -> str:
-        from helpers import CLIENT_VERSION
+        from ..helpers import CLIENT_VERSION
         temp_path = os.path.join(tempfile.gettempdir(), "phantasystar", CLIENT_VERSION, "libs")
         return temp_path
 
@@ -78,12 +78,13 @@ class PSOPatch(APPatch, metaclass=AutoPatchRegister):
         base_path = os.path.splitext(appso_patch)[0]
         output_file = base_path + self.result_file_ending
 
+        # Calls the PSOPatcher to patch the file into ISO
+        from worlds.pso.patcher.pso_patcher import PSOPatcher
+
         try:
             # Make sure we have the clean rom first
             self.verify_base_rom(pso_clean_iso, throw_on_missing_speedups=True)
 
-            # Calls the PSOPatcher to patch the file into ISO
-            from pso_patcher import PSOPatcher
             PSOPatcher(appso_patch)
         except ImportError:
             self.__get_remote_dependencies_and_create_iso(appso_patch, pso_clean_iso)
@@ -91,7 +92,7 @@ class PSOPatch(APPatch, metaclass=AutoPatchRegister):
 
     def read_contents(self, appso_patch: str) -> dict[str, Any]:
         with zipfile.ZipFile(appso_patch, "r") as zf:
-            with zf.open("archipelago.json", "r") as f:
+            with zf.open("../archipelago.json", "r") as f:
                 manifest = json.load(f)
 
         if manifest["compatible_version"] > self.version:
@@ -151,7 +152,7 @@ class PSOPatch(APPatch, metaclass=AutoPatchRegister):
         self.verify_base_rom(vanilla_iso_path)
 
         #Use the Patcher to patch it into an iso.
-        from pso_patcher import PSOPatcher
+        from worlds.pso.patcher.pso_patcher import PSOPatcher
         PSOPatcher(patch_file_path)
 
     def __get_remote_dependencies_and_create_iso(self, appso_patch: str, pso_clean_iso: str):
