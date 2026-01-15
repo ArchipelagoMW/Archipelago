@@ -1191,10 +1191,12 @@ class Rac3Interface(GameInterface):
                         self.UnlockItem[RAC3ITEM.HYPERSHOT].status == 0))
         return False
     def clank_cycler(self):
+        # Special cases where Clank is already removed
         if self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(0x00142713) == 0:
             self._write16(RAC3STATUS.NO_CLANK, 1)
         elif self.planet == RAC3REGION.AQUATOS_BASE:
             self._write16(RAC3STATUS.NO_CLANK, 1)
+        # No special case:
         elif self.UnlockItem[RAC3ITEM.CLANK].status:
             if self.UnlockItem[RAC3ITEM.CLANK].unlock_delay:
                 self._write16(RAC3STATUS.NO_CLANK, 0)
@@ -1203,3 +1205,4 @@ class Rac3Interface(GameInterface):
                 self.UnlockItem[RAC3ITEM.CLANK].unlock_delay += 1
         else:
             self._write16(RAC3STATUS.NO_CLANK, 1)
+
