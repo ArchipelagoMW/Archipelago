@@ -883,6 +883,9 @@ class Rac3Interface(GameInterface):
                             self._write8(status, 2)
                         case RAC3STATUS.WRENCH_ONLY:
                             self._write8(status, 2)
+                        case RAC3STATUS.DISARM:
+                            if RAC3STATUS.IN_VEHICLE == 0:
+                                self._write8(status, 0)
                         case _:
                             self._write8(status, 1)
 
