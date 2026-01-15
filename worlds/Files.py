@@ -233,6 +233,7 @@ class APPlayerContainer(APContainer):
         self.player = player
         self.player_name = player_name
         self.server = server
+        self.force_file_name: str = ""
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
         manifest = super().read_contents(opened_zipfile)
@@ -249,6 +250,7 @@ class APPlayerContainer(APContainer):
             "player_name": self.player_name,
             "game": self.game,
             "patch_file_ending": self.patch_file_ending,
+            "force_file_name": self.force_file_name,
         })
         return manifest
 
