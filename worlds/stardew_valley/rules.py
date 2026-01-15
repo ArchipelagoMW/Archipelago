@@ -1162,7 +1162,7 @@ def set_endgame_locations_rules(logic: StardewLogic, rule_collector: StardewRule
         rule_collector.set_location_rule("Purchase Spouse Portrait", logic.relationship.can_purchase_portrait())
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_false:
         rule_collector.set_location_rule("Island Obelisk Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.island_obelisk))
-        if world_options.special_order_locations == SpecialOrderLocations.option_board_qi:
+        if world_options.special_order_locations & SpecialOrderLocations.value_qi:
             rule_collector.set_location_rule("Purchase Horse Flute", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
             rule_collector.set_location_rule("Purchase Pierre's Missing Stocklist", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
             rule_collector.set_location_rule("Purchase Key To The Town", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 20))
