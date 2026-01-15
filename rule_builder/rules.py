@@ -163,7 +163,6 @@ class Rule(Generic[TWorld]):
                 raise TypeError(f"Rule {cls.__qualname__} has already been registered for game {game}")
             custom_rules[cls.__qualname__] = cls
         elif cls.__module__ != "rule_builder.rules":
-            # TODO: test to make sure this works on frozen
             raise TypeError("You cannot define custom rules for the base Archipelago world")
         cls.game_name = game
 
