@@ -151,6 +151,17 @@ class CommandProcessor(ClientCommandProcessor):
             else:
                 self.output(f'Player cannot respawn right now')
 
+    def _cmd_homewarp(self):
+        """Loads Ratchet back on the Phoenix. Does nothing if used during the intro before reaching the Phoenix.
+        Also activated with the following button combo: L2 + R2 + L1 + R1 + SELECT"""
+        if not self.verify(4):
+            return
+        if isinstance(self.ctx, Rac3Context):
+            if create_task(handle_respawn(self.ctx, force_load=True)):
+                self.output(f'Player Warped to the Phoenix')
+            else:
+                self.output(f'Player cannot homewarp right now')
+
     def _cmd_ryno(self):
         """Toggles the maximum upgrade level for the RYNO between lv5 and lv4"""
         if not self.verify(4):
@@ -172,7 +183,7 @@ class CommandProcessor(ClientCommandProcessor):
             if len(message) > 225:
                 self.output(f'Message longer than 225 characters, truncated to fit in message box.')
             self.output(f'Message box displayed with message: {message[:225:]}')
-    
+
     def _cmd_one_hp(self, *args):
         """Toggles One HP Challenge for the specified character."""
         if not self.verify(4):
@@ -322,7 +333,9 @@ async def pcsx2_sync_task(ctx: Rac3Context):
                         connection_retry_attempts += 1
 
                     retry_wait = connection_retry_attempts * 10
-                    logger.warning(f'Could not connect to RaC3! Will retry connection in {retry_wait} seconds...\nPlease check your PINE settings both global and game specific, and restart PCSX2 if you changed them.')
+                    logger.warning(
+                        f'Could not connect to RaC3! Will retry connection in {retry_wait} seconds...\nPlease check '
+                        f'your PINE settings both global and game specific, and restart PCSX2 if you changed them.')
                     await sleep(retry_wait)
                 else:
                     connection_retry_attempts = 0

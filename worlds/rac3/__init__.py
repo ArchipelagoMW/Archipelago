@@ -155,7 +155,7 @@ class RaC3World(World):
         if excluded_count > 30:
             option_list.append(RAC3OPTION.EXCLUDE)
         if not option_list:
-            option_list: str = "¯\_(''/)_/¯ dunno"
+            option_list: str = "dunno" # ¯\_(''/)_/¯
         if count >= 50:
             raise OptionError(f"Not enough location options enabled! {count} items have nowhere to be placed.\n"
                               f"This large of a difference requires Progressive Weapons to be disabled, Additional "

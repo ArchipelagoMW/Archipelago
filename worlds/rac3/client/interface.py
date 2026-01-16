@@ -1154,6 +1154,17 @@ class Rac3Interface(GameInterface):
         self.self_respawning = True
         self._write8(RAC3STATUS.FORCE_RELOAD, 1)
 
+    def homewarp(self):
+        if self.planet not in RAC3_REGION_DATA_TABLE.keys():
+            # Unknown planet, abort homewarp
+            logger.error(f'Aborting homewarp, Unknown Planet: {self.planet}')
+            return
+        planet_to_load = RAC3_REGION_DATA_TABLE[self.planet].PLANET_TO_LOAD
+        home_id = RAC3_REGION_DATA_TABLE[self.planet].ID
+        if planet_to_load:
+            self._write8(planet_to_load, home_id)
+            self._write8(RAC3STATUS.PLANET_LOAD, 1)
+
     def teleport_to_coords(self):
         self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
 
@@ -1233,9 +1244,12 @@ class Rac3Interface(GameInterface):
             logger.debug(f'player unable to be killed')
             return False
 
-    def respawn_inputs(self) -> bool:
-        pressed_square = bool(self.inputs & RAC3INPUT.SQUARE)
-        return self.pause_menu and pressed_square
+    def check_inputs(self, check: int, paused: bool = False) -> bool:
+        """
+        Receives an input combination and checks if the game is currently receiving that combination,
+        with optional pause check
+        """
+        return not(self.pause_menu ^ paused) and bool(self.inputs & check)
 
     def messagebox(self, msg_list: list[bytes], color_bytes_count: int, longest_line_length: int, box_theme: int =
     RAC3BOXTHEME.DEFAULT, _time: int = 0x168) -> None:
@@ -1384,3 +1398,7 @@ class Rac3Interface(GameInterface):
                 and not RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE in checked_locations
                 and infobot_flag != RAC3STATUS.ALLOW_SHIP):
                 self._write8(infobot_flag, 0)
+
+    def check_intro(self) -> bool:
+        """Checks if the player has reached the end of the intro by collecting the phoenix coordinates"""
+        return  not self.UnlockItem[RAC3ITEM.STARSHIP_PHOENIX].status
