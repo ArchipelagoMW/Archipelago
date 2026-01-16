@@ -244,10 +244,6 @@ class Wargroove2Context(CommonContext):
                 self.starting_groove_multiplier = self.slot_data["groove_boost"]
                 self.income_boost_multiplier = self.slot_data["income_boost"]
                 self.commander_defense_boost_multiplier = self.slot_data["commander_defense_boost"]
-            for ss in self.checked_locations:
-                filename = f"send{ss}"
-                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                    pass
 
             self.stored_finale_key = f"wargroove_2_{self.slot}_{self.team}"
             self.set_notify(self.stored_finale_key)
@@ -334,11 +330,6 @@ class Wargroove2Context(CommonContext):
             self.ui.update_ui()
 
         if cmd in {"RoomUpdate"}:
-            if "checked_locations" in args:
-                for ss in self.checked_locations:
-                    filename = f"send{ss}"
-                    with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                        pass
             self.ui.update_ui()
 
         if cmd in {"Retrieved"}:

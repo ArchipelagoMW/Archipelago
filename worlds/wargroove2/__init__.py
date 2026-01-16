@@ -41,14 +41,7 @@ class Wargroove2Settings(settings.Group):
         Locates the Wargroove 2 save file directory on your system.
         This is used by the Wargroove 2 client, so it knows where to send mod and save files to.
         """
-        description = "Wargroove 2 save file/appdata directory"
-
-        def browse(self, **kwargs):
-            from Utils import messagebox
-            messagebox("AppData folder not found",
-                       "Wargroove2Client couldn't detect a path to the AppData folder.\n"
-                       "Please select the folder containing the \"/Chucklefish/Wargroove2/\" directories.")
-            super().browse(**kwargs)
+        description = "Appdata directory containing the Chucklefish/Wargroove2 folders."
 
     root_directory: RootDirectory = RootDirectory("C:/Program Files (x86)/Steam/steamapps/common/Wargroove 2")
     save_directory: SaveDirectory = SaveDirectory("%APPDATA%")
