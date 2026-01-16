@@ -50,9 +50,9 @@ For further examples, check out the "presets" folder of the standalone randomize
 
 ## Individual Assignments
 
-Individual enemy assignment is in contrast to a pool, where you cannot target individual enemies but rather a category.
+Individual enemy assignment allows you to target individual enemies, rather than a category as under pools.
 
-This overrides pools and any other configuration will usually ignore progression and can possibly cause you to have to
+This overrides pools and any other configuration, will usually ignore progression, and can possibly cause you to have to
 fight Yhorm the Giant without Storm Ruler.
 
 You use it in the [`Enemies`](#enemies) section by selecting a specific enemy using its unique
@@ -104,7 +104,7 @@ and
 - Cathedral Large Hollow Soldier
 - Lothric Castle Large Hollow Soldier
 
-However this would make it more likely to select a regular soldier instead of a large one (5 out of 8), just because
+However, this would make it more likely to select a regular soldier instead of a large one (5 out of 8), just because
 there are fewer entries in the latter category.
 
 You can specify `RandomByType: true` to select randomly from the list itself (Hollow Soldiers, Large Hollow Soldiers)
@@ -140,7 +140,7 @@ Be aware that weights will not work in the [`Enemies`](#enemies) section.
 
 ### Boss
 
-This setting indicates which enemies can be used as sources for bosses.
+This setting indicates which enemies can be used as replacements for bosses.
 By default, this is the pool of all 29 bosses.
 
 ```yaml
@@ -153,7 +153,7 @@ Boss:
 
 ### Miniboss
 
-This setting indicates which enemies can be used as sources for minibosses.
+This setting indicates which enemies can be used as replacements for minibosses.
 By default, this is the pool of all 32 minibosses (including duplicates).
 
 ```yaml
@@ -166,7 +166,7 @@ Miniboss:
 
 ### Basic
 
-This setting indicates which enemies can be used as sources for all other enemies, so non-bosses and non-minibosses.
+This setting indicates which enemies can be used as replacements for all other enemies, so non-bosses and non-minibosses.
 By default, this is the pool of all ~2000 basic enemies (including duplicates).
 
 ```yaml
