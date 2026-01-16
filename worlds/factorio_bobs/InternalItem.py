@@ -293,14 +293,17 @@ class RecipeEngine:
         machines: dict[str, Machine] = {}
 
         for name, categories in raw_machines.items():
+            if name in self.entity_to_item:
+                name = self.entity_to_item[name]
             machines[name] = Machine(name, set(categories), self)
 
-        machines["pumpjack"] = Machine("pumpjack", {"basic-fluid"}, self)
         machines["assembling-machine-1"].categories.add("crafting-with-fluid")  # mod enables this
         machines["character"].categories.add("basic-crafting")  # somehow this is implied and not exported
         machines["character"].categories.add("basic-solid")
 
         for name, categories in self.missed_machines.items():
+            if name in self.entity_to_item:
+                name = self.entity_to_item[name]
             if name in machines:
                 for category in categories:
                     machines[name].categories.add(category)
@@ -308,6 +311,12 @@ class RecipeEngine:
                 machines[name] = Machine(name, categories, self)
 
         return machines
+
+    @cached_property
+    def entity_to_item(self) -> dict[str, str]:
+        with self.modpack.open_file("extractor/entityToItem.json") as file:
+            raw_entity_to_item = json.load(file)
+        return raw_entity_to_item
 
     @property
     def invalid_ingredients(self) -> set[str]:
