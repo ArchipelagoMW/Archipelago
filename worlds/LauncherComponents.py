@@ -247,7 +247,8 @@ components: List[Component] = [
     # MegaMan Battle Network 3
     Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3')),
 
-    Component("Export Datapackage", func=export_datapackage, component_type=Type.TOOL),
+    Component("Export Datapackage", func=export_datapackage, component_type=Type.TOOL,
+              description="Write item/location data for installed worlds to a file and open it."),
 ]
 
 # if registering an icon from within an apworld, the format "ap:module.name/path/to/file.png" can be used
