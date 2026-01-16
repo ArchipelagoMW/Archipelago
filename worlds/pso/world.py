@@ -1,3 +1,4 @@
+import os
 from collections.abc import Mapping
 from typing import Any
 
@@ -7,6 +8,7 @@ from worlds.AutoWorld import World
 # Imports of your world's files must be relative.
 from . import items, locations, regions, rules, web_world
 from . import options as pso_options  # rename due to a name conflict with World.options
+from .patcher.rom_patch import PSOPlayerContainer
 from .strings.region_names import Region
 
 # APQuest will go through all the parts of the world api one step at a time,
@@ -77,6 +79,26 @@ class PSOWorld(World):
     # In our case, we defined a function called get_random_filler_item_name for this purpose in our items.py.
     def get_filler_item_name(self) -> str:
         return items.get_random_filler_item_name(self)
+
+    def generate_output(self, output_directory: str, **kwargs):
+        # Outputs the plando details to our expected output file
+        # Create the output path based on the current player + expected patch file ending.
+        patch_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
+                                                    f"{PSOPlayerContainer.patch_file_ending}")
+        # Create a zip (container) that will contain all the necessary output files for us to use during patching.
+        dict_output_data: dict = {
+            "Seed": self.multiworld.seed,
+            "Slot": self.player,
+            "Name": self.player_name,
+            "Locations": {},
+            "Options": {}
+        }
+
+        # Creates the zip that will hold all necessary output files.
+        pso_container = PSOPlayerContainer(dict_output_data, patch_path, self.multiworld.player_name[self.player],
+                                               self.player)
+        # Write the expected output zip container to the Generated Seed folder.
+        pso_container.write()
 
     # There may be data that the game client will need to modify the behavior of the game.
     # This is what slot_data exists for. Upon every client connection, the slot's slot_data is sent to the client.
