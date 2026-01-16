@@ -248,6 +248,7 @@ class WorldTestBase(unittest.TestCase):
         with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
+            call_all(self.multiworld, "finalize_multiworld")
             self.assertTrue(fulfills_accessibility(), "Collected all locations, but can't beat the game.")
             placed_items = [loc.item for loc in self.multiworld.get_locations() if loc.item and loc.item.code]
             self.assertLessEqual(len(self.multiworld.itempool), len(placed_items),
