@@ -1367,7 +1367,7 @@ class CommandProcessor(metaclass=CommandMeta):
             method_doc = inspect.getdoc(method)
             if method_doc is None:
                 method_doc = "(missing help text)"
-            doctext = '\n    '.join(method_doc.split('\n'))
+            doctext = "\n    ".join(method_doc.split("\n"))
             s += f"{self.marker}{command} {argtext}\n    {doctext}\n"
         return s
 
