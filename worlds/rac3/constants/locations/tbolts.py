@@ -16,7 +16,7 @@ class RAC3TBOLT:
     AQUATOS_BRIDGE = "Aquatos: T-Bolt: Under the Bridge"
     AQUATOS_UNDERWATER = "Aquatos: T-Bolt: Underwater Bolt"
     AQUATOS_GATE = "Aquatos: T-Bolt: Behind the Locked Gate"
-    SEWER_PIPE = "Aquatos: T-Bolt: Top Left Bolt"
+    SEWER_PIPE = "Aquatos: T-Bolt: North Pipe Bolt"
     SEWER_SWING = "Aquatos: T-Bolt: Swinging Bolt"
     TYHRRANOSIS_CANNON = "Tyhrranosis: T-Bolt: South East Cannon"
     TYHRRANOSIS_CAVE = "Tyhrranosis: T-Bolt: Underground Cave Bolt"
