@@ -96,6 +96,15 @@ def get_filler_item_selection(world: "RaC3World"):
     if world.options.traps_enabled.value:
         traps = world.options.trap_weight.value
         frequencies.update(traps)
+
+    if not frequencies or all(count == 0 for count in frequencies.values()):
+        frequencies[RAC3ITEM.BOLTS] = 1 # set bolts to be the only filler if the filler weights are empty
+        # error = "No filler items available. Please enable some filler items."
+        # if world.options.enable_progressive_weapons.value:
+        #     error += " Progressive Weapons option is enabled, so 'Weapon XP' cannot be used as a filler item."
+        # if not world.options.traps_enabled.value:
+        #     error += " Traps are disabled, so no trap items can be used as filler."
+        # raise OptionError(error)
     return [name for name, count in frequencies.items() for _ in range(count)]
 
 
@@ -111,4 +120,4 @@ def starting_weapons(world: "RaC3World", dictionary: dict[str, int]) -> list[str
         else:
             weapon_list.append(name)
     world.random.shuffle(weapon_list)
-    return [weapon_list[0], weapon_list[1]]
+    return weapon_list[:2]

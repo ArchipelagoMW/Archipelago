@@ -2,6 +2,7 @@ from logging import DEBUG, getLogger
 from typing import Any, ClassVar, Optional, TYPE_CHECKING
 
 from BaseClasses import CollectionState, Item, MultiWorld, Tutorial
+from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, SuffixIdentifier, Type
 from worlds.rac3.constants.data.item import item_groups, RAC3_ITEM_DATA_TABLE
@@ -115,9 +116,58 @@ class RaC3World(World):
     def create_items(self):
         itempool = create_itempool(self)
         self.multiworld.itempool.extend(itempool)
-        filler = [self.create_filler() for _ in
-                  range(get_total_locations(self) - len(self.preplaced_items) - len(itempool) + 2)]
-        self.multiworld.itempool.extend(filler)
+        location_count = len(self.multiworld.get_unfilled_locations(self.player))
+        item_count = len(itempool)
+        if location_count - item_count >= 0:
+            filler = [self.create_filler() for _ in range(location_count - item_count)]
+            self.multiworld.itempool.extend(filler)
+        else:
+            self.handle_option_error(item_count - location_count)
+
+    def handle_option_error(self, count):
+        try:
+            excluded_count = len(self.multiworld.exclude_locations[self.player].value)
+        except AttributeError:
+            excluded_count = 0
+        option_list: list[str] = []
+        if self.options.skill_points.value == 0:
+            option_list.append(RAC3OPTION.SKILL_POINTS)
+        if self.options.trophies.value == 0:
+            option_list.append(RAC3OPTION.TROPHIES)
+        if self.options.titanium_bolts.value == 0:
+            option_list.append(RAC3OPTION.TITANIUM_BOLTS)
+        if self.options.nanotech_milestones.value < 3:
+            option_list.append(RAC3OPTION.NANOTECH_MILESTONES)
+        if self.options.rangers.value == 0:
+            option_list.append(RAC3OPTION.RANGERS)
+        if self.options.arena.value == 0:
+            option_list.append(RAC3OPTION.ARENA)
+        if self.options.vidcomics.value == 0:
+            option_list.append(RAC3OPTION.VIDCOMICS)
+        if self.options.vr_challenges.value == 0:
+            option_list.append(RAC3OPTION.VR_CHALLENGES)
+        if self.options.sewer_crystals.value < 3:
+            option_list.append(RAC3OPTION.SEWER_CRYSTALS)
+        if self.options.sewer_limitation.value < 20:
+            option_list.append(RAC3OPTION.SEWER_LIMITATION)
+        if self.options.nanotech_limitation.value < 60:
+            option_list.append(RAC3OPTION.NANOTECH_LIMITATION)
+        if excluded_count > 30:
+            option_list.append(RAC3OPTION.EXCLUDE)
+        if not option_list:
+            option_list: str = "¯\_(''/)_/¯ dunno"
+        if count >= 50:
+            raise OptionError(f"Not enough location options enabled! {count} items have nowhere to be placed.\n"
+                              f"This large of a difference requires Progressive Weapons to be disabled, Additional "
+                              f"Sewer Crystal Trade locations, or Addtional Nanotech level locations.\n"
+                              f"Consider adjusting the following options: {option_list}")
+        if count >= 10:
+            raise OptionError(f"Not enough location options enabled! {count} items have nowhere to be placed.\n"
+                              f"Consider adjusting some of the following options: {option_list}")
+        else:
+            raise OptionError(f"Not enough location options enabled! {count} items have nowhere to be placed.\n"
+                              f"Consider adding some items to your starting_items_from_pool, or adjusting one of "
+                              f"these options: {option_list}")
 
     def get_filler_item_name(self) -> str:
         if not len(self.filler_items):

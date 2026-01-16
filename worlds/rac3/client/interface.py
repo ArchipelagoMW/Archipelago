@@ -226,7 +226,7 @@ class Rac3Interface(GameInterface):
     ship: int = 0
     ship_skin: int = 0
     skin: int = 0
-    timers: dict[str, int] = {}
+    timers: dict[str, float] = {}
     weaponLevelLockFlag: bool = None
     planet: str = RAC3REGION.GALAXY
     player_type: str = RAC3PLAYERTYPE.RATCHET
@@ -263,7 +263,7 @@ class Rac3Interface(GameInterface):
         self.remove_all_items()
         self.undo_collections()
 
-    def important_items(self, item: int, us: str, them: str, location: int):
+    def important_items(self, item: int, us: str, location: int):
         """Runs when loading into game from the main menu to update the player with important items from the server,
         skips filler and trap items to not flood the player with bolts/xp"""
         if (RAC3ITEMTAG.FILLER in RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS or RAC3ITEMTAG.TRAP in
@@ -1236,9 +1236,9 @@ class Rac3Interface(GameInterface):
         return self.pause_menu and pressed_square
 
     def messagebox(self, msg_list: list[bytes], color_bytes_count: int, longest_line_length: int, box_theme: int =
-    RAC3BOXTHEME.DEFAULT, time: int = 0x168) -> None:
-        if time < 0:
-            time = 0
+    RAC3BOXTHEME.DEFAULT, _time: int = 0x168) -> None:
+        if _time < 0:
+            _time = 0
         # real overflow cap is actually about 248, but we don't need that long messages
         curr_addr = RAC3MESSAGEBOX.MESSAGE
         msg_bytes = b''
@@ -1266,7 +1266,7 @@ class Rac3Interface(GameInterface):
         self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), box_color)
         self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), text_color)
 
-        self._write32(RAC3MESSAGEBOX.TIMER, time)
+        self._write32(RAC3MESSAGEBOX.TIMER, _time)
         self._write32(RAC3MESSAGEBOX.TEXT_POINTER, RAC3MESSAGEBOX.MESSAGE)
         self._write32(RAC3MESSAGEBOX.BOX_WIDTH, width)
         self._write_bytes(RAC3MESSAGEBOX.MESSAGE, msg_bytes)
@@ -1329,6 +1329,8 @@ class Rac3Interface(GameInterface):
                 return (self.UnlockItem[RAC3ITEM.HOLOSTAR_STUDIOS].status > 0 and
                         (self.UnlockItem[RAC3ITEM.HACKER].status == 0 or
                         self.UnlockItem[RAC3ITEM.HYPERSHOT].status == 0))
+            case _:
+                pass
         return False
 
     def find_pda_vendor(self) -> int | str:
