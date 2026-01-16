@@ -243,6 +243,7 @@ class Rac3Interface(GameInterface):
     last_death_count: int = 0
     last_death_state: int = 0
     has_died: bool = False
+    died_in_vehicle: bool = False
     inside_hacker_puzzle: bool = False
     notification_queue: list[tuple] = []
     notification_time: float | None = None
@@ -952,9 +953,14 @@ class Rac3Interface(GameInterface):
         # Vehicle one HP challenge is independent of player_type
         if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
             health_addr = self._read32(self._read32(self.vehicle + 0x68))
-            if self._read_float(health_addr) > 5.0:
-                # This displays as 1 HP in-game for vehicles
-                self._write_float(health_addr, 5)
+            target_health = 5.0
+            if self.planet == RAC3REGION.TYHRRANOSIS_RANGERS or self.planet == RAC3REGION.MARCADIA:
+                target_health = 1.0  # For some reason these vehicles have 100 max health instead of 500
+            elif self.planet == RAC3REGION.TYHRRANOSIS:
+                target_health = 0.6 # For some reason the turboslider on Tyhrranosis has 60 max health
+            if self._read_float(health_addr) > target_health:
+                # This displays as 1 HP in-game for vehicles with 500 max health
+                self._write_float(health_addr, target_health)
         
         if not self.one_hp_challenge.get(character, False) and self.planet == RAC3REGION.ANNIHILATION_NATION and not self.pause_state:
             # Restore sleeping gas health reduction if one HP challenge is not active for Ratchet
@@ -972,9 +978,10 @@ class Rac3Interface(GameInterface):
         """Detects if the game is currently being reloaded, and updates death data"""
         if self.is_reloading and not self.reloading_handled and not self.self_respawning:
             self.last_death_state = self.action
+            self.died_in_vehicle = bool(self._read8(RAC3STATUS.IN_VEHICLE))
             self.reloading_handled = True
             logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state},'
-                         f' death count: {self.last_death_count}')
+                         f' death count: {self.last_death_count}, in vehicle? {self.died_in_vehicle}')
         if not self.is_reloading and self.reloading_handled:
             self.death_count = self._read32(RAC3STATUS.DEATH_COUNT)
             self.has_died = self.death_count > self.last_death_count
@@ -1052,8 +1059,13 @@ class Rac3Interface(GameInterface):
             self.last_death_count = self.death_count
             logger.debug(f'Death Detected! (death count increased)')
             is_clank = self.player_type == RAC3PLAYERTYPE.CLANK
-            death = DEATH_FROM_ACTION.get(self.last_death_state, 'Died') if not is_clank else (
-                CLANK_DEATH_FROM_ACTION.get(self.last_death_state, 'Died'))
+            death = DEATH_FROM_ACTION.get(self.last_death_state, 'ran out of nanotech.') if not is_clank else (
+                CLANK_DEATH_FROM_ACTION.get(self.last_death_state, 'ran out of nanotech.'))
+            
+            # Vehicle pointer becomes 0 during reload, but the address next to it gets a value during reload after vehicle death
+            if self.died_in_vehicle:
+                # Vehicle death uses state 34 which is the same as getting eaten by a shark
+                death = 'Didn\'t leave the vehicle in time.'
             return False, f"{self.player_type} {death}"
 
         logger.debug(f'{self.player_type} is Alive')
