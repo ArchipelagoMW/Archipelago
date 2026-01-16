@@ -97,16 +97,20 @@ class RaC3World(World):
         starting_weapon_list = starting_weapons(self, self.options.starting_weapons.value)
         starting_planets = [RAC3ITEM.FLORANA, RAC3ITEM.STARSHIP_PHOENIX]
 
-        if len(starting_weapon_list) > 0:
-            self.get_location(RAC3LOCATION.VELDIN_FIRST_RANGER).place_locked_item(
-                self.create_item(starting_weapon_list[0]))
-            if len(starting_weapon_list) > 1:
-                self.get_location(RAC3LOCATION.VELDIN_SECOND_RANGER).place_locked_item(
-                    self.create_item(starting_weapon_list[1]))
-        self.get_location(RAC3LOCATION.VELDIN_SAVE_VELDIN).place_locked_item(self.create_item(starting_planets[0]))
-        self.get_location(RAC3LOCATION.FLORANA_DEFEAT_QWARK).place_locked_item(self.create_item(starting_planets[1]))
-        self.preplaced_items.extend(starting_weapon_list)
-        self.preplaced_items.extend(starting_planets)
+        if self.options.intro_skip.value:
+            for weapon in starting_weapon_list:
+                self.push_precollected(self.create_item(weapon))
+        else:
+            if len(starting_weapon_list) > 0:
+                self.get_location(RAC3LOCATION.VELDIN_FIRST_RANGER).place_locked_item(
+                    self.create_item(starting_weapon_list[0]))
+                if len(starting_weapon_list) > 1:
+                    self.get_location(RAC3LOCATION.VELDIN_SECOND_RANGER).place_locked_item(
+                        self.create_item(starting_weapon_list[1]))
+            self.get_location(RAC3LOCATION.VELDIN_SAVE_VELDIN).place_locked_item(self.create_item(starting_planets[0]))
+            self.get_location(RAC3LOCATION.FLORANA_DEFEAT_QWARK).place_locked_item(self.create_item(starting_planets[1]))
+            self.preplaced_items.extend(starting_weapon_list)
+            self.preplaced_items.extend(starting_planets)
 
     def create_items(self):
         itempool = create_itempool(self)

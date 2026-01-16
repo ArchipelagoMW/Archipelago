@@ -27,6 +27,8 @@ if TYPE_CHECKING:
 async def update(ctx: 'Context') -> None:
     """Called continuously"""
     ctx.game_interface.early_update()
+    # Todo: if intro skip option is on, force homewarp when on veldin
+    await handle_intro_skip(ctx)
     # Check received items
     await handle_received_items(ctx)
     # Check collected locations
@@ -165,6 +167,11 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
         ctx.game_interface.homewarp()
         return True
     return False
+
+async def handle_intro_skip(ctx):
+    """Checks if the intro skip option is enabled to skip veldin"""
+    if ctx.slot_data is None:
+        return
 
 async def handle_sequence_break(ctx: 'Context') -> None:
     """Undos the flags for infobot locations when sequence breaking if you haven't checked the corresponding location yet"""

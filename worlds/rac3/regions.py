@@ -393,14 +393,19 @@ simple_skillpoints: list[str] = [
 def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
     menu = create_region(world, RAC3REGION.MENU)
-    veldin = create_region_and_connect(world, RAC3REGION.VELDIN, f"{RAC3REGION.MENU} -> {RAC3REGION.VELDIN}", menu)
-    florana = create_region(world, RAC3REGION.FLORANA)
-    veldin.connect(florana, f"{RAC3REGION.VELDIN} -> {RAC3REGION.FLORANA}",
-                   rule=lambda state: state.has(RAC3ITEM.FLORANA, world.player))
-    starship_phoenix = create_region(world, RAC3REGION.STARSHIP_PHOENIX)
-    florana.connect(starship_phoenix, f"{RAC3REGION.FLORANA} -> {RAC3REGION.STARSHIP_PHOENIX}",
-                    rule=lambda state: state.has(RAC3ITEM.STARSHIP_PHOENIX, world.player))
-    starship_phoenix.connect(florana, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.FLORANA}", )
+    if world.options.intro_skip.value:
+        starship_phoenix = create_region_and_connect(world, RAC3REGION.STARSHIP_PHOENIX, f"{RAC3REGION.MENU} -> {RAC3REGION.STARSHIP_PHOENIX}", menu)
+        florana = create_region(world, RAC3REGION.FLORANA)
+        starship_phoenix.connect(florana, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.FLORANA}",
+                        rule=lambda state: state.has(RAC3ITEM.FLORANA, world.player))
+    else:
+        veldin = create_region_and_connect(world, RAC3REGION.VELDIN, f"{RAC3REGION.MENU} -> {RAC3REGION.VELDIN}", menu)
+        florana = create_region(world, RAC3REGION.FLORANA)
+        veldin.connect(florana, f"{RAC3REGION.VELDIN} -> {RAC3REGION.FLORANA}",
+                       rule=lambda state: state.has(RAC3ITEM.FLORANA, world.player))
+        starship_phoenix = create_region(world, RAC3REGION.STARSHIP_PHOENIX)
+        florana.connect(starship_phoenix, f"{RAC3REGION.FLORANA} -> {RAC3REGION.STARSHIP_PHOENIX}",
+                        rule=lambda state: state.has(RAC3ITEM.STARSHIP_PHOENIX, world.player))
 
     # ----- Regions within the game -----#
     marcadia = create_region(world, RAC3REGION.MARCADIA)
