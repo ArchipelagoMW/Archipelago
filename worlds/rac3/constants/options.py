@@ -33,3 +33,4 @@ class RAC3OPTION:
     WEAPON_VENDORS = "Weapon Vendors"
     FILLER_WEIGHT = "Filler Weight"
     ONE_HP_CHALLENGE = "One HP Challenge"
+    INTRO_SKIP = "Intro Skip"

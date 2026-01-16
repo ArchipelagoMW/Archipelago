@@ -8,6 +8,7 @@ from worlds.rac3.options.armor_upgrade_options import ArmorUpgrade
 from worlds.rac3.options.deathlink_options import Deathlink
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
 from worlds.rac3.options.filler_weight_options import FillerWeight
+from worlds.rac3.options.intro_skip import IntroSkip
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
 from worlds.rac3.options.nanotech_limitation_options import NanotechLimitation
 from worlds.rac3.options.nanotech_options import NanotechMilestones
@@ -69,6 +70,7 @@ class RaC3Options(PerGameCommonOptions):
     ship_skin: ShipSkin
     skin: RatchetSkin
     one_hp_challenge: OneHpChallenge
+    intro_skip: IntroSkip
 
 
 rac3_option_groups = [
@@ -79,6 +81,7 @@ rac3_option_groups = [
         RAC3ExcludeLocations,
     ]),
     OptionGroup("RAC3 Game Options", [
+        IntroSkip,
         BoltAndXPMultiplier,
         OneHpChallenge,
     ]),
@@ -140,4 +143,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.WEAPON_VENDORS,
     RAC3OPTION.FILLER_WEIGHT,
     RAC3OPTION.ONE_HP_CHALLENGE,
+    RAC3OPTION.INTRO_SKIP,
 ]
