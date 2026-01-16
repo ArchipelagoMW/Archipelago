@@ -110,6 +110,14 @@ def get_pool_core(world: "TWWWorld") -> tuple[list[str], list[str]]:
             else:
                 filler_pool.extend([item] * data.quantity)
 
+    # If the player starts with a sword, add one to the precollected items list and remove one from the item pool.
+    if world.options.sword_mode == "start_with_sword":
+        precollected_items.append("Progressive Sword")
+        progression_pool.remove("Progressive Sword")
+    # Or, if it's swordless mode, remove all swords from the item pool.
+    elif world.options.sword_mode == "swordless":
+        useful_pool = [item for item in useful_pool if item != "Progressive Sword"]
+
     # Assign useful and filler items to item pools in the world.
     world.random.shuffle(useful_pool)
     world.random.shuffle(filler_pool)
@@ -140,17 +148,6 @@ def get_pool_core(world: "TWWWorld") -> tuple[list[str], list[str]]:
         )
     pool.extend(progression_pool)
     num_items_left_to_place -= len(progression_pool)
-
-    # If the player starts with a sword, add one to the precollected items list and remove one from the item pool.
-    if world.options.sword_mode == "start_with_sword":
-        precollected_items.append("Progressive Sword")
-        num_items_left_to_place += 1
-        pool.remove("Progressive Sword")
-    # Or, if it's swordless mode, remove all swords from the item pool.
-    elif world.options.sword_mode == "swordless":
-        while "Progressive Sword" in pool:
-            num_items_left_to_place += 1
-            pool.remove("Progressive Sword")
 
     # Place useful items, then filler items to fill out the remaining locations.
     pool.extend([world.get_filler_item_name(strict=False) for _ in range(num_items_left_to_place)])
