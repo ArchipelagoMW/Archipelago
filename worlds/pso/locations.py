@@ -125,7 +125,7 @@ def get_location_id_to_name_dict(location_table: dict[str, PSOLocationData]) -> 
 # Each Location instance must correctly report the "game" it belongs to.
 # To make this simple, it is common practice to subclass the basic Location class and override the "game" field.
 class PSOLocation(Location):
-    game = "PSO"
+    game = "Phantasy Star Online Episode I & II Plus"
 
 # Helper method but may no longer be needed...
 # def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | None]:
@@ -139,6 +139,7 @@ def create_all_locations(world: PSOWorld) -> None:
     """
     for location_name, location_value in LOCATION_TABLE.items():
         location_region = world.get_region(LOCATION_TABLE[location_name].region)
+
         if location_value.code:
             location_region.add_locations({location_name: location_value.code}, PSOLocation)
         else:

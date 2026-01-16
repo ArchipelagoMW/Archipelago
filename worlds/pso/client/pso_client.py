@@ -69,7 +69,7 @@ class PSOContext(CommonContext):
     Manages all interactions with the Dolphin emulator and the Archipelago server for PSO
     """
     command_processor = PSOCommandProcessor
-    game = "PSO"
+    game = "Phantasy Star Online Episode I & II Plus"
 
     def __init__(self, server_address: str | None, password: str | None) -> None:
         """

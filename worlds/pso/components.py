@@ -26,7 +26,7 @@ components.append(
     Component(
         "PSO Client",
         func=run_client,
-        game_name="PSO",
+        game_name="Phantasy Star Online Episode I & II Plus",
         component_type=Type.CLIENT,
         supports_uri=True,
     )

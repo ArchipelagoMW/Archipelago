@@ -8,7 +8,7 @@ from .options import option_groups, option_presets
 class PSOWebWorld(WebWorld):
     # We need to override the "game" field of the WebWorld superclass.
     # This must be the same string as the regular World class.
-    game = "PSO"
+    game = "Phantasy Star Online Episode I & II Plus"
 
     # Your game pages will have a visual theme (affecting e.g. the background image).
     # You can choose between dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, and stone.

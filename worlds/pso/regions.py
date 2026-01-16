@@ -83,33 +83,49 @@ def connect_regions(world: PSOWorld) -> None:
     ruins_3 = world.get_region(RegionName.RUINS_3)
     dark_falz = world.get_region(RegionName.DARK_FALZ)
 
+    # TODO: Restore the full connection once we can handle unlocking individual levels
+
     # Pioneer 2 Entrances
     pioneer_2.connect(forest_1, EntranceName.PIONEER_2_TO_FOREST_1, player_has(Item.UNLOCK_FOREST_1))
-    pioneer_2.connect(forest_2, EntranceName.PIONEER_2_TO_FOREST_2, player_has(Item.UNLOCK_FOREST_2))
+    # pioneer_2.connect(forest_2, EntranceName.PIONEER_2_TO_FOREST_2, player_has(Item.UNLOCK_FOREST_2))
     pioneer_2.connect(caves_1, EntranceName.PIONEER_2_TO_CAVES_1, player_has(Item.UNLOCK_CAVES_1))
-    pioneer_2.connect(caves_2, EntranceName.PIONEER_2_TO_CAVES_2, player_has(Item.UNLOCK_CAVES_2))
-    pioneer_2.connect(caves_3, EntranceName.PIONEER_2_TO_CAVES_3, player_has(Item.UNLOCK_CAVES_3))
+    # pioneer_2.connect(caves_2, EntranceName.PIONEER_2_TO_CAVES_2, player_has(Item.UNLOCK_CAVES_2))
+    # pioneer_2.connect(caves_3, EntranceName.PIONEER_2_TO_CAVES_3, player_has(Item.UNLOCK_CAVES_3))
     pioneer_2.connect(mines_1, EntranceName.PIONEER_2_TO_MINES_1, player_has(Item.UNLOCK_MINES_1))
-    pioneer_2.connect(mines_2, EntranceName.PIONEER_2_TO_MINES_2, player_has(Item.UNLOCK_MINES_2))
+    # pioneer_2.connect(mines_2, EntranceName.PIONEER_2_TO_MINES_2, player_has(Item.UNLOCK_MINES_2))
     pioneer_2.connect(ruins_1, EntranceName.PIONEER_2_TO_RUINS_1, player_has(Item.UNLOCK_RUINS_1))
-    pioneer_2.connect(ruins_2, EntranceName.PIONEER_2_TO_RUINS_2, player_has(Item.UNLOCK_RUINS_2))
-    pioneer_2.connect(ruins_3, EntranceName.PIONEER_2_TO_RUINS_3, player_has(Item.UNLOCK_RUINS_3))
+    # pioneer_2.connect(ruins_2, EntranceName.PIONEER_2_TO_RUINS_2, player_has(Item.UNLOCK_RUINS_2))
+    # pioneer_2.connect(ruins_3, EntranceName.PIONEER_2_TO_RUINS_3, player_has(Item.UNLOCK_RUINS_3))
 
     # Level Entrances
     # Technically, there are teleporters to return to Pioneer 2 in some areas, but Archipelago assumes
     # we can always return, so we leave those out.
     # This will also have to be reevaluated if / when we have non-linear progression.
-    forest_1.connect(forest_2, EntranceName.FOREST_1_TO_FOREST_2, player_has(Item.UNLOCK_FOREST_2))
-    forest_2.connect(forest_boss, EntranceName.FOREST_2_TO_DRAGON, player_has(Item.UNLOCK_DRAGON))
-    caves_1.connect(caves_2, EntranceName.CAVES_1_TO_CAVES_2, player_has(Item.UNLOCK_CAVES_2))
-    caves_2.connect(caves_3, EntranceName.CAVES_2_TO_CAVES_3, player_has(Item.UNLOCK_CAVES_3))
-    caves_3.connect(caves_boss, EntranceName.CAVES_3_TO_DE_ROL_LE, player_has(Item.UNLOCK_DE_ROL_LE))
-    mines_1.connect(mines_2, EntranceName.MINES_1_TO_MINES_2, player_has(Item.UNLOCK_MINES_2))
-    mines_2.connect(mines_boss, EntranceName.MINES_2_TO_VOL_OPT, player_has(Item.UNLOCK_VOL_OPT))
+    # forest_1.connect(forest_2, EntranceName.FOREST_1_TO_FOREST_2, player_has(Item.UNLOCK_FOREST_2))
+    # forest_2.connect(forest_boss, EntranceName.FOREST_2_TO_DRAGON, player_has(Item.UNLOCK_DRAGON))
+    # caves_1.connect(caves_2, EntranceName.CAVES_1_TO_CAVES_2, player_has(Item.UNLOCK_CAVES_2))
+    # caves_2.connect(caves_3, EntranceName.CAVES_2_TO_CAVES_3, player_has(Item.UNLOCK_CAVES_3))
+    # caves_3.connect(caves_boss, EntranceName.CAVES_3_TO_DE_ROL_LE, player_has(Item.UNLOCK_DE_ROL_LE))
+    # mines_1.connect(mines_2, EntranceName.MINES_1_TO_MINES_2, player_has(Item.UNLOCK_MINES_2))
+    # mines_2.connect(mines_boss, EntranceName.MINES_2_TO_VOL_OPT, player_has(Item.UNLOCK_VOL_OPT))
     # I feel like it makes sense that this connection will always be open, similar to vanilla, even without an unlock
-    mines_boss.connect(ruins_entrance, EntranceName.VOL_OPT_TO_RUINS_ENTRANCE) #, player_has("Unlocked Ruins Entrance"))
+    # mines_boss.connect(ruins_entrance, EntranceName.VOL_OPT_TO_RUINS_ENTRANCE) #, player_has("Unlocked Ruins Entrance"))
+    # ruins_entrance.connect(ruins_1, EntranceName.RUINS_ENTRANCE_TO_RUINS_1,
+    #                        player_has_all([Item.FOREST_PILLAR, Item.CAVES_PILLAR, Item.MINES_PILLAR]))
+    # ruins_1.connect(ruins_2, EntranceName.RUINS_1_TO_RUINS_2, player_has(Item.UNLOCK_RUINS_2))
+    # ruins_2.connect(ruins_3, EntranceName.RUINS_2_TO_RUINS_3, player_has(Item.UNLOCK_RUINS_3))
+    # ruins_3.connect(dark_falz, EntranceName.RUINS_3_TO_DARK_FALZ, player_has(Item.UNLOCK_DARK_FALZ))
+
+    forest_1.connect(forest_2, EntranceName.FOREST_1_TO_FOREST_2)
+    forest_2.connect(forest_boss, EntranceName.FOREST_2_TO_DRAGON)
+    caves_1.connect(caves_2, EntranceName.CAVES_1_TO_CAVES_2)
+    caves_2.connect(caves_3, EntranceName.CAVES_2_TO_CAVES_3)
+    caves_3.connect(caves_boss, EntranceName.CAVES_3_TO_DE_ROL_LE)
+    mines_1.connect(mines_2, EntranceName.MINES_1_TO_MINES_2)
+    mines_2.connect(mines_boss, EntranceName.MINES_2_TO_VOL_OPT)
+    mines_boss.connect(ruins_entrance, EntranceName.VOL_OPT_TO_RUINS_ENTRANCE)
     ruins_entrance.connect(ruins_1, EntranceName.RUINS_ENTRANCE_TO_RUINS_1,
                            player_has_all([Item.FOREST_PILLAR, Item.CAVES_PILLAR, Item.MINES_PILLAR]))
-    ruins_1.connect(ruins_2, EntranceName.RUINS_1_TO_RUINS_2, player_has(Item.UNLOCK_RUINS_2))
-    ruins_2.connect(ruins_3, EntranceName.RUINS_2_TO_RUINS_3, player_has(Item.UNLOCK_RUINS_3))
-    ruins_3.connect(dark_falz, EntranceName.RUINS_3_TO_DARK_FALZ, player_has(Item.UNLOCK_DARK_FALZ))
+    ruins_1.connect(ruins_2, EntranceName.RUINS_1_TO_RUINS_2)
+    ruins_2.connect(ruins_3, EntranceName.RUINS_2_TO_RUINS_3)
+    ruins_3.connect(dark_falz, EntranceName.RUINS_3_TO_DARK_FALZ)

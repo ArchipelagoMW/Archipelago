@@ -43,6 +43,17 @@ class QuestsRequired(Range):
     range_end = 26
     default = 9
 
+class TrapChance(Range):
+    """
+    Percentage chance that any given filler item will be replaced by a random trap
+    """
+
+    display_name = "Trap Chance"
+
+    range_start = 0
+    range_end = 100
+    default = 0
+
 
 # We must now define a dataclass inheriting from PerGameCommonOptions that we put all our options in.
 # This is in the format "option_name_in_snake_case: OptionClassName".
@@ -51,6 +62,7 @@ class PSOOptions(PerGameCommonOptions):
     goal: Goal
     quests_required: QuestsRequired
     start_with_lavis_blade: StartWithLavisBlade
+    trap_chance: TrapChance
 
 
 # If we want to group our options by similar type, we can do so as well. This looks nice on the website.
@@ -63,6 +75,10 @@ option_groups = [
         "Starting Items",
         [StartWithLavisBlade],
     ),
+    OptionGroup(
+        "Misc. Options",
+        [TrapChance]
+    )
 ]
 
 # Finally, we can define some option presets if we want the player to be able to quickly choose a specific "mode".
@@ -71,10 +87,12 @@ option_presets = {
         "goal": Goal.option_defeat_dark_falz,
         "quests_required": 9,
         "start_with_lavis_blade": False,
+        "trap_chance": 5
     },
     "debug": {
         "goal": Goal.option_defeat_the_dragon,
         "quests_required": 9,
         "start_with_lavis_blade": True,
+        "trap_chance": 50
     },
 }

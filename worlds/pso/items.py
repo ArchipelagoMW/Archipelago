@@ -43,7 +43,7 @@ class PSOItemData(NamedTuple):
 # Each Item instance must correctly report the "game" it belongs to.
 # To make this simple, it is common practice to subclass the basic Item class and override the "game" field.
 class PSOItem(Item):
-    game = "PSO"
+    game = "Phantasy Star Online Episode I & II Plus"
 
 
 # We comment out the boss unlocks for now to keep the checks low while we figure stuff out
@@ -81,7 +81,8 @@ def make_item_name_to_id_dict(item_table: dict[str, PSOItemData]) -> dict[str, i
 # Every item must have a unique integer ID associated with it.
 # We will have a lookup from item name to ID here that, in world.py, we will import and bind to the world class.
 # Even if an item doesn't exist on specific options, it must be present in this lookup.
-ITEM_NAME_TO_ID: dict[str, int | None] = make_item_name_to_id_dict(ITEM_TABLE)
+# ITEM_NAME_TO_ID: dict[str, int | None] =  make_item_name_to_id_dict(ITEM_TABLE)
+ITEM_NAME_TO_ID: dict[str, int | None] = {key: item.code for (key, item) in ITEM_TABLE.items()}
 
 
 # TODO: This doesn't fix the issue of Victory being None
@@ -90,7 +91,7 @@ def make_id_to_item_name_dict(item_table: dict[str, PSOItemData]) -> dict[int, s
     *_, code = zip(*item_table.values())
 
     # We don't add the last element of the array, since it's the Victory table
-    return dict(zip(code[:-1], name[:-1]))
+    return dict(zip(list(code)[:-1], list(name)[:-1]))
 
 # We have a reverse lookup table for getting item name from ID as well
 # It's possible we don't need this, but it may be a performance trade-off given the number of items this game has
@@ -126,6 +127,17 @@ def create_item_with_correct_classification(world: PSOWorld, name: str) -> PSOIt
 
 # With those two helper functions defined, let's now get to actually creating and submitting our itempool.
 def create_all_items(world: PSOWorld) -> None:
+    # We start with Forest 1 unlocked by default
+    starting_inventory: list[PSOItem] = [create_item_with_correct_classification(world, ItemName.UNLOCK_FOREST_1)]
+
+    if world.options.start_with_lavis_blade:
+        starting_inventory.append(world.create_item("Lavis Blade"))
+
+    if starting_inventory:
+        for item in starting_inventory:
+            world.push_precollected(item)
+
+
     # We filter the item table for items with the 'progression' classification and return their name strings
     # since create_item takes in the unique name strings
     progression_item_names = filter(lambda _name: ITEM_TABLE[_name].classification == IC.progression, ITEM_TABLE.keys())
@@ -143,8 +155,8 @@ def create_all_items(world: PSOWorld) -> None:
                 goal_location = "Defeat Dragon"
             else:
                 goal_location = "Defeat Dark Falz"
-
-            world.get_location(goal_location).place_locked_item(world.create_item(name))
+            # TODO: Figure out if this is the right way to do this
+            # world.get_location(goal_location).place_locked_item(world.create_item(name))
             continue
         itempool.append(world.create_item(name))
 
@@ -156,12 +168,30 @@ def create_all_items(world: PSOWorld) -> None:
 
     world.multiworld.itempool += itempool
 
-    # We start with Forest 1 unlocked by default
-    starting_inventory: list[PSOItem] = [create_item_with_correct_classification(world, ItemName.UNLOCK_FOREST_1)]
 
-    if world.options.start_with_lavis_blade:
-        starting_inventory.append(world.create_item("Lavis Blade"))
-
-    if starting_inventory:
-        for item in starting_inventory:
-            world.push_precollected(item)
+# def generate_itempool(world: "TWWWorld") -> None:
+#     """
+#     Generate the item pool for the world.
+#
+#     :param world: The Wind Waker game world.
+#     """
+#     multiworld = world.multiworld
+#
+#     # Get the core pool of items.
+#     pool, precollected_items = get_pool_core(world)
+#
+#     # Add precollected items to the multiworld's `precollected_items` list.
+#     for item in precollected_items:
+#         multiworld.push_precollected(item_factory(item, world))
+#
+#     # Place a "Victory" item on "Defeat Ganondorf" for the spoiler log.
+#     world.get_location("Defeat Ganondorf").place_locked_item(item_factory("Victory", world))
+#
+#     # Create the pool of the remaining shuffled items.
+#     items = item_factory(pool, world)
+#     world.random.shuffle(items)
+#
+#     multiworld.itempool += items
+#
+#     # Dungeon items should already be created, so handle those separately.
+#     handle_dungeon_items(world)

@@ -33,7 +33,7 @@ class PSOWorld(World):
     # The docstring should contain a description of the game, to be displayed on the WebHost.
 
     # You must override the "game" field to say the name of the game.
-    game = "PSO"
+    game = "Phantasy Star Online Episode I & II Plus"
 
     # The WebWorld is a definition class that governs how this world will be displayed on the website.
     web = web_world.PSOWebWorld()

@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Callable
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
+from .locations import LOCATION_TABLE
 from .strings.item_names import Item
 
 if TYPE_CHECKING:
@@ -29,9 +30,9 @@ def set_all_entrance_rules(world: PSOWorld) -> None:
 
 
 def set_all_location_rules(world: PSOWorld) -> None:
-
+    location_set = set(LOCATION_TABLE.keys())
     def set_rule_if_exists(location_name: str, rule: Callable[[CollectionState], bool]) -> None:
-        if location_name in world.progress_locations:
+        if location_name in location_set:
             set_rule(world.get_location(location_name), rule)
 
     player = world.player
