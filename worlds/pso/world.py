@@ -57,7 +57,8 @@ class PSOWorld(World):
     # (Note: options.py has been imported as "pso_options" at the top of this file to avoid a name conflict)
     options_dataclass = PSOOptions
     options: PSOOptions  # Common mistake: This has to be a colon (:), not an equals sign (=).
-    settings: PSOSettings
+
+    settings: PSOSettings #This is the line that ties the get_base_rom_path together.
 
     # Our world class must have a static location_name_to_id and item_name_to_id defined.
     # We define these in regions.py and items.py respectively, so we just set them here.
