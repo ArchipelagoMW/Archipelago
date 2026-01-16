@@ -706,11 +706,11 @@ class Rac3Interface(GameInterface):
         return True
 
     def gadget_cycler(self):
-        
+
         if not self.should_cycle_gadgets():
             self.respawn_gadgets()
             return
-        
+
         for name in gadget_data.keys():
             addr = gadget_data[name].UNLOCK_ADDRESS
             if self.UnlockItem[name].status:
@@ -1035,6 +1035,7 @@ class Rac3Interface(GameInterface):
             if distance < 12.0:
                 logger.debug(f'Ratchet is close to PDA Vendor (Distance: {distance:.2f}), resetting vendor')
                 self.reset_pda_vendor()
+
     def reset_pda_vendor(self):
         """Reset PDA Vendor to initial state to allow repurchasing the PDA"""
         if self.pda_vendor == 0:
@@ -1050,7 +1051,7 @@ class Rac3Interface(GameInterface):
             self._write32(RAC3STATUS.NANOTECH_EXP, 0)
             self.notification_queue.append((f'Negative Nanotech EXP detected! Resetting EXP to 0', RAC3BOXTHEME.WARNING))
         # If other stuff needs overflow fixing, add here
-    
+
     def respawn_gadgets(self):
         """Respawn gadget if the associated location isn't checked but the gadget is unlocked through AP"""
         if (self.UnlockItem[RAC3ITEM.REFRACTOR].status and
