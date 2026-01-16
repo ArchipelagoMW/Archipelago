@@ -254,6 +254,8 @@ every_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_97,
     RAC3SEWER.TRADE_98,
     RAC3SEWER.TRADE_99,
+    RAC3SEWER.TRADE_100,
+    RAC3SEWER.TRADE_101,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
 every_5_sewer_crystals: list[str] = [
@@ -276,7 +278,7 @@ every_5_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_85,
     RAC3SEWER.TRADE_90,
     RAC3SEWER.TRADE_95,
-    RAC3SEWER.TRADE_99,
+    RAC3SEWER.TRADE_100,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
 every_10_sewer_crystals: list[str] = [
@@ -289,7 +291,7 @@ every_10_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_70,
     RAC3SEWER.TRADE_80,
     RAC3SEWER.TRADE_90,
-    RAC3SEWER.TRADE_99,
+    RAC3SEWER.TRADE_100,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
 every_20_sewer_crystals: list[str] = [
@@ -297,7 +299,7 @@ every_20_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_40,
     RAC3SEWER.TRADE_60,
     RAC3SEWER.TRADE_80,
-    RAC3SEWER.TRADE_99,
+    RAC3SEWER.TRADE_100,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
 

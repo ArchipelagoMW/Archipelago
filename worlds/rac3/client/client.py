@@ -322,7 +322,7 @@ async def pcsx2_sync_task(ctx: Rac3Context):
                         connection_retry_attempts += 1
 
                     retry_wait = connection_retry_attempts * 10
-                    logger.warning(f'Could not connect to RaC3! Will retry connection in {retry_wait} seconds...')
+                    logger.warning(f'Could not connect to RaC3! Will retry connection in {retry_wait} seconds...\nPlease check your PINE settings both global and game specific, and restart PCSX2 if you changed them.')
                     await sleep(retry_wait)
                 else:
                     connection_retry_attempts = 0

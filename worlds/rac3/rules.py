@@ -305,6 +305,7 @@ def set_rules(world: "RaC3World"):
             lambda state: state.can_reach(RAC3REGION.COMMAND_CENTER, player=world.player),
         RAC3VENDOR.AQUATOS_BOUNCER: lambda state: state.can_reach(RAC3REGION.QWARKS_HIDEOUT, player=world.player),
         RAC3VENDOR.AQUATOS_PLASMA_COIL: lambda state: state.can_reach(RAC3REGION.KOROS, player=world.player),
+        # RAC3LOCATION.AQUATOS_BASE
         RAC3TBOLT.SEWER_PIPE: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
         RAC3TBOLT.SEWER_SWING: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.GRAV_BOOTS], world.player),
         # RAC3SEWER.TRADE_1: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
@@ -406,6 +407,8 @@ def set_rules(world: "RaC3World"):
         RAC3SEWER.TRADE_97: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
         RAC3SEWER.TRADE_98: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
         RAC3SEWER.TRADE_99: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_100: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_101: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
         RAC3SKILLPOINT.SEWER_MOTHERLOAD: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC],
                                                                      world.player),
 
@@ -465,7 +468,8 @@ def set_rules(world: "RaC3World"):
 
         # RAC3TBOLT.ZELDRIN_STARPORT_1
         RAC3TBOLT.ZELDRIN_STARPORT_2: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
-        RAC3LOCATION.ZELDRIN_STARPORT_ITEM: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
+        RAC3LOCATION.ZELDRIN_STARPORT_BOLT_GRABBER: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
+        RAC3LOCATION.ZELDRIN_STARPORT_BOX_BREAKER: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
         # RAC3LOCATION.ZELDRIN_STARPORT_SHIP
 
         RAC3SKILLPOINT.METROPOLIS_GOOD_YEAR: lambda state: state.has_any(
