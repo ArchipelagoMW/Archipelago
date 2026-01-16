@@ -102,7 +102,12 @@ class PSOWorld(World):
             "Slot": self.player,
             "Name": self.player_name,
             "Locations": {},
-            "Options": {}
+            "Options": {
+                "start_with_lavis_blade": self.options.start_with_lavis_blade.value,
+                "goal": self.options.goal.value,
+                "quests_required": self.options.quests_required.value,
+                "trap_chance": self.options.trap_chance.value
+            }
         }
 
         # Creates the zip that will hold all necessary output files.
