@@ -12,7 +12,9 @@ from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
 from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_data, infobot_data, ITEM_FROM_AP_CODE,
                                              ITEM_NAME_FROM_ID, non_prog_weapon_data, PROG_TO_NAME_DICT,
                                              RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data, weapon_upgrade_data)
-from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
+from worlds.rac3.constants.data.location import (LOCATION_FROM_AP_CODE, LOCATION_TO_INFOBOT_FLAG,
+                                                 RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA,
+                                                 REGION_TO_INFOBOT_LOCATION)
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
 from worlds.rac3.constants.deaths import CLANK_DEATH_FROM_ACTION, DEATH_FROM_ACTION
@@ -1372,3 +1374,13 @@ class Rac3Interface(GameInterface):
                     (player_pos[1] - moby_pos[1]) ** 2 +
                     (player_pos[2] - moby_pos[2]) ** 2) ** 0.5
         return distance
+
+    def sequence_break(self, checked_locations: set[int]) -> None:
+        current_planet = self.planet
+        infobot_location = REGION_TO_INFOBOT_LOCATION.get(current_planet, None)
+        if infobot_location is not None and infobot_location in RAC3_LOCATION_DATA_TABLE:
+            infobot_flag = LOCATION_TO_INFOBOT_FLAG.get(infobot_location, None)
+            if (infobot_flag is not None
+                and not RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE in checked_locations
+                and infobot_flag != RAC3STATUS.ALLOW_SHIP):
+                self._write8(infobot_flag, 0)

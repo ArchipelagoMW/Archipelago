@@ -6,12 +6,10 @@ from NetUtils import ClientStatus
 from worlds.rac3 import RAC3OPTION
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.texthelper import get_rich_item_name
-from worlds.rac3.constants.data.location import LOCATION_TO_INFOBOT_FLAG, RAC3_LOCATION_DATA_TABLE, REGION_TO_INFOBOT_LOCATION
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_color import RAC3TEXTCOLOR
 from worlds.rac3.constants.region import RAC3REGION
-from worlds.rac3.constants.status import RAC3STATUS
 
 ##################################################
 # Only change point: Change filename/Class name  #
@@ -159,18 +157,10 @@ async def handle_respawn(ctx: 'Context', skip_inputs: bool = False) -> bool:
     return False
 
 async def handle_sequence_break(ctx: 'Context') -> None:
-    """Undos the flags for infobot locations when sequence breaking if you havent checked the corresponding location yet"""
+    """Undos the flags for infobot locations when sequence breaking if you haven't checked the corresponding location yet"""
     if ctx.slot_data is None:
         return
-
-    current_planet = ctx.game_interface.planet
-    infobot_location = REGION_TO_INFOBOT_LOCATION.get(current_planet, None)
-    if (infobot_location is not None and infobot_location in RAC3_LOCATION_DATA_TABLE):
-        infobot_flag = LOCATION_TO_INFOBOT_FLAG.get(infobot_location, None)
-        if (infobot_flag is not None
-            and not RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE in ctx.checked_locations
-            and infobot_flag != RAC3STATUS.ALLOW_SHIP):
-            ctx.game_interface._write8(infobot_flag, 0)
+    ctx.game_interface.sequence_break(ctx.checked_locations)
 
 async def handle_check_goal(ctx: 'Context') -> None:
     """Checks if the goal is completed"""
