@@ -301,6 +301,7 @@ class Rac3Interface(GameInterface):
         self.timer_cycler()
         self.verify_quick_select_and_last_used()
         self.notification_cycler()
+        self.clank_cycler()
         # Proc Options
         self.multiplier_cycler()
         self.overflow_fix()
@@ -569,6 +570,7 @@ class Rac3Interface(GameInterface):
         self.weapon_exp_cycler()
         self.timer_cycler()
         self.notification_cycler()
+        self.clank_cycler()
 
     def undo_collections(self):
         self.health = self._read8(RAC3STATUS.HEALTH)
@@ -1372,3 +1374,17 @@ class Rac3Interface(GameInterface):
                     (player_pos[1] - moby_pos[1]) ** 2 +
                     (player_pos[2] - moby_pos[2]) ** 2) ** 0.5
         return distance
+
+    def clank_cycler(self):
+        if self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(0x00142713) == 0:
+            self._write16(RAC3STATUS.NO_CLANK, 1)
+        elif self.planet == RAC3REGION.AQUATOS_BASE:
+            self._write16(RAC3STATUS.NO_CLANK, 1)
+        elif self.UnlockItem[RAC3ITEM.CLANK].status:
+            if self.UnlockItem[RAC3ITEM.CLANK].unlock_delay:
+                self._write16(RAC3STATUS.NO_CLANK, 0)
+                self.UnlockItem[RAC3ITEM.CLANK].unlock_delay = 0
+            else:
+                self.UnlockItem[RAC3ITEM.CLANK].unlock_delay += 1
+        else:
+            self._write16(RAC3STATUS.NO_CLANK, 1)
