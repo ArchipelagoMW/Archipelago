@@ -322,7 +322,7 @@ async def pcsx2_sync_task(ctx: Rac3Context):
                         connection_retry_attempts += 1
 
                     retry_wait = connection_retry_attempts * 10
-                    logger.warning(f'Could not connect to RaC3! Will retry connection in {retry_wait} seconds...')
+                    logger.warning(f'Could not connect to RaC3! Will retry connection in {retry_wait} seconds...\nPlease check your PINE settings both global and game specific, and restart PCSX2 if you changed them.')
                     await sleep(retry_wait)
                 else:
                     connection_retry_attempts = 0
@@ -388,8 +388,7 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
                 if count > items_to_process:
                     logger.debug(f"Handle Later")
                     continue
-                ctx.game_interface.important_items(item.item, ctx.player_names[ctx.slot], ctx.player_names[
-                    item.player], item.location)
+                ctx.game_interface.important_items(item.item, ctx.player_names[ctx.slot], item.location)
             ctx.processed_item_count = min(counter, items_to_process)
             await ctx.send_msgs([ClientMessage.set_processed(ctx.processed_item_count)])
             logger.info(f"Items Processed: {ctx.processed_item_count}")

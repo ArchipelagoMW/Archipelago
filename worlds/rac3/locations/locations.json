@@ -505,7 +505,7 @@
         "map_locations": [
           {
             "map": "Galaxy",
-            "x": 390,
+            "x": 380,
             "y": 242
           }
         ],
@@ -577,6 +577,10 @@
           {
             "name": "117",
             "item_count": 1
+          },
+          {
+            "name": "397",
+            "itme_count": 1
           }
         ]
       },
@@ -812,6 +816,10 @@
         "sections": [
           {
             "name": "80",
+            "item_count": 1
+          },
+          {
+            "name": "398",
             "item_count": 1
           },
           {
@@ -2744,6 +2752,11 @@
             "map": "Aquatos Sewers",
             "x": 39,
             "y": 295
+          },
+          {
+            "map": "Galaxy",
+            "x": 400,
+            "y": 242
           }
         ],
         "sections": [
@@ -3144,8 +3157,32 @@
             "item_count": 1
           },
           {
+            "name": "399",
+            "item_count": 1
+          },
+          {
+            "name": "400",
+            "item_count": 1
+          },
+          {
             "name": "202",
             "item_count": 1
+          }
+        ]
+      },
+      {
+        "name": "9",
+        "map_locations": [
+          {
+            "map": "Aquatos Base",
+            "x": 455,
+            "y": 310
+          }
+        ],
+        "sections": [
+          {
+            "name": "397",
+            "itme_count": 1
           }
         ]
       }
@@ -5105,6 +5142,10 @@
         "sections": [
           {
             "name": "80",
+            "item_count": 1
+          },
+          {
+            "name": "398",
             "item_count": 1
           }
         ]

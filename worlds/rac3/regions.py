@@ -6,7 +6,7 @@ from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCA
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.nanotech import RAC3NANOTECH
 from worlds.rac3.constants.locations.sewers import RAC3SEWER
-from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT, SKILLPOINT_LOCATION_TO_NAME
+from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
 from worlds.rac3.constants.locations.trophies import RAC3TROPHY
@@ -254,6 +254,8 @@ every_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_97,
     RAC3SEWER.TRADE_98,
     RAC3SEWER.TRADE_99,
+    RAC3SEWER.TRADE_100,
+    RAC3SEWER.TRADE_101,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
 every_5_sewer_crystals: list[str] = [
@@ -276,7 +278,7 @@ every_5_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_85,
     RAC3SEWER.TRADE_90,
     RAC3SEWER.TRADE_95,
-    RAC3SEWER.TRADE_99,
+    RAC3SEWER.TRADE_100,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
 every_10_sewer_crystals: list[str] = [
@@ -289,7 +291,7 @@ every_10_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_70,
     RAC3SEWER.TRADE_80,
     RAC3SEWER.TRADE_90,
-    RAC3SEWER.TRADE_99,
+    RAC3SEWER.TRADE_100,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
 every_20_sewer_crystals: list[str] = [
@@ -297,7 +299,7 @@ every_20_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_40,
     RAC3SEWER.TRADE_60,
     RAC3SEWER.TRADE_80,
-    RAC3SEWER.TRADE_99,
+    RAC3SEWER.TRADE_100,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
 
@@ -367,6 +369,26 @@ veldin_weapons: list[str] = [
     RAC3LOCATION.VELDIN_SECOND_RANGER,
 ]
 
+simple_skillpoints: list[str] = [
+    RAC3SKILLPOINT.ARIDIA_HANG_TIME,
+    RAC3SKILLPOINT.PHOENIX_VR_TRAINING,
+    RAC3SKILLPOINT.PHOENIX_ARMOR,
+    RAC3SKILLPOINT.PHOENIX_MONKEY,
+    RAC3SKILLPOINT.MARCADIA_REFLECT,
+    RAC3SKILLPOINT.DAXX_BUGS,
+    RAC3SKILLPOINT.NATION_CAMERA,
+    RAC3SKILLPOINT.AQUATOS_SUNKEN,
+    RAC3SKILLPOINT.TYHRRANOSIS_SHARPSHOOTER,
+    RAC3SKILLPOINT.GEMINI_BELT,
+    RAC3SKILLPOINT.BLACKWATER_BASH,
+    RAC3SKILLPOINT.KOROS_BREAK,
+    RAC3SKILLPOINT.METROPOLIS_GOOD_YEAR,
+    RAC3SKILLPOINT.CRASH_SITE_SUCK,
+    RAC3SKILLPOINT.CRASH_SITE_AIM_HIGH,
+    RAC3SKILLPOINT.ARIDIA_ZAP,
+    RAC3SKILLPOINT.HIDEOUT_DAN,
+    RAC3SKILLPOINT.COMMAND_CENTER_GERMS,
+]
 
 def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
@@ -511,7 +533,6 @@ def create_region_and_connect(world: "RaC3World", name: str, entrance_name: str,
 
 def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> bool:
     """Return False if the location should be skipped based on options."""
-    all_skill_points = all(options.skill_points.values())
     loc = LOCATION_FROM_AP_CODE[data.AP_CODE]
     for tag in data.TAGS:
         match tag:
@@ -523,11 +544,14 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
             case RAC3TAG.LONG_TROPHY:
                 if options.trophies.value < 2:  # Skip long term trophies if not set to every trophy
                     return True
-                elif not all_skill_points and loc == RAC3TROPHY.PHOENIX_SKILL_MASTER:
+                elif (options.skill_points.value < 2 and options.sewer_limitation < 100 and loc ==
+                      RAC3TROPHY.PHOENIX_SKILL_MASTER):
                     return True
             case RAC3TAG.SKILLPOINT:
-                if not options.skill_points[SKILLPOINT_LOCATION_TO_NAME[loc]]:
-                    return True  # Skips the skill points which the player didn't choose
+                if options.skill_points.value == 0:
+                    return True  # Skips skill points when disabled
+                elif options.skill_points.value == 1 and loc not in simple_skillpoints:
+                    return True # Skips harder skill points
             case RAC3TAG.T_BOLT:
                 if options.titanium_bolts.value == 0:
                     return True  # Skip titanium bolt locations if titanium bolt option is disabled

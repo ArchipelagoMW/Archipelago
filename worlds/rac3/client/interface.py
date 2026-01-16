@@ -28,6 +28,7 @@ from worlds.rac3.constants.messages.messagebox import RAC3MESSAGEBOX
 from worlds.rac3.constants.messages.text_color import RAC3TEXTCOLOR
 from worlds.rac3.constants.messages.text_format import CLASSIFICATION_TO_COLOR, COLOR_NAME_TO_BYTE
 from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
                                           SHIP_SLOTS)
@@ -225,7 +226,7 @@ class Rac3Interface(GameInterface):
     ship: int = 0
     ship_skin: int = 0
     skin: int = 0
-    timers: dict[str, int] = {}
+    timers: dict[str, float] = {}
     weaponLevelLockFlag: bool = None
     planet: str = RAC3REGION.GALAXY
     player_type: str = RAC3PLAYERTYPE.RATCHET
@@ -234,6 +235,7 @@ class Rac3Interface(GameInterface):
     prev_action: int = 0
     pause_menu: bool = False
     pause_state: bool = False
+    pause_state_value: int = 0
     inputs: int = RAC3INPUT.NOTHING
     health: int = 100
     max_health: int = 10
@@ -243,6 +245,7 @@ class Rac3Interface(GameInterface):
     last_death_count: int = 0
     last_death_state: int = 0
     has_died: bool = False
+    died_in_vehicle: bool = False
     inside_hacker_puzzle: bool = False
     notification_queue: list[tuple] = []
     notification_time: float | None = None
@@ -250,6 +253,7 @@ class Rac3Interface(GameInterface):
     message_display: bool = False
     ship_slot_limit: int = 0
     one_hp_challenge: dict[str, bool] = None
+    pda_vendor: int = 0
 
     # Called at once when client started
     def init(self):
@@ -259,7 +263,7 @@ class Rac3Interface(GameInterface):
         self.remove_all_items()
         self.undo_collections()
 
-    def important_items(self, item: int, us: str, them: str, location: int):
+    def important_items(self, item: int, us: str, location: int):
         """Runs when loading into game from the main menu to update the player with important items from the server,
         skips filler and trap items to not flood the player with bolts/xp"""
         if (RAC3ITEMTAG.FILLER in RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS or RAC3ITEMTAG.TRAP in
@@ -288,6 +292,7 @@ class Rac3Interface(GameInterface):
     # Called in periodically
     def late_update(self):
         # Memory checking
+        self.cutscene_gadget_fix()
         self.gadget_cycler()
         self.planet_cycler()
         self.weapon_cycler()
@@ -296,11 +301,11 @@ class Rac3Interface(GameInterface):
         self.timer_cycler()
         self.verify_quick_select_and_last_used()
         self.notification_cycler()
-        self.clank_cycler()
         # Proc Options
         self.multiplier_cycler()
         self.overflow_fix()
         self.health_cycler()
+        self.pda_vendor_cycler()
         if self.weaponLevelLockFlag:
             self.weapon_exp_cycler()
         # Logic Fixes
@@ -469,6 +474,21 @@ class Rac3Interface(GameInterface):
                         already_no_clank = self._read8(RAC3STATUS.NO_CLANK)
                         if already_no_clank == 0:
                             self.timers[name] = int(time.time() + uniform(5, 20))
+            case RAC3ITEM.INVISIBLE_TRAP:
+                if self.timers.get(name, False):
+                    self.timers[name] += randint(3, 10)
+                else:
+                    self.timers[name] = int(time.time() + uniform(3, 10))
+            case RAC3ITEM.DISARM_TRAP:
+                if self.timers.get(name, False):
+                    self.timers[name] += randint(3, 7)
+                else:
+                    self.timers[name] = int(time.time() + uniform(3, 7))
+            case RAC3ITEM.WRENCH_ONLY_TRAP:
+                if self.timers.get(name, False):
+                    self.timers[name] += randint(3, 7)
+                else:
+                    self.timers[name] = int(time.time() + uniform(3, 7))
         if name in non_prog_weapon_data.keys():
             if non_prog_weapon_data[name].AMMO:
                 self._write8(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
@@ -549,7 +569,6 @@ class Rac3Interface(GameInterface):
         self.weapon_exp_cycler()
         self.timer_cycler()
         self.notification_cycler()
-        self.clank_cycler()
 
     def undo_collections(self):
         self.health = self._read8(RAC3STATUS.HEALTH)
@@ -653,7 +672,45 @@ class Rac3Interface(GameInterface):
             else:
                 self._write8(RAC3STATUS.EQUIPPED, last_3)
 
+    def cutscene_gadget_fix(self):
+        """Temporarily removing a gadget when grabbing it during a cutscene to make sure the location check address
+        gets checked"""
+        if bool(self._read8(RAC3STATUS.HIDE_WEAPON)):
+            match self.planet:
+                case RAC3REGION.MARCADIA:
+                    self._write8(gadget_data[RAC3ITEM.REFRACTOR].UNLOCK_ADDRESS, 0)
+                case RAC3REGION.DAXX:
+                    self._write8(gadget_data[RAC3ITEM.CHARGE_BOOTS].UNLOCK_ADDRESS, 0)
+                case RAC3REGION.ZELDRIN_STARPORT:
+                    self._write8(gadget_data[RAC3ITEM.BOLT_GRABBER].UNLOCK_ADDRESS, 0)
+                    self._write8(gadget_data[RAC3ITEM.BOX_BREAKER].UNLOCK_ADDRESS, 0)
+                case RAC3REGION.CRASH_SITE:
+                    self._write8(gadget_data[RAC3ITEM.NANO_PAK].UNLOCK_ADDRESS, 0)
+                case RAC3REGION.QWARKS_HIDEOUT:
+                    self._write8(gadget_data[RAC3ITEM.PDA].UNLOCK_ADDRESS, 0)
+
+    def should_cycle_gadgets(self) -> bool:
+        """Check if it's safe to cycle gadgets
+        used to ensure gadgets can respawn without the cycler interfering"""
+        if (self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE
+                or self.is_reloading
+                or self.self_respawning
+                or bool(self._read8(RAC3STATUS.HIDE_WEAPON))
+                # for some reason during the initial planet load, pause state and action are all 0s and are therefore
+                # useless but this timer is set to 1 during that time, so we use that to know when the initial load is
+                # happening
+                or self._read16(RAC3STATUS.FALL_TIMER) == 1):
+            return False
+        if self.planet != RAC3REGION.QWARKS_HIDEOUT or self.distance_to_moby(self.pda_vendor) < 12.0:
+            return False
+        return True
+
     def gadget_cycler(self):
+
+        if not self.should_cycle_gadgets():
+            self.respawn_gadgets()
+            return
+
         for name in gadget_data.keys():
             addr = gadget_data[name].UNLOCK_ADDRESS
             if self.UnlockItem[name].status:
@@ -866,6 +923,13 @@ class Rac3Interface(GameInterface):
                     match status:
                         case RAC3STATUS.BLACK_SCREEN:
                             self._write16(status, 0)
+                        case RAC3STATUS.INVISIBLE:
+                            self._write8(status, 2)
+                        case RAC3STATUS.WRENCH_ONLY:
+                            self._write8(status, 2)
+                        case RAC3STATUS.DISARM:
+                            if RAC3STATUS.IN_VEHICLE == 0:
+                                self._write8(status, 0)
                         case _:
                             self._write8(status, 1)
             else:
@@ -888,6 +952,12 @@ class Rac3Interface(GameInterface):
                         self._write16(RAC3STATUS.BLACK_SCREEN, 0x8C)
                     case RAC3ITEM.NO_CLANK_TRAP:
                         self._write8(RAC3STATUS.NO_CLANK, 0)
+                    case RAC3ITEM.INVISIBLE_TRAP:
+                        self._write8(RAC3STATUS.INVISIBLE, 0)
+                    case RAC3ITEM.DISARM_TRAP:
+                        self._write8(RAC3STATUS.DISARM, 0)
+                    case RAC3ITEM.WRENCH_ONLY_TRAP:
+                        self._write8(RAC3STATUS.WRENCH_ONLY, 0)
 
         # Remove trap effects for traps not in the timer dictionary to prevent any stuck effects
         # Prevent not having lock trap from unlocking weapon during arena weapon specific challenges every cycle
@@ -925,14 +995,55 @@ class Rac3Interface(GameInterface):
         # Vehicle one HP challenge is independent of player_type
         if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
             health_addr = self._read32(self._read32(self.vehicle + 0x68))
-            if self._read_float(health_addr) > 5.0:
-                # This displays as 1 HP in-game for vehicles
-                self._write_float(health_addr, 5)
+            target_health = 5.0
+            if self.planet == RAC3REGION.TYHRRANOSIS_RANGERS or self.planet == RAC3REGION.MARCADIA:
+                target_health = 1.0  # For some reason these vehicles have 100 max health instead of 500
+            elif self.planet == RAC3REGION.TYHRRANOSIS:
+                target_health = 0.6 # For some reason the turboslider on Tyhrranosis has 60 max health
+            if self._read_float(health_addr) > target_health:
+                # This displays as 1 HP in-game for vehicles with 500 max health
+                self._write_float(health_addr, target_health)
         
         if not self.one_hp_challenge.get(character, False) and self.planet == RAC3REGION.ANNIHILATION_NATION and not self.pause_state:
             # Restore sleeping gas health reduction if one HP challenge is not active for Ratchet
             self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x2442FFFF) # addiu v0,v0,-0x1
             self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0xAC652850) # sw a1,0x2850(v1)
+
+    def pda_vendor_cycler(self):
+        """Handles PDA vendor logic: finding, resetting, and repurchasing on Qwark's Hideout."""
+        if self.planet != RAC3REGION.QWARKS_HIDEOUT:
+            # reset PDA vendor when leaving Qwarks Hideout
+            self.pda_vendor = 0
+            return
+
+        # Wait until Qwarks Hideout is fully loaded and PDA is unlocked
+        if not self.should_cycle_gadgets() or self.UnlockItem[RAC3ITEM.PDA].status == 0:
+            return
+
+        # Find PDA Vendor if not already found
+        if self.pda_vendor == 0:
+            self.pda_vendor = self.find_pda_vendor()
+            # If not found, don't continue
+            if self.pda_vendor == 0:
+                return
+
+        # If Ratchet has the PDA but has not checked the PDA location, reset the vendor if close
+        if (self.UnlockItem[RAC3ITEM.PDA].status == 1 and
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.HIDEOUT_PDA].AP_CODE)):
+            distance = self.distance_to_moby(self.pda_vendor)
+            logger.debug(f'Ratchet has PDA and PDA location unchecked, distance to PDA Vendor: {distance:.2f}')
+            if distance < 12.0:
+                logger.debug(f'Ratchet is close to PDA Vendor (Distance: {distance:.2f}), resetting vendor')
+                self.reset_pda_vendor()
+
+    def reset_pda_vendor(self):
+        """Reset PDA Vendor to initial state to allow repurchasing the PDA"""
+        if self.pda_vendor == 0:
+            logger.debug('PDA Vendor not found, cannot reset')
+            return
+        self._write8(self.pda_vendor + 0x7C, 1) # Put PDA back in vendor
+        self._write8(self.pda_vendor + 0x94, 0) # Set bought flag to 0
+        self._write8(self.pda_vendor + 0x20, 1) # Reset interaction state
 
     def overflow_fix(self):
         nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
@@ -941,13 +1052,36 @@ class Rac3Interface(GameInterface):
             self.notification_queue.append((f'Negative Nanotech EXP detected! Resetting EXP to 0', RAC3BOXTHEME.WARNING))
         # If other stuff needs overflow fixing, add here
 
+    def respawn_gadgets(self):
+        """Respawn gadget if the associated location isn't checked but the gadget is unlocked through AP"""
+        if (self.UnlockItem[RAC3ITEM.REFRACTOR].status and
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.MARCADIA_REFRACTOR].AP_CODE)):
+            self._write8(gadget_data[RAC3ITEM.REFRACTOR].UNLOCK_ADDRESS, 0)
+
+        if (self.UnlockItem[RAC3ITEM.CHARGE_BOOTS].status and
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.DAXX_CHARGE_BOOTS].AP_CODE)):
+            self._write8(gadget_data[RAC3ITEM.CHARGE_BOOTS].UNLOCK_ADDRESS, 0)
+
+        if (self.UnlockItem[RAC3ITEM.NANO_PAK].status and
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.CRASH_SITE_NANO_PAK].AP_CODE)):
+            self._write8(gadget_data[RAC3ITEM.NANO_PAK].UNLOCK_ADDRESS, 0)
+
+        if ((self.UnlockItem[RAC3ITEM.BOLT_GRABBER].status or self.UnlockItem[RAC3ITEM.BOX_BREAKER].status) and
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.ZELDRIN_STARPORT_BOLT_GRABBER].AP_CODE)):
+            self._write8(gadget_data[RAC3ITEM.BOLT_GRABBER].UNLOCK_ADDRESS, 0)
+            self._write8(gadget_data[RAC3ITEM.BOX_BREAKER].UNLOCK_ADDRESS, 0)
+        if (self.UnlockItem[RAC3ITEM.PDA].status and
+                not self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.HIDEOUT_PDA].AP_CODE)):
+            self._write8(gadget_data[RAC3ITEM.PDA].UNLOCK_ADDRESS, 0)
+
     def reload_check(self):
         """Detects if the game is currently being reloaded, and updates death data"""
         if self.is_reloading and not self.reloading_handled and not self.self_respawning:
             self.last_death_state = self.action
+            self.died_in_vehicle = bool(self._read8(RAC3STATUS.IN_VEHICLE))
             self.reloading_handled = True
             logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state},'
-                         f' death count: {self.last_death_count}')
+                         f' death count: {self.last_death_count}, in vehicle? {self.died_in_vehicle}')
         if not self.is_reloading and self.reloading_handled:
             self.death_count = self._read32(RAC3STATUS.DEATH_COUNT)
             self.has_died = self.death_count > self.last_death_count
@@ -967,7 +1101,8 @@ class Rac3Interface(GameInterface):
 
         pause_address = RAC3_REGION_DATA_TABLE[self.planet].PAUSE_ADDRESS
         self.pause_menu = bool(self._read8(pause_address)) if pause_address else False
-        self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE))
+        self.pause_state_value = self._read8(RAC3STATUS.PAUSE_STATE)
+        self.pause_state = bool(self.pause_state_value)
         match self.planet:
             case RAC3REGION.QWARKS_HIDEOUT:
                 self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE + 0x40))
@@ -1004,7 +1139,7 @@ class Rac3Interface(GameInterface):
             case RAC3REGION.VELDIN:
                 return False  # Problems with F-sector
             case RAC3REGION.MARCADIA:
-                return self._read_float(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
+                return self._read32(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
             case RAC3REGION.TYHRRANOSIS:
                 return False  # Entrance coordinates in the first section that gets unloaded after leaving
             case RAC3REGION.ZELDRIN_STARPORT:
@@ -1025,8 +1160,13 @@ class Rac3Interface(GameInterface):
             self.last_death_count = self.death_count
             logger.debug(f'Death Detected! (death count increased)')
             is_clank = self.player_type == RAC3PLAYERTYPE.CLANK
-            death = DEATH_FROM_ACTION.get(self.last_death_state, 'Died') if not is_clank else (
-                CLANK_DEATH_FROM_ACTION.get(self.last_death_state, 'Died'))
+            death = DEATH_FROM_ACTION.get(self.last_death_state, 'ran out of nanotech.') if not is_clank else (
+                CLANK_DEATH_FROM_ACTION.get(self.last_death_state, 'ran out of nanotech.'))
+
+            # Vehicle pointer becomes 0 during reload, but the address next to it gets a value during reload after vehicle death
+            if self.died_in_vehicle:
+                # Vehicle death uses state 34 which is the same as getting eaten by a shark
+                death = 'Didn\'t leave the vehicle in time.'
             return False, f"{self.player_type} {death}"
 
         logger.debug(f'{self.player_type} is Alive')
@@ -1096,9 +1236,9 @@ class Rac3Interface(GameInterface):
         return self.pause_menu and pressed_square
 
     def messagebox(self, msg_list: list[bytes], color_bytes_count: int, longest_line_length: int, box_theme: int =
-    RAC3BOXTHEME.DEFAULT, time: int = 0x168) -> None:
-        if time < 0:
-            time = 0
+    RAC3BOXTHEME.DEFAULT, _time: int = 0x168) -> None:
+        if _time < 0:
+            _time = 0
         # real overflow cap is actually about 248, but we don't need that long messages
         curr_addr = RAC3MESSAGEBOX.MESSAGE
         msg_bytes = b''
@@ -1126,7 +1266,7 @@ class Rac3Interface(GameInterface):
         self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), box_color)
         self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), text_color)
 
-        self._write32(RAC3MESSAGEBOX.TIMER, time)
+        self._write32(RAC3MESSAGEBOX.TIMER, _time)
         self._write32(RAC3MESSAGEBOX.TEXT_POINTER, RAC3MESSAGEBOX.MESSAGE)
         self._write32(RAC3MESSAGEBOX.BOX_WIDTH, width)
         self._write_bytes(RAC3MESSAGEBOX.MESSAGE, msg_bytes)
@@ -1189,20 +1329,46 @@ class Rac3Interface(GameInterface):
                 return (self.UnlockItem[RAC3ITEM.HOLOSTAR_STUDIOS].status > 0 and
                         (self.UnlockItem[RAC3ITEM.HACKER].status == 0 or
                         self.UnlockItem[RAC3ITEM.HYPERSHOT].status == 0))
+            case _:
+                pass
         return False
-    def clank_cycler(self):
-        # Special cases where Clank is already removed
-        if self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(0x00142713) == 0:
-            self._write16(RAC3STATUS.NO_CLANK, 1)
-        elif self.planet == RAC3REGION.AQUATOS_BASE:
-            self._write16(RAC3STATUS.NO_CLANK, 1)
-        # No special case:
-        elif self.UnlockItem[RAC3ITEM.CLANK].status:
-            if self.UnlockItem[RAC3ITEM.CLANK].unlock_delay:
-                self._write16(RAC3STATUS.NO_CLANK, 0)
-                self.UnlockItem[RAC3ITEM.CLANK].unlock_delay = 0
-            else:
-                self.UnlockItem[RAC3ITEM.CLANK].unlock_delay += 1
-        else:
-            self._write16(RAC3STATUS.NO_CLANK, 1)
 
+    def find_pda_vendor(self) -> int | str:
+        """Traverse the moby linked list on Qwarks Hideout to find the PDA vendor moby and return its address"""
+        table_start = RAC3STATUS.HIDEOUT_MOBY_TABLE_START
+        target_moby_id = RAC3STATUS.PDA_VENDOR_MOBY_ID
+        moby_offset = 0
+        current_id = 0
+        for traversal in range(1, 10001):
+            if current_id == target_moby_id:
+                # once vendor has been found, save address
+                pda_vendor_addr = table_start + moby_offset
+                logger.debug(f'PDA Vendor found at address: {hex(pda_vendor_addr)} after {traversal} traversals')
+                return pda_vendor_addr
+            next_ptr = self._read32(table_start + 0x28 + moby_offset)
+            if next_ptr == 0:  # Null pointer found
+                logger.debug(f'PDA Vendor not found after {traversal} traversals, reached null pointer')
+                return 0
+            moby_offset = next_ptr - table_start
+            if moby_offset < 0:
+                logger.debug(f'PDA Vendor not found after {traversal} traversals, invalid offset detected')
+                return 0
+            current_id = self._read16(table_start + 0xB2 + moby_offset)
+        return 0
+
+    def distance_to_moby(self, moby) -> float:
+        """Calculate the distance from the player to the moby"""
+        if not moby:
+            return float('inf')
+        assert RAC3STATUS.HIDEOUT_MOBY_TABLE_START < moby < RAC3STATUS.HIDEOUT_MOBY_TABLE_START + 0x00100000, \
+            "Moby not in the typical moby range"
+        player_pos = (self._read_float(RAC3STATUS.POS_X),
+                      self._read_float(RAC3STATUS.POS_Y),
+                      self._read_float(RAC3STATUS.POS_Z))
+        moby_pos = (self._read_float(moby + 0x10),
+                      self._read_float(moby + 0x14),
+                      self._read_float(moby + 0x18))
+        distance = ((player_pos[0] - moby_pos[0]) ** 2 +
+                    (player_pos[1] - moby_pos[1]) ** 2 +
+                    (player_pos[2] - moby_pos[2]) ** 2) ** 0.5
+        return distance

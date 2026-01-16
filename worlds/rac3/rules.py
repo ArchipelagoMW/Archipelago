@@ -111,13 +111,10 @@ def set_rules(world: "RaC3World"):
         # RAC3VENDOR.FLORANA_WHIP
         # RAC3VENDOR.FLORANA_N60
         # RAC3TBOLT.FLORANA_BELOW_VENDOR
-        RAC3TROPHY.FLORANA_RATCHET: lambda state: state.can_reach_location(
-            RAC3LOCATION.FLORANA_DEFEAT_QWARK, player=world.player),
-        RAC3TBOLT.FLORANA_PATH_OF_DEATH: lambda state: state.can_reach_location(
-            RAC3LOCATION.FLORANA_DEFEAT_QWARK, player=world.player),
-        RAC3SKILLPOINT.FLORANA_PATH: lambda state: state.can_reach_location(
-            RAC3LOCATION.FLORANA_DEFEAT_QWARK, player=world.player),
-        RAC3LOCATION.FLORANA_DEFEAT_QWARK: lambda state: state.has(RAC3ITEM.CLANK, world.player),
+        # RAC3TROPHY.FLORANA_RATCHET
+        # RAC3TBOLT.FLORANA_PATH_OF_DEATH
+        # RAC3SKILLPOINT.FLORANA_PATH
+        # RAC3LOCATION.FLORANA_DEFEAT_QWARK
 
         # RAC3VENDOR.PHOENIX_SUCK
         # RAC3VENDOR.PHOENIX_INFECTOR
@@ -308,6 +305,7 @@ def set_rules(world: "RaC3World"):
             lambda state: state.can_reach(RAC3REGION.COMMAND_CENTER, player=world.player),
         RAC3VENDOR.AQUATOS_BOUNCER: lambda state: state.can_reach(RAC3REGION.QWARKS_HIDEOUT, player=world.player),
         RAC3VENDOR.AQUATOS_PLASMA_COIL: lambda state: state.can_reach(RAC3REGION.KOROS, player=world.player),
+        # RAC3LOCATION.AQUATOS_BASE
         RAC3TBOLT.SEWER_PIPE: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
         RAC3TBOLT.SEWER_SWING: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.GRAV_BOOTS], world.player),
         # RAC3SEWER.TRADE_1: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
@@ -409,6 +407,8 @@ def set_rules(world: "RaC3World"):
         RAC3SEWER.TRADE_97: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
         RAC3SEWER.TRADE_98: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
         RAC3SEWER.TRADE_99: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_100: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_101: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
         RAC3SKILLPOINT.SEWER_MOTHERLOAD: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC],
                                                                      world.player),
 
@@ -435,7 +435,7 @@ def set_rules(world: "RaC3World"):
         # RAC3LOCATION.DAXX_CHARGE_BOOTS
         # RAC3TROPHY.DAXX_PLUMBER
         RAC3LOCATION.DAXX_GUNSHIP: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
-        RAC3TBOLT.DAXX_TAXI: lambda state: state.has_all([RAC3ITEM.HYPERSHOT,RAC3ITEM.CLANK], world.player),
+        RAC3TBOLT.DAXX_TAXI: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
         RAC3TBOLT.DAXX_DOOR:
             lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.HACKER, RAC3ITEM.CHARGE_BOOTS], world.player),
         RAC3LOCATION.DAXX_FACILITY: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.HACKER], world.player),
@@ -464,12 +464,12 @@ def set_rules(world: "RaC3World"):
 
         # RAC3LOCATION.SKIDD_CAPTURED
 
-        RAC3LOCATION.DRACO_COURTNEY: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.CLANK], world.player),
+        RAC3LOCATION.DRACO_COURTNEY: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
 
-        #RAC3TBOLT.ZELDRIN_STARPORT_1
-        RAC3TBOLT.ZELDRIN_STARPORT_2: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.CLANK], world.player),
-        RAC3LOCATION.ZELDRIN_STARPORT_ITEM:
-            lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.CLANK], world.player),
+        # RAC3TBOLT.ZELDRIN_STARPORT_1
+        RAC3TBOLT.ZELDRIN_STARPORT_2: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
+        RAC3LOCATION.ZELDRIN_STARPORT_BOLT_GRABBER: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
+        RAC3LOCATION.ZELDRIN_STARPORT_BOX_BREAKER: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
         # RAC3LOCATION.ZELDRIN_STARPORT_SHIP
 
         RAC3SKILLPOINT.METROPOLIS_GOOD_YEAR: lambda state: state.has_any(
@@ -506,8 +506,7 @@ def set_rules(world: "RaC3World"):
             lambda state: state.has_any([RAC3ITEM.FLUX_RIFLE, RAC3ITEM.PROGRESSIVE_FLUX_RIFLE], world.player),
         RAC3LOCATION.CRASH_SITE_NANO_PAK:
             lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.HYPERSHOT], world.player),
-        RAC3LOCATION.CRASH_SITE_ESCAPE_POD:
-            lambda state: state.has_any([RAC3ITEM.HYPERSHOT, RAC3ITEM.CLANK], world.player),
+        # RAC3LOCATION.CRASH_SITE_ESCAPE_POD
         RAC3LOCATION.CRASH_SITE_INFOBOT_ARIDIA: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
 
         # RAC3VENDOR.ARIDIA_QWACK_O_RAY
@@ -534,10 +533,8 @@ def set_rules(world: "RaC3World"):
         RAC3TBOLT.HIDEOUT: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
         RAC3LOCATION.HIDEOUT_PDA: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
         RAC3SKILLPOINT.HIDEOUT_DAN: lambda state: state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT], world.player),
-        RAC3TROPHY.HIDEOUT_QWARK:
-            lambda state: state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT, RAC3ITEM.CLANK], world.player),
-        RAC3LOCATION.HIDEOUT_QWARK:
-            lambda state: state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT, RAC3ITEM.CLANK], world.player),
+        RAC3TROPHY.HIDEOUT_QWARK: lambda state: state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT], world.player),
+        RAC3LOCATION.HIDEOUT_QWARK: lambda state: state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT], world.player),
 
         # RAC3TROPHY.KOROS_COURTNEY
         # RAC3TBOLT.KOROS_FENCE

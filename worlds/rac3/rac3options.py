@@ -34,7 +34,7 @@ from worlds.rac3.options.weapon_vendors_options import WeaponVendors
 
 def create_option_groups() -> list[OptionGroup]:
     option_group_list: list[OptionGroup] = []
-    for name, options in rac3_option_groups.items():
+    for name, options in rac3_option_groups:
         option_group_list.append(OptionGroup(name=name, options=options))
 
     return option_group_list

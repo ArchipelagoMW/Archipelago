@@ -26,7 +26,7 @@ class RAC3OPTION:
     RANGERS = "Rangers"
     ARENA = "Arena"
     VIDCOMICS = "Vidcomics"
-    VR_CHALLENGES = "Vr Challenges"
+    VR_CHALLENGES = "VR Challenges"
     SEWER_CRYSTALS = "Sewer Crystals"
     SEWER_LIMITATION = "Sewer Limitation"
     NANOTECH_LIMITATION = "Nanotech Limitation"
