@@ -64,8 +64,11 @@ class RecipeEngine:
         with self.modpack.open_file("recipeEngineSettings.json") as file:
             raw_settings = json.load(file)
             self.__root_categories: set[str] = raw_settings["root_categories"]
-            self.__missed_machines: dict[str, set[Category]] = {name: set(categories)
-                                                                for name, categories in raw_settings["missed_machines"].items()}
+            if raw_settings["missed_machines"]:
+                self.__missed_machines: dict[str, set[Category]] = {name: set(categories)
+                                                                    for name, categories in raw_settings["missed_machines"].items()}
+            else:
+                self.__missed_machines: dict[str, set[Category]] = {}
             self.__raw_cost: dict[str, float] = raw_settings["raw_cost"]
             self.__invalid_ingredients: set[str] = raw_settings["invalid_ingredients"]
             self.__req_machines_for_category: dict[Category, str] = raw_settings["req_machines_for_category"]
@@ -77,7 +80,7 @@ class RecipeEngine:
         self.__all_ingredients: dict[str, InternalItem] = {}
         self.__valid_ingredients: dict[str, InternalItem] = {}
 
-        with self.modpack.open_file("fluids.json") as file:
+        with self.modpack.open_file("extractor/fluids.json") as file:
             self.__fluids: set[str] = set(json.load(file))
 
         for fluid in self.__fluids:
@@ -87,7 +90,7 @@ class RecipeEngine:
             self.__all_ingredients[fluid] = ingredient
             self.__valid_ingredients[fluid] = ingredient
 
-        with self.modpack.open_file("items.json") as file:
+        with self.modpack.open_file("extractor/items.json") as file:
             item_stack_sizes: dict[str, int] = json.load(file)
 
         for item, stack_size in item_stack_sizes.items():
@@ -109,7 +112,7 @@ class RecipeEngine:
             if "mining-with-fluid" in technology.modifiers:
                 mining_with_fluid_sources.add(technology)
 
-        with self.modpack.open_file("resources.json") as file: # todo find better method then opening twice
+        with self.modpack.open_file("extractor/resources.json") as file: # todo find better method then opening twice
             raw_resources = json.load(file)
 
         for resource_name, resource_data in raw_resources.items():
@@ -119,7 +122,7 @@ class RecipeEngine:
     def __register_recipes(self):
         self.__recipes: dict[str, Recipe] = {}
 
-        with self.modpack.open_file("resources.json") as file:  # todo find better method then opening twice
+        with self.modpack.open_file("extractor/resources.json") as file:  # todo find better method then opening twice
             raw_resources = json.load(file)
 
         for resource_name, resource_data in raw_resources.items():
@@ -133,7 +136,7 @@ class RecipeEngine:
             )
         del raw_resources
 
-        with self.modpack.open_file("recipes.json") as file:
+        with self.modpack.open_file("extractor/recipes.json") as file:
             raw_recipes = json.load(file)
 
         for recipe_name, recipe_data in raw_recipes.items():
@@ -285,7 +288,7 @@ class RecipeEngine:
 
     @cached_property
     def machines(self) -> dict[str, Machine]:
-        with self.modpack.open_file("machines.json") as file:
+        with self.modpack.open_file("extractor/machines.json") as file:
             raw_machines = json.load(file)
         machines: dict[str, Machine] = {}
 

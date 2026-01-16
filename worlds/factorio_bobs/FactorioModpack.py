@@ -71,7 +71,7 @@ class FactorioModpack(BaseModpack):
 
     def __init_technologies(self) -> None:
         self.__technology_table: dict[str, Technology] = {}
-        with self.open_file("techs.json") as file:
+        with self.open_file("extractor/techs.json") as file:
             raw_technologies = json.load(file)
         for technology_name, data in sorted(raw_technologies.items()):
             technology = Technology(
@@ -227,7 +227,7 @@ class FactorioModpack(BaseModpack):
 
     @cached_property
     def mod_settings(self) -> dict[str, dict[str, Any]]:
-        with self.open_file("modSettings.json") as file:
+        with self.open_file("extractor/modSettings.json") as file:
             mod_settings_raw = json.load(file)
         return mod_settings_raw
 
@@ -278,7 +278,7 @@ class FactorioModpack(BaseModpack):
             "min_expansion_cooldown": 14400,
             "max_expansion_cooldown": 216000
         }}
-        with self.open_file("autoplace.json") as file:
+        with self.open_file("extractor/autoplace.json") as file:
             autoplace_raw = json.load(file)
 
         for name, settings in autoplace_raw.items():
