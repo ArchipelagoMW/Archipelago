@@ -11,12 +11,23 @@ from . import options as pso_options  # rename due to a name conflict with World
 from .patcher.rom_patch import PSOPlayerContainer
 from .strings.region_names import Region
 
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+
 # APQuest will go through all the parts of the world api one step at a time,
 # with many examples and comments across multiple files.
 # If you'd rather read one continuous document, or just like reading multiple sources,
 # we also have this document specifying the entire world api:
 # https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md
 
+def run_client(*args):
+    from .client.pso_client import sync_main  # lazy import
+    launch_subprocess(sync_main, name="PSO Client", args=args)
+
+
+# Adds the launcher for our component and our client logo.
+components.append(
+    Component("PSO Client", func=run_client, component_type=Type.CLIENT,
+              file_identifier=SuffixIdentifier(".appso")))
 
 # The world class is the heart and soul of an apworld implementation.
 # It holds all the data and functions required to build the world and submit it to the multiworld generator.

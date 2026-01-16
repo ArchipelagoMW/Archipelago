@@ -18,7 +18,7 @@ AP_WORLD_VERSION_NAME = "APWorldVersion"
 
 class PSOPatcher:
     def __init__(self, patch_file_path: str):
-        from rom_patch import get_base_rom_path, PSOPatch
+        from .rom_patch import get_base_rom_path, PSOPatch
         self.clean_iso_path = get_base_rom_path()
 
         base_path = os.path.splitext(patch_file_path)[0]
