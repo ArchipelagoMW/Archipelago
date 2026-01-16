@@ -87,11 +87,6 @@ class RaC3World(World):
         super().__init__(multiworld, player)
 
     def generate_early(self):
-        rac3_logger.warning(
-            "INCOMPLETE WORLD! Slot '%s' is using an unfinished alpha world that is not stable yet!",
-            self.player_name)
-        rac3_logger.warning("INCOMPLETE WORLD! Slot '%s' may require send_location/send_item for completion!",
-                            self.player_name)
         self.preplaced_items = [RAC3ITEM.VELDIN, RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK]
         # implement .yaml-less Universal Tracker support
         setup_options_from_slot_data(self)
