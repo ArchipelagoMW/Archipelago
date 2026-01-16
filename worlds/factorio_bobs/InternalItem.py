@@ -327,7 +327,6 @@ class InternalItem(FactorioElement):
         self.is_used_in: set[Recipe] = set()
 
         self.best_recipe: Recipe | None = None
-        self.root_item = False
 
         self.non_recursive_raw_ingredients: dict[InternalItem, float] = {}
         self.non_recursive_best_recipe: Recipe | None = None
@@ -357,31 +356,26 @@ class InternalItem(FactorioElement):
             self.__raw_ingredients = {self: 1}
             return self.__raw_ingredients, None, set(), set()
 
+        # check if free recipe todo handle multiple free recipes
+        for recipe in self.recipes:
+            if recipe.ingredients == {}:
+                self.non_recursive_raw_ingredients = {self: 1}
+                self.non_recursive_best_recipe = recipe
+                self.__raw_ingredients = {self: 1}
+                self.best_recipe = recipe
+                self.__req_categories = {recipe.category}
+                self.__ingredient_unlocking_technologies = recipe.all_unlocking_technologies()
+
         InternalItem.evaluating.add(self)
         for loop in self.recursive_loops:
             loop.enter_loop(self)
-
-        if self.root_item:
-            self.recipeEngine.add_recipe_path(self, self.best_recipe)
-            (self.__raw_ingredients, self.__ingredient_unlocking_technologies,
-             self.__req_categories) = self.best_recipe.eval()
-            self.recipeEngine.pop_recipe_path()
-
-            if not self.__raw_ingredients:
-                self.__raw_ingredients = {self: 1}
-
-            self.non_recursive_best_recipe = self.best_recipe
-            self.non_recursive_raw_ingredients = self.__raw_ingredients
-            InternalItem.evaluating.remove(self)
-            return (self.__raw_ingredients, self.best_recipe,
-                    self.__ingredient_unlocking_technologies, self.__req_categories)
-
 
         lowest_score = float('inf')
         best_recipe = None
         best_tech = set()
         best_categories = set()
         best_raw_ingredients = {}
+
         for recipe in self.recipes:
             self.recipeEngine.add_recipe_path(self, recipe)
             raw_ingredients, tech, cat = recipe.eval()
@@ -640,7 +634,8 @@ class Recipe(FactorioElement):
             if type(product) is InternalItem:
                 self.products[product] = amount
             elif type(product) is str:
-                assert product in self.recipeEngine.all_ingredients, (f"Unknown product: {product}", f"In recipe {self.name}")
+                if product not in self.recipeEngine.all_ingredients: # must be hidden
+                    continue
                 self.products[self.recipeEngine.all_ingredients[product]] = amount
             else:
                 raise TypeError(f"Unknown product type: {product} \nIn recipe {self.name}")
@@ -651,20 +646,6 @@ class Recipe(FactorioElement):
 
         for ingredient in self.ingredients.keys():
             ingredient.is_used_in.add(self)
-
-        if category in self.recipeEngine.root_categories:
-            for product, produced in self.products.items():
-                product.root_item = True
-                product.best_recipe = self
-                product.best_non_recursive_recipe = self
-                # if ingredients:
-                #     for ingredient, cost in ingredients.items():
-                #         product.raw_ingredients |= {ingredient: cost/produced}
-                # else:
-                #     if self.name not in rel_cost:
-                #         print(f"spontaneously existing item ({product.name}) doesn't have a cost, default to 1")
-                #     product.raw_ingredients = {product: 1}
-                #     product.raw_eval = True
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.name})"
