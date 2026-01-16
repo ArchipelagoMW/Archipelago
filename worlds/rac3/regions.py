@@ -528,7 +528,7 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 elif not all_skill_points and loc == RAC3TROPHY.PHOENIX_SKILL_MASTER:
                     return True
             case RAC3TAG.SKILLPOINT:
-                if not options.skill_points[SKILLPOINT_LOCATION_TO_NAME[loc]]:
+                if not options.skill_points.get(SKILLPOINT_LOCATION_TO_NAME[loc], False):
                     return True  # Skips the skill points which the player didn't choose
             case RAC3TAG.T_BOLT:
                 if options.titanium_bolts.value == 0:
