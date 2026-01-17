@@ -27,7 +27,6 @@ if TYPE_CHECKING:
 async def update(ctx: 'Context') -> None:
     """Called continuously"""
     ctx.game_interface.early_update()
-    # Todo: if intro skip option is on, force homewarp when on veldin
     await handle_intro_skip(ctx)
     # Check received items
     await handle_received_items(ctx)

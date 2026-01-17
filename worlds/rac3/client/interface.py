@@ -1416,6 +1416,6 @@ class Rac3Interface(GameInterface):
 
     def check_intro(self) -> bool:
         """Checks if the player has reached the end of the intro by collecting the phoenix coordinates"""
-        if self._read8(RAC3STATUS.PLANET_VISITED_1) & 0b00000100:
+        if self._read8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID):
             return True
         return False
