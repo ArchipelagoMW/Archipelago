@@ -16,11 +16,11 @@ class TestHasPowerNodes(AVTestBase):
 
         self.collect(self.get_item_by_name("Power Node"))
         self.collect(self.get_item_by_name("Power Node"))
-        self.assertFalse(conditions.has_power_nodes(state, context))
+        self.assertFalse(conditions.has_power_nodes(state, context, 3))
 
         self.collect(self.get_item_by_name("Power Node"))
         assert self.count("Power Node") == 3
-        self.assertTrue(conditions.has_power_nodes(state, context))
+        self.assertTrue(conditions.has_power_nodes(state, context, 3))
 
 
 class TestHasHealthNodes(AVTestBase):
@@ -29,13 +29,13 @@ class TestHasHealthNodes(AVTestBase):
 
         self.collect(self.get_item_by_name("Health Node"))
         self.collect(self.get_item_by_name("Health Node"))
-        self.assertFalse(conditions.has_health_nodes(state, context))
+        self.assertFalse(conditions.has_health_nodes(state, context, 3))
         print(self.count("Health Node"))
         assert self.count("Health Node") == 2
 
         self.collect(self.get_item_by_name("Health Node"))
         assert self.count("Health Node") == 3
-        self.assertTrue(conditions.has_health_nodes(state, context))
+        self.assertTrue(conditions.has_health_nodes(state, context, 3))
 
 
 class TestRequireNodesDisabled(AVTestBase):
@@ -46,5 +46,5 @@ class TestRequireNodesDisabled(AVTestBase):
     def test_disabled(self):
         state, context = self.multiworld.state, self.multiworld.worlds[1].context
 
-        self.assertTrue(conditions.has_health_nodes(state, context))
-        self.assertTrue(conditions.has_power_nodes(state, context))
+        self.assertTrue(conditions.has_health_nodes(state, context, 3))
+        self.assertTrue(conditions.has_power_nodes(state, context, 3))

@@ -9,6 +9,7 @@ class AVItemType(StrEnum):
     DRILL = "Drills"
     DRONE = "Drones"
     GLITCH = "Glitches"
+    HEALTH = "Health"
     HEALTH_NODE = "Health Nodes"
     HEALTH_NODE_FRAGMENT = "Health Node Fragments"
     KEY = "Keys"
@@ -33,7 +34,7 @@ class AVArea(StrEnum):
     MAR_URU = 'Mar-Uru'
 
 
-class AVRegions(StrEnum):
+class AVRegion(StrEnum):
     # Eribu
     WEST_ERIBU = "West Eribu"
     DINGER_GISBAR = "Dinger-Gisbar"
@@ -48,6 +49,7 @@ class AVRegions(StrEnum):
     WEST_ABSU = "West Absu"
     WEST_ATTIC = "West Attic"
     EAST_ATTIC = "East Attic"
+    ATTIC_JUNCTION = "Attic Junction"
     ELSENOVA = "Elsenova"
     LOWER_ABSU = "Lower Absu"
     ABSU_BASEMENT = "Absu Basement"
@@ -68,6 +70,7 @@ class AVRegions(StrEnum):
     # Zi
     ABSU_ZI = "Absu-Zi"
     LOWER_ZI = "Lower Zi"
+    ZI_CORRIDOR = "Zi Corridor"
     EAST_ZI = "East Zi"
     UPPER_ZI = "Upper Zi"
     PREVIEW_ROOM = "Preview Room"
@@ -86,6 +89,7 @@ class AVRegions(StrEnum):
     GAUNTLET_REWARD = "Gauntlet Reward"
 
     MOUNTAIN_BASE = "Mountain Base"
+    MOUNTAIN_MID = "Mountain Mid"
     MOUNTAIN_TOP = "Mountain Top"
     MOUNTAIN_PEAK = "Mountain Peak"
 
@@ -108,12 +112,14 @@ class AVRegions(StrEnum):
     WEST_UKKIN_NA_EXIT = "West Ukkin-Na Exit"
     UKKIN_NA_BASE = "Ukkin-Na Base"
     SOUTH_UKKIN_NA_EXIT = "South Ukkin-Na Exit"
-    VISION = "Vision"
     OPHELIA = "Ophelia"
     EAST_UKKIN_NA_EXIT = "East Ukkin-Na Exit"
 
     # Edin
-    LOWER_EDIN = "Lower Edin"
+    LOWER_EDIN_LEFT = "Lower Edin Left"
+    EDIN_WALL = "Edin Wall"
+    LOWER_EDIN_RIGHT = "Lower Edin Right"
+    UKHU_TOWER = "Ukhu Tower"
     UKHU = "Ukhu"
     CLONE = "Clone"
     HANGAR = "Hangar"
@@ -133,12 +139,19 @@ class AVRegions(StrEnum):
 
     MENU = "Menu"
     BLURST = "Blurst"
-    
+
+
+# Glitchsanity-specfic regions
+class AVGlitchRegion(StrEnum):
+    MOGRA = "Mogra"
+    SPITBUG = "Spitbug"
+    SWARMILY = "Swarmily"
 
 
 START_OPTION_MAP = [
-    (AVRegions.WEST_ERIBU, "Area1", "SaveRoom1"),
-    (AVRegions.ELSENOVA, "Area2", "SaveRoom2"),
-    (AVRegions.EAST_ABSU, "Area2", "SaveRoom4"),
-    (AVRegions.LOWER_CAVES, "Area4", "SaveRoom1"),
+    AVRegion.WEST_ERIBU,
+    AVRegion.ELSENOVA,
+    AVRegion.EAST_ABSU,
+    AVRegion.LOWER_CAVES,
+    AVRegion.MOUNTAIN_PEAK,
 ]

@@ -15,7 +15,7 @@ from .markers import Marker, MarkerGenerator
 
 from ..types.items import ItemData, ProgressiveItemChainSingle, SingleItemData, ItemPoolEntry, ProgressiveItemChain
 from ..types.locations import AccessInfo, LocationData
-from ..types.condition import Condition, NeverCondition, RegionCondition, OrCondition, ShopSlotCondition
+from ..types.condition import Condition, NeverCondition, RegionCondition, OrCondition, AndCondition, ShopSlotCondition
 from ..types.shops import ShopData
 
 class LocationCategory(StrEnum):
@@ -399,7 +399,6 @@ class ListInfo:
                     access=AccessInfo(
                         region={ name: "Menu" for name in access_info.region },
                         cond=[
-                            ShopSlotCondition(shop_name, item_id),
                             OrCondition(slot_condition)
                         ],
                     ),
@@ -417,7 +416,12 @@ class ListInfo:
                 }
 
             # Require the player to be able to reach the shop region in all modes that the shop has a region in.
-            self.global_slot_region_conditions_list[item_id].append(RegionCondition(None, shop_display_name))
+            self.global_slot_region_conditions_list[item_id].append(
+                AndCondition([
+                    RegionCondition(None, shop_display_name),
+                    ShopSlotCondition(shop_name, item_id)
+                ])
+            )
 
         self.shop_data[shop_display_name] = ShopData(
             internal_name=shop_name,

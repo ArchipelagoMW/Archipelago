@@ -6,6 +6,8 @@ This is the AP World for playing A Link Between Worlds in [Archipelago](https://
 
 See the [setup guide](https://github.com/randomsalience/albw-archipelago/blob/main/docs/setup_en.md).
 
+This world can be played on a modded 3DS [using a plugin](https://github.com/LittleCube-hax/albw-ap-plugin). Follow the instructions on that page to set it up.
+
 ## Known Issues
 
 - Checks that logically require portraits or pendants do not show up in the Universal Tracker.

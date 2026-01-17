@@ -718,7 +718,7 @@ def generate_output(world: "PokemonCrystalWorld", output_directory: str, patch: 
         for type_id, type_data in world.generated_types.items():
             address = data.rom_addresses["AP_Setting_TypeMatchups_" + type_id] - 1
             for _, matchup in sorted(
-                    list(type_data.matchups.items()), key=lambda matchup: world.generated_types[matchup[0]].rom_id):
+                    type_data.matchups.items(), key=lambda matchup: world.generated_types[matchup[0]].rom_id):
                 address += 3
                 write_bytes([matchup], address)
 

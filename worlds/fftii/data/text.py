@@ -140,7 +140,7 @@ max_text_width = 180
 
 def create_text_for_offworld_item(player_name: str, item_name: str, classification: ItemClassification, is_fft_item: bool):
     if is_fft_item and item_name in zodiac_stone_names:
-        item_string = f"{{{item_name}}}" + f"{item_name}"
+        item_string = f"{{{item_name.replace(" Stone", "")}}}" + f"{item_name}"
     else:
         item_string = f"{item_name}"
     if classification == ItemClassification.progression:
@@ -155,7 +155,7 @@ def create_text_for_offworld_item(player_name: str, item_name: str, classificati
 
 def create_text_for_own_item(item_name: str, classification: ItemClassification):
     if item_name in zodiac_stone_names:
-        item_string = f"{{{item_name}}}" + f"{item_name}"
+        item_string = f"{{{item_name.replace(" Stone", "")}}}" + f"{item_name}"
     else:
         item_string = f"{item_name}"
     if classification == ItemClassification.progression:
@@ -228,8 +228,7 @@ def split_text_into_lines(location_text: str) -> tuple[list[str], list[list[int]
                         sub_data_key = current_line[sub_start:sub_end + 1]
                         sub_index = sub_end + 1
                     else:
-                        print(character)
-                        print(index)
+                        print(location_text, character, index)
                         raise InputError("We shouldn't be processing this.")
                     if sub_data_key not in text_data_lookup.keys():
                         sub_data_key = "?"

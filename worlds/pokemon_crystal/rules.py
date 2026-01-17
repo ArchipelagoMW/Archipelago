@@ -22,8 +22,8 @@ if TYPE_CHECKING:
 class PokemonCrystalLogic:
     available_pokemon: set[str]
     all_pokemon: set[str]
-    evolution: dict[str, set[tuple[EvolutionData, LogicalAccess]]]
-    breeding: dict[str, set[tuple[str, LogicalAccess]]]
+    evolution: dict[str, list[tuple[EvolutionData, LogicalAccess]]]
+    breeding: dict[str, list[tuple[str, LogicalAccess]]]
     wild_regions: dict[EncounterKey, LogicalAccess]
     guaranteed_hm_access: bool
 
@@ -47,8 +47,8 @@ class PokemonCrystalLogic:
     def __init__(self, world: "PokemonCrystalWorld"):
         self.available_pokemon = set()
         self.all_pokemon = set(world.generated_pokemon.keys())
-        self.evolution = defaultdict(set)
-        self.breeding = defaultdict(set)
+        self.evolution = defaultdict(list)
+        self.breeding = defaultdict(list)
         self.wild_regions = defaultdict(lambda: LogicalAccess.Inaccessible)
         self.compatible_hm_pokemon = defaultdict(list)
         self.guaranteed_hm_access = False
@@ -1662,13 +1662,6 @@ def set_rules(world: "PokemonCrystalWorld") -> None:
         set_rule(get_entrance("REGION_VERMILION_CITY:DIGLETTS_CAVE_ENTRANCE -> REGION_VERMILION_CITY"),
                  digletts_cave_rule)
         set_rule(get_entrance("REGION_ROUTE_11 -> REGION_VERMILION_CITY"), digletts_cave_rule)
-
-        if world.options.ss_aqua_access:
-            ship_rule = lambda state: state.has("S.S. Ticket", world.player) and state.has(
-                "EVENT_JASMINE_RETURNED_TO_GYM", world.player)
-        else:
-            ship_rule = lambda state: state.has("S.S. Ticket", world.player)
-
         set_rule(get_entrance("REGION_VERMILION_PORT -> REGION_FAST_SHIP_1F"), ship_rule)
 
         if hidden():
@@ -1820,12 +1813,12 @@ def set_rules(world: "PokemonCrystalWorld") -> None:
 
         for trade_id, trade in world.generated_trades.items():
             if world.options.trades_required and world.is_universal_tracker:
-                rule = lambda state: state.has(trade.requested_pokemon, world.player) or state.has(
+                rule = lambda state, request=trade.requested_pokemon: state.has(request, world.player) or state.has(
                     PokemonCrystalGlitchedToken.TOKEN_NAME, world.player)
             elif world.is_universal_tracker:
                 rule = lambda state: state.has(PokemonCrystalGlitchedToken.TOKEN_NAME, world.player)
             else:
-                rule = lambda state: state.has(trade.requested_pokemon, world.player)
+                rule = lambda state, request=trade.requested_pokemon: state.has(request, world.player)
             safe_set_location_rule(trade_id, rule)
 
     if world.options.require_itemfinder:
@@ -2028,7 +2021,9 @@ def verify_hm_accessibility(world: "PokemonCrystalWorld") -> None:
                     continue
 
                 last_hm = hm_to_verify
-                valid_pokemon = [mon for mon in logic.available_pokemon if state.has(mon, world.player)
+                logical_pokemon = sorted(logic.available_pokemon)
+                world.random.shuffle(logical_pokemon)
+                valid_pokemon = [mon for mon in logical_pokemon if state.has(mon, world.player)
                                  and mon not in logic.compatible_hm_pokemon[hm_to_verify]]
                 if valid_pokemon:
                     pokemon = world.random.choice(valid_pokemon)

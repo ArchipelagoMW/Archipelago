@@ -47,7 +47,9 @@ Riovanes.connections = [
 Riovanes.locations = [
     FFTLocation(LocationNames.RIOVANES_1_STORY, battle_level=11),
     FFTLocation(LocationNames.RIOVANES_2_STORY, battle_level=11),
+    FFTLocation(LocationNames.RIOVANES_2_STONE, battle_level=11),
     FFTLocation(LocationNames.RIOVANES_3_STORY, battle_level=11),
+    FFTLocation(LocationNames.RIOVANES_3_STONE, battle_level=11),
     FFTLocation(LocationNames.RIOVANES_SHOP, battle_level=11),
     FFTLocation(LocationNames.RAMZA_CHAPTER_4_UNLOCK, battle_level=11),
     FFTLocation(LocationNames.RAFA_RECRUIT, battle_level=11),
@@ -61,6 +63,6 @@ Fovoham.connections = [
 ]
 
 Fovoham.locations = [
-    FFTLocation(LocationNames.FOVOHAM_STORY, battle_level=1),
+    FFTLocation(LocationNames.FOVOHAM_STORY, battle_level=2),
     RareBattleLocation(LocationNames.FOVOHAM_RARE, battle_level=8)
 ]

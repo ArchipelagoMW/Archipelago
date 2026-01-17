@@ -13,7 +13,8 @@ from .data.items import item_data_lookup, gear_item_names, gil_item_names, gil_i
     jp_item_names, jp_item_sizes, job_names, special_character_names, world_map_pass_names, earned_job_names
 from .data.locations import linked_reward_names
 from .data.logic.JobUnlocks import unlock_dict
-from .data.memory import stones_lookup, seed_hash_length, pass_paths, finale_path
+from .data.memory import stones_lookup, seed_hash_length, pass_paths, finale_path, location_dot_info, STORY_LOCATIONS, \
+    RARE_BATTLE, SIDEQUEST_LOCATIONS, ALTIMA_ONLY_STORY_LOCATIONS, ADDRESS
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -87,6 +88,7 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 await self.location_check(ctx)
                 await self.received_items_check(ctx)
                 await self.write_pass_paths(ctx)
+                await self.write_dot_colors(ctx)
 
         except bizhawk.RequestFailedError:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
@@ -258,7 +260,6 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
                 await bizhawk.display_message(ctx.bizhawk_ctx, f"Received {current_item_name}")
 
     async def check_victory(self, ctx):
-        value = None
         if ctx.finished_game:
             return
         else:
@@ -442,6 +443,39 @@ class FinalFantasyTacticsIvaliceIslandClient(BizHawkClient):
             new_flag_data = flag_data | bit
             write_list.append((flag_address, [new_flag_data], self.ram))
             await self.write_ram_values_guarded(ctx, write_list)
+
+    async def write_dot_colors(self, ctx: "BizHawkClientContext"):
+        for location_dot, location_dot_data in location_dot_info.items():
+            needed_locations = []
+            needed_locations.extend(location_dot_data[STORY_LOCATIONS])
+            if ctx.slot_data["rare_battles"] == 1:
+                if RARE_BATTLE in location_dot_data.keys():
+                    needed_locations.append(location_dot_data[RARE_BATTLE])
+            if ctx.slot_data["sidequest_battles"] == 1:
+                if SIDEQUEST_LOCATIONS in location_dot_data.keys():
+                    needed_locations.extend(location_dot_data[SIDEQUEST_LOCATIONS])
+            if ctx.slot_data["final_battles"] == 1:
+                if ALTIMA_ONLY_STORY_LOCATIONS in location_dot_data.keys():
+                    needed_locations.extend(location_dot_data[ALTIMA_ONLY_STORY_LOCATIONS])
+            toggle_dot = True
+            for location in needed_locations:
+                location_id = self.location_name_to_id[location.value]
+                if location_id not in ctx.checked_locations:
+                    toggle_dot = False
+            if toggle_dot:
+                print(location_dot_data)
+                location_dot_address = location_dot_data[ADDRESS][0]
+                location_dot_bit = location_dot_data[ADDRESS][1]
+                current_dot_data = await self.read_ram_value_guarded(ctx, location_dot_address)
+                if current_dot_data is None:
+                    return
+                if current_dot_data & location_dot_bit == 0:
+                    new_dot_data = current_dot_data | location_dot_bit
+                    await self.write_ram_values_guarded(ctx, [
+                        (location_dot_address, [new_dot_data], self.ram)
+                    ])
+
+
 
     async def read_ram_values_guarded(self, ctx: "BizHawkClientContext", location: int, size: int):
         value = await bizhawk.guarded_read(ctx.bizhawk_ctx, [(location, size, self.ram)], guard_list)

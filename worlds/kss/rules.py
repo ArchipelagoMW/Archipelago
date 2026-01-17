@@ -20,9 +20,11 @@ def set_dyna_blade_rules(world: "KSSWorld") -> None:
                                                                                          world.player))
 
     if world.options.essences or "Maxim Tomato" in world.options.consumables:
-        set_rule(world.get_entrance("Dyna Blade -> Dyna Blade Bonus 1"),
+        # They always need this, but these regions don't have locations if not on essence/maxim
+        # so we set the item to useful
+        set_rule(world.get_entrance("Mallow Castle -> Dyna Blade Bonus 1"),
                  lambda state: state.has(item_names.dyna_blade_ex1, world.player))
-        set_rule(world.get_entrance("Dyna Blade -> Dyna Blade Bonus 2"),
+        set_rule(world.get_entrance("Candy Mountain -> Dyna Blade Bonus 2"),
                  lambda state: state.has(item_names.dyna_blade_ex2, world.player))
 
     if "Maxim Tomato" in world.options.consumables:
@@ -94,7 +96,7 @@ def set_great_cave_rules(world: "KSSWorld") -> None:
                                           item_names.bomb, item_names.beam], world.player))
     set_rule(world.get_location(location_names.tgco_treasure_28),
              lambda state: state.has_any([item_names.crash, item_names.yoyo,
-                                          item_names.beam, item_names.beam], world.player))
+                                          item_names.bomb, item_names.beam], world.player))
     set_rule(world.get_location(location_names.tgco_treasure_31),
              lambda state: state.has_any([item_names.hammer, item_names.stone], world.player))
     set_rule(world.get_location(location_names.tgco_treasure_32),
@@ -103,9 +105,9 @@ def set_great_cave_rules(world: "KSSWorld") -> None:
     set_rule(world.get_location(location_names.tgco_treasure_33),
              lambda state: state.has_any([item_names.hammer, item_names.stone], world.player))
     set_rule(world.get_location(location_names.tgco_treasure_34),
-             lambda state: state.has_any([item_names.cutter, item_names.beam, item_names.beam, item_names.hammer,
+             lambda state: state.has_any([item_names.cutter, item_names.beam, item_names.hammer,
                                           item_names.bomb, item_names.jet, item_names.wing, item_names.stone,
-                                          item_names.plasma], world.player))
+                                          item_names.plasma, item_names.parasol], world.player))
     set_rule(world.get_location(location_names.tgco_treasure_36),
              lambda state: state.has_any([item_names.beam, item_names.yoyo, item_names.plasma], world.player))
     set_rule(world.get_location(location_names.tgco_treasure_37),

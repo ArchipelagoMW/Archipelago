@@ -7,7 +7,7 @@ import ast
 
 from ..types.condition import Condition
 from ..types.locations import AccessInfo, LocationData
-from ..types.regions import RegionConnection
+from ..types.regions import Goal, RegionConnection
 from ..types.items import ItemData, ItemPoolEntry, ProgressiveChainEntry, SingleItemData
 from ..types.shops import ShopData
 
@@ -293,6 +293,30 @@ def create_expression_region_connection(conn: RegionConnection):
     ast.fix_missing_locations(ast_region)
 
     return ast_region
+
+def create_expression_goal(goal: Goal):
+    """
+    Create an expression representing a goal.
+    """
+
+    ast_goal = ast.Call(
+        func=ast.Name("Goal"),
+        args=[],
+        keywords=[
+            ast.keyword(
+                arg="region",
+                value=ast.Constant(goal.region)
+            ),
+            ast.keyword(
+                arg="condition",
+                value=create_expression_condition_list(goal.condition)
+            ),
+        ]
+    )
+
+    ast.fix_missing_locations(ast_goal)
+
+    return ast_goal
 
 def create_expression_shop(data: ShopData) -> ast.Call:
     """

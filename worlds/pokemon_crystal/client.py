@@ -873,13 +873,15 @@ class PokemonCrystalClient(BizHawkClient):
                 if trap_name not in TRAP_NAME_TO_ID:
                     return
 
+                local_trap_name = TRAP_ID_TO_NAME[TRAP_NAME_TO_ID[trap_name]]
+
                 if "trap_weights" not in ctx.slot_data:
                     return
 
-                if trap_name not in ctx.slot_data["trap_weights"]:
+                if local_trap_name not in ctx.slot_data["trap_weights"]:
                     return
 
-                if ctx.slot_data["trap_weights"][trap_name] == 0:
+                if ctx.slot_data["trap_weights"][local_trap_name] == 0:
                     return
 
                 self.trap_link_queue.append(TRAP_NAME_TO_ID[trap_name])

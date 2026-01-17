@@ -1020,7 +1020,7 @@ done:   ; Return to normal item drop handler
     re.store(rom)
 
     rom.texts[0xCF] = formatText("""
-        Bingo!
+        apbingo!
         Young lad, I mean... #####, the hero!
         You have bingo!
         You have proven your wisdom, courage and power!
@@ -1031,6 +1031,6 @@ done:   ; Return to normal item drop handler
         Thank you, #####...
         My work is done...
         The Wind Fish will wake soon.
-        Good bye...Bingo!
+        Good bye...apbingo!
     """)
     rom.texts[0xCE] = rom.texts[0xCF]

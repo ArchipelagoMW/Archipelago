@@ -286,13 +286,13 @@ def setup_location_table_with_settings(options) -> None:
         total_table.update(location_store_diamonds)
 
     if options.location_system.value == 1:
-        result = give_default_location_table(options.disable_late_styx_scribe)
+        result = give_default_location_table(options.disable_late_styx)
         total_table.update(result)
     elif options.location_system.value == 2:
         levels = options.score_rewards_amount.value
         total_table.update(give_score_location_table(levels))
     elif options.location_system.value == 3:
-        total_table.update(give_weapon_based_locations(options.disable_late_styx_scribe))
+        total_table.update(give_weapon_based_locations(options.disable_late_styx))
     
     if options.fatesanity == 1:
         total_table.update(location_table_fates)

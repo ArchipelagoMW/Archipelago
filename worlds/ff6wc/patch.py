@@ -44,9 +44,10 @@ class FF6WCPatch(APAutoPatchInterface):
                                 compress_type=zipfile.ZIP_DEFLATED)
 
     @override
-    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
-        super().read_contents(opened_zipfile)
+    def read_contents(self, opened_zipfile: zipfile.ZipFile) -> dict[str, Any]:
+        manifest = super().read_contents(opened_zipfile)
         self.gen_data_str = opened_zipfile.read("gen_data.json").decode()
+        return manifest
 
     @override
     def patch(self, target: str) -> None:

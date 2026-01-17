@@ -235,12 +235,12 @@ class FFVCDWorld(World):
             "Faris": self.options.faris_name.value,}
 
         self.options_conductor = options_conductor
-        
+
         return options_conductor
-                
+
     def pre_fill(self):
         if self.options.trapped_chests and self.options.trapped_chests_settings in [0,1]:
-            state = self.multiworld.get_all_state(False)
+            state = self.multiworld.get_all_state()
             fill_restrictive(self.multiworld, state, self.chosen_mib_locations, self.mib_items_to_place,
                                single_player_placement=True, lock=True, allow_excluded=True)
 
@@ -250,7 +250,7 @@ class FFVCDWorld(World):
     def generate_output(self, output_directory: str):
         locs = [i for i in self.multiworld.get_locations(self.player)]
         data = {}
-        
+
         for loc in locs:
             if loc.address and loc.item:
                 try:

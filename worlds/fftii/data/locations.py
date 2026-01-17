@@ -85,6 +85,21 @@ story_battle_locations: list[LocationNames] = [
     LocationNames.AIRSHIPS_2_STORY
 ]
 
+story_stone_locations: list[LocationNames] = [
+    LocationNames.GOUG_STONE,
+    LocationNames.LIONEL_2_STONE,
+    LocationNames.RIOVANES_2_STONE,
+    LocationNames.RIOVANES_3_STONE,
+    LocationNames.BETHLA_SLUICE_STONE,
+    LocationNames.LIMBERRY_3_STONE_1,
+    LocationNames.LIMBERRY_3_STONE_2,
+    LocationNames.IGROS_STONE
+]
+
+altima_only_stone_locations: list[LocationNames] = [
+    LocationNames.AIRSHIPS_1_STONE
+]
+
 story_character_recruit_locations: list[LocationNames] = [
     LocationNames.RAD_RECRUIT,
     LocationNames.ALICIA_RECRUIT,
@@ -136,6 +151,12 @@ sidequest_battles: list[LocationNames] = [
     LocationNames.END_SIDEQUEST,
 ]
 
+sidequest_stone_locations: list[LocationNames] = [
+    LocationNames.GOLAND_4_STONE,
+    LocationNames.NELVESKA_STONE,
+    LocationNames.END_STONE
+]
+
 dd_locations: list[LocationNames] = [
     LocationNames.NOGIAS_SIDEQUEST,
     LocationNames.TERMINATE_SIDEQUEST,
@@ -153,6 +174,7 @@ dd_location_names: list[str] = [location.value for location in dd_locations]
 
 sidequest_battle_locations: list[LocationNames] = [
     *sidequest_battles,
+    *sidequest_stone_locations,
     LocationNames.BEOWULF_RECRUIT,
     LocationNames.WORKER_8_RECRUIT,
     LocationNames.REIS_DRAGON_RECRUIT,
@@ -235,35 +257,16 @@ default_murond_fights: list[LocationNames] = [
     LocationNames.UBS_5_STORY,
     LocationNames.MUROND_DEATH_CITY_STORY,
     LocationNames.PRECINCTS_STORY,
-    LocationNames.AIRSHIPS_1_STORY
-]
-
-story_zodiac_stone_locations: list[LocationNames] = [
-    LocationNames.IGROS_STORY, # Capricorn
-    LocationNames.RIOVANES_3_STORY, # Pisces
-    LocationNames.RIOVANES_2_STORY, # Aries
-    LocationNames.GOUG_STORY, # Taurus
-    LocationNames.LIMBERRY_2_STORY, # Gemini
-    # "Graveyard of Airships 1 Story Battle", # Leo
-    # "Graveyard of Airships 2 Story Battle", # Virgo
-    LocationNames.BETHLA_SLUICE_STORY, # Libra
-    LocationNames.LIONEL_2_STORY, # Scorpio
-    LocationNames.LIMBERRY_3_STORY, # Sagittarius
-]
-
-altima_only_story_zodiac_stone_locations: list[LocationNames] = [
-    LocationNames.AIRSHIPS_1_STORY
-]
-
-sidequest_zodiac_stone_locations: list[LocationNames] = [
-    LocationNames.GOLAND_4_SIDEQUEST,
-    LocationNames.NELVESKA_SIDEQUEST,
-    LocationNames.END_SIDEQUEST,
+    LocationNames.AIRSHIPS_1_STORY,
+    LocationNames.AIRSHIPS_1_STONE
 ]
 
 linked_rewards: dict[LocationNames, list[LocationNames]] = {
     LocationNames.MANDALIA_STORY: [
         LocationNames.MANDALIA_SHOP
+    ],
+    LocationNames.IGROS_STORY: [
+        LocationNames.IGROS_STONE
     ],
     LocationNames.LENALIA_STORY: [
         LocationNames.LENALIA_SHOP,
@@ -278,7 +281,11 @@ linked_rewards: dict[LocationNames, list[LocationNames]] = {
     LocationNames.YARDOW_STORY: [
         LocationNames.YARDOW_SHOP
     ],
+    LocationNames.RIOVANES_2_STORY: [
+        LocationNames.RIOVANES_2_STONE
+    ],
     LocationNames.RIOVANES_3_STORY: [
+        LocationNames.RIOVANES_3_STONE,
         LocationNames.RIOVANES_SHOP,
         LocationNames.RAFA_RECRUIT,
         LocationNames.MALAK_RECRUIT,
@@ -294,6 +301,7 @@ linked_rewards: dict[LocationNames, list[LocationNames]] = {
         LocationNames.BOCO_RECRUIT
     ],
     LocationNames.GOLAND_4_SIDEQUEST: [
+        LocationNames.GOLAND_4_STONE,
         LocationNames.BEOWULF_RECRUIT,
         LocationNames.REIS_DRAGON_RECRUIT,
         LocationNames.WORKER_8_RECRUIT
@@ -305,6 +313,7 @@ linked_rewards: dict[LocationNames, list[LocationNames]] = {
         LocationNames.BARIAUS_HILL_SHOP
     ],
     LocationNames.LIONEL_2_STORY: [
+        LocationNames.LIONEL_2_STONE,
         LocationNames.LIONEL_SHOP
     ],
     LocationNames.BARIAUS_VALLEY_STORY: [
@@ -312,16 +321,20 @@ linked_rewards: dict[LocationNames, list[LocationNames]] = {
         LocationNames.AGRIAS_RECRUIT
     ],
     LocationNames.NELVESKA_SIDEQUEST: [
+        LocationNames.NELVESKA_STONE,
         LocationNames.REIS_HUMAN_RECRUIT
     ],
     LocationNames.ZARGHIDAS_SIDEQUEST: [
         LocationNames.CLOUD_RECRUIT
     ],
     LocationNames.BETHLA_SLUICE_STORY: [
+        LocationNames.BETHLA_SLUICE_STONE,
         LocationNames.BETHLA_SHOP,
         LocationNames.ORLANDU_RECRUIT
     ],
     LocationNames.LIMBERRY_3_STORY: [
+        LocationNames.LIMBERRY_3_STONE_1,
+        LocationNames.LIMBERRY_3_STONE_2,
         LocationNames.LIMBERRY_SHOP,
         LocationNames.MELIADOUL_RECRUIT
     ],
@@ -329,10 +342,15 @@ linked_rewards: dict[LocationNames, list[LocationNames]] = {
         LocationNames.ORBONNE_SHOP
     ],
     LocationNames.GOUG_STORY: [
+        LocationNames.GOUG_STONE,
         LocationNames.MUSTADIO_RECRUIT
     ],
     LocationNames.END_SIDEQUEST: [
+        LocationNames.END_STONE,
         LocationNames.BYBLOS_RECRUIT
+    ],
+    LocationNames.AIRSHIPS_1_STORY: [
+        LocationNames.AIRSHIPS_1_STONE
     ]
 }
 
@@ -358,6 +376,9 @@ for location in rare_battle_locations:
 monster_location_names: list[str] = [f"Poach {monster.monster_name.value}" for monster in monster_locations]
 
 location_sort_list: list[LocationNames] = [
+    *story_stone_locations,
+    *altima_only_stone_locations,
+    *sidequest_stone_locations,
     *story_battle_locations,
     *shop_unlock_locations,
     *ramza_job_unlock_locations,
@@ -375,12 +396,17 @@ location_groups = {
     "Story Battles": [
         location.value for location in [
             *story_battle_locations,
+            *story_stone_locations,
+            *altima_only_stone_locations,
             *shop_unlock_locations,
             *ramza_job_unlock_locations,
             *story_character_recruit_locations
         ]
     ],
-    "Sidequest Battles": [location.value for location in sidequest_battles],
+    "Sidequest Battles": [
+        *[location.value for location in sidequest_battles],
+        *[location.value for location in sidequest_stone_locations]
+    ],
     "Rare Battles": rare_battle_location_names,
     "Poaches": monster_location_names,
     "Job Unlocks": [location.value for location in job_unlock_locations]

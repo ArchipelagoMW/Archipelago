@@ -18,6 +18,7 @@ character_list: List[str] = [
     "Automaton",
     "Snecko",
     "Collector",
+    "AwakenedOne",
 ]
 
 official_names: List[str] = [
@@ -34,6 +35,7 @@ official_names: List[str] = [
     "THE_AUTOMATON",
     "THE_SNECKO",
     "THE_COLLECTOR",
+    "AWAKENED_ONE",
 ]
 
 # character_option_map = {
@@ -74,6 +76,9 @@ class CharacterConfig:
         self.final_act: int = kwargs['final_act']
         self.downfall: int = kwargs['downfall']
         self.ascension_down: int = kwargs['ascension_down']
+        self.key_sanity: int = kwargs['key_sanity']
+        if self.final_act == 0:
+            self.key_sanity = 0
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -88,6 +93,7 @@ class CharacterConfig:
             'final_act': self.final_act != 0,
             'downfall': self.downfall != 0,
             'ascension_down': self.ascension_down,
+            'key_sanity': self.key_sanity != 0,
         }
 
     def __repr__(self):

@@ -33,7 +33,7 @@ class PatchInfo:
     check_map: Dict[str, str]
     items: Dict[str, PatchItemInfo]
 
-    cur_version: ClassVar[Version] = Version(0, 1, 3)
+    cur_version: ClassVar[Version] = Version(0, 1, 5)
     min_compatible_version: ClassVar[Version] = Version(0, 1, 3)
 
     def __init__(
@@ -185,6 +185,3 @@ class ALBWPatchExtension(metaclass=AutoPatchExtensionRegister):
             with open(output_path, "rb") as output_file:
                 output = output_file.read()
             return output
-
-if __name__ == "__main__":
-    create_rom_file(sys.argv[1])

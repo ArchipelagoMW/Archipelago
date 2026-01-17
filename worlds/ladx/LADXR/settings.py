@@ -134,8 +134,8 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
                                                          ('2', '2', '2 instruments'), ('1', '1', '1 instrument'), ('0', '0', 'No instruments'),
                                                          ('open', 'O', 'Egg already open'), ('random', 'R', 'Random instrument count'),
                                                          ('open-4', '<', 'Random short game (0-4)'), ('5-8', '>', 'Random long game (5-8)'),
-                                                         ('seashells', 'S', 'Seashell hunt (20)'), ('bingo', 'b', 'Bingo!'),
-                                                         ('bingo-full', 'B', 'Bingo-25!')], default='8',
+                                                         ('seashells', 'S', 'Seashell hunt (20)'), ('bingo', 'b', 'apbingo!'),
+                                                         ('bingo-full', 'B', 'apbingo-25!')], default='8',
                 description="""Changes the goal of the game.
 [1-8 instruments], number of instruments required to open the egg.
 [No instruments] open the egg without instruments, still requires the ocarina with the balled of the windfish
@@ -143,8 +143,8 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
 [Randomized instrument count] random number of instruments required to open the egg, between 0 and 8.
 [Random short/long game] random number of instruments required to open the egg, chosen between 0-4 and 5-8 respectively.
 [Seashell hunt] egg will open once you collected 20 seashells. Instruments are replaced by seashells and shuffled.
-[Bingo] Generate a 5x5 bingo board with various goals. Complete one row/column or diagonal to win!
-[Bingo-25] Bingo, but need to fill the whole bingo card to win!"""),
+[apbingo] Generate a 5x5 bingo board with various goals. Complete one row/column or diagonal to win!
+[apbingo-25] apbingo, but need to fill the whole bingo card to win!"""),
             Setting('itempool', 'Gameplay', 'P', 'Item pool', options=[('', '', 'Normal'), ('casual', 'c', 'Casual'), ('pain', 'p', 'Path of Pain'), ('keyup', 'k', 'More keys')], default='',
                 description="""Effects which items are shuffled.
 [Casual] places more inventory and key items so the seed is easier.
@@ -284,8 +284,8 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
                 setattr(self, setting, new_value)
 
         if self.goal in ("bingo", "bingo-full"):
-            req("overworld", "normal", "Bingo goal does not work with dungeondive")
-            req("accessibility", "all", "Bingo goal needs 'all' accessibility")
+            req("overworld", "normal", "apbingo goal does not work with dungeondive")
+            req("accessibility", "all", "apbingo goal needs 'all' accessibility")
             dis("steal", "disabled", "default", "With bingo goal, stealing should be allowed")
             dis("boss", "random", "shuffle", "With bingo goal, bosses need to be on normal or shuffle")
             dis("miniboss", "random", "shuffle", "With bingo goal, minibosses need to be on normal or shuffle")

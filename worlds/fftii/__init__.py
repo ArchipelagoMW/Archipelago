@@ -25,9 +25,10 @@ from .data.items import zodiac_stone_names, world_map_pass_names, job_names, sho
     gil_item_names_weighted, earned_job_names, filler_item_names, jp_item_names_weighted
 from .data.locations import all_regions, world_map_regions, story_battle_locations, character_recruit_locations, \
     sidequest_battle_locations, job_unlock_locations, rare_battle_locations, default_murond_fights, \
-    shop_unlock_locations, monster_location_names, story_zodiac_stone_locations, sidequest_zodiac_stone_locations, \
+    shop_unlock_locations, monster_location_names, \
     ramza_job_unlock_locations, location_sort_list_names, locations_with_text, linked_reward_names, \
-    altima_only_story_zodiac_stone_locations, location_groups
+    location_groups, story_stone_locations, altima_only_stone_locations, \
+    sidequest_stone_locations
 from .data.logic.FFTLocation import LocationNames
 from .data.logic.Monsters import monster_locations_lookup, monster_family_lookup, monster_families
 from .data.logic.regions.Fovoham import fovoham_regions
@@ -39,6 +40,18 @@ from .data.logic.regions.Lionel import lionel_regions
 from .data.logic.regions.Murond import murond_regions
 from .data.logic.regions.Zeltennia import zeltennia_regions
 from .data.text import create_text_for_own_item, create_text_for_offworld_item
+from .enemyrando.BattleMappingLists import all_fights
+from .enemyrando.BattleMappings import valid_shuffle_source_units, zodiac_shuffle_source_units, \
+    sidequest_shuffle_source_units, zodiac_sidequest_source_units
+from .enemyrando.EventCodes import EventCode
+from .enemyrando.Job import Job
+from .enemyrando.RandomizedMapping import RandomizedMapping
+from .enemyrando.RandomizedMappings import base_shuffle_list, zodiac_story_shuffle_list, sidequest_zodiac_shuffle_list, \
+    sidequest_boss_shuffle_list
+from .enemyrando.RandomizedUnitFactory import RandomizedUnitFactory
+from .enemyrando.RandomizedUnits import RandomizedUnit
+from .enemyrando.SourceUnit import SourceUnit
+from .enemyrando.SpriteSet import SpriteSet
 
 
 class FinalFantasyTacticsIISettings(settings.Group):
@@ -98,8 +111,9 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
     starting_pass: str
     zodiac_stones_required: int
     zodiac_stones_in_pool: int
+    enemy_rando_mapping: dict[EventCode, list[RandomizedMapping]]
 
-    version = "0.1.0"
+    version = "0.2.2"
     debug = False
     topology_present = debug
 
@@ -125,10 +139,67 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
     def create_event(self, name: str) -> "FinalFantasyTacticsIIItem":
         return FinalFantasyTacticsIIItem(name, ItemClassification.progression, None, self.player)
 
+    def create_enemy_rando_mapping(self):
+        # Switch modes based on settings
+        # For now, just boss enemy shuffle
+        if True: # if unique enemy shuffle
+            source_units: list[SourceUnit] = valid_shuffle_source_units.copy()
+            destination_units = base_shuffle_list.copy()
+            if True: # if Zodiac bosses are in
+                source_units.extend(zodiac_shuffle_source_units)
+                destination_units.extend(zodiac_story_shuffle_list)
+                if True: # if sidequest zodiac bosses are in
+                    source_units.extend(zodiac_sidequest_source_units)
+                    destination_units.extend(sidequest_zodiac_shuffle_list)
+            if True: # if sidequest bosses are in
+                source_units.extend(sidequest_shuffle_source_units)
+                destination_units.extend(sidequest_boss_shuffle_list)
+            # for each souorce unit, get a unit factory
+            assert len(source_units) == len(destination_units), (len(source_units), len(destination_units))
+            destination_unit_jobs = [unit.job for unit in destination_units]
+            unit_factories: dict[Job, RandomizedUnitFactory] = {
+                job.job: RandomizedUnitFactory({job: 1}, self.random) for job in destination_units
+            }
+            for source_unit in source_units:
+                assert source_unit.job in destination_unit_jobs, Job(source_unit.job).name
+            mapping_dict: dict[EventCode, list[RandomizedMapping]] = {}
+            for fight in all_fights:
+                mapping_dict[fight.battle_id] = list()
+                for fight_source_unit in fight.source_units:
+                    if fight_source_unit in source_units:
+                        new_randomized_mapping = RandomizedMapping()
+                        new_randomized_mapping.source_unit = fight_source_unit
+                        logical_difficulty = self.options.logical_difficulty.value
+                        adjusted_battle_level = Logic.battle_levels[logical_difficulty][fight.battle_level]
+                        new_randomized_mapping.battle_level = adjusted_battle_level
+                        mapping_dict[fight.battle_id].append(new_randomized_mapping)
+            refined_dict = {key: value for key, value in mapping_dict.items() if len(value) > 0}
+            for battle_id, battle_mapping_list in refined_dict.items():
+                for mapping in battle_mapping_list:
+                    factory_options = {
+                        job: factory for job, factory in unit_factories.items()
+                        if factory.get_lowest_difficulty() <= mapping.battle_level
+                           and job in destination_unit_jobs
+                    }
+                    destination_job = self.random.choice(sorted(list(factory_options.keys())))
+                    destination_factory = factory_options[destination_job]
+                    source = mapping.source_unit
+                    mapping.destination_unit = destination_factory.get_unit(mapping.battle_level)
+                    destination_unit_jobs.remove(destination_job)
+            self.enemy_rando_mapping = refined_dict
+        elif True: # Randomized enemies
+            pass
+
+
     def generate_early(self) -> None:
+        self.enemy_rando_mapping: dict[EventCode, list[RandomizedMapping]] = {}
+        if False:
+            self.create_enemy_rando_mapping()
+
         # Story battles are always in
         included_locations: list[LocationNames] = []
         included_locations.extend(story_battle_locations)
+        included_locations.extend(story_stone_locations)
 
         # Character recruitment locations are always in if not tied to a sidequest
         if self.options.sidequest_battles:
@@ -148,6 +219,7 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         # Optional locations
         if self.options.sidequest_battles:
             included_locations.extend(sidequest_battle_locations)
+            included_locations.extend(sidequest_stone_locations)
         if self.options.job_unlocks:
             included_locations.extend(job_unlock_locations)
         if self.options.rare_battles:
@@ -171,11 +243,11 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         self.zodiac_stones_in_pool = self.options.zodiac_stones_in_pool.value
         # Determine number of zodiac stones based on options
         if self.options.zodiac_stone_locations == self.options.zodiac_stone_locations.option_vanilla_stones:
-            max_stones = len(story_zodiac_stone_locations)
+            max_stones = len(story_stone_locations)
             if self.options.final_battles == self.options.final_battles.option_altima_only:
-                max_stones += len(altima_only_story_zodiac_stone_locations)
+                max_stones += len(altima_only_stone_locations)
             if self.options.sidequest_battles:
-                max_stones += len(sidequest_zodiac_stone_locations)
+                max_stones += len(sidequest_stone_locations)
             self.zodiac_stones_required = min(self.zodiac_stones_required, max_stones)
             self.zodiac_stones_in_pool = min(self.zodiac_stones_in_pool, max_stones)
         if self.zodiac_stones_in_pool < self.zodiac_stones_required:
@@ -335,11 +407,11 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
 
         # Place Zodiac Stones if stones are in vanilla spots. Otherwise, add them to itempool.
         if self.options.zodiac_stone_locations == self.options.zodiac_stone_locations.option_vanilla_stones:
-            stone_locations = [location.value for location in story_zodiac_stone_locations]
+            stone_locations = [location.value for location in story_stone_locations]
             if self.options.sidequest_battles:
-                stone_locations.extend([location.value for location in sidequest_zodiac_stone_locations])
+                stone_locations.extend([location.value for location in sidequest_stone_locations])
             if self.options.final_battles == self.options.final_battles.option_altima_only:
-                stone_locations.extend([location.value for location in altima_only_story_zodiac_stone_locations])
+                stone_locations.extend([location.value for location in altima_only_stone_locations])
             stone_locations_pruned = self.random.sample(stone_locations, k=self.zodiac_stones_in_pool)
             self.random.shuffle(stone_locations)
             for stone in zodiac_stones_in_game:
@@ -461,6 +533,14 @@ class FinalFantasyTacticsIvaliceIslandWorld(World):
         patch_dict["EXPMultiplier"] = self.options.exp_gain_multiplier.value
         patch_dict["JPMultiplier"] = self.options.jp_gain_multiplier.value
         patch_dict["LocationDict"] = self.create_location_dict()
+
+        new_enemy_rando_dict = {}
+        for key, value in self.enemy_rando_mapping.items():
+            new_list = []
+            for mapping in value:
+                new_list.append(mapping.to_json())
+            new_enemy_rando_dict[key.value] = new_list
+        patch_dict["EnemyRandoMapping"] = new_enemy_rando_dict
 
         rom_name_text = f'FFTII{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:9}'
         rom_name_text = rom_name_text[:20]

@@ -816,7 +816,7 @@ class ChestDowsing(Choice):
         (after obtaining the necessary song or Sea Chart first).
     **All Chests**: dowsing points to all chests (regardless of their contents).
     **Progress Items**: dowsing only points to chests containing progress items
-        (doesn't work with Goddess Chests).
+        (Goddess Chests must be activated by their respective Goddess Cube before being dowsable)).
     """
 
     display_name = "Chest Dowsing"
@@ -949,3 +949,4 @@ class SSOptions(PerGameCommonOptions):
     starting_items: StartInventoryPool
     death_link: DeathLink
     progression_balancing: SSProgressionBalancing
+

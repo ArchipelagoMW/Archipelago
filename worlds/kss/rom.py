@@ -99,10 +99,11 @@ def patch_rom(world: "KSSWorld", patch: KSSProcedurePatch) -> None:
     if world.options.kirby_flavor_preset.value:
         if isinstance(world.options.kirby_flavor_preset.value, int):
             flavors = {key: world.options.kirby_flavor_preset.value for key in palette_addresses.keys()}
+
         else:
-            flavors = {key: KirbyFlavorPreset.options[val]
+            flavors = {key: KirbyFlavorPreset.options[val] if val in KirbyFlavorPreset.options else val
                        for key, val in world.options.kirby_flavor_preset.value.items()
-                       if KirbyFlavorPreset.options[val] != 0}
+                       if val not in KirbyFlavorPreset.options or KirbyFlavorPreset.options[val] != 0}
         for ability, flavor in flavors.items():
             for palette in palette_addresses[ability]:
                 patch.write_bytes(palette, get_palette_bytes(get_palette(world, flavor), palette_factors[palette]))

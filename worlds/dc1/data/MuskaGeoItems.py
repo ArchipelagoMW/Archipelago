@@ -1,8 +1,8 @@
 from typing import List
 
 from BaseClasses import ItemClassification
-from worlds.dc1.Items import DarkCloudItem
-from worlds.dc1.Options import DarkCloudOptions
+from ..Items import DarkCloudItem
+from ..Options import DarkCloudOptions
 
 ids = {
     "Progressive Chief's House": 971110400,
@@ -19,7 +19,24 @@ ids = {
     "Progressive Oasis": 971110411,
     "Muska Lacka Trees": 971110412,
     "Muska Lacka Road": 971110413
-  }
+}
+
+classifications = {
+    "Progressive Chief's House": ItemClassification.progression | ItemClassification.useful | ItemClassification.filler,
+    "Progressive Jibubu's House": ItemClassification.progression | ItemClassification.useful,
+    "Progressive Zabo's House": ItemClassification.progression | ItemClassification.useful,
+    "Progressive 3 Sisters' House": ItemClassification.progression,
+    "Progressive Brooke's House": ItemClassification.progression | ItemClassification.useful,
+    "Progressive Enga's House": ItemClassification.progression | ItemClassification.useful,
+    "Progressive Prisoner Cabin": ItemClassification.progression | ItemClassification.useful | ItemClassification.filler,
+    "Progressive Toto's House": ItemClassification.progression | ItemClassification.useful,
+    "Progressive Totem Pole A": ItemClassification.progression | ItemClassification.filler,
+    "Progressive Totem Pole B": ItemClassification.progression | ItemClassification.filler,
+    "Progressive Totem Pole C": ItemClassification.progression | ItemClassification.filler,
+    "Progressive Oasis": ItemClassification.useful | ItemClassification.filler,
+    "Muska Lacka Trees": ItemClassification.filler,
+    "Muska Lacka Road": ItemClassification.filler
+}
 
 # Required for Ungaga
 sister_ids = ["Progressive 3 Sisters' House", "Progressive 3 Sisters' House", "Progressive 3 Sisters' House",
@@ -31,8 +48,8 @@ chief_ids = ["Progressive Chief's House", "Progressive Chief's House",
              "Progressive Chief's House", "Progressive Chief's House"]
 zabo_ids = ["Progressive Zabo's House", "Progressive Zabo's House", "Progressive Zabo's House",
             "Progressive Zabo's House", "Progressive Zabo's House"]
-enga_ids = ["Progressive Enga's House", "Progressive Enga's House", "Progressive Enga's House",
-            "Progressive Enga's House", "Progressive Enga's House", "Progressive Enga's House"]
+enga_ids = ["Progressive Enga's House", "Progressive Enga's House",
+            "Progressive Enga's House", "Progressive Enga's House"]
 
 jibubu_ids = ["Progressive Jibubu's House", "Progressive Jibubu's House",
               "Progressive Jibubu's House", "Progressive Jibubu's House"]
@@ -50,7 +67,8 @@ misc_ids = ["Muska Lacka Trees", "Muska Lacka Trees", "Muska Lacka Road", "Muska
             "Muska Lacka Road", "Muska Lacka Road", "Muska Lacka Road"]
 
 
-mc_required = ["Progressive Chief's House", "Progressive Enga's House", "Progressive Toto's House"]
+mc_required = ["Progressive Chief's House", "Progressive Toto's House",
+               "Progressive Enga's House", "Progressive Enga's House", "Progressive Enga's House"]
 mc_useful = ["Progressive Jibubu's House", "Progressive Jibubu's House", "Progressive Brooke's House",
              "Progressive Prisoner Cabin", "Progressive Oasis"]
 mc_filler = ["Progressive Totem Pole A", "Progressive Totem Pole B", "Progressive Totem Pole C"]
@@ -61,9 +79,10 @@ required = sister_ids
 useful = jibubu_ids + brooke_ids + toto_ids
 filler = prisoner_ids + oasis_ids + totem_ids + misc_ids
 
+
 def create_muska_atla(options: DarkCloudOptions, player: int) -> List["DarkCloudItem"]:
     items = []
-    
+
     muska_required = required.copy() + mc_required.copy()
     muska_useful = useful.copy()
     muska_filler = filler.copy()
@@ -98,4 +117,3 @@ def create_muska_atla(options: DarkCloudOptions, player: int) -> List["DarkCloud
     # print(len(items))
     # print (items)
     return items
-

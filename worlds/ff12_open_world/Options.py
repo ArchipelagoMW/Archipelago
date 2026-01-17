@@ -15,10 +15,10 @@ class ShuffleMainParty(Toggle):
     default = 1
 
 
-class CharacterProgressionScaling(Toggle):
-    """In addition to the progression scaling, also scale the progression based on the number of party members
-       and if the second license board has been unlocked."""
-    display_name = "Character Progression Scaling"
+class ProgressiveScaling(Toggle):
+    """In addition to the progression scaling, also scale the progression based on the number of party members, 
+    the second license board has been unlocked, and progressive access to slightly easier regions to unlock more difficult areas."""
+    display_name = "Difficulty Progressive Scaling"
     default = 1
 
 
@@ -66,19 +66,25 @@ class BahamutUnlock(Choice):
     Defeat Cid 2: Climb the Pharos and defeat Cid 2 (Requires 2 magicites and 1 story sword).
     Collect Pinewood Chops: Collect 28 pinewood chops from the multiworld and turn in for the Sandalwood Chop check.
     Collect Espers: Collect all 13 espers and turn in for the Clan Hall Control 13 Espers check.
+    Defeat Shadowseer: Defeat the Shadowseer in the Pharos and turn in for the Hunt 44: Shadowseer check.
+    Defeat Yiazmat: Defeat Yiazmat in Ridorana and turn in for the Hunt 45: Yiazmat check.
+    Defeat Omega: Defeat Omega Mark XII in the Great Crystal and turn in for the Clan Boss: Omega Mark XII check.
     Random Location: The Writ of Transit can be anywhere in the multiworld."""
     display_name = "Bahamut Unlock Goal"
     option_defeat_cid_2 = 0
     option_collect_pinewood_chops = 1
     option_collect_espers = 2
-    option_random_location = 3
+    option_defeat_shadowseer = 3
+    option_defeat_yiazmat = 4
+    option_defeat_omega = 5
+    option_random_location = 6
     default = 0
 
 
 @dataclass
 class FF12OpenWorldGameOptions(PerGameCommonOptions):
     shuffle_main_party: ShuffleMainParty
-    character_progression_scaling: CharacterProgressionScaling
+    difficulty_progressive_scaling: ProgressiveScaling
     include_treasures: IncludeTreasures
     include_chops: IncludeChops
     include_black_orbs: IncludeBlackOrbs

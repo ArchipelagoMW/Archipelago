@@ -1,7 +1,8 @@
 import typing
 
 from BaseClasses import Region, CollectionState, ItemClassification
-from .locations import K64Location, location_table
+from .consumable_info import consumable_by_level
+from .locations import K64Location, location_table, star_locations, food_locations, one_up_locations
 from .items import K64Item
 from .names import LocationName, ItemName
 from .rules import (burn_levels, needle_levels, stone_levels,
@@ -38,23 +39,30 @@ class K64Region(Region):
 
 
 default_levels = {
-    1: [0x640001, 0x640002, 0x640003, 0x640200],
-    2: [0x640004, 0x640005, 0x640006, 0x640007, 0x640201],
-    3: [0x640008, 0x640009, 0x64000A, 0x64000B, 0x640202],
-    4: [0x64000C, 0x64000D, 0x64000E, 0x64000F, 0x640203],
-    5: [0x640010, 0x640011, 0x640012, 0x640013, 0x640204],
-    6: [0x640014, 0x640015, 0x640016, 0x640205],
+    1: [0x0001, 0x0002, 0x0003, 0x0200],
+    2: [0x0004, 0x0005, 0x0006, 0x0007, 0x0201],
+    3: [0x0008, 0x0009, 0x000A, 0x000B, 0x0202],
+    4: [0x000C, 0x000D, 0x000E, 0x000F, 0x0203],
+    5: [0x0010, 0x0011, 0x0012, 0x0013, 0x0204],
+    6: [0x0014, 0x0015, 0x0016, 0x0205],
 }
 
-first_stage_blacklist = {
-
+first_level_restrict = {
+    0x0009,
+    0x000A,
+    0x000D,
+    0x000F,
+    0x0010,
+    0x0013,
+    0x0015,
 }
 
 
-def generate_valid_level(level, stage, possible_stages, slot_random):
+def generate_valid_level(level, stage, possible_stages, restrict, slot_random):
     new_stage = slot_random.choice(possible_stages)
-    if level == 1 and stage == 0 and new_stage in first_stage_blacklist:
-        return generate_valid_level(level, stage, possible_stages, slot_random)
+    possible_stages.remove(new_stage)
+    if restrict and new_stage in first_level_restrict:
+        return generate_valid_level(level, stage, possible_stages, restrict, slot_random)
     else:
         return new_stage
 
@@ -97,8 +105,14 @@ def generate_valid_levels(world: "K64World", enforce_world: bool) -> dict:
                                         if (not enforce_world)
                                         or (enforce_world and candidate in default_levels[level])
                                         ]
-                    new_stage = generate_valid_level(level, stage, stage_candidates,
-                                                     world.random)
+                    if level == 1:
+                        if any(levels[level][x] in first_level_restrict for x in range(len(levels[level]))):
+                            restrict = True
+                        else:
+                            restrict = False
+                    else:
+                        restrict = False
+                    new_stage = generate_valid_level(level, stage, stage_candidates, restrict, world.random)
                     possible_stages.remove(new_stage)
                     levels[level][stage] = new_stage
             except Exception:
@@ -181,15 +195,31 @@ def create_levels(world: "K64World") -> None:
             region = K64Region(location_table[real_stage].replace(" - Complete", "").replace(" Defeated", ""),
                                world.player, world.multiworld)
             levels[level].connect(region)
-            crystals = [(((real_stage & 0xFF) - 1) * 3) + i + 0x640101 for i in range(3) if not real_stage & 0x200]
+            crystals = [(((real_stage & 0xFF) - 1) * 3) + i + 0x0101 for i in range(3) if not real_stage & 0x200]
+            real_consumables = []
+            if real_stage in consumable_by_level:
+                consumables = range(*consumable_by_level[real_stage])
+                for consumable in consumables:
+                    if consumable in star_locations and "Stars" in world.options.consumables:
+                        real_consumables.append(consumable)
+                    elif consumable in one_up_locations and "1-Ups" in world.options.consumables:
+                        real_consumables.append(consumable)
+                    elif consumable in food_locations and "Food" in world.options.consumables:
+                        real_consumables.append(consumable)
             locations = {
                 location_table[code]: code for code in location_table
-                if code in [real_stage, *crystals]
+                if code in [real_stage, *crystals, *real_consumables]
             }
+
             region.add_locations(locations, K64Location)
             world.multiworld.regions.append(region)
 
-    level7.add_locations({LocationName.dark_star: None}, K64Location)
+    dark_star_locations: dict[str, int|None] = {LocationName.dark_star: None}
+
+    if "Food" in world.options.consumables:
+        dark_star_locations[LocationName.dark_star_adeleine] = 0x0761
+
+    level7.add_locations(dark_star_locations, K64Location)
 
     menu.connect(level1, "Start Game")
     level1.connect(level2, "To Level 2")

@@ -1,6 +1,6 @@
 import itertools
-
-from .Rom import openFile
+import pkgutil
+from io import BufferedIOBase, BytesIO
 
 def range_union(ranges):
     ret = []
@@ -34,30 +34,33 @@ class IPS_Patch(object):
 
     @staticmethod
     def load(filename):
-        loaded_patch = IPS_Patch()
-        with openFile(filename, 'rb') as file:
-            header = file.read(5)
-            if header != b'PATCH':
-                raise Exception('Not a valid IPS patch file!')
-            while True:
-                address_bytes = file.read(3)
-                if address_bytes == b'EOF':
-                    break
-                address = int.from_bytes(address_bytes, byteorder='big')
-                length = int.from_bytes(file.read(2), byteorder='big')
-                rle_count = 0
-                if length == 0:
-                    rle_count = int.from_bytes(file.read(2), byteorder='big')
-                    length = 1
-                data = file.read(length)
-                if rle_count > 0:
-                    loaded_patch.add_rle_record(address, data, rle_count)
-                else:
-                    loaded_patch.add_record(address, data)
+        return IPS_Patch.decode(BytesIO(pkgutil.get_data(__name__, filename)))
 
-            truncate_bytes = file.read(3)
-            if len(truncate_bytes) == 3:
-                loaded_patch.set_truncate_length(int.from_bytes(truncate_bytes, byteorder='big'))
+    @staticmethod
+    def decode(patch_bytes: BufferedIOBase):
+        loaded_patch = IPS_Patch()
+        header = patch_bytes.read(5)
+        if header != b'PATCH':
+            raise Exception('Not a valid IPS patch file!')
+        while True:
+            address_bytes = patch_bytes.read(3)
+            if address_bytes == b'EOF':
+                break
+            address = int.from_bytes(address_bytes, byteorder='big')
+            length = int.from_bytes(patch_bytes.read(2), byteorder='big')
+            rle_count = 0
+            if length == 0:
+                rle_count = int.from_bytes(patch_bytes.read(2), byteorder='big')
+                length = 1
+            data = patch_bytes.read(length)
+            if rle_count > 0:
+                loaded_patch.add_rle_record(address, data, rle_count)
+            else:
+                loaded_patch.add_record(address, data)
+
+        truncate_bytes = patch_bytes.read(3)
+        if len(truncate_bytes) == 3:
+            loaded_patch.set_truncate_length(int.from_bytes(truncate_bytes, byteorder='big'))
         return loaded_patch
 
     @staticmethod

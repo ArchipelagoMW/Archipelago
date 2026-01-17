@@ -2,6 +2,8 @@ from worlds.generic.Rules import set_rule, add_rule
 from worlds.AutoWorld import LogicMixin
 from BaseClasses import MultiWorld
 from copy import deepcopy
+from .consumable_info import consumable_by_level
+from .locations import star_locations
 from .names import LocationName, ItemName
 import typing
 
@@ -387,6 +389,78 @@ def has_adeleine(state: "CollectionState", player: int):
 def has_king_dedede(state: "CollectionState", player: int):
     return state.has(ItemName.king_dedede, player)
 
+def set_oneup_rules(world: "K64World"):
+    for location in (LocationName.neo_star_2_u1, LocationName.neo_star_2_u2):
+        set_rule(world.get_location(location), lambda state: has_waddle_dee(state, world.player))
+    for location in (LocationName.aqua_star_3_u1, LocationName.neo_star_4_u1, LocationName.ripple_star_2_u1, LocationName.ripple_star_2_u2):
+        set_rule(world.get_location(location), lambda state: has_king_dedede(state, world.player))
+    add_rule(world.get_location(LocationName.ripple_star_2_u2), lambda state: has_any_spark(state, world.player))
+    add_rule(world.get_location(LocationName.aqua_star_3_u1),
+             lambda state: has_stone_friends(state, world.player, world.options.split_power_combos.value))
+
+def set_food_rules(world: "K64World"):
+    # Waddle Dee
+    for location in (LocationName.rock_star_1_f5, LocationName.aqua_star_2_f4, LocationName.aqua_star_2_f5,
+                     LocationName.aqua_star_2_f6, LocationName.aqua_star_2_f7, LocationName.aqua_star_2_f8,
+                     LocationName.aqua_star_2_f9, LocationName.aqua_star_2_f10, LocationName.aqua_star_2_f11,
+                     LocationName.neo_star_2_f2, LocationName.neo_star_2_f3, LocationName.neo_star_2_f4,
+                     LocationName.neo_star_2_f5, LocationName.neo_star_2_f6, LocationName.neo_star_2_f7,
+                     LocationName.neo_star_2_f8, LocationName.neo_star_2_f9, LocationName.neo_star_2_f10,
+                     LocationName.shiver_star_1_f4, LocationName.shiver_star_1_f5, LocationName.shiver_star_1_f6,
+                     LocationName.shiver_star_1_f7, LocationName.shiver_star_1_f8, LocationName.shiver_star_1_f9,
+                     LocationName.shiver_star_1_f10, LocationName.shiver_star_1_f11, LocationName.shiver_star_1_f12,):
+        set_rule(world.get_location(location), lambda state: has_waddle_dee(state, world.player))
+    # King Dedede
+    for location in (LocationName.rock_star_2_f7, LocationName.rock_star_2_f8, LocationName.rock_star_2_f9,
+                     LocationName.rock_star_2_f10, LocationName.aqua_star_3_f3, LocationName.neo_star_4_f3,
+                     LocationName.neo_star_4_f4, LocationName.neo_star_4_f5, LocationName.neo_star_4_f6,
+                     LocationName.neo_star_4_f7, LocationName.neo_star_4_f8, LocationName.neo_star_4_f9,
+                     LocationName.neo_star_4_f10, LocationName.neo_star_4_f11, LocationName.neo_star_4_f12,
+                     LocationName.neo_star_4_f13, LocationName.neo_star_4_f14, LocationName.ripple_star_2_f3,
+                     LocationName.ripple_star_2_f4, LocationName.ripple_star_2_f5, LocationName.ripple_star_2_f6,
+                     LocationName.ripple_star_2_f7, LocationName.ripple_star_2_f8, LocationName.ripple_star_2_f9,
+                     LocationName.ripple_star_2_f10, LocationName.ripple_star_2_f11):
+        set_rule(world.get_location(location), lambda state: has_king_dedede(state, world.player))
+    # Adeleine
+    for location in (LocationName.pop_star_3_f3, LocationName.aqua_star_1_f8, LocationName.dark_star_adeleine):
+        set_rule(world.get_location(location), lambda state: has_adeleine(state, world.player))
+    add_rule(world.get_location(LocationName.ripple_star_2_f10), lambda state: has_any_ice(state, world.player))
+    add_rule(world.get_location(LocationName.ripple_star_2_f11), lambda state: has_any_needle(state, world.player))
+
+def set_star_rules(world: "K64World"):
+    # define the ranges for each level in question
+    waddle_dee_range_start = {
+        0x0004: 0x0455,
+        0x0009: 0x0508,
+        0x000D: 0x05C7,
+        0x0010: 0x0653,
+    }
+    dedede_range_start = {
+        0x0007: 0x0480,
+        0x000A: 0x054A,
+        0x000F: 0x061F,
+        0x0013: 0x06E3,
+        0x0015: 0x072E,
+    }
+    for level, start in waddle_dee_range_start.items():
+        for loc in range(start, consumable_by_level[level][1]):
+            if loc in star_locations:
+                set_rule(world.get_location(star_locations[loc]), lambda state: has_waddle_dee(state, world.player))
+    for level, start in dedede_range_start.items():
+        for loc in range(start, consumable_by_level[level][1]):
+            if loc in star_locations:
+                set_rule(world.get_location(star_locations[loc]), lambda state: has_king_dedede(state, world.player))
+
+    for location in (LocationName.aqua_star_1_t35, LocationName.aqua_star_1_t36,
+                     LocationName.aqua_star_1_t37, LocationName.aqua_star_1_t38):
+        add_rule(world.get_location(location),
+                 lambda state: has_exploding_snowman(state, world.player, world.options.split_power_combos.value))
+
+    for location in (LocationName.shiver_star_4_t6, LocationName.shiver_star_4_t7):
+        add_rule(world.get_location(location),
+                 lambda state: has_drill(state, world.player, world.options.split_power_combos.value))
+
+
 
 def set_rules(world: "K64World") -> None:
     # Level 1
@@ -428,8 +502,10 @@ def set_rules(world: "K64World") -> None:
         set_rule(world.get_location(location), lambda state: has_king_dedede(state, world.player))
     add_rule(world.get_location(LocationName.neo_star_4_s2), lambda state: has_any_ice(state, world.player))
     # Level 5
-    set_rule(world.get_location(LocationName.shiver_star_1_s1), lambda state: has_waddle_dee(state, world.player))
-    set_rule(world.get_location(LocationName.shiver_star_1_s2), lambda state: has_any_burn(state, world.player))
+    for location in (LocationName.shiver_star_1, LocationName.shiver_star_1_s1,
+                     LocationName.shiver_star_1_s2, LocationName.shiver_star_1_s3):
+        set_rule(world.get_location(location), lambda state: has_waddle_dee(state, world.player))
+    add_rule(world.get_location(LocationName.shiver_star_1_s2), lambda state: has_any_burn(state, world.player))
     set_rule(world.get_location(LocationName.shiver_star_2_s3),
              lambda state: has_lightning_rod(state, world.player, world.options.split_power_combos.value))
     set_rule(world.get_location(LocationName.shiver_star_3_s3), lambda state: has_adeleine(state, world.player))
@@ -437,6 +513,8 @@ def set_rules(world: "K64World") -> None:
              lambda state: has_drill(state, world.player, world.options.split_power_combos.value))
     for location in (LocationName.shiver_star_4, LocationName.shiver_star_4_s2, LocationName.shiver_star_4_s3):
         set_rule(world.get_location(location), lambda state: has_king_dedede(state, world.player))
+    add_rule(world.get_location(LocationName.shiver_star_4_s2),
+             lambda state: has_lightsaber(state, world.player, world.options.split_power_combos.value))
     # Level 6
     set_rule(world.get_location(LocationName.ripple_star_1_s3),
              lambda state: has_exploding_gordo(state, world.player, world.options.split_power_combos.value)
@@ -454,6 +532,14 @@ def set_rules(world: "K64World") -> None:
                  lambda state, j=level: state.has(ItemName.crystal_shard, world.player, j))
         set_rule(world.multiworld.get_location(f"{LocationName.level_names[i]} - Boss Defeated", world.player),
                  lambda state, j=level: state.has(ItemName.crystal_shard, world.player, j))
+
+    # Consumables
+    if "1-Ups" in world.options.consumables:
+        set_oneup_rules(world)
+    if "Food" in world.options.consumables:
+        set_food_rules(world)
+    if "Stars" in world.options.consumables:
+        set_star_rules(world)
 
     # Friend Requirement
     add_rule(world.get_entrance("To Level 7"), lambda state: state.has_all([ItemName.waddle_dee, ItemName.adeleine,

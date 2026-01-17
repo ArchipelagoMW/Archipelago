@@ -66,6 +66,13 @@ class WorldSource:
                 with warnings.catch_warnings():
                     warnings.filterwarnings("ignore", message="__package__ != __spec__.parent")
                     importer.exec_module(mod)
+            # Ashipelago customization
+            elif "custom_worlds" in self.path:
+                    self.relative = True
+                    logging.info(f"Loading custom worlds before trimming path: {self.path}")
+                    self.path = self.path.replace(os.path.dirname(self.path) + os.sep, "")
+                    logging.info(f"Loading custom worlds after trimming path: {self.path}")
+                    importlib.import_module(f".{self.path}", "custom_worlds")
             else:
                 importlib.import_module(f".{self.path}", "worlds")
             self.time_taken = time.perf_counter()-start

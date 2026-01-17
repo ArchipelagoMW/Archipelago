@@ -4,8 +4,8 @@ from enum import IntEnum
 from typing import Type, List, Dict
 
 from Options import (Choice, DeathLink, PerGameCommonOptions, StartInventoryPool, Toggle, Range, OptionSet,
-                     DefaultOnToggle, NamedRange)
-from .Data import Locations
+                     DefaultOnToggle, NamedRange, OptionCounter)
+from .Data import Locations, Items
 from .Data.Regions import Red_Cave
 
 
@@ -82,6 +82,15 @@ class Dustsanity(Toggle):
     [On] Picking up dust counts as a check the first time it gets picked up by a broom. Dust will appear gold if it has yet to be picked up.
     """
     display_name = "Dustsanity"
+
+
+class RockSanity(Toggle):
+    """
+    Select if interacting with rocks counts as a check.
+    [Off] Rocks behave as in the normal game.
+    [On] Interacting with rocks sends out a check.
+    """
+    display_name = "Rocksanity"
 
 
 class RedCaveAccess(Choice):
@@ -408,10 +417,21 @@ class IncludeForestBunnyChest(Toggle):
 
 
 class TrapPercentage(Range):
-    """Determines how many traps will be generated."""
+    """Determines how many filler items will be traps."""
     display_name = "Traps Percentage"
     range_end = 100
     default = 25
+
+
+class TrapWeights(OptionCounter):
+    """Specify the distribution of traps that should be placed into the pool.
+
+    If you don't want a specific type of trap, set the weight to zero.
+    """
+    display_name = "Trap Weights"
+    valid_keys = Items.Trap.names()
+    min = 0
+    default = {full_name: 1 for full_name in Items.Trap.names()}
 
 
 class CardAmount(NamedRange):
@@ -491,7 +511,9 @@ class AnodyneGameOptions(PerGameCommonOptions):
     custom_nexus_gates_open: CustomNexusGatesOpen
     # Extra Locations
     dustsanity: Dustsanity
+    rocksanity: RockSanity
     health_cicada_shuffle: HealthCicadaShuffle
     forest_bunny_chest: IncludeForestBunnyChest
     # Filler Items
     traps_percentage: TrapPercentage
+    trap_weights: TrapWeights

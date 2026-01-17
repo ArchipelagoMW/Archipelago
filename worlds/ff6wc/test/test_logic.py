@@ -1,4 +1,5 @@
-from typing import ClassVar, Iterable
+from collections.abc import Iterable
+from typing import ClassVar
 
 from worlds.ff6wc import Locations
 from . import FF6WCTestBase

@@ -11,13 +11,13 @@ class TestStuffingTheMostItemsIntoBeginnerRegions(CrystalProjectTestBase):
         "kill_bosses_mode": 0,
         "shopsanity": 0,
         "regionsanity": 1,
-        "progressive_level_size": 3,
+        "progressive_level_size": 1,
         "max_level": 99,
         "key_mode": 2, #vanilla
         "start_with_treasure_finder": 0,
-        "start_with_maps": 1,
+        "start_with_maps": 0,
         "include_summon_abilities": 1,
         "include_scholar_abilities": 1
     }
-    #Todo: turn off start with maps in the future once we get enough item massaging for that to not break unit tests
+
     run_default_tests = True

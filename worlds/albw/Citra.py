@@ -1,6 +1,7 @@
 from typing import Optional
 import socket
 import struct
+import asyncio
 
 class CitraException(Exception):
     pass
@@ -16,7 +17,7 @@ class CitraInterface:
 
     socket: socket.socket
 
-    def connect(self) -> bool:
+    async def connect(self) -> bool:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.connect(("127.0.0.1", 45987))
         self.socket.settimeout(1)
@@ -37,7 +38,7 @@ class CitraInterface:
         else:
             raise Exception("Did not receive packet of expected size.")
     
-    def read(self, address: int, size: int) -> bytes:
+    async def read(self, address: int, size: int) -> bytes:
         try:
             mem = b""
             while size > 0:
@@ -49,8 +50,8 @@ class CitraInterface:
         except Exception as e:
             raise CitraException(f"Lost connection to emulator ({str(e)})")
     
-    def read_u32(self, address: int) -> int:
-        return int.from_bytes(self.read(address, 4), "little")
+    async def read_u32(self, address: int) -> int:
+        return int.from_bytes(await self.read(address, 4), "little")
 
     def _write_single(self, address: int, data: bytes) -> None:
         out_packet = struct.pack("=IIIIII", self.PACKET_VERSION, 0, self.TYPE_WRITE, 8 + len(data), address, len(data))
@@ -58,7 +59,7 @@ class CitraInterface:
         self.socket.sendall(out_packet)
         self.socket.recv(self.HEADER_SIZE)
 
-    def write(self, address: int, data: bytes) -> None:
+    async def write(self, address: int, data: bytes) -> None:
         try:
             start = 0
             while start < len(data):
@@ -68,5 +69,5 @@ class CitraInterface:
         except Exception as e:
             raise CitraException(f"Lost connection to emulator ({str(e)})")
 
-    def write_u32(self, address: int, value: int) -> None:
-        self.write(address, value.to_bytes(4, "little"))
+    async def write_u32(self, address: int, value: int) -> None:
+        await self.write(address, value.to_bytes(4, "little"))

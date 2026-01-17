@@ -14,16 +14,21 @@ class LocationType(Enum):
     Dust = auto()
     Nexus = auto()
     AreaEvent = auto()
+    Rock = auto()
 
 
 class LocationData(NamedTuple):
     region: RegionEnum
     base_name: str
     reqs: List[str]
-    tracker_loc: tuple[int, int]
+    tracker_loc_: tuple[int, int]
     type: LocationType = LocationType.Chest
     has_key: bool = False
     outside_of_dungeon: bool = False
+
+    @property
+    def tracker_loc(self):
+        return self.tracker_loc_[0] + self.region.ut_map_offset()[0], self.tracker_loc_[1] + self.region.ut_map_offset()[1]
 
     @property
     def name(self):
@@ -53,13 +58,16 @@ class LocationData(NamedTuple):
     def nexus_gate(self):
         return self.type == LocationType.Nexus
 
+    @property
+    def rock(self):
+        return self.type == LocationType.Rock
+
     def postgame(self, secret_paths: bool):
         return (("SwapOrSecret" in self.reqs and not secret_paths) or "Progressive Swap:2"
                 in self.reqs or self.region in postgame_regions or (
                         not secret_paths and self.region in postgame_without_secret_paths))
 
 
-# This array must maintain a consistent order because the IDs are generated from it.
 all_locations: List[LocationData] = [
     # 0AC41F72-EE1D-0D32-8F5D-8F25796B6396
     LocationData(Apartment.floor_1, "1F Ledge Chest", ["Combat"], (24, 504), has_key=True),
@@ -81,8 +89,8 @@ all_locations: List[LocationData] = [
     LocationData(Bedroom.core, "Rock-Surrounded Chest", [], (456, 600)),
     LocationData(Bedroom.exit, "Boss Chest", [], (552, 40)),
     # D41F2750-E3C7-BBB4-D650-FAFC190EBD32
-    LocationData(Bedroom.after_statue, "After Statue Left Chest", [], (920, 24), has_key=True),
-    LocationData(Bedroom.after_statue, "After Statue Right Chest", [], (936, 24)),
+    LocationData(Bedroom.after_statue, "After Statue Left Chest", [], (924, 24), has_key=True),
+    LocationData(Bedroom.after_statue, "After Statue Right Chest", [], (924, 24)),
     # 401939A4-41BA-E07E-3BA2-DC22513DCC5C
     LocationData(Bedroom.core, "Dark Room Chest", [], (184, 504), has_key=True),
     LocationData(Blank.windmill, "Card Chest", [], (920, 264)),
@@ -99,8 +107,8 @@ all_locations: List[LocationData] = [
     # A2479A02-9B0D-751F-71A4-DB15C4982DF5
     LocationData(Circus.third_key_gauntlet, "Lion Chest", [], (232, 344), has_key=True),
     LocationData(Circus.north_gauntlet, "Double Clowns Chest", [], (616, 424)),
-    LocationData(Circus.boss_gauntlet, "Boss Chest", ["Defeat Servants"], (1192, 24)),
-    LocationData(Cliffs.post_windmill, "Upper Chest", [], (744, 932)),
+    LocationData(Circus.post_boss, "Boss Chest", [], (1192, 24)),
+    LocationData(Cliffs.post_windmill, "Upper Chest", [], (744, 392)),
     LocationData(Cliffs.post_windmill, "Lower Chest", [], (440, 1224)),
     LocationData(Crowd.floor_2_gauntlets, "2F Crowded Ledge Chest", ["Small Key (Mountain Cavern):4"], (360, 344)),
     # BE2FB96B-1D5F-FCD1-3F58-D158DB982C21
@@ -116,8 +124,8 @@ all_locations: List[LocationData] = [
     # 868736EF-EC8B-74C9-ACAB-B7BC56A44394
     LocationData(Crowd.floor_2_gauntlets, "2F Frogs and Rotators Chest", [], (904, 712), has_key=True),
     LocationData(Debug.DEFAULT, "River Puzzles Chest", ["Combat", "Jump Shoes"], (728, 600)),
-    LocationData(Debug.DEFAULT, "Upper Prison Chest", [], (72, 664)),
     LocationData(Debug.DEFAULT, "Lower Prison Chest", [], (136, 1080)),
+    LocationData(Debug.DEFAULT, "Upper Prison Chest", [], (72, 664)),
     LocationData(Debug.DEFAULT, "Jumping Chest", [], (872, 56)),
     LocationData(Debug.DEFAULT, "Maze Chest", ["Jump Shoes"], (888, 1496)),
     LocationData(Drawer.DEFAULT, "Game Over Chest", ["Progressive Swap:2"], (440, 200)),
@@ -161,8 +169,8 @@ all_locations: List[LocationData] = [
     LocationData(Hotel.floor_2, "2F Crevice Left Chest", ["Jump Shoes"], (1336, 376), has_key=True),
     LocationData(Hotel.floor_1, "Boss Chest", ["Defeat Manager"], (1352, 1832)),
     LocationData(Hotel.roof, "Roof Chest", ["Combat", "Progressive Swap:2"], (936, 88), outside_of_dungeon=True),
-    LocationData(Nexus.top, "Isolated Chest", ["Progressive Swap:2"], (520, 88)),
-    LocationData(Overworld.DEFAULT, "Near Gate Chest", [], (184, 1544)),
+    LocationData(Nexus.top, "Isolated Chest", ["Progressive Swap:2"], (840, 408)),
+    LocationData(Overworld.west, "Near Gate Chest", [], (184, 1544)),
     LocationData(Overworld.post_windmill, "After Temple Chest", ["Combat"], (920, 1240)),
     LocationData(Red_Cave.top, "Top Cave Slasher Chest", ["Combat"], (24, 24)),
     # 72BAD10E-598F-F238-0103-60E1B36F6240
@@ -195,8 +203,8 @@ all_locations: List[LocationData] = [
     LocationData(Street.DEFAULT, "Broom Chest", [], (776, 680)),
     LocationData(Street.DEFAULT, "Secret Chest", ["Progressive Swap:2"], (280, 1016)),
     LocationData(Terminal.DEFAULT, "Broken Bridge Chest", [], (744, 392)),
-    LocationData(Windmill.DEFAULT, "Post Activation Chest", [], (216, 376)),
-    LocationData(Windmill.DEFAULT, "Activation", [], (216, 376), type=LocationType.AreaEvent),
+    LocationData(Windmill.third_gate, "Post Activation Chest", [], (24, 840)),
+    LocationData(Windmill.third_gate, "Activation", [], (56, 376), type=LocationType.AreaEvent),
     LocationData(Boss_Rush.DEFAULT, "Reward Chest", [], (376, 104)),
     # Health Cicadas
     LocationData(Apartment.floor_3, "Health Cicada", ["Defeat Watcher"], (1192, 1032), type=LocationType.Cicada),
@@ -207,7 +215,7 @@ all_locations: List[LocationData] = [
     LocationData(Circus.boss_gauntlet, "Health Cicada", ["Defeat Servants"], (712, 184), type=LocationType.Cicada),
     LocationData(Crowd.floor_1, "Health Cicada", ["Defeat The Wall"], (1512, 1016), type=LocationType.Cicada),
     LocationData(Hotel.floor_1, "Health Cicada", ["Defeat Manager"], (1352, 1688), type=LocationType.Cicada),
-    LocationData(Overworld.Gauntlet, "Health Cicada", [], (264, 904), type=LocationType.Cicada),
+    LocationData(Overworld.gauntlet, "Health Cicada", [], (264, 904), type=LocationType.Cicada),
     LocationData(Red_Cave.top, "Health Cicada", ["Defeat Rogue"], (1032, 24), type=LocationType.Cicada),
     LocationData(Suburb.past_gate, "Health Cicada", [], (680, 408), type=LocationType.Cicada),
     LocationData(Bedroom.exit, "Green Key", [], (600, 104), type=LocationType.BigKey),
@@ -219,7 +227,7 @@ all_locations: List[LocationData] = [
                  type=LocationType.Tentacle),
     LocationData(Red_Cave.right, "Right Cave Tentacle", ["Small Key (Red Grotto):6"], (872, 680),
                  type=LocationType.Tentacle),
-    LocationData(Go.top, "Defeat Briar", ["Combat", "Jump Shoes"], (400, 240), type=LocationType.AreaEvent),
+    LocationData(Go.top, "Defeat Briar", ["Combat", "Jump Shoes", "Complete Blue", "Complete Happy"], (400, 240), type=LocationType.AreaEvent),
     # Nexus portals
     LocationData(Apartment.floor_1, "Warp Pad", [], (368, 768), type=LocationType.Nexus),
     LocationData(Beach.DEFAULT, "Warp Pad", [], (1039, 400), type=LocationType.Nexus),
@@ -240,7 +248,7 @@ all_locations: List[LocationData] = [
     LocationData(Suburb.DEFAULT, "Warp Pad", [], (400, 544), type=LocationType.Nexus),
     LocationData(Space.DEFAULT, "Warp Pad", [], (880, 400), type=LocationType.Nexus),
     LocationData(Terminal.DEFAULT, "Warp Pad", [], (448, 736), type=LocationType.Nexus),
-    LocationData(Windmill.entrance, "Warp Pad", [], (272, 1040), type=LocationType.Nexus),
+    LocationData(Windmill.first_gate, "Warp Pad", [], (112, 1040), type=LocationType.Nexus),
     LocationData(Blue.DEFAULT, "Completion Reward", ["Jump Shoes", "Combat"], (88, 40), type=LocationType.AreaEvent),
     LocationData(Happy.gauntlet, "Completion Reward", [], (662, 186), type=LocationType.AreaEvent),
     # Dust locations
@@ -259,7 +267,7 @@ all_locations: List[LocationData] = [
     LocationData(Apartment.floor_1, "1F Flooded Room Dust", [], (280, 536), type=LocationType.Dust),
     LocationData(Apartment.floor_1, "1F Flooded Library Dust", [], (360, 296), type=LocationType.Dust),
     LocationData(Bedroom.core, "Laser Room Dust 1", [], (408, 536), type=LocationType.Dust),
-    LocationData(Bedroom.core, "Laser Room Dust 2", [], (392, 568), type=LocationType.Dust),
+    LocationData(Bedroom.core, "Laser Room Dust 2", [], (402, 569), type=LocationType.Dust),
     LocationData(Bedroom.core, "Room With Holes Dust 1", [], (200, 344), type=LocationType.Dust),
     LocationData(Bedroom.core, "Room With Holes Dust 2", [], (296, 360), type=LocationType.Dust),
     LocationData(Bedroom.core, "Past Shieldy Puzzle Dust 1", [], (264, 280), type=LocationType.Dust),
@@ -317,15 +325,15 @@ all_locations: List[LocationData] = [
     LocationData(Debug.DEFAULT, "Whirlpool Room Dust 1", [], (232, 264), type=LocationType.Dust),
     LocationData(Debug.DEFAULT, "Whirlpool Room Dust 2", [], (264, 216), type=LocationType.Dust),
     LocationData(Debug.DEFAULT, "Sound Test Console Dust", [], (120, 200), type=LocationType.Dust),
-    LocationData(Fields.Goldman, "Goldman's Cave Dust 1", [], (1304, 104), type=LocationType.Dust),
-    LocationData(Fields.Goldman, "Goldman's Cave Dust 2", [], (1320, 120), type=LocationType.Dust),
-    LocationData(Fields.Goldman, "Goldman's Cave Dust 3", [], (1336, 72), type=LocationType.Dust),
-    LocationData(Fields.Goldman, "Goldman's Cave Dust 4", [], (1384, 72), type=LocationType.Dust),
-    LocationData(Fields.Goldman, "Goldman's Cave Dust 5", [], (1400, 72), type=LocationType.Dust),
-    LocationData(Fields.Goldman, "Goldman's Cave Dust 6", [], (1400, 88), type=LocationType.Dust),
-    LocationData(Fields.Goldman, "Goldman's Cave Dust 7", [], (1304, 120), type=LocationType.Dust),
+    LocationData(Fields.Goldman, "Goldman's Cave Dust 1", [], (1368, 104), type=LocationType.Dust),
+    LocationData(Fields.Goldman, "Goldman's Cave Dust 2", [], (1368, 104), type=LocationType.Dust),
+    LocationData(Fields.Goldman, "Goldman's Cave Dust 3", [], (1368, 104), type=LocationType.Dust),
+    LocationData(Fields.Goldman, "Goldman's Cave Dust 4", [], (1368, 104), type=LocationType.Dust),
+    LocationData(Fields.Goldman, "Goldman's Cave Dust 5", [], (1368, 104), type=LocationType.Dust),
+    LocationData(Fields.Goldman, "Goldman's Cave Dust 6", [], (1368, 104), type=LocationType.Dust),
+    LocationData(Fields.Goldman, "Goldman's Cave Dust 7", [], (1368, 104), type=LocationType.Dust),
     LocationData(Fields.Goldman, "Goldman's Cave Dust 8", [], (1368, 104), type=LocationType.Dust),
-    LocationData(Fields.Goldman, "Goldman's Cave Dust 9", [], (1400, 120), type=LocationType.Dust),
+    LocationData(Fields.Goldman, "Goldman's Cave Dust 9", [], (1368, 104), type=LocationType.Dust),
     LocationData(Fields.Lake, "Lake After Spikes Dust", [], (1208, 1032), type=LocationType.Dust),
     LocationData(Fields.DEFAULT, "North River Dust", [], (1032, 248), type=LocationType.Dust),
     LocationData(Fields.Lake, "Lake After Holes Floating Dust", [], (1160, 1704), type=LocationType.Dust),
@@ -427,8 +435,78 @@ all_locations: List[LocationData] = [
     LocationData(Boss_Rush.DEFAULT, "Red Boss Dust 3", [], (776, 1096), type=LocationType.Dust),
     LocationData(Boss_Rush.DEFAULT, "Red Boss Dust 4", [], (776, 984), type=LocationType.Dust),
     LocationData(Boss_Rush.DEFAULT, "Manager Phase 1 Dust", [], (40, 824), type=LocationType.Dust),
-    LocationData(Boss_Rush.DEFAULT, "Manager Phase 2 Dust", [], (40, 1000), type=LocationType.Dust)
+    LocationData(Boss_Rush.DEFAULT, "Manager Phase 2 Dust", [], (40, 1000), type=LocationType.Dust),
+    LocationData(Bedroom.entrance, "Dark Room Rock", [], (248, 504), LocationType.Rock),
+    LocationData(Bedroom.swapper_entrance, "Near Entrance Hidden Rock", [], (552, 696), LocationType.Rock),
+    LocationData(Bedroom.drawer, "Near Drawer Hidden Rock", ["Progressive Swap:2"], (1080, 392), LocationType.Rock),
+    LocationData(Blank.windmill, "Unclaimed Rock", [], (664, 824), LocationType.Rock),
+    LocationData(Blank.windmill, "Circles Rock", [], (776, 664), LocationType.Rock),
+    LocationData(Blank.windmill, "Platforms Rock", [], (680, 40), LocationType.Rock),
+    LocationData(Blank.windmill, "Love Rock", [], (184, 712), LocationType.Rock),
+    LocationData(Blank.windmill, "Portal Rock", [], (24, 872), LocationType.Rock),
+    LocationData(Cell.DEFAULT, "Nexus Pad Rock", [], (500, 504), LocationType.Rock),
+    LocationData(Cell.past_gate, "Health Cicada Rock", [], (1000, 1032), LocationType.Rock),
+    LocationData(Cell.DEFAULT, "Spikes Rock", ["Progressive Swap:2", "Jump Shoes"], (1176, 1176), LocationType.Rock),
+    LocationData(Cell.DEFAULT, "Near Red Grotto Rock", [], (56, 1224), LocationType.Rock),
+    LocationData(Circus.entry_gauntlets, "Trapeze Rock", [], (376, 920), LocationType.Rock),
+    LocationData(Circus.entry_gauntlets, "Clown Makeup Rock", [], (136, 504), LocationType.Rock),
+    LocationData(Circus.entry_gauntlets, "Arthur Rock", [], (1208, 904), LocationType.Rock),
+    LocationData(Circus.third_key_gauntlet, "Shining Eyed Rock", [], (232, 392), LocationType.Rock),
+    LocationData(Circus.circlejump_gauntlets, "Javiera Rock", [], (1208, 408), LocationType.Rock),
+    LocationData(Circus.post_boss, "Followers Rock", [], (1192, 72), LocationType.Rock),
+    LocationData(Cliffs.post_windmill, "Indecipherable Rock", [], (1176, 216), LocationType.Rock),
+    LocationData(Cliffs.post_windmill, "Stupid Rock", [], (920, 379), LocationType.Rock),
+    LocationData(Cliffs.DEFAULT, "Warning Rock", [], (536, 856), LocationType.Rock),
+    LocationData(Cliffs.post_windmill, "Ladder Rock", [], (1096, 1000), LocationType.Rock),
+    LocationData(Crowd.exit, "How? Rock", ["Progressive Swap:2"], (1416, 696), LocationType.Rock),
+    LocationData(Crowd.floor_3, "Vertical Drop Rock", [], (1576, 344), LocationType.Rock),
+    LocationData(Debug.DEFAULT, "Placeholder Card Gate Rock", [], (680, 104), LocationType.Rock),
+    LocationData(Debug.DEFAULT, "One Way Tiles Rock", [], (232, 120), LocationType.Rock),
+    LocationData(Debug.DEFAULT, "Dropped Keys Rock", [], (72, 104), LocationType.Rock),
+    LocationData(Debug.DEFAULT, "Prison Rock", [], (680, 840), LocationType.Rock),
+    LocationData(Debug.DEFAULT, "Welcoming Rock", [], (552, 344), LocationType.Rock),
+    LocationData(Drawer.DEFAULT, "Archives Rock", [], (72, 104), LocationType.Rock),
+    LocationData(Drawer.DEFAULT, "Hurricane Islands Rock", [], (840, 200), LocationType.Rock),
+    LocationData(Drawer.DEFAULT, "Brown Area Rock", [], (392, 1192), LocationType.Rock),
+    LocationData(Fields.DEFAULT, "Mitra's House Rock", [], (936, 696), LocationType.Rock),
+    LocationData(Forest.DEFAULT, "Relaxation Pond Rock", [], (392, 776), LocationType.Rock),
+    LocationData(Forest.island, "Carved Rock", [], (40, 1400), LocationType.Rock),
+    LocationData(Forest.DEFAULT, "Nexus Pad Rock", [], (264, 1000), LocationType.Rock),
+    LocationData(Forest.DEFAULT, "Near Cliffs Rock", [], (744, 1160), LocationType.Rock),
+    LocationData(Go.bottom, "Swap Puzzle Rock", [], (360, 504), LocationType.Rock),
+    LocationData(Go.bottom, "Strange Dimensional Guardian Rock", [], (200, 520), LocationType.Rock),
+    LocationData(Go.bottom, "Suburban Guardian Rock", [], (600, 856), LocationType.Rock),
+    LocationData(Go.bottom, "Labyrinthine Dungeon's Guardian Rock", [], (200, 856), LocationType.Rock),
+    LocationData(Nexus.bottom, "Rock of Beginnings", [], (778, 1384), LocationType.Rock),
+    LocationData(Nexus.top, "Before Gate Rock", [], (728, 440), LocationType.Rock),
+    LocationData(Nexus.top, "Post Gate Rock", [], (728, 378), LocationType.Rock),
+    LocationData(Nexus.top, "Wiggle Rock", [], (840, 550), LocationType.Rock),
+    LocationData(Overworld.west, "Mean Rock", [], (288, 1184), LocationType.Rock),
+    LocationData(Overworld.out_of_bounds_south, "Out of Bounds Rock", [], (692, 1496), LocationType.Rock),
+    LocationData(Overworld.color_puzzle_hint, "Secret Treasure Rock", [], (536, 264), LocationType.Rock),
+    LocationData(Overworld.color_puzzle_hint, "Gotcha Rock", [], (1334, 664), LocationType.Rock),
+    LocationData(Overworld.station, "Overworld Station Rock", [], (216, 152), LocationType.Rock),
+    LocationData(Red_Cave.center, "Center Grotto Rock", [], (504, 664), LocationType.Rock),
+    LocationData(Red_Cave.right, "Right Grotto Rock", [], (824, 984), LocationType.Rock),
+    LocationData(Red_Cave.left, "Left Grotto Rock", [], (296, 984), LocationType.Rock),
+    LocationData(Red_Sea.DEFAULT, "Treasure Rock", [], (360, 424), LocationType.Rock),
+    LocationData(Red_Sea.DEFAULT, "Near Portal Rock", [], (568, 104), LocationType.Rock),
+    LocationData(Red_Sea.DEFAULT, "Far Edge Rock", [], (1016, 104), LocationType.Rock),
+    LocationData(Red_Sea.DEFAULT, "Red Walker Rock", [], (504, 984), LocationType.Rock),
+    LocationData(Suburb.DEFAULT, "Fragmented Rock", [], (760, 696), LocationType.Rock),
+    LocationData(Suburb.DEFAULT, "Parking Lot Rock", [], (24, 728), LocationType.Rock),
+    LocationData(Suburb.DEFAULT, "Ying's Apartment Rock", [], (360, 104), LocationType.Rock),
+    LocationData(Suburb.DEFAULT, "Near Forest Rock", [], (72, 72), LocationType.Rock),
+    LocationData(Space.DEFAULT, "Space Time Tablet", [], (840, 392), LocationType.Rock),
+    LocationData(Space.DEFAULT, "Unreadable Grave", [], (1464, 344), LocationType.Rock),
+    LocationData(Space.DEFAULT, "Burd's Grave", [], (376, 248), LocationType.Rock),
+    LocationData(Space.DEFAULT, "Bag's Grave", [], (440, 232), LocationType.Rock),
+    LocationData(Space.DEFAULT, "Savitch's Grave", [], (1336, 216), LocationType.Rock),
+    LocationData(Space.DEFAULT, "Dave's Grave", [], (1624, 184), LocationType.Rock),
+    LocationData(Windmill.blank, "Dimensional Rift Tower Rock", [], (376, 840), LocationType.Rock),
+    LocationData(Windmill.third_gate, "Repurposed Tower Rock", [], (264, 824), LocationType.Rock),
 ]
+# This array must maintain a consistent order because the IDs are generated from it.
 
 locations_by_name: Dict[str, LocationData] = {location.name: location for location in all_locations}
 

@@ -128,7 +128,7 @@ class FatesNeeded(Range):
     """
     display_name = "FatesNeeded"
     range_start = 0
-    range_end = 35
+    range_end = 52
     default = 0
 
 
@@ -540,11 +540,11 @@ class StoreGiveHints(DefaultOnToggle):
     display_name = "Store Give Hints"
 
 
-class DisableLateStyxScribe(Toggle):
+class DisableLateStyx(Toggle):
     """
-    If true rooms pass room 55 will not have checks on room based settings.  
+    If true, rooms past room 55 will not have checks on room based settings.  
     """
-    display_name = "Automatic Room Finish On Hades Defeat"
+    display_name = "Disable Late Styx"
     default = 0
 
 class AutomaticRoomsFinishOnHadesDefeat(Toggle):
@@ -611,7 +611,7 @@ class HadesOptions(PerGameCommonOptions):
     reverse_order_em: ReverseOrderExtremeMeasure
     ignore_greece_deaths: IgnoreGreeceDeaths
     store_give_hints: StoreGiveHints
-    disable_late_styx_scribe : DisableLateStyxScribe
+    disable_late_styx : DisableLateStyx
     automatic_rooms_finish_on_hades_defeat: AutomaticRoomsFinishOnHadesDefeat
     death_link: DeathLink
 
@@ -681,7 +681,7 @@ hades_option_groups = [
         ReverseOrderExtremeMeasure,
         IgnoreGreeceDeaths,
         StoreGiveHints,
-        DisableLateStyxScribe,
+        DisableLateStyx,
         AutomaticRoomsFinishOnHadesDefeat
     ]),
 ]
@@ -722,7 +722,7 @@ hades_option_presets: Dict[str, Dict[str, Any]] = {
         "max_health_helper_percentage": 40,
         "initial_money_helper_percentage": 30,
         "filler_trap_percentage": 0,
-        "disable_late_styx_scribe" : True,
+        "disable_late_styx" : True,
         "automatic_rooms_finish_on_hades_defeat": True,
     },
     "Normal": {
@@ -755,7 +755,7 @@ hades_option_presets: Dict[str, Dict[str, Any]] = {
         "ambrosia_pack_value": 2,
         "filler_helper_percentage": 0,
         "filler_trap_percentage": 5,
-        "disable_late_styx_scribe" : True,
+        "disable_late_styx" : True,
         "automatic_rooms_finish_on_hades_defeat": True,
     },
     "Hard": {
@@ -788,7 +788,7 @@ hades_option_presets: Dict[str, Dict[str, Any]] = {
         "ambrosia_pack_value": 1,
         "filler_helper_percentage": 0,
         "filler_trap_percentage": 10,
-        "disable_late_styx_scribe" : False,
+        "disable_late_styx" : False,
         "automatic_rooms_finish_on_hades_defeat": False,
     },
 }

@@ -1,0 +1,12 @@
+[
+    { "name": "Sudra", "img": "sudra.png", "location_size": 14, "location_border_thickness": 2 },
+    { "name": "Eribu", "img": "eribu.png", "location_size": 14, "location_border_thickness": 2 },
+    { "name": "Absu", "img": "absu.png", "location_size": 14, "location_border_thickness": 2 },
+    { "name": "Zi", "img": "zi.png", "location_size": 14, "location_border_thickness": 2 },
+    { "name": "Kur", "img": "kur.png", "location_size": 14, "location_border_thickness": 2 },
+    { "name": "Indi", "img": "indi.png", "location_size": 14, "location_border_thickness": 2 },
+    { "name": "Ukkin-Na", "img": "ukkinna.png", "location_size": 14, "location_border_thickness": 2 },
+    { "name": "Edin", "img": "edin.png", "location_size": 14, "location_border_thickness": 2 },
+    { "name": "E-Kur-Mah", "img": "ekurmah.png", "location_size": 14, "location_border_thickness": 2 },
+    { "name": "Mar-Uru", "img": "maruru.png", "location_size": 14, "location_border_thickness": 2 }
+]

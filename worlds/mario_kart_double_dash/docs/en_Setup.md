@@ -23,7 +23,6 @@ Optionally, there's 2 options for tracking your progress:
     * Text-based, shows a list of accessible locations.
     * If you have Universal Tracker installed, the client will have a tracker page automatically.
     * Might be better on single screen / small screen setups.
-    * NOTE: Make sure you have up to date version of UT. Having old version installed prevents the client from launching!
 
 ## Setting Up a YAML
 
@@ -53,8 +52,6 @@ You should now get checks whenever you finish races. To see what is currently un
 
 ## Troubleshooting
 
-* Client screen is black.
-  * You probably have an out of date version of Universal Tracker. Update or remove `tracker.apworld`.
 * The game crashes when I try to select a character.
   * You probably aren't connected to a server. Restart the game and ensure you have connection.
 * I can't select character X.

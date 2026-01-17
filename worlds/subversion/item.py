@@ -3,9 +3,9 @@ from typing import Dict, Iterator
 from BaseClasses import Item, ItemClassification as IC
 from .config import base_id
 
-from subversion_rando.area_rando_types import DoorPairs
-from subversion_rando.item_data import Item as SvItem, Items
-from subversion_rando.fillAssumed import FillAssumed
+from .subversion_rando.area_rando_types import DoorPairs
+from .subversion_rando.item_data import Item as SvItem, Items
+from .subversion_rando.fillAssumed import FillAssumed
 
 
 classifications: Dict[str, IC] = defaultdict(lambda: IC.progression)

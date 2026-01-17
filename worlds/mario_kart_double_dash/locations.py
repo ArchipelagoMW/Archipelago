@@ -1,7 +1,7 @@
 from typing import NamedTuple, TYPE_CHECKING
 
 from BaseClasses import Location
-from . import game_data, items
+from . import game_data, items, version
 
 if TYPE_CHECKING:
     from . import MkddWorld
@@ -23,7 +23,7 @@ TAG_TT_GHOST = "Time Trial Staff Ghost"
 
 
 class MkddLocation(Location):
-    game = "Mario Kart Double Dash"
+    game = version.get_game_name()
 
 
 class MkddLocationData(NamedTuple):

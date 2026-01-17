@@ -1,6 +1,3 @@
-from typing import List
-
-
 major_terra_checks = [
     "Whelk",
     "Whelk (Boss)",
@@ -202,7 +199,7 @@ minor_terra_ext_checks = [
     "Zozo Esper Room Right"
 ]
 
-minor_locke_checks: List[str] = [
+minor_locke_checks: list[str] = [
 ]
 
 minor_locke_ext_checks = [
@@ -233,7 +230,7 @@ minor_cyan_checks = [
     "Mt. Zozo Cyan's Room"
 ]
 
-minor_cyan_ext_checks: List[str] = [
+minor_cyan_ext_checks: list[str] = [
 ]
 
 minor_shadow_checks = [
@@ -272,7 +269,7 @@ minor_edgar_checks = [
     "Figaro Castle Basement 3 Treasure Room Statue"
 ]
 
-minor_edgar_ext_checks: List[str] = [
+minor_edgar_ext_checks: list[str] = [
 ]
 
 minor_sabin_checks = [
@@ -318,7 +315,7 @@ minor_celes_checks = [
     "Magitek Factory Specimen Room"
 ]
 
-minor_celes_ext_checks: List[str] = [
+minor_celes_ext_checks: list[str] = [
 ]
 
 minor_strago_checks = [
@@ -355,13 +352,13 @@ minor_setzer_checks = [
     "Darill's Tomb Pre-Boss Room Right"
 ]
 
-minor_setzer_ext_checks: List[str] = [
+minor_setzer_ext_checks: list[str] = [
 ]
 
-minor_mog_checks: List[str] = [
+minor_mog_checks: list[str] = [
 ]
 
-minor_mog_ext_checks: List[str] = [
+minor_mog_ext_checks: list[str] = [
 ]
 
 minor_gau_checks = [
@@ -369,7 +366,7 @@ minor_gau_checks = [
     "Serpent Trench Second Branch"
 ]
 
-minor_gau_ext_checks: List[str] = [
+minor_gau_ext_checks: list[str] = [
 ]
 
 minor_gogo_checks = [
@@ -393,7 +390,7 @@ minor_umaro_checks = [
     "Umaro's Cave Basement 2 Lower Left"
 ]
 
-minor_umaro_ext_checks: List[str] = [
+minor_umaro_ext_checks: list[str] = [
 ]
 
 minor_generic_checks = [

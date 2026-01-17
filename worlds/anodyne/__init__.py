@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from BaseClasses import Region, Location, Item, ItemClassification, CollectionState, Tutorial
 from Fill import fill_restrictive, FillError
-from settings import Group, Bool, FilePath
+from settings import Group, UserFilePath
 from Options import Accessibility, OptionGroup
 from worlds.AutoWorld import WebWorld, World
 from typing import ClassVar, List, Callable, Dict, Any, Set, Iterable, Type, Tuple, Optional
@@ -21,8 +21,8 @@ from .Data.Regions import RegionEnum, Nexus, Red_Cave, Blue, Happy, Forest, Wind
 from .Options import AnodyneGameOptions, SmallKeyShuffle, StartBroom, VictoryCondition, BigKeyShuffle, \
     HealthCicadaShuffle, NexusGatesOpen, RedCaveAccess, PostgameMode, NexusGateShuffle, TrapPercentage, SmallKeyMode, \
     Dustsanity, GateType, gatereq_classes, CardAmount, EndgameRequirement, GateRequirements, MitraHints, gate_lookup, \
-    OverworldFieldsGate
-from .ut_stuff import UTTrackerData
+    OverworldFieldsGate, RockSanity
+from .ut_stuff import UTStuff
 
 
 class AnodyneLocation(Location):
@@ -34,12 +34,13 @@ class AnodyneItem(Item):
 
 
 class AnodyneSettings(Group):
-    class UTTrackerPath(FilePath):
+    class UTTrackerPath(UserFilePath):
         """Path to the user's Anodyne UT map pack."""
         description = "Anodyne's Universal Tracker zip file"
         required = False
 
     ut_tracker_path: UTTrackerPath | str = UTTrackerPath()
+
 
 class AnodyneWebWorld(WebWorld):
     theme = "dirt"
@@ -68,11 +69,13 @@ class AnodyneWebWorld(WebWorld):
         ]),
         OptionGroup("Extra Locations", [
             Options.Dustsanity,
+            Options.RockSanity,
             Options.HealthCicadaShuffle,
             Options.IncludeForestBunnyChest
         ]),
         OptionGroup("Filler Items", [
-            Options.TrapPercentage
+            Options.TrapPercentage,
+            Options.TrapWeights
         ]),
         OptionGroup("Big Gate Logic", [option for gatereqs in [
             [gatereq.Gate, gatereq.GateCardReq, gatereq.GateBossReq]
@@ -89,7 +92,7 @@ class AnodyneWebWorld(WebWorld):
     )]
 
 
-class AnodyneWorld(World):
+class AnodyneWorld(UTStuff, World):
     """
     Anodyne is a unique Zelda-like game, influenced by games such as Yume Nikki and Link's Awakening. 
     In Anodyne, you'll visit areas urban, natural, and bizarre, fighting your way through dungeons 
@@ -103,14 +106,6 @@ class AnodyneWorld(World):
     settings: ClassVar[AnodyneSettings]
     topology_present = False  # show path to required location checks in spoiler
 
-    ut_can_gen_without_yaml = True
-    tracker_world = UTTrackerData
-    using_ut: bool
-    found_entrances_datastorage_key = "Slot:{player}:EventMap"
-    tracked_events: EventFlags
-
-    version = "0.4.0"
-
     item_name_to_id = Constants.item_name_to_id
     location_name_to_id = Constants.location_name_to_id
     item_name_groups = Items.item_groups
@@ -123,6 +118,7 @@ class AnodyneWorld(World):
     dungeon_items: Dict[type[RegionEnum], List[Item]]
     proxy_rules: Dict[str, List[str]]
     shuffled_gates: Set[type[RegionEnum]]
+    using_ut: bool
 
     def generate_early(self):
         self.gates_unlocked = []
@@ -152,6 +148,7 @@ class AnodyneWorld(World):
             self.options.forest_bunny_chest.value = slot_data.get("forest_bunny_chest", False)
             self.options.fields_secret_paths.value = slot_data.get("fields_secret_paths", False)
             self.options.dustsanity.value = slot_data.get("dustsanity", False)
+            self.options.rocksanity.value = slot_data.get("rocksanity", False)
             if "endgame_card_requirement" in slot_data:
                 EndgameRequirement.cardoption(self.options).value = slot_data["endgame_card_requirement"]
             self.options.include_blue_happy.value = slot_data.get("include_blue_happy", False)
@@ -257,7 +254,10 @@ class AnodyneWorld(World):
             *Items.RedCaveUnlock.all(),
             Items.Inventory.Progressive_Swap.item,
             *Items.Nexus.all(),
-            *Items.Card.all()
+            *Items.Card.all(),
+            *Items.Secret.all(),
+            *Items.Trap.all(),
+            *Items.Heal.all()
         ]
 
         if small_key_mode == SmallKeyMode.option_small_keys:
@@ -423,8 +423,14 @@ class AnodyneWorld(World):
             num_traps = int(self.options.traps_percentage / 100 * remaining_items)
             remaining_items -= num_traps
 
-            for i in range(num_traps):
-                new_items.append(self.random.choice(Items.Trap.all()))
+            total_trap_weight = sum(self.options.trap_weights.values())
+
+            if total_trap_weight > 0:
+                trap_counts = {name: int(weight * num_traps / total_trap_weight)
+                               for name, weight in self.options.trap_weights.items()}
+                for name, count in trap_counts.items():
+                    for i in range(0, count):
+                        new_items.append(Items.all_items[name])
 
             secret_items = Items.early_secret_items if self.options.postgame_mode == PostgameMode.option_disabled \
                 else Items.Secret.all()
@@ -454,6 +460,7 @@ class AnodyneWorld(World):
         include_big_keys = self.options.big_key_shuffle
         include_postgame: bool = (self.options.postgame_mode != PostgameMode.option_disabled)
         dustsanity: bool = bool(self.options.dustsanity.value)
+        rocksanity: bool = bool(self.options.rocksanity.value)
 
         postgame_regions = Regions.postgame_regions if self.options.fields_secret_paths.value else (
                 Regions.postgame_regions + Regions.postgame_without_secret_paths)
@@ -483,6 +490,9 @@ class AnodyneWorld(World):
                         continue
 
                     if not include_postgame and location.postgame(bool(self.options.fields_secret_paths.value)):
+                        continue
+
+                    if not rocksanity and location.rock:
                         continue
 
                     if (not self.options.forest_bunny_chest and location.region.area_name() == Forest.area_name()
@@ -551,10 +561,10 @@ class AnodyneWorld(World):
             if not event.is_active(self.options):
                 continue
 
-            if self.using_ut and bool(self.multiworld.__getattribute__("enforce_deferred_connections")):
-                event_region = Region(f"Event Region: {event.name}",self.player,self.multiworld)
+            if self.using_ut and str(self.multiworld.__getattribute__("enforce_deferred_connections")) != "off":
+                event_region = Region(f"Event Region: {event.name}", self.player, self.multiworld)
                 entry = all_regions[event.region].create_exit(f"Get event: {event.name}")
-                entry.access_rule = Constants.get_access_rule(event.reqs,str(event.region),self)
+                entry.access_rule = Constants.get_access_rule(event.reqs, str(event.region), self)
                 entry.connect(event_region)
 
                 self.create_event(event_region, event.name, self.ut_event_check(event))
@@ -562,7 +572,8 @@ class AnodyneWorld(World):
                 self.multiworld.regions.append(event_region)
             else:
                 self.create_event(all_regions[event.region], event.name, Constants.get_access_rule(event.reqs,
-                                                                                         str(event.region), self))
+                                                                                                   str(event.region),
+                                                                                                   self))
 
         self.multiworld.regions += all_regions.values()
 
@@ -570,13 +581,6 @@ class AnodyneWorld(World):
             from Utils import visualize_regions
 
             visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
-
-    def ut_event_check(self, event:EventData):
-        return lambda _: event.flag in self.tracked_events
-
-    def reconnect_found_entrances(self, key:str, value:Any):
-        if key.endswith("EventMap") and isinstance(value,int):
-            self.tracked_events = EventFlags(value)
 
     def create_gate_proxy_rule(self, cls: typing.Type[GateRequirements]):
         rules = []
@@ -883,7 +887,6 @@ class AnodyneWorld(World):
             current_items = confined_dungeon_items.copy()
             confined_dungeon_items.clear()  # Prevent the current items from being picked up by all state
 
-
             # This will pick up all unplaced dungeon items as well
             collection_state = self.multiworld.get_all_state(allow_partial_entrances=True)
 
@@ -947,6 +950,7 @@ class AnodyneWorld(World):
             "victory_condition": int(self.options.victory_condition),
             "forest_bunny_chest": bool(self.options.forest_bunny_chest.value),
             "dustsanity": bool(self.options.dustsanity),
+            "rocksanity": bool(self.options.rocksanity),
             "seed": self.random.randint(0, 1000000),
             "card_amount": self.options.card_amount + self.options.extra_cards,
             "fields_secret_paths": bool(self.options.fields_secret_paths),
@@ -956,7 +960,8 @@ class AnodyneWorld(World):
                             self.get_mitra_hints(0 if self.options.mitra_hints == MitraHints.option_none else 8 + 1)],
             "mitra_hint_type": int(self.options.mitra_hints),
             "include_blue_happy": bool(self.options.include_blue_happy),
-            "version": self.version,
+            "swap_areas": [area.swap_areas() for area in Regions.all_areas],
+            "version": self.world_version.as_simple_string(),
             **{c.typename(): c.shorthand(self.options) for c in gatereq_classes}
         }
 
@@ -997,7 +1002,7 @@ class AnodyneWorld(World):
         hints: List[AnodyneWorld.ItemHint] = []
 
         for item in items:
-            location = self.multiworld.find_item(item.name, self.player)
+            location = item.location
             hints.append(AnodyneWorld.ItemHint(item.code, location.address, location.player))
 
         return hints

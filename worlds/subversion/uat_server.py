@@ -3,7 +3,7 @@ from typing import Any, Literal, Mapping, Sequence, TypedDict
 from typing_extensions import NotRequired
 import websockets
 
-from subversion_rando.tracker_logic import TrackerLogic
+from .subversion_rando.tracker_logic import TrackerLogic
 
 from Utils import async_start
 

@@ -1,5 +1,6 @@
 import os
-from typing import List
+import time
+from typing import Dict, List, Tuple
 
 import ModuleUpdate
 from Utils import async_start
@@ -10,7 +11,7 @@ from pymem import pymem
 from NetUtils import ClientStatus, NetworkItem
 from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop, ClientCommandProcessor, handle_url_arg
 
-from .Items import FF12OW_BASE_ID, item_data_table, inv_item_table
+from .Items import item_data_table, inv_item_table
 from .Locations import location_data_table, FF12OpenWorldLocationData
 
 tracker_loaded = False
@@ -47,6 +48,59 @@ sort_count_addresses = [
     0x2050C60,  # Key Items
     0x2050C64,  # Loot
 ]
+
+MAX_PARTY_MEMBERS = 12
+
+
+class FF12StateCache:
+    SAVE_DATA_LENGTH = 0xE200
+    ITEM_SECTION_LENGTH = 0x2000
+    BITFIELD_SECTION_LENGTH = 0x200
+
+    def __init__(self):
+        self.save_data_base: int = 0
+        self.save_data: bytes = b""
+        self.extra_segments: List[Tuple[int, bytes]] = []
+        self.party_address: int = 0
+        self.scenario_flag: int = -1
+        self.current_map: int = -1
+        self.current_game_state: int = -1
+        self.party_members: set[int] = set()
+        self.inventory_by_code: Dict[int, int] = {}
+        self.inventory_by_name: Dict[str, int] = {}
+        self.leviathan_progress: int = 0
+        self.escape_progress: int = 0
+        self.draklor_progress: int = 0
+
+    def read_range(self, absolute_address: int, size: int):
+        if self.save_data and self.save_data_base <= absolute_address and \
+                absolute_address + size <= self.save_data_base + len(self.save_data):
+            offset = absolute_address - self.save_data_base
+            return self.save_data[offset:offset + size]
+
+        for base, data in self.extra_segments:
+            if base <= absolute_address and absolute_address + size <= base + len(data):
+                offset = absolute_address - base
+                return data[offset:offset + size]
+        return None
+
+    def add_extra_segment(self, base: int, data: bytes):
+        if data:
+            self.extra_segments.append((base, data))
+
+    def save_byte(self, offset: int) -> int:
+        if 0 <= offset < len(self.save_data):
+            return self.save_data[offset]
+        return 0
+
+    def save_short(self, offset: int) -> int:
+        if 0 <= offset + 1 < len(self.save_data):
+            return int.from_bytes(self.save_data[offset:offset + 2], "little")
+        return 0
+
+    def save_bit(self, offset: int, bit: int) -> bool:
+        byte = self.save_byte(offset)
+        return ((byte >> bit) & 1) != 0
 
 
 class FF12OpenWorldCommandProcessor(ClientCommandProcessor):
@@ -93,9 +147,14 @@ class FF12OpenWorldContext(CommonContext):
         self.hunt_progress_changed = False
         # hooked object
         self.ff12 = None
+        self.game_state_cache = FF12StateCache()
         self.item_lock = asyncio.Lock()
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%\FF12OpenWorldAP")
+        else:
+            logger.info("Could not find localappdata environment variable")
+            self.game_communication_path = None
+        self.delete_communication_files()
 
     async def get_username(self):
         if not self.auth:
@@ -113,13 +172,17 @@ class FF12OpenWorldContext(CommonContext):
     async def connection_closed(self):
         self.ff12connected = False
         self.server_connected = False
+        self.delete_communication_files()
         self.ff12_items_received.clear()
+        self.game_state_cache = FF12StateCache()
         await super(FF12OpenWorldContext, self).connection_closed()
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.ff12connected = False
         self.server_connected = False
+        self.delete_communication_files()
         self.ff12_items_received.clear()
+        self.game_state_cache = FF12StateCache()
         await super(FF12OpenWorldContext, self).disconnect()
 
     @property
@@ -135,26 +198,31 @@ class FF12OpenWorldContext(CommonContext):
     def ff12_story_address(self):
         return self.ff12.base_address
 
+    def _compute_save_data_address(self) -> int:
+        if not self.ff12:
+            return 0
+        return self.ff12.base_address + 0x02044480
+
+    def _read_bytes(self, address: int, length: int, use_base: bool = True) -> bytes:
+        if not self.ff12:
+            raise RuntimeError("FF12 process not attached")
+        absolute = self.ff12.base_address + address if use_base else address
+        cached = self.game_state_cache.read_range(absolute, length)
+        if cached is not None and len(cached) == length:
+            return cached
+        return self.ff12.read_bytes(absolute, length)
+
     def ff12_read_byte(self, address, use_base=True):
-        if use_base:
-            return int.from_bytes(self.ff12.read_bytes(self.ff12.base_address + address, 1), "little")
-        else:
-            return int.from_bytes(self.ff12.read_bytes(address, 1), "little")
+        return int.from_bytes(self._read_bytes(address, 1, use_base), "little")
 
     def ff12_read_bit(self, address, bit, use_base=True) -> bool:
         return (self.ff12_read_byte(address, use_base) >> bit) & 1 == 1
 
     def ff12_read_short(self, address, use_base=True):
-        if use_base:
-            return int.from_bytes(self.ff12.read_bytes(self.ff12.base_address + address, 2), "little")
-        else:
-            return int.from_bytes(self.ff12.read_bytes(address, 2), "little")
+        return int.from_bytes(self._read_bytes(address, 2, use_base), "little")
 
     def ff12_read_int(self, address, use_base=True):
-        if use_base:
-            return int.from_bytes(self.ff12.read_bytes(self.ff12.base_address + address, 4), "little")
-        else:
-            return int.from_bytes(self.ff12.read_bytes(address, 4), "little")
+        return int.from_bytes(self._read_bytes(address, 4, use_base), "little")
 
     def on_package(self, cmd: str, args: dict):
 
@@ -181,6 +249,7 @@ class FF12OpenWorldContext(CommonContext):
         if cmd in {"DataPackage"}:
             self.find_game()
             self.server_connected = True
+            self.delete_communication_files()
             asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
 
         if cmd in {"RoomInfo"}:
@@ -200,17 +269,161 @@ class FF12OpenWorldContext(CommonContext):
                     self.ff12connected = False
                 logger.info("Game is not open (Try running the client as an admin).")
 
+    def delete_communication_files(self):
+        if os.path.exists(self.game_communication_path):
+            for filename in os.listdir(self.game_communication_path):
+                file_path = os.path.join(self.game_communication_path, filename)
+                try:
+                    if os.path.isfile(file_path):
+                        os.remove(file_path)
+                except Exception as e:
+                    logger.info(e)
+
+    async def update_game_state_cache(self):
+        if not self.ff12connected or not self.ff12:
+            return
+
+        new_cache = FF12StateCache()
+        try:
+            save_addr = self._compute_save_data_address()
+            if not save_addr:
+                return
+
+            new_cache.save_data_base = save_addr
+            new_cache.save_data = self.ff12.read_bytes(save_addr, FF12StateCache.SAVE_DATA_LENGTH)
+            if not new_cache.save_data:
+                return
+            new_cache.scenario_flag = int.from_bytes(new_cache.save_data[0:2], "little")
+
+            base = self.ff12.base_address
+
+            def capture_segment(offset: int, length: int) -> bytes:
+                data = self.ff12.read_bytes(base + offset, length)
+                new_cache.add_extra_segment(base + offset, data)
+                return data
+
+            normal_items = capture_segment(0x02097054, FF12StateCache.ITEM_SECTION_LENGTH)
+            equipment_items = capture_segment(0x020970D4, FF12StateCache.ITEM_SECTION_LENGTH)
+            loot_items = capture_segment(0x0209741C, FF12StateCache.ITEM_SECTION_LENGTH)
+            key_item_bits = capture_segment(0x0209784C, FF12StateCache.BITFIELD_SECTION_LENGTH)
+            esper_bits = capture_segment(0x0209788C, FF12StateCache.BITFIELD_SECTION_LENGTH)
+            magick_bits = capture_segment(0x0209781C, FF12StateCache.BITFIELD_SECTION_LENGTH)
+            technick_bits = capture_segment(0x02097828, FF12StateCache.BITFIELD_SECTION_LENGTH)
+
+            party_ptr = int.from_bytes(
+                self.ff12.read_bytes(self.ff12.base_address + 0x02D9F190, 4), "little")
+            new_cache.party_address = party_ptr + 0x08 if party_ptr else 0
+
+            pointer1 = int.from_bytes(
+                self.ff12.read_bytes(self.ff12.base_address + 0x01E5FFE0, 4), "little")
+            if pointer1:
+                new_cache.current_game_state = int.from_bytes(
+                    self.ff12.read_bytes(pointer1 + 0x3A, 1), "little")
+            new_cache.current_map = int.from_bytes(
+                self.ff12.read_bytes(self.ff12.base_address + 0x020454C4, 2), "little")
+
+            def read_short_from(data: bytes, offset: int) -> int:
+                if 0 <= offset + 1 < len(data):
+                    return int.from_bytes(data[offset:offset + 2], "little")
+                return 0
+
+            def read_flag_from(data: bytes, index: int) -> int:
+                byte_index = index // 8
+                bit_index = index % 8
+                if 0 <= byte_index < len(data):
+                    return (data[byte_index] >> bit_index) & 1
+                return 0
+
+            inventory_by_code: Dict[int, int] = {}
+            inventory_by_name: Dict[str, int] = {}
+            for name, item in item_data_table.items():
+                code = item.code
+                count = 0
+                if code < 0x1000:
+                    count = read_short_from(normal_items, code * 2)
+                elif code < 0x2000:
+                    count = read_short_from(equipment_items, (code - 0x1000) * 2)
+                elif 0x2000 <= code < 0x3000:
+                    count = read_short_from(loot_items, (code - 0x2000) * 2)
+                elif 0x8000 <= code < 0x9000:
+                    count = read_flag_from(key_item_bits, code - 0x8000)
+                elif 0xC000 <= code < 0xD000:
+                    count = read_flag_from(esper_bits, code - 0xC000)
+                elif 0x3000 <= code < 0x4000:
+                    count = read_flag_from(magick_bits, code - 0x3000)
+                elif 0x4000 <= code < 0x5000:
+                    count = read_flag_from(technick_bits, code - 0x4000)
+                inventory_by_code[code] = count
+                inventory_by_name[name] = count
+            new_cache.inventory_by_code = inventory_by_code
+            new_cache.inventory_by_name = inventory_by_name
+
+            party_members = set()
+            if new_cache.party_address:
+                try:
+                    party_blob = self.ff12.read_bytes(new_cache.party_address, 0x1C8 * MAX_PARTY_MEMBERS)
+                    for chara in range(MAX_PARTY_MEMBERS):
+                        base_index = chara * 0x1C8
+                        if base_index < len(party_blob) and party_blob[base_index] & 0x10:
+                            party_members.add(chara)
+                except Exception:
+                    pass
+            new_cache.party_members = party_members
+
+            scenario_flag = new_cache.scenario_flag
+            if 0x37A <= scenario_flag <= 0x44C:
+                new_cache.leviathan_progress = scenario_flag
+            else:
+                lev_flag = new_cache.save_short(0xDFF7)
+                if lev_flag > 10000:
+                    new_cache.leviathan_progress = lev_flag - 10000
+                elif lev_flag == 0:
+                    new_cache.leviathan_progress = 0
+                else:
+                    new_cache.leviathan_progress = lev_flag
+
+            esc_flag = new_cache.save_short(0xDFF4)
+            if new_cache.save_byte(0xA04) >= 2:
+                new_cache.escape_progress = 0x208
+            elif 0x11D < scenario_flag < 0x208:
+                new_cache.escape_progress = scenario_flag
+            elif 0x11D < esc_flag < 0x208:
+                new_cache.escape_progress = esc_flag
+            elif new_cache.save_byte(0xA06) >= 2:
+                new_cache.escape_progress = 0x11D
+            elif 6110 < scenario_flag <= 6110 + 70:
+                new_cache.escape_progress = scenario_flag - 6110
+            elif 6110 < esc_flag <= 6110 + 70:
+                new_cache.escape_progress = esc_flag - 6110
+            else:
+                new_cache.escape_progress = 0
+
+            if 0xD48 <= scenario_flag <= 0x1036:
+                new_cache.draklor_progress = scenario_flag
+            else:
+                darklor_flag = new_cache.save_short(0xDFF9)
+                new_cache.draklor_progress = 0 if darklor_flag == 0 else darklor_flag
+
+            self.game_state_cache = new_cache
+        except Exception as e:
+            if self.ff12connected:
+                self.ff12connected = False
+            logger.info(e)
+
     def get_party_address(self) -> int:
+        if self.game_state_cache.party_address:
+            return self.game_state_cache.party_address
         return self.ff12_read_int(0x02D9F190) + 0x08
 
     def get_save_data_address(self) -> int:
-        return self.ff12.base_address + 0x02044480
+        if self.game_state_cache.save_data_base:
+            return self.game_state_cache.save_data_base
+        return self._compute_save_data_address()
 
     def get_scenario_flag(self) -> int:
+        if self.game_state_cache.scenario_flag >= 0:
+            return self.game_state_cache.scenario_flag
         return self.ff12_read_short(0x02044480)
-
-    def is_chara_in_party(self, chara) -> bool:
-        return self.ff12_read_bit(self.get_party_address() + chara * 0x1C8, 4, False)
 
     def get_item_count_received(self, item_name: str) -> int:
         return len([item for item in self.ff12_items_received[:self.get_item_index()] if
@@ -222,94 +435,20 @@ class FF12OpenWorldContext(CommonContext):
     def has_item_received(self, item_name: str) -> bool:
         return self.get_item_count_received(item_name) > 0
 
-    def get_item_count(self, item_name: str) -> int:
-        int_id = item_data_table[item_name].code - FF12OW_BASE_ID
-        if int_id < 0x1000:  # Normal items
-            return self.ff12_read_short(0x02097054 + int_id * 2)
-        elif int_id < 0x2000:  # Equipment
-            return self.ff12_read_short(0x020970D4 + (int_id - 0x1000) * 2)
-        elif 0x2000 <= int_id < 0x3000:  # Loot items
-            return self.ff12_read_short(0x0209741C + (int_id - 0x2000) * 2)
-        elif 0x8000 <= int_id < 0x9000:  # Key items
-            byte_index = (int_id - 0x8000) // 8
-            bit_index = (int_id - 0x8000) % 8
-            return 1 if self.ff12_read_bit(0x0209784C + byte_index, bit_index) else 0
-        elif 0xC000 <= int_id < 0xD000:  # Espers
-            byte_index = (int_id - 0xC000) // 8
-            bit_index = (int_id - 0xC000) % 8
-            return 1 if self.ff12_read_bit(0x0209788C + byte_index, bit_index) else 0
-        elif 0x3000 <= int_id < 0x4000:  # Magicks
-            byte_index = (int_id - 0x3000) // 8
-            bit_index = (int_id - 0x3000) % 8
-            return 1 if self.ff12_read_bit(0x0209781C + byte_index, bit_index) else 0
-        elif 0x4000 <= int_id < 0x5000:  # Technicks
-            byte_index = (int_id - 0x4000) // 8
-            bit_index = (int_id - 0x4000) % 8
-            return 1 if self.ff12_read_bit(0x02097828 + byte_index, bit_index) else 0
-        else:
-            return 0
+    def inventory_count(self, item_name: str) -> int:
+        return self.game_state_cache.inventory_by_name.get(item_name, 0)
 
-    def has_item_in_game(self, item_name: str) -> bool:
-        return self.get_item_count(item_name) > 0
-
-    def get_leviathan_progress(self) -> int:
-        # Check if currently in Leviathan
-        if 0x37A <= self.get_scenario_flag() <= 0x44C:
-            return self.get_scenario_flag()
-
-        # Otherwise use the stored flag
-        lev_flag = self.ff12_read_short(self.get_save_data_address() + 0xDFF7, False)
-        if lev_flag > 10000:  # Used the 2nd checkpoint
-            return lev_flag - 10000
-        elif lev_flag == 0:  # Not yet started
-            return 0
-        else:  # Used the 1st checkpoint
-            return lev_flag
-
-    def get_escape_progress(self) -> int:
-        esc_flag = self.ff12_read_short(self.get_save_data_address() + 0xDFF4, False)
-
-        # Check if stored progress is after beating Mimic Queen
-        if self.ff12_read_byte(self.get_save_data_address() + 0xA04, False) >= 2:
-            return 0x208  # Close to beating mimic queen
-        # Check if currently in the escape sequence after beating Firemane
-        elif 0x11D < self.get_scenario_flag() < 0x208:
-            return self.get_scenario_flag()
-        # Check if the stored progress in the escape sequence after beating Firemane
-        elif 0x11D < esc_flag < 0x208:
-            return esc_flag
-        # Check if stored progress is after beating Firemane
-        elif self.ff12_read_byte(self.get_save_data_address() + 0xA06, False) >= 2:
-            return 0x11D  # Close to beating Firemane
-        # Check if currently in the escape sequence before beating Firemane
-        elif 6110 < self.get_scenario_flag() <= 6110 + 70:
-            return self.get_scenario_flag() - 6110
-        # Check if the stored progress in the escape sequence before beating Firemane
-        elif 6110 < esc_flag <= 6110 + 70:
-            return esc_flag - 6110
-        else:
-            return 0
-
-    def get_draklor_progress(self) -> int:
-        # Check if currently in Leviathan
-        if 0xD48 <= self.get_scenario_flag() <= 0x1036:
-            return self.get_scenario_flag()
-
-        # Otherwise use the stored flag
-        darklor_flag = self.ff12_read_short(self.get_save_data_address() + 0xDFF9, False)
-        if darklor_flag == 0:  # Not yet started
-            return 0
-        else:
-            return darklor_flag
+    def inventory_has(self, item_name: str) -> bool:
+        return self.inventory_count(item_name) > 0
 
     def get_current_map(self) -> int:
+        if self.game_state_cache.current_map >= 0:
+            return self.game_state_cache.current_map
         return self.ff12_read_short(0x20454C4)
 
     def get_current_game_state(self) -> int:
-        # 0 - Field
-        # 1 - Dialog/Cutscene
-        # 4 - Menu
-        # 5 - Load Screen
+        if self.game_state_cache.current_game_state >= 0:
+            return self.game_state_cache.current_game_state
         pointer1 = self.ff12_read_int(0x01E5FFE0)
         return self.ff12_read_byte(pointer1 + 0x3A, False)
 
@@ -331,7 +470,7 @@ class FF12OpenWorldContext(CommonContext):
                     break
 
                 if data.type == "inventory":
-                    if self.is_chara_in_party(int(data.str_id)):
+                    if int(data.str_id) in self.game_state_cache.party_members:
                         self.sending.append(data.address)
                 elif data.type == "reward":
                     if self.is_reward_met(data):
@@ -343,14 +482,14 @@ class FF12OpenWorldContext(CommonContext):
                     treasure_index = treasures.index(location_name)
                     byte_index = treasure_index // 8
                     bit_index = treasure_index % 8
-                    if self.ff12_read_bit(self.get_save_data_address() + 0x14B4 + byte_index, bit_index, False):
+                    treasure_byte = self.game_state_cache.save_byte(0x14B4 + byte_index)
+                    if (treasure_byte >> bit_index) & 1:
                         self.sending.append(data.address)
 
             self.locations_checked |= set(self.sending)
 
             # Victory, Final Boss
-            if self.ff12_read_byte(self.get_save_data_address() + 0xA2E, False) >= 2 \
-                    and not self.finished_game:
+            if self.game_state_cache.save_byte(0xA2E) >= 2 and not self.finished_game:
                 await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 self.finished_game = True
 
@@ -392,72 +531,75 @@ class FF12OpenWorldContext(CommonContext):
             logger.info(e)
 
     def is_reward_met(self, location_data: FF12OpenWorldLocationData):
+        save = self.game_state_cache
+        scen = self.get_scenario_flag()
+
         if location_data.str_id == "9000" or \
                 location_data.str_id == "916B" or \
                 location_data.str_id == "916C":  # Tomaj Checks
-            return self.get_scenario_flag() >= 6110
+            return scen >= 6110
         elif location_data.str_id == "9002":  # Shadestone check
-            return self.ff12_read_bit(self.get_save_data_address() + 0xA42, 0, False)
+            return save.save_bit(0xA42, 0)
         elif location_data.str_id == "9001":  # Sunstone check (if received Shadestone but the item is lost)
-            return self.has_item_received("Shadestone") and not self.has_item_in_game("Shadestone")
+            return self.has_item_received("Shadestone") and not self.inventory_has("Shadestone")
         elif location_data.str_id == "905E":  # Crescent Stone (if received Sunstone but the item is lost)
-            return self.has_item_received("Sunstone") and not self.has_item_in_game("Sunstone")
+            return self.has_item_received("Sunstone") and not self.inventory_has("Sunstone")
         elif location_data.str_id == "905F":  # Dalan SotO
-            return self.ff12_read_bit(self.get_save_data_address() + 0xA42, 1, False)
+            return save.save_bit(0xA42, 1)
         elif location_data.str_id == "911E":  # SotO turn in
-            return self.has_item_received("Sword of the Order") and not self.has_item_in_game("Sword of the Order")
+            return self.has_item_received("Sword of the Order") and not self.inventory_has("Sword of the Order")
         elif location_data.str_id == "9060":  # Judges Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA27, False) >= 2
+            return save.save_byte(0xA27) >= 2
         elif location_data.str_id == "9061":  # Systems Access Key
-            return self.ff12_read_bit(self.get_save_data_address() + 0x14D4 + 4, 0, False)
+            return save.save_bit(0x14D4 + 4, 0)
         elif location_data.str_id == "912C":  # Manufacted Nethicite
-            return self.get_leviathan_progress() >= 0x3E8
+            return self.game_state_cache.leviathan_progress >= 0x3E8
         elif location_data.str_id == "912D":  # Eksir Berries
-            return self.ff12_read_bit(self.get_save_data_address() + 0xA42, 2, False)
+            return save.save_bit(0xA42, 2)
         elif location_data.str_id == "9190":  # Belias Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA19, False) >= 2
+            return save.save_byte(0xA19) >= 2
         elif location_data.str_id == "912E":  # Dawn Shard
-            return self.ff12_read_bit(self.get_save_data_address() + 0xA42, 3, False)
+            return save.save_bit(0xA42, 3)
         elif location_data.str_id == "918E":  # Vossler Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA3B, False) >= 2
+            return save.save_byte(0xA3B) >= 2
         elif location_data.str_id == "912F":  # Goddess's Magicite
-            return self.get_escape_progress() >= 15
+            return self.game_state_cache.escape_progress >= 15
         elif location_data.str_id == "9130":  # Tube Fuse
-            return self.get_escape_progress() >= 0x13F
+            return self.game_state_cache.escape_progress >= 0x13F
         elif location_data.str_id == "911F":  # Garif Reward
-            return self.ff12_read_bit(self.get_save_data_address() + 0xA42, 4, False)
+            return save.save_bit(0xA42, 4)
         elif location_data.str_id == "9131":  # Lente's Tear (Tiamat Boss)
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA08, False) >= 2
+            return save.save_byte(0xA08) >= 2
         elif location_data.str_id == "9191":  # Mateus Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA21, False) >= 2
+            return save.save_byte(0xA21) >= 2
         elif location_data.str_id == "9132":  # Sword of Kings
-            return self.ff12_read_bit(self.get_save_data_address() + 0xA42, 6, False)
+            return save.save_bit(0xA42, 6)
         elif location_data.str_id == "9133":  # Start Mandragoras
             # Kid or Dad
-            return self.ff12_read_byte(self.get_save_data_address() + 0x684, False) == 1 or \
-                self.ff12_read_byte(self.get_save_data_address() + 0x681, False) == 1
+            return self.game_state_cache.save_byte(0x684) == 1 or \
+                self.game_state_cache.save_byte(0x681) == 1
         elif location_data.str_id == "9052":  # Turn in Mandragoras
-            return self.ff12_read_byte(self.get_save_data_address() + 0x683, False) == 1
+            return self.game_state_cache.save_byte(0x683) == 1
         elif location_data.str_id == "918D":  # Cid 1 Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA29, False) >= 2
+            return self.game_state_cache.save_byte(0xA29) >= 2
         elif 0x9134 <= int(location_data.str_id, 16) <= 0x914F:  # Pinewood Chops
-            return (self.ff12_read_byte(self.get_save_data_address() + 0xDFF6, False) >
+            return (save.save_byte(0xDFF6) >
                     int(location_data.str_id, 16) - 0x9134)
         elif location_data.str_id == "9150":  # Sandalwood Chop
-            return self.ff12_read_bit(self.get_save_data_address() + 0xA42, 7, False)
+            return save.save_bit(0xA42, 7)
         elif location_data.str_id == "9151":  # Lab Access Card
-            return self.get_draklor_progress() >= 0xD48
+            return self.game_state_cache.draklor_progress >= 0xD48
         elif location_data.str_id == "9192":  # Shemhazai Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA20, False) >= 2
+            return self.game_state_cache.save_byte(0xA20) >= 2
         elif location_data.str_id == "9152":  # Treaty Blade
-            return self.ff12_read_bit(self.get_save_data_address() + 0xDFFB, 0, False)
+            return save.save_bit(0xDFFB, 0)
         elif 0x9153 <= int(location_data.str_id, 16) <= 0x916A:  # Black Orbs
-            return (self.ff12_read_byte(self.get_save_data_address() + 0xDFFC, False) >
+            return (save.save_byte(0xDFFC) >
                     int(location_data.str_id, 16) - 0x9153)
         elif location_data.str_id == "9193":  # Hashmal Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA1F, False) >= 2
+            return self.game_state_cache.save_byte(0xA1F) >= 2
         elif location_data.str_id == "918F":  # Cid 2 Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA2A, False) >= 2
+            return self.game_state_cache.save_byte(0xA2A) >= 2
         elif location_data.str_id == "9003":  # Hunt 1
             return self.read_hunt_progress(0) >= 70
         elif location_data.str_id == "9004":  # Hunt 2
@@ -549,206 +691,206 @@ class FF12OpenWorldContext(CommonContext):
         elif location_data.str_id == "9122":  # Hunt 41
             return self.read_hunt_progress(44) >= 100
         elif 0x902F <= int(location_data.str_id, 16) <= 0x903A:  # Clan Rank Rewards
-            return (self.ff12_read_byte(self.get_save_data_address() + 0x418, False) >
+            return (self.game_state_cache.save_byte(0x418) >
                     int(location_data.str_id, 16) - 0x902F)
         elif location_data.str_id == "903B":  # Clan Boss Flans
-            return self.ff12_read_bit(self.get_save_data_address() + 0x419, 0, False)
+            return self.game_state_cache.save_bit(0x419, 0)
         elif location_data.str_id == "903C":  # Clan Boss Firemane
-            return self.ff12_read_bit(self.get_save_data_address() + 0x419, 1, False)
+            return self.game_state_cache.save_bit(0x419, 1)
         elif location_data.str_id == "903D":  # Clan Boss Earth Tyrant
-            return self.ff12_read_bit(self.get_save_data_address() + 0x419, 2, False)
+            return self.game_state_cache.save_bit(0x419, 2)
         elif location_data.str_id == "903E":  # Clan Boss Mimic Queen
-            return self.ff12_read_bit(self.get_save_data_address() + 0x419, 3, False)
+            return self.game_state_cache.save_bit(0x419, 3)
         elif location_data.str_id == "903F":  # Clan Boss Demon Wall 1
-            return self.ff12_read_bit(self.get_save_data_address() + 0x419, 4, False)
+            return self.game_state_cache.save_bit(0x419, 4)
         elif location_data.str_id == "9040":  # Clan Boss Demon Wall 2
-            return self.ff12_read_bit(self.get_save_data_address() + 0x419, 5, False)
+            return self.game_state_cache.save_bit(0x419, 5)
         elif location_data.str_id == "9041":  # Clan Boss Elder Wyrm
-            return self.ff12_read_bit(self.get_save_data_address() + 0x419, 6, False)
+            return self.game_state_cache.save_bit(0x419, 6)
         elif location_data.str_id == "9042":  # Clan Boss Tiamat
-            return self.ff12_read_bit(self.get_save_data_address() + 0x419, 7, False)
+            return self.game_state_cache.save_bit(0x419, 7)
         elif location_data.str_id == "9043":  # Clan Boss Vinuskar
-            return self.ff12_read_bit(self.get_save_data_address() + 0x41A, 0, False)
+            return self.game_state_cache.save_bit(0x41A, 0)
         elif location_data.str_id == "9044":  # Clan Boss King Bomb
-            return self.ff12_read_bit(self.get_save_data_address() + 0x41A, 1, False)
+            return self.game_state_cache.save_bit(0x41A, 1)
         elif location_data.str_id == "9045":  # Clan Boss Mandragoras
-            return self.ff12_read_bit(self.get_save_data_address() + 0x41A, 3, False)
+            return self.game_state_cache.save_bit(0x41A, 3)
         elif location_data.str_id == "9046":  # Clan Boss Ahriman
-            return self.ff12_read_bit(self.get_save_data_address() + 0x41A, 2, False)
+            return self.game_state_cache.save_bit(0x41A, 2)
         elif location_data.str_id == "9047":  # Clan Boss Hell Wyrm
-            return self.ff12_read_bit(self.get_save_data_address() + 0x41A, 4, False)
+            return self.game_state_cache.save_bit(0x41A, 4)
         elif location_data.str_id == "9048":  # Clan Boss Rafflesia
-            return self.ff12_read_bit(self.get_save_data_address() + 0x41A, 5, False)
+            return self.game_state_cache.save_bit(0x41A, 5)
         elif location_data.str_id == "9049":  # Clan Boss Daedalus
-            return self.ff12_read_bit(self.get_save_data_address() + 0x41A, 6, False)
+            return self.game_state_cache.save_bit(0x41A, 6)
         elif location_data.str_id == "904A":  # Clan Boss Tyrant
-            return self.ff12_read_bit(self.get_save_data_address() + 0x41A, 7, False)
+            return self.game_state_cache.save_bit(0x41A, 7)
         elif location_data.str_id == "904B":  # Clan Boss Hydro
-            return self.ff12_read_bit(self.get_save_data_address() + 0x41B, 0, False)
+            return self.game_state_cache.save_bit(0x41B, 0)
         elif location_data.str_id == "904C":  # Clan Boss Humbaba Mistant
-            return self.ff12_read_bit(self.get_save_data_address() + 0x41B, 1, False)
+            return self.game_state_cache.save_bit(0x41B, 1)
         elif location_data.str_id == "904D":  # Clan Boss Fury
-            return self.ff12_read_bit(self.get_save_data_address() + 0x41B, 2, False)
+            return self.game_state_cache.save_bit(0x41B, 2)
         elif location_data.str_id == "905A":  # Clan Boss Omega Mark XII
-            return self.ff12_read_bit(self.get_save_data_address() + 0x41B, 3, False)
+            return self.game_state_cache.save_bit(0x41B, 3)
         elif 0x904E <= int(location_data.str_id, 16) <= 0x9051:  # Clan Espers (1,4,8,13)
-            return (self.ff12_read_byte(self.get_save_data_address() + 0x41C, False) >
+            return (self.game_state_cache.save_byte(0x41C) >
                     int(location_data.str_id, 16) - 0x904E)
         elif location_data.str_id == "916D":  # Flowering Cactoid Drop
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 130, False) >= 70
+            return self.game_state_cache.save_byte(0x1064 + 130) >= 70
         elif location_data.str_id == "916E":  # Barheim Key
-            return self.ff12_read_byte(self.get_save_data_address() + 0x68B, False) >= 11
+            return self.game_state_cache.save_byte(0x68B) >= 11
         elif location_data.str_id == "9081":  # Deliver Cactus Flower
-            return self.ff12_read_byte(self.get_save_data_address() + 0x68B, False) >= 3
+            return self.game_state_cache.save_byte(0x68B) >= 3
         elif location_data.str_id == "908A":  # Cactus Family
-            return self.ff12_read_byte(self.get_save_data_address() + 0x686, False) >= 7
+            return self.game_state_cache.save_byte(0x686) >= 7
         elif location_data.str_id == "916F":  # Get Stone of the Condemner
-            return self.ff12_read_byte(self.get_save_data_address() + 0x680, False) >= 1
+            return self.game_state_cache.save_byte(0x680) >= 1
         elif location_data.str_id == "9170":  # Get Wind Globe
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 53, False) >= 50
+            return self.game_state_cache.save_byte(0x1064 + 53) >= 50
         elif location_data.str_id == "9171":  # Get Windvane
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 53, False) >= 60
+            return self.game_state_cache.save_byte(0x1064 + 53) >= 60
         elif location_data.str_id == "9172":  # White Mousse Drop
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 133, False) >= 50
+            return self.game_state_cache.save_byte(0x1064 + 133) >= 50
         elif location_data.str_id == "9173":  # Sluice Gate Key
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 133, False) >= 120
+            return self.game_state_cache.save_byte(0x1064 + 133) >= 120
         elif location_data.str_id == "9174":  # Enkelados Drop
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 137, False) >= 50
+            return self.game_state_cache.save_byte(0x1064 + 137) >= 50
         elif location_data.str_id == "9062":  # Give Errmonea Leaf
-            return self.ff12_read_byte(self.get_save_data_address() + 0x4AE, False) >= 1
+            return self.game_state_cache.save_byte(0x4AE) >= 1
         elif location_data.str_id == "9175":  # Merchant's Armband
-            return self.ff12_read_byte(self.get_save_data_address() + 0x6FD, False) >= 2
+            return self.game_state_cache.save_byte(0x6FD) >= 2
         elif location_data.str_id == "9176":  # Get Pilika's Diary
-            return self.ff12_read_byte(self.get_save_data_address() + 0x6FD, False) >= 3
+            return self.game_state_cache.save_byte(0x6FD) >= 3
         elif location_data.str_id == "908D":  # Give Pilika's Diary
-            return self.ff12_read_byte(self.get_save_data_address() + 0x6FD, False) >= 4
+            return self.game_state_cache.save_byte(0x6FD) >= 4
         elif location_data.str_id == "9177":  # Vorpal Bunny Drop
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 141, False) >= 50
+            return self.game_state_cache.save_byte(0x1064 + 141) >= 50
         elif location_data.str_id == "9178":  # Croakadile Drop
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 138, False) >= 50
+            return self.game_state_cache.save_byte(0x1064 + 138) >= 50
         elif location_data.str_id == "9179":  # Lindwyrm Drop
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 149, False) >= 100
+            return self.game_state_cache.save_byte(0x1064 + 149) >= 100
         elif location_data.str_id == "917A":  # Get Silent Urn
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 163, False) >= 50
+            return self.game_state_cache.save_byte(0x1064 + 163) >= 50
         elif location_data.str_id == "917B":  # Orthros Drop
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 162, False) >= 70
+            return self.game_state_cache.save_byte(0x1064 + 162) >= 70
         elif location_data.str_id == "917D":  # Site 3 Key
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 165, False) >= 50
+            return self.game_state_cache.save_byte(0x1064 + 165) >= 50
         elif location_data.str_id == "917E":  # Site 11 Key
-            return self.ff12_read_bit(self.get_save_data_address() + 0xDFFB, 2, False)
+            return self.game_state_cache.save_bit(0xDFFB, 2)
         elif location_data.str_id == "917F":  # Fafnir Drop
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 158, False) >= 70
+            return self.game_state_cache.save_byte(0x1064 + 158) >= 70
         elif location_data.str_id == "9180":  # Marilith Drop
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 136, False) >= 70
+            return self.game_state_cache.save_byte(0x1064 + 136) >= 70
         elif location_data.str_id == "9181":  # Vyraal Drop
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 148, False) >= 100
+            return self.game_state_cache.save_byte(0x1064 + 148) >= 100
         elif location_data.str_id == "9182":  # Dragon Scale
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 148, False) >= 150
+            return self.game_state_cache.save_byte(0x1064 + 148) >= 150
         elif location_data.str_id == "9183":  # Ageworn Key check (if received Dragon Scale but the item is lost)
-            return self.has_item_received("Dragon Scale") and not self.has_item_in_game("Dragon Scale")
+            return self.has_item_received("Dragon Scale") and not self.inventory_has("Dragon Scale")
         elif location_data.str_id == "9184":  # Ann's Letter
-            return self.ff12_read_byte(self.get_save_data_address() + 0x5A6, False) >= 1
+            return self.game_state_cache.save_byte(0x5A6) >= 1
         elif location_data.str_id == "906C":  # Ann's Sisters
-            return self.ff12_read_byte(self.get_save_data_address() + 0x5A6, False) >= 7
+            return self.game_state_cache.save_byte(0x5A6) >= 7
         elif location_data.str_id == "9185":  # Dusty Letter
-            return self.ff12_read_bit(self.get_save_data_address() + 0x423, 2, False)
+            return self.game_state_cache.save_bit(0x423, 2)
         elif location_data.str_id == "917C":  # Blackened Fragment
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 162, False) >= 100
+            return self.game_state_cache.save_byte(0x1064 + 162) >= 100
         elif location_data.str_id == "9186":  # Dull Fragment
-            return self.ff12_read_bit(self.get_save_data_address() + 0x423, 1, False)
+            return self.game_state_cache.save_bit(0x423, 1)
         elif location_data.str_id == "9187":  # Grimy Fragment
-            return self.ff12_read_byte(self.get_save_data_address() + 0x416, False) >= 7
+            return self.game_state_cache.save_byte(0x416) >= 7
         elif location_data.str_id == "9188":  # Moonsilver Medallion
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 59, False) >= 20
+            return self.game_state_cache.save_byte(0x1064 + 59) >= 20
         elif location_data.str_id == "9189" or \
                 location_data.str_id == "918A" or \
                 location_data.str_id == "918B":  # Nabreus Medallions
-            return self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 57, False) >= 100
+            return self.game_state_cache.save_byte(0x1064 + 57) >= 100
         elif location_data.str_id == "918C":  # Medallion of Might (Humbaba Mistant and Fury bosses)
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA0F, False) >= 2 and \
-                self.ff12_read_byte(self.get_save_data_address() + 0xA10, False) >= 2
+            return self.game_state_cache.save_byte(0xA0F) >= 2 and \
+                self.game_state_cache.save_byte(0xA10) >= 2
         elif location_data.str_id == "9056":  # Viera Rendevous
-            return self.ff12_read_byte(self.get_save_data_address() + 0x40E, False) >= 6
+            return self.game_state_cache.save_byte(0x40E) >= 6
         elif location_data.str_id == "9058":  # Ktjn Reward
-            return self.ff12_read_bit(self.get_save_data_address() + 0x409, 0, False)
+            return self.game_state_cache.save_bit(0x409, 0)
         elif location_data.str_id == "906A":  # Jovy Reward
-            return self.ff12_read_byte(self.get_save_data_address() + 0x5B8, False) >= 6
+            return self.game_state_cache.save_byte(0x5B8) >= 6
         elif location_data.str_id == "906E":  # Outpost Glint 1
-            return self.ff12_read_byte(self.get_save_data_address() + 0x691, False) >= 1
+            return self.game_state_cache.save_byte(0x691) >= 1
         elif location_data.str_id == "906F":  # Outpost Glint 2
-            return self.ff12_read_byte(self.get_save_data_address() + 0x692, False) >= 1
+            return self.game_state_cache.save_byte(0x692) >= 1
         elif location_data.str_id == "9057":  # Outpost Glint 3
-            return self.ff12_read_byte(self.get_save_data_address() + 0x693, False) >= 1
+            return self.game_state_cache.save_byte(0x693) >= 1
         elif location_data.str_id == "9070":  # Outpost Glint 4
-            return self.ff12_read_byte(self.get_save_data_address() + 0x694, False) >= 1
+            return self.game_state_cache.save_byte(0x694) >= 1
         elif location_data.str_id == "9059":  # Outpost Glint 5
-            return self.ff12_read_byte(self.get_save_data_address() + 0x695, False) >= 1
+            return self.game_state_cache.save_byte(0x695) >= 1
         elif location_data.str_id == "908F":  # Footrace
-            return self.ff12_read_byte(self.get_save_data_address() + 0x73D, False) >= 1
+            return self.game_state_cache.save_byte(0x73D) >= 1
         elif location_data.str_id == "9194":  # Adrammelech Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA25, False) >= 2
+            return save.save_byte(0xA25) >= 2
         elif location_data.str_id == "9195":  # Zalera Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA1D, False) >= 2
+            return save.save_byte(0xA1D) >= 2
         elif location_data.str_id == "9196":  # Cuchulainn Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA1C, False) >= 2
+            return save.save_byte(0xA1C) >= 2
         elif location_data.str_id == "9197":  # Zeromus Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA22, False) >= 2
+            return save.save_byte(0xA22) >= 2
         elif location_data.str_id == "9198":  # Exodus Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA23, False) >= 2
+            return save.save_byte(0xA23) >= 2
         elif location_data.str_id == "9199":  # Chaos Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA1A, False) >= 2
+            return save.save_byte(0xA1A) >= 2
         elif location_data.str_id == "919A":  # Ultima Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA24, False) >= 2
+            return save.save_byte(0xA24) >= 2
         elif location_data.str_id == "919B":  # Zodiark Boss
-            return self.ff12_read_byte(self.get_save_data_address() + 0xA1B, False) >= 2
+            return save.save_byte(0xA1B) >= 2
         elif 0x9090 <= int(location_data.str_id, 16) <= 0x90AE:  # Trophy Drops
             trophy_index = int(location_data.str_id, 16) - 0x9090
-            return self.ff12_read_byte(self.get_save_data_address() + 0xC90 + trophy_index, False) >= 2
+            return save.save_byte(0xC90 + trophy_index) >= 2
         elif 0x90F9 <= int(location_data.str_id, 16) <= 0x90FE:  # Rare Game Defeats (5,10,15,20,25,30)
-            return self.ff12_read_byte(self.get_save_data_address() + 0x725, False) > \
+            return save.save_byte(0x725) > \
                 (int(location_data.str_id, 16) - 0x90F9) + 1
         elif location_data.str_id == "90F3":  # Atak >=16
-            if self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 71, False) < 170:
+            if save.save_byte(0x1064 + 71) < 170:
                 return False
             max_trophies = self.get_max_trophies()
-            return self.ff12_read_byte(self.get_save_data_address() + 0xb14, False) == max_trophies and \
+            return save.save_byte(0xB14) == max_trophies and \
                 max_trophies >= 16
         elif location_data.str_id == "90F4":  # Atak <16
-            if self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 71, False) < 170:
+            if save.save_byte(0x1064 + 71) < 170:
                 return False
             max_trophies = self.get_max_trophies()
-            return self.ff12_read_byte(self.get_save_data_address() + 0xb14, False) == max_trophies and \
+            return save.save_byte(0xB14) == max_trophies and \
                 max_trophies < 16
         elif location_data.str_id == "90F5":  # Blok >=16
-            if self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 71, False) < 170:
+            if save.save_byte(0x1064 + 71) < 170:
                 return False
             max_trophies = self.get_max_trophies()
-            return self.ff12_read_byte(self.get_save_data_address() + 0xb15, False) == max_trophies and \
+            return save.save_byte(0xB15) == max_trophies and \
                 max_trophies >= 16
         elif location_data.str_id == "90F6":  # Blok <16
-            if self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 71, False) < 170:
+            if save.save_byte(0x1064 + 71) < 170:
                 return False
             max_trophies = self.get_max_trophies()
-            return self.ff12_read_byte(self.get_save_data_address() + 0xb15, False) == max_trophies and \
+            return save.save_byte(0xB15) == max_trophies and \
                 max_trophies < 16
         elif location_data.str_id == "90F7":  # Stok >=16
-            if self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 71, False) < 170:
+            if save.save_byte(0x1064 + 71) < 170:
                 return False
             max_trophies = self.get_max_trophies()
-            return self.ff12_read_byte(self.get_save_data_address() + 0xb16, False) == max_trophies and \
+            return save.save_byte(0xB16) == max_trophies and \
                 max_trophies >= 16
         elif location_data.str_id == "90F8":  # Stok <16
-            if self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 71, False) < 170:
+            if save.save_byte(0x1064 + 71) < 170:
                 return False
             max_trophies = self.get_max_trophies()
-            return self.ff12_read_byte(self.get_save_data_address() + 0xb16, False) == max_trophies and \
+            return save.save_byte(0xB16) == max_trophies and \
                 max_trophies < 16
         elif 0x90FF <= int(location_data.str_id, 16) <= 0x911D:  # Hunt Club Outfitters
             outfitter_index = int(location_data.str_id, 16) - 0x90FF
-            return self.ff12_read_byte(self.get_save_data_address() + 0xAF2 + outfitter_index, False) >= 1
+            return save.save_byte(0xAF2 + outfitter_index) >= 1
 
     def read_hunt_progress(self, hunt_id: int) -> int:
-        value = self.ff12_read_byte(self.get_save_data_address() + 0x1064 + 128 + hunt_id, False)
+        value = self.game_state_cache.save_byte(0x1064 + 128 + hunt_id)
         if self.hunt_progress.get(hunt_id) != value:
             print("[Debug] Hunt Progress: Hunt %d: %d -> %d" % (hunt_id, self.hunt_progress.get(hunt_id, 0), value))
             self.hunt_progress[hunt_id] = value
@@ -757,21 +899,26 @@ class FF12OpenWorldContext(CommonContext):
 
     def get_max_trophies(self):
         return max(
-            self.ff12_read_byte(self.get_save_data_address() + 0xb14, False),
-            self.ff12_read_byte(self.get_save_data_address() + 0xb15, False),
-            self.ff12_read_byte(self.get_save_data_address() + 0xb16, False))
+            self.game_state_cache.save_byte(0xB14),
+            self.game_state_cache.save_byte(0xB15),
+            self.game_state_cache.save_byte(0xB16))
 
     async def give_items(self):
         try:
-            # Write obtained items to a txt file in the communication folder
-            with open(os.path.join(self.game_communication_path, "items_received.txt"), "w") as f:
-                for item in self.ff12_items_received:
-                    # Write the item ID and the amount of the item
-                    item_id = item.item - FF12OW_BASE_ID
-                    if item.item >= FF12OW_BASE_ID + 98304:  # Gil
+            # Write obtained items to txt files in the communication folder in format items_received_####.txt
+            cur_index = 0
+            for item in self.ff12_items_received:
+                file_path = os.path.join(
+                    self.game_communication_path,
+                    f"items_received_{cur_index:04d}.txt")
+                with open(file_path, "w") as f:
+                    # Write the item ID and the amount of the item on new lines
+                    item_id = item.item - 1
+                    if item.item >= 1 + 98304:  # Gil
                         item_id = 0xFFFE
                     item_count = item_data_table[inv_item_table[item.item]].amount
-                    f.write(f"{item_id}|{item_count}\n")
+                    f.write(f"{item_id}\n{item_count}\n")
+                cur_index += 1
         except Exception as e:
             if self.ff12connected:
                 self.ff12connected = False
@@ -794,14 +941,18 @@ async def ff12_watcher(ctx: FF12OpenWorldContext):
     while not ctx.exit_event.is_set():
         try:
             if ctx.ff12connected and ctx.server_connected:
-                async_start(ctx.ff12_check_locations())
-                async_start(ctx.give_items())
+                await ctx.update_game_state_cache()
+                await ctx.ff12_check_locations()
+                await ctx.give_items()
             elif not ctx.ff12connected and ctx.server_connected:
-                logger.info("Game Connection lost. Waiting 15 seconds until trying to reconnect.")
                 ctx.ff12 = None
-                while not ctx.ff12connected and ctx.server_connected:
-                    await asyncio.sleep(15)
-                    ctx.find_game()
+                last_check = time.time()
+                while not ctx.ff12connected and ctx.server_connected and not ctx.exit_event.is_set():
+                    if time.time() - last_check > 15:
+                        logger.info("Game Connection lost. Waiting 15 seconds until trying to reconnect.")
+                        ctx.find_game()
+                        last_check = time.time()
+                    await asyncio.sleep(0.5)
         except Exception as e:
             if ctx.ff12connected:
                 ctx.ff12connected = False

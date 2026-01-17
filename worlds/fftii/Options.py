@@ -22,8 +22,8 @@ class ZodiacStonesRequired(Range):
 
 class ZodiacStoneLocations(Choice):
     """Where can Zodiac Stones appear?
-    Vanilla limits their possible locations to those events which had one in the vanilla game. Note that this limits
-    the number of stones in the pool to 11, with sidequests on, and 8 without.
+    Vanilla limits their possible locations to those events which had one in the vanilla game.
+    This limits the number maximum number of stones in the pool from 8-12, depending on sidequest and Altima options.
     Anywhere Local means stones can be at any location in your world.
     Anywhere means stones can be anywhere in the multiworld."""
     display_name = "Zodiac Stone Locations"

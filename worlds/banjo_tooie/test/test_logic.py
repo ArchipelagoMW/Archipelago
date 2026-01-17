@@ -8,7 +8,7 @@ class IntendedLogic:
         "logic_type": LogicType.option_intended,
         "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "randomize_bk_moves": RandomizeBKMoveList.option_all,
-        "randomize_notes": RandomizeNotes.option_true
+        "randomize_notes": RandomizeNotes.option_true,
     }
 
 
@@ -24,7 +24,7 @@ class EasyTricksLogic:
         "logic_type": LogicType.option_easy_tricks,
         "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "randomize_bk_moves": RandomizeBKMoveList.option_all,
-        "randomize_notes": RandomizeNotes.option_true
+        "randomize_notes": RandomizeNotes.option_true,
     }
 
 
@@ -40,8 +40,7 @@ class HardTricksLogic:
         "logic_type": LogicType.option_hard_tricks,
         "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "randomize_bk_moves": RandomizeBKMoveList.option_all,
-        "randomize_notes": RandomizeNotes.option_true
-
+        "randomize_notes": RandomizeNotes.option_true,
     }
 
 
@@ -57,7 +56,7 @@ class GlitchesLogic:
         "logic_type": LogicType.option_glitches,
         "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "randomize_bk_moves": RandomizeBKMoveList.option_all,
-        "randomize_notes": RandomizeNotes.option_true
+        "randomize_notes": RandomizeNotes.option_true,
     }
 
 

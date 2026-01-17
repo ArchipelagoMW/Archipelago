@@ -1,14 +1,21 @@
-from worlds.fftii.enemyrando.Abilities import ReactionAbility, SupportAbility, MovementAbility, \
-    ActionAbility
-from worlds.fftii.enemyrando.Birthday import Month
-from worlds.fftii.enemyrando.Items import Items
-from worlds.fftii.enemyrando.Job import UnlockedJob, Job
-from worlds.fftii.enemyrando.SpriteSet import SpriteSet
-from worlds.fftii.enemyrando.Unit import UnitGender
+from .Abilities import ReactionAbility, SupportAbility, MovementAbility, ActionAbility
+from .Birthday import Month
+from .Items import Items
+from .Job import UnlockedJob, Job
+from .SpriteSet import SpriteSet
+from worlds.fftii.patchersuite.Unit import UnitGender
 
 RANDOM_VALUE = 0xFE
 
-class RandomizedUnit:
+class RandomizedUnitMetaclass(type):
+    job: Job = Job.SQUIRE
+    sprite_set: SpriteSet = SpriteSet.GENERIC_FEMALE
+    gender: UnitGender = UnitGender.FEMALE
+
+    def __repr__(self):
+        return f"Sprite: {self.sprite_set.name}, Job: {self.job.name}, Gender: {self.gender.name}"
+
+class RandomizedUnit(object, metaclass=RandomizedUnitMetaclass):
     job: Job
     job_name: str
     sprite_set: SpriteSet
@@ -18,8 +25,8 @@ class RandomizedUnit:
     birthday_day: int = RANDOM_VALUE
     brave: int = RANDOM_VALUE
     faith: int = RANDOM_VALUE
-    unlocked_job: UnlockedJob
-    unlocked_job_level: int
+    unlocked_job: UnlockedJob = UnlockedJob.BASE
+    unlocked_job_level: int = 2
     primary: ActionAbility = ActionAbility.JOB
     secondary: ActionAbility = ActionAbility.RANDOM
     reaction: ReactionAbility = ReactionAbility.RANDOM
@@ -31,6 +38,33 @@ class RandomizedUnit:
     right_hand: Items = Items.RANDOM
     left_hand: Items = Items.RANDOM
     difficulty: int = 0
+
+    @classmethod
+    def to_json(cls):
+        return {
+            "Job": cls.job.value,
+            "SpriteSet": cls.sprite_set.value,
+            "Gender": cls.gender.value,
+            "BirthdayMonth": cls.birthday_month.value,
+            "BirthdayDay": cls.birthday_day,
+            "Brave": cls.brave,
+            "Faith": cls.faith,
+            "UnlockedJob": cls.unlocked_job.value,
+            "UnlockedJobLevel": cls.unlocked_job_level,
+            "Primary": cls.primary.value,
+            "Secondary": cls.secondary.value,
+            "Reaction": cls.reaction.value,
+            "Support": cls.support.value,
+            "Movement": cls.movement.value,
+            "Head": cls.head.value,
+            "Body": cls.body.value,
+            "Accessory": cls.accessory.value,
+            "RightHand": cls.right_hand.value,
+            "LeftHand": cls.left_hand.value
+        }
+
+    def __repr__(self):
+        return f"Sprite: {self.sprite_set.name}, Job: {self.job.name}, Gender: {self.gender.name}"
 
 #region Generic humanss
 class MaleSquire(RandomizedUnit):
@@ -316,13 +350,13 @@ class ZalbagArcKnight(RandomizedUnit):
     job = Job.ARC_KNIGHT_ZALBAG
     sprite_set = SpriteSet.ZALBAG
     gender = UnitGender.MALE
-    difficulty = 4
+    difficulty = 3
 
 class LuneKnight(RandomizedUnit):
     job = Job.LUNE_KNIGHT
     sprite_set = SpriteSet.DYCEDARG
     gender = UnitGender.MALE
-    difficulty = 4
+    difficulty = 3
 
 class Princess(RandomizedUnit):
     job = Job.PRINCESS
@@ -345,7 +379,7 @@ class Dragoner(RandomizedUnit):
     job = Job.DRAGONER
     sprite_set = SpriteSet.REIS
     gender = UnitGender.FEMALE
-    difficulty = 4
+    difficulty = 3
 
 class HolyPriest(RandomizedUnit):
     job = Job.HOLY_PRIEST
@@ -363,7 +397,7 @@ class Astrologist(RandomizedUnit):
     job = Job.ASTROLOGIST
     sprite_set = SpriteSet.OLAN
     gender = UnitGender.MALE
-    difficulty = 4
+    difficulty = 3
 
 
 class EngineerMustadio(RandomizedUnit):
@@ -395,7 +429,7 @@ class HolyKnightAgrias(RandomizedUnit):
     job = Job.HOLY_KNIGHT_AGRIAS
     sprite_set = SpriteSet.AGRIAS
     gender = UnitGender.FEMALE
-    difficulty = 4
+    difficulty = 3
 
 
 class TempleKnight(RandomizedUnit):
@@ -423,7 +457,7 @@ class KnightBlade(RandomizedUnit):
     job = Job.KNIGHT_BLADE
     sprite_set = SpriteSet.IZLUDE
     gender = UnitGender.MALE
-    difficulty = 4
+    difficulty = 3
 
 
 class KnightBladeWithKit(KnightBlade):
@@ -444,7 +478,7 @@ class WhiteKnight(RandomizedUnit):
     job = Job.WHITE_KNIGHT_C3
     sprite_set = SpriteSet.WIEGRAF2
     gender = UnitGender.MALE
-    difficulty = 4
+    difficulty = 3
 
 
 class WhiteKnightWithCounter(WhiteKnight):
@@ -467,7 +501,7 @@ class HeavenKnight(RandomizedUnit):
 
 
 class DivineKnightMeliadoul(RandomizedUnit):
-    job = Job.DIVINE_KNIGHT_MELIADOUL
+    job = Job.DIVINE_KNIGHT_MELIADOUL_ENEMY
     sprite_set = SpriteSet.MELIADOUL
     gender = UnitGender.FEMALE
     difficulty = 6
@@ -501,14 +535,14 @@ class Cleric(RandomizedUnit):
 
 class ClericWithUltima(Cleric):
     primary = ActionAbility.HOLY_MAGIC
-    difficulty = 4
+    difficulty = 3
 
 
 class Soldier(RandomizedUnit):
     job = Job.SOLDIER
     sprite_set = SpriteSet.CLOUD
     gender = UnitGender.MALE
-    difficulty = 4
+    difficulty = 3
 
 
 class ArcKnightZombie(RandomizedUnit):
@@ -918,11 +952,15 @@ class Gafgarion(DarkKnight):
     faith = 67
 
 class Gafgarion1Boss(Gafgarion):
+    unlocked_job = UnlockedJob.BASE
+    unlocked_job_level = 4
+
+class Gafgarion2Boss(Gafgarion):
     unlocked_job = UnlockedJob.GEOMANCER
     unlocked_job_level = 5
     right_hand = Items.BLOOD_SWORD
 
-class Gafgarion2Boss(Gafgarion):
+class Gafgarion3Boss(Gafgarion):
     unlocked_job = UnlockedJob.BASE
     unlocked_job_level = 7
     secondary = ActionAbility.NONE
@@ -932,6 +970,9 @@ class QueklainBoss(QueklainWithKit):
     birthday_day = 15
     brave = 70
     faith = 70
+    reaction = ReactionAbility.NONE
+    support = SupportAbility.NONE
+    movement = MovementAbility.NONE
 
 class Zalmo(HolyPriest):
     birthday_month = Month.DECEMBER
@@ -993,13 +1034,15 @@ class VeliusBoss(VeliusWithKit):
     birthday_day = 23
     brave = 70
     faith = 70
+    reaction = ReactionAbility.NONE
+    support = SupportAbility.NONE
+    movement = MovementAbility.NONE
 
 class Elmdor(ArcKnightElmdor):
     birthday_month = Month.MAY
     birthday_day = 21
     brave = 70
     faith = 70
-
 
 class Elmdor1Boss(Elmdor):
     primary = ActionAbility.SWORD_SPIRIT_1
@@ -1087,6 +1130,9 @@ class ZaleraBoss(ZaleraWithKit):
     birthday_day = 21
     brave = 70
     faith = 70
+    reaction = ReactionAbility.NONE
+    support = SupportAbility.NONE
+    movement = MovementAbility.NONE
 
 class DycedargBoss(LuneKnight):
     birthday_month = Month.OCTOBER
@@ -1105,6 +1151,9 @@ class AdramelkBoss(AdramelkWithKit):
     birthday_day = 24
     brave = 70
     faith = 70
+    reaction = ReactionAbility.NONE
+    support = SupportAbility.NONE
+    movement = MovementAbility.NONE
 
 class VormavBoss(DivineKnightVormav):
     birthday_month = Month.JULY
@@ -1186,11 +1235,14 @@ class Balk2Boss(Balk):
     head = Items.THIEF_HAT
     difficulty = 12
 
-class Hashmalum(HashmalumWithKit):
+class HashmalumBoss(HashmalumWithKit):
     birthday_month = Month.JULY
     birthday_day = 23
     brave = 70
     faith = 70
+    reaction = ReactionAbility.NONE
+    support = SupportAbility.NONE
+    movement = MovementAbility.NONE
 
 class Altima1Boss(Altima1):
     birthday_month = Month.SEPTEMBER
@@ -1200,6 +1252,11 @@ class Altima1Boss(Altima1):
     reaction = ReactionAbility.ABSORB_USED_MP
     support = SupportAbility.NONE
     movement = MovementAbility.NONE
+    right_hand = Items.NONE
+    left_hand = Items.NONE
+    head = Items.NONE
+    body = Items.NONE
+    accessory = Items.NONE
 
 
 class Altima2Boss(Altima2):
@@ -1210,6 +1267,37 @@ class Altima2Boss(Altima2):
     reaction = ReactionAbility.NONE
     support = SupportAbility.NONE
     movement = MovementAbility.NONE
+    right_hand = Items.NONE
+    left_hand = Items.NONE
+    head = Items.NONE
+    body = Items.NONE
+    accessory = Items.NONE
+
+class Worker7Boss(SteelGiant):
+    brave = 50
+    faith = 0
+    primary = ActionAbility.JOB
+    secondary = ActionAbility.NONE
+    reaction = ReactionAbility.NONE
+    support = SupportAbility.DEFENSE_UP
+    movement = MovementAbility.NONE
+    right_hand = Items.NONE
+    left_hand = Items.NONE
+    head = Items.NONE
+    body = Items.NONE
+    accessory = Items.NONE
+
+class ElidibsBoss(Elidibs):
+    birthday_month = Month.UNKNOWN
+    birthday_day = 0
+    brave = 70
+    faith = 70
+    right_hand = Items.NONE
+    left_hand = Items.NONE
+    head = Items.NONE
+    body = Items.NONE
+    accessory = Items.NONE
+
 
 
 

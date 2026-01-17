@@ -2,8 +2,6 @@
     This function can be used to test world.random.choices
     Don't use this directly in tests, instead, you can run it locally to make sure the generated numbers
     make sense.
-
-
 """
 
 import math
@@ -46,4 +44,3 @@ weights = {
 }
 N = 687 - 30
 confidence_intervals = count_confidence_interval(weights, N)
-print(confidence_intervals)

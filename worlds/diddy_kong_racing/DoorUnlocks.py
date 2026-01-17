@@ -14,71 +14,67 @@ else:
 
 
 class DoorUnlockInfo:
-    def __init__(self, item: str, location: str, requirement: int):
+    def __init__(self, door_index: int, item: str, location: str, requirement: int):
+        self.door_index = door_index
         self.item = item
         self.location = location
         self.requirement = requirement
 
 
 vanilla_door_unlock_info_list: list[DoorUnlockInfo] = [
-    DoorUnlockInfo(ItemName.DINO_DOMAIN_UNLOCK, LocationName.WORLD_1_UNLOCK, 1),
-    DoorUnlockInfo(ItemName.SNOWFLAKE_MOUNTAIN_UNLOCK, LocationName.WORLD_2_UNLOCK, 2),
-    DoorUnlockInfo(ItemName.SHERBET_ISLAND_UNLOCK, LocationName.WORLD_3_UNLOCK, 10),
-    DoorUnlockInfo(ItemName.DRAGON_FOREST_UNLOCK, LocationName.WORLD_4_UNLOCK, 16),
-    DoorUnlockInfo(ItemName.ANCIENT_LAKE_DOOR_1_UNLOCK, LocationName.RACE_1_1_UNLOCK, 1),
-    DoorUnlockInfo(ItemName.ANCIENT_LAKE_DOOR_2_UNLOCK, LocationName.RACE_1_2_UNLOCK, 6),
-    DoorUnlockInfo(ItemName.FOSSIL_CANYON_DOOR_1_UNLOCK, LocationName.RACE_2_1_UNLOCK, 2),
-    DoorUnlockInfo(ItemName.FOSSIL_CANYON_DOOR_2_UNLOCK, LocationName.RACE_2_2_UNLOCK, 7),
-    DoorUnlockInfo(ItemName.JUNGLE_FALLS_DOOR_1_UNLOCK, LocationName.RACE_3_1_UNLOCK, 3),
-    DoorUnlockInfo(ItemName.JUNGLE_FALLS_DOOR_2_UNLOCK, LocationName.RACE_3_2_UNLOCK, 8),
-    DoorUnlockInfo(ItemName.HOT_TOP_VOLCANO_DOOR_1_UNLOCK, LocationName.RACE_4_1_UNLOCK, 5),
-    DoorUnlockInfo(ItemName.HOT_TOP_VOLCANO_DOOR_2_UNLOCK, LocationName.RACE_4_2_UNLOCK, 10),
-    DoorUnlockInfo(ItemName.EVERFROST_PEAK_DOOR_1_UNLOCK, LocationName.RACE_5_1_UNLOCK, 2),
-    DoorUnlockInfo(ItemName.EVERFROST_PEAK_DOOR_2_UNLOCK, LocationName.RACE_5_2_UNLOCK, 10),
-    DoorUnlockInfo(ItemName.WALRUS_COVE_DOOR_1_UNLOCK, LocationName.RACE_6_1_UNLOCK, 3),
-    DoorUnlockInfo(ItemName.WALRUS_COVE_DOOR_2_UNLOCK, LocationName.RACE_6_2_UNLOCK, 11),
-    DoorUnlockInfo(ItemName.SNOWBALL_VALLEY_DOOR_1_UNLOCK, LocationName.RACE_7_1_UNLOCK, 6),
-    DoorUnlockInfo(ItemName.SNOWBALL_VALLEY_DOOR_2_UNLOCK, LocationName.RACE_7_2_UNLOCK, 14),
-    DoorUnlockInfo(ItemName.FROSTY_VILLAGE_DOOR_1_UNLOCK, LocationName.RACE_8_1_UNLOCK, 9),
-    DoorUnlockInfo(ItemName.FROSTY_VILLAGE_DOOR_2_UNLOCK, LocationName.RACE_8_2_UNLOCK, 16),
-    DoorUnlockInfo(ItemName.WHALE_BAY_DOOR_1_UNLOCK, LocationName.RACE_9_1_UNLOCK, 10),
-    DoorUnlockInfo(ItemName.WHALE_BAY_DOOR_2_UNLOCK, LocationName.RACE_9_2_UNLOCK, 17),
-    DoorUnlockInfo(ItemName.CRESCENT_ISLAND_DOOR_1_UNLOCK, LocationName.RACE_10_1_UNLOCK, 11),
-    DoorUnlockInfo(ItemName.CRESCENT_ISLAND_DOOR_2_UNLOCK, LocationName.RACE_10_2_UNLOCK, 18),
-    DoorUnlockInfo(ItemName.PIRATE_LAGOON_DOOR_1_UNLOCK, LocationName.RACE_11_1_UNLOCK, 13),
-    DoorUnlockInfo(ItemName.PIRATE_LAGOON_DOOR_2_UNLOCK, LocationName.RACE_11_2_UNLOCK, 20),
-    DoorUnlockInfo(ItemName.TREASURE_CAVES_DOOR_1_UNLOCK, LocationName.RACE_12_1_UNLOCK, 16),
-    DoorUnlockInfo(ItemName.TREASURE_CAVES_DOOR_2_UNLOCK, LocationName.RACE_12_2_UNLOCK, 22),
-    DoorUnlockInfo(ItemName.WINDMILL_PLAINS_DOOR_1_UNLOCK, LocationName.RACE_13_1_UNLOCK, 16),
-    DoorUnlockInfo(ItemName.WINDMILL_PLAINS_DOOR_2_UNLOCK, LocationName.RACE_13_2_UNLOCK, 23),
-    DoorUnlockInfo(ItemName.GREENWOOD_VILLAGE_DOOR_1_UNLOCK, LocationName.RACE_14_1_UNLOCK, 17),
-    DoorUnlockInfo(ItemName.GREENWOOD_VILLAGE_DOOR_2_UNLOCK, LocationName.RACE_14_2_UNLOCK, 24),
-    DoorUnlockInfo(ItemName.BOULDER_CANYON_DOOR_1_UNLOCK, LocationName.RACE_15_1_UNLOCK, 20),
-    DoorUnlockInfo(ItemName.BOULDER_CANYON_DOOR_2_UNLOCK, LocationName.RACE_15_2_UNLOCK, 30),
-    DoorUnlockInfo(ItemName.HAUNTED_WOODS_DOOR_1_UNLOCK, LocationName.RACE_16_1_UNLOCK, 22),
-    DoorUnlockInfo(ItemName.HAUNTED_WOODS_DOOR_2_UNLOCK, LocationName.RACE_16_2_UNLOCK, 37),
-    DoorUnlockInfo(ItemName.SPACEDUST_ALLEY_DOOR_1_UNLOCK, LocationName.RACE_17_1_UNLOCK, 39),
-    DoorUnlockInfo(ItemName.SPACEDUST_ALLEY_DOOR_2_UNLOCK, LocationName.RACE_17_2_UNLOCK, 43),
-    DoorUnlockInfo(ItemName.DARKMOON_CAVERNS_DOOR_1_UNLOCK, LocationName.RACE_18_1_UNLOCK, 40),
-    DoorUnlockInfo(ItemName.DARKMOON_CAVERNS_DOOR_2_UNLOCK, LocationName.RACE_18_2_UNLOCK, 44),
-    DoorUnlockInfo(ItemName.SPACEPORT_ALPHA_DOOR_1_UNLOCK, LocationName.RACE_19_1_UNLOCK, 41),
-    DoorUnlockInfo(ItemName.SPACEPORT_ALPHA_DOOR_2_UNLOCK, LocationName.RACE_19_2_UNLOCK, 45),
-    DoorUnlockInfo(ItemName.STAR_CITY_DOOR_1_UNLOCK, LocationName.RACE_20_1_UNLOCK, 42),
-    DoorUnlockInfo(ItemName.STAR_CITY_DOOR_2_UNLOCK, LocationName.RACE_20_2_UNLOCK, 46)
+    DoorUnlockInfo(0, ItemName.DINO_DOMAIN_UNLOCK, LocationName.WORLD_1_UNLOCK, 1),
+    DoorUnlockInfo(1, ItemName.SNOWFLAKE_MOUNTAIN_UNLOCK, LocationName.WORLD_2_UNLOCK, 2),
+    DoorUnlockInfo(2, ItemName.SHERBET_ISLAND_UNLOCK, LocationName.WORLD_3_UNLOCK, 10),
+    DoorUnlockInfo(3, ItemName.DRAGON_FOREST_UNLOCK, LocationName.WORLD_4_UNLOCK, 16),
+    DoorUnlockInfo(4, ItemName.ANCIENT_LAKE_DOOR_1_UNLOCK, LocationName.RACE_1_1_UNLOCK, 1),
+    DoorUnlockInfo(5, ItemName.ANCIENT_LAKE_DOOR_2_UNLOCK, LocationName.RACE_1_2_UNLOCK, 6),
+    DoorUnlockInfo(6, ItemName.FOSSIL_CANYON_DOOR_1_UNLOCK, LocationName.RACE_2_1_UNLOCK, 2),
+    DoorUnlockInfo(7, ItemName.FOSSIL_CANYON_DOOR_2_UNLOCK, LocationName.RACE_2_2_UNLOCK, 7),
+    DoorUnlockInfo(8, ItemName.JUNGLE_FALLS_DOOR_1_UNLOCK, LocationName.RACE_3_1_UNLOCK, 3),
+    DoorUnlockInfo(9, ItemName.JUNGLE_FALLS_DOOR_2_UNLOCK, LocationName.RACE_3_2_UNLOCK, 8),
+    DoorUnlockInfo(10, ItemName.HOT_TOP_VOLCANO_DOOR_1_UNLOCK, LocationName.RACE_4_1_UNLOCK, 5),
+    DoorUnlockInfo(11, ItemName.HOT_TOP_VOLCANO_DOOR_2_UNLOCK, LocationName.RACE_4_2_UNLOCK, 10),
+    DoorUnlockInfo(12, ItemName.EVERFROST_PEAK_DOOR_1_UNLOCK, LocationName.RACE_5_1_UNLOCK, 2),
+    DoorUnlockInfo(13, ItemName.EVERFROST_PEAK_DOOR_2_UNLOCK, LocationName.RACE_5_2_UNLOCK, 10),
+    DoorUnlockInfo(14, ItemName.WALRUS_COVE_DOOR_1_UNLOCK, LocationName.RACE_6_1_UNLOCK, 3),
+    DoorUnlockInfo(15, ItemName.WALRUS_COVE_DOOR_2_UNLOCK, LocationName.RACE_6_2_UNLOCK, 11),
+    DoorUnlockInfo(16, ItemName.SNOWBALL_VALLEY_DOOR_1_UNLOCK, LocationName.RACE_7_1_UNLOCK, 6),
+    DoorUnlockInfo(17, ItemName.SNOWBALL_VALLEY_DOOR_2_UNLOCK, LocationName.RACE_7_2_UNLOCK, 14),
+    DoorUnlockInfo(18, ItemName.FROSTY_VILLAGE_DOOR_1_UNLOCK, LocationName.RACE_8_1_UNLOCK, 9),
+    DoorUnlockInfo(19, ItemName.FROSTY_VILLAGE_DOOR_2_UNLOCK, LocationName.RACE_8_2_UNLOCK, 16),
+    DoorUnlockInfo(20, ItemName.WHALE_BAY_DOOR_1_UNLOCK, LocationName.RACE_9_1_UNLOCK, 10),
+    DoorUnlockInfo(21, ItemName.WHALE_BAY_DOOR_2_UNLOCK, LocationName.RACE_9_2_UNLOCK, 17),
+    DoorUnlockInfo(22, ItemName.CRESCENT_ISLAND_DOOR_1_UNLOCK, LocationName.RACE_10_1_UNLOCK, 11),
+    DoorUnlockInfo(23, ItemName.CRESCENT_ISLAND_DOOR_2_UNLOCK, LocationName.RACE_10_2_UNLOCK, 18),
+    DoorUnlockInfo(24, ItemName.PIRATE_LAGOON_DOOR_1_UNLOCK, LocationName.RACE_11_1_UNLOCK, 13),
+    DoorUnlockInfo(25, ItemName.PIRATE_LAGOON_DOOR_2_UNLOCK, LocationName.RACE_11_2_UNLOCK, 20),
+    DoorUnlockInfo(26, ItemName.TREASURE_CAVES_DOOR_1_UNLOCK, LocationName.RACE_12_1_UNLOCK, 16),
+    DoorUnlockInfo(27, ItemName.TREASURE_CAVES_DOOR_2_UNLOCK, LocationName.RACE_12_2_UNLOCK, 22),
+    DoorUnlockInfo(28, ItemName.WINDMILL_PLAINS_DOOR_1_UNLOCK, LocationName.RACE_13_1_UNLOCK, 16),
+    DoorUnlockInfo(29, ItemName.WINDMILL_PLAINS_DOOR_2_UNLOCK, LocationName.RACE_13_2_UNLOCK, 23),
+    DoorUnlockInfo(30, ItemName.GREENWOOD_VILLAGE_DOOR_1_UNLOCK, LocationName.RACE_14_1_UNLOCK, 17),
+    DoorUnlockInfo(31, ItemName.GREENWOOD_VILLAGE_DOOR_2_UNLOCK, LocationName.RACE_14_2_UNLOCK, 24),
+    DoorUnlockInfo(32, ItemName.BOULDER_CANYON_DOOR_1_UNLOCK, LocationName.RACE_15_1_UNLOCK, 20),
+    DoorUnlockInfo(33, ItemName.BOULDER_CANYON_DOOR_2_UNLOCK, LocationName.RACE_15_2_UNLOCK, 30),
+    DoorUnlockInfo(34, ItemName.HAUNTED_WOODS_DOOR_1_UNLOCK, LocationName.RACE_16_1_UNLOCK, 22),
+    DoorUnlockInfo(35, ItemName.HAUNTED_WOODS_DOOR_2_UNLOCK, LocationName.RACE_16_2_UNLOCK, 37),
+    DoorUnlockInfo(36, ItemName.SPACEDUST_ALLEY_DOOR_1_UNLOCK, LocationName.RACE_17_1_UNLOCK, 39),
+    DoorUnlockInfo(37, ItemName.SPACEDUST_ALLEY_DOOR_2_UNLOCK, LocationName.RACE_17_2_UNLOCK, 43),
+    DoorUnlockInfo(38, ItemName.DARKMOON_CAVERNS_DOOR_1_UNLOCK, LocationName.RACE_18_1_UNLOCK, 40),
+    DoorUnlockInfo(39, ItemName.DARKMOON_CAVERNS_DOOR_2_UNLOCK, LocationName.RACE_18_2_UNLOCK, 44),
+    DoorUnlockInfo(40, ItemName.SPACEPORT_ALPHA_DOOR_1_UNLOCK, LocationName.RACE_19_1_UNLOCK, 41),
+    DoorUnlockInfo(41, ItemName.SPACEPORT_ALPHA_DOOR_2_UNLOCK, LocationName.RACE_19_2_UNLOCK, 45),
+    DoorUnlockInfo(42, ItemName.STAR_CITY_DOOR_1_UNLOCK, LocationName.RACE_20_1_UNLOCK, 42),
+    DoorUnlockInfo(43, ItemName.STAR_CITY_DOOR_2_UNLOCK, LocationName.RACE_20_2_UNLOCK, 46)
 ]
 
 vanilla_door_unlock_info_sorted_by_requirement: list[DoorUnlockInfo] = sorted(vanilla_door_unlock_info_list,
                                                                               key=lambda x: x.requirement)
-cached_door_requirement_progression: list[int] | None = None
 
 DOOR_UNLOCK_ITEM_PATTERN = re.compile("(\\d+) balloon\\(s\\) \\(.* Unlock\\)")
 
 
 def get_door_requirement_progression(world: DiddyKongRacingWorld) -> list[int]:
-    global cached_door_requirement_progression
-    if cached_door_requirement_progression:
-        return cached_door_requirement_progression
-
     if world.options.door_requirement_progression == 0:  # Vanilla
         door_requirement_progression = [x.requirement for x in vanilla_door_unlock_info_sorted_by_requirement]
     elif world.options.door_requirement_progression == 1:  # Linear
@@ -97,11 +93,19 @@ def get_door_requirement_progression(world: DiddyKongRacingWorld) -> list[int]:
 
         door_requirement_progression.append(int(world.options.maximum_door_requirement))
 
-    cached_door_requirement_progression = door_requirement_progression
     return door_requirement_progression
 
 
-def shuffle_door_unlock_items(world: DiddyKongRacingWorld) -> None:
+def set_door_unlock_requirements(world: DiddyKongRacingWorld) -> None:
+    door_requirement_progression = get_door_requirement_progression(world)
+
+    if world.options.shuffle_door_requirements:
+        set_shuffled_door_requirements(world, door_requirement_progression)
+    else:
+        set_unshuffled_door_requirements(world, door_requirement_progression)
+
+
+def set_shuffled_door_requirements(world: DiddyKongRacingWorld, door_requirement_progression: list[int]) -> None:
     race_1_unlock_to_race_2_unlock = {
         ItemName.ANCIENT_LAKE_DOOR_1_UNLOCK: ItemName.ANCIENT_LAKE_DOOR_2_UNLOCK,
         ItemName.FOSSIL_CANYON_DOOR_1_UNLOCK: ItemName.FOSSIL_CANYON_DOOR_2_UNLOCK,
@@ -178,7 +182,7 @@ def shuffle_door_unlock_items(world: DiddyKongRacingWorld) -> None:
     race_2_unlock_count = 0
 
     for door_unlock_info, requirement in zip(vanilla_door_unlock_info_sorted_by_requirement,
-                                             get_door_requirement_progression(world)):
+                                             door_requirement_progression):
         if not (world.options.open_worlds and door_unlock_info.location in LocationName.WORLD_UNLOCK_LOCATIONS):
             world.random.shuffle(available_doors)
             door_unlock_item = available_doors.pop()
@@ -201,10 +205,11 @@ def shuffle_door_unlock_items(world: DiddyKongRacingWorld) -> None:
                     available_doors.extend(future_fun_land_race_1_unlocks)
 
 
-def place_vanilla_door_unlock_items(world: DiddyKongRacingWorld) -> None:
-    for door_num, door_unlock_info in enumerate(vanilla_door_unlock_info_list):
+def set_unshuffled_door_requirements(world: DiddyKongRacingWorld, door_requirement_progression: list[int]) -> None:
+    for door_unlock_info, requirement in zip(vanilla_door_unlock_info_sorted_by_requirement,
+                                             door_requirement_progression):
         if not (world.options.open_worlds and door_unlock_info.location in LocationName.WORLD_UNLOCK_LOCATIONS):
-            world.door_unlock_requirements[door_num] = door_unlock_info.requirement
+            world.door_unlock_requirements[door_unlock_info.door_index] = requirement
 
 
 def place_door_unlock_items(world: DiddyKongRacingWorld) -> None:

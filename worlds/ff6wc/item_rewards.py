@@ -1,5 +1,5 @@
+from collections.abc import Mapping
 from random import Random
-from typing import Dict, List, Mapping
 
 from BaseClasses import ItemClassification, Location
 
@@ -11,9 +11,9 @@ from .Options import FF6WCOptions
 # NOTE: most of this code is located in WorldsCollide/args/items.py during the process function
 
 
-def get_item_rewards(options: FF6WCOptions) -> List[str]:
+def get_item_rewards(options: FF6WCOptions) -> list[str]:
     # Check to see what the Item Rewards are to populate the "dead" checks
-    item_rewards: List[str] = []
+    item_rewards: list[str] = []
     # if -ir in flagstring, then user specified item rewards
     if options.Flagstring.has_flag("-ir"):
         # get the item reward string between the -ir flag & the next one
@@ -71,11 +71,11 @@ def get_item_rewards(options: FF6WCOptions) -> List[str]:
     return item_rewards
 
 
-def build_ir_from_placements(wc_event_locations: List[Location]) -> List[str]:
+def build_ir_from_placements(wc_event_locations: list[Location]) -> list[str]:
     """ returns the "-ir" flag for the flagstring """
     inventory_item_ap_id_to_name = {item_name_to_id[name]: name for name in Items.items}
 
-    items_in_wc_event_locations: Dict[str, int] = {}
+    items_in_wc_event_locations: dict[str, int] = {}
     for loc in wc_event_locations:
         if loc.item and loc.item.player == loc.player:
             ap_item_id = loc.item.code
@@ -105,14 +105,14 @@ def item_qualities() -> Mapping[int, int]:
         assert len(sort_keys) == len(tiers), f"{len(tiers)=} {sort_keys=}"
         assert 239 in tiers[4], f"{tiers[4]=} should be Megalixir"
         assert 254 in tiers[3], f"{tiers[3]=} should have Dried Meat"
-        qualities: Dict[int, int] = {}
-        for item_tier, key in zip(tiers, sort_keys):
+        qualities: dict[int, int] = {}
+        for item_tier, key in zip(tiers, sort_keys, strict=True):
             for wc_id in item_tier:
                 qualities[wc_id] = key
         return qualities
 
 
-def limit_event_items(wc_event_locations: List[Location], random: Random) -> None:
+def limit_event_items(wc_event_locations: list[Location], random: Random) -> None:
     """
     make sure there are not too many different inventory items in the major locations
 
@@ -120,8 +120,8 @@ def limit_event_items(wc_event_locations: List[Location], random: Random) -> Non
     """
     inventory_item_ap_id_to_name = {item_name_to_id[name]: name for name in Items.items}
 
-    items_in_wc_event_locations: Dict[str, int] = {}
-    locations_by_name: Dict[str, Location] = {}
+    items_in_wc_event_locations: dict[str, int] = {}
+    locations_by_name: dict[str, Location] = {}
     for loc in wc_event_locations:
         if loc.item and loc.item.player == loc.player:
             ap_item_id = loc.item.code

@@ -1,0 +1,4083 @@
+[
+    {
+        "name": "Sudra",
+        "children": [
+            {
+                "name": "Eribu - Starter Weapon",
+                "sections": [
+                    {"name": "Eribu - Starter Weapon"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 225,
+                        "y": 333
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 99,
+                        "y": 171
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Wheelchair Room",
+                "sections": [
+                    {"name": "Eribu - Wheelchair Room"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 261,
+                        "y": 297
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 135,
+                        "y": 135
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Primordial Cave Lower",
+                "sections": [
+                    {"name": "Eribu - Primordial Cave Lower"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 153,
+                        "y": 333
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 27,
+                        "y": 171
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Primordial Cave Upper",
+                "sections": [
+                    {"name": "Eribu - Primordial Cave Upper"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 153,
+                        "y": 243
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 27,
+                        "y": 81
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Right Tower",
+                "sections": [
+                    {"name": "Eribu - Right Tower"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 405,
+                        "y": 207
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 279,
+                        "y": 45
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Left Tower",
+                "sections": [
+                    {"name": "Eribu - Left Tower"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 370,
+                        "y": 171
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 243,
+                        "y": 9
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Bubble Shrine",
+                "sections": [
+                    {"name": "Eribu - Bubble Shrine"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 261,
+                        "y": 261
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 135,
+                        "y": 99
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Outside Upper Passcode Room",
+                "sections": [
+                    {"name": "Eribu - Outside Upper Passcode Room"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 279,
+                        "y": 225
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 153,
+                        "y": 63
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Xedur Reward",
+                "sections": [
+                    {"name": "Eribu - Xedur Reward"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 405,
+                        "y": 297
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 279,
+                        "y": 135
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Below Xedur",
+                "sections": [
+                    {"name": "Eribu - Below Xedur"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 369,
+                        "y": 315
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 243,
+                        "y": 153
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Upper Passcode Room",
+                "sections": [
+                    {"name": "Eribu - Upper Passcode Room"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 225,
+                        "y": 225
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 99,
+                        "y": 63
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Sentry Bot Tunnel",
+                "sections": [
+                    {"name": "Eribu - Sentry Bot Tunnel"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 297,
+                        "y": 369
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 171,
+                        "y": 207
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Outside Lower Passcode Room",
+                "sections": [
+                    {"name": "Eribu - Outside Lower Passcode Room"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 333,
+                        "y": 441
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 207,
+                        "y": 279
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Lower Passcode Room",
+                "sections": [
+                    {"name": "Eribu - Lower Passcode Room"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 315,
+                        "y": 405
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 189,
+                        "y": 243
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Path to Absu",
+                "sections": [
+                    {"name": "Eribu - Path to Absu"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 387,
+                        "y": 459
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 261,
+                        "y": 297
+                    }
+                ]
+            },
+            {
+                "name": "Eribu - Path to Indi Ceiling",
+                "sections": [
+                    {"name": "Eribu - Path to Indi Ceiling"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 387,
+                        "y": 423
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 261,
+                        "y": 261
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Entrance Shaft",
+                "sections": [
+                    {"name": "Absu - Entrance Shaft"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 405,
+                        "y": 585
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 81,
+                        "y": 137
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Entrance Shaft Vault",
+                "sections": [
+                    {"name": "Absu - Entrance Shaft Vault"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 333,
+                        "y": 603
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 9,
+                        "y": 155
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Under Entrance Shaft",
+                "sections": [
+                    {"name": "Absu - Under Entrance Shaft"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 369,
+                        "y": 639
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 45,
+                        "y": 191
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Deep Under Entrance Shaft",
+                "sections": [
+                    {"name": "Absu - Deep Under Entrance Shaft"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 387,
+                        "y": 675
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 63,
+                        "y": 227
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Switch Cage",
+                "sections": [
+                    {"name": "Absu - Switch Cage"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 441,
+                        "y": 531
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 117,
+                        "y": 83
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Attic Left Shrine",
+                "sections": [
+                    {"name": "Absu - Attic Left Shrine"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 459,
+                        "y": 513
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 135,
+                        "y": 65
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Attic Between Glitch Barriers",
+                "sections": [
+                    {"name": "Absu - Attic Between Glitch Barriers"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 477,
+                        "y": 513
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 153,
+                        "y": 65
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Attic Right Shrine",
+                "sections": [
+                    {"name": "Absu - Attic Right Shrine"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 495,
+                        "y": 495
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 171,
+                        "y": 47
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Attic Upper Alcove",
+                "sections": [
+                    {"name": "Absu - Attic Upper Alcove"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 513,
+                        "y": 495
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 189,
+                        "y": 47
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Elsenova",
+                "sections": [
+                    {"name": "Absu - Elsenova"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 477,
+                        "y": 621
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 153,
+                        "y": 173
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Behind Glitch Barrier",
+                "sections": [
+                    {"name": "Absu - Behind Glitch Barrier"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 459,
+                        "y": 675
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 135,
+                        "y": 227
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Cell Near Elsenova",
+                "sections": [
+                    {"name": "Absu - Cell Near Elsenova"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 459,
+                        "y": 657
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 135,
+                        "y": 209
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Lowest Point",
+                "sections": [
+                    {"name": "Absu - Lowest Point"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 459,
+                        "y": 729
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 135,
+                        "y": 281
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Floating Platform",
+                "sections": [
+                    {"name": "Absu - Floating Platform"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 567,
+                        "y": 675
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 243,
+                        "y": 227
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Telal Reward",
+                "sections": [
+                    {"name": "Absu - Telal Reward"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 567,
+                        "y": 585
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 243,
+                        "y": 137
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Path to Indi Side Room",
+                "sections": [
+                    {"name": "Absu - Path to Indi Side Room"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 639,
+                        "y": 477
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 315,
+                        "y": 29
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Trapped Diatoms",
+                "sections": [
+                    {"name": "Absu - Trapped Diatoms"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 603,
+                        "y": 657
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 279,
+                        "y": 209
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Lava Hall",
+                "sections": [
+                    {"name": "Absu - Lava Hall"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 729,
+                        "y": 711
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 405,
+                        "y": 263
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Shaft Behind Telal",
+                "sections": [
+                    {"name": "Absu - Shaft Behind Telal"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 603,
+                        "y": 603
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 279,
+                        "y": 155
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Green Wall Alcove",
+                "sections": [
+                    {"name": "Absu - Green Wall Alcove"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 657,
+                        "y": 639
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 333,
+                        "y": 191
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Hidden Shrine",
+                "sections": [
+                    {"name": "Absu - Hidden Shrine"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 639,
+                        "y": 675
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 315,
+                        "y": 227
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Chasm Room Tunnel",
+                "sections": [
+                    {"name": "Absu - Chasm Room Tunnel"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 675,
+                        "y": 693
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 351,
+                        "y": 245
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Gated Alcove",
+                "sections": [
+                    {"name": "Absu - Gated Alcove"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 711,
+                        "y": 657
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 387,
+                        "y": 209
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Shrine Behind Glitch",
+                "sections": [
+                    {"name": "Absu - Shrine Behind Glitch"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 765,
+                        "y": 621
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 441,
+                        "y": 173
+                    }
+                ]
+            },
+            {
+                "name": "Absu - Path to Zi",
+                "sections": [
+                    {
+                        "name": "Absu - Path to Zi"
+                    }
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 765,
+                        "y": 693
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 441,
+                        "y": 245
+                    }
+                ]
+            },
+            {
+                "name": "Zi - False Wall Near Lower Save",
+                "sections": [
+                    {"name": "Zi - False Wall Near Lower Save"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 837,
+                        "y": 675
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 63,
+                        "y": 227
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Disappointment Hill",
+                "sections": [
+                    {"name": "Zi - Disappointment Hill"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 819,
+                        "y": 639
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 45,
+                        "y": 191
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Ceiling Secret Near Lower Save",
+                "sections": [
+                    {"name": "Zi - Ceiling Secret Near Lower Save"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 873,
+                        "y": 657
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 99,
+                        "y": 209
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Furglot Tunnel",
+                "sections": [
+                    {"name": "Zi - Furglot Tunnel"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 783,
+                        "y": 621
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 9,
+                        "y": 173
+                    }
+                ]
+            },
+            {
+                "name": "Zi - False Ceiling Alcove",
+                "sections": [
+                    {"name": "Zi - False Ceiling Alcove"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 927,
+                        "y": 621
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 153,
+                        "y": 173
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Above Veruska",
+                "sections": [
+                    {"name": "Zi - Above Veruska"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 963,
+                        "y": 639
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 189,
+                        "y": 191
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Behind Veruska Left",
+                "sections": [
+                    {"name": "Zi - Behind Veruska Left"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 927,
+                        "y": 693
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 153,
+                        "y": 245
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Behind Veruska Right",
+                "sections": [
+                    {"name": "Zi - Behind Veruska Right"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 963,
+                        "y": 693
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 189,
+                        "y": 245
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Ceiling Secret Above Preview Room",
+                "sections": [
+                    {"name": "Zi - Ceiling Secret Above Preview Room"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 909,
+                        "y": 531
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 135,
+                        "y": 83
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Drone Quest Upper",
+                "sections": [
+                    {"name": "Zi - Drone Quest Upper"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 801,
+                        "y": 567
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 27,
+                        "y": 119
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Drone Quest Lower",
+                "sections": [
+                    {"name": "Zi - Drone Quest Lower"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 855,
+                        "y": 585
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 81,
+                        "y": 137
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Preview Room",
+                "sections": [
+                    {"name": "Zi - Preview Room"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 945,
+                        "y": 549
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 171,
+                        "y": 101
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Uruku Reward",
+                "sections": [
+                    {"name": "Zi - Uruku Reward"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 999,
+                        "y": 495
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 225,
+                        "y": 47
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Uruku Cage",
+                "sections": [
+                    {"name": "Zi - Uruku Cage"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 945,
+                        "y": 495
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 171,
+                        "y": 47
+                    }
+                ]
+            },
+            {
+                "name": "Zi - Behind Uruku Ceiling Ledge",
+                "sections": [
+                    {"name": "Zi - Behind Uruku Ceiling Ledge"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 981,
+                        "y": 477
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 207,
+                        "y": 29
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Drone Tunnel Before Gauntlet",
+                "sections": [
+                    {"name": "Kur - Drone Tunnel Before Gauntlet"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1143,
+                        "y": 423
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 167,
+                        "y": 369
+                    }
+                ]
+            },
+            {
+                "name": "Kur - High Jump Shrine",
+                "sections": [
+                    {"name": "Kur - High Jump Shrine"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1125,
+                        "y": 477
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 167,
+                        "y": 423
+                    }
+                ]
+            },
+            {
+                "name": "Kur - High Jump Shrine False Wall",
+                "sections": [
+                    {"name": "Kur - High Jump Shrine False Wall"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1107,
+                        "y": 441
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 149,
+                        "y": 387
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Above Lower Save",
+                "sections": [
+                    {"name": "Kur - Above Lower Save"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1053,
+                        "y": 477
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 95,
+                        "y": 423
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Gauntlet Reward",
+                "sections": [
+                    {"name": "Kur - Gauntlet Reward"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1197,
+                        "y": 477
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 239,
+                        "y": 423
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Main Shaft",
+                "sections": [
+                    {"name": "Kur - Main Shaft"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1035,
+                        "y": 423
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 77,
+                        "y": 369
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Drone Side Quest",
+                "sections": [
+                    {"name": "Kur - Drone Side Quest"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1125,
+                        "y": 315
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 167,
+                        "y": 261,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Above Twin Save Rooms",
+                "sections": [
+                    {"name": "Kur - Above Twin Save Rooms"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1143,
+                        "y": 261
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 185,
+                        "y": 207
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Watch for Rolling Rocks",
+                "sections": [
+                    {"name": "Kur - Watch for Rolling Rocks"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1089,
+                        "y": 243
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 131,
+                        "y": 189
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Inside Cliff",
+                "sections": [
+                    {"name": "Kur - Inside Cliff"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1107,
+                        "y": 261
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 149,
+                        "y": 207
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Drone Odyssey Secret",
+                "sections": [
+                    {"name": "Kur - Drone Odyssey Secret"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1197,
+                        "y": 171
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 239,
+                        "y": 117
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Drone Odyssey Reward",
+                "sections": [
+                    {"name": "Kur - Drone Odyssey Reward"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1233,
+                        "y": 135
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 275,
+                        "y": 81
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Shrine Before Drone Odyssey",
+                "sections": [
+                    {"name": "Kur - Shrine Before Drone Odyssey"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1179,
+                        "y": 189
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 221,
+                        "y": 135
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Snowy Cliffs Ledge Upper",
+                "sections": [
+                    {"name": "Kur - Snowy Cliffs Ledge Upper"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1107,
+                        "y": 135
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 149,
+                        "y": 81
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Snowy Cliffs Ledge Lower",
+                "sections": [
+                    {"name": "Kur - Snowy Cliffs Ledge Lower"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1107,
+                        "y": 153
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 149,
+                        "y": 99
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Loop Room",
+                "sections": [
+                    {"name": "Kur - Loop Room"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1215,
+                        "y": 153
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 257,
+                        "y": 99
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Peak Cliff Ledge",
+                "sections": [
+                    {"name": "Kur - Peak Cliff Ledge"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1161,
+                        "y": 81
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 203,
+                        "y": 27
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Gir-Tab Lower Entrance Drone Tunnel",
+                "sections": [
+                    {"name": "Kur - Gir-Tab Lower Entrance Drone Tunnel"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1143,
+                        "y": 315
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 185,
+                        "y": 261
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Gir-Tab Upper Entrance",
+                "sections": [
+                    {"name": "Kur - Gir-Tab Upper Entrance"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1197,
+                        "y": 243
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 239,
+                        "y": 189
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Cliffs Behind Gir-Tab Near Crumble Floor",
+                "sections": [
+                    {"name": "Kur - Cliffs Behind Gir-Tab Near Crumble Floor"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1323,
+                        "y": 117
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 365,
+                        "y": 63
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Cliffs Behind Gir-Tab Shrine",
+                "sections": [
+                    {"name": "Kur - Cliffs Behind Gir-Tab Shrine"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1323,
+                        "y": 171
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 365,
+                        "y": 117
+                    }
+                ]
+            },
+            {
+                "name": "Kur - Cliffs Behind Gir-Tab Above Shrine",
+                "sections": [
+                    {"name": "Kur - Cliffs Behind Gir-Tab Above Shrine"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1323,
+                        "y": 153
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 365,
+                        "y": 99
+                    }
+                ]
+            },
+            {
+                "name": "Indi - Path to Eribu",
+                "sections": [
+                    {"name": "Indi - Path to Eribu"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 423,
+                        "y": 423
+                    },
+                    {
+                        "map": "Indi",
+                        "x": 28,
+                        "y": 65
+                    }
+                ]
+            },
+            {
+                "name": "Indi - Outside Save",
+                "sections": [
+                    {"name": "Indi - Outside Save"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 837,
+                        "y": 405
+                    },
+                    {
+                        "map": "Indi",
+                        "x": 442,
+                        "y": 47
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na - Below Long Fall",
+                "sections": [
+                    {"name": "Ukkin-Na - Below Long Fall"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 477,
+                        "y": 333
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 147,
+                        "y": 335
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na - Long Fall",
+                "sections": [
+                    {"name": "Ukkin-Na - Long Fall"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 477,
+                        "y": 315
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 147,
+                        "y": 317
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na - Secret Room Above Lower Save",
+                "sections": [
+                    {"name": "Ukkin-Na - Secret Room Above Lower Save"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 567,
+                        "y": 351
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 237,
+                        "y": 353
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na - Past the Slugs",
+                "sections": [
+                    {"name": "Ukkin-Na - Past the Slugs"},
+                    {"name": "Glitched Blurst Item"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 531,
+                        "y": 315
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 201,
+                        "y": 317
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na - Midway Shaft Lower",
+                "sections": [
+                    {"name": "Ukkin-Na - Midway Shaft Lower"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 549,
+                        "y": 261
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 219,
+                        "y": 263
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na - Midway Shaft Upper",
+                "sections": [
+                    {"name": "Ukkin-Na - Midway Shaft Upper"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 549,
+                        "y": 189
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 219,
+                        "y": 191
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na - Secret Room Below Upper Save",
+                "sections": [
+                    {"name": "Ukkin-Na - Secret Room Below Upper Save"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 585,
+                        "y": 153
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 255,
+                        "y": 155
+                    }
+                ]
+            },
+            {
+                "name": "Above Vision Room",
+                "sections": [
+                    {"name": "Ukkin-Na - Above Vision Room"},
+                    {"name": "Glitched Blurst Item"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 585,
+                        "y": 27
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 255,
+                        "y": 29
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na - Vision Room Tunnel",
+                "sections": [
+                    {"name": "Ukkin-Na - Vision Room Tunnel"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 549,
+                        "y": 117
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 219,
+                        "y": 119
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na - Outside Ophelia",
+                "sections": [
+                    {"name": "Ukkin-Na - Outside Ophelia"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 477,
+                        "y": 171
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 147,
+                        "y": 173
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na - Above Ophelia",
+                "sections": [
+                    {"name": "Ukkin-Na - Above Ophelia"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 459,
+                        "y": 117
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 129,
+                        "y": 119
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Ceiling Near Ukkin-Na",
+                "sections": [
+                    {"name": "Edin - Ceiling Near Ukkin-Na"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 657,
+                        "y": 351
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 29,
+                        "y": 189
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Sky Cage",
+                "sections": [
+                    {"name": "Edin - Sky Cage"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 711,
+                        "y": 333
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 83,
+                        "y": 171
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Central Ruins Glitch Alcove",
+                "sections": [
+                    {"name": "Edin - Central Ruins Glitch Alcove"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 765,
+                        "y": 369
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 137,
+                        "y": 207
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Secret Tunnel Near Indi",
+                "sections": [
+                    {"name": "Edin - Secret Tunnel Near Indi"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 801,
+                        "y": 369
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 173,
+                        "y": 207
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Before Clone Path",
+                "sections": [
+                    {"name": "Edin - Before Clone Path"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 855,
+                        "y": 333
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 227,
+                        "y": 171
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Clone Path Inside Blocks",
+                "sections": [
+                    {"name": "Edin - Clone Path Inside Blocks"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 837,
+                        "y": 315
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 209,
+                        "y": 153
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Clone Path Rooftop Ledge",
+                "sections": [
+                    {"name": "Edin - Clone Path Rooftop Ledge"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 837,
+                        "y": 261
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 209,
+                        "y": 99
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Clone Path Roof Before Save",
+                "sections": [
+                    {"name": "Edin - Clone Path Roof Before Save"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 855,
+                        "y": 243
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 227,
+                        "y": 81
+                    }
+                ]
+            },
+            {
+                "name": "Edin - False Wall Shrine",
+                "sections": [
+                    {"name": "Edin - False Wall Shrine"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 783,
+                        "y": 315
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 155,
+                        "y": 153
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Ukhu Path Drone Tunnel",
+                "sections": [
+                    {"name": "Edin - Ukhu Path Drone Tunnel"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 765,
+                        "y": 261
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 137,
+                        "y": 99
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Ukhu Path Side Room",
+                "sections": [
+                    {"name": "Edin - Ukhu Path Side Room"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 729,
+                        "y": 279
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 101,
+                        "y": 117
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Ukhu Path Ruins",
+                "sections": [
+                    {"name": "Edin - Ukhu Path Ruins"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 765,
+                        "y": 243
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 137,
+                        "y": 81
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Ukhu Reward",
+                "sections": [
+                    {"name": "Edin - Ukhu Reward"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 711,
+                        "y": 207
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 83,
+                        "y": 45
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Main Hangar",
+                "sections": [
+                    {"name": "Edin - Main Hangar"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 909,
+                        "y": 369
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 281,
+                        "y": 207
+                    }
+                ]
+            },
+            {
+                "name": "Edin - Double Check Tunnel",
+                "sections": [
+                    {"name": "Edin - Double Check Tunnel Left"},
+                    {"name": "Edin - Double Check Tunnel Right"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 891,
+                        "y": 333
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 263,
+                        "y": 171
+                    }
+                ]
+            },
+            {
+                "name": "E-Kur-Mah - Entry Chamber Breakable Wall",
+                "sections": [
+                    {"name": "E-Kur-Mah - Entry Chamber Breakable Wall"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1269,
+                        "y": 81
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 97,
+                        "y": 81
+                    }
+                ]
+            },
+            {
+                "name": "E-Kur-Mah - Key Door on Quarry Path",
+                "sections": [
+                    {"name": "E-Kur-Mah - Key Door on Quarry Path"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1269,
+                        "y": 27
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 97,
+                        "y": 27
+                    }
+                ]
+            },
+            {
+                "name": "E-Kur-Mah - Quarry Upper",
+                "sections": [
+                    {"name": "E-Kur-Mah - Quarry Upper"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1341,
+                        "y": 45
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 169,
+                        "y": 45
+                    }
+                ]
+            },
+            {
+                "name": "E-Kur-Mah - Quarry Lower",
+                "sections": [
+                    {"name": "E-Kur-Mah - Quarry Lower"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1359,
+                        "y": 63
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 187,
+                        "y": 63
+                    }
+                ]
+            },
+            {
+                "name": "E-Kur-Mah - East Shaft Wall Alcove",
+                "sections": [
+                    {"name": "E-Kur-Mah - East Shaft Wall Alcove"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1359,
+                        "y": 153
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 187,
+                        "y": 153
+                    }
+                ]
+            },
+            {
+                "name": "E-Kur-Mah - Passcode Alcove",
+                "sections": [
+                    {"name": "E-Kur-Mah - Passcode Alcove"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1287,
+                        "y": 297
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 115,
+                        "y": 297
+                    }
+                ]
+            },
+            {
+                "name": "E-Kur-Mah - Hidden Drone Tunnel",
+                "sections": [
+                    {"name": "E-Kur-Mah - Hidden Drone Tunnel"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1323,
+                        "y": 333
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 151,
+                        "y": 333
+                    }
+                ]
+            },
+            {
+                "name": "E-Kur-Mah - Final Chamber Upper",
+                "sections": [
+                    {"name": "E-Kur-Mah - Final Chamber Upper"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1287,
+                        "y": 369
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 115,
+                        "y": 369
+                    }
+                ]
+            },
+            {
+                "name": "E-Kur-Mah - Final Chamber Lower",
+                "sections": [
+                    {"name": "E-Kur-Mah - Final Chamber Lower"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1305,
+                        "y": 387
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 133,
+                        "y": 387
+                    }
+                ]
+            },
+            {
+                "name": "Mar-Uru - Sentinel Reward",
+                "sections": [
+                    {"name": "Mar-Uru - Sentinel Reward"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 45,
+                        "y": 333
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 46,
+                        "y": 333
+                    }
+                ]
+            },
+            {
+                "name": "Mar-Uru - Quantum Sentry",
+                "sections": [
+                    {"name": "Mar-Uru - Quantum Sentry"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 81,
+                        "y": 333
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 82,
+                        "y": 333
+                    }
+                ]
+            },
+            {
+                "name": "Mar-Uru - Quantum Sentry Basement",
+                "sections": [
+                    {"name": "Mar-Uru - Quantum Sentry Basement"},
+                    {"name": "Mar-Uru - Quantum Sentry Basement Secret"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 81,
+                        "y": 351
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 82,
+                        "y": 351
+                    }
+                ]
+            },
+            {
+                "name": "Mar-Uru - Inside Corridor Block",
+                "sections": [
+                    {"name": "Mar-Uru - Inside Corridor Block"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 99,
+                        "y": 243
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 100,
+                        "y": 243
+                    }
+                ]
+            },
+            {
+                "name": "Mar-Uru - Before Laser Bot Puzzle",
+                "sections": [
+                    {"name": "Mar-Uru - Before Laser Bot Puzzle"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 45,
+                        "y": 207
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 46,
+                        "y": 207
+                    }
+                ]
+            },
+            {
+                "name": "Mar-Uru - Laser Bot Puzzle",
+                "sections": [
+                    {"name": "Mar-Uru - Laser Bot Puzzle"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 27,
+                        "y": 243
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 28,
+                        "y": 243
+                    }
+                ]
+            },
+            {
+                "name": "Mar-Uru - Athethos Ascent Drone Tunnel",
+                "sections": [
+                    {"name": "Mar-Uru - Athethos Ascent Drone Tunnel"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 63,
+                        "y": 135
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 64,
+                        "y": 135
+                    }
+                ]
+            },
+            {
+                "name": "Blurst",
+                "sections": [
+                    {"name": "Glitched Blurst Item"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 135,
+                        "y": 279
+                    },
+                    {
+                        "map": "Sudra",
+                        "x": 981,
+                        "y": 441
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 9,
+                        "y": 117
+                    },
+                    {
+                        "map": "Indi",
+                        "x": 586,
+                        "y": 83
+                    }
+                ]
+            },
+            {
+                "name": "Glitchsanity: Eribu",
+                "sections": [
+                    {"name": "Glitch a Red Snailborg"},
+                    {"name": "Glitch a Blue Snailborg"},
+                    {"name": "Glitch a Yorchug"},
+                    {"name": "Glitch a Purple Trap Claw"},
+                    {"name": "Glitch a Red Trap Claw"},
+                    {"name": "Glitch a Cyan Trap Claw"},
+                    {"name": "Glitch a Swarmily (Child)"},
+                    {"name": "Glitch a Swarmily (Parent)"},
+                    {"name": "Glitch a Quadropus"},
+                    {"name": "Glitch a Buoyg"},
+                    {"name": "Glitch a Gill"},
+                    {"name": "Glitch a Blue Mutant"},
+                    {"name": "Glitch a Blurst"},
+                    {"name": "Glitch a Blurst Swarm"},
+                    {"name": "Glitch a Spitbug"},
+                    {"name": "Glitch a Spitbug Nest"},
+                    {"name": "Glitch a Spiru"},
+                    {"name": "Glitch an Ancient Sentry Bot"},
+                    {"name": "Glitch a Purple Sentry Bot"},
+                    {"name": "Glitch a Green Tube Worm"},
+                    {"name": "Glitch a Will-o-Wisp"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 184,
+                        "y": 279
+                    }
+                ]
+            },
+            {
+                "name": "Glitchsanity: Absu",
+                "sections": [
+                    {"name": "Glitch a Red Snailborg"},
+                    {"name": "Glitch a Blue Snailborg"},
+                    {"name": "Glitch a Red Trap Claw"},
+                    {"name": "Glitch a Swarmily (Child)"},
+                    {"name": "Glitch a Swarmily (Parent)"},
+                    {"name": "Glitch a Pink Loop Diatom"},
+                    {"name": "Glitch a Violet Loop Diatom"},
+                    {"name": "Glitch a Quadropus"},
+                    {"name": "Glitch an Arachnoptopus"},
+                    {"name": "Glitch a Buoyg"},
+                    {"name": "Glitch a Fungine"},
+                    {"name": "Glitch a Brown Mutant"},
+                    {"name": "Glitch a Blue Mutant"},
+                    {"name": "Glitch a Spitbug"},
+                    {"name": "Glitch a Spitbug Nest"},
+                    {"name": "Glitch a Mushroom Poof"},
+                    {"name": "Glitch a Spungus Spore"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 530,
+                        "y": 477
+                    }
+                ]
+            },
+            {
+                "name": "Glitchsanity: Zi",
+                "sections": [
+                    {"name": "Glitch a Green Rugg"},
+                    {"name": "Glitch a Magenta Rugg"},
+                    {"name": "Glitch a Scorpiant"},
+                    {"name": "Glitch a Prongfish"},
+                    {"name": "Glitch a Brown Mutant"},
+                    {"name": "Glitch a Furglot"},
+                    {"name": "Glitch a Goolumn"},
+                    {"name": "Glitch a Yellow Tube Worm"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 783,
+                        "y": 514
+                    }
+                ]
+            },
+            {
+                "name": "Glitchsanity: Kur",
+                "sections": [
+                    {"name": "Glitch a Cyan Trap Claw"},
+                    {"name": "Glitch a Gill"},
+                    {"name": "Glitch a Pliaa"},
+                    {"name": "Glitch a Seamk"},
+                    {"name": "Glitch a Spidler"},
+                    {"name": "Glitch a Drometon"},
+                    {"name": "Glitch a Flynn Stone"},
+                    {"name": "Glitch a Blue Mutant"},
+                    {"name": "Glitch a Small Mogra"},
+                    {"name": "Glitch a Mogra"},
+                    {"name": "Glitch an Eyecopter"},
+                    {"name": "Glitch a Blite"},
+                    {"name": "Glitch a Boulder"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1036,
+                        "y": 208
+                    }
+                ]
+            },
+            {
+                "name": "Glitchsanity: Indi",
+                "sections": [
+                    {"name": "Glitch a Glugg"},
+                    {"name": "Glitch a Blurst"},
+                    {"name": "Glitch a Blurst Swarm"},
+                    {"name": "Glitch a Green Tube Worm"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 745,
+                        "y": 476
+                    }
+                ]
+            },
+            {
+                "name": "Glitchsanity: Ukkin-Na",
+                "sections": [
+                    {"name": "Glitch a Pillbug"},
+                    {"name": "Glitch a Glugg"},
+                    {"name": "Glitch a Blurst"},
+                    {"name": "Glitch a Blurst Swarm"},
+                    {"name": "Glitch an Annihiwaiter"},
+                    {"name": "Glitch a Silver Sentry Bot"},
+                    {"name": "Glitch a Green Tube Worm"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 434,
+                        "y": 99
+                    }
+                ]
+            },
+            {
+                "name": "Glitchsanity: Edin",
+                "sections": [
+                    {"name": "Glitch a Blue Mutant"},
+                    {"name": "Glitch a Jorm"},
+                    {"name": "Glitch a Space Bat"},
+                    {"name": "Glitch an Eyecopter"},
+                    {"name": "Glitch an Ukhu Spawn"},
+                    {"name": "Glitch a Hoverling"},
+                    {"name": "Glitch a Volg"},
+                    {"name": "Glitch a Will-o-Wisp"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 680,
+                        "y": 299
+                    }
+                ]
+            },
+            {
+                "name": "Glitchsanity: E-Kur-Mah",
+                "sections": [
+                    {"name": "Glitch a Hookfish"},
+                    {"name": "Glitch an Artichoker"},
+                    {"name": "Glitch a Furglot"},
+                    {"name": "Glitch an Ancient Sentry Bot"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 1136,
+                        "y": 44
+                    }
+                ]
+            },
+            {
+                "name": "Glitchsanity: Mar-Uru",
+                "sections": [
+                    {"name": "Glitch a Purple Sentry Bot"},
+                    {"name": "Glitch a Tie-Flighter"},
+                    {"name": "Glitch a Diskko"},
+                    {"name": "Glitch a Donaught"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Sudra",
+                        "x": 112,
+                        "y": 172
+                    }
+                ]
+            },
+            {
+                "name": "Red Snailborgs (Many)",
+                "sections": [
+                    {"name": "Glitch a Red Snailborg"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 153,
+                        "y": 171,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 189,
+                        "y": 171,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 261,
+                        "y": 153,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 243,
+                        "y": 81,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 279,
+                        "y": 81,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Indi",
+                        "x": 28,
+                        "y": 83,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Blue Snailborg",
+                "sections": [
+                    {"name": "Glitch a Blue Snailborg"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 225,
+                        "y": 155,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 171,
+                        "y": 245,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Yorchug",
+                "sections": [
+                    {"name": "Glitch a Yorchug"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 243,
+                        "y": 63,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 135,
+                        "y": 45,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 117,
+                        "y": 63,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Brown Mutant",
+                "sections": [
+                    {"name": "Glitch a Brown Mutant"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 171,
+                        "y": 65,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 153,
+                        "y": 119,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 135,
+                        "y": 245,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 135,
+                        "y": 173,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 153,
+                        "y": 209,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 189,
+                        "y": 227,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 27,
+                        "y": 209,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 117,
+                        "y": 65,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 27,
+                        "y": 119,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 9,
+                        "y": 137,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 45,
+                        "y": 137,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Blue Mutant",
+                "sections": [
+                    {"name": "Glitch a Blue Mutant"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 99,
+                        "y": 27,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 333,
+                        "y": 263,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 191,
+                        "y": 189,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 275,
+                        "y": 189,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Spiru",
+                "sections": [
+                    {"name": "Glitch a Spiru"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 243,
+                        "y": 207,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Cyan Trap Claw",
+                "sections": [
+                    {"name": "Glitch a Cyan Trap Claw"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 63,
+                        "y": 45,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 239,
+                        "y": 153,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 239,
+                        "y": 63,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Buoyg",
+                "sections": [
+                    {"name": "Glitch a Buoyg"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 171,
+                        "y": 81,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 153,
+                        "y": 81,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 387,
+                        "y": 209,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Green Tube Worm",
+                "sections": [
+                    {"name": "Glitch a Green Tube Worm"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 45,
+                        "y": 171,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 237,
+                        "y": 173,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Mushroom Poof",
+                "sections": [
+                    {"name": "Glitch a Mushroom Poof"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 117,
+                        "y": 65,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Quadropus",
+                "sections": [
+                    {"name": "Glitch a Mushroom Poof"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 99,
+                        "y": 155,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 315,
+                        "y": 245,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 441,
+                        "y": 245,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Spungus Spore",
+                "sections": [
+                    {"name": "Glitch a Spungus Spore"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 261,
+                        "y": 137,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Fungine",
+                "sections": [
+                    {"name": "Glitch a Fungine"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 351,
+                        "y": 209,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 423,
+                        "y": 227,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Green Rugg",
+                "sections": [
+                    {"name": "Glitch a Green Rugg"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 9,
+                        "y": 263,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 99,
+                        "y": 227,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Magenta Rugg",
+                "sections": [
+                    {"name": "Glitch a Magenta Rugg"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 27,
+                        "y": 83,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Goolumn",
+                "sections": [
+                    {"name": "Glitch a Goolumn"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 45,
+                        "y": 173,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Yellow Tube Worm",
+                "sections": [
+                    {"name": "Glitch a Yellow Tube Worm"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 189,
+                        "y": 155,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 225,
+                        "y": 137,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Arachnoptopus",
+                "sections": [
+                    {"name": "Glitch an Arachnoptopus"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 207,
+                        "y": 83,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 99,
+                        "y": 83,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 45,
+                        "y": 83,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Blite",
+                "sections": [
+                    {"name": "Glitch a Blite"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 95,
+                        "y": 369,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 149,
+                        "y": 405,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Spidler",
+                "sections": [
+                    {"name": "Glitch a Spidler"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 77,
+                        "y": 333,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Pliaa",
+                "sections": [
+                    {"name": "Glitch a Pliaa"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 149,
+                        "y": 297,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 167,
+                        "y": 297,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Seamk",
+                "sections": [
+                    {"name": "Glitch a Seamk"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 221,
+                        "y": 261,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 257,
+                        "y": 171,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Flynn Stone",
+                "sections": [
+                    {"name": "Glitch a Flynn Stone"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 257,
+                        "y": 135,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Hoverling",
+                "sections": [
+                    {"name": "Glitch a Hoverling"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Edin",
+                        "x": 137,
+                        "y": 135,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Gill",
+                "sections": [
+                    {"name": "Glitch a Gill"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 189,
+                        "y": 261,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 77,
+                        "y": 477,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 149,
+                        "y": 279,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Kur",
+                        "x": 275,
+                        "y": 117,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Drometon",
+                "sections": [
+                    {"name": "Glitch a Drometon"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 203,
+                        "y": 189,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Glugg",
+                "sections": [
+                    {"name": "Glitch a Glugg"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 219,
+                        "y": 155,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Annihiwaiter",
+                "sections": [
+                    {"name": "Glitch an Annihiwaiter"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 147,
+                        "y": 371,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Pillbug",
+                "sections": [
+                    {"name": "Glitch a Pillbug"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 201,
+                        "y": 353,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 237,
+                        "y": 245,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 165,
+                        "y": 119,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 129,
+                        "y": 155,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Silver Sentry Bot",
+                "sections": [
+                    {"name": "Glitch a Silver Sentry Bot"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 237,
+                        "y": 335,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 237,
+                        "y": 299,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 219,
+                        "y": 209,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 237,
+                        "y": 119,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Purple Sentry Bot",
+                "sections": [
+                    {"name": "Glitch a Purple Sentry Bot"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 27,
+                        "y": 99,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 207,
+                        "y": 207,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 46,
+                        "y": 351,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 64,
+                        "y": 297,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 82,
+                        "y": 243,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 118,
+                        "y": 207,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Will-o-Wisp",
+                "sections": [
+                    {"name": "Glitch a Will-o-Wisp"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 81,
+                        "y": 153,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 117,
+                        "y": 135,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 119,
+                        "y": 117,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Jorm",
+                "sections": [
+                    {"name": "Glitch a Jorm"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Edin",
+                        "x": 227,
+                        "y": 189,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 227,
+                        "y": 117,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Ukhu Spawn",
+                "sections": [
+                    {"name": "Glitch an Ukhu Spawn"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Edin",
+                        "x": 137,
+                        "y": 27,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Ancient Sentry Bot",
+                "sections": [
+                    {"name": "Glitch an Ancient Sentry Bot"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 61,
+                        "y": 81,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 79,
+                        "y": 45,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 115,
+                        "y": 27,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 151,
+                        "y": 63,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 133,
+                        "y": 81,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 205,
+                        "y": 207,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 205,
+                        "y": 225,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Hookfish",
+                "sections": [
+                    {"name": "Glitch a Hookfish"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 97,
+                        "y": 351,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Tie-Flighter",
+                "sections": [
+                    {"name": "Glitch a Tie-Flighter"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Mar-Uru",
+                        "x": 46,
+                        "y": 441,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 64,
+                        "y": 405,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 82,
+                        "y": 423,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 64,
+                        "y": 261,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 82,
+                        "y": 207,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 28,
+                        "y": 207,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Mar-Uru",
+                        "x": 10,
+                        "y": 225,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Diskko",
+                "sections": [
+                    {"name": "Glitch a Diskko"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Mar-Uru",
+                        "x": 64,
+                        "y": 171,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Donaught",
+                "sections": [
+                    {"name": "Glitch a Donaught"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Mar-Uru",
+                        "x": 64,
+                        "y": 45,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Primordial Caves Middle",
+                "sections": [
+                    {"name": "Glitch a Blurst"},
+                    {"name": "Glitch a Blurst Swarm"},
+                    {"name": "Glitch an Ancient Sentry Bot"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 27,
+                        "y": 117,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Xedur Front & Drill Barrier",
+                "sections": [
+                    {"name": "Glitch a Red Snailborg"},
+                    {"name": "Glitch a Purple Trap Claw"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 225,
+                        "y": 153,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Eribu",
+                        "x": 207,
+                        "y": 189,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Bubble Shrine Room",
+                "sections": [
+                    {"name": "Glitch a Spitbug"},
+                    {"name": "Glitch a Spitbug Nest"},
+                    {"name": "Glitch a Swarmily (Child)"},
+                    {"name": "Glitch a Swarmily (Parent)"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 171,
+                        "y": 99
+                    }
+                ]
+            },
+            {
+                "name": "Eribu Towers Base",
+                "sections": [
+                    {"name": "Glitch a Red Snailborg"},
+                    {"name": "Glitch a Spitbug"},
+                    {"name": "Glitch a Spitbug Nest"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 171,
+                        "y": 99
+                    }
+                ]
+            },
+            {
+                "name": "Eribu Left Tower",
+                "sections": [
+                    {"name": "Glitch a Yorchug"},
+                    {"name": "Glitch a Quadropus"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 243,
+                        "y": 27
+                    }
+                ]
+            },
+            {
+                "name": "Eribu Shaft",
+                "sections": [
+                    {"name": "Glitch a Red Snailborg"},
+                    {"name": "Glitch a Yorchug"},
+                    {"name": "Glitch a Spiru"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 225,
+                        "y": 243
+                    }
+                ]
+            },
+            {
+                "name": "Eribu Below Lower Passcode Room",
+                "sections": [
+                    {"name": "Glitch a Blue Snailborg"},
+                    {"name": "Glitch a Red Trap Claw"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Eribu",
+                        "x": 207,
+                        "y": 297,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Absu Main Shaft",
+                "sections": [
+                    {"name": "Glitch a Red Snailborg"},
+                    {"name": "Glitch a Blue Snailborg"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 81,
+                        "y": 47,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Absu Vault",
+                "sections": [
+                    {"name": "Glitch a Pink Loop Diatom"},
+                    {"name": "Glitch a Violet Loop Diatom"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 63,
+                        "y": 155,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Absu Below Attic",
+                "sections": [
+                    {"name": "Glitch a Mushroom Poof"},
+                    {"name": "Glitch a Brown Mutant"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 135,
+                        "y": 83,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Absu Junction",
+                "sections": [
+                    {"name": "Glitch a Blue Snailborg"},
+                    {"name": "Glitch a Pink Loop Diatom"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 171,
+                        "y": 83,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 117,
+                        "y": 173,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Dynamic Duo",
+                "sections": [
+                    {"name": "Glitch a Quadropus"},
+                    {"name": "Glitch an Arachnoptopus"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 279,
+                        "y": 29,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Absu",
+                        "x": 153,
+                        "y": 263,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Absu Corridor",
+                "sections": [
+                    {"name": "Glitch a Red Snailborg"},
+                    {"name": "Glitch a Blue Snailborg"},
+                    {"name": "Glitch a Pink Loop Diatom"},
+                    {"name": "Glitch a Violet Loop Diatom"},
+                    {"name": "Glitch a Quadropus"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 261,
+                        "y": 227,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Purple Absu",
+                "sections": [
+                    {"name": "Glitch a Blue Snailborg"},
+                    {"name": "Glitch a Pink Loop Diatom"},
+                    {"name": "Glitch a Red Trap Claw"},
+                    {"name": "Glitch a Spungus Spore"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 279,
+                        "y": 227,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Absu Shaft behind Telal",
+                "sections": [
+                    {"name": "Glitch a Red Snailborg"},
+                    {"name": "Glitch a Blue Snailborg"},
+                    {"name": "Glitch a Spitbug Nest"},
+                    {"name": "Glitch a Spitbug"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 279,
+                        "y": 173,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Absu Pre Lava Hall 1",
+                "sections": [
+                    {"name": "Glitch a Blue Snailborg"},
+                    {"name": "Glitch a Red Trap Claw"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 297,
+                        "y": 245,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Green Absu",
+                "sections": [
+                    {"name": "Glitch a Buoyg"},
+                    {"name": "Glitch a Quadropus"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 315,
+                        "y": 191,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Green Absu Glitch Shrine",
+                "sections": [
+                    {"name": "Glitch a Mushroom Poof"},
+                    {"name": "Glitch a Swarmily (Child)"},
+                    {"name": "Glitch a Swarmily (Parent)"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Absu",
+                        "x": 423,
+                        "y": 191
+                    }
+                ]
+            },
+            {
+                "name": "Dynamic Duo 2",
+                "sections": [
+                    {"name": "Glitch a Green Rugg"},
+                    {"name": "Glitch a Scorpiant"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 27,
+                        "y": 245,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Zi",
+                        "x": 45,
+                        "y": 245,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Zi Main Shaft",
+                "sections": [
+                    {"name": "Glitch a Green Rugg"},
+                    {"name": "Glitch a Magenta Rugg"},
+                    {"name": "Glitch a Scorpiant"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 117,
+                        "y": 191,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Zi Furglot Tunnel",
+                "sections": [
+                    {"name": "Glitch a Green Rugg"},
+                    {"name": "Glitch a Furglot"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 99,
+                        "y": 173,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Zi Furglot Tunnel End",
+                "sections": [
+                    {"name": "Glitch a Prongfish"},
+                    {"name": "Glitch a Goolumn"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 27,
+                        "y": 173,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Zi Corridor",
+                "sections": [
+                    {"name": "Glitch a Goolumn"},
+                    {"name": "Glitch an Arachnoptopus"},
+                    {"name": "Glitch a Prongfish"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 135,
+                        "y": 173,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Zi Corridor",
+                "sections": [
+                    {"name": "Glitch a Brown Mutant"},
+                    {"name": "Glitch a Prongfish"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 171,
+                        "y": 119,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Zi Upper Corridor",
+                "sections": [
+                    {"name": "Glitch a Yellow Tube Worm"},
+                    {"name": "Glitch a Prongfish"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 153,
+                        "y": 83,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Zi Drone Quest",
+                "sections": [
+                    {"name": "Glitch a Magenta Rugg"},
+                    {"name": "Glitch a Furglot"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Zi",
+                        "x": 81,
+                        "y": 119,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Kur Address 2 Room",
+                "sections": [
+                    {"name": "Glitch a Brown Mutant"},
+                    {"name": "Glitch a Blite"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 95,
+                        "y": 369,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Kur Pre Gauntlet",
+                "sections": [
+                    {"name": "Glitch a Gill"},
+                    {"name": "Glitch a Pliaa"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 131,
+                        "y": 369,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Kur Gauntlet",
+                "sections": [
+                    {"name": "Glitch a Spidler"},
+                    {"name": "Glitch a Seamk"},
+                    {"name": "Glitch a Pliaa"},
+                    {"name": "Glitch an Eyecopter"},
+                    {"name": "Glitch a Gill"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 221,
+                        "y": 369,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Kur Mountain Base",
+                "sections": [
+                    {"name": "Glitch a Drometon"},
+                    {"name": "Glitch a Spidler"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 113,
+                        "y": 297,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Kur Pre Gir-Tab",
+                "sections": [
+                    {"name": "Glitch a Spidler"},
+                    {"name": "Glitch a Drometon"},
+                    {"name": "Glitch a Gill"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 221,
+                        "y": 369,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Kur Grapple Cliffs",
+                "sections": [
+                    {"name": "Glitch a Spidler"},
+                    {"name": "Glitch a Mogra"},
+                    {"name": "Glitch a Small Mogra"},
+                    {"name": "Glitch a Cyan Trap claw"},
+                    {"name": "Glitch a Gill"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 221,
+                        "y": 369,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Kur Mountain Mid",
+                "sections": [
+                    {"name": "Glitch a Spidler"},
+                    {"name": "Glitch a Flynn Stone"},
+                    {"name": "Glitch a Drometon"},
+                    {"name": "Glitch a Boulder"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 131,
+                        "y": 225,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Kur Snowy Mountain",
+                "sections": [
+                    {"name": "Glitch a Small Mogra"},
+                    {"name": "Glitch a Mogra"},
+                    {"name": "Glitch a Cyan Trap Claw"},
+                    {"name": "Glitch a Boulder"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 131,
+                        "y": 225,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Kur Drone Odyssey Secret Room",
+                "sections": [
+                    {"name": "Glitch a Spidler"},
+                    {"name": "Glitch a Gill"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Kur",
+                        "x": 257,
+                        "y": 117,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Indi",
+                "sections": [
+                    {"name": "Glitch a Blurst"},
+                    {"name": "Glitch a Blurst Swarm"},
+                    {"name": "Glitch a Green Tube Worm"},
+                    {"name": "Glitch a Glugg"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Indi",
+                        "x": 568,
+                        "y": 83,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na Blurst Room",
+                "sections": [
+                    {"name": "Glitched Blurst Item"},
+                    {"name": "Ukkin-Na - Past the Slugs"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 201,
+                        "y": 317
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na Above Vision Room",
+                "sections": [
+                    {"name": "Glitched Blurst Item"},
+                    {"name": "Ukkin-Na - Above Vision Room"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 255,
+                        "y": 47
+                    }
+                ]
+            },
+            {
+                "name": "Ukkin-Na Above Vision Room Enemies",
+                "sections": [
+                    {"name": "Glitch a Green Tube Worm"},
+                    {"name": "Glitch a Blurst"},
+                    {"name": "Glitch a Blurst Swarm"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Ukkin-Na",
+                        "x": 237,
+                        "y": 47
+                    }
+                ]
+            },
+            {
+                "name": "Edin Main Areas",
+                "sections": [
+                    {"name": "Glitch an Eyecopter"},
+                    {"name": "Glitch a Hoverling"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Edin",
+                        "x": 47,
+                        "y": 207,
+                        "shape": "trapezoid"
+                    },
+                    {
+                        "map": "Edin",
+                        "x": 371,
+                        "y": 207,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Edin Clone Path",
+                "sections": [
+                    {"name": "Glitch a Space Bat"},
+                    {"name": "Glitch an Eyecopter"},
+                    {"name": "Glitch a Jorm"},
+                    {"name": "Glitch a Volg"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Edin",
+                        "x": 209,
+                        "y": 171,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Edin Ukhu Upper",
+                "sections": [
+                    {"name": "Glitch an Eyecopter"},
+                    {"name": "Glitch a Will-o-Wisp"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Edin",
+                        "x": 119,
+                        "y": 81,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "Edin Double Check Tunnel",
+                "sections": [
+                    {"name": "Glitch a Blue Mutant"},
+                    {"name": "Glitch a Will-o-Wisp"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "Edin",
+                        "x": 281,
+                        "y": 171,
+                        "shape": "trapezoid"
+                    }
+                ]
+            },
+            {
+                "name": "E-Kur-Mah Passcode Room",
+                "sections": [
+                    {"name": "Glitch an Artichoker"},
+                    {"name": "Glitch an Ancient Sentry Bot"},
+                    {"name": "Glitch a Furglot"},
+                    {"name": "Glitch a Hookfish"}
+                ],
+                "map_locations": [
+                    {
+                        "map": "E-Kur-Mah",
+                        "x": 151,
+                        "y": 243,
+                        "shape": "trapezoid"
+                    }
+                ]
+            }
+        ]
+    }
+]

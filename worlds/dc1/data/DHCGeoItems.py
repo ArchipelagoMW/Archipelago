@@ -1,8 +1,8 @@
 from typing import List
 
 from BaseClasses import ItemClassification
-from worlds.dc1.Items import DarkCloudItem
-from worlds.dc1.Options import DarkCloudOptions
+from ..Items import DarkCloudItem
+from ..Options import DarkCloudOptions
 
 ids = {
     "Progressive Crowning Day": 971110600,
@@ -17,7 +17,22 @@ ids = {
     "Progressive Demon": 971110609,
     "Progressive Things Lost": 971110610,
     "Progressive Departure": 971110611,
-  }
+}
+
+classifications = {
+    "Progressive Crowning Day": ItemClassification.progression,
+    "Progressive Ceremony": ItemClassification.progression,
+    "Progressive Reunion": ItemClassification.progression,
+    "Progressive Campaign": ItemClassification.progression,
+    "Progressive Menace": ItemClassification.progression,
+    "Progressive The Deal": ItemClassification.progression,
+    "Progressive Dark Power": ItemClassification.progression,
+    "Progressive Assassin": ItemClassification.progression,
+    "Progressive Protected": ItemClassification.progression,
+    "Progressive Demon": ItemClassification.progression,
+    "Progressive Things Lost": ItemClassification.progression,
+    "Progressive Departure": ItemClassification.progression,
+}
 
 cday_ids = ["Progressive Crowning Day", "Progressive Crowning Day",
             "Progressive Crowning Day", "Progressive Crowning Day"]
@@ -26,9 +41,9 @@ ceremony_ids = ["Progressive Ceremony", "Progressive Ceremony", "Progressive Cer
 reunion_ids = ["Progressive Reunion", "Progressive Reunion", "Progressive Reunion",
                "Progressive Reunion", "Progressive Reunion"]
 campaign_ids = ["Progressive Campaign", "Progressive Campaign", "Progressive Campaign",
-                "Progressive Campaign", "Progressive Campaign", "Progressive Campaign",]
+                "Progressive Campaign", "Progressive Campaign", "Progressive Campaign", ]
 menace_ids = ["Progressive Menace", "Progressive Menace", "Progressive Menace",
-              "Progressive Menace", "Progressive Menace", "Progressive Menace",]
+              "Progressive Menace", "Progressive Menace", "Progressive Menace", ]
 deal_ids = ["Progressive The Deal", "Progressive The Deal", "Progressive The Deal",
             "Progressive The Deal", "Progressive The Deal"]
 power_ids = ["Progressive Dark Power", "Progressive Dark Power", "Progressive Dark Power",
@@ -42,6 +57,8 @@ things_ids = ["Progressive Things Lost", "Progressive Things Lost",
 departure_ids = ["Progressive Departure", "Progressive Departure", "Progressive Departure",
                  "Progressive Departure", "Progressive Departure"]
 
+
+# Unused options param for consistency since these files are all done in a loop with func pointers
 def create_castle_atla(options: DarkCloudOptions, player: int) -> List["DarkCloudItem"]:
     """Create atla items for Dark Heaven Castle."""
     items = []

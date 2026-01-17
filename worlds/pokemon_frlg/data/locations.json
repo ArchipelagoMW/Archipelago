@@ -538,7 +538,7 @@
   },
   "NPC_GIFT_GOT_CERULEAN_KEY": {
     "name": "Route 25 - Man Gift",
-    "tags": ["NPC Gifts", "Kanto", "Rotue 25"],
+    "tags": ["NPC Gifts", "Kanto", "Route 25"],
     "category": "NPC_GIFT",
     "include": ["Gym Keys"]
   },

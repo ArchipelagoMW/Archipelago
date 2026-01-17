@@ -1,9 +1,8 @@
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 import math
 from random import Random
 import random
-from typing import Any, Dict, List, Sequence
 
 from typing_extensions import override
 
@@ -72,7 +71,7 @@ class StartingCharacter1(Choice):
 
     @override
     @classmethod
-    def from_any(cls, data: Any) -> Choice:
+    def from_any(cls, data: object) -> Choice:
         """
         random doesn't allow gogo or umaro in slot 1
         because if it did allow it, we wouldn't have a good way
@@ -157,7 +156,7 @@ class StartAverageLevel(DefaultOnToggle):
     """ Recruited characters start at the average character level """
     display_name = "Start Average Level"
 
-    def flags(self) -> List[str]:
+    def flags(self) -> list[str]:
         return ["-sal"] if self.value else []
 
 
@@ -334,8 +333,8 @@ class Flagstring(FreeText):
     _cache: dict[str, Mapping[str, str]] | None = None
     """ `{full_flagstring_value: {flag: value}}` """
 
-    def _parse(self) -> Dict[str, str]:
-        parsed: Dict[str, str] = {}
+    def _parse(self) -> dict[str, str]:
+        parsed: dict[str, str] = {}
         space_split = self.value.split(" ")
         i = 0
         while i < len(space_split):
@@ -343,7 +342,7 @@ class Flagstring(FreeText):
                 if len(space_split[i]) < 2:
                     raise ValueError(f"invalid {self.display_name} at symbol {i}")
                 key = space_split[i]
-                values: List[str] = []
+                values: list[str] = []
                 i += 1
                 while i < len(space_split) and not space_split[i].startswith("-"):
                     values.append(space_split[i])
@@ -465,7 +464,7 @@ def verify_flagstring(flags: Sequence[str]) -> None:
         Arguments(flags)
 
 
-def generate_flagstring(options: FF6WCOptions, starting_characters: List[str]) -> List[str]:
+def generate_flagstring(options: FF6WCOptions, starting_characters: list[str]) -> list[str]:
     if (options.Flagstring.value).capitalize() != 'False':
         flags = options.Flagstring.value.split(" ")
     else:
@@ -487,12 +486,12 @@ def generate_flagstring(options: FF6WCOptions, starting_characters: List[str]) -
     return flags
 
 
-def generate_settings_string() -> List[str]:
+def generate_settings_string() -> list[str]:
     # Character gating is always on, and we want the spoiler log
     return ["-cg", "-sl"]
 
 
-def generate_objectives_string(options: FF6WCOptions) -> List[str]:
+def generate_objectives_string(options: FF6WCOptions) -> list[str]:
     character_count = options.CharacterCount
     esper_count = options.EsperCount
     dragon_count = options.DragonCount
@@ -534,7 +533,7 @@ def generate_objectives_string(options: FF6WCOptions) -> List[str]:
     return [*fb_string, *kts_string, *swdtech_learn, *magitek_upgrade]
 
 
-def generate_party_string(options: FF6WCOptions, starting_characters: List[str]) -> List[str]:
+def generate_party_string(options: FF6WCOptions, starting_characters: list[str]) -> list[str]:
     character_count = options.StartingCharacterCount.value
 
     if character_count < 4:
@@ -574,7 +573,7 @@ def generate_party_string(options: FF6WCOptions, starting_characters: List[str])
     return [character_one, character_two, character_three, character_four, *sal, *stat_string, equipable_umaro]
 
 
-def generate_commands_string(options: FF6WCOptions) -> List[str]:
+def generate_commands_string(options: FF6WCOptions) -> list[str]:
     command_strings = []
     if options.RandomizedCommands.value == RandomizedCommands.option_vanilla:
         command_strings = ["-com=03050708091011121315191629"]
@@ -603,7 +602,7 @@ def generate_commands_string(options: FF6WCOptions) -> List[str]:
             *rage_command_strings, *other_command_string]
 
 
-def generate_battle_string(options: FF6WCOptions) -> List[str]:
+def generate_battle_string(options: FF6WCOptions) -> list[str]:
     reward_value = options.BattleRewardMultiplier + 1
     rewards_strings = [f"-xpm={reward_value}", f"-mpm={reward_value}", f"-gpm={reward_value}", "-be", "-nxppd"]
 
@@ -623,7 +622,7 @@ def generate_battle_string(options: FF6WCOptions) -> List[str]:
     return [*rewards_strings, boss_string, statue_string, dragon_string, *scaling_string]
 
 
-def generate_magic_string(options: FF6WCOptions) -> List[str]:
+def generate_magic_string(options: FF6WCOptions) -> list[str]:
     spell_strings = ["-mmprp", "75", "125"]  # Spell cost +/- 25%
 
     esper_spells_strings = [""]
@@ -696,7 +695,7 @@ def generate_items_string(options: FF6WCOptions) -> list[str]:
             *spellcasting_items_string, *equipability_strings, *chest_randomization]
 
 
-def generate_gameplay_string(options: FF6WCOptions) -> List[str]:
+def generate_gameplay_string(options: FF6WCOptions) -> list[str]:
     # B Dash, randomized Coliseum rewards and enemies, randomize Auction House minor items
     gameplay_strings = ["-move=bd", "-cor", "-crr", "-crvr", "50", "250", "-crm", "-ari"]
     if not options.AllowStrongestItems.value:
@@ -707,22 +706,22 @@ def generate_gameplay_string(options: FF6WCOptions) -> List[str]:
     return gameplay_strings
 
 
-def generate_graphics_string() -> List[str]:
+def generate_graphics_string() -> list[str]:
     # Lowercase the names.
     return ["-name=Terra.Locke.Cyan.Shadow.Edgar.Sabin.Celes.Strago.Relm.Setzer.Mog.Gau.Gogo.Umaro "]
 
 
-def generate_accessibility_string() -> List[str]:
+def generate_accessibility_string() -> list[str]:
     # Remove flashing, add high contrast world map
     return ["-frm", "-wmhc"]
 
 
-def generate_fixes_string() -> List[str]:
+def generate_fixes_string() -> list[str]:
     # Bug fixes, and Magimaster can cast his final spell because I'm a jerk.
     return ["-fedc", "-fe", "-fbs", "-fvd", "-fj", "-dgne", "-wnz", "-cmd"]
 
 
-def resolve_character_options(options: FF6WCOptions, random: Random) -> List[str]:
+def resolve_character_options(options: FF6WCOptions, random: Random) -> list[str]:
     """ returns the starting characters and sets the option values to match the returned characters """
 
     from . import Rom
@@ -736,7 +735,7 @@ def resolve_character_options(options: FF6WCOptions, random: Random) -> List[str
     ]
     to_use = from_options[:character_count]
     assert len(to_use) == character_count, f"{to_use=} {character_count=}"
-    specified: List[str] = []
+    specified: list[str] = []
     for ch in to_use:
         specified.append(ch if (ch in Rom.characters and ch not in specified) else "")
     assert len(specified) == character_count, f"{specified=} {character_count=}"

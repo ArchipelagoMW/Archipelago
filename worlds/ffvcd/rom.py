@@ -20,10 +20,10 @@ class LocalRom(object):
 
         with open(file, 'rb') as stream:
             self.buffer = read_snes_rom(stream)
-                
+
         with open(file, 'rb') as file:
             self.rom_data = file.read()
-        
+
     def read_bit(self, address: int, bit_number: int) -> bool:
         bitflag = (1 << bit_number)
         return ((self.buffer[address] & bitflag) != 0)
@@ -51,12 +51,12 @@ class LocalRom(object):
     def read_from_file(self, file):
         with open(file, 'rb') as stream:
             self.buffer = bytearray(stream.read())
-            
-            
+
+
     def write_randomizer_asm_to_file(self, basepatch_to_use, temp_patch_path, rompath):
         # with open(basepatch_to_use, "rb") as f:
         #     delta: bytes = f.read()
-            
+
 
         base_patch = pkgutil.get_data(__name__,basepatch_to_use)
         self.rom_data = bsdiff4.patch(self.rom_data, base_patch)
@@ -65,7 +65,7 @@ class LocalRom(object):
 
         # the following code is taking a .asm file meant to be used with asar
         # and instead manually updates all of the bytes
-        
+
         with open(temp_patch_path,'r') as f:
             data = f.readlines()
 
@@ -75,7 +75,7 @@ class LocalRom(object):
             line = line.split(";")[0]
             if "org" not in line and "db" not in line:
                 continue
-            
+
             if "org" in line:
                 new_loc = int(line.split("$")[1],base=16) - 0xC00000
                 continue
@@ -86,9 +86,9 @@ class LocalRom(object):
                     if b:
                         master[new_loc] = int(b, base=16)
                         new_loc += 1
-                    
-                    
-        
+
+
+
         for idx, b in master.items():
             self.buffer[idx] = b
 
@@ -98,13 +98,13 @@ class LocalRom(object):
         self.buffer[new_loc + 1] = 1
         self.buffer[new_loc + 2] = 0
         self.buffer[new_loc + 3] = 0
-        
+
         b = data[-6].split("dw ")[1].split("\n")[0].replace("$","")
         b1 = b[:2]
         b2 = b[2:]
 
 
-        
+
         for i in range(15):
             self.buffer[new_loc + 4 + i * 2] = int(b2,base=16)
             self.buffer[new_loc + 4 + i * 2 + 1] = int(b1,base=16)
@@ -115,8 +115,8 @@ def patch_rom(multiworld, rom, player):
     rom.name = bytearray(f'K7{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
-    
-    
+
+
 class FFVCDDeltaPatch(APDeltaPatch):
     hash = USHASH
     game = "Final Fantasy V Career Day"
@@ -142,9 +142,9 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
     return base_rom_bytes
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options = Utils.get_options()
+    from . import FFVCDWorld
     if not file_name:
-        file_name = options["ffvcd_options"]["rom_file"]
+        file_name = FFVCDWorld.settings.rom_file
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
@@ -731,9 +731,9 @@ event_flag_dict = {0xC0FAB2: {'name': 'Wind Crystal (Knight)',
   'ram_address': 0xA26,
   'bit': 2,
   'direction': 1},
- 0xC0FAD2: {'name': 'Titan (Titan)', 
-  'ram_address': 0xA1E, 
-  'bit': 0, 
+ 0xC0FAD2: {'name': 'Titan (Titan)',
+  'ram_address': 0xA1E,
+  'bit': 0,
   'direction': 1},
  0xC0FAD4: {'name': 'Carbuncle (Crbnkl)',
   'ram_address': 0xA84,
@@ -743,9 +743,9 @@ event_flag_dict = {0xC0FAB2: {'name': 'Wind Crystal (Knight)',
   'ram_address': 0xA3D,
   'bit': 7,
   'direction': 1},
- 0xC0FAD8: {'name': 'Odin (Odin)', 
-  'ram_address': 0xA59, 
-  'bit': 7, 
+ 0xC0FAD8: {'name': 'Odin (Odin)',
+  'ram_address': 0xA59,
+  'bit': 7,
   'direction': 0},
  0xC0FADA: {'name': 'Phoenix (Phenix)',
   'ram_address': 0xA26,
@@ -795,9 +795,9 @@ event_flag_dict = {0xC0FAB2: {'name': 'Wind Crystal (Knight)',
   'ram_address': 0xA52,
   'bit': 2,
   'direction': 1},
- 0xC0FAF2: {'name': 'Meteo (Meteo)', 
-  'ram_address': 0xA15, 
-  'bit': 6, 
+ 0xC0FAF2: {'name': 'Meteo (Meteo)',
+  'ram_address': 0xA15,
+  'bit': 6,
   'direction': 1},
  0xC0FAF4: {'name': '5 potions (from NPC) (Potion)',
   'ram_address': 0xA38,
@@ -871,13 +871,13 @@ event_flag_dict = {0xC0FAB2: {'name': 'Wind Crystal (Knight)',
   'ram_address': 0xA79,
   'bit': 7,
   'direction': 0},
- 0xC0FB1A: {'name': 'Shiva (Shiva)', 
-  'ram_address': 0xA18, 
-  'bit': 5, 
+ 0xC0FB1A: {'name': 'Shiva (Shiva)',
+  'ram_address': 0xA18,
+  'bit': 5,
   'direction': 1},
- 0xC0FB1C: {'name': 'Ifrit (Ifrit)', 
-  'ram_address': 0xA86, 
-  'bit': 7, 
+ 0xC0FB1C: {'name': 'Ifrit (Ifrit)',
+  'ram_address': 0xA86,
+  'bit': 7,
   'direction': 0},
  0xC0FB1E: {'name': 'Water Crystal (RedMage)',
   'ram_address': 0xA18,
@@ -947,9 +947,9 @@ event_flag_dict = {0xC0FAB2: {'name': 'Wind Crystal (Knight)',
   'ram_address': 0xA46,
   'bit': 6,
   'direction': 1},
- 0xC0FB70: {'name': 'Byblos (Boss)', 
-  'ram_address': 0xA39, 
-  'bit': 2, 
+ 0xC0FB70: {'name': 'Byblos (Boss)',
+  'ram_address': 0xA39,
+  'bit': 2,
   'direction': 1},
  0xC0FB72: {'name': 'WingRaptor (Boss)',
   'ram_address': 0xA38,
@@ -959,17 +959,17 @@ event_flag_dict = {0xC0FAB2: {'name': 'Wind Crystal (Knight)',
   'ram_address': 0xA38,
   'bit': 2,
   'direction': 1},
- 0xC0FB76: {'name': 'Siren (Boss)', 
-  'ram_address': 0xA18, 
-  'bit': 1, 
+ 0xC0FB76: {'name': 'Siren (Boss)',
+  'ram_address': 0xA18,
+  'bit': 1,
   'direction': 1},
  0xC0FB78: {'name': 'Magisa & Forza (Boss)',
   'ram_address': 0xA18,
   'bit': 3,
   'direction': 1},
- 0xC0FB7A: {'name': 'Galura (Boss)', 
-  'ram_address': 0xA18, 
-  'bit': 7, 
+ 0xC0FB7A: {'name': 'Galura (Boss)',
+  'ram_address': 0xA18,
+  'bit': 7,
   'direction': 1},
  0xC0FB7C: {'name': 'LiquiFlame (Boss)',
   'ram_address': 0xA19,
@@ -1003,17 +1003,17 @@ event_flag_dict = {0xC0FAB2: {'name': 'Wind Crystal (Knight)',
   'ram_address': 0xA1E,
   'bit': 3,
   'direction': 1},
- 0xC0FB8C: {'name': 'Titan (Boss)', 
-  'ram_address': 0xA1E, 
-  'bit': 0, 
+ 0xC0FB8C: {'name': 'Titan (Boss)',
+  'ram_address': 0xA1E,
+  'bit': 0,
   'direction': 1},
- 0xC0FBB6: {'name': 'Ifrit (Boss)', 
-  'ram_address': 0xA86, 
-  'bit': 7, 
+ 0xC0FBB6: {'name': 'Ifrit (Boss)',
+  'ram_address': 0xA86,
+  'bit': 7,
   'direction': 0},
- 0xC0FBB8: {'name': 'Shiva (Boss)', 
-  'ram_address': 0xA18, 
-  'bit': 5, 
+ 0xC0FBB8: {'name': 'Shiva (Boss)',
+  'ram_address': 0xA18,
+  'bit': 5,
   'direction': 1},
  0xC0FBBA: {'name': 'Crayclaw (Boss)',
   'ram_address': 0xA1C,
@@ -1043,9 +1043,9 @@ event_flag_dict = {0xC0FAB2: {'name': 'Wind Crystal (Knight)',
   'ram_address': 0xA21,
   'bit': 1,
   'direction': 1},
- 0xC0FB9A: {'name': 'Atmos (Boss)', 
-  'ram_address': 0xA22, 
-  'bit': 7, 
+ 0xC0FB9A: {'name': 'Atmos (Boss)',
+  'ram_address': 0xA22,
+  'bit': 7,
   'direction': 1},
  0xC0FB9C: {'name': 'Guardians (Boss)',
   'ram_address': 0xA22,
@@ -1067,9 +1067,9 @@ event_flag_dict = {0xC0FAB2: {'name': 'Wind Crystal (Knight)',
   'ram_address': 0xA23,
   'bit': 0,
   'direction': 1},
- 0xC0FBA6: {'name': 'Odin (Boss)', 
-  'ram_address': 0xA59, 
-  'bit': 7, 
+ 0xC0FBA6: {'name': 'Odin (Boss)',
+  'ram_address': 0xA59,
+  'bit': 7,
   'direction': 0},
  0xC0FBA8: {'name': 'Triton, Neregeid & Phobos (Boss)',
   'ram_address': 0xA15,
@@ -1091,9 +1091,9 @@ event_flag_dict = {0xC0FAB2: {'name': 'Wind Crystal (Knight)',
   'ram_address': 0xA3E,
   'bit': 3,
   'direction': 1},
- 0xC0FBB2: {'name': 'GoGo (Boss)', 
-  'ram_address': 0xA71, 
-  'bit': 3, 
+ 0xC0FBB2: {'name': 'GoGo (Boss)',
+  'ram_address': 0xA71,
+  'bit': 3,
   'direction': 0},
  0xC0FBB4: {'name': 'Bahamut (Boss)',
   'ram_address': 0xA2E,

@@ -85,17 +85,63 @@ locs_with_jump_required = [
     "Chest WingedStorm: Chest #54",
     "Chest WingedStorm: Chest #55",
     "Chest MarcusMercenaryShop: Station Rooftop",
+    "Challenge EridiumBlight: Vault Hunter vs. The Volcano",
+    "Challenge Bunker: Cult of the Vault",
+    "Challenge VaultOfTheWarrior: Dying of the Light",
+    "Challenge SouthernShelfBay: Vault Hunter on Wire",
+    "Challenge SouthernShelfBay: Cult of the Vault",
+    "Challenge Sawtooth: Cult of the Vault",
+    "Challenge NaturalSelectionAnnex: Cult of the Vault",
+    "Challenge BloodshotStronghold: Eff Yo' Couch",
+    "Challenge HerosPass: Cult of the Vault",
+    "Challenge Fridge: Stiff Competition",
+    "Challenge Fridge: Trapped Rat",
+    "Challenge Fridge: Cult of the Vault",
+    "Challenge ThousandCuts: Slab UHF",
+    "Challenge ThousandCuts: Cult of the Vault",
+    "Challenge Highlands: Winds of the Highlands",
+    "Challenge ThreeHornsDivide: Cult of the Vault",
+    "Challenge Dust: The Van Is Damned",
+    "Challenge Lynchwood: Cult of the Vault",
+    "Challenge WildlifePreserve: Mordy's Secret Stashes",
+    "Challenge WildlifePreserve: Bear Minimum",
+    "Challenge WildlifePreserve: Ride Together, Die Together",
+    "Challenge WildlifePreserve: Cult of the Vault",
+    "Challenge SanctuaryHole: Down the Rabbit Hole",
+    "Challenge SanctuaryHole: Sugar Shack",
+    "Challenge Sanctuary: Cult of the Vault",
+    "Challenge SouthPaw: Cult of the Vault",
+    "Challenge SouthernShelf: Cult of the Vault",
+    "Challenge TundraExpress: What's Yours Is Mine",
+    "Challenge TundraExpress: King of the Buzzard World",
+    "Challenge Fridge: The Rakk Knight",
+    "Challenge Frostburn: Burning Sensation",
+    "Challenge WildlifePreserve: Siren's Song",
+    "Challenge ThousandCuts: Portrait of the Gunzerker as a Young Man",
+    "Challenge BadassCrater: Fan Club Membership",
+    "Challenge Forge: Parachutes Are for Pansies",
+    "Challenge Oasis: I Ain't Afraid of Heights",
+    "Challenge Rustyards: My Main Squeeze",
+    "Challenge Rustyards: Crow's Nest",
+    "Challenge Rustyards: Cult of the Vault",
+    "Challenge HuntersGrotto: Stool Sample",
+    "Challenge HeliosFallen: Cult of the Vault",
+    "Challenge DahlAbandon: Mine, Dahl Mine!",
+    "Challenge DahlAbandon: Cult of the Vault",
+    "Challenge MtScarab: Cult of the Vault",
+    "Challenge Burrows: Grrang'laarg'll (Queen's Treasure)",
+    "Challenge Burrows: Never Enough Tools",
+    "Challenge Burrows: Cult of the Vault",
+    "Challenge WrithingDeep: Dune Raider",
+    "Challenge WrithingDeep: Cult of the Vault",
 ]
 
 locs_with_crouch_required = [
     "Enemy HatredsShadow: Handsome Dragon",
     "Symbol Opportunity: Construction Site",
     "Chest SouthernShelf: Boom Bewm Elevator",
+    "Challenge AssaultRifle: Crouching Tiger, Hidden Assault Rifle",
 ]
-
-# TODO list for crouch
-
-# TODO list for vehicle fire (mostly just challenges)
 
 def try_add_rule(place, rule):
     if place is None:
@@ -133,6 +179,9 @@ def set_rules(world: Borderlands2World):
                 lambda state: state.has("Progressive Jump", world.player)
             )
 
+    try_add_rule(world.try_get_location("Challenge Vehicles: Turret Syndrome"),
+        lambda state: state.has("Vehicle Fire", world.player))
+
     #need melee to break vines to Hector
     try_add_rule(world.try_get_entrance("Mt.ScarabResearchCenter to FFSBossFight"),
              lambda state: state.has("Melee", world.player))
@@ -148,7 +197,14 @@ def set_rules(world: Borderlands2World):
             lambda state: state.has("Crouch", world.player)
         )
 
+    # FFS Butt Stalion requires the amulet
+    try_add_rule(world.try_get_location("Challenge Backburner: Fandir Fiction"),
+            lambda state: state.has("Unique Relic", world.player))
+    try_add_rule(world.try_get_location("Challenge Backburner: Fandir Fiction"),
+            lambda state: state.has("Reward Agony: The Amulet", world.player))
 
+    try_add_rule(world.try_get_location("Challenge Sanctuary: Jackpot!"),
+            lambda state: state.has("Progressive Money Cap", world.player))
 
     if world.options.entrance_locks.value == 0:
         # skip if no entrance locks

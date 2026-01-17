@@ -63,6 +63,7 @@ Goland.locations = [
     SidequestLocation(LocationNames.GOLAND_2_SIDEQUEST, battle_level=8),
     SidequestLocation(LocationNames.GOLAND_3_SIDEQUEST, battle_level=8),
     SidequestLocation(LocationNames.GOLAND_4_SIDEQUEST, battle_level=8),
+    SidequestLocation(LocationNames.GOLAND_4_STONE, battle_level=8),
     SidequestLocation(LocationNames.BEOWULF_RECRUIT, battle_level=8),
     SidequestLocation(LocationNames.REIS_DRAGON_RECRUIT, battle_level=8),
     SidequestLocation(LocationNames.WORKER_8_RECRUIT, battle_level=8)

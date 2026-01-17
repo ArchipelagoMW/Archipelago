@@ -24,7 +24,7 @@ class TestSignpostsHints(BanjoTooieTestBase):
         assert len(self.world.hints) == 61
 
         non_joke_hints = len([hint_data for hint_data in self.world.hints.values() if hint_data.location_id])
-        assert non_joke_hints == self.world.options.signpost_hints
+        assert non_joke_hints == self.world.options.signpost_hints.value
 
     def test_move_hint_count(self) -> None:
         move_names = [
@@ -45,13 +45,13 @@ class TestSignpostsHints(BanjoTooieTestBase):
 
         # There can be more if slow locations are also hinted.
         possible_moves = 0
-        if self.world.options.randomize_bt_moves:
+        if self.world.options.randomize_bt_moves.value:
             possible_moves += 24
-        if self.world.options.randomize_bk_moves == RandomizeBKMoveList.option_all:
+        if self.world.options.randomize_bk_moves.value == RandomizeBKMoveList.option_all:
             possible_moves += 16
 
-        assert move_hints >= min(self.world.options.signpost_move_hints, possible_moves,
-                                 self.world.options.signpost_hints)
+        assert move_hints >= min(self.world.options.signpost_move_hints.value, possible_moves,
+                                 self.world.options.signpost_hints.value)
 
 
 class TestClearSignpostsHints(TestSignpostsHints):
@@ -131,8 +131,6 @@ class TestCrypticSignpostsHints(TestSignpostsHints):
                 and location.player == hint_data.location_player_id
             ][0]
 
-            text = hint_data.text[::]
-
             location = hinted_location.name
 
             classification_keywords = {
@@ -146,10 +144,10 @@ class TestCrypticSignpostsHints(TestSignpostsHints):
             }
             keywords = classification_keywords[hinted_location.item.classification]
 
-            assert 'Your' in text
-            assert location in text
-            assert any([keyword in text for keyword in keywords]), f"Item {hinted_location.item.name}\
-                    should be one of these: {keywords} but was hinted: here's the full text: {text}."
+            assert 'Your' in hint_data.text
+            assert location in hint_data.text
+            assert any([keyword in hint_data.text for keyword in keywords]), f"Item {hinted_location.item.name}\
+                    should be one of these: {keywords} but was hinted: here's the full text: {hint_data.text}."
             assert not hint_data.should_add_hint
 
 

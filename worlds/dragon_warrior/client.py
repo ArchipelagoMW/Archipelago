@@ -11,7 +11,7 @@ nes_logger = logging.getLogger("NES")
 logger = logging.getLogger("Client")
 
 EXPECTED_ROM_NAME = "DWAPV"
-EXPECTED_VERSION = "101"
+EXPECTED_VERSION = "102"
 EQUIPMENT_BYTES = [0x1, 0x2, 0x3, 0x4, 0x8, 0xC, 0x10, 0x14, 0x18, 0x1C, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0, 0xE0]
 ENEMY_NAMES = ['Slime', 'Red Slime', 'Drakee', 'Ghost', 'Magician', 'Magidrakee', 'Scorpion', 'Druin', 'Poltergeist',
                'Droll', 'Drakeema', 'Skeleton', 'Warlock', 'Metal Scorpion', 'Wolf', 'Wraith', 'Metal Slime', 'Specter',

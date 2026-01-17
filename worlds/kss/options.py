@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from Options import (PerGameCommonOptions, Range, Choice, OptionSet, OptionDict, DeathLinkMixin, Toggle,
-                     OptionCounter, Visibility)
+                     OptionCounter, Visibility, TextChoice)
 from dataclasses import dataclass
 from schema import Schema, And, Use, Optional, Or
 from typing import Any
@@ -35,15 +35,7 @@ class RequiredSubgames(OptionSet):
     Which subgames are required to be completed for the game to be considered complete.
     """
     display_name = "Required Subgames"
-    valid_keys = {
-        "Spring Breeze",
-        "Dyna Blade",
-        "Gourmet Race",
-        "The Great Cave Offensive",
-        "Revenge of Meta Knight",
-        "Milky Way Wishes",
-        "The Arena"
-    }
+    valid_keys = frozenset(subgame_mapping.values())
     default = {"Milky Way Wishes"}
 
 
@@ -67,15 +59,7 @@ class IncludedSubgames(OptionSet):
     Which subgames should be included as locations.
     """
     display_name = "Included Subgames"
-    valid_keys = {
-        "Spring Breeze",
-        "Dyna Blade",
-        "Gourmet Race",
-        "The Great Cave Offensive",
-        "Revenge of Meta Knight",
-        "Milky Way Wishes",
-        "The Arena"
-    }
+    valid_keys = frozenset(subgame_mapping.values())
     default = sorted(valid_keys)
 
 
@@ -149,15 +133,23 @@ class Essences(Toggle):
     display_name = "Essence-sanity"
 
 
-class KirbyFlavorPreset(Choice, OptionDict):
+class KirbyFlavorPreset(TextChoice, OptionDict):
     """
     The color of Kirby, from a list of presets.
+    Can also accept a valid preset defined in `kirby_flavors`, 1/2 direct hex colors (#RRGGBB|#RRGGBB), a single hex
+    color and a method to derive a second color (#RRGGBB|complement/analogous/intensify), or a dict taking each Copy
+    Ability (and Kirby) as a key and one of the former options as the value.
+
+    kirby_flavor_preset:
+        kirby: #99EEDD|analogous
+        Copy: bubblegum
+        Cutter: #AAEEDD
     """
     display_name = "Kirby Flavor"
     valid_keys = sorted(palette_addresses.keys())
+    # primary validation, perform secondary validation in generate_early
     schema = Schema(Or(str, int, {
-        Optional(And(str, Use(str.title), lambda s: s in palette_addresses)):
-            And(str, Use(str.lower), lambda s: s in KirbyFlavorPreset.options)
+        Optional(And(str, Use(str.title), lambda s: s in palette_addresses)): str
     }))
     default = 0
     option_default = 0
@@ -175,22 +167,16 @@ class KirbyFlavorPreset(Choice, OptionDict):
     option_lime = 12
     option_lavender = 13
     option_miku = 14
-    option_custom = -1
 
-    def __init__(self, value: int | dict[str, Any]) -> None:
-        self.value: int | dict[str, Any] = value
+    def __init__(self, value: int | str | dict[str, Any]) -> None:
+        self.value: int | str | dict[str, Any] = value
 
     @classmethod
     def parse_weighted_option(cls, value: dict[str, int]) -> str:
-        for key in value.keys():
-            if key.lower() not in cls.options and key.lower() != "random":
-                raise KeyError(
-                    f'Could not find option "{key}" for "{cls.__name__}", '
-                    f'known options are {", ".join(f"{option}" for option in cls.name_lookup.values())}')
         return random.choices(list(value.keys()), weights=list(value.values()), k=1)[0]
 
     @classmethod
-    def from_any(cls, value: Any) -> Choice | OptionDict:
+    def from_any(cls, value: Any) -> TextChoice | OptionDict:
         if isinstance(value, dict):
             if any(key not in cls.valid_keys for key in value.keys()):
                 # We have to assume that this is a weighted option
@@ -204,34 +190,46 @@ class KirbyFlavorPreset(Choice, OptionDict):
             return super().from_any(value)
 
     def verify_keys(self) -> None:
-        if not isinstance(self.value, int):
+        if isinstance(self.value, dict):
             super().verify_keys()
 
     @classmethod
     def get_option_name(cls, value: int | dict[str, str]) -> str:
         if isinstance(value, int):
             return cls.name_lookup[value].replace("_", " ").title()
+        elif isinstance(value, str):
+            return value
         else:
             return ", ".join(f"{key}: {v}" for key, v in value.items())
 
 
 class KirbyFlavor(OptionDict):
     """
-    A custom color for Kirby. To use a custom color, set the preset to Custom and then define a dict of keys from "1" to
+    Define custom colors for Kirby. To use a custom color, set the preset to the name defined and then define a dict of keys from "1" to
     "8", with their values being an HTML hex color.
     """
-    display_name = "Custom Kirby Flavor"
+    display_name = "Custom Kirby Flavors"
+    schema = Schema(
+        {
+            Optional(str): {
+                f"{x}": And(str, Use(str.lower), lambda x: all(y in "abcdef0123456789#" for y in x))
+                for x in range(1, 9)
+            }
+        }
+    )
     default = {
-        "1": "F8F8F8",
-        "2": "F0E0E8",
-        "3": "E8D0D0",
-        "4": "F0A0B8",
-        "5": "C8A0A8",
-        "6": "A85048",
-        "7": "E02018",
-        "8": "E85048",
+        "default_kirby": {
+            "1": "F8F8F8",
+            "2": "F0E0E8",
+            "3": "E8D0D0",
+            "4": "F0A0B8",
+            "5": "C8A0A8",
+            "6": "A85048",
+            "7": "E02018",
+            "8": "E85048",
+        }
     }
-    visibility = Visibility.template | Visibility.spoiler  # likely never supported on guis
+    visibility = Visibility.template | Visibility.spoiler  # never supported on guis
 
 
 @dataclass
@@ -247,5 +245,5 @@ class KSSOptions(PerGameCommonOptions, DeathLinkMixin):
     the_great_cave_offensive_gold_thresholds: TheGreatCaveOffensiveGoldThresholds
     milky_way_wishes_mode: MilkyWayWishesMode
     kirby_flavor_preset: KirbyFlavorPreset
-    kirby_flavor: KirbyFlavor
+    kirby_flavors: KirbyFlavor
     

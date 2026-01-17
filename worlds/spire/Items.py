@@ -6,10 +6,10 @@ from BaseClasses import ItemClassification
 from typing import Dict
 
 from .Characters import character_list
-from .Constants import NUM_CUSTOM
+from .Constants import NUM_CUSTOM, CHAR_ITEM_OFFSET
 
 
-CHAR_OFFSET = 20
+CHAR_OFFSET = CHAR_ITEM_OFFSET
 
 class ItemType(Enum):
     CARD_REWARD = auto()
@@ -28,7 +28,9 @@ class ItemType(Enum):
     POTION = auto()
     ASCENSION_DOWN = auto()
     TRAP = auto()
+    KEY = auto()
     CAW_CAW = auto()
+    OTHER = auto()
 
 
 class ItemData(typing.NamedTuple):
@@ -63,6 +65,9 @@ base_item_table: Dict[str, ItemData] = {
     'Unlock': ItemData(14, ItemType.CHAR_UNLOCK),
     'Potion': ItemData(18, ItemType.POTION, ItemClassification.useful),
     'Ascension Down': ItemData(19, ItemType.ASCENSION_DOWN, ItemClassification.useful),
+    'Sapphire Key': ItemData(20, ItemType.KEY),
+    'Ruby Key': ItemData(21, ItemType.KEY),
+    'Emerald Key': ItemData(22, ItemType.KEY),
 
     # Event Items
     'Victory': ItemData(None, None, ItemClassification.progression, True, True),
@@ -91,6 +96,7 @@ trap_item_table = {
 
 other_items = {
     'CAW CAW': ItemData(100000, ItemType.CAW_CAW, ItemClassification.filler),
+    'Combat Buff': ItemData(100001, ItemType.OTHER, ItemClassification.filler)
 }
 
 def create_item_tables(vanilla_chars: typing.List[str], extras: int) -> typing.Tuple[dict[str, ItemData], dict[

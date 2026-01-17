@@ -1,6 +1,6 @@
 from BaseClasses import ItemClassification
-from worlds.dc1.Items import DarkCloudItem
-from worlds.dc1.Options import DarkCloudOptions
+from ..Items import DarkCloudItem
+from ..Options import DarkCloudOptions
 
 ids = {
     "Progressive Player's House": 971110100,
@@ -15,11 +15,31 @@ ids = {
     "Progressive Windmill 1": 971110109,
     "Progressive Windmill 2": 971110110,
     "Progressive Windmill 3": 971110111,
-    "Pond": 971110112,
+    "Norune Pond": 971110112,
     "Norune Trees": 971110113,
     "Norune Road": 971110114,
     "Norune River": 971110115,
     "Norune Bridge": 971110116,
+}
+
+classifications = {
+    "Progressive Player's House": ItemClassification.progression,
+    "Progressive Macho's House": ItemClassification.progression | ItemClassification.filler,
+    "Progressive Laura's House": ItemClassification.progression | ItemClassification.useful | ItemClassification.filler,
+    "Progressive Paige's House": ItemClassification.progression,
+    "Progressive Claude's House": ItemClassification.progression | ItemClassification.useful | ItemClassification.filler,
+    "Progressive Hag's House": ItemClassification.progression | ItemClassification.useful,
+    "Progressive Alnet's House": ItemClassification.progression | ItemClassification.useful | ItemClassification.filler,
+    "Progressive Gaffer's Buggy": ItemClassification.progression,
+    "Progressive Dran's Windmill": ItemClassification.progression | ItemClassification.useful,
+    "Progressive Windmill 1": ItemClassification.filler,
+    "Progressive Windmill 2": ItemClassification.filler,
+    "Progressive Windmill 3": ItemClassification.filler,
+    "Norune Pond": ItemClassification.progression,
+    "Norune Trees": ItemClassification.filler,
+    "Norune Road": ItemClassification.filler,
+    "Norune River": ItemClassification.filler,
+    "Norune Bridge": ItemClassification.filler,
 }
 
 player_house_ids = ["Progressive Player's House", "Progressive Player's House", "Progressive Player's House",
@@ -31,31 +51,29 @@ gaffer_buggy_ids = ["Progressive Paige's House", "Progressive Paige's House", "P
                     "Progressive Gaffer's Buggy", "Progressive Gaffer's Buggy", "Progressive Gaffer's Buggy",
                     "Progressive Gaffer's Buggy"]
 
-# Just windmill (majors! make windmill always progressive (and required by dran/goro?))
+# Defense chests always required.  Otherwise, only required if Dran is
 d_windmill_ids = ["Progressive Dran's Windmill", "Progressive Dran's Windmill", "Progressive Dran's Windmill",
                   "Progressive Dran's Windmill"]
 
 # Macho: House + annex (all minors)
-macho_house_ids = ["Progressive Macho's House", "Progressive Macho's House", "Progressive Macho's House",
+macho_house_ids = ["Progressive Macho's House", "Progressive Macho's House",
                    "Progressive Macho's House", "Progressive Macho's House"]
 
 # House (gourd+fruit) + cabin (minors)
-laura_house_ids = ["Progressive Laura's House", "Progressive Laura's House", "Progressive Laura's House",
+laura_house_ids = ["Progressive Laura's House", "Progressive Laura's House",
                    "Progressive Laura's House", "Progressive Laura's House"]
 
-# Paige MCs: Just house, all minors.  Cabin doesn't have chests Paige's house does give the pocket though!
-paige_house_ids = ["Progressive Paige's House", "Progressive Paige's House",
-                   "Progressive Paige's House", "Progressive Paige's House", "Progressive Paige's House"]
+# Paige gives a pocket
+paige_house_ids = ["Progressive Paige's House", "Progressive Paige's House", "Progressive Paige's House",
+                   "Progressive Paige's House", "Progressive Paige's House"]
 # House + cabin
 claude_house_ids = ["Progressive Claude's House", "Progressive Claude's House", "Progressive Claude's House"]
 
 # House + cabin (minor)
-hag_house_ids = ["Progressive Hag's House", "Progressive Hag's House",
-                 "Progressive Hag's House", "Progressive Hag's House"]
+hag_house_ids = ["Progressive Hag's House", "Progressive Hag's House", "Progressive Hag's House"]
 
 # House (fruit+gourd) + stairs (minors) + cabin (minor)
-alnet_house_ids = ["Progressive Alnet's House", "Progressive Alnet's House",
-                   "Progressive Alnet's House", "Progressive Alnet's House"]
+alnet_house_ids = ["Progressive Alnet's House", "Progressive Alnet's House", "Progressive Alnet's House"]
 
 windmill_ids = ["Progressive Windmill 1", "Progressive Windmill 1", "Progressive Windmill 1",
                 "Progressive Windmill 2", "Progressive Windmill 2", "Progressive Windmill 2",
@@ -65,20 +83,18 @@ other_ids = ["Norune Trees", "Norune Trees", "Norune Bridge", "Norune Road", "No
 
 # Atla that give MCs by content quality (unless handled otherwise). If MC shuffle is on, these all need to be required
 mc_useful = []
-mc_filler = ["Progressive Macho's House", "Progressive Macho's House", "Progressive Claude's House",
-             "Progressive Claude's House", "Progressive Claude's House", "Progressive Claude's House",]
+mc_filler = ["Progressive Macho's House", "Progressive Macho's House", "Progressive Macho's House",
+             "Progressive Claude's House", "Progressive Claude's House",
+             "Progressive Claude's House", "Progressive Claude's House", "Progressive Alnet's House"]
 # Pieces that only give MCs in the second half of a dungeon
 mc_useful_2 = ["Progressive Laura's House", "Progressive Hag's House", "Progressive Hag's House",
-               "Progressive Alnet's House"]
-mc_filler_2 = ["Progressive Laura's House", "Progressive Hag's House", "Progressive Alnet's House",
-               "Progressive Alnet's House"]
-
-# Defense for now, might add some gourd/eden to guarantee the player has some hp boosts by certain points as well
-stat_upgrades = ["Pond", "Progressive Dran's Windmill"]
+               "Progressive Hag's House", "Progressive Hag's House", "Progressive Alnet's House"]
+mc_filler_2 = ["Progressive Laura's House", "Progressive Laura's House",
+               "Progressive Alnet's House", "Progressive Alnet's House"]
 
 # Always required/useful/filler items
-required = stat_upgrades + player_house_ids + gaffer_buggy_ids
-useful = hag_house_ids + paige_house_ids
+required = player_house_ids + gaffer_buggy_ids + paige_house_ids + ["Norune Pond", "Progressive Dran's Windmill"]
+useful = hag_house_ids
 filler = windmill_ids + other_ids + alnet_house_ids + claude_house_ids + laura_house_ids + macho_house_ids
 
 
@@ -90,8 +106,8 @@ def create_norune_atla(options: DarkCloudOptions, player: int) -> list["DarkClou
     norune_useful = useful.copy()
     norune_filler = filler.copy()
 
-    # Dran's windmill is only full required if Dran is required
-    if options.all_bosses:
+    # Dran's windmill is only full required if Dran is required or the key chest is available
+    if options.all_bosses or options.miracle_sanity:
         norune_progression.extend(d_windmill_ids)
     else:
         norune_useful.extend(d_windmill_ids)
@@ -103,8 +119,8 @@ def create_norune_atla(options: DarkCloudOptions, player: int) -> list["DarkClou
         norune_progression.extend(mc_filler)
         norune_progression.extend(mc_filler_2)
     else:
-        norune_useful.extend(mc_useful_2)
         norune_useful.extend(mc_useful)
+        norune_useful.extend(mc_useful_2)
         norune_filler.extend(mc_filler)
         norune_filler.extend(mc_filler_2)
 

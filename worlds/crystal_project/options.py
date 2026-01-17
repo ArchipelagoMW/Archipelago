@@ -1,8 +1,9 @@
 from dataclasses import dataclass
-from typing import Type, Any, List
+from typing import Any, List
 from typing import Dict
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Visibility, Option, OptionGroup
-from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, StartInventoryPool
+
+from Options import PerGameCommonOptions, StartInventoryPool
+from Options import Toggle, DefaultOnToggle, Choice, Range, OptionGroup
 
 
 def create_option_groups() -> List[OptionGroup]:
@@ -18,10 +19,10 @@ class Goal(Choice):
     
     Checking the first sign in the Spawning Meadows will tell you the selected goal. A goal items counter is displayed on the in-game party screen in the menu.
     
-    Astley: Defeat Astley in the New World. A New World Stone will be given to the player after obtaining a certain number of jobs (starting Jobs don't count).
+    Astley: Defeat Astley in the New World. The throne room in The New World will unlock once you have found enough Jobs (starting Jobs don't count).
 
     True Astley: A saga awaits you! Collect 4 Deity Eyes and the STEM WARD to challenge Gabriel for the Old World Stone. Then travel to the Old World to defeat Periculum and earn the Proof of Merit.
-    Along the way, gather enough Jobs to unlock the New World Stone. Then you can venture to the New World to defeat true Astley to win!
+    Along the way, gather enough Jobs to unlock the throne room in The New World. Then, venture there to defeat true Astley to win!
     
     Clamshells: Collect enough clamshells for Mañana Man in Seaside Cliffs.
     """
@@ -31,17 +32,17 @@ class Goal(Choice):
     option_clamshells = 2
     default = 0
 
-class NewWorldStoneJobQuantity(Range):
+class AstleyJobQuantity(Range):
     """
-    If your goal is Astley, select how many Jobs you need to find before being sent the New World Stone for the final fight.
+    If your goal is Astley or True Astley, select how many Jobs you need to find to unlock the throne room for the final fight.
 
-    This option is validated at generation time, and if it is higher than the number of jobs you can obtain, it will be capped to what is possible. By default, the maximum you can obtain is 18.
+    This option is validated at generation time, and if it is higher than the number of Jobs you can obtain, it will be capped to what is possible. By default, the maximum you can obtain is 18.
 
     Picking Job Rando: Full and decreasing the Starting Job Quantity will increase the maximum by that much. It will also increase if you enable mods that give you more.
 
     Picking Job Rando: None and Included Regions: Beginner or Advanced will reduce the maximum number available to 4 or 11, respectively.
     """
-    display_name = "Job count that locks the New World Stone"
+    display_name = "Job count that unlocks Astley's throne room"
     range_start = 1
     range_end = 99
     default = 18
@@ -53,7 +54,7 @@ class ClamshellGoalQuantity(Range):
     (If your goal is not Clamshells, this setting does nothing. 3 Clamshells will be placed in your pool and the Mañana Man will ask for 2. Don't worry, he's cool with it.)
     """
     display_name = "Clamshells needed to win"
-    range_start = 2
+    range_start = 1
     range_end = 99
     default = 13
     
@@ -163,15 +164,49 @@ class Regionsanity(Choice):
 
     If you put any region pass items in your starting inventory, the first one will be chosen as your starting region.
 
-    If regionsanity is set to extreme, the Grandmaster won't even let you walk through regions you don't have the pass for.
+    If Regionsanity is set to Extreme, the Grandmaster won't even let you walk through regions you don't have the pass for.
     Spend more than 10 seconds in a region without a pass and the Grandmaster will teleport you!
 
-    You will start the game with a pass for one reachable region.
+    You will start the game in a random region with a pass. You will be leveled appropriately.
     """
     display_name = "Regionsanity"
     option_disabled = 0
     option_enabled = 1
     option_extreme = 2
+    default = 0
+
+class RegionsanityStarterRegionMinLevel(Range):
+    """
+    This sets the lowest possible level your random starter region could be in Regionsanity.
+    All regions without combat have a level of 0 (e.g. Capital Sequoia and Eastern Chasm). Otherwise, Beginner Regions start at level 3, Advanced at 18, Expert at 36, and End-Game at 60.
+    """
+    display_name = "Regionsanity Starter Region Minimum Level"
+    range_start = 0
+    range_end = 63
+    default = 0
+
+class RegionsanityStarterRegionMaxLevel(Range):
+    """
+    This sets the highest possible level your random starter region could be in Regionsanity.
+    Beginner Regions end at level 15, Advanced at level 38 (except Capital Pipeline at level 50 lol), Expert at 60, and End-Game at 63.
+    (The Old World is not allowed to be your starter region. Sorry if you just really wanted to fight Periculum with no gear right off the bat.)
+    """
+    display_name = "Regionsanity Starter Region Maximum Level"
+    range_start = 0
+    range_end = 63
+    default = 30
+
+class HomePointHustle(Choice):
+    """
+    When enabled, every Home Point will give you a check the first time you interact with it, and Home Point teleport items will be added to the pool.
+    
+    Mixed: You can teleport to any Home Point that you have interacted with or have the teleport item for.
+    Hustle Only: You can ONLY teleport to a Home Point after getting its matching teleport item.
+    """
+    display_name = "Home Point Hustle"
+    option_disabled = 0
+    option_mixed = 1
+    option_hustle_only = 2
     default = 0
 
 #"""Progression Options"""
@@ -188,6 +223,17 @@ class ProgressiveMountMode(DefaultOnToggle):
     """
     display_name = "Progressive Mount Mode"
 
+class StartingLevel(Range):
+    """
+    Choose what level your party starts at.
+
+    NOTE: If any variant of Regionsanity is enabled, you may start at a higher level based on the level of your random starter region. See Regionsanity settings above.
+    """
+    display_name = "Starting Level"
+    range_start = 3
+    range_end = 99
+    default = 3
+
 class LevelGating(Choice):
     """
     When enabled, the party's level is considered for Archipelago logic, and Progressive Level items are added to the pool. (This won't stop you from beating the game at level 3. ^_^)
@@ -200,11 +246,17 @@ class LevelGating(Choice):
     Level Capped: The party's maximum level is hard capped. Progressive Levels are added to the pool. Collecting them allows your party to gain more levels, and in-game tracking will light up
     checks that you have access to based on that max level.
 
-    Level Catch-Up: Progressive Levels are added to the pool. Collecting them will help your party catch up in levels (and LP!) based on the number you've collected. For example, if the Progressive Level
-    Size Setting is 6 (see below), 1 Progressive Level will bring your party's level up to 6, 2 Progressive Levels will bring your party's level up to 12, etc. If your party
-    has already reached that level, no extra levels will be granted. 2 LP are granted per 1 level granted. In-game tracking will light up checks that you have access to based on the number you have collected.
+    Level Catch-Up: Progressive Levels are added to the pool. Collecting them will help your party catch up in levels (and LP!) based on the number you've collected. 2 LP are granted per 1 level granted.
+    For example, if your Starting Level is 3 (above) and Progressive Level Size (below) is 6, 1 Progressive Level will bring your party's level up to 9. If your party has already reached that level,
+    no extra levels will be granted. In-game tracking will light up checks that you have access to based on the number you have collected.
 
     Level Set: A combination of Level Catch-Up and Capped. The player will always be at the level set by the Progressive Level. There is no escape.
+
+    For example, if your Starting Level (above) is 3 and Progressive Level Size (below) is 6, the Level Gating options would behave like this:
+       Level Passes - Your party's level starts at 3. The first Progressive Level you collect will signal that areas up to 9 are now logic, the second up to 15, etc.
+       Level Capped - Your party's level and level cap start at 3. The first Progressive Level you collect will increase your party's level cap to 9, the second to 15, and so on.
+       Level Catch-Up - Your party's level starts at 3. The first Progressive Level you collect will bring your party's level up to 9 if it isn't already, the second up to 15, and so on.
+       Level Set - Your party's level and level cap start at 3. The first Progressive Level you collect will increase your party's level and level cap to 9, the second to 15, and so on.
     """
     display_name = "Level Gating"
     option_none = 0
@@ -212,11 +264,11 @@ class LevelGating(Choice):
     option_level_capped = 2
     option_level_catch_up = 3
     option_level_set = 4
-    default = 1
+    default = 3
 
 class LevelComparedToEnemies(Range):
     """
-    If Level Gating is on, this option changes what level you're expected to fight enemies.
+    If Level Gating is on, this option changes what level you're expected to fight enemies. In Regionsanity, it will be added to your starting level.
     Set it higher if you want to be a higher level than enemies when you enter a region, or lower if you want to be lower.
 
     For example, if this is set to 5, and the enemy level of a region is 12, then the Level Gating options would require you to unlock level 17 (or for Level Capped, max level 17) for that region.
@@ -227,26 +279,17 @@ class LevelComparedToEnemies(Range):
     Note: Remember to increase your Max Level (see below) if you want regions with high-level enemies to still be lower level than you.
     Note #2: Spark color changes: red at -10 levels, orange at -5, green at +3, and grey +10. (Though enemies can be 3-5 levels above the min enemy level for a region.)
     """
-    display_name = "Level compared to enemies"
+    display_name = "Level Compared to Enemies"
     range_start = -10
     range_end = 10
     default = 0
 
-
 class ProgressiveLevelSize(Range):
     """
-    If Level Gating is on, Progressive Levels will be added to the item pool. This sets the number of levels that an individual Progressive Level will grant, as well as the starting level expectation.
-
-    For example, if Progressive Level Size is 6, the three Level Gating options would behave like this:
-       Level Passes - At the start, areas up to level 6 are considered in logic. The first Progressive Level you collect will signal that areas up to 12 are now logic, the second up to 18, etc.
-       Level Capped - Your party's level cap starts at 6. The first Progressive Level you collect will increase your party's level cap to 12, the second to 18, and so on.
-       Level Catch-Up - Your party is leveled up to 6 at the start. The first Progressive Level you collect will bring your party's level up to 12 if it isn't already, the second up to 18, and so on.
-       Level Set - Your party's level and level cap start at 6. The first Progressive Level you collect will increase your party's level and level cap to 12, the second to 18, and so on.
-
-    This setting will only increase your party's starting level (3 by default) if you pick Level Catch-Up.
+    If Level Gating is on, Progressive Levels will be added to the item pool. This sets the number of levels that an individual Progressive Level will grant.
     """
     display_name = "Progressive Level Size"
-    range_start = 3
+    range_start = 1
     range_end = 10
     default = 6
 
@@ -260,6 +303,35 @@ class MaxLevel(Range):
     range_start = 3
     range_end = 99
     default = 60
+
+class StartingPassivePoints(Range):
+    """
+    The number of Passive Points each party member starts with. Default is the vanilla value of 10.
+    """
+    display_name = "Starting Passive Points"
+    range_start = 0
+    range_end = 50
+    default = 10
+
+class MaximumPassivePoints(Range):
+    """
+    The maximum number of Passive Points each party member can have. Default is the vanilla value of 10.
+
+    If you set your Maximum Passive Points higher than your Starting Passive Points, Passive Point Boosts will be added to the item pool that increase your party's available Passive Points when found.
+    """
+    display_name = "Maximum Passive Points"
+    range_start = 0
+    range_end = 50
+    default = 10
+
+class PassivePointBoostSize(Range):
+    """
+    This sets the number of Passive Points you gain per Passive Point Boost.
+    """
+    display_name = "Passive Point Boost Size"
+    range_start = 1
+    range_end = 10
+    default = 2
 
 class KeyMode(Choice):
     """
@@ -285,6 +357,20 @@ class ObscureRoutes(Toggle):
     """
     display_name = "Obscure Routes"
 
+class HopToIt(Choice):
+    """
+    No Tricks: No fancy hops expected.
+    Fancy Footwork: Above-average jumping skill expected, e.g. jumping past the pushblocks in Eaclaneya with no mounts or Auto-Jump-level jumping precision.
+    One Hop Beyond: More jumping tricks expected, like ibek jumping up from underneath a ledge.
+    Pray: You didn't *want* the Golden Quintar for the Sequoia, did you?
+    """
+    display_name = "Hop To It"
+    option_no_tricks = 0
+    option_fancy_footwork = 1
+    option_one_hop_beyond = 2
+    option_pray = 3
+    default = 0
+
 class PrioritizeCrystals(DefaultOnToggle):
     """
     When enabled, crystals will be prioritized when placing progression items.
@@ -296,7 +382,19 @@ class PrioritizeCrystals(DefaultOnToggle):
     Here's an example:
     priority_locations = ["Crystals", "Region Completions", "Bosses", "Salmon River NPC - Win the Salmon Race"]
 
-    Crystal Project's location groups: Crystals, Bosses, Region Completions, and Shops
+    Crystal Project's location groups:
+      - Every region and subregion; e.g. Shoudu Province, Sky Arena
+      - Base groups: Crystals, Mount Instruments, Purple Chests, Ore Nodes
+      - Collectible groups: Collectible Turn-ins; Black Squirrels, Dog Bones, Clamshells, Penguins, Quintar Sheddings, Secret Herbs, Undersea Crabs
+      - Special access groups: Salmon Race Prizes, Luxury Pass Required
+      - NPC groups: Bribe Quests (pay NPC money), Challenge Quests (do a challenge like complete a number of Sky Arena fights,
+        complete an ice block pushing puzzle, or answer Quizard questions), Fetch Quests (give NPC one or more items),
+        Gifts (NPC gives you an item), Job Checkers (find a certain number of Jobs to get an item), Fishers
+      - Relevant Depending On Your Other Options:
+          - Home Point Hustle: Home Points
+          - Kill Bosses: Bosses, Summons, End-Game Bosses
+          - Regionsanity: Region Completions
+          - Shopsanity: Shops
     """
     display_name = "Prioritize Crystals"
 
@@ -428,7 +526,7 @@ class UseMods(Toggle):
 class CrystalProjectOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     goal: Goal
-    new_world_stone_job_quantity: NewWorldStoneJobQuantity
+    astley_job_quantity: AstleyJobQuantity
     clamshell_goal_quantity: ClamshellGoalQuantity
     extra_clamshells_in_pool: ExtraClamshellsInPool
     job_rando: JobRando
@@ -437,14 +535,22 @@ class CrystalProjectOptions(PerGameCommonOptions):
     kill_bosses_mode: KillBossesMode
     shopsanity: Shopsanity
     regionsanity: Regionsanity
+    regionsanity_starter_region_min_level: RegionsanityStarterRegionMinLevel
+    regionsanity_starter_region_max_level: RegionsanityStarterRegionMaxLevel
+    home_point_hustle: HomePointHustle
     included_regions: IncludedRegions
     progressive_mount_mode: ProgressiveMountMode
+    starting_level: StartingLevel
     level_gating: LevelGating
     level_compared_to_enemies: LevelComparedToEnemies
     progressive_level_size: ProgressiveLevelSize
     max_level: MaxLevel
+    starting_passive_points: StartingPassivePoints
+    maximum_passive_points: MaximumPassivePoints
+    passive_point_boost_size: PassivePointBoostSize
     key_mode: KeyMode
     obscure_routes: ObscureRoutes
+    hop_to_it: HopToIt
     prioritize_crystals: PrioritizeCrystals
     auto_spend_lp: AutoSpendLP
     auto_equip_passives: AutoEquipPassives
@@ -461,9 +567,9 @@ class CrystalProjectOptions(PerGameCommonOptions):
     use_mods: UseMods
 
 crystal_project_option_groups: Dict[str, List[Any]] = {
-    "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
-    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, DisableSparks, KillBossesMode, Shopsanity, Regionsanity],
-    "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, PrioritizeCrystals, AutoSpendLP, AutoEquipPassives, EasyLeveling],
+    "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, AstleyJobQuantity],
+    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, DisableSparks, KillBossesMode, Shopsanity, Regionsanity, RegionsanityStarterRegionMinLevel, RegionsanityStarterRegionMaxLevel, HomePointHustle],
+    "Progression Options": [ProgressiveMountMode, StartingLevel, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, StartingPassivePoints, MaximumPassivePoints, PassivePointBoostSize, KeyMode, ObscureRoutes, HopToIt, PrioritizeCrystals, AutoSpendLP, AutoEquipPassives, EasyLeveling],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, FillFullMap, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [ItemInfoMode, RandomizeMusic, UseMods]
 }

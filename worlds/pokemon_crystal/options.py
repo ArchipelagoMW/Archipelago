@@ -1,9 +1,13 @@
+from collections.abc import Hashable
 from dataclasses import dataclass
+from typing import Type, override
 
+from BaseClasses import PlandoOptions
 from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, NamedRange, OptionSet, \
     StartInventoryPool, OptionDict, Visibility, DeathLink, OptionGroup, OptionList, FreeText, OptionError
 from .data import data, MapPalette, MiscOption
 from .maps import FLASH_MAP_GROUPS
+from ..AutoWorld import World
 
 
 class EnhancedOptionSet(OptionSet):
@@ -942,7 +946,7 @@ class ForceFullyEvolved(NamedRange):
     Only applies when trainer parties are randomized.
     """
     display_name = "Force Fully Evolved"
-    range_start = 1
+    range_start = 0
     range_end = 100
     default = 0
     special_range_names = {
@@ -1238,7 +1242,7 @@ class TMCompatibility(NamedRange):
     """
     display_name = "TM Compatibility"
     default = -1
-    range_start = 0
+    range_start = -1
     range_end = 100
     special_range_names = {
         "vanilla": -1,
@@ -1258,7 +1262,7 @@ class HMCompatibility(NamedRange):
     """
     display_name = "HM Compatibility"
     default = -1
-    range_start = 0
+    range_start = -1
     range_end = 100
     special_range_names = {
         "vanilla": -1,
@@ -1891,7 +1895,7 @@ class GameOptions(OptionDict):
     text_frame: 1-8 - Sets the textbox frame, "random" will pick a random frame
     text_speed: mid/slow/fast/instant - Sets the speed at which text advances
     time_of_day: auto/morn/day/nite - Sets a time of day override, auto follows the clock, "random" will pick a random time
-    trainersanity_indication - Sets whether Trainersanity trainers have grayscale sprites until they are beaten
+    trainersanity_indication: off/on - Sets whether Trainersanity trainers have grayscale sprites until they are beaten
     turbo_button: none/a/b/a_or_b - Sets which buttons auto advance text when held
     """
     display_name = "Game Options"
@@ -1929,6 +1933,12 @@ class GameOptions(OptionDict):
         "hms_require_teaching": "on",
         "item_notification": "popup",
     }
+
+    @override
+    def verify(self, world: Type[World], player_name: str, plando_options: PlandoOptions) -> None:
+        for key, value in self.value.items():
+            if not isinstance(value, Hashable):
+                raise OptionError(f"Invalid game option value for {key}.")
 
 
 class FieldMoveMenuOrder(OptionList):

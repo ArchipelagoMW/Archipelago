@@ -1,0 +1,66 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Build Custom .apworlds
+
+on:
+  push:
+  pull_request:
+    types: [closed]
+    branches:
+      - ashipelago
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Building custom .apworlds for Ashipelago
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.12.6
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.12.6
+    - name: Get current date
+      if: startsWith(github.event.pull_request.title, 'Worlds/') == true
+      id: date
+      run: echo "NOW=$(TZ=":America/New_York" date +'%Y-%m-%d')" >> $GITHUB_ENV
+    - name: Create Release
+      if: startsWith(github.event.pull_request.title, 'Worlds/') == true
+      uses: softprops/action-gh-release@v2.5.0
+      with:
+        draft: true
+        prerelease: false
+        name: "Custom Worlds ${{ env.NOW }}"
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    - name: Read custom .apworlds file
+      id: read_apworlds
+      run: |
+        FILE_CONTENTS=$(cat custom_worlds.txt)
+        echo "world_list=$FILE_CONTENTS" >> $GITHUB_OUTPUT
+      shell: bash
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        python -m pip install --upgrade pip
+        python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
+    - name: Build APWorlds
+      run: |
+        source venv/bin/activate
+        export PYTHONPATH=$(pwd)
+        timeout 600 python Launcher.py "Build APWorlds" ${{steps.read_apworlds.outputs.world_list}}
+        FILE_COUNT=$(find "build/apworlds" -maxdepth 1 -mindepth 1 | wc -l)
+        echo "Built $FILE_COUNT .apworlds"
+    - name: Add to Release
+      if: startsWith(github.event.pull_request.title, 'Worlds/') == true
+      uses: softprops/action-gh-release@v2.5.0
+      with:
+        draft: true
+        prerelease: false
+        name: "Custom Worlds ${{ env.NOW }}"
+        files: |
+          build/apworlds/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

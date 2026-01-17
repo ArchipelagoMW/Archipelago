@@ -23,26 +23,27 @@ logic_map: dict[PowerLevel, List[str]] = {
         "Act 1 Campfire 2",
         "Potion Drop 1",
         "Potion Drop 2",
+        "Ruby Key",
         *_create_floor_check(1,10),
-        *_create_combat_check(1,4),
+        *_create_combat_check(1,3),
     ],
     PowerLevel(gold=2): [
         *_create_shop_check(1, 5),
     ],
     PowerLevel(1): [
         "Relic 1",
+        "Sapphire Key",
     ],
     PowerLevel(draw=0,relic=1, rest=1): [
         "Card Reward 3",
         "Card Reward 4",
+        *_create_combat_check(4, 7),
     ],
     PowerLevel(draw=2,rest=1, shop=2): [
         "Relic 2",
         "Relic 3",
-        "Elite Gold 1",
-        "Elite Gold 2",
         "Potion Drop 3",
-        *_create_combat_check(5, 6),
+        *_create_combat_check(8, 8),
         *_create_floor_check(11, 15)
     ],
     PowerLevel(draw=3,relic=2, rest=1, smith=1, shop=3, shop_remove=1, gold=2): [
@@ -56,7 +57,7 @@ logic_map: dict[PowerLevel, List[str]] = {
         "Act 2 Campfire 1",
         "Act 2 Campfire 2",
         *_create_floor_check(16, 22),
-        *_create_combat_check(7, 8),
+        *_create_combat_check(9, 11),
     ],
     PowerLevel(draw=3,relic=2, rest=1, smith=1, shop=3, shop_remove=1, gold=5): [
         *_create_shop_check(6, 10),
@@ -67,7 +68,7 @@ logic_map: dict[PowerLevel, List[str]] = {
     ],
     PowerLevel(draw=6, relic=3, rest=2, smith=1, shop=4, shop_remove=1, gold=2): [
         "Card Reward 7",
-        *_create_combat_check(9, 10),
+        *_create_combat_check(12, 13),
     ],
     PowerLevel(draw=6, relic=3, rest=2, smith=1, shop=5, shop_remove=1, gold=2): [
         "Potion Drop 6",
@@ -75,16 +76,14 @@ logic_map: dict[PowerLevel, List[str]] = {
     ],
     PowerLevel(draw=6, relic=4, rest=2, smith=1, shop=5, shop_remove=1, gold=2): [
         "Card Reward 8",
-        *_create_combat_check(11, 12),
+        *_create_combat_check(14, 16),
     ],
     PowerLevel(draw=7, relic=2, rest=2,smith=1, shop=4, shop_remove=1, gold=2): [
         "Relic 4",
         "Relic 5",
-        "Elite Gold 3",
     ],
     PowerLevel(draw=7, relic=3, rest=2,smith=1, shop=5, shop_remove=1, gold=2): [
         "Relic 6",
-        "Elite Gold 4",
     ],
     PowerLevel(draw=7, relic=3, boss_relic=1, rest=2, smith=2, shop=6, shop_remove=2, gold=5): [
         "Act 2 Boss",
@@ -97,7 +96,7 @@ logic_map: dict[PowerLevel, List[str]] = {
         "Act 3 Campfire 1",
         "Act 3 Campfire 2",
         *_create_floor_check(33, 39),
-        *_create_combat_check(13, 14),
+        *_create_combat_check(17, 19),
     ],
     PowerLevel(draw=7, relic=3, boss_relic=1, rest=2, smith=2, shop=6, shop_remove=2, gold=9): [
         *_create_shop_check(11, 16),
@@ -106,28 +105,30 @@ logic_map: dict[PowerLevel, List[str]] = {
         "Relic 7",
         "Relic 8",
         "Card Reward 11",
-        "Elite Gold 5",
         "Potion Drop 8",
         *_create_floor_check(40, 44),
-        *_create_combat_check(15, 16),
+        *_create_combat_check(20, 21),
     ],
     PowerLevel(draw=9,relic=6,boss_relic=1, rest=3,smith=2, shop=10, shop_remove=2, gold=5): [
         "Card Reward 12",
         "Card Reward 13",
         "Potion Drop 9",
+        "Emerald Key",
         *_create_floor_check(45, 49),
-        *_create_combat_check(17, 18),
+        *_create_combat_check(22, 23),
     ],
     PowerLevel(draw=9,relic=6,boss_relic=1, rest=3,smith=2, shop=10, shop_remove=2, gold=5): [
         "Relic 9",
         "Relic 10",
-        "Elite Gold 6",
-        "Elite Gold 7",
+        *_create_combat_check(24, 25),
     ],
     PowerLevel(draw=10,relic=7,boss_relic=2,rest=3,smith=3, shop=10,shop_remove=3, gold=9): [
         "Act 3 Boss",
+        * _create_floor_check(50, 51)
+    ],
+    PowerLevel(draw=10, relic=7, boss_relic=2, rest=3, smith=3, shop=10, shop_remove=3, gold=9, keys=1): [
         "Heart Room",
-        * _create_floor_check(50, 55)
+        *_create_floor_check(52, 55)
     ],
 }
 
@@ -148,6 +149,7 @@ class LogicTestBase(SpireTestBase):
         'shop_remove_slots': 1,
         'gold_sanity': 1,
         'potion_sanity': 1,
+        'key_sanity': 1,
     }
 
     def _setup_state_accessible(self, power: PowerLevel) -> CollectionState:
@@ -186,6 +188,10 @@ class LogicTestBase(SpireTestBase):
         for _ in range(power.shop_remove):
             state.collect(remove)
 
+        keys = self.get_items_by_name([f"{self.prefix} {key}" for key in ["Ruby Key", "Emerald Key", "Sapphire Key"]])
+        for key in keys:
+            state.collect(key)
+
         return state
 
     def _setup_state_inaccessible(self, power: PowerLevel, type: str):
@@ -216,6 +222,8 @@ class LogicTestBase(SpireTestBase):
         gold = self.get_item_by_name(f"{self.prefix} 30 Gold")
         golds = [gold for _ in range(power.gold)]
 
+        keys = self.get_items_by_name([f"{self.prefix} {key}" for key in ["Ruby Key", "Emerald Key", "Sapphire Key"]])
+
         if type == "Card Reward":
             draws.pop()
         elif type == "Relic":
@@ -232,8 +240,10 @@ class LogicTestBase(SpireTestBase):
             removes.pop()
         elif type == "30 Gold":
             golds.pop()
+        elif type == "Keys":
+            keys.pop()
 
-        for list in [draws, relics, boss_relics, rests, smiths, shops, removes, golds]:
+        for list in [draws, relics, boss_relics, rests, smiths, shops, removes, golds, keys]:
             for item in list:
                 state.collect(item)
 
@@ -241,7 +251,7 @@ class LogicTestBase(SpireTestBase):
 
     def _test_inaccessible(self, power: PowerLevel, locations: Iterable[str]):
 
-        for i, type in enumerate([ x for x in ['Card Reward', 'Relic', 'Boss Relic', 'Progressive Rest', 'Progressive Smith', "Shop Card Slot", "Progressive Shop Remove", "30 Gold"]]):
+        for i, type in enumerate([ x for x in ['Card Reward', 'Relic', 'Boss Relic', 'Progressive Rest', 'Progressive Smith', "Shop Card Slot", "Progressive Shop Remove", "30 Gold", "Keys"]]):
             if power[i] == 0:
                 continue
             state = self._setup_state_inaccessible(power, type)
@@ -286,6 +296,7 @@ class CustomCharTest(LogicTests):
             "foobar": {
                 'final_act': 1,
                 'ascension': 1,
+                'key_sanity': 1,
             }
         },
         'campfire_sanity': 1,
@@ -297,4 +308,5 @@ class CustomCharTest(LogicTests):
         'shop_remove_slots': 1,
         'gold_sanity': 1,
         'potion_sanity': 1,
+        'key_sanity': 1,
     }

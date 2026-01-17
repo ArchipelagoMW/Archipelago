@@ -68,6 +68,7 @@ class FileGenerator:
             "default_mode": self.ctx.rando_data["defaultMode"],
             "base_id": self.ctx.rando_data["baseId"],
             "data_version": self.ctx.rando_data["dataVersion"],
+            "version": self.ctx.rando_data["randoVersion"],
         }
 
     def generate_python_file_common(self):

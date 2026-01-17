@@ -304,6 +304,8 @@ def set_fates_rules(world: "HadesWorld", player: int, location_table : dict, opt
                 state._has_defeated_boss("Hades Victory", player, options) and state.has("Fishing Rod Item",player))
         add_rule(world.get_location("A Place of Revelry" + subfix, player), lambda state: \
                 state.has("Deluxe Contractor Desk Item", player))
+        add_rule(world.get_location("Customer Loyalty" + subfix, player), lambda state: \
+                state.has("Fishing Rod Item", player) and state.has("Infernal Trove1 Item", player))
     else:
         add_rule(world.get_location("The Reluctant Musician" + subfix, player), lambda state:  \
                 state._has_defeated_boss("Meg Victory", player, options))

@@ -4,8 +4,7 @@ from typing import List
 from BaseClasses import ItemClassification
 from Options import OptionError
 from worlds.AutoWorld import World
-from .CharacterUtils import get_playable_character_item, is_character_playable, are_character_upgrades_randomized, \
-    get_character_upgrades_item
+from .CharacterUtils import get_playable_character_item, is_character_playable, get_character_upgrades_item
 from .Enums import Character
 from .Items import filler_item_table
 from .Names import ItemName, LocationName
@@ -115,13 +114,16 @@ def get_item_distribution(world: World, starting_item_count: int, options: Sonic
 
 def get_item_names(options: SonicAdventureDXOptions, starter_setup: StarterSetup) -> List[str]:
     item_names = sum((get_item_for_options_per_character(character, options) for character in Character), [])
-    item_names += [
-        ItemName.KeyItem.Train, ItemName.KeyItem.Boat, ItemName.KeyItem.Raft, ItemName.KeyItem.StationFrontKey,
-        ItemName.KeyItem.StationBackKey, ItemName.KeyItem.HotelFrontKey, ItemName.KeyItem.HotelBackKey,
-        ItemName.KeyItem.TwinkleParkTicket,
-        ItemName.KeyItem.EmployeeCard, ItemName.KeyItem.Dynamite, ItemName.KeyItem.JungleCart,
-        ItemName.KeyItem.IceStone, ItemName.KeyItem.WindStone, ItemName.KeyItem.Egglift, ItemName.KeyItem.Monorail
-    ]
+
+    if options.gating_mode == 1:
+        item_names += [
+            ItemName.KeyItem.Train, ItemName.KeyItem.Boat, ItemName.KeyItem.Raft, ItemName.KeyItem.StationKey,
+            ItemName.KeyItem.ShutterKey, ItemName.KeyItem.HotelKey, ItemName.KeyItem.CasinoKey,
+            ItemName.KeyItem.PoolKey,
+            ItemName.KeyItem.TPTicket, ItemName.KeyItem.PolicePass, ItemName.KeyItem.EmployeeCard,
+            ItemName.KeyItem.Dynamite, ItemName.KeyItem.JungleCart, ItemName.KeyItem.TimeMachine,
+            ItemName.KeyItem.IceStone, ItemName.KeyItem.WindStone, ItemName.KeyItem.Egglift, ItemName.KeyItem.Monorail
+        ]
 
     if options.goal_requires_chaos_emeralds.value:
         item_names += [
@@ -142,6 +144,9 @@ def get_item_for_options_per_character(character: Character, options: SonicAdven
 
 
 def place_not_randomized_upgrades(world: World, options: SonicAdventureDXOptions, item_names: List[str]):
+    if options.randomized_upgrades.value:
+        return
+
     upgrades = {
         Character.Sonic: [
             (LocationName.Sonic.LightShoes, ItemName.Sonic.LightShoes),
@@ -175,7 +180,7 @@ def place_not_randomized_upgrades(world: World, options: SonicAdventureDXOptions
     }
 
     for character, upgrades in upgrades.items():
-        if is_character_playable(character, options) and not are_character_upgrades_randomized(character, options):
+        if is_character_playable(character, options):
             for location_name, item_name in upgrades:
                 world.multiworld.get_location(location_name, world.player).place_locked_item(
                     world.create_item(item_name))

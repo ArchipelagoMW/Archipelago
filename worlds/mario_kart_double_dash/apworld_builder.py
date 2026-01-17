@@ -24,4 +24,6 @@ build_apworld("mario_kart_double_dash",
                   "*asm/*",
                   "*.yaml",
                   "*.gitignore",
+                  "*.af",
+                  "*.af~lock~",
               ])

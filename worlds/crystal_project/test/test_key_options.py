@@ -74,9 +74,9 @@ class TestKeyRings(MultiuseKeyMethods):
 
     def test_has_beaurior_keyring(self):
         self.collect_mounts_and_progressive_levels_and_passes()
-        self.assertFalse(self.can_reach_location("Beaurior Volcano Crystal - Valkyrie"))
+        self.assertFalse(self.can_reach_location("Beaurior Rock Chest - What's behind Door Number 3? Ominous lamp room!"))
         self.collect(self.get_item_by_name(BEAURIOR_KEY_RING))
-        self.assertTrue(self.can_reach_location("Beaurior Volcano Crystal - Valkyrie"))
+        self.assertTrue(self.can_reach_location("Beaurior Rock Chest - What's behind Door Number 3? Ominous lamp room!"))
 
     def test_has_slip_glide_ride_keyring(self):
         self.collect_mounts_and_progressive_levels_and_passes()
@@ -87,15 +87,15 @@ class TestKeyRings(MultiuseKeyMethods):
     def test_has_ice_puzzle_keyring(self):
         self.collect_mounts_and_progressive_levels_and_passes()
         self.collect([self.get_item_by_name(VERMILLION_BOOK), self.get_item_by_name(VIRIDIAN_BOOK), self.get_item_by_name(CERULEAN_BOOK)])
-        self.assertFalse(self.can_reach_location("Sequoia Athenaeum Chest - You expected another Chips Challenge, but it was me, Dio!"))
+        self.assertFalse(self.can_reach_location("Sequoia Athenaeum Chest - You expected another Chip's Challenge, but it was me, Dio!"))
         self.collect(self.get_item_by_name(ICE_PUZZLE_KEY_RING))
-        self.assertTrue(self.can_reach_location("Sequoia Athenaeum Chest - You expected another Chips Challenge, but it was me, Dio!"))
+        self.assertTrue(self.can_reach_location("Sequoia Athenaeum Chest - You expected another Chip's Challenge, but it was me, Dio!"))
 
     def test_has_jidamba_keyring(self):
         self.collect_mounts_and_progressive_levels_and_passes()
-        self.assertFalse(self.can_reach_region(JIDAMBA_EACLANEYA_AP_REGION))
+        self.assertFalse(self.can_reach_region(EACLANEYA_TRICKY_BLOCK_BRANCHES_AP_REGION))
         self.collect(self.get_item_by_name(JIDAMBA_KEY_RING))
-        self.assertTrue(self.can_reach_region(JIDAMBA_EACLANEYA_AP_REGION))
+        self.assertTrue(self.can_reach_region(EACLANEYA_TRICKY_BLOCK_BRANCHES_AP_REGION))
 
 class TestVanillaKeys(MultiuseKeyMethods):
     run_default_tests = False

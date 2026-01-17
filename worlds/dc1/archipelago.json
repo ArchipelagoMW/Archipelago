@@ -3,6 +3,6 @@
     "version": 7,
     "compatible_version": 7,
     "minimum_ap_version": "0.6.1",
-    "world_version": "0.3.0",
+    "world_version": "0.4.0",
     "authors": ["Lizardman175"]
 }

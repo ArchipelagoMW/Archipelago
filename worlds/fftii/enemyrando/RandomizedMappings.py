@@ -1,12 +1,9 @@
-from worlds.fftii.enemyrando.RandomizedUnitFactory import RandomizedUnitFactory
-from worlds.fftii.enemyrando.RandomizedUnits import *
+from .RandomizedUnitFactory import RandomizedUnitFactory
+from .RandomizedUnits import *
 
 base_mapping = {
     job: job for job in list(Job)
 }
-
-for job in list(Job):
-    print(Job(job).name)
 
 allowed_mappings: dict[Job, dict[type[RandomizedUnit], int]] = {
     Job.RAMZA_SQUIRE_CHAPTER_1: {RamzaC1Squire: 1},
@@ -138,6 +135,25 @@ allowed_mappings: dict[Job, dict[type[RandomizedUnit], int]] = {
     Job.ELIDIBS: {Elidibs: 1}
 }
 
-factories = {
+base_shuffle_list: list[type[RandomizedUnit]] = [
+    Wiegraf1Boss, AlgusBoss, Gafgarion1Boss, Gafgarion2Boss, Gafgarion3Boss, Zalmo1Boss, IzludeBoss, Wiegraf2Boss,
+    Malak1Boss, Malak2Boss, Wiegraf3Boss, Elmdor1Boss, Celia1Boss, Lede1Boss, MeliadoulBoss, Zalmo2Boss, Balk1Boss,
+    Celia2Boss, Lede2Boss, Celia3Boss, Lede3Boss, Elmdor2Boss, DycedargBoss, VormavBoss, Rofel1Boss, Kletian1Boss,
+    ZalbagBoss, Rofel2Boss, Kletian2Boss, Balk2Boss
+]
+
+zodiac_story_shuffle_list: list[type[RandomizedUnit]] = [
+    QueklainBoss, VeliusBoss, ZaleraBoss, AdramelkBoss, HashmalumBoss
+]
+
+sidequest_boss_shuffle_list: list[type[RandomizedUnit]] = [
+    Worker7Boss
+]
+
+sidequest_zodiac_shuffle_list: list[type[RandomizedUnit]] = [
+    ElidibsBoss
+]
+
+randomized_factories: dict[Job, RandomizedUnitFactory] = {
     job: RandomizedUnitFactory(mapping) for job, mapping in allowed_mappings.items()
 }

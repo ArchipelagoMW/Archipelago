@@ -1,12 +1,4 @@
-import typing
-
 from . import Rom
-
-
-class ItemData(typing.NamedTuple):
-    code: typing.Optional[int]
-    progression: bool
-
 
 espers = Rom.espers
 

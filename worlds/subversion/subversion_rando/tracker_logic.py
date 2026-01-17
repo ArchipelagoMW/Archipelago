@@ -1,14 +1,14 @@
 from typing import Dict, List, Mapping
 
-from subversion_rando.door_logic import vanilla_doors
-from subversion_rando.area_rando_types import DoorPairs
-from subversion_rando.connection_data import vanilla_areas
-from subversion_rando.game import Game, GameOptions
-from subversion_rando.item_data import Item, all_items
-from subversion_rando.loadout import Loadout
-from subversion_rando.location_data import Location, new_locations
-from subversion_rando.logic_presets import custom_logic_tricks_from_str
-from subversion_rando.solver import solve
+from .door_logic import vanilla_doors
+from .area_rando_types import DoorPairs
+from .connection_data import vanilla_areas
+from .game import Game, GameOptions
+from .item_data import Item, all_items
+from .loadout import Loadout
+from .location_data import Location, new_locations
+from .logic_presets import custom_logic_tricks_from_str
+from .solver import solve
 
 
 class TrackerLogic:

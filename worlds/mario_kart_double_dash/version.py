@@ -1,7 +1,11 @@
-major = 0
-minor = 2
-patch = 2
-suffix = ""
+import json
+import pkgutil
 
-def get_str() -> str:
-    return f"v{major}.{minor}.{patch}{suffix}"
+data_bytes = pkgutil.get_data(__name__, "archipelago.json")
+data = json.loads(data_bytes.decode())
+
+def get_version() -> str:
+    return f"v{data["world_version"]}"
+
+def get_game_name() -> str:
+    return data["game"]

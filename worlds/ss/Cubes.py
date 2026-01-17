@@ -1,0 +1,32 @@
+# These flags are communicated to the tracker as a bitfield using this order.
+# Modifying the order will cause undetectable autotracking issues.
+cubes_table=[
+    ("Goddess Cube West of Earth Temple Entrance",(0x4, 0x80, 0x805A9AF0)),
+    ("Goddess Cube at Ride near Temple of Time", (0x7, 0x40, 0x805A9AF0)),
+    ("Goddess Cube on Top of Skyview", (0x4, 0x40, 0x805A9AF0)),
+    ("Goddess Cube Near Mogma Turf Entrance", (0x5, 0x10, 0x805A9AF0)),
+    ("Goddess Cube in Secret Passageway", (0x7, 0x01, 0x805A9AF0)),
+    ("Goddess Cube at Lanayru Mine Entrance", (0x5, 0x20, 0x805A9AF0)),
+    ("Goddess Cube East of Earth Temple Entrance",(0x5, 0x80, 0x805A9AF0)),
+    ("Initial Goddess Cube", (0x2, 0x20, 0x805A9AF0)),
+    ("Goddess Cube in Skyview Spring", (0x7, 0x10, 0x805A9AF0)),
+    ("Goddess Cube in Deep Woods", (0x2, 0x40, 0x805A9AF0)),
+    ("Goddess Cube in Sand Oasis", (0x5, 0x01, 0x805A9AF0)),
+    ("Goddess Cube on East Great Tree with Clawshot Target",(0x5, 0x02,0x805A9AF0)),
+    ("Goddess Cube in Floria Waterfall", (0x7, 0x08, 0x805A9AF0)),
+    ("Goddess Cube at Eldin Entrance", (0x2, 0x80, 0x805A9AF0)),
+    ("Goddess Cube near Caged Robot", (0x7, 0x02, 0x805A9AF0)),
+    ("Goddess Cube in Skipper's Retreat", (0x4, 0x01, 0x805A9AF0)),
+    ("Goddess Cube in Mogma Turf", (0x6, 0x02, 0x805A9AF0)),
+    ("Goddess Cube Near Fire Sanctuary Entrance", (0x7, 0x04, 0x805A9AF0)),
+    ("Goddess Cube on East Great Tree with Rope", (0x5, 0x40, 0x805A9AF0)),
+    ("Goddess Cube Inside Volcano Summit", (0x4, 0x04, 0x805A9AF0)),
+    ("Goddess Cube in Lanayru Gorge", (0x4, 0x02, 0x805A9AF0)),
+    ("Goddess Cube in Summit Waterfall", (0x7, 0x20, 0x805A9AF0)),
+    ("Goddess Cube in Ancient Harbour", (0x6, 0x04, 0x805A9AF0)),
+    ("Goddess Cube in Pirate Stronghold", (0x4, 0x20, 0x805A9AF0)),
+    ("Goddess Cube in Lake Floria", (0x6, 0x01, 0x805A9AF0)),
+    ("Goddess Cube on West Great Tree near Exit",(0x4, 0x08, 0x805A9AF0)),
+    ("Goddess Cube on Sand Slide", (0x4, 0x10, 0x805A9AF0)),
+    ] 
+

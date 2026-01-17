@@ -1,5 +1,3 @@
-from typing import Dict, Tuple
-
 ROM_PLAYER_LIMIT = 65535
 ROM_NAME = 0x00FFC0
 treasure_chest_base_address = 0xF51E40
@@ -378,7 +376,7 @@ additional_event_flags = {
     "Narshe Weapon Shop Both Rewards Picked": 0x0b7
 }
 
-treasure_chest_data: Dict[str, Tuple[int, int, int]] = {
+treasure_chest_data: dict[str, tuple[int, int, int]] = {
     "Narshe Arvis's Clock": (0x1E40, 2, 1),
     "Narshe Elder's Clock": (0x1E41, 2, 9),
     "Narshe Adventuring School Advanced Battle Tactics Chest": (0x1E51, 4, 74),
@@ -654,14 +652,14 @@ dialog_location_scouts_lookup = {
 }
 
 
-def get_event_flag_value(event_id: int) -> Tuple[int, int]:
+def get_event_flag_value(event_id: int) -> tuple[int, int]:
     """ returns (address offset from `event_flag_base_address`, bit mask) """
     event_byte = event_id // 8
     event_bit = event_id % 8
     return event_byte, bit_positions[event_bit]
 
 
-def get_obtained_esper_bit(esper_name: int) -> Tuple[int, int]:
+def get_obtained_esper_bit(esper_name: int) -> tuple[int, int]:
     esper_index = esper_name
     esper_byte = esper_bit_base_address + (esper_index // 8)
     esper_bit = esper_index % 8
@@ -673,22 +671,22 @@ def add_esper(initial: int, esper_name: int) -> int:
     return initial | bit
 
 
-def get_character_bit(character: int, address: int) -> Tuple[int, int]:
+def get_character_bit(character: int, address: int) -> tuple[int, int]:
     character_index = character
     character_byte = address + character_index // 8
     character_bit = character_index % 8
     return character_byte, bit_positions[character_bit]
 
 
-def get_character_initialized_bit(character_name: int) -> Tuple[int, int]:
+def get_character_initialized_bit(character_name: int) -> tuple[int, int]:
     return get_character_bit(character_name, character_intialized_bit_base_address)
 
 
-def get_character_recruited_bit(character_name: int) -> Tuple[int, int]:
+def get_character_recruited_bit(character_name: int) -> tuple[int, int]:
     return get_character_bit(character_name, character_recruited_bit_base_address)
 
 
-def get_treasure_chest_bit(treasure_chest: str) -> Tuple[int, int]:
+def get_treasure_chest_bit(treasure_chest: str) -> tuple[int, int]:
     treasure_byte = treasure_chest_data[treasure_chest][0] - 0x1E40
     treasure_bit = bit_positions[treasure_chest_data[treasure_chest][1]]
     return treasure_byte, treasure_bit

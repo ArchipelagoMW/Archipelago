@@ -47,8 +47,9 @@ an experience customized for their taste, and different players in the same mult
 [//]: # (You can customize your options by visiting)
 
 [//]: # (the [Slay the Spire Options Page]&#40;/games/Slay%20the%20Spire/player-options&#41;.)
-
-Open ArchipelagoLauncher.exe to start the Launcher, and click on "Generate Template Options" to create template yamls 
+There are two ways to get a YAML:
+1. Open ArchipelagoLauncher.exe to start the Launcher, then click on "Options Creator".  This will give you a UI with which you can create your YAML.
+2. Open ArchipelagoLauncher.exe to start the Launcher, and click on "Generate Template Options" to create template yamls 
 for all of the apworlds in your `\custom_worlds` folder as well as your `\lib\worlds` folder.  
 After you click on this button, a File Explorer window will open (on Windows) pointing directly to your 
 `\Players\Templates` folder, with all of the new template files.

@@ -1,3 +1,6 @@
+from .Utils import setup_lib
+setup_lib()
+
 import os
 import orjson
 from typing import Any, ClassVar, Dict, List, Optional, Sequence, Tuple
@@ -21,7 +24,7 @@ albw_base_id = 6242624000
 
 def launch_client(*args):
     from .Client import launch
-    launch_subprocess(launch, name="ALBWClient")
+    launch_subprocess(launch, name="ALBWClient", args=args)
 
 components.append(
     Component(
@@ -50,11 +53,15 @@ class ALBWSettings(Group):
         """File name of your decrypted North American A Link Between Worlds ROM"""
         description = "A Link Between Worlds ROM File"
         
+        def browse(self, filetypes=None, **kwargs):
+            filetypes = [("3ds ROM File", [".3ds", ".cci"])]
+            return super().browse(filetypes=filetypes, **kwargs)
+
         @classmethod
         def validate(cls, path: str) -> None:
             pass #TODO add validation; hashing doesn't work for 3ds roms
 
-    rom_file: ALBWRomFile = ALBWRomFile("Legend of Zelda, The - A Link Between Worlds (USA) (En,Fr,Es).3ds")
+    rom_file: ALBWRomFile = ALBWRomFile("Legend of Zelda, The - A Link Between Worlds (USA) (En,Fr,Es).cci")
 
 class ALBWWorld(World):
     """

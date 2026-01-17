@@ -3,6 +3,9 @@
 # If you need to change something here, check out codegen.py and the templates directory.
 
 
+from Utils import Version
+
 NAME: str = "CrossCode"
 BASE_ID: int = 3235824000
 DATA_VERSION: str = "0.5"
+APWORLD_VERSION: Version = Version(0, 8, 0)

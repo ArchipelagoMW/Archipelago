@@ -22,7 +22,7 @@ gear_item_names = [
 
     "Defender", "Save the Queen", "Excalibur", "Ragnarok", "Chaos Blade",
 
-    "Asura Knife", "Koutetsu Knife", "Bizzen Boat", "Murasame", "Heaven's Cloud", "Kiyomori", "Muramasa",
+    "Asura Knife", "Koutetsu Knife", "Bizen Boat", "Murasame", "Heaven's Cloud", "Kiyomori", "Muramasa",
     "Kikuichimoji", "Masamune", "Chirijiraden",
 
     "Battle Axe", "Giant Axe", "Slasher",
@@ -100,8 +100,8 @@ for index, item_name in enumerate(gear_item_names, start=1):
 item_data_lookup = {item.name: item for item in all_item_data}
 
 zodiac_stone_names = [
-    "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra",
-    "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces", "Serpentarius",
+    "Aries Stone", "Taurus Stone", "Gemini Stone", "Cancer Stone", "Leo Stone", "Virgo Stone", "Libra Stone",
+    "Scorpio Stone", "Sagittarius Stone", "Capricorn Stone", "Aquarius Stone", "Pisces Stone", "Serpentarius Stone",
 ]
 
 world_map_pass_names = [

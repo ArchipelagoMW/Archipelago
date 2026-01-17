@@ -299,7 +299,7 @@ class TestJiggiesHardLimit(FillersTrapTestBase):
         pool = self.pool()
 
         assert sum(pool.distribution.values()) == 687 + BASE_FILLERS
-        assert pool.total_distribution[itemName.JIGGY] == 249  # One more for jingaling's
+        assert pool.total_distribution[itemName.JIGGY] == 249
 
 
 class TestDoubloonsHardLimit(FillersTrapTestBase):

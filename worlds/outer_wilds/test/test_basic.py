@@ -198,3 +198,9 @@ class TestZeroUpgradeCounts(OuterWildsTestBase):
             "Boost Duration Upgrade": 0,
         }
     }
+
+
+class TestOmittedUpgradeCounts(OuterWildsTestBase):
+    options = {
+        "upgrade_counts": {}
+    }

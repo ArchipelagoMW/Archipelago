@@ -1,19 +1,20 @@
 import json
 import os
 import re
-from typing import List, Any, Dict
+from typing import List, Any, Dict, Tuple
 
 from BaseClasses import Region, Tutorial, ItemClassification, CollectionState, Callable, LocationProgressType, \
     MultiWorld, Item
 from worlds.AutoWorld import WebWorld, World
+from worlds.Files import APPlayerContainer
 from worlds.generic.Rules import add_rule
 from worlds.LauncherComponents import launch_subprocess, components, Component, Type
 
-from .Items import FF12OpenWorldItem, item_data_table, FF12OW_BASE_ID, item_table, filler_items, filler_weights
+from .Items import FF12OpenWorldItem, item_data_table, item_table, filler_items, filler_weights
 from .Locations import FF12OpenWorldLocation, location_data_table, location_table
 from .Options import FF12OpenWorldGameOptions
 from .Regions import region_data_table
-from .Rules import rule_data_table
+from .Rules import rule_data_table, entrance_rule_data_table, entrance_rule_difficulty_table
 from .Events import event_data_table, FF12OpenWorldEventData
 from .RuleLogic import state_has_characters
 
@@ -27,8 +28,23 @@ components.append(Component("FF12 Open World Client", "FF12OpenWorldClient",
                             func=launch_client, component_type=Type.CLIENT,
                             game_name="Final Fantasy 12 Open World", supports_uri=True))
 
-FF12OW_VERSION = "0.5.3"
 character_names = ["Vaan", "Ashe", "Fran", "Balthier", "Basch", "Penelo"]
+
+
+class FF12OpenWorldContainer(APPlayerContainer):
+    """AP container for FF12 Open World output, carrying mod JSON payload inside."""
+    game: str = "Final Fantasy 12 Open World"
+    patch_file_ending: str = ".apff12ow"
+
+    def __init__(self, *args: Any, data: Dict[str, Any] = None, **kwargs: Any) -> None:
+        self.data = data or {}
+        super().__init__(*args, **kwargs)
+
+    def write_contents(self, opened_zipfile) -> None:
+        # Write the JSON content used by the FF12 Open World mod tool
+        opened_zipfile.writestr("seed.json", json.dumps(self.data))
+        # Write the AP manifest last
+        super().write_contents(opened_zipfile)
 
 
 class FF12OpenWorldWebWorld(WebWorld):
@@ -65,6 +81,7 @@ class FF12OpenWorldWorld(World):
         # Dictionary of excluded location names to their item name and count
         self.excluded_locations: Dict[str, tuple[str, int]] = {}
         self.re_gen_data: Dict[str, Any] = {}
+        self.origin_region_name = "Initial"
 
     def create_item(self, name: str) -> FF12OpenWorldItem:
         return FF12OpenWorldItem(name, item_data_table[name].classification, item_data_table[name].code, self.player)
@@ -151,12 +168,13 @@ class FF12OpenWorldWorld(World):
                         self.excluded_locations[location_name] = ("", 0)
                         continue
 
+                    # Add 1 since data offsets are 0 based and AP doesn't allow 0 used as a location address.
                     region.add_locations({location_name: location_data.address}, FF12OpenWorldLocation)
                     self.multiworld.get_location(location_name, self.player).progress_type = classification
 
             # Add events
             for event_name, data in event_data_table.items():
-                region = self.multiworld.get_region("Ivalice", self.player)
+                region = self.multiworld.get_region(data.region, self.player)
                 region.locations.append(FF12OpenWorldLocation(self.player, event_name, None, region))
             return
 
@@ -166,24 +184,44 @@ class FF12OpenWorldWorld(World):
         locations_to_add = self.multiworld.random.sample(treasure_names,
                                                          k=255)
 
-        self.selected_treasures = [loc for loc in locations_to_add]
+        self.selected_treasures = [loc for loc in locations_to_add]        
 
-        # Select 50% of the random secondary reward locations (2nd and 3rd indices).
-        secondary_reward_names = [name for name, data in location_data_table.items()
-                                  if data.type == "reward" and data.secondary_index > 0]
-        locations_to_add += self.multiworld.random.sample(secondary_reward_names,
-                                                          k=len(secondary_reward_names) // 2)
+        # Add first index reward locations.
+        reward_names = [name for name, data in location_data_table.items()
+                        if data.type == "reward" and data.secondary_index == 0]
+        locations_to_add += reward_names
 
-        # Select 5-10 random starting inventory locations for each character.
+        # Select 5-9 random starting inventory locations for each character.
         for character in range(6):
             starting_inventory_names = [name for name, data in location_data_table.items()
                                         if data.type == "inventory" and int(data.str_id) == character]
             locations_to_add += self.multiworld.random.sample(starting_inventory_names,
                                                               k=self.multiworld.random.randint(5, 9))
 
-        # Add first fixed index rewards.
-        locations_to_add += [name for name, data in location_data_table.items()
-                             if data.type == "reward" and data.secondary_index == 0]
+        secondary_reward_names = [name for name, data in location_data_table.items()
+                                  if data.type == "reward" and data.secondary_index > 0]
+        
+        # Add half of the secondary reward locations randomly.
+        secondary_added = self.multiworld.random.sample(secondary_reward_names,
+                                                        k=len(secondary_reward_names) // 2)
+        locations_to_add += secondary_added
+        
+        # Add enough non excluded secondary reward locations to meet at least progression + useful item counts.
+        remaining_non_excluded_secondary = [name for name in secondary_reward_names
+                               if name not in locations_to_add and
+                               self.get_loc_classification(name) != LocationProgressType.EXCLUDED]                        
+        secondary_needed = 0
+        for _, data in item_data_table.items():
+            if data.classification & (ItemClassification.progression | ItemClassification.useful):
+                secondary_needed += data.duplicateAmount
+        # Subtract already added non-excludedsecondary rewards
+        secondary_needed -= len([name for name in secondary_added
+                                       if self.get_loc_classification(name) != LocationProgressType.EXCLUDED])
+        secondary_needed = min(len(remaining_non_excluded_secondary), secondary_needed)
+
+        if secondary_needed > 0:
+            locations_to_add += self.multiworld.random.sample(remaining_non_excluded_secondary,
+                                                                k=secondary_needed)
 
         # Place randomly selected locations.
         for location_name in locations_to_add:
@@ -201,7 +239,7 @@ class FF12OpenWorldWorld(World):
 
         # Add events
         for event_name, data in event_data_table.items():
-            region = self.multiworld.get_region("Ivalice", self.player)
+            region = self.multiworld.get_region(data.region, self.player)
             region.locations.append(FF12OpenWorldLocation(self.player, event_name, None, region))
 
     def get_loc_classification(self, location_name: str) -> LocationProgressType:
@@ -210,6 +248,15 @@ class FF12OpenWorldWorld(World):
         # Check for special progression locations which unlock Bahamut and must be available for progression.
         if (self.options.bahamut_unlock == "defeat_cid_2" and
                 location_name == "Pharos of Ridorana - Defeat Famfrit and Cid 2 Reward (1)"):
+            return LocationProgressType.DEFAULT
+        if (self.options.bahamut_unlock == "defeat_shadowseer" and
+                location_name == "Clan Hall - Hunt 44: Shadowseer Reward (1)"):
+            return LocationProgressType.DEFAULT
+        if (self.options.bahamut_unlock == "defeat_yiazmat" and
+                location_name == "Clan Hall - Hunt 45: Yiazmat Reward (1)"):
+            return LocationProgressType.DEFAULT
+        if (self.options.bahamut_unlock == "defeat_omega" and
+                location_name == "Clan Hall - Clan Boss: Omega Mark XII Reward (1)"):
             return LocationProgressType.DEFAULT
         if (self.options.bahamut_unlock == "collect_pinewood_chops" and
                 location_name == "Archades - Sandalwood Chop Reward (1)"):
@@ -295,8 +342,19 @@ class FF12OpenWorldWorld(World):
         # Set location rules
         for location in self.multiworld.get_locations(self.player):
             add_rule(location, self.create_rule(location.name))
-            if self.options.character_progression_scaling:
+            if self.options.difficulty_progressive_scaling:
                 add_rule(location, self.create_chara_rule(location.name))
+
+        # Set entrance rules when defined
+        for region in self.multiworld.regions:
+            if region.player != self.player:
+                continue
+            for entrance in region.exits:
+                entrance_tuple = (entrance.parent_region.name, entrance.connected_region.name)
+                if entrance_tuple in entrance_rule_data_table:
+                    add_rule(entrance, self.create_entrance_rule(entrance_tuple))
+                    if self.options.difficulty_progressive_scaling:
+                        add_rule(entrance, self.create_chara_rule_entrance(entrance_tuple))
 
         # Set event locked items
         for event_name, event_data in event_data_table.items():
@@ -305,6 +363,15 @@ class FF12OpenWorldWorld(World):
 
         if self.options.bahamut_unlock == "defeat_cid_2":
             self.multiworld.get_location("Pharos of Ridorana - Defeat Famfrit and Cid 2 Reward (1)", self.player).place_locked_item(
+                self.create_item("Writ of Transit"))
+        elif self.options.bahamut_unlock == "defeat_shadowseer":
+            self.multiworld.get_location("Clan Hall - Hunt 44: Shadowseer Reward (1)", self.player).place_locked_item(
+                self.create_item("Writ of Transit"))
+        elif self.options.bahamut_unlock == "defeat_yiazmat":
+            self.multiworld.get_location("Clan Hall - Hunt 45: Yiazmat Reward (1)", self.player).place_locked_item(
+                self.create_item("Writ of Transit"))
+        elif self.options.bahamut_unlock == "defeat_omega":
+            self.multiworld.get_location("Clan Hall - Clan Boss: Omega Mark XII Reward (1)", self.player).place_locked_item(
                 self.create_item("Writ of Transit"))
         elif self.options.bahamut_unlock == "collect_pinewood_chops":
             self.multiworld.get_location("Archades - Sandalwood Chop Reward (1)", self.player).place_locked_item(
@@ -338,16 +405,58 @@ class FF12OpenWorldWorld(World):
 
     def create_rule(self, location_name: str) -> Callable[[CollectionState], bool]:
         return lambda state: rule_data_table[location_name](state, self.player)
+    
+    def state_has_difficulty_access(self, state: CollectionState, difficulty: int, player: int, range: int) -> bool:
+        if not state_has_characters(state, difficulty, player):
+            return False
+        
+        if difficulty == 0:
+            return True
 
-    def create_chara_rule(self, location_name: str) -> Callable[[CollectionState], bool]:
-        if location_name in location_data_table.keys():
-            return lambda state: state_has_characters(state,
-                                                      location_data_table[location_name].difficulty,
-                                                      self.player)
-        elif location_name in event_data_table.keys():
-            return lambda state: state_has_characters(state,
-                                                      event_data_table[location_name].difficulty,
-                                                      self.player)
+        lower_bound = max(0, difficulty - range)
+
+        def in_range(value: int) -> bool:
+            return lower_bound <= value < difficulty
+
+        multiworld = state.multiworld
+
+        for loc in multiworld.get_locations(player):
+            if not loc.name in location_data_table or not in_range(location_data_table[loc.name].difficulty):
+                continue
+            if loc.can_reach(state):
+                return True
+
+        for entrance in multiworld.get_entrances(player):
+            entrance_tuple = (entrance.parent_region.name, entrance.connected_region.name)
+            if not in_range(entrance_rule_difficulty_table[entrance_tuple]):
+                continue
+            if entrance.can_reach(state):
+                return True
+
+        return False
+
+    def create_chara_rule(self, name: str) -> Callable[[CollectionState], bool]:
+        if name in location_data_table.keys():
+            return lambda state: self.state_has_difficulty_access(state,
+                                                                  location_data_table[name].difficulty,
+                                                                  self.player,
+                                                                  3)
+        elif name in event_data_table.keys():
+            return lambda state: self.state_has_difficulty_access(state,
+                                                                  event_data_table[name].difficulty,
+                                                                  self.player,
+                                                                  3)
+        else:
+            raise Exception(f"Could not create character rule for {name}.")
+        
+    def create_chara_rule_entrance(self, entrance: Tuple[str, str]) -> Callable[[CollectionState], bool]:
+        return lambda state: self.state_has_difficulty_access(state,
+                                                              entrance_rule_difficulty_table[entrance],
+                                                              self.player,
+                                                              3)      
+
+    def create_entrance_rule(self, entrance: Tuple[str, str]) -> Callable[[CollectionState], bool]:
+        return lambda state: entrance_rule_data_table[entrance](state, self.player)
 
     def create_event(self, event_item: str) -> FF12OpenWorldItem:
         name = event_item
@@ -366,7 +475,7 @@ class FF12OpenWorldWorld(World):
                 self.character_order = self.re_gen_data["characters"]
                 options = self.re_gen_data["options"]
                 self.options.shuffle_main_party = options["shuffle_main_party"]
-                self.options.character_progression_scaling = options["character_progression_scaling"]
+                self.options.difficulty_progressive_scaling = options["difficulty_progressive_scaling"]
                 self.options.include_treasures = options["include_treasures"]
                 self.options.include_chops = options["include_chops"]
                 self.options.include_black_orbs = options["include_black_orbs"]
@@ -402,7 +511,7 @@ class FF12OpenWorldWorld(World):
             "seed": seed_name,  # to identify the seed
             "type": "archipelago",  # to identify the seed type
             "archipelago": {
-                "version": FF12OW_VERSION,
+                "version": self.world_version.as_simple_string(),
                 "used_items": list(self.used_items),  # Lets the seed generator fill shops with unused items
                 # Store selected treasures for tracking
                 "treasures": [
@@ -420,9 +529,16 @@ class FF12OpenWorldWorld(World):
                 ]
             }
         }
+        # Package output using an APPlayerContainer for consistency with other worlds
         mod_name = self.multiworld.get_out_file_name_base(self.player)
-        with open(os.path.join(output_directory, mod_name + ".json"), "w") as f:
-            json.dump(data, f)
+        container = FF12OpenWorldContainer(
+            path=os.path.join(output_directory, f"{mod_name}{FF12OpenWorldContainer.patch_file_ending}"),
+            player=self.player,
+            player_name=self.multiworld.get_file_safe_player_name(self.player),
+            server="",
+            data=data,
+        )
+        container.write()
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
@@ -431,7 +547,7 @@ class FF12OpenWorldWorld(World):
             "characters": self.character_order,
             "options": {
                 "shuffle_main_party": self.options.shuffle_main_party.value,
-                "character_progression_scaling": self.options.character_progression_scaling.value,
+                "difficulty_progressive_scaling": self.options.difficulty_progressive_scaling.value,
                 "include_treasures": self.options.include_treasures.value,
                 "include_chops": self.options.include_chops.value,
                 "include_black_orbs": self.options.include_black_orbs.value,

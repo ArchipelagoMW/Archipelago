@@ -62,11 +62,12 @@ Nelveska.connections = [
 
 Nelveska.locations = [
     SidequestLocation(LocationNames.NELVESKA_SIDEQUEST, battle_level=12),
+    SidequestLocation(LocationNames.NELVESKA_STONE, battle_level=12),
     SidequestLocation(LocationNames.REIS_HUMAN_RECRUIT, battle_level=12)
 ]
 
 Doguola.connections = [
-    Connection(Grog),
+    Connection(Grog, [HasFovohamPass]),
     Connection(BerveniaCity)
 ]
 

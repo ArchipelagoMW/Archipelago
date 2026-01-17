@@ -14,9 +14,9 @@ from .patch_utils import (
     ItemRomData, get_gen_data, get_multi_patch_path, ips_patch_from_file, offset_from_symbol, patch_item_sprites
 )
 
-from subversion_rando.logic_presets import custom_logic_str_from_tricks
-from subversion_rando.main_generation import apply_rom_patches
-from subversion_rando.romWriter import RomWriter
+from .subversion_rando.logic_presets import custom_logic_str_from_tricks
+from .subversion_rando.main_generation import apply_rom_patches
+from .subversion_rando.romWriter import RomWriter
 
 
 SMJUHASH = '21f3e98df4780ee1c667b84e57d88675'

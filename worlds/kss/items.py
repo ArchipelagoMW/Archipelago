@@ -14,6 +14,7 @@ class ItemData(NamedTuple):
     classification: ItemClassification
     value: int = 0
     num: int = 1
+    single_use: bool = False
 
 
 sub_games: Dict[str, ItemData] = {
@@ -56,11 +57,11 @@ copy_abilities: Dict[str, ItemData] = {
     item_names.suplex: ItemData(BASE_ID + 0x111, ItemClassification.progression),
     item_names.hammer: ItemData(BASE_ID + 0x112, ItemClassification.progression),
     item_names.parasol: ItemData(BASE_ID + 0x113, ItemClassification.progression),
-    item_names.mike: ItemData(BASE_ID + 0x114, ItemClassification.progression),
-    item_names.sleep: ItemData(BASE_ID + 0x115, ItemClassification.trap),
-    item_names.paint: ItemData(BASE_ID + 0x116, ItemClassification.useful),
-    item_names.cook: ItemData(BASE_ID + 0x117, ItemClassification.useful),
-    item_names.crash: ItemData(BASE_ID + 0x118, ItemClassification.progression),
+    item_names.mike: ItemData(BASE_ID + 0x114, ItemClassification.progression, single_use=True),
+    item_names.sleep: ItemData(BASE_ID + 0x115, ItemClassification.trap, single_use=True),
+    item_names.paint: ItemData(BASE_ID + 0x116, ItemClassification.useful, single_use=True),
+    item_names.cook: ItemData(BASE_ID + 0x117, ItemClassification.useful, single_use=True),
+    item_names.crash: ItemData(BASE_ID + 0x118, ItemClassification.progression, single_use=True),
 }
 
 treasures: Dict[str, ItemData] = {
@@ -167,7 +168,8 @@ item_table: Dict[str, ItemData] = {
 }
 
 item_groups: Dict[str, Set[str]] = {
-    "Copy Ability": {name for name in copy_abilities},
+    "Copy Ability": {name for name, data in copy_abilities.items() if not data.single_use},
+    "Single Use Copy Ability": {name for name, data in copy_abilities.items() if data.single_use},
     "Treasures": {name for name in treasures},
     "Planets": {name for name in planets}
 }

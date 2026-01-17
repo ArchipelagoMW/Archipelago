@@ -1,7 +1,6 @@
 from enum import IntEnum
 from typing import NamedTuple
 
-
 class Character(NamedTuple):
     id: int
     name: str

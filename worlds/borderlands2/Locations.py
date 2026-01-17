@@ -99,23 +99,24 @@ region_exceptions = {
     "Level 2":                                      "DigistructPeak",
     "Level 3":                                      "DigistructPeak",
     "Level 4":                                      "SouthernShelf",
-    "Level 15":                                      "BloodshotRamparts",
-    "Level 16":                                      "BloodshotRamparts",
-    "Level 17":                                      "BloodshotRamparts",
-    "Level 18":                                      "BloodshotRamparts",
-    "Level 19":                                      "WildlifeExploitationPreserve",
-    "Level 20":                                      "WildlifeExploitationPreserve",
-    "Level 21":                                      "WildlifeExploitationPreserve",
-    "Level 22":                                      "ThousandCuts",
-    "Level 23":                                      "ThousandCuts",
-    "Level 24":                                      "ThousandCuts",
-    "Level 25":                                      "ControlCoreAngel",
-    "Level 26":                                      "ControlCoreAngel",
-    "Level 27":                                      "EridiumBlight",
-    "Level 28":                                      "EridiumBlight",
-    "Level 29":                                      "EridiumBlight",
-    "Level 30":                                      "HerosPass",
+    "Level 15":                                     "BloodshotRamparts",
+    "Level 16":                                     "BloodshotRamparts",
+    "Level 17":                                     "BloodshotRamparts",
+    "Level 18":                                     "BloodshotRamparts",
+    "Level 19":                                     "WildlifeExploitationPreserve",
+    "Level 20":                                     "WildlifeExploitationPreserve",
+    "Level 21":                                     "WildlifeExploitationPreserve",
+    "Level 22":                                     "ThousandCuts",
+    "Level 23":                                     "ThousandCuts",
+    "Level 24":                                     "ThousandCuts",
+    "Level 25":                                     "ControlCoreAngel",
+    "Level 26":                                     "ControlCoreAngel",
+    "Level 27":                                     "EridiumBlight",
+    "Level 28":                                     "EridiumBlight",
+    "Level 29":                                     "EridiumBlight",
+    "Level 30":                                     "HerosPass",
 
+    "Challenge Loot: Open Pandora's Boxes":         "WindshearWaste",
     "Chest WindshearWaste: Blindsided":             "SouthernShelf", # don't let the chest past Knuckledragger be the intended way to kill him.
     "Challenge Money: Whaddaya Buyin'?":            "Sanctuary",
     "Challenge Enemies: Hurly Burly":               "SouthernShelf",
@@ -185,6 +186,7 @@ region_exceptions = {
     "Quest Dust: Rakkaholics Anonymous":                         "WildlifeExploitationPreserve",
     "Quest Dust: The Good, the Bad, and the Mordecai":           "Highlands",
     "Quest Sanctuary: Bearer of Bad News":                       "ControlCoreAngel",
+    "Chest Sanctuary: Roland's Armory":                          "ControlCoreAngel",
     "Quest Sanctuary: BFFs":                                     "EridiumBlight",
     "Quest Sanctuary: Won't Get Fooled Again":                   "Highlands",
     "Quest Sanctuary: Claptrap's Birthday Bash!":                "Highlands",
@@ -227,6 +229,8 @@ region_exceptions = {
     "Chest BloodshotStronghold: Flinter's Room": "BloodshotRamparts",
     "Chest Fridge: Smashhead's Cave": "Highlands",
     "Chest Fridge: Rakkman's Lair": "Highlands",
+
+    "Challenge LilithDLC: Haderax The Invincible": "WrithingDeep",
 }
 
 coop_locations = {
@@ -241,6 +245,41 @@ coop_locations = {
     "Challenge Opportunity: Top o' the World": 2,
     "Challenge TerramorphousPeak: Cult of the Vault": 2,
     "Symbol TerramorphousPeak: Dropdown": 2,
+}
+
+raidboss_regions = {
+    "WingedStorm",
+    "WrithingDeep",
+    "TerramorphousPeak",
+}
+raidboss_locations = {
+    # Terramorphous, Dragons, Haderax
+    "Enemy TundraExpress: Vermivorous the Invincible",
+    "Enemy Washburne Refinery: Hyperius",
+    "Enemy Hayter's Folly: Master Gee",
+    "Enemy Pyro Pete's Bar: Pyro Pete the Invincible",
+    "Enemy CandlerakksCrag: Voracidous the Invincible",
+    "Enemy HuntersGrotto: Dexiduous the Invincible",
+    "Enemy WamBamIsland: Son of Crawmerax Raid Boss",
+
+    "Challenge ScarlettDLC: Hyperius the Not-So-Invincible",
+    "Challenge ScarlettDLC: Master Worm Food",
+    "Challenge TorgueDLC: Pete the Invincible Defeated"
+    "Challenge HammerlockDLC: Voracidous the Invincible",
+
+    "Quest Washburne: Hyperius the Invincible",
+    "Quest Hayters: Master Gee the Invincible",
+    "Quest PyroPetesBar: Pyro Pete the Invincible",
+    "Quest CandlerakksCrag: Voracidous the Invincible",
+    "Quest WingedStorm: Raiders of the Last Boss",
+
+    "Chest WamBamIsland: Raid Reward #4",
+    "Chest WamBamIsland: Raid Reward #5",
+    "Chest WamBamIsland: Raid Reward #3",
+    "Chest WamBamIsland: Raid Reward #7",
+    "Chest WamBamIsland: Raid Reward #6",
+    "Chest WamBamIsland: Raid Reward #2",
+    "Chest WamBamIsland: Raid Reward #1",
 }
 
 def get_region_from_loc_name(loc_name):

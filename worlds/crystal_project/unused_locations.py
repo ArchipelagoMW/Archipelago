@@ -1,7 +1,8 @@
 from typing import List
-from .locations import LocationData, npc_index_offset
-from .constants.ap_regions import *
+
 from .constants.display_regions import *
+from .locations import LocationData, npc_index_offset
+
 
 def get_unused_locations() -> List[LocationData]:
     location_table: List[LocationData] = [
@@ -17,7 +18,7 @@ def get_unused_locations() -> List[LocationData]:
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Master Warrior", 3566 + npc_index_offset),
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Master Wizard", 3569 + npc_index_offset),
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Master Hunter", 3558 + npc_index_offset),
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Master Dervish", 3575 + npc_index_offset),
+        LocationData(RUINS_CRUMBLING_ON_SHORE_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Master Dervish", 3575 + npc_index_offset),
         LocationData(SUMMONERS_TOWER_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " NPC - Master Aegis", 3610 + npc_index_offset),
         LocationData(SUMMONERS_TOWER_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " NPC - Master Beastmaster", 3608 + npc_index_offset),
         LocationData(SUMMONERS_TOWER_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " NPC - Master Ninja", 3550 + npc_index_offset),
@@ -25,10 +26,10 @@ def get_unused_locations() -> List[LocationData]:
         LocationData(SUMMONERS_TOWER_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " NPC - Master Reaper", 3611 + npc_index_offset),
         LocationData(SUMMONERS_TOWER_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " NPC - Master Summoner", 3557 + npc_index_offset),
         LocationData(SUMMONERS_TOWER_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " NPC - Master Valkyrie", 3554 + npc_index_offset),
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Master Assassin", 3605 + npc_index_offset),
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Master Samurai", 3576 + npc_index_offset),
+        LocationData(SHOUDU_PROVINCE_PROPER_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Master Assassin", 3605 + npc_index_offset),
+        LocationData(SHOUDU_PROVINCE_PROPER_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Master Samurai", 3576 + npc_index_offset),
         LocationData(PAMOA_TREE_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Master Chemist", 3707 + npc_index_offset),
-        LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " NPC - Master Mimic", 3606 + npc_index_offset),
+        LocationData(CHALICE_ASCENT_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " NPC - Master Mimic", 3606 + npc_index_offset),
         LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " NPC - Master Weaver", 3579 + npc_index_offset),
     ]
 

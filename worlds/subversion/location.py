@@ -3,7 +3,7 @@ from typing import Optional
 from BaseClasses import Location, Region
 from .config import base_id
 
-from subversion_rando.location_data import Location as SvLocation, new_locations
+from .subversion_rando.location_data import Location as SvLocation, new_locations
 
 location_data = new_locations()
 

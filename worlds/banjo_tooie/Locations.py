@@ -10,11 +10,11 @@ class BanjoTooieLocation(Location):
 class LocationData(typing.NamedTuple):
     # last good ID: 1231640 (CCL Bean 2)
     # 12C770 pointer instead (1230704)
-    btid: int | None = 0
+    btid: int | None
     # Save + mem addr
-    memaddr: int = 0
+    memaddr: int
     # some items have bitmasks. if bitmask>0 bitor to give item else
-    bitmask: int = 0
+    bitmask: int
     # some items are part of a group that needs to be processed seperately
     group: str = ""
 

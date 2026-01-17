@@ -71,11 +71,11 @@ def get_logically_available_breeding(world: "PokemonCrystalWorld") -> set[str]:
         logical_access = LogicalAccess.InLogic if (
                 can_breed_ditto or can_breed_without_ditto) else LogicalAccess.OutOfLogic
         if not world.is_universal_tracker and logical_access is LogicalAccess.OutOfLogic: continue
-        world.logic.breeding[data.produces_egg].add((pokemon_id, logical_access))
+        world.logic.breeding[data.produces_egg].append((pokemon_id, logical_access))
         if logical_access is LogicalAccess.InLogic:
             breeding_pokemon.add(data.produces_egg)
         if data.produces_egg == "NIDORAN_F":
-            world.logic.breeding["NIDORAN_M"].add((pokemon_id, logical_access))
+            world.logic.breeding["NIDORAN_M"].append((pokemon_id, logical_access))
             if logical_access is LogicalAccess.InLogic:
                 breeding_pokemon.add("NIDORAN_M")
 

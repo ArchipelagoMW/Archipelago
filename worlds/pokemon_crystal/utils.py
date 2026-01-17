@@ -406,9 +406,8 @@ def _starting_town_valid(world: "PokemonCrystalWorld", starting_town: StartingTo
         return world.options.static_pokemon_required and (
                 (full_johto_trainersanity and immediate_hiddens) or johto_shopsanity)
     if starting_town.name in ("Lake of Rage", "Mahogany Town"):
-        return (not (world.options.mount_mortar_access or ("Mount Mortar" in world.options.dark_areas))
-                or johto_shopsanity or full_johto_trainersanity
-                or ("Mount Mortar" not in world.options.dark_areas))
+        return ((not world.options.mount_mortar_access and "Mount Mortar" not in world.options.dark_areas)
+                or johto_shopsanity or full_johto_trainersanity)
     if starting_town.name == "Azalea Town":
         return ("Slowpoke Well" not in world.options.dark_areas
                 or "Union Cave" not in world.options.dark_areas)

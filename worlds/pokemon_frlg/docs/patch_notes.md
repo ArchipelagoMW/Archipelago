@@ -1,3 +1,8 @@
+# 1.0.2
+## Bug Fixes
+* Fixed a typo in Route 25 - Man Gift location groups (credit to [Mysteryem](https://github.com/Mysteryem))
+* Added workaround to the Options Creator not allowing vanilla HM/TM Compatibility (credit to [Darvitz](https://github.com/Darvitz))
+
 # 1.0.1
 ## Bug Fixes
 * Fixed a Generator error that occurred when genning a multiworld with >255 players

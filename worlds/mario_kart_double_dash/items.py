@@ -2,7 +2,7 @@ from typing import Any, NamedTuple, TYPE_CHECKING
 from enum import Enum
 
 from BaseClasses import Item, ItemClassification
-from . import game_data
+from . import game_data, version
 
 if TYPE_CHECKING:
     from . import MkddWorld
@@ -23,7 +23,7 @@ class ItemType(Enum):
     KART_UPGRADE = 6
 
 class MkddItem(Item):
-    game = "Mario Kart Double Dash"
+    game = version.get_game_name()
 
 
 class MkddItemData(NamedTuple):

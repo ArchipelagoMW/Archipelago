@@ -15,50 +15,50 @@ class K64Item(Item):
 
 
 copy_ability_table = {
-    ItemName.burn:      ItemData(0x640001, True),
-    ItemName.stone:     ItemData(0x640002, True),
-    ItemName.ice:       ItemData(0x640003, True),
-    ItemName.needle:    ItemData(0x640004, True),
-    ItemName.bomb:      ItemData(0x640005, True),
-    ItemName.spark:     ItemData(0x640006, True),
-    ItemName.cutter:    ItemData(0x640007, True)
+    ItemName.burn:      ItemData(0x0001, True),
+    ItemName.stone:     ItemData(0x0002, True),
+    ItemName.ice:       ItemData(0x0003, True),
+    ItemName.needle:    ItemData(0x0004, True),
+    ItemName.bomb:      ItemData(0x0005, True),
+    ItemName.spark:     ItemData(0x0006, True),
+    ItemName.cutter:    ItemData(0x0007, True)
 }
 
 friend_table = {
-    ItemName.waddle_dee:    ItemData(0x640100, True),
-    ItemName.adeleine:      ItemData(0x640101, True),
-    ItemName.king_dedede:   ItemData(0x600102, True),
+    ItemName.waddle_dee:    ItemData(0x0100, True),
+    ItemName.adeleine:      ItemData(0x0101, True),
+    ItemName.king_dedede:   ItemData(0x0102, True),
 }
 
 power_combo_table = {
-    ItemName.burn_burn:     ItemData(0x640200, True),
-    ItemName.burn_stone:    ItemData(0x640201, True),
-    ItemName.burn_ice:      ItemData(0x640202, True),
-    ItemName.burn_needle:   ItemData(0x640203, True),
-    ItemName.burn_bomb:     ItemData(0x640204, True),
-    ItemName.burn_spark:    ItemData(0x640205, True),
-    ItemName.burn_cutter:   ItemData(0x640206, True),
-    ItemName.stone_stone:   ItemData(0x640207, True),
-    ItemName.stone_ice:     ItemData(0x640208, True),
-    ItemName.stone_needle:  ItemData(0x640209, True),
-    ItemName.stone_bomb:    ItemData(0x64020A, True),
-    ItemName.stone_spark:   ItemData(0x64020B, True),
-    ItemName.stone_cutter:  ItemData(0x64020C, True),
-    ItemName.ice_ice:       ItemData(0x64020D, True),
-    ItemName.ice_needle:    ItemData(0x64020E, True),
-    ItemName.ice_bomb:      ItemData(0x64020F, True),
-    ItemName.ice_spark:     ItemData(0x640210, True),
-    ItemName.ice_cutter:    ItemData(0x640211, True),
-    ItemName.needle_needle: ItemData(0x640212, True),
-    ItemName.needle_bomb:   ItemData(0x640213, True),
-    ItemName.needle_spark:  ItemData(0x640214, True),
-    ItemName.needle_cutter: ItemData(0x640215, True),
-    ItemName.bomb_bomb:     ItemData(0x640216, True),
-    ItemName.bomb_spark:    ItemData(0x640217, True),
-    ItemName.bomb_cutter:   ItemData(0x640218, True),
-    ItemName.spark_spark:   ItemData(0x640219, True),
-    ItemName.spark_cutter:  ItemData(0x64021A, True),
-    ItemName.cutter_cutter: ItemData(0x64021B, True),
+    ItemName.burn_burn:     ItemData(0x0200, True),
+    ItemName.burn_stone:    ItemData(0x0201, True),
+    ItemName.burn_ice:      ItemData(0x0202, True),
+    ItemName.burn_needle:   ItemData(0x0203, True),
+    ItemName.burn_bomb:     ItemData(0x0204, True),
+    ItemName.burn_spark:    ItemData(0x0205, True),
+    ItemName.burn_cutter:   ItemData(0x0206, True),
+    ItemName.stone_stone:   ItemData(0x0207, True),
+    ItemName.stone_ice:     ItemData(0x0208, True),
+    ItemName.stone_needle:  ItemData(0x0209, True),
+    ItemName.stone_bomb:    ItemData(0x020A, True),
+    ItemName.stone_spark:   ItemData(0x020B, True),
+    ItemName.stone_cutter:  ItemData(0x020C, True),
+    ItemName.ice_ice:       ItemData(0x020D, True),
+    ItemName.ice_needle:    ItemData(0x020E, True),
+    ItemName.ice_bomb:      ItemData(0x020F, True),
+    ItemName.ice_spark:     ItemData(0x0210, True),
+    ItemName.ice_cutter:    ItemData(0x0211, True),
+    ItemName.needle_needle: ItemData(0x0212, True),
+    ItemName.needle_bomb:   ItemData(0x0213, True),
+    ItemName.needle_spark:  ItemData(0x0214, True),
+    ItemName.needle_cutter: ItemData(0x0215, True),
+    ItemName.bomb_bomb:     ItemData(0x0216, True),
+    ItemName.bomb_spark:    ItemData(0x0217, True),
+    ItemName.bomb_cutter:   ItemData(0x0218, True),
+    ItemName.spark_spark:   ItemData(0x0219, True),
+    ItemName.spark_cutter:  ItemData(0x021A, True),
+    ItemName.cutter_cutter: ItemData(0x021B, True),
 }
 
 power_combo_map = {
@@ -104,18 +104,31 @@ copy_ability_access_table = {
 }
 
 misc_item_table = {
-    ItemName.crystal_shard: ItemData(0x640020, True, True),
-    ItemName.one_up: ItemData(0x640021, False),
-    ItemName.maxim_tomato: ItemData(0x640022, False),
-    ItemName.invincibility_candy: ItemData(0x640023, False),
+    ItemName.crystal_shard: ItemData(0x0020, True, True),
+    ItemName.one_up: ItemData(0x0021, False),
+    ItemName.maxim_tomato: ItemData(0x0022, False),
+    ItemName.invincibility_candy: ItemData(0x0023, False),
+    ItemName.small_star: ItemData(0x0024, False),
+    ItemName.ice_cream: ItemData(0x0025, False),
+    ItemName.cake: ItemData(0x0026, False),
+    ItemName.sandwich: ItemData(0x0027, False),
+    ItemName.meat: ItemData(0x0028, False),
 }
 
 filler_item_weights = {
-    ItemName.one_up: 4,
-    ItemName.maxim_tomato: 2,
-    ItemName.invincibility_candy: 2,
+    ItemName.one_up: 2,
+    ItemName.maxim_tomato: 1,
+    ItemName.ice_cream: 1,
+    ItemName.sandwich: 1,
+    ItemName.meat: 1,
+    ItemName.cake: 1,
+    ItemName.invincibility_candy: 1,
 }
 
+star_filler_item_weights = {
+    ItemName.small_star: 16,
+    **filler_item_weights
+}
 
 item_table = {
     **copy_ability_table,

@@ -46,7 +46,7 @@ class TestCustomNexusGates2(AnodyneTestBase):
         self.assertFalse(self.can_reach_region(Red_Cave.right))
         self.assertFalse(self.can_reach_region(Red_Cave.center))
         self.assertFalse(self.can_reach_region(Red_Sea.DEFAULT))
-        self.assertTrue(self.can_reach_region(Windmill.entrance))
+        self.assertTrue(self.can_reach_region(Windmill.first_gate))
         self.assertTrue(self.can_reach_region(Street.DEFAULT))
 
 

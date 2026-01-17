@@ -13,5 +13,5 @@ class TestDefault(CrystalProjectTestBase):
     def test_base_functions(self):
         self.collect_mounts_and_progressive_levels_and_passes()
         self.assert_region_entrances(JIDAMBA_WATERWAYS_AP_REGION, (THE_OPEN_SEA_AP_REGION,))
-        self.assert_region_entrances(TANGLE_EACLANEYA_CONNECTOR_AP_REGION, (), (JIDAMBA_EACLANEYA_AP_REGION,))
+        self.assert_region_entrances(TANGLE_EACLANEYA_CONNECTOR_AP_REGION, (), (EACLANEYA_ENTRANCE_AP_REGION,))
         self.assert_locations(["Spawning Meadows Chest - Jump on Nan"], ["Spawning Meadows NPC - Butterfly Goo"])

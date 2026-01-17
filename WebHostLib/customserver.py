@@ -110,7 +110,7 @@ class WebHostContext(Context):
     def load(self, room_id: int):
         self.room_id = room_id
         room = Room.get(id=room_id)
-        if room.last_port:
+        if room.last_port and 52700 >= room.last_port >= 52500:
             self.port = room.last_port
         else:
             self.port = get_random_port()
@@ -127,11 +127,8 @@ class WebHostContext(Context):
         missing_checksum = False
 
         # Ashipelago customization
-        self.room_is_tracked = multidata["server_options"]["track_in_discord"]
-        if "use_room_hints" in multidata["server_options"]:
-            self.dynx.use_room_hints = multidata["server_options"]["use_room_hints"]
-        else:
-            self.dynx.use_room_hints = False
+        self.room_is_tracked = multidata["server_options"]["track_in_discord"] if "track_in_discord" in multidata["server_options"] else False
+        self.dynx.use_room_hints = multidata["server_options"]["use_room_hints"] if "use_room_hints" in multidata["server_options"] else False
 
         for game in list(multidata.get("datapackage", {})):
             game_data = multidata["datapackage"][game]

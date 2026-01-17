@@ -12,7 +12,7 @@ class TestVanillaWindmill(AnodyneTestBase):
     def test_requirement(self):
         self.collect_by_name("Broom")  # collect just to re-evaluate reachable regions
 
-        self.assertFalse(self.can_reach_region(Windmill.DEFAULT))
+        self.assertFalse(self.can_reach_region(Windmill.third_gate))
         self.assertFalse(self.can_reach_region(Cell.DEFAULT))
         self.assertFalse(self.can_reach_region(Space.DEFAULT))
         self.assertFalse(self.can_reach_region(Suburb.DEFAULT))
@@ -20,7 +20,7 @@ class TestVanillaWindmill(AnodyneTestBase):
         self.collect_by_name("Red Key")
         self.collect_by_name("Blue Key")
 
-        self.assertTrue(self.can_reach_region(Windmill.DEFAULT))
+        self.assertTrue(self.can_reach_region(Windmill.third_gate))
         self.assertTrue(self.can_reach_region(Cell.DEFAULT))
         self.assertTrue(self.can_reach_region(Space.DEFAULT))
         self.assertTrue(self.can_reach_region(Suburb.DEFAULT))
@@ -36,7 +36,7 @@ class TestSplitWindmill(AnodyneTestBase):
     def test_requirement(self):
         self.collect_by_name("Broom")  # collect just to re-evaluate reachable regions
 
-        self.assertFalse(self.can_reach_region(Windmill.DEFAULT))
+        self.assertFalse(self.can_reach_region(Windmill.third_gate))
         self.assertFalse(self.can_reach_region(Cell.DEFAULT))
         self.assertFalse(self.can_reach_region(Space.DEFAULT))
         self.assertFalse(self.can_reach_region(Suburb.DEFAULT))
@@ -44,7 +44,7 @@ class TestSplitWindmill(AnodyneTestBase):
         self.collect_by_name("Red Key")
         self.collect_by_name("Blue Key")
 
-        self.assertTrue(self.can_reach_region(Windmill.DEFAULT))
+        self.assertTrue(self.can_reach_region(Windmill.third_gate))
         self.assertFalse(self.can_reach_region(Cell.DEFAULT))
         self.assertFalse(self.can_reach_region(Space.DEFAULT))
         self.assertFalse(self.can_reach_region(Suburb.DEFAULT))

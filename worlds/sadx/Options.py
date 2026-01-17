@@ -1,23 +1,7 @@
 from dataclasses import dataclass
 
-from schema import Schema, And, Optional
-
-from Options import OptionGroup, Choice, Range, DefaultOnToggle, Toggle, DeathLink, OptionSet, OptionDict, \
-    ProgressionBalancing
+from Options import OptionGroup, Choice, Range, DefaultOnToggle, Toggle, DeathLink, OptionSet
 from Options import PerGameCommonOptions
-from .Enums import level_areas, pascal_to_space
-
-
-class SADXProgressionBalancing(ProgressionBalancing):
-    default = 80
-    special_range_names = {
-        "disabled": 0,
-        "normal": 80,
-        "extreme": 99,
-    }
-    __doc__ = ProgressionBalancing.__doc__.replace(f"default {ProgressionBalancing.default}", f"default {default}") \
-        if ProgressionBalancing.__doc__ else None
-
 
 
 class GoalRequiresLevels(DefaultOnToggle):
@@ -41,7 +25,7 @@ class GoalRequiresChaosEmeralds(Toggle):
     display_name = "Goal Requires Chaos Emeralds"
 
 
-class GoalRequiresEmblems(Toggle):
+class GoalRequiresEmblems(DefaultOnToggle):
     """
     If enabled, you have to collect a certain number of emblems to unlock the last fight.
     The emblems are extra items added to the item pool, so they scale with the number of checks.
@@ -136,39 +120,18 @@ class StartingCharacterOption(Choice):
 class StartingLocationOption(Choice):
     """
     Select in which location you would like to start.
-    Keep in mind that if there are no checks in that location for your character, another one will be chosen.
-    CChoose between Random (0), Station Square (Main) (1), Station (2), Hotel (3), Casino (4), Twinkle Park Lobby (5),
-    Mystic Ruins (Main) (6), Angel Island (7), Jungle (8) and EggCarrier (Outside) (9), EggCarrier (Inside) (10)
+    Station Square Main (0): Vanilla starting location and default value.
+    Random (1): Start in a random location (same for all characters).
+    Random per Character (2): Each character starts in a different random location.
     """
     display_name = "Starting Location"
-    option_random_location = 0
-    option_station_square_main = 1
-    option_station = 2
-    option_hotel = 3
-    option_casino = 4
-    option_twinkle_park_lobby = 5
-    option_mystic_ruins_main = 6
-    option_angel_island = 7
-    option_jungle = 8
-    option_egg_carrier_outside = 9
-    option_egg_carrier_inside = 10
+    option_station_square_main = 0
+    option_random_location = 1
+    option_random_location_per_character = 2
     default = 0
 
 
-class RandomStartingLocationPerCharacter(DefaultOnToggle):
-    """If enabled, each character will start in a random location."""
-    display_name = "Random Starting Location Per Character"
-
-
-class GuaranteedStartingChecks(Range):
-    """Ensures at least this many checks in your starting location if possible."""
-    display_name = "Guaranteed Starting Checks"
-    range_start = 1
-    range_end = 10
-    default = 2
-
-
-class EntranceRandomizer(Toggle):
+class EntranceRandomizer(Choice):
     """
     Randomizes the entrances to action stages.
     This means that the entrance to an action stage could be different from the original game.
@@ -177,19 +140,24 @@ class EntranceRandomizer(Toggle):
     Depending on the character, the entrance may be Sonic's or Knuckles'. Big, for example, can't use the Speed Highway elevator.
     """
     display_name = "Entrance Randomizer"
+    option_disabled = 0
+    option_stages = 1
+    option_stages_and_bosses = 2
+    default = 0
+    alias_false = 0
+    alias_true = 1
 
 
-class LevelEntrancePlando(OptionDict):
+class GatingMode(Choice):
     """
-    Plando for level entrance. Only works if Entrance Randomizer is enabled.
-    The level name should be Capitalized with no spaces.
-    For example, {'Emerald Coast': 'Final Egg'} will place Final Egg behind the Emerald Coast entrance and randomize the rest.
+    Determines how the rando will close off parts of the adventure field.
+    Emblems (0): Areas are gated based on the number of emblems collected.
+    KeyItems (1): Areas are gated based on key items like the Train or Station Key
     """
-    display_name = "Level Entrance Plando"
-    valid_keys = {pascal_to_space(area.name): area.name for area in level_areas}
-    schema = Schema(
-        {Optional(pascal_to_space(area.name)): And(str, lambda n: n in [pascal_to_space(a.name) for a in level_areas])
-         for area in level_areas})
+    display_name = "Gating Mode"
+    option_emblems_gating = 0
+    option_key_items_gating = 1
+    default = 0
 
 
 class SendDeathLinkChance(Range):
@@ -208,26 +176,23 @@ class ReceiveDeathLinkChance(Range):
     default = 100
 
 
-class RingLink(Toggle):
+class RingLink(Choice):
     """
     Whether your in-level ring gain/loss is linked to other players.
+    Disabled (0): Ring Link is disabled.
+    Enabled (1): Rings are sent and received in normal situations.
+    Enabled Casinopolis (2): Rings are sent and received in most situations, plus while playing Sonic's Casinopolis.
+    Enabled Hard (3): Rings are sent and received when including finishing a level and during the Perfect Chaos fight.
+
     """
     display_name = "Ring Link"
-
-
-class CasinopolisRingLink(Toggle):
-    """
-    Whether Ring Link is enabled while playing Sonic's Casinopolis.
-    """
-    display_name = "Enable Ring Link while playing Sonic's Casinopolis"
-
-
-class HardRingLink(Toggle):
-    """
-    If Ring Link is enabled, sends and receives rings in more situations.
-    Particularly, it will subtract rings when finishing a level and during the Perfect Chaos fight.
-    """
-    display_name = "Hard Ring Link"
+    option_disabled = 0
+    option_enabled = 1
+    option_enabled_casinopolis = 2
+    option_enabled_hard = 3
+    default = 0
+    alias_false = 0
+    alias_true = 1
 
 
 class RingLoss(Choice):
@@ -400,34 +365,9 @@ class LifeCapsulesChangeSongs(Toggle):
     display_name = "Life Capsules Change Songs"
 
 
-class RandomizedSonicUpgrades(DefaultOnToggle):
-    """Determines whether Sonic's upgrades are randomized and sent to the item pool."""
-    display_name = "Randomize Sonic's Upgrades"
-
-
-class RandomizedTailsUpgrades(DefaultOnToggle):
-    """Determines whether Tails' upgrades are randomized and sent to the item pool."""
-    display_name = "Randomize Tails' Upgrades"
-
-
-class RandomizedKnucklesUpgrades(DefaultOnToggle):
-    """Determines whether Knuckles' upgrades are randomized and sent to the item pool."""
-    display_name = "Randomize Knuckles' Upgrades"
-
-
-class RandomizedAmyUpgrades(DefaultOnToggle):
-    """Determines whether Amy's upgrades are randomized and sent to the item pool."""
-    display_name = "Randomize Amy's Upgrades"
-
-
-class RandomizedBigUpgrades(DefaultOnToggle):
-    """Determines whether Big's upgrades are randomized and sent to the item pool."""
-    display_name = "Randomize Big's Upgrades"
-
-
-class RandomizedGammaUpgrades(DefaultOnToggle):
-    """Determines whether Gamma's upgrades are randomized and sent to the item pool."""
-    display_name = "Randomize Gamma's Upgrades"
+class RandomizedUpgrades(DefaultOnToggle):
+    """Determines whether upgrades are randomized and sent to the item pool."""
+    display_name = "Randomize Everyone's Upgrades"
 
 
 class BossChecks(DefaultOnToggle):
@@ -435,7 +375,7 @@ class BossChecks(DefaultOnToggle):
     display_name = "Boss Checks"
 
 
-class UnifyChaos4(DefaultOnToggle):
+class UnifyChaos4(Toggle):
     """Determines whether the Chaos 4 fight counts as a single location or three (Sonic, Tails, and Knuckles)."""
     display_name = "Unify Chaos 4"
 
@@ -455,7 +395,7 @@ class FieldEmblemsChecks(DefaultOnToggle):
     display_name = "Field Emblems Checks"
 
 
-class SecretChaoEggs(DefaultOnToggle):
+class SecretChaoEggs(Toggle):
     """Determines whether getting the 3 secret chao eggs grants checks (3 Locations)."""
     display_name = "Secret Chao Egg Checks"
 
@@ -499,43 +439,52 @@ class MissionBlackList(OptionSet):
     valid_keys = [str(i) for i in range(1, 61)] + ["Sonic", "Tails", "Knuckles", "Amy", "Big", "Gamma"]
 
 
-class TwinkleCircuitCheck(DefaultOnToggle):
-    """Determines whether beating Twinkle Circuit grants a check."""
+class TwinkleCircuitChecks(Choice):
+    """
+    Determines whether beating Twinkle Circuit grants a checks
+    Disabled (0): Twinkle Circuit disabled.
+    Enabled (1): Twinkle Circuit enabled (1 location).
+    Enabled Multiple (2): Enable a different track for each character as well (+5 locations).
+    """
     display_name = "Twinkle Circuit Check"
+    option_disabled = 0
+    option_enabled = 1
+    option_enabled_multiple = 2
+    default = 1
+    alias_false = 0
+    alias_true = 1
 
 
-class MultipleTwinkleCircuitChecks(Toggle):
+class SandHillChecks(Choice):
     """
-    If enabled, each character will have their own Twinkle Circuit check (5 extra locations).
-    Only works if Twinkle Circuit Check is enabled.
+    Determines whether beating Sand Hill grants a check:
+    Disabled (0): Sand Hill disabled.
+    Enabled (1): Sand Hill enabled (1 location).
+    Enabled Hard (2): Harder (points-based) Sand Hill mission enabled (+1 location).
     """
-    display_name = "Multiple Twinkle Circuit Checks"
-
-
-class SandHillCheck(DefaultOnToggle):
-    """Determines whether beating Sand Hill grants a check."""
     display_name = "Sand Hill Check"
+    option_disabled = 0
+    option_enabled = 1
+    option_enabled_hard = 2
+    default = 1
+    alias_false = 0
+    alias_true = 1
 
 
-class SandHillCheckHard(Toggle):
+class SkyChaseChecks(Choice):
     """
-    Determines whether beating the harder (points-based) Sand Hill mission grants a check.
-    Only works if Sand Hill Check is enabled.
+    Determines whether beating Sky Chase grants a check:
+    Disabled (0): Sky Chase disabled.
+    Enabled (1): Sky Chase Act 1 and 2 enabled (2 locations).
+    Enabled Hard (2): Harder (points-based) Sky Chase missions enabled (+2 locations).
     """
-    display_name = "Hard Sand Hill Check"
-
-
-class SkyChaseChecks(DefaultOnToggle):
-    """Determines whether beating Sky Chase Act 1 and 2 grants checks (2 Locations)."""
     display_name = "Sky Chase Checks"
-
-
-class SkyChaseChecksHard(Toggle):
-    """
-    Determines whether beating the harder (points-based) Sky Chase Act 1 and 2 missions grants checks (2 Locations).
-    Only works if Sky Chase checks are enabled.
-    """
-    display_name = "Hard Sky Chase Checks"
+    option_disabled = 0
+    option_enabled = 1
+    option_enabled_hard = 2
+    default = 1
+    alias_false = 0
+    alias_true = 1
 
 
 class EnemySanity(Toggle):
@@ -546,34 +495,22 @@ class EnemySanity(Toggle):
     display_name = "Enemy Sanity"
 
 
-class SonicEnemySanity(DefaultOnToggle):
-    """If enemy-sanity is on, determines whether Sonic's enemies are part of the randomizer (308 Locations)."""
-    display_name = "Sonic's Enemy Sanity"
+class EnemySanityList(OptionSet):
+    """
+    Determines which enemies are included in enemy-sanity.
+    Character names are used as values
+    """
+    display_name = "EnemySanityList"
+    default = {'Sonic', 'Tails', 'Knuckles', 'Amy', 'Big', 'Gamma'}
+    valid_keys = ['Sonic', 'Tails', 'Knuckles', 'Amy', 'Big', 'Gamma']
 
 
-class TailsEnemySanity(DefaultOnToggle):
-    """If enemy-sanity is on, determines whether Tails' enemies are part of the randomizer (46 Locations)."""
-    display_name = "Tails' Enemy Sanity"
-
-
-class KnucklesEnemySanity(DefaultOnToggle):
-    """If enemy-sanity is on, determines whether Knuckles' enemies are part of the randomizer (80 Locations)."""
-    display_name = "Knuckles' Enemy Sanity"
-
-
-class AmyEnemySanity(DefaultOnToggle):
-    """If enemy-sanity is on, determines whether Amy's enemies are part of the randomizer (54 Locations)."""
-    display_name = "Amy's Enemy Sanity"
-
-
-class BigEnemySanity(DefaultOnToggle):
-    """If enemy-sanity is on, determines whether Big's enemies are part of the randomizer (12 Locations)."""
-    display_name = "Big's Enemy Sanity"
-
-
-class GammaEnemySanity(DefaultOnToggle):
-    """If enemy-sanity is on, determines whether Gamma's enemies are part of the randomizer (210 Locations)."""
-    display_name = "Gamma's Enemy Sanity"
+class MissableEnemies(DefaultOnToggle):
+    """Determines whether enemies in missable locations grant checks. This includes:
+    - Enemies in the Casinopolis Sewers (Sonic and Tails)
+    - Enemies in the Kart section of Sonic's Twinkle Park
+    """
+    display_name = "Include Missable Capsules"
 
 
 class CapsuleSanity(Toggle):
@@ -584,59 +521,40 @@ class CapsuleSanity(Toggle):
     display_name = "Capsule Sanity"
 
 
+class CapsuleSanityList(OptionSet):
+    """
+    Determines which capsules are included in capsule-sanity.
+    You can sue Character name and capsule type as values.
+    X-Life, X-Shield, X-PowerUp, and X-Ring with X being the character name (i.e. 'Sonic-PowerUp')
+    """
+    display_name = "CapsuleSanityList"
+    default = {'Sonic-Life', 'Sonic-Shield', 'Sonic-PowerUp', 'Sonic-Ring',
+               'Tails-Life', 'Tails-Shield', 'Tails-PowerUp', 'Tails-Ring',
+               'Knuckles-Life', 'Knuckles-Shield', 'Knuckles-PowerUp', 'Knuckles-Ring',
+               'Amy-Life', 'Amy-Shield', 'Amy-PowerUp', 'Amy-Ring',
+               'Big-Life', 'Big-Shield', 'Big-PowerUp', 'Big-Ring',
+               'Gamma-Life', 'Gamma-Shield', 'Gamma-PowerUp', 'Gamma-Ring'}
+    valid_keys = ['Sonic-Life', 'Sonic-Shield', 'Sonic-PowerUp', 'Sonic-Ring',
+                  'Tails-Life', 'Tails-Shield', 'Tails-PowerUp', 'Tails-Ring',
+                  'Knuckles-Life', 'Knuckles-Shield', 'Knuckles-PowerUp', 'Knuckles-Ring',
+                  'Amy-Life', 'Amy-Shield', 'Amy-PowerUp', 'Amy-Ring',
+                  'Big-Life', 'Big-Shield', 'Big-PowerUp', 'Big-Ring',
+                  'Gamma-Life', 'Gamma-Shield', 'Gamma-PowerUp', 'Gamma-Ring']
+
+
+class MissableCapsules(DefaultOnToggle):
+    """Determines whether capsules in missable locations grant checks. This includes:
+    - Capsules in the Casinopolis Sewers (Sonic and Tails)
+    - Capsules in the Kart section of Sonic's Twinkle Park
+    - Capsules in the 'Going Down?' section of Sonic's Speed Highway
+    - Capsules in the Boulder section of Sonic's Lost World
+    """
+    display_name = "Include Missable Capsules"
+
+
 class PinballCapsules(Toggle):
     """Determines whether pinball's capsules grant checks (5 Locations)."""
     display_name = "Include Pinball's Capsules"
-
-
-class SonicCapsuleSanity(DefaultOnToggle):
-    """If capsule-sanity is on, determines whether Sonic's capsules are part of the randomizer (360 Locations)."""
-    display_name = "Sonic's Capsule Sanity"
-
-
-class TailsCapsuleSanity(DefaultOnToggle):
-    """If capsule-sanity is on, determines whether Tails' capsules are part of the randomizer (111 Locations)."""
-    display_name = "Tails' Capsule Sanity"
-
-
-class KnucklesCapsuleSanity(DefaultOnToggle):
-    """If capsule-sanity is on, determines whether Knuckles' capsules are part of the randomizer (66 Locations)."""
-    display_name = "Knuckles' Capsule Sanity"
-
-
-class AmyCapsuleSanity(DefaultOnToggle):
-    """If capsule-sanity is on, determines whether Amy's capsules are part of the randomizer (53 Locations)."""
-    display_name = "Amy's Capsule Sanity"
-
-
-class BigCapsuleSanity(DefaultOnToggle):
-    """If capsule-sanity is on, determines whether Big's capsules are part of the randomizer (26 Locations)."""
-    display_name = "Big's Capsule Sanity"
-
-
-class GammaCapsuleSanity(DefaultOnToggle):
-    """If capsule-sanity is on, determines whether Gamma's capsules are part of the randomizer (76 Locations)."""
-    display_name = "Gamma's Capsule Sanity"
-
-
-class LifeCapsuleSanity(DefaultOnToggle):
-    """If capsule-sanity is on, the randomizer will include Life Capsules (103 Locations)."""
-    display_name = "Life Capsule Sanity"
-
-
-class ShieldCapsuleSanity(DefaultOnToggle):
-    """If capsule-sanity is on, the randomizer will include  Shields and Magnetic Shields (78 Locations)."""
-    display_name = "Shield Capsule Sanity"
-
-
-class PowerUpCapsuleSanity(DefaultOnToggle):
-    """If capsule-sanity is on, the randomizer will include Invincibility, Speed Up and Bomb Capsules (70 Locations)."""
-    display_name = "Power Up Capsule Sanity"
-
-
-class RingCapsuleSanity(DefaultOnToggle):
-    """If capsule-sanity is on, the randomizer will include 5, 10 and ? capsules (441 Locations)."""
-    display_name = "Ring Capsule Sanity"
 
 
 class FishSanity(Toggle):
@@ -780,17 +698,13 @@ class SonicAdventureDXOptions(PerGameCommonOptions):
     logic_level: LogicLevel
     starting_character: StartingCharacterOption
     starting_location: StartingLocationOption
-    random_starting_location_per_character: RandomStartingLocationPerCharacter
-    guaranteed_starting_checks: GuaranteedStartingChecks
     entrance_randomizer: EntranceRandomizer
-    level_entrance_plando: LevelEntrancePlando
+    gating_mode: GatingMode
 
     death_link: DeathLink
     send_death_link_chance: SendDeathLinkChance
     receive_death_link_chance: ReceiveDeathLinkChance
     ring_link: RingLink
-    casinopolis_ring_link: CasinopolisRingLink
-    hard_ring_link: HardRingLink
     ring_loss: RingLoss
     trap_link: TrapLink
 
@@ -813,12 +727,7 @@ class SonicAdventureDXOptions(PerGameCommonOptions):
     music_shuffle_consistency: MusicShuffleConsistency
     life_capsules_change_songs: LifeCapsulesChangeSongs
 
-    randomized_sonic_upgrades: RandomizedSonicUpgrades
-    randomized_tails_upgrades: RandomizedTailsUpgrades
-    randomized_knuckles_upgrades: RandomizedKnucklesUpgrades
-    randomized_amy_upgrades: RandomizedAmyUpgrades
-    randomized_big_upgrades: RandomizedBigUpgrades
-    randomized_gamma_upgrades: RandomizedGammaUpgrades
+    randomized_upgrades: RandomizedUpgrades
 
     boss_checks: BossChecks
     unify_chaos4: UnifyChaos4
@@ -832,35 +741,18 @@ class SonicAdventureDXOptions(PerGameCommonOptions):
     mission_mode_checks: MissionChecks
     auto_start_missions: AutoStartMissions
     mission_blacklist: MissionBlackList
-    twinkle_circuit_check: TwinkleCircuitCheck
-    twinkle_circuit_multiple_check: MultipleTwinkleCircuitChecks
-    sand_hill_check: SandHillCheck
-    sand_hill_check_hard: SandHillCheckHard
+    twinkle_circuit_checks: TwinkleCircuitChecks
+    sand_hill_checks: SandHillChecks
     sky_chase_checks: SkyChaseChecks
-    sky_chase_checks_hard: SkyChaseChecksHard
 
     enemy_sanity: EnemySanity
-    sonic_enemy_sanity: SonicEnemySanity
-    tails_enemy_sanity: TailsEnemySanity
-    knuckles_enemy_sanity: KnucklesEnemySanity
-    amy_enemy_sanity: AmyEnemySanity
-    big_enemy_sanity: BigEnemySanity
-    gamma_enemy_sanity: GammaEnemySanity
+    enemy_sanity_list: EnemySanityList
+    missable_enemies: MissableEnemies
 
     capsule_sanity: CapsuleSanity
+    capsule_sanity_list: CapsuleSanityList
+    missable_capsules: MissableCapsules
     pinball_capsules: PinballCapsules
-
-    sonic_capsule_sanity: SonicCapsuleSanity
-    tails_capsule_sanity: TailsCapsuleSanity
-    knuckles_capsule_sanity: KnucklesCapsuleSanity
-    amy_capsule_sanity: AmyCapsuleSanity
-    big_capsule_sanity: BigCapsuleSanity
-    gamma_capsule_sanity: GammaCapsuleSanity
-
-    life_capsule_sanity: LifeCapsuleSanity
-    shield_capsule_sanity: ShieldCapsuleSanity
-    powerup_capsule_sanity: PowerUpCapsuleSanity
-    ring_capsule_sanity: RingCapsuleSanity
 
     fish_sanity: FishSanity
     lazy_fishing: LazyFishing
@@ -879,10 +771,11 @@ class SonicAdventureDXOptions(PerGameCommonOptions):
     traps_and_filler_on_boss_fights: TrapsAndFillerOnBossFights
     traps_and_filler_on_perfect_chaos_fight: TrapsAndFillerOnPerfectChaosFight
 
-    progression_balancing: SADXProgressionBalancing
 
 sadx_option_groups = [
     OptionGroup("General Options", [
+        LogicLevel,
+        GatingMode,
         GoalRequiresLevels,
         LevelPercentage,
         GoalRequiresChaosEmeralds,
@@ -894,20 +787,12 @@ sadx_option_groups = [
         GoalRequiresBosses,
         BossPercentage,
         GoalRequiresChaoRaces,
-        LogicLevel,
         StartingCharacterOption,
         StartingLocationOption,
-        RandomStartingLocationPerCharacter,
-        GuaranteedStartingChecks,
         EntranceRandomizer,
-        LevelEntrancePlando,
         SendDeathLinkChance,
         ReceiveDeathLinkChance,
-        RingLink,
-        CasinopolisRingLink,
-        HardRingLink,
         RingLoss,
-        TrapLink,
     ]),
     OptionGroup("Characters Options", [
         PlayableSonic,
@@ -931,21 +816,27 @@ sadx_option_groups = [
         MusicShuffleConsistency,
         LifeCapsulesChangeSongs,
     ]),
-    OptionGroup("Upgrade Options", [
-        RandomizedSonicUpgrades,
-        RandomizedTailsUpgrades,
-        RandomizedKnucklesUpgrades,
-        RandomizedAmyUpgrades,
-        RandomizedBigUpgrades,
-        RandomizedGammaUpgrades,
-    ]),
     OptionGroup("Bosses Options", [
         BossChecks,
         UnifyChaos4,
         UnifyChaos6,
         UnifyEggHornet,
     ]),
+
+    OptionGroup("Sanity Options", [
+        EnemySanity,
+        EnemySanityList,
+        MissableEnemies,
+        CapsuleSanity,
+        CapsuleSanityList,
+        MissableCapsules,
+        PinballCapsules,
+        FishSanity,
+        LazyFishing,
+    ]),
+
     OptionGroup("Extra locations", [
+        RandomizedUpgrades,
         FieldEmblemsChecks,
         SecretChaoEggs,
         ChaoRacesChecks,
@@ -953,34 +844,11 @@ sadx_option_groups = [
         MissionChecks,
         AutoStartMissions,
         MissionBlackList,
-        TwinkleCircuitCheck,
-        MultipleTwinkleCircuitChecks,
-        SandHillCheck,
-        SandHillCheckHard,
+        TwinkleCircuitChecks,
+        SandHillChecks,
         SkyChaseChecks,
-        SkyChaseChecksHard,
-        EnemySanity,
-        SonicEnemySanity,
-        TailsEnemySanity,
-        KnucklesEnemySanity,
-        AmyEnemySanity,
-        BigEnemySanity,
-        GammaEnemySanity,
-        CapsuleSanity,
-        PinballCapsules,
-        SonicCapsuleSanity,
-        TailsCapsuleSanity,
-        KnucklesCapsuleSanity,
-        AmyCapsuleSanity,
-        BigCapsuleSanity,
-        GammaCapsuleSanity,
-        LifeCapsuleSanity,
-        ShieldCapsuleSanity,
-        PowerUpCapsuleSanity,
-        RingCapsuleSanity,
-        FishSanity,
-        LazyFishing,
     ]),
+
     OptionGroup("Junk Options", [
         JunkFillPercentage,
         TrapFillPercentage,

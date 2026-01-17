@@ -1,9 +1,9 @@
 {
   "Player's House": "Progressive Player's House",
-  "Player's Storage": "Progressive Player's House",
-  "Renee":  "Progressive Player's House",
-  "Player's Llama": "Progressive Player's House",
   "Player's Keg": "Progressive Player's House",
+  "Player's Storage": "Progressive Player's House",
+  "Renee": "Progressive Player's House",
+  "Player's Llama": "Progressive Player's House",
   "Player's Chimney": "Progressive Player's House",
   "Stray Cat":  "Progressive Player's House",
 
@@ -29,11 +29,11 @@
   "Paige": "Progressive Paige's House",
   "Paige's Fence": "Progressive Paige's House",
   "Paige's Lamp": "Progressive Paige's House",
-  "Wheels": "Progressive Paige's House",
+  "Paige's Wheels": "Progressive Paige's House",
 
   "Claude's House": "Progressive Claude's House",
   "Claude's Cabin": "Progressive Claude's House",
-  "Candy Box": "Progressive Claude's House",
+  "Claude's Candy Box": "Progressive Claude's House",
   "Claude": "Progressive Claude's House",
   "Claude's Fence": "Progressive Claude's House",
   "Claude's Lamp": "Progressive Claude's House",
@@ -41,7 +41,7 @@
 
   "Hag's House": "Progressive Hag's House",
   "Hag's Cabin": "Progressive Hag's House",
-  "Hags' Jar": "Progressive Hag's House",
+  "Hag's Jar": "Progressive Hag's House",
   "Hag": "Progressive Hag's House",
   "Hag's Bench": "Progressive Hag's House",
   "Hag's Lamp": "Progressive Hag's House",
@@ -50,8 +50,8 @@
   "Alnet's House": "Progressive Alnet's House",
   "Alnet's Stairway": "Progressive Alnet's House",
   "Alnet's Cabin": "Progressive Alnet's House",
-  "Alnet": "Progressive Alnet's House",
   "Carl": "Progressive Alnet's House",
+  "Alnet": "Progressive Alnet's House",
   "Alnet's Llama": "Progressive Alnet's House",
   "Alnet's Lamp": "Progressive Alnet's House",
 
@@ -131,15 +131,15 @@
   "Gob's Tree": "Progressive Gob's House",
 
   "Mushroom House": "Progressive Mushroom House",
-  "Second Floor": "Progressive Mushroom House",
-  "Ro": "Progressive Mushroom House",
+  "Mushroom Second Floor": "Progressive Mushroom House",
   "Annie": "Progressive Mushroom House",
+  "Ro": "Progressive Mushroom House",
   "Mushroom Torch": "Progressive Mushroom House",
   "Mushroom Sign": "Progressive Mushroom House",
-  "Balcony": "Progressive Mushroom House",
+  "Mushroom Balcony": "Progressive Mushroom House",
 
   "Wise Owl Shop": "Progressive Owl Shop",
-  "Owl Shop Entrance": "Progressive Owl Shop",
+  "Wise Owl Shop Entrance": "Progressive Owl Shop",
   "Mr. Moustache": "Progressive Owl Shop",
   "Wise Owl Torch": "Progressive Owl Shop",
   "Wise Owl Sign": "Progressive Owl Shop",
@@ -186,9 +186,9 @@
 
   "Ruty's Store": "Progressive Ruty's Store",
   "Ruty": "Progressive Ruty's Store",
-  "Pushcart (Fish) 1": "Progressive Ruty's Store",
-  "Pushcart (Fish) 2": "Progressive Ruty's Store",
-  "Pushcart (Fish) 3": "Progressive Ruty's Store",
+  "Ruty's Pushcart 1": "Progressive Ruty's Store",
+  "Ruty's Pushcart 2": "Progressive Ruty's Store",
+  "Ruty's Pushcart 3": "Progressive Ruty's Store",
 
   "Suzy's Store": "Progressive Suzy's Store",
   "Suzy's Pushcart": "Progressive Suzy's Store",
@@ -198,10 +198,10 @@
   "Suzy's Lamp": "Progressive Suzy's Store",
 
   "Lana's Store": "Progressive Lana's Store",
-  "Pushcart (Fruit) 2": "Progressive Lana's Store",
-  "Pushcart (Fruit) 3": "Progressive Lana's Store",
+  "Lana's Pushcart 2": "Progressive Lana's Store",
+  "Lana's Pushcart 3": "Progressive Lana's Store",
   "Lana": "Progressive Lana's Store",
-  "Pushcart (Fruit) 1": "Progressive Lana's Store",
+  "Lana's Pushcart 1": "Progressive Lana's Store",
 
   "Jack's Store": "Progressive Jack's Store",
   "Jack's Annex Room": "Progressive Jack's Store",
@@ -219,30 +219,30 @@
   "Joker's Lamp": "Progressive Joker's House",
 
   "Divining House": "Progressive Divining House",
-  "Snake": "Progressive Divining House",
+  "Divining House Snake": "Progressive Divining House",
   "Yaya": "Progressive Divining House",
-  "Yaya's Sign": "Progressive Divining House",
+  "Divining House Sign": "Progressive Divining House",
 
   "Cathedral": "Progressive Cathedral",
   "Phil": "Progressive Cathedral",
-  "Hat Shaped Roof": "Progressive Cathedral",
+  "Cathedral's Hat Shaped Roof": "Progressive Cathedral",
   "Cathedral's Torch": "Progressive Cathedral",
-  "Holy Mark": "Progressive Cathedral",
+  "Cathedral's Holy Mark": "Progressive Cathedral",
 
   "Basker's Store": "Progressive Basker's Store",
   "Basker's Second Floor": "Progressive Basker's Store",
+  "Basker": "Progressive Basker's Store",
   "Basker's Chimney": "Progressive Basker's Store",
   "Basker's Sunshade": "Progressive Basker's Store",
-  "Basker": "Progressive Basker's Store",
   "Basker's Sign": "Progressive Basker's Store",
   "Basker's Lamp": "Progressive Basker's Store",
 
   "King's Hideout": "Progressive King's Hideout",
   "King's Sunshade": "Progressive King's Hideout",
-  "Car": "Progressive King's Hideout",
+  "King's Car": "Progressive King's Hideout",
   "Jake": "Progressive King's Hideout",
-  "Stu": "Progressive King's Hideout",
   "King": "Progressive King's Hideout",
+  "Stu": "Progressive King's Hideout",
   "King's Lamp": "Progressive King's Hideout",
 
   "Sheriff's Office": "Progressive Sheriff's Office",
@@ -253,14 +253,14 @@
   "Bicycle": "Progressive Sheriff's Office",
   "Sheriff's Sign": "Progressive Sheriff's Office",
 
-  "Fountain": "Progressive Fountain",
-  "Water's Surface": "Progressive Fountain",
-  "Pillar": "Progressive Fountain",
-  "Spout": "Progressive Fountain",
+  "Queens Fountain": "Progressive Queens Fountain",
+  "Queens Fountain Water's Surface": "Progressive Queens Fountain",
+  "Queens Fountain Pillar": "Progressive Queens Fountain",
+  "Queens Fountain Spout": "Progressive Queens Fountain",
 
   "Leaning Tower": "Progressive Leaning Tower",
-  "Tower Second Floor": "Progressive Leaning Tower",
-  "Tower Third Floor": "Progressive Leaning Tower",
+  "Leaning Tower Second Floor": "Progressive Leaning Tower",
+  "Leaning Tower Third Floor": "Progressive Leaning Tower",
 
 
 
@@ -306,11 +306,11 @@
   "Enga's Odds & Ends": "Progressive Enga's House",
   "Enga's Roof": "Progressive Enga's House",
 
-  "Prisoner's Cabin": "Progressive Prisoner's Cabin",
-  "Gron": "Progressive Prisoner's Cabin",
-  "Prisoner's Mini Totem Pole": "Progressive Prisoner's Cabin",
-  "Prisoner's Stairway": "Progressive Prisoner's Cabin",
-  "Prisoner's Sign": "Progressive Prisoner's Cabin",
+  "Prisoner Cabin": "Progressive Prisoner Cabin",
+  "Gron": "Progressive Prisoner Cabin",
+  "Prisoner's Mini Totem Pole": "Progressive Prisoner Cabin",
+  "Prisoner's Stairway": "Progressive Prisoner Cabin",
+  "Prisoner's Sign": "Progressive Prisoner Cabin",
 
   "Toto's House": "Progressive Toto's House",
   "Toto": "Progressive Toto's House",

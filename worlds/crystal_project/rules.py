@@ -1,17 +1,17 @@
-from .options import CrystalProjectOptions
-from .constants.keys import *
-from .constants.key_items import *
-from .constants.mounts import *
-from .constants.teleport_stones import *
-from .constants.ap_regions import *
+from BaseClasses import CollectionState
 from .constants.display_regions import *
+from .constants.item_groups import *
 from .constants.jobs import SCHOLAR_JOB
+from .constants.key_items import *
+from .constants.keys import *
+from .constants.level_requirements import *
+from .constants.mounts import *
 from .constants.region_passes import *
 from .constants.scholar_abilities import REVERSE_POLARITY
-from .constants.item_groups import *
-from .constants.level_requirements import *
+from .constants.teleport_stones import *
 from .items import singleton_keys
-from BaseClasses import CollectionState
+from .options import CrystalProjectOptions
+
 
 class CrystalProjectLogic:
     player: int
@@ -47,15 +47,14 @@ class CrystalProjectLogic:
 
     def has_rental_quintar(self, state: CollectionState, rental_display_region_name: str) -> bool:
         #Using the display region for this check bc it's least likely to change and equivalent in function in this case
-        has_rental_quintar: bool = False
-        
+
         #If you have Owl Drum or Quintar Flute you're just good to go
         if self.has_horizontal_movement(state):
             has_rental_quintar = True
         #If not we check for Quintar Pass and access to the rental location
         else:
             has_rental_quintar = state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player) or state.has(PROGRESSIVE_MOUNT, self.player)
-            if self.options.regionsanity.value != self.options.regionsanity.option_disabled:
+            if not self.is_regionsanity_disabled():
                 if rental_display_region_name == ROLLING_QUINTAR_FIELDS_DISPLAY_NAME and not state.has(ROLLING_QUINTAR_FIELDS_PASS, self.player):
                     has_rental_quintar = False
                 if rental_display_region_name == SARA_SARA_BAZAAR_DISPLAY_NAME and not state.has(SARA_SARA_BAZAAR_PASS, self.player):
@@ -84,17 +83,32 @@ class CrystalProjectLogic:
     def has_swimming(self, state: CollectionState) -> bool:
         return state.has(PROGRESSIVE_SALMON_VIOLA, self.player) or state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3)  or state.has(PROGRESSIVE_MOUNT, self.player, 5)
 
+    def fish_race_requirements(self, state: CollectionState, is_rental_salmon_enough: bool = False) -> bool:
+        if is_rental_salmon_enough:
+            return state.has(SALMON_RIVER_PASS, self.player) or self.options.regionsanity.value == self.options.regionsanity.option_disabled
+        else:
+            return (state.has(PROGRESSIVE_SALMON_VIOLA, self.player) or state.has(PROGRESSIVE_MOUNT, self.player, 5)) and (state.has(SALMON_RIVER_PASS, self.player) or self.options.regionsanity.value == self.options.regionsanity.option_disabled)
+
     def has_golden_quintar(self, state: CollectionState) -> bool:
         return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3) or state.has(PROGRESSIVE_MOUNT, self.player, 7)
 
-    def obscure_routes_on(self, state: CollectionState) -> bool:
+    def obscure_routes_on(self) -> bool:
         return self.options.obscure_routes.value == self.options.obscure_routes.option_true
 
-    def new_world_requirements(self, state: CollectionState) -> bool:
-        if self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley:
-            return self.has_jobs(state, self.options.new_world_stone_job_quantity.value)
-        else:
-            return state.has(NEW_WORLD_STONE, self.player)
+    def is_hop_to_it_at_least_fancy_footwork(self) -> bool:
+        return self.options.hop_to_it.value >= self.options.hop_to_it.option_fancy_footwork
+
+    def is_hop_to_it_at_least_one_hop_beyond(self) -> bool:
+        return self.options.hop_to_it.value >= self.options.hop_to_it.option_one_hop_beyond
+
+    def is_hop_to_it_pray(self) -> bool:
+        return self.options.hop_to_it.value == self.options.hop_to_it.option_pray
+
+    def is_regionsanity_disabled(self) -> bool:
+        return self.options.regionsanity.value == self.options.regionsanity.option_disabled
+
+    def is_regionsanity_extreme(self) -> bool:
+        return self.options.regionsanity.value == self.options.regionsanity.option_extreme
 
     def old_world_requirements(self, state: CollectionState) -> bool:
         if self.options.goal.value == self.options.goal.option_true_astley:
@@ -102,17 +116,20 @@ class CrystalProjectLogic:
         else:
             return state.has(OLD_WORLD_STONE, self.player)
 
-    def is_area_in_level_range(self, state: CollectionState, min_level: int) -> bool:
-        min_level = min_level + self.options.level_compared_to_enemies.value
+    def get_progressive_level_count(self, expected_level: int) -> int:
+        expected_level += self.options.level_compared_to_enemies.value
 
-        if min_level > self.options.max_level.value:
-            min_level = self.options.max_level.value
+        if expected_level > self.options.max_level.value:
+            expected_level = self.options.max_level.value
 
-        # Players start with 1 Progressive Level
-        count = ((min_level - 1) // self.options.progressive_level_size.value) + 1
+        expected_level -= self.options.starting_level.value
 
+        count = ((expected_level - 1) // self.options.progressive_level_size.value) + 1
+        return count
+
+    def is_area_in_level_range(self, state: CollectionState, level: int) -> bool:
         if not self.options.level_gating.value == self.options.level_gating.option_none:
-            return state.has(PROGRESSIVE_LEVEL, self.player, count)
+            return state.has(PROGRESSIVE_LEVEL, self.player, self.get_progressive_level_count(level))
 
         return True
 
@@ -160,7 +177,11 @@ class CrystalProjectLogic:
         else:
             return False
 
+    ap_regions_that_cant_earn_money: list[str] = [MENU_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, IBEK_CAVE_MOUTH_AP_REGION, BELOW_IBEK_CAVE_MOUTH_AP_REGION, BELOW_IBEK_CAVE_EAST_AP_REGION,
+                                                  BELOW_IBEK_CAVE_WEST_AP_REGION, MODDED_ZONE_AP_REGION]
+
     def can_earn_money(self, state: CollectionState, shop_ap_region: str) -> bool:
+        #Note: this rule is also used for the Sara Sara Bazaar innkeeper bc he charges money
         if shop_ap_region == MERCURY_SHRINE_AP_REGION:
             return True
 
@@ -178,9 +199,10 @@ class CrystalProjectLogic:
 
             #checking if the player has access to money-earning zones that are higher than 6 regions below the shop's region, to make sure they're not expected to grind Spawning Meadows enemies
             #to buy something in Neptune Shrine
-            if current_display_region_index > (shop_region_index - 6) and ap_region.can_reach(state) and ap_region.name != MENU_AP_REGION and ap_region.name != MODDED_ZONE_AP_REGION:
+            if current_display_region_index > (shop_region_index - 6) and ap_region.can_reach(state) and ap_region.name not in self.ap_regions_that_cant_earn_money:
                 enemy_level = display_region_levels_dictionary[ap_region_to_display_region_dictionary[ap_region.name]][0]
-                if enemy_level > 0 or (ap_region.name == CAPITAL_SEQUOIA_AP_REGION and self.is_area_in_level_range(state, CAPITAL_SEQUOIA_ENEMY_LEVEL)) or (ap_region.name == QUINTAR_RESERVE_AP_REGION and self.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)):
+                if (enemy_level > 0 or (ap_region.name == CAPITAL_SEQUOIA_AP_REGION and self.is_area_in_level_range(state, CAPITAL_SEQUOIA_ENEMY_LEVEL)) or
+                        (ap_region.name == QUINTAR_RESERVE_AP_REGION and self.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL))):
                     has_combat = True
                     break
 

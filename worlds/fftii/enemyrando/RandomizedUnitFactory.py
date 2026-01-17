@@ -1,6 +1,6 @@
 from random import Random
 
-from worlds.fftii.enemyrando.RandomizedUnits import RandomizedUnit
+from .RandomizedUnits import RandomizedUnit
 
 
 class RandomizedUnitFactory:
@@ -20,5 +20,5 @@ class RandomizedUnitFactory:
         if difficulty < self.get_lowest_difficulty():
             return None
         eligible_units = {unit: self.units[unit] for unit in self.units.keys() if self.units[unit] <= difficulty}
-        chosen_unit: type[RandomizedUnit] = self.random.sample(eligible_units, k=1, counts=eligible_units.values()).pop()
+        chosen_unit: type[RandomizedUnit] = self.random.sample(list(eligible_units), k=1, counts=eligible_units.values()).pop()
         return chosen_unit

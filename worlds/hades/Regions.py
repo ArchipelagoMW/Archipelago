@@ -33,7 +33,7 @@ def create_main_weapon_regions(ctx, weaponSubfix : str, subfixCounter : int, loc
         
     styx["Beat Hades " + weaponSubfix] = None
 
-    if (not ctx.options.disable_late_styx_scribe):
+    if (not ctx.options.disable_late_styx):
         for i in range(55, 72):
             styx_late["Clear Room " + str(i + 1) + " " + weaponSubfix] = hades_base_location_id + 1073 + i \
                 + 73 * subfixCounter

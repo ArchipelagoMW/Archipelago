@@ -8,11 +8,12 @@ from typing import Dict, List, ClassVar, Any, Mapping
 from BaseClasses import Tutorial, MultiWorld, CollectionState, Item, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from Options import OptionError
+from .aesthetics import split_auto_string
 from .items import (lookup_item_to_id, item_table, item_groups, KSSItem, filler_item_weights, copy_abilities,
                     sub_games, dyna_items, planets, treasures, sub_game_completion)
 from .locations import location_table, KSSLocation
 from .names import item_names
-from .options import KSSOptions, subgame_mapping, IncludedSubgames, Consumables
+from .options import KSSOptions, subgame_mapping, IncludedSubgames, Consumables, KirbyFlavorPreset
 from .regions import create_regions
 from .rom import KSS_UHASH, KSSProcedurePatch, patch_rom, KSS_VCHASH
 from .rules import set_rules
@@ -82,7 +83,7 @@ class KSSWorld(World):
                                F"adding to included subgames")
                 self.options.included_subgames.value.add(game)
 
-        if self.options.starting_subgame.current_option_name not in self.options.included_subgames:
+        if subgame_mapping[self.options.starting_subgame.value] not in self.options.included_subgames:
             logger.warning(f"Kirby Super Star ({self.player_name}): Starting subgame not included, choosing random.")
             self.options.starting_subgame.value = self.random.choice([value[0] for value in subgame_mapping.items()
                                                                       if value[1] in self.options.included_subgames])
@@ -108,6 +109,21 @@ class KSSWorld(World):
                 self.options.the_great_cave_offensive_gold_thresholds.value["Garden"] =\
                     self.options.the_great_cave_offensive_gold_thresholds["Old Tower"]
                 self.options.the_great_cave_offensive_gold_thresholds.value["Old Tower"] = temp
+
+        # aesthetics validation
+        flavor = self.options.kirby_flavor_preset.value
+        if isinstance(flavor, str):
+            if flavor not in KirbyFlavorPreset.options:
+                # we're dealing with either a custom preset or auto-string
+                if flavor not in self.options.kirby_flavors.value:
+                    # either invalid, or auto-string
+                    split_auto_string(flavor) # this will raise an exception if invalid
+        elif isinstance(flavor, dict):
+            for val in flavor.values():
+                if val not in KirbyFlavorPreset.options:
+                    if val not in self.options.kirby_flavors.value:
+                        split_auto_string(val)
+
 
         # proper UT support
         if hasattr(self.multiworld, "generation_is_fake"):

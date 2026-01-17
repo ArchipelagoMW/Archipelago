@@ -5,8 +5,7 @@ from typing import Any
 from BaseClasses import Item, ItemClassification, MultiWorld, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, launch_subprocess, Type
-from .DoorUnlocks import place_door_unlock_items, place_vanilla_door_unlock_items, \
-    shuffle_door_unlock_items, vanilla_door_unlock_info_list
+from .DoorUnlocks import place_door_unlock_items, set_door_unlock_requirements, vanilla_door_unlock_info_list
 from .Items import ALL_ITEM_TABLE, DiddyKongRacingItem, ITEM_NAME_GROUPS
 from .Locations import ALL_LOCATION_TABLE
 from .Names import ItemName, LocationName, RegionName
@@ -39,7 +38,7 @@ class DiddyKongRacingWorld(World):
     """Diddy Kong Racing is a kart racing game with a story mode, complete with bosses and hidden collectibles."""
 
     game = "Diddy Kong Racing"
-    apworld_version = "DKRv1.1.1"
+    apworld_version = "DKRv1.1.3"
     web = DiddyKongRacingWeb()
     topology_preset = True
     item_name_to_id = {}
@@ -54,14 +53,14 @@ class DiddyKongRacingWorld(World):
     options: DiddyKongRacingOptions
     origin_region_name: str = RegionName.TIMBERS_ISLAND
     slot_data: dict[str, Any] = {}
-    track_versions: list[bool]
-    music: list[int] = list(range(20))
-    entrance_order: list[int] = list(range(20))
-    door_unlock_requirements: list[int] = [0] * len(vanilla_door_unlock_info_list)
     found_entrances_datastorage_key: list[str] = []
 
     def __init__(self, world: MultiWorld, player: int) -> None:
         super(DiddyKongRacingWorld, self).__init__(world, player)
+        self.track_versions: list[bool]
+        self.music: list[int] = list(range(20))
+        self.entrance_order: list[int] = list(range(20))
+        self.door_unlock_requirements: list[int] = [0] * len(vanilla_door_unlock_info_list)
 
     def create_regions(self) -> None:
         create_regions(self)
@@ -76,11 +75,7 @@ class DiddyKongRacingWorld(World):
 
         # Skip for Universal Tracker, this will be done from slot_data
         if not hasattr(self.multiworld, "generation_is_fake"):
-            if self.options.shuffle_door_requirements:
-                shuffle_door_unlock_items(self)
-            else:
-                place_vanilla_door_unlock_items(self)
-
+            set_door_unlock_requirements(self)
             place_door_unlock_items(self)
 
     def set_rules(self) -> None:

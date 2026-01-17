@@ -6,11 +6,12 @@ import os
 import random
 import string
 import threading
-from typing import Any, ClassVar
+from typing import ClassVar
 
 from typing_extensions import override
 
 from BaseClasses import Item, Location, Region, MultiWorld, ItemClassification, Tutorial
+from NetUtils import MultiData
 from .id_maps import item_name_to_id, location_name_to_id
 from .item_rewards import build_ir_from_placements, get_item_rewards, limit_event_items
 from .gen_data import GenData
@@ -669,7 +670,7 @@ class FF6WCWorld(World):
         logging.debug(f"FF6WC player {self.player} finished generate_output")
 
     @override
-    def modify_multidata(self, multidata: dict[str, Any]) -> None:
+    def modify_multidata(self, multidata: MultiData) -> None:
         import base64
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()

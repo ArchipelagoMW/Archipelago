@@ -26,6 +26,7 @@ Bethla.locations = [
     FFTLocation(LocationNames.BETHLA_NORTH_STORY, battle_level=12),
     FFTLocation(LocationNames.BETHLA_SOUTH_STORY, battle_level=12),
     FFTLocation(LocationNames.BETHLA_SLUICE_STORY, battle_level=12),
+    FFTLocation(LocationNames.BETHLA_SLUICE_STONE, battle_level=12),
     FFTLocation(LocationNames.BETHLA_SHOP, battle_level=12),
     FFTLocation(LocationNames.ORLANDU_RECRUIT, battle_level=12)
 ]
@@ -48,6 +49,8 @@ Limberry.locations = [
     FFTLocation(LocationNames.LIMBERRY_1_STORY, battle_level=13),
     FFTLocation(LocationNames.LIMBERRY_2_STORY, battle_level=13),
     FFTLocation(LocationNames.LIMBERRY_3_STORY, battle_level=13),
+    FFTLocation(LocationNames.LIMBERRY_3_STONE_1, battle_level=13),
+    FFTLocation(LocationNames.LIMBERRY_3_STONE_2, battle_level=13),
     FFTLocation(LocationNames.LIMBERRY_SHOP, battle_level=13),
     FFTLocation(LocationNames.MELIADOUL_RECRUIT, battle_level=13)
 ]

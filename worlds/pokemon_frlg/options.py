@@ -1001,7 +1001,7 @@ class ForceFullyEvolved(NamedRange):
     """
     display_name = "Force Fully Evolved"
     default = 0
-    range_start = 1
+    range_start = -1
     range_end = 100
     special_range_names = {
         "never": 0,
@@ -1337,7 +1337,7 @@ class HmCompatibility(NamedRange):
     """
     display_name = "HM Compatibility"
     default = -1
-    range_start = 0
+    range_start = -1
     range_end = 100
     special_range_names = {
         "vanilla": -1,
@@ -1352,7 +1352,7 @@ class TmTutorCompatibility(NamedRange):
     """
     display_name = "TM/Tutor Compatibility"
     default = -1
-    range_start = 0
+    range_start = -1
     range_end = 100
     special_range_names = {
         "vanilla": -1,

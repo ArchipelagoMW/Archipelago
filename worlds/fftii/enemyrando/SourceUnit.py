@@ -1,6 +1,6 @@
-from worlds.fftii.enemyrando.Job import Job, monster_families
-from worlds.fftii.enemyrando.SpriteSet import SpriteSet
-from worlds.fftii.enemyrando.Unit import UnitGender
+from .Job import Job, monster_families
+from .SpriteSet import SpriteSet
+from worlds.fftii.patchersuite.Unit import UnitGender
 
 
 class SourceUnit:
@@ -12,6 +12,13 @@ class SourceUnit:
         self.sprite_set = sprite_set
         self.job = job
         self.gender = gender
+
+    def to_json(self):
+        return {
+            "SpriteSet": self.sprite_set.value,
+            "Job": self.job.value,
+            "Gender": self.gender.value
+        }
 
     def __repr__(self):
         return f"Sprite: {self.sprite_set.name}, Job: {self.job.name}, Gender: {self.gender.name}"

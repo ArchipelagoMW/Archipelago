@@ -1,10 +1,9 @@
 import random
 from dataclasses import dataclass
 
-from Options import DeathLinkMixin, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
+from Options import DeathLinkMixin, Choice, Toggle, OptionDict, OptionSet, Range, PlandoBosses, DefaultOnToggle, \
     PerGameCommonOptions, Visibility, StartInventoryPool, PlandoConnections
 from .names import LocationName
-import typing
 
 
 class K64PlandoConnections(PlandoConnections):
@@ -33,7 +32,7 @@ class SplitPowerCombos(Toggle):
     display_name = "Split Power Combos"
 
 
-class TotalCrystalShards(Range):
+class MaxCrystalShards(Range):
     """
     Maximum number of crystal shards to include in the pool of items.
     """
@@ -97,6 +96,20 @@ class BossRequirementRandom(Toggle):
     If enabled, unlocking a boss will require a random amount of Crystal Shards, up to a certain amount per level.
     """
     display_name = "Randomize Boss Unlock Requirement"
+
+
+class Consumables(OptionSet):
+    """
+    Which type of pickups should become checks.
+    Options are 1-Up, Food, and Stars.
+
+    All of Adeleine's gifts are considered food.
+    The large stars that replace Crystals are not considered checks.
+    """
+    display_name = "Consumables"
+    valid_keys = {"1-Ups", "Food", "Stars"}
+
+    default = frozenset({})
 
 
 class FillerPercentage(Range):
@@ -225,8 +238,9 @@ class K64Options(PerGameCommonOptions, DeathLinkMixin):
     stage_shuffle: LevelShuffle
     # boss_shuffle: BossShuffle
     boss_requirement_random: BossRequirementRandom
-    total_crystals: TotalCrystalShards
+    max_crystals: MaxCrystalShards
     required_crystals: CrystalShardsRequired
+    consumables: Consumables
     filler_percentage: FillerPercentage
     kirby_flavor_preset: KirbyFlavorPreset
     kirby_flavor: KirbyFlavor

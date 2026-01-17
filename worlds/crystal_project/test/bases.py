@@ -13,25 +13,21 @@ class CrystalProjectTestBase(WorldTestBase):
 
         if isinstance(reachable_regions, tuple):
             for reachable in reachable_regions:
-                with self.subTest(msg="Test Can Reach Entrance", region=region, reachable_region=reachable):
-                    self.assertTrue(self.can_reach_entrance(region + " -> " + reachable))
+                self.assertTrue(self.can_reach_entrance(region + " -> " + reachable), msg="Test Can Reach Entrance " + reachable + " from " + region)
 
         if isinstance(unreachable_regions, tuple):
             for unreachable in unreachable_regions:
-                with self.subTest(msg="Test Cannot Reach Entrance", region=region, unreachable_region=unreachable):
-                    self.assertFalse(self.can_reach_entrance(region + " -> " + unreachable))
+                self.assertFalse(self.can_reach_entrance(region + " -> " + unreachable), msg="Test Cannot Reach Entrance " + unreachable + " from " + region)
 
 
     def assert_locations(self, reachable_locations: list[str] | None=None, unreachable_locations: list[str] | None=None):
         if isinstance(reachable_locations, list):
             for reachable in reachable_locations:
-                with self.subTest(msg="Test Can Reach Location", reachable_location=reachable):
-                    self.assertTrue(self.can_reach_location(reachable))
+                self.assertTrue(self.can_reach_location(reachable), msg="Test Can Reach Location")
 
         if isinstance(unreachable_locations, list):
             for unreachable in unreachable_locations:
-                with self.subTest(msg="Test Cannot Reach Location", unreachable_location=unreachable):
-                    self.assertFalse(self.can_reach_location(unreachable))
+                self.assertFalse(self.can_reach_location(unreachable), msg="Test Cannot Reach Location")
 
     def set_collected_job_count(self, job_count: int):
         """Guarantees that you have collected X non-starting jobs.

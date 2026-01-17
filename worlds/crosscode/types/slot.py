@@ -1,8 +1,11 @@
 import typing
 
 class SlotOptions(typing.TypedDict):
+    goal: str
     vtShadeLock: int | bool
+    rhombusHubUnlock: bool
     meteorPassage: bool
+    closedGaia: int
     vtSkip: bool
     keyrings: list[int]
     questRando: bool

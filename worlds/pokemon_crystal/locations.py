@@ -131,8 +131,8 @@ def create_locations(world: "PokemonCrystalWorld", regions: dict[str, Region]) -
 
     if world.options.dexsanity:
         if not world.is_universal_tracker:
-            pokemon_items = sorted(list(world.logic.available_pokemon))
-            priority_pokemon = sorted(list(get_priority_dexsanity(world)))
+            pokemon_items = sorted(world.logic.available_pokemon)
+            priority_pokemon = sorted(get_priority_dexsanity(world))
             excluded_pokemon = get_excluded_dexsanity(world)
 
             if world.options.dexsanity_starters.value == DexsanityStarters.option_block:
@@ -151,7 +151,7 @@ def create_locations(world: "PokemonCrystalWorld", regions: dict[str, Region]) -
 
         pokedex_region = regions["Pokedex"]
 
-        for pokemon_id in world.generated_dexsanity:
+        for pokemon_id in sorted(world.generated_dexsanity):
             pokemon_data = world.generated_pokemon[pokemon_id]
             new_location = PokemonCrystalLocation(
                 world.player,
@@ -203,7 +203,7 @@ def create_locations(world: "PokemonCrystalWorld", regions: dict[str, Region]) -
     if world.options.evolution_methods_required or world.is_universal_tracker:
         evolution_region = regions["Evolutions"]
         created_locations = set()
-        for pokemon_id, evos_access in world.logic.evolution.items():
+        for pokemon_id, evos_access in sorted(world.logic.evolution.items(), key=lambda x: x[0]):
             for evolution, access in evos_access:
                 if access is LogicalAccess.OutOfLogic and not world.is_universal_tracker: continue
                 location_name = evolution_location_name(world, pokemon_id, evolution.pokemon)
@@ -223,7 +223,7 @@ def create_locations(world: "PokemonCrystalWorld", regions: dict[str, Region]) -
 
     if world.options.breeding_methods_required or world.is_universal_tracker:
         breeding_region = regions["Breeding"]
-        for pokemon_id, children_access in world.logic.breeding.items():
+        for pokemon_id, children_access in sorted(world.logic.breeding.items(), key=lambda x: x[0]):
             accesses = [access for _, access in children_access]
             if LogicalAccess.InLogic not in accesses and not world.is_universal_tracker: continue
             new_location = PokemonCrystalLocation(
@@ -239,7 +239,7 @@ def create_locations(world: "PokemonCrystalWorld", regions: dict[str, Region]) -
             breeding_region.locations.append(new_location)
 
     if world.options.shopsanity:
-        for mart, mart_data in data.marts.items():
+        for mart, mart_data in sorted(data.marts.items(), key=lambda x: x[0]):
             region_name = f"REGION_{mart}"
             if region_name in regions:
                 region = regions[region_name]
@@ -280,7 +280,7 @@ def create_locations(world: "PokemonCrystalWorld", regions: dict[str, Region]) -
             parent_region.locations.append(location)
 
     if world.options.grasssanity == Grasssanity.option_full:
-        for region_id, grass in data.grass_tiles.items():
+        for region_id, grass in sorted(data.grass_tiles.items(), key=lambda x: x[0]):
             if region_id not in regions: continue
             grass_region = regions[f"{region_id}:GRASS"]
 
@@ -296,7 +296,7 @@ def create_locations(world: "PokemonCrystalWorld", regions: dict[str, Region]) -
                     )
                 )
     elif world.options.grasssanity == Grasssanity.option_one_per_area:
-        for location_name, grass_regions in data.grass_regions.items():
+        for location_name, grass_regions in sorted(data.grass_regions.items(), key=lambda x: x[0]):
             region_grass = list[tuple[GrassTile, str]]()
 
             for region in grass_regions:

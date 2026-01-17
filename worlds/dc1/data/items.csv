@@ -1,0 +1,77 @@
+Idea: Take the json of item descriptions from c#, Change this to .json of "Town": ["<item>":<value>,...]
+Anti-Curse Amulet,filler,1
+Attack+1,useful,2
+Attack+3,useful,1
+Beast Buster,useful,2
+Bomb,filler,1
+Bread,filler,6
+Cheese,filler,1
+Dragon Slayer,useful,1
+Fruit of Eden,progression,5
+Endurance+1,useful,1
+Endurance+3,useful,1
+Fire,useful,1
+Fish Candy,progression,2
+Fluffy Doughnut,progression,2
+Gourd,progression,6
+Holy,useful,1
+Magic+1,useful,1
+Magic+3,useful,1
+Mimi,filler,1
+Plant Buster,useful,1
+Pocket,progression,1
+Powerup Powder,useful,2
+Prickly,filler,1
+Repair Powder,filler,5
+Sky Hunter,useful,1
+Speed+1,filler,2
+Speed+2,filler,2
+Stone Breaker,useful,1
+Tasty Water,filler,5
+Thunder,useful,1
+Undead Buster,useful,2
+Wind,useful,1
+
+Anti-Curse Amulet,filler,1
+Antidote Amulet,filler,1
+Antidote Drink,filler,1
+Anti-Goo Amulet,filler,1
+Beast Buster,useful,6
+Bomb,filler,1
+Bread,filler,4
+Cheese,filler,6
+Fruit of Eden,progression,8
+Fire,useful,1
+Fire Gem,filler,1
+Fish Candy,progression,2
+Fluffy Doughnut,progression,2
+Gourd,progression,8
+Grass Cake,progression,2
+Holy,useful,1
+Ice,useful,1
+Mage Slayer,useful,4
+Metal Breaker,useful,1
+Mimic Breaker,useful,3
+Plant Buster,useful,6
+Pocket,progression,1
+Powerup Powder,filler,1
+Premium Chicken,filler,1
+Prickly,filler,1
+Repair Powder,filler,1
+Sea Killer,useful,2
+Sky Hunter,useful,2
+Soap,filler,1
+Stone Breaker,useful,1
+Throbbing Cherry,filler,1
+Thunder,useful,1
+Wind,useful,1
+
+Anti-Curse Amulet,filler,1
+Anti-Freeze Amulet,filler,2
+Anti-Goo Amulet,filler,1
+Antidote Amulet,filler,1
+Antidote Drink,filler,1
+Attack+3,useful,1
+Bomb,filler,3
+Bread,filler,1
+Cheese,filler,3

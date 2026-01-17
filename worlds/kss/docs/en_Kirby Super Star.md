@@ -27,7 +27,7 @@ config file.
 - Collecting treasures in The Great Cave Offensive
 - Collecting Copy Essence Deluxes in Milky Way Wishes
 - Interacting with Copy Essences (optional)
-- Collecting 1-Ups/Maxim Tomatoes/Invincibility Candy (optional, excludes Gourmet Race)
+- Collecting 1-Ups/Maxim Tomatoes/Invincibility Candy (optional, excludes Gourmet Race, optionally includes The Arena)
 
 ## When the player receives an item, what happens?
 A sound effect will play, and Kirby will immediately receive the effects of that item, such as being able to receive Copy Abilities from enemies that 
@@ -36,7 +36,10 @@ give said Copy Ability. Receiving a subgame will require you to refresh the cork
 ## What is the goal of Kirby Super Star?
 Two major options control the goal of Kirby Super Star:
 - `required_subgame_completions` requires a specific number of subgames to have been completed, from 1 to all 7. 
-- `required_subgames` allows for a specific subgame(s) to be required as one of the required completions.
+    This number is displayed on the corkboard between Milky Way Wishes and The Arena.
+- `required_subgames` allows for a specific subgame(s) to be required as one of the required completions. This is displayed
+on the corkboard within the gap between Dyna Blade and Revenge of Meta Knight, with a star appearing within the 7 tiles 
+between the two for each specific game required.
 
 ### Goals for each subgame
 - Spring Breeze: defeat King Dedede in Castle Dedede

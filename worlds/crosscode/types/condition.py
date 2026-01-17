@@ -92,6 +92,13 @@ class OrCondition(Condition):
         return any(map(lambda x: x.satisfied(state, player, location, args), self.subconditions))
 
 @dataclass
+class AndCondition(Condition):
+    subconditions: list[Condition]
+
+    def satisfied(self, state: CollectionState, player: int, location: int | None, args: LogicDict) -> bool:
+        return all(map(lambda x: x.satisfied(state, player, location, args), self.subconditions))
+
+@dataclass
 class VariableCondition(Condition):
     name: str
 
@@ -107,6 +114,17 @@ class VariableCondition(Condition):
                 return False
 
         return True
+
+@dataclass
+class VariableEntryCondition(Condition):
+    name: str
+    value: str
+    desired: bool
+
+    def satisfied(self, state: CollectionState, player: int, location: int | None, args: LogicDict) -> bool:
+        variables = args["variables"]
+
+        return (self.value in variables[self.name]) == self.desired
 
 @dataclass
 class ChestKeyCondition(Condition):
@@ -159,7 +177,9 @@ __all__ = [
     "RegionCondition",
     "AnyElementCondition",
     "OrCondition",
+    "AndCondition",
     "VariableCondition",
+    "VariableEntryCondition",
     "ChestKeyCondition",
     "ShopSlotCondition",
     "NeverCondition"

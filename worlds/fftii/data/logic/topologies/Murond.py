@@ -25,6 +25,7 @@ Goug.connections = [
 
 Goug.locations = [
     FFTLocation(LocationNames.GOUG_STORY, battle_level=6),
+    FFTLocation(LocationNames.GOUG_STONE, battle_level=6),
     FFTLocation(LocationNames.MUSTADIO_RECRUIT, battle_level=6)
 ]
 
@@ -41,7 +42,8 @@ Orbonne.locations = [
     AltimaOnlyFinalFightLocation(LocationNames.UBS_5_STORY, battle_level=14),
     AltimaOnlyFinalFightLocation(LocationNames.MUROND_DEATH_CITY_STORY, battle_level=14),
     AltimaOnlyFinalFightLocation(LocationNames.PRECINCTS_STORY, battle_level=14),
-    AltimaOnlyFinalFightLocation(LocationNames.AIRSHIPS_1_STORY, battle_level=14)
+    AltimaOnlyFinalFightLocation(LocationNames.AIRSHIPS_1_STORY, battle_level=14),
+    AltimaOnlyFinalFightLocation(LocationNames.AIRSHIPS_1_STONE, battle_level=14)
 ]
 
 DeepDungeon.connections = [
@@ -60,6 +62,7 @@ DeepDungeon.locations = [
     SidequestLocation(LocationNames.VOYAGE_SIDEQUEST, battle_level=12),
     SidequestLocation(LocationNames.HORROR_SIDEQUEST, battle_level=12),
     SidequestLocation(LocationNames.END_SIDEQUEST, battle_level=14),
+    SidequestLocation(LocationNames.END_STONE, battle_level=14),
     SidequestLocation(LocationNames.BYBLOS_RECRUIT, battle_level=14),
 ]
 
@@ -73,5 +76,6 @@ MurondDeathCity.locations = [
     VanillaFinalFightsLocation(LocationNames.MUROND_DEATH_CITY_STORY, battle_level=14),
     VanillaFinalFightsLocation(LocationNames.PRECINCTS_STORY, battle_level=14),
     VanillaFinalFightsLocation(LocationNames.AIRSHIPS_1_STORY, battle_level=14),
+    VanillaFinalFightsLocation(LocationNames.AIRSHIPS_1_STONE, battle_level=14),
     FFTLocation(LocationNames.AIRSHIPS_2_STORY, battle_level=14)
 ]

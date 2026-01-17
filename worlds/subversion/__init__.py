@@ -18,17 +18,17 @@ from .options import SubversionAutoHints, SubversionOptions, SubversionShortGame
 from .patch_utils import GenData, ItemRomData, make_gen_data
 from .rom import SubversionDeltaPatch
 
-from subversion_rando.connection_data import area_doors
-from subversion_rando.game import Game as SvGame
-from subversion_rando.item_data import Item as SvItem, Items, unique_items
-from subversion_rando.item_marker import ItemMarker
-from subversion_rando.loadout import Loadout
-from subversion_rando.location_data import get_location_ids, new_locations
-from subversion_rando.logic_locations import location_logic
-from subversion_rando.logic_goal import can_win
-from subversion_rando.logic_updater import updateLogic
-from subversion_rando.main_generation import daphne_gate_spoiler
-from subversion_rando.trick_data import trick_name_lookup
+from .subversion_rando.connection_data import area_doors
+from .subversion_rando.game import Game as SvGame
+from .subversion_rando.item_data import Item as SvItem, Items, unique_items
+from .subversion_rando.item_marker import ItemMarker
+from .subversion_rando.loadout import Loadout
+from .subversion_rando.location_data import get_location_ids, new_locations
+from .subversion_rando.logic_locations import location_logic
+from .subversion_rando.logic_goal import can_win
+from .subversion_rando.logic_updater import updateLogic
+from .subversion_rando.main_generation import daphne_gate_spoiler
+from .subversion_rando.trick_data import trick_name_lookup
 
 _ = SubversionSNIClient  # load the module to register the handler
 

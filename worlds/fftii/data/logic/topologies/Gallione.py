@@ -36,7 +36,8 @@ Igros.connections = [
 ]
 
 Igros.locations = [
-    FFTLocation(LocationNames.IGROS_STORY, battle_level=14)
+    FFTLocation(LocationNames.IGROS_STORY, battle_level=14),
+    FFTLocation(LocationNames.IGROS_STONE, battle_level=14)
 ]
 
 Sweegy.connections = [

@@ -9,15 +9,15 @@ from Options import Choice, DefaultOnToggle, FreeText, PerGameCommonOptions, Ran
 from .item import SubversionItem
 from .location import location_data
 
-from subversion_rando.areaRando import RandomizeAreas
-from subversion_rando.connection_data import vanilla_areas
-from subversion_rando.daphne_gate import get_daphne_gate
-from subversion_rando.game import CypherItems, Game, GameOptions
-from subversion_rando.goal import generate_goals
-from subversion_rando.item_data import unique_items
-from subversion_rando.item_marker import ItemMarker, ItemMarkersOption
-from subversion_rando.logic_presets import casual, expert, medium, custom_logic_tricks_from_str
-from subversion_rando.trick import Trick
+from .subversion_rando.areaRando import RandomizeAreas
+from .subversion_rando.connection_data import vanilla_areas
+from .subversion_rando.daphne_gate import get_daphne_gate
+from .subversion_rando.game import CypherItems, Game, GameOptions
+from .subversion_rando.goal import generate_goals
+from .subversion_rando.item_data import unique_items
+from .subversion_rando.item_marker import ItemMarker, ItemMarkersOption
+from .subversion_rando.logic_presets import casual, expert, medium, custom_logic_tricks_from_str
+from .subversion_rando.trick import Trick
 
 
 class SubversionLogic(Choice):

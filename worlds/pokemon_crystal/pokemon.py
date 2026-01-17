@@ -20,7 +20,7 @@ def randomize_pokemon_data(world: "PokemonCrystalWorld"):
     # follow_evolutions can change types after the pokemon has already been randomized,
     # so we randomize types before all else
     if world.options.randomize_types.value:
-        for pkmn_name, pkmn_data in world.generated_pokemon.items():
+        for pkmn_name, pkmn_data in sorted(world.generated_pokemon.items(), key=lambda x: x[0]):
             evolution_line_list = [pkmn_name]
             if world.options.randomize_types.value == RandomizeTypes.option_follow_evolutions:
                 # skip evolved pokemon if follow_evolutions
@@ -42,7 +42,7 @@ def randomize_pokemon_data(world: "PokemonCrystalWorld"):
 
     move_blocklist = moves_convert_friendly_to_ids(world, world.options.move_blocklist)
 
-    for pkmn_name, pkmn_data in world.generated_pokemon.items():
+    for pkmn_name, pkmn_data in sorted(world.generated_pokemon.items(), key=lambda x: x[0]):
         new_base_stats = pkmn_data.base_stats
         new_learnset = pkmn_data.learnset
         new_tm_hms = pkmn_data.tm_hm
@@ -183,7 +183,7 @@ def randomize_trade_requested_pokemon(world: "PokemonCrystalWorld"):
     randomize_requested = world.options.randomize_trades.value not in (RandomizeTrades.option_requested,
                                                                        RandomizeTrades.option_both)
 
-    logically_available_pokemon = sorted(list(world.logic.available_pokemon))
+    logically_available_pokemon = sorted(world.logic.available_pokemon)
 
     assert logically_available_pokemon
     while len(logically_available_pokemon) < len(world.generated_trades):
@@ -211,8 +211,7 @@ def randomize_request_pokemon(world: "PokemonCrystalWorld"):
     if world.options.randomize_pokemon_requests in (RandomizePokemonRequests.option_items_and_pokemon,
                                                     RandomizePokemonRequests.option_pokemon):
 
-        logically_available_pokemon = sorted(
-            [pokemon for pokemon in world.logic.available_pokemon if pokemon != "UNOWN"])
+        logically_available_pokemon = sorted(pokemon for pokemon in world.logic.available_pokemon if pokemon != "UNOWN")
 
         assert logically_available_pokemon
         while len(logically_available_pokemon) < len(world.generated_request_pokemon):
@@ -222,7 +221,7 @@ def randomize_request_pokemon(world: "PokemonCrystalWorld"):
         world.generated_request_pokemon = [logically_available_pokemon.pop() for _ in world.generated_request_pokemon]
     elif world.options.randomize_pokemon_requests == RandomizePokemonRequests.option_items:
         # ideally we should never need this, but best to be safe
-        logically_available_pokemon = [pokemon for pokemon in world.logic.available_pokemon if pokemon != "UNOWN"]
+        logically_available_pokemon = [pokemon for pokemon in sorted(world.logic.available_pokemon) if pokemon != "UNOWN"]
 
         world.generated_request_pokemon = [
             world.random.choice(logically_available_pokemon) if mon not in world.logic.available_pokemon else mon for

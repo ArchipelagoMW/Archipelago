@@ -117,8 +117,7 @@ def get_display_region_by_id(region_id: int) -> str:
     if region_id in SARA_SARA_IDS:
         return SARA_SARA_BAZAAR_DISPLAY_NAME
     if region_id in SARA_SARA_BEACH_IDS:
-        #No idea why there are two of these now, but we have no way to know so just pick one
-        return SARA_SARA_BEACH_EAST_DISPLAY_NAME
+        return SARA_SARA_BEACH_DISPLAY_NAME
     if region_id in ANCIENT_RESERVOIR_IDS:
         return ANCIENT_RESERVOIR_DISPLAY_NAME
     if region_id in SALMON_BAY_IDS:

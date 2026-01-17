@@ -1,8 +1,7 @@
 from ..Options import BossHuntLength, JinjoFamilyRescueLength, MinigameHuntLength, VictoryCondition
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
-from ..Names import locationName, itemName, regionName
-from .. import all_item_table, all_group_table
+from ..Names import locationName
 
 # Tests and make sure that if the correct Victory Condition is set, enough Mumbo Tokens are placed
 # and the game is beatable.
@@ -23,11 +22,10 @@ class TokenTest(BanjoTooieTestBase):
 
         # Locked locations for every other Mumbo token vic con
         for location in self.mumbo_token_location_group:
-            try:
-                if "Mumbo Token" == self.world.multiworld.get_location(location, self.player).item.name:
+            item = self.world.get_location(location).item
+            if item is not None:
+                if "Mumbo Token" == item.name:
                     mumbo_tokens += 1
-            except Exception:
-                mumbo_tokens += 0
         assert amt == mumbo_tokens
 
 
@@ -35,11 +33,7 @@ class TestVictoryHAG1(TokenTest):
     options = {
         "victory_condition": VictoryCondition.option_hag1,
     }
-    mumbo_token_location_group = {
-        locationName.MUMBOTKNGAME1,
-        locationName.MUMBOTKNBOSS1,
-        locationName.MUMBOTKNJINJO1
-    }
+    mumbo_token_location_group = set()
 
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(0)

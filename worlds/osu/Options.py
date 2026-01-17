@@ -31,6 +31,24 @@ class MaximumLength(Range):
     display_name = "Maximum Length"
 
 
+class MinimumAge(Range):
+    """The newest year to pick beatmapsets from.
+    """
+    range_start = 2007
+    range_end = 2025
+    default = 2025
+    display_name = "Minimum Age"
+
+
+class MaximumAge(Range):
+    """The oldest year to pick beatmapsets from.
+    """
+    range_start = 2007
+    range_end = 2025
+    default = 2007
+    display_name = "Maximum Age"
+
+
 class DisableDifficultyReduction(Toggle):
     """Prevents plays using difficulty reduction mods from sending checks."""
     display_name = "Disable Difficulty Reduction"
@@ -40,7 +58,7 @@ class DifficultySync(Choice):
     """Changes which difficulties of each beatmapset are able to send checks
     Off - Any difficulty of each Beatmapset will send a check.
     Strict_Any - Only difficulties that fall in your difficulty ranges will send checks
-    Strict_Random - A randomly chosen difficulty within your range has to be played. /check will tell you the diff.
+    Strict_Random - A randomly chosen difficulty within your range has to be played. To be used with /check_diff.
     """
     display_name = "Strict Difficulty Sync"
     option_Off = 0
@@ -247,8 +265,7 @@ class ShuffleIncludedSongs(Toggle):
 
 
 class IncludeSongs(OptionSet):
-    """List of Beatmapset IDs to include, each replacing a Rando song.
-    If Shuffle Included songs is disabled, songs can't appear as your starting songs."""
+    """List of Beatmapset IDs to include, each replacing a Rando song."""
     display_name = "Include Songs"
     valid_keys = {str(beatmapset['id']) for beatmapset in get_song_data()}
 
@@ -270,6 +287,8 @@ class OsuOptions(PerGameCommonOptions):
     difficulty_sync: DifficultySync
     disallow_converts: DisallowConverts
     maximum_length: MaximumLength
+    minimum_age: MinimumAge
+    maximum_age: MaximumAge
     exclude_standard: DisableStandard
     minimum_difficulty_standard: StandardMinimumDifficulty
     maximum_difficulty_standard: StandardMaximumDifficulty

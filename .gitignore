@@ -65,7 +65,6 @@ Output Logs/
 /installdelete.iss
 /data/user.kv
 /datapackage
-/custom_worlds
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -198,6 +197,15 @@ _speedups.html
 Thumbs.db
 [Dd]esktop.ini
 
+# Ashipelago overrides
+!custom_libraries/*/lib
+
 # World files that need to be added but devs have named them improperly...
 !worlds/metroidprime/lib
+!rust.abi3.so
+!rust.pyd
 !worlds/subversion/data/*/*.*
+!worlds/sm_map_rando/data/*/*.*
+!worlds/albw/albwrandomizer
+!worlds/albw/albwrandomizer/*.pyd
+!worlds/albw/albwrandomizer/*.so

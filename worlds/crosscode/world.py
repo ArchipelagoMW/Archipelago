@@ -93,6 +93,8 @@ class CrossCodeWorld(World):
     logic_mode: str
     region_pack: RegionsData
 
+    rhombus_hub_unlock: bool
+
     pre_fill_specific_dungeons_names: dict[str, set[str]]
     pre_fill_any_dungeon_names: set[str]
 
@@ -277,6 +279,8 @@ class CrossCodeWorld(World):
 
         green_leaf_shade_name = "Green Leaf Shade"
 
+        self.rhombus_hub_unlock = bool(self.options.rhombus_hub_unlock.value)
+
         area_unlocks = self.options.progressive_area_unlocks.value
         if area_unlocks & ProgressiveAreaUnlocks.COMBINE_POOLS:
             self.enabled_chain_names.add("areaItemsAll")
@@ -312,7 +316,16 @@ class CrossCodeWorld(World):
         if self.options.vw_meteor_passage.value:
             self.variables["vwPassage"].append("meteor")
 
+        if self.options.closed_gaia.value in [1, 2]:
+            self.variables["closedGaia"].append("on")
+        if self.options.closed_gaia.value == 1:
+            self.variables["closedGaia"].append("minimal")
+        if self.options.closed_gaia.value == 2:
+            self.variables["closedGaia"].append("full")
+
         self.variables["canGrind"].append("noShadeWarp")
+
+        self.variables["rhombusHubUnlock"].append("on" if self.rhombus_hub_unlock else "off")
 
         if self.options.start_with_green_leaf_shade.value:
             self.multiworld.push_precollected(self.create_item(green_leaf_shade_name))
@@ -487,11 +500,22 @@ class CrossCodeWorld(World):
         if self.options.shop_rando:
             self.create_shops()
 
-        goal_region = self.region_dict[self.region_pack.goal_region]
-        goal = Location(self.player, "The Creator", parent=goal_region)
-        goal.place_locked_item(Item("Victory", ItemClassification.progression, None, self.player))
+        goal_name = self.options.goal.current_key
+        goal = self.region_pack.goals[goal_name]
+        goal_region = self.region_dict[goal.region]
+        goal_location = Location(self.player, "Victory", parent=goal_region)
+        goal_location.place_locked_item(Item("Victory", ItemClassification.progression, None, self.player))
+        add_rule(
+            goal_location,
+            condition_satisfied(
+                self.player,
+                goal.condition if goal.condition is not None else [],
+                None,
+                self.logic_dict
+            )
+        )
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-        goal_region.locations.append(goal)
+        goal_region.locations.append(goal_location)
 
     def create_items(self):
         exclude = self.multiworld.precollected_items[self.player][:]
@@ -686,8 +710,11 @@ class CrossCodeWorld(World):
             "mode": self.logic_mode,
             "dataVersion": self.world_data.data_version,
             "options": {
+                "goal": self.options.goal.current_key,
                 "vtShadeLock": self.options.vt_shade_lock.value,
+                "rhombusHubUnlock": bool(self.options.rhombus_hub_unlock.value),
                 "meteorPassage": bool(self.options.vw_meteor_passage.value),
+                "closedGaia": self.options.closed_gaia.value,
                 "vtSkip": bool(self.options.vt_skip.value),
                 "keyrings": [self.world_data.single_items_dict[name].item_id for name in self.logic_dict["keyrings"]],
                 "questRando": bool(self.options.quest_rando.value),

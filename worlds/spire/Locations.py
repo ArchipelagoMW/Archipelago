@@ -21,6 +21,7 @@ class LocationType(Enum):
     Start = auto()
     Gold = auto()
     Potion = auto()
+    Key = auto()
 
 
 class LocationData(NamedTuple):
@@ -35,8 +36,8 @@ def create_location_data() -> List[LocationData]:
             [LocationData(f"Card Reward {j}", j + 100, LocationType.Card_Reward, min(((j - 1) // (CARD_REWARD_COUNT // 3)) + 1, 3)) for j in range(1, CARD_REWARD_COUNT + 1)] +
             [LocationData(f"Relic {j}", j + 140, LocationType.Relic, min(((j-1) // 3)+1,3)) for j in range(1, 11)] +
             [LocationData(f"Shop Slot {j}", j + 163, LocationType.Shop, min(((j-1) // 5)+1, 3)) for j in range(1,17)] +
-            [LocationData(f"Combat Gold {j}", j + 56, LocationType.Gold, min(((j-1)//6)+1,3)) for j in range(1,19)] +
-            [LocationData(f"Elite Gold {j}", j + 75, LocationType.Gold, min(((j-1)//2)+1,3)) for j in range(1,8)] +
+            [LocationData(f"Combat Gold {j}", j + 56, LocationType.Gold, min(((j-1)//8)+1,3)) for j in range(1,27)] +
+            # [LocationData(f"Elite Gold {j}", j + 75, LocationType.Gold, min(((j-1)//2)+1,3)) for j in range(1,8)] +
             [LocationData(f"Potion Drop {j}", j + 84, LocationType.Potion, min(((j-1)//3)+1,3)) for j in range(1,10)] +
             [LocationData('Act 1 Campfire 1', 121, LocationType.Campfire, 1),
             LocationData('Act 1 Campfire 2', 122, LocationType.Campfire, 1),
@@ -51,6 +52,9 @@ def create_location_data() -> List[LocationData]:
             LocationData('Press Start', 163, LocationType.Start, 1),
             LocationData('Boss Gold 1', 83, LocationType.Gold, 1, True),
             LocationData('Boss Gold 2', 84, LocationType.Gold, 2, True),
+            LocationData('Sapphire Key', 94, LocationType.Key, 1),
+            LocationData('Ruby Key', 95, LocationType.Key, 1),
+            LocationData('Emerald Key', 96, LocationType.Key, 3),
             LocationData('Heart Room', None, LocationType.Event, 3),
             LocationData('Act 1 Boss', None, LocationType.Event, 1),
             LocationData('Act 2 Boss', None, LocationType.Event, 2),

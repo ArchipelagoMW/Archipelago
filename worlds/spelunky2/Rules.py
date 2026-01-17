@@ -17,7 +17,6 @@ def has_or_unrestricted(world, state, player, item_name: str) -> bool:
 
 
 def set_common_rules(world: "Spelunky2World", player: int):
-
     # Primary Regions -- note starting from shortcuts is not currently in logic. When this is added, it might break certain entries (e.g. The Tusk Idol and chain requirements) # noqa: E128
     set_rule(world.get_entrance(RuleNames.MENU_TO_DWELLING), lambda state: True)
     # set_rule(world.get_entrance(RuleNames.MENU_TO_OLMECS_LAIR), lambda state: state.has(ShortcutName.OLMECS_LAIR, player) or state.has(ShortcutName.PROGRESSIVE, player, 2))  # Not implemented yet # noqa: E128
@@ -46,11 +45,23 @@ def set_common_rules(world: "Spelunky2World", player: int):
     set_rule(world.get_entrance(RuleNames.DWELLING_TO_ANY_WORLD_2),
              lambda state: has_world_2(state, player))
     set_rule(world.get_entrance(RuleNames.JUNGLE_TO_BLACK_MARKET),
-             lambda state: has_or_unrestricted(world, state, player, ItemName.UDJAT_EYE))  # TODO Udjat Skip setting
+             lambda state:
+             (
+                     has_or_unrestricted(world, state, player, ItemName.UDJAT_EYE)
+                     or world.options.can_udjat_skip
+             ))
     set_rule(world.get_entrance(RuleNames.VOLCANA_TO_VLADS_CASTLE),
-             lambda state: has_or_unrestricted(world, state, player, ItemName.UDJAT_EYE))  # TODO Udjat Skip setting
+             lambda state:
+             (
+                 has_or_unrestricted(world, state, player, ItemName.UDJAT_EYE)
+                 or world.options.can_udjat_skip
+             ))
     set_rule(world.get_entrance(RuleNames.TIDEPOOL_TO_ABZU),
-             lambda state: has_or_unrestricted(world, state, player, ItemName.ANKH))  # TODO Death skip setting
+             lambda state:
+             (
+                 has_or_unrestricted(world, state, player, ItemName.ANKH)
+                 or world.options.can_ankh_skip
+             ))
     set_rule(world.get_entrance(RuleNames.TEMPLE_TO_CITY_OF_GOLD),
              lambda state:
              has_royalty(world, state, player)
@@ -58,7 +69,7 @@ def set_common_rules(world: "Spelunky2World", player: int):
     set_rule(world.get_entrance(RuleNames.CITY_OF_GOLD_TO_DUAT),
              lambda state: has_or_unrestricted(world, state, player, ItemName.ANKH))
     set_rule(world.get_entrance(RuleNames.ICE_CAVES_TO_MOTHERSHIP),
-             lambda state: can_access_mothership(state, player))
+             lambda state: can_access_mothership(world, state, player))
 
     # People Entries
     set_rule(world.get_location(JournalName.EGGPLANT_CHILD),
@@ -129,17 +140,6 @@ def has_royalty(world: "Spelunky2World", state: CollectionState, player: int):
     )
 
 
-def has_weapon(state: CollectionState, player: int) -> bool:  # Currently unused
-    return (
-            state.has_all([WorldName.TIDE_POOL.value, ItemName.EXCALIBUR], player)
-            or state.has_all([WorldName.TEMPLE.value, ItemName.SCEPTER], player)
-            or (
-                    state.has(WorldName.PROGRESSIVE, player, 3)
-                    and state.has_any([ItemName.EXCALIBUR.value, ItemName.SCEPTER], player)
-            )
-    )
-
-
 def has_world_2(state: CollectionState, player: int) -> bool:
     return (
             state.has_any(
@@ -150,30 +150,21 @@ def has_world_2(state: CollectionState, player: int) -> bool:
     )
 
 
-def has_world_4(state: CollectionState, player: int) -> bool:  # Currently unused
-    return (
-            state.has_any(
-                [WorldName.TIDE_POOL.value, WorldName.TEMPLE],
-                player
-            )
-            or state.has(WorldName.PROGRESSIVE, player, 3)
-    )
-
-
 def can_obtain_alien_compass(state: CollectionState, player: int) -> bool:
     return (
             state.has_all([WorldName.VOLCANA, WorldName.OLMECS_LAIR, WorldName.TEMPLE], player)
             and state.can_reach(LocationName.VLADS_CASTLE, "Region", player)
             or state.has(WorldName.PROGRESSIVE, player, 3)
-           )
+    )
 
 
-# TODO Alien Compass Skip settings (Mothership can be found with various mobility items or even with nothing but bombs/landmines), currently identical to can_obtain_alien_compass # noqa: E128
-def can_access_mothership(state: CollectionState, player: int) -> bool:
-    return can_obtain_alien_compass(state, player)
+def can_access_mothership(world: "Spelunky2World", state: CollectionState, player: int) -> bool:
+    return (
+        can_obtain_alien_compass(state, player)
+        or world.options.can_mothership_skip
+    )
 
 
-# TODO Excalibur Skip settings
 def can_obtain_tablet(world: "Spelunky2World", state: CollectionState, player: int) -> bool:
     return (
             has_or_unrestricted(world, state, player, ItemName.ANKH)
@@ -183,29 +174,33 @@ def can_obtain_tablet(world: "Spelunky2World", state: CollectionState, player: i
                     state.can_reach(LocationName.DUAT, "Region", player)
                     or (
                             state.can_reach(LocationName.ABZU, "Region", player)
-                            and state.can_reach(JournalName.EXCALIBUR, "Location", player)
-                       )
-                )
-           )
+                            and
+                            (
+                                state.can_reach(JournalName.EXCALIBUR, "Location", player)
+                                or world.options.can_kingu_skip
+                            )
+                    )
+            )
+    )
 
 
 def can_obtain_qilin(world: "Spelunky2World", state: CollectionState, player: int) -> bool:
     return (
             can_obtain_tablet(world, state, player)
             and has_or_unrestricted(world, state, player, ItemName.USHABTI)
-           )
+    )
 
 
-# TODO Qilin Skip settings
 def can_access_sunken_city(world: "Spelunky2World", state: CollectionState, player: int) -> bool:
     return (
-                can_obtain_qilin(world, state, player)
-                and
-                (
-                        state.has(WorldName.SUNKEN_CITY, player)
-                        or state.has(WorldName.PROGRESSIVE, player, 6)
-                )
-           )
+            (can_obtain_qilin(world, state, player)
+            and
+            (
+                    state.has(WorldName.SUNKEN_CITY, player)
+                    or state.has(WorldName.PROGRESSIVE, player, 6)
+            ))
+            or world.options.can_qilin_skip
+    )
 
 
 def can_access_cosmic_ocean(world: "Spelunky2World", state: CollectionState, player: int) -> bool:
@@ -234,7 +229,7 @@ def set_starter_upgrade_rules(world: "Spelunky2World", player: int):
             set_rule(
                 world.get_location(upgrade_name),
                 lambda state,
-                name=ItemName(item_name).value: has_or_unrestricted(world, state, player, name)
+                       name=ItemName(item_name).value: has_or_unrestricted(world, state, player, name)
             )
         except KeyError:
             # This handles cases where an upgrade for an item exists but isn't

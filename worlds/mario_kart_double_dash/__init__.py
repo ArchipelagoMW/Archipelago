@@ -9,13 +9,12 @@ from BaseClasses import Region, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, launch_subprocess
 
-from . import locations, items, regions
+from . import game_data, locations, items, regions, version
 from .items import MkddItem
 from .locations import MkddLocation, MkddLocationData
 from .options import MkddOptions
 from .regions import MkddRegionData
 from .rules import MkddRules
-from . import game_data, version
 
 class MkddWebWorld(WebWorld):
     theme = "ocean"
@@ -35,7 +34,7 @@ class MkddWorld(World):
     """
     The fourth entry in Mario Kart series, Double Dash shakes up the gameplay by introducing 2 drivers per vehicle.
     """
-    game = "Mario Kart Double Dash"
+    game = version.get_game_name()
     web = MkddWebWorld()
 
     options_dataclass = MkddOptions
@@ -295,7 +294,7 @@ class MkddWorld(World):
             if laps > 0:
                 lap_counts[course] = laps
         return {
-            "version": version.get_str(),
+            "version": version.get_version(),
             "trophy_requirement": int(self.options.trophy_requirement),
             "logic_difficulty": int(self.options.logic_difficulty) if not self.options.tracker_unrestricted_logic else 100,
             "time_trials": int(self.options.time_trials),
@@ -319,16 +318,7 @@ def launch_client():
 
 
 def add_client_to_launcher() -> None:
-    found = False
-    for c in components:
-        if c.display_name == "Mario Kart Double Dash Client":
-            found = True
-            if getattr(c, "version", 0) < version.get_str():
-                c.version = version.get_str()
-                c.func = launch_client
-                return
-    if not found:
-        components.append(Component("Mario Kart Double Dash Client", func=launch_client))
+    components.append(Component("Mario Kart Double Dash Client", func=launch_client))
 
 
 add_client_to_launcher()

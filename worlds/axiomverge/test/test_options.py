@@ -40,22 +40,9 @@ class TestOptionProgDisruptorOff(AVTestBase):
         self.assertListEqual([item.name for item in base_items], ["Address Disruptor 1", "Address Disruptor 2", "Address Bomb"])
 
 
-class TestOptionProgDisruptorOnly(AVTestBase):
-    options = {
-        "progressive_address_disruptor": 1,
-    }
-
-    def test_prog_disruptor_only(self):
-        base_items = self.get_items_by_name(("Address Disruptor 1", "Address Disruptor 2", "Address Bomb"))
-        self.assertListEqual([item.name for item in base_items], ["Address Bomb"])
-
-        prog_items = self.get_items_by_name(("Progressive Address Disruptor",))
-        self.assertEqual(len(prog_items), 2)
-
-
 class TestOptionProgDisruptorOn(AVTestBase):
     options = {
-        "progressive_address_disruptor": 2,
+        "progressive_address_disruptor": 1,
     }
 
     def test_prog_disruptor_on(self):
@@ -90,3 +77,25 @@ class TestOptionProgDroneOn(AVTestBase):
 
         prog_items = self.get_items_by_name(("Progressive Drone",))
         self.assertEqual(len(prog_items), 2)
+
+
+class TestOptionShuffleSecretWorldWeaponsEnabled(AVTestBase):
+    options = {
+        "secret_world_weapons": 1,
+    }
+
+    def test_secret_weapons_in_pool(self):
+        items = self.get_items_by_name(("Heat Seeker", "Fat Beam", "Scissor Beam"))
+
+        self.assertEqual(len(items), 3)
+
+
+class TestOptionShuffleSecretWorldWeaponsDisabled(AVTestBase):
+    options = {
+        "secret_world_weapons": 0,
+    }
+
+    def test_secret_weapons_not_in_pool(self):
+        items = self.get_items_by_name(("Heat Seeker", "Fat Beam", "Scissor Beam"))
+
+        self.assertListEqual(items, [])

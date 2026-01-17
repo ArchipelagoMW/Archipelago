@@ -1,10 +1,9 @@
 import logging
 
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, CollectionState, Item
-from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
 from .items import item_table, item_names, copy_ability_table, filler_item_weights, K64Item, copy_ability_access_table,\
-    power_combo_table, friend_table
+    power_combo_table, friend_table, star_filler_item_weights
 from .locations import location_table, K64Location
 from .names import LocationName, ItemName
 from .regions import create_levels, default_levels
@@ -12,7 +11,7 @@ from .rom import K64ProcedurePatch, get_base_rom_path, RomData, patch_rom, K64UH
 from .client import K64Client
 from .options import K64Options
 from .rules import set_rules
-from typing import Dict, TextIO, Optional, List, Any, Mapping, ClassVar
+from typing import TextIO, Any, Mapping, ClassVar
 from io import BytesIO
 import os
 import math
@@ -98,8 +97,14 @@ class K64World(World):
         self.rom_name_available_event = threading.Event()
         super().__init__(multiworld, player)
         self.required_crystals: int = 0  # we fill this during create_items
-        self.boss_requirements: List[int] = list()
+        self.boss_requirements: list[int] = []
         self.player_levels = default_levels.copy()
+
+    def generate_early(self) -> None:
+        if self.multiworld.players == 1 and self.options.required_crystals.value > 90:
+            logger.warning(f"Kirby 64 ({self.player_name}): Required Crystal percentage is too high "
+                           f"for a single player game, setting to 90.")
+            self.options.required_crystals.value = 90
 
     create_regions = create_levels
 
@@ -124,8 +129,8 @@ class K64World(World):
         if self.options.split_power_combos:
             itempool.extend([self.create_item(name) for name in power_combo_table])
         required_percentage = self.options.required_crystals / 100.0
-        remaining_items = len(location_table) - len(itempool)
-        total_crystals = min(remaining_items, self.options.total_crystals.value)
+        remaining_items = len([location for location in self.get_locations() if not location.item]) - len(itempool)
+        total_crystals = min(remaining_items, self.options.max_crystals.value)
         required_crystals = max(math.floor(total_crystals * required_percentage), 5)
         # ensure at least 1 crystal shard required
         filler_items = total_crystals - required_crystals
@@ -145,9 +150,11 @@ class K64World(World):
             for i in range(1, 6):
                 requirements.insert(i - 1, quotient * i)
         self.boss_requirements = requirements
+        filler_weights = star_filler_item_weights if "Stars" in self.options.consumables else filler_item_weights
         itempool.extend([self.create_item(ItemName.crystal_shard) for _ in range(required_crystals)])
-        itempool.extend([self.create_item(self.get_filler_item_name())
-                         for _ in range(filler_amount + (remaining_items - total_crystals))])
+        itempool.extend([self.create_item(name)
+                         for name in self.random.choices(list(filler_weights.keys()), weights=list(filler_weights.values()),
+                                                         k=filler_amount + (remaining_items - total_crystals))])
         itempool.extend([self.create_item(ItemName.crystal_shard, True) for _ in range(non_required_crystals)])
         self.multiworld.itempool += itempool
 
@@ -157,14 +164,17 @@ class K64World(World):
         self.stage_shuffle_enabled = self.options.stage_shuffle.value > 0
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        return {
+        slot_data = self.options.as_dict("goal_speed", "split_power_combos", "kirby_flavor_preset", "kirby_flavor")
+        slot_data.update({
             "player_levels": self.player_levels,
             "required_crystals": self.required_crystals,
             "boss_requirements": self.boss_requirements
-        }
+        })
+
+        return slot_data
 
     @staticmethod
-    def interpret_slot_data(slot_data: Dict[str, Any]):
+    def interpret_slot_data(slot_data: Mapping[str, Any]):
         local_levels = {int(key): value for key, value in slot_data["player_levels"].items()}
         return {"player_levels": local_levels}
 

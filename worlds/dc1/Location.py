@@ -9,3 +9,4 @@ class DarkCloudLocation(Location):
         super(DarkCloudLocation, self).__init__(player, name, address)
         self.type = loc_type
         self.parent_region = region
+        self.access = access

@@ -4,12 +4,12 @@ from typing import Iterator, List, Tuple
 from BaseClasses import CollectionState
 from .item import name_to_id as item_name_to_id, id_to_sv_item
 
-from subversion_rando.connection_data import area_doors
-from subversion_rando.game import Game
-from subversion_rando.item_data import Items
-from subversion_rando.loadout import Loadout
-from subversion_rando.logic_updater import update_area_logic
-from subversion_rando.trick_data import Tricks
+from .subversion_rando.connection_data import area_doors
+from .subversion_rando.game import Game
+from .subversion_rando.item_data import Items
+from .subversion_rando.loadout import Loadout
+from .subversion_rando.logic_updater import update_area_logic
+from .subversion_rando.trick_data import Tricks
 
 _excluded_after_torpedo_bay = {
     "Missile": ["Gantry", "Weapon Locker"],

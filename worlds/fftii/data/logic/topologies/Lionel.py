@@ -35,6 +35,7 @@ Lionel.connections = [
 Lionel.locations = [
     FFTLocation(LocationNames.LIONEL_1_STORY, battle_level=7),
     FFTLocation(LocationNames.LIONEL_2_STORY, battle_level=7),
+    FFTLocation(LocationNames.LIONEL_2_STONE, battle_level=7),
     FFTLocation(LocationNames.LIONEL_SHOP, battle_level=7)
 ]
 

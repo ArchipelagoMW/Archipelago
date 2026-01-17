@@ -76,10 +76,13 @@ class DWPatch(APAutoPatchInterface):
         current_directory = Utils.user_path()
         new_dir = os.path.join(current_directory, "dragon_warrior_randomizer")
 
+        # Load the appropriate module file depending on OS and which Python version is running
+        python_version = str(sys.version_info.major) + str(sys.version_info.minor)
+
         if platform.system() == "Windows":
-            file = "dwr.cp312-win_amd64.pyd"
+            file = "dwr.cp" + python_version + "-win_amd64.pyd"
         else:
-            file = "dwr.cpython-312-x86_64-linux-gnu.so"
+            file = "dwr.cpython-" + python_version +"-x86_64-linux-gnu.so"
 
         try:
             os.mkdir(new_dir)

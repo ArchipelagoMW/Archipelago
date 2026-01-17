@@ -2,15 +2,14 @@ from dataclasses import dataclass
 from typing import Dict, Tuple
 
 from BaseClasses import Region
-from .CharacterUtils import is_character_playable
+from .CharacterUtils import is_character_playable, is_capsule_enabled
 from .CharacterUtils import is_level_playable, \
-    get_playable_characters, get_playable_character_item, is_any_character_playable, character_has_enemy_sanity, \
-    character_has_capsule_sanity
-from .Enums import Area, Character, SubLevelMission, SubLevel, pascal_to_space, Capsule
+    get_playable_characters, get_playable_character_item, is_any_character_playable, character_has_enemy_sanity
+from .Enums import Area, Character, SubLevelMission, SubLevel, pascal_to_space, non_existent_areas
 from .Locations import SonicAdventureDXLocation, \
     upgrade_location_table, level_location_table, mission_location_table, boss_location_table, sub_level_location_table, \
     field_emblem_location_table
-from .Logic import area_connections, chao_egg_location_table, chao_race_location_table, enemy_location_table, \
+from .Logic import chao_egg_location_table, chao_race_location_table, enemy_location_table, \
     capsule_location_table, fish_location_table
 from .Names import LocationName
 from .Options import SonicAdventureDXOptions
@@ -26,12 +25,26 @@ class AreaConnection:
     item: str
 
 
+MISSABLE_CAPSULES = (list(range(12501, 12547))  # Sonic Casinopolis Sewers
+                     + list(range(21501, 21542))  # Tails Casinopolis Sewers
+                     + list(range(14501, 14519))  # Sonic Twinkle Park Karting
+                     + list(range(15524, 15532))  # Sonic Speed Highway Going down
+                     + list(range(18512, 18514)))  # Sonic Lost Would Boulder
+
+MISSABLE_ENEMIES = (list(range(12001, 12010))  # Sonic Casinopolis Sewers
+                    + list(range(21001, 21003))  # Tails Casinopolis Sewers
+                    + list(range(14001, 14008)))  # Sonic Twinkle Park karting
+
+
 def get_region_name(character: Character, area: Area) -> str:
     return "{} ({})".format(pascal_to_space(area.name), character.name)
 
 
-def get_entrance_name(character: Character, area: Area) -> str:
-    return "{} Entrance ({})".format(pascal_to_space(area.name), character.name)
+def get_entrance_name(character: Character, area_from: Region, area_to: Region, alt: bool) -> str:
+    if alt:
+        return "{} to {} Alt Entrance ({})".format(area_from.name, area_to.name, character.name)
+    else:
+        return "{} to {} Entrance ({})".format(area_from.name, area_to.name, character.name)
 
 
 def create_sadx_regions(world: World, starter_setup: StarterSetup, options: SonicAdventureDXOptions):
@@ -42,6 +55,8 @@ def create_sadx_regions(world: World, starter_setup: StarterSetup, options: Soni
     created_regions: Dict[Tuple[Character, Area], Region] = {}
     for area in Area:
         for character in get_playable_characters(options):
+            if (character, area) in non_existent_areas:
+                continue
             region = Region(get_region_name(character, area), world.player, world.multiworld)
             world.multiworld.regions.append(region)
             add_locations_to_region(region, area, character, world.player, options)
@@ -50,48 +65,6 @@ def create_sadx_regions(world: World, starter_setup: StarterSetup, options: Soni
                 menu_region.connect(region, None,
                                     lambda state, item=get_playable_character_item(character): state.has(item,
                                                                                                          world.player))
-
-    # Connect regions based on area connections rules
-    for (character, area_from, area_to), (normal_logic_items, hard_logic_items, expert_dc_logic_items,
-                                          expert_dx_logic_items, expert_plus_dx_logic_items) in area_connections.items():
-
-        if options.entrance_randomizer:
-            actual_area = starter_setup.level_mapping.get(area_to, area_to)
-        else:
-            actual_area = area_to
-
-        region_from = created_regions.get((character, area_from))
-        region_to = created_regions.get((character, actual_area))
-
-        if options.logic_level.value == 4:
-            key_items = expert_plus_dx_logic_items
-        elif options.logic_level.value == 3:
-            key_items = expert_dx_logic_items
-        elif options.logic_level.value == 2:
-            key_items = expert_dc_logic_items
-        elif options.logic_level.value == 1:
-            key_items = hard_logic_items
-        else:
-            key_items = normal_logic_items
-
-        if Area.EmeraldCoast.value <= area_to.value <= Area.HotShelter.value:
-            entrance_name = get_entrance_name(character, area_to)
-        else:
-            entrance_name = None
-
-        if region_from and region_to:
-            if key_items:
-                if all(isinstance(item, str) for item in key_items):
-                    region_from.connect(region_to, entrance_name,
-                                        lambda state, items=key_items: all(
-                                            state.has(item, world.player) for item in items))
-                else:
-                    region_from.connect(region_to, entrance_name,
-                                        lambda state, items=key_items: any(
-                                            all(state.has(item, world.player) for item in requirement_group) for
-                                            requirement_group in items))
-            else:
-                region_from.connect(region_to, entrance_name)
 
     common_region = Region("Common region", world.player, world.multiworld)
     world.multiworld.regions.append(common_region)
@@ -103,7 +76,7 @@ def create_sadx_regions(world: World, starter_setup: StarterSetup, options: Soni
     perfect_chaos_fight.locked = True
     perfect_chaos_area.locations.append(perfect_chaos_fight)
     menu_region.connect(perfect_chaos_area)
-    created_regions.clear()
+    return created_regions
 
 
 def add_locations_to_region(region: Region, area: Area, character: Character, player: int,
@@ -116,7 +89,7 @@ def add_locations_to_region(region: Region, area: Area, character: Character, pl
 
 def get_location_ids_for_area(area: Area, character: Character, options: SonicAdventureDXOptions):
     location_ids = []
-    if area == Area.TwinkleParkLobby and options.twinkle_circuit_check and options.twinkle_circuit_multiple_check:
+    if area == Area.TPLobby and options.twinkle_circuit_checks.value == 2:
         for sub_level in sub_level_location_table:
             if sub_level.subLevel == SubLevel.TwinkleCircuit:
                 if is_any_character_playable(sub_level.get_logic_characters(options), options):
@@ -137,25 +110,21 @@ def get_location_ids_for_area(area: Area, character: Character, options: SonicAd
         for capsule in capsule_location_table:
             if capsule.area == area and capsule.character == character and is_character_playable(capsule.character,
                                                                                                  options):
-                if character_has_capsule_sanity(capsule.character, options):
-                    if 12548 <= capsule.locationId <= 12552 and not options.pinball_capsules.value:
-                        continue
-                    if capsule.type == Capsule.ExtraLife and options.life_capsule_sanity:
-                        location_ids.append(capsule.locationId)
-                    elif capsule.type in [Capsule.Shield, Capsule.MagneticShield] and options.shield_capsule_sanity:
-                        location_ids.append(capsule.locationId)
-                    elif (capsule.type in [Capsule.SpeedUp, Capsule.Invincibility, Capsule.Bomb]
-                          and options.powerup_capsule_sanity):
-                        location_ids.append(capsule.locationId)
-                    elif (capsule.type in [Capsule.FiveRings, Capsule.TenRings, Capsule.RandomRings]
-                          and options.ring_capsule_sanity):
-                        location_ids.append(capsule.locationId)
+                if not is_capsule_enabled(capsule, options):
+                    continue
+                if not options.pinball_capsules.value and 12548 <= capsule.locationId <= 12552:
+                    continue
+                if not options.missable_capsules.value and capsule.locationId in MISSABLE_CAPSULES:
+                    continue
+                location_ids.append(capsule.locationId)
 
     if options.enemy_sanity:
         for enemy in enemy_location_table:
             if enemy.area == area and enemy.character == character:
                 if is_character_playable(enemy.character, options):
                     if character_has_enemy_sanity(enemy.character, options):
+                        if not options.missable_enemies.value and enemy.locationId in MISSABLE_ENEMIES:
+                            continue
                         location_ids.append(enemy.locationId)
 
     if options.fish_sanity:
@@ -198,15 +167,15 @@ def add_locations_to_common_region(region: Region, player: int, options: SonicAd
 
 def get_location_ids_for_common_region(options):
     location_ids = []
-    if options.sand_hill_check:
+    if options.sand_hill_checks:
         for sub_level in sub_level_location_table:
             if sub_level.subLevel == SubLevel.SandHill:
                 if is_any_character_playable(sub_level.get_logic_characters(options), options):
-                    if ((options.sand_hill_check_hard and sub_level.subLevelMission == SubLevelMission.A)
+                    if ((options.sand_hill_checks.value == 2 and sub_level.subLevelMission == SubLevelMission.A)
                             or sub_level.subLevelMission == SubLevelMission.B):
                         location_ids.append(sub_level.locationId)
 
-    if options.twinkle_circuit_check and not options.twinkle_circuit_multiple_check:
+    if options.twinkle_circuit_checks.value == 1:
         for sub_level in sub_level_location_table:
             if sub_level.subLevel == SubLevel.TwinkleCircuit:
                 if is_any_character_playable(sub_level.get_logic_characters(options), options):
@@ -216,7 +185,7 @@ def get_location_ids_for_common_region(options):
         for sub_level in sub_level_location_table:
             if sub_level.subLevel == SubLevel.SkyChaseAct1 or sub_level.subLevel == SubLevel.SkyChaseAct2:
                 if is_any_character_playable(sub_level.get_logic_characters(options), options):
-                    if ((options.sky_chase_checks_hard and sub_level.subLevelMission == SubLevelMission.A)
+                    if ((options.sky_chase_checks.value == 2 and sub_level.subLevelMission == SubLevelMission.A)
                             or sub_level.subLevelMission == SubLevelMission.B):
                         location_ids.append(sub_level.locationId)
 

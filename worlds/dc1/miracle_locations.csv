@@ -1,0 +1,425 @@
+    "Mayor's House Table chest": 971111001
+    "Mayor's House Bed chest":  971111002
+    "Mayor's House Chair chest":  971111003
+    "Mayor's House Closet chest":  971111004
+
+    "Player's House inside chest (storage)": 971111005
+    "Player's House inside chest (bed)": 971111005
+    "Player's House inside chest (table)": 971111005
+    "Player's House inside chest (sink)": 971111005
+    "Player's House Barn chest (rake)": 971111005
+    "Player's House Barn chest (feed)": 971111005
+    "Player's House Barn chest (trough)": 971111005
+    "Player's House outside chest (barrels)": 971111005
+    "Player's House outside chest (fence)": 971111006
+    "Player's House outside chest (stairs)": 971111007
+
+    "Macho's House inside chest (cabinet)": 971111005
+    "Macho's House inside chest (punching bag)": 971111005
+    "Macho's House inside chest (bed)": 971111005
+    "Macho's House inside chest (table)": 971111005
+    "Macho's House outside chest (left side)": 971111006
+    "Macho's House outside chest (behind)": 971111006
+
+    "Laura's House inside chest (shelf)": 971111005
+    "Laura's House inside chest (bed)": 971111005
+    "Laura's House inside chest (sink)": 971111005
+    "Laura's House inside chest (storage)": 971111005
+    "Laura's House outside chest (tricycle)": 971111006
+    "Laura's House outside chest (right)": 971111006
+
+    "Paige's House Inside chest (storage)": 971111005
+    "Paige's House Inside chest (upstairs)": 971111005
+    "Paige's House Inside chest (bed)": 971111005
+    "Paige's House Outside chest (behind)": 971111006
+    "Paige's House Outside chest (wheel)": 971111006
+
+    "Claude's House Inside chest (bed)": 971111005
+    "Claude's House Inside chest (corner)": 971111005
+    "Claude's House Inside chest (storage)": 971111005
+    "Claude's House Inside chest (sink)": 971111005
+    "Claude's House Outside chest (behind)": 971111006
+    "Claude's House Outside chest (candy box)": 971111006
+
+    "Hag's House Inside chest (table)": 971111005
+    "Hag's House Inside chest (fireplace)": 971111005
+    "Hag's House Inside chest (sink)": 971111005
+    "Hag's House Inside chest (storage)": 971111005
+    "Hag's House Outside chest (front)": 971111006
+    "Hag's House Outside chest (urns)": 971111006
+
+    "Alnet's House inside chest (sink)": 971111005
+    "Alnet's House inside chest (table)": 971111005
+    "Alnet's House Barn chest (buckets)": 971111005
+    "Alnet's House Barn chest (hay)": 971111005
+    "Alnet's House Barn chest (trough)": 971111005
+    "Alnet's House Barn chest (cabin)": 971111005
+    "Alnet's House outside chest (barrels)": 971111006
+    "Alnet's House outside chest (barn door)": 971111006
+
+    "Gaffer's Buggy chest (front)": 0
+    "Gaffer's Buggy chest (behind)": 0
+
+    "Dran's Windmill outside chest (right)": 0
+    "Dran's Windmill outside chest (left)": 0
+    "Dran's Windmill inside chest (?)": 0
+    "Dran's Windmill inside chest (barrels)": 0
+    "Dran's Windmill inside chest (pillar)": 0
+    "Dran's Windmill inside chest (closet)": 0
+    "Dran's Windmill inside chest (stairs mid)": 0
+    "Dran's Windmill inside chest (stairs top)": 0
+    "Dran's Windmill inside chest (under stairs)": 0
+
+    "Norune Pond chest": 0
+
+
+
+    "Treant chest 1": 0
+    "Treant chest 2": 0
+    "Treant chest 3": 0
+    "Treant chest 4": 0
+    "Treant chest 5": 0
+
+    "Near Waterfall chest": 0
+    "Matataki Pond chest": 0
+    "Near Treant chest": 0
+    "Goro sign chest": 0
+
+    "Goro's House inside chest (bed)": 0
+    "Goro's House inside chest (ladder)": 0
+    "Goro's House inside chest (bucket)": 0
+    "Goro's House inside chest (table)": 0
+    "Goro's House outside chest (left log)": 0
+    "Goro's House outside chest (??)": 0
+    "Goro's House outside chest (behind)": 0
+    "Goro's House outside chest (up ladder)": 0
+
+    "Pao's House inside chest (bed table)": 0
+    "Pao's House inside chest (bench)": 0
+    "Pao's House inside chest (bed)": 0
+    "Pao's House outside chest (ground)": 0
+    "Pao's House outside chest (upstairs)": 0
+    "Pao's House outside chest (laundry)": 0
+
+    "Cacao's House inside chest (wall shelf)": 0
+    "Cacao's House inside chest (bench)": 0
+    "Cacao's House outside chest (ground 1)": 0
+    "Cacao's House outside chest (ground 2)": 0
+    "Cacao's House outside chest (laundry)": 0
+
+    "Bunbuku's House inside chest (downstairs)": 0
+    "Bunbuku's House outside chest (behind)": 0
+    "Bunbuku's House outside chest (barrels)": 0
+
+    "Kye's House inside chest (sink)": 0
+    "Kye's House inside chest (upper bunk)": 0
+    "Kye's House inside chest (cabin)": 0
+    "Kye's House outside chest (right side)": 0
+    "Kye's House outside chest (behind)": 0
+
+    "Baron's House inside chest (table)": 0
+    "Baron's House inside chest (throne)": 0
+    "Baron's House inside chest (curtain)": 0
+    "Baron's House outside chest (ground)": 0
+    "Baron's House outside chest (behind)": 0
+
+    "Couscous's House inside chest (table)": 0
+    "Couscous's House inside chest (bonsai)": 0
+    "Couscous's House outside chest (left)": 0
+    "Couscous's House outside chest (right)": 0
+
+    "Gob's House inside chest (bones)": 0
+    "Gob's House inside chest (bed)": 0
+    "Gob's House inside chest (firewood)": 0
+    "Gob's House outside chest (bones)": 0
+    "Gob's House outside chest (behind)": 0
+
+    "Mushroom House inside chest (behind ladder)": 0
+    "Mushroom House inside chest (by ladder)": 0
+    "Mushroom House inside chest (up ladder)": 0
+    "Mushroom House inside chest (top floor)": 0
+    "Mushroom House outside chest (behind)": 0
+    "Mushroom House outside chest (ladder)": 0
+
+    "Watermill 1 inside chest (right)": 0
+    "Watermill 1 inside chest (left)": 0
+    "Watermill 1 outside chest (right)": 0
+    "Watermill 1 outside chest (left)": 0
+
+    "Watermill 2 inside chest (right)": 0
+    "Watermill 2 inside chest (left)": 0
+    "Watermill 2 outside chest (right)": 0
+    "Watermill 2 outside chest (left)": 0
+
+    "Watermill 3 inside chest (right)": 0
+    "Watermill 3 inside chest (left)": 0
+    "Watermill 3 outside chest (right)": 0
+    "Watermill 3 outside chest (left)": 0
+
+    "Wise Owl Shop inside chest (stools)": 0
+    "Wise Owl Shop inside chest (counter)": 0
+    "Wise Owl Shop inside chest (trash left)": 0
+    "Wise Owl Shop inside chest (trash right)": 0
+    "Wise Owl Shop outside chest (right)": 0
+    "Wise Owl Shop outside chest (behind)": 0
+
+
+
+    "Queens river bridge chest": 0
+    "Queens wall near entrance chest": 0
+    "Queens south area wall chest": 0
+    "Queens corner by ramps chest": 0
+
+    "Queens dock barrels by Rando shop chest": 0
+    "Queens dock near sub chest": 0
+    "Queens dock near ship chest": 0
+    "Queens dock far end chest": 0
+
+    "Rando's House floor chest": 0
+    "Rando's House crate chest": 0
+    "Rando's House barrels in back chest": 0
+
+    "Ruty's Store chest (umbrella)": 0
+    "Ruty's Store chest (center)": 0
+    "Ruty's Store chest (washtub)": 0
+
+    "Suzy's Store chest (table 1)": 0
+    "Suzy's Store chest (cart)": 0
+    "Suzy's Store chest (table 2)": 0
+    "Suzy's Store chest (keg)": 0
+
+    "Lana's Store chest (crates 1)": 0
+    "Lana's Store chest (crates 2)": 0
+    "Lana's Store chest (cart 3)": 0
+    "Lana's Store chest (cart 2)": 0
+
+    "Jack's Store inside chest (crates)": 0
+    "Jack's Store inside chest (armor)": 0
+    "Jack's Store inside chest (weapons)": 0
+    "Jack's Store inside chest (bed)": 0
+    "Jack's Store outside chest (door)": 0
+    "Jack's Store outside chest (roof left)": 0
+    "Jack's Store outside chest (roof right)": 0
+
+    "Joker's House inside chest (door)": 0
+    "Joker's House inside chest (counter)": 0
+    "Joker's House inside chest (bedroom)": 0
+    "Joker's House outside chest (ground)": 0
+    "Joker's House outside chest (roof right)": 0
+    "Joker's House outside chest (pillar)": 0
+    "Joker's House outside chest (roof left)": 0
+
+    "Divining House inside chest 1": 0
+    "Divining House inside chest 2": 0
+    "Divining House inside chest 3": 0
+    "Divining House inside chest 4": 0
+    "Divining House outside chest (front)": 0
+    "Divining House outside chest (behind)": 0
+
+    "Cathedral inside chest (entryway)": 0
+    "Cathedral inside chest (plinth)": 0
+    "Cathedral inside chest (left)": 0
+    "Cathedral inside chest (table)": 0
+    "Cathedral inside chest (right)": 0
+    "Cathedral outside chest (right)": 0
+    "Cathedral outside chest (left 1)": 0
+    "Cathedral outside chest (left 2)": 0
+
+    "Basker's Store inside chest (crates)": 0
+    "Basker's Store inside chest (barrel)": 0
+    "Basker's Store inside chest (counter)": 0
+    "Basker's Store outside chest (upper door)": 0
+    "Basker's Store outside chest (roof)": 0
+
+    "King's Hideout inside chest (table)": 0
+    "King's Hideout inside chest (corner)": 0
+    "King's Hideout inside chest (pillar)": 0
+    "King's Hideout inside chest (window)": 0
+    "King's Hideout outside chest (car)": 0
+    "King's Hideout outside chest (umbrella right)": 0
+    "King's Hideout outside chest (umbrella left)": 0
+
+    "Sheriff's Office inside chest (deputy desk)": 0
+    "Sheriff's Office inside chest (sheriff desk)": 0
+    "Sheriff's Office inside chest (corner)": 0
+    "Sheriff's Office outside chest (left)": 0
+    "Sheriff's Office outside chest (behind)": 0
+
+    "Queens Fountain chest (front)": 0
+    "Queens Fountain chest (right)": 0
+    "Queens Fountain chest (left)": 0
+    "Queens Fountain chest (behind)": 0
+
+    "Leaning Tower chest 1": 0
+    "Leaning Tower chest 2": 0
+    "Leaning Tower chest 3": 0
+    "Leaning Tower chest 4": 0
+
+
+
+    "Ungaga's House inside chest (fire)": 971114301
+    "Ungaga's House inside chest (crates)": 971114302
+    "Ungaga's House inside chest (bow)": 971114303
+    "Ungaga's House inside chest (table)": 971114304
+    "Ungaga's House outside chest (totem)": 971114305
+    "Ungaga's House outside chest (bowls)": 971114306
+
+    "Jibubu's House inside chest (on bench)": 971114306
+    "Jibubu's House inside chest (crates)": 971114306
+    "Jibubu's House inside chest (near bench)": 971114306
+    "Jibubu's House outside chest (hay)": 971114306
+    "Jibubu's House outside chest (behind)": 971114306
+
+    "3 Sisters' House inside chest (small jugs)": 971114306
+    "3 Sisters' House inside chest (wall rug)": 971114306
+    "3 Sisters' House inside chest (jug)": 971114306
+    "3 Sisters' House inside chest (basket)": 971114306
+    "3 Sisters' House outside chest (left side)": 971114306
+    "3 Sisters' House outside chest (behind)": 971114306
+    "3 Sisters' House outside chest (right of door)": 971114306
+
+    "Brooke's House inside chest (bench)": 971114306
+    "Brooke's House inside chest (jug)": 971114306
+    "Brooke's House inside chest (boomerangs)": 971114306
+    "Brooke's House inside chest (crates)": 971114306
+    "Brooke's House outside chest (front)": 971114306
+    "Brooke's House outside chest (rear right)": 971114306
+    "Brooke's House outside chest (rear left)": 971114306
+
+    "Prisoner Cabin chest (front)": 971114306
+    "Prisoner Cabin chest (cell)": 971114306
+    "Prisoner Cabin chest (left)": 971114306
+
+    "Chief's House inside chest (Chief's seat)": 971114306
+    "Chief's House inside chest (left of stairs)": 971114306
+    "Chief's House inside chest (table)": 971114306
+    "Chief's House inside chest (drums)": 971114306
+    "Chief's House outside chest (right)": 971114306
+    "Chief's House outside chest (behind)": 971114306
+    "Chief's House outside chest (left)": 971114306
+
+    "Zabo's House inside chest (bowls)": 971114306
+    "Zabo's House inside chest (table)": 971114306
+    "Zabo's House inside chest (bench)": 971114306
+    "Zabo's House inside chest (crates)": 971114306
+    "Zabo's House outside chest (behind)": 971114306
+    "Zabo's House outside chest (roof left)": 971114306
+    "Zabo's House outside chest (roof right)": 971114306
+
+    "Enga's House inside chest (door)": 971114306
+    "Enga's House inside chest (bowls)": 971114306
+    "Enga's House inside chest (jar)": 971114306
+    "Enga's House inside chest (bows)": 971114306
+    "Enga's House outside chest (right of door)": 971114306
+    "Enga's House outside chest (behind)": 971114306
+    "Enga's House outside chest (left of door)": 971114306
+
+    "Toto's House inside chest (ladder)": 971114306
+    "Toto's House inside chest (window)": 971114306
+    "Toto's House inside chest (Gosuke)": 971114306
+    "Toto's House inside chest (downstairs)": 971114306
+    "Toto's House outside chest (front)": 971114306
+    "Toto's House outside chest (left side)": 971114306
+    "Toto's House outside chest (right side)": 971114306
+
+    "Muska Lacka Oasis chest 1": 971114306
+    "Muska Lacka Oasis chest 2": 971114306
+    "Muska Lacka Oasis chest 3": 971114306
+    "Muska Lacka Oasis chest 4": 971114306
+    "Muska Lacka Oasis chest 5": 971114306
+
+    "Totem Pole A chest (right)": 971114306
+    "Totem Pole A chest (left)": 971114306
+
+    "Totem Pole B chest (right)": 971114306
+    "Totem Pole B chest (left)": 971114306
+
+    "Totem Pole C chest (right)": 971114306
+    "Totem Pole C chest (left)": 971114306
+
+    "Muska Lacka SMT entrance chest (left)": 0
+    "Muska Lacka SMT entrance chest (right)": 0
+
+    "Muska Lacka entrance chest (left)": 0
+    "Muska Lacka entrance chest (right)": 0
+
+    "SMT (right of stairs)": 0
+    "SMT (right rock)": 0
+    "SMT (right wall)": 0
+    "SMT (left wall)": 0
+    "SMT (far left)": 0
+
+
+
+    "Yellow Drops Shop room chest 1": 0
+    "Yellow Drops Shop room chest 2": 0
+    "Yellow Drops Shop room chest 3": 0
+    "Yellow Drops Shop outside chest": 0
+
+    "Samba's House Inside chest 1": 0
+    "Samba's House Inside chest 2": 0
+    "Samba's House Inside chest 3": 0
+    "Samba's House Outside chest": 0
+
+    "Lumba's House Inside chest 1": 0
+    "Lumba's House Inside chest 2": 0
+    "Lumba's House Inside chest 3": 0
+    "Lumba's House Outside chest": 0
+
+    "Flammi's House Inside chest 1": 0
+    "Flammi's House Inside chest 2": 0
+    "Flammi's House Inside chest 3": 0
+    "Flammi's House Outside chest": 0
+
+    "Yellow Drops path to Moon Sea chest": 0
+    "Yellow Drops near Marnia chest": 0
+
+    "Factory Floor chest 1": 0
+    "Factory Floor chest 2": 0
+    "Factory chest (observation platform)": 0
+    "Factory chest (ramp by door)": 0
+    "Factory Floor chest 3": 0
+    "Factory chest (floor by ramp)": 0
+
+    "Parts HD chest 1": 0
+    "Parts HD chest 2": 0
+
+    "Parts AMR chest 1": 0
+    "Parts AMR chest 2": 0
+
+    "Parts AML chest 1": 0
+    "Parts AML chest 2": 0
+
+    "Parts HGR chest 1": 0
+    "Parts HGR chest 2": 0
+
+    "Parts HGL chest 1": 0
+    "Parts HGL chest 2": 0
+
+    "Parts HGR2 chest 1": 0
+    "Parts HGR2 chest 2": 0
+
+    "Parts HGL2 chest 1": 0
+    "Parts HGL2 chest 2": 0
+
+    "Parts CT chest 1": 0
+    "Parts CT chest 2": 0
+
+    "Parts WT chest 1": 0
+    "Parts WT chest 2": 0
+
+    "Parts TIR chest 1": 0
+    "Parts TIR chest 2": 0
+
+    "Parts TIL chest 1": 0
+    "Parts TIL chest 2": 0
+
+    "Parts FTR chest 1": 0
+    "Parts FTR chest 2": 0
+
+    "Parts FTL chest 1": 0
+    "Parts FTL chest 2": 0
+
+    "Factory Lookout chest (ground)": 0
+    "Factory Lookout chest (1st level)": 0
+    "Factory Lookout chest (2nd level)": 0

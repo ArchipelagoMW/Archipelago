@@ -33,25 +33,21 @@ The goal of the game is to collect enough Zodiac Stones to unlock the way to Mur
 ## What Quality of Life options have been added?
 
 - JP Boon items have been added, adding JP to your character's jobs to make acquiring abilities easier
-- JP gains have been multiplied across the board (configurable with an option) to make unlocking new jobs easier.
+- JP and EXP gains have been multiplied across the board (configurable with an option) to make unlocking new jobs easier.
 
 ## Where can the Zodiac Stones be on the Vanilla Stones setting?
 
-- Inside of Lionel Castle
 - Slums of Goug
+- Inside of Lionel Castle
 - Inside Riovanes Castle
 - Roof of Riovanes Castle
 - Bethla Garrison Sluice
-- Inside Limberry Castle
-- Limberry Castle Cemetary
+- Limberry Castle Cemetery (two Stone locations are here)
 - Igros Castle
 - Graveyard of Airships 1 (only when Altima Only is enabled)
 - Goland Underground Passage (only when sidequests are enabled)
 - Nelveska Temple (only when sidequests are enabled)
 - END (only when sidequests are enabled)
-
-Because in vanilla the Limberry Castle Cemetary gives out two stones (one from Zalera and one from Meliadoul),
-Inside Limberry Castle was chosen as a possible location for a Zodiac Stone to maintain some parity with vanilla.
 
 ## Can I play this single player?
 

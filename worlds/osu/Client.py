@@ -7,12 +7,12 @@ import aiohttp
 import webbrowser
 import time
 import ast
-
+import Utils
 import ModuleUpdate
 
-ModuleUpdate.update()
+osu_base_id = 727000000
 
-import Utils
+ModuleUpdate.update()
 
 if __name__ == "__main__":
     Utils.init_logging("osu!Client", exception_logger="Client")
@@ -51,20 +51,20 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
         os.environ['API_KEY'] = key
         self.output(f"Set to ##################")
 
-    def _cmd_set_client_id(self, id=""):
+    def _cmd_set_client_id(self, client_id=""):
         """Sets the Client ID, generated in the "OAuth" Section of Account Settings"""
-        os.environ['CLIENT_ID'] = id
-        self.output(f"Set to {id}")
+        os.environ['CLIENT_ID'] = client_id
+        self.output(f"Set to {client_id}")
 
-    def _cmd_set_player_id(self, id=""):
+    def _cmd_set_player_id(self, player_id=""):
         """Sets the player's user ID, found in the URL of their profile"""
-        os.environ['PLAYER_ID'] = id
-        self.output(f"Set to {id}")
+        os.environ['PLAYER_ID'] = player_id
+        self.output(f"Set to {player_id}")
 
     def _cmd_save_keys(self):
         """Saves the player's current IDs"""
         filename = "config"
-        path = self.ctx.game_communication_path+' config'
+        path = self.ctx.game_communication_path + ' config'
         if not os.path.exists(path):
             os.makedirs(path)
         with open(os.path.join(path, filename), 'w') as f:
@@ -76,7 +76,7 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
     def _cmd_load_keys(self):
         """loads the player's previously saved IDs"""
         filename = "config"
-        path = self.ctx.game_communication_path+' config'
+        path = self.ctx.game_communication_path + ' config'
         with open(os.path.join(path, filename), 'r') as f:
             data = f.read()
         d = data.split(" ")
@@ -86,7 +86,7 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
     def _cmd_save_settings(self):
         """Saves the player's current settings. Doesn't include API keys or IDs."""
         filename = "settings"
-        path = self.ctx.game_communication_path+' config'
+        path = self.ctx.game_communication_path + ' config'
         if not os.path.exists(path):
             os.makedirs(path)
         with open(os.path.join(path, filename), 'w') as f:
@@ -98,17 +98,18 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
     def _cmd_load_settings(self):
         """Loads the player's previously saved settings. Doesn't include API keys or IDs."""
         filename = "settings"
-        path = self.ctx.game_communication_path+' config'
+        path = self.ctx.game_communication_path + ' config'
         with open(os.path.join(path, filename), 'r') as f:
             data = f.read()
         d = data.split("\t")
-        self.ctx.auto_modes, self.ctx.auto_download, self.ctx.download_type = ast.literal_eval(d[0]), ast.literal_eval(d[1]), d[2],
+        self.ctx.auto_modes, self.ctx.auto_download, self.ctx.download_type = ast.literal_eval(d[0]), \
+            ast.literal_eval(d[1]), d[2],
         self.output("Loaded Previous Settings")
 
     def _cmd_save_all(self):
         """Saves both the player's current IDs, and their settings."""
         filename = "config"
-        path = self.ctx.game_communication_path+' config'
+        path = self.ctx.game_communication_path + ' config'
         if not os.path.exists(path):
             os.makedirs(path)
         with open(os.path.join(path, filename), 'w') as f:
@@ -129,7 +130,7 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
     def _cmd_load_all(self):
         """loads the player's previously saved IDs, and their settings."""
         filename = "config"
-        path = self.ctx.game_communication_path+' config'
+        path = self.ctx.game_communication_path + ' config'
         with open(os.path.join(path, filename), 'r') as f:
             data = f.read()
             d = data.split(" ")
@@ -140,13 +141,15 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
         with open(os.path.join(path, filename), 'r') as f:
             data = f.read()
         d = data.split("\t")
-        self.ctx.auto_modes, self.ctx.auto_download, self.ctx.download_type = ast.literal_eval(d[0]), ast.literal_eval(d[1]), d[2],
+        self.ctx.auto_modes, self.ctx.auto_download, self.ctx.download_type = ast.literal_eval(d[0]), \
+            ast.literal_eval(d[1]), d[2],
         self.output("Loaded Previous Settings")
 
     def _cmd_songs(self):
         """Display all songs in logic."""
         indexes = get_available_ids(self.ctx)
-        self.output(f"You Have {count_item(self.ctx, 726999999)} Performance Points, you need {self.ctx.preformance_points_needed} to unlock your goal.")
+        self.output(f"You Have {count_item(self.ctx, 726999999)} Performance Points, "
+                    f"you need {self.ctx.preformance_points_needed} to unlock your goal.")
         self.output(f"You currently have {len(indexes)} songs in Logic")
         for i in indexes:
             song = list(self.ctx.pairs.keys())[i]
@@ -156,10 +159,11 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
     def _cmd_all_songs(self):
         """Displays all songs included in current generation."""
         played_songs = get_played_songs(self.ctx)
-        self.output(f"You have played {len(played_songs)}/{len(self.ctx.pairs)-1} songs")
+        self.output(f"You have played {len(played_songs)}/{len(self.ctx.pairs) - 1} songs")
         for song in self.ctx.pairs:
             beatmapset = self.ctx.pairs[song]
-            self.output(f"{song}: {beatmapset['title']} (ID: {beatmapset['id']}) {'(passed)' if song in played_songs else ''}")
+            self.output(f"{song}: {beatmapset['title']} (ID: {beatmapset['id']}) "
+                        f"{'(passed)' if song in played_songs else ''}")
 
     def _cmd_update(self, mode=''):
         """Gets the player's last score, in a given gamemode or their set default"""
@@ -168,18 +172,19 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
     def _cmd_download(self, number=''):
         """Downloads the given song number in '/songs'. Also Accepts "Next" and "Victory"."""
         if number.lower() == 'next':
-            if len(get_available_ids(self.ctx)) > 0:
-                number = get_available_ids(self.ctx)[0]+1
+            in_logic = get_available_ids(self.ctx)
+            if len(in_logic) > 0:
+                number = in_logic[0] + 1
             else:
                 self.output("You have no songs to download")
                 return
+        if number.lower() == 'victory':
+            number = 0
         try:
-            song_number = int(number)-1
+            song_number = int(number) - 1
         except ValueError:
-            if not (number.lower().capitalize() == 'Victory'):
-                self.output("Please Give a Number, 'next' or 'Victory'")
-                return
-            song_number = -1
+            self.output("Please Give a Number, 'next' or 'Victory'")
+            return
         try:
             song = list(self.ctx.pairs.keys())[song_number]
         except IndexError:
@@ -187,7 +192,8 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
             return
         beatmapset = self.ctx.pairs[song]
         if self.ctx.download_type == 'mirror':
-            self.output(f"Downloading {song}: {beatmapset['title']} (ID: {beatmapset['id']}) as '{beatmapset['id']} {beatmapset['artist']} - {beatmapset['title']}.osz'")
+            self.output(f"Downloading {song}: {beatmapset['title']} (ID: {beatmapset['id']}) as "
+                        f"'{beatmapset['id']} {beatmapset['artist']} - {beatmapset['title']}.osz'")
             asyncio.create_task(self.download_beatmapset(beatmapset))
             return
         if self.ctx.download_type == 'direct':
@@ -255,12 +261,12 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
             return
         if number.lower() == 'next':
             if len(get_available_ids(self.ctx)) > 0:
-                number = get_available_ids(self.ctx)[0]+1
+                number = get_available_ids(self.ctx)[0] + 1
             else:
                 self.output("You have no songs in logic")
                 return
         try:
-            song_number = int(number)-1
+            song_number = int(number) - 1
         except ValueError:
             if not (number.lower().capitalize() == 'Victory'):
                 self.output("Please Give a Number, 'next' or 'Victory'")
@@ -295,14 +301,16 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
         if not score['passed']:
             # self.output("You cannot check a location without passing the song")
             return
-        if self.ctx.disable_difficulty_reduction and any(mod['acronym'] in ['NF', 'EZ', 'HT', 'DC'] for mod in score['mods']):
+        if self.ctx.disable_difficulty_reduction and any(
+                mod['acronym'] in ['NF', 'EZ', 'HT', 'DC'] for mod in score['mods']):
             self.output("Your current settings do not allow difficulty reduction mods.")
             return
         if self.ctx.minimum_grade:
             grade = calculate_grade(score)
             grades = ['X', 'S', 'A', 'B', 'C', 'D']
             if grades.index(grade) >= self.ctx.minimum_grade:
-                required_grade = 'SS' if grades[self.ctx.minimum_grade-1] == 'X' else grades[self.ctx.minimum_grade-1]
+                required_grade = 'SS' if grades[self.ctx.minimum_grade - 1] == 'X' else grades[
+                    self.ctx.minimum_grade - 1]
                 self.output(f"You did not get a high enough grade. You need atleast a"
                             f"{'n' if required_grade == 'A' else ''} {required_grade} Rank")
                 return
@@ -324,18 +332,18 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
                                 self.output('Your settings do not allow converts')
                                 return
                 if song == "Victory":
-                    if count_item(self.ctx, 726999999) >= self.ctx.preformance_points_needed:
+                    if count_item(self.ctx, osu_base_id - 1) >= self.ctx.preformance_points_needed:
                         message = [{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}]
                         asyncio.create_task(self.ctx.send_msgs(message))
                         return
                     self.output("You don't have enough preformance points")
                     return
-                if not count_item(self.ctx, 727000000 + list(self.ctx.pairs.keys()).index(song)):
+                if not count_item(self.ctx, osu_base_id + list(self.ctx.pairs.keys()).index(song)):
                     self.output("You don't have this song unlocked")
                     return
                 locations = []
                 for i in range(2):
-                    location_id = 727000000 + (2 * list(self.ctx.pairs.keys()).index(song)) + i
+                    location_id = osu_base_id + (2 * list(self.ctx.pairs.keys()).index(song)) + i
                     if location_id in self.ctx.missing_locations:
                         if location_id in self.ctx.missing_locations:
                             locations.append(int(location_id))
@@ -352,7 +360,7 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
                 content_length = req.headers.get('Content-Length')
                 req_status = req.status
                 if req_status != 200:
-                    # The library doesn't have a built-in way to get the status name in our version of aiohttp, so we have to do it manually sadly
+                    # The library doesn't have a built-in way to get the status name in our version of aiohttp
                     # I have only included the most likely status codes to be returned by beatconnect
                     http_status_names = {
                         400: 'Bad Request',
@@ -366,14 +374,16 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
                         503: 'Service Unavailable',
                         504: 'Gateway Timeout',
                     }
-                    self.output(f'Error Downloading {beatmapset["id"]} {beatmapset["artist"]} - {beatmapset["title"]}.osz')
-                    self.output(f'Please Manually Add the Map or Try Again Later. ({req_status} - {http_status_names.get(req_status, "Unknown Error")})')
+                    self.output(
+                        f'Error Downloading {beatmapset["id"]} {beatmapset["artist"]} - {beatmapset["title"]}.osz')
+                    self.output(
+                        f'Please Manually Add the Map or Try Again Later. ({req_status} - {http_status_names.get(req_status, "Unknown Error")})')
                     return
                 # With beatconnect we always know the total size of the download, so this is always true
                 if content_length is not None:
                     total_bytes = int(content_length)
                     total_mb = total_bytes / (1024 ** 2)
-                    # Beatconnect is slow to respond, so this message will appear when the download starts unlike when you run the command
+                    # Beatconnect is slow to respond, so this message will appear when the download starts
                     self.output(f"Starting download of beatmapset ({total_mb:.2f}MB)")
 
                 downloaded_content = []
@@ -418,8 +428,6 @@ class APosuClientCommandProcessor(ClientCommandProcessor):
             self.output(f"An error occurred: {repr(e)}")
 
 
-
-
 class APosuContext(CommonContext):
     command_processor: int = APosuClientCommandProcessor
     game = "osu!"
@@ -433,7 +441,7 @@ class APosuContext(CommonContext):
         self.last_scores: list = []
         self.auto_modes: list[str] = []
         self.auto_download: bool = False
-        self.download_type: str = 'mirror'
+        self.download_type: str = 'direct'
         self.token: str = ''
         self.disable_difficulty_reduction: bool = False
         self.all_locations: list[int] = []
@@ -531,9 +539,10 @@ def get_available_ids(ctx):
     # Gets the Index of each Song the player has but has not played
     incomplete_items = []
     for item in ctx.items_received:
-        song_index = item.item-727000000
-        location_id = (song_index*2)+727000000
-        if (location_id in ctx.missing_locations or location_id+1 in ctx.missing_locations) and song_index not in incomplete_items:
+        song_index = item.item - osu_base_id
+        location_id = (song_index * 2) + osu_base_id
+        if (
+                location_id in ctx.missing_locations or location_id + 1 in ctx.missing_locations) and song_index not in incomplete_items:
             incomplete_items.append(song_index)
     if count_item(ctx, 726999999) >= ctx.preformance_points_needed:
         incomplete_items.append(-1)
@@ -544,10 +553,10 @@ def get_available_ids(ctx):
 async def get_token(ctx):
     try:
         async with aiohttp.request("POST", "https://osu.ppy.sh/oauth/token",
-                                    headers={"Accept": "application/json",
-                                    "Content-Type": "application/x-www-form-urlencoded"},
-                                    data=f"client_id={os.environ['CLIENT_ID']}&client_secret={os.environ['API_KEY']}"
-                                         f"&grant_type=client_credentials&scope=public") as authreq:
+                                   headers={"Accept": "application/json",
+                                            "Content-Type": "application/x-www-form-urlencoded"},
+                                   data=f"client_id={os.environ['CLIENT_ID']}&client_secret={os.environ['API_KEY']}"
+                                        f"&grant_type=client_credentials&scope=public") as authreq:
             tokenjson = await authreq.json()
             print(tokenjson)
             ctx.token = tokenjson['access_token']
@@ -572,6 +581,7 @@ async def open_set_in_direct(ctx, diff_id: int, fallback: bool = False) -> None:
         return
     # otherwise we can just open the first diff directly
     webbrowser.open(f"osu://b/{diff_id}")
+
 
 # This is the silent version of the function below where this one is used in game watcher
 async def download_next_beatmapset_silent(ctx, task):
@@ -608,6 +618,7 @@ async def download_next_beatmapset_silent(ctx, task):
         webbrowser.open(file_path)
     except Exception as e:
         print(f"An error occurred: {e}")
+
 
 # This is the non-silent version of the function above where this one is used in the update command
 async def download_next_beatmapset(self, task):
@@ -647,6 +658,7 @@ async def download_next_beatmapset(self, task):
     except Exception as e:
         self.output(f"An error occurred: {e}")
 
+
 # This is the silent version of the function below where this one is used in game watcher
 async def auto_get_last_scores(ctx, mode=''):
     # Make URl for the request
@@ -660,7 +672,8 @@ async def auto_get_last_scores(ctx, mode=''):
         request += f"&mode={mode}"
     if not ctx.token:
         await get_token(ctx)
-    headers = {"Accept": "application/json", "Content-Type": "application/json", "Authorization": f"Bearer {ctx.token}", "x-api-version" : "20240529"}
+    headers = {"Accept": "application/json", "Content-Type": "application/json", "Authorization": f"Bearer {ctx.token}",
+               "x-api-version": "20240529"}
     async with aiohttp.request("GET", request, headers=headers) as scores:
         try:
             score_list = await scores.json()
@@ -685,6 +698,7 @@ async def auto_get_last_scores(ctx, mode=''):
             ctx.last_scores.pop(0)
         check_location(ctx, score)
 
+
 # This is the non-silent version of the function above where this one is used in the update command
 async def get_last_scores(self, mode=''):
     # Make URl for the request
@@ -698,7 +712,8 @@ async def get_last_scores(self, mode=''):
         request += f"&mode={self.mode_names[mode.lower()]}"
     if not self.ctx.token:
         await get_token(self.ctx)
-    headers = {"Accept": "application/json", "Content-Type": "application/json", "Authorization": f"Bearer {self.ctx.token}", "x-api-version": "20240529"}
+    headers = {"Accept": "application/json", "Content-Type": "application/json",
+               "Authorization": f"Bearer {self.ctx.token}", "x-api-version": "20240529"}
     async with aiohttp.request("GET", request, headers=headers) as scores:
         try:
             score_list = await scores.json()
@@ -734,9 +749,8 @@ def calculate_grade(score):
 
     # if this score has the Classic mod enabled or if it has a legacy id, then we assume it is a stable score
     elif any(mod['acronym'] == 'CL' for mod in score['mods']) or score['legacy_score_id']:
-        if gamemode == 0 or gamemode == 1: # osu!standard or osu!taiko
-
-            # for some reason these statistics are missing if you get 0 of any of these
+        if gamemode == 0 or gamemode == 1:  # osu!standard or osu!taiko
+            # for some reason these statistics are missing if you get 0 of any of these,
             # so we have to check if they exist before we try to get them
             miss_count = int(score['statistics'].get('miss', 0) or 0)
             num_300s = int(score['statistics'].get('great', 0) or 0)
@@ -745,8 +759,8 @@ def calculate_grade(score):
             total_judgements = miss_count + num_300s + num_100s + num_50s
             percent_300s = num_300s / total_judgements
             precent_50s = num_50s / (num_300s + num_100s + num_50s)
-            if miss_count == 0 and precent_50s <= 0.01:
-                if percent_300s > 0.9: return 'S'
+            if miss_count == 0:
+                if percent_300s > 0.9 and precent_50s <= 0.01: return 'S'
                 if percent_300s > 0.8: return 'A'
                 if percent_300s > 0.7: return 'B'
                 if percent_300s > 0.6: return 'C'
@@ -780,14 +794,15 @@ def calculate_grade(score):
     else:
         return score['rank'].replace('XH', 'X').replace('SH', 'S')  # remove hidden and flashlight from the grade
 
+
 def get_played_ids(ctx):
     # Gets the Index of each Song the player has played
     played_items = []
     for item in ctx.items_received:
-        song_index = item.item-727000000
-        location_id = (song_index*2)+727000000
-        if location_id < 727000000: continue
-        if (location_id not in ctx.missing_locations and location_id+1 not in ctx.missing_locations) and song_index not in played_items:
+        song_index = item.item - osu_base_id
+        location_id = (song_index * 2) + osu_base_id
+        if location_id < osu_base_id: continue
+        if (location_id not in ctx.missing_locations and location_id + 1 not in ctx.missing_locations) and song_index not in played_items:
             played_items.append(song_index)
     played_items.sort()
     return played_items
@@ -832,12 +847,12 @@ def check_location(ctx, score):
                     return
                 print("You don't have enough performance points")
                 return
-            if not count_item(ctx, 727000000 + list(ctx.pairs.keys()).index(song)):
+            if not count_item(ctx, osu_base_id + list(ctx.pairs.keys()).index(song)):
                 print("You don't have this song unlocked")
                 return
             locations = []
             for i in range(2):
-                location_id = 727000000 + (2 * list(ctx.pairs.keys()).index(song)) + i
+                location_id = osu_base_id + (2 * list(ctx.pairs.keys()).index(song)) + i
                 if location_id in ctx.missing_locations:
                     if location_id in ctx.missing_locations:
                         locations.append(int(location_id))

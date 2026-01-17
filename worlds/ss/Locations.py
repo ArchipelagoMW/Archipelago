@@ -617,7 +617,7 @@ LOCATION_TABLE: dict[str, SSLocData] = {
         "F011r",
         "Heart Piece",
         SSLocType.CHAND,
-        [SSLocCheckedFlag.SCENE, 0x1, 0x80, "Sky"],
+        [SSLocCheckedFlag.SCENE, 0x4, 0x80, "Sky"],
     ),
     "Sky - Lumpy Pumpkin - Harp Minigame": SSLocData(
         52,
@@ -3387,3 +3387,4 @@ LOCATION_TABLE: dict[str, SSLocData] = {
     # If you add checks to the list, begin 1 index above the HIGHEST_INDEX
     # and update the value above when you complete
 }
+

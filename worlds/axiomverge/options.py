@@ -6,7 +6,7 @@ class Goal(Choice):
     """Victory condition."""
     display_name = "Goal"
     option_athetos = 0
-    # option_boss_rush = 1
+    option_boss_rush = 1
     # option_gun_hunt = 2
     default = 0
 
@@ -21,17 +21,14 @@ class StartLocation(Choice):
     option_elsenova = 1
     option_purple_absu = 2
     option_lower_kur = 3
+    option_kur_peak = 4
     default = 0
 
 # Item Options
-class ProgressiveAddressDisruptor(Choice):
+class ProgressiveAddressDisruptor(Toggle):
     """
-    Combine Address Disruptors into a single progressive upgrade. Can optionally keep bomb seperate.
+    Combine Address Disruptors into a single progressive upgrade.
     """
-    option_false = 0
-    option_exclude_bomb = 1
-    option_true = 2
-    display_name = "Progressive Address Disruptor"
 
 
 class ProgressiveCoat(DefaultOnToggle):
@@ -48,7 +45,7 @@ class ProgressiveDrone(DefaultOnToggle):
 
 
 class ShuffleSecretWorldWeapons(DefaultOnToggle):
-    """Randomize Secret world weapons into the item pool. Currently not implemented."""
+    """Randomize Secret world weapons into the item pool."""
 
 
 # Logic Options
@@ -106,6 +103,12 @@ class RequireNodes(DefaultOnToggle):
     """
 
 
+class GlitchSanity(Toggle):
+    """
+    Glitching enemies provides checks. Adds 59 locations to the pool.
+    """
+
+
 @dataclass
 class AxiomVergeOptions(PerGameCommonOptions):
     allow_displacement_warps: AllowDisplacementWarps
@@ -121,4 +124,5 @@ class AxiomVergeOptions(PerGameCommonOptions):
     progressive_drone: ProgressiveDrone
     secret_world_weapons: ShuffleSecretWorldWeapons
     require_nodes: RequireNodes
+    glitchsanity: GlitchSanity
     start_location: StartLocation

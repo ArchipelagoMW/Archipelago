@@ -92,14 +92,14 @@ class RotNCollections:
         "High Above the Land (The Flying Machine)": SongData(122, "High Above the Land (The Flying Machine)", "Shovel Knight", 4, 7, 16, 21),
         "An Underlying Problem (The Lost City)": SongData(123, "An Underlying Problem (The Lost City)", "Shovel Knight", 4, 11, 18, 23),
         #Friday Night Funkin'
-        "Dad Battle": SongData(124, "Dad Battle", "Free Promo", 4, 10, 16, 21, False),
-        "Blammed": SongData(125, "Blammed", "Friday Night Funkin'", 7, 12, 18, 25, False),
-        "Stress": SongData(126, "Stress", "Friday Night Funkin'", 7, 15, 21, 28, False),
-        "Darnell": SongData(127, "Darnell", "Friday Night Funkin'", 6, 10, 19, 27, False),
-        "Ugh": SongData(185, "Ugh", "Friday Night Funkin'", 5, 12, 17, 24, False),
-        "Senpai": SongData(129, "Senpai", "Friday Night Funkin'", 2, 10, 16, 24, False),
+        "Dad Battle": SongData(124, "Dad Battle", "Free Promo", 4, 10, 16, 21),
+        "Blammed": SongData(125, "Blammed", "Friday Night Funkin'", 7, 12, 18, 25),
+        "Stress": SongData(126, "Stress", "Friday Night Funkin'", 7, 15, 21, 28),
+        "Darnell": SongData(127, "Darnell", "Friday Night Funkin'", 6, 10, 19, 27),
+        "Ugh": SongData(185, "Ugh", "Friday Night Funkin'", 5, 12, 17, 24),
+        "Senpai": SongData(129, "Senpai", "Friday Night Funkin'", 2, 10, 16, 24),
         #Unbeatable
-        "WORN OUT TAPES [tally-ho version]": SongData(130, "WORN OUT TAPES [tally-ho version]", "Free Promo", 5, 12, 16, 25, False),
+        "WORN OUT TAPES [tally-ho version]": SongData(130, "WORN OUT TAPES [tally-ho version]", "Free Promo", 5, 12, 16, 25),
     }
 
     EXTRA_DATA: Dict[str, ExtraSongData] = {

@@ -7063,7 +7063,7 @@
     "wild_encounters": {
       "grass": "UNION_CAVE_B2F",
       "surfing": "UNION_CAVE_B2F",
-      "fishing": "Lake"
+      "fishing": "Shore"
     }
   },
   "REGION_VERMILION_CITY": {

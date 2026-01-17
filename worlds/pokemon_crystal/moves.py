@@ -124,7 +124,7 @@ def get_tmhm_compatibility(world: "PokemonCrystalWorld", pkmn_name):
     tm_value = world.options.tm_compatibility.value
     hm_value = world.options.hm_compatibility.value
     tmhms = []
-    for tm_name, tm_data in world.generated_tms.items():
+    for tm_name, tm_data in sorted(world.generated_tms.items(), key=lambda x: x[0]):
         use_value = hm_value if tm_data.is_hm or tm_name in HM_COMPAT_TMS else tm_value
         # if the value is -1, use vanilla compatibility
         if use_value == -1:
@@ -142,7 +142,7 @@ def get_tmhm_compatibility(world: "PokemonCrystalWorld", pkmn_name):
 def apply_tm_plando(world: "PokemonCrystalWorld") -> dict[int, str]:
     move_friendly_to_ids = {move_data.name.title(): move_id for move_id, move_data in world.generated_moves.items()}
     plando_data = {tm_num: move_friendly_to_ids[move] for tm_num, move in world.options.tm_plando.value.items()}
-    for tm_name, tm_data in world.generated_tms.items():
+    for tm_name, tm_data in sorted(world.generated_tms.items(), key=lambda x: x[0]):
         if tm_data.is_hm or tm_data.tm_num not in plando_data:
             continue
         move = world.generated_moves[plando_data[tm_data.tm_num]]

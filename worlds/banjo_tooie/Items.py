@@ -9,10 +9,10 @@ class BanjoTooieItem(Item):
 
 
 class ItemData(NamedTuple):
-    btid: int | None = None
-    qty: int = 0
-    type: ItemClassification = ItemClassification.progression
-    default_location: str = ""
+    btid: int | None
+    qty: int
+    type: ItemClassification
+    default_location: str
 
 
 jinjo_table = {
@@ -60,7 +60,7 @@ moves_table = {
     itemName.SHPACK:        ItemData(1230774, 1, ItemClassification.progression, locationName.SHPACK),
     itemName.GLIDE:         ItemData(1230775, 1, ItemClassification.progression, locationName.GLIDE),
     itemName.SAPACK:        ItemData(1230776, 1, ItemClassification.progression, locationName.SAPACK),
-    itemName.FSWIM:         ItemData(1230777, 1, ItemClassification.useful,   locationName.ROYSTEN1),
+    itemName.FSWIM:         ItemData(1230777, 1, ItemClassification.useful,      locationName.ROYSTEN1),
     itemName.DAIR:          ItemData(1230778, 1, ItemClassification.progression, locationName.ROYSTEN2),
     itemName.AMAZEOGAZE:    ItemData(1230779, 1, ItemClassification.progression, locationName.GOGGLES)
 }

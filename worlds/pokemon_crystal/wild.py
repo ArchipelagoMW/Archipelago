@@ -189,40 +189,51 @@ def randomize_wild_pokemon(world: "PokemonCrystalWorld"):
                 wilds = [replace(wild, pokemon="RATTATA") for wild in wilds]
                 world.generated_wild[region_key] = wilds
 
+    ensure_placed = []
+
     if world.options.randomize_pokemon_requests:
-        logical_wilds = get_logically_available_wilds(world)
+        ensure_placed.append("MAGIKARP")
 
-        if "MAGIKARP" not in logical_wilds:
-            wilds = [(key, wilds) for key, wilds in world.generated_wild.items() if
-                     world.logic.wild_regions[key] is LogicalAccess.InLogic and key.region_id is not None]
+    if world.options.randomize_pokemon_requests == RandomizePokemonRequests.option_items:
+        ensure_placed.extend(world.generated_request_pokemon)
 
-            wilds.sort(key=lambda x: x[0].region_id)
-            world.random.shuffle(wilds)
+    if world.options.breeding_methods_required == BreedingMethodsRequired.option_with_ditto:
+        ensure_placed.append("DITTO")
 
-            seen_pokemon = set()
+    if world.options.trades_required and world.options.randomize_trades.value in (RandomizeTrades.option_received,
+                                                                                  RandomizeTrades.option_vanilla):
+        ensure_placed.extend(trade.requested_pokemon for trade in world.generated_trades.values())
 
-            to_replace = None
-            encounter_key = None
-            encounters = None
-            if world.options.randomize_pokemon_requests == RandomizePokemonRequests.option_items:
-                while (not to_replace or (to_replace in world.generated_request_pokemon)) and (
-                        to_replace not in seen_pokemon):
-                    if to_replace:
-                        seen_pokemon.add(to_replace)
-                    if not wilds:
-                        raise RuntimeError("Magikarp could not be placed anywhere. Aborting.")
-                    encounter_key, encounters = wilds.pop()
-                    to_replace = world.random.choice(encounters).pokemon
+    for ensure_placed_pokemon in ensure_placed:
 
-            else:
-                encounter_key, encounters = world.random.choice(wilds)
-                to_replace = world.random.choice(encounters).pokemon
+        if ensure_placed_pokemon in get_logically_available_wilds(world): continue
 
-            encounters = [
-                replace(encounter, pokemon="MAGIKARP" if encounter.pokemon == to_replace else encounter.pokemon) for
-                encounter in encounters]
+        wilds = [(key, wilds) for key, wilds in world.generated_wild.items() if
+                 world.logic.wild_regions[key] is LogicalAccess.InLogic and key.region_id is not None]
 
-            world.generated_wild[encounter_key] = encounters
+        wilds.sort(key=lambda x: x[0].region_id)
+        world.random.shuffle(wilds)
+
+        seen_pokemon = set()
+
+        to_replace = None
+        encounter_key = None
+        encounters = None
+
+        while (not to_replace or (to_replace in ensure_placed)) and (to_replace not in seen_pokemon):
+            if to_replace:
+                seen_pokemon.add(to_replace)
+            if not wilds:
+                raise RuntimeError(f"{ensure_placed_pokemon} could not be placed anywhere. Aborting.")
+            encounter_key, encounters = wilds.pop()
+            to_replace = world.random.choice(encounters).pokemon
+
+        encounters = [
+            replace(encounter, pokemon=ensure_placed_pokemon if encounter.pokemon == to_replace else encounter.pokemon)
+            for
+            encounter in encounters]
+
+        world.generated_wild[encounter_key] = encounters
 
 
 def randomize_static_pokemon(world: "PokemonCrystalWorld"):

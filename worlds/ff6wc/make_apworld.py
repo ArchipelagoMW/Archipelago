@@ -1,8 +1,6 @@
 # a script for creating the apworld
 # (This is not a module for Archipelago. This is a stand-alone script.)
 
-# working directory near worlds will be changed to worlds
-
 import os
 from shutil import copytree, make_archive, rmtree
 
@@ -19,7 +17,8 @@ def delete_pycache(directory: str) -> None:
             # print(f"deleted: {pycache_dir}")
 
 
-def main() -> None:
+def old_main() -> None:
+    # working directory near worlds will be changed to worlds
     if os.getcwd().endswith("Archipelago"):
         os.chdir("worlds")
     else:
@@ -54,5 +53,12 @@ def main() -> None:
     assert not os.path.exists(MOVE), f"{MOVE} exists at end"
 
 
+def new_apworld_builder() -> None:
+    from subprocess import run
+
+    proc = run(["python", "Launcher.py", "Build APWorlds", "Final Fantasy 6 Worlds Collide"], check=True)
+    assert proc.returncode == 0
+
+
 if __name__ == "__main__":
-    main()
+    new_apworld_builder()

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Tuple, List, Union
 
-from .Enums import Character, Area, SubLevel, LevelMission, pascal_to_space, SubLevelMission, EVERYONE, Capsule, Enemy, \
+from .Enums import Character, Area, SubLevel, LevelMission, pascal_to_space, SubLevelMission, Capsule, Enemy, \
     Fish
 from .Names import ItemName, LocationName
 from .Names.LocationName import Boss
@@ -274,653 +274,1268 @@ class FishLocation:
         return f"{pascal_to_space(self.area.name)} (Big) - {pascal_to_space(self.fishType.name)}"
 
 
-area_connections: Dict[Tuple[Character, Area, Area], Tuple[List[str], List[str], List[str]]] = {
-    (Character.Sonic, Area.Hotel, Area.EmeraldCoast): ([], [], [], [], []),
-    (Character.Sonic, Area.MysticRuinsMain, Area.WindyValley): (
-        [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone],
-        [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone]),
-    (Character.Sonic, Area.Casino, Area.Casinopolis): (
-        [ItemName.Sonic.LightShoes], [ItemName.Sonic.LightShoes], [], [], []),
-    (Character.Sonic, Area.AngelIsland, Area.IceCap): ([[ItemName.KeyItem.IceStone,
-                                                         ItemName.KeyItem.StationBackKey,
-                                                         ItemName.KeyItem.Train,
-                                                         ItemName.KeyItem.Dynamite],
-                                                        [ItemName.KeyItem.IceStone,
-                                                         ItemName.KeyItem.StationFrontKey,
-                                                         ItemName.KeyItem.HotelFrontKey,
-                                                         ItemName.KeyItem.HotelBackKey,
-                                                         ItemName.KeyItem.Train,
-                                                         ItemName.KeyItem.Dynamite]], [
-                                                           [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationBackKey,
-                                                            ItemName.KeyItem.Train, ItemName.KeyItem.Dynamite],
-                                                           [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationFrontKey,
-                                                            ItemName.KeyItem.HotelFrontKey,
-                                                            ItemName.KeyItem.HotelBackKey, ItemName.KeyItem.Train,
-                                                            ItemName.KeyItem.Dynamite]], [], [], []),
-    (Character.Sonic, Area.TwinkleParkLobby, Area.TwinklePark): ([], [], [], [], []),
-    (Character.Sonic, Area.StationSquareMain, Area.SpeedHighway): (
-        [ItemName.KeyItem.EmployeeCard], [ItemName.KeyItem.EmployeeCard], [], [], []),
-    (Character.Sonic, Area.AngelIsland, Area.RedMountain): (
-        [ItemName.Sonic.LightShoes, ItemName.Sonic.AncientLight],
-        [ItemName.Sonic.LightShoes, ItemName.Sonic.AncientLight],
-        [], [], []),
-    (Character.Sonic, Area.EggCarrierFrontDeck, Area.SkyDeck): ([], [], [], [], []),
-    (Character.Sonic, Area.Jungle, Area.LostWorld): ([], [], [], [], []),
-    (Character.Sonic, Area.Jungle, Area.FinalEgg): ([], [], [], [], []),
-    (Character.Sonic, Area.EggCarrierInside, Area.HotShelter): ([], [], [], [], []),
-    (Character.Tails, Area.Hotel, Area.EmeraldCoast): ([], [], [], [], []),
-    (Character.Tails, Area.MysticRuinsMain, Area.WindyValley): (
-        [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone],
-        [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone]),
-    (Character.Tails, Area.Casino, Area.Casinopolis): ([], [], [], [], []),
-    (Character.Tails, Area.AngelIsland, Area.IceCap): ([[ItemName.KeyItem.IceStone,
-                                                         ItemName.KeyItem.StationBackKey,
-                                                         ItemName.KeyItem.Train,
-                                                         ItemName.KeyItem.Dynamite],
-                                                        [ItemName.KeyItem.IceStone,
-                                                         ItemName.KeyItem.StationFrontKey,
-                                                         ItemName.KeyItem.HotelFrontKey,
-                                                         ItemName.KeyItem.HotelBackKey,
-                                                         ItemName.KeyItem.Train,
-                                                         ItemName.KeyItem.Dynamite]], [[ItemName.KeyItem.IceStone,
-                                                                                        ItemName.KeyItem.StationBackKey,
-                                                                                        ItemName.KeyItem.Train,
-                                                                                        ItemName.KeyItem.Dynamite],
-                                                                                       [ItemName.KeyItem.IceStone,
-                                                                                        ItemName.KeyItem.StationFrontKey,
-                                                                                        ItemName.KeyItem.HotelFrontKey,
-                                                                                        ItemName.KeyItem.HotelBackKey,
-                                                                                        ItemName.KeyItem.Train,
-                                                                                        ItemName.KeyItem.Dynamite]], [],
-                                                       [], []),
-    (Character.Tails, Area.TwinkleParkLobby, Area.TwinklePark): ([], [], [], [], []),
-    (Character.Tails, Area.StationSquareMain, Area.SpeedHighway): (
-        [ItemName.KeyItem.EmployeeCard], [ItemName.KeyItem.EmployeeCard], [], [], []),
-    (Character.Tails, Area.AngelIsland, Area.RedMountain): ([], [], [], [], []),
-    (Character.Tails, Area.EggCarrierFrontDeck, Area.SkyDeck): ([], [], [], [], []),
-    (Character.Tails, Area.Jungle, Area.LostWorld): ([], [], [], [], []),
-    (Character.Tails, Area.Jungle, Area.FinalEgg): ([], [], [], [], []),
-    (Character.Tails, Area.EggCarrierInside, Area.HotShelter): ([], [], [], [], []),
-    (Character.Knuckles, Area.Hotel, Area.EmeraldCoast): ([], [], [], [], []),
-    (Character.Knuckles, Area.MysticRuinsMain, Area.WindyValley): (
-        [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone],
-        [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone]),
-    (Character.Knuckles, Area.Casino, Area.Casinopolis): ([], [], [], [], []),
-    (Character.Knuckles, Area.AngelIsland, Area.IceCap): (
-        [ItemName.KeyItem.IceStone], [ItemName.KeyItem.IceStone], [], [ItemName.KeyItem.IceStone],
-        [[ItemName.KeyItem.IceStone],
-         [ItemName.Knuckles.ShovelClaw]]),
-    (Character.Knuckles, Area.TwinkleParkLobby, Area.TwinklePark): ([], [], [], [], []),
-    (Character.Knuckles, Area.StationSquareMain, Area.SpeedHighway): ([], [], [], [], []),
-    (Character.Knuckles, Area.AngelIsland, Area.RedMountain): (
-        [ItemName.Knuckles.ShovelClaw, ItemName.KeyItem.Dynamite],
-        [ItemName.Knuckles.ShovelClaw, ItemName.KeyItem.Dynamite],
-        [ItemName.Knuckles.ShovelClaw, ItemName.KeyItem.Dynamite], [], []),
-    (Character.Knuckles, Area.EggCarrierOutside, Area.SkyDeck): ([], [], [], [], []),
-    (Character.Knuckles, Area.Jungle, Area.LostWorld): (
-        [ItemName.Knuckles.ShovelClaw], [ItemName.Knuckles.ShovelClaw], [], [], []),
-    (Character.Knuckles, Area.Jungle, Area.FinalEgg): ([], [], [], [], []),
-    (Character.Knuckles, Area.EggCarrierInside, Area.HotShelter): ([], [], [], [], []),
-    (Character.Amy, Area.Hotel, Area.EmeraldCoast): ([], [], [], [], []),
-    (Character.Amy, Area.MysticRuinsMain, Area.WindyValley): (
-        [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone],
-        [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone]),
-    (Character.Amy, Area.Casino, Area.Casinopolis): ([], [], [], [], []),
-    (Character.Amy, Area.AngelIsland, Area.IceCap): (
-        [ItemName.KeyItem.IceStone], [ItemName.KeyItem.IceStone], [ItemName.KeyItem.IceStone],
-        [ItemName.KeyItem.IceStone],
-        [ItemName.KeyItem.IceStone]),
-    (Character.Amy, Area.TwinkleParkLobby, Area.TwinklePark): ([], [], [], [], []),
-    (Character.Amy, Area.StationSquareMain, Area.SpeedHighway): (
-        [ItemName.KeyItem.EmployeeCard], [ItemName.KeyItem.EmployeeCard], [ItemName.KeyItem.EmployeeCard], [], []),
-    (Character.Amy, Area.AngelIsland, Area.RedMountain): ([], [], [], [], []),
-    (Character.Amy, Area.EggCarrierFrontDeck, Area.SkyDeck): ([], [], [], [], []),
-    (Character.Amy, Area.Jungle, Area.LostWorld): ([], [], [], [], []),
-    (Character.Amy, Area.Jungle, Area.FinalEgg): ([], [], [], [], []),
-    (Character.Amy, Area.EggCarrierInside, Area.HotShelter): ([], [], [], [], []),
-    (Character.Big, Area.Hotel, Area.EmeraldCoast): ([], [], [], [], []),
-    (Character.Big, Area.MysticRuinsMain, Area.WindyValley): (
-        [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone],
-        [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone]),
-    (Character.Big, Area.Casino, Area.Casinopolis): ([], [], [], [], []),
-    (Character.Big, Area.AngelIsland, Area.IceCap): ([[ItemName.KeyItem.IceStone,
-                                                       ItemName.KeyItem.StationFrontKey,
-                                                       ItemName.KeyItem.Train,
-                                                       ItemName.KeyItem.Dynamite],
-                                                      [ItemName.KeyItem.IceStone,
-                                                       ItemName.KeyItem.HotelFrontKey,
-                                                       ItemName.KeyItem.HotelBackKey,
-                                                       ItemName.KeyItem.StationBackKey,
-                                                       ItemName.KeyItem.Train,
-                                                       ItemName.KeyItem.Dynamite]], [[ItemName.KeyItem.IceStone,
-                                                                                      ItemName.KeyItem.StationFrontKey,
-                                                                                      ItemName.KeyItem.Train,
-                                                                                      ItemName.KeyItem.Dynamite],
-                                                                                     [ItemName.KeyItem.IceStone,
-                                                                                      ItemName.KeyItem.HotelFrontKey,
-                                                                                      ItemName.KeyItem.HotelBackKey,
-                                                                                      ItemName.KeyItem.StationBackKey,
-                                                                                      ItemName.KeyItem.Train,
-                                                                                      ItemName.KeyItem.Dynamite]],
-                                                     [[ItemName.KeyItem.IceStone,
-                                                       ItemName.KeyItem.StationFrontKey,
-                                                       ItemName.KeyItem.Train,
-                                                       ItemName.KeyItem.Dynamite],
-                                                      [ItemName.KeyItem.IceStone,
-                                                       ItemName.KeyItem.HotelFrontKey,
-                                                       ItemName.KeyItem.HotelBackKey,
-                                                       ItemName.KeyItem.StationBackKey,
-                                                       ItemName.KeyItem.Train,
-                                                       ItemName.KeyItem.Dynamite]], [[ItemName.KeyItem.IceStone,
-                                                                                      ItemName.KeyItem.StationFrontKey,
-                                                                                      ItemName.KeyItem.Train,
-                                                                                      ItemName.KeyItem.Dynamite],
-                                                                                     [ItemName.KeyItem.IceStone,
-                                                                                      ItemName.KeyItem.HotelFrontKey,
-                                                                                      ItemName.KeyItem.HotelBackKey,
-                                                                                      ItemName.KeyItem.StationBackKey,
-                                                                                      ItemName.KeyItem.Train,
-                                                                                      ItemName.KeyItem.Dynamite]],
-                                                     [[ItemName.KeyItem.IceStone,
-                                                       ItemName.KeyItem.StationFrontKey,
-                                                       ItemName.KeyItem.Train,
-                                                       ItemName.KeyItem.Dynamite],
-                                                      [ItemName.KeyItem.IceStone,
-                                                       ItemName.KeyItem.HotelFrontKey,
-                                                       ItemName.KeyItem.HotelBackKey,
-                                                       ItemName.KeyItem.StationBackKey,
-                                                       ItemName.KeyItem.Train,
-                                                       ItemName.KeyItem.Dynamite]]),
-    (Character.Big, Area.TwinkleParkLobby, Area.TwinklePark): ([], [], [], [], []),
-    (Character.Big, Area.StationSquareMain, Area.SpeedHighway): (
-        [ItemName.KeyItem.EmployeeCard], [ItemName.KeyItem.EmployeeCard], [ItemName.KeyItem.EmployeeCard], [], []),
-    (Character.Big, Area.AngelIsland, Area.RedMountain): ([], [], [], [], []),
-    (Character.Big, Area.EggCarrierFrontDeck, Area.SkyDeck): ([], [], [], [], []),
-    (Character.Big, Area.Jungle, Area.LostWorld): ([], [], [], [], []),
-    (Character.Big, Area.Jungle, Area.FinalEgg): ([], [], [], [], []),
-    (Character.Big, Area.EggCarrierInside, Area.HotShelter): ([], [], [], [], []),
-    (Character.Gamma, Area.Hotel, Area.EmeraldCoast): ([], [], [], [], []),
-    (Character.Gamma, Area.MysticRuinsMain, Area.WindyValley): (
-        [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone],
-        [ItemName.KeyItem.WindStone], [ItemName.KeyItem.WindStone]),
-    (Character.Gamma, Area.Casino, Area.Casinopolis): ([], [], [], [], []),
-    (Character.Gamma, Area.AngelIsland, Area.IceCap): (
-        [ItemName.KeyItem.IceStone], [ItemName.KeyItem.IceStone], [ItemName.KeyItem.IceStone],
-        [ItemName.KeyItem.IceStone],
-        [ItemName.KeyItem.IceStone]),
-    (Character.Gamma, Area.TwinkleParkLobby, Area.TwinklePark): ([], [], [], [], []),
-    (Character.Gamma, Area.StationSquareMain, Area.SpeedHighway): (
-        [ItemName.KeyItem.EmployeeCard], [ItemName.KeyItem.EmployeeCard], [ItemName.KeyItem.EmployeeCard], [], []),
-    (Character.Gamma, Area.AngelIsland, Area.RedMountain): ([], [], [], [], []),
-    (Character.Gamma, Area.EggCarrierFrontDeck, Area.SkyDeck): ([], [], [], [], []),
-    (Character.Gamma, Area.Jungle, Area.LostWorld): ([], [], [], [], []),
-    (Character.Gamma, Area.Jungle, Area.FinalEgg): ([], [], [], [], []),
-    (Character.Gamma, Area.EggCarrierInside, Area.HotShelter): ([], [], [], [], []),
+HotelKey = ItemName.KeyItem.HotelKey
+PoolKey = ItemName.KeyItem.PoolKey
+CasinoKey = ItemName.KeyItem.CasinoKey
+StationKey = ItemName.KeyItem.StationKey
+ShutterKey = ItemName.KeyItem.ShutterKey
+PolicePass = ItemName.KeyItem.PolicePass
+TPTicket = ItemName.KeyItem.TPTicket
+EmployeeCard = ItemName.KeyItem.EmployeeCard
+IceStone = ItemName.KeyItem.IceStone
+WindStone = ItemName.KeyItem.WindStone
+Dynamite = ItemName.KeyItem.Dynamite
+JungleCart = ItemName.KeyItem.JungleCart
+TimeMachine = ItemName.KeyItem.TimeMachine
+Egglift = ItemName.KeyItem.Egglift
+Monorail = ItemName.KeyItem.Monorail
+Train = ItemName.KeyItem.Train
+Boat = ItemName.KeyItem.Boat
+Raft = ItemName.KeyItem.Raft
 
-    (Character.Sonic, Area.StationSquareMain, Area.Station): (
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey], [], [], []),
-    (Character.Sonic, Area.Station, Area.StationSquareMain): (
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey], [], [], []),
-    (Character.Sonic, Area.StationSquareMain, Area.Hotel): (
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [], [], []),
-    (Character.Sonic, Area.Hotel, Area.StationSquareMain): (
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [], [], []),
-    (Character.Sonic, Area.Station, Area.Casino): (
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [], [], []),
-    (Character.Sonic, Area.Casino, Area.Station): (
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [],
-        []),
-    (Character.Sonic, Area.Hotel, Area.Casino): (
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [], []),
-    (Character.Sonic, Area.Casino, Area.Hotel): (
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [], [], []),
-    (Character.Sonic, Area.StationSquareMain, Area.TwinkleParkLobby): (
-        [ItemName.KeyItem.TwinkleParkTicket], [ItemName.KeyItem.TwinkleParkTicket], [], [], []),
-    (Character.Sonic, Area.TwinkleParkLobby, Area.StationSquareMain): (
-        [ItemName.KeyItem.TwinkleParkTicket], [ItemName.KeyItem.TwinkleParkTicket], [], [], []),
-    (Character.Sonic, Area.MysticRuinsMain, Area.AngelIsland): (
-        [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite], [], [], []),
-    (Character.Sonic, Area.AngelIsland, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite], [], [], []),
-    (Character.Sonic, Area.MysticRuinsMain, Area.Jungle): (
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart],
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart]),
-    (Character.Sonic, Area.Jungle, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart],
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart]),
-    (Character.Sonic, Area.Station, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train],
-        [ItemName.KeyItem.Train]),
-    (Character.Sonic, Area.MysticRuinsMain, Area.Station): (
-        [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train],
-        [ItemName.KeyItem.Train]),
-    (Character.Sonic, Area.StationSquareMain, Area.EggCarrierOutside): (
-        [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat],
-        [ItemName.KeyItem.Boat]),
-    (Character.Sonic, Area.EggCarrierOutside, Area.StationSquareMain): (
-        [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat],
-        [ItemName.KeyItem.Boat]),
-    (Character.Sonic, Area.MysticRuinsMain, Area.EggCarrierOutside): (
-        [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft],
-        [ItemName.KeyItem.Raft]),
-    (Character.Sonic, Area.EggCarrierOutside, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft],
-        [ItemName.KeyItem.Raft]),
-    (Character.Sonic, Area.EggCarrierOutside, Area.EggCarrierInside): (
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]]),
-    (Character.Sonic, Area.EggCarrierInside, Area.EggCarrierOutside): (
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]]),
-    (Character.Sonic, Area.EggCarrierInside, Area.EggCarrierFrontDeck): (
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift]),
-    (Character.Sonic, Area.EggCarrierFrontDeck, Area.EggCarrierInside): (
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift]),
-    (Character.Tails, Area.StationSquareMain, Area.Station): (
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey], [], [], []),
-    (Character.Tails, Area.Station, Area.StationSquareMain): (
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey], [], [ItemName.KeyItem.StationFrontKey],
-        [ItemName.KeyItem.StationFrontKey]),
-    (Character.Tails, Area.StationSquareMain, Area.Hotel): (
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [], [], []),
-    (Character.Tails, Area.Hotel, Area.StationSquareMain): (
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [], [], []),
-    (Character.Tails, Area.Station, Area.Casino): (
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [], [], []),
-    (Character.Tails, Area.Casino, Area.Station): (
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [], [], []),
-    (Character.Tails, Area.Hotel, Area.Casino): (
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [], [], []),
-    (Character.Tails, Area.Casino, Area.Hotel): (
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [], [], []),
-    (Character.Tails, Area.StationSquareMain, Area.TwinkleParkLobby): (
-        [ItemName.KeyItem.TwinkleParkTicket], [ItemName.KeyItem.TwinkleParkTicket], [], [], []),
-    (Character.Tails, Area.TwinkleParkLobby, Area.StationSquareMain): (
-        [ItemName.KeyItem.TwinkleParkTicket], [ItemName.KeyItem.TwinkleParkTicket], [], [], []),
-    (Character.Tails, Area.MysticRuinsMain, Area.AngelIsland): (
-        [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite], [], [], []),
-    (Character.Tails, Area.AngelIsland, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite], [], [], []),
-    (Character.Tails, Area.MysticRuinsMain, Area.Jungle): (
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart],
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart]),
-    (Character.Tails, Area.Jungle, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart],
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart]),
-    (Character.Tails, Area.Station, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train],
-        [ItemName.KeyItem.Train]),
-    (Character.Tails, Area.MysticRuinsMain, Area.Station): (
-        [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train],
-        [ItemName.KeyItem.Train]),
-    (Character.Tails, Area.StationSquareMain, Area.EggCarrierOutside): (
-        [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat],
-        [ItemName.KeyItem.Boat]),
-    (Character.Tails, Area.EggCarrierOutside, Area.StationSquareMain): (
-        [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat],
-        [ItemName.KeyItem.Boat]),
-    (Character.Tails, Area.MysticRuinsMain, Area.EggCarrierOutside): (
-        [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft],
-        [ItemName.KeyItem.Raft]),
-    (Character.Tails, Area.EggCarrierOutside, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft],
-        [ItemName.KeyItem.Raft]),
-    (Character.Tails, Area.EggCarrierOutside, Area.EggCarrierInside): (
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]]),
-    (Character.Tails, Area.EggCarrierInside, Area.EggCarrierOutside): (
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]]),
-    (Character.Tails, Area.EggCarrierInside, Area.EggCarrierFrontDeck): (
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift]),
-    (Character.Tails, Area.EggCarrierFrontDeck, Area.EggCarrierInside): (
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift]),
-    (Character.Knuckles, Area.StationSquareMain, Area.Station): (
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey], [], [], []),
-    (Character.Knuckles, Area.Station, Area.StationSquareMain): (
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey],
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey]),
-    (Character.Knuckles, Area.StationSquareMain, Area.Hotel): (
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [], []),
-    (Character.Knuckles, Area.Hotel, Area.StationSquareMain): (
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [], [], []),
-    (Character.Knuckles, Area.Station, Area.Casino): (
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [], [], []),
-    (Character.Knuckles, Area.Casino, Area.Station): (
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey],
-        [ItemName.KeyItem.StationBackKey], []),
-    (Character.Knuckles, Area.Hotel, Area.Casino): (
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [], [ItemName.KeyItem.HotelBackKey],
-        [ItemName.KeyItem.HotelBackKey]),
-    (Character.Knuckles, Area.Casino, Area.Hotel): (
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [], []),
-    (Character.Knuckles, Area.StationSquareMain, Area.TwinkleParkLobby): (
-        [ItemName.KeyItem.TwinkleParkTicket], [ItemName.KeyItem.TwinkleParkTicket], [], [], []),
-    (Character.Knuckles, Area.TwinkleParkLobby, Area.StationSquareMain): (
-        [ItemName.KeyItem.TwinkleParkTicket], [ItemName.KeyItem.TwinkleParkTicket], [], [], []),
-    (Character.Knuckles, Area.MysticRuinsMain, Area.AngelIsland): (
-        [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite], [], [], []),
-    (Character.Knuckles, Area.AngelIsland, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite], [], [], []),
-    (Character.Knuckles, Area.MysticRuinsMain, Area.Jungle): (
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart],
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart]),
-    (Character.Knuckles, Area.Jungle, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart],
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart]),
-    (Character.Knuckles, Area.Station, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train],
-        [ItemName.KeyItem.Train]),
-    (Character.Knuckles, Area.MysticRuinsMain, Area.Station): (
-        [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train],
-        [ItemName.KeyItem.Train]),
-    (Character.Knuckles, Area.StationSquareMain, Area.EggCarrierOutside): (
-        [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat],
-        [ItemName.KeyItem.Boat]),
-    (Character.Knuckles, Area.EggCarrierOutside, Area.StationSquareMain): (
-        [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat],
-        [ItemName.KeyItem.Boat]),
-    (Character.Knuckles, Area.MysticRuinsMain, Area.EggCarrierOutside): (
-        [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft],
-        [ItemName.KeyItem.Raft]),
-    (Character.Knuckles, Area.EggCarrierOutside, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft],
-        [ItemName.KeyItem.Raft]),
-    (Character.Knuckles, Area.EggCarrierOutside, Area.EggCarrierInside): (
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]]),
-    (Character.Knuckles, Area.EggCarrierInside, Area.EggCarrierOutside): (
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]]),
-    (Character.Knuckles, Area.EggCarrierInside, Area.EggCarrierFrontDeck): (
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift]),
-    (Character.Knuckles, Area.EggCarrierFrontDeck, Area.EggCarrierInside): (
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift]),
-    (Character.Amy, Area.StationSquareMain, Area.Station): (
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey], [], [], []),
-    (Character.Amy, Area.Station, Area.StationSquareMain): (
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey],
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey]),
-    (Character.Amy, Area.StationSquareMain, Area.Hotel): (
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [], [ItemName.KeyItem.HotelFrontKey],
-        [ItemName.KeyItem.HotelFrontKey]),
-    (Character.Amy, Area.Hotel, Area.StationSquareMain): (
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [], [], []),
-    (Character.Amy, Area.Station, Area.Casino): (
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [], [ItemName.KeyItem.StationBackKey],
-        [ItemName.KeyItem.StationBackKey]),
-    (Character.Amy, Area.Casino, Area.Station): (
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey],
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey]),
-    (Character.Amy, Area.Hotel, Area.Casino): (
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [], [], []),
-    (Character.Amy, Area.Casino, Area.Hotel): (
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey],
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey]),
-    (Character.Amy, Area.StationSquareMain, Area.TwinkleParkLobby): (
-        [ItemName.KeyItem.TwinkleParkTicket], [ItemName.KeyItem.TwinkleParkTicket], [], [], []),
-    (Character.Amy, Area.TwinkleParkLobby, Area.StationSquareMain): (
-        [ItemName.KeyItem.TwinkleParkTicket], [ItemName.KeyItem.TwinkleParkTicket], [], [], []),
-    (Character.Amy, Area.MysticRuinsMain, Area.AngelIsland): (
-        [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite],
-        [ItemName.KeyItem.Dynamite],
-        [ItemName.KeyItem.Dynamite]),
-    (Character.Amy, Area.AngelIsland, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite],
-        [ItemName.KeyItem.Dynamite],
-        [ItemName.KeyItem.Dynamite]),
-    (Character.Amy, Area.MysticRuinsMain, Area.Jungle): (
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart],
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart]),
-    (Character.Amy, Area.Jungle, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart],
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart]),
-    (Character.Amy, Area.Station, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train],
-        [ItemName.KeyItem.Train]),
-    (Character.Amy, Area.MysticRuinsMain, Area.Station): (
-        [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train],
-        [ItemName.KeyItem.Train]),
-    (Character.Amy, Area.StationSquareMain, Area.EggCarrierOutside): (
-        [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat],
-        [ItemName.KeyItem.Boat]),
-    (Character.Amy, Area.EggCarrierOutside, Area.StationSquareMain): (
-        [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat],
-        [ItemName.KeyItem.Boat]),
-    (Character.Amy, Area.MysticRuinsMain, Area.EggCarrierOutside): (
-        [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft],
-        [ItemName.KeyItem.Raft]),
-    (Character.Amy, Area.EggCarrierOutside, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft],
-        [ItemName.KeyItem.Raft]),
-    (Character.Amy, Area.EggCarrierOutside, Area.EggCarrierInside): (
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]]),
-    (Character.Amy, Area.EggCarrierInside, Area.EggCarrierOutside): (
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]]),
-    (Character.Amy, Area.EggCarrierInside, Area.EggCarrierFrontDeck): (
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift]),
-    (Character.Amy, Area.EggCarrierFrontDeck, Area.EggCarrierInside): (
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift]),
-    (Character.Big, Area.StationSquareMain, Area.Station): (
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey], [], [], []),
-    (Character.Big, Area.Station, Area.StationSquareMain): (
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey],
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey]),
-    (Character.Big, Area.StationSquareMain, Area.Hotel): (
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey],
-        [[ItemName.KeyItem.HotelFrontKey],
-         [ItemName.Big.LifeBelt]], []),
-    (Character.Big, Area.Hotel, Area.StationSquareMain): (
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey],
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey]),
-    (Character.Big, Area.Station, Area.Casino): (
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey],
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey]),
-    (Character.Big, Area.Casino, Area.Station): (
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey],
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey]),
-    (Character.Big, Area.Hotel, Area.Casino): (
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey],
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey]),
-    (Character.Big, Area.Casino, Area.Hotel): (
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey],
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey]),
-    (Character.Big, Area.StationSquareMain, Area.TwinkleParkLobby): ([], [], [], [], []),
-    (Character.Big, Area.TwinkleParkLobby, Area.StationSquareMain): (
-        [ItemName.KeyItem.TwinkleParkTicket], [ItemName.KeyItem.TwinkleParkTicket], [], [], []),
-    (Character.Big, Area.MysticRuinsMain, Area.AngelIsland): (
-        [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite],
-        [ItemName.KeyItem.Dynamite],
-        [ItemName.KeyItem.Dynamite]),
-    (Character.Big, Area.AngelIsland, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite],
-        [ItemName.KeyItem.Dynamite],
-        [ItemName.KeyItem.Dynamite]),
-    (Character.Big, Area.MysticRuinsMain, Area.Jungle): (
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart],
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart]),
-    (Character.Big, Area.Jungle, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart],
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart]),
-    (Character.Big, Area.Station, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train],
-        [ItemName.KeyItem.Train]),
-    (Character.Big, Area.MysticRuinsMain, Area.Station): (
-        [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train],
-        [ItemName.KeyItem.Train]),
-    (Character.Big, Area.StationSquareMain, Area.EggCarrierOutside): (
-        [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat],
-        [ItemName.KeyItem.Boat]),
-    (Character.Big, Area.EggCarrierOutside, Area.StationSquareMain): (
-        [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat],
-        [ItemName.KeyItem.Boat]),
-    (Character.Big, Area.MysticRuinsMain, Area.EggCarrierOutside): (
-        [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft],
-        [ItemName.KeyItem.Raft]),
-    (Character.Big, Area.EggCarrierOutside, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft],
-        [ItemName.KeyItem.Raft]),
-    (Character.Big, Area.EggCarrierOutside, Area.EggCarrierInside): (
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]]),
-    (Character.Big, Area.EggCarrierInside, Area.EggCarrierOutside): (
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]]),
-    (Character.Big, Area.EggCarrierInside, Area.EggCarrierFrontDeck): (
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift]),
-    (Character.Big, Area.EggCarrierFrontDeck, Area.EggCarrierInside): (
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift]),
-    (Character.Gamma, Area.StationSquareMain, Area.Station): (
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey], [], [], []),
-    (Character.Gamma, Area.Station, Area.StationSquareMain): (
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey],
-        [ItemName.KeyItem.StationFrontKey], [ItemName.KeyItem.StationFrontKey]),
-    (Character.Gamma, Area.StationSquareMain, Area.Hotel): (
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [], []),
-    (Character.Gamma, Area.Hotel, Area.StationSquareMain): (
-        [ItemName.KeyItem.HotelFrontKey], [ItemName.KeyItem.HotelFrontKey], [], [[ItemName.KeyItem.HotelFrontKey],
-                                                                                 [ItemName.Gamma.JetBooster]], []),
-    (Character.Gamma, Area.Station, Area.Casino): (
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey],
-        [ItemName.KeyItem.StationBackKey], [[ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.Train]]),
-    (Character.Gamma, Area.Casino, Area.Station): (
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey],
-        [ItemName.KeyItem.StationBackKey], [ItemName.KeyItem.StationBackKey]),
-    (Character.Gamma, Area.Hotel, Area.Casino): (
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [], [[ItemName.KeyItem.HotelBackKey],
-                                                                               [ItemName.Gamma.JetBooster]], []),
-    (Character.Gamma, Area.Casino, Area.Hotel): (
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey],
-        [ItemName.KeyItem.HotelBackKey], [ItemName.KeyItem.HotelBackKey]),
-    (Character.Gamma, Area.StationSquareMain, Area.TwinkleParkLobby): (
-        [ItemName.KeyItem.TwinkleParkTicket], [ItemName.KeyItem.TwinkleParkTicket], [], [], []),
-    (Character.Gamma, Area.TwinkleParkLobby, Area.StationSquareMain): (
-        [ItemName.KeyItem.TwinkleParkTicket], [ItemName.KeyItem.TwinkleParkTicket], [], [], []),
-    (Character.Gamma, Area.MysticRuinsMain, Area.AngelIsland): (
-        [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite],
-        [[ItemName.KeyItem.Dynamite], [ItemName.Gamma.JetBooster]], [[ItemName.KeyItem.Dynamite],
-                                                                     [ItemName.Gamma.JetBooster]],
-        [[ItemName.KeyItem.Dynamite],
-         [ItemName.Gamma.JetBooster]]),
-    (Character.Gamma, Area.AngelIsland, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Dynamite], [ItemName.KeyItem.Dynamite], [[ItemName.KeyItem.Dynamite],
-                                                                   [ItemName.Gamma.JetBooster]],
-        [[ItemName.KeyItem.Dynamite],
-         [ItemName.Gamma.JetBooster]], [[ItemName.KeyItem.Dynamite], [ItemName.Gamma.JetBooster]]),
-    (Character.Gamma, Area.MysticRuinsMain, Area.Jungle): (
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart],
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart]),
-    (Character.Gamma, Area.Jungle, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart],
-        [ItemName.KeyItem.JungleCart], [ItemName.KeyItem.JungleCart]),
-    (Character.Gamma, Area.Station, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train],
-        [ItemName.KeyItem.Train]),
-    (Character.Gamma, Area.MysticRuinsMain, Area.Station): (
-        [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train], [ItemName.KeyItem.Train],
-        [ItemName.KeyItem.Train]),
-    (Character.Gamma, Area.StationSquareMain, Area.EggCarrierOutside): (
-        [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat],
-        [ItemName.KeyItem.Boat]),
-    (Character.Gamma, Area.EggCarrierOutside, Area.StationSquareMain): (
-        [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat], [ItemName.KeyItem.Boat],
-        [ItemName.KeyItem.Boat]),
-    (Character.Gamma, Area.MysticRuinsMain, Area.EggCarrierOutside): (
-        [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft],
-        [ItemName.KeyItem.Raft]),
-    (Character.Gamma, Area.EggCarrierOutside, Area.MysticRuinsMain): (
-        [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft], [ItemName.KeyItem.Raft],
-        [ItemName.KeyItem.Raft]),
-    (Character.Gamma, Area.EggCarrierOutside, Area.EggCarrierInside): (
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]]),
-    (Character.Gamma, Area.EggCarrierInside, Area.EggCarrierOutside): (
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]],
-        [[ItemName.KeyItem.Monorail], [ItemName.KeyItem.Egglift]]),
-    (Character.Gamma, Area.EggCarrierInside, Area.EggCarrierFrontDeck): (
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift]),
-    (Character.Gamma, Area.EggCarrierFrontDeck, Area.EggCarrierInside): (
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift], [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift],
-        [ItemName.KeyItem.Monorail, ItemName.KeyItem.Egglift]),
+EMBLEM_BLOCKED = "EMBLEM_BLOCKED"
+ONLY_RANDO = "ONLY_RANDO"
+ECSwitchAccess = "ECSwitchAccess"
+
+LightShoes = ItemName.Sonic.LightShoes
+AncientLight = ItemName.Sonic.AncientLight
+ShovelClaw = ItemName.Knuckles.ShovelClaw
+LifeBelt = ItemName.Big.LifeBelt
+JetBooster = ItemName.Gamma.JetBooster
+JetAnklet = ItemName.Tails.JetAnklet
+Lure1 = ItemName.Big.Lure1
+Lure2 = ItemName.Big.Lure2
+Lure3 = ItemName.Big.Lure3
+Lure4 = ItemName.Big.Lure4
+
+P_SONIC = Character.Sonic
+P_TAILS = Character.Tails
+P_KNUCKLES = Character.Knuckles
+P_AMY = Character.Amy
+P_GAMMA = Character.Gamma
+P_BIG = Character.Big
+P_GAMMA_W_JB = CharacterUpgrade(Character.Gamma, ItemName.Gamma.JetBooster)
+P_KNUCKLES_W_SC = CharacterUpgrade(Character.Knuckles, ItemName.Knuckles.ShovelClaw)
+P_SONIC_W_LS = CharacterUpgrade(Character.Sonic, ItemName.Sonic.LightShoes)
+EVERYONE = [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_GAMMA, P_BIG]
+area_connections: Dict[
+    Tuple[Character, Area, Area, bool], Tuple[List[str], List[str], List[str], List[str], List[str]]] = {
+    (Character.Sonic, Area.CityHall, Area.SSMain, False): (
+        [PolicePass], [PolicePass], [PolicePass], [PolicePass], [PolicePass]),
+    (Character.Sonic, Area.CityHall, Area.SpeedHighway, False): ([ONLY_RANDO], [ONLY_RANDO], [], [], []),
+    (Character.Sonic, Area.CityHall, Area.Chaos0, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.CityHall, Area.Sewers, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.Sewers, Area.CityHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.Sewers, Area.TPTunnel, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.Station, Area.SSMain, False): ([StationKey], [StationKey], [], [], []),
+    (Character.Sonic, Area.Station, Area.MRMain, False): ([Train], [Train], [Train], [Train], [Train]),
+    (Character.Sonic, Area.Station, Area.Casino, False): ([ShutterKey], [ShutterKey], [], [], []),
+    (Character.Sonic, Area.Casino, Area.Station, False): ([ShutterKey], [ShutterKey], [ShutterKey], [], []),
+    (Character.Sonic, Area.Casino, Area.Casinopolis, False): (
+        [EMBLEM_BLOCKED, LightShoes], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.Casino, Area.Hotel, False): ([CasinoKey], [CasinoKey], [], [], []),
+    (Character.Sonic, Area.Casino, Area.EggWalker, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Sonic, Area.SSMain, Area.Hotel, False): ([HotelKey], [HotelKey], [], [], []),
+    (Character.Sonic, Area.SSMain, Area.Station, False): ([StationKey], [StationKey], [], [], []),
+    (Character.Sonic, Area.SSMain, Area.CityHall, False): ([PolicePass], [PolicePass], [], [PolicePass], [PolicePass]),
+    (Character.Sonic, Area.SSMain, Area.ECOutside, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Sonic, Area.SSMain, Area.ECBridge, False): (
+        [Boat, ECSwitchAccess], [Boat, ECSwitchAccess], [Boat, ECSwitchAccess], [Boat, ECSwitchAccess],
+        [Boat, ECSwitchAccess]),
+    (Character.Sonic, Area.SSMain, Area.SpeedHighway, False): ([EmployeeCard], [EmployeeCard], [], [], []),
+    (Character.Sonic, Area.SSMain, Area.TPTunnel, False): ([TPTicket], [TPTicket], [], [], []),
+    (Character.Sonic, Area.TPTunnel, Area.SSMain, False): ([TPTicket], [TPTicket], [], [], []),
+    (Character.Sonic, Area.TPTunnel, Area.Sewers, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.TPTunnel, Area.TPLobby, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.TPLobby, Area.TPTunnel, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.TPLobby, Area.TwinklePark, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.TPLobby, Area.TwinkleCircuit, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.Hotel, Area.SSMain, False): ([HotelKey], [HotelKey], [], [], []),
+    (Character.Sonic, Area.Hotel, Area.Casino, False): ([CasinoKey], [CasinoKey], [], [], []),
+    (Character.Sonic, Area.Hotel, Area.SSChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.Hotel, Area.Chaos2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Sonic, Area.Hotel, Area.HotelPool, False): ([PoolKey], [PoolKey], [], [PoolKey], [PoolKey]),
+    (Character.Sonic, Area.HotelPool, Area.Hotel, False): ([PoolKey], [PoolKey], [], [PoolKey], [PoolKey]),
+    (Character.Sonic, Area.HotelPool, Area.EmeraldCoast, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.MRMain, Area.Station, False): ([Train], [Train], [Train], [Train], [Train]),
+    (Character.Sonic, Area.MRMain, Area.ECOutside, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Sonic, Area.MRMain, Area.ECBridge, False): (
+        [Raft, ECSwitchAccess], [Raft, ECSwitchAccess], [Raft, ECSwitchAccess], [Raft, ECSwitchAccess],
+        [Raft, ECSwitchAccess]),
+    (Character.Sonic, Area.MRMain, Area.WindyValley, False): (
+        [WindStone], [WindStone], [WindStone], [WindStone], [WindStone]),
+    (Character.Sonic, Area.MRMain, Area.Jungle, False): (
+        [JungleCart], [JungleCart], [JungleCart], [JungleCart], [JungleCart]),
+    (Character.Sonic, Area.MRMain, Area.Chaos4, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.MRMain, Area.EggHornet, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.MRMain, Area.SkyChase1, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.MRMain, Area.MRChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.MRMain, Area.AngelIsland, False): ([Dynamite], [Dynamite], [], [], []),
+    (Character.Sonic, Area.AngelIsland, Area.MRMain, False): ([Dynamite], [Dynamite], [], [], []),
+    (Character.Sonic, Area.AngelIsland, Area.IceCave, False): ([IceStone], [IceStone], [], [], []),
+    (Character.Sonic, Area.AngelIsland, Area.RedMountain, False): (
+        [EMBLEM_BLOCKED, LightShoes, AncientLight], [EMBLEM_BLOCKED, LightShoes, AncientLight], [], [], []),
+    (Character.Sonic, Area.AngelIsland, Area.PastAltar, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Sonic, Area.IceCave, Area.AngelIsland, False): ([IceStone], [IceStone], [], [IceStone], [IceStone]),
+    (Character.Sonic, Area.IceCave, Area.IceCap, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.PastAltar, Area.AngelIsland, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Sonic, Area.PastAltar, Area.PastMain, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.PastMain, Area.PastAltar, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.PastMain, Area.Jungle, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Sonic, Area.Jungle, Area.PastMain, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Sonic, Area.Jungle, Area.MRMain, False): (
+        [JungleCart], [JungleCart], [JungleCart], [JungleCart], [JungleCart]),
+    (Character.Sonic, Area.Jungle, Area.LostWorld, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.Jungle, Area.LostWorld, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Sonic, Area.Jungle, Area.SandHill, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.Jungle, Area.FinalEggTower, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.FinalEggTower, Area.Jungle, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.FinalEggTower, Area.FinalEgg, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.FinalEggTower, Area.FinalEgg, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Sonic, Area.FinalEggTower, Area.BetaEggViper, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.FinalEggTower, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECOutside, Area.SSMain, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Sonic, Area.ECOutside, Area.MRMain, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Sonic, Area.ECOutside, Area.SkyChase2, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECOutside, Area.Chaos6ZeroBeta, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECOutside, Area.ECInside, False): (
+        [Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Sonic, Area.ECOutside, Area.ECInside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Sonic, Area.ECOutside, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECOutside, Area.ECPool, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECBridge, Area.SSMain, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Sonic, Area.ECBridge, Area.MRMain, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Sonic, Area.ECBridge, Area.SkyDeck, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECBridge, Area.SkyChase2, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECBridge, Area.Chaos6ZeroBeta, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECBridge, Area.ECInside, False): (
+        [Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Sonic, Area.ECDeck, Area.ECPool, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECDeck, Area.CaptainRoom, False): (
+        [ONLY_RANDO], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECDeck, Area.PrivateRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECDeck, Area.PrivateRoom, True): (
+        [ONLY_RANDO], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECDeck, Area.ECInside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Sonic, Area.CaptainRoom, Area.ECOutside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.CaptainRoom, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Sonic, Area.CaptainRoom, Area.PrivateRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.PrivateRoom, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.PrivateRoom, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Sonic, Area.PrivateRoom, Area.ECDeck, True): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Sonic, Area.ECPool, Area.ECOutside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECPool, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Sonic, Area.ECPool, Area.SkyDeck, False): ([ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [], []),
+    (Character.Sonic, Area.ECInside, Area.ECOutside, False): (
+        [Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Sonic, Area.ECInside, Area.ECOutside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Sonic, Area.ECInside, Area.ECDeck, False): (
+        [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess],
+        [Egglift, ECSwitchAccess]),
+    (Character.Sonic, Area.ECInside, Area.ECBridge, False): (
+        [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess],
+        [Monorail, ECSwitchAccess]),
+    (Character.Sonic, Area.ECInside, Area.HotShelter, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Sonic, Area.ECInside, Area.HedgehogHammer, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECInside, Area.FinalEggTower, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECInside, Area.WarpHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECInside, Area.Arsenal, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.ECInside, Area.WaterTank, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.HedgehogHammer, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.HedgehogHammer, Area.PrisonHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.PrisonHall, Area.HedgehogHammer, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.Arsenal, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.WaterTank, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.WarpHall, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Sonic, Area.WarpHall, Area.ECChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.CityHall, Area.SSMain, False): (
+        [PolicePass], [PolicePass], [PolicePass], [PolicePass], [PolicePass]),
+    (Character.Tails, Area.CityHall, Area.SpeedHighway, False): ([ONLY_RANDO], [ONLY_RANDO], [], [], []),
+    (Character.Tails, Area.CityHall, Area.Chaos0, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.CityHall, Area.Sewers, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.Sewers, Area.CityHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.Sewers, Area.TPTunnel, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.Station, Area.SSMain, False): ([StationKey], [StationKey], [], [StationKey], [StationKey]),
+    (Character.Tails, Area.Station, Area.MRMain, False): ([Train], [Train], [Train], [Train], [Train]),
+    (Character.Tails, Area.Station, Area.Casino, False): ([ShutterKey], [ShutterKey], [], [], []),
+    (Character.Tails, Area.Casino, Area.Station, False): ([ShutterKey], [ShutterKey], [], [], []),
+    (Character.Tails, Area.Casino, Area.Casinopolis, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.Casino, Area.Hotel, False): ([CasinoKey], [CasinoKey], [], [], []),
+    (Character.Tails, Area.Casino, Area.EggWalker, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.SSMain, Area.Hotel, False): ([HotelKey], [HotelKey], [], [], []),
+    (Character.Tails, Area.SSMain, Area.Station, False): ([StationKey], [StationKey], [], [], []),
+    (Character.Tails, Area.SSMain, Area.CityHall, False): ([PolicePass], [PolicePass], [], [PolicePass], [PolicePass]),
+    (Character.Tails, Area.SSMain, Area.ECOutside, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Tails, Area.SSMain, Area.ECBridge, False): (
+        [Boat, ECSwitchAccess], [Boat, ECSwitchAccess], [Boat, ECSwitchAccess], [Boat, ECSwitchAccess],
+        [Boat, ECSwitchAccess]),
+    (Character.Tails, Area.SSMain, Area.SpeedHighway, False): ([EmployeeCard], [EmployeeCard], [], [], []),
+    (Character.Tails, Area.SSMain, Area.TPTunnel, False): ([TPTicket], [TPTicket], [], [], []),
+    (Character.Tails, Area.TPTunnel, Area.SSMain, False): ([TPTicket], [TPTicket], [], [], []),
+    (Character.Tails, Area.TPTunnel, Area.Sewers, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.TPTunnel, Area.TPLobby, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.TPLobby, Area.TPTunnel, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.TPLobby, Area.TwinklePark, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.TPLobby, Area.TwinkleCircuit, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.Hotel, Area.SSMain, False): ([HotelKey], [HotelKey], [], [], []),
+    (Character.Tails, Area.Hotel, Area.Casino, False): ([CasinoKey], [CasinoKey], [], [], []),
+    (Character.Tails, Area.Hotel, Area.SSChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.Hotel, Area.Chaos2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.Hotel, Area.HotelPool, False): ([PoolKey], [PoolKey], [], [PoolKey], [PoolKey]),
+    (Character.Tails, Area.HotelPool, Area.Hotel, False): ([PoolKey], [PoolKey], [], [PoolKey], [PoolKey]),
+    (Character.Tails, Area.HotelPool, Area.EmeraldCoast, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.MRMain, Area.Station, False): ([Train], [Train], [Train], [Train], [Train]),
+    (Character.Tails, Area.MRMain, Area.ECOutside, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Tails, Area.MRMain, Area.ECBridge, False): (
+        [Raft, ECSwitchAccess], [Raft, ECSwitchAccess], [Raft, ECSwitchAccess], [Raft, ECSwitchAccess],
+        [Raft, ECSwitchAccess]),
+    (Character.Tails, Area.MRMain, Area.WindyValley, False): (
+        [WindStone], [WindStone], [WindStone], [WindStone], [WindStone]),
+    (Character.Tails, Area.MRMain, Area.Jungle, False): (
+        [JungleCart], [JungleCart], [JungleCart], [JungleCart], [JungleCart]),
+    (Character.Tails, Area.MRMain, Area.Chaos4, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.MRMain, Area.EggHornet, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.MRMain, Area.SkyChase1, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.MRMain, Area.MRChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.MRMain, Area.AngelIsland, False): ([Dynamite], [Dynamite], [], [], []),
+    (Character.Tails, Area.AngelIsland, Area.MRMain, False): ([Dynamite], [Dynamite], [], [], []),
+    (Character.Tails, Area.AngelIsland, Area.IceCave, False): ([IceStone], [IceStone], [], [], []),
+    (Character.Tails, Area.AngelIsland, Area.RedMountain, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.AngelIsland, Area.PastAltar, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Tails, Area.IceCave, Area.AngelIsland, False): ([IceStone], [IceStone], [], [IceStone], [IceStone]),
+    (Character.Tails, Area.IceCave, Area.IceCap, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.PastAltar, Area.AngelIsland, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Tails, Area.PastAltar, Area.PastMain, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.PastMain, Area.PastAltar, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.PastMain, Area.Jungle, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Tails, Area.Jungle, Area.PastMain, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Tails, Area.Jungle, Area.MRMain, False): (
+        [JungleCart], [JungleCart], [JungleCart], [JungleCart], [JungleCart]),
+    (Character.Tails, Area.Jungle, Area.LostWorld, False): ([ONLY_RANDO], [ONLY_RANDO], [], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.Jungle, Area.LostWorld, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.Jungle, Area.SandHill, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.Jungle, Area.FinalEggTower, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.FinalEggTower, Area.Jungle, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.FinalEggTower, Area.FinalEgg, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.FinalEggTower, Area.FinalEgg, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.FinalEggTower, Area.BetaEggViper, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.FinalEggTower, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECOutside, Area.SSMain, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Tails, Area.ECOutside, Area.MRMain, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Tails, Area.ECOutside, Area.SkyChase2, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECOutside, Area.Chaos6ZeroBeta, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.ECOutside, Area.ECInside, False): (
+        [Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Tails, Area.ECOutside, Area.ECInside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Tails, Area.ECOutside, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECOutside, Area.ECPool, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECBridge, Area.SSMain, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Tails, Area.ECBridge, Area.MRMain, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Tails, Area.ECBridge, Area.SkyDeck, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECBridge, Area.SkyChase2, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECBridge, Area.Chaos6ZeroBeta, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.ECBridge, Area.ECInside, False): (
+        [Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Tails, Area.ECDeck, Area.ECPool, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECDeck, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECDeck, Area.PrivateRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECDeck, Area.PrivateRoom, True): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECDeck, Area.ECInside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Tails, Area.CaptainRoom, Area.ECOutside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.CaptainRoom, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Tails, Area.CaptainRoom, Area.PrivateRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.PrivateRoom, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.PrivateRoom, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Tails, Area.PrivateRoom, Area.ECDeck, True): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Tails, Area.ECPool, Area.ECOutside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECPool, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Tails, Area.ECPool, Area.SkyDeck, False): ([ONLY_RANDO], [ONLY_RANDO], [], [], []),
+    (Character.Tails, Area.ECInside, Area.ECOutside, False): (
+        [Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Tails, Area.ECInside, Area.ECOutside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Tails, Area.ECInside, Area.ECDeck, False): (
+        [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess],
+        [Egglift, ECSwitchAccess]),
+    (Character.Tails, Area.ECInside, Area.ECBridge, False): (
+        [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess],
+        [Monorail, ECSwitchAccess]),
+    (Character.Tails, Area.ECInside, Area.HotShelter, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Tails, Area.ECInside, Area.HedgehogHammer, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECInside, Area.FinalEggTower, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECInside, Area.WarpHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECInside, Area.Arsenal, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.ECInside, Area.WaterTank, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.HedgehogHammer, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.HedgehogHammer, Area.PrisonHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.PrisonHall, Area.HedgehogHammer, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.Arsenal, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.WaterTank, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.WarpHall, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Tails, Area.WarpHall, Area.ECChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.CityHall, Area.SSMain, False): (
+        [PolicePass], [PolicePass], [PolicePass], [PolicePass], [PolicePass]),
+    (Character.Knuckles, Area.CityHall, Area.SpeedHighway, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.CityHall, Area.Chaos0, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.CityHall, Area.Sewers, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.Sewers, Area.CityHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.Sewers, Area.TPTunnel, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.Station, Area.SSMain, False): (
+        [StationKey], [StationKey], [StationKey], [StationKey], [StationKey]),
+    (Character.Knuckles, Area.Station, Area.MRMain, False): ([Train], [Train], [Train], [Train], [Train]),
+    (Character.Knuckles, Area.Station, Area.Casino, False): ([ShutterKey], [ShutterKey], [], [], []),
+    (Character.Knuckles, Area.Casino, Area.Station, False): ([ShutterKey], [ShutterKey], [], [ShutterKey], []),
+    (Character.Knuckles, Area.Casino, Area.Casinopolis, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.Casino, Area.Hotel, False): (
+        [CasinoKey], [CasinoKey], [CasinoKey], [[CasinoKey], [ShutterKey]], []),
+    (Character.Knuckles, Area.Casino, Area.EggWalker, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.SSMain, Area.Hotel, False): ([HotelKey], [HotelKey], [], [], []),
+    (Character.Knuckles, Area.SSMain, Area.Station, False): ([StationKey], [StationKey], [], [], []),
+    (Character.Knuckles, Area.SSMain, Area.CityHall, False): (
+        [PolicePass], [PolicePass], [], [PolicePass], [PolicePass]),
+    (Character.Knuckles, Area.SSMain, Area.ECOutside, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Knuckles, Area.SSMain, Area.ECBridge, False): (
+        [Boat, ECSwitchAccess], [Boat, ECSwitchAccess], [Boat, ECSwitchAccess], [Boat, ECSwitchAccess],
+        [Boat, ECSwitchAccess]),
+    (Character.Knuckles, Area.SSMain, Area.SpeedHighway, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.SSMain, Area.TPTunnel, False): ([TPTicket], [TPTicket], [], [], []),
+    (Character.Knuckles, Area.TPTunnel, Area.SSMain, False): ([TPTicket], [TPTicket], [], [], []),
+    (Character.Knuckles, Area.TPTunnel, Area.Sewers, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.TPTunnel, Area.TPLobby, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.TPLobby, Area.TPTunnel, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.TPLobby, Area.TwinklePark, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.TPLobby, Area.TwinkleCircuit, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.Hotel, Area.SSMain, False): ([HotelKey], [HotelKey], [], [], []),
+    (Character.Knuckles, Area.Hotel, Area.Casino, False): ([CasinoKey], [CasinoKey], [], [CasinoKey], [CasinoKey]),
+    (Character.Knuckles, Area.Hotel, Area.SSChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.Hotel, Area.Chaos2, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.Hotel, Area.HotelPool, False): ([PoolKey], [PoolKey], [], [PoolKey], [PoolKey]),
+    (Character.Knuckles, Area.HotelPool, Area.Hotel, False): ([PoolKey], [PoolKey], [PoolKey], [PoolKey], [PoolKey]),
+    (Character.Knuckles, Area.HotelPool, Area.EmeraldCoast, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.MRMain, Area.Station, False): ([Train], [Train], [Train], [Train], [Train]),
+    (Character.Knuckles, Area.MRMain, Area.ECOutside, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Knuckles, Area.MRMain, Area.ECBridge, False): (
+        [Raft, ECSwitchAccess], [Raft, ECSwitchAccess], [Raft, ECSwitchAccess], [Raft, ECSwitchAccess],
+        [Raft, ECSwitchAccess]),
+    (Character.Knuckles, Area.MRMain, Area.WindyValley, False): (
+        [WindStone], [WindStone], [WindStone], [WindStone], [WindStone]),
+    (Character.Knuckles, Area.MRMain, Area.Jungle, False): (
+        [JungleCart], [JungleCart], [JungleCart], [JungleCart], [JungleCart]),
+    (Character.Knuckles, Area.MRMain, Area.Chaos4, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.MRMain, Area.EggHornet, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.MRMain, Area.SkyChase1, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.MRMain, Area.MRChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.MRMain, Area.AngelIsland, False): ([Dynamite], [Dynamite], [], [], []),
+    (Character.Knuckles, Area.AngelIsland, Area.MRMain, False): ([Dynamite], [Dynamite], [], [], []),
+    (Character.Knuckles, Area.AngelIsland, Area.IceCave, False): ([IceStone], [IceStone], [], [IceStone], [[IceStone],
+                                                                                                           [
+                                                                                                               ShovelClaw]]),
+    (Character.Knuckles, Area.AngelIsland, Area.RedMountain, False): ([EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [], []),
+    (Character.Knuckles, Area.AngelIsland, Area.PastAltar, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Knuckles, Area.IceCave, Area.AngelIsland, False): (
+        [IceStone], [IceStone], [IceStone], [IceStone], [IceStone]),
+    (Character.Knuckles, Area.IceCave, Area.IceCap, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.PastAltar, Area.AngelIsland, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Knuckles, Area.PastAltar, Area.PastMain, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.PastMain, Area.PastAltar, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.PastMain, Area.Jungle, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Knuckles, Area.Jungle, Area.PastMain, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Knuckles, Area.Jungle, Area.MRMain, False): (
+        [JungleCart], [JungleCart], [JungleCart], [JungleCart], [JungleCart]),
+    (Character.Knuckles, Area.Jungle, Area.LostWorld, False): ([ONLY_RANDO], [ONLY_RANDO], [], [], []),
+    (Character.Knuckles, Area.Jungle, Area.LostWorld, True): (
+        [EMBLEM_BLOCKED, ShovelClaw], [EMBLEM_BLOCKED, ShovelClaw], [EMBLEM_BLOCKED, ShovelClaw],
+        [EMBLEM_BLOCKED, ShovelClaw], [EMBLEM_BLOCKED, ShovelClaw]),
+    (Character.Knuckles, Area.Jungle, Area.SandHill, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.Jungle, Area.FinalEggTower, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.FinalEggTower, Area.Jungle, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.FinalEggTower, Area.FinalEgg, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.FinalEggTower, Area.FinalEgg, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.FinalEggTower, Area.BetaEggViper, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.FinalEggTower, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECOutside, Area.SSMain, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Knuckles, Area.ECOutside, Area.MRMain, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Knuckles, Area.ECOutside, Area.SkyChase2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.ECOutside, Area.Chaos6ZeroBeta, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECOutside, Area.ECInside, False): (
+        [Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Knuckles, Area.ECOutside, Area.ECInside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Knuckles, Area.ECOutside, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECOutside, Area.ECPool, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECBridge, Area.SSMain, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Knuckles, Area.ECBridge, Area.MRMain, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Knuckles, Area.ECBridge, Area.SkyDeck, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.ECBridge, Area.SkyChase2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.ECBridge, Area.Chaos6ZeroBeta, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECBridge, Area.ECInside, False): (
+        [Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Knuckles, Area.ECDeck, Area.ECPool, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECDeck, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECDeck, Area.PrivateRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECDeck, Area.PrivateRoom, True): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECDeck, Area.ECInside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Knuckles, Area.CaptainRoom, Area.ECOutside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.CaptainRoom, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Knuckles, Area.CaptainRoom, Area.PrivateRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.PrivateRoom, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.PrivateRoom, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Knuckles, Area.PrivateRoom, Area.ECDeck, True): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Knuckles, Area.ECPool, Area.ECOutside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECPool, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Knuckles, Area.ECPool, Area.SkyDeck, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECInside, Area.ECOutside, False): (
+        [Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Knuckles, Area.ECInside, Area.ECOutside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Knuckles, Area.ECInside, Area.ECDeck, False): (
+        [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess],
+        [Egglift, ECSwitchAccess]),
+    (Character.Knuckles, Area.ECInside, Area.ECBridge, False): (
+        [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess],
+        [Monorail, ECSwitchAccess]),
+    (Character.Knuckles, Area.ECInside, Area.HotShelter, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Knuckles, Area.ECInside, Area.HedgehogHammer, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECInside, Area.FinalEggTower, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECInside, Area.WarpHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECInside, Area.Arsenal, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.ECInside, Area.WaterTank, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.HedgehogHammer, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.HedgehogHammer, Area.PrisonHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.PrisonHall, Area.HedgehogHammer, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.Arsenal, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.WaterTank, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.WarpHall, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Knuckles, Area.WarpHall, Area.ECChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.CityHall, Area.SSMain, False): (
+        [PolicePass], [PolicePass], [PolicePass], [PolicePass], [PolicePass]),
+    (Character.Amy, Area.CityHall, Area.SpeedHighway, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.CityHall, Area.Chaos0, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.CityHall, Area.Sewers, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.Sewers, Area.CityHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.Sewers, Area.TPTunnel, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.Station, Area.SSMain, False): (
+        [StationKey], [StationKey], [StationKey], [StationKey], [StationKey]),
+    (Character.Amy, Area.Station, Area.MRMain, False): ([Train], [Train], [Train], [Train], [Train]),
+    (Character.Amy, Area.Station, Area.Casino, False): ([ShutterKey], [ShutterKey], [], [], []),
+    (Character.Amy, Area.Casino, Area.Station, False): (
+        [ShutterKey], [ShutterKey], [ShutterKey], [ShutterKey], [ShutterKey]),
+    (Character.Amy, Area.Casino, Area.Casinopolis, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.Casino, Area.Hotel, False): ([CasinoKey], [CasinoKey], [CasinoKey], [CasinoKey], [CasinoKey]),
+    (Character.Amy, Area.Casino, Area.EggWalker, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.SSMain, Area.Hotel, False): ([HotelKey], [HotelKey], [], [], []),
+    (Character.Amy, Area.SSMain, Area.Station, False): ([StationKey], [StationKey], [], [], []),
+    (Character.Amy, Area.SSMain, Area.CityHall, False): (
+        [PolicePass], [PolicePass], [PolicePass], [PolicePass], [PolicePass]),
+    (Character.Amy, Area.SSMain, Area.ECOutside, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Amy, Area.SSMain, Area.ECBridge, False): (
+        [Boat, ECSwitchAccess], [Boat, ECSwitchAccess], [Boat, ECSwitchAccess], [Boat, ECSwitchAccess],
+        [Boat, ECSwitchAccess]),
+    (Character.Amy, Area.SSMain, Area.SpeedHighway, False): (
+        [ONLY_RANDO, EmployeeCard], [ONLY_RANDO, EmployeeCard], [], [], []),
+    (Character.Amy, Area.SSMain, Area.TPTunnel, False): ([TPTicket], [TPTicket], [], [], []),
+    (Character.Amy, Area.TPTunnel, Area.SSMain, False): ([TPTicket], [TPTicket], [], [], []),
+    (Character.Amy, Area.TPTunnel, Area.Sewers, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.TPTunnel, Area.TPLobby, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.TPLobby, Area.TPTunnel, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.TPLobby, Area.TwinklePark, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.TPLobby, Area.TwinkleCircuit, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.Hotel, Area.SSMain, False): ([HotelKey], [HotelKey], [], [], []),
+    (Character.Amy, Area.Hotel, Area.Casino, False): ([CasinoKey], [CasinoKey], [], [], []),
+    (Character.Amy, Area.Hotel, Area.SSChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.Hotel, Area.Chaos2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.Hotel, Area.HotelPool, False): ([PoolKey], [PoolKey], [PoolKey], [PoolKey], [PoolKey]),
+    (Character.Amy, Area.HotelPool, Area.Hotel, False): ([PoolKey], [PoolKey], [PoolKey], [PoolKey], [PoolKey]),
+    (Character.Amy, Area.HotelPool, Area.EmeraldCoast, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.MRMain, Area.Station, False): ([Train], [Train], [Train], [Train], [Train]),
+    (Character.Amy, Area.MRMain, Area.ECOutside, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Amy, Area.MRMain, Area.ECBridge, False): (
+        [Raft, ECSwitchAccess], [Raft, ECSwitchAccess], [Raft, ECSwitchAccess], [Raft, ECSwitchAccess],
+        [Raft, ECSwitchAccess]),
+    (Character.Amy, Area.MRMain, Area.WindyValley, False): (
+        [WindStone], [WindStone], [WindStone], [WindStone], [WindStone]),
+    (Character.Amy, Area.MRMain, Area.Jungle, False): (
+        [JungleCart], [JungleCart], [JungleCart], [JungleCart], [JungleCart]),
+    (Character.Amy, Area.MRMain, Area.Chaos4, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.MRMain, Area.EggHornet, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.MRMain, Area.SkyChase1, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.MRMain, Area.MRChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.MRMain, Area.AngelIsland, False): ([Dynamite], [Dynamite], [Dynamite], [Dynamite], [Dynamite]),
+    (Character.Amy, Area.AngelIsland, Area.MRMain, False): ([Dynamite], [Dynamite], [Dynamite], [Dynamite], [Dynamite]),
+    (Character.Amy, Area.AngelIsland, Area.IceCave, False): (
+        [IceStone], [IceStone], [IceStone], [IceStone], [IceStone]),
+    (Character.Amy, Area.AngelIsland, Area.RedMountain, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.AngelIsland, Area.PastAltar, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Amy, Area.IceCave, Area.AngelIsland, False): (
+        [IceStone], [IceStone], [IceStone], [IceStone], [IceStone]),
+    (Character.Amy, Area.IceCave, Area.IceCap, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.PastAltar, Area.AngelIsland, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Amy, Area.PastAltar, Area.PastMain, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.PastMain, Area.PastAltar, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.PastMain, Area.Jungle, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Amy, Area.Jungle, Area.PastMain, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Amy, Area.Jungle, Area.MRMain, False): (
+        [JungleCart], [JungleCart], [JungleCart], [JungleCart], [JungleCart]),
+    (Character.Amy, Area.Jungle, Area.LostWorld, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.Jungle, Area.LostWorld, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.Jungle, Area.SandHill, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.Jungle, Area.FinalEggTower, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.FinalEggTower, Area.Jungle, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.FinalEggTower, Area.FinalEgg, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.FinalEggTower, Area.FinalEgg, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.FinalEggTower, Area.BetaEggViper, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.FinalEggTower, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECOutside, Area.SSMain, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Amy, Area.ECOutside, Area.MRMain, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Amy, Area.ECOutside, Area.SkyChase2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.ECOutside, Area.Chaos6ZeroBeta, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECOutside, Area.ECInside, False): ([Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Amy, Area.ECOutside, Area.ECInside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Amy, Area.ECOutside, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECOutside, Area.ECPool, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECBridge, Area.SSMain, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Amy, Area.ECBridge, Area.MRMain, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Amy, Area.ECBridge, Area.SkyDeck, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.ECBridge, Area.SkyChase2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.ECBridge, Area.Chaos6ZeroBeta, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECBridge, Area.ECInside, False): ([Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Amy, Area.ECDeck, Area.ECPool, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECDeck, Area.CaptainRoom, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.ECDeck, Area.PrivateRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECDeck, Area.PrivateRoom, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.ECDeck, Area.ECInside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Amy, Area.CaptainRoom, Area.ECOutside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.CaptainRoom, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Amy, Area.CaptainRoom, Area.PrivateRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.PrivateRoom, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.PrivateRoom, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Amy, Area.PrivateRoom, Area.ECDeck, True): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Amy, Area.ECPool, Area.ECOutside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECPool, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Amy, Area.ECPool, Area.SkyDeck, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Amy, Area.ECInside, Area.ECOutside, False): ([Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Amy, Area.ECInside, Area.ECOutside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Amy, Area.ECInside, Area.ECDeck, False): (
+        [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess],
+        [Egglift, ECSwitchAccess]),
+    (Character.Amy, Area.ECInside, Area.ECBridge, False): (
+        [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess],
+        [Monorail, ECSwitchAccess]),
+    (Character.Amy, Area.ECInside, Area.HotShelter, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECInside, Area.HedgehogHammer, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECInside, Area.FinalEggTower, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECInside, Area.WarpHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECInside, Area.Arsenal, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.ECInside, Area.WaterTank, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.HedgehogHammer, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.HedgehogHammer, Area.PrisonHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.PrisonHall, Area.HedgehogHammer, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.Arsenal, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.WaterTank, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.WarpHall, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Amy, Area.WarpHall, Area.ECChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.CityHall, Area.SSMain, False): (
+        [PolicePass], [PolicePass], [PolicePass], [PolicePass], [PolicePass]),
+    (Character.Big, Area.CityHall, Area.SpeedHighway, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.CityHall, Area.Chaos0, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.CityHall, Area.Sewers, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.Sewers, Area.CityHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.Sewers, Area.TPTunnel, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.Station, Area.SSMain, False): (
+        [StationKey], [StationKey], [StationKey], [StationKey], [StationKey]),
+    (Character.Big, Area.Station, Area.MRMain, False): ([Train], [Train], [Train], [Train], [Train]),
+    (Character.Big, Area.Station, Area.Casino, False): (
+        [ShutterKey], [ShutterKey], [ShutterKey], [ShutterKey], [ShutterKey]),
+    (Character.Big, Area.Casino, Area.Station, False): (
+        [ShutterKey], [ShutterKey], [ShutterKey], [ShutterKey], [ShutterKey]),
+    (Character.Big, Area.Casino, Area.Casinopolis, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.Casino, Area.Hotel, False): ([CasinoKey], [CasinoKey], [CasinoKey], [CasinoKey], [CasinoKey]),
+    (Character.Big, Area.Casino, Area.EggWalker, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.SSMain, Area.Hotel, False): ([HotelKey], [HotelKey], [HotelKey], [[HotelKey],
+                                                                                           [LifeBelt]], []),
+    (Character.Big, Area.SSMain, Area.Station, False): ([StationKey], [StationKey], [], [], []),
+    (Character.Big, Area.SSMain, Area.CityHall, False): (
+        [PolicePass], [PolicePass], [PolicePass], [PolicePass], [PolicePass]),
+    (Character.Big, Area.SSMain, Area.ECOutside, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Big, Area.SSMain, Area.ECBridge, False): (
+        [Boat, ECSwitchAccess], [Boat, ECSwitchAccess], [Boat, ECSwitchAccess], [Boat, ECSwitchAccess],
+        [Boat, ECSwitchAccess]),
+    (Character.Big, Area.SSMain, Area.SpeedHighway, False): (
+        [ONLY_RANDO, EmployeeCard], [ONLY_RANDO, EmployeeCard], [], [], []),
+    (Character.Big, Area.SSMain, Area.TPTunnel, False): ([TPTicket], [TPTicket], [TPTicket], [TPTicket], [TPTicket]),
+    (Character.Big, Area.TPTunnel, Area.SSMain, False): ([TPTicket], [TPTicket], [], [], []),
+    (Character.Big, Area.TPTunnel, Area.Sewers, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.TPTunnel, Area.TPLobby, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.TPLobby, Area.TPTunnel, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.TPLobby, Area.TwinklePark, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.TPLobby, Area.TwinkleCircuit, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.Hotel, Area.SSMain, False): ([HotelKey], [HotelKey], [HotelKey], [HotelKey], [HotelKey]),
+    (Character.Big, Area.Hotel, Area.Casino, False): ([CasinoKey], [CasinoKey], [CasinoKey], [CasinoKey], [CasinoKey]),
+    (Character.Big, Area.Hotel, Area.SSChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.Hotel, Area.Chaos2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.Hotel, Area.HotelPool, False): ([PoolKey], [PoolKey], [PoolKey], [PoolKey], [PoolKey]),
+    (Character.Big, Area.HotelPool, Area.Hotel, False): ([PoolKey], [PoolKey], [PoolKey], [PoolKey], [PoolKey]),
+    (Character.Big, Area.HotelPool, Area.EmeraldCoast, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.MRMain, Area.Station, False): ([Train], [Train], [Train], [Train], [Train]),
+    (Character.Big, Area.MRMain, Area.ECOutside, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Big, Area.MRMain, Area.ECBridge, False): (
+        [Raft, ECSwitchAccess], [Raft, ECSwitchAccess], [Raft, ECSwitchAccess], [Raft, ECSwitchAccess],
+        [Raft, ECSwitchAccess]),
+    (Character.Big, Area.MRMain, Area.WindyValley, False): (
+        [WindStone], [WindStone], [WindStone], [WindStone], [WindStone]),
+    (Character.Big, Area.MRMain, Area.Jungle, False): (
+        [JungleCart], [JungleCart], [JungleCart], [JungleCart], [JungleCart]),
+    (Character.Big, Area.MRMain, Area.Chaos4, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.MRMain, Area.EggHornet, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.MRMain, Area.SkyChase1, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.MRMain, Area.MRChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.MRMain, Area.AngelIsland, False): ([Dynamite], [Dynamite], [Dynamite], [Dynamite], [Dynamite]),
+    (Character.Big, Area.AngelIsland, Area.MRMain, False): ([Dynamite], [Dynamite], [Dynamite], [Dynamite], [Dynamite]),
+    (Character.Big, Area.AngelIsland, Area.IceCave, False): (
+        [IceStone], [IceStone], [IceStone], [IceStone], [IceStone]),
+    (Character.Big, Area.AngelIsland, Area.RedMountain, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.AngelIsland, Area.PastAltar, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Big, Area.IceCave, Area.AngelIsland, False): (
+        [IceStone], [IceStone], [IceStone], [IceStone], [IceStone]),
+    (Character.Big, Area.IceCave, Area.IceCap, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.PastAltar, Area.AngelIsland, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Big, Area.PastAltar, Area.PastMain, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.PastMain, Area.PastAltar, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.PastMain, Area.Jungle, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Big, Area.Jungle, Area.PastMain, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Big, Area.Jungle, Area.MRMain, False): (
+        [JungleCart], [JungleCart], [JungleCart], [JungleCart], [JungleCart]),
+    (Character.Big, Area.Jungle, Area.LostWorld, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.Jungle, Area.LostWorld, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.Jungle, Area.SandHill, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.Jungle, Area.FinalEggTower, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.FinalEggTower, Area.Jungle, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.FinalEggTower, Area.FinalEgg, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.FinalEggTower, Area.FinalEgg, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.FinalEggTower, Area.BetaEggViper, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.FinalEggTower, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECOutside, Area.SSMain, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Big, Area.ECOutside, Area.MRMain, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Big, Area.ECOutside, Area.SkyChase2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.ECOutside, Area.Chaos6ZeroBeta, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECOutside, Area.ECInside, False): ([Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Big, Area.ECOutside, Area.ECInside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Big, Area.ECOutside, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECOutside, Area.ECPool, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECBridge, Area.SSMain, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Big, Area.ECBridge, Area.MRMain, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Big, Area.ECBridge, Area.SkyDeck, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.ECBridge, Area.SkyChase2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.ECBridge, Area.Chaos6ZeroBeta, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECBridge, Area.ECInside, False): ([Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Big, Area.ECDeck, Area.ECPool, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECDeck, Area.CaptainRoom, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.ECDeck, Area.PrivateRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECDeck, Area.PrivateRoom, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.ECDeck, Area.ECInside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Big, Area.CaptainRoom, Area.ECOutside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.CaptainRoom, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Big, Area.CaptainRoom, Area.PrivateRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.PrivateRoom, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.PrivateRoom, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Big, Area.PrivateRoom, Area.ECDeck, True): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Big, Area.ECPool, Area.ECOutside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECPool, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Big, Area.ECPool, Area.SkyDeck, False): ([ONLY_RANDO], [ONLY_RANDO], [], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Big, Area.ECInside, Area.ECOutside, False): ([Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Big, Area.ECInside, Area.ECOutside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Big, Area.ECInside, Area.ECDeck, False): (
+        [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess],
+        [Egglift, ECSwitchAccess]),
+    (Character.Big, Area.ECInside, Area.ECBridge, False): (
+        [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess],
+        [Monorail, ECSwitchAccess]),
+    (Character.Big, Area.ECInside, Area.HotShelter, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECInside, Area.HedgehogHammer, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECInside, Area.FinalEggTower, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECInside, Area.WarpHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECInside, Area.Arsenal, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.ECInside, Area.WaterTank, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.HedgehogHammer, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.HedgehogHammer, Area.PrisonHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.PrisonHall, Area.HedgehogHammer, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.Arsenal, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.WaterTank, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.WarpHall, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Big, Area.WarpHall, Area.ECChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.CityHall, Area.SSMain, False): (
+        [PolicePass], [PolicePass], [PolicePass], [PolicePass], [PolicePass]),
+    (Character.Gamma, Area.CityHall, Area.SpeedHighway, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.CityHall, Area.Chaos0, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.CityHall, Area.Sewers, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.Sewers, Area.CityHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.Sewers, Area.TPTunnel, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.Station, Area.SSMain, False): (
+        [StationKey], [StationKey], [StationKey], [StationKey], [StationKey]),
+    (Character.Gamma, Area.Station, Area.MRMain, False): ([Train], [Train], [Train], [Train], [Train]),
+    (Character.Gamma, Area.Station, Area.Casino, False): ([ShutterKey], [ShutterKey], [], [], []),
+    (Character.Gamma, Area.Casino, Area.Station, False): (
+        [ShutterKey], [ShutterKey], [ShutterKey], [ShutterKey], [ShutterKey]),
+    (Character.Gamma, Area.Casino, Area.Casinopolis, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.Casino, Area.Hotel, False): (
+        [CasinoKey], [CasinoKey], [CasinoKey], [CasinoKey], [CasinoKey]),
+    (Character.Gamma, Area.Casino, Area.EggWalker, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.SSMain, Area.Hotel, False): ([HotelKey], [HotelKey], [HotelKey], [], []),
+    (Character.Gamma, Area.SSMain, Area.Station, False): ([StationKey], [StationKey], [], [], []),
+    (Character.Gamma, Area.SSMain, Area.CityHall, False): (
+        [PolicePass], [PolicePass], [PolicePass], [PolicePass], [PolicePass]),
+    (Character.Gamma, Area.SSMain, Area.ECOutside, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Gamma, Area.SSMain, Area.ECBridge, False): (
+        [Boat, ECSwitchAccess], [Boat, ECSwitchAccess], [Boat, ECSwitchAccess], [Boat, ECSwitchAccess],
+        [Boat, ECSwitchAccess]),
+    (Character.Gamma, Area.SSMain, Area.SpeedHighway, False): (
+        [ONLY_RANDO, EmployeeCard], [ONLY_RANDO, EmployeeCard], [ONLY_RANDO, EmployeeCard], [], []),
+    (Character.Gamma, Area.SSMain, Area.TPTunnel, False): ([TPTicket], [TPTicket], [], [], []),
+    (Character.Gamma, Area.TPTunnel, Area.SSMain, False): ([TPTicket], [TPTicket], [], [], []),
+    (Character.Gamma, Area.TPTunnel, Area.Sewers, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.TPTunnel, Area.TPLobby, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.TPLobby, Area.TPTunnel, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.TPLobby, Area.TwinklePark, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.TPLobby, Area.TwinkleCircuit, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.Hotel, Area.SSMain, False): ([HotelKey], [HotelKey], [], [], []),
+    (Character.Gamma, Area.Hotel, Area.Casino, False): ([CasinoKey], [CasinoKey], [], [[CasinoKey],
+                                                                                       [JetBooster]], []),
+    (Character.Gamma, Area.Hotel, Area.SSChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.Hotel, Area.Chaos2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.Hotel, Area.HotelPool, False): ([PoolKey], [PoolKey], [PoolKey], [PoolKey], [PoolKey]),
+    (Character.Gamma, Area.HotelPool, Area.Hotel, False): ([PoolKey], [PoolKey], [PoolKey], [PoolKey], [PoolKey]),
+    (Character.Gamma, Area.HotelPool, Area.EmeraldCoast, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.MRMain, Area.Station, False): ([Train], [Train], [Train], [Train], [Train]),
+    (Character.Gamma, Area.MRMain, Area.ECOutside, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Gamma, Area.MRMain, Area.ECBridge, False): (
+        [Raft, ECSwitchAccess], [Raft, ECSwitchAccess], [Raft, ECSwitchAccess], [Raft, ECSwitchAccess],
+        [Raft, ECSwitchAccess]),
+    (Character.Gamma, Area.MRMain, Area.WindyValley, False): (
+        [WindStone], [WindStone], [WindStone], [WindStone], [WindStone]),
+    (Character.Gamma, Area.MRMain, Area.Jungle, False): (
+        [JungleCart], [JungleCart], [JungleCart], [JungleCart], [JungleCart]),
+    (Character.Gamma, Area.MRMain, Area.Chaos4, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.MRMain, Area.EggHornet, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.MRMain, Area.SkyChase1, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.MRMain, Area.MRChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.MRMain, Area.AngelIsland, False): (
+        [Dynamite], [Dynamite], [[Dynamite], [JetBooster]], [[Dynamite],
+                                                             [JetBooster]], [[Dynamite],
+                                                                             [JetBooster]]),
+    (Character.Gamma, Area.AngelIsland, Area.MRMain, False): ([Dynamite], [Dynamite], [[Dynamite],
+                                                                                       [JetBooster]], [[Dynamite],
+                                                                                                       [JetBooster]],
+                                                              [[Dynamite],
+                                                               [JetBooster]]),
+    (Character.Gamma, Area.AngelIsland, Area.IceCave, False): (
+        [IceStone], [IceStone], [[IceStone], [JetBooster]], [[IceStone], [JetBooster]], [[IceStone], [JetBooster]]),
+    (Character.Gamma, Area.AngelIsland, Area.RedMountain, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.AngelIsland, Area.PastAltar, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Gamma, Area.IceCave, Area.AngelIsland, False): (
+        [IceStone], [IceStone], [IceStone], [IceStone], [IceStone]),
+    (Character.Gamma, Area.IceCave, Area.IceCap, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.PastAltar, Area.AngelIsland, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Gamma, Area.PastAltar, Area.PastMain, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.PastMain, Area.PastAltar, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.PastMain, Area.Jungle, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Gamma, Area.Jungle, Area.PastMain, False): (
+        [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine], [TimeMachine]),
+    (Character.Gamma, Area.Jungle, Area.MRMain, False): (
+        [JungleCart], [JungleCart], [JungleCart], [JungleCart], [JungleCart]),
+    (Character.Gamma, Area.Jungle, Area.LostWorld, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.Jungle, Area.LostWorld, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.Jungle, Area.SandHill, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.Jungle, Area.FinalEggTower, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.FinalEggTower, Area.Jungle, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.FinalEggTower, Area.FinalEgg, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.FinalEggTower, Area.FinalEgg, True): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.FinalEggTower, Area.BetaEggViper, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.FinalEggTower, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECOutside, Area.SSMain, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Gamma, Area.ECOutside, Area.MRMain, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Gamma, Area.ECOutside, Area.SkyChase2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.ECOutside, Area.Chaos6ZeroBeta, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECOutside, Area.ECInside, False): (
+        [Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Gamma, Area.ECOutside, Area.ECInside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Gamma, Area.ECOutside, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECOutside, Area.ECPool, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECBridge, Area.SSMain, False): ([Boat], [Boat], [Boat], [Boat], [Boat]),
+    (Character.Gamma, Area.ECBridge, Area.MRMain, False): ([Raft], [Raft], [Raft], [Raft], [Raft]),
+    (Character.Gamma, Area.ECBridge, Area.SkyDeck, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.ECBridge, Area.SkyChase2, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.ECBridge, Area.Chaos6ZeroBeta, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECBridge, Area.ECInside, False): (
+        [Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Gamma, Area.ECDeck, Area.ECPool, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECDeck, Area.CaptainRoom, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.ECDeck, Area.PrivateRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECDeck, Area.PrivateRoom, True): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.ECDeck, Area.ECInside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Gamma, Area.CaptainRoom, Area.ECOutside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.CaptainRoom, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Gamma, Area.CaptainRoom, Area.PrivateRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.PrivateRoom, Area.CaptainRoom, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.PrivateRoom, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Gamma, Area.PrivateRoom, Area.ECDeck, True): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Gamma, Area.ECPool, Area.ECOutside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECPool, Area.ECDeck, False): (
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess],
+        [EMBLEM_BLOCKED, ECSwitchAccess], [EMBLEM_BLOCKED, ECSwitchAccess]),
+    (Character.Gamma, Area.ECPool, Area.SkyDeck, False): (
+        [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO], [ONLY_RANDO]),
+    (Character.Gamma, Area.ECInside, Area.ECOutside, False): (
+        [Monorail], [Monorail], [Monorail], [Monorail], [Monorail]),
+    (Character.Gamma, Area.ECInside, Area.ECOutside, False): ([Egglift], [Egglift], [Egglift], [Egglift], [Egglift]),
+    (Character.Gamma, Area.ECInside, Area.ECDeck, False): (
+        [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess], [Egglift, ECSwitchAccess],
+        [Egglift, ECSwitchAccess]),
+    (Character.Gamma, Area.ECInside, Area.ECBridge, False): (
+        [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess], [Monorail, ECSwitchAccess],
+        [Monorail, ECSwitchAccess]),
+    (Character.Gamma, Area.ECInside, Area.HotShelter, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECInside, Area.HedgehogHammer, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECInside, Area.FinalEggTower, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECInside, Area.WarpHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECInside, Area.Arsenal, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.ECInside, Area.WaterTank, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.HedgehogHammer, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.HedgehogHammer, Area.PrisonHall, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.PrisonHall, Area.HedgehogHammer, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.Arsenal, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.WaterTank, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.WarpHall, Area.ECInside, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
+    (Character.Gamma, Area.WarpHall, Area.ECChaoGarden, False): (
+        [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED], [EMBLEM_BLOCKED]),
 }
 
 level_location_table: List[LevelLocation] = [
     LevelLocation(6002, Area.TwinklePark, Character.Big, LevelMission.C, [], [], [], [], []),
-    LevelLocation(6001, Area.TwinklePark, Character.Big, LevelMission.B,
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4], [], [], [], []),
-    LevelLocation(6000, Area.TwinklePark, Character.Big, LevelMission.A,
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4]),
-    LevelLocation(6003, Area.TwinklePark, Character.Big, LevelMission.S,
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4]),
+    LevelLocation(6001, Area.TwinklePark, Character.Big, LevelMission.B, [Lure1, Lure2, Lure3, Lure4], [], [], [], []),
+    LevelLocation(6000, Area.TwinklePark, Character.Big, LevelMission.A, [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4]),
+    LevelLocation(6003, Area.TwinklePark, Character.Big, LevelMission.S, [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4]),
     LevelLocation(3002, Area.SpeedHighway, Character.Knuckles, LevelMission.C, [], [], [], [], []),
     LevelLocation(3001, Area.SpeedHighway, Character.Knuckles, LevelMission.B, [], [], [], [], []),
     LevelLocation(3000, Area.SpeedHighway, Character.Knuckles, LevelMission.A, [], [], [], [], []),
@@ -930,20 +1545,13 @@ level_location_table: List[LevelLocation] = [
     LevelLocation(1000, Area.EmeraldCoast, Character.Sonic, LevelMission.A, [], [], [], [], []),
     LevelLocation(1003, Area.EmeraldCoast, Character.Sonic, LevelMission.S, [], [], [], [], []),
     LevelLocation(6202, Area.EmeraldCoast, Character.Big, LevelMission.C, [], [], [], [], []),
-    LevelLocation(6201, Area.EmeraldCoast, Character.Big, LevelMission.B,
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4], [], [], [], []),
-    LevelLocation(6200, Area.EmeraldCoast, Character.Big, LevelMission.A,
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4]),
-    LevelLocation(6203, Area.EmeraldCoast, Character.Big, LevelMission.S,
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4]),
+    LevelLocation(6201, Area.EmeraldCoast, Character.Big, LevelMission.B, [Lure1, Lure2, Lure3, Lure4], [], [], [], []),
+    LevelLocation(6200, Area.EmeraldCoast, Character.Big, LevelMission.A, [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4]),
+    LevelLocation(6203, Area.EmeraldCoast, Character.Big, LevelMission.S, [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4]),
     LevelLocation(5102, Area.EmeraldCoast, Character.Gamma, LevelMission.C, [], [], [], [], []),
     LevelLocation(5101, Area.EmeraldCoast, Character.Gamma, LevelMission.B, [], [], [], [], []),
     LevelLocation(5100, Area.EmeraldCoast, Character.Gamma, LevelMission.A, [], [], [], [], []),
@@ -954,8 +1562,8 @@ level_location_table: List[LevelLocation] = [
     LevelLocation(1203, Area.Casinopolis, Character.Sonic, LevelMission.S, [], [], [], [], []),
     LevelLocation(2102, Area.Casinopolis, Character.Tails, LevelMission.C, [], [], [], [], []),
     LevelLocation(2101, Area.Casinopolis, Character.Tails, LevelMission.B, [], [], [], [], []),
-    LevelLocation(2100, Area.Casinopolis, Character.Tails, LevelMission.A, [ItemName.Tails.JetAnklet], [], [], [], []),
-    LevelLocation(2103, Area.Casinopolis, Character.Tails, LevelMission.S, [ItemName.Tails.JetAnklet], [], [], [], []),
+    LevelLocation(2100, Area.Casinopolis, Character.Tails, LevelMission.A, [JetAnklet], [], [], [], []),
+    LevelLocation(2103, Area.Casinopolis, Character.Tails, LevelMission.S, [JetAnklet], [], [], [], []),
     LevelLocation(3102, Area.Casinopolis, Character.Knuckles, LevelMission.C, [], [], [], [], []),
     LevelLocation(3101, Area.Casinopolis, Character.Knuckles, LevelMission.B, [], [], [], [], []),
     LevelLocation(3100, Area.Casinopolis, Character.Knuckles, LevelMission.A, [], [], [], [], []),
@@ -974,20 +1582,20 @@ level_location_table: List[LevelLocation] = [
     LevelLocation(1503, Area.SpeedHighway, Character.Sonic, LevelMission.S, [], [], [], [], []),
     LevelLocation(2402, Area.SpeedHighway, Character.Tails, LevelMission.C, [], [], [], [], []),
     LevelLocation(2401, Area.SpeedHighway, Character.Tails, LevelMission.B, [], [], [], [], []),
-    LevelLocation(2400, Area.SpeedHighway, Character.Tails, LevelMission.A, [ItemName.Tails.JetAnklet], [], [], [], []),
-    LevelLocation(2403, Area.SpeedHighway, Character.Tails, LevelMission.S, [ItemName.Tails.JetAnklet], [], [], [], []),
+    LevelLocation(2400, Area.SpeedHighway, Character.Tails, LevelMission.A, [JetAnklet], [], [], [], []),
+    LevelLocation(2403, Area.SpeedHighway, Character.Tails, LevelMission.S, [JetAnklet], [], [], [], []),
     LevelLocation(1102, Area.WindyValley, Character.Sonic, LevelMission.C, [], [], [], [], []),
     LevelLocation(1101, Area.WindyValley, Character.Sonic, LevelMission.B, [], [], [], [], []),
     LevelLocation(1100, Area.WindyValley, Character.Sonic, LevelMission.A, [], [], [], [], []),
     LevelLocation(1103, Area.WindyValley, Character.Sonic, LevelMission.S, [], [], [], [], []),
     LevelLocation(2002, Area.WindyValley, Character.Tails, LevelMission.C, [], [], [], [], []),
     LevelLocation(2001, Area.WindyValley, Character.Tails, LevelMission.B, [], [], [], [], []),
-    LevelLocation(2000, Area.WindyValley, Character.Tails, LevelMission.A, [ItemName.Tails.JetAnklet], [], [], [], []),
-    LevelLocation(2003, Area.WindyValley, Character.Tails, LevelMission.S, [ItemName.Tails.JetAnklet], [], [], [], []),
-    LevelLocation(5202, Area.WindyValley, Character.Gamma, LevelMission.C, [ItemName.Gamma.JetBooster], [], [], [], []),
-    LevelLocation(5201, Area.WindyValley, Character.Gamma, LevelMission.B, [ItemName.Gamma.JetBooster], [], [], [], []),
-    LevelLocation(5200, Area.WindyValley, Character.Gamma, LevelMission.A, [ItemName.Gamma.JetBooster], [], [], [], []),
-    LevelLocation(5203, Area.WindyValley, Character.Gamma, LevelMission.S, [ItemName.Gamma.JetBooster], [], [], [], []),
+    LevelLocation(2000, Area.WindyValley, Character.Tails, LevelMission.A, [JetAnklet], [], [], [], []),
+    LevelLocation(2003, Area.WindyValley, Character.Tails, LevelMission.S, [JetAnklet], [], [], [], []),
+    LevelLocation(5202, Area.WindyValley, Character.Gamma, LevelMission.C, [JetBooster], [], [], [], []),
+    LevelLocation(5201, Area.WindyValley, Character.Gamma, LevelMission.B, [JetBooster], [], [], [], []),
+    LevelLocation(5200, Area.WindyValley, Character.Gamma, LevelMission.A, [JetBooster], [], [], [], []),
+    LevelLocation(5203, Area.WindyValley, Character.Gamma, LevelMission.S, [JetBooster], [], [], [], []),
     LevelLocation(1302, Area.IceCap, Character.Sonic, LevelMission.C, [], [], [], [], []),
     LevelLocation(1301, Area.IceCap, Character.Sonic, LevelMission.B, [], [], [], [], []),
     LevelLocation(1300, Area.IceCap, Character.Sonic, LevelMission.A, [], [], [], [], []),
@@ -997,52 +1605,37 @@ level_location_table: List[LevelLocation] = [
     LevelLocation(2200, Area.IceCap, Character.Tails, LevelMission.A, [], [], [], [], []),
     LevelLocation(2203, Area.IceCap, Character.Tails, LevelMission.S, [], [], [], [], []),
     LevelLocation(6102, Area.IceCap, Character.Big, LevelMission.C, [], [], [], [], []),
-    LevelLocation(6101, Area.IceCap, Character.Big, LevelMission.B,
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4], [], [], [], []),
-    LevelLocation(6100, Area.IceCap, Character.Big, LevelMission.A,
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4]),
-    LevelLocation(6103, Area.IceCap, Character.Big, LevelMission.S,
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4]),
+    LevelLocation(6101, Area.IceCap, Character.Big, LevelMission.B, [Lure1, Lure2, Lure3, Lure4], [], [], [], []),
+    LevelLocation(6100, Area.IceCap, Character.Big, LevelMission.A, [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4]),
+    LevelLocation(6103, Area.IceCap, Character.Big, LevelMission.S, [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4]),
     LevelLocation(1602, Area.RedMountain, Character.Sonic, LevelMission.C, [], [], [], [], []),
     LevelLocation(1601, Area.RedMountain, Character.Sonic, LevelMission.B, [], [], [], [], []),
     LevelLocation(1600, Area.RedMountain, Character.Sonic, LevelMission.A, [], [], [], [], []),
     LevelLocation(1603, Area.RedMountain, Character.Sonic, LevelMission.S, [], [], [], [], []),
-    LevelLocation(3202, Area.RedMountain, Character.Knuckles, LevelMission.C, [ItemName.Knuckles.ShovelClaw], [], [],
-                  [], []),
-    LevelLocation(3201, Area.RedMountain, Character.Knuckles, LevelMission.B, [ItemName.Knuckles.ShovelClaw], [], [],
-                  [], []),
-    LevelLocation(3200, Area.RedMountain, Character.Knuckles, LevelMission.A, [ItemName.Knuckles.ShovelClaw], [], [],
-                  [], []),
-    LevelLocation(3203, Area.RedMountain, Character.Knuckles, LevelMission.S, [ItemName.Knuckles.ShovelClaw], [], [],
-                  [], []),
+    LevelLocation(3202, Area.RedMountain, Character.Knuckles, LevelMission.C, [ShovelClaw], [], [], [], []),
+    LevelLocation(3201, Area.RedMountain, Character.Knuckles, LevelMission.B, [ShovelClaw], [], [], [], []),
+    LevelLocation(3200, Area.RedMountain, Character.Knuckles, LevelMission.A, [ShovelClaw], [], [], [], []),
+    LevelLocation(3203, Area.RedMountain, Character.Knuckles, LevelMission.S, [ShovelClaw], [], [], [], []),
     LevelLocation(5302, Area.RedMountain, Character.Gamma, LevelMission.C, [], [], [], [], []),
     LevelLocation(5301, Area.RedMountain, Character.Gamma, LevelMission.B, [], [], [], [], []),
     LevelLocation(5300, Area.RedMountain, Character.Gamma, LevelMission.A, [], [], [], [], []),
     LevelLocation(5303, Area.RedMountain, Character.Gamma, LevelMission.S, [], [], [], [], []),
-    LevelLocation(1802, Area.LostWorld, Character.Sonic, LevelMission.C, [ItemName.Sonic.LightShoes], [], [], [], []),
-    LevelLocation(1801, Area.LostWorld, Character.Sonic, LevelMission.B, [ItemName.Sonic.LightShoes], [], [], [], []),
-    LevelLocation(1800, Area.LostWorld, Character.Sonic, LevelMission.A, [ItemName.Sonic.LightShoes], [], [], [], []),
-    LevelLocation(1803, Area.LostWorld, Character.Sonic, LevelMission.S, [ItemName.Sonic.LightShoes], [], [], [], []),
-    LevelLocation(3302, Area.LostWorld, Character.Knuckles, LevelMission.C, [ItemName.Knuckles.ShovelClaw], [], [], [],
-                  []),
-    LevelLocation(3301, Area.LostWorld, Character.Knuckles, LevelMission.B, [ItemName.Knuckles.ShovelClaw], [], [], [],
-                  []),
-    LevelLocation(3300, Area.LostWorld, Character.Knuckles, LevelMission.A, [ItemName.Knuckles.ShovelClaw], [], [], [],
-                  []),
-    LevelLocation(3303, Area.LostWorld, Character.Knuckles, LevelMission.S, [ItemName.Knuckles.ShovelClaw], [], [], [],
-                  []),
-    LevelLocation(1902, Area.FinalEgg, Character.Sonic, LevelMission.C, [ItemName.Sonic.LightShoes], [], [], [], []),
-    LevelLocation(1901, Area.FinalEgg, Character.Sonic, LevelMission.B, [ItemName.Sonic.LightShoes], [], [], [], []),
-    LevelLocation(1900, Area.FinalEgg, Character.Sonic, LevelMission.A, [ItemName.Sonic.LightShoes], [], [], [], []),
-    LevelLocation(1903, Area.FinalEgg, Character.Sonic, LevelMission.S, [ItemName.Sonic.LightShoes], [], [], [], []),
+    LevelLocation(1802, Area.LostWorld, Character.Sonic, LevelMission.C, [LightShoes], [], [], [], []),
+    LevelLocation(1801, Area.LostWorld, Character.Sonic, LevelMission.B, [LightShoes], [], [], [], []),
+    LevelLocation(1800, Area.LostWorld, Character.Sonic, LevelMission.A, [LightShoes], [], [], [], []),
+    LevelLocation(1803, Area.LostWorld, Character.Sonic, LevelMission.S, [LightShoes], [], [], [], []),
+    LevelLocation(3302, Area.LostWorld, Character.Knuckles, LevelMission.C, [ShovelClaw], [], [], [], []),
+    LevelLocation(3301, Area.LostWorld, Character.Knuckles, LevelMission.B, [ShovelClaw], [], [], [], []),
+    LevelLocation(3300, Area.LostWorld, Character.Knuckles, LevelMission.A, [ShovelClaw], [], [], [], []),
+    LevelLocation(3303, Area.LostWorld, Character.Knuckles, LevelMission.S, [ShovelClaw], [], [], [], []),
+    LevelLocation(1902, Area.FinalEgg, Character.Sonic, LevelMission.C, [LightShoes], [], [], [], []),
+    LevelLocation(1901, Area.FinalEgg, Character.Sonic, LevelMission.B, [LightShoes], [], [], [], []),
+    LevelLocation(1900, Area.FinalEgg, Character.Sonic, LevelMission.A, [LightShoes], [], [], [], []),
+    LevelLocation(1903, Area.FinalEgg, Character.Sonic, LevelMission.S, [LightShoes], [], [], [], []),
     LevelLocation(4202, Area.FinalEgg, Character.Amy, LevelMission.C, [], [], [], [], []),
     LevelLocation(4201, Area.FinalEgg, Character.Amy, LevelMission.B, [], [], [], [], []),
     LevelLocation(4200, Area.FinalEgg, Character.Amy, LevelMission.A, [], [], [], [], []),
@@ -1057,357 +1650,195 @@ level_location_table: List[LevelLocation] = [
     LevelLocation(1703, Area.SkyDeck, Character.Sonic, LevelMission.S, [], [], [], [], []),
     LevelLocation(2302, Area.SkyDeck, Character.Tails, LevelMission.C, [], [], [], [], []),
     LevelLocation(2301, Area.SkyDeck, Character.Tails, LevelMission.B, [], [], [], [], []),
-    LevelLocation(2300, Area.SkyDeck, Character.Tails, LevelMission.A, [ItemName.Tails.JetAnklet], [], [], [], []),
-    LevelLocation(2303, Area.SkyDeck, Character.Tails, LevelMission.S, [ItemName.Tails.JetAnklet], [], [], [], []),
-    LevelLocation(3402, Area.SkyDeck, Character.Knuckles, LevelMission.C, [ItemName.Knuckles.ShovelClaw], [], [], [],
-                  []),
-    LevelLocation(3401, Area.SkyDeck, Character.Knuckles, LevelMission.B, [ItemName.Knuckles.ShovelClaw], [], [], [],
-                  []),
-    LevelLocation(3400, Area.SkyDeck, Character.Knuckles, LevelMission.A, [ItemName.Knuckles.ShovelClaw], [], [], [],
-                  []),
-    LevelLocation(3403, Area.SkyDeck, Character.Knuckles, LevelMission.S, [ItemName.Knuckles.ShovelClaw], [], [], [],
-                  []),
+    LevelLocation(2300, Area.SkyDeck, Character.Tails, LevelMission.A, [JetAnklet], [], [], [], []),
+    LevelLocation(2303, Area.SkyDeck, Character.Tails, LevelMission.S, [JetAnklet], [], [], [], []),
+    LevelLocation(3402, Area.SkyDeck, Character.Knuckles, LevelMission.C, [ShovelClaw], [], [], [], []),
+    LevelLocation(3401, Area.SkyDeck, Character.Knuckles, LevelMission.B, [ShovelClaw], [], [], [], []),
+    LevelLocation(3400, Area.SkyDeck, Character.Knuckles, LevelMission.A, [ShovelClaw], [], [], [], []),
+    LevelLocation(3403, Area.SkyDeck, Character.Knuckles, LevelMission.S, [ShovelClaw], [], [], [], []),
     LevelLocation(4102, Area.HotShelter, Character.Amy, LevelMission.C, [], [], [], [], []),
     LevelLocation(4101, Area.HotShelter, Character.Amy, LevelMission.B, [], [], [], [], []),
     LevelLocation(4100, Area.HotShelter, Character.Amy, LevelMission.A, [], [], [], [], []),
     LevelLocation(4103, Area.HotShelter, Character.Amy, LevelMission.S, [], [], [], [], []),
     LevelLocation(6302, Area.HotShelter, Character.Big, LevelMission.C, [], [], [], [], []),
-    LevelLocation(6301, Area.HotShelter, Character.Big, LevelMission.B,
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4], [], [], [], []),
-    LevelLocation(6300, Area.HotShelter, Character.Big, LevelMission.A,
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4], [], [], []),
-    LevelLocation(6303, Area.HotShelter, Character.Big, LevelMission.S,
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                  [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4], [], [], []),
-    LevelLocation(5402, Area.HotShelter, Character.Gamma, LevelMission.C, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    LevelLocation(5401, Area.HotShelter, Character.Gamma, LevelMission.B, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    LevelLocation(5400, Area.HotShelter, Character.Gamma, LevelMission.A, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    LevelLocation(5403, Area.HotShelter, Character.Gamma, LevelMission.S, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
+    LevelLocation(6301, Area.HotShelter, Character.Big, LevelMission.B, [Lure1, Lure2, Lure3, Lure4], [], [], [], []),
+    LevelLocation(6300, Area.HotShelter, Character.Big, LevelMission.A, [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4], [], [], []),
+    LevelLocation(6303, Area.HotShelter, Character.Big, LevelMission.S, [Lure1, Lure2, Lure3, Lure4],
+                  [Lure1, Lure2, Lure3, Lure4], [], [], []),
+    LevelLocation(5402, Area.HotShelter, Character.Gamma, LevelMission.C, [JetBooster], [JetBooster], [], [], []),
+    LevelLocation(5401, Area.HotShelter, Character.Gamma, LevelMission.B, [JetBooster], [JetBooster], [], [], []),
+    LevelLocation(5400, Area.HotShelter, Character.Gamma, LevelMission.A, [JetBooster], [JetBooster], [], [], []),
+    LevelLocation(5403, Area.HotShelter, Character.Gamma, LevelMission.S, [JetBooster], [JetBooster], [], [], []),
 ]
 
 upgrade_location_table: List[UpgradeLocation] = [
-    UpgradeLocation(100, LocationName.Sonic.LightShoes, Area.StationSquareMain, Character.Sonic, [], [], [], [], []),
-    UpgradeLocation(200, LocationName.Tails.JetAnklet, Area.StationSquareMain, Character.Tails, [], [], [], [], []),
-    UpgradeLocation(602, LocationName.Big.Lure1, Area.StationSquareMain, Character.Big, [], [], [], [], []),
-    UpgradeLocation(101, LocationName.Sonic.CrystalRing, Area.Hotel, Character.Sonic, [ItemName.Sonic.LightShoes],
-                    [ItemName.Sonic.LightShoes], [], [], []),
-    UpgradeLocation(300, LocationName.Knuckles.ShovelClaw, Area.MysticRuinsMain, Character.Knuckles, [], [], [], [],
-                    []),
+    UpgradeLocation(100, LocationName.Sonic.LightShoes, Area.Sewers, Character.Sonic, [], [], [], [], []),
+    UpgradeLocation(200, LocationName.Tails.JetAnklet, Area.SSMain, Character.Tails, [], [], [], [], []),
+    UpgradeLocation(602, LocationName.Big.Lure1, Area.SSMain, Character.Big, [], [], [], [], []),
+    UpgradeLocation(101, LocationName.Sonic.CrystalRing, Area.Hotel, Character.Sonic, [LightShoes], [], [], [], []),
+    UpgradeLocation(300, LocationName.Knuckles.ShovelClaw, Area.MRMain, Character.Knuckles, [], [], [], [], []),
     UpgradeLocation(604, LocationName.Big.Lure3, Area.IceCap, Character.Big, [], [], [], [], []),
-    UpgradeLocation(600, LocationName.Big.LifeBelt, Area.AngelIsland, Character.Big, [
-        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationFrontKey, ItemName.KeyItem.Train,
-         ItemName.KeyItem.Dynamite],
-        [ItemName.KeyItem.IceStone, ItemName.KeyItem.HotelFrontKey, ItemName.KeyItem.HotelBackKey,
-         ItemName.KeyItem.StationBackKey, ItemName.KeyItem.Train, ItemName.KeyItem.Dynamite]], [
-                        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationFrontKey, ItemName.KeyItem.Train,
-                         ItemName.KeyItem.Dynamite],
-                        [ItemName.KeyItem.IceStone, ItemName.KeyItem.HotelFrontKey, ItemName.KeyItem.HotelBackKey,
-                         ItemName.KeyItem.StationBackKey, ItemName.KeyItem.Train, ItemName.KeyItem.Dynamite]], [
-                        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationFrontKey, ItemName.KeyItem.Train,
-                         ItemName.KeyItem.Dynamite],
-                        [ItemName.KeyItem.IceStone, ItemName.KeyItem.HotelFrontKey, ItemName.KeyItem.HotelBackKey,
-                         ItemName.KeyItem.StationBackKey, ItemName.KeyItem.Train, ItemName.KeyItem.Dynamite]],
-                    [ItemName.KeyItem.IceStone, ItemName.KeyItem.Train, ItemName.KeyItem.Dynamite],
-                    [ItemName.KeyItem.IceStone, ItemName.KeyItem.Train, ItemName.KeyItem.Dynamite]),
+    UpgradeLocation(600, LocationName.Big.LifeBelt, Area.IceCave, Character.Big, [], [], [], [], []),
     UpgradeLocation(102, LocationName.Sonic.AncientLight, Area.AngelIsland, Character.Sonic, [], [], [], [], []),
     UpgradeLocation(301, LocationName.Knuckles.FightingGloves, Area.Jungle, Character.Knuckles, [], [], [], [], []),
     UpgradeLocation(603, LocationName.Big.Lure2, Area.Jungle, Character.Big, [], [], [], [], []),
     UpgradeLocation(601, LocationName.Big.PowerRod, Area.Jungle, Character.Big, [], [], [], [], []),
-    UpgradeLocation(400, LocationName.Amy.WarriorFeather, Area.EggCarrierInside, Character.Amy, [], [], [], [], []),
-    UpgradeLocation(401, LocationName.Amy.LongHammer, Area.EggCarrierInside, Character.Amy, [], [], [], [], []),
-    UpgradeLocation(500, LocationName.Gamma.JetBooster, Area.EggCarrierInside, Character.Gamma, [], [], [], [], []),
-    UpgradeLocation(501, LocationName.Gamma.LaserBlaster, Area.EggCarrierInside, Character.Gamma, [], [], [], [], []),
-    UpgradeLocation(605, LocationName.Big.Lure4, Area.EggCarrierInside, Character.Big, [], [], [], [], []),
-    UpgradeLocation(201, LocationName.Tails.RhythmBadge, Area.AngelIsland, Character.Tails, [], [], [], [], []),
+    UpgradeLocation(400, LocationName.Amy.WarriorFeather, Area.HedgehogHammer, Character.Amy, [], [], [], [], []),
+    UpgradeLocation(401, LocationName.Amy.LongHammer, Area.HedgehogHammer, Character.Amy, [], [], [], [], []),
+    UpgradeLocation(500, LocationName.Gamma.JetBooster, Area.Arsenal, Character.Gamma, [], [], [], [], []),
+    UpgradeLocation(501, LocationName.Gamma.LaserBlaster, Area.WaterTank, Character.Gamma, [], [], [], [], []),
+    UpgradeLocation(605, LocationName.Big.Lure4, Area.PrisonHall, Character.Big, [], [], [], [], []),
+    UpgradeLocation(201, LocationName.Tails.RhythmBadge, Area.PastMain, Character.Tails, [], [], [], [], []),
 ]
 
 field_emblem_location_table: List[EmblemLocation] = [
-    EmblemLocation(10, Area.Station,
-                   [Character.Sonic, Character.Knuckles, Character.Tails, Character.Amy, Character.Big,
-                    CharacterUpgrade(Character.Gamma, ItemName.Gamma.JetBooster)],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma], "Station Emblem"),
-    EmblemLocation(11, Area.StationSquareMain,
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma], "Burger Shop Emblem"),
-    EmblemLocation(12, Area.StationSquareMain,
-                   [Character.Tails, CharacterUpgrade(Character.Knuckles, ItemName.Knuckles.ShovelClaw)],
-                   [Character.Tails, CharacterUpgrade(Character.Knuckles, ItemName.Knuckles.ShovelClaw)],
-                   [Character.Amy, Character.Tails, Character.Knuckles],
-                   [Character.Amy, Character.Tails, Character.Knuckles],
-                   [Character.Amy, Character.Tails, Character.Knuckles], "City Hall Emblem"),
-    EmblemLocation(13, Area.Casino, [Character.Tails], [Character.Tails, Character.Sonic],
-                   [Character.Tails, Character.Sonic, Character.Amy], [Character.Tails, Character.Sonic],
-                   [Character.Tails, Character.Sonic, Character.Knuckles], "Casino Emblem"),
-    EmblemLocation(20, Area.MysticRuinsMain,
-                   [Character.Tails, Character.Knuckles, CharacterUpgrade(Character.Gamma, ItemName.Gamma.JetBooster)],
-                   [Character.Sonic, Character.Tails, Character.Knuckles,
-                    CharacterUpgrade(Character.Gamma, ItemName.Gamma.JetBooster)],
-                   [Character.Sonic, Character.Tails, Character.Knuckles,
-                    CharacterUpgrade(Character.Gamma, ItemName.Gamma.JetBooster), Character.Amy],
-                   [Character.Sonic, Character.Tails, Character.Knuckles,
-                    CharacterUpgrade(Character.Gamma, ItemName.Gamma.JetBooster), Character.Amy],
-                   [Character.Sonic, Character.Tails, Character.Knuckles,
-                    CharacterUpgrade(Character.Gamma, ItemName.Gamma.JetBooster), Character.Amy],
-                   "Tails' Workshop Emblem"),
-    EmblemLocation(21, Area.AngelIsland, [Character.Knuckles],
-                   [Character.Tails, Character.Knuckles, CharacterUpgrade(Character.Gamma, ItemName.Gamma.JetBooster)],
-                   [Character.Sonic, Character.Tails, Character.Knuckles,
-                    CharacterUpgrade(Character.Gamma, ItemName.Gamma.JetBooster)],
-                   [Character.Sonic, Character.Tails, Character.Knuckles,
-                    CharacterUpgrade(Character.Gamma, ItemName.Gamma.JetBooster)],
-                   [Character.Sonic, Character.Tails, Character.Knuckles,
-                    CharacterUpgrade(Character.Gamma,
-                                     ItemName.Gamma.JetBooster)], "Shrine Emblem"),
-    EmblemLocation(22, Area.Jungle, [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                                     Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma], "Jungle Path Emblem"),
-    EmblemLocation(23, Area.Jungle, [Character.Tails, Character.Knuckles],
-                   [Character.Sonic, Character.Tails, Character.Knuckles],
-                   [Character.Sonic, Character.Tails, Character.Knuckles],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Gamma],
-                   "Tree Stump Emblem"),
-    EmblemLocation(30, Area.EggCarrierOutside, [Character.Tails, Character.Knuckles],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Gamma],
-                   "Pool Emblem"),
-    EmblemLocation(31, Area.EggCarrierOutside, [Character.Tails],
-                   [Character.Tails, Character.Sonic, Character.Knuckles],
-                   [Character.Tails, Character.Sonic, Character.Knuckles, Character.Amy],
-                   [Character.Tails, Character.Sonic, Character.Knuckles, Character.Amy],
-                   [Character.Tails, Character.Sonic, Character.Knuckles, Character.Amy], "Spinning Platform Emblem"),
-    EmblemLocation(32, Area.EggCarrierOutside, [Character.Tails, Character.Sonic],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma],
-                   [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                    Character.Gamma], "Hidden Bed Emblem"),
-    EmblemLocation(33, Area.EggCarrierFrontDeck, [Character.Sonic],
-                   [Character.Sonic, Character.Big, Character.Knuckles, Character.Amy],
-                   [Character.Sonic, Character.Big, Character.Knuckles, Character.Amy, Character.Tails],
-                   [Character.Sonic, Character.Big, Character.Knuckles, Character.Amy, Character.Tails],
-                   [Character.Sonic, Character.Big, Character.Knuckles, Character.Amy, Character.Tails],
-                   "Main Platform Emblem"),
+    EmblemLocation(10, Area.Station, [P_SONIC, P_KNUCKLES, P_TAILS, P_AMY, P_BIG, P_GAMMA_W_JB],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA], "Station Emblem"),
+    EmblemLocation(11, Area.CityHall, [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA], "Burger Shop Emblem"),
+    EmblemLocation(12, Area.CityHall, [P_TAILS, P_KNUCKLES_W_SC], [P_TAILS, P_KNUCKLES_W_SC],
+                   [P_AMY, P_TAILS, P_KNUCKLES, P_SONIC_W_LS], [P_AMY, P_TAILS, P_KNUCKLES],
+                   [P_AMY, P_TAILS, P_KNUCKLES], "City Hall Emblem"),
+    EmblemLocation(13, Area.Casino, [P_TAILS], [P_TAILS], [P_TAILS, P_SONIC, P_KNUCKLES, P_AMY], [P_TAILS, P_SONIC],
+                   [P_TAILS, P_SONIC, P_KNUCKLES], "Casino Emblem"),
+    EmblemLocation(20, Area.MRMain, [P_TAILS, P_KNUCKLES, P_GAMMA_W_JB], [P_SONIC, P_TAILS, P_KNUCKLES, P_GAMMA_W_JB],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_GAMMA_W_JB, P_AMY],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_GAMMA_W_JB, P_AMY],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_GAMMA_W_JB, P_AMY], "Tails' Workshop Emblem"),
+    EmblemLocation(21, Area.AngelIsland, [P_KNUCKLES], [P_TAILS, P_KNUCKLES, P_GAMMA_W_JB],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_GAMMA_W_JB], [P_SONIC, P_TAILS, P_KNUCKLES, P_GAMMA_W_JB],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_GAMMA_W_JB], "Shrine Emblem"),
+    EmblemLocation(22, Area.Jungle, [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA], "Jungle Path Emblem"),
+    EmblemLocation(23, Area.Jungle, [P_TAILS, P_KNUCKLES], [P_SONIC, P_TAILS, P_KNUCKLES],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_BIG], [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_GAMMA, P_BIG],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_GAMMA, P_BIG], "Tree Stump Emblem"),
+    EmblemLocation(30, Area.ECPool, [P_TAILS, P_KNUCKLES], [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY], [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_GAMMA], "Pool Emblem"),
+    EmblemLocation(31, Area.ECBridge, [P_TAILS], [P_TAILS, P_SONIC, P_KNUCKLES],
+                   [P_TAILS, P_SONIC, P_KNUCKLES, P_AMY, P_GAMMA_W_JB], [P_TAILS, P_SONIC, P_KNUCKLES, P_AMY],
+                   [P_TAILS, P_SONIC, P_KNUCKLES, P_AMY], "Spinning Platform Emblem"),
+    EmblemLocation(32, Area.PrivateRoom, [P_TAILS, P_SONIC], [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                   [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA], "Hidden Bed Emblem"),
+    EmblemLocation(33, Area.ECDeck, [P_SONIC], [P_SONIC, P_BIG, P_KNUCKLES, P_AMY],
+                   [P_SONIC, P_BIG, P_KNUCKLES, P_AMY, P_TAILS], [P_SONIC, P_BIG, P_KNUCKLES, P_AMY, P_TAILS],
+                   [P_SONIC, P_BIG, P_KNUCKLES, P_AMY, P_TAILS], "Main Platform Emblem"),
 ]
 
 mission_location_table: List[MissionLocation] = [
-    MissionLocation(801, Area.StationSquareMain, Area.StationSquareMain, Character.Sonic, 1, [], [], [], [], []),
-    MissionLocation(802, Area.MysticRuinsMain, Area.MysticRuinsMain, Character.Sonic, 2, [], [], [], [], []),
-    MissionLocation(803, Area.Hotel, Area.Hotel, Character.Sonic, 3, [ItemName.Sonic.LightShoes],
-                    [ItemName.Sonic.LightShoes], [ItemName.Sonic.LightShoes], [ItemName.Sonic.LightShoes],
-                    [ItemName.Sonic.LightShoes]),
-    MissionLocation(804, Area.MysticRuinsMain, Area.MysticRuinsMain, Character.Tails, 4, [], [], [], [], []),
+    MissionLocation(801, Area.SSMain, Area.SSMain, Character.Sonic, 1, [], [], [], [], []),
+    MissionLocation(802, Area.MRMain, Area.MRMain, Character.Sonic, 2, [], [], [], [], []),
+    MissionLocation(803, Area.HotelPool, Area.HotelPool, Character.Sonic, 3, [LightShoes], [LightShoes], [LightShoes],
+                    [LightShoes], [LightShoes]),
+    MissionLocation(804, Area.MRMain, Area.MRMain, Character.Tails, 4, [], [], [], [], []),
     MissionLocation(805, Area.Casino, Area.Casino, Character.Knuckles, 5, [], [], [], [], []),
-    MissionLocation(806, Area.MysticRuinsMain, Area.MysticRuinsMain, Character.Amy, 6, [], [], [], [], []),
-    MissionLocation(807, Area.MysticRuinsMain, Area.Jungle, Character.Gamma, 7, [], [], [], [], []),
-    MissionLocation(808, Area.StationSquareMain, Area.StationSquareMain, Character.Big, 8, [], [], [], [], []),
-    MissionLocation(809, Area.StationSquareMain, Area.EmeraldCoast, Character.Sonic, 9, [], [], [], [], []),
-    MissionLocation(810, Area.Hotel, Area.Hotel, Character.Tails, 10, [], [], [], [], []),
-    MissionLocation(811, Area.MysticRuinsMain, Area.WindyValley, Character.Sonic, 11, [], [], [], [], []),
-    MissionLocation(812, Area.MysticRuinsMain, Area.MysticRuinsMain, Character.Knuckles, 12,
-                    [ItemName.Knuckles.ShovelClaw], [ItemName.Knuckles.ShovelClaw], [ItemName.Knuckles.ShovelClaw], [],
+    MissionLocation(806, Area.MRMain, Area.MRMain, Character.Amy, 6, [], [], [], [], []),
+    MissionLocation(807, Area.MRMain, Area.FinalEggTower, Character.Gamma, 7, [], [], [], [], []),
+    MissionLocation(808, Area.SSMain, Area.Sewers, Character.Big, 8, [], [], [], [], []),
+    MissionLocation(809, Area.SSMain, Area.EmeraldCoast, Character.Sonic, 9, [], [], [], [], []),
+    MissionLocation(810, Area.Hotel, Area.SSChaoGarden, Character.Tails, 10, [], [], [], [], []),
+    MissionLocation(811, Area.MRMain, Area.WindyValley, Character.Sonic, 11, [], [], [], [], []),
+    MissionLocation(812, Area.MRMain, Area.MRMain, Character.Knuckles, 12, [ShovelClaw], [ShovelClaw], [ShovelClaw], [],
                     []),
     MissionLocation(813, Area.Casino, Area.Casinopolis, Character.Sonic, 13, [], [], [], [], []),
-    MissionLocation(814, Area.StationSquareMain, Area.Hotel, Character.Big, 14, [], [], [], [], []),
-    MissionLocation(815, Area.MysticRuinsMain, Area.WindyValley, Character.Sonic, 15, [], [], [], [], []),
-    MissionLocation(816, Area.MysticRuinsMain, Area.WindyValley, Character.Tails, 16, [], [], [], [], []),
-    MissionLocation(817, Area.StationSquareMain, Area.Casinopolis, Character.Sonic, 17, [], [], [], [], []),
+    MissionLocation(814, Area.SSMain, Area.HotelPool, Character.Big, 14, [], [], [], [], []),
+    MissionLocation(815, Area.MRMain, Area.WindyValley, Character.Sonic, 15, [], [], [], [], []),
+    MissionLocation(816, Area.MRMain, Area.WindyValley, Character.Tails, 16, [], [], [], [], []),
+    MissionLocation(817, Area.CityHall, Area.Casinopolis, Character.Sonic, 17, [], [], [], [], []),
     MissionLocation(818, Area.Station, Area.TwinklePark, Character.Amy, 18, [], [], [], [], []),
-    MissionLocation(819, Area.StationSquareMain, Area.TwinklePark, Character.Amy, 19, [], [], [], [], []),
-    MissionLocation(820, Area.AngelIsland, Area.IceCap, Character.Sonic, 20, [
-        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationBackKey, ItemName.KeyItem.Train, ItemName.KeyItem.Dynamite],
-        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationFrontKey, ItemName.KeyItem.HotelFrontKey,
-         ItemName.KeyItem.HotelBackKey, ItemName.KeyItem.Train, ItemName.KeyItem.Dynamite]], [
-                        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationBackKey, ItemName.KeyItem.Train,
-                         ItemName.KeyItem.Dynamite],
-                        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationFrontKey, ItemName.KeyItem.HotelFrontKey,
-                         ItemName.KeyItem.HotelBackKey, ItemName.KeyItem.Train, ItemName.KeyItem.Dynamite]], [
-                        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationBackKey, ItemName.KeyItem.Train,
-                         ItemName.KeyItem.Dynamite],
-                        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationFrontKey, ItemName.KeyItem.HotelFrontKey,
-                         ItemName.KeyItem.HotelBackKey, ItemName.KeyItem.Train, ItemName.KeyItem.Dynamite]], [
-                        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationBackKey, ItemName.KeyItem.Train,
-                         ItemName.KeyItem.Dynamite],
-                        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationFrontKey, ItemName.KeyItem.HotelFrontKey,
-                         ItemName.KeyItem.HotelBackKey, ItemName.KeyItem.Train, ItemName.KeyItem.Dynamite]], [
-                        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationBackKey, ItemName.KeyItem.Train,
-                         ItemName.KeyItem.Dynamite],
-                        [ItemName.KeyItem.IceStone, ItemName.KeyItem.StationFrontKey, ItemName.KeyItem.HotelFrontKey,
-                         ItemName.KeyItem.HotelBackKey, ItemName.KeyItem.Train, ItemName.KeyItem.Dynamite]]),
+    MissionLocation(819, Area.SSMain, Area.TwinklePark, Character.Amy, 19, [], [], [], [], []),
+    MissionLocation(820, Area.IceCave, Area.IceCap, Character.Sonic, 20, [], [], [], [], []),
     MissionLocation(821, Area.Jungle, Area.FinalEgg, Character.Gamma, 21, [], [], [], [], []),
     MissionLocation(822, Area.Hotel, Area.EmeraldCoast, Character.Big, 22, [], [], [], [], []),
-    MissionLocation(823, Area.TwinkleParkLobby, Area.TwinklePark, Character.Sonic, 23, [], [], [], [], []),
+    MissionLocation(823, Area.TPLobby, Area.TwinklePark, Character.Sonic, 23, [], [], [], [], []),
     MissionLocation(824, Area.Casino, Area.Casinopolis, Character.Tails, 24, [], [], [], [], []),
-    MissionLocation(825, Area.StationSquareMain, Area.Casinopolis, Character.Knuckles, 25, [], [], [], [], []),
-    MissionLocation(826, Area.StationSquareMain, Area.Casinopolis, Character.Knuckles, 26, [], [], [], [], []),
-    MissionLocation(827, Area.StationSquareMain, Area.SpeedHighway, Character.Sonic, 27, [], [], [], [], []),
-    MissionLocation(828, Area.StationSquareMain, Area.SpeedHighway, Character.Sonic, 28, [], [], [], [], []),
-    MissionLocation(829, Area.StationSquareMain, Area.StationSquareMain, Character.Big, 29, [ItemName.Big.LifeBelt], [],
-                    [], [], []),
+    MissionLocation(825, Area.CityHall, Area.Casinopolis, Character.Knuckles, 25, [], [], [], [], []),
+    MissionLocation(826, Area.CityHall, Area.Casinopolis, Character.Knuckles, 26, [], [], [], [], []),
+    MissionLocation(827, Area.CityHall, Area.SpeedHighway, Character.Sonic, 27, [], [], [], [], []),
+    MissionLocation(828, Area.SSMain, Area.SpeedHighway, Character.Sonic, 28, [], [], [], [], []),
+    MissionLocation(829, Area.CityHall, Area.SSMain, Character.Big, 29, [LifeBelt], [], [], [], []),
     MissionLocation(830, Area.Jungle, Area.RedMountain, Character.Sonic, 30, [], [], [], [], []),
     MissionLocation(831, Area.Station, Area.Casinopolis, Character.Tails, 31, [], [], [], [], []),
     MissionLocation(832, Area.AngelIsland, Area.AngelIsland, Character.Knuckles, 32, [], [], [], [], []),
-    MissionLocation(833, Area.EggCarrierOutside, Area.EggCarrierOutside, Character.Sonic, 33, [], [], [], [], []),
-    MissionLocation(834, Area.EggCarrierOutside, Area.EggCarrierOutside, Character.Sonic, 34,
-                    [ItemName.Sonic.LightShoes], [ItemName.Sonic.LightShoes], [], [], []),
-    MissionLocation(835, Area.MysticRuinsMain, Area.AngelIsland, Character.Big, 35, [[ItemName.KeyItem.IceStone,
-                                                                                      ItemName.KeyItem.StationFrontKey,
-                                                                                      ItemName.KeyItem.Train,
-                                                                                      ItemName.KeyItem.Dynamite],
-                                                                                     [ItemName.KeyItem.IceStone,
-                                                                                      ItemName.KeyItem.HotelFrontKey,
-                                                                                      ItemName.KeyItem.HotelBackKey,
-                                                                                      ItemName.KeyItem.StationBackKey,
-                                                                                      ItemName.KeyItem.Train,
-                                                                                      ItemName.KeyItem.Dynamite]],
-                    [[ItemName.KeyItem.IceStone,
-                      ItemName.KeyItem.StationFrontKey,
-                      ItemName.KeyItem.Train,
-                      ItemName.KeyItem.Dynamite],
-                     [ItemName.KeyItem.IceStone,
-                      ItemName.KeyItem.HotelFrontKey,
-                      ItemName.KeyItem.HotelBackKey,
-                      ItemName.KeyItem.StationBackKey,
-                      ItemName.KeyItem.Train,
-                      ItemName.KeyItem.Dynamite]], [[ItemName.KeyItem.IceStone,
-                                                     ItemName.KeyItem.StationFrontKey,
-                                                     ItemName.KeyItem.Train,
-                                                     ItemName.KeyItem.Dynamite],
-                                                    [ItemName.KeyItem.IceStone,
-                                                     ItemName.KeyItem.HotelFrontKey,
-                                                     ItemName.KeyItem.HotelBackKey,
-                                                     ItemName.KeyItem.StationBackKey,
-                                                     ItemName.KeyItem.Train,
-                                                     ItemName.KeyItem.Dynamite]], [[ItemName.KeyItem.IceStone,
-                                                                                    ItemName.KeyItem.StationFrontKey,
-                                                                                    ItemName.KeyItem.Train,
-                                                                                    ItemName.KeyItem.Dynamite],
-                                                                                   [ItemName.KeyItem.IceStone,
-                                                                                    ItemName.KeyItem.HotelFrontKey,
-                                                                                    ItemName.KeyItem.HotelBackKey,
-                                                                                    ItemName.KeyItem.StationBackKey,
-                                                                                    ItemName.KeyItem.Train,
-                                                                                    ItemName.KeyItem.Dynamite]],
-                    [[ItemName.KeyItem.IceStone,
-                      ItemName.KeyItem.StationFrontKey,
-                      ItemName.KeyItem.Train,
-                      ItemName.KeyItem.Dynamite],
-                     [ItemName.KeyItem.IceStone,
-                      ItemName.KeyItem.HotelFrontKey,
-                      ItemName.KeyItem.HotelBackKey,
-                      ItemName.KeyItem.StationBackKey,
-                      ItemName.KeyItem.Train,
-                      ItemName.KeyItem.Dynamite]]),
-    MissionLocation(836, Area.EggCarrierInside, Area.SkyDeck, Character.Sonic, 36, [], [], [], [], []),
-    MissionLocation(837, Area.Jungle, Area.Jungle, Character.Tails, 37, [ItemName.Tails.JetAnklet], [], [], [], []),
-    MissionLocation(838, Area.Jungle, Area.LostWorld, Character.Knuckles, 38, [ItemName.Knuckles.ShovelClaw],
-                    [ItemName.Knuckles.ShovelClaw], [ItemName.Knuckles.ShovelClaw], [], []),
-    MissionLocation(839, Area.Hotel, Area.EmeraldCoast, Character.Gamma, 39, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [ItemName.Gamma.JetBooster], [ItemName.Gamma.JetBooster], []),
-    MissionLocation(840, Area.MysticRuinsMain, Area.LostWorld, Character.Sonic, 40, [ItemName.Sonic.LightShoes],
-                    [ItemName.Sonic.LightShoes], [ItemName.Sonic.LightShoes], [ItemName.Sonic.LightShoes], []),
-    MissionLocation(841, Area.Jungle, Area.LostWorld, Character.Sonic, 41, [ItemName.Sonic.LightShoes], [], [], [], []),
-    MissionLocation(842, Area.EggCarrierInside, Area.HotShelter, Character.Gamma, 42, [], [], [], [], []),
-    MissionLocation(843, Area.EggCarrierInside, Area.HotShelter, Character.Amy, 43, [], [], [], [], []),
-    MissionLocation(844, Area.EggCarrierOutside, Area.EggCarrierOutside, Character.Big, 44, [], [], [], [], []),
+    MissionLocation(833, Area.ECPool, Area.ECOutside, Character.Sonic, 33, [], [], [], [], []),
+    MissionLocation(834, Area.ECOutside, Area.ECOutside, Character.Sonic, 34, [LightShoes], [LightShoes], [], [], []),
+    MissionLocation(835, Area.MRMain, Area.IceCave, Character.Big, 35, [], [], [], [], []),
+    MissionLocation(836, Area.ECInside, Area.SkyDeck, Character.Sonic, 36, [], [], [], [], []),
+    MissionLocation(837, Area.Jungle, Area.Jungle, Character.Tails, 37, [JetAnklet], [], [], [], []),
+    MissionLocation(838, Area.Jungle, Area.LostWorld, Character.Knuckles, 38, [ShovelClaw], [ShovelClaw], [ShovelClaw],
+                    [], []),
+    MissionLocation(839, Area.Hotel, Area.EmeraldCoast, Character.Gamma, 39, [JetBooster], [JetBooster], [JetBooster],
+                    [JetBooster], []),
+    MissionLocation(840, Area.MRMain, Area.LostWorld, Character.Sonic, 40, [LightShoes], [LightShoes], [LightShoes],
+                    [LightShoes], []),
+    MissionLocation(841, Area.Jungle, Area.LostWorld, Character.Sonic, 41, [LightShoes], [], [], [], []),
+    MissionLocation(842, Area.PrisonHall, Area.HotShelter, Character.Gamma, 42, [], [], [], [], []),
+    MissionLocation(843, Area.PrisonHall, Area.HotShelter, Character.Amy, 43, [], [], [], [], []),
+    MissionLocation(844, Area.ECOutside, Area.ECPool, Character.Big, 44, [], [], [], [], []),
     MissionLocation(845, Area.Jungle, Area.FinalEgg, Character.Sonic, 45, [], [], [], [], []),
     MissionLocation(846, Area.Jungle, Area.FinalEgg, Character.Sonic, 46, [], [], [], [], []),
-    MissionLocation(847, Area.MysticRuinsMain, Area.MysticRuinsMain, Character.Tails, 47, [], [], [], [], []),
-    MissionLocation(848, Area.StationSquareMain, Area.Casinopolis, Character.Knuckles, 48, [], [], [], [], []),
-    MissionLocation(849, Area.StationSquareMain, Area.TwinklePark, Character.Sonic, 49, [], [], [], [], []),
-    MissionLocation(850, Area.Jungle, Area.FinalEgg, Character.Amy, 50, [], [], [], [], []),
-    MissionLocation(851, Area.Jungle, Area.WindyValley, Character.Gamma, 51, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [ItemName.Gamma.JetBooster], [ItemName.Gamma.JetBooster], []),
+    MissionLocation(847, Area.MRMain, Area.MRMain, Character.Tails, 47, [], [], [], [], []),
+    MissionLocation(848, Area.CityHall, Area.Casinopolis, Character.Knuckles, 48, [], [], [], [], []),
+    MissionLocation(849, Area.Sewers, Area.TwinklePark, Character.Sonic, 49, [], [], [], [], []),
+    MissionLocation(850, Area.FinalEggTower, Area.FinalEgg, Character.Amy, 50, [], [], [], [], []),
+    MissionLocation(851, Area.Jungle, Area.WindyValley, Character.Gamma, 51, [JetBooster], [JetBooster], [JetBooster],
+                    [JetBooster], []),
     MissionLocation(852, Area.Jungle, Area.Jungle, Character.Big, 52, [], [], [], [], []),
     MissionLocation(853, Area.AngelIsland, Area.IceCap, Character.Sonic, 53, [], [], [], [], []),
-    MissionLocation(854, Area.AngelIsland, Area.IceCap, Character.Tails, 54, [], [], [], [], []),
-    MissionLocation(855, Area.TwinkleParkLobby, Area.SpeedHighway, Character.Sonic, 55, [], [], [], [], []),
-    MissionLocation(856, Area.MysticRuinsMain, Area.RedMountain, Character.Knuckles, 56, [ItemName.Knuckles.ShovelClaw],
-                    [ItemName.Knuckles.ShovelClaw], [ItemName.Knuckles.ShovelClaw], [ItemName.Knuckles.ShovelClaw], []),
+    MissionLocation(854, Area.IceCave, Area.IceCap, Character.Tails, 54, [], [], [], [], []),
+    MissionLocation(855, Area.TPTunnel, Area.SpeedHighway, Character.Sonic, 55, [], [], [], [], []),
+    MissionLocation(856, Area.MRMain, Area.RedMountain, Character.Knuckles, 56, [ShovelClaw], [ShovelClaw],
+                    [ShovelClaw], [ShovelClaw], []),
     MissionLocation(857, Area.AngelIsland, Area.RedMountain, Character.Sonic, 57, [], [], [], [], []),
-    MissionLocation(858, Area.Jungle, Area.LostWorld, Character.Sonic, 58, [ItemName.Sonic.LightShoes], [], [], [], []),
-    MissionLocation(859, Area.EggCarrierOutside, Area.SkyDeck, Character.Knuckles, 59, [], [], [], [], []),
-    MissionLocation(860, Area.MysticRuinsMain, Area.IceCap, Character.Big, 60, [], [], [], [], []),
+    MissionLocation(858, Area.Jungle, Area.LostWorld, Character.Sonic, 58, [LightShoes], [], [], [], []),
+    MissionLocation(859, Area.ECPool, Area.SkyDeck, Character.Knuckles, 59, [], [], [], [], []),
+    MissionLocation(860, Area.MRMain, Area.IceCap, Character.Big, 60, [], [], [], [], []),
 ]
 
 sub_level_location_table: List[SubLevelLocation] = [
-    SubLevelLocation(15, Area.TwinkleParkLobby, SubLevel.TwinkleCircuit, SubLevelMission.B,
-                     [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                      Character.Gamma],
-                     [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                      Character.Gamma],
-                     [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                      Character.Gamma],
-                     [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                      Character.Gamma],
-                     [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big,
-                      Character.Gamma]),
-    SubLevelLocation(40, Area.TwinkleParkLobby, SubLevel.TwinkleCircuit, SubLevelMission.Sonic, [Character.Sonic],
-                     [Character.Sonic], [Character.Sonic], [Character.Sonic], [Character.Sonic]),
-    SubLevelLocation(41, Area.TwinkleParkLobby, SubLevel.TwinkleCircuit, SubLevelMission.Tails, [Character.Tails],
-                     [Character.Tails], [Character.Tails], [Character.Tails], [Character.Tails]),
-    SubLevelLocation(42, Area.TwinkleParkLobby, SubLevel.TwinkleCircuit, SubLevelMission.Knuckles, [Character.Knuckles],
-                     [Character.Knuckles], [Character.Knuckles], [Character.Knuckles], [Character.Knuckles]),
-    SubLevelLocation(43, Area.TwinkleParkLobby, SubLevel.TwinkleCircuit, SubLevelMission.Amy, [Character.Amy],
-                     [Character.Amy], [Character.Amy], [Character.Amy], [Character.Amy]),
-    SubLevelLocation(44, Area.TwinkleParkLobby, SubLevel.TwinkleCircuit, SubLevelMission.Big, [Character.Big],
-                     [Character.Big], [Character.Big], [Character.Big], [Character.Big]),
-    SubLevelLocation(45, Area.TwinkleParkLobby, SubLevel.TwinkleCircuit, SubLevelMission.Gamma, [Character.Gamma],
-                     [Character.Gamma], [Character.Gamma], [Character.Gamma], [Character.Gamma]),
-    SubLevelLocation(25, Area.Jungle, SubLevel.SandHill, SubLevelMission.B, [Character.Tails], [Character.Tails],
-                     [Character.Tails, Character.Sonic], [Character.Tails, Character.Sonic],
-                     [Character.Tails, Character.Sonic]),
-    SubLevelLocation(26, Area.Jungle, SubLevel.SandHill, SubLevelMission.A, [Character.Tails], [Character.Tails],
-                     [Character.Tails, Character.Sonic], [Character.Tails, Character.Sonic],
-                     [Character.Tails, Character.Sonic]),
-    SubLevelLocation(27, Area.MysticRuinsMain, SubLevel.SkyChaseAct1, SubLevelMission.B,
-                     [Character.Tails, Character.Sonic], [Character.Tails, Character.Sonic],
-                     [Character.Tails, Character.Sonic], [Character.Tails, Character.Sonic],
-                     [Character.Tails, Character.Sonic]),
-    SubLevelLocation(28, Area.MysticRuinsMain, SubLevel.SkyChaseAct1, SubLevelMission.A,
-                     [Character.Tails, Character.Sonic], [Character.Tails, Character.Sonic],
-                     [Character.Tails, Character.Sonic], [Character.Tails, Character.Sonic],
-                     [Character.Tails, Character.Sonic]),
-    SubLevelLocation(35, Area.EggCarrierOutside, SubLevel.SkyChaseAct2, SubLevelMission.B,
-                     [Character.Tails, Character.Sonic], [Character.Tails, Character.Sonic],
-                     [Character.Tails, Character.Sonic], [Character.Tails, Character.Sonic],
-                     [Character.Tails, Character.Sonic]),
-    SubLevelLocation(36, Area.EggCarrierOutside, SubLevel.SkyChaseAct2, SubLevelMission.A,
-                     [Character.Tails, Character.Sonic], [Character.Tails, Character.Sonic],
-                     [Character.Tails, Character.Sonic], [Character.Tails, Character.Sonic],
-                     [Character.Tails, Character.Sonic]),
+    SubLevelLocation(15, Area.TwinkleCircuit, SubLevel.TwinkleCircuit, SubLevelMission.B,
+                     [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                     [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                     [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                     [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA],
+                     [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG, P_GAMMA]),
+    SubLevelLocation(40, Area.TwinkleCircuit, SubLevel.TwinkleCircuit, SubLevelMission.Sonic, [P_SONIC], [P_SONIC],
+                     [P_SONIC], [P_SONIC], [P_SONIC]),
+    SubLevelLocation(41, Area.TwinkleCircuit, SubLevel.TwinkleCircuit, SubLevelMission.Tails, [P_TAILS], [P_TAILS],
+                     [P_TAILS], [P_TAILS], [P_TAILS]),
+    SubLevelLocation(42, Area.TwinkleCircuit, SubLevel.TwinkleCircuit, SubLevelMission.Knuckles, [P_KNUCKLES],
+                     [P_KNUCKLES], [P_KNUCKLES], [P_KNUCKLES], [P_KNUCKLES]),
+    SubLevelLocation(43, Area.TwinkleCircuit, SubLevel.TwinkleCircuit, SubLevelMission.Amy, [P_AMY], [P_AMY], [P_AMY],
+                     [P_AMY], [P_AMY]),
+    SubLevelLocation(44, Area.TwinkleCircuit, SubLevel.TwinkleCircuit, SubLevelMission.Big, [P_BIG], [P_BIG], [P_BIG],
+                     [P_BIG], [P_BIG]),
+    SubLevelLocation(45, Area.TwinkleCircuit, SubLevel.TwinkleCircuit, SubLevelMission.Gamma, [P_GAMMA], [P_GAMMA],
+                     [P_GAMMA], [P_GAMMA], [P_GAMMA]),
+    SubLevelLocation(25, Area.SandHill, SubLevel.SandHill, SubLevelMission.B, [P_TAILS], [P_TAILS], [P_TAILS, P_SONIC],
+                     [P_TAILS, P_SONIC], [P_TAILS, P_SONIC]),
+    SubLevelLocation(26, Area.SandHill, SubLevel.SandHill, SubLevelMission.A, [P_TAILS], [P_TAILS], [P_TAILS, P_SONIC],
+                     [P_TAILS, P_SONIC], [P_TAILS, P_SONIC]),
+    SubLevelLocation(27, Area.SkyChase1, SubLevel.SkyChaseAct1, SubLevelMission.B, [P_TAILS, P_SONIC],
+                     [P_TAILS, P_SONIC], [P_TAILS, P_SONIC], [P_TAILS, P_SONIC], [P_TAILS, P_SONIC]),
+    SubLevelLocation(28, Area.SkyChase1, SubLevel.SkyChaseAct1, SubLevelMission.A, [P_TAILS, P_SONIC],
+                     [P_TAILS, P_SONIC], [P_TAILS, P_SONIC], [P_TAILS, P_SONIC], [P_TAILS, P_SONIC]),
+    SubLevelLocation(35, Area.SkyChase2, SubLevel.SkyChaseAct2, SubLevelMission.B, [P_TAILS, P_SONIC],
+                     [P_TAILS, P_SONIC], [P_TAILS, P_SONIC], [P_TAILS, P_SONIC], [P_TAILS, P_SONIC]),
+    SubLevelLocation(36, Area.SkyChase2, SubLevel.SkyChaseAct2, SubLevelMission.A, [P_TAILS, P_SONIC],
+                     [P_TAILS, P_SONIC], [P_TAILS, P_SONIC], [P_TAILS, P_SONIC], [P_TAILS, P_SONIC]),
 ]
 
 enemy_location_table: List[EnemyLocation] = [
@@ -1476,22 +1907,15 @@ enemy_location_table: List[EnemyLocation] = [
     EnemyLocation(20003, Area.WindyValley, Character.Tails, 3, Enemy.Rhinotank, [], [], [], [], []),
     EnemyLocation(52001, Area.WindyValley, Character.Gamma, 1, Enemy.BoaBoa, [], [], [], [], []),
     EnemyLocation(52002, Area.WindyValley, Character.Gamma, 2, Enemy.Rhinotank, [], [], [], [], []),
-    EnemyLocation(52003, Area.WindyValley, Character.Gamma, 3, Enemy.BoaBoa, [ItemName.Gamma.JetBooster], [], [], [],
-                  []),
-    EnemyLocation(52004, Area.WindyValley, Character.Gamma, 4, Enemy.BoaBoa, [ItemName.Gamma.JetBooster], [], [], [],
-                  []),
-    EnemyLocation(52005, Area.WindyValley, Character.Gamma, 5, Enemy.Leon, [ItemName.Gamma.JetBooster], [], [], [], []),
-    EnemyLocation(52006, Area.WindyValley, Character.Gamma, 6, Enemy.Leon, [ItemName.Gamma.JetBooster], [], [], [], []),
-    EnemyLocation(52007, Area.WindyValley, Character.Gamma, 7, Enemy.BoaBoa, [ItemName.Gamma.JetBooster], [], [], [],
-                  []),
-    EnemyLocation(52008, Area.WindyValley, Character.Gamma, 8, Enemy.BoaBoa, [ItemName.Gamma.JetBooster], [], [], [],
-                  []),
-    EnemyLocation(52009, Area.WindyValley, Character.Gamma, 9, Enemy.BoaBoa, [ItemName.Gamma.JetBooster], [], [], [],
-                  []),
-    EnemyLocation(52010, Area.WindyValley, Character.Gamma, 10, Enemy.BoaBoa, [ItemName.Gamma.JetBooster], [], [], [],
-                  []),
-    EnemyLocation(52011, Area.WindyValley, Character.Gamma, 11, Enemy.Rhinotank, [ItemName.Gamma.JetBooster], [], [],
-                  [], []),
+    EnemyLocation(52003, Area.WindyValley, Character.Gamma, 3, Enemy.BoaBoa, [JetBooster], [], [], [], []),
+    EnemyLocation(52004, Area.WindyValley, Character.Gamma, 4, Enemy.BoaBoa, [JetBooster], [], [], [], []),
+    EnemyLocation(52005, Area.WindyValley, Character.Gamma, 5, Enemy.Leon, [JetBooster], [], [], [], []),
+    EnemyLocation(52006, Area.WindyValley, Character.Gamma, 6, Enemy.Leon, [JetBooster], [], [], [], []),
+    EnemyLocation(52007, Area.WindyValley, Character.Gamma, 7, Enemy.BoaBoa, [JetBooster], [], [], [], []),
+    EnemyLocation(52008, Area.WindyValley, Character.Gamma, 8, Enemy.BoaBoa, [JetBooster], [], [], [], []),
+    EnemyLocation(52009, Area.WindyValley, Character.Gamma, 9, Enemy.BoaBoa, [JetBooster], [], [], [], []),
+    EnemyLocation(52010, Area.WindyValley, Character.Gamma, 10, Enemy.BoaBoa, [JetBooster], [], [], [], []),
+    EnemyLocation(52011, Area.WindyValley, Character.Gamma, 11, Enemy.Rhinotank, [JetBooster], [], [], [], []),
     EnemyLocation(14001, Area.TwinklePark, Character.Sonic, 1, Enemy.Kiki, [], [], [], [], []),
     EnemyLocation(14002, Area.TwinklePark, Character.Sonic, 2, Enemy.Kiki, [], [], [], [], []),
     EnemyLocation(14003, Area.TwinklePark, Character.Sonic, 3, Enemy.Kiki, [], [], [], [], []),
@@ -1872,16 +2296,15 @@ enemy_location_table: List[EnemyLocation] = [
     EnemyLocation(18012, Area.LostWorld, Character.Sonic, 12, Enemy.Leon, [], [], [], [], []),
     EnemyLocation(18013, Area.LostWorld, Character.Sonic, 13, Enemy.Gola, [], [], [], [], []),
     EnemyLocation(18014, Area.LostWorld, Character.Sonic, 14, Enemy.Gola, [], [], [], [], []),
-    EnemyLocation(18015, Area.LostWorld, Character.Sonic, 15, Enemy.Leon, [ItemName.Sonic.LightShoes], [], [], [], []),
-    EnemyLocation(18016, Area.LostWorld, Character.Sonic, 16, Enemy.Leon, [ItemName.Sonic.LightShoes], [], [], [], []),
-    EnemyLocation(18017, Area.LostWorld, Character.Sonic, 17, Enemy.Gola, [ItemName.Sonic.LightShoes], [], [], [], []),
-    EnemyLocation(18018, Area.LostWorld, Character.Sonic, 18, Enemy.Gola, [ItemName.Sonic.LightShoes], [], [], [], []),
-    EnemyLocation(18019, Area.LostWorld, Character.Sonic, 19, Enemy.Leon, [ItemName.Sonic.LightShoes], [], [], [], []),
-    EnemyLocation(18020, Area.LostWorld, Character.Sonic, 20, Enemy.Gola, [ItemName.Sonic.LightShoes], [], [], [], []),
-    EnemyLocation(18021, Area.LostWorld, Character.Sonic, 21, Enemy.BoaBoa, [ItemName.Sonic.LightShoes], [], [], [],
-                  []),
-    EnemyLocation(18022, Area.LostWorld, Character.Sonic, 22, Enemy.Leon, [ItemName.Sonic.LightShoes], [], [], [], []),
-    EnemyLocation(18023, Area.LostWorld, Character.Sonic, 23, Enemy.Leon, [ItemName.Sonic.LightShoes], [], [], [], []),
+    EnemyLocation(18015, Area.LostWorld, Character.Sonic, 15, Enemy.Leon, [LightShoes], [], [], [], []),
+    EnemyLocation(18016, Area.LostWorld, Character.Sonic, 16, Enemy.Leon, [LightShoes], [], [], [], []),
+    EnemyLocation(18017, Area.LostWorld, Character.Sonic, 17, Enemy.Gola, [LightShoes], [], [], [], []),
+    EnemyLocation(18018, Area.LostWorld, Character.Sonic, 18, Enemy.Gola, [LightShoes], [], [], [], []),
+    EnemyLocation(18019, Area.LostWorld, Character.Sonic, 19, Enemy.Leon, [LightShoes], [], [], [], []),
+    EnemyLocation(18020, Area.LostWorld, Character.Sonic, 20, Enemy.Gola, [LightShoes], [], [], [], []),
+    EnemyLocation(18021, Area.LostWorld, Character.Sonic, 21, Enemy.BoaBoa, [LightShoes], [], [], [], []),
+    EnemyLocation(18022, Area.LostWorld, Character.Sonic, 22, Enemy.Leon, [LightShoes], [], [], [], []),
+    EnemyLocation(18023, Area.LostWorld, Character.Sonic, 23, Enemy.Leon, [LightShoes], [], [], [], []),
     EnemyLocation(33001, Area.LostWorld, Character.Knuckles, 1, Enemy.Leon, [], [], [], [], []),
     EnemyLocation(33002, Area.LostWorld, Character.Knuckles, 2, Enemy.Leon, [], [], [], [], []),
     EnemyLocation(33003, Area.LostWorld, Character.Knuckles, 3, Enemy.Leon, [], [], [], [], []),
@@ -2025,210 +2448,116 @@ enemy_location_table: List[EnemyLocation] = [
     EnemyLocation(54017, Area.HotShelter, Character.Gamma, 17, Enemy.Kiki, [], [], [], [], []),
     EnemyLocation(54018, Area.HotShelter, Character.Gamma, 18, Enemy.Kiki, [], [], [], [], []),
     EnemyLocation(54019, Area.HotShelter, Character.Gamma, 19, Enemy.Kiki, [], [], [], [], []),
-    EnemyLocation(54020, Area.HotShelter, Character.Gamma, 20, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54021, Area.HotShelter, Character.Gamma, 21, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54022, Area.HotShelter, Character.Gamma, 22, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54023, Area.HotShelter, Character.Gamma, 23, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54024, Area.HotShelter, Character.Gamma, 24, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54025, Area.HotShelter, Character.Gamma, 25, Enemy.EggKeeper, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54026, Area.HotShelter, Character.Gamma, 26, Enemy.Leon, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54027, Area.HotShelter, Character.Gamma, 27, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54028, Area.HotShelter, Character.Gamma, 28, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54029, Area.HotShelter, Character.Gamma, 29, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54030, Area.HotShelter, Character.Gamma, 30, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54031, Area.HotShelter, Character.Gamma, 31, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54032, Area.HotShelter, Character.Gamma, 32, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54033, Area.HotShelter, Character.Gamma, 33, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54034, Area.HotShelter, Character.Gamma, 34, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54035, Area.HotShelter, Character.Gamma, 35, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54036, Area.HotShelter, Character.Gamma, 36, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54037, Area.HotShelter, Character.Gamma, 37, Enemy.EggKeeper, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54038, Area.HotShelter, Character.Gamma, 38, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54039, Area.HotShelter, Character.Gamma, 39, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54040, Area.HotShelter, Character.Gamma, 40, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54041, Area.HotShelter, Character.Gamma, 41, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54042, Area.HotShelter, Character.Gamma, 42, Enemy.EggKeeper, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54043, Area.HotShelter, Character.Gamma, 43, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54044, Area.HotShelter, Character.Gamma, 44, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54045, Area.HotShelter, Character.Gamma, 45, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54046, Area.HotShelter, Character.Gamma, 46, Enemy.Leon, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54047, Area.HotShelter, Character.Gamma, 47, Enemy.Leon, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54048, Area.HotShelter, Character.Gamma, 48, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54049, Area.HotShelter, Character.Gamma, 49, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54050, Area.HotShelter, Character.Gamma, 50, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54051, Area.HotShelter, Character.Gamma, 51, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54052, Area.HotShelter, Character.Gamma, 52, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54053, Area.HotShelter, Character.Gamma, 53, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54054, Area.HotShelter, Character.Gamma, 54, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54055, Area.HotShelter, Character.Gamma, 55, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54056, Area.HotShelter, Character.Gamma, 56, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54057, Area.HotShelter, Character.Gamma, 57, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54058, Area.HotShelter, Character.Gamma, 58, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54059, Area.HotShelter, Character.Gamma, 59, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54060, Area.HotShelter, Character.Gamma, 60, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54061, Area.HotShelter, Character.Gamma, 61, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54062, Area.HotShelter, Character.Gamma, 62, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54063, Area.HotShelter, Character.Gamma, 63, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54064, Area.HotShelter, Character.Gamma, 64, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54065, Area.HotShelter, Character.Gamma, 65, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54066, Area.HotShelter, Character.Gamma, 66, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54067, Area.HotShelter, Character.Gamma, 67, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54068, Area.HotShelter, Character.Gamma, 68, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54069, Area.HotShelter, Character.Gamma, 69, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54070, Area.HotShelter, Character.Gamma, 70, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54071, Area.HotShelter, Character.Gamma, 71, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54072, Area.HotShelter, Character.Gamma, 72, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54073, Area.HotShelter, Character.Gamma, 73, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54074, Area.HotShelter, Character.Gamma, 74, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54075, Area.HotShelter, Character.Gamma, 75, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54076, Area.HotShelter, Character.Gamma, 76, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54077, Area.HotShelter, Character.Gamma, 77, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54078, Area.HotShelter, Character.Gamma, 78, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54079, Area.HotShelter, Character.Gamma, 79, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54080, Area.HotShelter, Character.Gamma, 80, Enemy.Leon, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54081, Area.HotShelter, Character.Gamma, 81, Enemy.Leon, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54082, Area.HotShelter, Character.Gamma, 82, Enemy.Leon, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54083, Area.HotShelter, Character.Gamma, 83, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54084, Area.HotShelter, Character.Gamma, 84, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54085, Area.HotShelter, Character.Gamma, 85, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54086, Area.HotShelter, Character.Gamma, 86, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54087, Area.HotShelter, Character.Gamma, 87, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54088, Area.HotShelter, Character.Gamma, 88, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54089, Area.HotShelter, Character.Gamma, 89, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54090, Area.HotShelter, Character.Gamma, 90, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54091, Area.HotShelter, Character.Gamma, 91, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54092, Area.HotShelter, Character.Gamma, 92, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54093, Area.HotShelter, Character.Gamma, 93, Enemy.EggKeeper, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54094, Area.HotShelter, Character.Gamma, 94, Enemy.EggKeeper, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54095, Area.HotShelter, Character.Gamma, 95, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54096, Area.HotShelter, Character.Gamma, 96, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54097, Area.HotShelter, Character.Gamma, 97, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54098, Area.HotShelter, Character.Gamma, 98, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54099, Area.HotShelter, Character.Gamma, 99, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54100, Area.HotShelter, Character.Gamma, 100, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54101, Area.HotShelter, Character.Gamma, 101, Enemy.EggKeeper, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54102, Area.HotShelter, Character.Gamma, 102, Enemy.EggKeeper, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54103, Area.HotShelter, Character.Gamma, 103, Enemy.EggKeeper, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54104, Area.HotShelter, Character.Gamma, 104, Enemy.EggKeeper, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54105, Area.HotShelter, Character.Gamma, 105, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54106, Area.HotShelter, Character.Gamma, 106, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54107, Area.HotShelter, Character.Gamma, 107, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54108, Area.HotShelter, Character.Gamma, 108, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54109, Area.HotShelter, Character.Gamma, 109, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54110, Area.HotShelter, Character.Gamma, 110, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54111, Area.HotShelter, Character.Gamma, 111, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54112, Area.HotShelter, Character.Gamma, 112, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54113, Area.HotShelter, Character.Gamma, 113, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54114, Area.HotShelter, Character.Gamma, 114, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54115, Area.HotShelter, Character.Gamma, 115, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54116, Area.HotShelter, Character.Gamma, 116, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
-    EnemyLocation(54117, Area.HotShelter, Character.Gamma, 117, Enemy.Kiki, [ItemName.Gamma.JetBooster],
-                  [ItemName.Gamma.JetBooster], [], [], []),
+    EnemyLocation(54020, Area.HotShelter, Character.Gamma, 20, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54021, Area.HotShelter, Character.Gamma, 21, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54022, Area.HotShelter, Character.Gamma, 22, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54023, Area.HotShelter, Character.Gamma, 23, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54024, Area.HotShelter, Character.Gamma, 24, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54025, Area.HotShelter, Character.Gamma, 25, Enemy.EggKeeper, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54026, Area.HotShelter, Character.Gamma, 26, Enemy.Leon, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54027, Area.HotShelter, Character.Gamma, 27, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54028, Area.HotShelter, Character.Gamma, 28, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54029, Area.HotShelter, Character.Gamma, 29, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54030, Area.HotShelter, Character.Gamma, 30, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54031, Area.HotShelter, Character.Gamma, 31, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54032, Area.HotShelter, Character.Gamma, 32, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54033, Area.HotShelter, Character.Gamma, 33, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54034, Area.HotShelter, Character.Gamma, 34, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54035, Area.HotShelter, Character.Gamma, 35, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54036, Area.HotShelter, Character.Gamma, 36, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54037, Area.HotShelter, Character.Gamma, 37, Enemy.EggKeeper, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54038, Area.HotShelter, Character.Gamma, 38, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54039, Area.HotShelter, Character.Gamma, 39, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54040, Area.HotShelter, Character.Gamma, 40, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54041, Area.HotShelter, Character.Gamma, 41, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54042, Area.HotShelter, Character.Gamma, 42, Enemy.EggKeeper, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54043, Area.HotShelter, Character.Gamma, 43, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54044, Area.HotShelter, Character.Gamma, 44, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54045, Area.HotShelter, Character.Gamma, 45, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54046, Area.HotShelter, Character.Gamma, 46, Enemy.Leon, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54047, Area.HotShelter, Character.Gamma, 47, Enemy.Leon, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54048, Area.HotShelter, Character.Gamma, 48, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54049, Area.HotShelter, Character.Gamma, 49, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54050, Area.HotShelter, Character.Gamma, 50, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54051, Area.HotShelter, Character.Gamma, 51, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54052, Area.HotShelter, Character.Gamma, 52, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54053, Area.HotShelter, Character.Gamma, 53, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54054, Area.HotShelter, Character.Gamma, 54, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54055, Area.HotShelter, Character.Gamma, 55, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54056, Area.HotShelter, Character.Gamma, 56, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54057, Area.HotShelter, Character.Gamma, 57, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54058, Area.HotShelter, Character.Gamma, 58, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54059, Area.HotShelter, Character.Gamma, 59, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54060, Area.HotShelter, Character.Gamma, 60, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54061, Area.HotShelter, Character.Gamma, 61, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54062, Area.HotShelter, Character.Gamma, 62, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54063, Area.HotShelter, Character.Gamma, 63, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54064, Area.HotShelter, Character.Gamma, 64, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54065, Area.HotShelter, Character.Gamma, 65, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54066, Area.HotShelter, Character.Gamma, 66, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54067, Area.HotShelter, Character.Gamma, 67, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54068, Area.HotShelter, Character.Gamma, 68, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54069, Area.HotShelter, Character.Gamma, 69, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54070, Area.HotShelter, Character.Gamma, 70, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54071, Area.HotShelter, Character.Gamma, 71, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54072, Area.HotShelter, Character.Gamma, 72, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54073, Area.HotShelter, Character.Gamma, 73, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54074, Area.HotShelter, Character.Gamma, 74, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54075, Area.HotShelter, Character.Gamma, 75, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54076, Area.HotShelter, Character.Gamma, 76, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54077, Area.HotShelter, Character.Gamma, 77, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54078, Area.HotShelter, Character.Gamma, 78, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54079, Area.HotShelter, Character.Gamma, 79, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54080, Area.HotShelter, Character.Gamma, 80, Enemy.Leon, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54081, Area.HotShelter, Character.Gamma, 81, Enemy.Leon, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54082, Area.HotShelter, Character.Gamma, 82, Enemy.Leon, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54083, Area.HotShelter, Character.Gamma, 83, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54084, Area.HotShelter, Character.Gamma, 84, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54085, Area.HotShelter, Character.Gamma, 85, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54086, Area.HotShelter, Character.Gamma, 86, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54087, Area.HotShelter, Character.Gamma, 87, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54088, Area.HotShelter, Character.Gamma, 88, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54089, Area.HotShelter, Character.Gamma, 89, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54090, Area.HotShelter, Character.Gamma, 90, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54091, Area.HotShelter, Character.Gamma, 91, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54092, Area.HotShelter, Character.Gamma, 92, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54093, Area.HotShelter, Character.Gamma, 93, Enemy.EggKeeper, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54094, Area.HotShelter, Character.Gamma, 94, Enemy.EggKeeper, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54095, Area.HotShelter, Character.Gamma, 95, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54096, Area.HotShelter, Character.Gamma, 96, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54097, Area.HotShelter, Character.Gamma, 97, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54098, Area.HotShelter, Character.Gamma, 98, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54099, Area.HotShelter, Character.Gamma, 99, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54100, Area.HotShelter, Character.Gamma, 100, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54101, Area.HotShelter, Character.Gamma, 101, Enemy.EggKeeper, [JetBooster], [JetBooster], [], [],
+                  []),
+    EnemyLocation(54102, Area.HotShelter, Character.Gamma, 102, Enemy.EggKeeper, [JetBooster], [JetBooster], [], [],
+                  []),
+    EnemyLocation(54103, Area.HotShelter, Character.Gamma, 103, Enemy.EggKeeper, [JetBooster], [JetBooster], [], [],
+                  []),
+    EnemyLocation(54104, Area.HotShelter, Character.Gamma, 104, Enemy.EggKeeper, [JetBooster], [JetBooster], [], [],
+                  []),
+    EnemyLocation(54105, Area.HotShelter, Character.Gamma, 105, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54106, Area.HotShelter, Character.Gamma, 106, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54107, Area.HotShelter, Character.Gamma, 107, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54108, Area.HotShelter, Character.Gamma, 108, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54109, Area.HotShelter, Character.Gamma, 109, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54110, Area.HotShelter, Character.Gamma, 110, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54111, Area.HotShelter, Character.Gamma, 111, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54112, Area.HotShelter, Character.Gamma, 112, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54113, Area.HotShelter, Character.Gamma, 113, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54114, Area.HotShelter, Character.Gamma, 114, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54115, Area.HotShelter, Character.Gamma, 115, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54116, Area.HotShelter, Character.Gamma, 116, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
+    EnemyLocation(54117, Area.HotShelter, Character.Gamma, 117, Enemy.Kiki, [JetBooster], [JetBooster], [], [], []),
     EnemyLocation(63001, Area.HotShelter, Character.Big, 1, Enemy.Kiki, [], [], [], [], []),
     EnemyLocation(63002, Area.HotShelter, Character.Big, 2, Enemy.Kiki, [], [], [], [], []),
-    EnemyLocation(63003, Area.HotShelter, Character.Big, 3, Enemy.Kiki, [ItemName.Big.LifeBelt],
-                  [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt]),
-    EnemyLocation(63004, Area.HotShelter, Character.Big, 4, Enemy.Kiki, [ItemName.Big.LifeBelt],
-                  [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt]),
-    EnemyLocation(63005, Area.HotShelter, Character.Big, 5, Enemy.Kiki, [ItemName.Big.LifeBelt],
-                  [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt]),
+    EnemyLocation(63003, Area.HotShelter, Character.Big, 3, Enemy.Kiki, [LifeBelt], [LifeBelt], [], [LifeBelt],
+                  [LifeBelt]),
+    EnemyLocation(63004, Area.HotShelter, Character.Big, 4, Enemy.Kiki, [LifeBelt], [LifeBelt], [], [LifeBelt],
+                  [LifeBelt]),
+    EnemyLocation(63005, Area.HotShelter, Character.Big, 5, Enemy.Kiki, [LifeBelt], [LifeBelt], [], [LifeBelt],
+                  [LifeBelt]),
 ]
 
 capsule_location_table: List[CapsuleLocation] = [
@@ -2270,16 +2599,13 @@ capsule_location_table: List[CapsuleLocation] = [
     CapsuleLocation(11501, Area.WindyValley, Character.Sonic, 1, Capsule.TenRings, [], [], [], [], []),
     CapsuleLocation(11502, Area.WindyValley, Character.Sonic, 2, Capsule.MagneticShield, [], [], [], [], []),
     CapsuleLocation(11503, Area.WindyValley, Character.Sonic, 3, Capsule.Shield, [], [], [], [], []),
-    CapsuleLocation(11504, Area.WindyValley, Character.Sonic, 4, Capsule.ExtraLife, [ItemName.Sonic.LightShoes], [], [],
-                    [], []),
+    CapsuleLocation(11504, Area.WindyValley, Character.Sonic, 4, Capsule.ExtraLife, [LightShoes], [], [], [], []),
     CapsuleLocation(11505, Area.WindyValley, Character.Sonic, 5, Capsule.RandomRings, [], [], [], [], []),
     CapsuleLocation(11506, Area.WindyValley, Character.Sonic, 6, Capsule.ExtraLife, [], [], [], [], []),
     CapsuleLocation(11507, Area.WindyValley, Character.Sonic, 7, Capsule.SpeedUp, [], [], [], [], []),
     CapsuleLocation(11508, Area.WindyValley, Character.Sonic, 8, Capsule.ExtraLife, [], [], [], [], []),
-    CapsuleLocation(11509, Area.WindyValley, Character.Sonic, 9, Capsule.MagneticShield, [ItemName.Sonic.LightShoes],
-                    [], [], [], []),
-    CapsuleLocation(11510, Area.WindyValley, Character.Sonic, 10, Capsule.ExtraLife, [ItemName.Sonic.LightShoes], [],
-                    [], [], []),
+    CapsuleLocation(11509, Area.WindyValley, Character.Sonic, 9, Capsule.MagneticShield, [LightShoes], [], [], [], []),
+    CapsuleLocation(11510, Area.WindyValley, Character.Sonic, 10, Capsule.ExtraLife, [LightShoes], [], [], [], []),
     CapsuleLocation(11511, Area.WindyValley, Character.Sonic, 11, Capsule.RandomRings, [], [], [], [], []),
     CapsuleLocation(11512, Area.WindyValley, Character.Sonic, 12, Capsule.MagneticShield, [], [], [], [], []),
     CapsuleLocation(11513, Area.WindyValley, Character.Sonic, 13, Capsule.RandomRings, [], [], [], [], []),
@@ -2297,26 +2623,16 @@ capsule_location_table: List[CapsuleLocation] = [
     CapsuleLocation(20508, Area.WindyValley, Character.Tails, 8, Capsule.SpeedUp, [], [], [], [], []),
     CapsuleLocation(20509, Area.WindyValley, Character.Tails, 9, Capsule.ExtraLife, [], [], [], [], []),
     CapsuleLocation(20510, Area.WindyValley, Character.Tails, 10, Capsule.RandomRings, [], [], [], [], []),
-    CapsuleLocation(52501, Area.WindyValley, Character.Gamma, 1, Capsule.ExtraLife, [ItemName.Gamma.JetBooster], [], [],
-                    [], []),
-    CapsuleLocation(52502, Area.WindyValley, Character.Gamma, 2, Capsule.SpeedUp, [ItemName.Gamma.JetBooster], [], [],
-                    [], []),
-    CapsuleLocation(52503, Area.WindyValley, Character.Gamma, 3, Capsule.TenRings, [ItemName.Gamma.JetBooster], [], [],
-                    [], []),
-    CapsuleLocation(52504, Area.WindyValley, Character.Gamma, 4, Capsule.FiveRings, [ItemName.Gamma.JetBooster], [], [],
-                    [], []),
-    CapsuleLocation(52505, Area.WindyValley, Character.Gamma, 5, Capsule.Invincibility, [ItemName.Gamma.JetBooster], [],
-                    [], [], []),
-    CapsuleLocation(52506, Area.WindyValley, Character.Gamma, 6, Capsule.MagneticShield, [ItemName.Gamma.JetBooster],
-                    [], [], [], []),
-    CapsuleLocation(52507, Area.WindyValley, Character.Gamma, 7, Capsule.RandomRings, [ItemName.Gamma.JetBooster], [],
-                    [], [], []),
-    CapsuleLocation(52508, Area.WindyValley, Character.Gamma, 8, Capsule.ExtraLife, [ItemName.Gamma.JetBooster], [], [],
-                    [], []),
-    CapsuleLocation(52509, Area.WindyValley, Character.Gamma, 9, Capsule.RandomRings, [ItemName.Gamma.JetBooster], [],
-                    [], [], []),
-    CapsuleLocation(52510, Area.WindyValley, Character.Gamma, 10, Capsule.RandomRings, [ItemName.Gamma.JetBooster], [],
-                    [], [], []),
+    CapsuleLocation(52501, Area.WindyValley, Character.Gamma, 1, Capsule.ExtraLife, [JetBooster], [], [], [], []),
+    CapsuleLocation(52502, Area.WindyValley, Character.Gamma, 2, Capsule.SpeedUp, [JetBooster], [], [], [], []),
+    CapsuleLocation(52503, Area.WindyValley, Character.Gamma, 3, Capsule.TenRings, [JetBooster], [], [], [], []),
+    CapsuleLocation(52504, Area.WindyValley, Character.Gamma, 4, Capsule.FiveRings, [JetBooster], [], [], [], []),
+    CapsuleLocation(52505, Area.WindyValley, Character.Gamma, 5, Capsule.Invincibility, [JetBooster], [], [], [], []),
+    CapsuleLocation(52506, Area.WindyValley, Character.Gamma, 6, Capsule.MagneticShield, [JetBooster], [], [], [], []),
+    CapsuleLocation(52507, Area.WindyValley, Character.Gamma, 7, Capsule.RandomRings, [JetBooster], [], [], [], []),
+    CapsuleLocation(52508, Area.WindyValley, Character.Gamma, 8, Capsule.ExtraLife, [JetBooster], [], [], [], []),
+    CapsuleLocation(52509, Area.WindyValley, Character.Gamma, 9, Capsule.RandomRings, [JetBooster], [], [], [], []),
+    CapsuleLocation(52510, Area.WindyValley, Character.Gamma, 10, Capsule.RandomRings, [JetBooster], [], [], [], []),
     CapsuleLocation(14501, Area.TwinklePark, Character.Sonic, 1, Capsule.FiveRings, [], [], [], [], []),
     CapsuleLocation(14502, Area.TwinklePark, Character.Sonic, 2, Capsule.TenRings, [], [], [], [], []),
     CapsuleLocation(14503, Area.TwinklePark, Character.Sonic, 3, Capsule.RandomRings, [], [], [], [], []),
@@ -2452,10 +2768,8 @@ capsule_location_table: List[CapsuleLocation] = [
     CapsuleLocation(16508, Area.RedMountain, Character.Sonic, 8, Capsule.TenRings, [], [], [], [], []),
     CapsuleLocation(16509, Area.RedMountain, Character.Sonic, 9, Capsule.ExtraLife, [], [], [], [], []),
     CapsuleLocation(16510, Area.RedMountain, Character.Sonic, 10, Capsule.FiveRings, [], [], [], [], []),
-    CapsuleLocation(16511, Area.RedMountain, Character.Sonic, 11, Capsule.ExtraLife, [ItemName.Sonic.LightShoes], [],
-                    [], [], []),
-    CapsuleLocation(16512, Area.RedMountain, Character.Sonic, 12, Capsule.ExtraLife, [ItemName.Sonic.LightShoes], [],
-                    [], [], []),
+    CapsuleLocation(16511, Area.RedMountain, Character.Sonic, 11, Capsule.ExtraLife, [LightShoes], [], [], [], []),
+    CapsuleLocation(16512, Area.RedMountain, Character.Sonic, 12, Capsule.ExtraLife, [LightShoes], [], [], [], []),
     CapsuleLocation(16513, Area.RedMountain, Character.Sonic, 13, Capsule.ExtraLife, [], [], [], [], []),
     CapsuleLocation(16514, Area.RedMountain, Character.Sonic, 14, Capsule.TenRings, [], [], [], [], []),
     CapsuleLocation(16515, Area.RedMountain, Character.Sonic, 15, Capsule.TenRings, [], [], [], [], []),
@@ -2630,32 +2944,19 @@ capsule_location_table: List[CapsuleLocation] = [
     CapsuleLocation(18508, Area.LostWorld, Character.Sonic, 8, Capsule.TenRings, [], [], [], [], []),
     CapsuleLocation(18509, Area.LostWorld, Character.Sonic, 9, Capsule.Shield, [], [], [], [], []),
     CapsuleLocation(18510, Area.LostWorld, Character.Sonic, 10, Capsule.MagneticShield, [], [], [], [], []),
-    CapsuleLocation(18511, Area.LostWorld, Character.Sonic, 11, Capsule.Shield, [ItemName.Sonic.LightShoes], [], [], [],
-                    []),
-    CapsuleLocation(18512, Area.LostWorld, Character.Sonic, 12, Capsule.RandomRings, [ItemName.Sonic.LightShoes], [],
-                    [], [], []),
-    CapsuleLocation(18513, Area.LostWorld, Character.Sonic, 13, Capsule.MagneticShield, [ItemName.Sonic.LightShoes], [],
-                    [], [], []),
-    CapsuleLocation(18514, Area.LostWorld, Character.Sonic, 14, Capsule.RandomRings, [ItemName.Sonic.LightShoes], [],
-                    [], [], []),
-    CapsuleLocation(18515, Area.LostWorld, Character.Sonic, 15, Capsule.FiveRings, [ItemName.Sonic.LightShoes], [], [],
-                    [], []),
-    CapsuleLocation(18516, Area.LostWorld, Character.Sonic, 16, Capsule.RandomRings, [ItemName.Sonic.LightShoes], [],
-                    [], [], []),
-    CapsuleLocation(18517, Area.LostWorld, Character.Sonic, 17, Capsule.TenRings, [ItemName.Sonic.LightShoes], [], [],
-                    [], []),
-    CapsuleLocation(18518, Area.LostWorld, Character.Sonic, 18, Capsule.TenRings, [ItemName.Sonic.LightShoes], [], [],
-                    [], []),
-    CapsuleLocation(18519, Area.LostWorld, Character.Sonic, 19, Capsule.FiveRings, [ItemName.Sonic.LightShoes], [], [],
-                    [], []),
-    CapsuleLocation(18520, Area.LostWorld, Character.Sonic, 20, Capsule.RandomRings, [ItemName.Sonic.LightShoes], [],
-                    [], [], []),
-    CapsuleLocation(18521, Area.LostWorld, Character.Sonic, 21, Capsule.Shield, [ItemName.Sonic.LightShoes], [], [], [],
-                    []),
-    CapsuleLocation(18522, Area.LostWorld, Character.Sonic, 22, Capsule.ExtraLife, [ItemName.Sonic.LightShoes], [], [],
-                    [], []),
-    CapsuleLocation(18523, Area.LostWorld, Character.Sonic, 23, Capsule.RandomRings, [ItemName.Sonic.LightShoes], [],
-                    [], [], []),
+    CapsuleLocation(18511, Area.LostWorld, Character.Sonic, 11, Capsule.Shield, [LightShoes], [], [], [], []),
+    CapsuleLocation(18512, Area.LostWorld, Character.Sonic, 12, Capsule.RandomRings, [LightShoes], [], [], [], []),
+    CapsuleLocation(18513, Area.LostWorld, Character.Sonic, 13, Capsule.MagneticShield, [LightShoes], [], [], [], []),
+    CapsuleLocation(18514, Area.LostWorld, Character.Sonic, 14, Capsule.RandomRings, [LightShoes], [], [], [], []),
+    CapsuleLocation(18515, Area.LostWorld, Character.Sonic, 15, Capsule.FiveRings, [LightShoes], [], [], [], []),
+    CapsuleLocation(18516, Area.LostWorld, Character.Sonic, 16, Capsule.RandomRings, [LightShoes], [], [], [], []),
+    CapsuleLocation(18517, Area.LostWorld, Character.Sonic, 17, Capsule.TenRings, [LightShoes], [], [], [], []),
+    CapsuleLocation(18518, Area.LostWorld, Character.Sonic, 18, Capsule.TenRings, [LightShoes], [], [], [], []),
+    CapsuleLocation(18519, Area.LostWorld, Character.Sonic, 19, Capsule.FiveRings, [LightShoes], [], [], [], []),
+    CapsuleLocation(18520, Area.LostWorld, Character.Sonic, 20, Capsule.RandomRings, [LightShoes], [], [], [], []),
+    CapsuleLocation(18521, Area.LostWorld, Character.Sonic, 21, Capsule.Shield, [LightShoes], [], [], [], []),
+    CapsuleLocation(18522, Area.LostWorld, Character.Sonic, 22, Capsule.ExtraLife, [LightShoes], [], [], [], []),
+    CapsuleLocation(18523, Area.LostWorld, Character.Sonic, 23, Capsule.RandomRings, [LightShoes], [], [], [], []),
     CapsuleLocation(33501, Area.LostWorld, Character.Knuckles, 1, Capsule.TenRings, [], [], [], [], []),
     CapsuleLocation(33502, Area.LostWorld, Character.Knuckles, 2, Capsule.RandomRings, [], [], [], [], []),
     CapsuleLocation(33503, Area.LostWorld, Character.Knuckles, 3, Capsule.RandomRings, [], [], [], [], []),
@@ -2886,7 +3187,7 @@ capsule_location_table: List[CapsuleLocation] = [
     CapsuleLocation(41512, Area.HotShelter, Character.Amy, 12, Capsule.Invincibility, [], [], [], [], []),
     CapsuleLocation(41513, Area.HotShelter, Character.Amy, 13, Capsule.ExtraLife, [], [], [], [], []),
     CapsuleLocation(41514, Area.HotShelter, Character.Amy, 14, Capsule.Shield, [], [], [], [], []),
-    CapsuleLocation(41515, Area.HotShelter, Character.Amy, 15, Capsule.SpeedUp, [], [], [], [], []),
+    CapsuleLocation(41515, Area.HotShelter, Character.Amy, 15, Capsule.MagneticShield, [], [], [], [], []),
     CapsuleLocation(41516, Area.HotShelter, Character.Amy, 16, Capsule.TenRings, [], [], [], [], []),
     CapsuleLocation(41517, Area.HotShelter, Character.Amy, 17, Capsule.SpeedUp, [], [], [], [], []),
     CapsuleLocation(41518, Area.HotShelter, Character.Amy, 18, Capsule.ExtraLife, [], [], [], [], []),
@@ -2911,7 +3212,7 @@ capsule_location_table: List[CapsuleLocation] = [
     CapsuleLocation(41537, Area.HotShelter, Character.Amy, 37, Capsule.Shield, [], [], [], [], []),
     CapsuleLocation(54501, Area.HotShelter, Character.Gamma, 1, Capsule.RandomRings, [], [], [], [], []),
     CapsuleLocation(54502, Area.HotShelter, Character.Gamma, 2, Capsule.ExtraLife, [], [], [], [], []),
-    CapsuleLocation(54503, Area.HotShelter, Character.Gamma, 3, Capsule.SpeedUp, [], [], [], [], []),
+    CapsuleLocation(54503, Area.HotShelter, Character.Gamma, 3, Capsule.MagneticShield, [], [], [], [], []),
     CapsuleLocation(54504, Area.HotShelter, Character.Gamma, 4, Capsule.TenRings, [], [], [], [], []),
     CapsuleLocation(54505, Area.HotShelter, Character.Gamma, 5, Capsule.Shield, [], [], [], [], []),
     CapsuleLocation(54506, Area.HotShelter, Character.Gamma, 6, Capsule.TenRings, [], [], [], [], []),
@@ -2920,50 +3221,49 @@ capsule_location_table: List[CapsuleLocation] = [
     CapsuleLocation(54509, Area.HotShelter, Character.Gamma, 9, Capsule.TenRings, [], [], [], [], []),
     CapsuleLocation(54510, Area.HotShelter, Character.Gamma, 10, Capsule.TenRings, [], [], [], [], []),
     CapsuleLocation(54511, Area.HotShelter, Character.Gamma, 11, Capsule.TenRings, [], [], [], [], []),
-    CapsuleLocation(54512, Area.HotShelter, Character.Gamma, 12, Capsule.RandomRings, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54513, Area.HotShelter, Character.Gamma, 13, Capsule.FiveRings, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54514, Area.HotShelter, Character.Gamma, 14, Capsule.RandomRings, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54515, Area.HotShelter, Character.Gamma, 15, Capsule.RandomRings, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54516, Area.HotShelter, Character.Gamma, 16, Capsule.SpeedUp, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54517, Area.HotShelter, Character.Gamma, 17, Capsule.ExtraLife, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54518, Area.HotShelter, Character.Gamma, 18, Capsule.ExtraLife, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54519, Area.HotShelter, Character.Gamma, 19, Capsule.SpeedUp, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54520, Area.HotShelter, Character.Gamma, 20, Capsule.Invincibility, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54521, Area.HotShelter, Character.Gamma, 21, Capsule.ExtraLife, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54522, Area.HotShelter, Character.Gamma, 22, Capsule.FiveRings, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54523, Area.HotShelter, Character.Gamma, 23, Capsule.FiveRings, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54524, Area.HotShelter, Character.Gamma, 24, Capsule.Shield, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54525, Area.HotShelter, Character.Gamma, 25, Capsule.FiveRings, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54526, Area.HotShelter, Character.Gamma, 26, Capsule.TenRings, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54527, Area.HotShelter, Character.Gamma, 27, Capsule.FiveRings, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54528, Area.HotShelter, Character.Gamma, 28, Capsule.TenRings, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54529, Area.HotShelter, Character.Gamma, 29, Capsule.TenRings, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54530, Area.HotShelter, Character.Gamma, 30, Capsule.MagneticShield, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54531, Area.HotShelter, Character.Gamma, 31, Capsule.Shield, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54532, Area.HotShelter, Character.Gamma, 32, Capsule.Bomb, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
-    CapsuleLocation(54533, Area.HotShelter, Character.Gamma, 33, Capsule.Shield, [ItemName.Gamma.JetBooster],
-                    [ItemName.Gamma.JetBooster], [], [], []),
+    CapsuleLocation(54512, Area.HotShelter, Character.Gamma, 12, Capsule.RandomRings, [JetBooster], [JetBooster], [],
+                    [], []),
+    CapsuleLocation(54513, Area.HotShelter, Character.Gamma, 13, Capsule.FiveRings, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54514, Area.HotShelter, Character.Gamma, 14, Capsule.RandomRings, [JetBooster], [JetBooster], [],
+                    [], []),
+    CapsuleLocation(54515, Area.HotShelter, Character.Gamma, 15, Capsule.RandomRings, [JetBooster], [JetBooster], [],
+                    [], []),
+    CapsuleLocation(54516, Area.HotShelter, Character.Gamma, 16, Capsule.MagneticShield, [JetBooster], [JetBooster], [],
+                    [], []),
+    CapsuleLocation(54517, Area.HotShelter, Character.Gamma, 17, Capsule.ExtraLife, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54518, Area.HotShelter, Character.Gamma, 18, Capsule.ExtraLife, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54519, Area.HotShelter, Character.Gamma, 19, Capsule.MagneticShield, [JetBooster], [JetBooster], [],
+                    [], []),
+    CapsuleLocation(54520, Area.HotShelter, Character.Gamma, 20, Capsule.Invincibility, [JetBooster], [JetBooster], [],
+                    [], []),
+    CapsuleLocation(54521, Area.HotShelter, Character.Gamma, 21, Capsule.ExtraLife, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54522, Area.HotShelter, Character.Gamma, 22, Capsule.FiveRings, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54523, Area.HotShelter, Character.Gamma, 23, Capsule.FiveRings, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54524, Area.HotShelter, Character.Gamma, 24, Capsule.Shield, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54525, Area.HotShelter, Character.Gamma, 25, Capsule.FiveRings, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54526, Area.HotShelter, Character.Gamma, 26, Capsule.TenRings, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54527, Area.HotShelter, Character.Gamma, 27, Capsule.FiveRings, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54528, Area.HotShelter, Character.Gamma, 28, Capsule.TenRings, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54529, Area.HotShelter, Character.Gamma, 29, Capsule.TenRings, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54530, Area.HotShelter, Character.Gamma, 30, Capsule.MagneticShield, [JetBooster], [JetBooster], [],
+                    [], []),
+    CapsuleLocation(54531, Area.HotShelter, Character.Gamma, 31, Capsule.Shield, [JetBooster], [JetBooster], [], [],
+                    []),
+    CapsuleLocation(54532, Area.HotShelter, Character.Gamma, 32, Capsule.Bomb, [JetBooster], [JetBooster], [], [], []),
+    CapsuleLocation(54533, Area.HotShelter, Character.Gamma, 33, Capsule.Shield, [JetBooster], [JetBooster], [], [],
+                    []),
     CapsuleLocation(63501, Area.HotShelter, Character.Big, 1, Capsule.Shield, [], [], [], [], []),
     CapsuleLocation(63502, Area.HotShelter, Character.Big, 2, Capsule.SpeedUp, [], [], [], [], []),
     CapsuleLocation(63503, Area.HotShelter, Character.Big, 3, Capsule.Shield, [], [], [], [], []),
@@ -2971,23 +3271,19 @@ capsule_location_table: List[CapsuleLocation] = [
     CapsuleLocation(63505, Area.HotShelter, Character.Big, 5, Capsule.TenRings, [], [], [], [], []),
     CapsuleLocation(63506, Area.HotShelter, Character.Big, 6, Capsule.RandomRings, [], [], [], [], []),
     CapsuleLocation(63507, Area.HotShelter, Character.Big, 7, Capsule.ExtraLife, [], [], [], [], []),
-    CapsuleLocation(63508, Area.HotShelter, Character.Big, 8, Capsule.SpeedUp, [ItemName.Big.LifeBelt],
-                    [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt]),
-    CapsuleLocation(63509, Area.HotShelter, Character.Big, 9, Capsule.TenRings, [ItemName.Big.LifeBelt],
-                    [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt]),
-    CapsuleLocation(63510, Area.HotShelter, Character.Big, 10, Capsule.TenRings, [ItemName.Big.LifeBelt],
-                    [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt], [ItemName.Big.LifeBelt]),
+    CapsuleLocation(63508, Area.HotShelter, Character.Big, 8, Capsule.SpeedUp, [LifeBelt], [LifeBelt], [], [LifeBelt],
+                    [LifeBelt]),
+    CapsuleLocation(63509, Area.HotShelter, Character.Big, 9, Capsule.TenRings, [LifeBelt], [LifeBelt], [], [LifeBelt],
+                    [LifeBelt]),
+    CapsuleLocation(63510, Area.HotShelter, Character.Big, 10, Capsule.TenRings, [LifeBelt], [LifeBelt], [], [LifeBelt],
+                    [LifeBelt]),
 ]
 
 fish_location_table: List[FishLocation] = [
     FishLocation(950, Area.TwinklePark, Fish.LargemouthBass, [], [], [], [], []),
     FishLocation(951, Area.TwinklePark, Fish.Piranha, [], [], [], [], []),
-    FishLocation(952, Area.TwinklePark, Fish.MechaFish,
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4]),
+    FishLocation(952, Area.TwinklePark, Fish.MechaFish, [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4],
+                 [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4]),
     FishLocation(953, Area.EmeraldCoast, Fish.Hammerhead, [], [], [], [], []),
     FishLocation(954, Area.EmeraldCoast, Fish.StripedBeakfish, [], [], [], [], []),
     FishLocation(955, Area.EmeraldCoast, Fish.MechaFish, [], [], [], [], []),
@@ -2995,69 +3291,56 @@ fish_location_table: List[FishLocation] = [
     FishLocation(957, Area.EmeraldCoast, Fish.SeaBass, [], [], [], [], []),
     FishLocation(958, Area.EmeraldCoast, Fish.RedSeaBream, [], [], [], [], []),
     FishLocation(959, Area.EmeraldCoast, Fish.MorayEel, [], [], [], [], []),
-    FishLocation(960, Area.EmeraldCoast, Fish.BlueMarlin,
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4]),
+    FishLocation(960, Area.EmeraldCoast, Fish.BlueMarlin, [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4],
+                 [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4]),
     FishLocation(961, Area.IceCap, Fish.Hammerhead, [], [], [], [], []),
     FishLocation(962, Area.IceCap, Fish.MechaFish, [], [], [], [], []),
     FishLocation(963, Area.IceCap, Fish.LargemouthBass, [], [], [], [], []),
     FishLocation(964, Area.IceCap, Fish.Salmon, [], [], [], [], []),
     FishLocation(965, Area.IceCap, Fish.Shark, [], [], [], [], []),
     FishLocation(966, Area.IceCap, Fish.JapaneseEel, [], [], [], [], []),
-    FishLocation(967, Area.HotShelter, Fish.AnglerFish, [ItemName.Big.LifeBelt], [], [], [], []),
+    FishLocation(967, Area.HotShelter, Fish.AnglerFish, [LifeBelt], [], [], [], []),
     FishLocation(968, Area.HotShelter, Fish.Hammerhead, [], [], [], [], []),
-    FishLocation(969, Area.HotShelter, Fish.Oarfish, [ItemName.Big.LifeBelt], [], [], [], []),
+    FishLocation(969, Area.HotShelter, Fish.Oarfish, [LifeBelt], [], [], [], []),
     FishLocation(970, Area.HotShelter, Fish.Shark, [], [], [], [], []),
-    FishLocation(971, Area.HotShelter, Fish.Coelacanth,
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4],
-                 [ItemName.Big.Lure1, ItemName.Big.Lure2, ItemName.Big.Lure3, ItemName.Big.Lure4]),
-    FishLocation(972, Area.HotShelter, Fish.MorayEel, [ItemName.Big.LifeBelt], [], [], [], []),
+    FishLocation(971, Area.HotShelter, Fish.Coelacanth, [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4],
+                 [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4], [Lure1, Lure2, Lure3, Lure4]),
+    FishLocation(972, Area.HotShelter, Fish.MorayEel, [LifeBelt], [], [], [], []),
 ]
 
 boss_location_table: List[BossFightLocation] = [
-    BossFightLocation(700, Area.StationSquareMain, [Character.Sonic], LocationName.Boss.Chaos0, False),
-    BossFightLocation(710, Area.Hotel, [Character.Knuckles], LocationName.Boss.Chaos2, False),
-    BossFightLocation(720, Area.Casino, [Character.Tails], LocationName.Boss.EggWalker, False),
-    BossFightLocation(730, Area.MysticRuinsMain, [Character.Sonic], LocationName.Boss.EggHornet, False),
-    BossFightLocation(731, Area.MysticRuinsMain, [Character.Tails], LocationName.Boss.EggHornet, False),
-    BossFightLocation(739, Area.MysticRuinsMain, [Character.Sonic, Character.Tails], LocationName.Boss.EggHornet, True),
-    BossFightLocation(740, Area.MysticRuinsMain, [Character.Sonic], LocationName.Boss.Chaos4, False),
-    BossFightLocation(741, Area.MysticRuinsMain, [Character.Tails], LocationName.Boss.Chaos4, False),
-    BossFightLocation(742, Area.MysticRuinsMain, [Character.Knuckles], LocationName.Boss.Chaos4, False),
-    BossFightLocation(749, Area.MysticRuinsMain, [Character.Sonic, Character.Tails, Character.Knuckles],
-                      LocationName.Boss.Chaos4, True),
-    BossFightLocation(750, Area.Jungle, [Character.Sonic], LocationName.Boss.EggViper, False),
-    BossFightLocation(760, Area.Jungle, [Character.Gamma], LocationName.Boss.E101Beta, False),
-    BossFightLocation(770, Area.EggCarrierOutside, [Character.Sonic], LocationName.Boss.Chaos6, False),
-    BossFightLocation(771, Area.EggCarrierOutside, [Character.Knuckles], LocationName.Boss.Chaos6, False),
-    BossFightLocation(772, Area.EggCarrierOutside, [Character.Big], LocationName.Boss.Chaos6, False),
-    BossFightLocation(779, Area.EggCarrierOutside, [Character.Sonic, Character.Knuckles, Character.Big],
-                      LocationName.Boss.Chaos6, True),
-    BossFightLocation(780, Area.EggCarrierOutside, [Character.Gamma], LocationName.Boss.E101mkII, False),
-    BossFightLocation(790, Area.EggCarrierOutside, [Character.Amy], LocationName.Boss.Zero, False),
+    BossFightLocation(700, Area.Chaos0, [P_SONIC], LocationName.Boss.Chaos0, False),
+    BossFightLocation(710, Area.Chaos2, [P_KNUCKLES], LocationName.Boss.Chaos2, False),
+    BossFightLocation(720, Area.EggWalker, [P_TAILS], LocationName.Boss.EggWalker, False),
+    BossFightLocation(730, Area.EggHornet, [P_SONIC], LocationName.Boss.EggHornet, False),
+    BossFightLocation(731, Area.EggHornet, [P_TAILS], LocationName.Boss.EggHornet, False),
+    BossFightLocation(739, Area.EggHornet, [P_SONIC, P_TAILS], LocationName.Boss.EggHornet, True),
+    BossFightLocation(740, Area.Chaos4, [P_SONIC], LocationName.Boss.Chaos4, False),
+    BossFightLocation(741, Area.Chaos4, [P_TAILS], LocationName.Boss.Chaos4, False),
+    BossFightLocation(742, Area.Chaos4, [P_KNUCKLES], LocationName.Boss.Chaos4, False),
+    BossFightLocation(749, Area.Chaos4, [P_SONIC, P_TAILS, P_KNUCKLES], LocationName.Boss.Chaos4, True),
+    BossFightLocation(750, Area.BetaEggViper, [P_SONIC], LocationName.Boss.EggViper, False),
+    BossFightLocation(760, Area.BetaEggViper, [P_GAMMA], LocationName.Boss.E101Beta, False),
+    BossFightLocation(770, Area.Chaos6ZeroBeta, [P_SONIC], LocationName.Boss.Chaos6, False),
+    BossFightLocation(771, Area.Chaos6ZeroBeta, [P_KNUCKLES], LocationName.Boss.Chaos6, False),
+    BossFightLocation(772, Area.Chaos6ZeroBeta, [P_BIG], LocationName.Boss.Chaos6, False),
+    BossFightLocation(779, Area.Chaos6ZeroBeta, [P_SONIC, P_KNUCKLES, P_BIG], LocationName.Boss.Chaos6, True),
+    BossFightLocation(780, Area.Chaos6ZeroBeta, [P_GAMMA], LocationName.Boss.E101mkII, False),
+    BossFightLocation(790, Area.Chaos6ZeroBeta, [P_AMY], LocationName.Boss.Zero, False),
 ]
 
 chao_egg_location_table: List[ChaoEggLocation] = [
-    ChaoEggLocation(900, LocationName.Chao.GoldEgg, Area.StationSquareMain, EVERYONE, [[ItemName.KeyItem.HotelFrontKey],
-                                                                                       [ItemName.KeyItem.HotelBackKey,
-                                                                                        ItemName.KeyItem.StationBackKey,
-                                                                                        ItemName.KeyItem.StationFrontKey]]),
-    ChaoEggLocation(901, LocationName.Chao.SilverEgg, Area.MysticRuinsMain,
-                    [Character.Sonic, Character.Tails, Character.Knuckles, Character.Amy, Character.Big], []),
-    ChaoEggLocation(902, LocationName.Chao.BlackEgg, Area.EggCarrierInside,
-                    [Character.Amy, Character.Gamma, Character.Big], []),
+    ChaoEggLocation(900, LocationName.Chao.GoldEgg, Area.SSChaoGarden, EVERYONE,
+                    [[HotelKey, PolicePass], [CasinoKey, ShutterKey, StationKey, PolicePass]]),
+    ChaoEggLocation(901, LocationName.Chao.SilverEgg, Area.MRChaoGarden, [P_SONIC, P_TAILS, P_KNUCKLES, P_AMY, P_BIG],
+                    []),
+    ChaoEggLocation(902, LocationName.Chao.BlackEgg, Area.ECChaoGarden, [P_AMY, P_GAMMA, P_BIG], []),
 ]
 
 chao_race_location_table: List[ChaoRaceLocation] = [
-    ChaoRaceLocation(905, LocationName.Chao.PearlCourse, Area.Hotel),
-    ChaoRaceLocation(906, LocationName.Chao.AmethystCourse, Area.Hotel),
-    ChaoRaceLocation(907, LocationName.Chao.SapphireCourse, Area.Hotel),
-    ChaoRaceLocation(908, LocationName.Chao.RubyCourse, Area.Hotel),
-    ChaoRaceLocation(909, LocationName.Chao.EmeraldCourse, Area.Hotel),
+    ChaoRaceLocation(905, LocationName.Chao.PearlCourse, Area.SSChaoGarden),
+    ChaoRaceLocation(906, LocationName.Chao.AmethystCourse, Area.SSChaoGarden),
+    ChaoRaceLocation(907, LocationName.Chao.SapphireCourse, Area.SSChaoGarden),
+    ChaoRaceLocation(908, LocationName.Chao.RubyCourse, Area.SSChaoGarden),
+    ChaoRaceLocation(909, LocationName.Chao.EmeraldCourse, Area.SSChaoGarden),
 ]

@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from schema import Schema, And
+from schema import Schema, And, Optional
 
-from Options import Choice, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, StartInventoryPool, Toggle
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, StartInventoryPool, Toggle, OptionCounter
 
 
 class Goal(Choice):
@@ -40,20 +40,20 @@ class TrapChance(Range):
     default = 15
 
 
-class TrapTypeWeights(OptionDict):
+class TrapTypeWeights(OptionCounter):
     """When a filler item is replaced with a trap, these weights determine the
     odds for each trap type to be selected.
-    If you don't want a specific trap type, set its weight to 0.
+    If you don't want a specific trap type, omit it or set its weight to 0.
     Setting all weights to 0 is the same as setting trap_chance to 0."""
     schema = Schema({
-        "Ship Damage Trap": And(int, lambda n: n >= 0),
-        "Nap Trap": And(int, lambda n: n >= 0),
-        "Audio Trap": And(int, lambda n: n >= 0),
-        "Suit Puncture Trap": And(int, lambda n: n >= 0),
-        "Map Disable Trap": And(int, lambda n: n >= 0),
-        "HUD Corruption Trap": And(int, lambda n: n >= 0),
-        "Ice Physics Trap": And(int, lambda n: n >= 0),
-        "Supernova Trap": And(int, lambda n: n >= 0),
+        Optional("Ship Damage Trap"): lambda n: n >= 0,
+        Optional("Nap Trap"): lambda n: n >= 0,
+        Optional("Audio Trap"): lambda n: n >= 0,
+        Optional("Suit Puncture Trap"): lambda n: n >= 0,
+        Optional("Map Disable Trap"): lambda n: n >= 0,
+        Optional("HUD Corruption Trap"): lambda n: n >= 0,
+        Optional("Ice Physics Trap"): lambda n: n >= 0,
+        Optional("Supernova Trap"): lambda n: n >= 0,
     })
     display_name = "Trap Type Weights"
     default = {
@@ -68,14 +68,14 @@ class TrapTypeWeights(OptionDict):
     }
 
 
-class UpgradeCounts(OptionDict):
+class UpgradeCounts(OptionCounter):
     """Choose the number of upgrades shuffled into the item pool.
     The default in-game settings start you with 50% of each, bringing you to 200% once all upgrades are acquired.
     You'll probably want to adjust them if you change these too drastically."""
     schema = Schema({
-        "Oxygen Capacity Upgrade": And(int, lambda n: n >= 0),
-        "Fuel Capacity Upgrade": And(int, lambda n: n >= 0),
-        "Boost Duration Upgrade": And(int, lambda n: n >= 0),
+        Optional("Oxygen Capacity Upgrade"): lambda n: n >= 0,
+        Optional("Fuel Capacity Upgrade"): lambda n: n >= 0,
+        Optional("Boost Duration Upgrade"): lambda n: n >= 0,
     })
     display_name = "Upgrade Counts"
     default = {

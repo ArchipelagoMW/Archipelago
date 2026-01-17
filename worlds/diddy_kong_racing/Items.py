@@ -50,6 +50,7 @@ ITEM_NAME_GROUPS: dict[str, set[str]] = {
     "DD Balloon": {ItemName.DINO_DOMAIN_BALLOON},
     "SM Balloon": {ItemName.SNOWFLAKE_MOUNTAIN_BALLOON},
     "SI Balloon": {ItemName.SHERBET_ISLAND_BALLOON},
+    "DF Balloon": {ItemName.DRAGON_FOREST_BALLOON},
     "FFL Balloon": {ItemName.FUTURE_FUN_LAND_BALLOON},
     "Wizpig Amulet": {ItemName.WIZPIG_AMULET_PIECE},
     "TT Amulet": {ItemName.TT_AMULET_PIECE}

@@ -39,7 +39,8 @@ def add_locations(world: "KSSWorld", region: KSSRegion, locations: dict[str, Loc
 
     filtered = {location: data.code for location, data in locations.items() if data.tag in filter_list}
 
-    region.add_locations(filtered, KSSLocation)
+    if filtered:
+        region.add_locations(filtered, KSSLocation)
 
 
 def create_trivial_regions(world: "KSSWorld", menu: KSSRegion, included_subgames: set[str]) -> None:
@@ -112,13 +113,13 @@ def create_dyna_blade(world: "KSSWorld", menu: KSSRegion) -> None:
     world.multiworld.regions.extend([dyna_blade, peanut_plains, mallow_castle, cocoa_cave,
                                      candy_mountain, dyna_blade_nest])
 
-    if world.options.essences or "Maxim Tomato" in world.options.consumables:
-        extra1 = create_region("Dyna Blade Bonus 1", world)
-        extra2 = create_region("Dyna Blade Bonus 2", world)
-        for locations, region in zip((bonus_1_locations, bonus_2_locations), (extra1, extra2)):
-            add_locations(world, region, locations)
-            dyna_blade.connect(region)
-            world.multiworld.regions.append(region)
+    extra1 = create_region("Dyna Blade Bonus 1", world)
+    extra2 = create_region("Dyna Blade Bonus 2", world)
+    for locations, region, parent in zip((bonus_1_locations, bonus_2_locations), (extra1, extra2),
+                                         (mallow_castle, candy_mountain)):
+        add_locations(world, region, locations)
+        parent.connect(region)
+        world.multiworld.regions.append(region)
 
 
 def create_great_cave_offensive(world: "KSSWorld", menu: KSSRegion) -> None:

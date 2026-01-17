@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState, Item, MultiWorld
 from worlds.generic.Rules import add_rule, set_rule, CollectionRule
 from worlds.AutoWorld import LogicMixin
-from . import locations, items, regions, game_data, options
+from . import locations, items, regions, game_data, options, version
 
 if TYPE_CHECKING:
     from . import MkddWorld
@@ -86,7 +86,7 @@ class MkddState(LogicMixin):
         self.mkdd_unlocked_characters = {}
         self.mkdd_best_combo_level = {}
         self.mkdd_state_is_stale = {}
-        for player in multiworld.get_game_players("Mario Kart Double Dash"):
+        for player in multiworld.get_game_players(version.get_game_name()):
             self.mkdd_kart_levels[player] = [0] * len(game_data.KARTS)
             self.mkdd_unlocked_karts[player] = [0] * len(game_data.KARTS)
             self.mkdd_character_levels[player] = [0] * len(game_data.CHARACTERS)

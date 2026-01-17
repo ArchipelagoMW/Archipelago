@@ -82,7 +82,8 @@ class MkddContext(CommonContext):
     """
 
     command_processor = MkddCommandProcessor
-    game: str = "Mario Kart Double Dash"
+    game: str = version.get_game_name()
+    compatible_version: str = "v0.2"
     items_handling: int = 0b111
 
     def __init__(self, server_address: Optional[str], password: Optional[str]) -> None:
@@ -193,10 +194,25 @@ class MkddContext(CommonContext):
             self.items_received_2 = []
             self.last_rcvd_index = -1
             slot_data: dict = args.get("slot_data")
+            host_version : str = slot_data.get("version")
+            if not host_version.startswith(self.compatible_version):
+                self.gui_error("Incompatible seed/client",
+                    f"The seed was generated using version {host_version} of MKDDAP.\n" +
+                    f"Client's version: {version.get_version()}"
+                )
+                self.disconnect()
+                return
+            
             if "death_link" in slot_data:
                 Utils.async_start(self.update_death_link(bool(args["slot_data"]["death_link"])))
             
             self.trophy_goal = slot_data.get("trophy_requirement")
+            if self.ui:
+                self.ui.update_trophies(self.trophies, self.trophy_goal)
+                self.ui.update_characters(self.unlocked_characters)
+                self.ui.update_cc(self.unlocked_vehicle_class)
+                self.ui.update_cups(self.unlocked_cups)
+                
             self.cups_courses = slot_data["cups_courses"]
             self.all_cup_tour_length = slot_data.get("all_cup_tour_length", 8)
             self.mirror_200cc = bool(slot_data.get("mirror_200cc"))
@@ -205,13 +221,6 @@ class MkddContext(CommonContext):
             self.character_item_total_weights = slot_data.get("character_item_total_weights")
             self.global_items_total_weights = slot_data.get("global_items_total_weights")
 
-            host_version = slot_data.get("version")
-            if host_version != version.get_str():
-                logger.warning(
-                    f"The seed was generated using version {host_version} of MKDDAP.\n" +
-                    f"The client is using version {version.get_str()}.\n" +
-                    "If there are any issues, consider changing your client to matching version."
-                )
             sync_state(self)
         elif cmd == "ReceivedItems":
             if args["index"] >= self.last_rcvd_index:
@@ -254,12 +263,90 @@ class MkddContext(CommonContext):
 
         :return: The client's GUI.
         """
-        ui = super().make_gui()
-        ui.base_title = f"Archipelago Mario Kart Double Dash Client {version.get_str()}"
-        if tracker_loaded:
-            ui.base_title += f" | Universal Tracker {UT_VERSION}"
-        ui.base_title +=  " | Archipelago v"
-        return ui
+        from kvui import GameManager
+        base_class: type = GameManager
+        ut_title: str = ""
+        # Use Universal Tracker gui only if it's recent enough version.
+        if tracker_loaded and UT_VERSION >= "v0.2.12":
+            base_class = super().make_gui()
+            ut_title = f" | Universal Tracker {UT_VERSION}"
+        class MKDDManager(base_class):
+            logging_pairs = [("Client", "Archipelago")]
+            base_title = f"MKDD AP Client {version.get_version()}{ut_title} | Archipelago"
+            
+
+            def build(self):
+                container = super().build()
+                from kivy.metrics import dp
+                from kvui import MDBoxLayout, MDGridLayout, MDLabel
+                from kivymd.uix.fitimage import FitImage
+                
+                def get_image(source: str, width: int = 0, height: int = 0) -> FitImage:
+                    from importlib import resources
+                    from kivy.core.image import Image
+                    from io import BytesIO
+                    img = resources.files(__package__ + ".images").joinpath(source)
+                    data = img.read_bytes()
+                    raw_image = Image(BytesIO(data), ext=img.suffix[1:])
+                    image = FitImage(texture = raw_image.texture)
+                    if width > 0:
+                        image.size_hint_x = None
+                        image.width = dp(width)
+                    if height > 0:
+                        image.size_hint_y = None
+                        image.height = dp(height)
+                    return image
+                
+                layout = MDBoxLayout(
+                    orientation = "horizontal",
+                    size_hint_y = None,
+                    height = dp(50),
+                    spacing = dp(5),
+                    padding = dp(5),
+                )
+                
+                layout.add_widget(get_image("trophy_1.png", 36, 36))
+
+                self.trophies_text: MDLabel = MDLabel(text = "0/10", halign = "left", role = "large")
+                layout.add_widget(self.trophies_text)
+
+                layout.add_widget(MDLabel(text = "Characters", halign = "right", role = "large"))
+                char_grid = MDGridLayout(rows = 2, padding = 0, size_hint_x = None, width = dp(180))
+                layout.add_widget(char_grid)
+                self.character_icons: list[FitImage] = []
+                for i in range(20):
+                    self.character_icons.append(get_image(f"character_{i + 1}.png", 18, 18))
+                # Grid is filled in row-major order, but characters are in column-major, so we need to pivot.
+                for y in range(2):
+                    for x in range(10):
+                        char_grid.add_widget(self.character_icons[x * 2 + y])
+
+                self.cc_text: MDLabel = MDLabel(text = "50CC", halign = "right", role = "large")
+                layout.add_widget(self.cc_text)
+                self.cup_icons: list[FitImage] = []
+                for i in range(4):
+                    self.cup_icons.append(get_image(f"cup_{i + 1}.png", 36, 36))
+                    layout.add_widget(self.cup_icons[i])
+
+                self.grid.add_widget(layout)
+                return container
+
+            def update_trophies(self, current: int, goal: int) -> None:
+                self.trophies_text.text = f"{current}/{goal}"
+
+            def update_characters(self, unlocked_characters: list[int]) -> None:
+                for idx, img in enumerate(self.character_icons):
+                    img.opacity = 1 if idx in unlocked_characters else .2
+            
+            def update_cc(self, current_vehile_class: int) -> None:
+                self.cc_text.text = ["50CC", "100CC", "150CC", "Mirror"][min(3, current_vehile_class)]
+
+            def update_cups(self, unlocked_cups: list[int]) -> None:
+                for idx, img in enumerate(self.cup_icons):
+                    img.opacity = 1 if idx in unlocked_cups else .2
+        
+        return MKDDManager
+
 
 ###### Dolphin connection ######
 def _apply_ar_code(code: list[int]):
@@ -333,7 +420,9 @@ def _give_item(ctx: MkddContext, item: MkddItemData) -> bool:
     if item.item_type == ItemType.CHARACTER:
         dolphin.write_byte(ctx.memory_addresses.available_characters_bx + item.address, 1)
         ctx.unlocked_characters.append(item.address)
-    
+        if ctx.ui:
+            ctx.ui.update_characters(ctx.unlocked_characters)
+
     elif item.item_type == ItemType.KART:
         kart = game_data.KARTS[item.address]
         dolphin.write_byte(ctx.memory_addresses.available_karts_bx + kart.unlock_id, 1)
@@ -347,6 +436,8 @@ def _give_item(ctx: MkddContext, item: MkddItemData) -> bool:
     
     elif item.item_type == ItemType.CUP:
         ctx.unlocked_cups.append(item.address)
+        if ctx.ui:
+            ctx.ui.update_cups(ctx.unlocked_cups)
     
     elif item.item_type == ItemType.TT_COURSE:
         ctx.unlocked_courses.append(item.address)
@@ -354,7 +445,9 @@ def _give_item(ctx: MkddContext, item: MkddItemData) -> bool:
     elif item.name == items.PROGRESSIVE_CLASS:
         ctx.unlocked_vehicle_class = min(ctx.unlocked_vehicle_class + 1, 3)
         dolphin.write_word(ctx.memory_addresses.max_vehicle_class_w, ctx.unlocked_vehicle_class)
-    
+        if ctx.ui:
+            ctx.ui.update_cc(ctx.unlocked_vehicle_class)
+
     elif item.name == items.PROGRESSIVE_CUP_SKIP:
         ctx.unlocked_cup_skips = min(ctx.unlocked_cup_skips + 1, 3)
     
@@ -370,6 +463,8 @@ def _give_item(ctx: MkddContext, item: MkddItemData) -> bool:
 
     elif item.name == items.TROPHY:
         ctx.trophies += 1
+        if ctx.ui:
+            ctx.ui.update_trophies(ctx.trophies, ctx.trophy_goal)
     
     elif item.name == items.VICTORY:
         ctx.victory = True
@@ -692,6 +787,7 @@ def update_game(ctx: MkddContext) -> None:
         total_weight = ctx.global_items_total_weights[in_race_placement]
         total_weight += ctx.character_item_total_weights[ctx.active_characters[0].name][in_race_placement]
         item_pool = ctx.global_items + ctx.character_items[ctx.active_characters[0]]
+        # Give different items only if there's no item synergy.
         if item_adr[0] != item_adr[1]:
             item_weights = [item.weight_table[in_race_placement] for item in item_pool]
             # Yet to be unlocked items still count towards item weights.
@@ -699,7 +795,9 @@ def update_game(ctx: MkddContext) -> None:
             if weight_gap > 0:
                 item_pool.append(game_data.ITEM_NONE)
                 item_weights.append(weight_gap)
-            rand_item = random.sample(item_pool, 1, counts = item_weights)[0]
+            rand_item = game_data.ITEM_NONE
+            if len(item_pool) > 0:
+                rand_item = random.sample(item_pool, 1, counts = item_weights)[0]
             dolphin.write_byte(item_adr[0], rand_item.id)
 
             # Reset pool for second player only if they aren't synced.
@@ -713,7 +811,9 @@ def update_game(ctx: MkddContext) -> None:
         if weight_gap > 0:
             item_pool.append(game_data.ITEM_NONE)
             item_weights.append(weight_gap)
-        rand_item = random.sample(item_pool, 1, counts = item_weights)[0]
+        rand_item = game_data.ITEM_NONE
+        if len(item_pool) > 0:
+            rand_item = random.sample(item_pool, 1, counts = item_weights)[0]
         dolphin.write_byte(item_adr[1], rand_item.id)
 
         # Set All Cup Tour lenght by skipping to the second-last race. This ensures that Rainbow Road is still the last.

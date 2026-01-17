@@ -1,4 +1,4 @@
-from typing import Counter
+from collections import Counter
 
 from BaseClasses import CollectionState
 from .Options import FF6WCOptions

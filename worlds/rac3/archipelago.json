@@ -1,14 +1,13 @@
 {
   "compatible_version": 7,
   "version": 7,
-  "game": "RaC3",
-  "world_version": "0.2.2",
-  "minimum_ap_version": "0.6.3",
+  "game": "Ratchet & Clank 3",
+  "world_version": "0.3.2",
+  "minimum_ap_version": "0.5.0",
   "authors": [
     "AmondoVagyok",
     "Myth197",
     "Taoshi",
     "1theory"
-  ],
-  "maximum_ap_version": "0.6.4"
+  ]
 }

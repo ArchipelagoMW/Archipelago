@@ -600,3 +600,12 @@ class TestNoAscensionDown2(SpireTestBase):
         except ValueError:
             return
         raise AssertionError("oops")
+
+
+class TestEmptyTrapWeights(SpireTestBase):
+    options = {
+        "trap_weights": {}
+    }
+
+    def test_empty_trap_weights(self):
+        pass

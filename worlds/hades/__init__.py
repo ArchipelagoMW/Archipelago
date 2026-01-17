@@ -63,7 +63,7 @@ class HadesWorld(World):
     web = HadesWeb()
     required_client_version = (0, 6, 4)
 
-    polycosmos_version = "0.14"
+    polycosmos_version = "0.15"
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = give_all_locations_table()
@@ -290,7 +290,7 @@ class HadesWorld(World):
                                          "nectar_pack_value", "ambrosia_pack_value", "filler_helper_percentage",
                                          "max_health_helper_percentage", "initial_money_helper_percentage",
                                          "filler_trap_percentage", "reverse_order_em", "ignore_greece_deaths",
-                                         "store_give_hints", "automatic_rooms_finish_on_hades_defeat", "death_link")
+                                         "store_give_hints", "automatic_rooms_finish_on_hades_defeat", "disable_late_styx", "death_link")
         slot_data['seed'] = "".join(self.random.choice(string.ascii_letters) for i in range(16))
         slot_data["version_check"] = self.polycosmos_version
         return slot_data

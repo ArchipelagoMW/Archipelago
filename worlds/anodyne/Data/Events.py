@@ -81,9 +81,14 @@ class EventData(NamedTuple):
     region: RegionEnum
     name: str
     reqs: list[str]
-    tracker_loc: tuple[int, int]
+    tracker_loc_: tuple[int, int]
     flag: EventFlags
     is_active: Callable[[AnodyneGameOptions], bool] = lambda _: True
+
+    @property
+    def tracker_loc(self):
+        return self.tracker_loc_[0] + self.region.ut_map_offset()[0], self.tracker_loc_[1] + \
+               self.region.ut_map_offset()[1]
 
 
 all_events: list[EventData] = [
@@ -91,18 +96,19 @@ all_events: list[EventData] = [
     EventData(Bedroom.exit, "Grab Green Key", [], (600, 104), EventFlags.GreenKey, big_keys_vanilla),
     EventData(Crowd.floor_1, "Defeat The Wall", ["Combat", "Jump Shoes"], (1519, 984), EventFlags.Wall),
     EventData(Crowd.exit, "Grab Blue Key", [], (1544, 872), EventFlags.BlueKey, big_keys_vanilla),
-    EventData(Windmill.DEFAULT, "Windmill activated", [], (216, 376), EventFlags.Windmill, windmill_vanilla),
+    EventData(Windmill.third_gate, "Windmill activated", [], (56, 376), EventFlags.Windmill, windmill_vanilla),
     EventData(Hotel.floor_1, "Defeat Manager", ["Small Key (Hotel):6", "Combat"], (1356, 1661), EventFlags.Manager),
     EventData(Circus.boss_gauntlet, "Defeat Servants", ["Combat", "Jump Shoes"], (734, 184), EventFlags.Servants),
     EventData(Apartment.floor_3, "Defeat Watcher", ["Combat", "Small Key (Apartment):4"], (1196, 993),
               EventFlags.Watcher),
     EventData(Terminal.top, "Defeat Sage", ["Combat", "Jump Shoes"], (400, 522), EventFlags.Sage),
-    EventData(Go.top, "Defeat Briar", ["Combat", "Complete Blue", "Complete Happy"], (400, 216), EventFlags.Briar),
+    EventData(Go.top, "Defeat Briar", ["Combat", "Jump Shoes", "Complete Blue", "Complete Happy"], (400, 216),
+              EventFlags.Briar),
     EventData(Blue.DEFAULT, "Blue Completion", ["Combat", "Jump Shoes"], (5 * 16, 2 * 16), EventFlags.Activate_Blue,
               blue_happy_vanilla),
     EventData(Happy.gauntlet, "Happy Completion", [], (41 * 16, 11 * 16), EventFlags.Activate_Happy,
               blue_happy_vanilla),
-    EventData(Nexus.ending, "Open final gate", [], (400, 32), EventFlags.Victory, final_gate_ending),
+    EventData(Nexus.ending, "Open final gate", [], (720, 352), EventFlags.Victory, final_gate_ending),
     EventData(Red_Cave.center, "Center left tentacle hit", ["Combat"], (232, 216), EventFlags.Tentacle_CL,
               tentacles_vanilla),
     EventData(Red_Cave.center, "Center right tentacle hit", ["Combat"], (840, 200), EventFlags.Tentacle_CR,

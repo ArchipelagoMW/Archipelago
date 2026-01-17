@@ -1,5 +1,6 @@
 from worlds.banjo_tooie.Names import itemName, locationName
-from ..Options import KingJingalingHasJiggy, RandomizeJinjos, WorldRequirements
+from ..Options import KingJingalingHasJiggy, RandomizeJinjos, SkipKlungo, WorldRequirements
+from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
 
 # This file contains tests of options that barely do anything.
@@ -39,3 +40,71 @@ class TestRandomizedJingalingJiggy(BanjoTooieTestBase):
         useful_jiggies = sum(1 for item in self.multiworld.itempool if item.useful and item.name == itemName.JIGGY)
         assert progression_jiggies == 66
         assert useful_jiggies == 10
+
+
+class TestSkipKlungoEnabled(BanjoTooieTestBase):
+    options = {
+        "skip_klungo": SkipKlungo.option_true,
+    }
+
+
+class TestSkipKlungoDisabled(BanjoTooieTestBase):
+    options = {
+        "skip_klungo": SkipKlungo.option_false,
+    }
+
+
+class TestSkipKlungoEnabledIntended(TestSkipKlungoEnabled, IntendedLogic):
+    options = {
+        **TestSkipKlungoEnabled.options,
+        **IntendedLogic.options,
+    }
+
+
+class TestSkipKlungoEnabledEasyTricks(TestSkipKlungoEnabled, EasyTricksLogic):
+    options = {
+        **TestSkipKlungoEnabled.options,
+        **EasyTricksLogic.options,
+    }
+
+
+class TestSkipKlungoEnabledHardTricks(TestSkipKlungoEnabled, HardTricksLogic):
+    options = {
+        **TestSkipKlungoEnabled.options,
+        **HardTricksLogic.options,
+    }
+
+
+class TestSkipKlungoEnabledGlitches(TestSkipKlungoEnabled, GlitchesLogic):
+    options = {
+        **TestSkipKlungoEnabled.options,
+        **GlitchesLogic.options,
+    }
+
+
+class TestSkipKlungoDisabledIntended(TestSkipKlungoDisabled, IntendedLogic):
+    options = {
+        **TestSkipKlungoDisabled.options,
+        **IntendedLogic.options,
+    }
+
+
+class TestSkipKlungoDisabledEasyTricks(TestSkipKlungoDisabled, EasyTricksLogic):
+    options = {
+        **TestSkipKlungoDisabled.options,
+        **EasyTricksLogic.options,
+    }
+
+
+class TestSkipKlungoDisabledHardTricks(TestSkipKlungoDisabled, HardTricksLogic):
+    options = {
+        **TestSkipKlungoDisabled.options,
+        **HardTricksLogic.options,
+    }
+
+
+class TestSkipKlungoDisabledGlitches(TestSkipKlungoDisabled, GlitchesLogic):
+    options = {
+        **TestSkipKlungoDisabled.options,
+        **GlitchesLogic.options,
+    }

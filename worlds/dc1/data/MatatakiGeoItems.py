@@ -1,6 +1,6 @@
-from worlds.dc1.Options import DarkCloudOptions
 from BaseClasses import ItemClassification
-from worlds.dc1.Items import DarkCloudItem
+from ..Items import DarkCloudItem
+from ..Options import DarkCloudOptions
 
 ids = {
     "Progressive Pao's House": 971110200,
@@ -23,7 +23,30 @@ ids = {
     "Matataki Bridge": 971110217,
     "Earth A": 971110218,
     "Earth B": 971110219,
-  }
+}
+
+classifications = {
+    "Progressive Pao's House": ItemClassification.progression | ItemClassification.useful,
+    "Progressive Cacao's House": ItemClassification.progression,
+    "Progressive Bunbuku's House": ItemClassification.progression | ItemClassification.useful | ItemClassification.filler,
+    "Progressive Kye's House": ItemClassification.progression | ItemClassification.useful | ItemClassification.filler,
+    "Progressive Baron's House": ItemClassification.progression | ItemClassification.useful,
+    "Progressive Couscous's House": ItemClassification.progression | ItemClassification.useful | ItemClassification.filler,
+    "Progressive Gob's House": ItemClassification.progression | ItemClassification.useful,
+    "Progressive Mushroom House": ItemClassification.progression,
+    "Progressive Well 1": ItemClassification.filler,
+    "Progressive Well 2": ItemClassification.filler,
+    "Progressive Well 3": ItemClassification.filler,
+    "Progressive Watermill 1": ItemClassification.progression | ItemClassification.useful | ItemClassification.filler,
+    "Progressive Watermill 2": ItemClassification.progression | ItemClassification.useful | ItemClassification.filler,
+    "Progressive Watermill 3": ItemClassification.progression | ItemClassification.useful | ItemClassification.filler,
+    "Progressive Owl Shop": ItemClassification.progression | ItemClassification.useful,
+    "Matataki Trees": ItemClassification.filler,
+    "Progressive Matataki River": ItemClassification.progression,
+    "Matataki Bridge": ItemClassification.filler,
+    "Earth A": ItemClassification.filler,
+    "Earth B": ItemClassification.filler,
+}
 
 cacao_ids = ["Progressive Cacao's House", "Progressive Cacao's House", "Progressive Cacao's House",
              "Progressive Cacao's House", "Progressive Cacao's House", "Progressive Cacao's House",
@@ -40,7 +63,7 @@ pao_ids = ["Progressive Pao's House",
 baron_ids = ["Progressive Baron's House", "Progressive Baron's House", "Progressive Baron's House",
              "Progressive Baron's House", "Progressive Baron's House"]
 
-bunbuku_ids = ["Progressive Bunbuku's House", "Progressive Bunbuku's House",
+bunbuku_ids = ["Progressive Bunbuku's House", "Progressive Bunbuku's House", "Progressive Bunbuku's House",
                "Progressive Bunbuku's House", "Progressive Bunbuku's House"]
 
 kye_ids = ["Progressive Kye's House", "Progressive Kye's House", "Progressive Kye's House", "Progressive Kye's House"]
@@ -55,30 +78,35 @@ gob_ids = ["Progressive Gob's House", "Progressive Gob's House",
 
 # Inside has a gourd, so first 2 pieces are minimum useful.  Reward is a shop so the rest useful
 owl_ids = ["Progressive Owl Shop", "Progressive Owl Shop", "Progressive Owl Shop", "Progressive Owl Shop"]
-well_ids = ["Progressive Well 1","Progressive Well 1", "Progressive Well 1", "Progressive Well 1", "Progressive Well 1",
-            "Progressive Well 2","Progressive Well 2", "Progressive Well 2", "Progressive Well 2", "Progressive Well 2",
-            "Progressive Well 3","Progressive Well 3", "Progressive Well 3", "Progressive Well 3", "Progressive Well 3"]
+well_ids = ["Progressive Well 1", "Progressive Well 1", "Progressive Well 1", "Progressive Well 1",
+            "Progressive Well 1",
+            "Progressive Well 2", "Progressive Well 2", "Progressive Well 2", "Progressive Well 2",
+            "Progressive Well 2",
+            "Progressive Well 3", "Progressive Well 3", "Progressive Well 3", "Progressive Well 3",
+            "Progressive Well 3"]
 
 # Each watermill has MCs, 2 have gourds
 watermill_ids = ["Progressive Watermill 1", "Progressive Watermill 1", "Progressive Watermill 2",
-                 "Progressive Watermill 2", "Progressive Watermill 3", "Progressive Watermill 3",]
+                 "Progressive Watermill 2", "Progressive Watermill 3", "Progressive Watermill 3", ]
 
 # Only 5 are required for progression, could take 3 out as useful?
-river_ids = ["Progressive Matataki River", "Progressive Matataki River", "Progressive Matataki River", "Progressive Matataki River",
-             "Progressive Matataki River", "Progressive Matataki River", "Progressive Matataki River", "Progressive Matataki River"]
+river_ids = ["Progressive Matataki River", "Progressive Matataki River", "Progressive Matataki River",
+             "Progressive Matataki River", "Progressive Matataki River", "Progressive Matataki River",
+             "Progressive Matataki River", "Progressive Matataki River"]
 other_ids = ["Matataki Trees", "Matataki Trees", "Matataki Bridge"]
 
 
 # Atla that give MCs by content quality (unless handled otherwise). If MC shuffle is on, these all need to be required
 mc_useful = ["Progressive Owl Shop", "Progressive Owl Shop",
-             "Progressive Bunbuku's House",
+             "Progressive Bunbuku's House", "Progressive Bunbuku's House",
              "Progressive Baron's House", "Progressive Pao's House", "Progressive Pao's House", ]
-mc_filler = ["Progressive Watermill 1", "Progressive Bunbuku's House", ]
+mc_filler = ["Progressive Watermill 1", ]
 
 mc_useful_2 = ["Progressive Kye's House", "Progressive Kye's House", "Progressive Kye's House",
                "Progressive Couscous's House", "Progressive Gob's House",
                "Progressive Watermill 2", "Progressive Watermill 3", ]
-mc_filler_2 = ["Progressive Bunbuku's House",]
+# mc_filler_2 = [,]  Bunbuku's chest accessed by the cabin is not shuffled right now
+
 # Always required/useful/filler items
 required = river_ids + cacao_ids
 useful = pao_ids + baron_ids + gob_ids + owl_ids
@@ -90,36 +118,36 @@ def create_matataki_atla(options: DarkCloudOptions, player: int) -> list["DarkCl
 
     items = []
 
-    matataki_required = required.copy()
+    matataki_progression = required.copy()
     matataki_useful = useful.copy()
     matataki_filler = filler.copy()
 
     # Mush house is only full required if Utan is required
     if options.all_bosses or options.boss_goal == 2:
-        matataki_required.extend(mush_ids)
-        matataki_required.extend(mush_ids_mc)
-        matataki_required.extend(mush_ids_mc2)
+        matataki_progression.extend(mush_ids)
+        matataki_progression.extend(mush_ids_mc)
+        matataki_progression.extend(mush_ids_mc2)
     else:
         matataki_useful.extend(mush_ids)
         if options.miracle_sanity:
-            matataki_required.extend(mush_ids_mc)
-            matataki_required.extend(mush_ids_mc2)
+            matataki_progression.extend(mush_ids_mc)
+            matataki_progression.extend(mush_ids_mc2)
         else:
             matataki_useful.extend(mush_ids_mc)
             matataki_useful.extend(mush_ids_mc2)
 
     if options.miracle_sanity:
-        matataki_required.extend(mc_useful)
-        matataki_required.extend(mc_useful_2)
-        matataki_required.extend(mc_filler)
-        matataki_required.extend(mc_filler_2)
+        matataki_progression.extend(mc_useful)
+        matataki_progression.extend(mc_useful_2)
+        matataki_progression.extend(mc_filler)
+        # matataki_progression.extend(mc_filler_2)
     else:
         matataki_useful.extend(mc_useful)
         matataki_useful.extend(mc_useful_2)
         matataki_filler.extend(mc_filler)
-        matataki_filler.extend(mc_filler_2)
+        # matataki_filler.extend(mc_filler_2)
 
-    for i in matataki_required:
+    for i in matataki_progression:
         items.append(DarkCloudItem(i, ItemClassification.progression, ids[i], player))
 
     for i in matataki_useful:
@@ -128,4 +156,6 @@ def create_matataki_atla(options: DarkCloudOptions, player: int) -> list["DarkCl
     for i in matataki_filler:
         items.append(DarkCloudItem(i, ItemClassification.filler, ids[i], player))
 
+    # print(len(items))
+    # print (items)
     return items

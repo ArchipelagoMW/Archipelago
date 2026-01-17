@@ -4,7 +4,7 @@ from worlds.AutoWorld import WebWorld, World
 from .Items import OsuItem, item_data_table, item_table, osu_song_data, osu_song_pool, find_beatmapset
 from .Locations import OsuLocation, location_table, location_data_table
 from Options import PerGameCommonOptions  # Muse Dash uses this for a type (where I don't) but I'm having an error
-from typing import ClassVar               # where the "Type" Import below breaks if I remove this, so I'm ignoring it!
+from typing import ClassVar               # where the "Type" Import below breaks if I remove this, so I'm leaving it
 from .Options import OsuOptions
 from .Regions import region_data_table
 from math import floor
@@ -49,7 +49,7 @@ class OsuMode:
 class OsuWorld(World):
     """
     osu! is a free to play rhythm game featuring 4 modes, an online ranking system/statistics,
-    and songs downloadable from its website.
+    with user submitted songs downloadable from its website.
     """
 
     # Lots of code is taken from Mushdash, Clique, and various other APworlds
@@ -71,12 +71,10 @@ class OsuWorld(World):
     def generate_early(self):
         self.pairs = {}
         song_pool = osu_song_pool.copy()
-        song_data = []
         self.modes = {}
         self.starting_songs = []
         self.additional_songs = []
         self.disable_difficulty_reduction = bool(self.options.disable_difficulty_reduction.value)
-        shuffle_included_songs = self.options.shuffle_included_songs
         self.modes['osu'] = OsuMode(self.options.minimum_difficulty_standard.value,
                                     self.options.maximum_difficulty_standard.value, self.options.exclude_standard.value)
         self.modes['fruits'] = OsuMode(self.options.minimum_difficulty_catch.value,
@@ -88,7 +86,8 @@ class OsuWorld(World):
         self.modes['7k'] = OsuMode(self.options.minimum_difficulty_7k.value,
                                    self.options.maximum_difficulty_7k.value, self.options.exclude_7k.value)
         self.modes['other'] = OsuMode(self.options.minimum_difficulty_other.value,
-                                      self.options.maximum_difficulty_other.value, self.options.exclude_other_keys.value)
+                                      self.options.maximum_difficulty_other.value,
+                                      self.options.exclude_other_keys.value)
         starting_song_count = self.options.starting_songs
         additional_song_count = self.options.additional_songs
         song_count = additional_song_count+starting_song_count
@@ -102,15 +101,14 @@ class OsuWorld(World):
         if potiental_song_count < (song_count + 1):
             # If we don't have atleast 16 more than the requesting starting amount, we can't lower it enough.
             if potiental_song_count < starting_song_count+16:
-                raise Exception(f"Player {self.player}'s settings cannot generate enough songs, their settings only allow "
-                                f"{len(song_data_raw)+len(self.options.include_songs.value)} out of {song_count+1} " 
-                                f"requested songs, or the {starting_song_count+16} minimum songs.")
+                raise Exception(f"Player {self.player}'s settings cannot generate enough songs, their settings only "
+                                f"allow {len(song_data_raw)+len(self.options.include_songs.value)} out of " 
+                                f"{song_count+1} requested songs, or the {starting_song_count+16} minimum songs.")
             else:
                 # Otherwise, we can lower the song count such that we have enough songs.
                 song_count = len(song_data_raw)+len(self.options.include_songs.value)-1
                 logging.warning(f"Player {self.player}'s settings cannot generate enough songs. Lowering Song count to"
                                 f" {song_count+1}.")
-
 
         # Put generic songs into the list
         for song in song_pool[:starting_song_count]:
@@ -189,20 +187,23 @@ class OsuWorld(World):
         return song_list
 
     def check_eligibility(self, beatmapset):
-        # first check each of the settings to see if the song could be included
+        # Check each of the settings to see if the song cannot be included
         if str(beatmapset["id"]) in self.options.include_songs.value.union(self.options.exclude_songs.value):
-            return False # Special case, these songs are auto-processed and we want to not have them in the standard pool
+            return False  # Included Songs are handled elsewhere, and we don't want duplicates
         if beatmapset["length"] > self.options.maximum_length:
             return False
         if (not self.options.explicit_lyrics) and beatmapset["nsfw"]:
             return False
         if beatmapset["status"] == 'loved' and (not self.options.enable_loved):
             return False
+        if not (self.options.minimum_age >= beatmapset["ranked_date"] >= self.options.maximum_age):
+            return False
         # If the song is legal, start looking for difficulties
         return self.check_difficulties(beatmapset)
 
     def check_difficulties(self, beatmapset):
         found_difficulties = []
+        # Check each beatmap of the set individually
         for difficulty in beatmapset["beatmaps"]:
             mode = self.modes[difficulty['mode']]
             # excluded modes will have -1 for both

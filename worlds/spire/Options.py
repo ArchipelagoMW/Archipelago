@@ -4,32 +4,17 @@ from typing import List
 from schema import Schema, Optional, And
 
 from Options import TextChoice, Range, Toggle, PerGameCommonOptions, Visibility, OptionDict, Choice, OptionSet, \
-    OptionGroup, OptionCounter
+    OptionGroup, OptionCounter, Removed, OptionError
 from .Items import trap_item_table
 from .Constants import NUM_CUSTOM
 
 
-class Character(OptionSet):
-    """Deprecated, use the `characters` option"""
-    visibility = Visibility.none
-    display_name = "Character"
-    valid_keys = [
-        "Ironclad",
-        "Silent",
-        "Defect",
-        "Watcher",
-        "Hermit",
-        "SlimeBoss",
-        "Guardian",
-        "Hexaghost",
-        "Champ",
-        "Gremlins",
-        "Automaton",
-        "Snecko",
-        "Collector",
-    ]
-    default = []
-    valid_keys_casefold = False
+class Character(Removed):
+    """Please use the `characters` option"""
+    def __init__(self, value: str):
+        if value:
+            raise OptionError("The option 'character' has been updated to be 'characters', please update your options file.")
+        super().__init__(value)
 
 class Characters(OptionSet):
     """Enter the list of characters to play as.  Valid characters are:
@@ -45,7 +30,8 @@ class Characters(OptionSet):
         'Gremlins'
         'Automaton'
         'Snecko'
-        'Collector'"""
+        'Collector'
+        'AwakenedOne'"""
     # For those wondering why there's a CharacterOption, it's because
     # OptionDict doesn't show up on WebHost, which is what Advanced Character is
     display_name = "Character"
@@ -63,6 +49,7 @@ class Characters(OptionSet):
         "Automaton",
         "Snecko",
         "Collector",
+        "AwakenedOne",
     ]
     default = ["Ironclad", "Silent", "Defect", "Watcher"]
     valid_keys_casefold = False
@@ -71,7 +58,7 @@ class GoalNumChar(Range):
     """How many characters you need to complete a run with before you goal. 0 means all characters"""
     display_name = "Number of Characters to Goal"
     range_start = 0
-    range_end = 13 + NUM_CUSTOM
+    range_end = 14 + NUM_CUSTOM
     default = 0
 
 class Ascension(Range):
@@ -94,7 +81,7 @@ class PickNumberCharacters(Range):
     """
     display_name = "Pick Number of Characters"
     range_start = 0
-    range_end = 13 + NUM_CUSTOM - 1
+    range_end = 14 + NUM_CUSTOM - 1
     default = 2
 
 class FinalAct(Toggle):
@@ -195,6 +182,12 @@ class PotionSanity(Toggle):
     display_name = "Potion Sanity"
     default = 0
 
+class KeySanity(Toggle):
+    """Whether the keys needed to enter the final act should be shuffled into the multiworld;
+    adds 3 locations per character"""
+    display_name = "Key Sanity"
+    default = 0
+
 class SeededRun(Toggle):
     """Whether each character should have a fixed seed to climb the spire with or not."""
     display_name = "Seeded Run"
@@ -244,6 +237,7 @@ class UnlockedCharacter(TextChoice):
     option_automaton = 10
     option_snecko = 11
     option_collector = 12
+    option_awakenedone = 13
 
 
 class CharacterOptions(OptionDict):
@@ -276,6 +270,7 @@ class CharacterOptions(OptionDict):
             "final_act": 1,
             "downfall": 0,
             "ascension_down": 0,
+            "key_sanity": 0,
         }
     }
     schema = Schema({
@@ -283,7 +278,8 @@ class CharacterOptions(OptionDict):
             Optional("ascension", default=0): And(int,lambda n: 0 <= n <= 20),
             Optional("final_act", default=0): And(int, lambda n: 0 <= n <= 1),
             Optional("downfall", default=0): And(int, lambda n: 0 <= n <= 1),
-            Optional("ascension_down", default=0): And(int, lambda n: 0 <= n <= 20)
+            Optional("ascension_down", default=0): And(int, lambda n: 0 <= n <= 20),
+            Optional("key_sanity", default=0): And(int, lambda n: 0 <= n <= 1),
         }
     })
 
@@ -323,6 +319,29 @@ class TrapWeights(OptionCounter):
     default = {trap: 1 for trap in trap_item_table.keys()}
     valid_keys = sorted(trap_item_table.keys())
 
+class FillerWeights(OptionCounter):
+    """
+    The list of filler and corresponding weights that will be added to the item pool
+    1 Gold - One gold, character bound
+    5 Gold - Five gold, character bound
+    CAW CAW - CAW CAW
+    Combat Buff - Similar to traps in function, but beneficial instead of detrimental, not character bound
+    """
+    display_name = "Filler Weights"
+    min = 0
+    default = {
+        "1 Gold": 40,
+        "5 Gold": 60,
+        "CAW CAW": 0,
+        "Combat Buff": 0,
+    }
+    valid_keys = [
+        "5 Gold",
+        "1 Gold",
+        "CAW CAW",
+        "Combat Buff",
+    ]
+
 
 
 @dataclass
@@ -344,6 +363,7 @@ class SpireOptions(PerGameCommonOptions):
     campfire_sanity: CampfireSanity
     gold_sanity: GoldSanity
     potion_sanity: PotionSanity
+    key_sanity: KeySanity
     seeded: SeededRun
     chatty_mc: ChattyMC
     shop_sanity: ShopSanity
@@ -355,6 +375,7 @@ class SpireOptions(PerGameCommonOptions):
     shop_sanity_costs: ShopSanityCosts
     trap_chance: TrapChance
     trap_weights: TrapWeights
+    filler_weights: FillerWeights
 
 option_groups: List[OptionGroup] = [
     OptionGroup("Sanities", [
@@ -362,6 +383,7 @@ option_groups: List[OptionGroup] = [
         CampfireSanity,
         GoldSanity,
         PotionSanity,
+        KeySanity,
         ShopSanity,
         ShopCardSlots,
         ShopNeutralSlots,
@@ -376,5 +398,6 @@ option_groups: List[OptionGroup] = [
     ]),
     OptionGroup("Misc", [
         ChattyMC,
+        FillerWeights,
     ]),
 ]
