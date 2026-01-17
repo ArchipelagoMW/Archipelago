@@ -105,6 +105,7 @@ class GoalImage(Range):
 
 class StartingTool(Choice):
     """Sets which tool (other than Magnifier) you will be able to use from the start."""
+    display_name = "Starting Tool"
     option_brush = 0
     option_pencil = 1
     option_eraser = 2
