@@ -121,7 +121,7 @@ class FactorioModpack(BaseModpack):
         with self.open_file("worldSettings.json") as file:
             raw_settings = json.load(file)
         self.__forced_locations: dict[str, int] = {}
-        if raw_settings["forced_locations"]:
+        if "forced_locations" in raw_settings:
             for index, location in enumerate(raw_settings["forced_locations"]["start"], start=0):
                 self.__forced_locations[location] = index
             for index, location in enumerate(raw_settings["forced_locations"]["end"], start=1):
