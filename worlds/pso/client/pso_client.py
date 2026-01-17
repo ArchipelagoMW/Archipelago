@@ -372,15 +372,19 @@ async def dolphin_sync_task(ctx: PSOContext) -> None:
                 logger.info("Attempting to connect to Dolphin...")
                 dolphin_memory_engine.hook()
                 if dolphin_memory_engine.is_hooked():
-                    if dolphin_memory_engine.read_bytes(0x80000000, 6) != b"GZLE99":
+                    game_id = read_string(0x80000000, 6)
+
+                    if game_id in ["GP0E8P"]:
                         logger.info(ConnectionStatus.REFUSED_GAME)
                         ctx.dolphin_status = ConnectionStatus.REFUSED_GAME
                         dolphin_memory_engine.un_hook()
                         sleep_time = 5
-                    else:
-                        logger.info(ConnectionStatus.CONNECTED)
-                        ctx.dolphin_status = ConnectionStatus.CONNECTED
-                        ctx.locations_checked = set()
+                        continue
+
+                    logger.info(ConnectionStatus.CONNECTED)
+                    ctx.dolphin_status = ConnectionStatus.CONNECTED
+                    ctx.locations_checked = set()
+
                 else:
                     logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
                     ctx.dolphin_status = ConnectionStatus.LOST
