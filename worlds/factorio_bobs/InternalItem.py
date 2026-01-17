@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from functools import cached_property
 from typing import TYPE_CHECKING, Callable
 
@@ -44,10 +45,99 @@ class RecipeEngine:
         self.__current_recipe_path: list[tuple[InternalItem, Recipe]] = []
 
     def full_init(self) -> None:
+        self.__load_settings()
         if self.__valid_ingredients is None:
             self.__register_iternal_items()
         if self.__recipes is None:
             self.__register_recipes()
+
+        with self.modpack.open_file("extractor/generators.json") as file:
+            raw_generators = json.load(file)
+        for item, product in raw_generators.items():
+            if item in self.entity_to_item:
+                item = self.entity_to_item[item]
+            if item in self.machines:
+                self.machines[item].categories.add(item)
+            else:
+                self.machines[item] = Machine(item, {item}, self)
+            self.req_machines_for_category[item] = item
+            self.__recipes[f"generator_{item}"] = Recipe(f"generator_{item}", item, {},
+                                                         {product: 1}, 1, self)
+        del raw_generators
+
+        is_offshore_pump = False
+        for machine in self.machines.values():
+            if "offshore-pump" in machine.categories:
+                is_offshore_pump = True
+                break
+        if is_offshore_pump:
+            fluids = set()
+            with self.modpack.open_file("extractor/specialTiles.json") as file:
+                raw_tiles = json.load(file)
+            for tile in raw_tiles:
+                if "fluid" in tile:
+                    fluids.add(tile["fluid"])
+            del raw_tiles
+            for fluid in fluids:
+                self.__recipes[f"pump_{fluid}"] = Recipe(f"pump_{fluid}", "offshore-pump",
+                                                         {}, {fluid: 1}, 1, self)
+
+
+        unknown_categories: set[Category] = set()
+        for recipe in self.__recipes.values():
+            if recipe.category not in self.req_machines_for_category:
+                unknown_categories.add(recipe.category)
+
+        is_error = False
+        for category in unknown_categories:
+            valid_machines: set[Machine] = set()
+            for machine in self.machines.values():
+                if category in machine.categories:
+                    valid_machines.add(machine)
+
+            if len(valid_machines) == 1:
+                self.req_machines_for_category[category] = valid_machines.pop().name
+                continue
+
+            best_value = 999
+            best_machine = None
+            without_postfix = None
+            multiple_types = False
+            for machine in valid_machines:
+                machine_name = machine.name
+
+                reg_result = re.search(r"\d+$", machine_name)
+                if reg_result:
+                    int_result = int(reg_result.group(0))
+                    if int_result < best_value:
+                        best_value = int_result
+                        best_machine = machine_name
+                else:
+                    best_value = 0
+                    best_machine = machine_name
+
+                while machine_name[-1] in "0123456789-":
+                    machine_name = machine_name[:-1]
+
+                if not without_postfix:
+                    without_postfix = machine_name
+                if without_postfix != machine_name:
+                    multiple_types = True
+                    break
+
+            if not multiple_types:
+                self.req_machines_for_category[category] = best_machine
+                continue
+
+            is_error = True
+            if valid_machines:
+                print(f"Unknown machine for category \"{category}\", valid options: {valid_machines}")
+            else:
+                print(f"Unknown machine for category \"{category}\", no valid machines found")
+
+        if is_error:
+            raise Exception(f"Unknown for following categories in {self.modpack.packName}: {unknown_categories}")
+
         try:
             with self.modpack.open_file("Cache/precalc.json") as file:
                 precalc = json.load(file)
@@ -58,7 +148,7 @@ class RecipeEngine:
                                {self.modpack.technology_table[tech] for tech in result["technologies"]},
                                set(result["category"]))
         except FileNotFoundError:
-            self.modpack.logger.debug("No precalc.json found")
+            self.modpack.logger.debug("No precalc_old.json found")
 
     def __load_settings(self) -> None:
         with self.modpack.open_file("recipeEngineSettings.json") as file:
