@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import re
-from functools import cached_property
+from functools import cached_property, cache
 from typing import TYPE_CHECKING, Callable
 
 # All of this needs redoing to be more modular
@@ -35,7 +35,6 @@ class RecipeEngine:
         self.__recipe_sources: dict[str, set[Technology]] | None = None
         self.__mining_with_fluid_sources: set[Technology] | None = None
 
-        self.__root_categories: set[str] | None = None
         self.__missed_machines: dict[str, set[Category]] | None = None
         self.__raw_cost: dict[str, float] | None = None
         self.__invalid_ingredients: set[str] | None = None
@@ -60,7 +59,7 @@ class RecipeEngine:
                 self.machines[item].categories.add(item)
             else:
                 self.machines[item] = Machine(item, {item}, self)
-            self.req_machines_for_category[item] = item
+            self.__req_machines_for_category[item] = item
             self.__recipes[f"generator_{item}"] = Recipe(f"generator_{item}", item, {},
                                                          {product: 1}, 1, self)
         del raw_generators
@@ -96,7 +95,7 @@ class RecipeEngine:
                     valid_machines.add(machine)
 
             if len(valid_machines) == 1:
-                self.req_machines_for_category[category] = valid_machines.pop().name
+                self.__req_machines_for_category[category] = valid_machines.pop().name
                 continue
 
             best_value = 999
@@ -126,7 +125,7 @@ class RecipeEngine:
                     break
 
             if not multiple_types:
-                self.req_machines_for_category[category] = best_machine
+                self.__req_machines_for_category[category] = best_machine
                 continue
 
             is_error = True
@@ -153,7 +152,6 @@ class RecipeEngine:
     def __load_settings(self) -> None:
         with self.modpack.open_file("recipeEngineSettings.json") as file:
             raw_settings = json.load(file)
-            self.__root_categories: set[str] = raw_settings["root_categories"]
             if raw_settings["missed_machines"]:
                 self.__missed_machines: dict[str, set[Category]] = {name: set(categories)
                                                                     for name, categories in raw_settings["missed_machines"].items()}
@@ -340,12 +338,6 @@ class RecipeEngine:
         return self.__pack_custom_recipes
 
     @property
-    def root_categories(self) -> set[str]:
-        if self.__root_categories is None:
-            self.__load_settings()
-        return self.__root_categories
-
-    @property
     def missed_machines(self) -> dict[str, set[Category]]:
         if self.__missed_machines is None:
             self.__load_settings()
@@ -372,7 +364,7 @@ class RecipeEngine:
 
     @property
     def excluded_automation_ingredients(self) -> set[str]:
-        if self.__excluded_automation_ingredients:
+        if self.__excluded_automation_ingredients is None:
             self.__load_settings()
         return self.__excluded_automation_ingredients
 
@@ -583,6 +575,7 @@ class InternalItem(FactorioElement):
             return 1
         return ingredient_score(self.get_raw_ingredients())
 
+    @cache
     def all_unlocking_technologies(self) -> set[Technology]:
         if self in InternalItem.evaluating:
             return set()
@@ -613,8 +606,14 @@ class InternalItem(FactorioElement):
 class RecursiveRecipeLoop:
     # entered_loops = 0
     existing_loops = set()
+    temp_num_loop = 0
 
     def __init__(self, start: InternalItem, recipeEngine: RecipeEngine) -> None:
+        RecursiveRecipeLoop.temp_num_loop += 1
+        if RecursiveRecipeLoop.temp_num_loop % 1000 == 0:
+            print(f"Num of loops: {RecursiveRecipeLoop.temp_num_loop}")
+        return
+
         self.recipeEngine = recipeEngine
 
         self.recipes: tuple[tuple[InternalItem, Recipe], ...] = self.recipeEngine.get_recipe_path_from(start)
