@@ -81,7 +81,7 @@ enemy_addresses: dict[str, int] = {
     "Metall": 0x7D,
     "Giant Springer": 0x83,
     "Springer Missile": 0x85,
-    "Big Snakey": 0x99,
+    "Giant Snakey": 0x99,
     "Tama": 0x9A,
     "Doc Robot (Flash)": 0xB0,
     "Doc Robot (Wood)": 0xB1,
