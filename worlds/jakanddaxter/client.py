@@ -22,13 +22,13 @@ import ModuleUpdate
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui_enabled
 from NetUtils import ClientStatus
+from PyMemoryEditor import OpenProcess, ProcessNotFoundError
 
 # Jak imports
 from .game_id import jak1_name, jak1_gk, jak1_goalc
 from .options import EnableOrbsanity
 from .agents.memory_reader import JakAndDaxterMemoryReader
 from .agents.repl_client import JakAndDaxterReplClient
-from .agents.PyMemoryEditor import OpenProcess, ProcessNotFoundError
 from . import JakAndDaxterWorld
 
 

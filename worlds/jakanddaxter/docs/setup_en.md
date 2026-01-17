@@ -5,7 +5,7 @@
 - A legally purchased copy of *Jak And Daxter: The Precursor Legacy.*
 - [The OpenGOAL Launcher](https://opengoal.dev/)
 
-At this time, this method of setup works on Windows only, but Linux support is a strong likelihood in the near future as OpenGOAL itself supports Linux.
+This method of setup works on Windows and Linux.
 
 ## Installation via OpenGOAL Launcher
 

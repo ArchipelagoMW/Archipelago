@@ -4,7 +4,7 @@ import struct
 import sys
 from typing import ByteString, Callable
 import json
-from .PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
+from PyMemoryEditor import OpenProcess, ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
 from dataclasses import dataclass
 
 import Utils
