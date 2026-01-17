@@ -91,16 +91,15 @@ def create_item(world: "RaC3World", name: str) -> Item:
     return GameItem(name, data.AP_CLASSIFICATION, data.AP_CODE, world.player)
 
 
-def get_filler_item_selection(world: "RaC3World"):
+def get_filler_selection(world: "RaC3World"):
     frequencies = world.options.filler_weight.value
     if world.options.enable_progressive_weapons.value:
         frequencies[RAC3ITEM.WEAPON_XP] = 0
     if world.options.traps_enabled.value:
         traps = world.options.trap_weight.value
         frequencies.update(traps)
-
     if not frequencies or all(count == 0 for count in frequencies.values()):
-        frequencies[RAC3ITEM.BOLTS] = 1 # set bolts to be the only filler if the filler weights are empty
+        frequencies[RAC3ITEM.BOLTS] = 1  # set bolts to be the only filler if the filler weights are empty
         # error = "No filler items available. Please enable some filler items."
         # if world.options.enable_progressive_weapons.value:
         #     error += " Progressive Weapons option is enabled, so 'Weapon XP' cannot be used as a filler item."

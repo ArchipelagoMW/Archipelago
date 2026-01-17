@@ -165,23 +165,21 @@ class RaC3World(World):
         if excluded_count > 30:
             option_list.append(RAC3OPTION.EXCLUDE)
         if not option_list:
-            option_list: str = "dunno" # ¯\_(''/)_/¯
+            option_list: str = "dunno"  # ¯\_(''/)_/¯
+        message = f"Not enough location options enabled! {count} items have nowhere to be placed."
         if count >= 50:
-            raise OptionError(f"Not enough location options enabled! {count} items have nowhere to be placed.\n"
-                              f"This large of a difference requires Progressive Weapons to be disabled, Additional "
-                              f"Sewer Crystal Trade locations, or Addtional Nanotech level locations.\n"
-                              f"Consider adjusting the following options: {option_list}")
-        if count >= 10:
-            raise OptionError(f"Not enough location options enabled! {count} items have nowhere to be placed.\n"
-                              f"Consider adjusting some of the following options: {option_list}")
+            message += (f"\nThis large of a difference requires Progressive Weapons to be disabled, Additional Sewer "
+                        f"Crystal Trade locations, or Addtional Nanotech level locations.")
+        if count <= 10 and sum(self.options.start_inventory_from_pool.value.values()) <= 10:
+            message += f"Consider adding some items to your starting_items_from_pool or "
         else:
-            raise OptionError(f"Not enough location options enabled! {count} items have nowhere to be placed.\n"
-                              f"Consider adding some items to your starting_items_from_pool, or adjusting one of "
-                              f"these options: {option_list}")
+            message += f"Consider "
+        message += f"adjusting some of the following options: {option_list}"
+        raise OptionError(message)
 
     def get_filler_item_name(self) -> str:
         if not len(self.filler_items):
-            self.filler_items = get_filler_item_selection(self)
+            self.filler_items = get_filler_selection(self)
         return self.random.choice(self.filler_items)
 
     def set_rules(self):

@@ -279,7 +279,7 @@ class Rac3Interface(GameInterface):
         self.vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER)
         self.action = self._read8(RAC3STATUS.ACTION)
         self.prev_action = self._read8(RAC3STATUS.PREV_ACTION)
-        self.inputs = self._read16(RAC3STATUS.READ_INPUT)
+        self.inputs = RAC3INPUT(self._read16(RAC3STATUS.READ_INPUT))
         self.health = self._read8(RAC3STATUS.HEALTH)
         self.max_health = self._read8(RAC3STATUS.MAX_HEALTH)
         self.is_reloading = self._read8(RAC3STATUS.FORCE_RELOAD)
@@ -1244,7 +1244,7 @@ class Rac3Interface(GameInterface):
             logger.debug(f'player unable to be killed')
             return False
 
-    def check_inputs(self, check: int, paused: bool = False) -> bool:
+    def check_inputs(self, check: RAC3INPUT, paused: bool = False) -> bool:
         """
         Receives an input combination and checks if the game is currently receiving that combination,
         with optional pause check
