@@ -100,6 +100,7 @@ class RaC3World(World):
         if self.options.intro_skip.value:
             for weapon in starting_weapon_list:
                 self.push_precollected(self.create_item(weapon))
+                self.push_precollected(self.create_item(RAC3ITEM.STARSHIP_PHOENIX))
         else:
             if len(starting_weapon_list) > 0:
                 self.get_location(RAC3LOCATION.VELDIN_FIRST_RANGER).place_locked_item(

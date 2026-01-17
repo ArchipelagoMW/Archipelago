@@ -158,6 +158,10 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
             ctx.game_interface.teleport_to_ship()
             return True
         if ctx.game_interface.check_intro():
+            if force_load:
+                logger.error(f'Player cannot homewarp right now')
+            elif force_respawn:
+                logger.error(f'Player cannot respawn right now')
             return False
         if ctx.game_interface.check_inputs(RAC3INPUT.RELOAD, True) or force_load:
             ctx.game_interface.unpause_game()
@@ -168,10 +172,12 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
         return True
     return False
 
-async def handle_intro_skip(ctx):
+async def handle_intro_skip(ctx : 'Context') -> None:
     """Checks if the intro skip option is enabled to skip veldin"""
     if ctx.slot_data is None:
         return
+    if ctx.slot_data.get(RAC3OPTION.INTRO_SKIP, False) and ctx.current_planet == RAC3REGION.VELDIN:
+        ctx.game_interface.homewarp()
 
 async def handle_sequence_break(ctx: 'Context') -> None:
     """Undos the flags for infobot locations when sequence breaking if you haven't checked the corresponding location yet"""

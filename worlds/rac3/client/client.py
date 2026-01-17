@@ -146,10 +146,7 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify(4):
             return
         if isinstance(self.ctx, Rac3Context):
-            if create_task(handle_respawn(self.ctx, True)):
-                self.output(f'Player respawned on {self.ctx.current_planet}')
-            else:
-                self.output(f'Player cannot respawn right now')
+            create_task(handle_respawn(self.ctx, True))
 
     def _cmd_homewarp(self):
         """Loads Ratchet back on the Phoenix. Does nothing if used during the intro before reaching the Phoenix.
@@ -157,10 +154,8 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify(4):
             return
         if isinstance(self.ctx, Rac3Context):
-            if create_task(handle_respawn(self.ctx, force_load=True)):
-                self.output(f'Player Warped to the Phoenix')
-            else:
-                self.output(f'Player cannot homewarp right now')
+            self.output(f'Attempting to homewarp to the Phoenix...')
+            create_task(handle_respawn(self.ctx, force_load=True))
 
     def _cmd_ryno(self):
         """Toggles the maximum upgrade level for the RYNO between lv5 and lv4"""

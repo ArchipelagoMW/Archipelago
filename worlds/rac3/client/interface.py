@@ -1128,9 +1128,9 @@ class Rac3Interface(GameInterface):
             self._write_bytes(
                 RESPAWN_COORDS_OFFSET[self.planet] + RAC3STATUS.RESPAWN_BASE,
                 self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
-            logger.debug(f'Teleporting to ship on: {self.planet}')
+            logger.info(f'Player respawned on: {self.planet}')
         else:
-            logger.debug(f'Teleporting to last checkpoint on: {self.planet}')
+            logger.info(f'Player respawned at last checkpoint on: {self.planet}')
         self.force_respawn()
 
     def should_overwrite_respawn(self):
@@ -1249,7 +1249,7 @@ class Rac3Interface(GameInterface):
         Receives an input combination and checks if the game is currently receiving that combination,
         with optional pause check
         """
-        return not(self.pause_menu ^ paused) and bool(self.inputs & check)
+        return not(self.pause_menu ^ paused) and (self.inputs & check) == check
 
     def messagebox(self, msg_list: list[bytes], color_bytes_count: int, longest_line_length: int, box_theme: int =
     RAC3BOXTHEME.DEFAULT, _time: int = 0x168) -> None:
@@ -1401,4 +1401,4 @@ class Rac3Interface(GameInterface):
 
     def check_intro(self) -> bool:
         """Checks if the player has reached the end of the intro by collecting the phoenix coordinates"""
-        return  not self.UnlockItem[RAC3ITEM.STARSHIP_PHOENIX].status
+        return not self.UnlockItem[RAC3ITEM.STARSHIP_PHOENIX].status
