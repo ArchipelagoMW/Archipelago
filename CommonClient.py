@@ -304,6 +304,7 @@ class CommonContext:
     keep_alive_task: typing.Optional["asyncio.Task[None]"] = None
     server_task: typing.Optional["asyncio.Task[None]"] = None
     autoreconnect_task: typing.Optional["asyncio.Task[None]"] = None
+    delete_old_data_package_task: typing.Optional["asyncio.Task[None]"] = None
     disconnected_intentionally: bool = False
     server: typing.Optional[Endpoint] = None
     server_version: Version = Version(0, 0, 0)
@@ -628,6 +629,8 @@ class CommonContext:
             self.input_queue.put_nowait(None)
             self.input_requests -= 1
         self.keep_alive_task.cancel()
+        if self.delete_old_data_package_task:
+            self.delete_old_data_package_task.cancel()
         if self.ui_task:
             await self.ui_task
         if self.input_task:
@@ -691,6 +694,9 @@ class CommonContext:
         for game, game_data in data_package["games"].items():
             Utils.store_data_package_for_checksum(game, game_data)
 
+    async def delete_old_data_packages(self):
+        Utils.delete_old_data_packages()
+        
     def consume_network_item_groups(self):
         data = {"item_name_groups": self.stored_data[f"_read_item_name_groups_{self.game}"]}
         current_cache = Utils.persistent_load().get("groups_by_checksum", {}).get(self.checksums[self.game], {})
@@ -1042,6 +1048,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
         server_url = urllib.parse.urlparse(ctx.server_address)
         Utils.persistent_store("client", "last_server_address", server_url.netloc)
+
+        ctx.delete_old_data_package_task = asyncio.create_task(ctx.delete_old_data_packages())
 
     elif cmd == 'ReceivedItems':
         start_index = args["index"]
