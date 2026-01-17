@@ -69,9 +69,9 @@ class RecipeEngine:
                                                                     for name, categories in raw_settings["missed_machines"].items()}
             else:
                 self.__missed_machines: dict[str, set[Category]] = {}
-            self.__raw_cost: dict[str, float] = raw_settings["raw_cost"]
-            self.__invalid_ingredients: set[str] = raw_settings["invalid_ingredients"]
             self.__req_machines_for_category: dict[Category, str] = raw_settings["req_machines_for_category"]
+            self.__raw_cost: dict[str, float] = raw_settings.get("raw_cost", {})
+            self.__invalid_ingredients: set[str] = raw_settings.get("invalid_ingredients", set())
             self.__excluded_automation_ingredients: set[str] = raw_settings.get("excluded_automation_ingredients", set())
 
     def __register_iternal_items(self) -> None:
