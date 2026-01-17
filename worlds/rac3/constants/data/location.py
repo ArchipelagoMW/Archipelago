@@ -2167,7 +2167,7 @@ class RAC3LOCATIONDATA:
 
 
 RAC3_LOCATION_DATA_TABLE: dict[str, RAC3LOCATIONDATA] = {name: RAC3LOCATIONDATA.construct(name) for name in
-                                                         LOCATION_NAME_TO_ID.keys()}
+                                                         LOCATION_NAME_TO_REGION.keys()}
 LOCATION_FROM_AP_CODE: dict[int, str] = dict((kv[1].AP_CODE, kv[0]) for kv in RAC3_LOCATION_DATA_TABLE.items())
 
 LOCATION_TO_INFOBOT_FLAG: dict[str, int] = {
