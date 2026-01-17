@@ -635,7 +635,7 @@ class Context:
                         time.sleep(max(1.0, next_wakeup))
                         if self.save_dirty:
                             self.logger.debug("Saving via thread.")
-                            self._save()
+                            self._save(bool(self.exit_event.is_set()))
                     except OperationalError as e:
                         self.logger.exception(e)
                         self.logger.info(f"Saving failed. Retry in {self.auto_save_interval} seconds.")
