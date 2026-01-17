@@ -8,12 +8,15 @@ from worlds.AutoWorld import World
 # Imports of your world's files must be relative.
 from . import items, locations, regions, rules, web_world
 from . import options as pso_options  # rename due to a name conflict with World.options
+from .helpers import CLIENT_VERSION
 from .options import PSOOptions
 from .patcher.pso_settings import PSOSettings
 from .patcher.rom_patch import PSOPlayerContainer
 from .strings.region_names import Region
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+from ..saving_princess import CLIENT_NAME
+
 
 # APQuest will go through all the parts of the world api one step at a time,
 # with many examples and comments across multiple files.
@@ -106,6 +109,7 @@ class PSOWorld(World):
             "Slot": self.player,
             "Name": self.player_name,
             "Locations": {},
+            "APWorldVersion": CLIENT_VERSION,
             "Options": {
                 "start_with_lavis_blade": self.options.start_with_lavis_blade.value,
                 "goal": self.options.goal.value,
