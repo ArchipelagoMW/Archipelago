@@ -162,10 +162,11 @@ class VoidSolsWorld(World):
             ItemName.sols_100,
             ItemName.sols_250,
         ]
+        sols_weights = [50, 25, 15, 7, 3]
         
         if needed_fillers > 0:
-            for _ in range(needed_fillers):
-                filler_name = self.random.choice(sols_items)
+            fillers = self.random.choices(sols_items, weights=sols_weights, k=needed_fillers)
+            for filler_name in fillers:
                 itempool.append(self.create_item(filler_name))
         elif needed_fillers < 0:
             raise Exception(f"Too many items! {len(itempool)} items for {total_locations} locations.")
