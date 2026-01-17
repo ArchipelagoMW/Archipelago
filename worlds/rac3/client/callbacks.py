@@ -6,8 +6,10 @@ from NetUtils import ClientStatus
 from worlds.rac3 import RAC3OPTION
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.texthelper import get_rich_item_name
+from worlds.rac3.constants.data.location import LOCATION_NAME_TO_ADDRESS
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.input import RAC3INPUT
+from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_color import RAC3TEXTCOLOR
 from worlds.rac3.constants.region import RAC3REGION
@@ -176,6 +178,9 @@ async def handle_intro_skip(ctx : 'Context') -> None:
     if ctx.slot_data is None:
         return
     if ctx.slot_data.get(RAC3OPTION.INTRO_SKIP, False) and ctx.current_planet == RAC3REGION.VELDIN:
+        ctx.game_interface._write8(next(iter(LOCATION_NAME_TO_ADDRESS[RAC3LOCATION.VELDIN_FIRST_RANGER]))[0], 1)
+        ctx.game_interface._write8(next(iter(LOCATION_NAME_TO_ADDRESS[RAC3LOCATION.VELDIN_SECOND_RANGER]))[0], 1)
+        ctx.game_interface._write8(next(iter(LOCATION_NAME_TO_ADDRESS[RAC3LOCATION.VELDIN_SAVE_VELDIN]))[0], 1)
         ctx.game_interface.homewarp()
 
 async def handle_sequence_break(ctx: 'Context') -> None:
