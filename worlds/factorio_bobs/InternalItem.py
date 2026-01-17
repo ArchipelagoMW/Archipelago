@@ -464,6 +464,8 @@ class InternalItem(FactorioElement):
                 self.best_recipe = recipe
                 self.__req_categories = {recipe.category}
                 self.__ingredient_unlocking_technologies = recipe.all_unlocking_technologies()
+                return (self.__raw_ingredients, self.best_recipe,
+                        self.__ingredient_unlocking_technologies, self.__req_categories)
 
         InternalItem.evaluating.add(self)
         for loop in self.recursive_loops:
