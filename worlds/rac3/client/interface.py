@@ -715,7 +715,7 @@ class Rac3Interface(GameInterface):
 
     def gadget_cycler(self):
 
-        if not self.should_cycle_gadgets():
+        if not self.should_cycle_gadgets() or self.near_pda_vendor():
             self.respawn_gadgets()
             return
 
