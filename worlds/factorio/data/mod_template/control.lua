@@ -2,6 +2,7 @@
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
 require "lib"
 require "util"
+require "tech-obscurity"
 
 FREE_SAMPLES = {{ free_samples }}
 SLOT_NAME = "{{ slot_name }}"
