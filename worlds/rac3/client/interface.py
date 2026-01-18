@@ -13,7 +13,8 @@ from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_
                                              ITEM_NAME_FROM_ID, non_prog_weapon_data, PROG_TO_NAME_DICT,
                                              RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data, weapon_upgrade_data)
 from worlds.rac3.constants.data.location import (LOCATION_FROM_AP_CODE, LOCATION_TO_INFOBOT_FLAG,
-                                                 RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA, REGION_TO_INFOBOT_LOCATION)
+                                                 RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA,
+                                                 REGION_TO_INFOBOT_LOCATION)
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
 from worlds.rac3.constants.deaths import CLANK_DEATH_FROM_ACTION, DEATH_FROM_ACTION

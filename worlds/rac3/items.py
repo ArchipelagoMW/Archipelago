@@ -158,11 +158,8 @@ def starting_planets(world: "RaC3World") -> list[str]:
     if len(planet_list) > 1:
         world.random.shuffle(planet_list)
         if world.options.intro_skip.value:
-            if RAC3ITEM.STARSHIP_PHOENIX in planet_list:
-                if planet_list[0] != RAC3ITEM.STARSHIP_PHOENIX:
-                    planet_list = [planet_list[0], RAC3ITEM.STARSHIP_PHOENIX]
-                else:
-                    planet_list = [planet_list[1], RAC3ITEM.STARSHIP_PHOENIX]
+            if RAC3ITEM.STARSHIP_PHOENIX in planet_list and planet_list[0] != RAC3ITEM.STARSHIP_PHOENIX:
+                planet_list = [RAC3ITEM.STARSHIP_PHOENIX, planet_list[1]]
             else:
                 planet_list = planet_list[:2]
         else:
