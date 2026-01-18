@@ -704,9 +704,12 @@ class Rac3Interface(GameInterface):
                 # happening
                 or self._read16(RAC3STATUS.FALL_TIMER) == 1):
             return False
-        if self.planet == RAC3REGION.QWARKS_HIDEOUT and self.distance_to_moby(self.pda_vendor) < 12.0:
-            return False
         return True
+
+    def near_pda_vendor(self) -> bool:
+        if self.planet == RAC3REGION.QWARKS_HIDEOUT and self.distance_to_moby(self.pda_vendor) < 12.0:
+            return True
+        return False
 
     def gadget_cycler(self):
 
