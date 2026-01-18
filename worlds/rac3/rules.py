@@ -485,7 +485,7 @@ def set_rules(world: "RaC3World"):
 
         # RAC3LOCATION.SKIDD_CAPTURED
 
-        RAC3LOCATION.DRACO_COURTNEY: lambda state: state.has([RAC3ITEM.GRAV_BOOTS], world.player),
+        RAC3LOCATION.DRACO_COURTNEY: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
 
         # RAC3TBOLT.ZELDRIN_STARPORT_1
         RAC3TBOLT.ZELDRIN_STARPORT_2: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.CLANK], world.player),
