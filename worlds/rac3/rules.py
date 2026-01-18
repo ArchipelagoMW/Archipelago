@@ -273,23 +273,30 @@ def set_rules(world: "RaC3World"):
         RAC3LOCATION.NATION_QWARKTASTIC_BATTLE: lambda state: state.has(RAC3ITEM.VICTORY, world.player),
         # RAC3LOCATION.NATION_HEAT_STREET
         RAC3LOCATION.NATION_CRISPY_CRITTER:
-            lambda state: state.can_reach_location(RAC3LOCATION.NATION_HEAT_STREET, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.NATION_HEAT_STREET, player=world.player) and
+                          state.has(RAC3ITEM.CLANK, world.player),
         RAC3LOCATION.NATION_PYRO_PLAYGROUND:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_CRISPY_CRITTER, player=world.player),
         RAC3LOCATION.NATION_SUICIDE_RUN:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_PYRO_PLAYGROUND, player=world.player),
         RAC3LOCATION.NATION_BBQ_BOULEVARD:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player) and
+                          state.has(RAC3ITEM.CLANK,world.player),
         RAC3LOCATION.NATION_MAZE_OF_BLAZE:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player) and
+                          state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
         RAC3TBOLT.NATION_PLATFORM:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player) and
+                          state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
         RAC3LOCATION.NATION_CREMATION_STATION:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player) and
+                          state.can_reach_location(RAC3LOCATION.NATION_MAZE_OF_BLAZE, player=world.player),
         RAC3LOCATION.NATION_THE_ANNIHILATOR:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player) and
+                          state.can_reach_location(RAC3LOCATION.NATION_CREMATION_STATION, player=world.player),
         RAC3SKILLPOINT.NATION_EIGHT:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player) and
+                          state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
 
         # RAC3VENDOR.AQUATOS_FLUX_RIFLE
         # RAC3TBOLT.AQUATOS_BRIDGE
@@ -416,7 +423,7 @@ def set_rules(world: "RaC3World"):
         # RAC3TBOLT.TYHRRANOSIS_CANNON
         RAC3TROPHY.TYHRRANOSIS_AL: lambda state: state.has(RAC3ITEM.CLANK, world.player),
         RAC3TBOLT.TYHRRANOSIS_CAVE: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
-        # RAC3LOCATION.TYHRRANOSIS_BOSS
+        RAC3LOCATION.TYHRRANOSIS_BOSS: lambda state: state.has(RAC3ITEM.CLANK,world.player),
         RAC3LOCATION.TYHRRANOSIS_RANGERS_1:
             lambda state: state.can_reach_location(RAC3LOCATION.TYHRRANOSIS_BOSS, player=world.player),
         RAC3LOCATION.TYHRRANOSIS_RANGERS_2:
