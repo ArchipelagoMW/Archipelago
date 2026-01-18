@@ -103,8 +103,10 @@ class RaC3World(World):
 
         if self.options.intro_skip.value:
             for item in starting_weapon_list:
+                self.preplaced_items.append(item)
                 self.push_precollected(self.create_item(item))
             for item in starting_planet_list:
+                self.preplaced_items.append(item)
                 self.push_precollected(self.create_item(item))
         else:
             if len(starting_weapon_list) > 0:
