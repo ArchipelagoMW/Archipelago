@@ -730,21 +730,11 @@ class Rac3Interface(GameInterface):
             planet = RAC3_REGION_DATA_TABLE[PLANET_FROM_INFOBOT[name]]
             if self.UnlockItem[name].status:
                 addr = RAC3_REGION_DATA_TABLE[SHIP_SLOTS[self.UnlockItem[name].status - 1]].SLOT_ADDRESS
-                # Don't allow planets that can softlock
-                if name == RAC3ITEM.QWARKS_HIDEOUT and not self.UnlockItem[RAC3ITEM.REFRACTOR].status:
-                    # Write 0 if Qwarks Hideout is missing Refractor
-                    self._write8(addr, 0)
-                elif name == RAC3ITEM.HOLOSTAR_STUDIOS and (
-                        self.UnlockItem[RAC3ITEM.HACKER].status == 0 or self.UnlockItem[
-                    RAC3ITEM.HYPERSHOT].status == 0):
-                    # Write 0 if Holostar Studios is missing Hacker or Hypershot
-                    self._write8(addr, 0)
+                if self.UnlockItem[name].unlock_delay:
+                    # logger.debug(f'Write access to: {name} at {hex(addr)} value: {hex(planet.ID)}')
+                    self._write8(addr, planet.ID)
                 else:
-                    if self.UnlockItem[name].unlock_delay:
-                        # logger.debug(f'Write access to: {name} at {hex(addr)} value: {hex(planet.ID)}')
-                        self._write8(addr, planet.ID)
-                    else:
-                        self.UnlockItem[name].unlock_delay += 1
+                    self.UnlockItem[name].unlock_delay += 1
         for number, slot in enumerate(SHIP_SLOTS):
             self.ship_slot_limit = self.UnlockItem[RAC3REGION.SLOT_0].status
             if number >= self.ship_slot_limit:
@@ -1416,6 +1406,6 @@ class Rac3Interface(GameInterface):
 
     def check_intro(self) -> bool:
         """Checks if the player has reached the end of the intro by collecting the phoenix coordinates"""
-        if self._read8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID):
+        if not self._read8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID):
             return True
         return False
