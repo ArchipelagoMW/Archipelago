@@ -255,6 +255,7 @@ class Rac3Interface(GameInterface):
     ship_slot_limit: int = 0
     one_hp_challenge: dict[str, bool] = None
     pda_vendor: int = 0
+    clank_options: dict[str, bool] = None
 
     # Called at once when client started
     def init(self):
@@ -336,6 +337,7 @@ class Rac3Interface(GameInterface):
         self.ship_skin = slot_data[RAC3OPTION.SHIP_SKIN]
         self.skin = slot_data[RAC3OPTION.SKIN]
         self.one_hp_challenge = slot_data[RAC3OPTION.ONE_HP_CHALLENGE]
+        self.clank_options = slot_data[RAC3OPTION.CLANK_OPTIONS]
 
     def map_switch(self) -> tuple[str, str]:
         planet = RAC3_REGION_DATA_TABLE[self.planet].ID
@@ -1398,20 +1400,21 @@ class Rac3Interface(GameInterface):
         return False
 
     def clank_cycler(self):
-        # Special cases where Clank is already removed
-        if self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(RAC3STATUS.HOLOSTAR_CLANKFIX) == 0:
-            self._write16(RAC3STATUS.NO_CLANK, 1)
-        elif self.planet == RAC3REGION.AQUATOS_BASE:
-            self._write16(RAC3STATUS.NO_CLANK, 1)
-        # No special case:
-        elif self.UnlockItem[RAC3ITEM.CLANK].status:
-            if self.UnlockItem[RAC3ITEM.CLANK].unlock_delay:
-                self._write16(RAC3STATUS.NO_CLANK, 0)
-                self.UnlockItem[RAC3ITEM.CLANK].unlock_delay = 0
+        if self.clank_options:
+            # Special cases where Clank is already removed
+            if self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(RAC3STATUS.HOLOSTAR_CLANKFIX) == 0:
+                self._write16(RAC3STATUS.NO_CLANK, 1)
+            elif self.planet == RAC3REGION.AQUATOS_BASE:
+                self._write16(RAC3STATUS.NO_CLANK, 1)
+            # No special case:
+            elif self.UnlockItem[RAC3ITEM.CLANK].status:
+                if self.UnlockItem[RAC3ITEM.CLANK].unlock_delay:
+                    self._write16(RAC3STATUS.NO_CLANK, 0)
+                    self.UnlockItem[RAC3ITEM.CLANK].unlock_delay = 0
+                else:
+                    self.UnlockItem[RAC3ITEM.CLANK].unlock_delay += 1
             else:
-                self.UnlockItem[RAC3ITEM.CLANK].unlock_delay += 1
-        else:
-            self._write16(RAC3STATUS.NO_CLANK, 1)
+                self._write16(RAC3STATUS.NO_CLANK, 1)
 
     def set_flag(self, data: list[RAC3ADDRESSDATA]):
         """Sets the bit flags for a given location"""
