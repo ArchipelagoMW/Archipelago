@@ -5,7 +5,7 @@ from dolphin_memory_engine import read_byte, read_bytes, write_byte, write_bytes
 CLIENT_VERSION = "v0.0.1"
 
 # TODO: Get a real address for this - hopefully this doesn't crash anything...
-SLOT_NAME_ADDR = 0x000000AF
+SLOT_NAME_ADDR = 0x8000C360 # We still need a further address for this, but we are having a DOL size issue.
 
 class PSORamData(NamedTuple):
     """
