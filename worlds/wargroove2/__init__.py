@@ -1,3 +1,4 @@
+import threading
 from random import Random
 
 import settings
@@ -9,8 +10,9 @@ from Options import NumericOption, OptionSet
 from .Items import item_table, faction_table, Wargroove2Item
 from .Levels import Wargroove2Level, low_victory_checks_levels, high_victory_checks_levels, first_level, \
     final_levels, region_names, FINAL_LEVEL_1, \
-    FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, LEVEL_COUNT, FINAL_LEVEL_COUNT, main_filler_levels, final_filler_levels
-from .Locations import location_table
+    FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4, LEVEL_COUNT, FINAL_LEVEL_COUNT, main_filler_levels, \
+    final_filler_levels, region_names_to_distance
+from .Locations import location_table, Wargroove2Location
 from .Presets import wargroove2_option_presets
 from .Regions import create_regions
 from .Rules import set_rules
@@ -73,6 +75,14 @@ class Wargroove2World(World):
     web = Wargroove2Web()
     level_list: typing.List[Wargroove2Level] = []
     final_levels: typing.List[Wargroove2Level] = []
+    random_barracks_cost_values: typing.List[int] = []
+    random_tower_cost_values: typing.List[int] = []
+    random_hideout_cost_values: typing.List[int] = []
+    random_port_cost_values: typing.List[int] = []
+    player_barracks_costs: typing.Dict[int, float] = {}
+    player_tower_costs: typing.Dict[int, float] = {}
+    player_hideout_costs: typing.Dict[int, float] = {}
+    player_port_costs: typing.Dict[int, float] = {}
 
     item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
     location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
@@ -81,6 +91,15 @@ class Wargroove2World(World):
         early_level_slots = 4
         main_level_slots = LEVEL_COUNT - early_level_slots
         final_level_no_ocean_slots = 1
+
+        self.random_barracks_cost_values = [self.random.randrange(0, 100)
+                                            for _ in range(LEVEL_COUNT + FINAL_LEVEL_COUNT)]
+        self.random_tower_cost_values = [self.random.randrange(0, 100)
+                                            for _ in range(LEVEL_COUNT + FINAL_LEVEL_COUNT)]
+        self.random_hideout_cost_values = [self.random.randrange(0, 100)
+                                            for _ in range(LEVEL_COUNT + FINAL_LEVEL_COUNT)]
+        self.random_port_cost_values = [self.random.randrange(0, 100)
+                                            for _ in range(LEVEL_COUNT + FINAL_LEVEL_COUNT)]
 
         if self.options.level_shuffle_seed.value == 0:
             random = self.random
@@ -143,6 +162,8 @@ class Wargroove2World(World):
 
         for _ in range(5):
             pool.append(Wargroove2Item("Commander Defense Boost", self.player))
+
+        for _ in range(15):
             pool.append(Wargroove2Item("Income Boost", self.player))
 
         # Matching number of unfilled locations with filler items
@@ -176,6 +197,62 @@ class Wargroove2World(World):
     def create_regions(self) -> None:
         create_regions(self)
 
+    @classmethod
+    def stage_generate_output(cls, multiworld, output_directory):
+        player_to_sphere: dict[int, typing.List[typing.Tuple[int, str]]] = {}
+        sphere_number = 0
+        highest_wg2_sphere = 0
+        for sphere in multiworld.get_spheres():
+            for location in sphere:
+                if location.game == "Wargroove 2":
+                    assert isinstance(location, Wargroove2Location)
+                    if (location.game == "Wargroove 2" and location.name.endswith("Victory") and
+                            location.name != "Humble Beginnings Rebirth: Victory"):
+                        if location.player in player_to_sphere:
+                            player_to_sphere[location.player].append((sphere_number, location.parent_region.name))
+                        else:
+                            player_to_sphere[location.player] = [(sphere_number, location.parent_region.name)]
+                        highest_wg2_sphere = sphere_number
+            sphere_number += 1
+        for world in multiworld.get_game_worlds("Wargroove 2"):
+            assert isinstance(world, Wargroove2World)
+            world.player_barracks_costs = calculate_production_costs(
+                                       world.options.player_barracks_early_sphere.value / 100.0,
+                                       world.options.player_barracks_late_sphere.value / 100.0,
+                                       world.options.player_barracks_early_distance.value / 100.0,
+                                       world.options.player_barracks_late_distance.value / 100.0,
+                                       world.options.player_barracks_random_low_cost.value / 100.0,
+                                       world.options.player_barracks_random_high_cost.value / 100.0,
+                                       highest_wg2_sphere, world.random_barracks_cost_values,
+                                       player_to_sphere, world)
+            world.player_tower_costs = calculate_production_costs(
+                                       world.options.player_tower_early_sphere.value / 100.0,
+                                       world.options.player_tower_late_sphere.value / 100.0,
+                                       world.options.player_tower_early_distance.value / 100.0,
+                                       world.options.player_tower_late_distance.value / 100.0,
+                                       world.options.player_tower_random_low_cost.value / 100.0,
+                                       world.options.player_tower_random_high_cost.value / 100.0,
+                                       highest_wg2_sphere, world.random_tower_cost_values,
+                                       player_to_sphere, world)
+            world.player_hideout_costs = calculate_production_costs(
+                                       world.options.player_hideout_early_sphere.value / 100.0,
+                                       world.options.player_hideout_late_sphere.value / 100.0,
+                                       world.options.player_hideout_early_distance.value / 100.0,
+                                       world.options.player_hideout_late_distance.value / 100.0,
+                                       world.options.player_hideout_random_low_cost.value / 100.0,
+                                       world.options.player_hideout_random_high_cost.value / 100.0,
+                                       highest_wg2_sphere, world.random_hideout_cost_values,
+                                       player_to_sphere, world)
+            world.player_port_costs = calculate_production_costs(
+                                       world.options.player_port_early_sphere.value / 100.0,
+                                       world.options.player_port_late_sphere.value / 100.0,
+                                       world.options.player_port_early_distance.value / 100.0,
+                                       world.options.player_port_late_distance.value / 100.0,
+                                       world.options.player_port_random_low_cost.value / 100.0,
+                                       world.options.player_port_random_high_cost.value / 100.0,
+                                       highest_wg2_sphere, world.random_port_cost_values,
+                                       player_to_sphere, world)
+
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         slot_data = {'seed': "".join(self.random.choice(string.ascii_letters) for _ in range(16))}
         for option_name in self.options.__dict__.keys():
@@ -193,10 +270,18 @@ class Wargroove2World(World):
         for i in range(0, min(LEVEL_COUNT, len(self.level_list))):
             slot_data[f"Level File #{i}"] = self.level_list[i].file_name
             slot_data[region_names[i]] = self.level_list[i].name
+            slot_data[f"Level Barracks Cost #{i}"] = f"{self.player_barracks_costs[i]:.2f}"
+            slot_data[f"Level Tower Cost #{i}"] = f"{self.player_tower_costs[i]:.2f}"
+            slot_data[f"Level Hideout Cost #{i}"] = f"{self.player_hideout_costs[i]:.2f}"
+            slot_data[f"Level Port Cost #{i}"] = f"{self.player_port_costs[i]:.2f}"
             for location_name in self.level_list[i].location_rules.keys():
                 slot_data[location_name] = region_names[i]
         for i in range(0, FINAL_LEVEL_COUNT):
             slot_data[f"Final Level File #{i}"] = self.final_levels[i].file_name
+            slot_data[f"Level Barracks Cost #{i + LEVEL_COUNT}"] = f"{self.player_barracks_costs[i + LEVEL_COUNT]:.2f}"
+            slot_data[f"Level Tower Cost #{i+ LEVEL_COUNT}"] = f"{self.player_tower_costs[i + LEVEL_COUNT]:.2f}"
+            slot_data[f"Level Hideout Cost #{i+ LEVEL_COUNT}"] = f"{self.player_hideout_costs[i + LEVEL_COUNT]:.2f}"
+            slot_data[f"Level Port Cost #{i+ LEVEL_COUNT}"] = f"{self.player_port_costs[i + LEVEL_COUNT]:.2f}"
         slot_data[FINAL_LEVEL_1] = self.final_levels[0].name
         for location_name in self.final_levels[0].location_rules.keys():
             slot_data[location_name] = FINAL_LEVEL_1
@@ -222,3 +307,44 @@ class Wargroove2World(World):
             else:
                 total_locations += self.options.objective_locations
         return total_locations
+
+#############
+# Functions #
+#############
+
+def calculate_production_costs(early_sphere: float, late_sphere: float,
+                                close_distance: float, far_distance: float,
+                                min_random: float, max_random: float,
+                                highest_wg2_sphere: int,
+                                random_values: typing.List[int],
+                                player_to_sphere: dict[int, list[tuple[int, str]]], world) -> dict[int, float]:
+    level_distance_to_cost: dict[int, float] = {}
+    min_random_tmp = min_random
+    max_random_tmp = max_random
+    min_random = min(min_random_tmp, max_random_tmp)
+    max_random = max(min_random_tmp, max_random_tmp)
+    max_range = max(min_random, max_random, far_distance, close_distance, late_sphere, early_sphere)
+    min_range = min(min_random, max_random, far_distance, close_distance, late_sphere, early_sphere)
+    index = 0
+    for sphere_data in player_to_sphere[world.player]:
+        current_sphere = sphere_data[0]
+        region_distance = region_names_to_distance[sphere_data[1]]
+        sphere_value = (current_sphere / highest_wg2_sphere)
+        sphere_percentage = early_sphere + sphere_value * (late_sphere - early_sphere)
+        distance_value = region_distance / (LEVEL_COUNT + FINAL_LEVEL_COUNT)
+        distance_percentage = close_distance + (distance_value * (far_distance - close_distance))
+        random_value = random_values[index] / 100.0
+        random_percentage = min_random + (random_value * (max_random - min_random))
+        cost = (sphere_percentage + distance_percentage + random_percentage) / 3.0
+        cost_min = (min(early_sphere, late_sphere) + min(close_distance, far_distance) + min_random) / 3.0
+        cost_max = (max(early_sphere, late_sphere) + max(close_distance, far_distance) + max_random) / 3.0
+        if cost_max == cost_min:
+            cost_min -= 0.01
+        cost = min_range + ((cost - cost_min) * (max_range - min_range) / (cost_max - cost_min))
+        level_distance_to_cost[region_distance] = cost
+        index += 1
+
+    for i in range(0, LEVEL_COUNT + FINAL_LEVEL_COUNT):
+        if i not in level_distance_to_cost.keys():
+            level_distance_to_cost[i] = 1.0
+    return level_distance_to_cost

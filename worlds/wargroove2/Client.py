@@ -262,22 +262,45 @@ class Wargroove2Context(CommonContext):
                     f.write(str(random.randint(0, 4294967295)))
             for i in range(0, LEVEL_COUNT):
                 filename = f"AP_{i + 1}.map"
+                production_cost_filename = f"Cost_{i + 1}.json"
                 level_file_name = self.slot_data[f"Level File #{i}"]
-                file_data = pkgutil.get_data("worlds.wargroove2", os.path.join(self.level_directory, level_file_name))
+                # Convert to integers because lua doesn't handle floats very well
+                player_barracks_cost = int(float(self.slot_data[f"Level Barracks Cost #{i}"]) * 100)
+                player_tower_cost = int(float(self.slot_data[f"Level Tower Cost #{i}"]) * 100)
+                player_hideout_cost = int(float(self.slot_data[f"Level Hideout Cost #{i}"]) * 100)
+                player_port_cost = int(float(self.slot_data[f"Level Port Cost #{i}"]) * 100)
+                file_data = pkgutil.get_data("worlds.wargroove2", os.path.join(self.level_directory,
+                                                                               level_file_name))
                 if file_data is None:
                     print_error_and_close("Wargroove2Client couldn't find Wargoove 2 level files in install!")
                 else:
                     with open(os.path.join(self.game_communication_path, filename), 'wb') as f:
                         f.write(file_data)
+                    with open(os.path.join(self.game_communication_path, production_cost_filename), 'w') as f:
+                        json.dump({"player_barracks_cost": player_barracks_cost,
+                                   "player_tower_cost": player_tower_cost,
+                                   "player_hideout_cost": player_hideout_cost,
+                                   "player_port_cost": player_port_cost}, f)
             for i in range(0, FINAL_LEVEL_COUNT):
                 filename = f"AP_{i + LEVEL_COUNT + 1}.map"
+                production_cost_filename = f"Cost_{i + LEVEL_COUNT + 1}.json"
                 level_file_name = self.slot_data[f"Final Level File #{i}"]
-                file_data = pkgutil.get_data("worlds.wargroove2", os.path.join(self.level_directory, level_file_name))
+                player_barracks_cost = int(float(self.slot_data[f"Level Barracks Cost #{i + LEVEL_COUNT}"]) * 100)
+                player_tower_cost = int(float(self.slot_data[f"Level Tower Cost #{i + LEVEL_COUNT}"]) * 100)
+                player_hideout_cost = int(float(self.slot_data[f"Level Hideout Cost #{i + LEVEL_COUNT}"]) * 100)
+                player_port_cost = int(float(self.slot_data[f"Level Port Cost #{i + LEVEL_COUNT}"]) * 100)
+                file_data = pkgutil.get_data("worlds.wargroove2", os.path.join(self.level_directory,
+                                                                               level_file_name))
                 if file_data is None:
                     print_error_and_close("Wargroove2Client couldn't find Wargoove 2 level files in install!")
                 else:
                     with open(os.path.join(self.game_communication_path, filename), 'wb') as f:
                         f.write(file_data)
+                    with open(os.path.join(self.game_communication_path, production_cost_filename), 'w') as f:
+                        json.dump({"player_barracks_cost": player_barracks_cost,
+                                   "player_tower_cost": player_tower_cost,
+                                   "player_hideout_cost": player_hideout_cost,
+                                   "player_port_cost": player_port_cost}, f)
 
             # Available Commanders:
             total_enabled_commanders = args["slot_data"].get("enabled_commanders_length", 0)
