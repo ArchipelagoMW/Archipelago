@@ -65,9 +65,7 @@ def set_rules(world: "RaC3World"):
 
         # Getting to Holostar Studios
         f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.HOLOSTAR_STUDIOS}":
-        # Softlock
-        # Prevention
-            lambda state: state.has_all([RAC3ITEM.HOLOSTAR_STUDIOS, RAC3ITEM.HACKER, RAC3ITEM.HYPERSHOT], world.player),
+            lambda state: state.has(RAC3ITEM.HOLOSTAR_STUDIOS, world.player),
 
         # Getting to Obani Draco (lol)
         f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.OBANI_DRACO}":
@@ -91,8 +89,7 @@ def set_rules(world: "RaC3World"):
 
         # Getting to Qwark's Hideout
         f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.QWARKS_HIDEOUT}":
-            lambda state: state.has_all([RAC3ITEM.QWARKS_HIDEOUT, RAC3ITEM.REFRACTOR], world.player),
-        # Softlock Prevention
+            lambda state: state.has(RAC3ITEM.QWARKS_HIDEOUT, world.player),
 
         # Getting to Koros
         f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.KOROS}":
@@ -127,7 +124,7 @@ def set_rules(world: "RaC3World"):
         RAC3SKILLPOINT.PHOENIX_MONKEY: lambda state: state.has(RAC3ITEM.TYHRRA_GUISE, world.player),
         RAC3LOCATION.PHOENIX_ASSAULT:
             lambda state: state.can_reach(RAC3REGION.QWARKS_HIDEOUT, player=world.player)
-                          and state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT], world.player),
+                          and state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT, RAC3ITEM.REFRACTOR], world.player),
         RAC3LOCATION.PHOENIX_GRAND_PRIZE:
             lambda state: state.can_reach(RAC3REGION.ANNIHILATION_NATION, player=world.player),
         RAC3LOCATION.PHOENIX_STAR_MAP: lambda state: state.has(RAC3ITEM.STAR_MAP, player=world.player),
@@ -456,11 +453,13 @@ def set_rules(world: "RaC3World"):
             lambda state: state.can_reach_location(RAC3LOCATION.BLACKWATER_CITY_RANGERS_3, player=world.player),
 
         # RAC3VENDOR.HOLOSTAR_RIFT_INDUCER
-        # RAC3TROPHY.HOLOSTAR_CLANK
-        # RAC3TBOLT.HOLOSTAR_CHAIRS
-        # RAC3SKILLPOINT.HOLOSTAR_LUCKY
-        RAC3TBOLT.HOLOSTAR_GRAV_RAMP: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3TBOLT.HOLOSTAR_KAMIKAZE_NOIDS: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+        RAC3TROPHY.HOLOSTAR_CLANK: lambda state: state.has(RAC3ITEM.HACKER, world.player),
+        RAC3TBOLT.HOLOSTAR_CHAIRS: lambda state: state.has(RAC3ITEM.HACKER, world.player),
+        RAC3SKILLPOINT.HOLOSTAR_LUCKY: lambda state: state.has(RAC3ITEM.HACKER, world.player),
+        RAC3TBOLT.HOLOSTAR_GRAV_RAMP:
+            lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.HACKER, RAC3ITEM.HYPERSHOT], world.player),
+        RAC3TBOLT.HOLOSTAR_KAMIKAZE_NOIDS:
+            lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.HACKER, RAC3ITEM.HYPERSHOT], world.player),
 
         # RAC3LOCATION.SKIDD_CAPTURED
 

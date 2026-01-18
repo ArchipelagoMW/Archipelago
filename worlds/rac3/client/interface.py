@@ -1002,9 +1002,9 @@ class Rac3Interface(GameInterface):
                 # This displays as 1 HP in-game for vehicles with 500 max health
                 self._write_float(health_addr, target_health)
 
-        if (not self.one_hp_challenge.get(character,
-                                         False) and self.planet == RAC3REGION.ANNIHILATION_NATION and not
-        self.pause_state):
+        if (not self.one_hp_challenge.get(character, False)
+                and self.planet == RAC3REGION.ANNIHILATION_NATION
+                and not self.pause_state):
             # Restore sleeping gas health reduction if one HP challenge is not active for Ratchet
             self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x2442FFFF)  # addiu v0,v0,-0x1
             self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0xAC652850)  # sw a1,0x2850(v1)
@@ -1392,3 +1392,9 @@ class Rac3Interface(GameInterface):
         if not self._read8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID):
             return True
         return False
+
+    def set_flag(self, data: list[RAC3ADDRESSDATA]):
+        """Sets the bit flags for a given location"""
+        for check in data:
+            if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
+                self._write8(check.ADDRESS, check.VALUE)

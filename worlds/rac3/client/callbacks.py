@@ -6,7 +6,7 @@ from NetUtils import ClientStatus
 from worlds.rac3 import RAC3OPTION
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.texthelper import get_rich_item_name
-from worlds.rac3.constants.data.location import LOCATION_NAME_TO_ADDRESS
+from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.input import RAC3INPUT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
@@ -173,21 +173,25 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
         return True
     return False
 
-async def handle_intro_skip(ctx : 'Context') -> None:
-    """Checks if the intro skip option is enabled to skip veldin"""
+
+async def handle_intro_skip(ctx: 'Context') -> None:
+    """Checks if the intro skip option is enabled, then skips veldin and sets required story/mission flags"""
     if ctx.slot_data is None:
         return
     if ctx.slot_data.get(RAC3OPTION.INTRO_SKIP, False) and ctx.current_planet == RAC3REGION.VELDIN:
-        ctx.game_interface._write8(next(iter(LOCATION_NAME_TO_ADDRESS[RAC3LOCATION.VELDIN_FIRST_RANGER]))[0], 1)
-        ctx.game_interface._write8(next(iter(LOCATION_NAME_TO_ADDRESS[RAC3LOCATION.VELDIN_SECOND_RANGER]))[0], 1)
-        ctx.game_interface._write8(next(iter(LOCATION_NAME_TO_ADDRESS[RAC3LOCATION.VELDIN_SAVE_VELDIN]))[0], 1)
+        ctx.game_interface.set_flag(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.VELDIN_FIRST_RANGER].CHECK_ADDRESS)
+        ctx.game_interface.set_flag(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.VELDIN_SECOND_RANGER].CHECK_ADDRESS)
+        ctx.game_interface.set_flag(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.VELDIN_SAVE_VELDIN].CHECK_ADDRESS)
         ctx.game_interface.homewarp()
 
+
 async def handle_sequence_break(ctx: 'Context') -> None:
-    """Undos the flags for infobot locations when sequence breaking if you haven't checked the corresponding location yet"""
+    """Undos the flags for infobot locations when sequence breaking if you haven't checked the corresponding location
+    yet"""
     if ctx.slot_data is None:
         return
     ctx.game_interface.sequence_break(ctx.checked_locations)
+
 
 async def handle_check_goal(ctx: 'Context') -> None:
     """Checks if the goal is completed"""
