@@ -703,13 +703,16 @@ class Rac3Interface(GameInterface):
                 # happening
                 or self._read16(RAC3STATUS.FALL_TIMER) == 1):
             return False
-        if self.planet != RAC3REGION.QWARKS_HIDEOUT or self.distance_to_moby(self.pda_vendor) < 12.0:
-            return False
         return True
+    
+    def near_pda_vendor(self) -> bool:
+        if self.planet == RAC3REGION.QWARKS_HIDEOUT and self.distance_to_moby(self.pda_vendor) < 12.0:
+            return True
+        return False
 
     def gadget_cycler(self):
 
-        if not self.should_cycle_gadgets():
+        if not self.should_cycle_gadgets() or self.near_pda_vendor():
             self.respawn_gadgets()
             return
 
@@ -923,7 +926,7 @@ class Rac3Interface(GameInterface):
                         case RAC3STATUS.WRENCH_ONLY:
                             self._write8(status, 2)
                         case RAC3STATUS.DISARM:
-                            if RAC3STATUS.IN_VEHICLE == 0:
+                            if self.vehicle == 0:
                                 self._write8(status, 0)
                         case _:
                             self._write8(status, 1)

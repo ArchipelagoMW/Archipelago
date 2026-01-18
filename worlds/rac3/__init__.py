@@ -120,8 +120,8 @@ class RaC3World(World):
                 if len(starting_planet_list) > 1:
                     self.get_location(RAC3LOCATION.FLORANA_DEFEAT_QWARK).place_locked_item(
                         self.create_item(starting_planet_list[1]))
-            self.preplaced_items.extend(starting_weapon_list)
-            self.preplaced_items.extend(starting_planet_list)
+        self.preplaced_items.extend(starting_weapon_list)
+        self.preplaced_items.extend(starting_planet_list)
 
     def create_items(self):
         itempool = create_itempool(self)
