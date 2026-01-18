@@ -474,11 +474,11 @@ def roll_linked_options(weights: dict) -> dict:
 
 
 def compare_results(
-        yaml_value: str | int | bool | dict | list,
-        trigger_value: str | int | bool | dict | list,
+        yaml_value: str | int | bool | None,
+        trigger_value: str | int | bool | None,
         comparator: str):
-    if yaml_value is None:
-        return False
+    if isinstance(yaml_value, dict | list) or isinstance(trigger_value, dict | list):
+        raise Exception("Triggers can't currently process dictionaries or lists.")
     if isinstance(yaml_value, (str, bool, int)) and isinstance(trigger_value, (str, bool, int)):
         yaml_value = str(yaml_value).lower()
         trigger_value = str(trigger_value).lower()
