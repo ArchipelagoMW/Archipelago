@@ -237,30 +237,41 @@ def set_rules(world: "RaC3World"):
                           and state.can_reach_location(RAC3LOCATION.NATION_WHIP_IT_GOOD, world.player),
 
         RAC3SKILLPOINT.NATION_BASH:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
+                          and state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
         RAC3LOCATION.NATION_MEET_COURTNEY:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
+                          and state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
         RAC3LOCATION.NATION_INFOBOT_HOLOSTAR:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
+                          and state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
         RAC3LOCATION.NATION_NINJA_CHALLENGE:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
+                          and state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
         RAC3LOCATION.NATION_COUNTING_DUCKS:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
+                          and state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
         RAC3LOCATION.NATION_CYCLING_WEAPONS:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
+                          and state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
         RAC3LOCATION.NATION_ONE_HIT_WONDER:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
+                          and state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
         RAC3LOCATION.NATION_TIME_TO_SUCK:
             lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
+                          and state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player)
                           and state.has_any([RAC3ITEM.SUCK_CANNON, RAC3ITEM.PROGRESSIVE_SUCK_CANNON], world.player),
         RAC3LOCATION.NATION_NAPTIME:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
+                          and state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
         RAC3LOCATION.NATION_MORE_CYCLING_WEAPONS:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
+                          and state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
         RAC3LOCATION.NATION_DODGE_THE_TWINS:
             lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
         RAC3LOCATION.NATION_CHOP_CHOP:
             lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
+                          and state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player)
                           and state.has_any([RAC3ITEM.DISC_BLADE, RAC3ITEM.PROGRESSIVE_DISC_BLADE], world.player),
         RAC3LOCATION.NATION_SLEEP_INDUCER:
             lambda state: state.has_any([RAC3ITEM.RIFT_INDUCER, RAC3ITEM.PROGRESSIVE_RIFT_INDUCER], world.player)
@@ -269,7 +280,8 @@ def set_rules(world: "RaC3World"):
             lambda state: state.has_any([RAC3ITEM.QWACK_O_RAY, RAC3ITEM.PROGRESSIVE_QWACK_O_RAY], world.player)
                           and state.can_reach_location(RAC3LOCATION.NATION_SLEEP_INDUCER, world.player),
         RAC3LOCATION.NATION_CHAMPIONSHIP_BOUT_II:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
+                          and state.can_reach_location(RAC3LOCATION.NATION_BBQ_BOULEVARD, player=world.player),
         RAC3LOCATION.NATION_QWARKTASTIC_BATTLE: lambda state: state.has(RAC3ITEM.VICTORY, world.player),
         # RAC3LOCATION.NATION_HEAT_STREET
         RAC3LOCATION.NATION_CRISPY_CRITTER:
