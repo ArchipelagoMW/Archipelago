@@ -80,7 +80,6 @@ rac3_option_groups = [
         ProgressionBalancing,
         Accessibility,
         Deathlink,
-        RAC3ExcludeLocations,
     ]),
     OptionGroup("RAC3 Game Options", [
         IntroSkip,
@@ -115,6 +114,9 @@ rac3_option_groups = [
         ShipWings,
         ShipSkin,
         RatchetSkin,
+    ]),
+    OptionGroup("Item & Location Options", [
+        RAC3ExcludeLocations,
     ]),
 ]
 
