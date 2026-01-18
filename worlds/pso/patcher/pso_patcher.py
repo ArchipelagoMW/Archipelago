@@ -140,7 +140,7 @@ class PSOPatcher:
         print("Randomized item patching complete!")
 
         # Put the player name into the DOL Bytes.
-        self.dol.data.seek(SLOT_NAME_ADDR)
+        self.dol.data.seek(0x000460) #This Needs to be a DOL Offset in order to work properly, not an Address
         self.dol.data.write(string_to_bytes(self.output_data["Name"], PSO_PLAYER_NAME_BYTE_LENGTH))
 
         # Save all changes to the DOL itself.
