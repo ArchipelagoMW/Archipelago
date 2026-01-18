@@ -214,7 +214,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.THIRD_PERSON: RAC3ITEMDATA.construct_unused(0x24),
     RAC3ITEM.FIRST_PERSON: RAC3ITEMDATA.construct_unused(0x25),
     RAC3ITEM.LOCK_STRAFE: RAC3ITEMDATA.construct_unused(0x26),
-    RAC3ITEM.SHOCK_BLASTER: RAC3ITEMDATA.construct_weapon(0x27, 40, 30, ItemClassification.useful),
+    RAC3ITEM.SHOCK_BLASTER: RAC3ITEMDATA.construct_weapon(0x27, 40, 30, ItemClassification.progression),
     RAC3ITEM.SHOCK_BLASTER_V2: RAC3ITEMDATA.construct_weapon_level(0x28, 50, 35, 150),
     RAC3ITEM.SHOCK_BLASTER_V3: RAC3ITEMDATA.construct_weapon_level(0x29, 60, 40, 400),
     RAC3ITEM.SHOCK_BLASTER_V4: RAC3ITEMDATA.construct_weapon_level(0x2A, 80, 40, 700),
@@ -379,7 +379,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.PROGRESSIVE_BOUNCER: RAC3ITEMDATA.construct_rac2_prog(0xCD, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_MINI_TURRET: RAC3ITEMDATA.construct_rac2_prog(0xCE, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_SHIELD_CHARGER: RAC3ITEMDATA.construct_rac2_prog(0xCF, ItemClassification.useful),
-    RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER: RAC3ITEMDATA.construct_weapon_prog(0xD0, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER: RAC3ITEMDATA.construct_weapon_prog(0xD0, ItemClassification.progression),
     RAC3ITEM.PROGRESSIVE_N60_STORM: RAC3ITEMDATA.construct_weapon_prog(0xD1, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_INFECTOR:
         RAC3ITEMDATA.construct_weapon_prog(0xD2, ItemClassification.progression_skip_balancing),
