@@ -477,7 +477,7 @@ def compare_results(
         yaml_value: str | int | bool | None,
         trigger_value: str | int | bool | None,
         comparator: str):
-    if isinstance(yaml_value, dict | list) or isinstance(trigger_value, dict | list):
+    if isinstance(yaml_value, (dict, list)) or isinstance(trigger_value, (dict, list)):
         raise Exception("Triggers can't currently process dictionaries or lists.")
     if isinstance(yaml_value, (str, bool, int)) and isinstance(trigger_value, (str, bool, int)):
         yaml_value = str(yaml_value).lower()
