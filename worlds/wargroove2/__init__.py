@@ -91,6 +91,7 @@ class Wargroove2World(World):
     ai_tower_costs: typing.Dict[int, float] = {}
     ai_hideout_costs: typing.Dict[int, float] = {}
     ai_port_costs: typing.Dict[int, float] = {}
+    fill_slot_data_event: threading.Event = threading.Event()
 
     item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
     location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
@@ -304,8 +305,10 @@ class Wargroove2World(World):
                                        world.options.ai_port_random_high_cost.value / 100.0,
                                        highest_wg2_sphere, world.ai_random_port_cost_values,
                                        player_to_sphere, world)
+            world.fill_slot_data_event.set()
 
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
+        self.fill_slot_data_event.wait()
         slot_data = {'seed': "".join(self.random.choice(string.ascii_letters) for _ in range(16))}
         for option_name in self.options.__dict__.keys():
             option = getattr(self.options, option_name)
@@ -322,26 +325,34 @@ class Wargroove2World(World):
         for i in range(0, min(LEVEL_COUNT, len(self.level_list))):
             slot_data[f"Level File #{i}"] = self.level_list[i].file_name
             slot_data[region_names[i]] = self.level_list[i].name
-            slot_data[f"Level Barracks Cost #{i}"] = f"{self.player_barracks_costs[i]:.2f}"
-            slot_data[f"Level Tower Cost #{i}"] = f"{self.player_tower_costs[i]:.2f}"
-            slot_data[f"Level Hideout Cost #{i}"] = f"{self.player_hideout_costs[i]:.2f}"
-            slot_data[f"Level Port Cost #{i}"] = f"{self.player_port_costs[i]:.2f}"
-            slot_data[f"Level AI Barracks Cost #{i}"] = f"{self.ai_barracks_costs[i]:.2f}"
-            slot_data[f"Level AI Tower Cost #{i}"] = f"{self.ai_tower_costs[i]:.2f}"
-            slot_data[f"Level AI Hideout Cost #{i}"] = f"{self.ai_hideout_costs[i]:.2f}"
-            slot_data[f"Level AI Port Cost #{i}"] = f"{self.ai_port_costs[i]:.2f}"
+            slot_data[f"Level Barracks Cost #{i}"] = f"{self.player_barracks_costs.get(i, 100):.2f}"
+            slot_data[f"Level Tower Cost #{i}"] = f"{self.player_tower_costs.get(i, 100):.2f}"
+            slot_data[f"Level Hideout Cost #{i}"] = f"{self.player_hideout_costs.get(i, 100):.2f}"
+            slot_data[f"Level Port Cost #{i}"] = f"{self.player_port_costs.get(i, 100):.2f}"
+            slot_data[f"Level AI Barracks Cost #{i}"] = f"{self.ai_barracks_costs.get(i, 100):.2f}"
+            slot_data[f"Level AI Tower Cost #{i}"] = f"{self.ai_tower_costs.get(i, 100):.2f}"
+            slot_data[f"Level AI Hideout Cost #{i}"] = f"{self.ai_hideout_costs.get(i, 100):.2f}"
+            slot_data[f"Level AI Port Cost #{i}"] = f"{self.ai_port_costs.get(i, 100):.2f}"
             for location_name in self.level_list[i].location_rules.keys():
                 slot_data[location_name] = region_names[i]
         for i in range(0, FINAL_LEVEL_COUNT):
             slot_data[f"Final Level File #{i}"] = self.final_levels[i].file_name
-            slot_data[f"Level Barracks Cost #{i + LEVEL_COUNT}"] = f"{self.player_barracks_costs[i + LEVEL_COUNT]:.2f}"
-            slot_data[f"Level Tower Cost #{i + LEVEL_COUNT}"] = f"{self.player_tower_costs[i + LEVEL_COUNT]:.2f}"
-            slot_data[f"Level Hideout Cost #{i + LEVEL_COUNT}"] = f"{self.player_hideout_costs[i + LEVEL_COUNT]:.2f}"
-            slot_data[f"Level Port Cost #{i + LEVEL_COUNT}"] = f"{self.player_port_costs[i + LEVEL_COUNT]:.2f}"
-            slot_data[f"Level AI Barracks Cost #{i + LEVEL_COUNT}"] = f"{self.ai_barracks_costs[i + LEVEL_COUNT]:.2f}"
-            slot_data[f"Level AI Tower Cost #{i + LEVEL_COUNT}"] = f"{self.ai_tower_costs[i + LEVEL_COUNT]:.2f}"
-            slot_data[f"Level AI Hideout Cost #{i + LEVEL_COUNT}"] = f"{self.ai_hideout_costs[i + LEVEL_COUNT]:.2f}"
-            slot_data[f"Level AI Port Cost #{i + LEVEL_COUNT}"] = f"{self.ai_port_costs[i + LEVEL_COUNT]:.2f}"
+            slot_data[f"Level Barracks Cost #{i + LEVEL_COUNT}"] = \
+                f"{self.player_barracks_costs.get(i + LEVEL_COUNT, 100):.2f}"
+            slot_data[f"Level Tower Cost #{i + LEVEL_COUNT}"] = \
+                f"{self.player_tower_costs.get(i + LEVEL_COUNT, 100):.2f}"
+            slot_data[f"Level Hideout Cost #{i + LEVEL_COUNT}"] = \
+                f"{self.player_hideout_costs.get(i + LEVEL_COUNT, 100):.2f}"
+            slot_data[f"Level Port Cost #{i + LEVEL_COUNT}"] = \
+                f"{self.player_port_costs.get(i + LEVEL_COUNT, 100):.2f}"
+            slot_data[f"Level AI Barracks Cost #{i + LEVEL_COUNT}"] = \
+                f"{self.ai_barracks_costs.get(i + LEVEL_COUNT, 100):.2f}"
+            slot_data[f"Level AI Tower Cost #{i + LEVEL_COUNT}"] = \
+                f"{self.ai_tower_costs.get(i + LEVEL_COUNT, 100):.2f}"
+            slot_data[f"Level AI Hideout Cost #{i + LEVEL_COUNT}"] = \
+                f"{self.ai_hideout_costs.get(i + LEVEL_COUNT, 100):.2f}"
+            slot_data[f"Level AI Port Cost #{i + LEVEL_COUNT}"] = \
+                f"{self.ai_port_costs.get(i + LEVEL_COUNT, 100):.2f}"
         slot_data[FINAL_LEVEL_1] = self.final_levels[0].name
         for location_name in self.final_levels[0].location_rules.keys():
             slot_data[location_name] = FINAL_LEVEL_1
