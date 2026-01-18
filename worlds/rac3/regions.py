@@ -393,14 +393,19 @@ simple_skillpoints: list[str] = [
 def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
     menu = create_region(world, RAC3REGION.MENU)
-    veldin = create_region_and_connect(world, RAC3REGION.VELDIN, f"{RAC3REGION.MENU} -> {RAC3REGION.VELDIN}", menu)
-    florana = create_region(world, RAC3REGION.FLORANA)
-    veldin.connect(florana, f"{RAC3REGION.VELDIN} -> {RAC3REGION.FLORANA}",
-                   rule=lambda state: state.has(RAC3ITEM.FLORANA, world.player))
-    starship_phoenix = create_region(world, RAC3REGION.STARSHIP_PHOENIX)
-    florana.connect(starship_phoenix, f"{RAC3REGION.FLORANA} -> {RAC3REGION.STARSHIP_PHOENIX}",
-                    rule=lambda state: state.has(RAC3ITEM.STARSHIP_PHOENIX, world.player))
-    starship_phoenix.connect(florana, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.FLORANA}", )
+    if world.options.intro_skip.value:
+        starship_phoenix = create_region_and_connect(world, RAC3REGION.STARSHIP_PHOENIX, f"{RAC3REGION.MENU} -> {RAC3REGION.STARSHIP_PHOENIX}", menu)
+        florana = create_region(world, RAC3REGION.FLORANA)
+        starship_phoenix.connect(florana, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.FLORANA}",
+                        rule=lambda state: state.has(RAC3ITEM.FLORANA, world.player))
+    else:
+        veldin = create_region_and_connect(world, RAC3REGION.VELDIN, f"{RAC3REGION.MENU} -> {RAC3REGION.VELDIN}", menu)
+        florana = create_region(world, RAC3REGION.FLORANA)
+        veldin.connect(florana, f"{RAC3REGION.VELDIN} -> {RAC3REGION.FLORANA}",
+                       rule=lambda state: state.has(RAC3ITEM.FLORANA, world.player))
+        starship_phoenix = create_region(world, RAC3REGION.STARSHIP_PHOENIX)
+        florana.connect(starship_phoenix, f"{RAC3REGION.FLORANA} -> {RAC3REGION.STARSHIP_PHOENIX}",
+                        rule=lambda state: state.has(RAC3ITEM.STARSHIP_PHOENIX, world.player))
 
     # ----- Regions within the game -----#
     marcadia = create_region(world, RAC3REGION.MARCADIA)
@@ -411,6 +416,7 @@ def create_regions(world: "RaC3World"):
     obani_gemini = create_region(world, RAC3REGION.OBANI_GEMINI)
     blackwater_city = create_region(world, RAC3REGION.BLACKWATER_CITY)
     holostar_studios = create_region(world, RAC3REGION.HOLOSTAR_STUDIOS)
+    skidd_cutscene = create_region(world, RAC3REGION.SKIDD_CUTSCENE)
     obani_draco = create_region(world, RAC3REGION.OBANI_DRACO)
     zeldrin_starport = create_region(world, RAC3REGION.ZELDRIN_STARPORT)
     metropolis_first_half = create_region(world, RAC3REGION.METROPOLIS)
@@ -429,6 +435,10 @@ def create_regions(world: "RaC3World"):
     starship_phoenix.connect(obani_gemini, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.OBANI_GEMINI}")
     starship_phoenix.connect(blackwater_city, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.BLACKWATER_CITY}")
     starship_phoenix.connect(holostar_studios, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.HOLOSTAR_STUDIOS}")
+    holostar_studios.connect(skidd_cutscene,
+                             rule=lambda state: state.can_reach(RAC3REGION.BLACKWATER_CITY, player=world.player))
+    blackwater_city.connect(skidd_cutscene,
+                            rule=lambda state: state.can_reach(RAC3REGION.HOLOSTAR_STUDIOS, player=world.player))
     starship_phoenix.connect(obani_draco, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.OBANI_DRACO}")
     starship_phoenix.connect(zeldrin_starport, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ZELDRIN_STARPORT}")
     starship_phoenix.connect(metropolis_first_half, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.METROPOLIS}")
@@ -438,14 +448,6 @@ def create_regions(world: "RaC3World"):
     starship_phoenix.connect(koros, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.KOROS}")
     starship_phoenix.connect(command_center, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.COMMAND_CENTER}")
 
-    # ----- Split planet connections for gadget reasons -----#
-
-    # This cutscene requires beating Holostar and Blackwater in any order:
-    skidd_cutscene = create_region(world, RAC3REGION.SKIDD_CUTSCENE)
-    holostar_studios.connect(skidd_cutscene,
-                             rule=lambda state: state.can_reach(RAC3REGION.BLACKWATER_CITY, player=world.player))
-    blackwater_city.connect(skidd_cutscene,
-                            rule=lambda state: state.can_reach(RAC3REGION.HOLOSTAR_STUDIOS, player=world.player))
 
     # ----- Dummy regions for weapon upgrade organization -----#
 

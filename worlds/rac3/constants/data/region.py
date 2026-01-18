@@ -20,11 +20,13 @@ class RAC3REGIONDATA:
                  slot: Optional[int] = None,
                  checkpoint: Optional[RAC3POSITIONDATA] = None,
                  pause_address: Optional[int] = None,
+                 planet_to_load_address: Optional[int] = None,
                  respawn_coords_address: Optional[int] = None):
         self.ID: Optional[int] = idx
         self.SLOT_ADDRESS: Optional[int] = slot
         self.CHECKPOINT: Optional[RAC3POSITIONDATA] = checkpoint
         self.PAUSE_ADDRESS: Optional[int] = pause_address
+        self.PLANET_TO_LOAD: Optional[int] = planet_to_load_address
         self.RESPAWN_COORDS_ADDRESS: Optional[int] = respawn_coords_address
 
     @staticmethod
@@ -35,13 +37,15 @@ class RAC3REGIONDATA:
 
     @staticmethod
     def construct_planet(idx: int):
+        """Generic planet constructor, makes each planet into region data given the data in the RAC3_REGION_DATA_TABLE"""
         name = PLANET_NAME_FROM_ID[idx]
-        planet_address = PLANET_MENU_OFFSET[name] + RAC3STATUS.PAUSE_BASE
+        pause = PLANET_MENU_OFFSET[name] + RAC3STATUS.PAUSE_BASE
+        load = PLANET_MENU_OFFSET[name] + RAC3STATUS.PLANET_LOAD_BASE
         checkpoint = PLANET_CHECKPOINT.get(name, None)
         respawn_coords_address = RESPAWN_COORDS_OFFSET.get(name, None)
         if respawn_coords_address is not None:  # Not all planets should have respawn coords changed
             respawn_coords_address += RAC3STATUS.RESPAWN_BASE
-        return RAC3REGIONDATA(idx, checkpoint=checkpoint, pause_address=planet_address,
+        return RAC3REGIONDATA(idx, checkpoint=checkpoint, pause_address=pause, planet_to_load_address=load,
                               respawn_coords_address=respawn_coords_address)
 
 

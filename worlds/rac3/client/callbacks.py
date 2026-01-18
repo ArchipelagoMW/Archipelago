@@ -6,12 +6,13 @@ from NetUtils import ClientStatus
 from worlds.rac3 import RAC3OPTION
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.texthelper import get_rich_item_name
-from worlds.rac3.constants.data.location import LOCATION_TO_INFOBOT_FLAG, RAC3_LOCATION_DATA_TABLE, REGION_TO_INFOBOT_LOCATION
+from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
+from worlds.rac3.constants.input import RAC3INPUT
+from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_color import RAC3TEXTCOLOR
 from worlds.rac3.constants.region import RAC3REGION
-from worlds.rac3.constants.status import RAC3STATUS
 
 ##################################################
 # Only change point: Change filename/Class name  #
@@ -28,6 +29,7 @@ if TYPE_CHECKING:
 async def update(ctx: 'Context') -> None:
     """Called continuously"""
     ctx.game_interface.early_update()
+    await handle_intro_skip(ctx)
     # Check received items
     await handle_received_items(ctx)
     # Check collected locations
@@ -140,7 +142,7 @@ async def handle_deathlink(ctx: 'Context') -> None:
             logger.debug(f'Sent Death, queue: {ctx.queued_deaths}')
 
 
-async def handle_respawn(ctx: 'Context', skip_inputs: bool = False) -> bool:
+async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load: bool = False) -> bool:
     """Check if the player should respawn"""
     if ctx.game_interface.is_reloading:
         return False
@@ -152,25 +154,44 @@ async def handle_respawn(ctx: 'Context', skip_inputs: bool = False) -> bool:
     if planet_data.ID > 55:
         return False
     if planet_data.PAUSE_ADDRESS is not None:  # Vid comics do not have a pause address
-        if ctx.game_interface.respawn_inputs() or skip_inputs:
+        if ctx.game_interface.check_inputs(RAC3INPUT.SQUARE, True) or force_respawn:
             ctx.game_interface.unpause_game()
             ctx.game_interface.teleport_to_ship()
             return True
+        if ctx.game_interface.check_intro():
+            if force_load:
+                logger.error(f'Player cannot homewarp right now')
+            elif force_respawn:
+                logger.error(f'Player cannot respawn right now')
+            return False
+        if ctx.game_interface.check_inputs(RAC3INPUT.RELOAD, True) or force_load:
+            ctx.game_interface.unpause_game()
+            ctx.game_interface.homewarp()
+            return True
+    if ctx.game_interface.check_inputs(RAC3INPUT.RELOAD, False) or force_load:
+        ctx.game_interface.homewarp()
+        return True
     return False
 
-async def handle_sequence_break(ctx: 'Context') -> None:
-    """Undos the flags for infobot locations when sequence breaking if you havent checked the corresponding location yet"""
+
+async def handle_intro_skip(ctx: 'Context') -> None:
+    """Checks if the intro skip option is enabled, then skips veldin and sets required story/mission flags"""
     if ctx.slot_data is None:
         return
+    if ctx.slot_data.get(RAC3OPTION.INTRO_SKIP, False) and ctx.current_planet == RAC3REGION.VELDIN:
+        ctx.game_interface.set_flag(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.VELDIN_FIRST_RANGER].CHECK_ADDRESS)
+        ctx.game_interface.set_flag(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.VELDIN_SECOND_RANGER].CHECK_ADDRESS)
+        ctx.game_interface.set_flag(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.VELDIN_SAVE_VELDIN].CHECK_ADDRESS)
+        ctx.game_interface.homewarp()
 
-    current_planet = ctx.game_interface.planet
-    infobot_location = REGION_TO_INFOBOT_LOCATION.get(current_planet, None)
-    if (infobot_location is not None and infobot_location in RAC3_LOCATION_DATA_TABLE):
-        infobot_flag = LOCATION_TO_INFOBOT_FLAG.get(infobot_location, None)
-        if (infobot_flag is not None
-            and not RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE in ctx.checked_locations
-            and infobot_flag != RAC3STATUS.ALLOW_SHIP):
-            ctx.game_interface._write8(infobot_flag, 0)
+
+async def handle_sequence_break(ctx: 'Context') -> None:
+    """Undos the flags for infobot locations when sequence breaking if you haven't checked the corresponding location
+    yet"""
+    if ctx.slot_data is None:
+        return
+    ctx.game_interface.sequence_break(ctx.checked_locations)
+
 
 async def handle_check_goal(ctx: 'Context') -> None:
     """Checks if the goal is completed"""

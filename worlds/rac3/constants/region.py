@@ -20,7 +20,7 @@ class RAC3REGION:
     OBANI_GEMINI = "Obani Gemini"
     BLACKWATER_CITY = "Blackwater City"
     HOLOSTAR_STUDIOS = "Holostar Studios"
-    SKIDD_CUTSCENE = "Skidd Cutscene"
+    SKIDD_CUTSCENE = "Galaxy Burger"
     KOROS = "Koros"
     UNUSED = "Unused"
     METROPOLIS = "Metropolis"

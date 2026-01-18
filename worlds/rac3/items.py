@@ -2,8 +2,9 @@ from logging import DEBUG, getLogger
 from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from worlds.rac3.constants.data.item import (goal_data, item_counts, item_table, NAME_TO_PROG_DICT,
-                                             non_prog_weapon_data, prog_weapon_data, progressive_data, RAC3ITEMDATA)
+from worlds.rac3.constants.data.item import (goal_data, infobot_data, item_counts, item_table, NAME_TO_PROG_DICT,
+                                             non_prog_weapon_data, PROG_TO_NAME_DICT, prog_weapon_data,
+                                             progressive_data, RAC3ITEMDATA)
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
@@ -39,10 +40,11 @@ def create_itempool(world: "RaC3World") -> list[Item]:
 
         # Already placed items (Starting items and vanilla)
         if name in world.preplaced_items:
-            if item_amount == 1:
+            count = world.preplaced_items.count(name)
+            if item_amount <= count:
                 continue
             else:
-                item_amount -= 1  # remove one from the pool as it has already been placed
+                item_amount -= count  # remove one from the pool as it has already been placed
 
         # Progressive Weapons option
         if not options.enable_progressive_weapons.value:
@@ -89,16 +91,15 @@ def create_item(world: "RaC3World", name: str) -> Item:
     return GameItem(name, data.AP_CLASSIFICATION, data.AP_CODE, world.player)
 
 
-def get_filler_item_selection(world: "RaC3World"):
+def get_filler_selection(world: "RaC3World"):
     frequencies = world.options.filler_weight.value
     if world.options.enable_progressive_weapons.value:
         frequencies[RAC3ITEM.WEAPON_XP] = 0
     if world.options.traps_enabled.value:
         traps = world.options.trap_weight.value
         frequencies.update(traps)
-
     if not frequencies or all(count == 0 for count in frequencies.values()):
-        frequencies[RAC3ITEM.BOLTS] = 1 # set bolts to be the only filler if the filler weights are empty
+        frequencies[RAC3ITEM.BOLTS] = 1  # set bolts to be the only filler if the filler weights are empty
         # error = "No filler items available. Please enable some filler items."
         # if world.options.enable_progressive_weapons.value:
         #     error += " Progressive Weapons option is enabled, so 'Weapon XP' cannot be used as a filler item."
@@ -108,16 +109,73 @@ def get_filler_item_selection(world: "RaC3World"):
     return [name for name, count in frequencies.items() for _ in range(count)]
 
 
-def starting_weapons(world: "RaC3World", dictionary: dict[str, int]) -> list[str]:
+def process_start_inventory(world: "RaC3World") -> list[str]:
+    itemlist: list[str] = []
+    if not world.options.enable_progressive_weapons.value:
+        for item in PROG_TO_NAME_DICT.keys():
+            if world.options.start_inventory_from_pool.value.get(item, None):
+                world.options.start_inventory_from_pool.value.pop(item)
+                world.options.start_inventory_from_pool.value[PROG_TO_NAME_DICT[item]] = 1
+    else:
+        for item in NAME_TO_PROG_DICT.keys():
+            if world.options.start_inventory_from_pool.value.get(item, None):
+                count = world.options.start_inventory_from_pool.value[item]
+                world.options.start_inventory_from_pool.value.pop(item)
+                world.options.start_inventory_from_pool.value[NAME_TO_PROG_DICT[item]] += count
+    world.options.start_inventory_from_pool.value.pop(RAC3ITEM.VELDIN, None)
+    for item, count in world.options.start_inventory_from_pool.items():
+        itemlist.extend([item for _ in range(count)])
+    return itemlist
+
+
+def starting_weapons(world: "RaC3World") -> list[str]:
     weapon_list: list[str] = []
-    for name in dictionary:
-        count = dictionary[name]
+    for name in world.options.starting_weapons.value:
+        count = world.options.starting_weapons.value[name]
         if count == 0:
             continue
         if world.options.enable_progressive_weapons.value:
-            for _ in range(count):
-                weapon_list.append(NAME_TO_PROG_DICT[name])
+            new_name = NAME_TO_PROG_DICT[name]
+            preplaced_count = world.preplaced_items.count(new_name)
+            if preplaced_count <= item_counts[new_name] - 2:
+                for _ in range(count):
+                    weapon_list.append(new_name)
+            elif preplaced_count == item_counts[new_name] - 1:
+                weapon_list.append(new_name)
         else:
-            weapon_list.append(name)
+            if name not in world.preplaced_items:
+                weapon_list.append(name)
     world.random.shuffle(weapon_list)
     return weapon_list[:2]
+
+
+def starting_planets(world: "RaC3World") -> list[str]:
+    planet_list: list[str] = [infobot for infobot in infobot_data.keys() if infobot not in world.preplaced_items]
+    if RAC3ITEM.MUSEUM in planet_list:
+        planet_list.remove(RAC3ITEM.MUSEUM)
+    if len(planet_list) > 1:
+        world.random.shuffle(planet_list)
+        if world.options.intro_skip.value:
+            if RAC3ITEM.STARSHIP_PHOENIX in planet_list:
+                if planet_list[0] != RAC3ITEM.STARSHIP_PHOENIX:
+                    planet_list = [planet_list[0], RAC3ITEM.STARSHIP_PHOENIX]
+                else:
+                    planet_list = [planet_list[1], RAC3ITEM.STARSHIP_PHOENIX]
+            else:
+                planet_list = planet_list[:2]
+        else:
+            if RAC3ITEM.FLORANA in planet_list and RAC3ITEM.STARSHIP_PHOENIX in planet_list:
+                planet_list = [RAC3ITEM.FLORANA, RAC3ITEM.STARSHIP_PHOENIX]
+            elif RAC3ITEM.FLORANA in planet_list:
+                if planet_list[0] != RAC3ITEM.FLORANA:
+                    planet_list = [RAC3ITEM.FLORANA, planet_list[0]]
+                else:
+                    planet_list = planet_list[:2]
+            elif RAC3ITEM.STARSHIP_PHOENIX in planet_list:
+                if planet_list[0] != RAC3ITEM.STARSHIP_PHOENIX:
+                    planet_list = [planet_list[0], RAC3ITEM.STARSHIP_PHOENIX]
+                else:
+                    planet_list = [planet_list[1], RAC3ITEM.STARSHIP_PHOENIX]
+            else:
+                planet_list = planet_list[:2]
+    return planet_list
