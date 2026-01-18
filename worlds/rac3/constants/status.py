@@ -96,3 +96,4 @@ class RAC3STATUS:
     DISARM = 0x001A71CD
     WRENCH_ONLY = 0x001A71C8 # Used when Ratchet is in water, but only allows wrench on land.
     IN_VEHICLE = 0x001A71CF
+    HOLOSTAR_CLANKFIX = 0x00142713 #Same address as Holostar: Return to your ship, needed for Clank fix

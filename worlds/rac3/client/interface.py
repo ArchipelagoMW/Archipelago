@@ -924,8 +924,8 @@ class Rac3Interface(GameInterface):
                         case RAC3STATUS.WRENCH_ONLY:
                             self._write8(status, 2)
                         case RAC3STATUS.DISARM:
-                            if RAC3STATUS.IN_VEHICLE == 0:
-                                self._write8(status, 0)
+                            if self._read8(RAC3STATUS.IN_VEHICLE) == 0:
+                                self._write8(status, 1)
                         case _:
                             self._write8(status, 1)
             else:
@@ -1396,7 +1396,7 @@ class Rac3Interface(GameInterface):
 
     def clank_cycler(self):
         # Special cases where Clank is already removed
-        if self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(0x00142713) == 0:
+        if self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(RAC3STATUS.HOLOSTAR_CLANKFIX) == 0:
             self._write16(RAC3STATUS.NO_CLANK, 1)
         elif self.planet == RAC3REGION.AQUATOS_BASE:
             self._write16(RAC3STATUS.NO_CLANK, 1)
