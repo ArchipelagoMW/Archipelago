@@ -899,10 +899,6 @@ class Rac3Interface(GameInterface):
             count += 1
         logger.info(f'Current planet Tracked: {self.planet}')
         logger.info(f'Ship Slot Limit: {self.ship_slot_limit}')
-        logger.info(
-            f'Softlock Prevention:\nHolostar Studios - '
-            f'{self.softlock_prevention_check(RAC3REGION.HOLOSTAR_STUDIOS)}\nQwarks Hideout - '
-            f'{self.softlock_prevention_check(RAC3REGION.QWARKS_HIDEOUT)}')
         logger.info(f'Slot Data: {slot_data}')
 
     def multiplier_cycler(self):
@@ -1340,19 +1336,6 @@ class Rac3Interface(GameInterface):
         self._write32(self._read32(RAC3MESSAGEBOX.EDGE_COLOR_POINTER), default_theme.BOX)
         self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), default_theme.BOX)
         self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), default_theme.TEXT)
-
-    def softlock_prevention_check(self, planet: str) -> bool:
-        match planet:
-            case RAC3REGION.QWARKS_HIDEOUT:
-                return (self.UnlockItem[RAC3ITEM.QWARKS_HIDEOUT].status > 0 and
-                        (self.UnlockItem[RAC3ITEM.REFRACTOR].status == 0))
-            case RAC3REGION.HOLOSTAR_STUDIOS:
-                return (self.UnlockItem[RAC3ITEM.HOLOSTAR_STUDIOS].status > 0 and
-                        (self.UnlockItem[RAC3ITEM.HACKER].status == 0 or
-                         self.UnlockItem[RAC3ITEM.HYPERSHOT].status == 0))
-            case _:
-                pass
-        return False
 
     def find_pda_vendor(self) -> int | str:
         """Traverse the moby linked list on Qwarks Hideout to find the PDA vendor moby and return its address"""
