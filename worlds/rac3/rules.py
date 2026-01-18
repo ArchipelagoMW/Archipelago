@@ -289,8 +289,7 @@ def set_rules(world: "RaC3World"):
         RAC3LOCATION.NATION_QWARKTASTIC_BATTLE: lambda state: state.has(RAC3ITEM.VICTORY, world.player),
         # RAC3LOCATION.NATION_HEAT_STREET
         RAC3LOCATION.NATION_CRISPY_CRITTER:
-            lambda state: state.can_reach_location(RAC3LOCATION.NATION_HEAT_STREET, player=world.player) and
-                          state.has(RAC3ITEM.CLANK, world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.NATION_HEAT_STREET, player=world.player),
         RAC3LOCATION.NATION_PYRO_PLAYGROUND:
             lambda state: state.can_reach_location(RAC3LOCATION.NATION_CRISPY_CRITTER, player=world.player),
         RAC3LOCATION.NATION_SUICIDE_RUN:
@@ -439,7 +438,7 @@ def set_rules(world: "RaC3World"):
         # RAC3TBOLT.TYHRRANOSIS_CANNON
         RAC3TROPHY.TYHRRANOSIS_AL: lambda state: state.has(RAC3ITEM.CLANK, world.player),
         RAC3TBOLT.TYHRRANOSIS_CAVE: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
-        RAC3LOCATION.TYHRRANOSIS_BOSS: lambda state: state.has(RAC3ITEM.CLANK,world.player),
+        #RAC3LOCATION.TYHRRANOSIS_BOSS: lambda state: state.has(RAC3ITEM.CLANK,world.player),
         RAC3LOCATION.TYHRRANOSIS_RANGERS_1:
             lambda state: state.can_reach_location(RAC3LOCATION.TYHRRANOSIS_BOSS, player=world.player),
         RAC3LOCATION.TYHRRANOSIS_RANGERS_2:
@@ -486,7 +485,7 @@ def set_rules(world: "RaC3World"):
 
         # RAC3LOCATION.SKIDD_CAPTURED
 
-        RAC3LOCATION.DRACO_COURTNEY: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.CLANK], world.player),
+        RAC3LOCATION.DRACO_COURTNEY: lambda state: state.has([RAC3ITEM.GRAV_BOOTS], world.player),
 
         # RAC3TBOLT.ZELDRIN_STARPORT_1
         RAC3TBOLT.ZELDRIN_STARPORT_2: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.CLANK], world.player),
