@@ -22,6 +22,7 @@ from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
+from pathspec import PathSpec, GitIgnoreSpec
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
@@ -385,6 +386,14 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
                 json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
+
+
+def read_apignore(filename: str | pathlib.Path) -> PathSpec | None:
+    try:
+        with open(filename) as ignore_file:
+            return GitIgnoreSpec.from_lines(ignore_file)
+    except FileNotFoundError:
+        return None
 
 
 def get_default_adjuster_settings(game_name: str) -> Namespace:
