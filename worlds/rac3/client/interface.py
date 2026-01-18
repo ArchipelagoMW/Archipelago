@@ -256,6 +256,7 @@ class Rac3Interface(GameInterface):
     ship_slot_limit: int = 0
     one_hp_challenge: dict[str, bool] = None
     pda_vendor: int = 0
+    last_in_vehicle_time: float = 0.0
 
     # Called at once when client started
     def init(self):
@@ -286,6 +287,7 @@ class Rac3Interface(GameInterface):
         self.inside_hacker_puzzle = self._read8(RAC3STATUS.HELD_ITEM) == RAC3_ITEM_DATA_TABLE[RAC3ITEM.HACKER].ID
         self.message_display = bool(self._read_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER)))
 
+        self.vehicle_check()
         self.pause_check()
         if self.self_respawning:
             if not self.is_reloading:
@@ -1083,7 +1085,7 @@ class Rac3Interface(GameInterface):
         """Detects if the game is currently being reloaded, and updates death data"""
         if self.is_reloading and not self.reloading_handled and not self.self_respawning:
             self.last_death_state = self.action
-            self.died_in_vehicle = bool(self._read8(RAC3STATUS.IN_VEHICLE))
+            self.died_in_vehicle = time.time() - self.last_in_vehicle_time < 1.5
             self.reloading_handled = True
             logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state},'
                          f' death count: {self.last_death_count}, in vehicle? {self.died_in_vehicle}')
@@ -1096,6 +1098,20 @@ class Rac3Interface(GameInterface):
                          f' {self.has_died}')
         else:
             self.has_died = False
+    
+    def vehicle_check(self):
+        """
+        Updates the last_in_vehicle_time when the player is in a vehicle.
+        Used to detect if the player died while in a vehicle for deathlink.
+        """
+        current_time = time.time()
+        if self.vehicle:
+            self.last_in_vehicle_time = current_time
+        
+        # Special case for vehicles that eject you and kill you after some time
+        if current_time - self.last_in_vehicle_time < 1 and self.action == 0x39:
+            self.last_in_vehicle_time = current_time
+            
 
     def pause_check(self):
         if self.planet not in RAC3_REGION_DATA_TABLE.keys():
