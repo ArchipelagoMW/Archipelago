@@ -742,7 +742,7 @@ wargroove2_option_groups = [
             AIPortLateDistanceCost,
             AIPortRandomLowCost,
             AIPortRandomHighCost
-        ]),
+        ], start_collapsed=True),
         OptionGroup("Level Playlists", [
             CustomEarlyLevelPlaylist,
             CustomMainLevelPlaylist,

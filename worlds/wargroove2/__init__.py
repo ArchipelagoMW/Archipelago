@@ -79,10 +79,18 @@ class Wargroove2World(World):
     random_tower_cost_values: typing.List[int] = []
     random_hideout_cost_values: typing.List[int] = []
     random_port_cost_values: typing.List[int] = []
+    ai_random_barracks_cost_values: typing.List[int] = []
+    ai_random_tower_cost_values: typing.List[int] = []
+    ai_random_hideout_cost_values: typing.List[int] = []
+    ai_random_port_cost_values: typing.List[int] = []
     player_barracks_costs: typing.Dict[int, float] = {}
     player_tower_costs: typing.Dict[int, float] = {}
     player_hideout_costs: typing.Dict[int, float] = {}
     player_port_costs: typing.Dict[int, float] = {}
+    ai_barracks_costs: typing.Dict[int, float] = {}
+    ai_tower_costs: typing.Dict[int, float] = {}
+    ai_hideout_costs: typing.Dict[int, float] = {}
+    ai_port_costs: typing.Dict[int, float] = {}
 
     item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
     location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
@@ -99,6 +107,14 @@ class Wargroove2World(World):
         self.random_hideout_cost_values = [self.random.randrange(0, 100)
                                             for _ in range(LEVEL_COUNT + FINAL_LEVEL_COUNT)]
         self.random_port_cost_values = [self.random.randrange(0, 100)
+                                            for _ in range(LEVEL_COUNT + FINAL_LEVEL_COUNT)]
+        self.ai_random_barracks_cost_values = [self.random.randrange(0, 100)
+                                            for _ in range(LEVEL_COUNT + FINAL_LEVEL_COUNT)]
+        self.ai_random_tower_cost_values = [self.random.randrange(0, 100)
+                                            for _ in range(LEVEL_COUNT + FINAL_LEVEL_COUNT)]
+        self.ai_random_hideout_cost_values = [self.random.randrange(0, 100)
+                                            for _ in range(LEVEL_COUNT + FINAL_LEVEL_COUNT)]
+        self.ai_random_port_cost_values = [self.random.randrange(0, 100)
                                             for _ in range(LEVEL_COUNT + FINAL_LEVEL_COUNT)]
 
         if self.options.level_shuffle_seed.value == 0:
@@ -252,6 +268,42 @@ class Wargroove2World(World):
                                        world.options.player_port_random_high_cost.value / 100.0,
                                        highest_wg2_sphere, world.random_port_cost_values,
                                        player_to_sphere, world)
+            world.ai_barracks_costs = calculate_production_costs(
+                                       world.options.ai_barracks_early_sphere.value / 100.0,
+                                       world.options.ai_barracks_late_sphere.value / 100.0,
+                                       world.options.ai_barracks_early_distance.value / 100.0,
+                                       world.options.ai_barracks_late_distance.value / 100.0,
+                                       world.options.ai_barracks_random_low_cost.value / 100.0,
+                                       world.options.ai_barracks_random_high_cost.value / 100.0,
+                                       highest_wg2_sphere, world.ai_random_barracks_cost_values,
+                                       player_to_sphere, world)
+            world.ai_tower_costs = calculate_production_costs(
+                                       world.options.ai_tower_early_sphere.value / 100.0,
+                                       world.options.ai_tower_late_sphere.value / 100.0,
+                                       world.options.ai_tower_early_distance.value / 100.0,
+                                       world.options.ai_tower_late_distance.value / 100.0,
+                                       world.options.ai_tower_random_low_cost.value / 100.0,
+                                       world.options.ai_tower_random_high_cost.value / 100.0,
+                                       highest_wg2_sphere, world.ai_random_tower_cost_values,
+                                       player_to_sphere, world)
+            world.ai_hideout_costs = calculate_production_costs(
+                                       world.options.ai_hideout_early_sphere.value / 100.0,
+                                       world.options.ai_hideout_late_sphere.value / 100.0,
+                                       world.options.ai_hideout_early_distance.value / 100.0,
+                                       world.options.ai_hideout_late_distance.value / 100.0,
+                                       world.options.ai_hideout_random_low_cost.value / 100.0,
+                                       world.options.ai_hideout_random_high_cost.value / 100.0,
+                                       highest_wg2_sphere, world.ai_random_hideout_cost_values,
+                                       player_to_sphere, world)
+            world.ai_port_costs = calculate_production_costs(
+                                       world.options.ai_port_early_sphere.value / 100.0,
+                                       world.options.ai_port_late_sphere.value / 100.0,
+                                       world.options.ai_port_early_distance.value / 100.0,
+                                       world.options.ai_port_late_distance.value / 100.0,
+                                       world.options.ai_port_random_low_cost.value / 100.0,
+                                       world.options.ai_port_random_high_cost.value / 100.0,
+                                       highest_wg2_sphere, world.ai_random_port_cost_values,
+                                       player_to_sphere, world)
 
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         slot_data = {'seed': "".join(self.random.choice(string.ascii_letters) for _ in range(16))}
@@ -274,14 +326,22 @@ class Wargroove2World(World):
             slot_data[f"Level Tower Cost #{i}"] = f"{self.player_tower_costs[i]:.2f}"
             slot_data[f"Level Hideout Cost #{i}"] = f"{self.player_hideout_costs[i]:.2f}"
             slot_data[f"Level Port Cost #{i}"] = f"{self.player_port_costs[i]:.2f}"
+            slot_data[f"Level AI Barracks Cost #{i}"] = f"{self.ai_barracks_costs[i]:.2f}"
+            slot_data[f"Level AI Tower Cost #{i}"] = f"{self.ai_tower_costs[i]:.2f}"
+            slot_data[f"Level AI Hideout Cost #{i}"] = f"{self.ai_hideout_costs[i]:.2f}"
+            slot_data[f"Level AI Port Cost #{i}"] = f"{self.ai_port_costs[i]:.2f}"
             for location_name in self.level_list[i].location_rules.keys():
                 slot_data[location_name] = region_names[i]
         for i in range(0, FINAL_LEVEL_COUNT):
             slot_data[f"Final Level File #{i}"] = self.final_levels[i].file_name
             slot_data[f"Level Barracks Cost #{i + LEVEL_COUNT}"] = f"{self.player_barracks_costs[i + LEVEL_COUNT]:.2f}"
-            slot_data[f"Level Tower Cost #{i+ LEVEL_COUNT}"] = f"{self.player_tower_costs[i + LEVEL_COUNT]:.2f}"
-            slot_data[f"Level Hideout Cost #{i+ LEVEL_COUNT}"] = f"{self.player_hideout_costs[i + LEVEL_COUNT]:.2f}"
-            slot_data[f"Level Port Cost #{i+ LEVEL_COUNT}"] = f"{self.player_port_costs[i + LEVEL_COUNT]:.2f}"
+            slot_data[f"Level Tower Cost #{i + LEVEL_COUNT}"] = f"{self.player_tower_costs[i + LEVEL_COUNT]:.2f}"
+            slot_data[f"Level Hideout Cost #{i + LEVEL_COUNT}"] = f"{self.player_hideout_costs[i + LEVEL_COUNT]:.2f}"
+            slot_data[f"Level Port Cost #{i + LEVEL_COUNT}"] = f"{self.player_port_costs[i + LEVEL_COUNT]:.2f}"
+            slot_data[f"Level AI Barracks Cost #{i + LEVEL_COUNT}"] = f"{self.ai_barracks_costs[i + LEVEL_COUNT]:.2f}"
+            slot_data[f"Level AI Tower Cost #{i + LEVEL_COUNT}"] = f"{self.ai_tower_costs[i + LEVEL_COUNT]:.2f}"
+            slot_data[f"Level AI Hideout Cost #{i + LEVEL_COUNT}"] = f"{self.ai_hideout_costs[i + LEVEL_COUNT]:.2f}"
+            slot_data[f"Level AI Port Cost #{i + LEVEL_COUNT}"] = f"{self.ai_port_costs[i + LEVEL_COUNT]:.2f}"
         slot_data[FINAL_LEVEL_1] = self.final_levels[0].name
         for location_name in self.final_levels[0].location_rules.keys():
             slot_data[location_name] = FINAL_LEVEL_1

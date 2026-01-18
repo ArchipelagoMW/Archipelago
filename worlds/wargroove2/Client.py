@@ -33,6 +33,75 @@ wg2_logger = logging.getLogger("WG2")
 
 
 class Wargroove2ClientCommandProcessor(ClientCommandProcessor):
+    def _cmd_toggle_costs(self):
+        """Toggles dynamic unit costs On/Off"""
+        if isinstance(self.ctx, Wargroove2Context):
+            self.ctx.has_dynamic_cost = not self.ctx.has_dynamic_cost
+            if self.ctx.has_dynamic_cost:
+                for i in range(0, LEVEL_COUNT):
+                    production_cost_filename = f"Cost_{i + 1}.json"
+                    player_barracks_cost = int(float(self.ctx.slot_data[f"Level Barracks Cost #{i}"]) * 100)
+                    player_tower_cost = int(float(self.ctx.slot_data[f"Level Tower Cost #{i}"]) * 100)
+                    player_hideout_cost = int(float(self.ctx.slot_data[f"Level Hideout Cost #{i}"]) * 100)
+                    player_port_cost = int(float(self.ctx.slot_data[f"Level Port Cost #{i}"]) * 100)
+                    ai_barracks_cost = int(float(self.ctx.slot_data[f"Level AI Barracks Cost #{i}"]) * 100)
+                    ai_tower_cost = int(float(self.ctx.slot_data[f"Level AI Tower Cost #{i}"]) * 100)
+                    ai_hideout_cost = int(float(self.ctx.slot_data[f"Level AI Hideout Cost #{i}"]) * 100)
+                    ai_port_cost = int(float(self.ctx.slot_data[f"Level AI Port Cost #{i}"]) * 100)
+                    with open(os.path.join(self.ctx.game_communication_path, production_cost_filename), 'w') as f:
+                        json.dump({"player_barracks_cost": player_barracks_cost,
+                                   "player_tower_cost": player_tower_cost,
+                                   "player_hideout_cost": player_hideout_cost,
+                                   "player_port_cost": player_port_cost,
+                                   "ai_barracks_cost": ai_barracks_cost,
+                                   "ai_tower_cost": ai_tower_cost,
+                                   "ai_hideout_cost": ai_hideout_cost,
+                                   "ai_port_cost": ai_port_cost}, f)
+                for i in range(0, FINAL_LEVEL_COUNT):
+                    production_cost_filename = f"Cost_{i + LEVEL_COUNT + 1}.json"
+                    player_barracks_cost = int(float(self.ctx.slot_data[f"Level Barracks Cost #{i + LEVEL_COUNT}"])*100)
+                    player_tower_cost = int(float(self.ctx.slot_data[f"Level Tower Cost #{i + LEVEL_COUNT}"]) * 100)
+                    player_hideout_cost = int(float(self.ctx.slot_data[f"Level Hideout Cost #{i + LEVEL_COUNT}"]) * 100)
+                    player_port_cost = int(float(self.ctx.slot_data[f"Level Port Cost #{i + LEVEL_COUNT}"]) * 100)
+                    ai_barracks_cost = int(float(self.ctx.slot_data[f"Level AI Barracks Cost #{i + LEVEL_COUNT}"]) *100)
+                    ai_tower_cost = int(float(self.ctx.slot_data[f"Level AI Tower Cost #{i + LEVEL_COUNT}"]) * 100)
+                    ai_hideout_cost = int(float(self.ctx.slot_data[f"Level AI Hideout Cost #{i + LEVEL_COUNT}"]) * 100)
+                    ai_port_cost = int(float(self.ctx.slot_data[f"Level AI Port Cost #{i + LEVEL_COUNT}"]) * 100)
+                    with open(os.path.join(self.ctx.game_communication_path, production_cost_filename), 'w') as f:
+                        json.dump({"player_barracks_cost": player_barracks_cost,
+                                   "player_tower_cost": player_tower_cost,
+                                   "player_hideout_cost": player_hideout_cost,
+                                   "player_port_cost": player_port_cost,
+                                   "ai_barracks_cost": ai_barracks_cost,
+                                   "ai_tower_cost": ai_tower_cost,
+                                   "ai_hideout_cost": ai_hideout_cost,
+                                   "ai_port_cost": ai_port_cost}, f)
+                self.output(f"Dynamic unit costs are enabled.")
+            else:
+                for i in range(0, LEVEL_COUNT):
+                    production_cost_filename = f"Cost_{i + 1}.json"
+                    with open(os.path.join(self.ctx.game_communication_path, production_cost_filename), 'w') as f:
+                        json.dump({"player_barracks_cost": 100,
+                                   "player_tower_cost": 100,
+                                   "player_hideout_cost": 100,
+                                   "player_port_cost": 100,
+                                   "ai_barracks_cost": 100,
+                                   "ai_tower_cost": 100,
+                                   "ai_hideout_cost": 100,
+                                   "ai_port_cost": 100}, f)
+                for i in range(0, FINAL_LEVEL_COUNT):
+                    production_cost_filename = f"Cost_{i + LEVEL_COUNT + 1}.json"
+                    with open(os.path.join(self.ctx.game_communication_path, production_cost_filename), 'w') as f:
+                        json.dump({"player_barracks_cost": 100,
+                                   "player_tower_cost": 100,
+                                   "player_hideout_cost": 100,
+                                   "player_port_cost": 100,
+                                   "ai_barracks_cost": 100,
+                                   "ai_tower_cost": 100,
+                                   "ai_hideout_cost": 100,
+                                   "ai_port_cost": 100}, f)
+                self.output(f"Dynamic unit costs are disabled.")
+
     def _cmd_sacrifice_summon(self):
         """Toggles sacrifices and summons On/Off"""
         if isinstance(self.ctx, Wargroove2Context):
@@ -93,6 +162,7 @@ class Wargroove2Context(CommonContext):
     starting_groove_multiplier: int = 0
     has_death_link: bool = False
     has_sacrifice_summon: bool = True
+    has_dynamic_cost: bool = True
     victory_locations: int = 1
     objective_locations: int = 1
     final_levels: int = 1
@@ -237,6 +307,7 @@ class Wargroove2Context(CommonContext):
             self.has_death_link = self.slot_data.get("death_link", False)
             self.final_levels = self.slot_data.get("final_levels", 1)
             self.level_shuffle_seed = self.slot_data.get("level_shuffle_seed", 0)
+            self.has_dynamic_cost = True
             filename = f"AP_settings.json"
             with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                 json.dump(args["slot_data"], f)
@@ -269,6 +340,10 @@ class Wargroove2Context(CommonContext):
                 player_tower_cost = int(float(self.slot_data[f"Level Tower Cost #{i}"]) * 100)
                 player_hideout_cost = int(float(self.slot_data[f"Level Hideout Cost #{i}"]) * 100)
                 player_port_cost = int(float(self.slot_data[f"Level Port Cost #{i}"]) * 100)
+                ai_barracks_cost = int(float(self.slot_data[f"Level AI Barracks Cost #{i}"]) * 100)
+                ai_tower_cost = int(float(self.slot_data[f"Level AI Tower Cost #{i}"]) * 100)
+                ai_hideout_cost = int(float(self.slot_data[f"Level AI Hideout Cost #{i}"]) * 100)
+                ai_port_cost = int(float(self.slot_data[f"Level AI Port Cost #{i}"]) * 100)
                 file_data = pkgutil.get_data("worlds.wargroove2", os.path.join(self.level_directory,
                                                                                level_file_name))
                 if file_data is None:
@@ -280,7 +355,11 @@ class Wargroove2Context(CommonContext):
                         json.dump({"player_barracks_cost": player_barracks_cost,
                                    "player_tower_cost": player_tower_cost,
                                    "player_hideout_cost": player_hideout_cost,
-                                   "player_port_cost": player_port_cost}, f)
+                                   "player_port_cost": player_port_cost,
+                                   "ai_barracks_cost": ai_barracks_cost,
+                                   "ai_tower_cost": ai_tower_cost,
+                                   "ai_hideout_cost": ai_hideout_cost,
+                                   "ai_port_cost": ai_port_cost}, f)
             for i in range(0, FINAL_LEVEL_COUNT):
                 filename = f"AP_{i + LEVEL_COUNT + 1}.map"
                 production_cost_filename = f"Cost_{i + LEVEL_COUNT + 1}.json"
@@ -289,6 +368,10 @@ class Wargroove2Context(CommonContext):
                 player_tower_cost = int(float(self.slot_data[f"Level Tower Cost #{i + LEVEL_COUNT}"]) * 100)
                 player_hideout_cost = int(float(self.slot_data[f"Level Hideout Cost #{i + LEVEL_COUNT}"]) * 100)
                 player_port_cost = int(float(self.slot_data[f"Level Port Cost #{i + LEVEL_COUNT}"]) * 100)
+                ai_barracks_cost = int(float(self.slot_data[f"Level AI Barracks Cost #{i + LEVEL_COUNT}"]) * 100)
+                ai_tower_cost = int(float(self.slot_data[f"Level AI Tower Cost #{i + LEVEL_COUNT}"]) * 100)
+                ai_hideout_cost = int(float(self.slot_data[f"Level AI Hideout Cost #{i + LEVEL_COUNT}"]) * 100)
+                ai_port_cost = int(float(self.slot_data[f"Level AI Port Cost #{i + LEVEL_COUNT}"]) * 100)
                 file_data = pkgutil.get_data("worlds.wargroove2", os.path.join(self.level_directory,
                                                                                level_file_name))
                 if file_data is None:
@@ -300,7 +383,11 @@ class Wargroove2Context(CommonContext):
                         json.dump({"player_barracks_cost": player_barracks_cost,
                                    "player_tower_cost": player_tower_cost,
                                    "player_hideout_cost": player_hideout_cost,
-                                   "player_port_cost": player_port_cost}, f)
+                                   "player_port_cost": player_port_cost,
+                                   "ai_barracks_cost": ai_barracks_cost,
+                                   "ai_tower_cost": ai_tower_cost,
+                                   "ai_hideout_cost": ai_hideout_cost,
+                                   "ai_port_cost": ai_port_cost}, f)
 
             # Available Commanders:
             total_enabled_commanders = args["slot_data"].get("enabled_commanders_length", 0)
