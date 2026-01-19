@@ -21,7 +21,7 @@ class RAC3SKILLPOINT:
     CRASH_SITE_SUCK = "Crash Site: Skillpoint: Suck it up!"  # 0x001D54C3,
     CRASH_SITE_AIM_HIGH = "Crash Site: Skillpoint: Aim High"  # 0x001D54C4,
     ARIDIA_ZAP = "Aridia: Skillpoint: Zap back at ya'"  # 0x001D54C5,
-    HIDEOUT_DAN = "Hideout: Skillpoint: Break the Dan"  # 0x001D54C6,
+    HIDEOUT_DAN = "Qwarks Hideout: Skillpoint: Break the Dan"  # 0x001D54C6,
     COMMAND_CENTER_GERMS = "Command Center: Skillpoint: Spread your germs"  # 0x001D54C7,
     SEWER_MOTHERLOAD = "Aquatos Sewer: Skillpoint: Hit the motherload"  # 0x001D54C8,
     PHOENIX_COMIC_1 = "Phoenix: Skillpoint: Pirate booty - set a new record for Qwark"  # 0x001D54C9,
