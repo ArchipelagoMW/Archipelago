@@ -351,8 +351,11 @@ class Rac3Interface(GameInterface):
     def tyhrranosis_fix(self):
         self._write8(RAC3STATUS.ROBONOIDS, 0)
 
-    def item_received(self, item_code: int, our_name: Optional[str], other_player: Optional[str], location: Optional[
-            int]):
+    def item_received(self,
+                      item_code: int,
+                      our_name: Optional[str],
+                      other_player: Optional[str],
+                      location: Optional[int]):
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
         if other_player is not None:
             classification = RAC3_ITEM_DATA_TABLE[name].AP_CLASSIFICATION
@@ -988,8 +991,9 @@ class Rac3Interface(GameInterface):
                 if self._read8(RAC3STATUS.HEALTH) > 1:
                     self._write8(RAC3STATUS.HEALTH, 1)
                     self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
-                if (character == RAC3PLAYERTYPE.RATCHET and self.planet == RAC3REGION.ANNIHILATION_NATION and not
-                        self.pause_state):
+                if (character == RAC3PLAYERTYPE.RATCHET
+                        and self.planet == RAC3REGION.ANNIHILATION_NATION
+                        and not self.pause_state):
                     # Patch out sleeping gas health reduction to prevent death
                     self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000)  # addiu v0,v0,0x0
                     # Patch out health refill to prevent auto losing One Hit Wonder challenge
@@ -1266,8 +1270,12 @@ class Rac3Interface(GameInterface):
         """
         return not (self.pause_menu ^ paused) and (self.inputs & check) == check
 
-    def messagebox(self, msg_list: list[bytes], color_bytes_count: int, longest_line_length: int, box_theme: int =
-                   RAC3BOXTHEME.DEFAULT, _time: int = 0x168) -> None:
+    def messagebox(self,
+                   msg_list: list[bytes],
+                   color_bytes_count: int,
+                   longest_line_length: int,
+                   box_theme: int = RAC3BOXTHEME.DEFAULT,
+                   _time: int = 0x168) -> None:
         if _time < 0:
             _time = 0
         # real overflow cap is actually about 248, but we don't need that long messages
