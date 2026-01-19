@@ -1,4 +1,4 @@
-from typing import Dict, Callable, Any, List
+from typing import Callable, Any
 
 from BaseClasses import Item, ItemClassification as IClass
 from .options import ShapezOptions
@@ -37,7 +37,7 @@ def always_trap(options: ShapezOptions) -> IClass:
 # would be unreasonably complicated and time-consuming.
 # Some buildings are not needed to complete the game, but are "logically needed" for the "MAM" achievement.
 
-buildings_processing: Dict[str, Callable[[ShapezOptions], IClass]] = {
+buildings_processing: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.cutter: always_progression,
     ITEMS.cutter_quad: always_progression,
     ITEMS.rotator: always_progression,
@@ -50,7 +50,7 @@ buildings_processing: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.color_mixer: always_progression,
 }
 
-buildings_routing: Dict[str, Callable[[ShapezOptions], IClass]] = {
+buildings_routing: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.balancer: always_progression,
     ITEMS.comp_merger: always_progression,
     ITEMS.comp_splitter: always_progression,
@@ -58,12 +58,12 @@ buildings_routing: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.tunnel_tier_ii: is_mam_achievement_included,
 }
 
-buildings_other: Dict[str, Callable[[ShapezOptions], IClass]] = {
+buildings_other: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trash: always_progression,
     ITEMS.extractor_chain: always_useful
 }
 
-buildings_top_row: Dict[str, Callable[[ShapezOptions], IClass]] = {
+buildings_top_row: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.belt_reader: is_mam_achievement_included,
     ITEMS.storage: is_achievements_included,
     ITEMS.switch: always_progression,
@@ -71,18 +71,18 @@ buildings_top_row: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.display: always_useful
 }
 
-buildings_wires: Dict[str, Callable[[ShapezOptions], IClass]] = {
+buildings_wires: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.wires: always_progression,
     ITEMS.const_signal: always_progression,
     ITEMS.logic_gates: is_mam_achievement_included,
     ITEMS.virtual_proc: is_mam_achievement_included
 }
 
-gameplay_unlocks: Dict[str, Callable[[ShapezOptions], IClass]] = {
+gameplay_unlocks: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.blueprints: is_achievements_included
 }
 
-upgrades: Dict[str, Callable[[ShapezOptions], IClass]] = {
+upgrades: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.upgrade_big_belt: always_progression,
     ITEMS.upgrade_big_miner: always_useful,
     ITEMS.upgrade_big_proc: always_useful,
@@ -93,7 +93,7 @@ upgrades: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.upgrade_small_paint: always_filler
 }
 
-whacky_upgrades: Dict[str, Callable[[ShapezOptions], IClass]] = {
+whacky_upgrades: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.upgrade_gigantic_belt: always_progression,
     ITEMS.upgrade_gigantic_miner: always_useful,
     ITEMS.upgrade_gigantic_proc: always_useful,
@@ -106,7 +106,7 @@ whacky_upgrades: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.upgrade_small_random: always_filler,
 }
 
-whacky_upgrade_traps: Dict[str, Callable[[ShapezOptions], IClass]] = {
+whacky_upgrade_traps: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trap_upgrade_belt: always_trap,
     ITEMS.trap_upgrade_miner: always_trap,
     ITEMS.trap_upgrade_proc: always_trap,
@@ -117,13 +117,13 @@ whacky_upgrade_traps: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trap_upgrade_demonic_paint: always_trap,
 }
 
-bundles: Dict[str, Callable[[ShapezOptions], IClass]] = {
+bundles: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.bundle_blueprint: always_filler,
     ITEMS.bundle_level: always_filler,
     ITEMS.bundle_upgrade: always_filler
 }
 
-standard_traps: Dict[str, Callable[[ShapezOptions], IClass]] = {
+standard_traps: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trap_locked: always_trap,
     ITEMS.trap_throttled: always_trap,
     ITEMS.trap_malfunction: always_trap,
@@ -131,22 +131,22 @@ standard_traps: Dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trap_clear_belts: always_trap,
 }
 
-random_draining_trap: Dict[str, Callable[[ShapezOptions], IClass]] = {
+random_draining_trap: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trap_draining_inv: always_trap
 }
 
-split_draining_traps: Dict[str, Callable[[ShapezOptions], IClass]] = {
+split_draining_traps: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.trap_draining_blueprint: always_trap,
     ITEMS.trap_draining_level: always_trap,
     ITEMS.trap_draining_upgrade: always_trap
 }
 
-belt_and_extractor: Dict[str, Callable[[ShapezOptions], IClass]] = {
+belt_and_extractor: dict[str, Callable[[ShapezOptions], IClass]] = {
     ITEMS.belt: always_progression,
     ITEMS.extractor: always_progression
 }
 
-item_table: Dict[str, Callable[[ShapezOptions], IClass]] = {
+item_table: dict[str, Callable[[ShapezOptions], IClass]] = {
     **buildings_processing,
     **buildings_routing,
     **buildings_other,
@@ -205,10 +205,10 @@ def trap(random: float, split_draining: bool, whacky_allowed: bool) -> str:
     return random_choice_nested(random, pool)
 
 
-def random_choice_nested(random: float, nested: List[Any]) -> Any:
+def random_choice_nested(random: float, nested: list[Any]) -> Any:
     """Helper function for getting a random element from a nested list."""
     current: Any = nested
-    while isinstance(current, List):
+    while isinstance(current, list):
         index_float = random*len(current)
         current = current[int(index_float)]
         random = index_float-int(index_float)

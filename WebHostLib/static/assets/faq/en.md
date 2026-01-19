@@ -23,7 +23,7 @@ players to rely upon each other to complete their game.
 While a multiworld game traditionally requires all players to be playing the same game, a multi-game multiworld allows
 players to randomize any of the supported games, and send items between them. This allows players of different
 games to interact with one another in a single multiplayer environment.  Archipelago supports multi-game multiworlds.
-Here is a list of our [Supported Games](https://archipelago.gg/games).
+Here is a list of our [Supported Games](/games).
 
 ## Can I generate a single-player game with Archipelago?
 
@@ -33,7 +33,7 @@ play, open the Settings Page, pick your settings, and click Generate Game.
 
 ## How do I get started?
 
-We have a [Getting Started](https://archipelago.gg/tutorial/Archipelago/setup/en) guide that will help you get the
+We have a [Getting Started](/tutorial/Archipelago/setup/en) guide that will help you get the
 software set up. You can use that guide to learn how to generate multiworlds. There are also basic instructions for
 including multiple games, and hosting multiworlds on the website for ease and convenience.
 
@@ -57,7 +57,7 @@ their multiworld.
 
 If a player must leave early, they can use Archipelago's release system. When a player releases their game, all items
 in that game belonging to other players are sent out automatically. This allows other players to continue to play
-uninterrupted. Here is a list of all of our [Server Commands](https://archipelago.gg/tutorial/Archipelago/commands/en).
+uninterrupted. Here is a list of all of our [Server Commands](/tutorial/Archipelago/commands/en).
 
 ## What happens if an item is placed somewhere it is impossible to get?
 
@@ -66,7 +66,7 @@ is to ensure items necessary to complete the game will be accessible to the play
 rules allowing certain items to be placed in normally unreachable locations, provided the player has indicated they are
 comfortable exploiting certain glitches in the game.
 
-## I want to add a game to the Archipelago randomizer. How do I do that?
+## I want to develop a game implementation for Archipelago. How do I do that?
 
 The best way to get started is to take a look at our code on GitHub:  
 [Archipelago GitHub Page](https://github.com/ArchipelagoMW/Archipelago).
@@ -77,4 +77,5 @@ There, you will find examples of games in the `worlds` folder:
 You may also find developer documentation in the `docs` folder:  
 [/docs Folder in Archipelago Code](https://github.com/ArchipelagoMW/Archipelago/tree/main/docs).
 
-If you have more questions, feel free to ask in the **#ap-world-dev** channel on our Discord.
+If you have more questions regarding development of a game implementation, feel free to ask in the **#ap-world-dev** 
+channel on our Discord.

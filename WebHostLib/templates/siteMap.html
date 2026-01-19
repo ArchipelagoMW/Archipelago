@@ -11,32 +11,32 @@
         <h1>Site Map</h1>
         <h2>Base Pages</h2>
         <ul>
-            <li><a href="/discord">Discord Link</a></li>
-            <li><a href="/faq/en">F.A.Q. Page</a></li>
-            <li><a href="/favicon.ico">Favicon</a></li>
-            <li><a href="/generate">Generate Game Page</a></li>
-            <li><a href="/">Homepage</a></li>
-            <li><a href="/uploads">Host Game Page</a></li>
-            <li><a href="/datapackage">Raw Data Package</a></li>
-            <li><a href="{{ url_for('check')}}">Settings Validator</a></li>
-            <li><a href="/sitemap">Site Map</a></li>
-            <li><a href="/start-playing">Start Playing</a></li>
-            <li><a href="/games">Supported Games Page</a></li>
-            <li><a href="/tutorial">Tutorials Page</a></li>
-            <li><a href="/user-content">User Content</a></li>
-            <li><a href="{{url_for('stats')}}">Game Statistics</a></li>
-            <li><a href="/glossary/en">Glossary</a></li>
-            <li><a href="{{url_for("show_session")}}">Session / Login</a></li>
+            <li><a href="{{ url_for('discord') }}">Discord Link</a></li>
+            <li><a href="{{ url_for('faq', lang='en') }}">F.A.Q. Page</a></li>
+            <li><a href="{{ url_for('favicon') }}">Favicon</a></li>
+            <li><a href="{{ url_for('generate') }}">Generate Game Page</a></li>
+            <li><a href="{{ url_for('landing') }}">Homepage</a></li>
+            <li><a href="{{ url_for('uploads') }}">Host Game Page</a></li>
+            <li><a href="{{ url_for('get_datapackage') }}">Raw Data Package</a></li>
+            <li><a href="{{ url_for('check') }}">Settings Validator</a></li>
+            <li><a href="{{ url_for('get_sitemap') }}">Site Map</a></li>
+            <li><a href="{{ url_for('start_playing') }}">Start Playing</a></li>
+            <li><a href="{{ url_for('games') }}">Supported Games Page</a></li>
+            <li><a href="{{ url_for('tutorial_landing') }}">Tutorials Page</a></li>
+            <li><a href="{{ url_for('user_content') }}">User Content</a></li>
+            <li><a href="{{ url_for('stats') }}">Game Statistics</a></li>
+            <li><a href="{{ url_for('glossary', lang='en') }}">Glossary</a></li>
+            <li><a href="{{ url_for('show_session') }}">Session / Login</a></li>
         </ul>
 
         <h2>Tutorials</h2>
         <ul>
-            <li><a href="/tutorial/Archipelago/setup/en">Multiworld Setup Tutorial</a></li>
-            <li><a href="/tutorial/Archipelago/mac/en">Setup Guide for Mac</a></li>
-            <li><a href="/tutorial/Archipelago/commands/en">Server and Client Commands</a></li>
-            <li><a href="/tutorial/Archipelago/advanced_settings/en">Advanced YAML Guide</a></li>
-            <li><a href="/tutorial/Archipelago/triggers/en">Triggers Guide</a></li>
-            <li><a href="/tutorial/Archipelago/plando/en">Plando Guide</a></li>
+            <li><a href="{{ url_for('tutorial', game='Archipelago', file='setup_en') }}">Multiworld Setup Tutorial</a></li>
+            <li><a href="{{ url_for('tutorial', game='Archipelago', file='mac_en') }}">Setup Guide for Mac</a></li>
+            <li><a href="{{ url_for('tutorial', game='Archipelago', file='commands_en') }}">Server and Client Commands</a></li>
+            <li><a href="{{ url_for('tutorial', game='Archipelago', file='advanced_settings_en') }}">Advanced YAML Guide</a></li>
+            <li><a href="{{ url_for('tutorial', game='Archipelago', file='triggers_en') }}">Triggers Guide</a></li>
+            <li><a href="{{ url_for('tutorial', game='Archipelago', file='plando_en') }}">Plando Guide</a></li>
         </ul>
 
         <h2>Game Info Pages</h2>
