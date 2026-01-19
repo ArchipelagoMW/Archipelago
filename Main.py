@@ -312,11 +312,11 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     game_world.game: worlds.network_data_package["games"][game_world.game]
                     for game_world in multiworld.worlds.values()
                 }
-                dynamic_data_package = {
-                    game_world.game: game_world.get_dynamic_data_package_data()
-                    for game_world in multiworld.worlds.values()
-                    if game_world.get_dynamic_data_package_data() is not None
-                }
+                dynamic_data_package = {}
+                for game_world in multiworld.worlds.values():
+                    dynamic_package = game_world.get_dynamic_data_package_data()
+                    if dynamic_package:
+                        dynamic_data_package[game_world.game] = dynamic_package
                 data_package["Archipelago"] = worlds.network_data_package["games"]["Archipelago"]
 
                 checks_in_area: dict[int, dict[str, int | list[int]]] = {}

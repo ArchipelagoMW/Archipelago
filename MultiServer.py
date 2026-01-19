@@ -316,12 +316,12 @@ class Context:
         self.spheres = []
 
         # init empty to satisfy linter, I suppose
-        self.gamespackage = {}
-        self.dynamic_package = {}
-        self.checksums = {}
-        self.dynamic_checksums = {}
-        self.item_name_groups = {}
-        self.location_name_groups = {}
+        self.gamespackage: dict[str, NetUtils.GamesPackage] = {}
+        self.dynamic_package: dict[str, NetUtils.GamesPackage] = {}
+        self.checksums: dict[str, str] = {}
+        self.dynamic_checksums: dict[str, str] = {}
+        self.item_name_groups: dict[str, dict[str, set[str]]] = {}
+        self.location_name_groups: dict[str, dict[str, set[str]]] = {}
         self.all_item_and_group_names = {}
         self.all_location_and_group_names = {}
         self.item_names = collections.defaultdict(
