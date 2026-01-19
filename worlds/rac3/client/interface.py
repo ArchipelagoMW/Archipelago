@@ -1108,7 +1108,6 @@ class Rac3Interface(GameInterface):
         if self.vehicle or (current_time - self.last_in_vehicle_time < 1 and self.action == 0x39):
             self.last_in_vehicle_time = current_time
             
-
     def pause_check(self):
         if self.planet not in RAC3_REGION_DATA_TABLE.keys():
             # Unknown planet, assume paused to be safe
