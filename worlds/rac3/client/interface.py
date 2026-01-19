@@ -254,8 +254,9 @@ class Rac3Interface(GameInterface):
     notification_merge_count: int = 1
     message_display: bool = False
     ship_slot_limit: int = 0
-    one_hp_challenge: dict[str, bool] = None
+    one_hp_challenge: dict[str, int] = None
     pda_vendor: int = 0
+    last_in_vehicle_time: float = 0.0
     clank_options: dict[str, bool] = None
 
     # Called at once when client started
@@ -287,6 +288,7 @@ class Rac3Interface(GameInterface):
         self.inside_hacker_puzzle = self._read8(RAC3STATUS.HELD_ITEM) == RAC3_ITEM_DATA_TABLE[RAC3ITEM.HACKER].ID
         self.message_display = bool(self._read_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER)))
 
+        self.vehicle_check()
         self.pause_check()
         if self.self_respawning:
             if not self.is_reloading:
@@ -352,8 +354,11 @@ class Rac3Interface(GameInterface):
     def tyhrranosis_fix(self):
         self._write8(RAC3STATUS.ROBONOIDS, 0)
 
-    def item_received(self, item_code: int, our_name: Optional[str], other_player: Optional[str], location: Optional[
-        int]):
+    def item_received(self,
+                      item_code: int,
+                      our_name: Optional[str],
+                      other_player: Optional[str],
+                      location: Optional[int]):
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
         if other_player is not None:
             classification = RAC3_ITEM_DATA_TABLE[name].AP_CLASSIFICATION
@@ -531,9 +536,9 @@ class Rac3Interface(GameInterface):
         logger.debug(f'UnlockItem dict:{self.UnlockItem.keys()}')
 
         # Proc options
-        ### Bolt and XPMultiplier
+        # Bolt and XPMultiplier
         self.boltAndXPMultiplierValue = int(self.boltAndXPMultiplier)
-        ### EnableWeaponLevelAsItem: if enabled, EXP disabler is running.
+        # EnableWeaponLevelAsItem: if enabled, EXP disabler is running.
 
     # Address conversion from str to int(with US to JP)
     @staticmethod
@@ -990,8 +995,9 @@ class Rac3Interface(GameInterface):
                 if self._read8(RAC3STATUS.HEALTH) > 1:
                     self._write8(RAC3STATUS.HEALTH, 1)
                     self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
-                if (character == RAC3PLAYERTYPE.RATCHET and self.planet == RAC3REGION.ANNIHILATION_NATION and not
-                self.pause_state):
+                if (character == RAC3PLAYERTYPE.RATCHET
+                        and self.planet == RAC3REGION.ANNIHILATION_NATION
+                        and not self.pause_state):
                     # Patch out sleeping gas health reduction to prevent death
                     self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000)  # addiu v0,v0,0x0
                     # Patch out health refill to prevent auto losing One Hit Wonder challenge
@@ -1087,7 +1093,7 @@ class Rac3Interface(GameInterface):
         """Detects if the game is currently being reloaded, and updates death data"""
         if self.is_reloading and not self.reloading_handled and not self.self_respawning:
             self.last_death_state = self.action
-            self.died_in_vehicle = bool(self._read8(RAC3STATUS.IN_VEHICLE))
+            self.died_in_vehicle = time.time() - self.last_in_vehicle_time < 1.5
             self.reloading_handled = True
             logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state},'
                          f' death count: {self.last_death_count}, in vehicle? {self.died_in_vehicle}')
@@ -1100,6 +1106,15 @@ class Rac3Interface(GameInterface):
                          f' {self.has_died}')
         else:
             self.has_died = False
+
+    def vehicle_check(self):
+        """
+        Updates the last_in_vehicle_time when the player is in a vehicle.
+        Used to detect if the player died while in a vehicle for deathlink.
+        """
+        current_time = time.time()
+        if self.vehicle or (current_time - self.last_in_vehicle_time < 1 and self.action == 0x39):
+            self.last_in_vehicle_time = current_time
 
     def pause_check(self):
         if self.planet not in RAC3_REGION_DATA_TABLE.keys():
@@ -1259,8 +1274,12 @@ class Rac3Interface(GameInterface):
         """
         return not (self.pause_menu ^ paused) and (self.inputs & check) == check
 
-    def messagebox(self, msg_list: list[bytes], color_bytes_count: int, longest_line_length: int, box_theme: int =
-    RAC3BOXTHEME.DEFAULT, _time: int = 0x168) -> None:
+    def messagebox(self,
+                   msg_list: list[bytes],
+                   color_bytes_count: int,
+                   longest_line_length: int,
+                   box_theme: int = RAC3BOXTHEME.DEFAULT,
+                   _time: int = 0x168) -> None:
         if _time < 0:
             _time = 0
         # real overflow cap is actually about 248, but we don't need that long messages
