@@ -5,7 +5,7 @@ import settings
 import string
 import typing
 
-from BaseClasses import Item, Tutorial, ItemClassification
+from BaseClasses import Item, Tutorial, ItemClassification, MultiWorld
 from Options import NumericOption, OptionSet
 from .Items import item_table, faction_table, Wargroove2Item
 from .Levels import Wargroove2Level, low_victory_checks_levels, high_victory_checks_levels, first_level, \
@@ -92,6 +92,7 @@ class Wargroove2World(World):
     ai_hideout_costs: typing.Dict[int, float] = {}
     ai_port_costs: typing.Dict[int, float] = {}
     fill_slot_data_event: threading.Event = threading.Event()
+    stage_assert_generate_called: bool = False
 
     item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
     location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
@@ -214,8 +215,14 @@ class Wargroove2World(World):
     def create_regions(self) -> None:
         create_regions(self)
 
+
     @classmethod
-    def stage_generate_output(cls, multiworld, output_directory):
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
+        cls.stage_assert_generate_called = True
+
+
+    @classmethod
+    def stage_generate_output(cls, multiworld: MultiWorld, output_directory):
         player_to_sphere: dict[int, typing.List[typing.Tuple[int, str]]] = {}
         sphere_number = 0
         highest_wg2_sphere = 0
@@ -308,7 +315,8 @@ class Wargroove2World(World):
             world.fill_slot_data_event.set()
 
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
-        self.fill_slot_data_event.wait()
+        if self.stage_assert_generate_called:
+            self.fill_slot_data_event.wait()
         slot_data = {'seed': "".join(self.random.choice(string.ascii_letters) for _ in range(16))}
         for option_name in self.options.__dict__.keys():
             option = getattr(self.options, option_name)
