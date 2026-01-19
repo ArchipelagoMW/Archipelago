@@ -1,10 +1,12 @@
+import json
 import os
 import zipfile
-from base64 import b64encode
 from collections.abc import Mapping
 from typing import Any, ClassVar
 
-import yaml
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import padding, rsa
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
@@ -59,12 +61,57 @@ class TWWContainer(APPlayerContainer):
     game: str = "The Wind Waker"
     patch_file_ending: str = ".aptww"
 
+    RSA_PUBLIC_KEY = b"""-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAti52wrwBhzrdbMTQCeBM
+WjyOxHASRccbsvBkRD01Ti8dQ8HvxcEDv61PMK14I2EwJP8rCg9m+zJ6jkOxmWGS
+RrxsBemcY4i2xSULGlelYlrJBzRBjIhZ5538cFOhnQffUvgSFWWfwqWkyOeWJ5i3
+Tttd6HUTORk9cGeHtlx8k1MMNlj9JQObMoJ8SekoIaEEO9R+r5Glcyoq13qTPTjD
+ptzWltCIJ/+8UezTVg4k3p72Soj7wkIrlt9O6+VmZFkhTHN1OwfWCBTlCiQ2uV20
+MdSE3qzwiqCkG+4GVM+Aa1Abq+EgeRXZCDrFIR/C6Hea1bGbU5rHcwITPYPUDJpK
+kwIDAQAB
+-----END PUBLIC KEY-----"""
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         if "data" in kwargs:
             self.data = kwargs["data"]
             del kwargs["data"]
 
         super().__init__(*args, **kwargs)
+
+    def _encrypt_payload(self, payload: bytes) -> bytes:
+        """
+        Encrypt a payload using hybrid RSA + AES-GCM encryption.
+
+        :param payload: The payload to encrypt.
+        :type payload: bytes
+        :raises TypeError: If the public key used for encryption is not a RSA public key.
+        :return: The encrypted payload.
+        :rtype: bytes
+        """
+        # Generate a random AES key.
+        aes_key = os.urandom(32)
+
+        # Generate a random nonce.
+        nonce = os.urandom(12)
+
+        # Encrypt payload using AES-GCM.
+        aesgcm = AESGCM(aes_key)
+        ciphertext = aesgcm.encrypt(nonce, payload, None)
+
+        # Encrypt the AES key with RSA-OAEP.
+        public_key = serialization.load_pem_public_key(self.RSA_PUBLIC_KEY)
+        if not isinstance(public_key, rsa.RSAPublicKey):
+            raise TypeError("Failed to write patch file: Expected RSA public key!")
+        encrypted_aes_key = public_key.encrypt(
+            aes_key,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None,
+            ),
+        )
+
+        return encrypted_aes_key + nonce + ciphertext
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         """
@@ -73,7 +120,8 @@ class TWWContainer(APPlayerContainer):
         super().write_contents(opened_zipfile)
 
         # Record the data for the game under the key `plando`.
-        opened_zipfile.writestr("plando", b64encode(bytes(yaml.safe_dump(self.data, sort_keys=False), "utf-8")))
+        data = json.dumps(self.data).encode("utf-8")
+        opened_zipfile.writestr("plando", self._encrypt_payload(data))
 
 
 class TWWWeb(WebWorld):
