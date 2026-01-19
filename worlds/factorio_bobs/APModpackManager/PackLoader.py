@@ -1,16 +1,18 @@
 import logging
 from pathlib import Path
+from typing import TypeVar
 from zipfile import ZipFile, Path as ZipPath
 
 from . import BaseModpack
 
 logger = logging.getLogger(f"APModpackManager - factorio with modpacks: PackLoader")
 
-modpacks: dict[str, BaseModpack] = {}
+U = TypeVar('U', bound=BaseModpack)
+modpacks: dict[str, U] = {}
 """
 all the initializes modpacks
 """
-def init_modpacks(modpackType: type[BaseModpack]) -> None:
+def init_modpacks(modpackType: type[U]) -> None:
     """
     This initializes all mod packs it can find
     it checks all locations found in modpack_directories
