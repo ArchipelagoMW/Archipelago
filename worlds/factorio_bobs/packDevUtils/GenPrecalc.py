@@ -2,30 +2,12 @@ import sys
 import timeit
 from pathlib import Path
 
-
-if __name__ == '__main__' and (__package__ is None or __package__ == ''):
-    file = Path(__file__).resolve()
-    parent, top = file.parent, file.parents[2]
-
-    sys.path.append(str(top))
-    try:
-        sys.path.remove(str(parent))
-    except ValueError: # Already removed
-        pass
-
-    import worlds.factorio_bobs
-    __package__ = 'worlds.factorio_bobs'
+from worlds.factorio_bobs.packDevUtils import get_modpack
 
 import json
 
-from .FactorioModpack import FactorioModpack
-from .APModpackManager import modpacks
-
 def main():
-    modpack: FactorioModpack = modpacks["bob's"]
-    modpack.init_items()
-    modpack.init_locations()
-    modpack.init_pack_check()
+    modpack = get_modpack()
 
     start = timeit.default_timer()
     output = {}
