@@ -3,7 +3,7 @@ import json
 import struct, zipfile
 
 from gclib.gcm import GCM
-from gclib.dol import DOL
+from gclib.dol import DOL, DOLSection
 
 import Utils
 
@@ -12,6 +12,7 @@ from ..locations import LOCATION_TABLE, PSOLocationData
 from ..helpers import CLIENT_VERSION, SLOT_NAME_ADDR, string_to_bytes
 from .dol_changes import CODE_PATCHES
 
+# CUSTOM_CODE_OFFSET_START = 0x002010 This is placeholder until we expand the DOL.
 PSO_PLAYER_NAME_BYTE_LENGTH = 0x40
 
 AP_WORLD_VERSION_NAME = "APWorldVersion"
@@ -138,6 +139,12 @@ class PSOPatcher:
         for location_name, item_name in self.output_data["Locations"].items():
             self.write_item_to_location(location_name, item_name)
         print("Randomized item patching complete!")
+
+        # TODO: Change Slot Name ADDR, byte length, and this section once we find the DOL expansion location
+        # This will be where we tell where our new DOL location is and its length... allowing us to write to it.
+        # new_dol_size = 0x4000
+        # new_dol_sect = DOLSection(CUSTOM_CODE_OFFSET_START, 0x804DD940, new_dol_size)
+        # self.dol.sections[2] = new_dol_sect
 
         # Put the player name into the DOL Bytes.
         self.dol.data.seek(0x000460) #This Needs to be a DOL Offset in order to work properly, not an Address
