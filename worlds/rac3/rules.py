@@ -490,7 +490,7 @@ def set_rules(world: "RaC3World"):
         RAC3TBOLT.HOLOSTAR_KAMIKAZE_NOIDS:
             lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.HACKER, RAC3ITEM.HYPERSHOT], world.player),
 
-        # RAC3LOCATION.SKIDD_CAPTURED
+        RAC3LOCATION.SKIDD_CAPTURED: lambda state: state.has_all([RAC3ITEM.HACKER, RAC3ITEM.HYPERSHOT], world.player),
 
         RAC3LOCATION.DRACO_COURTNEY: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
 
