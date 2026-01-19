@@ -152,7 +152,7 @@ class RecipeEngine:
     def __load_settings(self) -> None:
         with self.modpack.open_file("recipeEngineSettings.json") as file:
             raw_settings = json.load(file)
-            if raw_settings["missed_machines"]:
+            if "missed_machines" in raw_settings:
                 self.__missed_machines: dict[str, set[Category]] = {name: set(categories)
                                                                     for name, categories in raw_settings["missed_machines"].items()}
             else:
