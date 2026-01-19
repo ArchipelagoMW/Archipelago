@@ -188,8 +188,8 @@ class CommandProcessor(ClientCommandProcessor):
             valid_characters = {name.lower(): name for name in ONE_HP_CHALLENGE_CHARACTERS}
             if character in valid_characters:
                 char_name = valid_characters[character]
-                current_state = self.ctx.game_interface.one_hp_challenge.get(char_name, False)
-                new_state = not current_state
+                current_state = self.ctx.game_interface.one_hp_challenge.get(char_name, 0)
+                new_state = 0 if current_state else 1
                 self.ctx.game_interface.one_hp_challenge[char_name] = new_state
                 self.output(f'One HP Challenge for {char_name} set to {new_state}')
             else:

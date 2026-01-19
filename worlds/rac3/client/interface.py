@@ -254,7 +254,7 @@ class Rac3Interface(GameInterface):
     notification_merge_count: int = 1
     message_display: bool = False
     ship_slot_limit: int = 0
-    one_hp_challenge: dict[str, bool] = None
+    one_hp_challenge: dict[str, int] = None
     pda_vendor: int = 0
 
     # Called at once when client started
