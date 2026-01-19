@@ -1,10 +1,8 @@
-import sys
+import json
 import timeit
-from pathlib import Path
 
 from worlds.factorio_bobs.packDevUtils import get_modpack
 
-import json
 
 def main():
     modpack = get_modpack()
