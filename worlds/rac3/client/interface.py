@@ -1182,10 +1182,11 @@ class Rac3Interface(GameInterface):
             logger.error(f'Aborting homewarp, Unknown Planet: {self.planet}')
             return
         planet_to_load = RAC3_REGION_DATA_TABLE[self.planet].PLANET_TO_LOAD
+        planet_load_trigger = RAC3_REGION_DATA_TABLE[self.planet].PLANET_LOAD_TRIGGER
         home_id = RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID
         if planet_to_load:
             self._write8(planet_to_load, home_id)
-            self._write8(RAC3STATUS.PLANET_LOAD, 1)
+            self._write8(planet_load_trigger, 1)
 
     def teleport_to_coords(self):
         self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
