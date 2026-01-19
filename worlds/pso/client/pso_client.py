@@ -10,6 +10,7 @@ import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 from worlds.pso.locations import LOCATION_TABLE
+from worlds.pso.patcher.pso_patcher import PSO_PLAYER_NAME_BYTE_LENGTH
 
 from ..items import ITEM_TABLE, ITEM_ID_TO_NAME, PSOItemType
 
@@ -310,7 +311,7 @@ async def check_locations(ctx: PSOContext) -> None:
     # We make a deepcopy to avoid unexpected mutations of missing_locations during our checks
     local_missing_locations = deepcopy(ctx.missing_locations)
     for missing_location in local_missing_locations:
-        location_name = ctx.location_names.lookup(missing_location)
+        location_name = ctx.location_names.lookup_in_game(missing_location)
         location_data = LOCATION_TABLE[location_name].ram_data
         if check_bit(location_data.ram_addr, location_data.bit_position):
             ctx.locations_checked.add(missing_location)
@@ -353,14 +354,19 @@ async def dolphin_sync_task(ctx: PSOContext) -> None:
                     await give_items(ctx)
                     await check_locations(ctx)
                 else:
+                    # This 2 line section needs to be BEFORE the No Slot Name unhooking.
                     if not ctx.auth:
-                        ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
-                        ctx.auth = None
-                        ctx.dolphin_status = ConnectionStatus.NO_SLOT_NAME
-                        logger.info(ctx.dolphin_status)
-                        dolphin_memory_engine.un_hook()
-                        await asyncio.sleep(5)
-                        continue
+                        ctx.auth = read_string(SLOT_NAME_ADDR, PSO_PLAYER_NAME_BYTE_LENGTH)
+
+                        # This triggers if ctx auth is not correct.
+                        if not ctx.auth:
+                            ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
+                            ctx.auth = None
+                            ctx.dolphin_status = ConnectionStatus.NO_SLOT_NAME
+                            logger.info(ctx.dolphin_status)
+                            dolphin_memory_engine.un_hook()
+                            await asyncio.sleep(5)
+                            continue
 
                     if ctx.awaiting_rom:
                         await ctx.server_auth()
