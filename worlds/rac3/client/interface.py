@@ -1098,7 +1098,7 @@ class Rac3Interface(GameInterface):
                          f' {self.has_died}')
         else:
             self.has_died = False
-    
+
     def vehicle_check(self):
         """
         Updates the last_in_vehicle_time when the player is in a vehicle.
