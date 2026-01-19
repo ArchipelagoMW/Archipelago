@@ -1104,12 +1104,8 @@ class Rac3Interface(GameInterface):
         Updates the last_in_vehicle_time when the player is in a vehicle.
         Used to detect if the player died while in a vehicle for deathlink.
         """
-        current_time = time.time()
-        if self.vehicle:
-            self.last_in_vehicle_time = current_time
-        
-        # Special case for vehicles that eject you and kill you after some time
-        if current_time - self.last_in_vehicle_time < 1 and self.action == 0x39:
+        current_time = time.time()        
+        if self.vehicle or (current_time - self.last_in_vehicle_time < 1 and self.action == 0x39):
             self.last_in_vehicle_time = current_time
             
 
