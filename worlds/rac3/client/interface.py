@@ -254,7 +254,7 @@ class Rac3Interface(GameInterface):
     notification_merge_count: int = 1
     message_display: bool = False
     ship_slot_limit: int = 0
-    one_hp_challenge: dict[str, bool] = None
+    one_hp_challenge: dict[str, int] = None
     pda_vendor: int = 0
 
     # Called at once when client started
@@ -335,7 +335,7 @@ class Rac3Interface(GameInterface):
         self.ship = slot_data[RAC3OPTION.SHIP_NOSE] + slot_data[RAC3OPTION.SHIP_WINGS]
         self.ship_skin = slot_data[RAC3OPTION.SHIP_SKIN]
         self.skin = slot_data[RAC3OPTION.SKIN]
-        self.one_hp_challenge = {k: bool(v) for k, v in slot_data[RAC3OPTION.ONE_HP_CHALLENGE].items()}
+        self.one_hp_challenge = slot_data[RAC3OPTION.ONE_HP_CHALLENGE]
 
     def map_switch(self) -> tuple[str, str]:
         planet = RAC3_REGION_DATA_TABLE[self.planet].ID
