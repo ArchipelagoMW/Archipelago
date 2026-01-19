@@ -609,11 +609,6 @@ class RecursiveRecipeLoop:
     temp_num_loop = 0
 
     def __init__(self, start: InternalItem, recipeEngine: RecipeEngine) -> None:
-        RecursiveRecipeLoop.temp_num_loop += 1
-        if RecursiveRecipeLoop.temp_num_loop % 1000 == 0:
-            print(f"Num of loops: {RecursiveRecipeLoop.temp_num_loop}")
-        return
-
         self.recipeEngine = recipeEngine
 
         self.recipes: tuple[tuple[InternalItem, Recipe], ...] = self.recipeEngine.get_recipe_path_from(start)
