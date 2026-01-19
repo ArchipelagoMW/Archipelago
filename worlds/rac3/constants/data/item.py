@@ -375,7 +375,8 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.PROGRESSIVE_BOUNCER: RAC3ITEMDATA.construct_rac2_prog(0xCD, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_MINI_TURRET: RAC3ITEMDATA.construct_rac2_prog(0xCE, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_SHIELD_CHARGER: RAC3ITEMDATA.construct_rac2_prog(0xCF, ItemClassification.useful),
-    RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER: RAC3ITEMDATA.construct_weapon_prog(0xD0, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER: 
+        RAC3ITEMDATA.construct_weapon_prog(0xD0, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_N60_STORM: RAC3ITEMDATA.construct_weapon_prog(0xD1, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_INFECTOR:
         RAC3ITEMDATA.construct_weapon_prog(0xD2, ItemClassification.progression_skip_balancing),

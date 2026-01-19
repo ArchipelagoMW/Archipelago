@@ -139,16 +139,16 @@ def set_rules(world: "RaC3World"):
         RAC3LOCATION.PHOENIX_VR_90_SECOND:
             lambda state: state.can_reach_location(RAC3LOCATION.PHOENIX_VR_SPEED_ROUND, player=world.player),
         RAC3LOCATION.PHOENIX_VR_SHOCKER:
-            lambda state: state.has_any([RAC3ITEM.SHOCK_BLASTER, RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER], world.player)
+            lambda state: state.has_any([RAC3ITEM.SHOCK_BLASTER, RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER], player=world.player)
                           and state.can_reach_location(RAC3LOCATION.PHOENIX_VR_D_L_D, player=world.player),
         RAC3LOCATION.PHOENIX_VR_WRENCH:
             lambda state: state.can_reach_location(RAC3LOCATION.PHOENIX_VR_SHOCKER, player=world.player),
         RAC3TBOLT.PHOENIX_VR_NERVES:
             lambda state: state.can_reach_location(RAC3LOCATION.PHOENIX_VR_WRENCH, player=world.player)
-                          and state.can_reach_location(RAC3LOCATION.PHOENIX_VR_90_SECOND),
+                          and state.can_reach_location(RAC3LOCATION.PHOENIX_VR_90_SECOND, player=world.player),
         RAC3LOCATION.PHOENIX_VR_NERVES:
             lambda state: state.can_reach_location(RAC3LOCATION.PHOENIX_VR_WRENCH, player=world.player)
-                          and state.can_reach_location(RAC3LOCATION.PHOENIX_VR_90_SECOND),
+                          and state.can_reach_location(RAC3LOCATION.PHOENIX_VR_90_SECOND, player=world.player),
         RAC3TBOLT.PHOENIX_VR_TRAINING:
             lambda state: state.can_reach(RAC3REGION.TYHRRANOSIS, player=world.player)
                           and state.has_all([RAC3ITEM.HACKER, RAC3ITEM.HYPERSHOT], player=world.player),
