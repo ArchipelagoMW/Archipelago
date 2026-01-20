@@ -81,7 +81,16 @@ class RecipeEngine:
             raw_machines = json.load(file)
 
         for entity, categories in raw_machines.items():
+            if entity == "character":
+                for category in categories:
+                    self.categories[category].manual = True
+                self.categories["basic-crafting"].manual = True # somehow this is implied and not exported
+                self.categories["basic-solid"].manual = True # somehow this is implied and not exported
+                continue
+
             item = self.get_item_from_entity(entity)
+            if item.name == "assembling-machine-1":
+                self.categories["crafting-with-fluid"].machines.add(item) # mod enables this todo: disable?
             for category in categories:
                 if category not in self.categories:
                     self.categories[category] = CategoryCatalyst(self, category, DefinitionSource.EXTRACTED)
