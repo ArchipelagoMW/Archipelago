@@ -584,7 +584,7 @@ def launch(*new_args: str):
 
     # args handling
     parser = get_base_parser(description="Optional arguments to Factorio Client follow. "
-                                         "Remaining arguments get passed into bound Factorio instance."
+                                         "Remaining arguments get passed into bound Factorio instance. "
                                          "Refer to Factorio --help for those.")
     parser.add_argument('--rcon-port', default='24242', type=int, help='Port to use to communicate with Factorio')
     parser.add_argument('--rcon-password', help='Password to authenticate with RCON.')

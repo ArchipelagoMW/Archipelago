@@ -22,6 +22,7 @@ from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
+from pathspec import PathSpec, GitIgnoreSpec
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
@@ -48,7 +49,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.5"
+__version__ = "0.6.7"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -385,6 +386,14 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
                 json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
+
+
+def read_apignore(filename: str | pathlib.Path) -> PathSpec | None:
+    try:
+        with open(filename) as ignore_file:
+            return GitIgnoreSpec.from_lines(ignore_file)
+    except FileNotFoundError:
+        return None
 
 
 def get_default_adjuster_settings(game_name: str) -> Namespace:
@@ -1222,3 +1231,35 @@ class DaemonThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):
             t.start()
             self._threads.add(t)
             # NOTE: don't add to _threads_queues so we don't block on shutdown
+
+
+def get_full_typename(t: type) -> str:
+    """Returns the full qualified name of a type, including its module (if not builtins)."""
+    module = t.__module__
+    if module and module != "builtins":
+        return f"{module}.{t.__qualname__}"
+    return t.__qualname__
+
+
+def get_all_causes(ex: Exception) -> str:
+    """Return a string describing the recursive causes of this exception.
+
+    :param ex: The exception to be described.
+    :return A multiline string starting with the initial exception on the first line and each resulting exception
+            on subsequent lines with progressive indentation.
+
+            For example:
+
+            ```
+            Exception: Invalid value 'bad'.
+             Which caused: Options.OptionError: Error generating option
+              Which caused: ValueError: File bad.yaml is invalid.
+            ```
+    """
+    cause = ex
+    causes = [f"{get_full_typename(type(ex))}: {ex}"]
+    while cause := cause.__cause__:
+        causes.append(f"{get_full_typename(type(cause))}: {cause}")
+    top = causes[-1]
+    others = "".join(f"\n{' ' * (i + 1)}Which caused: {c}" for i, c in enumerate(reversed(causes[:-1])))
+    return f"{top}{others}"

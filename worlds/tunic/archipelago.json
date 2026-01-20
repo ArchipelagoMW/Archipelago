@@ -1,6 +1,6 @@
 {
   "game": "TUNIC",
-  "authors": ["SilentSR", "ScipioWright"],
+  "authors": ["silent-destroyer", "ScipioWright"],
   "minimum_ap_version": "0.6.4",
-  "world_version": "4.1.0"
+  "world_version": "4.2.7"
 }
