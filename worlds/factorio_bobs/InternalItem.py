@@ -64,18 +64,14 @@ class RecipeEngine:
                                                          {product: 1}, 1, self)
         del raw_generators
 
-        is_offshore_pump = False
-        for machine in self.machines.values():
-            if "offshore-pump" in machine.categories:
-                is_offshore_pump = True
-                break
+        is_offshore_pump = any("offshore-pump" in machine.categories for machine in self.machines.values())
         if is_offshore_pump:
             fluids = set()
             with self.modpack.open_file("Extractor/specialTiles.json") as file:
                 raw_tiles = json.load(file)
-            for tile in raw_tiles:
-                if "fluid" in tile:
-                    fluids.add(tile["fluid"])
+            for tile, special in raw_tiles.items():
+                if "fluid" in special:
+                    fluids.add(special["fluid"])
             del raw_tiles
             for fluid in fluids:
                 self.__recipes[f"pump_{fluid}"] = Recipe(f"pump_{fluid}", "offshore-pump",
@@ -159,8 +155,8 @@ class RecipeEngine:
                 self.__missed_machines: dict[str, set[Category]] = {}
             self.__req_machines_for_category: dict[Category, str] = raw_settings["req_machines_for_category"]
             self.__raw_cost: dict[str, float] = raw_settings.get("raw_cost", {})
-            self.__invalid_ingredients: set[str] = raw_settings.get("invalid_ingredients", set())
-            self.__excluded_automation_ingredients: set[str] = raw_settings.get("excluded_automation_ingredients", set())
+            self.__invalid_ingredients: set[str] = set(raw_settings.get("invalid_ingredients", set()))
+            self.__excluded_automation_ingredients: set[str] = set(raw_settings.get("excluded_automation_ingredients", set()))
 
     def __register_iternal_items(self) -> None:
         invalid_items = {"pistol", "fluid-unknown"} | {f"parameter-{i}" for i in range(10)}
