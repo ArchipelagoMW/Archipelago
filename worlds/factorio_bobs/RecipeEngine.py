@@ -290,7 +290,7 @@ class GameRecipe(RecipeEngineType):
         else:
             self.cost: float = float("inf")
 
-        for ingredient, amount in ingredients.copy().items():
+        for ingredient, amount in self.ingredients.copy().items():
             if not ingredient.is_valid_ingredient:
                 self.is_valid = False
             if ingredient not in self.products:
