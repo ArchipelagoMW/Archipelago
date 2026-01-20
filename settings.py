@@ -98,6 +98,8 @@ class Group:
                     self._changed = True
                     attr = new
             # resolve the path immediately when accessing it
+            if attr.exists():
+                attr.__class__.validate(attr.resolve())
             return attr.__class__(attr.resolve())
         return attr
 
@@ -436,11 +438,6 @@ class FilePath(Path):
             except ValueError:
                 raise ValueError(f"File hash does not match for {path}")
 
-    def resolve(self) -> str:
-        path = super().resolve()
-        self.validate(path)
-        return path
-
 
 class FolderPath(Path):
     # path to a folder
@@ -460,10 +457,7 @@ class FolderPath(Path):
 
 
 class UserFilePath(_UserPath, FilePath):
-    def resolve(self) -> str:
-        path = super().resolve()
-        self.validate(path)
-        return path
+    pass
 
 
 class UserFolderPath(_UserPath, FolderPath):
@@ -479,10 +473,7 @@ class OptionalUserFolderPath(UserFolderPath):
 
 
 class LocalFilePath(_LocalPath, FilePath):
-    def resolve(self) -> str:
-        path = super().resolve()
-        self.validate(path)
-        return path
+    pass
 
 
 class LocalFolderPath(_LocalPath, FolderPath):
