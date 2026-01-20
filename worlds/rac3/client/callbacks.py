@@ -106,7 +106,7 @@ async def handle_checked_locations(ctx: 'Context') -> None:
     if new_checks:
         real_checks = list(await ctx.check_locations(new_checks))
         ctx.locations_checked.update(real_checks)
-        for location in real_checks:
+        for location in set(real_checks):
             net_item = ctx.locations_info.get(location, None)
             if net_item is not None and net_item.player != ctx.slot:
                 item_to_player_names = get_rich_item_name(ctx, net_item, True)
