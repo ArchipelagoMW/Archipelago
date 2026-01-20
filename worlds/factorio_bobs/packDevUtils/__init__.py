@@ -1,6 +1,7 @@
 from worlds.factorio_bobs import FactorioModpack, modpacks
 
-pack_name = "bob's"
+# pack_name = "bob's angel's"
+pack_name = "baketorio"
 
 def get_modpack(pn=pack_name) -> FactorioModpack:
 

@@ -9,9 +9,12 @@ def main():
 
     start = timeit.default_timer()
     output = {}
-    all_ingredients = modpack.recipe_engine.all_ingredients
-    for name, item in all_ingredients.items():
+    all_ingredients = set(modpack.recipe_engine.valid_ingredients.keys()) - modpack.recipe_engine.invalid_ingredients
+    for name in all_ingredients:
+        item = modpack.recipe_engine.all_ingredients[name]
         raw, best, tech, cat = item.eval()
+        if not cat:
+            print(f"{name}: {raw[item]}")
         output[name] = {"raw_ingredients": {item.name: cost for item, cost in raw.items()},
                         "best_recipe": best.name if best else None,
                         "technologies": list(sorted(technology.name for technology in tech)),

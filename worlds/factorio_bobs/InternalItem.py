@@ -414,23 +414,17 @@ class InternalItem(FactorioElement):
         self.is_used_in: set[Recipe] = set()
 
         self.best_recipe: Recipe | None = None
-
-        self.non_recursive_raw_ingredients: dict[InternalItem, float] = {}
-        self.non_recursive_best_recipe: Recipe | None = None
-        self.recursive_loops: set[RecursiveRecipeLoop] = set()
-        self.has_recursive_recipe = False
-        self.best_loop = None
-
         self.__raw_ingredients: dict[InternalItem, float] = {}
         self.__ingredient_unlocking_technologies: set[Technology] = set()
         self.__req_categories: set[Category] = set()
+
+        self.recipes_waiting: set[Recipe] = set()
 
     def get_raw_ingredients(self) -> dict[InternalItem, float]:
         return self.eval()[0]
 
     def eval(self) -> tuple[dict[InternalItem, float], Recipe | None, set[Technology], set[Category]]:
-        if (self.__raw_ingredients
-                and not any(loop.entry and loop.get_recipe(self) == self.best_recipe for loop in self.recursive_loops)): #  and loop.get_recipe(self) == self.best_recipe
+        if self.__raw_ingredients:
             return (self.__raw_ingredients, self.best_recipe,
                     self.__ingredient_unlocking_technologies, self.__req_categories)
         # no cache calculate
@@ -439,129 +433,57 @@ class InternalItem(FactorioElement):
             # must be an unknown method for item to spontaneously exist
             if self.name not in self.recipeEngine.raw_cost and self.name not in self.recipeEngine.invalid_ingredients:
                 self.recipeEngine.modpack.logger.warning(f"spontaneously existing item ({self.name}) doesn't have a cost, defaulting to 1")
-            self.non_recursive_raw_ingredients = {self: 1}
             self.__raw_ingredients = {self: 1}
             return self.__raw_ingredients, None, set(), set()
 
-        # check if free recipe todo handle multiple free recipes
+        InternalItem.evaluating.add(self)
+        # check if free recipe todo handle multiple
         for recipe in self.recipes:
             if recipe.ingredients == {}:
-                self.non_recursive_raw_ingredients = {self: 1}
-                self.non_recursive_best_recipe = recipe
-                self.__raw_ingredients = {self: 1}
-                self.best_recipe = recipe
-                self.__req_categories = {recipe.category}
-                self.__ingredient_unlocking_technologies = recipe.all_unlocking_technologies()
-                return (self.__raw_ingredients, self.best_recipe,
-                        self.__ingredient_unlocking_technologies, self.__req_categories)
-
-        InternalItem.evaluating.add(self)
-        for loop in self.recursive_loops:
-            loop.enter_loop(self)
-
-        lowest_score = float('inf')
-        best_recipe = None
-        best_tech = set()
-        best_categories = set()
-        best_raw_ingredients = {}
+                raw_ingredients, tech, cat = recipe.eval()
+                if cat:
+                    self.non_recursive_raw_ingredients = {self: 1}
+                    self.non_recursive_best_recipe = recipe
+                    self.__raw_ingredients = {self: 1}
+                    self.best_recipe = recipe
+                    self.__req_categories = cat
+                    self.__ingredient_unlocking_technologies = tech
+                    InternalItem.evaluating.remove(self)
+                    return (self.__raw_ingredients, self.best_recipe,
+                            self.__ingredient_unlocking_technologies, self.__req_categories)
 
         for recipe in self.recipes:
             self.recipeEngine.add_recipe_path(self, recipe)
             raw_ingredients, tech, cat = recipe.eval()
             self.recipeEngine.pop_recipe_path()
 
-            if not raw_ingredients:
+            if not cat:
                 continue
 
             recipe_score = ingredient_score(raw_ingredients) / recipe.products[self]
-            if recipe_score < lowest_score:
-                lowest_score = recipe_score
-                best_recipe = recipe
-                best_tech = tech
-                best_categories = cat
-                best_raw_ingredients = {ingredient: cost / recipe.products[self] for ingredient, cost in raw_ingredients.items()}
+            if self.best_recipe is None or self.get_score() < recipe_score:
+                self.__raw_ingredients = {ingredient: cost / recipe.products[self] for ingredient, cost in raw_ingredients.items()}
+                self.best_recipe = recipe
+                self.__ingredient_unlocking_technologies = tech
+                self.__req_categories = cat
 
-        for loop in self.recursive_loops:
-            loop.exit_loop(self)
-
-        if any(loop.entry for loop in self.recursive_loops):
-            # in loop, calculation not valid for cache or recursive calculation
-            InternalItem.evaluating.remove(self)
-            return best_raw_ingredients, best_recipe, best_tech, best_categories
-
-        if not best_raw_ingredients:
-            # initial item must have unknown generation
-            best_raw_ingredients = {self: 1}
+        if not self.__raw_ingredients:
+            # initial item must have unknown generation or can't be handled yet
+            self.__raw_ingredients = {self: 1}
             if self.name not in self.recipeEngine.raw_cost:
                 print(f"spontaneously existing sample item ({self.name}) doesn't have a cost, defaulting to 1")
 
-        self.non_recursive_raw_ingredients = best_raw_ingredients
-        self.non_recursive_best_recipe = best_recipe
-        # todo non_recursive_tech
+        old_waiting = self.recipes_waiting.copy()
+        for recipe in old_waiting:
+            recipe.eval_up()
+            self.recipes_waiting.remove(recipe)
 
-        if not self.recursive_loops or True: # todo fix recursion
-            self.__raw_ingredients = best_raw_ingredients
-            self.best_recipe = best_recipe
-            self.__ingredient_unlocking_technologies = best_tech
-            self.__req_categories = best_categories
-            InternalItem.evaluating.remove(self)
-            return (self.__raw_ingredients, self.best_recipe,
-                    self.__ingredient_unlocking_technologies, self.__req_categories)
-
-        # recursive calculate
-        raise NotImplementedError("recursion takes too long and should be implemented yet. How did you get here?")
-        # todo recursive tech handling & categories
-
-        for loop in self.recursive_loops:
-            loop.enter_loop(self)
-
-        non_recursive_score = lowest_score
-        best_loop = None
-        for loop in self.recursive_loops:
-            loop_ingredients = loop.get_cost(self)
-
-            if loop_ingredients[self] >= 1: # costs more for the loop
-                continue
-
-            discount = loop_ingredients[self]
-            del loop_ingredients[self]
-
-            raw_loop_ingredients = {}
-            for loop_ingredient, loop_amount in loop_ingredients.items():
-                raw_ingredients = loop_ingredient.get_raw_ingredients()
-
-                for ingredient, amount in raw_ingredients.items():
-                    if ingredient in raw_loop_ingredients:
-                        raw_loop_ingredients[ingredient] += amount * loop_amount
-                    else:
-                        raw_loop_ingredients[ingredient] = amount * loop_amount
-
-            self.has_recursive_recipe = True
-
-            recipe_score = ingredient_score(raw_loop_ingredients) + non_recursive_score * discount
-
-            if recipe_score < lowest_score:
-                lowest_score = recipe_score
-                best_loop = loop
-                best_raw_ingredients = raw_loop_ingredients
-                for ingredient, amount in self.non_recursive_raw_ingredients.items():
-                    if ingredient in best_raw_ingredients:
-                        best_raw_ingredients[ingredient] += amount * discount
-                    else:
-                        best_raw_ingredients[ingredient] = amount * discount
-
-        for loop in self.recursive_loops:
-            loop.exit_loop(self)
-
-        self.__raw_ingredients = best_raw_ingredients
-        self.best_loop = best_loop
-        if best_loop is None:
-            self.best_recipe = best_recipe
-        else:
-            self.best_recipe = best_loop.get_recipe(self)
+        assert len(self.recipes_waiting) == 0
 
         InternalItem.evaluating.remove(self)
-        return self.__raw_ingredients
+
+        return (self.__raw_ingredients, self.best_recipe,
+                self.__ingredient_unlocking_technologies, self.__req_categories)
 
     def get_score(self) -> float:
         if self.name in self.recipeEngine.raw_cost:
@@ -569,7 +491,7 @@ class InternalItem(FactorioElement):
         raw_ingredients = self.get_raw_ingredients()
         if len(raw_ingredients) == 1 and self in raw_ingredients:
             return 1
-        return ingredient_score(self.get_raw_ingredients())
+        return ingredient_score(raw_ingredients)
 
     @cache
     def all_unlocking_technologies(self) -> set[Technology]:
@@ -597,6 +519,20 @@ class InternalItem(FactorioElement):
         self.best_recipe = best_recipe
         self.__ingredient_unlocking_technologies = ingredient_tech
         self.__req_categories = req_categories
+
+    def eval_up(self, challenging_recipe: Recipe, raw_ingredients: dict[InternalItem, float],
+                all_unlocking_technologies: set[Technology], all_categories: set[Category]):
+        if not (self.best_recipe is None):
+            current_score = self.get_score()
+            challenging_score = ingredient_score(raw_ingredients) / challenging_recipe.products[self]
+
+            if challenging_score >= current_score:
+                return
+
+        self.__raw_ingredients = {ingredient: cost / challenging_recipe.products[self] for ingredient, cost in raw_ingredients.items()}
+        self.best_recipe = challenging_recipe
+        self.__ingredient_unlocking_technologies = all_unlocking_technologies
+        self.__req_categories = all_categories
 
 
 class RecursiveRecipeLoop:
@@ -792,11 +728,8 @@ class Recipe(FactorioElement):
 
 
     def eval(self) -> tuple[dict[InternalItem, float], set[Technology], set[Category]]:
-        invalid_cache = any(loop.entry for ingredient in self.ingredients for loop in ingredient.recursive_loops) # todo less invalidation possible?
-
-        if self.__raw_ingredients and not invalid_cache:
+        if self.__raw_ingredients:
             return self.__raw_ingredients, self.__all_unlocking_technologies, self.__all_categories
-        invalid = False
 
         base_tech = self.unlocking_technologies
         req_categories = {self.category}
@@ -804,14 +737,13 @@ class Recipe(FactorioElement):
         for ingredient, cost in self.ingredients.items():
             if ingredient in InternalItem.evaluating:
                 # recursion occured log and bounce
-                RecursiveRecipeLoop(ingredient, self.recipeEngine)
-                return {}, set(), set() # todo fix recursion
-                invalid = True
-                continue
+                ingredient.recipes_waiting.add(self)
+                return {}, set(), set()
 
             raw_ingredients, _, tech, cat = ingredient.eval()
             if not raw_ingredients:
                 # not currently a valid path fail
+                ingredient.recipes_waiting.add(self) # todo needed?
                 return {}, set(), set()
 
             base_tech |= tech
@@ -822,15 +754,43 @@ class Recipe(FactorioElement):
                 else:
                     ingredients[raw_ingredient] += raw_cost * cost
 
-        if invalid:
-            return {}, set(), set()
-
-        if not invalid_cache:
-            self.__raw_ingredients = ingredients
-            self.__all_unlocking_technologies = base_tech
-            self.__all_categories = req_categories
+        self.__raw_ingredients = ingredients
+        self.__all_unlocking_technologies = base_tech
+        self.__all_categories = req_categories
 
         return ingredients, base_tech, req_categories
+
+    def eval_up(self):
+        base_tech = self.unlocking_technologies
+        req_categories = {self.category}
+        ingredients = {}
+
+        for ingredient, cost in self.ingredients.items():
+            if ingredient in InternalItem.evaluating:
+                # recursion occurred log and bounce
+                ingredient.recipes_waiting.add(self)
+                return {}, set(), set()
+
+            raw_ingredients, _, tech, cat = ingredient.eval()
+            if not raw_ingredients:
+                # not currently a valid path fail
+                ingredient.recipes_waiting.add(self) # todo needed?
+                return {}, set(), set()
+
+            base_tech |= tech
+            req_categories |= cat
+            for raw_ingredient, raw_cost in raw_ingredients.items():
+                if raw_ingredient not in ingredients:
+                    ingredients[raw_ingredient] = raw_cost * cost
+                else:
+                    ingredients[raw_ingredient] += raw_cost * cost
+
+        self.__raw_ingredients = ingredients
+        self.__all_unlocking_technologies = base_tech
+        self.__all_categories = req_categories
+
+        for product in self.products.keys():
+            product.eval_up(self, self.__raw_ingredients, self.__all_unlocking_technologies, self.__all_categories)
 
 class Machine(FactorioElement):
     evaluating: set[Machine] = set()
