@@ -183,3 +183,58 @@ So when the game itself does not follow this assumption, the options are:
   - For connections, any logical regions will still need to be reachable through other, *repeatable* connections
   - For locations, this may require game changes to remove the vanilla item if it affects logic
 - Decide that resetting the save file is part of the game's logic, and warn players about that
+
+---
+
+### What are "local" vs "remote" items, and what are the pros and cons of each?
+
+First off, these terms can be misleading. Since the whole point of a multi-game multiworld randomizer is that some items
+are going to be placed in other slots (unless there's only one slot), the choice isn't really "local vs remote";
+it's "mixed local/remote vs all remote". You have to get "remote items" working to be an AP implementation at all, and
+it's often simpler to handle every item/location the same way, so you generally shouldn't worry about "local items"
+until you've finished more critical features.
+
+Next, "local" and "remote" items confusingly refer to multiple concepts, so it's important to clearly separate them:
+
+- Whether an item happens to get placed in the same slot it originates from, or a different slot. I'll call these
+  "locally placed" and "remotely placed" items.
+- Whether an AP client implements location checking for locally placed items by skipping the usual AP server roundtrip
+  (i.e. sending [LocationChecks](<network%20protocol.md#locationchecks>)
+  then receiving [ReceivedItems](<network%20protocol.md#receiveditems>)
+  ) and directly giving the item to the player, or by doing the AP server roundtrip regardless. I'll call these
+  "locally implemented" items and "remotely implemented" items.
+  - Locally implementing items requires the AP client to know what the locally placed items were without asking an AP
+    server (or else you'd effectively be doing remote items with extra steps). Typically, it gets that information from
+    a patch file, which is one reason why games that already need a patch file are more likely to choose local items.
+  - If items are remotely implemented, the AP client can use [location scouts](<network%20protocol.md#LocationScouts>)
+    to learn what items are placed on what locations. Features that require this information are sometimes mistakenly
+    assumed to require locally implemented items, but location scouts work just as well as patch file data.
+- [The `items_handling` bitflags in the Connect packet](<network%20protocol.md#items_handling-flags>).
+  AP clients with remotely implemented items will typically set all three flags, including "from your own world".
+  Clients with locally implemented items might set only the "from other worlds" flag.
+  - Whether a local items client sets the "starting inventory" flag likely depends on other details. For example, if a ROM
+    is being patched, and starting inventory can be added to that patch, then it makes sense to leave the flag unset.
+
+When people talk about "local vs remote items" as a choice that world devs have to make, they mean deciding whether
+your client will locally or remotely implement the items which happen to be locally placed (or make both
+implementations, or let the player choose an implementation).
+
+Theoretically, the biggest benefit of "local items" is that it allows a solo (single slot) multiworld to be played
+entirely offline, with no AP server, from start to finish. This is similar to a "standalone"/non-AP randomizer,
+except that you still get AP's player options, generation, etc. for free.
+For some games, there are also technical constraints that make certain items easier to implement locally,
+or less glitchy when implemented locally, as long as you're okay with never allowing these items to be placed remotely
+(or offering the player even more options).
+
+The main downside (besides more implementation work) is that "local items" can't support "same slot co-op".
+That's when two players on two different machines connect to the same slot and play together.
+This only works if both players receive all the items for that slot, including ones found by the other player,
+which requires those items to be implemented remotely so the AP server can send them to all of that slot's clients.
+
+So to recap:
+
+- (All) remote items is often the simplest choice, since you have to implement remote items anyway.
+- Remote items enable same slot co-op.
+- Local items enable solo offline play.
+- If you want to support both solo offline play and same slot co-op,
+  you might need to expose local vs remote items as an option to the player.
