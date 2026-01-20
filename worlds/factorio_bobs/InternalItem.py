@@ -1,71 +1,136 @@
 from __future__ import annotations
 
 import json
-import re
-from functools import cached_property, cache
-from typing import TYPE_CHECKING, Callable
-
-# All of this needs redoing to be more modular
+from enum import Enum
+from functools import cached_property
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from . import Technology, FactorioModpack
 
-from .FactorioUtils import FactorioElement
+GENERATOR_ENERGY = 0
 
-Category = str
+class DefinitionSource(Enum):
+    UNKNOWN = 0
+    EXTRACTED = 1
+    CUSTOM = 2
+    IMPLIED = 3
 
-def ingredient_score(ingredients: dict[InternalItem, float]):
-    cost = 0
+class RecipeEngineType:
+    def __init__(self, ctx: RecipeEngine, name: str, source: DefinitionSource):
+        self.name: str = name
+        self.ctx: RecipeEngine = ctx
+        self.source: DefinitionSource = source
+        if source == DefinitionSource.IMPLIED:
+            ctx.modpack.logger.warning(f"{repr(self)}: is implied more strictly define")
 
-    for ingredient, amount in ingredients.items():
-        cost += ingredient.get_score() * amount
-    return cost
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}(name={self.name}, ctx={self.ctx.name})"
 
 class RecipeEngine:
     def __init__(self, modpack: "FactorioModpack"):
         self.modpack = modpack
-        self.__all_ingredients: dict[str, InternalItem] | None = None
-        self.__valid_ingredients: dict[str, InternalItem] | None = None
-        self.__fluids: set[str] | None = None
-        self.__recipes: dict[str, Recipe] | None = None
-        self.__imported_recipes: dict[str, Recipe] | None = None
-        self.__pack_custom_recipes: dict[str, Recipe] | None = None
-        self.__machines: dict[str, Machine] | None = None
+        self.name = self.modpack.packName
 
-        self.__recipe_sources: dict[str, set[Technology]] | None = None
-        self.__mining_with_fluid_sources: set[Technology] | None = None
+        self.has_init = False
 
-        self.__missed_machines: dict[str, set[Category]] | None = None
-        self.__raw_cost: dict[str, float] | None = None
-        self.__invalid_ingredients: set[str] | None = None
-        self.__req_machines_for_category: dict[Category, str] | None = None
-        self.__excluded_automation_ingredients: set[str] | None = None
+        self.game_items: dict[str, GameItem] = {}
+        self.recipes: dict[str, GameRecipe] = {}
 
-        self.__current_recipe_path: list[tuple[InternalItem, Recipe]] = []
+        self.item_catalysts: dict[GameItem, ItemCatalyst] = {}
+        self.categories: dict[str, CategoryCatalyst] = {}
+        self.fluid_mining: OrTechsCatalyst = OrTechsCatalyst(self, "FluidMining", DefinitionSource.EXTRACTED)
+
+        self.__dif_entity_to_item: dict[str, str] | None = None
 
     def full_init(self) -> None:
+        if self.has_init:
+            return
+        self.has_init = True
+
+        self.__register_game_items()
+        self.__register_categories()
+        self.__register_recipes()
         self.__load_settings()
-        if self.__valid_ingredients is None:
-            self.__register_iternal_items()
-        if self.__recipes is None:
-            self.__register_recipes()
+        self.__link_recipes()
+
+    def __register_game_items(self) -> None:
+        invalid_items = {"fluid-unknown"} | {f"parameter-{i}" for i in range(10)}
+
+        with self.modpack.open_file("Extractor/fluids.json") as file:
+            fluids: set[str] = set(json.load(file))
+
+        for fluid in fluids:
+            ingredient = GameItem(self, fluid, DefinitionSource.EXTRACTED, True)
+            self.game_items[fluid] = ingredient
+            if fluid in invalid_items:
+                ingredient.is_valid_ingredient = False
+
+        with self.modpack.open_file("Extractor/items.json") as file:
+            item_stack_sizes: dict[str, int] = json.load(file)
+
+        for item, stack_size in item_stack_sizes.items():
+            ingredient = GameItem(self, item, DefinitionSource.EXTRACTED,False)
+            self.game_items[item] = ingredient
+            if ingredient.name in self.modpack.ordered_science_packs or invalid_items:
+                ingredient.is_valid_ingredient = False
+
+    def __register_categories(self) -> None:
+        with self.modpack.open_file("Extractor/machines.json") as file:
+            raw_machines = json.load(file)
+
+        for entity, categories in raw_machines.items():
+            item = self.get_item_from_entity(entity)
+            for category in categories:
+                if category not in self.categories:
+                    self.categories[category] = CategoryCatalyst(self, category, DefinitionSource.EXTRACTED)
+                self.categories[category].machines.add(item)
+
+    def __register_recipes(self):
+        self.__recipes: dict[str, GameRecipe] = {}
+
+        with self.modpack.open_file("Extractor/resources.json") as file:  # todo find better method then opening twice
+            raw_resources = json.load(file)
+
+        for resource_name, resource_data in raw_resources.items():
+            if "required_fluid" in resource_data:
+                self.recipes[f"resource_{resource_name}"] = GameRecipe(self, resource_name, DefinitionSource.EXTRACTED,
+                                                                       {resource_data["required_fluid"]: resource_data["fluid_amount"]},
+                                                                       resource_data["products"], resource_data["mining_time"])
+                if resource_data["category"] == "basic-solid":
+                    self.recipes[f"resource_{resource_name}"].catalysts.add(self.fluid_mining)
+            else:
+                self.recipes[f"resource_{resource_name}"] = GameRecipe(self, resource_name, DefinitionSource.EXTRACTED,
+                                                                       {},
+                                                                       resource_data["products"], resource_data["mining_time"])
+            self.recipes[f"resource_{resource_name}"].catalysts.add(self.categories[resource_data["category"]])
+        del raw_resources
+
+        with self.modpack.open_file("Extractor/recipes.json") as file:
+            raw_recipes = json.load(file)
+
+        for recipe_name, recipe_data in raw_recipes.items():
+            # example "wheat-seeds":{"ingredients":{"wood":100},"products":{"wheat-seeds":1},"category":"organic-synth-recipes","energy":30}
+            self.recipes[recipe_name] = GameRecipe(self, recipe_name, DefinitionSource.EXTRACTED,
+                                                   recipe_data["ingredients"], recipe_data["products"],
+                                                   recipe_data["energy"])
+            self.recipes[recipe_name].catalysts.add(self.categories[recipe_data["category"]])
+        del raw_recipes
 
         with self.modpack.open_file("Extractor/generators.json") as file:
             raw_generators = json.load(file)
-        for item, product in raw_generators.items():
-            if item in self.entity_to_item:
-                item = self.entity_to_item[item]
-            if item in self.machines:
-                self.machines[item].categories.add(item)
-            else:
-                self.machines[item] = Machine(item, {item}, self)
-            self.__req_machines_for_category[item] = item
-            self.__recipes[f"generator_{item}"] = Recipe(f"generator_{item}", item, {},
-                                                         {product: 1}, 1, self)
+        for entity, product in raw_generators.items():
+            item = self.get_item_from_entity(entity)
+            self.categories[f"generator_{item.name}"] = CategoryCatalyst(self, f"generator_{item.name}",
+                                                                         DefinitionSource.EXTRACTED)
+            self.categories[f"generator_{item.name}"].machines.add(item)
+            self.recipes[f"generator_{item.name}"] = GameRecipe(self, f"generator_{item.name}",
+                                                                DefinitionSource.EXTRACTED,
+                                                                {}, {product: 1},
+                                                                GENERATOR_ENERGY)
         del raw_generators
 
-        is_offshore_pump = any("offshore-pump" in machine.categories for machine in self.machines.values())
-        if is_offshore_pump:
+        if "offshore-pump" in self.categories:
             fluids = set()
             with self.modpack.open_file("Extractor/specialTiles.json") as file:
                 raw_tiles = json.load(file)
@@ -74,171 +139,8 @@ class RecipeEngine:
                     fluids.add(special["fluid"])
             del raw_tiles
             for fluid in fluids:
-                self.__recipes[f"pump_{fluid}"] = Recipe(f"pump_{fluid}", "offshore-pump",
-                                                         {}, {fluid: 1}, 1, self)
-
-
-        unknown_categories: set[Category] = set()
-        for recipe in self.__recipes.values():
-            if recipe.category not in self.req_machines_for_category:
-                unknown_categories.add(recipe.category)
-
-        is_error = False
-        for category in unknown_categories:
-            valid_machines: set[Machine] = set()
-            for machine in self.machines.values():
-                if category in machine.categories:
-                    valid_machines.add(machine)
-
-            if len(valid_machines) == 1:
-                self.__req_machines_for_category[category] = valid_machines.pop().name
-                continue
-
-            best_value = 999
-            best_machine = None
-            without_postfix = None
-            multiple_types = False
-            for machine in valid_machines:
-                machine_name = machine.name
-
-                reg_result = re.search(r"\d+$", machine_name)
-                if reg_result:
-                    int_result = int(reg_result.group(0))
-                    if int_result < best_value:
-                        best_value = int_result
-                        best_machine = machine_name
-                else:
-                    best_value = 0
-                    best_machine = machine_name
-
-                while machine_name[-1] in "0123456789-":
-                    machine_name = machine_name[:-1]
-
-                if not without_postfix:
-                    without_postfix = machine_name
-                if without_postfix != machine_name:
-                    multiple_types = True
-                    break
-
-            if not multiple_types:
-                self.__req_machines_for_category[category] = best_machine
-                continue
-
-            is_error = True
-            if valid_machines:
-                print(f"Unknown machine for category \"{category}\", valid options: {valid_machines}")
-            else:
-                print(f"Unknown machine for category \"{category}\", no valid machines found")
-
-        if is_error:
-            raise Exception(f"Unknown for following categories in {self.modpack.packName}: {unknown_categories}")
-
-        try:
-            with self.modpack.open_file("Cache/precalc.json") as file:
-                precalc = json.load(file)
-            for item_name, result in precalc.items():
-                item = self.all_ingredients[item_name]
-                item.set_cache({self.all_ingredients[ingredient_name]: cost for ingredient_name, cost in result["raw_ingredients"].items()},
-                               self.recipes[result["best_recipe"]] if result["best_recipe"] else None,
-                               {self.modpack.technology_table[tech] for tech in result["technologies"]},
-                               set(result["category"]))
-        except FileNotFoundError:
-            self.modpack.logger.debug("No precalc_old.json found")
-
-    def __load_settings(self) -> None:
-        with self.modpack.open_file("recipeEngineSettings.json") as file:
-            raw_settings = json.load(file)
-            if "missed_machines" in raw_settings:
-                self.__missed_machines: dict[str, set[Category]] = {name: set(categories)
-                                                                    for name, categories in raw_settings["missed_machines"].items()}
-            else:
-                self.__missed_machines: dict[str, set[Category]] = {}
-            self.__req_machines_for_category: dict[Category, str] = raw_settings["req_machines_for_category"]
-            self.__raw_cost: dict[str, float] = raw_settings.get("raw_cost", {})
-            self.__invalid_ingredients: set[str] = set(raw_settings.get("invalid_ingredients", set()))
-            self.__excluded_automation_ingredients: set[str] = set(raw_settings.get("excluded_automation_ingredients", set()))
-
-    def __register_iternal_items(self) -> None:
-        invalid_items = {"pistol", "fluid-unknown"} | {f"parameter-{i}" for i in range(10)}
-
-        self.__all_ingredients: dict[str, InternalItem] = {}
-        self.__valid_ingredients: dict[str, InternalItem] = {}
-
-        with self.modpack.open_file("Extractor/fluids.json") as file:
-            self.__fluids: set[str] = set(json.load(file))
-
-        for fluid in self.__fluids:
-            if fluid in invalid_items:
-                continue
-            ingredient = InternalItem(fluid, True, self)
-            self.__all_ingredients[fluid] = ingredient
-            self.__valid_ingredients[fluid] = ingredient
-
-        with self.modpack.open_file("Extractor/items.json") as file:
-            item_stack_sizes: dict[str, int] = json.load(file)
-
-        for item, stack_size in item_stack_sizes.items():
-            if item in invalid_items:
-                continue
-            ingredient = InternalItem(item, False, self)
-            self.__all_ingredients[item] = ingredient
-            if stack_size > 1 and ingredient.name not in self.modpack.ordered_science_packs:
-                self.__valid_ingredients[item] = ingredient
-
-        self.__all_ingredients["rocket-part"] = InternalItem("rocket-part", False, self)
-
-    def __register_recipe_sources(self) -> None:
-        self.__recipe_sources: dict[str, set[Technology]] = {}
-        mining_with_fluid_sources: set[Technology] = set()
-        for technology in self.modpack.base_technology_table.values():
-            for recipe_name in technology.unlocks:
-                self.__recipe_sources.setdefault(recipe_name, set()).add(technology)
-            if "mining-with-fluid" in technology.modifiers:
-                mining_with_fluid_sources.add(technology)
-
-        with self.modpack.open_file("Extractor/resources.json") as file: # todo find better method then opening twice
-            raw_resources = json.load(file)
-
-        for resource_name, resource_data in raw_resources.items():
-            if "required_fluid" in resource_data:
-                self.__recipe_sources[f"mining-{resource_name}"] = mining_with_fluid_sources
-
-    def __register_recipes(self):
-        self.__recipes: dict[str, Recipe] = {}
-
-        with self.modpack.open_file("Extractor/resources.json") as file:  # todo find better method then opening twice
-            raw_resources = json.load(file)
-
-        for resource_name, resource_data in raw_resources.items():
-            self.__add_recipe(
-                f"mining-{resource_name}",
-                resource_data["category"],
-                {resource_data["required_fluid"]: resource_data["fluid_amount"]}
-                if "required_fluid" in resource_data else {},
-                {data["name"]: data["amount"] for data in resource_data["products"].values()},
-                resource_data["mining_time"]
-            )
-        del raw_resources
-
-        with self.modpack.open_file("Extractor/recipes.json") as file:
-            raw_recipes = json.load(file)
-
-        for recipe_name, recipe_data in raw_recipes.items():
-            # example:
-            # "accumulator":{"ingredients":{"iron-plate":2,"battery":5},"products":{"accumulator":1},"category":"crafting"}
-            # FIXME: add mining?
-            if (("barrel" in recipe_data["products"] and recipe_name != "barrel")
-                    or ("bob-gas-canister" in recipe_data["products"] and recipe_name != "bob-gas-canister")
-                    or ("bob-empty-canister" in recipe_data["products"] and recipe_name != "bob-empty-canister")
-                    or (recipe_data["category"] == "parameters")): # todo add custom canisters somewhere to skip
-                continue
-
-            self.__add_recipe(recipe_name, recipe_data["category"],
-                              recipe_data["ingredients"], recipe_data["products"],
-                              recipe_data.get("energy", 0))
-
-        del raw_recipes
-        self.__imported_recipes: dict[str, Recipe] = self.__recipes.copy()
+                self.recipes[f"pump_{fluid}"] = GameRecipe(self, f"pump_{fluid}", DefinitionSource.EXTRACTED,
+                                                           {}, {fluid: 1}, GENERATOR_ENERGY)
 
         try:
             with self.modpack.open_file("customRecipes.json") as file:
@@ -246,572 +148,162 @@ class RecipeEngine:
         except FileNotFoundError:
             raw_custom = {}
 
-        self.__pack_custom_recipes: dict[str, Recipe] = {}
         for recipe_name, recipe_data in raw_custom.items():
             # TODO add optional crafting_machine_tints
             # TODO add group for AP recipes
             # TODO add support for custom techs for recipes
-            recipe = Recipe(recipe_name, recipe_data["category"],
-                              recipe_data["ingredients"], recipe_data["products"],
-                              recipe_data.get("energy", 0), self)
-            self.__recipes[recipe_name] = recipe
-            self.__pack_custom_recipes[recipe_name] = recipe
+            self.recipes[recipe_name] = GameRecipe(self, recipe_name, DefinitionSource.CUSTOM,
+                                                   recipe_data["ingredients"], recipe_data["products"], recipe_data["energy"])
+            self.recipes[recipe_name].catalysts.add(self.categories[recipe_data["category"]])
 
-    def delete_recipe(self, name: str):
-        del self.__recipes[name]
+    def __load_settings(self) -> None:
+        with self.modpack.open_file("recipeEngineSettings.json") as file:
+            raw_settings = json.load(file)
 
-    def __add_recipe(self, recipe_name: str, category: Category,
-                     ingredients: dict[InternalItem | str, float], products: dict[InternalItem | str, float],
-                     energy = 0) -> None:
-        self.__recipes[recipe_name] = Recipe(recipe_name, category, ingredients, products, energy, self)
-
-    def add_recipe_path(self, item: InternalItem, recipe: Recipe):
-        self.__current_recipe_path.append((item, recipe))
-
-    def pop_recipe_path(self):
-        self.__current_recipe_path.pop()
-
-    def get_recipe_path_from(self, ingredient: InternalItem) -> tuple[tuple[InternalItem, Recipe], ...]:
-        start_index = 0
-        try:
-            while self.__current_recipe_path[start_index][0] != ingredient:
-                start_index += 1
-        except IndexError:
-            Exception(f"history: {self.__current_recipe_path}, item: {ingredient}, index: {start_index}")
-
-        return tuple(self.__current_recipe_path[start_index:])
-
-    def get_machine_from_category(self, category: Category) -> Machine:
-        return self.machines[self.req_machines_for_category[category]]
-
-    def get_ordered_items(self, key: Callable[[InternalItem], int] = lambda item: item.get_score()) -> tuple[
-        set[InternalItem], list[InternalItem]]:
-        valid_items: set[InternalItem] = set()
-        for ingredient in self.valid_ingredients.values():
-            raw_ingredients = ingredient.get_raw_ingredients()
-            if any(raw.name in self.invalid_ingredients for raw in raw_ingredients.keys()):
-                continue
-            valid_items.add(ingredient)
-
-        starting_pool = set()
-        for item in valid_items:
-            if not item.all_unlocking_technologies() and not item.is_fluid and all(
-                    raw.name not in self.excluded_automation_ingredients for raw in item.get_raw_ingredients().keys()):
-                starting_pool.add(item)
-
-        valid_items.difference_update(starting_pool)
-        ordered_items: list[InternalItem] = list(sorted(valid_items, key=key))
-        return starting_pool, ordered_items
-
-    @property
-    def all_ingredients(self) -> dict[str, InternalItem]:
-        if self.__all_ingredients is None:
-            self.__register_iternal_items()
-        return self.__all_ingredients
-
-    @property
-    def valid_ingredients(self) -> dict[str, InternalItem]:
-        if self.__valid_ingredients is None:
-            self.__register_iternal_items()
-        return self.__valid_ingredients
-
-    @property
-    def fluids(self) -> set[str]:
-        if self.__fluids is None:
-            self.__register_iternal_items()
-        return self.__fluids
-
-    @property
-    def recipes(self) -> dict[str, Recipe]:
-        if self.__recipes is None:
-            self.__register_recipes()
-        return self.__recipes
-
-    @property
-    def pack_custom_recipes(self) -> dict[str, Recipe]:
-        if self.__pack_custom_recipes is None:
-            self.__register_recipes()
-        return self.__pack_custom_recipes
-
-    @property
-    def missed_machines(self) -> dict[str, set[Category]]:
-        if self.__missed_machines is None:
-            self.__load_settings()
-        return self.__missed_machines
-
-
-    @property
-    def recipe_sources(self):
-        if self.__recipe_sources is None:
-            self.__register_recipe_sources()
-        return self.__recipe_sources
-
-    @property
-    def raw_cost(self) -> dict[str, float]:
-        if self.__raw_cost is None:
-            self.__load_settings()
-        return self.__raw_cost
-
-    @property
-    def req_machines_for_category(self) -> dict[Category, str]:
-        if self.__req_machines_for_category is None:
-            self.__load_settings()
-        return self.__req_machines_for_category
-
-    @property
-    def excluded_automation_ingredients(self) -> set[str]:
-        if self.__excluded_automation_ingredients is None:
-            self.__load_settings()
-        return self.__excluded_automation_ingredients
-
-    @cached_property
-    def machines(self) -> dict[str, Machine]:
-        with self.modpack.open_file("Extractor/machines.json") as file:
-            raw_machines = json.load(file)
-        machines: dict[str, Machine] = {}
-
-        for name, categories in raw_machines.items():
-            if name in self.entity_to_item:
-                name = self.entity_to_item[name]
-            machines[name] = Machine(name, set(categories), self)
-
-        machines["assembling-machine-1"].categories.add("crafting-with-fluid")  # mod enables this
-        machines["character"].categories.add("basic-crafting")  # somehow this is implied and not exported
-        machines["character"].categories.add("basic-solid")
-
-        for name, categories in self.missed_machines.items():
-            if name in self.entity_to_item:
-                name = self.entity_to_item[name]
-            if name in machines:
+        if "missed_machines" in raw_settings:
+            for name, categories in raw_settings["missed_machines"].items():
                 for category in categories:
-                    machines[name].categories.add(category)
-            else:
-                machines[name] = Machine(name, categories, self)
+                    self.categories[category].machines.add(self.get_game_item(name, DefinitionSource.CUSTOM))
 
-        return machines
+        if "invalid_ingredients" in raw_settings:
+            for ingredient in raw_settings["invalid_ingredients"]:
+                self.get_game_item(ingredient, DefinitionSource.CUSTOM).is_valid_ingredient = False
+
+        if "excluded_automation_ingredients" in raw_settings:
+            for ingredient in raw_settings["excluded_automation_ingredients"]:
+                self.get_game_item(ingredient, DefinitionSource.CUSTOM).is_valid_first_pool = False
+
+    def __link_recipes(self):
+        for recipe in self.recipes.values():
+            recipe.link()
+
+    def get_item_catalyst(self, item: GameItem) -> ItemCatalyst:
+        if item not in self.item_catalysts:
+            self.item_catalysts[item] = ItemCatalyst(DefinitionSource.IMPLIED, item)
+        return self.item_catalysts[item]
+
+    def get_item_from_entity(self, entity: str) -> GameItem:
+        if self.__dif_entity_to_item is None:
+            with self.modpack.open_file("Extractor/entityToItem.json") as file:
+                self.__dif_entity_to_item = json.load(file)
+
+        if entity in self.__dif_entity_to_item:
+            entity = self.__dif_entity_to_item[entity]
+
+        return self.game_items[entity]
+
+    def get_game_item(self, item: GameItem | str, source: DefinitionSource = DefinitionSource.IMPLIED) -> GameItem:
+        if type(item) is GameItem:
+            return item
+        if item in self.game_items:
+            return self.game_items[item]
+        if source != DefinitionSource.EXTRACTED:
+            raise RuntimeError(f"{item} is not a valid ingredient")
+        self.game_items[item] = GameItem(self, item, DefinitionSource.IMPLIED)
+        return self.game_items[item]
+
+
+
+class GameItem(RecipeEngineType):
+    def __init__(self, ctx: RecipeEngine, name: str, source: DefinitionSource,
+                 is_fluid: bool = False):
+        super().__init__(ctx, name, source)
+        self.is_fluid = is_fluid
+
+        self.has_calculated_raw: bool = False
+
+        self.is_valid_ingredient: bool = True
+        self.__is_valid_first_pool: bool = True
+        self.__is_valid_pool: bool = True
+
+        self.used_in: set[GameRecipe] = set()
+        self.crafted_by: set[GameRecipe] = set()
+
+    @property
+    def is_valid_first_pool(self) -> bool:
+        return self.is_valid_pool and self.__is_valid_first_pool
+
+    @is_valid_first_pool.setter
+    def is_valid_first_pool(self, is_valid_first_pool: bool) -> None:
+        self.__is_valid_first_pool = is_valid_first_pool
+
+    @property
+    def is_valid_pool(self) -> bool:
+        return self.is_valid_ingredient and self.__is_valid_pool
+
+    @is_valid_pool.setter
+    def is_valid_pool(self, is_valid_pool: bool) -> None:
+        self.__is_valid_pool = is_valid_pool
+
+
+class GameRecipe(RecipeEngineType):
+    def __init__(self, ctx: RecipeEngine, name: str, source: DefinitionSource,
+                 ingredients: dict[GameItem | str, float], products: dict[GameItem | str, float], energy: float):
+        super().__init__(ctx, name, source)
+
+        self.has_calculated_raw: bool = False
+        self.is_valid: bool = True
+
+        self.ingredients: dict[GameItem, float] = {ctx.get_game_item(ingredient, source): amount
+                                                   for ingredient, amount in ingredients.items()}
+        self.products: dict[GameItem, float] = {ctx.get_game_item(product, source): amount
+                                                for product, amount in products.items()}
+        self.energy = energy
+        self.catalysts: set[Catalyst] = set()
+
+        if not self.ingredients:
+            self.cost: float = self.energy
+        else:
+            self.cost: float = float("inf")
+
+        for ingredient, amount in ingredients.copy().items():
+            if not ingredient.is_valid_ingredient:
+                self.is_valid = False
+            if ingredient not in self.products:
+                continue
+            new_amount = self.products[ingredient] - amount
+            if new_amount >= 0:
+                del self.ingredients[ingredient]
+                self.catalysts.add(ctx.get_item_catalyst(ingredient))
+                self.products[ingredient] = new_amount
+            else:
+                del self.products[ingredient]
+                self.ingredients[ingredient] = -new_amount
 
     @cached_property
-    def entity_to_item(self) -> dict[str, str]:
-        with self.modpack.open_file("Extractor/entityToItem.json") as file:
-            raw_entity_to_item = json.load(file)
-        return raw_entity_to_item
-
-    @property
-    def invalid_ingredients(self) -> set[str]:
-        if self.__invalid_ingredients is None:
-            self.__load_settings()
-        return self.__invalid_ingredients
-
-
-class InternalItem(FactorioElement):
-    evaluating: set[InternalItem] = set()
-    __req_categories: set[Category]
-    def __init__(self, name: str, is_fluid: bool, recipeEngine: RecipeEngine):
-        self.name = name
-        self.recipeEngine = recipeEngine
-        self.is_fluid = is_fluid
-        self.recipes: set[Recipe] = set()
-        self.is_used_in: set[Recipe] = set()
-
-        self.best_recipe: Recipe | None = None
-        self.__raw_ingredients: dict[InternalItem, float] = {}
-        self.__ingredient_unlocking_technologies: set[Technology] = set()
-        self.__req_categories: set[Category] = set()
-
-        self.recipes_waiting: set[Recipe] = set()
-
-    def get_raw_ingredients(self) -> dict[InternalItem, float]:
-        return self.eval()[0]
-
-    def eval(self) -> tuple[dict[InternalItem, float], Recipe | None, set[Technology], set[Category]]:
-        if self.__raw_ingredients:
-            return (self.__raw_ingredients, self.best_recipe,
-                    self.__ingredient_unlocking_technologies, self.__req_categories)
-        # no cache calculate
-
-        if len(self.recipes) == 0:
-            # must be an unknown method for item to spontaneously exist
-            if self.name not in self.recipeEngine.raw_cost and self.name not in self.recipeEngine.invalid_ingredients:
-                self.recipeEngine.modpack.logger.warning(f"spontaneously existing item ({self.name}) doesn't have a cost, defaulting to 1")
-            self.__raw_ingredients = {self: 1}
-            return self.__raw_ingredients, None, set(), set()
-
-        InternalItem.evaluating.add(self)
-        # check if free recipe todo handle multiple
-        for recipe in self.recipes:
-            if recipe.ingredients == {}:
-                raw_ingredients, tech, cat = recipe.eval()
-                if cat:
-                    self.non_recursive_raw_ingredients = {self: 1}
-                    self.non_recursive_best_recipe = recipe
-                    self.__raw_ingredients = {self: 1}
-                    self.best_recipe = recipe
-                    self.__req_categories = cat
-                    self.__ingredient_unlocking_technologies = tech
-                    InternalItem.evaluating.remove(self)
-                    return (self.__raw_ingredients, self.best_recipe,
-                            self.__ingredient_unlocking_technologies, self.__req_categories)
-
-        for recipe in self.recipes:
-            self.recipeEngine.add_recipe_path(self, recipe)
-            raw_ingredients, tech, cat = recipe.eval()
-            self.recipeEngine.pop_recipe_path()
-
-            if not cat:
-                continue
-
-            recipe_score = ingredient_score(raw_ingredients) / recipe.products[self]
-            if self.best_recipe is None or self.get_score() < recipe_score:
-                self.__raw_ingredients = {ingredient: cost / recipe.products[self] for ingredient, cost in raw_ingredients.items()}
-                self.best_recipe = recipe
-                self.__ingredient_unlocking_technologies = tech
-                self.__req_categories = cat
-
-        if not self.__raw_ingredients:
-            # initial item must have unknown generation or can't be handled yet
-            self.__raw_ingredients = {self: 1}
-            if self.name not in self.recipeEngine.raw_cost:
-                print(f"spontaneously existing sample item ({self.name}) doesn't have a cost, defaulting to 1")
-
-        old_waiting = self.recipes_waiting.copy()
-        for recipe in old_waiting:
-            recipe.eval_up()
-            self.recipes_waiting.remove(recipe)
-
-        assert len(self.recipes_waiting) == 0
-
-        InternalItem.evaluating.remove(self)
-
-        return (self.__raw_ingredients, self.best_recipe,
-                self.__ingredient_unlocking_technologies, self.__req_categories)
-
-    def get_score(self) -> float:
-        if self.name in self.recipeEngine.raw_cost:
-            return self.recipeEngine.raw_cost[self.name]
-        raw_ingredients = self.get_raw_ingredients()
-        if len(raw_ingredients) == 1 and self in raw_ingredients:
-            return 1
-        return ingredient_score(raw_ingredients)
-
-    @cache
-    def all_unlocking_technologies(self) -> set[Technology]:
-        if self in InternalItem.evaluating:
-            return set()
-
-        _,_,all_unlocking_technologies, categories = self.eval()
-        all_unlocking_technologies = all_unlocking_technologies.copy()
-        categories = categories.copy()
-
-        for category in categories:
-            all_unlocking_technologies |= self.recipeEngine.get_machine_from_category(category).all_unlocking_technologies()
-
-        return all_unlocking_technologies
-
-    def invalidate_cache(self):
-        self.__raw_ingredients = set()
-        self.best_recipe = None
-        self.__ingredient_unlocking_technologies = set()
-        self.__req_categories = set()
-
-    def set_cache(self, raw_ingredients: dict[InternalItem, float], best_recipe : Recipe | None,
-                  ingredient_tech: set[Technology], req_categories: set[Category]):
-        self.__raw_ingredients = raw_ingredients
-        self.best_recipe = best_recipe
-        self.__ingredient_unlocking_technologies = ingredient_tech
-        self.__req_categories = req_categories
-
-    def eval_up(self, challenging_recipe: Recipe, raw_ingredients: dict[InternalItem, float],
-                all_unlocking_technologies: set[Technology], all_categories: set[Category]):
-        if not (self.best_recipe is None):
-            current_score = self.get_score()
-            challenging_score = ingredient_score(raw_ingredients) / challenging_recipe.products[self]
-
-            if challenging_score >= current_score:
-                return
-
-        self.__raw_ingredients = {ingredient: cost / challenging_recipe.products[self] for ingredient, cost in raw_ingredients.items()}
-        self.best_recipe = challenging_recipe
-        self.__ingredient_unlocking_technologies = all_unlocking_technologies
-        self.__req_categories = all_categories
-
-
-class RecursiveRecipeLoop:
-    # entered_loops = 0
-    existing_loops = set()
-    temp_num_loop = 0
-
-    def __init__(self, start: InternalItem, recipeEngine: RecipeEngine) -> None:
-        self.recipeEngine = recipeEngine
-
-        self.recipes: tuple[tuple[InternalItem, Recipe], ...] = self.recipeEngine.get_recipe_path_from(start)
-        self.entry: InternalItem | None = start
-        try:
-            self.blocked: Recipe | None = self.recipes[0][1]
-        except IndexError:
-            Exception(f"recipes: {self.recipes}, item: {start}")
-        # RecursiveRecipeLoop.entered_loops += 1
-
-        # make the start of self.recipes stable for hash
-        hashed_recipes = tuple(hash(recipe) for recipe in self.recipes)
-        first_recipe = min(hashed_recipes)
-        first_recipe_index = hashed_recipes.index(first_recipe)
-        self.recipes = self.recipes[first_recipe_index:] + self.recipes[:first_recipe_index]
-
-        if self in RecursiveRecipeLoop.existing_loops:
-            return
-        RecursiveRecipeLoop.existing_loops.add(self)
-        if not len(RecursiveRecipeLoop.existing_loops) % 100:
-            print(f"recursive loops: {len(RecursiveRecipeLoop.existing_loops)}\n"
-                  f"loop: {self.recipes}")
-
-        for item, _ in self.recipes:
-            item.recursive_loops.add(self)
-
-    def __hash__(self) -> int:
-        return hash(self.recipes)
-
-    def __eq__(self, other) -> bool:
-        return hash(self) == hash(other)
-
-    def enter_loop(self, item: InternalItem) -> bool:
-        if self.entry:
-            return False
-        self.entry = item
-        # RecursiveRecipeLoop.entered_loops += 1
-        for index, (loop_item, _) in enumerate(self.recipes):
-            if item == loop_item:
-                self.blocked = self.recipes[index-1][1]
-                # excluded_recipes.add(self.blocked)
-                break
-
-        return True
-
-    def exit_loop(self, item: InternalItem) -> bool:
-        if not self.entry:
-            raise Exception("exiting_loop called without entry")
-        if item != self.entry:
-            return False
-        self.entry = None
-        # excluded_recipes.remove(self.blocked)
-        self.blocked = None
-        return True
-
-    # what would getting one of the item from the loop cost
-    def get_cost(self, item: InternalItem) -> dict[InternalItem, float]:
-        item_index = 0
-        while self.recipes[item_index][0] != item:
-            item_index += 1
-        recipes = self.recipes[item_index:] + self.recipes[:item_index]
-
-        loop_ingredients: dict[InternalItem, float] = {}
-        ingredients = {item: 1}
-        for index, (current_item, recipe) in enumerate(recipes):
-            amount_wanted = ingredients[current_item]
-            produced = recipe.products[current_item]
-            ingredients = {ingredient: (cost/produced) * amount_wanted
-                           for ingredient, cost in recipe.ingredients.items()}
-
-            for ingredient, cost in ingredients.items():
-                if index + 1 != len(recipes) and ingredient == recipes[index+1][0]:
-                    continue
-                if ingredient not in loop_ingredients:
-                    loop_ingredients[ingredient] = cost
-                else:
-                    loop_ingredients[ingredient] += cost
-
-        return loop_ingredients
-
-    def get_recipe(self, item: InternalItem):
-        item_index = 0
-        while self.recipes[item_index][0] != item:
-            item_index += 1
-        return self.recipes[item_index][1]
-
-class Recipe(FactorioElement):
-    name: str
-    category: str
-    ingredients: dict[InternalItem, float]
-    products: dict[InternalItem, float]
-    energy: float
-
-    def __init__(self, name: str, category: str, ingredients_raw: dict[InternalItem | str, float],
-                 products_raw: dict[InternalItem | str, float], energy: float, recipeEngine: RecipeEngine):
-        self.name = name
-        self.recipeEngine = recipeEngine
-        # TODO add check for category
-        self.category = category
-        self.energy = energy
-        self.productivity = False
-        self.__raw_ingredients: dict[InternalItem, float] = {}
-        self.__all_unlocking_technologies: set[Technology] = set()
-        self.__all_categories: set[Category] = set()
-
-        self.ingredients = {}
-        for ingredient, amount in ingredients_raw.items():
-            if type(ingredient) is InternalItem:
-                self.ingredients[ingredient] = amount
-            elif type(ingredient) is str:
-                assert ingredient in self.recipeEngine.all_ingredients, (f"Unknown ingredient: {ingredient}", f"In recipe {self.name}")
-                self.ingredients[self.recipeEngine.all_ingredients[ingredient]] = amount
-            else:
-                raise TypeError(f"Unknown ingredient type: {ingredient} \nIn recipe {self.name}")
-
-        self.products = {}
-        for product, amount in products_raw.items():
-            if type(product) is InternalItem:
-                self.products[product] = amount
-            elif type(product) is str:
-                if product not in self.recipeEngine.all_ingredients: # must be hidden
-                    continue
-                self.products[self.recipeEngine.all_ingredients[product]] = amount
-            else:
-                raise TypeError(f"Unknown product type: {product} \nIn recipe {self.name}")
-
-        for product in self.products.keys():
-            product.recipes.add(self)
-            product.invalidate_cache()
-
-        for ingredient in self.ingredients.keys():
-            ingredient.is_used_in.add(self)
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}({self.name})"
-
-    def remove(self):
-        self.recipeEngine.delete_recipe(self.name)
-        for product in self.products.keys():
-            product.recipes.remove(self)
-            if self == product.best_recipe:
-                product.invalidate_cache()
-
-        for ingredient in self.ingredients.keys():
-            ingredient.is_used_in.remove(self)
-
-    @property
-    def crafting_machine(self) -> Machine:
-        """cheapest crafting machine name able to run this recipe"""
-        return self.recipeEngine.get_machine_from_category(self.category)
-
-    @property
-    def unlocking_technologies(self) -> set[Technology]:
-        """Unlocked by any of the returned technologies. Empty set indicates a starting recipe."""
-        return {tech for tech in self.recipeEngine.recipe_sources.get(self.name, ())}
-
-    def all_unlocking_technologies(self) -> set[Technology]:
-        _, technologies, all_categories = self.eval()
-        for category in all_categories:
-            technologies |= self.recipeEngine.get_machine_from_category(category).all_unlocking_technologies()
-        return technologies
-
-
-    @property
-    def total_energy(self) -> float:
-        """Total required energy (crafting time) for single craft"""
-        # TODO: multiply mining energy by 2 since drill has 0.5 speed
-        total_energy = self.energy
-        for ingredient, cost in self.ingredients.items():
-            ingredient.get_raw_ingredients()
-            if ingredient.best_recipe:
-                total_energy += ingredient.best_recipe.total_energy / ingredient.best_recipe.products[ingredient] * cost
-            # if ingredient in craftable:
-            #     selected_recipe_energy = float('inf')
-            #     for ingredient_recipe in all_product_sources[ingredient]:
-            #         craft_count = max((n for name, n in ingredient_recipe.products.items() if name == ingredient))
-            #         recipe_energy = ingredient_recipe.total_energy / craft_count * cost
-            #         if recipe_energy < selected_recipe_energy:
-            #             selected_recipe_energy = recipe_energy
-            #     total_energy += selected_recipe_energy
-        return total_energy
-
-    def get_raw_ingredients(self) -> dict[InternalItem, float]:
-        return self.eval()[0]
-
-
-    def eval(self) -> tuple[dict[InternalItem, float], set[Technology], set[Category]]:
-        if self.__raw_ingredients:
-            return self.__raw_ingredients, self.__all_unlocking_technologies, self.__all_categories
-
-        base_tech = self.unlocking_technologies
-        req_categories = {self.category}
-        ingredients = {}
-        for ingredient, cost in self.ingredients.items():
-            if ingredient in InternalItem.evaluating:
-                # recursion occured log and bounce
-                ingredient.recipes_waiting.add(self)
-                return {}, set(), set()
-
-            raw_ingredients, _, tech, cat = ingredient.eval()
-            if not raw_ingredients:
-                # not currently a valid path fail
-                ingredient.recipes_waiting.add(self) # todo needed?
-                return {}, set(), set()
-
-            base_tech |= tech
-            req_categories |= cat
-            for raw_ingredient, raw_cost in raw_ingredients.items():
-                if raw_ingredient not in ingredients:
-                    ingredients[raw_ingredient] = raw_cost * cost
-                else:
-                    ingredients[raw_ingredient] += raw_cost * cost
-
-        self.__raw_ingredients = ingredients
-        self.__all_unlocking_technologies = base_tech
-        self.__all_categories = req_categories
-
-        return ingredients, base_tech, req_categories
-
-    def eval_up(self):
-        base_tech = self.unlocking_technologies
-        req_categories = {self.category}
-        ingredients = {}
-
-        for ingredient, cost in self.ingredients.items():
-            if ingredient in InternalItem.evaluating:
-                # recursion occurred log and bounce
-                ingredient.recipes_waiting.add(self)
-                return {}, set(), set()
-
-            raw_ingredients, _, tech, cat = ingredient.eval()
-            if not raw_ingredients:
-                # not currently a valid path fail
-                ingredient.recipes_waiting.add(self) # todo needed?
-                return {}, set(), set()
-
-            base_tech |= tech
-            req_categories |= cat
-            for raw_ingredient, raw_cost in raw_ingredients.items():
-                if raw_ingredient not in ingredients:
-                    ingredients[raw_ingredient] = raw_cost * cost
-                else:
-                    ingredients[raw_ingredient] += raw_cost * cost
-
-        self.__raw_ingredients = ingredients
-        self.__all_unlocking_technologies = base_tech
-        self.__all_categories = req_categories
-
-        for product in self.products.keys():
-            product.eval_up(self, self.__raw_ingredients, self.__all_unlocking_technologies, self.__all_categories)
-
-class Machine(FactorioElement):
-    evaluating: set[Machine] = set()
-    def __init__(self, name: str, categories: set[Category], recipeEngine: RecipeEngine):
-        self.name: str = name
-        self.recipeEngine: RecipeEngine = recipeEngine
-        self.item: InternalItem | None
-        if self.name != "character":
-            self.item = self.recipeEngine.all_ingredients[name]
-        else:
-            self.item = None
-        self.categories: set[Category] = categories
-
-    def all_unlocking_technologies(self) -> set[Technology]:
-        if self.item:
-            if self in Machine.evaluating:
-                return set()
-            Machine.evaluating.add(self)
-            tech = self.item.all_unlocking_technologies()
-            Machine.evaluating.remove(self)
-            return tech
-        else:
-            return set()
-
+    def category(self) -> str | None:
+        for cat in self.catalysts:
+            if type(cat) is CategoryCatalyst:
+                return cat.name
+        return None
+
+    def link(self) -> None:
+        for ingredient in self.ingredients:
+            ingredient.used_in.add(self)
+        for product in self.products:
+            product.crafted_by.add(self)
+
+
+class Catalyst(RecipeEngineType):
+    pass
+
+class CategoryCatalyst(Catalyst):
+    def __init__(self, ctx: RecipeEngine, name: str, source: DefinitionSource):
+        super().__init__(ctx, name, source)
+        self.machines: set[GameItem] = set()
+
+class OrTechsCatalyst(Catalyst):
+    def __init__(self, ctx: RecipeEngine, name: str, source: DefinitionSource):
+        super().__init__(ctx, name, source)
+        self.techs: set[Technology] = set()
+
+class ItemCatalyst(Catalyst):
+    def __init__(self, source: DefinitionSource,
+                 item: GameItem):
+        super().__init__(item.ctx, item.name, source)
+        self.item = item
+
+class TechCatalyst(Catalyst):
+    def __init__(self, ctx: RecipeEngine, source: DefinitionSource, tech: Technology):
+        super().__init__(ctx, tech.name, source)
+        self.tech = tech
