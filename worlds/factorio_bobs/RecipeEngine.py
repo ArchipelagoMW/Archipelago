@@ -77,6 +77,12 @@ class RecipeEngine:
                 ingredient.is_valid_ingredient = False
 
     def __register_categories(self) -> None:
+
+        def get_category(name: str) -> CategoryCatalyst:
+            if name not in self.categories:
+                self.categories[name] = CategoryCatalyst(self, name, DefinitionSource.EXTRACTED)
+            return self.categories[name]
+
         with self.modpack.open_file("Extractor/machines.json") as file:
             raw_machines = json.load(file)
 
@@ -84,17 +90,15 @@ class RecipeEngine:
             if entity == "character":
                 for category in categories:
                     self.categories[category].manual = True
-                self.categories["basic-crafting"].manual = True # somehow this is implied and not exported
-                self.categories["basic-solid"].manual = True # somehow this is implied and not exported
+                get_category("basic-crafting").manual = True # somehow this is implied and not exported
+                get_category("basic-solid").manual = True # somehow this is implied and not exported
                 continue
 
             item = self.get_item_from_entity(entity)
             if item.name == "assembling-machine-1":
-                self.categories["crafting-with-fluid"].machines.add(item) # mod enables this todo: disable?
+                get_category("crafting-with-fluid").machines.add(item) # mod enables this todo: disable?
             for category in categories:
-                if category not in self.categories:
-                    self.categories[category] = CategoryCatalyst(self, category, DefinitionSource.EXTRACTED)
-                self.categories[category].machines.add(item)
+                get_category(category).machines.add(item)
 
     def __register_recipes(self):
         self.__recipes: dict[str, GameRecipe] = {}
