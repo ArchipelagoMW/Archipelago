@@ -614,7 +614,8 @@ class World(metaclass=AutoWorldRegister):
         return res
 
     @classmethod
-    def get_dynamic_data_package_data(cls):
+    def get_dynamic_data_package_data(cls) -> "GamesPackage | None":
+        """Returns the dynamic datapackage for a given game if one is specified, otherwise None."""
         if not cls.dynamic_location_name_to_id and not cls.dynamic_item_name_to_id:
             return None
         sorted_item_name_groups = {
