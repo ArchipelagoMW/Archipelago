@@ -194,8 +194,8 @@ class RecipeEngine:
             for ingredient in raw_settings["invalid_ingredients"]:
                 self.get_game_item(ingredient, DefinitionSource.CUSTOM).is_valid_ingredient = False
 
-        if "excluded_automation_ingredients" in raw_settings:
-            for ingredient in raw_settings["excluded_automation_ingredients"]:
+        if "excluded_first_pool" in raw_settings:
+            for ingredient in raw_settings["excluded_first_pool"]:
                 self.get_game_item(ingredient, DefinitionSource.CUSTOM).is_valid_first_pool = False
 
     def __link_recipes(self):
