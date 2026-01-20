@@ -463,42 +463,42 @@ class Rac3Interface(GameInterface):
                 self._write8(RAC3STATUS.QWARK_AMMO, 0)
             case RAC3ITEM.LOCK_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(5, 15)
+                    self.timers[name] += randint(10, 15)
                 else:
-                    self.timers[name] = int(time.time() + uniform(5, 15))
+                    self.timers[name] = int(time.time() + uniform(10, 15))
             case RAC3ITEM.MIRROR_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(5, 20)
+                    self.timers[name] += randint(10, 20)
                 else:
-                    self.timers[name] = int(time.time() + uniform(5, 20))
+                    self.timers[name] = int(time.time() + uniform(10, 20))
             case RAC3ITEM.BLACK_SCREEN_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(3, 5)
+                    self.timers[name] += randint(6, 10)
                 else:
-                    self.timers[name] = int(time.time() + uniform(3, 5))
+                    self.timers[name] = int(time.time() + uniform(6, 10))
             case RAC3ITEM.NO_CLANK_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(5, 20)
+                    self.timers[name] += randint(10, 20)
                 else:
                     # Special case for holostar, nefarious base and klunk fight
                     already_no_clank = self._read8(RAC3STATUS.NO_CLANK)
                     if already_no_clank == 0:
-                        self.timers[name] = int(time.time() + uniform(5, 20))
+                        self.timers[name] = int(time.time() + uniform(10, 20))
             case RAC3ITEM.INVISIBLE_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(3, 10)
+                    self.timers[name] += randint(6, 15)
                 else:
-                    self.timers[name] = int(time.time() + uniform(3, 10))
+                    self.timers[name] = int(time.time() + uniform(6, 15))
             case RAC3ITEM.DISARM_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(3, 7)
+                    self.timers[name] += randint(6, 15)
                 else:
-                    self.timers[name] = int(time.time() + uniform(3, 7))
+                    self.timers[name] = int(time.time() + uniform(6, 15))
             case RAC3ITEM.WRENCH_ONLY_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(3, 7)
+                    self.timers[name] += randint(6, 15)
                 else:
-                    self.timers[name] = int(time.time() + uniform(3, 7))
+                    self.timers[name] = int(time.time() + uniform(6, 15))
         if name in non_prog_weapon_data.keys():
             if non_prog_weapon_data[name].AMMO:
                 self._write8(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
