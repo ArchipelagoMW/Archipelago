@@ -1,0 +1,1148 @@
+0:      get_slotnumber R250
+        thread 26
+        thread 27
+        thread 28
+        thread 29
+        thread 40
+        thread 41
+        thread 42
+        thread 43
+        thread 44
+        thread 45
+        thread 46
+        thread 47
+        thread 48
+        thread 49
+        thread 50
+        thread 58
+        thread 59
+        thread 65
+        thread 66
+        thread 67
+        thread 68
+        thread 69
+        thread 75
+        thread 76
+        ret 
+1:      gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R229, 00000001, 14
+        jmpi_= R224, 00000001, 13
+        jmpi_= R223, 00000001, 12
+        jmpi_= R221, 00000001, 11
+        jmpi_= R219, 00000001, 10
+        jmpi_= R218, 00000001, 9
+        jmpi_= R213, 00000001, 8
+        jmpi_= R212, 00000001, 7
+        jmpi_= R211, 00000001, 6
+        jmpi_= R210, 00000001, 5
+        jmpi_= R209, 00000001, 4
+        jmpi_= R201, 00000001, 3
+        jmpi_= R200, 00000001, 2
+        message 000003E9, 'Are you <name hero>,<cr>the <name job>?<cr>I'm Principal Tyrell.'
+        mesend 
+        jmp 18
+18:     message 000003E9, 'Ask Irene, my secretary, for<cr>further details.'
+        gset 000B
+        mesend 
+        ret 
+2:      message 000003E9, 'I didn't say anything.'
+        mesend 
+        ret 
+3:      message 000003E9, 'We can't return to our<cr>planet.  Now we must emigrate<cr>to Ragol.'
+        mesend 
+        ret 
+4:      message 000003E9, 'How was the surface of Ragol?'
+        mesend 
+        ret 
+5:      message 000003E9, 'Pioneer 1 never reported<cr>that there were dangerous<cr>creatures on Ragol!'
+        mesend 
+        ret 
+6:      message 000003E9, 'A huge dragon?  You actually<cr>saw such a creature?'
+        mesend 
+        ret 
+7:      message 000003E9, 'The... The dragon, did it<cr>attack you!?'
+        gset 0018
+        mesend 
+        ret 
+8:      message 000003E9, 'Rico...!'
+        add_msg 'No, I didn't say anything.<cr>Please continue your research.'
+        mesend 
+        ret 
+9:      message 000003E9, 'Visit the lab and tell them<cr>about the creatures you<cr>encountered on Ragol.'
+        gset 0021
+        mesend 
+        ret 
+10:     message 000003E9, 'Where are they?  Where is<cr>Pioneer 1?  I need to know!'
+        mesend 
+        ret 
+11:     message 000003E9, 'I don't want to believe it.'
+        mesend 
+        ret 
+12:     message 000003E9, 'I am responsible for<cr>30,000 people on Pioneer 2.'
+        mesend 
+        ret 
+13:     message 000003E9, 'The underground ruins...  Are<cr>they the cause of everything?'
+        mesend 
+        ret 
+14:     message 000003E9, 'I don't believe it!<cr>Undiscovered monsters also<cr>exist in the ancient ruins?!'
+        mesend 
+        ret 
+15:     window_msg ''
+        sound_effect 00000002
+        winend 
+        jmp 16
+16:     window_msg ''
+        sound_effect 00000002
+        winend 
+        jmp 17
+17:     window_msg ''
+        sound_effect 00000002
+        winend 
+        jmp 18
+20:     gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R205, 00000001, 23
+        jmpi_= R223, 00000001, 22
+        jmpi_= R218, 00000001, 22
+        jmpi_= R212, 00000001, 22
+        jmpi_= R201, 00000001, 22
+        jmpi_= R200, 00000001, 21
+        message 000003EA, 'Please see the Principal.'
+        mesend 
+        ret 
+21:     message 000003EA, 'Well, let me brief you on<cr>your mission.'
+        gset 000C
+        mesend 
+        ret 
+22:     message 000003EA, 'This is just between us, OK?'
+        gset 0010
+        mesend 
+        ret 
+23:     jmpi_= R206, 00000001, 24
+        message 000003EA, 'Red Ring Rico is<cr>the principal's daughter.'
+        mesend 
+        ret 
+24:     jmpi_= R212, 00000001, 25
+        message 000003EA, 'How is everything?  Have<cr>you found any clues leading<cr>to Red Ring Rico?'
+        mesend 
+        ret 
+25:     message 000003EA, 'I heard that you found<cr>messages from Rico.'
+        mesend 
+        ret 
+30:     gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R229, 00000001, 39
+        jmpi_= R224, 00000001, 38
+        jmpi_= R221, 00000001, 37
+        jmpi_= R218, 00000001, 36
+        jmpi_= R216, 00000001, 35
+        jmpi_= R214, 00000001, 34
+        jmpi_= R212, 00000001, 33
+        jmpi_= R210, 00000001, 32
+        jmpi_= R202, 00000001, 31
+        message 000003EB, 'Our planet was tearing itself<cr>apart, we couldn't stop it.'
+        gset 000D
+        mesend 
+        ret 
+31:     message 000003EB, 'Pioneer 1 and 2 are<cr>identical spaceships.'
+        mesend 
+        ret 
+32:     message 000003EB, 'I heard about it.'
+        mesend 
+        ret 
+33:     message 000003EB, 'A huge dragon!?'
+        gset 0019
+        mesend 
+        ret 
+34:     message 000003EB, 'As a scientist, I'm very<cr>interested in the ecological<cr>system of Ragol...'
+        mesend 
+        ret 
+35:     message 000003EB, 'Hmmmmm...<cr>This is unbelievable!'
+        mesend 
+        ret 
+36:     message 000003EB, 'I'm assuming the monsters you<cr>saw in the cave are mutant<cr>variations of the native life.'
+        mesend 
+        ret 
+37:     message 000003EB, 'Based on our analysis, I<cr>discovered that the robots you<cr>fought against were'
+        mesend 
+        ret 
+38:     message 000003EB, 'Ruins found underground...'
+        mesend 
+        ret 
+39:     message 000003EB, 'I studied the data from the<cr>ruins and confirmed that it<cr>was from another civilization.'
+        mesend 
+        ret 
+50:     gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R229, 00000001, 57
+        jmpi_= R224, 00000001, 56
+        jmpi_= R221, 00000001, 55
+        jmpi_= R218, 00000001, 54
+        jmpi_= R216, 00000001, 53
+        jmpi_= R210, 00000001, 52
+        jmpi_= R203, 00000001, 51
+        message 000003EC, 'When our ship was led by the<cr>signal from Pioneer 1 to land<cr>on Ragol, we saw...'
+        gset 000E
+        mesend 
+        ret 
+51:     message 000003EC, 'I was against the immigration!'
+        mesend 
+        ret 
+52:     message 000003EC, 'What made the normally quiet<cr>native animals go berserk?'
+        mesend 
+        ret 
+53:     message 000003EC, 'I've read your report.'
+        mesend 
+        ret 
+54:     message 000003EC, 'If that huge creature caused<cr>all of those accidents, we<cr>should be safe now.'
+        mesend 
+        ret 
+55:     message 000003EC, 'By now, you must know that<cr>Ragol is a dangerous planet.<cr>That is something!'
+        mesend 
+        ret 
+56:     message 000003EC, 'Pioneer 1 somehow knew of<cr>the existence of the ancient<cr>ruins that were underground.'
+        mesend 
+        ret 
+57:     message 000003EC, 'In the depths of the ruins...'
+        mesend 
+        ret 
+60:     gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R223, 00000001, 64
+        jmpi_= R218, 00000001, 63
+        jmpi_= R212, 00000001, 61
+        message 000003F4, 'Ah, I miss her...'
+        gset 0012
+        mesend 
+        ret 
+61:     jmpi_= R206, 00000001, 62
+        mesend 
+        ret 
+62:     message 000003F4, 'Did you know?'
+        mesend 
+        ret 
+63:     message 000003F4, 'Did you know?'
+        mesend 
+        ret 
+64:     message 000003F4, 'Did you know?'
+        mesend 
+        ret 
+70:     gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R223, 00000001, 74
+        jmpi_= R218, 00000001, 73
+        jmpi_= R212, 00000001, 72
+        jmpi_= R204, 00000001, 71
+        message 000003F5, 'Tell me, tell me, tell me!'
+        gset 000F
+        mesend 
+        ret 
+71:     message 000003F5, 'Pioneer 1... is anyone<cr>still alive?'
+        mesend 
+        ret 
+72:     message 000003F5, 'Nobody on Pioneer 1 was<cr>found on the surface?'
+        mesend 
+        ret 
+73:     message 000003F5, 'An underground cave was found?'
+        mesend 
+        ret 
+74:     message 000003F5, 'This is just a hunch that I<cr>have... OK?'
+        mesend 
+        ret 
+80:     gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R223, 00000001, 83
+        jmpi_= R218, 00000001, 82
+        jmpi_= R212, 00000001, 81
+        message 000003F6, 'The explosion occurred just<cr>after the landing announcement.'
+        mesend 
+        ret 
+81:     message 000003F6, 'The government hasn't made<cr>an official statement!  Why!?'
+        mesend 
+        ret 
+82:     message 000003F6, '2 years have passed since<cr>Pioneer 2 left home.'
+        mesend 
+        ret 
+83:     message 000003F6, 'What should we do if Ragol<cr>isn't the place for us...?'
+        mesend 
+        ret 
+90:     gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R223, 00000001, 93
+        jmpi_= R218, 00000001, 92
+        jmpi_= R212, 00000001, 91
+        message 000003F7, 'Rico loved the color red.<cr>She always wore something<cr>red.'
+        mesend 
+        ret 
+91:     message 000003F7, 'If I wear a red armlet, maybe<cr>I'll have the same courage<cr>...as Rico.'
+        mesend 
+        ret 
+92:     message 000003F7, 'Did you...<cr>go down to Ragol?'
+        mesend 
+        ret 
+93:     message 000003F7, 'Have you found Rico yet?'
+        mesend 
+        ret 
+100:    gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R223, 00000001, 103
+        jmpi_= R218, 00000001, 102
+        jmpi_= R212, 00000001, 101
+        message 000003F8, 'The Hunter's Guild...'
+        mesend 
+        ret 
+101:    message 000003F8, 'Regardless of the problem,<cr>most of our troubles are taken<cr>care of by hunters.'
+        mesend 
+        ret 
+102:    message 000003F8, 'Some hunters get their jobs<cr>directly from the government.'
+        mesend 
+        ret 
+103:    message 000003F8, 'There are probably other ways<cr>to make money, anyway.'
+        mesend 
+        ret 
+110:    gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R223, 00000001, 113
+        jmpi_= R218, 00000001, 112
+        jmpi_= R212, 00000001, 111
+        message 000003FA, 'Busy, busy!'
+        mesend 
+        ret 
+111:    message 000003FA, 'Busy, busy!'
+        mesend 
+        ret 
+112:    message 000003FA, 'Have you heard about the<cr>monsters on Ragol?'
+        mesend 
+        ret 
+113:    message 000003FA, 'Now I understand why we've<cr>been so busy these days...<cr>I can only imagine...'
+        mesend 
+        ret 
+120:    gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R223, 00000001, 123
+        jmpi_= R219, 00000001, 122
+        jmpi_= R218, 00000001, 124
+        jmpi_= R213, 00000001, 121
+        jmpi_= R212, 00000001, 124
+        message 000003FB, 'This area is for A rank<cr>hunters who sometimes take<cr>part in secret missions.'
+        mesend 
+        ret 
+121:    message 000003FB, 'People in this area have no<cr>sense of this crisis at all!'
+        mesend 
+        ret 
+122:    message 000003FB, 'If we had more soldiers, we<cr>wouldn't need to use hunters!'
+        mesend 
+        ret 
+123:    message 000003FB, 'Well, I'd handle everything<cr>if I had stronger weapons!'
+        mesend 
+        ret 
+124:    message 000003FB, 'The Principal is waiting<cr>for you.'
+        add_msg 'You may enter his room.'
+        mesend 
+        ret 
+130:    gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R223, 00000001, 133
+        jmpi_= R219, 00000001, 132
+        jmpi_= R218, 00000001, 134
+        jmpi_= R213, 00000001, 131
+        jmpi_= R212, 00000001, 134
+        message 000003FC, 'Pioneer 2 departed after<cr>Pioneer 1 confirmed that Ragol<cr>was suitable for colonization.'
+        mesend 
+        ret 
+131:    message 000003FC, 'Do we always need to look sad<cr>or serious when we're in<cr>trouble?'
+        mesend 
+        ret 
+132:    message 000003FC, 'Do only what you can do.'
+        mesend 
+        ret 
+133:    message 000003FC, 'Pioneer 1 carried a lot more<cr>weaponry than we did.'
+        mesend 
+        ret 
+134:    message 000003FC, 'We'll check all the data<cr>you send, but you still<cr>need to report to him.'
+        mesend 
+        ret 
+140:    gget 000B, R200
+        gget 000C, R201
+        gget 000D, R202
+        gget 000E, R203
+        gget 000F, R204
+        gget 0010, R205
+        gget 0011, R206
+        gget 0012, R207
+        gget 0013, R208
+        gget 0014, R209
+        gget 0015, R210
+        gget 0016, R211
+        gget 0017, R212
+        gget 0018, R213
+        gget 0019, R214
+        gget 001A, R215
+        gget 001E, R216
+        gget 001F, R217
+        gget 0020, R218
+        gget 0021, R219
+        gget 0022, R220
+        gget 0028, R221
+        gget 0029, R222
+        gget 002A, R223
+        gget 002B, R224
+        gget 002C, R225
+        gget 002D, R226
+        gget 002E, R227
+        gget 002F, R228
+        gget 0030, R229
+        jmpi_= R208, 00000001, 141
+        message 000003FD, 'Have you met the tekkers?'
+        mesend 
+        ret 
+141:    message 000003FD, 'Items found in the shop may<cr>sometimes be altered.'
+        mesend 
+        ret 
+26:     sync 
+        jmpi_= R150, 00000000, 26
+        clear R150
+        sound_effect 00000008
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R97, 'New Item<cr>in Inventory!'
+        item_create2 R1, R13
+        leti R60, 00000011
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        thread_stg 26
+        ret 
+27:     sync 
+        jmpi_= R151, 00000000, 27
+        clear R151
+        sound_effect 00000008
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R97, 'Received<cr>AP Item!'
+        leti R60, 00000011
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        thread 27
+        ret 
+28:     sync 
+        jmpi_= R152, 00000000, 28
+        clear R152
+        sound_effect 00000008
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R97, 'Received<cr>Progressive<cr>Area Unlock!'
+        leti R60, 00000011
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        thread 28
+        ret 
+29:     sync 
+        jmpi_= R153, 00000000, 29
+        clear R153
+        sound_effect 00000008
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R97, 'Received Monument<cr>Activation!'
+        leti R60, 00000011
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        thread 29
+        ret 
+40:     sync 
+        jmpi_= R154, 00000000, 40
+        clear R154
+        sound_effect 00000008
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R98, 'Sent AP Item!'
+        leti R60, 00000030
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        thread 40
+        ret 
+41:     sync 
+        jmpi_= R155, 00000000, 41
+        clear R155
+        sound_effect 00000006
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R99, 'Received a<cr>Confusion Trap!'
+        leti R60, 00000024
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        set_slot_confuse R250
+        thread 41
+        ret 
+42:     sync 
+        jmpi_= R156, 00000000, 42
+        clear R156
+        sound_effect 00000006
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R99, 'Received a<cr>Freeze Trap!'
+        leti R60, 00000062
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        set_slot_freeze R250
+        thread 42
+        ret 
+43:     sync 
+        jmpi_= R157, 00000000, 43
+        clear R157
+        sound_effect 00000006
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R99, 'Received a<cr>Slow Trap!'
+        leti R60, 00000027
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        set_slot_slow R250
+        thread 43
+        ret 
+44:     sync 
+        jmpi_= R158, 00000000, 44
+        clear R158
+        sound_effect 00000006
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R99, 'Received a<cr>Shock Trap!'
+        leti R60, 00000021
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        set_slot_shock R250
+        thread 44
+        ret 
+45:     sync 
+        jmpi_= R159, 00000000, 45
+        clear R159
+        sound_effect 00000006
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R99, 'Received a<cr>Para Trap!'
+        leti R60, 00000026
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        set_slot_paralyse R250
+        thread 45
+        ret 
+46:     sync 
+        jmpi_= R160, 00000000, 46
+        clear R160
+        sound_effect 00000006
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R99, 'Received a<cr>Music Trap!'
+        leti R60, 0000001B
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        create_bgmctrl 
+        enable_bgmctrl 0000000E
+        thread 46
+        ret 
+47:     sync 
+        jmpi_= R161, 00000000, 47
+        clear R161
+        call 85
+        sound_effect 0000000B
+        p_disablewarp 
+        warp_off 
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 2, R99, 'Received Instant<cr>Death Trap!<cr>    3'
+        leti R60, 000001C7
+        leti R61, 0000001E
+        leti R62, 00000000
+        leti R63, 00000028
+        particle_id_v3 R60
+        leti R149, 0000001E
+        call 84
+        sound_effect 0000000B
+        leti R60, 000001C7
+        leti R61, 0000001E
+        leti R62, 00000000
+        leti R63, 0000001E
+        particle_id_v3 R60
+        sound_effect 0000000B
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 2, R99, '2'
+        leti R149, 0000001E
+        call 84
+        sound_effect 0000000B
+        leti R60, 000001C7
+        leti R61, 0000001E
+        leti R62, 00000000
+        leti R63, 00000014
+        particle_id_v3 R60
+        sound_effect 0000000B
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 2, R99, '1'
+        leti R149, 0000001E
+        call 84
+        sound_effect 0000000B
+        leti R60, 000001C7
+        leti R61, 0000001E
+        leti R62, 00000000
+        leti R63, 00000005
+        particle_id_v3 R60
+        sound_effect 0000000B
+        kill_player R250
+        p_enablewarp 
+        warp_on 
+        thread 47
+        ret 
+48:     sync 
+        jmpi_= R162, 00000000, 48
+        clear R162
+        sound_effect 00000006
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 2, R99, 'Telepipe Trap!'
+        create_pipe 00000000
+        thread 48
+        ret 
+49:     sync 
+        jmpi_= R163, 00000000, 49
+        clear R163
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R97, 'Fully Healed!'
+        restore_hp R250
+        restore_tp R250
+        leti R60, 0000002D
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        thread 49
+        ret 
+58:     sync 
+        jmpi_= R164, 00000000, 58
+        clear R164
+        sound_effect 00000006
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R99, 'Received<cr>Jellen/Zalure!'
+        set_slot_jellen R250
+        set_slot_zalure R250
+        thread 58
+        ret 
+59:     sync 
+        jmpi_= R165, 00000000, 59
+        clear R165
+        sound_effect 00000006
+        warp_off 
+        p_disablewarp 
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 2, R99, 'Shrink Trap!'
+        shrink R250
+        leti R149, 00000096
+        call 84
+        unshrink R250
+        warp_on 
+        p_enablewarp 
+        thread 59
+        ret 
+65:     sync 
+        jmpi_= R166, 00000000, 65
+        clear R166
+        sound_effect 00000006
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 2, R99, 'Weapon Unequipped!'
+        unequip_item_V3 00000000, 00000000
+        thread 65
+        ret 
+66:     sync 
+        jmpi_= R167, 00000000, 66
+        clear R167
+        sound_effect 00000006
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 2, R99, 'Mag Unequipped!'
+        unequip_item_V3 00000000, 00000003
+        thread 66
+        ret 
+67:     sync 
+        jmpi_= R168, 00000000, 67
+        clear R168
+        sound_effect 00000006
+        leti R60, 000000C9
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        warp_off 
+        p_disablewarp 
+        p_action_disable 
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 2, R99, 'Disability Trap!'
+        leti R149, 0000005A
+        call 84
+        sound_effect 00000007
+        warp_on 
+        p_enablewarp 
+        p_action_enable 
+        thread 67
+        ret 
+68:     sync 
+        jmpi_= R169, 00000000, 68
+        clear R169
+        sound_effect 00000006
+        p_action_disable 
+        window_msg 'THIS IS A HUGE TRAP'
+        add_msg 'OH YOU THINK YOU<cr>COULD ESCAPE IT EASILY?'
+        add_msg 'WELL THINK AGAIN<cr><hero name>!'
+        add_msg 'I CAN DO THIS<cr>ALL DAY BABY!'
+        add_msg 'A'
+        add_msg 'B'
+        add_msg 'C'
+        add_msg 'D'
+        add_msg 'E'
+        add_msg 'F'
+        add_msg 'just joking :)'
+        winend 
+        p_action_enable 
+        sound_effect 00000007
+        thread 68
+        ret 
+69:     sync 
+        jmpi_= R170, 00000000, 69
+        clear R170
+        call 85
+        leti R60, 000000C6
+        leti R61, 00000096
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        sound_effect 00000006
+        disable_techs R250
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 2, R99, 'Disable Tech Trap!'
+        leti R149, 00000096
+        call 84
+        sound_effect 00000007
+        enable_techs R250
+        thread 69
+        ret 
+75:     sync 
+        jmpi_= R171, 00000000, 75
+        clear R171
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 1, R97, 'Received<cr>Shifta/Deband!'
+        leti R60, 000000A7
+        leti R61, 0000005A
+        leti R62, 00000000
+        leti R63, 00000008
+        particle_id_v3 R60
+        set_slot_shifta R250
+        set_slot_deband R250
+        thread 75
+        ret 
+76:     sync 
+        jmpi_= R172, 00000000, 76
+        clear R172
+        sound_effect 00000006
+        scroll_text 000001D6, 000000B4, 00000014, 00000005, 00000002, 2, R99, 'Knockdown<cr>Trap!'
+        get_player_hp R250, R173
+        divi R173, 00000004
+        addi R173, 00000001
+        add_damage_to 00000000, R173
+        thread 76
+        ret 
+84:     sync 
+        subi R149, 00000001
+        jmpi_!= R149, 00000000, 84
+        ret 
+85:     sync 
+        get_floor_number R250, R147
+        jmpi_= R147, 00000000, 85
+        leti R149, 0000012C
+        call 84
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        ret 
+        nop 
+        nop 
+        nop 
+        nop 
+        nop 
