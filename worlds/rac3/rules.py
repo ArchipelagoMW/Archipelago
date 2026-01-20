@@ -669,8 +669,9 @@ def set_rules(world: "RaC3World"):
         RAC3NANOTECH.LEVEL_99: lambda state: state.has_from_list(infobot_data.keys(), world.player, 20),
         RAC3NANOTECH.LEVEL_100: lambda state: state.has_from_list(infobot_data.keys(), world.player, 20),
     }
-    for region in region_rules_dict.keys():
-        add_rule(world.multiworld.get_entrance(region, world.player), region_rules_dict[region])
+    for region in world.multiworld.get_regions(world.player):
+        for entrance in region.entrances:
+            add_rule(entrance, region_rules_dict.get(entrance.name, lambda _: True))
     for location in world.get_locations():
         add_rule(location, rules_dict.get(location.name, lambda _: True))
 

@@ -173,7 +173,7 @@ class RaC3World(World):
         message = f"Not enough location options enabled! {count} items have nowhere to be placed."
         if count >= 50:
             message += (f"\nThis large of a difference requires Progressive Weapons to be disabled, Additional Sewer "
-                        f"Crystal Trade locations, or Addtional Nanotech level locations.")
+                        f"Crystal Trade locations, or Additional Nanotech level locations.")
         if count <= 10 and sum(self.options.start_inventory_from_pool.value.values()) <= 10:
             message += f"Consider adding some items to your starting_items_from_pool or "
         else:
@@ -241,8 +241,8 @@ class RaC3World(World):
         # Trigger a regen in UT
         return slot_data
 
-    # def post_fill(self) -> None:
-    #    from Utils import visualize_regions
-    #    visualize_regions(self.multiworld.get_region("Menu", self.player), f"{self.player_name}_world.puml",
-    #                      regions_to_highlight=self.multiworld.get_all_state(False).reachable_regions[
-    #                          self.player])
+    def post_fill(self) -> None:
+       from Utils import visualize_regions
+       visualize_regions(self.multiworld.get_region("Menu", self.player), f"{self.player_name}_world.puml",
+                         regions_to_highlight=self.multiworld.get_all_state(False).reachable_regions[
+                             self.player])
