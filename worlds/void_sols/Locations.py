@@ -122,7 +122,6 @@ torches_table = {
     LocationName.swamp_torch_desecrated_valley: 1184,
     LocationName.swamp_torch_market_square: 1185,
     LocationName.swamp_torch_scrapyard: 1186,
-    LocationName.swamp_torch_subterranean_storage_units: 1187,
     LocationName.apex_torch_acwis58fl9: 1188,
     LocationName.apex_torch_audience_hall: 1189,
     LocationName.apex_torch_biome_incubator: 1190,

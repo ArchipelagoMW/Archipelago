@@ -200,11 +200,12 @@ def connect_regions(world: World):
     # Supermax Prison East -> Forest (Exit)
     connect(world, "Supermax Prison East", "Forest")
     
-    connect(world, "Village", "Swamp", lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
     connect(world, "Village", "Factory", lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
-    
+    connect(world, "Factory", "Swamp")
+
     # Apex Connections
     connect(world, "Apex Outskirts", "Apex", lambda state: state.has(ItemName.apex_gatekeeper_defeated_event, player))
+    connect(world, "Apex", "Factory")
 
 
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):
