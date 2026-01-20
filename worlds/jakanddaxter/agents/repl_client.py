@@ -251,7 +251,7 @@ class JakAndDaxterReplClient:
                 self.connected = False
 
         if self.connected:
-            self.log_success(logger, "The REPL is ready!")
+            self.log_success(logger, "The Compiler is ready!")
 
     async def print_status(self):
         gc_proc_id = str(self.goalc_process.pid) if self.goalc_process else "None"

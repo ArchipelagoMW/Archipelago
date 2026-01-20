@@ -57,9 +57,9 @@ class JakAndDaxterClientCommandProcessor(ClientCommandProcessor):
     # (which takes 10-15 seconds to compile the game) have to be requested with user-initiated flags.
     # The flags are checked by the agents every main_tick.
     def _cmd_repl(self, *arguments: str):
-        """Sends a command to the OpenGOAL REPL. Arguments:
-        - connect : connect the client to the REPL (goalc).
-        - status : check internal status of the REPL."""
+        """Sends a command to the OpenGOAL Compiler. Arguments:
+        - connect : connect the client to the compiler (goalc).
+        - status : check internal status of the Compiler."""
         if arguments:
             if arguments[0] == "connect":
                 self.ctx.on_log_info(logger, "This may take a bit... Wait for the success audio cue before continuing!")
@@ -134,6 +134,12 @@ class JakAndDaxterContext(CommonContext):
         await self.get_username()
         self.tags = set()
         await self.send_connect()
+
+    async def connect(self, address: str | None = None) -> None:
+        if not self.repl.connected or not self.memr.connected:
+            self.on_log_warn(logger, "Please wait for the Compiler and Memory Reader to connect to the game!")
+            return
+        await super(JakAndDaxterContext, self).connect(address)
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.locations_checked = set()  # Clear this set to gracefully handle server disconnects.
@@ -341,7 +347,7 @@ class JakAndDaxterContext(CommonContext):
                 await asyncio.sleep(0.1)
             # This catch re-engages the memr loop, enabling the client to re-connect on losing the process
             except NoSuchProcess:
-                self.on_log_info(logger, "REPL process lost. Restarting REPL loop.")
+                self.on_log_info(logger, "Compiler process lost. Restarting Compiler loop.")
 
     async def run_memr_loop(self):
         while True:
