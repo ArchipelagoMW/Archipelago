@@ -436,6 +436,11 @@ class FilePath(Path):
             except ValueError:
                 raise ValueError(f"File hash does not match for {path}")
 
+    def resolve(self) -> str:
+        path = super().resolve()
+        self.validate(path)
+        return path
+
 
 class FolderPath(Path):
     # path to a folder
@@ -454,11 +459,11 @@ class FolderPath(Path):
         return None
 
 
-class UserFilePath(_UserPath, FilePath):
+class UserFilePath(FilePath, _UserPath):
     pass
 
 
-class UserFolderPath(_UserPath, FolderPath):
+class UserFolderPath(FolderPath, _UserPath):
     pass
 
 
@@ -470,11 +475,11 @@ class OptionalUserFolderPath(UserFolderPath):
     required = False
 
 
-class LocalFilePath(_LocalPath, FilePath):
+class LocalFilePath(FilePath, _LocalPath):
     pass
 
 
-class LocalFolderPath(_LocalPath, FolderPath):
+class LocalFolderPath(FolderPath, _LocalPath):
     pass
 
 
