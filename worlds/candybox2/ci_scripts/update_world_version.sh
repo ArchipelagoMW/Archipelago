@@ -18,4 +18,4 @@ else
 fi
 
 # Update the archipelago.json file
-jq ".world_version=\"1.$DATE_PART.$BUILD_NUMBER\"" worlds/candybox2/archipelago.json > worlds/candybox2/archipelago.json.tmp && mv worlds/candybox2/archipelago.json.tmp worlds/candybox2/archipelago.json
+jq ".world_version=\"1.$DATE_PART.$BUILD_NUMBER\" | .world_version_full=\"$EXPECTED_CLIENT_VERSION\"" worlds/candybox2/archipelago.json > worlds/candybox2/archipelago.json.tmp && mv worlds/candybox2/archipelago.json.tmp worlds/candybox2/archipelago.json
