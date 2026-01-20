@@ -369,8 +369,8 @@ class Context:
                 self.item_names[game_name][item_id] = item_name
             for location_name, location_id in game_package["location_name_to_id"].items():
                 self.location_names[game_name][location_id] = location_name
-            self.all_item_and_group_names[game_name] |= (set(game_package["item_name_to_id"]) | set(game_package["item_name_groups"]))
-            self.all_location_and_group_names[game_name] |= (set(game_package["location_name_to_id"]) | set(game_package["location_name_groups"]))
+            self.all_item_and_group_names[game_name] |= set(game_package["item_name_to_id"])
+            self.all_location_and_group_names[game_name] |= set(game_package["location_name_to_id"])
 
         archipelago_item_names = self.item_names["Archipelago"]
         archipelago_location_names = self.location_names["Archipelago"]
@@ -600,6 +600,10 @@ class Context:
         for game_name, data in decoded_obj.get("dynamic_datapackage", {}).items():
             self.logger.info(f"Loading dynamic data package for game {game_name}")
             self.dynamic_package[game_name] = data
+            self.item_name_groups[game_name] |= data["item_name_groups"]
+            self.location_name_groups[game_name] |= data["location_name_groups"]
+            del data["item_name_groups"]
+            del data["location_name_groups"]
 
         self._init_game_data()
         for game_name, data in self.item_name_groups.items():
@@ -967,7 +971,7 @@ async def on_client_connected(ctx: Context, client: Client):
         'datapackage_checksums': {game: game_data["checksum"] for game, game_data
                                   in ctx.gamespackage.items() if game in games and "checksum" in game_data},
         "dynamic_checksums": {game: game_data["checksum"] for game, game_data in ctx.dynamic_package.items()
-                              if game in games and "checksum" in game_data},
+                              if game in games},
         'seed_name': ctx.seed_name,
         'time': time.time(),
     }])
