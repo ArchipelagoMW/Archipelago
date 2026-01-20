@@ -803,7 +803,7 @@ location_data = [
     LocationData("Celadon Game Corner", "Rocket", None, rom_addresses["Trainersanity_EVENT_BEAT_GAME_CORNER_ROCKET_ITEM"], EventFlag(459), inclusion=trainersanity),
     LocationData("Route 24", "Rocket", None, rom_addresses["Trainersanity_EVENT_BEAT_ROUTE_24_LEADER_ITEM"], EventFlag(460), inclusion=trainersanity),
     LocationData("S.S. Anne 2F", "Rival", None, rom_addresses["Trainersanity_EVENT_BEAT_RIVAL_SS_ANNE_ITEM"], EventFlag(462), inclusion=trainersanity),
-    LocationData("Saffron Fighting Dojo", "Blackbelt 5", None, rom_addresses["Trainersanity_EVENT_DEFEATED_FIGHTING_DOJO_ITEM"], EventFlag(860), inclusion=trainersanity),
+    LocationData("Saffron Fighting Dojo", "Blackbelt 5", None, rom_addresses["Trainersanity_EVENT_DEFEATED_FIGHTING_DOJO_ITEM"], EventFlag(856), inclusion=trainersanity),
 
     LocationData("Celadon Game Corner", "", "Game Corner", event=True),
     LocationData("Cinnabar Island", "", "Cinnabar Island", event=True),
