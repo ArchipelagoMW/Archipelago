@@ -73,7 +73,7 @@ class RecipeEngine:
         for item, stack_size in item_stack_sizes.items():
             ingredient = GameItem(self, item, DefinitionSource.EXTRACTED,False)
             self.game_items[item] = ingredient
-            if ingredient.name in self.modpack.ordered_science_packs or invalid_items:
+            if ingredient.name in self.modpack.ordered_science_packs or ingredient.name in  invalid_items:
                 ingredient.is_valid_ingredient = False
 
     def __register_categories(self) -> None:
