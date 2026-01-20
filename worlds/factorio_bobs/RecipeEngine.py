@@ -15,6 +15,7 @@ class DefinitionSource(Enum):
     EXTRACTED = 1
     CUSTOM = 2
     IMPLIED = 3
+    WORLD = 4
 
 class RecipeEngineType:
     def __init__(self, ctx: RecipeEngine, name: str, source: DefinitionSource):
@@ -214,7 +215,7 @@ class RecipeEngine:
 
     def get_item_catalyst(self, item: GameItem) -> ItemCatalyst:
         if item not in self.item_catalysts:
-            self.item_catalysts[item] = ItemCatalyst(DefinitionSource.IMPLIED, item)
+            self.item_catalysts[item] = ItemCatalyst(DefinitionSource.UNKNOWN, item)
         return self.item_catalysts[item]
 
     def get_item_from_entity(self, entity: str) -> GameItem:
@@ -325,6 +326,7 @@ class CategoryCatalyst(Catalyst):
     def __init__(self, ctx: RecipeEngine, name: str, source: DefinitionSource):
         super().__init__(ctx, name, source)
         self.machines: set[GameItem] = set()
+        self.manual = False
 
 class OrTechsCatalyst(Catalyst):
     def __init__(self, ctx: RecipeEngine, name: str, source: DefinitionSource):

@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import FrozenSet, Any
 
 import Utils
-from .InternalItem import RecipeEngine
+from .RecipeEngine import RecipeEngine
 from .Technologies import Technology
 from .APModpackManager import BaseModpack
 

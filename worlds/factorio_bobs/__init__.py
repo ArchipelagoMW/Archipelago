@@ -14,11 +14,11 @@ from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 from worlds.generic import Rules
-from .InternalItem import Recipe, InternalItem
 from .Mod import generate_mod
 from .FactorioOptions import (FactorioOptions, Silo, Satellite, TechTreeInformation, Goal,
                               TechCostDistribution, option_groups)
 from .FactorioRules import RecipeRule, InternalItemRule, TechRule, AndRule, OrRule, process_yaml_rule
+from .RecipeEngine import GameRecipe, GameItem, DefinitionSource
 from .Shapes import get_shapes
 from .FactorioSettings import FactorioSettings
 from .Technologies import Technology
@@ -96,8 +96,8 @@ class FactorioBobs(World):
         super(FactorioBobs, self).__init__(world, player)
         self.additional_logic: dict[int, AndRule] = {}
         self.progression_technologies: set[Technology] = set()
-        self.custom_recipes : typing.Dict[str, Recipe] = {}
-        self.custom_products: dict[str, InternalItem] = {}
+        self.custom_recipes : typing.Dict[str, GameRecipe] = {}
+        self.custom_products: dict[str, GameItem] = {}
         self.science_locations = []
         self.tech_tree_layout_prerequisites = {}
         self.modpack: FactorioModpack | None = None
@@ -168,10 +168,12 @@ class FactorioBobs(World):
 
                 custom_products = {}
                 if product_name not in self.custom_products:
-                    self.custom_products[product_name] = InternalItem(product_name, False, self.modpack.recipe_engine)
+                    self.custom_products[product_name] = GameItem(self.modpack.recipe_engine, product_name,
+                                                                  DefinitionSource.WORLD, self.modpack.recipe_engine)
                 custom_products[self.custom_products[product_name]] = 1
-                self.custom_recipes[product_name] = Recipe(product_name, self.get_category("crafting", liquids_used), new_ingredients,
-                                                           custom_products, 1, self.modpack.recipe_engine)
+                self.custom_recipes[product_name] = GameRecipe(self.modpack.recipe_engine, product_name,
+                                                               DefinitionSource.WORLD, new_ingredients, custom_products,
+                                                               1)
                 # print(f"{[x for x in self.custom_recipes[product_name].products]}: {[x for x in self.custom_recipes[product_name].ingredients]}")
             self.options.additional_logic.value = self.options.additional_logic.option_none
             slot_options = slot_data[FactorioBobs.SLOT_OPTIONS_KEY]
@@ -354,14 +356,14 @@ class FactorioBobs(World):
 
     def get_science_pack_rule(self, complexity: int) -> FactorioRules.Rule:
         science_pack = self.modpack.ordered_science_packs[complexity-1]
-        science_pack_item: InternalItem = self.get_internal_item(science_pack)
+        science_pack_item: GameItem = self.get_internal_item(science_pack)
         if complexity in self.additional_logic:
             rule = AndRule(InternalItemRule(science_pack_item), self.additional_logic[complexity])
         else:
             rule = InternalItemRule(science_pack_item)
         return rule.optimize()
 
-    def get_internal_item(self, name: str) -> InternalItem:
+    def get_internal_item(self, name: str) -> GameItem:
         return self.custom_products[name] if name in self.custom_products \
             else self.modpack.recipe_engine.all_ingredients[name]
 
@@ -405,20 +407,20 @@ class FactorioBobs(World):
                       2: "chemistry"}
         return categories.get(liquids, category)
 
-    def make_custom_recipe(self, name:str, products: dict[InternalItem, int], ingredients_num: int, energy: int,
-                           pool: list[InternalItem], allow_liquids: int = 2, category = "crafting")-> Recipe:
+    def make_custom_recipe(self, name:str, products: dict[GameItem, int], ingredients_num: int, energy: int,
+                           pool: list[GameItem], allow_liquids: int = 2, category = "crafting")-> GameRecipe:
         assert len(pool) >= ingredients_num, f"Can't pick {ingredients_num} many items from pool {pool}."
         new_ingredients = {}
         liquids_used = 0
         for _ in range(ingredients_num):
-            new_ingredient: InternalItem = self.random.sample(pool, 1)[0]
+            new_ingredient: GameItem = self.random.sample(pool, 1)[0]
             pool.remove(new_ingredient)
             if new_ingredient.is_fluid:
                 while liquids_used == allow_liquids and new_ingredient.is_fluid:
                     # liquids already at max for current recipe.
                     # Return the liquid to the pool and get a new lambda_ingredient.
                     pool.append(new_ingredient)
-                    new_ingredient: InternalItem = self.random.sample(pool, 1)[0]
+                    new_ingredient: GameItem = self.random.sample(pool, 1)[0]
                     pool.remove(new_ingredient)
                 liquids_used += 1 if new_ingredient.is_fluid else 0
             new_ingredients[new_ingredient] = 1
@@ -426,27 +428,27 @@ class FactorioBobs(World):
         custom_products = {}
         for product, amount in products.items():
             if product.name not in self.custom_products:
-                self.custom_products[product.name] = InternalItem(product.name, product.is_fluid, self.modpack.recipe_engine)
+                self.custom_products[product.name] = GameItem(product.name, product.is_fluid, self.modpack.recipe_engine)
             custom_products[self.custom_products[product.name]] = amount
-        return Recipe(name, self.get_category(category, liquids_used), new_ingredients,
+        return GameRecipe(name, self.get_category(category, liquids_used), new_ingredients,
                       custom_products, energy, self.modpack.recipe_engine)
 
-    def make_quick_recipe(self, original: Recipe, pool: set[InternalItem], allow_liquids: int = 2,
-                          ingredients_offset: int = 0) -> Recipe:
+    def make_quick_recipe(self, original: GameRecipe, pool: set[GameItem], allow_liquids: int = 2,
+                          ingredients_offset: int = 0) -> GameRecipe:
         count: int = len(original.ingredients) + ingredients_offset
         assert len(pool) >= count, f"Can't pick {count} many items from pool {pool}."
         pool = list(sorted(pool, key=lambda item: item.name))
         new_ingredients = {}
         liquids_used = 0
         for _ in range(count):
-            new_ingredient: InternalItem = self.random.sample(pool, 1)[0]
+            new_ingredient: GameItem = self.random.sample(pool, 1)[0]
             pool.remove(new_ingredient)
             if new_ingredient.is_fluid:
                 while liquids_used == allow_liquids and new_ingredient.is_fluid:
                     # liquids already at max for current recipe.
                     # Return the liquid to the pool and get a new lambda_ingredient.
                     pool.append(new_ingredient)
-                    new_ingredient: InternalItem = self.random.sample(pool, 1)[0]
+                    new_ingredient: GameItem = self.random.sample(pool, 1)[0]
                     pool.remove(new_ingredient)
                 liquids_used += 1 if new_ingredient.is_fluid else 0
             new_ingredients[new_ingredient] = 1
@@ -454,13 +456,13 @@ class FactorioBobs(World):
         custom_products = {}
         for product, amount in original.products.items():
             if product.name not in self.custom_products:
-                self.custom_products[product.name] = InternalItem(product.name, product.is_fluid, self.modpack.recipe_engine)
+                self.custom_products[product.name] = GameItem(product.name, product.is_fluid, self.modpack.recipe_engine)
             custom_products[self.custom_products[product.name]] = amount
-        return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
+        return GameRecipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
                       custom_products, original.energy, self.modpack.recipe_engine)
 
-    def make_balanced_recipe(self, original: Recipe, pool: list[InternalItem], factor: float = 1,
-                             allow_liquids: int = 2, ingredients_offset: int = 0) -> Recipe:
+    def make_balanced_recipe(self, original: GameRecipe, pool: list[GameItem], factor: float = 1,
+                             allow_liquids: int = 2, ingredients_offset: int = 0) -> GameRecipe:
         """Generate a recipe from pool with time and cost similar to original * factor"""
         new_ingredients = {}
         target_raw = int(sum((count for ingredient, count in original.get_raw_ingredients().items())) * factor)
@@ -522,7 +524,7 @@ class FactorioBobs(World):
         pool.extend(fallback_pool)
         fallback_pool = []
         while remaining_num_ingredients > 0 and pool:
-            ingredient: InternalItem = pool.pop()
+            ingredient: GameItem = pool.pop()
             if liquids_used == allow_liquids and ingredient.is_fluid:
                 fallback_pool.append(ingredient)
                 continue  # can't use this lambda_ingredient as we already have maximum liquid in our recipe.
@@ -556,15 +558,15 @@ class FactorioBobs(World):
         custom_products = {}
         for product, amount in original.products.items():
             if product.name not in self.custom_products:
-                self.custom_products[product.name] = InternalItem(product.name, product.is_fluid, self.modpack.recipe_engine)
+                self.custom_products[product.name] = GameItem(product.name, product.is_fluid, self.modpack.recipe_engine)
             custom_products[self.custom_products[product.name]] = amount
 
-        return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
+        return GameRecipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
                       custom_products, original.energy, self.modpack.recipe_engine)
 
-    def get_internal_item_pools(self) -> dict[str, list[InternalItem]]:
+    def get_internal_item_pools(self) -> dict[str, list[GameItem]]:
         automation_pool, ordered_items = self.modpack.recipe_engine.get_ordered_items()
-        item_pools: dict[str, list[InternalItem]] = {"automation-science-pack":
+        item_pools: dict[str, list[GameItem]] = {"automation-science-pack":
                                                          list(sorted(automation_pool, key=lambda item: item.name))}
 
         ordered_items = ordered_items[:int(len(ordered_items) * (self.options.percent_items_in_game.value / 100))]
@@ -612,9 +614,9 @@ class FactorioBobs(World):
             rocket_pool = science_pack_pools["rocket"]
         else:
             rocket_pool = science_pack_pools[self.modpack.ordered_science_packs[self.options.number_of_science_packs.value-1]]
-        custom_rocket_part = InternalItem("rocket-part", False, self.modpack.recipe_engine)
+        custom_rocket_part = GameItem("rocket-part", False, self.modpack.recipe_engine)
         self.custom_products[custom_rocket_part.name] = custom_rocket_part
-        self.custom_recipes["rocket-part"] = Recipe("rocket-part", original_rocket_part.category,
+        self.custom_recipes["rocket-part"] = GameRecipe("rocket-part", original_rocket_part.category,
                                                      {item: 10 for item in self.random.sample(rocket_pool, 3 + ingredients_offset)},
                                                      {custom_rocket_part: 1},
                                                      original_rocket_part.energy, self.modpack.recipe_engine)
@@ -642,7 +644,7 @@ class FactorioBobs(World):
                     factor=self.options.number_of_science_packs.value / len(self.modpack.ordered_science_packs),
                     ingredients_offset=ingredients_offset.value)
                 self.custom_recipes["satellite"] = new_recipe
-        bridge = InternalItem("ap-energy-bridge", False, self.modpack.recipe_engine)
+        bridge = GameItem("ap-energy-bridge", False, self.modpack.recipe_engine)
         self.custom_products["ap-energy-bridge"] = bridge
         new_recipe = self.make_custom_recipe(bridge.name, {bridge: 1}, 6+ingredients_offset.value, 10,
             science_pack_pools[self.modpack.ordered_science_packs[0]])
