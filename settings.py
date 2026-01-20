@@ -436,6 +436,11 @@ class FilePath(Path):
             except ValueError:
                 raise ValueError(f"File hash does not match for {path}")
 
+    def resolve(self) -> str:
+        path = super().resolve()
+        self.validate(path)
+        return path
+
 
 class FolderPath(Path):
     # path to a folder
