@@ -188,6 +188,17 @@ class RecipeEngine:
         for recipe in self.recipes.values():
             recipe.link()
 
+    def __remove_bad_items(self):
+        for item in self.game_items.values():
+            if item.crafted_by:
+                continue
+            if item.used_in:
+                if item.is_valid_pool:
+                    self.modpack.logger.warning(f"{item.name} is used but not method of obtaining it detected.\n"
+                                                "Consider disabling it or adding a custom recipe")
+                continue
+            item.is_valid_ingredient = False
+
     def get_item_catalyst(self, item: GameItem) -> ItemCatalyst:
         if item not in self.item_catalysts:
             self.item_catalysts[item] = ItemCatalyst(DefinitionSource.IMPLIED, item)
