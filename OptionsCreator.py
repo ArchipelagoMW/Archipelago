@@ -509,8 +509,10 @@ class OptionsCreator(ThemedApp):
                     self.options[name] = "random-" + str(self.options[name])
                 else:
                     self.options[name] = self.options[name].replace("random-", "")
-                    if self.options[name].isnumeric() or self.options[name] in ("True", "False"):
-                        self.options[name] = eval(self.options[name])
+                    if self.options[name].isnumeric():
+                        self.options[name] = int(self.options[name])
+                    elif self.options[name] in ("True", "False"):
+                        self.options[name] = self.options[name] == "True"
 
                 base_object = instance.parent.parent
                 label_object = instance.parent
@@ -632,7 +634,7 @@ class OptionsCreator(ThemedApp):
             self.create_options_panel(world_btn)
 
         for world, cls in sorted(AutoWorldRegister.world_types.items(), key=lambda x: x[0]):
-            if world == "Archipelago":
+            if cls.hidden:
                 continue
             world_text = MDButtonText(text=world, size_hint_y=None, width=dp(150),
                                       pos_hint={"x": 0.03, "center_y": 0.5})
