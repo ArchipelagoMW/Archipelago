@@ -51,6 +51,7 @@ class RecipeEngine:
         self.__register_game_items()
         self.__register_categories()
         self.__register_recipes()
+        self.__link_technologies()
         self.__load_settings()
         self.__link_recipes()
 
@@ -156,6 +157,16 @@ class RecipeEngine:
                                                    recipe_data["ingredients"], recipe_data["products"], recipe_data["energy"])
             self.recipes[recipe_name].catalysts.add(self.categories[recipe_data["category"]])
 
+    def __link_technologies(self):
+        for technology in self.modpack.base_technology_table.values():
+            if "mining-with-fluid" in technology.modifiers:
+                self.fluid_mining.techs.add(technology)
+            if not technology.unlocks:
+                continue
+            catalyst = TechCatalyst(self, DefinitionSource.EXTRACTED, technology)
+            for recipe_name in technology.unlocks:
+                self.recipes[recipe_name].catalysts.add(catalyst)
+
     def __load_settings(self) -> None:
         with self.modpack.open_file("recipeEngineSettings.json") as file:
             raw_settings = json.load(file)
@@ -201,7 +212,6 @@ class RecipeEngine:
             raise RuntimeError(f"{item} is not a valid ingredient")
         self.game_items[item] = GameItem(self, item, DefinitionSource.IMPLIED)
         return self.game_items[item]
-
 
 
 class GameItem(RecipeEngineType):
