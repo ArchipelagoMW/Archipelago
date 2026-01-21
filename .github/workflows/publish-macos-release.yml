@@ -1,8 +1,13 @@
-name: Build macOS DMG
-on: [push, workflow_dispatch]
+name: Publish macOS Release
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
 
 jobs:
-  build-mac:
+  publish-macos:
     runs-on: macos-latest
     steps:
       - name: Checkout Code
@@ -21,12 +26,8 @@ jobs:
       - name: Build Application Bundle
         id: build_app
         run: |
-          # Builds Archipelago.app into the build/ folder
-          # install bonus deps
-          python setup.py --yes bdist_mac || echo "This is fine"
-          # do the build
+          python setup.py --yes bdist_mac || true
           python setup.py bdist_mac
-          # find the generated .app (pick newest) and expose as output for later steps
           app=$(ls -1dt build/*.app 2>/dev/null | head -n1 || true)
           if [ -z "$app" ]; then
             echo "No .app found in build/"
@@ -34,12 +35,6 @@ jobs:
           fi
           echo "app_path=$app" >> $GITHUB_OUTPUT
           echo "Found $app"
-
-      - name: Upload App Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Archipelago-App
-          path: build/*.app
 
       - name: Ad-hoc sign app
         run: |
@@ -58,8 +53,10 @@ jobs:
           dmg_name: 'Archipelago-Installer'
           src_dir: ${{ steps.build_app.outputs.app_path }}
 
-      - name: Upload DMG Artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload DMG to Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: Archipelago-macOS-DMG
-          path: ./*.dmg
+          files: |
+            ./*.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
