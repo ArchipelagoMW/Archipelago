@@ -35,6 +35,12 @@ jobs:
           echo "app_path=$app" >> $GITHUB_OUTPUT
           echo "Found $app"
 
+      - name: Upload App Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Archipelago-App
+          path: build/*.app
+
       - name: Create DMG
         uses: L-Super/create-dmg-actions@v1
         with:
