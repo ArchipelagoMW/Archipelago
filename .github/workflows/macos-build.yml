@@ -19,19 +19,27 @@ jobs:
           pip install -r requirements.txt
 
       - name: Build Application Bundle
+        id: build_app
         run: |
           # Builds Archipelago.app into the build/ folder
           # install bonus deps
           python setup.py --yes bdist_mac || echo "This is fine"
           # do the build
           python setup.py bdist_mac
+          # find the generated .app (pick newest) and expose as output for later steps
+          app=$(ls -1dt build/*.app 2>/dev/null | head -n1 || true)
+          if [ -z "$app" ]; then
+            echo "No .app found in build/"
+            exit 1
+          fi
+          echo "app_path=$app" >> $GITHUB_OUTPUT
+          echo "Found $app"
 
       - name: Create DMG
         uses: L-Super/create-dmg-actions@v1
         with:
           dmg_name: 'Archipelago-Installer'
-          src_dir: 'build/Archipelago.app'
-          additional_args: '--no-code-sign' 
+          src_dir: ${{ steps.build_app.outputs.app_path }}
 
       - name: Upload DMG Artifact
         uses: actions/upload-artifact@v4
