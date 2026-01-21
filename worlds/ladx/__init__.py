@@ -20,9 +20,11 @@ from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningIt
 from .LADXR.itempool import ItemPool as LADXRItemPool
 from .LADXR.locations.constants import CHEST_ITEMS
 from .LADXR.locations.instrument import Instrument
+from .LADXR.locations.itemInfo import ItemInfo as LADXRItemInfo
 from .LADXR.logic import Logic as LADXRLogic
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
+from .LADXR.explorer import Explorer as LADXRExplorer
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id,
                         links_awakening_location_name_groups)
@@ -324,12 +326,6 @@ class LinksAwakeningWorld(World):
                     itempool.append(item)
 
         self.multi_key = self.generate_multi_key()
-
-        # Add special case for trendy shop access
-        trendy_region = self.multiworld.get_region("Trendy Shop", self.player)
-        event_location = Location(self.player, "Can Play Trendy Game", parent=trendy_region)
-        trendy_region.locations.insert(0, event_location)
-        event_location.place_locked_item(self.create_event("Can Play Trendy Game"))
        
         self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
         for r in self.multiworld.get_regions(self.player):
@@ -344,54 +340,64 @@ class LinksAwakeningWorld(World):
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
 
-        if self.options.tarins_gift != "any_item":
-            self.force_start_item(itempool)
-
+        self.local_front_fill(itempool, self.options.expand_start)
 
         self.multiworld.itempool += itempool
 
-    def force_start_item(self, itempool):
-        start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
-        if not start_loc.item:
-            """
-            Find an item that forces progression or a bush breaker for the player, depending on settings.
-            """
-            def is_possible_start_item(item):
-                return item.advancement and item.name not in self.options.non_local_items
 
-            def opens_new_regions(item):
-                collection_state = base_collection_state.copy()
-                collection_state.collect(item, prevent_sweep=True)
-                collection_state.sweep_for_advancements(self.get_locations())
-                return len(collection_state.reachable_regions[self.player]) > reachable_count
+    def local_front_fill(self, itempool, target: int) -> None:
+        """
+        Tries to fill progression locally until the target number of locations can be reached.
+        Uses LADXR logic to fill because AP doesnt account for randomized entrances at this step.
+        """
+        to_place: dict[LADXRItemInfo, LinksAwakeningItem] = {}
 
-            start_items = [item for item in itempool if is_possible_start_item(item)]
-            self.random.shuffle(start_items)
+        # Feed filled locations into LADXR logic
+        for location in self.multiworld.get_filled_locations(self.player):
+            if not hasattr(location, 'ladxr_item'):
+                continue
+            for ladxr_location in self.ladxr_logic.location_list: # ladxr_location is more like a region in ap
+                for ladxr_item in ladxr_location.items: # ladxr_item is more like a location in ap
+                    if f"{ladxr_item.metadata.name} ({ladxr_item.metadata.area})" == location.name:
+                        if location.item.player == self.player:
+                            ladxr_item.item = location.item.item_data.ladxr_id
+                        else:
+                            ladxr_item.item = 'MESSAGE' # Nothing item
 
-            if self.options.tarins_gift == "bush_breaker":
-                start_item = next((item for item in start_items if item.name in links_awakening_item_name_groups["Bush Breakers"]), None)
+        def explore(additional_item: str | None = None) -> tuple[list[LADXRItemInfo], list[LinksAwakeningItem]]:
+            explorer = LADXRExplorer()
+            for item in to_place.values():
+                explorer.addItem(item.item_data.ladxr_id, 1)
+            if additional_item:
+                explorer.addItem(additional_item.item_data.ladxr_id, 1)
+            explorer.visit(self.ladxr_logic.start)
+            reachable_locations = [l for l in explorer.getAccessableLocations() for l in l.items if l.metadata.area != "None"]
+            advancement_ladxr_ids = list(explorer.getRequiredItemsForNextLocations())
+            advancement_items = [i for i in itempool if i.item_data.ladxr_id in advancement_ladxr_ids and i.name not in self.options.non_local_items]
+            self.random.shuffle(advancement_items)
+            return reachable_locations, advancement_items
 
-            else:  # local_progression
-                entrance_mapping = self.ladxr_logic.world_setup.entrance_mapping
-                # Tail key opens a region but not a location if d1 entrance is not mapped to d1 or d4
-                # exclude it in these cases to avoid fill errors
-                if entrance_mapping['d1'] not in ['d1', 'd4']:
-                    start_items = [item for item in start_items if item.name != 'Tail Key']
-                # Exclude shovel unless starting in Mabe Village
-                if entrance_mapping['start_house'] not in ['start_house', 'shop']:
-                    start_items = [item for item in start_items if item.name != 'Shovel']
-                base_collection_state = CollectionState(self.multiworld)
-                base_collection_state.sweep_for_advancements(self.get_locations())
-                reachable_count = len(base_collection_state.reachable_regions[self.player])
-                start_item = next((item for item in start_items if opens_new_regions(item)), None)
+        reachable_locations, advancement_items = explore()
+        available_locations = [l for l in reachable_locations if not l.item]
+        failed_to_place_item = False
+        while not failed_to_place_item and len(reachable_locations) < target and available_locations:
+            has_placed_item = False
+            for item in advancement_items:
+                new_reachable_locations, new_advancement_items = explore(item)
+                if len(new_reachable_locations) > len(reachable_locations):
+                    to_place[self.random.choice(available_locations)] = item
+                    has_placed_item = True
+                    reachable_locations = new_reachable_locations
+                    advancement_items = new_advancement_items
+                    available_locations = [l for l in reachable_locations if l not in to_place]
+                    break
+            failed_to_place_item = not has_placed_item
 
-            if start_item:
-                # Make sure we're removing the same copy of the item that we're placing
-                # (.remove checks __eq__, which could be a different copy, so we find the first index and use .pop)
-                start_item = itempool.pop(itempool.index(start_item))
-                start_loc.place_locked_item(start_item)
-            else:
-                logging.getLogger("Link's Awakening Logger").warning(f"No {self.options.tarins_gift.current_option_name} available for Tarin's Gift.")
+        for ladxr_item, item in to_place.items():
+            name = f"{ladxr_item.metadata.name} ({ladxr_item.metadata.area})"
+            location = self.multiworld.get_location(name, self.player)
+            item_from_pool = itempool.pop(itempool.index(item))
+            location.place_locked_item(item_from_pool)
 
 
     def get_pre_fill_items(self):
