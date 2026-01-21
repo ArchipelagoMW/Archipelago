@@ -175,7 +175,7 @@ class JakAndDaxterReplClient:
                     logger.debug(response)
                 return True
             else:
-                self.log_error(logger, f"Unexpected response from REPL: {response}")
+                self.log_error(logger, f"Unexpected response from Compiler: {response}")
                 return False
 
     async def connect(self):
@@ -204,9 +204,10 @@ class JakAndDaxterReplClient:
                 logger.debug(welcome_message)
             else:
                 self.log_error(logger,
-                               f"Unable to connect to REPL websocket: unexpected welcome message \"{welcome_message}\"")
+                               f"Unable to connect to Compiler websocket: unexpected welcome message "
+                               f"\"{welcome_message}\"")
         except ConnectionRefusedError as e:
-            self.log_error(logger, f"Unable to connect to REPL websocket: {e.strerror}")
+            self.log_error(logger, f"Unable to connect to Compiler websocket: {e.strerror}")
             return
 
         ok_count = 0
@@ -256,8 +257,8 @@ class JakAndDaxterReplClient:
     async def print_status(self):
         gc_proc_id = str(self.goalc_process.pid) if self.goalc_process else "None"
         gk_proc_id = str(self.gk_process.pid) if self.gk_process else "None"
-        msg = (f"REPL Status:\n"
-               f"   REPL process ID: {gc_proc_id}\n"
+        msg = (f"Compiler Status:\n"
+               f"   Compiler process ID: {gc_proc_id}\n"
                f"   Game process ID: {gk_proc_id}\n")
         try:
             if self.reader and self.writer:
