@@ -509,6 +509,11 @@ class Rac3Interface(GameInterface):
         loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[LOCATION_FROM_AP_CODE[ap_code]]
         if not loc_data:
             return False
+        if LOCATION_FROM_AP_CODE[ap_code] == RAC3LOCATION.OBANI_GEMINI_SKIDD and self.planet == RAC3REGION.OBANI_GEMINI:
+            _x = abs(self._read_float(RAC3STATUS.POS_X) - 201.2) < 10
+            _y = abs(self._read_float(RAC3STATUS.POS_Y) - 364) < 10
+            _z = abs(self._read_float(RAC3STATUS.POS_Z) - 296.8) < 10
+            return _x & _y & _z
         check_all: bool = True
         for check in loc_data.CHECK_ADDRESS:
             match check.TYPE & CHECKTYPE.SIZE:
