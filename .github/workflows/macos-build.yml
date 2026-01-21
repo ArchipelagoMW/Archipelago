@@ -24,7 +24,7 @@ jobs:
           python setup.py bdist_mac
 
       - name: Create DMG
-        uses: L-Super/create-macos-dmg@v1
+        uses: L-Super/create-dmg-actions@v1
         with:
           dmg_name: 'Archipelago-Installer'
           src_dir: 'build/Archipelago.app'
