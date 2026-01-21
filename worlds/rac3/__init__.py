@@ -241,8 +241,8 @@ class RaC3World(World):
         # Trigger a regen in UT
         return slot_data
 
-    def post_fill(self) -> None:
-       from Utils import visualize_regions
-       visualize_regions(self.multiworld.get_region("Menu", self.player), f"{self.player_name}_world.puml",
-                         regions_to_highlight=self.multiworld.get_all_state(False).reachable_regions[
-                             self.player])
+    # def post_fill(self) -> None:
+    #    from Utils import visualize_regions
+    #    visualize_regions(self.multiworld.get_region("Menu", self.player), f"{self.player_name}_world.puml",
+    #                      regions_to_highlight=self.multiworld.get_all_state(False).reachable_regions[
+    #                          self.player])
