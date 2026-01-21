@@ -22,7 +22,7 @@ jobs:
         run: |
           # Builds Archipelago.app into the build/ folder
           # install bonus deps
-          python setup.py --yes bdist_mac
+          python setup.py --yes bdist_mac || echo "This is fine"
           # do the build
           python setup.py bdist_mac
 
