@@ -92,7 +92,9 @@ class RaC3World(World):
         setup_options_from_slot_data(self)
         create_regions(self)
 
-        self.preplaced_items = [RAC3ITEM.VELDIN, RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK]
+        self.preplaced_items = [RAC3ITEM.VELDIN]
+        if self.options.clank_options == 0:
+            self.preplaced_items += [RAC3ITEM.CLANK] #If Clank is set to vanilla, start with him
         for item in self.preplaced_items:
             self.push_precollected(self.create_item(item))
         self.preplaced_items.extend(process_start_inventory(self))
@@ -101,8 +103,10 @@ class RaC3World(World):
 
         if self.options.intro_skip.value:
             for item in starting_weapon_list:
+                self.preplaced_items.append(item)
                 self.push_precollected(self.create_item(item))
             for item in starting_planet_list:
+                self.preplaced_items.append(item)
                 self.push_precollected(self.create_item(item))
         else:
             if len(starting_weapon_list) > 0:
@@ -169,7 +173,7 @@ class RaC3World(World):
         message = f"Not enough location options enabled! {count} items have nowhere to be placed."
         if count >= 50:
             message += (f"\nThis large of a difference requires Progressive Weapons to be disabled, Additional Sewer "
-                        f"Crystal Trade locations, or Addtional Nanotech level locations.")
+                        f"Crystal Trade locations, or Additional Nanotech level locations.")
         if count <= 10 and sum(self.options.start_inventory_from_pool.value.values()) <= 10:
             message += f"Consider adding some items to your starting_items_from_pool or "
         else:
@@ -219,6 +223,7 @@ class RaC3World(World):
             RAC3OPTION.FILLER_WEIGHT: self.options.filler_weight.value,
             RAC3OPTION.ONE_HP_CHALLENGE: self.options.one_hp_challenge.value,
             RAC3OPTION.INTRO_SKIP: self.options.intro_skip.value,
+            RAC3OPTION.CLANK_OPTIONS: self.options.clank_options.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }
 

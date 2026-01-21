@@ -115,7 +115,7 @@ class GameInterface:
         logger.info("Disconnected from PCSX2 Emulator")
 
     def verify_game_version(self) -> bool:
-        logger.debug('Start Game Verfication')
+        logger.debug('Start Game Verification')
         try:
             game_id = self.pcsx2_interface.get_game_id()
         except ConnectionError as error:
@@ -257,6 +257,7 @@ class Rac3Interface(GameInterface):
     one_hp_challenge: dict[str, int] = None
     pda_vendor: int = 0
     last_in_vehicle_time: float = 0.0
+    clank_options: dict[str, bool] = None
 
     # Called at once when client started
     def init(self):
@@ -305,6 +306,7 @@ class Rac3Interface(GameInterface):
         self.timer_cycler()
         self.verify_quick_select_and_last_used()
         self.notification_cycler()
+        self.clank_cycler()
         # Proc Options
         self.multiplier_cycler()
         self.overflow_fix()
@@ -338,6 +340,7 @@ class Rac3Interface(GameInterface):
         self.ship_skin = slot_data[RAC3OPTION.SHIP_SKIN]
         self.skin = slot_data[RAC3OPTION.SKIN]
         self.one_hp_challenge = slot_data[RAC3OPTION.ONE_HP_CHALLENGE]
+        self.clank_options = slot_data[RAC3OPTION.CLANK_OPTIONS]
 
     def map_switch(self) -> tuple[str, str]:
         planet = RAC3_REGION_DATA_TABLE[self.planet].ID
@@ -460,42 +463,42 @@ class Rac3Interface(GameInterface):
                 self._write8(RAC3STATUS.QWARK_AMMO, 0)
             case RAC3ITEM.LOCK_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(5, 15)
+                    self.timers[name] += randint(10, 15)
                 else:
-                    self.timers[name] = int(time.time() + uniform(5, 15))
+                    self.timers[name] = int(time.time() + uniform(10, 15))
             case RAC3ITEM.MIRROR_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(5, 20)
+                    self.timers[name] += randint(10, 20)
                 else:
-                    self.timers[name] = int(time.time() + uniform(5, 20))
+                    self.timers[name] = int(time.time() + uniform(10, 20))
             case RAC3ITEM.BLACK_SCREEN_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(3, 5)
+                    self.timers[name] += randint(6, 10)
                 else:
-                    self.timers[name] = int(time.time() + uniform(3, 5))
+                    self.timers[name] = int(time.time() + uniform(6, 10))
             case RAC3ITEM.NO_CLANK_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(5, 20)
+                    self.timers[name] += randint(10, 20)
                 else:
                     # Special case for holostar, nefarious base and klunk fight
                     already_no_clank = self._read8(RAC3STATUS.NO_CLANK)
                     if already_no_clank == 0:
-                        self.timers[name] = int(time.time() + uniform(5, 20))
+                        self.timers[name] = int(time.time() + uniform(10, 20))
             case RAC3ITEM.INVISIBLE_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(3, 10)
+                    self.timers[name] += randint(6, 15)
                 else:
-                    self.timers[name] = int(time.time() + uniform(3, 10))
+                    self.timers[name] = int(time.time() + uniform(6, 15))
             case RAC3ITEM.DISARM_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(3, 7)
+                    self.timers[name] += randint(6, 15)
                 else:
-                    self.timers[name] = int(time.time() + uniform(3, 7))
+                    self.timers[name] = int(time.time() + uniform(6, 15))
             case RAC3ITEM.WRENCH_ONLY_TRAP:
                 if self.timers.get(name, False):
-                    self.timers[name] += randint(3, 7)
+                    self.timers[name] += randint(6, 15)
                 else:
-                    self.timers[name] = int(time.time() + uniform(3, 7))
+                    self.timers[name] = int(time.time() + uniform(6, 15))
         if name in non_prog_weapon_data.keys():
             if non_prog_weapon_data[name].AMMO:
                 self._write8(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
@@ -549,7 +552,7 @@ class Rac3Interface(GameInterface):
             _addr += 0
         elif 0x00100000 <= _addr <= 0x00100050:  # DummyEXP
             _addr += 0
-        elif 0x001D4C00 <= _addr <= 0x001D4CFF:  # Equipped garamecha
+        elif 0x001D4C00 <= _addr <= 0x001D4CFF:  # Equipped Items
             _addr += 0
         else:
             pass
@@ -576,6 +579,7 @@ class Rac3Interface(GameInterface):
         self.weapon_exp_cycler()
         self.timer_cycler()
         self.notification_cycler()
+        self.clank_cycler()
 
     def undo_collections(self):
         self.health = self._read8(RAC3STATUS.HEALTH)
@@ -932,7 +936,7 @@ class Rac3Interface(GameInterface):
                             self._write8(status, 2)
                         case RAC3STATUS.DISARM:
                             if self.vehicle == 0:
-                                self._write8(status, 0)
+                                self._write8(status, 1)
                         case _:
                             self._write8(status, 1)
             else:
@@ -1199,7 +1203,7 @@ class Rac3Interface(GameInterface):
             # vehicle death
             if self.died_in_vehicle:
                 # Vehicle death uses state 34 which is the same as getting eaten by a shark
-                death = 'Didn\'t leave the vehicle in time.'
+                death = "Didn't leave the vehicle in time."
             return False, f"{self.player_type} {death}"
 
         logger.debug(f'{self.player_type} is Alive')
@@ -1415,6 +1419,23 @@ class Rac3Interface(GameInterface):
         if not self._read8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID):
             return True
         return False
+
+    def clank_cycler(self):
+        if self.clank_options:
+            # Special cases where Clank is already removed
+            if self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(RAC3STATUS.HOLOSTAR_CLANK_FIX) == 0:
+                self._write16(RAC3STATUS.NO_CLANK, 1)
+            elif self.planet == RAC3REGION.AQUATOS_BASE:
+                self._write16(RAC3STATUS.NO_CLANK, 1)
+            # No special case:
+            elif self.UnlockItem[RAC3ITEM.CLANK].status:
+                if self.UnlockItem[RAC3ITEM.CLANK].unlock_delay:
+                    self._write16(RAC3STATUS.NO_CLANK, 0)
+                    self.UnlockItem[RAC3ITEM.CLANK].unlock_delay = 0
+                else:
+                    self.UnlockItem[RAC3ITEM.CLANK].unlock_delay += 1
+            else:
+                self._write16(RAC3STATUS.NO_CLANK, 1)
 
     def set_flag(self, data: list[RAC3ADDRESSDATA]):
         """Sets the bit flags for a given location"""

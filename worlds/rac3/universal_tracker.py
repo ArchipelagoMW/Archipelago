@@ -42,6 +42,7 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.filler_weight.value = world.passthrough[RAC3OPTION.FILLER_WEIGHT]
             world.options.one_hp_challenge.value = world.passthrough[RAC3OPTION.ONE_HP_CHALLENGE]
             world.options.intro_skip.value = world.passthrough[RAC3OPTION.INTRO_SKIP]
+            world.options.clank_options.value = world.passthrough[RAC3OPTION.CLANK_OPTIONS]
         else:
             world.using_ut = False
     else:

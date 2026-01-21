@@ -9,7 +9,7 @@ It is probably caused by one of these:
 3. Try out these commands in the Rac3 client: `/force_update`, `/rac3_info`
 4. Try closing and reopening the client.
 5. You connected to AP without verifying that it the client successfully connected to the emulator. It will say
-   "Connected to RaC3" if it sucessfully connected.
+   "Connected to RaC3" if it successfully connected.
 
 ## My RaC3 client never loads! It is always a black window no matter how long I wait, what can I do?
 

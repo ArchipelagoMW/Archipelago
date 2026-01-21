@@ -21,7 +21,7 @@ The following are required in order to play Ratchet and Clank 3 in Archipelago
 
 - Enable PINE in PCSX2
     - In PCSX2, Under Tools, **Check** Show Advanced Settings
-    - In PCSX2, System -> Settings -> Advanced tab -> PINE Settings,
+    - In PCSX2, System → Settings → Advanced tab → PINE Settings,
       **Check** Enable and ensure Slot is set to 28011
 
 Make sure you restart PCSX2 afterwards.

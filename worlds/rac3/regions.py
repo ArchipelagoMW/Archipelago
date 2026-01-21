@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 from BaseClasses import Location, Region
 from worlds.rac3 import RAC3LOCATION
 from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
-from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.nanotech import RAC3NANOTECH
 from worlds.rac3.constants.locations.sewers import RAC3SEWER
 from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
@@ -390,69 +389,68 @@ simple_skillpoints: list[str] = [
     RAC3SKILLPOINT.COMMAND_CENTER_GERMS,
 ]
 
+
 def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
     menu = create_region(world, RAC3REGION.MENU)
     if world.options.intro_skip.value:
-        starship_phoenix = create_region_and_connect(world, RAC3REGION.STARSHIP_PHOENIX, f"{RAC3REGION.MENU} -> {RAC3REGION.STARSHIP_PHOENIX}", menu)
-        florana = create_region(world, RAC3REGION.FLORANA)
-        starship_phoenix.connect(florana, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.FLORANA}",
-                        rule=lambda state: state.has(RAC3ITEM.FLORANA, world.player))
+        starship_phoenix = create_region_and_connect(world, RAC3REGION.STARSHIP_PHOENIX,
+                                                     f"{RAC3REGION.MENU} -> {RAC3REGION.STARSHIP_PHOENIX}", menu)
+        create_region_and_connect(world, RAC3REGION.FLORANA,
+                                  f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.FLORANA}", starship_phoenix)
     else:
         veldin = create_region_and_connect(world, RAC3REGION.VELDIN, f"{RAC3REGION.MENU} -> {RAC3REGION.VELDIN}", menu)
-        florana = create_region(world, RAC3REGION.FLORANA)
-        veldin.connect(florana, f"{RAC3REGION.VELDIN} -> {RAC3REGION.FLORANA}",
-                       rule=lambda state: state.has(RAC3ITEM.FLORANA, world.player))
-        starship_phoenix = create_region(world, RAC3REGION.STARSHIP_PHOENIX)
-        florana.connect(starship_phoenix, f"{RAC3REGION.FLORANA} -> {RAC3REGION.STARSHIP_PHOENIX}",
-                        rule=lambda state: state.has(RAC3ITEM.STARSHIP_PHOENIX, world.player))
+        florana = create_region_and_connect(world, RAC3REGION.FLORANA,
+                                            f"{RAC3REGION.VELDIN} -> {RAC3REGION.FLORANA}", veldin)
+        starship_phoenix = create_region_and_connect(world, RAC3REGION.STARSHIP_PHOENIX,
+                                                     f"{RAC3REGION.FLORANA} -> {RAC3REGION.STARSHIP_PHOENIX}", florana)
 
     # ----- Regions within the game -----#
-    marcadia = create_region(world, RAC3REGION.MARCADIA)
-    annihilation_nation = create_region(world, RAC3REGION.ANNIHILATION_NATION)
-    aquatos = create_region(world, RAC3REGION.AQUATOS)
-    tyhrranosis = create_region(world, RAC3REGION.TYHRRANOSIS)
-    daxx = create_region(world, RAC3REGION.DAXX)
-    obani_gemini = create_region(world, RAC3REGION.OBANI_GEMINI)
-    blackwater_city = create_region(world, RAC3REGION.BLACKWATER_CITY)
-    holostar_studios = create_region(world, RAC3REGION.HOLOSTAR_STUDIOS)
+    create_region_and_connect(world, RAC3REGION.MARCADIA,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.MARCADIA}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.ANNIHILATION_NATION,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ANNIHILATION_NATION}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.AQUATOS,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.AQUATOS}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.TYHRRANOSIS,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.TYHRRANOSIS}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.DAXX,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.DAXX}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.OBANI_GEMINI,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.OBANI_GEMINI}", starship_phoenix)
+    blackwater_city = create_region_and_connect(
+        world, RAC3REGION.BLACKWATER_CITY,
+        f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.BLACKWATER_CITY}", starship_phoenix)
+    holostar_studios = create_region_and_connect(
+        world, RAC3REGION.HOLOSTAR_STUDIOS,
+        f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.HOLOSTAR_STUDIOS}", starship_phoenix)
     skidd_cutscene = create_region(world, RAC3REGION.SKIDD_CUTSCENE)
-    obani_draco = create_region(world, RAC3REGION.OBANI_DRACO)
-    zeldrin_starport = create_region(world, RAC3REGION.ZELDRIN_STARPORT)
-    metropolis_first_half = create_region(world, RAC3REGION.METROPOLIS)
-    crash_site = create_region(world, RAC3REGION.CRASH_SITE)
-    aridia = create_region(world, RAC3REGION.ARIDIA)
-    qwarks_hideout = create_region(world, RAC3REGION.QWARKS_HIDEOUT)
-    koros = create_region(world, RAC3REGION.KOROS)
-    command_center = create_region(world, RAC3REGION.COMMAND_CENTER)  # Victory Location
+    blackwater_city.connect(skidd_cutscene, f"{RAC3REGION.BLACKWATER_CITY} -> {RAC3REGION.SKIDD_CUTSCENE}")
+    holostar_studios.connect(skidd_cutscene, f"{RAC3REGION.HOLOSTAR_STUDIOS} -> {RAC3REGION.SKIDD_CUTSCENE}")
+    create_region_and_connect(world, RAC3REGION.OBANI_DRACO,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.OBANI_DRACO}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.ZELDRIN_STARPORT,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ZELDRIN_STARPORT}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.METROPOLIS,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.METROPOLIS}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.CRASH_SITE,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.CRASH_SITE}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.ARIDIA,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ARIDIA}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.QWARKS_HIDEOUT,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.QWARKS_HIDEOUT}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.KOROS,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.KOROS}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.COMMAND_CENTER,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.COMMAND_CENTER}", starship_phoenix)
+
+    # Victory Location
 
     # ----- Connecting everything to Starship Phoenix -----#
-    starship_phoenix.connect(marcadia, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.MARCADIA}")
-    starship_phoenix.connect(annihilation_nation, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ANNIHILATION_NATION}")
-    starship_phoenix.connect(aquatos, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.AQUATOS}")
-    starship_phoenix.connect(tyhrranosis, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.TYHRRANOSIS}")
-    starship_phoenix.connect(daxx, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.DAXX}")
-    starship_phoenix.connect(obani_gemini, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.OBANI_GEMINI}")
-    starship_phoenix.connect(blackwater_city, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.BLACKWATER_CITY}")
-    starship_phoenix.connect(holostar_studios, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.HOLOSTAR_STUDIOS}")
-    holostar_studios.connect(skidd_cutscene,
-                             rule=lambda state: state.can_reach(RAC3REGION.BLACKWATER_CITY, player=world.player))
-    blackwater_city.connect(skidd_cutscene,
-                            rule=lambda state: state.can_reach(RAC3REGION.HOLOSTAR_STUDIOS, player=world.player))
-    starship_phoenix.connect(obani_draco, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.OBANI_DRACO}")
-    starship_phoenix.connect(zeldrin_starport, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ZELDRIN_STARPORT}")
-    starship_phoenix.connect(metropolis_first_half, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.METROPOLIS}")
-    starship_phoenix.connect(crash_site, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.CRASH_SITE}")
-    starship_phoenix.connect(aridia, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ARIDIA}")
-    starship_phoenix.connect(qwarks_hideout, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.QWARKS_HIDEOUT}")
-    starship_phoenix.connect(koros, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.KOROS}")
-    starship_phoenix.connect(command_center, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.COMMAND_CENTER}")
-
 
     # ----- Dummy regions for weapon upgrade organization -----#
 
-    nanotech_levels = create_region(world, RAC3REGION.NANOTECH)
-    menu.connect(nanotech_levels)
+    create_region_and_connect(world, RAC3REGION.NANOTECH, f"{RAC3REGION.MENU} -> {RAC3REGION.NANOTECH}", menu)
 
     # shock_blaster_upgrades = create_region(world, f"{RAC3ITEM.SHOCK_BLASTER} Upgrades")
     # menu.connect(shock_blaster_upgrades, rule=lambda state: state.has(RAC3ITEM.SHOCK_BLASTER, world.player)),
@@ -553,7 +551,7 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if options.skill_points.value == 0:
                     return True  # Skips skill points when disabled
                 elif options.skill_points.value == 1 and loc not in simple_skillpoints:
-                    return True # Skips harder skill points
+                    return True  # Skips harder skill points
             case RAC3TAG.T_BOLT:
                 if options.titanium_bolts.value == 0:
                     return True  # Skip titanium bolt locations if titanium bolt option is disabled

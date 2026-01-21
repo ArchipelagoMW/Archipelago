@@ -190,7 +190,7 @@ async def handle_intro_skip(ctx: 'Context') -> None:
 
 
 async def handle_sequence_break(ctx: 'Context') -> None:
-    """Undos the flags for infobot locations when sequence breaking if you haven't checked the corresponding location
+    """Undoes the flags for infobot locations when sequence breaking if you haven't checked the corresponding location
     yet"""
     if ctx.slot_data is None:
         return

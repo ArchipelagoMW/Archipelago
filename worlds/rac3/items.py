@@ -98,6 +98,8 @@ def get_filler_selection(world: "RaC3World"):
     if world.options.traps_enabled.value:
         traps = world.options.trap_weight.value
         frequencies.update(traps)
+        if world.options.clank_options.value == 1:
+            frequencies[RAC3ITEM.NO_CLANK_TRAP] = 0
     if not frequencies or all(count == 0 for count in frequencies.values()):
         frequencies[RAC3ITEM.BOLTS] = 1  # set bolts to be the only filler if the filler weights are empty
         # error = "No filler items available. Please enable some filler items."
