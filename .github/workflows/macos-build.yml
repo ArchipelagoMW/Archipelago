@@ -21,6 +21,9 @@ jobs:
       - name: Build Application Bundle
         run: |
           # Builds Archipelago.app into the build/ folder
+          # install bonus deps
+          python setup.py --yes bdist_mac
+          # do the build
           python setup.py bdist_mac
 
       - name: Create DMG
