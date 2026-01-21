@@ -115,7 +115,7 @@ class GameInterface:
         logger.info("Disconnected from PCSX2 Emulator")
 
     def verify_game_version(self) -> bool:
-        logger.debug('Start Game Verfication')
+        logger.debug('Start Game Verification')
         try:
             game_id = self.pcsx2_interface.get_game_id()
         except ConnectionError as error:
@@ -552,7 +552,7 @@ class Rac3Interface(GameInterface):
             _addr += 0
         elif 0x00100000 <= _addr <= 0x00100050:  # DummyEXP
             _addr += 0
-        elif 0x001D4C00 <= _addr <= 0x001D4CFF:  # Equipped garamecha
+        elif 0x001D4C00 <= _addr <= 0x001D4CFF:  # Equipped Items
             _addr += 0
         else:
             pass
@@ -1203,7 +1203,7 @@ class Rac3Interface(GameInterface):
             # vehicle death
             if self.died_in_vehicle:
                 # Vehicle death uses state 34 which is the same as getting eaten by a shark
-                death = 'Didn\'t leave the vehicle in time.'
+                death = "Didn't leave the vehicle in time."
             return False, f"{self.player_type} {death}"
 
         logger.debug(f'{self.player_type} is Alive')
@@ -1423,7 +1423,7 @@ class Rac3Interface(GameInterface):
     def clank_cycler(self):
         if self.clank_options:
             # Special cases where Clank is already removed
-            if self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(RAC3STATUS.HOLOSTAR_CLANKFIX) == 0:
+            if self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(RAC3STATUS.HOLOSTAR_CLANK_FIX) == 0:
                 self._write16(RAC3STATUS.NO_CLANK, 1)
             elif self.planet == RAC3REGION.AQUATOS_BASE:
                 self._write16(RAC3STATUS.NO_CLANK, 1)
