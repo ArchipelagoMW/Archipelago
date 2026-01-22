@@ -631,9 +631,8 @@ class Rac3Interface(GameInterface):
         if self.planet == RAC3REGION.STARSHIP_PHOENIX:
             self._write8(0x001426E8, 1)  # Todo: Take Qwark to Cage Mission
 
-    # interval update function: Check unlock/lock status of items
     def weapon_cycler(self):
-        # logger.debug('---------WeaponCycler Start---------')
+        """Interval update function: Check unlock/lock status of weapons"""
         for name in non_prog_weapon_data.keys():
             addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
             if self.UnlockItem[name].status:
@@ -1122,6 +1121,7 @@ class Rac3Interface(GameInterface):
             self.last_in_vehicle_time = current_time
 
     def pause_check(self):
+        """Update the current pause data, depending on the current planet"""
         if self.planet not in RAC3_REGION_DATA_TABLE.keys():
             # Unknown planet, assume paused to be safe
             self.pause_menu = True
@@ -1140,10 +1140,12 @@ class Rac3Interface(GameInterface):
                 self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE + 0x50))
 
     def unpause_game(self):
+        """Unpause the game if it is currently on the pause menu"""
         if self.pause_menu:
             self.write_input(RAC3INPUT.START)
 
     def write_input(self, button: RAC3INPUT):
+        """Insert button inputs into the game"""
         left_shifted = (button & 0x00FF) << 8
         right_shifted = button >> 8
         bitmasked = RAC3INPUT.MASK ^ (left_shifted | right_shifted)
@@ -1151,6 +1153,7 @@ class Rac3Interface(GameInterface):
         self._write16(RAC3STATUS.WRITE_INPUT_2, bitmasked)
 
     def teleport_to_ship(self):
+        """Handle respawning the player, to their ship if available, otherwise to the most recent checkpoint"""
         if self.should_overwrite_respawn() and self.planet in RESPAWN_COORDS_OFFSET.keys():
             self._write_bytes(
                 RESPAWN_COORDS_OFFSET[self.planet] + RAC3STATUS.RESPAWN_BASE,
@@ -1161,10 +1164,10 @@ class Rac3Interface(GameInterface):
         self.force_respawn()
 
     def should_overwrite_respawn(self):
+        """Determine if the current respawn coordinates should be overwritten to the ship coordinates"""
         if self.player_type in {RAC3PLAYERTYPE.CLANK, RAC3PLAYERTYPE.GIANT, RAC3PLAYERTYPE.QWARK}:
             return False
         match self.planet:
-            # Todo: add more special cases
             case RAC3REGION.VELDIN:
                 return False  # Problems with F-sector
             case RAC3REGION.MARCADIA:
@@ -1178,10 +1181,12 @@ class Rac3Interface(GameInterface):
                 return True
 
     def force_respawn(self):
+        """Force the game to reload the current planet, respawning the player"""
         self.self_respawning = True
         self._write8(RAC3STATUS.FORCE_RELOAD, 1)
 
     def homewarp(self):
+        """Triggers a planet load to the starship phoenix"""
         if self.planet not in RAC3_REGION_DATA_TABLE.keys():
             # Unknown planet, abort homewarp
             logger.error(f'Aborting homewarp, Unknown Planet: {self.planet}')
@@ -1197,6 +1202,7 @@ class Rac3Interface(GameInterface):
         self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
 
     def alive(self) -> tuple[bool, str]:
+        """Checks the current game state to determine if the player is still alive, and if not then how they died"""
         if self.has_died:
             self.last_death_count = self.death_count
             logger.debug(f'Death Detected! (death count increased)')
@@ -1215,6 +1221,7 @@ class Rac3Interface(GameInterface):
         return True, f"{self.player_type} is Alive"
 
     def kill_player(self) -> bool:
+        """Checks the current game state to determine if and how to kill the player, returns success/failure"""
         if not self.pause_state and not self.inside_hacker_puzzle:
             self._write8(RAC3STATUS.HEALTH, 0)
             self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
@@ -1286,6 +1293,7 @@ class Rac3Interface(GameInterface):
                    longest_line_length: int,
                    box_theme: int = RAC3BOXTHEME.DEFAULT,
                    _time: int = 0x168) -> None:
+        """Update the contents of the current pop-up message"""
         if _time < 0:
             _time = 0
         # real overflow cap is actually about 248, but we don't need that long messages
@@ -1322,6 +1330,7 @@ class Rac3Interface(GameInterface):
         self._write_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER), 1.0)
 
     def format_textbox_string(self, msg: str) -> tuple[list[bytes], int, int]:
+        """Process a full message into game insertable bytes, for use with in game pop-ups"""
         # Split message on \n to handle newlines
         lines = msg.split('\\n')
         color_byte_count = 0
@@ -1340,6 +1349,7 @@ class Rac3Interface(GameInterface):
 
     @staticmethod
     def format_color_string(msg: str) -> tuple[bytes, int]:
+        """Converts a message string with color formatting to game insertable bytes with color formatting"""
         result = bytearray()
         color_byte_count = 0
         i = 0
@@ -1410,6 +1420,7 @@ class Rac3Interface(GameInterface):
         return distance
 
     def sequence_break(self, checked_locations: set[int]) -> None:
+        """Checks the current planet and unsets any planet access flags that would interfere with location collecting"""
         current_planet = self.planet
         infobot_location = REGION_TO_INFOBOT_LOCATION.get(current_planet, None)
         if infobot_location is not None and infobot_location in RAC3_LOCATION_DATA_TABLE:
