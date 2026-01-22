@@ -1,20 +1,22 @@
+"""This module contains the dataclass for levels in the game and exportable constants"""
 from dataclasses import dataclass
 from typing import Optional
 
 from worlds.rac3.constants.data.position import RAC3POSITIONDATA
-from worlds.rac3.constants.region import (PLANET_CHECKPOINT, PLANET_LOAD_OFFSET, PLANET_LOAD_TRIGGER,
+from worlds.rac3.constants.region import (PLANET_CHECKPOINT, PLANET_LOAD_OFFSET, PLANET_SPECIAL_OFFSET,
                                           PLANET_MENU_OFFSET, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET)
 from worlds.rac3.constants.status import RAC3STATUS
 
 
 @dataclass
 class RAC3REGIONDATA:
+    """Data class for each level of the game"""
     ID: int = None
     SLOT_ADDRESS: Optional[int] = None
     CHECKPOINT: Optional[RAC3POSITIONDATA] = None
     PAUSE_ADDRESS: Optional[int] = None
     PLANET_TO_LOAD: Optional[int] = None
-    PLANET_LOAD_TRIGGER: Optional[int] = None
+    PLANET_SPECIAL_OFFSET: Optional[int] = None
     RESPAWN_COORDS_ADDRESS: Optional[int] = None
 
     def __init__(self,
@@ -23,18 +25,19 @@ class RAC3REGIONDATA:
                  checkpoint: Optional[RAC3POSITIONDATA] = None,
                  pause_address: Optional[int] = None,
                  planet_to_load_address: Optional[int] = None,
-                 planet_load_trigger: Optional[int] = None,
+                 planet_special_offset: Optional[int] = None,
                  respawn_coords_address: Optional[int] = None):
         self.ID: Optional[int] = idx
         self.SLOT_ADDRESS: Optional[int] = slot
         self.CHECKPOINT: Optional[RAC3POSITIONDATA] = checkpoint
         self.PAUSE_ADDRESS: Optional[int] = pause_address
         self.PLANET_TO_LOAD: Optional[int] = planet_to_load_address
-        self.PLANET_LOAD_TRIGGER: Optional[int] = planet_load_trigger
+        self.PLANET_SPECIAL_OFFSET: Optional[int] = planet_special_offset
         self.RESPAWN_COORDS_ADDRESS: Optional[int] = respawn_coords_address
 
     @staticmethod
     def construct_slot(slot: int):
+        """Generic planet slot constructor"""
         idx: int = slot + 1
         addr: int = 4 * slot + RAC3STATUS.PLANET_SLOT_ADDRESS
         return RAC3REGIONDATA(idx, addr)
@@ -47,13 +50,13 @@ class RAC3REGIONDATA:
         name = PLANET_NAME_FROM_ID[idx]
         pause = PLANET_MENU_OFFSET[name] + RAC3STATUS.PAUSE_BASE
         load = PLANET_LOAD_OFFSET[name] + RAC3STATUS.PLANET_LOAD_BASE
-        trigger = PLANET_LOAD_TRIGGER[name]
+        offset = PLANET_SPECIAL_OFFSET.get(name, 0)
         checkpoint = PLANET_CHECKPOINT.get(name, None)
         respawn_coords_address = RESPAWN_COORDS_OFFSET.get(name, None)
         if respawn_coords_address is not None:  # Not all planets should have respawn coords changed
             respawn_coords_address += RAC3STATUS.RESPAWN_BASE
         return RAC3REGIONDATA(idx, checkpoint=checkpoint, pause_address=pause, planet_to_load_address=load,
-                              planet_load_trigger=trigger, respawn_coords_address=respawn_coords_address)
+                              planet_special_offset=offset, respawn_coords_address=respawn_coords_address)
 
 
 RAC3_REGION_DATA_TABLE: dict[str, RAC3REGIONDATA] = {

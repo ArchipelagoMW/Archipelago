@@ -1,4 +1,8 @@
+"""This module defines the possible data that can be read from memory with respect to pause states"""
+
+
 class RAC3PAUSESTATE:
+    """Context for how the game has been paused"""
     UNPAUSED = 0
     CUTSCENE = 2
     PAUSED = 3

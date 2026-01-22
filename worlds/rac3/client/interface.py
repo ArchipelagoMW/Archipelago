@@ -343,13 +343,14 @@ class Rac3Interface(GameInterface):
         self.clank_options = slot_data[RAC3OPTION.CLANK_OPTIONS]
 
     def map_switch(self) -> tuple[str, str]:
-        planet = RAC3_REGION_DATA_TABLE[self.planet].ID
-        _planet = planet
-        if planet > 55 or not self._read8(RAC3STATUS.MAP_CHECK):
-            _planet = 0
-        elif planet > 29:
-            _planet = 3
-        return PLANET_NAME_FROM_ID[planet], PLANET_NAME_FROM_ID[_planet]
+        """Update and validate the current planet for the UT map"""
+        _raw_planet = RAC3_REGION_DATA_TABLE[self.planet].ID
+        _safe_planet = _raw_planet
+        if _raw_planet > 55 or not self._read8(RAC3STATUS.MAP_CHECK):
+            _safe_planet = 0
+        elif _raw_planet > 29:
+            _safe_planet = 3
+        return PLANET_NAME_FROM_ID[_raw_planet], PLANET_NAME_FROM_ID[_safe_planet]
 
     def tyhrranosis_fix(self):
         self._write8(RAC3STATUS.ROBONOIDS, 0)
@@ -746,22 +747,29 @@ class Rac3Interface(GameInterface):
                 self._write8(addr, 0)
 
     def planet_cycler(self):
-        # logger.debug('---------PlanetCycler Start---------')
+        """Handles unlocking planets if their "infobot" has been acquired"""
         for name in infobot_data.keys():
             planet = RAC3_REGION_DATA_TABLE[PLANET_FROM_INFOBOT[name]]
             if self.UnlockItem[name].status:
                 addr = RAC3_REGION_DATA_TABLE[SHIP_SLOTS[self.UnlockItem[name].status - 1]].SLOT_ADDRESS
                 if self.UnlockItem[name].unlock_delay:
-                    # logger.debug(f'Write access to: {name} at {hex(addr)} value: {hex(planet.ID)}')
                     self._write8(addr, planet.ID)
                 else:
                     self.UnlockItem[name].unlock_delay += 1
         for number, slot in enumerate(SHIP_SLOTS):
             self.ship_slot_limit = self.UnlockItem[RAC3REGION.SLOT_0].status
             if number >= self.ship_slot_limit:
-                # logger.debug(f'Remove planet at {slot}')
                 self._write8(RAC3_REGION_DATA_TABLE[slot].SLOT_ADDRESS, 0)
-        # logger.debug('---------PlanetCycler End---------')
+
+    def sequence_break(self, checked_locations: set[int]) -> None:
+        """Checks the current planet and unsets any planet access flags that would interfere with location collecting"""
+        infobot_location = REGION_TO_INFOBOT_LOCATION.get(self.planet, None)
+        if infobot_location is not None and infobot_location in RAC3_LOCATION_DATA_TABLE:
+            infobot_flag = LOCATION_TO_INFOBOT_FLAG.get(infobot_location, None)
+            if (infobot_flag is not None
+                    and not RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE in checked_locations
+                    and infobot_flag != RAC3STATUS.ALLOW_SHIP):
+                self._write8(infobot_flag, 0)
 
     def vidcomic_cycler(self):
         # logger.debug("---------VidComicCycler Start---------")
@@ -1128,22 +1136,16 @@ class Rac3Interface(GameInterface):
 
     def pause_check(self):
         """Update the current pause data, depending on the current planet"""
-        if self.planet not in RAC3_REGION_DATA_TABLE.keys():
+        planet_data = RAC3_REGION_DATA_TABLE.get(self.planet, None)
+        if planet_data:
+            self.pause_menu = bool(self._read8(planet_data.PAUSE_ADDRESS)) if planet_data.PAUSE_ADDRESS else False
+            self.pause_state_value = self._read8(RAC3STATUS.PAUSE_STATE + planet_data.PLANET_SPECIAL_OFFSET)
+            self.pause_state = bool(self.pause_state_value)
+        else:
             # Unknown planet, assume paused to be safe
             self.pause_menu = True
+            self.pause_state_value = RAC3PAUSESTATE.PAUSED
             self.pause_state = True
-            return
-
-        pause_address = RAC3_REGION_DATA_TABLE[self.planet].PAUSE_ADDRESS
-        self.pause_menu = bool(self._read8(pause_address)) if pause_address else False
-        self.pause_state_value = self._read8(RAC3STATUS.PAUSE_STATE)
-        self.pause_state = bool(self.pause_state_value)
-        match self.planet:
-            case RAC3REGION.QWARKS_HIDEOUT:
-                self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE + 0x40))
-            case (RAC3REGION.BLACKWATER_CITY | RAC3REGION.ARIDIA |
-                  RAC3REGION.METROPOLIS_RANGERS | RAC3REGION.TYHRRANOSIS_RANGERS):
-                self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE + 0x50))
 
     def unpause_game(self):
         """Unpause the game if it is currently on the pause menu"""
@@ -1197,15 +1199,13 @@ class Rac3Interface(GameInterface):
             # Unknown planet, abort homewarp
             logger.error(f'Aborting homewarp, Unknown Planet: {self.planet}')
             return
-        planet_to_load = RAC3_REGION_DATA_TABLE[self.planet].PLANET_TO_LOAD
-        planet_load_trigger = RAC3_REGION_DATA_TABLE[self.planet].PLANET_LOAD_TRIGGER
-        home_id = RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID
-        if planet_to_load:
-            self._write8(planet_to_load, home_id)
-            self._write8(planet_load_trigger, 1)
-
-    def teleport_to_coords(self):
-        self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
+        planet_data = RAC3_REGION_DATA_TABLE[self.planet]
+        if planet_data.PLANET_TO_LOAD:
+            self._write8(planet_data.PLANET_TO_LOAD, RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID)
+            self._write8(planet_data.PLANET_SPECIAL_OFFSET + RAC3STATUS.PLANET_LOAD, 1)
+            logger.info(f"Player home-warped from {self.planet}")
+        else:
+            logger.warning(f"Couldn't find warp data to leave planet: {self.planet}")
 
     def alive(self) -> tuple[bool, str]:
         """Checks the current game state to determine if the player is still alive, and if not then how they died"""
@@ -1417,17 +1417,6 @@ class Rac3Interface(GameInterface):
                     (player_pos[1] - moby_pos[1]) ** 2 +
                     (player_pos[2] - moby_pos[2]) ** 2) ** 0.5
         return distance
-
-    def sequence_break(self, checked_locations: set[int]) -> None:
-        """Checks the current planet and unsets any planet access flags that would interfere with location collecting"""
-        current_planet = self.planet
-        infobot_location = REGION_TO_INFOBOT_LOCATION.get(current_planet, None)
-        if infobot_location is not None and infobot_location in RAC3_LOCATION_DATA_TABLE:
-            infobot_flag = LOCATION_TO_INFOBOT_FLAG.get(infobot_location, None)
-            if (infobot_flag is not None
-                    and not RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE in checked_locations
-                    and infobot_flag != RAC3STATUS.ALLOW_SHIP):
-                self._write8(infobot_flag, 0)
 
     def check_intro(self) -> bool:
         """Checks if the player has reached the end of the intro by collecting the phoenix coordinates"""

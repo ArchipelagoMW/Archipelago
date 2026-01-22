@@ -52,7 +52,7 @@ class RAC3STATUS:
     PLANET_LOAD_BASE = 0x001DE544
     PAUSE_BASE = 0x001DF068
     PAUSE_STATE = 0x001D668C
-    PLANET_LOAD = 0x001D6675
+    PLANET_LOAD = 0x001D6674
     RESPAWN_BASE = 0x002348D0
     EQUIPPED = 0x001D4C40
     QUICK_SELECT = 0x001D4C60
@@ -94,6 +94,6 @@ class RAC3STATUS:
     POS_Z = 0x001A4C68
     INVISIBLE = 0x001A71C5
     DISARM = 0x001A71CD
-    WRENCH_ONLY = 0x001A71C8 # Used when Ratchet is in water, but only allows wrench on land.
+    WRENCH_ONLY = 0x001A71C8  # Used when Ratchet is in water, but only allows wrench on land.
     IN_VEHICLE = 0x001A71CF
-    HOLOSTAR_CLANK_FIX = 0x00142713 #Same address as Holostar: Return to your ship, needed for Clank fix
+    HOLOSTAR_CLANK_FIX = 0x00142713  # Same address as Holostar: Return to your ship, needed for Clank fix
