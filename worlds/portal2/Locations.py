@@ -83,7 +83,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
     # Chapter 8
     "Chapter 8: Test Completion": Portal2LocationData("sp_a4_intro", LocationType.MAP_COMPLETION, [ portal_gun_2, frankenturret, floor_button, button]),
     "Chapter 8: Funnel Intro Completion": Portal2LocationData("sp_a4_tb_intro", LocationType.MAP_COMPLETION, [ portal_gun_2, funnel, frankenturret, floor_button]),
-    "Chapter 8: Ceiling Button Completion": Portal2LocationData("sp_a4_tb_trust_drop", LocationType.MAP_COMPLETION, [ portal_gun_2, funnel, frankenturret, floor_button]),
+    "Chapter 8: Ceiling Button Completion": Portal2LocationData("sp_a4_tb_trust_drop", LocationType.MAP_COMPLETION, [ portal_gun_2, funnel, frankenturret, floor_button, button]),
     "Chapter 8: Wall Button Completion": Portal2LocationData("sp_a4_tb_wall_button", LocationType.MAP_COMPLETION, [ portal_gun_2, funnel, frankenturret, floor_button, button, faith_plate]),
     "Chapter 8: Polarity Completion": Portal2LocationData("sp_a4_tb_polarity", LocationType.MAP_COMPLETION, [ portal_gun_2, funnel, frankenturret, floor_button]),
     "Chapter 8: Funnel Catch Completion": Portal2LocationData("sp_a4_tb_catch", LocationType.MAP_COMPLETION, [ portal_gun_2, funnel, frankenturret, floor_button, button, faith_plate]),
