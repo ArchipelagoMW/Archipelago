@@ -6,13 +6,13 @@ from CommonClient import logger
 from NetUtils import ClientStatus
 from worlds.rac3 import RAC3OPTION
 from worlds.rac3.client.message import ClientMessage
-from worlds.rac3.client.texthelper import get_rich_item_name
+from worlds.rac3.client.texthelper import get_sent_item_message
 from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.input import RAC3INPUT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
-from worlds.rac3.constants.messages.text_color import RAC3TEXTCOLOR
+from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.region import RAC3REGION
 
 ##################################################
@@ -112,7 +112,7 @@ async def handle_checked_locations(ctx: 'Context') -> None:
         for location in real_checks:
             net_item = ctx.locations_info.get(location, None)
             if net_item is not None and net_item.player != ctx.slot:
-                item_to_player_names = get_rich_item_name(ctx, net_item, True)
+                item_to_player_names = get_sent_item_message(ctx, net_item, True)
                 ctx.game_interface.notification_queue.append((f'{item_to_player_names}', RAC3BOXTHEME.DEFAULT))
 
     # else:
@@ -131,15 +131,15 @@ async def handle_deathlink(ctx: 'Context') -> None:
                 logger.debug(f'Deaths requires processing: {ctx.queued_deaths}')
                 if ctx.game_interface.kill_player():
                     ctx.game_interface.notification_queue.append(
-                        (f'{RAC3TEXTCOLOR.WHITE}Deathlink Received from {RAC3TEXTCOLOR.GREEN}'
-                         f'{ctx.last_deathlink_sender}{RAC3TEXTCOLOR.WHITE}:\\n{ctx.last_deathlink_msg}',
+                        (f'{RAC3TEXTFORMATSTRING.WHITE}Deathlink Received from {RAC3TEXTFORMATSTRING.GREEN}'
+                         f'{ctx.last_deathlink_sender}{RAC3TEXTFORMATSTRING.WHITE}:\\n{ctx.last_deathlink_msg}',
                          RAC3BOXTHEME.DEATHLINK))
                     logger.debug(f'Deaths processed')
                     ctx.queued_deaths = 0
                     ctx.last_death_link = time()
         else:
             logger.debug(f'Sending Death, queue: {ctx.queued_deaths}')
-            ctx.game_interface.notification_queue.append((f'{RAC3TEXTCOLOR.WHITE}Sending Deathlink:\\n{message}',
+            ctx.game_interface.notification_queue.append((f'{RAC3TEXTFORMATSTRING.WHITE}Sending Deathlink:\\n{message}',
                                                           RAC3BOXTHEME.DEATHLINK))
             await ctx.send_death(message)
             logger.debug(f'Sent Death, queue: {ctx.queued_deaths}')

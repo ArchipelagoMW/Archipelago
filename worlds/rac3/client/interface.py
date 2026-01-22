@@ -27,8 +27,8 @@ from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.messages.box_format import THEME_ID_TO_THEME_COLORS
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.messagebox import RAC3MESSAGEBOX
-from worlds.rac3.constants.messages.text_color import RAC3TEXTCOLOR
-from worlds.rac3.constants.messages.text_format import CLASSIFICATION_TO_COLOR, COLOR_NAME_TO_BYTE
+from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
+from worlds.rac3.constants.messages.text_format import CLASSIFICATION_TO_COLOR, FORMAT_NAME_TO_BYTE
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
@@ -359,6 +359,7 @@ class Rac3Interface(GameInterface):
                       our_name: Optional[str],
                       other_player: Optional[str],
                       location: Optional[int]):
+        """Handle receiving items from the multiworld"""
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
         if other_player is not None:
             classification = RAC3_ITEM_DATA_TABLE[name].AP_CLASSIFICATION
@@ -368,18 +369,21 @@ class Rac3Interface(GameInterface):
                 elif location > 0:
                     if classification == ItemClassification.trap:
                         self.notification_queue.append(
-                            (f'{RAC3TEXTCOLOR.WHITE}Activated {RAC3TEXTCOLOR.NORMAL}{ITEM_FROM_AP_CODE[item_code]} '
-                             f'{RAC3TEXTCOLOR.WHITE}at\\n{RAC3TEXTCOLOR.WHITE}{LOCATION_FROM_AP_CODE[location]}',
-                             RAC3BOXTHEME.WARNING))
+                            (f'{RAC3TEXTFORMATSTRING.WHITE}Activated '
+                             f'{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]} '
+                             f'{RAC3TEXTFORMATSTRING.WHITE}at\\n'
+                             f'{RAC3TEXTFORMATSTRING.WHITE}{LOCATION_FROM_AP_CODE[location]}', RAC3BOXTHEME.WARNING))
                     else:
                         self.notification_queue.append(
-                            (f'Found {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} '
-                             f'{RAC3TEXTCOLOR.NORMAL}at\\n{LOCATION_FROM_AP_CODE[location]}', RAC3BOXTHEME.DEFAULT))
+                            (f'Found '
+                             f'{CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} '
+                             f'{RAC3TEXTFORMATSTRING.NORMAL}at\\n{LOCATION_FROM_AP_CODE[location]}',
+                             RAC3BOXTHEME.DEFAULT))
                 else:
                     if classification == ItemClassification.trap:
                         self.notification_queue.append(
-                            (f'{RAC3TEXTCOLOR.WHITE}Activated {RAC3TEXTCOLOR.NORMAL}{ITEM_FROM_AP_CODE[item_code]}',
-                             RAC3BOXTHEME.WARNING))
+                            (f'{RAC3TEXTFORMATSTRING.WHITE}Activated '
+                             f'{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]}', RAC3BOXTHEME.WARNING))
                     else:
                         self.notification_queue.append(
                             (f'Collected {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]}',
@@ -387,13 +391,14 @@ class Rac3Interface(GameInterface):
             else:
                 if classification == ItemClassification.trap:
                     self.notification_queue.append((
-                        f'{RAC3TEXTCOLOR.GREEN}{other_player}{RAC3TEXTCOLOR.WHITE} activated your '
-                        f'{RAC3TEXTCOLOR.NORMAL}{ITEM_FROM_AP_CODE[item_code]}', RAC3BOXTHEME.WARNING))
+                        f'{RAC3TEXTFORMATSTRING.GREEN}{other_player}'
+                        f'{RAC3TEXTFORMATSTRING.WHITE} activated your '
+                        f'{RAC3TEXTFORMATSTRING.NORMAL}{ITEM_FROM_AP_CODE[item_code]}', RAC3BOXTHEME.WARNING))
                 else:
                     self.notification_queue.append((
                         f"Received {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} "
-                        f"{RAC3TEXTCOLOR.NORMAL}from "
-                        f"{RAC3TEXTCOLOR.GREEN}{other_player}", RAC3BOXTHEME.DEFAULT))
+                        f"{RAC3TEXTFORMATSTRING.NORMAL}from "
+                        f"{RAC3TEXTFORMATSTRING.GREEN}{other_player}", RAC3BOXTHEME.DEFAULT))
         logger.debug(f'Item received: {ITEM_FROM_AP_CODE[item_code]}, AP code: {item_code}')
         if name in infobot_data.keys():
             if self.UnlockItem[name].status:
@@ -845,6 +850,7 @@ class Rac3Interface(GameInterface):
             self.verify_quick_select_and_last_used()
 
     def notification_cycler(self):
+        """Handle the currently displayed pop-up message notification, and message queue"""
         current_time = time.time()
         tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == 0x58
         self._write32(RAC3MESSAGEBOX.HIDDEN_AND_PAUSED,
@@ -947,11 +953,11 @@ class Rac3Interface(GameInterface):
                 self.timers.pop(name)
                 if 'Jackpot' in name:
                     self.notification_queue.append(
-                        (f'{RAC3TEXTCOLOR.WHITE}Jackpot x{2 ** self.boltAndXPMultiplierValue} '
-                         f'{RAC3TEXTCOLOR.NORMAL}effect has worn off.', RAC3BOXTHEME.DEFAULT))
+                        (f'{RAC3TEXTFORMATSTRING.WHITE}Jackpot x{2 ** self.boltAndXPMultiplierValue} '
+                         f'{RAC3TEXTFORMATSTRING.NORMAL}effect has worn off.', RAC3BOXTHEME.DEFAULT))
                 else:
                     self.notification_queue.append(
-                        (f'{name}{RAC3TEXTCOLOR.WHITE} effect has worn off.', RAC3BOXTHEME.WARNING))
+                        (f'{name}{RAC3TEXTFORMATSTRING.WHITE} effect has worn off.', RAC3BOXTHEME.WARNING))
                 match _name:
                     case RAC3ITEM.LOCK_TRAP:  # Special case for lock trap
                         # Clear when timer ends directly rather than from the trap cleanup loop below
@@ -1347,7 +1353,7 @@ class Rac3Interface(GameInterface):
         i = 0
         while i < len(msg):
             matched = False
-            for code, byte in COLOR_NAME_TO_BYTE.items():
+            for code, byte in FORMAT_NAME_TO_BYTE.items():
                 if msg.startswith(code, i):
                     # Insert the color code byte (as a single byte)
                     if isinstance(byte, str):
