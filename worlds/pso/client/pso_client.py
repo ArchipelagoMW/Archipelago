@@ -40,6 +40,8 @@ RUINS_DOOR_ADDRESS = 0x805127FD
 
 PILLAR_NAMES = {Item.FOREST_PILLAR, Item.CAVES_PILLAR, Item.MINES_PILLAR}
 
+DEBUG_SLOT_OVERRIDE = False
+
 class PSOCommandProcessor(ClientCommandProcessor):
     """
     Command Processor for Phantasy Star Online Episode I&II Plus client commands
@@ -71,6 +73,7 @@ class PSOContext(CommonContext):
     """
     command_processor = PSOCommandProcessor
     game = "Phantasy Star Online Episode I & II Plus"
+    items_handling: int = 0b111
 
     def __init__(self, server_address: str | None, password: str | None) -> None:
         """
@@ -283,22 +286,22 @@ async def give_items(ctx: PSOContext) -> None:
 
     # Read the index of the last item the game knows we received
     # Use this value to compare with w
-    last_item_idx = read_short(LAST_RECEIVED_ITEM_ADDRESS)
+    next_item_idx = read_short(LAST_RECEIVED_ITEM_ADDRESS) + 1
 
     # Fetch the list of received items
     received_items = ctx.items_received
-    if len(received_items) <= last_item_idx:
+    if len(received_items) <= next_item_idx:
         # No new items
         return
 
     # Iterate through the new items and give them to the player
-    for idx, item_to_add in enumerate(received_items[last_item_idx:], start=last_item_idx + 1):
+    for idx, item_to_add in enumerate(received_items[next_item_idx:]):
         # Lookup the item from the Context and attempt to give it to the player
         while not _give_item(ctx, ITEM_ID_TO_NAME[item_to_add.item]):
             await asyncio.sleep(0.01)
 
         # Update the last received item index to the item that was just sent
-        write_short(LAST_RECEIVED_ITEM_ADDRESS, idx)
+        write_short(LAST_RECEIVED_ITEM_ADDRESS, next_item_idx)
 
 
 async def check_locations(ctx: PSOContext) -> None:
@@ -357,6 +360,11 @@ async def dolphin_sync_task(ctx: PSOContext) -> None:
                     # This 2 line section needs to be BEFORE the No Slot Name unhooking.
                     if not ctx.auth:
                         ctx.auth = read_string(SLOT_NAME_ADDR, PSO_PLAYER_NAME_BYTE_LENGTH)
+
+                        # If we need to override the slot name for testing, match your player's slot name to this
+                        # DO NOT USE THIS IN A REAL GAME
+                        if DEBUG_SLOT_OVERRIDE:
+                            ctx.auth = "Rubix"
 
                         # This triggers if ctx auth is not correct.
                         if not ctx.auth:

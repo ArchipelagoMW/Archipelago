@@ -95,7 +95,7 @@ def make_id_to_item_name_dict(item_table: dict[str, PSOItemData]) -> dict[int, s
 
 # We have a reverse lookup table for getting item name from ID as well
 # It's possible we don't need this, but it may be a performance trade-off given the number of items this game has
-ITEM_ID_TO_NAME: dict[int, str] = make_id_to_item_name_dict(ITEM_TABLE)
+ITEM_ID_TO_NAME: dict[int, str] = {id: name for (name, id) in ITEM_NAME_TO_ID.items() if id is not None}
 
 
 # Ontop of our regular itempool, our world must be able to create arbitrary amounts of filler as requested by core.
