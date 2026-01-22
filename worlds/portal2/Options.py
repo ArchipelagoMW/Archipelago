@@ -16,6 +16,17 @@ class CutsceneLevels(Toggle):
     """
     display_name = "Cutscene Levels"
 
+class EarlyPlayabilityPercentage(Range):
+    """
+    What percentage of starting maps are in the first round of map selection
+    Minimum of 60 -> Over half of the starting maps are available from the get go, slightly slower start
+    Maximum of 100 -> All starting maps are available from the get go, a very quick start
+    """
+    display_name = "Early Playability Percentage"
+    range_start = 60
+    range_end = 100
+    default = 75
+
 class TrapFillPercentage(Range):
     """
     Replace a percentage of junk items in the item pool with random traps
@@ -80,7 +91,8 @@ class SlipperyFloorTrapWeight(BaseTrapWeight):
 portal2_option_groups = [
     OptionGroup("Location Options", [
         OpenWorld,
-        CutsceneLevels
+        CutsceneLevels,
+        EarlyPlayabilityPercentage
     ]),
     OptionGroup("Trap Options", [
         TrapFillPercentage,
@@ -106,6 +118,7 @@ class Portal2Options(PerGameCommonOptions):
 
     open_world: OpenWorld
     cutscenelevels: CutsceneLevels
+    early_playability_percentage: EarlyPlayabilityPercentage
     # storyachievementsanity: StoryAchievementSanity
     # monitorsanity: MonitorSanity
 

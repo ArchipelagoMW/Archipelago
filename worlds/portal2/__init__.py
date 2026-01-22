@@ -1,3 +1,4 @@
+from math import ceil
 import sys
 
 from BaseClasses import ItemClassification, MultiWorld, Region, Tutorial
@@ -103,14 +104,16 @@ class Portal2World(World):
         used_maps: list[str] = []
 
         possible_maps = [name for name in self.maps_in_use if not name.startswith("Chapter 9")]
+        
+        proportion_map_pick: float = self.options.early_playability_percentage / 100
 
         # Maps with no requirements
         map_pool += [name for name in possible_maps if len(all_locations_table[name].required_items) == 0]
-        pick_maps(3)
+        pick_maps(ceil(len(map_pool) * proportion_map_pick))
         
         # Maps with just portal gun upgrade
         map_pool += [name for name in possible_maps if all_locations_table[name].required_items == [portal_gun_2]]
-        pick_maps(3)
+        pick_maps(ceil(len(map_pool) * proportion_map_pick))
 
         # All other maps
         map_pool += [name for name in possible_maps if name not in used_maps and name not in map_pool]
