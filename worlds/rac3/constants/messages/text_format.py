@@ -12,6 +12,8 @@ class RAC3TEXTFORMAT:
     MAGENTA = 0xB
     WHITE = 0xC
     BLACK = 0xD
+    UNUSED_COLOR_1 = 0xE
+    UNUSED_COLOR_2 = 0xF
 
 
 COLOR_NAME_TO_BYTE = {
