@@ -1447,3 +1447,13 @@ class Rac3Interface(GameInterface):
         for check in data:
             if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
                 self._write8(check.ADDRESS, check.VALUE)
+
+    def softlock_warning(self):
+        """Checks if the player is on a planet with a potential softlock and informs them on how to escape"""
+        match self.planet:
+            case RAC3REGION.HOLOSTAR_STUDIOS | RAC3REGION.HOLOSTAR_STUDIOS_CLANK:
+                if not (self.UnlockItem[RAC3ITEM.HACKER].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status):
+                    logger.info("You do not have the items required to leave this planet through your ship. If you are"
+                                " stuck, hold L2 + R2 + L1 + R1 + SELECT to warp back to the phoenix")
+            case RAC3REGION.PHOENIX_ASSAULT:
+                logger.info("If you want to travel to the regular phoenix, hold L2 + R2 + L1 + R1 + SELECT")

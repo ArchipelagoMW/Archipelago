@@ -1,3 +1,4 @@
+"""This module contains functions related to the game client"""
 from time import time
 from typing import TYPE_CHECKING
 
@@ -41,7 +42,7 @@ async def update(ctx: 'Context') -> None:
     # Check planet id
     await handle_planet_changed(ctx)
     # Check player respawn
-    await handle_respawn(ctx, False)
+    await handle_respawn(ctx)
     # Check sequence breaks
     await handle_sequence_break(ctx)
     ctx.game_interface.late_update()
@@ -58,12 +59,14 @@ async def handle_planet_changed(ctx: 'Context') -> None:
     """Checks if the player is going to a different planet"""
     if ctx.slot_data is None:
         return
-    planet = ctx.current_planet
+    last_planet = ctx.current_planet
     ctx.current_planet, _map = ctx.game_interface.map_switch()
-    if planet is not ctx.current_planet:
+    if last_planet is not ctx.current_planet:
 
         if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
             ctx.game_interface.tyhrranosis_fix()
+
+        ctx.game_interface.softlock_warning()
 
         await ctx.send_msgs([ClientMessage.set_map(ctx.slot, ctx.team, _map)])
 
@@ -172,7 +175,7 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
             ctx.game_interface.unpause_game()
             ctx.game_interface.homewarp()
             return True
-    if ctx.game_interface.check_inputs(RAC3INPUT.RELOAD, False) or force_load:
+    if ctx.game_interface.check_inputs(RAC3INPUT.RELOAD) or force_load:
         ctx.game_interface.homewarp()
         return True
     return False
