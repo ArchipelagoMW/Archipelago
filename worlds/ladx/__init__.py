@@ -180,7 +180,17 @@ class LinksAwakeningWorld(World):
     }
 
     def convert_ap_options_to_ladxr_logic(self):
-        self.ladxr_settings = LADXRSettings(dataclasses.asdict(self.options))
+        # store a dict of ladxr settings as a middle step so that we can also create a
+        # ladxr settings object on the other side of the patch
+        options_dict = dataclasses.asdict(self.options)
+        self.ladxr_settings_dict = {}
+        for option in options_dict.values():
+            if not hasattr(option, 'to_ladxr_option'):
+                continue
+            name, value = option.to_ladxr_option(options_dict)
+            if name:
+                self.ladxr_settings_dict[name] = value
+        self.ladxr_settings = LADXRSettings(self.ladxr_settings_dict)
 
         self.ladxr_settings.validate()
         world_setup = LADXRWorldSetup()
@@ -503,36 +513,36 @@ class LinksAwakeningWorld(World):
         return "TRADING_ITEM_LETTER"
 
     def generate_output(self, output_directory: str):
-        # copy items back to locations
+        self.rom_item_placements = []
         for r in self.multiworld.get_regions(self.player):
             for loc in r.locations:
                 if isinstance(loc, LinksAwakeningLocation):
                     assert(loc.item)
-                        
+                    spot = {}
                     # If we're a links awakening item, just use the item
                     if isinstance(loc.item, LinksAwakeningItem):
-                        loc.ladxr_item.item = loc.item.item_data.ladxr_id
+                        spot["item"] = loc.item.item_data.ladxr_id
 
                     # If the item name contains "sword", use a sword icon, etc
                     # Otherwise, use a cute letter as the icon
                     elif self.options.foreign_item_icons == 'guess_by_name':
-                        loc.ladxr_item.item = self.guess_icon_for_other_world(loc.item)
-                        loc.ladxr_item.setCustomItemName(loc.item.name)
+                        spot["item"] = self.guess_icon_for_other_world(loc.item)
 
                     else:
                         if loc.item.advancement:
-                            loc.ladxr_item.item = 'PIECE_OF_POWER'
+                            spot["item"] = 'PIECE_OF_POWER'
                         else:
-                            loc.ladxr_item.item = 'GUARDIAN_ACORN'
-                        loc.ladxr_item.setCustomItemName(loc.item.name)
+                            spot["item"] = 'GUARDIAN_ACORN'
+
+                    spot["custom_item_name"] = loc.item.name
 
                     if loc.item:
-                        loc.ladxr_item.item_owner = loc.item.player
+                        spot["item_owner"] = loc.item.player
                     else:
-                        loc.ladxr_item.item_owner = self.player
+                        spot["item_owner"] = self.player
 
-                    # Kind of kludge, make it possible for the location to differentiate between local and remote items
-                    loc.ladxr_item.location_owner = self.player
+                    spot["name_id"] = loc.ladxr_item.nameId
+                    self.rom_item_placements.append(spot)
 
         
         patch = LADXProcedurePatch(player=self.player, player_name=self.player_name)
