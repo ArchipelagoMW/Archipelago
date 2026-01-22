@@ -1426,21 +1426,20 @@ class Rac3Interface(GameInterface):
         return False
 
     def clank_cycler(self):
+        """Checks the current state to see if clank needs to be disabled"""
         if self.clank_options:
             # Special cases where Clank is already removed
-            if self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(RAC3STATUS.HOLOSTAR_CLANK_FIX) == 0:
-                self._write16(RAC3STATUS.NO_CLANK, 1)
-            elif self.planet == RAC3REGION.AQUATOS_BASE:
+            if ((self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(RAC3STATUS.HOLOSTAR_CLANK_FIX) == 0)
+                    or self.planet == RAC3REGION.AQUATOS_BASE
+                    or not self.UnlockItem[RAC3ITEM.CLANK].status):
                 self._write16(RAC3STATUS.NO_CLANK, 1)
             # No special case:
-            elif self.UnlockItem[RAC3ITEM.CLANK].status:
+            else:
                 if self.UnlockItem[RAC3ITEM.CLANK].unlock_delay:
                     self._write16(RAC3STATUS.NO_CLANK, 0)
                     self.UnlockItem[RAC3ITEM.CLANK].unlock_delay = 0
                 else:
                     self.UnlockItem[RAC3ITEM.CLANK].unlock_delay += 1
-            else:
-                self._write16(RAC3STATUS.NO_CLANK, 1)
 
     def set_flag(self, data: list[RAC3ADDRESSDATA]):
         """Sets the bit flags for a given location"""
