@@ -1,4 +1,8 @@
+"""This module contains constant pointers used for the in-game pop-up menu"""
+
+
 class RAC3MESSAGEBOX:
+    """Constant pointers for use when triggering pop-up messages in game"""
     MESSAGE = 0x01FDC340
     TIMER = 0x01FDC450
     BOX_WIDTH = 0x01FDC46C

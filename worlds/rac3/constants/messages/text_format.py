@@ -1,8 +1,11 @@
+"""This file contains constants used to format the text displayed in the in-game pop-up messages"""
+
 from BaseClasses import ItemClassification
 from worlds.rac3.constants.messages.text_color import RAC3TEXTCOLOR
 
 
 class RAC3TEXTFORMAT:
+    """Enum for the byte value of a given text color"""
     NORMAL = 0x8
     BLUE = 0x9
     GREEN = 0xA

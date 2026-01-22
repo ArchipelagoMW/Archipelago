@@ -858,7 +858,7 @@ class Rac3Interface(GameInterface):
                     for _ in range(self.notification_merge_count):
                         if self.notification_queue:
                             self.notification_queue.pop(0)
-                    self.reset_messagebox_theme()
+                    self.write_messagebox_theme()
                     logger.debug(f'notification queue: {len(self.notification_queue)}')
                     self.notification_time = current_time + 3
                 if self.notification_queue:
@@ -1313,15 +1313,7 @@ class Rac3Interface(GameInterface):
             # Odd numbered width values display as if it was the even number below it
             # Ex: 101 width displays as 100 width
             width += 1
-
-        theme_format = THEME_ID_TO_THEME_COLORS[box_theme]
-        box_color = theme_format.BOX
-        text_color = theme_format.TEXT
-        background_color = theme_format.BACKGROUND
-        self._write32(self._read32(RAC3MESSAGEBOX.BACKGROUND_COLOR_POINTER), background_color)
-        self._write32(self._read32(RAC3MESSAGEBOX.EDGE_COLOR_POINTER), box_color)
-        self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), box_color)
-        self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), text_color)
+        self.write_messagebox_theme(box_theme)
 
         self._write32(RAC3MESSAGEBOX.TIMER, _time)
         self._write32(RAC3MESSAGEBOX.TEXT_POINTER, RAC3MESSAGEBOX.MESSAGE)
@@ -1372,12 +1364,13 @@ class Rac3Interface(GameInterface):
         color_byte_count += 1  # Count the null terminator
         return bytes(result), color_byte_count
 
-    def reset_messagebox_theme(self) -> None:
-        default_theme = THEME_ID_TO_THEME_COLORS[RAC3BOXTHEME.DEFAULT]
-        self._write32(self._read32(RAC3MESSAGEBOX.BACKGROUND_COLOR_POINTER), default_theme.BACKGROUND)
-        self._write32(self._read32(RAC3MESSAGEBOX.EDGE_COLOR_POINTER), default_theme.BOX)
-        self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), default_theme.BOX)
-        self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), default_theme.TEXT)
+    def write_messagebox_theme(self, theme_name: int = RAC3BOXTHEME.DEFAULT) -> None:
+        """Update the current messagebox theme, either to the default or a specific theme"""
+        theme = THEME_ID_TO_THEME_COLORS[theme_name]
+        self._write32(self._read32(RAC3MESSAGEBOX.BACKGROUND_COLOR_POINTER), theme.BACKGROUND)
+        self._write32(self._read32(RAC3MESSAGEBOX.EDGE_COLOR_POINTER), theme.BOX)
+        self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), theme.BOX)
+        self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), theme.TEXT)
 
     def find_pda_vendor(self) -> int | str:
         """Traverse the moby linked list on Qwarks Hideout to find the PDA vendor moby and return its address"""
