@@ -164,6 +164,8 @@ class Portal2World(World):
             if "chapter_dict" in slot_data:
                 self.chapter_maps_dict = slot_data.get("chapter_dict", [])
             return
+        
+        self.multiworld.early_items[self.player][portal_gun_2] = 1
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
