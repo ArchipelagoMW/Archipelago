@@ -770,6 +770,10 @@ class Rac3Interface(GameInterface):
                     and not RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE in checked_locations
                     and infobot_flag != RAC3STATUS.ALLOW_SHIP):
                 self._write8(infobot_flag, 0)
+        # Bring qwark back to life until Ratchet has met Sasha on the bridge
+        if (not RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.PHOENIX_MEET_SASHA].AP_CODE in checked_locations 
+            and self.planet != RAC3REGION.ZELDRIN_STARPORT):
+            self._write8(RAC3STATUS.ESCAPED_LEVIATHAN, 0)
 
     def vidcomic_cycler(self):
         # logger.debug("---------VidComicCycler Start---------")
