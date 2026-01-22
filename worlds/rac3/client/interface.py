@@ -239,6 +239,7 @@ class Rac3Interface(GameInterface):
     clank_options: dict[str, bool] = None
     nanotech_exp: int = 0
     homewarping: bool = False
+    checked_locations: set[int] = set()
 
     # Called at once when client started
     def init(self):
@@ -738,6 +739,11 @@ class Rac3Interface(GameInterface):
         for name in gadget_data.keys():
             addr = gadget_data[name].UNLOCK_ADDRESS
             if self.UnlockItem[name].status:
+                if (name == RAC3ITEM.TYHRRA_GUISE 
+                    and self.planet == RAC3REGION.STARSHIP_PHOENIX 
+                    and not RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.PHOENIX_MEET_SASHA].AP_CODE in self.checked_locations):
+                        self._write8(addr, 0)
+                        continue
                 if self.UnlockItem[name].unlock_delay:
                     self._write8(addr, 1)
                     self.UnlockItem[name].unlock_delay = 0
@@ -763,6 +769,7 @@ class Rac3Interface(GameInterface):
 
     def sequence_break(self, checked_locations: set[int]) -> None:
         """Checks the current planet and unsets any planet access flags that would interfere with location collecting"""
+        self.checked_locations = checked_locations
         infobot_location = REGION_TO_INFOBOT_LOCATION.get(self.planet, None)
         if infobot_location is not None and infobot_location in RAC3_LOCATION_DATA_TABLE:
             infobot_flag = LOCATION_TO_INFOBOT_FLAG.get(infobot_location, None)
