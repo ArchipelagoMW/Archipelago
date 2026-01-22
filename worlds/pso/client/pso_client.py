@@ -30,6 +30,9 @@ CURRENT_HEALTH_ADDRESS = 0x80DA65CC
 # Use it to track the index of the last item the game knows it has received for the player
 LAST_RECEIVED_ITEM_ADDRESS = 0x80C5CBA0
 
+EMPTY_BANK_SLOT: bytes = b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00'
+LAST_BANK_SLOT = 0x80FDA878
+
 # The memory address to check to see if the player is currently in game
 # Technically, this is the memory address for a Mothmant, which is loaded
 # when the character 'sparks' in for the first time
@@ -40,7 +43,7 @@ RUINS_DOOR_ADDRESS = 0x805127FD
 
 PILLAR_NAMES = {Item.FOREST_PILLAR, Item.CAVES_PILLAR, Item.MINES_PILLAR}
 
-DEBUG_SLOT_OVERRIDE = False
+DEBUG_SLOT_OVERRIDE = True
 
 class PSOCommandProcessor(ClientCommandProcessor):
     """
@@ -223,6 +226,57 @@ def check_pillars(ctx: PSOContext) -> None:
     return
 
 
+def write_to_bank(ctx: PSOContext, item_name: str) -> bool:
+    """
+    Write an item to the player's in-game bank
+
+    :param ctx: the Context object from CommonClient for PSO
+    :param item_name: the name of the item being given
+    :return: whether the item was written successfully (as far as we know)
+    """
+    bank_slot_bytes = dolphin_memory_engine.read_bytes(LAST_BANK_SLOT, 0x18)
+    logger.critical(f"Saber is {dolphin_memory_engine.read_bytes(0x80FD95D0, 18)}")
+    logger.critical(f"Or potentially is {dolphin_memory_engine.read_bytes(0x80FD95D0, 0x18)}")
+    logger.critical(f"Second empty slot is {dolphin_memory_engine.read_bytes(0x80FD95E8, 18)}")
+    logger.critical(f"Or potentially is {dolphin_memory_engine.read_bytes(0x80FD95E8, 0x18)}")
+
+    # Check to make sure all the bytes are zero in the last slot, to ensure it's empty
+    # There might be a better way to do this
+    # for byte in bank_slot_bytes:
+    #     if byte not in (0, 255):
+    #         logger.error(f"Byte was {byte}")
+    if bank_slot_bytes != EMPTY_BANK_SLOT:
+        # TODO: Have another option for handling the case where the bank is full
+        logger.error(f"Attempted to write {item_name} to bank, but the bank is full. Item is presumably lost. {bank_slot_bytes}")
+        return True
+
+    # 00 94 00 00 00 00 00 FF
+    # SABER_BYTES = [0,0, 9,4, 0,0, 0,0, 0,0, 0,0, 0,0, 0xF, 0xF]
+    # SABER_BYTES = 0x00940000000000FF
+    SABER_BYTES = b'\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01'
+
+    pso_item = ITEM_TABLE[item_name]
+
+    # item_bytes = SABER_BYTES.to_bytes(18, byteorder="big")
+    item_bytes = SABER_BYTES
+
+    if pso_item.type == PSOItemType.WEAPON:
+        # Item slots in the bank are 18 bytes long, and 24 bytes away from the next item
+        # We find how much padding we need to add to push the item into position
+        # for _ in range(len(item_bytes), 18):
+        #     item_bytes.append(0)
+
+        # dolphin_memory_engine.write_bytes(LAST_BANK_SLOT, item_bytes)
+        dolphin_memory_engine.write_bytes(0x80FD95D0, item_bytes)
+
+        logger.info(f"Wrote {item_name} to bank")
+        return True
+
+    # If we somehow don't handle all our cases properly, we should know that
+    logger.error(f"Attempted to write {item_name} to the bank, but something unexpected occurred.")
+    return False
+
+
 def _give_item(ctx: PSOContext, item_name: str) -> bool:
     """
     Give an item to the player in-game
@@ -267,8 +321,7 @@ def _give_item(ctx: PSOContext, item_name: str) -> bool:
             return True
 
         case PSOItemType.WEAPON:
-            logger.error(f"Tried to give {item_name} - This hasn't been fully explored")
-            return True
+            return write_to_bank(ctx, item_name)
 
         case _:
             logger.error(f"Unhandled {item.type} item not added to game: {item_name}")
