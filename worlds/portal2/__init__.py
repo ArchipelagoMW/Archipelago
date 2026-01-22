@@ -103,7 +103,7 @@ class Portal2World(World):
         map_pool: list[str] = []
         used_maps: list[str] = []
 
-        possible_maps = [name for name in self.maps_in_use if not name.startswith("Chapter 9")]
+        possible_maps = [name for name in sorted(self.maps_in_use) if not name.startswith("Chapter 9")]
         
         proportion_map_pick: float = self.options.early_playability_percentage / 100
 
