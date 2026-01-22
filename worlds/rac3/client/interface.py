@@ -268,7 +268,7 @@ class Rac3Interface(GameInterface):
         self.is_reloading = self._read8(RAC3STATUS.FORCE_RELOAD)
         self.inside_hacker_puzzle = self._read8(RAC3STATUS.HELD_ITEM) == RAC3_ITEM_DATA_TABLE[RAC3ITEM.HACKER].ID
         self.message_display = bool(self._read_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER)))
-        self.nanotech_exp = self._read8(RAC3STATUS.NANOTECH_EXP)
+        self.nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
 
         self.vehicle_check()
         self.pause_check()
@@ -423,11 +423,10 @@ class Rac3Interface(GameInterface):
                     self.timers[name + str(_time)] = _time
                     self.boltAndXPMultiplierValue += 1
             case RAC3ITEM.PLAYER_XP:
-                new_exp = self.nanotech_exp + 10000 + randint(1, 300 * self.max_health)
-                if new_exp > 0x7FFFFFFF:
-                    new_exp = 0x7FFFFFFF
-                self.nanotech_exp = new_exp
-                self._write32(RAC3STATUS.NANOTECH_EXP, new_exp)
+                self.nanotech_exp += 10000 + randint(1, 300 * self.max_health)
+                if self.nanotech_exp > 0x7FFFFFFF:
+                    self.nanotech_exp = 0x7FFFFFFF
+                self._write32(RAC3STATUS.NANOTECH_EXP, self.nanotech_exp)
             case RAC3ITEM.WEAPON_XP:
                 valid_weapons = []
                 for weapon_name in non_prog_weapon_data.keys():
