@@ -1,6 +1,7 @@
+"""This module provides an interface with RAC3 to control the game"""
+
 import time
 from dataclasses import dataclass
-from enum import IntEnum
 from random import randint, uniform
 from struct import unpack
 from typing import Any, Optional
@@ -35,11 +36,8 @@ from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYP
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
                                           SHIP_SLOTS)
 from worlds.rac3.constants.status import RAC3STATUS
+from worlds.rac3.constants.version import RAC3VERSION
 from worlds.rac3.pcsx2_interface.pine import Pine
-
-
-class Dummy(IntEnum):
-    test = 0
 
 
 class GameInterface:
@@ -128,35 +126,35 @@ class GameInterface:
         if game_id != self.current_game:
             logger.info(f'Detecting new game version...')
             match game_id:
-                case RAC3STATUS.US_ID:
+                case RAC3VERSION.US_ID:
                     self.current_game = game_id
                     logger.info(f'Version Detected: US release')
-                case RAC3STATUS.US_GH_ID:
+                case RAC3VERSION.US_GH_ID:
                     self.current_game = game_id
                     logger.info(f'Version Detected: US Greatest Hits release')
                     logger.warning('WARNING: Game version untested, please inform apworld devs of any '
                                    'inconsistencies found')
-                case RAC3STATUS.JP_ID:
+                case RAC3VERSION.JP_ID:
                     self.current_game = game_id
                     logger.info(f'Version Detected: Japanese release')
                     logger.warning('WARNING: Game version untested, please inform apworld devs of any '
                                    'inconsistencies found')
-                case RAC3STATUS.JP_TB_ID:
+                case RAC3VERSION.JP_TB_ID:
                     self.current_game = game_id
                     logger.info(f'Version Detected: Japanese The Best release')
                     logger.warning('WARNING: Game version untested, please inform apworld devs of any '
                                    'inconsistencies found')
-                case RAC3STATUS.KO_ID:
+                case RAC3VERSION.KO_ID:
                     self.current_game = game_id
                     logger.info(f'Version Detected: Korean release')
                     logger.warning('WARNING: Game version untested, please inform apworld devs of any '
                                    'inconsistencies found')
-                case RAC3STATUS.CH_ID:
+                case RAC3VERSION.CH_ID:
                     self.current_game = game_id
                     logger.info(f'Version Detected: Chinese release')
                     logger.warning('WARNING: Game version untested, please inform apworld devs of any '
                                    'inconsistencies found')
-                case RAC3STATUS.EU_ID:
+                case RAC3VERSION.EU_ID:
                     self.current_game = game_id
                     logger.info(f'Version Detected: EU release')
                     logger.warning('WARNING: Game version untested, please inform apworld devs of any '
@@ -182,42 +180,23 @@ class GameInterface:
             return False
 
 
-@dataclass
-class UnlockData:
-    status: int
-    unlock_delay: int
-
-    def __init__(self,
-                 status: int = 0,
-                 unlock_delay: int = 0):
-        self.status = status
-        self.unlock_delay = unlock_delay
-
-    def __repr__(self):
-        return f'{{ status: {self.status}, unlock_delay: {self.unlock_delay} }}'
-
-
-def compare(value: int, check: RAC3ADDRESSDATA) -> bool:
-    match check.TYPE & CHECKTYPE.SIGN:
-        case CHECKTYPE.EQ:
-            return value == check.VALUE
-        case CHECKTYPE.NEQ:
-            return value != check.VALUE
-        case CHECKTYPE.GT:
-            return value > check.VALUE
-        case CHECKTYPE.LT:
-            return value < check.VALUE
-        case CHECKTYPE.GE:
-            return value >= check.VALUE
-        case CHECKTYPE.LE:
-            return value <= check.VALUE
-    return False
-
-
 class Rac3Interface(GameInterface):
-    ########################################
-    # Mandatory functions                  #
-    ########################################
+    """Handles reading and modifying the game memory"""
+
+    @dataclass
+    class UnlockData:
+        """Data structure for tracking if items should be unlocked and if they are in the process of being unlocked"""
+        status: int
+        unlock_delay: int
+
+        def __init__(self,
+                     status: int = 0,
+                     unlock_delay: int = 0):
+            self.status = status
+            self.unlock_delay = unlock_delay
+
+        def __repr__(self):
+            return f'{{ status: {self.status}, unlock_delay: {self.unlock_delay} }}'
 
     UnlockItem: dict[str, UnlockData] = None
     boltAndXPMultiplier: int = None
@@ -258,6 +237,8 @@ class Rac3Interface(GameInterface):
     pda_vendor: int = 0
     last_in_vehicle_time: float = 0.0
     clank_options: dict[str, bool] = None
+    nanotech_exp: int = 0
+    homewarping: bool = False
 
     # Called at once when client started
     def init(self):
@@ -287,9 +268,13 @@ class Rac3Interface(GameInterface):
         self.is_reloading = self._read8(RAC3STATUS.FORCE_RELOAD)
         self.inside_hacker_puzzle = self._read8(RAC3STATUS.HELD_ITEM) == RAC3_ITEM_DATA_TABLE[RAC3ITEM.HACKER].ID
         self.message_display = bool(self._read_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER)))
+        self.nanotech_exp = self._read8(RAC3STATUS.NANOTECH_EXP)
 
         self.vehicle_check()
         self.pause_check()
+        if self.homewarping:
+            if self.pause_state_value != RAC3PAUSESTATE.PLANET_CHANGE:
+                self.homewarping = False
         if self.self_respawning:
             if not self.is_reloading:
                 self.self_respawning = False
@@ -438,11 +423,10 @@ class Rac3Interface(GameInterface):
                     self.timers[name + str(_time)] = _time
                     self.boltAndXPMultiplierValue += 1
             case RAC3ITEM.PLAYER_XP:
-                exp = self._read32(RAC3STATUS.NANOTECH_EXP)
-                level = self._read8(RAC3STATUS.MAX_HEALTH)
-                new_exp = exp + 10000 + randint(1, 300 * level)
+                new_exp = self.nanotech_exp + 10000 + randint(1, 300 * self.max_health)
                 if new_exp > 0x7FFFFFFF:
                     new_exp = 0x7FFFFFFF
+                self.nanotech_exp = new_exp
                 self._write32(RAC3STATUS.NANOTECH_EXP, new_exp)
             case RAC3ITEM.WEAPON_XP:
                 valid_weapons = []
@@ -526,12 +510,29 @@ class Rac3Interface(GameInterface):
                 case CHECKTYPE.BIT:
                     check_all &= (self._read8(check.ADDRESS) >> check.VALUE) & 0x01
                 case CHECKTYPE.BYTE:
-                    check_all &= compare(self._read8(check.ADDRESS), check)
+                    check_all &= self.compare(self._read8(check.ADDRESS), check)
                 case CHECKTYPE.SHORT:
-                    check_all &= compare(self._read16(check.ADDRESS), check)
+                    check_all &= self.compare(self._read16(check.ADDRESS), check)
                 case CHECKTYPE.INT:
-                    check_all &= compare(self._read32(check.ADDRESS), check)
+                    check_all &= self.compare(self._read32(check.ADDRESS), check)
         return check_all
+
+    @staticmethod
+    def compare(value: int, check: RAC3ADDRESSDATA) -> bool:
+        match check.TYPE & CHECKTYPE.SIGN:
+            case CHECKTYPE.EQ:
+                return value == check.VALUE
+            case CHECKTYPE.NEQ:
+                return value != check.VALUE
+            case CHECKTYPE.GT:
+                return value > check.VALUE
+            case CHECKTYPE.LT:
+                return value < check.VALUE
+            case CHECKTYPE.GE:
+                return value >= check.VALUE
+            case CHECKTYPE.LE:
+                return value <= check.VALUE
+        return False
 
     ###################################
     # Game dedicated functions        #
@@ -542,8 +543,8 @@ class Rac3Interface(GameInterface):
 
     def init_variables(self):
         # Unlock state variables/ArmorUpgrade variable
-        self.UnlockItem = {name: UnlockData() for name in ITEM_FROM_AP_CODE.values()}
-        self.UnlockItem.update({RAC3REGION.SLOT_0: UnlockData()})
+        self.UnlockItem = {name: self.UnlockData() for name in ITEM_FROM_AP_CODE.values()}
+        self.UnlockItem.update({RAC3REGION.SLOT_0: self.UnlockData()})
         logger.debug(f'UnlockItem dict:{self.UnlockItem.keys()}')
 
         # Proc options
@@ -661,37 +662,37 @@ class Rac3Interface(GameInterface):
         if equip_data > 1 and self.UnlockItem.get(ITEM_NAME_FROM_ID.get(equip_data)).status == 0:  # Not unlocked
             last_1 = self._read8(RAC3STATUS.LAST_USED_1)
             if last_1 == 0:
-                self._write8(RAC3STATUS.EQUIPPED, equipable_data[RAC3ITEM.WRENCH].ID)
-                self._write8(RAC3STATUS.LAST_USED_0, 0)
+                self.update_weapon_equip(equipable_data[RAC3ITEM.WRENCH].ID, 0, None, None)
                 return
             last_2 = self._read8(RAC3STATUS.LAST_USED_2)
             last_3 = self._read8(RAC3STATUS.LAST_USED_3)
             if self.UnlockItem.get(ITEM_NAME_FROM_ID.get(last_1)).status:
-                self._write8(RAC3STATUS.EQUIPPED, last_1)
-                self._write8(RAC3STATUS.LAST_USED_0, last_1)
-                self._write8(RAC3STATUS.LAST_USED_1, last_2)
-                self._write8(RAC3STATUS.LAST_USED_2, last_3)
+                self.update_weapon_equip(last_1, last_1, last_2, last_3)
                 return
             if last_2 == 0:
-                self._write8(RAC3STATUS.EQUIPPED, equipable_data[RAC3ITEM.WRENCH].ID)
-                self._write8(RAC3STATUS.LAST_USED_0, 0)
-                self._write8(RAC3STATUS.LAST_USED_1, 0)
+                self.update_weapon_equip(equipable_data[RAC3ITEM.WRENCH].ID, 0, 0, None)
                 return
             last_4 = self._read8(RAC3STATUS.LAST_USED_4)
             if self.UnlockItem.get(ITEM_NAME_FROM_ID.get(last_2)).status:
-                self._write8(RAC3STATUS.EQUIPPED, last_2)
-                self._write8(RAC3STATUS.LAST_USED_0, last_2)
-                self._write8(RAC3STATUS.LAST_USED_1, last_3)
-                self._write8(RAC3STATUS.LAST_USED_2, last_4)
+                self.update_weapon_equip(last_2, last_2, last_3, last_4)
                 return
             last_5 = self._read8(RAC3STATUS.LAST_USED_5)
-            self._write8(RAC3STATUS.LAST_USED_0, last_3)
-            self._write8(RAC3STATUS.LAST_USED_1, last_4)
-            self._write8(RAC3STATUS.LAST_USED_2, last_5)
             if last_3 == 0 or self.UnlockItem.get(ITEM_NAME_FROM_ID.get(last_3)).status:
-                self._write8(RAC3STATUS.EQUIPPED, equipable_data[RAC3ITEM.WRENCH].ID)
+                self.update_weapon_equip(equipable_data[RAC3ITEM.WRENCH].ID, last_3, last_4, last_5)
             else:
-                self._write8(RAC3STATUS.EQUIPPED, last_3)
+                self.update_weapon_equip(last_3, last_3, last_4, last_5)
+
+    def update_weapon_equip(self, equip: Optional[int], last_0: Optional[int],
+                            last_1: Optional[int], last_2: Optional[int]):
+        """Writes new values to the player's last used item history"""
+        if equip is not None:
+            self._write8(RAC3STATUS.EQUIPPED, equip)
+        if last_0 is not None:
+            self._write8(RAC3STATUS.LAST_USED_0, last_0)
+        if last_1 is not None:
+            self._write8(RAC3STATUS.LAST_USED_1, last_1)
+        if last_2 is not None:
+            self._write8(RAC3STATUS.LAST_USED_2, last_2)
 
     def cutscene_gadget_fix(self):
         """Temporarily removing a gadget when grabbing it during a cutscene to make sure the location check address
@@ -1025,7 +1026,7 @@ class Rac3Interface(GameInterface):
         if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
             health_addr = self._read32(self._read32(self.vehicle + 0x68))
             target_health = 5.0
-            if self.planet == RAC3REGION.TYHRRANOSIS_RANGERS or self.planet == RAC3REGION.MARCADIA:
+            if self.planet in [RAC3REGION.TYHRRANOSIS_RANGERS, RAC3REGION.MARCADIA]:
                 target_health = 1.0  # For some reason these vehicles have 100 max health instead of 500
             elif self.planet == RAC3REGION.TYHRRANOSIS:
                 target_health = 0.6  # For some reason the turboslider on Tyhrranosis has 60 max health
@@ -1077,8 +1078,8 @@ class Rac3Interface(GameInterface):
         self._write8(self.pda_vendor + 0x20, 1)  # Reset interaction state
 
     def overflow_fix(self):
-        nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
-        if nanotech_exp > 0x7FFFFFFF:
+        """Detect any integer overflows and reset the value"""
+        if self.nanotech_exp > 0x7FFFFFFF:
             self._write32(RAC3STATUS.NANOTECH_EXP, 0)
             self.notification_queue.append(
                 (f'Negative Nanotech EXP detected! Resetting EXP to 0', RAC3BOXTHEME.WARNING))
@@ -1176,15 +1177,14 @@ class Rac3Interface(GameInterface):
         if self.player_type in {RAC3PLAYERTYPE.CLANK, RAC3PLAYERTYPE.GIANT, RAC3PLAYERTYPE.QWARK}:
             return False
         match self.planet:
-            case RAC3REGION.VELDIN:
-                return False  # Problems with F-sector
+            case RAC3REGION.VELDIN | RAC3REGION.TYHRRANOSIS | RAC3REGION.ZELDRIN_STARPORT:
+                # Veldin: Problems with F-sector
+                # Tyhrranosis: Entrance coordinates in the first section that gets unloaded after leaving
+                # Zeldrin: only one respawn point, that is right next to the ship, and we don't want anything to happen
+                #          while aboard the leviathan
+                return False
             case RAC3REGION.MARCADIA:
                 return self._read32(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
-            case RAC3REGION.TYHRRANOSIS:
-                return False  # Entrance coordinates in the first section that gets unloaded after leaving
-            case RAC3REGION.ZELDRIN_STARPORT:
-                return False  # Zeldrin has only one respawn point that is right next to the ship and we don't want
-                # anything to happen while aboard the leviathan
             case _:
                 return True
 
@@ -1195,12 +1195,15 @@ class Rac3Interface(GameInterface):
 
     def homewarp(self):
         """Triggers a planet load to the starship phoenix"""
+        if self.homewarping:
+            return
         if self.planet not in RAC3_REGION_DATA_TABLE.keys():
             # Unknown planet, abort homewarp
             logger.error(f'Aborting homewarp, Unknown Planet: {self.planet}')
             return
         planet_data = RAC3_REGION_DATA_TABLE[self.planet]
         if planet_data.PLANET_TO_LOAD:
+            self.homewarping = True
             self._write8(planet_data.PLANET_TO_LOAD, RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID)
             self._write8(planet_data.PLANET_SPECIAL_OFFSET + RAC3STATUS.PLANET_LOAD, 1)
             logger.info(f"Player home-warped from {self.planet}")

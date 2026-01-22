@@ -1,4 +1,4 @@
-# Common import
+"""This module provides a launchable client for connecting RAC3 running on PCSX2 Emulation to a Multiworld"""
 from asyncio import create_task, run, sleep, Task
 from multiprocessing import freeze_support
 from time import time
@@ -94,7 +94,7 @@ class CommandProcessor(ClientCommandProcessor):
 
     def _cmd_weapon_exp_test(self):
         """Give weapon exp for testing purposes."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             if self.ctx.slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]:
@@ -106,7 +106,7 @@ class CommandProcessor(ClientCommandProcessor):
 
     def _cmd_bolt_test(self):
         """Give bolts for testing purposes."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.BOLTS].AP_CODE,
@@ -115,14 +115,14 @@ class CommandProcessor(ClientCommandProcessor):
 
     def _cmd_rac3_info(self):
         """Dump Rac3 info for debugging purposes."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.dump_info(self.ctx.slot_data)
 
     def _cmd_force_update(self):
         """Force an update to the game state by running all update cycle methods."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             update(self.ctx)
@@ -143,7 +143,7 @@ class CommandProcessor(ClientCommandProcessor):
     def _cmd_respawn(self):
         """Teleports Ratchet back to the ship. If used in an unusual place, forces a respawn instead.
         You can also pause the game and hold Square on the pause menu to run this command from in-game."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             create_task(handle_respawn(self.ctx, True))
@@ -151,7 +151,7 @@ class CommandProcessor(ClientCommandProcessor):
     def _cmd_homewarp(self):
         """Loads Ratchet back on the Phoenix. Does nothing if used during the intro before reaching the Phoenix.
         Also activated with the following button combo: L2 + R2 + L1 + R1 + SELECT"""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             self.output(f'Attempting to homewarp to the Phoenix...')
@@ -159,7 +159,7 @@ class CommandProcessor(ClientCommandProcessor):
 
     def _cmd_ryno(self):
         """Toggles the maximum upgrade level for the RYNO between lv5 and lv4"""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.ryno = not self.ctx.game_interface.ryno
@@ -170,7 +170,7 @@ class CommandProcessor(ClientCommandProcessor):
 
     def _cmd_messagebox(self, *args):
         """Displays a message box in-game with the specified message."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             message = " ".join(args)
@@ -181,7 +181,7 @@ class CommandProcessor(ClientCommandProcessor):
 
     def _cmd_one_hp(self, *args):
         """Toggles One HP Challenge for the specified character."""
-        if not self.verify(4):
+        if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
             character = " ".join(args).lower()
@@ -197,6 +197,7 @@ class CommandProcessor(ClientCommandProcessor):
 
 
 class Rac3Context(CommonContext):
+    """Class for handling server connection with the game client"""
     # Client variables
     command_processor = CommandProcessor
     current_planet: str = RAC3REGION.GALAXY
@@ -244,6 +245,7 @@ class Rac3Context(CommonContext):
         return ui
 
     async def server_auth(self, password_requested: bool = False) -> None:
+        """Authenticate with the Multiworld server."""
         if password_requested and not self.password:
             await super(Rac3Context, self).server_auth(password_requested)
         await self.get_username()
@@ -276,6 +278,7 @@ class Rac3Context(CommonContext):
 
 
 async def pcsx2_sync_task(ctx: Rac3Context):
+    """Connects to PCSX2 and loops through update functions until the connection is closed."""
     logger.info(f"Starting {RAC3OPTION.GAME_TITLE_FULL} Connector")
     connected_to_game: bool = False
     connection_retry_attempts: int = 0
@@ -286,14 +289,14 @@ async def pcsx2_sync_task(ctx: Rac3Context):
                 logger.info("Connected to server")
                 ctx.is_connected_to_server = connected_to_server
                 if ctx.slot_data.get(RAC3OPTION.VERSION, "0.0.0") < RAC3OPTION.VERSION_NUMBER:
-                    await ctx.disconnect(False)
+                    await ctx.disconnect()
                     logger.warning(
                         f"Client is v{RAC3OPTION.VERSION_NUMBER}, please downgrade to v"
                         f"{ctx.slot_data[RAC3OPTION.VERSION]}")
                     await sleep(10)
                     continue
                 if ctx.slot_data[RAC3OPTION.VERSION] > RAC3OPTION.VERSION_NUMBER:
-                    await ctx.disconnect(False)
+                    await ctx.disconnect()
                     logger.warning(
                         f"Client is v{RAC3OPTION.VERSION_NUMBER}, please upgrade to v"
                         f"{ctx.slot_data[RAC3OPTION.VERSION]}")
@@ -420,9 +423,11 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
 
 
 def launch_client():
+    """Launch an instance of the Ratchet and Clank 3 client"""
     init_logging(f"{RAC3OPTION.GAME_TITLE}_Client")
 
     async def main():
+        """The main client process"""
         freeze_support()
         logger.info("main")
         parser = get_base_parser()

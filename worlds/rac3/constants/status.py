@@ -1,16 +1,8 @@
+"""This module contains the constant address values used when reading in game memory"""
+
+
 class RAC3STATUS:
-    US_ID = "SCUS-97353"
-    US_BETA_ID = "SCUS-97413"
-    US_DEMO_ID = "SCUS-97411"
-    US_GH_ID = "SCUS-97518"
-    JP_ID = "SCPS-15084"
-    JP_TRIAL_ID = "PCPX-96653"
-    JP_TB_ID = "SCPS-19309"
-    KO_ID = "SCKA-20037"
-    CH_ID = "SCAJ-20109"
-    EU_ID = "SCES-52456"
-    EU_BETA_ID = "TCES-52456"
-    EU_DEMO_ID = "SCED-52847"
+    """Constant addresses for in game memory values"""
     APCODE = 51000000
     ACTION = 0x001A71A4
     PREV_ACTION = 0x001A71B0
