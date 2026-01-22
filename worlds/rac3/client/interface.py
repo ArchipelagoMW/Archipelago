@@ -1140,7 +1140,9 @@ class Rac3Interface(GameInterface):
         planet_data = RAC3_REGION_DATA_TABLE.get(self.planet, None)
         if planet_data:
             self.pause_menu = bool(self._read8(planet_data.PAUSE_ADDRESS)) if planet_data.PAUSE_ADDRESS else False
-            self.pause_state_value = self._read8(RAC3STATUS.PAUSE_STATE + planet_data.PLANET_SPECIAL_OFFSET)
+            self.pause_state_value = self._read8(RAC3STATUS.PAUSE_STATE
+                                                 + planet_data.PLANET_SPECIAL_OFFSET
+                                                 ) if planet_data.PLANET_SPECIAL_OFFSET is not None else None
             self.pause_state = bool(self.pause_state_value)
         else:
             # Unknown planet, assume paused to be safe
@@ -1167,9 +1169,9 @@ class Rac3Interface(GameInterface):
             self._write_bytes(
                 RESPAWN_COORDS_OFFSET[self.planet] + RAC3STATUS.RESPAWN_BASE,
                 self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
-            logger.info(f'Player respawned on: {self.planet}')
+            logger.debug(f'Player respawned on: {self.planet}')
         else:
-            logger.info(f'Player respawned at last checkpoint on: {self.planet}')
+            logger.debug(f'Player respawned at last checkpoint on: {self.planet}')
         self.force_respawn()
 
     def should_overwrite_respawn(self):
@@ -1206,7 +1208,8 @@ class Rac3Interface(GameInterface):
             self.homewarping = True
             self._write8(planet_data.PLANET_TO_LOAD, RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID)
             self._write8(planet_data.PLANET_SPECIAL_OFFSET + RAC3STATUS.PLANET_LOAD, 1)
-            logger.info(f"Player home-warped from {self.planet}")
+            self._write8(planet_data.PLANET_SPECIAL_OFFSET + RAC3STATUS.PAUSE_STATE, 6)
+            logger.debug(f"Player home-warped from {self.planet}")
         else:
             logger.warning(f"Couldn't find warp data to leave planet: {self.planet}")
 
