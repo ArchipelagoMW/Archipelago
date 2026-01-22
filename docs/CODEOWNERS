@@ -70,6 +70,9 @@
 # DOOM II
 /worlds/doom_ii/ @Daivuk @KScl
 
+# EarthBound
+/worlds/earthbound/ @PinkSwitch
+
 # Factorio
 /worlds/factorio/ @Berserker66
 
@@ -176,8 +179,12 @@
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace
 
+# Satisfactory
+/worlds/satisfactory/ @Jarno458 @budak7273
+
 # Starcraft 2
-/worlds/sc2/ @Ziktofel
+# Note: @Ziktofel acts as a mentor
+/worlds/sc2/ @MatthewMarinets @Snarkie @SirChuckOfTheChuckles
 
 # Super Metroid
 /worlds/sm/ @lordlou
