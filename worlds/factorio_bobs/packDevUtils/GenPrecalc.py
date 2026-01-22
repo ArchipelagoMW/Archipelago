@@ -10,13 +10,10 @@ def main():
     start = timeit.default_timer()
     output = {}
     for item in modpack.recipe_engine.game_items.values():
-        if not item.is_valid_ingredient:
+        item.raw_calculate()
+        if not item.is_valid:
             continue
-        print(repr(item))
-        if not item.is_valid_ingredient:
-            continue
-        continue
-        output[name] = {"raw_ingredients": {item.name: cost for item, cost in raw.items()},
+        output[item.name] = {"score": item.score,
                         "best_recipe": best.name if best else None,
                         "technologies": list(sorted(technology.name for technology in tech)),
                         "category": list(sorted(cat))}
