@@ -3,8 +3,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
 from worlds.rac3.constants.data.item import (goal_data, infobot_data, item_counts, item_table, NAME_TO_PROG_DICT,
-                                             non_prog_weapon_data, PROG_TO_NAME_DICT, prog_weapon_data,
-                                             progressive_data, RAC3ITEMDATA)
+                                             PROG_TO_NAME_DICT, progressive_data, RAC3ITEMDATA)
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
@@ -47,18 +46,28 @@ def create_itempool(world: "RaC3World") -> list[Item]:
                 item_amount -= count  # remove one from the pool as it has already been placed
 
         # Progressive Weapons option
-        if not options.enable_progressive_weapons.value:
-            if name in prog_weapon_data.keys():
-                continue
-        else:  # options.EnableProgressiveWeapons.value:
-            if name in non_prog_weapon_data.keys():
-                continue
+        if RAC3ITEMTAG.PROG_WEAPON in item_tags and not options.enable_progressive_weapons.value:
+            continue
+        if RAC3ITEMTAG.NON_PROG_WEAPON in item_tags and options.enable_progressive_weapons.value:
+            continue
 
         # ExtraArmorUpgrade option
         if RAC3ITEMTAG.ARMOR in item_tags:
             if name != RAC3ITEM.PROGRESSIVE_ARMOR:
                 continue
             item_amount = options.armor_upgrade.value
+
+        if RAC3ITEMTAG.CLANK in item_tags:
+            if options.clank_options.value == options.clank_options.option_start_with:
+                continue
+            elif options.clank_options.value == options.clank_options.option_shuffled_as_one and name != RAC3ITEM.CLANK:
+                continue
+            elif (options.clank_options.value == options.clank_options.option_shuffled_independently
+                  and name not in [RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK]):
+                continue
+            elif (options.clank_options.value == options.clank_options.option_shuffled_progressive
+                  and name != RAC3ITEM.PROGRESSIVE_PACK):
+                continue
 
         # Catch accidental duplicates
         if item_amount is None:
@@ -98,8 +107,8 @@ def get_filler_selection(world: "RaC3World"):
     if world.options.traps_enabled.value:
         traps = world.options.trap_weight.value
         frequencies.update(traps)
-        if world.options.clank_options.value == 1:
-            frequencies[RAC3ITEM.NO_CLANK_TRAP] = 0
+        # if world.options.clank_options.value > world.options.clank_options.option_start_with:
+        #     frequencies[RAC3ITEM.NO_CLANK_TRAP] = 0
     if not frequencies or all(count == 0 for count in frequencies.values()):
         frequencies[RAC3ITEM.BOLTS] = 1  # set bolts to be the only filler if the filler weights are empty
         # error = "No filler items available. Please enable some filler items."

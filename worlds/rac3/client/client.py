@@ -414,7 +414,7 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
             ctx.game_interface.reset_death_count()
             logger.info("Checking cosmetics...")
             ctx.game_interface.add_cosmetics()
-            logger.info("Load the latest autosave to apply cosmetics")
+            logger.info("Load the latest autosave or enter the Armor Vendor to apply cosmetics")
             logger.info("Game READY!")
 
         if not ctx.main_menu:

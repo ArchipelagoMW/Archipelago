@@ -236,10 +236,12 @@ class Rac3Interface(GameInterface):
     one_hp_challenge: dict[str, int] = None
     pda_vendor: int = 0
     last_in_vehicle_time: float = 0.0
-    clank_options: dict[str, bool] = None
     nanotech_exp: int = 0
     homewarping: bool = False
-    checked_locations: set[int] = set()
+    checked_locations: set[str] = set()
+    clank_disabled: bool = False
+    clank_disabled_trap: bool = False
+    unfreeze_packs: bool = False
 
     # Called at once when client started
     def init(self):
@@ -270,6 +272,7 @@ class Rac3Interface(GameInterface):
         self.inside_hacker_puzzle = self._read8(RAC3STATUS.HELD_ITEM) == RAC3_ITEM_DATA_TABLE[RAC3ITEM.HACKER].ID
         self.message_display = bool(self._read_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER)))
         self.nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
+        self.clank_disabled = bool(self._read8(RAC3STATUS.NO_CLANK))
 
         self.vehicle_check()
         self.pause_check()
@@ -326,7 +329,6 @@ class Rac3Interface(GameInterface):
         self.ship_skin = slot_data[RAC3OPTION.SHIP_SKIN]
         self.skin = slot_data[RAC3OPTION.SKIN]
         self.one_hp_challenge = slot_data[RAC3OPTION.ONE_HP_CHALLENGE]
-        self.clank_options = slot_data[RAC3OPTION.CLANK_OPTIONS]
 
     def map_switch(self) -> tuple[str, str]:
         """Update and validate the current planet for the UT map"""
@@ -402,6 +404,19 @@ class Rac3Interface(GameInterface):
             case RAC3ITEM.PROGRESSIVE_ARMOR:
                 if self.UnlockItem[name].status > 4:
                     self.UnlockItem[name].status = 4
+            case RAC3ITEM.PROGRESSIVE_PACK:
+                self.UnlockItem[RAC3ITEM.CLANK].status = 1
+                self.UnlockItem[RAC3ITEM.HELI_PACK].status = 1
+                if self.UnlockItem[name].status > 1:
+                    self.UnlockItem[RAC3ITEM.THRUSTER_PACK].status = 1
+                    self.UnlockItem[name].status = 2
+            case RAC3ITEM.HELI_PACK:
+                self.UnlockItem[RAC3ITEM.CLANK].status = 1
+            case RAC3ITEM.THRUSTER_PACK:
+                self.UnlockItem[RAC3ITEM.CLANK].status = 1
+            case RAC3ITEM.CLANK:
+                self.UnlockItem[RAC3ITEM.HELI_PACK].status = 1
+                self.UnlockItem[RAC3ITEM.THRUSTER_PACK].status = 1
             case RAC3ITEM.TITANIUM_BOLT:
                 pass
             case RAC3ITEM.BOLTS:
@@ -471,8 +486,7 @@ class Rac3Interface(GameInterface):
                     self.timers[name] += randint(10, 20)
                 else:
                     # Special case for holostar, nefarious base and klunk fight
-                    already_no_clank = self._read8(RAC3STATUS.NO_CLANK)
-                    if already_no_clank == 0:
+                    if not self.clank_disabled:
                         self.timers[name] = int(time.time() + uniform(10, 20))
             case RAC3ITEM.INVISIBLE_TRAP:
                 if self.timers.get(name, False):
@@ -966,6 +980,8 @@ class Rac3Interface(GameInterface):
                         case RAC3STATUS.DISARM:
                             if self.vehicle == 0:
                                 self._write8(status, 1)
+                        case RAC3STATUS.NO_CLANK:
+                            self.clank_disabled_trap = True
                         case _:
                             self._write8(status, 1)
             else:
@@ -989,7 +1005,7 @@ class Rac3Interface(GameInterface):
                     case RAC3ITEM.BLACK_SCREEN_TRAP:
                         self._write16(RAC3STATUS.BLACK_SCREEN, 0x8C)
                     case RAC3ITEM.NO_CLANK_TRAP:
-                        self._write8(RAC3STATUS.NO_CLANK, 0)
+                        self.clank_disabled_trap = False
                     case RAC3ITEM.INVISIBLE_TRAP:
                         self._write8(RAC3STATUS.INVISIBLE, 0)
                     case RAC3ITEM.DISARM_TRAP:
@@ -1442,25 +1458,31 @@ class Rac3Interface(GameInterface):
 
     def clank_cycler(self):
         """Checks the current state to see if clank needs to be disabled"""
-        if self.clank_options:
-            # Special cases where Clank is already removed
-            if ((self.planet == RAC3REGION.HOLOSTAR_STUDIOS and self._read8(RAC3STATUS.HOLOSTAR_CLANK_FIX) == 0)
-                    or self.planet == RAC3REGION.AQUATOS_BASE
-                    or not self.UnlockItem[RAC3ITEM.CLANK].status):
-                self._write16(RAC3STATUS.NO_CLANK, 1)
-            # No special case:
+        # Special cases where Clank is already removed
+        if ((self.planet == RAC3REGION.HOLOSTAR_STUDIOS and not self._read8(RAC3STATUS.HOLOSTAR_CLANK_FIX))
+                or self.planet == RAC3REGION.AQUATOS_BASE
+                or not self.UnlockItem[RAC3ITEM.CLANK].status
+                or self.clank_disabled_trap):
+            self._write8(RAC3STATUS.NO_CLANK, 1)
+        # No special case:
+        else:
+            if self.UnlockItem[RAC3ITEM.CLANK].unlock_delay:
+                self._write8(RAC3STATUS.NO_CLANK, 0)
+                self.UnlockItem[RAC3ITEM.CLANK].unlock_delay = 0
             else:
-                if self.UnlockItem[RAC3ITEM.CLANK].unlock_delay:
-                    self._write16(RAC3STATUS.NO_CLANK, 0)
-                    self.UnlockItem[RAC3ITEM.CLANK].unlock_delay = 0
+                self.UnlockItem[RAC3ITEM.CLANK].unlock_delay += 1
+        if self.UnlockItem[RAC3ITEM.HELI_PACK].status:
+            if self.UnlockItem[RAC3ITEM.THRUSTER_PACK].status:
+                if not self.unfreeze_packs:
+                    self._write8(RAC3STATUS.PACK_EQUIP, 2)  # Unset pack freeze
+                self.unfreeze_packs = True
+            else:
+                if self.pause_state_value == RAC3PAUSESTATE.PAUSED:
+                    self._write8(RAC3STATUS.PACK_EQUIP, 3)  # Set pack freeze
                 else:
-                    self.UnlockItem[RAC3ITEM.CLANK].unlock_delay += 1
-
-    def set_flag(self, data: list[RAC3ADDRESSDATA]):
-        """Sets the bit flags for a given location"""
-        for check in data:
-            if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
-                self._write8(check.ADDRESS, check.VALUE)
+                    self._write8(RAC3STATUS.PACK_EQUIP, 2)  # Unset pack freeze
+        elif self.UnlockItem[RAC3ITEM.THRUSTER_PACK].status:
+            self.unfreeze_packs = True
 
     def softlock_warning(self):
         """Checks if the player is on a planet with a potential softlock and informs them on how to escape"""

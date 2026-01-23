@@ -34,4 +34,4 @@ class RAC3OPTION:
     FILLER_WEIGHT = "Filler Weight"
     ONE_HP_CHALLENGE = "One HP Challenge"
     INTRO_SKIP = "Intro Skip"
-    CLANK_OPTIONS = "Clank Options"
+    CLANK_OPTIONS = "Clank Pack Options"

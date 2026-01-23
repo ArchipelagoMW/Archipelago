@@ -72,7 +72,7 @@ class RaC3Options(PerGameCommonOptions):
     skin: RatchetSkin
     one_hp_challenge: OneHpChallenge
     intro_skip: IntroSkip
-    clank_options:ClankOptions
+    clank_options: ClankOptions
 
 
 rac3_option_groups = [

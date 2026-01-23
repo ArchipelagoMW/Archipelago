@@ -202,7 +202,7 @@ class RAC3ITEM:
     ADAMANTINE = "Adamantine armor"
     AEGIS = "Aegis Mark V armor"
     INFERNOX = "Infernox armor"
-    CLANK = "Clank"
+    CLANK = "Clank pack"
 
     PROGRESSIVE_SHOCK_BLASTER = "Progressive Shock Blaster"
     PROGRESSIVE_NITRO_LAUNCHER = "Progressive Nitro Launcher"
@@ -226,6 +226,7 @@ class RAC3ITEM:
     PROGRESSIVE_PLASMA_COIL = "Progressive Plasma Coil"
     PROGRESSIVE_VIDCOMIC = "Progressive VidComic"
     PROGRESSIVE_ARMOR = "Progressive Armor"
+    PROGRESSIVE_PACK = "Progressive Pack"
 
     VELDIN = "Infobot: Veldin"
     FLORANA = "Infobot: Florana"
