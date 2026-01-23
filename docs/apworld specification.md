@@ -79,10 +79,26 @@ will be packaged into an `.apworld` with a manifest file inside of it that looks
 
 This is the recommended workflow for packaging your world to an `.apworld`.
 
-## Extra Data
+### .apignore Exclusions
 
-The zip can contain arbitrary files in addition what was specified above.
+By default, any additional files inside of the world folder will be packaged into the resulting `.apworld` archive and
+can then be read by the world. However, if there are any other files that aren't needed in the resulting `.apworld`, you
+can automatically prevent the build component from including them by specifying them in a file called `.apignore` inside
+the root of the world folder.
 
+The `.apignore` file selects files in the same way as the `.gitignore` format with patterns separated by line describing
+which files to ignore. For example, an `.apignore` like this:
+
+```gitignore
+*.iso
+scripts/
+!scripts/needed.py
+```
+
+would ignore any `.iso` files and anything in the scripts folder except for `scripts/needed.py`.
+
+Some exclusions are made by default for all worlds such as `__pycache__` folders. These are listed in the
+`GLOBAL.apignore` file inside of the `data` directory.
 
 ## Caveats
 
