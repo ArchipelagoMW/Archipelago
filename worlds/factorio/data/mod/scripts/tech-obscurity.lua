@@ -13,17 +13,31 @@
 
 --to do:
 --depth: functions settings and AP side
---hints inbound: command and AP side
+--hints inbound: AP side
 --hints outbound:  AP side
---tech tree trigger: functions
 
 local function send_hint(technology)
     if storage.hinted_techs[technology.name] == false then
         storage.hinted_techs[technology.name] = true
 
         -- send a hint to the archipelago server here.
-        log("Player gives hint for:"+technology.name) -- notifies client
+        log("Obscurity gives hint for:" .. technology.name) -- notifies client
 
+    end
+end
+
+local function receive_hint(tech_name)
+    -- receive a hint from the achipelago server.
+    for name, tech in pairs(prototypes.technology) do
+        if name == tech_name then
+            for name, force in pairs(game.forces) do
+                game.print(serpent.line(force.technologies[tech_name]))
+                if prototypes.technology[tech_name].hidden == false then
+                    force.technologies[tech_name].visible_when_disabled = true
+                    force.technologies[tech_name].enabled = false
+                end
+            end
+        end
     end
 end
 
@@ -35,39 +49,25 @@ local function depth_check(technology)
     return true --currently this check does not work.
 end
 
-local function receive_hint(tech_name)
-    -- receive a hint from the achipelago server.
-    for name, tech in pairs(technologies) do--fix this
-        if name == tech_name then
-            for name, force in pairs(forces) do --fix this
-                if force.technology[tech_name].hidden then --fix this
-                    force.technology[tech_name].hidden = false --fix this
-                    force.technology[tech_name].disabled = true --fix this
-                end
-            end
-        end
-    end
-end
-
 local function update_science_tech_tree(force)
     --update the entire science part of the tech tree. With hidden and not hidden things.
-    technologies = game.forces[force].technologies --fix this
-    hidden_science_tech = storage[force.name].hidden_science_tech
-    science_packs = storage[force.name].science_packs
+    technologies = force.technologies --fix this
+    hidden_science_tech = storage.forces[force.name].hidden_science_tech
+    science_packs_name = storage.forces[force.name].science_packs_name
 
     for name, tech in pairs(technologies) do
         if hidden_science_tech[tech.name] then
             is_revealed = true
-            for _, ingredient in tech.ingredients do
-                if science_packs[ingredient[0]].crafted == false then
+            for _, ingredient in pairs(tech.research_unit_ingredients) do
+                if science_packs_name[ingredient.name].crafted == false then
                     is_revealed = false
                 end
             end
-            if is_revealed or setting_layer_obscurity == false then -- fix this
+            if is_revealed or settings.global["archipelago-tech-layer-obscurity"] == false then -- fix this
                 if depth_check(tech) then
                     send_hint (tech)
-                    tech.hidden = false
-                    tech.disabled = false
+                    tech.enabled = true
+                    tech.visible_when_disabled = false
                 end
             end
         end
@@ -76,11 +76,11 @@ end
 
 local function update_trigger_tech_tree(force, technology)
     --update the entire trigger part of the tech tree. With hidden and not hidden things.
-    technologies = game.forces[force].technologies --fix this
-    hidden_trigger_tech = storage[force.name].hidden_trigger_tech
-    triggers = storage[force.name].triggers
+    local technologies = game.forces[force].technologies --fix this
+    local hidden_trigger_tech = storage.forces[force.name].hidden_trigger_tech
+    local triggers = storage.forces[force.name].triggers
 
-    to_check = {}
+    local to_check = {}
     for _, recipe in pairs(technology.unlocks) do --fix this mainly, check recipe structures in runtime.
         if recipe.result then
             to_check[recipe.result] = recipe.result
@@ -89,66 +89,105 @@ local function update_trigger_tech_tree(force, technology)
             to_check[name] = name
         end
     end
-    for _ name in pairs(to_check) do
-        if triggers[to_check] then
-            
+    for _, name in pairs(to_check) do
+        if triggers[name] then 
+            if triggers[name].unlocked_triggered == false then
+                triggers[name].unlocked_triggered = true
+                for _, tech_name in pairs(triggers[to_check].technologies) do
+                    hidden_trigger_tech[tech_name] = false
+                    force.technologies[tech_name].hidden = false
+                    force.technologies[tech_name].disabled = false
+                end
+            end
         end
     end
 end
 
 local function setup_storage(force)
     --setup all the information needed for later
-    storage[force.name].science_packs = {} --make a list of science packs.
-    storage[force.name].triggers = {} --make a list of all triggers in the game
-    storage[force.name].hidden_science_tech = {} --list all the newly hidden science techs
-    storage[force.name].hidden_crafting_tech = {} --list all the newly hidden trigger techs
+    storage.forces = storage.forces or {}
+    storage.forces[force.name] = storage.forces[force] or {}
+    storage.forces[force.name].science_packs_num = {} --make a list of science packs.
+    storage.forces[force.name].science_packs_name = {} --make a list of science packs.
+    storage.forces[force.name].triggers = {} --make a list of all triggers in the game
+    storage.forces[force.name].hidden_science_tech = {} --list all the newly hidden science techs
+    storage.forces[force.name].hidden_trigger_tech = {} --list all the newly hidden trigger techs
 
-    science_packs = storage[force.name].science_packs
-    triggers = storage[force.name].triggers
-    hidden_science_tech = storage[force.name].hidden_science_tech
-    hidden_crafting_tech = storage[force.name].hidden_crafting_tech
+ 
+    local science_packs_num = storage.forces[force.name].science_packs_num
+    local science_packs_name = storage.forces[force.name].science_packs_name
+    local triggers = storage.forces[force.name].triggers
+    local hidden_science_tech = storage.forces[force.name].hidden_science_tech
+    local hidden_trigger_tech = storage.forces[force.name].hidden_trigger_tech
 
-    done_packs = {}
-    done_triggers = {}
-    
-    for name, tech in pairs(force.technologies) do --fix this
-        if tech is research do --fix this
-            hidden_science_tech[tech.name] = true
-            for _, packs in pairs(tech.ingredients) do
-                if done_packs[packs[0]] ~= true then
-                    science_packs[packs[0]] = {name = packs[0], science = true, crafted = false}
-                end
-            end
-        end
-        if tech is trigger do  --fix this
-            hidden_trigger_tech[tech.name] = true
-            for _, items in pairs(tech.ingredients) do
-                if done_triggers[triggers[0]] ~= true then
-                    if triggers[items[0]] == null then
-                        triggers[items[0]] = {name = items[0], unlocked_triggered = false, technologies = {tech.name}}
-                    else
-                        triggers[items[0]].technologies --finish this
+    local done_packs = {}
+    local done_triggers = {}
+
+    for name, tech in pairs(game.forces[force.name].technologies) do
+        if tech.prototype.hidden == false then
+            if tech.prototype.research_trigger == nil and (settings.global["archipelago-tech-layer-obscurity"] or settings.global["archipelago-tech-depth-obscurity"]>=1) then
+                hidden_science_tech[tech.name] = true
+                for _, packs in pairs(tech.research_unit_ingredients) do
+                    if done_packs[packs.name] ~= true then
+                        done_packs[packs.name] = true
+                        table.insert(science_packs_num, {name = packs.name, crafted = false})
+                        science_packs_name[packs.name] = {name = packs.name, crafted = false}
                     end
                 end
+                tech.enabled = false
+            elseif (tech.prototype.research_trigger.type == "craft-item" or tech.prototype.research_trigger.type == "craft-fluid") and settings.global["archipelago-tech-craft-obscurity"] then
+                hidden_trigger_tech[tech.name] = true
+                if done_triggers[tech.prototype.research_trigger.name] ~= true then
+                    if triggers[tech.prototype.research_trigger.name] == nil then
+                        triggers[tech.prototype.research_trigger.name] = {name = tech.prototype.research_trigger.name, unlocked_triggered = false, technologies = {tech.name}}
+                    else
+                        table.insert(triggers[tech.prototype.research_trigger.name].technologies, tech.name)
+                    end
+                end
+                tech.enabled = false
             end
         end
     end
 end
 
-local function on_tick(event)
-    for force_name, force in pairs(game.forces) do
-        science_num = game.tick % len(storage[force_name].science_packs)
-        science_check = storage[force_name].science_packs[science_num] --check one science pack per tick.
+local function get_item_count(item_name, force)
+    local count = 0
+    for surface_name, surface in pairs(game.surfaces) do
+        local flowstatistics = force.get_item_production_statistics(surface)
+        count = count + flowstatistics.get_input_count(item_name)
+    end
+    return count
+end
 
-        if storage[force_name].science_packs.crafted == false then
-            if sience_pack_production > 0 then --if this science_pack is made then update the three
+local science_total
+local function on_tick(event)
+    if not science_total then
+        for force_name, force in pairs(game.forces) do
+            science_total = 0
+            local counter = 0
+            for _, _ in pairs(storage.forces[force_name].science_packs_num) do
+                counter = counter + 1
+            end
+            if counter > science_total then
+                science_total = counter
+            end
+        end
+    end 
+    for force_name, force in pairs(game.forces) do
+        local science_check = game.tick % science_total --check one science pack per tick.
+        local science_packs_num = storage.forces[force_name].science_packs_num
+        if science_packs_num[science_check+1].crafted == false then
+            if get_item_count(science_packs_num[science_check+1].name, force) > 0 then --if this science_pack is made then update the three
                 -- fix this (steal fomr milestones.)
-                storage[force_name].science_packs.crafted = true --ensure one update per pack extra crafted
+                game.print("you crafted a: "..science_packs_num[science_check+1].name)
+                science_packs_num[science_check+1].crafted = true --ensure one update per pack extra crafted
+                storage.forces[force_name].science_packs_name[science_packs_num[science_check+1].name].crafted  = true
                 update_science_tech_tree(force)
             end
         end
     end
 end
+
 
 local function on_research_finished(event)
     update_science_tech_tree(event.force)
@@ -161,10 +200,10 @@ end
 
 local function on_init()
     storage.hinted_techs = {} --will ensure hints are only send once.
-    for name, tech in pairs(technologies) do --fix this
+    for name, tech in pairs(prototypes.technology) do
         storage.hinted_techs[name] = tech.hidden
     end
-    for _, force in pairs(forces) do --fix this
+    for _, force in pairs(game.forces) do
         setup_storage(force)
     end
 end
@@ -173,10 +212,10 @@ local function on_configuration_changed()
     game.print("I see that you have changed your configuration.\n But as I was not asked I am going to ignore anything extra. And probably give errors on removed techs.\n~~the tech obscurity of the archipelago mod")
 end
 
-local events = {
-    [defines.on_tick] = on_tick,
-    [defines.on_research_finished] = on_research_finished,
-    [defines.on_force_created] = on_force_created,
+events = {
+    [defines.events.on_tick] = on_tick,
+    [defines.events.on_research_finished] = on_research_finished,
+    [defines.events.on_force_created] = on_force_created,
 }
 
 for name, loc_fun in pairs(events) do
@@ -192,20 +231,14 @@ commands.add_command("ap-receive-hint", "Used by the Archipelago client to manag
     if tech_name == "failed" then --take care of errors
         log("failure has occured")
         game.print("a failure with recieving a hint has occured")
+    else
+        receive_hint(tech_name) --from the perspective of factorio.
     end
-
-    -- give hint to all forces
-    for name, force in pairs(forces) do --fix this
-        if storage[force.name].hidden_science_tech[tech_name] then
-            --is hinted so no longer hidden but disabled.
-            force.technologies[tech_name].hidden = false
-            force.technologies[tech_name].disabled = true
-        end
-        if storage[force.name].hidden_trigger_tech[tech_name] then
-            --is hinted so no longer hidden but disabled.
-            force.technologies[tech_name].hidden = false
-            force.technologies[tech_name].disabled = true
-        end
-    end
-
 end)
+
+local lib = {}
+lib.get_events = function() return events end
+lib.on_init = on_init
+lib.on_configuration_changed = on_configuration_changed
+
+return lib
