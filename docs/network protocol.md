@@ -123,7 +123,8 @@ Sent to clients when the server refuses connection. This is sent during the init
 InvalidSlot indicates that the sent 'name' field did not match any auth entry on the server.
 InvalidGame indicates that a correctly named slot was found, but the game for it mismatched.
 IncompatibleVersion indicates a version mismatch.
-InvalidPassword indicates the wrong, or no password when it was required, was sent.
+InvalidPassword indicates the wrong, or no password when it was required, was sent. May also indicate an unrecognized
+uuid if the attempted slot to connect to is locked.
 InvalidItemsHandling indicates a wrong value type or flag combination was sent.
 
 ### Connected
@@ -295,7 +296,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | password       | str                               | If the game session requires a password, it should be passed here.                           |
 | game           | str                               | The name of the game the client is playing. Example: `A Link to the Past`                    |
 | name           | str                               | The player name for this client.                                                             |
-| uuid           | str                               | Unique identifier for player. Cached in the user cache \Archipelago\Cache\common.json        |
+| uuid           | str                               | Unique identifier for player. Cached in the user cache `\Archipelago\Cache\common.json`. Used as a connection token for the player locking feature. |
 | version        | [NetworkVersion](#NetworkVersion) | An object representing the Archipelago version this client supports.                         |
 | items_handling | int                               | Flags configuring which items should be sent by the server. Read below for individual flags. |
 | tags           | list\[str\]                       | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags)        |
