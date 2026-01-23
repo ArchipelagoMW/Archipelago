@@ -451,6 +451,9 @@ class PsyRules:
         # non-local item, so these locations cannot contain Psychonauts items that can only be placed locally.
         local_only_forbidden: Set[str] = set()
 
+        # Prevent local only items (baggage) from being placed at problematic locations
+        local_only_forbidden.update(LocationName.TunnelOfLoveRailDufflebagTag)
+
         # Ranks are now always spawned by Archipelago, no local only items
         if self.world.options.RankSanity:
             # Update ALL rank locations
@@ -459,7 +462,7 @@ class PsyRules:
         # Update only every five rank locations
             local_only_forbidden.update(FIVE_RANK_LOCATIONS.keys())
 
-        # Figment Percent checks are forbidden from local
+        # Figment Percent checks, no local only items
         if self.world.options.FigmentPercentageChecks.value >= 1:
             local_only_forbidden.update(FIGMENT_20_LOCATIONS.keys())
         if self.world.options.FigmentPercentageChecks.value >= 2:
@@ -473,7 +476,6 @@ class PsyRules:
 
         if self.world.options.ProgressiveBaggage and self.world.options.MaximumProgressiveBaggage.value != 0:
             # Progressive Baggage locations do not place items into the world.
-            # local_only_forbidden.update(PROG_BAGGAGE_LOCATIONS.keys())
 
             # checks to see if we have the total number of matching Bags and Tags required for a progressive location
             # Example: Progressive Suitcase 3 will require 3 Bags AND 3 Tags
