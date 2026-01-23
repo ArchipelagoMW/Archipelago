@@ -12,7 +12,6 @@
 --      hints will only be send once. Unless an achipelago command demands the whole list.
 
 --to do:
---depth: functions settings and AP side
 --hints inbound: AP side
 --hints outbound:  AP side
 
@@ -41,52 +40,151 @@ local function receive_hint(tech_name)
     end
 end
 
-local function depth_check(technology)
-    -- checks if the tech is close enough in depth to another tech.
-    -- so that you only reveal techs when you are only one or two layers away from it.
-    -- might be more fun and hints will be more spread out.
+local function depth_check(force, in_layer)
+    
+    local technologies = force.technologies
 
-    return true --currently this check does not work.
+    local in_depth = {} -- start with all already completed techs
+    local second_pass = {}
+    for _, tech in pairs(technologies) do
+        if tech.researched then
+            in_depth[tech.name] = true
+        end
+        local prerequisite = true
+        for _, _ in pairs(tech.prerequisites) do
+            prerequisite = false
+            break
+        end
+        if prerequisite and tech.prototype.research_trigger == nil then
+            second_pass[tech.name] = true
+        end
+    end
+
+    local to_check = table.deepcopy(in_depth)
+    local depth_measure = settings.global["archipelago-tech-depth-obscurity"].value
+    game.print("depth_measure before loop: " .. depth_measure)
+    local first_round = true
+    while depth_measure > 0 do
+        game.print("depth_measure before math in loop: " .. depth_measure)
+        depth_measure = depth_measure - 1
+        game.print("depth_measure after math in loop: " .. depth_measure)
+        local new_revealed = {}
+        if first_round then
+            new_revealed = second_pass
+            first_round = false
+        end
+        for name, _ in pairs(to_check) do
+            local count = 0
+            for _, tech in pairs(technologies[name].prerequisites) do
+                count = count + 1
+                if (not in_depth[tech.name]) and (not to_check[tech.name]) and in_layer[tech.name] then
+                    new_revealed[tech.name] = true
+                end
+            end
+            if count == 0 then new_revealed[name] = true end
+            for _, tech in pairs(technologies[name].successors) do
+                if (not in_depth[tech.name]) and (not to_check[tech.name]) and in_layer[tech.name] then
+                    new_revealed[tech.name] = true
+                end
+            end
+            in_depth[name] = true
+        end
+
+        local nothing_new = true
+        for _, _ in pairs(new_revealed) do
+            nothing_new = false
+            break
+        end
+        if nothing_new then
+            break -- nothing new found. So no need to continue the search.
+        end
+
+        to_check = new_revealed --set the next layer of techs at the ready.
+    end
+
+    return in_depth
 end
 
-local function update_science_tech_tree(force)
-    --update the entire science part of the tech tree. With hidden and not hidden things.
-    technologies = force.technologies --fix this
-    hidden_science_tech = storage.forces[force.name].hidden_science_tech
-    science_packs_name = storage.forces[force.name].science_packs_name
+local function layer_check(force)
+    
+    local technologies = force.technologies
+    local science_packs_name = storage.forces[force.name].science_packs_name
+    local hidden_science_tech = storage.forces[force.name].hidden_science_tech
 
+    local in_layers
+
+    in_layers = {}
     for name, tech in pairs(technologies) do
         if hidden_science_tech[tech.name] then
-            is_revealed = true
+            local is_revealed = true
             for _, ingredient in pairs(tech.research_unit_ingredients) do
                 if science_packs_name[ingredient.name].crafted == false then
                     is_revealed = false
                 end
             end
-            if is_revealed or settings.global["archipelago-tech-layer-obscurity"] == false then -- fix this
-                if depth_check(tech) then
-                    send_hint (tech)
-                    tech.enabled = true
-                    tech.visible_when_disabled = false
-                end
+            if is_revealed then
+                in_layers[tech.name] = true
             end
         end
     end
+
+    return in_layers
+end
+
+local function update_science_tech_tree(force)
+    --update the entire science part of the tech tree. With hidden and not hidden things.
+    local technologies = force.technologies
+    local hidden_science_tech = storage.forces[force.name].hidden_science_tech
+
+    local to_reveal
+
+    if settings.global["archipelago-tech-layer-obscurity"].value then
+        to_reveal = layer_check(force)
+    else
+        to_reveal = table.deepcopy(hidden_science_tech) or {}
+    end
+    
+    if settings.global["archipelago-tech-depth-obscurity"].value >=1 then
+        to_reveal = depth_check(force, to_reveal)
+    end
+
+    for name, _ in pairs(to_reveal) do
+        send_hint(technologies[name])
+        technologies[name].enabled = true
+        technologies[name].visible_when_disabled = false
+    end
+
+    -- in_layers either contains all still hidden sciences or contains 
 end
 
 local function update_trigger_tech_tree(force, technology)
     --update the entire trigger part of the tech tree. With hidden and not hidden things.
-    local technologies = game.forces[force].technologies --fix this
+    local technologies = force.technologies
     local hidden_trigger_tech = storage.forces[force.name].hidden_trigger_tech
     local triggers = storage.forces[force.name].triggers
 
     local to_check = {}
-    for _, recipe in pairs(technology.unlocks) do --fix this mainly, check recipe structures in runtime.
-        if recipe.result then
-            to_check[recipe.result] = recipe.result
+    if technology == false then
+        for _, technology in pairs(technologies) do
+            if technologies.researched then
+                for _, recipe in pairs(technology.unlocks) do
+                    if recipe.result then
+                        to_check[recipe.result] = recipe.result
+                    end
+                    for name, result in pairs(recipe.results) do
+                        to_check[name] = name
+                    end
+                end
+            end
         end
-        for name, result in pairs(recipe.results) do
-            to_check[name] = name
+    else
+        for _, effect in pairs(technology.prototype.effects) do
+            if effect.type == "unlock-recipe" then
+                local recipe = prototypes.recipe
+                for name, result in pairs(recipe.products) do
+                    to_check[name] = name
+                end
+            end
         end
     end
     for _, name in pairs(to_check) do
@@ -136,12 +234,20 @@ local function setup_storage(force)
                 end
                 tech.enabled = false
             elseif (tech.prototype.research_trigger.type == "craft-item" or tech.prototype.research_trigger.type == "craft-fluid") and settings.global["archipelago-tech-craft-obscurity"] then
+                
+                local trigger_name
+                if tech.prototype.research_trigger.type == "craft-item" then
+                    trigger_name = tech.prototype.research_trigger.item
+                else
+                    trigger_name = tech.prototype.research_trigger.fluid
+                end
+                
                 hidden_trigger_tech[tech.name] = true
-                if done_triggers[tech.prototype.research_trigger.name] ~= true then
-                    if triggers[tech.prototype.research_trigger.name] == nil then
-                        triggers[tech.prototype.research_trigger.name] = {name = tech.prototype.research_trigger.name, unlocked_triggered = false, technologies = {tech.name}}
+                if done_triggers[trigger_name] ~= true then
+                    if triggers[trigger_name] == nil then
+                        triggers[trigger_name] = {name = trigger_name, unlocked_triggered = false, technologies = {tech.name}}
                     else
-                        table.insert(triggers[tech.prototype.research_trigger.name].technologies, tech.name)
+                        table.insert(triggers[trigger_name].technologies, tech.name)
                     end
                 end
                 tech.enabled = false
@@ -190,8 +296,8 @@ end
 
 
 local function on_research_finished(event)
-    update_science_tech_tree(event.force)
-    update_trigger_tech_tree(event.force, event.technology) --verify this
+    update_science_tech_tree(event.research.force)
+    update_trigger_tech_tree(event.research.force, event.research)
 end
 
 local function on_force_created(event)
@@ -205,6 +311,7 @@ local function on_init()
     end
     for _, force in pairs(game.forces) do
         setup_storage(force)
+        update_trigger_tech_tree(force, false)
     end
 end
 
@@ -233,6 +340,19 @@ commands.add_command("ap-receive-hint", "Used by the Archipelago client to manag
         game.print("a failure with recieving a hint has occured")
     else
         receive_hint(tech_name) --from the perspective of factorio.
+    end
+end)
+
+commands.add_command("ap-resend-all-hints", "Used by the Archipelago client to manage the tech tree hints", function(call)
+    --sends all hints again, the order will be base factorio sorting.
+
+    storage.hinted_techs = {} --will ensure hints are only send once.
+    for name, tech in pairs(prototypes.technology) do
+        storage.hinted_techs[name] = tech.hidden
+    end
+    for _, force in pairs(game.forces) do
+        update_science_tech_tree(force)
+        update_trigger_tech_tree(force, false)
     end
 end)
 

@@ -129,8 +129,8 @@ class TechLayerObscurity(Toggle):
     Works alone or in combination with Depth Obscurity."""
     display_name = "Tech Layer Obscurity"
     default = True
-    option_disabled = False
-    option_enabled = True
+    disabled = False
+    enabled = True
 
 
 class TechDepthObscurity(Range):
@@ -153,6 +153,7 @@ class TechDepthObscurity(Range):
     display_name = "Tech Depth Obscurity"
     default = 2
     option_disabled = 0
+    disabled = 0
     option_blind = 1
     range_start = 0
     range_end = 100

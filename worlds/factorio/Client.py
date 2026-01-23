@@ -335,6 +335,17 @@ async def game_watcher(ctx: FactorioContext):
                                     bridge_logger.warning("RCON Client has unexpectedly lost connection. Please issue /rcon_reconnect.")
                                 else:
                                     logger.debug(f"EnergyLink: Sent {format_SI_prefix(value)}J")
+                    if ctx.location_info != data["send-hints"]:
+                        bridge_logger.debug(
+                            f"New Hints: "
+                            f"{[ctx.location_info.lookup_in_game(rid) for rid in data["send-hints"] - ctx.location_info]}")
+                        for hint in ctx.location_info:
+                            if  not hint.location in data["send-hints"]:
+                                ctx.rcon_client.send_command(
+                                    f"/ap-receive-hint -AP-{hint.location}-")
+                                data["send-hints"].append(hint.location)
+                        
+
 
             await asyncio.sleep(0.1)
 
@@ -422,7 +433,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                         if tech_split[0] == "AP":
                             location_id = int(tech_split[1])
                             #this should now only have te location id of the check. So 123456.....
-                            ctx.LocationScouts(locations = [location_id], create_as_hint=1)
+                            ctx.send_msgs([{"cmd": "CreateHints", "locations": [location_id], "player": ctx.slot}])
                 else:
                     factorio_server_logger.info(msg)
                     match = re.match(r"^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d \[CHAT\] ([^:]+): (.*)$", msg)
