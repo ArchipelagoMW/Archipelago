@@ -144,6 +144,7 @@ class Client(Endpoint):
         "__weakref__",
         "version",
         "auth",
+        "uuid",
         "team",
         "slot",
         "send_index",
@@ -159,6 +160,7 @@ class Client(Endpoint):
 
     version: Version
     auth: bool
+    uuid: str
     team: int | None
     slot: int | None
     send_index: int
@@ -175,6 +177,7 @@ class Client(Endpoint):
         super().__init__(socket)
         self.version = no_version
         self.auth = False
+        self.uuid = ""
         self.team = None
         self.slot = None
         self.send_index = 0
@@ -220,6 +223,7 @@ class Context:
                       "location_check_points": int,
                       "server_password": str,
                       "password": str,
+                      "player_locking": bool,
                       "release_mode": str,
                       "remaining_mode": str,
                       "collect_mode": str,
@@ -251,10 +255,11 @@ class Context:
     """ each sphere is { player: { location_id, ... } } """
     logger: logging.Logger
 
-    def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
-                 hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
-                 countdown_mode: str = "auto", remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, 
-                 compatibility: int = 2, log_network: bool = False, logger: logging.Logger = logging.getLogger()):
+    def __init__(self, host: str, port: int, server_password: str, password: str, player_locking: bool,
+                 location_check_points: int, hint_cost: int, item_cheat: bool, release_mode: str = "disabled",
+                 collect_mode="disabled", countdown_mode: str = "auto", remaining_mode: str = "disabled",
+                 auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2, log_network: bool = False,
+                 logger: logging.Logger = logging.getLogger()):
         self.logger = logger
         super(Context, self).__init__()
         self.slot_info = {}
@@ -274,6 +279,7 @@ class Context:
         self.port = port
         self.server_password = server_password
         self.password = password
+        self.player_locking = player_locking
         self.server = None
         self.countdown_timer = 0
         self.received_items = {}
@@ -295,6 +301,7 @@ class Context:
         self.client_connection_timers: typing.Dict[
             team_slot, datetime.datetime] = {}  # datetime of last connection
         self.client_game_state: typing.Dict[team_slot, int] = collections.defaultdict(int)
+        self.player_locks: dict[team_slot, set[str]] = {}
         self.er_hint_data: typing.Dict[int, typing.Dict[int, str]] = {}
         self.auto_shutdown = auto_shutdown
         self.commandprocessor = ServerCommandProcessor(self)
@@ -671,7 +678,7 @@ class Context:
             "stored_data": self.stored_data,
             "game_options": {"hint_cost": self.hint_cost, "location_check_points": self.location_check_points,
                              "server_password": self.server_password, "password": self.password,
-                             "release_mode": self.release_mode,
+                             "player_locking": self.player_locking, "release_mode": self.release_mode,
                              "remaining_mode": self.remaining_mode, "collect_mode": self.collect_mode,
                              "countdown_mode": self.countdown_mode,
                              "item_cheat": self.item_cheat, "compatibility": self.compatibility}
@@ -705,6 +712,7 @@ class Context:
             self.location_check_points = savedata["game_options"]["location_check_points"]
             self.server_password = savedata["game_options"]["server_password"]
             self.password = savedata["game_options"]["password"]
+            self.player_locking = savedata["game_options"]["player_locking"]
             self.release_mode = savedata["game_options"]["release_mode"]
             self.remaining_mode = savedata["game_options"]["remaining_mode"]
             self.collect_mode = savedata["game_options"]["collect_mode"]
@@ -791,6 +799,8 @@ class Context:
                 setattr(self, key, value)
             elif key == "disable_item_cheat":
                 self.item_cheat = not bool(value)
+            elif key == "disable_player_locking":
+                self.player_locking = not bool(value)
             else:
                 self.logger.debug(f"Unrecognized server option {key}")
 
@@ -881,6 +891,37 @@ class Context:
         targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
         if targets:
             self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.client_game_state[team, slot]}])
+
+
+def lock_slot(ctx: Context, team: int, slot: int, identifier: str = "") -> set[str]:
+    if identifier:
+        ids = {identifier}
+        password = True
+    else:
+        # Get all connected uuids, but filter empty string
+        ids = {client.uuid for client in ctx.clients[team][slot] if client.uuid}
+        password = False
+
+    ctx.player_locks[team, slot] = ids
+    for client in ctx.clients[team][slot]:
+        msgs = [{"cmd": "PrintJSON", "data": [{"text": f"Slot locked. Join IDs: {', '.join(ids)}"}]}]
+        if not client.uuid and not password:
+            msgs.append({
+                "cmd": "PrintJSON",
+                "data": [{"text": "Warning: Your client has an empty uuid set, "
+                          "so it will require entering one of these IDs in the password field to reconnect."}]
+            })
+        async_start(ctx.send_msgs(client, msgs))
+
+    return ids
+
+
+def unlock_slot(ctx: Context, team: int, slot: int) -> None:
+    ctx.player_locks[team, slot] = set()
+
+    for client in ctx.clients[team][slot]:
+        msgs = [{"cmd": "PrintJSON", "data": [{"text": "Slot unlocked."}]}]
+        async_start(ctx.send_msgs(client, msgs))
 
 
 def update_aliases(ctx: Context, team: int):
@@ -1482,6 +1523,26 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
         return self.ctx.commandprocessor(command)
 
+    def _cmd_lock(self, identifier: str = "") -> bool:
+        """Lock the current slot, disallowing connections from a new device/without a specified password.
+        If passed an ID, then this will be set as the password, which must be specified when connecting.
+        Otherwise, the identifiers of any current connections will be used instead."""
+        if not self.ctx.player_locking:
+            self.output("Player locking has been disabled on this server.")
+            return False
+
+        lock_slot(self.ctx, self.client.team, self.client.slot, identifier)
+        return True
+    
+    def _cmd_unlock(self) -> bool:
+        """Unlock the current slot, allowing anybody to join again."""
+        if not self.ctx.player_locking:
+            self.output("Player locking has been disabled on this server.")
+            return False
+
+        unlock_slot(self.ctx, self.client.team, self.client.slot)
+        return True
+
     def _cmd_players(self) -> bool:
         """Get information about connected and missing players."""
         if len(self.ctx.player_names) < 10:
@@ -1865,8 +1926,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             return
 
         errors = set()
-        if ctx.password and args['password'] != ctx.password:
-            errors.add('InvalidPassword')
+        locks = None
 
         if args['name'] not in ctx.connect_names:
             errors.add('InvalidSlot')
@@ -1886,6 +1946,15 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             except (ValueError, TypeError):
                 errors.add('InvalidItemsHandling')
 
+            locks = ctx.player_locking and ctx.player_locks.get((team, slot))
+            if locks:
+                if args["uuid"] not in locks and args["password"] not in locks:
+                    errors.add("InvalidPassword")
+
+        # Player lock overrides regular password requirement if set for slot
+        if not locks and ctx.password and args["password"] != ctx.password:
+            errors.add("InvalidPassword")
+
         # only exact version match allowed
         if ctx.compatibility == 0 and args['version'] != version_tuple:
             errors.add('IncompatibleVersion')
@@ -1893,7 +1962,6 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.logger.info(f"A client connection was refused due to: {errors}, the sent connect information was {args}.")
             await ctx.send_msgs(client, [{"cmd": "ConnectionRefused", "errors": list(errors)}])
         else:
-            team, slot = ctx.connect_names[args['name']]
             if client.auth and client.team is not None and client.slot in ctx.clients[client.team]:
                 ctx.clients[team][slot].remove(client)  # re-auth, remove old entry
                 if client.team != team or client.slot != slot:
@@ -1902,6 +1970,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.slot = slot
 
             ctx.client_ids[client.team, client.slot] = args["uuid"]
+            client.uuid = args["uuid"]
             ctx.clients[team][slot].append(client)
             client.version = args['version']
             client.tags = args['tags']
@@ -2232,6 +2301,40 @@ class ServerCommandProcessor(CommonCommandProcessor):
         else:
             self.output("Saving is disabled.")
             return False
+
+    def _cmd_lock(self, player_name: str, identifier: str = "") -> bool:
+        """Lock the specified player's slot"""
+        if not self.ctx.player_locking:
+            self.output("Player locking is disabled.")
+            return False
+
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, _ = player
+            ids = lock_slot(self.ctx, team, slot, identifier)
+
+            self.output(f"Locked slot {player_name} with values: {', '.join(ids)}")
+            return True
+
+        self.output(f"Could not find player {player_name} to lock.")
+        return False
+
+    def _cmd_unlock(self, player_name: str, identifier: str = "") -> bool:
+        """Unlock the specified player's slot"""
+        if not self.ctx.player_locking:
+            self.output("Player locking is disabled.")
+            return False
+
+        player = self.resolve_player(player_name)
+        if player:
+            team, slot, _ = player
+            unlock_slot(self.ctx, team, slot)
+
+            self.output(f"Unlocked slot {player_name}.")
+            return True
+
+        self.output(f"Could not find player {player_name} to unlock.")
+        return False
 
     def _cmd_players(self) -> bool:
         """Get information about connected players"""
@@ -2578,6 +2681,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--port', default=defaults["port"], type=int)
     parser.add_argument('--server_password', default=defaults["server_password"])
     parser.add_argument('--password', default=defaults["password"])
+    parser.add_argument("--disable_player_locking", default=defaults["disable_player_locking"], action="store_true",
+                        help="Disallow locking of individual player slots")
     parser.add_argument('--savefile', default=defaults["savefile"])
     parser.add_argument('--disable_save', default=defaults["disable_save"], action='store_true')
     parser.add_argument('--cert', help="Path to a SSL Certificate for encryption.")
@@ -2677,9 +2782,9 @@ async def main(args: argparse.Namespace):
                        loglevel=args.loglevel.lower(),
                        add_timestamp=args.logtime)
 
-    ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
-                  args.hint_cost, not args.disable_item_cheat, args.release_mode, args.collect_mode,
-                  args.countdown_mode, args.remaining_mode,
+    ctx = Context(args.host, args.port, args.server_password, args.password, not args.disable_player_locking,
+                  args.location_check_points, args.hint_cost, not args.disable_item_cheat, args.release_mode,
+                  args.collect_mode, args.countdown_mode, args.remaining_mode,
                   args.auto_shutdown, args.compatibility, args.log_network)
     data_filename = args.multidata
 
