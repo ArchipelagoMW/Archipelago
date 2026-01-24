@@ -277,7 +277,7 @@ item_pickups_table = {
     LocationName.cultist_compound_item_pickup_sol_alembic: 1500,
     LocationName.cultist_compound_item_pickup_minor_sol_shard_10: 1501,
     LocationName.cultist_compound_item_pickup_minor_sol_shard_11: 1502,
-    LocationName.cultist_compound_item_pickup_minor_sol_shard_12: 1503,
+    LocationName.cultist_compound_item_pickup_major_sol_shard_12: 1503,
     LocationName.cultist_compound_item_pickup_gauntlets: 1504,
     LocationName.cultist_compound_item_pickup_garnet_aegis: 1505,
     LocationName.cultist_compound_item_pickup_guile_rogue: 1506,
@@ -328,7 +328,7 @@ item_pickups_table = {
     LocationName.swamp_item_pickup_katana: 1548,
     LocationName.swamp_item_pickup_strange_curio_2: 1549,
     LocationName.swamp_item_pickup_map: 1550,
-    LocationName.swamp_item_pickup_minor_sol_shard_24: 1551,
+    LocationName.swamp_item_pickup_major_sol_shard_24: 1551,
 
     LocationName.apex_outskirts_item_pickup_golden_clover: 1552,
     LocationName.apex_outskirts_item_pickup_strange_curio_3: 1553,
@@ -464,6 +464,7 @@ walls_table = {
     LocationName.apex_wall_beach: 1940,
     LocationName.apex_wall_immunity_torch_1: 1941,
     LocationName.apex_wall_immunity_torch_2: 1942,
+    LocationName.swamp_wall_market_square: 1943,
 }
 
 # Misc

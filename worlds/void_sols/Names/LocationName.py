@@ -294,7 +294,7 @@ cultist_compound_item_pickup_flame_talisman = CULTIST_COMPOUND_PREFIX + "Flame T
 cultist_compound_item_pickup_sol_alembic = CULTIST_COMPOUND_PREFIX + "Sol Alembic Item Pickup"
 cultist_compound_item_pickup_minor_sol_shard_10 = CULTIST_COMPOUND_PREFIX + "Minor Sol Shard #10 Item Pickup"
 cultist_compound_item_pickup_minor_sol_shard_11 = CULTIST_COMPOUND_PREFIX + "Minor Sol Shard #11 Item Pickup"
-cultist_compound_item_pickup_minor_sol_shard_12 = CULTIST_COMPOUND_PREFIX + "Minor Sol Shard #12 Item Pickup"
+cultist_compound_item_pickup_major_sol_shard_12 = CULTIST_COMPOUND_PREFIX + "Major Sol Shard #12 Item Pickup"
 cultist_compound_item_pickup_gauntlets = CULTIST_COMPOUND_PREFIX + "Gauntlets Item Pickup"
 
 cultist_compound_item_pickup_garnet_aegis = CULTIST_COMPOUND_PREFIX + "Garnet Aegis Item Pickup"
@@ -348,7 +348,7 @@ swamp_item_pickup_katana = SWAMP_PREFIX + "Katana Item Pickup"
 
 swamp_item_pickup_strange_curio_2 = SWAMP_PREFIX + "Strange Curio #2 Item Pickup"
 swamp_item_pickup_map = SWAMP_PREFIX + "Map Item Pickup"
-swamp_item_pickup_minor_sol_shard_24 = SWAMP_PREFIX + "Minor Sol Shard #24 Item Pickup"
+swamp_item_pickup_major_sol_shard_24 = SWAMP_PREFIX + "Major Sol Shard #24 Item Pickup"
 
 apex_outskirts_item_pickup_golden_clover = APEX_OUTSKIRTS_PREFIX + "Golden Clover Item Pickup"
 apex_outskirts_item_pickup_strange_curio_3 = APEX_OUTSKIRTS_PREFIX + "Strange Curio #3 Item Pickup"
@@ -490,6 +490,8 @@ apex_wall_to_beach = APEX_PREFIX + "Wall Near Beach Access"
 apex_wall_beach = APEX_PREFIX + "Wall Near Beach"
 apex_wall_immunity_torch_1 = APEX_PREFIX + "Wall Near Immunity Torch #1"
 apex_wall_immunity_torch_2 = APEX_PREFIX + "Wall Near Immunity Torch #2"
+
+swamp_wall_market_square= SWAMP_PREFIX + "Wall Near Market Square"
 
 # Misc
 prison_yard_misc_furnace = PRISON_YARD_PREFIX + "Lit Furnace"
