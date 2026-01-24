@@ -9,8 +9,8 @@ from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 from Utils import Any, async_start, init_logging
 from worlds.rac3.client.callbacks import handle_respawn, init, update
-from worlds.rac3.client.interface import Rac3Interface
 from worlds.rac3.client.message import ClientMessage
+from worlds.rac3.client.rac3_interface import Rac3Interface
 from worlds.rac3.constants.data.item import ITEM_FROM_AP_CODE, RAC3_ITEM_DATA_TABLE
 from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE
 from worlds.rac3.constants.items import RAC3ITEM
