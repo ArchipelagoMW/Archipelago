@@ -4,14 +4,14 @@ from typing import TYPE_CHECKING
 
 from CommonClient import logger
 from NetUtils import ClientStatus
-from worlds.rac3 import RAC3OPTION
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.texthelper import get_sent_item_message
-from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE, LOCATION_FROM_AP_CODE
+from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.input import RAC3INPUT
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
+from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 
 ##################################################

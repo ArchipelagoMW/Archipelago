@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import Location, Region
-from worlds.rac3 import RAC3LOCATION
 from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
+from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.nanotech import RAC3NANOTECH
 from worlds.rac3.constants.locations.sewers import RAC3SEWER
 from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
@@ -15,7 +15,7 @@ from worlds.rac3.constants.region import RAC3REGION
 from worlds.rac3.rac3options import RaC3Options
 
 if TYPE_CHECKING:
-    from worlds.rac3 import RaC3World
+    from worlds.rac3.world import RaC3World
 
 
 class GameLocation(Location):

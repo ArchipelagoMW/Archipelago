@@ -191,7 +191,7 @@ class Pine:
                 request += data[bytes_written:bytes_written + 1]
                 self._send_request(request)
                 bytes_written += 1
-    
+
     def write_string(self, address: int, value: str) -> None:
         data = value.encode("ascii") + b'\x00'
         self.write_bytes(address, data)

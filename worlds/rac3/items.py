@@ -11,7 +11,7 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.rac3options import RaC3Options
 
 if TYPE_CHECKING:
-    from worlds.rac3 import RaC3World
+    from worlds.rac3.world import RaC3World
 
 
 class GameItem(Item):
