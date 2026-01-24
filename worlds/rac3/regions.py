@@ -393,13 +393,13 @@ simple_skillpoints: list[str] = [
 def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
     menu = create_region(world, RAC3REGION.MENU)
+    veldin = create_region_and_connect(world, RAC3REGION.VELDIN, f"{RAC3REGION.MENU} -> {RAC3REGION.VELDIN}", menu)
     if world.options.intro_skip.value:
         starship_phoenix = create_region_and_connect(world, RAC3REGION.STARSHIP_PHOENIX,
                                                      f"{RAC3REGION.MENU} -> {RAC3REGION.STARSHIP_PHOENIX}", menu)
         create_region_and_connect(world, RAC3REGION.FLORANA,
                                   f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.FLORANA}", starship_phoenix)
     else:
-        veldin = create_region_and_connect(world, RAC3REGION.VELDIN, f"{RAC3REGION.MENU} -> {RAC3REGION.VELDIN}", menu)
         florana = create_region_and_connect(world, RAC3REGION.FLORANA,
                                             f"{RAC3REGION.VELDIN} -> {RAC3REGION.FLORANA}", veldin)
         starship_phoenix = create_region_and_connect(world, RAC3REGION.STARSHIP_PHOENIX,

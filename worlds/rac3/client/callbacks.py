@@ -7,10 +7,9 @@ from NetUtils import ClientStatus
 from worlds.rac3 import RAC3OPTION
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.texthelper import get_sent_item_message
-from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE
+from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE, LOCATION_FROM_AP_CODE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.input import RAC3INPUT
-from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.region import RAC3REGION
@@ -185,10 +184,15 @@ async def handle_intro_skip(ctx: 'Context') -> None:
     """Checks if the intro skip option is enabled, then skips veldin and sets required story/mission flags"""
     if ctx.slot_data is None:
         return
-    if ctx.slot_data.get(RAC3OPTION.INTRO_SKIP, False) and ctx.current_planet == RAC3REGION.VELDIN:
-        ctx.game_interface.set_flag(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.VELDIN_FIRST_RANGER].CHECK_ADDRESS)
-        ctx.game_interface.set_flag(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.VELDIN_SECOND_RANGER].CHECK_ADDRESS)
-        ctx.game_interface.set_flag(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.VELDIN_SAVE_VELDIN].CHECK_ADDRESS)
+    if (ctx.slot_data.get(RAC3OPTION.INTRO_SKIP, False)
+            and ctx.current_planet == RAC3REGION.VELDIN and not ctx.game_interface.homewarping):
+        locations = []
+        for ap_code in [ap_code for ap_code in ctx.missing_locations if
+                        RAC3_LOCATION_DATA_TABLE[LOCATION_FROM_AP_CODE[ap_code]].REGION == RAC3REGION.VELDIN]:
+            ctx.game_interface.collect_location(LOCATION_FROM_AP_CODE[ap_code])
+            ctx.locations_checked.update([ap_code])
+            locations.append(ap_code)
+        ctx.locations_checked.update(await ctx.check_locations(locations))
         ctx.game_interface.homewarp()
 
 
@@ -197,7 +201,7 @@ async def handle_sequence_break(ctx: 'Context') -> None:
     yet"""
     if ctx.slot_data is None:
         return
-    ctx.game_interface.sequence_break(ctx.checked_locations)
+    ctx.game_interface.sequence_break()
 
 
 async def handle_check_goal(ctx: 'Context') -> None:

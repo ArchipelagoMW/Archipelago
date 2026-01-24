@@ -164,26 +164,29 @@ def starting_planets(world: "RaC3World") -> list[str]:
     planet_list: list[str] = [infobot for infobot in infobot_data.keys() if infobot not in world.preplaced_items]
     if RAC3ITEM.MUSEUM in planet_list:
         planet_list.remove(RAC3ITEM.MUSEUM)
-    if len(planet_list) > 1:
+    if len(planet_list) > 1:  # [Phoenix], [Florana], or [Other]
         world.random.shuffle(planet_list)
         if world.options.intro_skip.value:
-            if RAC3ITEM.STARSHIP_PHOENIX in planet_list and planet_list[0] != RAC3ITEM.STARSHIP_PHOENIX:
-                planet_list = [RAC3ITEM.STARSHIP_PHOENIX, planet_list[1]]
+            if RAC3ITEM.STARSHIP_PHOENIX in planet_list:
+                if planet_list[0] == RAC3ITEM.STARSHIP_PHOENIX:
+                    planet_list = planet_list[:2]  # [Phoenix, Other]
+                else:
+                    planet_list = [RAC3ITEM.STARSHIP_PHOENIX, planet_list[0]]  # [Phoenix, Other]
             else:
-                planet_list = planet_list[:2]
+                planet_list = planet_list[:1]  # [Other]
         else:
             if RAC3ITEM.FLORANA in planet_list and RAC3ITEM.STARSHIP_PHOENIX in planet_list:
-                planet_list = [RAC3ITEM.FLORANA, RAC3ITEM.STARSHIP_PHOENIX]
+                planet_list = [RAC3ITEM.FLORANA, RAC3ITEM.STARSHIP_PHOENIX]  # [Florana, Phoenix]
             elif RAC3ITEM.FLORANA in planet_list:
                 if planet_list[0] != RAC3ITEM.FLORANA:
-                    planet_list = [RAC3ITEM.FLORANA, planet_list[0]]
+                    planet_list = [RAC3ITEM.FLORANA, planet_list[0]]  # [Florana, Other]
                 else:
-                    planet_list = planet_list[:2]
+                    planet_list = planet_list[:2]  # [Florana, Other]
             elif RAC3ITEM.STARSHIP_PHOENIX in planet_list:
                 if planet_list[0] != RAC3ITEM.STARSHIP_PHOENIX:
-                    planet_list = [planet_list[0], RAC3ITEM.STARSHIP_PHOENIX]
+                    planet_list = [planet_list[0], RAC3ITEM.STARSHIP_PHOENIX]  # [Other, Phoenix]
                 else:
-                    planet_list = [planet_list[1], RAC3ITEM.STARSHIP_PHOENIX]
+                    planet_list = [planet_list[1], RAC3ITEM.STARSHIP_PHOENIX]  # [Other, Phoenix]
             else:
-                planet_list = planet_list[:2]
+                planet_list = planet_list[:2]  # [Other, Other]
     return planet_list

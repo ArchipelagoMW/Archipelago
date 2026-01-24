@@ -510,10 +510,14 @@ class Rac3Interface(GameInterface):
             self.update_equip(name)
 
     def is_location_checked(self, ap_code: int) -> bool:
-        loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[LOCATION_FROM_AP_CODE[ap_code]]
+        """Reads location data to find what memory check should be done, returns the collection state of the location"""
+        location = LOCATION_FROM_AP_CODE[ap_code]
+        if location in self.checked_locations:
+            return True
+        loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[location]
         if not loc_data:
             return False
-        if LOCATION_FROM_AP_CODE[ap_code] == RAC3LOCATION.OBANI_GEMINI_SKIDD and self.planet == RAC3REGION.OBANI_GEMINI:
+        if location == RAC3LOCATION.OBANI_GEMINI_SKIDD and self.planet == RAC3REGION.OBANI_GEMINI:
             _x = abs(self._read_float(RAC3STATUS.POS_X) - 201.2) < 10
             _y = abs(self._read_float(RAC3STATUS.POS_Y) - 364) < 10
             _z = abs(self._read_float(RAC3STATUS.POS_Z) - 296.8) < 10
@@ -529,6 +533,8 @@ class Rac3Interface(GameInterface):
                     check_all &= self.compare(self._read16(check.ADDRESS), check)
                 case CHECKTYPE.INT:
                     check_all &= self.compare(self._read32(check.ADDRESS), check)
+        if check_all:
+            self.checked_locations.add(location)
         return check_all
 
     @staticmethod
@@ -625,8 +631,10 @@ class Rac3Interface(GameInterface):
                 if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
                     self._write8(check.ADDRESS, self._read8(check.ADDRESS) & (0xFF ^ (0x01 << check.VALUE)))
 
-    def collect_location(self, ap_code: int):
-        loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[LOCATION_FROM_AP_CODE[ap_code]]
+    def collect_location(self, location: str):
+        """Set the in game flags for this location for it to act as if the player has already collected the item here"""
+        self.checked_locations.add(location)
+        loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[location]
         if RAC3TAG.NANOTECH in loc_data.TAGS or RAC3TAG.SEWER in loc_data.TAGS:
             return
         for check in loc_data.CHECK_ADDRESS:
@@ -753,11 +761,10 @@ class Rac3Interface(GameInterface):
         for name in gadget_data.keys():
             addr = gadget_data[name].UNLOCK_ADDRESS
             if self.UnlockItem[name].status:
-                if (name == RAC3ITEM.TYHRRA_GUISE 
-                    and self.planet == RAC3REGION.STARSHIP_PHOENIX 
-                    and not RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.PHOENIX_MEET_SASHA].AP_CODE in self.checked_locations):
-                        self._write8(addr, 0)
-                        continue
+                if (name == RAC3ITEM.TYHRRA_GUISE and self.planet == RAC3REGION.STARSHIP_PHOENIX and not
+                RAC3LOCATION.PHOENIX_MEET_SASHA in self.checked_locations):
+                    self._write8(addr, 0)
+                    continue
                 if self.UnlockItem[name].unlock_delay:
                     self._write8(addr, 1)
                     self.UnlockItem[name].unlock_delay = 0
@@ -781,19 +788,18 @@ class Rac3Interface(GameInterface):
             if number >= self.ship_slot_limit:
                 self._write8(RAC3_REGION_DATA_TABLE[slot].SLOT_ADDRESS, 0)
 
-    def sequence_break(self, checked_locations: set[int]) -> None:
+    def sequence_break(self) -> None:
         """Checks the current planet and unsets any planet access flags that would interfere with location collecting"""
-        self.checked_locations = checked_locations
         infobot_location = REGION_TO_INFOBOT_LOCATION.get(self.planet, None)
         if infobot_location is not None and infobot_location in RAC3_LOCATION_DATA_TABLE:
             infobot_flag = LOCATION_TO_INFOBOT_FLAG.get(infobot_location, None)
             if (infobot_flag is not None
-                    and not RAC3_LOCATION_DATA_TABLE[infobot_location].AP_CODE in checked_locations
+                    and not infobot_location in self.checked_locations
                     and infobot_flag != RAC3STATUS.ALLOW_SHIP):
                 self._write8(infobot_flag, 0)
         # Bring qwark back to life until Ratchet has met Sasha on the bridge
-        if (not RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.PHOENIX_MEET_SASHA].AP_CODE in checked_locations 
-            and self.planet != RAC3REGION.ZELDRIN_STARPORT):
+        if (not RAC3LOCATION.PHOENIX_MEET_SASHA in self.checked_locations
+                and self.planet != RAC3REGION.ZELDRIN_STARPORT):
             self._write8(RAC3STATUS.ESCAPED_LEVIATHAN, 0)
 
     def vidcomic_cycler(self):
@@ -1223,8 +1229,6 @@ class Rac3Interface(GameInterface):
 
     def homewarp(self):
         """Triggers a planet load to the starship phoenix"""
-        if self.homewarping:
-            return
         if self.planet not in RAC3_REGION_DATA_TABLE.keys():
             # Unknown planet, abort homewarp
             logger.error(f'Aborting homewarp, Unknown Planet: {self.planet}')

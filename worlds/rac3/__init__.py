@@ -92,36 +92,42 @@ class RaC3World(World):
         setup_options_from_slot_data(self)
         create_regions(self)
 
-        self.preplaced_items = [RAC3ITEM.VELDIN]
-        if self.options.clank_options == 0:
-            self.preplaced_items += [RAC3ITEM.CLANK] #If Clank is set to vanilla, start with him
+        self.preplaced_items = [RAC3ITEM.VELDIN, RAC3ITEM.THIRD_PERSON, RAC3ITEM.FIRST_PERSON, RAC3ITEM.LOCK_STRAFE]
+        if self.options.clank_options.value == self.options.clank_options.option_start_with:
+            self.preplaced_items += [RAC3ITEM.CLANK, RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK]
         for item in self.preplaced_items:
             self.push_precollected(self.create_item(item))
         self.preplaced_items.extend(process_start_inventory(self))
         starting_weapon_list = starting_weapons(self)
         starting_planet_list = starting_planets(self)
 
+        if len(starting_weapon_list) > 0:
+            self.get_location(RAC3LOCATION.VELDIN_FIRST_RANGER).place_locked_item(
+                self.create_item(starting_weapon_list[0]))
+            if len(starting_weapon_list) > 1:
+                self.get_location(RAC3LOCATION.VELDIN_SECOND_RANGER).place_locked_item(
+                    self.create_item(starting_weapon_list[1]))
         if self.options.intro_skip.value:
-            for item in starting_weapon_list:
-                self.preplaced_items.append(item)
-                self.push_precollected(self.create_item(item))
-            for item in starting_planet_list:
-                self.preplaced_items.append(item)
-                self.push_precollected(self.create_item(item))
+            if len(starting_planet_list) == 1:  # either [Phoenix] or [Other]
+                if starting_planet_list[0] == RAC3ITEM.STARSHIP_PHOENIX:
+                    self.preplaced_items.append(starting_planet_list[0])
+                    self.push_precollected(self.create_item(starting_planet_list[0]))
+                else:
+                    self.get_location(RAC3LOCATION.VELDIN_SAVE_VELDIN).place_locked_item(
+                        self.create_item(starting_planet_list[0]))
+            elif len(starting_planet_list) > 1:  # always [Phoenix, Other]
+                self.preplaced_items.append(starting_planet_list[0])
+                self.push_precollected(self.create_item(starting_planet_list[0]))
+                self.get_location(RAC3LOCATION.VELDIN_SAVE_VELDIN).place_locked_item(
+                    self.create_item(starting_planet_list[1]))
         else:
-            if len(starting_weapon_list) > 0:
-                self.get_location(RAC3LOCATION.VELDIN_FIRST_RANGER).place_locked_item(
-                    self.create_item(starting_weapon_list[0]))
-                if len(starting_weapon_list) > 1:
-                    self.get_location(RAC3LOCATION.VELDIN_SECOND_RANGER).place_locked_item(
-                        self.create_item(starting_weapon_list[1]))
-            if len(starting_planet_list) == 1 and starting_planet_list[0] == RAC3ITEM.STARSHIP_PHOENIX:
+            if len(starting_planet_list) == 1 and starting_planet_list[0] == RAC3ITEM.STARSHIP_PHOENIX:  # [Phoenix]
                 self.get_location(RAC3LOCATION.FLORANA_DEFEAT_QWARK).place_locked_item(
                     self.create_item(starting_planet_list[0]))
-            elif len(starting_planet_list) > 0:
+            elif len(starting_planet_list) > 0:  # First entry not Phoenix
                 self.get_location(RAC3LOCATION.VELDIN_SAVE_VELDIN).place_locked_item(
                     self.create_item(starting_planet_list[0]))
-                if len(starting_planet_list) > 1:
+                if len(starting_planet_list) > 1:  # size == 2
                     self.get_location(RAC3LOCATION.FLORANA_DEFEAT_QWARK).place_locked_item(
                         self.create_item(starting_planet_list[1]))
         self.preplaced_items.extend(starting_weapon_list)
