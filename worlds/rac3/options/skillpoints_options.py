@@ -8,7 +8,7 @@ class SkillPoints(Choice):
     Any Skill Points locked behind other locations such as Ranger Missions require those options to be enabled
     Simple locations are the following:
     - Aridia: Skillpoint: Go for hang time
-    - Phoenix: T-Bolt: VR Gadget Training
+    - Phoenix: Skillpoint: Beat Helga's best time
     - Phoenix: Skillpoint: Turn Up The Heat
     - Phoenix: Skillpoint: Monkeying around
     - Marcadia: Skillpoint: Reflect on how to score
