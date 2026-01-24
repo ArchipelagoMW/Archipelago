@@ -101,6 +101,15 @@ class RaC3World(World):
         starting_weapon_list = starting_weapons(self)
         starting_planet_list = starting_planets(self)
 
+        if (not self.options.intro_skip.value
+                and self.options.clank_options.value
+                and not self.options.titanium_bolts.value
+                and not self.options.weapon_vendors.value
+                and len(starting_weapon_list) > 1
+                and starting_planet_list
+                and self.multiworld.players == 1):
+            raise OptionError("Options selected do not allow Ratchet to collect a Clank Pack and advance past Florana")
+
         if len(starting_weapon_list) > 0:
             self.get_location(RAC3LOCATION.VELDIN_FIRST_RANGER).place_locked_item(
                 self.create_item(starting_weapon_list[0]))
@@ -142,9 +151,9 @@ class RaC3World(World):
             filler = [self.create_filler() for _ in range(location_count - item_count)]
             self.multiworld.itempool.extend(filler)
         else:
-            self.handle_option_error(item_count - location_count)
+            self.handle_not_enough_locations(item_count - location_count)
 
-    def handle_option_error(self, count):
+    def handle_not_enough_locations(self, count):
         try:
             excluded_count = len(self.multiworld.exclude_locations[self.player].value)
         except AttributeError:
