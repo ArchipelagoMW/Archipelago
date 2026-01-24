@@ -1,5 +1,6 @@
 import json
 import timeit
+import datetime
 
 from worlds.factorio_bobs.packDevUtils import get_modpack
 
@@ -9,18 +10,27 @@ def main():
 
     start = timeit.default_timer()
     output = {}
+    amount = len(modpack.recipe_engine.game_items)
+    done = 0
+    mean_time = 0
     for item in modpack.recipe_engine.game_items.values():
+        item_timer = timeit.default_timer()
+        print(f"Calculating: {item}")
         item.raw_calculate()
         if not item.is_valid:
-            continue
-        output[item.name] = {"score": item.score,
-                        "best_recipe": best.name if best else None,
-                        "technologies": list(sorted(technology.name for technology in tech)),
-                        "category": list(sorted(cat))}
-    return
+            output[item.name] = {"invalid": True}
+        else:
+            output[item.name] = {"score": item.score,
+                                 "tech": [tech.name for tech in item.req_techs]}
+        item_done_in = timeit.default_timer() - item_timer
+        mean_time = (mean_time * done + item_done_in) / (done+1)
+        done += 1
+        print(f"{done*100/amount:.2f}%, elapsed time: {datetime.timedelta(seconds=item_done_in)}, estimated time: {datetime.timedelta(seconds=mean_time*(amount-done))}")
+        print(f"{item}: {output[item.name]}")
+
     path = modpack._BaseModpack__root / "Cache/precalc.json"
     json.dump(output, open(path, "w"), indent=4, sort_keys=True)
-    print(f"Done in {(timeit.default_timer() - start):.2f} seconds")
+    print(f"Done in {datetime.timedelta(seconds=(timeit.default_timer() - start))} seconds")
 
 
 if __name__ == '__main__':

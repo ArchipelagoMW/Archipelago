@@ -45,6 +45,8 @@ class RecipeEngine:
         self.categories: dict[str, CategoryCatalyst] = {}
         self.fluid_mining: TechCatalyst | None = None
 
+        self.custom_invalid: set[GameItem] = set()
+
         self.__dif_entity_to_item: dict[str, str] | None = None
 
     def full_init(self) -> None:
@@ -78,7 +80,7 @@ class RecipeEngine:
         for item, stack_size in item_stack_sizes.items():
             ingredient = GameItem(self, item, DefinitionSource.EXTRACTED,False)
             self.game_items[item] = ingredient
-            if ingredient.name in self.modpack.ordered_science_packs or ingredient.name in  invalid_items:
+            if ingredient.name in self.modpack.ordered_science_packs or ingredient.name in invalid_items:
                 ingredient.is_valid_ingredient = False
 
     def __register_categories(self) -> None:
@@ -94,7 +96,7 @@ class RecipeEngine:
         for entity, categories in raw_machines.items():
             if entity == "character":
                 for category in categories:
-                    self.categories[category].manual = True
+                    get_category(category).manual = True
                 get_category("basic-crafting").manual = True # somehow this is implied and not exported
                 get_category("basic-solid").manual = True # somehow this is implied and not exported
                 continue
@@ -130,6 +132,8 @@ class RecipeEngine:
 
         for recipe_name, recipe_data in raw_recipes.items():
             # example "wheat-seeds":{"ingredients":{"wood":100},"products":{"wheat-seeds":1},"category":"organic-synth-recipes","energy":30}
+            if recipe_data["category"] not in self.categories:
+                continue
             self.recipes[recipe_name] = GameRecipe(self, recipe_name, DefinitionSource.EXTRACTED,
                                                    recipe_data["ingredients"], recipe_data["products"],
                                                    recipe_data["energy"])
@@ -196,7 +200,7 @@ class RecipeEngine:
 
         if "invalid_ingredients" in raw_settings:
             for ingredient in raw_settings["invalid_ingredients"]:
-                self.get_game_item(ingredient, DefinitionSource.CUSTOM).is_valid_ingredient = False
+                self.custom_invalid.add(self.get_game_item(ingredient, DefinitionSource.CUSTOM))
 
         if "excluded_first_pool" in raw_settings:
             for ingredient in raw_settings["excluded_first_pool"]:
@@ -208,12 +212,13 @@ class RecipeEngine:
 
     def __remove_bad_items(self):
         for name, item in self.game_items.copy().items():
-            if item.crafted_by:
-                continue
-            if item.used_in:
-                if item.is_valid_pool:
-                    self.modpack.logger.warning(f"{item.name} is used but not method of obtaining it detected.\n"
-                                                "Consider disabling it or adding a custom recipe")
+            if item not in self.custom_invalid:
+                if item.crafted_by:
+                    continue
+                if item.used_in:
+                    if item.is_valid_pool:
+                        self.modpack.logger.warning(f"{item.name} is used but not method of obtaining it detected.\n"
+                                                    "Consider disabling it or adding a custom recipe")
             item.set_invalid()
 
     def run_pulp_solver(self, goal: GameItem, invalid_catalysts: set[Catalyst]=None, remove_waste=False) \
@@ -230,13 +235,28 @@ class RecipeEngine:
             item: pulp.LpVariable(f"waste_{item.name}", lowBound=0)
             for item in self.game_items.values()
         }
+        # todo these are bad and massively slow things down a graph based solution to get bootstrap before hand would be better
+        can_get_item = {
+            item: pulp.LpVariable(f"cgi_{item.name}", cat="Binary")
+            for item in self.game_items.values()
+        }
+        can_get_recipe = {
+            recipe: pulp.LpVariable(f"cgr_{recipe.name}", cat="Binary")
+            for recipe in self.recipes.values()
+        }
+        can_get_category = {
+            category: pulp.LpVariable(f"cgc_{category.name}", cat="Binary")
+            for category in self.categories.values()
+        }
 
         # goal
-        epsilon = 1e-6
-        probBest += pulp.lpSum(
+        epsilon = 1e-3
+        epsilon_2 = 1e-6
+        probBest += (pulp.lpSum(
             recipe.energy * recipe_qty[recipe]
             for recipe in recipe_qty.keys()
-        ) + epsilon * pulp.lpSum(waste.values()) + epsilon * pulp.lpSum(recipe_qty.values())
+        ) + epsilon * pulp.lpSum(can_get_recipe.values())
+                     + epsilon_2 * pulp.lpSum(waste.values()) + epsilon_2 * pulp.lpSum(recipe_qty.values()))
 
         # constraint first pass get best
         for item in self.game_items.values():
@@ -248,10 +268,29 @@ class RecipeEngine:
             else:
                 probBest += pulp.lpSum(produced) - pulp.lpSum(consumed) == 0 + waste[item], f"balance_{item.name}"
 
+            probBest += can_get_item[item] <= pulp.lpSum(can_get_recipe[recipe] for recipe in item.crafted_by), f"can_get_{item.name}"
+
+        big_M = 1e5
+        for recipe in self.recipes.values():
+            rec_qty = recipe_qty[recipe]
+            can_rec = can_get_recipe[recipe]
+
+            probBest += rec_qty <= can_rec * big_M
+            req = ({can_get_item[cat.item] for cat in recipe.catalysts if isinstance(cat, OneItemCatalyst)}
+                   | {can_get_category[cat] for cat in recipe.catalysts if isinstance(cat, CategoryCatalyst)}
+                   | {can_get_item[ingredient] for ingredient in recipe.ingredients})
+            for catalyst in req:
+                probBest += can_rec <= catalyst
+
+        for category in self.categories.values():
+            if category.manual:
+                continue
+            probBest += can_get_category[category] <= pulp.lpSum(can_get_item[item] for item in category.machines)
+
         status = probBest.solve(pulp.PULP_CBC_CMD(msg=False))
         score = probBest.objective.value()
 
-        req_recipes = set(recipe for recipe, value in recipe_qty.items() if not math.isclose(value.value(), 0))
+        req_recipes = set(recipe for recipe, value in can_get_recipe.items() if not math.isclose(value.value(), 0))
 
         if not remove_waste:
             return status, score, req_recipes, set(), depulp_dict(waste)
@@ -324,6 +363,7 @@ class GameItem(RecipeEngineType):
         self.has_calculated_raw: bool = False
         self.best_recipes: set[GameRecipe] = set()
         self.score: float = float("inf")
+        self.req_techs: set[TechCatalyst] | None = None
 
         self.is_valid: bool = True
         self.__is_valid_first_pool: bool = True
@@ -352,15 +392,28 @@ class GameItem(RecipeEngineType):
             self.set_invalid()
         self.score = score
         self.best_recipes = best_recipes
+        self.req_techs = {tech for recipe in self.best_recipes for tech in recipe.catalysts if isinstance(tech, TechCatalyst)}
 
-        for recipe in best_recipes.copy():
-            recipe.raw_calculate()
+    def get_best_recipes(self):
+        if not self.best_recipes:
+            self.__eval_best()
+        return self.best_recipes
+
+    def __eval_best(self):
+        status, score, best_recipes, waste_recipes, waste = self.ctx.run_pulp_solver(self)
+        if status != pulp.LpStatusOptimal:
+            self.ctx.modpack.logger.warn(f"{self}: is uncraftable with status {status}\n"
+                                     f"removing {self}")
+            self.set_invalid()
+        self.score = score
+        self.best_recipes = best_recipes
 
     def set_invalid(self):
         self.is_valid = False
-        for recipe in self.used_in:
+        for recipe in self.used_in.copy():
             recipe.set_invalid()
-        del self.ctx.game_items[self.name]
+        if self.name in self.ctx.game_items:
+            del self.ctx.game_items[self.name]
 
 
 class GameRecipe(RecipeEngineType):
@@ -369,6 +422,7 @@ class GameRecipe(RecipeEngineType):
         super().__init__(ctx, name, source)
 
         self.has_calculated_raw: bool = False
+        self.req_techs: set[TechCatalyst] | None = None
         self.is_valid: bool = True
 
         self.ingredients: dict[GameItem, float] = {ctx.get_game_item(ingredient, source): amount
@@ -417,18 +471,24 @@ class GameRecipe(RecipeEngineType):
                 product.crafted_by.remove(self)
                 if not product.crafted_by:
                     product.set_invalid()
-        del self.ctx.recipes[self.name]
+        for ingredient in self.ingredients:
+            if self in ingredient.used_in:
+                ingredient.used_in.remove(self)
+        if self.name in self.ctx.recipes:
+            del self.ctx.recipes[self.name]
 
     def raw_calculate(self) -> None:
         if self.has_calculated_raw:
             return
         self.has_calculated_raw = True
 
+        self.req_techs = set()
         for catalyst in self.catalysts:
             catalyst.raw_calculate()
             if not catalyst.is_valid:
                 self.set_invalid()
                 return
+            self.req_techs |= catalyst.req_techs
 
 
 
@@ -437,6 +497,7 @@ class Catalyst(RecipeEngineType):
         super().__init__(ctx, name, source)
         self.has_calculated_raw: bool = False
         self.is_valid: bool = True
+        self.req_techs: set[TechCatalyst] | None = None
 
     def raw_calculate(self):
         pass
@@ -447,10 +508,8 @@ class ItemCatalyst(Catalyst):
         super().__init__(ctx, name, source)
         self.item: GameItem | None = None
 
-        self.calc_tech: set[TechCatalyst] | None = None
-
     def calculate_tech(self, invalid_cat: set[Catalyst] | None = None) -> set[TechCatalyst] | None:
-        # if self.has_calculated_raw:
+        # if self.has_calculated_raw: # TODO optimise this could do with some caching
         #     return
         # self.has_calculated_raw = True
 
@@ -459,18 +518,16 @@ class ItemCatalyst(Catalyst):
             invalid_cat: set[Catalyst] = {self} | invalid_cat
         else:
             invalid_cat: set[Catalyst] = {self}
-        req_cat: set[Catalyst] = set(cat for recipe in self.item.best_recipes for cat in recipe.catalysts)
+
+        status, _, recipes, _, _ = self.ctx.run_pulp_solver(self.item, invalid_catalysts=invalid_cat)
+        if status != pulp.LpStatusOptimal:
+            self.ctx.modpack.logger.debug(f"{self}: {status}, {recipes}")
+            return None  # critically failed
+        req_cat: set[Catalyst] = set(cat for recipe in recipes for cat in recipe.catalysts)
         item_cat: set[ItemCatalyst] = set(cat for cat in req_cat if isinstance(cat, ItemCatalyst))
-        if item_cat & invalid_cat:
-            status, score, recipes, _, _ = self.ctx.run_pulp_solver(self.item, invalid_catalysts=invalid_cat)
-            if status != pulp.LpStatusOptimal:
-                self.ctx.modpack.logger.debug(f"{self}: {status}, {score}, {recipes}")
-                return None  # critically failed
-            req_cat: set[Catalyst] = set(cat for recipe in recipes for cat in recipe.catalysts)
-            item_cat: set[Catalyst] = set(cat for cat in req_cat if isinstance(cat, ItemCatalyst))
         tech_cat: set[Catalyst] = set(cat for cat in req_cat if isinstance(cat, TechCatalyst))
         for cat in item_cat:
-            ret = cat.calculate_tech()
+            ret = cat.calculate_tech(invalid_cat=invalid_cat)
             if ret is None:
                 invalid_cat.add(cat)
                 return self.calculate_tech(invalid_cat=invalid_cat)
@@ -490,14 +547,14 @@ class CategoryCatalyst(ItemCatalyst):
         self.has_calculated_raw: bool = True
         if self.manual:
             self.has_calculated_raw: bool = True
-            self.calc_tech = set() # todo check is not manual early
+            self.req_techs = set() # todo check is not manual early
             return
 
-        ordered_machines = sorted(self.machines, key=lambda x: x.cost)
+        ordered_machines = sorted(self.machines, key=lambda x: x.score)
         for machine in ordered_machines:
             self.item = machine
-            self.calc_tech = self.calculate_tech()
-            if self.calc_tech is not None:
+            self.req_techs = self.calculate_tech()
+            if self.req_techs is not None:
                 return
 
         self.ctx.modpack.logger.warning(f"{self}: unable to bootstrap")
@@ -508,10 +565,11 @@ class CategoryCatalyst(ItemCatalyst):
             return set()
         store_best = self.item
 
-        ordered_machines = sorted(self.machines, key=lambda x: x.cost)
+        ordered_machines = sorted(self.machines, key=lambda x: x.score)
+        calc_tech: set[TechCatalyst] = set()
         for machine in ordered_machines:
             self.item = machine
-            calc_tech = self.calculate_tech(invalid_cat)
+            calc_tech = super().calculate_tech(invalid_cat)
             if calc_tech is not None:
                 break
 
@@ -531,26 +589,18 @@ class OneItemCatalyst(ItemCatalyst):
             return
         self.has_calculated_raw = True
 
-        self.calc_tech = self.calculate_tech()
-        if self.calc_tech is None:
+        self.req_techs = self.calculate_tech()
+        if self.req_techs is None:
             self.ctx.modpack.logger.warning(f"{self}: unable to bootstrap")
             self.is_valid = False # todo better is invalid
-
-
-class OrTechsCatalyst(Catalyst):
-    def __init__(self, ctx: RecipeEngine, name: str, source: DefinitionSource):
-        super().__init__(ctx, name, source)
-        self.techs: set[Technology] = set()
-
-        self.req_tech: bool = True
 
 
 class TechCatalyst(Catalyst):
     def __init__(self, ctx: RecipeEngine, source: DefinitionSource, tech: Technology):
         super().__init__(ctx, tech.name, source)
         self.tech = tech
+        self.req_techs = {self}
 
-        self.req_tech: bool = True
 
 T = TypeVar("T")
 def depulp_dict(dictionary: dict[T, pulp.LpVariable]) -> dict[T, float]:
