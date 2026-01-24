@@ -52,9 +52,23 @@ checkpoint_item_data_table: Dict[str, Celeste64ItemData] = {
     ItemName.checkpoint_10: Celeste64ItemData(celeste_64_base_id + 0x29, ItemClassification.progression),
 }
 
+trap_item_data_table: Dict[str, Celeste64ItemData] = {
+    ItemName.bald_trap:       Celeste64ItemData(celeste_64_base_id + 0x30, ItemClassification.trap),
+    ItemName.bubble_trap:     Celeste64ItemData(celeste_64_base_id + 0x31, ItemClassification.trap),
+    ItemName.hiccup_trap:     Celeste64ItemData(celeste_64_base_id + 0x32, ItemClassification.trap),
+    ItemName.ice_trap:        Celeste64ItemData(celeste_64_base_id + 0x33, ItemClassification.trap),
+    ItemName.invisible_trap:  Celeste64ItemData(celeste_64_base_id + 0x34, ItemClassification.trap),
+    ItemName.literature_trap: Celeste64ItemData(celeste_64_base_id + 0x35, ItemClassification.trap),
+    ItemName.reverse_trap:    Celeste64ItemData(celeste_64_base_id + 0x36, ItemClassification.trap),
+    ItemName.stun_trap:       Celeste64ItemData(celeste_64_base_id + 0x37, ItemClassification.trap),
+    ItemName.zoom_in_trap:    Celeste64ItemData(celeste_64_base_id + 0x38, ItemClassification.trap),
+    ItemName.zoom_out_trap:   Celeste64ItemData(celeste_64_base_id + 0x39, ItemClassification.trap),
+}
+
 item_data_table: Dict[str, Celeste64ItemData] = {**collectable_item_data_table,
                                                  **unlockable_item_data_table,
                                                  **move_item_data_table,
-                                                 **checkpoint_item_data_table}
+                                                 **checkpoint_item_data_table,
+                                                 **trap_item_data_table}
 
 item_table = {name: data.code for name, data in item_data_table.items() if data.code is not None}
