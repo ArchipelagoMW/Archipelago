@@ -118,6 +118,7 @@ class Rac3Interface(GameInterface):
         self.item_received(item, us, None, location)
 
     def early_update(self):
+        """Ran early in the update cycle, memory reads should happen here before any evaluations begin"""
         self.planet = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)]
         self.player_type = PLAYER_TYPE_TO_NAME[self._read8(RAC3STATUS.PLAYER_TYPE)]
         self.vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER)
@@ -134,12 +135,7 @@ class Rac3Interface(GameInterface):
 
         self.vehicle_check()
         self.pause_check()
-        if self.homewarping:
-            if self.pause_state_value != RAC3PAUSESTATE.PLANET_CHANGE:
-                self.homewarping = False
-        if self.self_respawning:
-            if not self.is_reloading:
-                self.self_respawning = False
+        self.check_latches()
 
     # Called in periodically
     def late_update(self):
@@ -1185,7 +1181,7 @@ class Rac3Interface(GameInterface):
         Receives an input combination and checks if the game is currently receiving that combination,
         with optional pause check
         """
-        return not (self.pause_menu ^ paused) and (self.inputs & check) == check
+        return ((self.pause_menu and not self.inputs & RAC3INPUT.START) or not paused) and (self.inputs & check) == check
 
     def messagebox(self,
                    msg_list: list[bytes],
@@ -1355,3 +1351,12 @@ class Rac3Interface(GameInterface):
                                 " stuck, hold L2 + R2 + L1 + R1 + SELECT to warp back to the phoenix")
             case RAC3REGION.PHOENIX_ASSAULT:
                 logger.info("If you want to travel to the regular phoenix, hold L2 + R2 + L1 + R1 + SELECT")
+
+    def check_latches(self):
+        """Check specific latched states need to be reset"""
+        if self.homewarping:
+            if self.pause_state_value != RAC3PAUSESTATE.PLANET_CHANGE:
+                self.homewarping = False
+        if self.self_respawning:
+            if not self.is_reloading:
+                self.self_respawning = False

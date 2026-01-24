@@ -144,10 +144,10 @@ async def handle_deathlink(ctx: 'Context') -> None:
             logger.debug(f'Sent Death, queue: {ctx.queued_deaths}')
 
 
-async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load: bool = False) -> bool:
+async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load: bool = False):
     """Check if the player should respawn"""
     if ctx.game_interface.is_reloading:
-        return False
+        return
     if ctx.death_link and ctx.game_interface.action not in {0, 1, 2, 3, 4, 0x13, 0x1D, 0x2E, 0x32, 0x33, 0x34, 0x37,
                                                             0x3F, 0x40, 0x4D, 0x51, 0x52, 0x59, 0x5B, 0x5C, 0x61,
                                                             0x62, 0x75, 0x76, 0x7C, 0x80, 0x9A, 0x9B, 0x9D, 0xA3}:
@@ -155,29 +155,29 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
             logger.error(f'Player cannot homewarp right now')
         elif force_respawn:
             logger.error(f'Player cannot respawn right now')
-        return False  # Todo: Action states
+        return  # Todo: Action states
     planet_data = RAC3_REGION_DATA_TABLE[ctx.game_interface.planet]
     if planet_data.ID > 55:
-        return False
+        return
     if planet_data.PAUSE_ADDRESS is not None:  # Vid comics do not have a pause address
         if ctx.game_interface.check_inputs(RAC3INPUT.SQUARE, True) or force_respawn:
             ctx.game_interface.unpause_game()
             ctx.game_interface.teleport_to_ship()
-            return True
+            return
         if ctx.game_interface.check_intro():
             if force_load:
                 logger.error(f'Player cannot homewarp right now')
             elif force_respawn:
                 logger.error(f'Player cannot respawn right now')
-            return False
+            return
         if ctx.game_interface.check_inputs(RAC3INPUT.RELOAD, True) or force_load:
             ctx.game_interface.unpause_game()
             ctx.game_interface.homewarp()
-            return True
+            return
     if ctx.game_interface.check_inputs(RAC3INPUT.RELOAD) or force_load:
         ctx.game_interface.homewarp()
-        return True
-    return False
+        return
+    return
 
 
 async def handle_intro_skip(ctx: 'Context') -> None:
