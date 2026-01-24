@@ -62,6 +62,18 @@ class RecipeEngine:
         self.__link_recipes()
         self.__remove_bad_items()
 
+        try:
+            with self.modpack.open_file("Cache/precalc.json") as file:
+                raw_logic_pre_compute = json.load(file)
+            for name, data in raw_logic_pre_compute.items():
+                item = self.get_game_item(name)
+                item.best_recipes = data["recipes"]
+                item.score = data["score"]
+                item.has_calculated_raw = True
+        except FileNotFoundError:
+            pass
+
+
     def __register_game_items(self) -> None:
         invalid_items = {"fluid-unknown"} | {f"parameter-{i}" for i in range(10)}
 
@@ -363,7 +375,7 @@ class GameItem(RecipeEngineType):
         self.has_calculated_raw: bool = False
         self.best_recipes: set[GameRecipe] = set()
         self.score: float = float("inf")
-        self.req_techs: set[TechCatalyst] | None = None
+        # self.req_techs: set[TechCatalyst] | None = None
 
         self.is_valid: bool = True
         self.__is_valid_first_pool: bool = True
@@ -392,7 +404,7 @@ class GameItem(RecipeEngineType):
             self.set_invalid()
         self.score = score
         self.best_recipes = best_recipes
-        self.req_techs = {tech for recipe in self.best_recipes for tech in recipe.catalysts if isinstance(tech, TechCatalyst)}
+        # self.req_techs = {tech for recipe in self.best_recipes for tech in recipe.catalysts if isinstance(tech, TechCatalyst)}
 
     def get_best_recipes(self):
         if not self.best_recipes:

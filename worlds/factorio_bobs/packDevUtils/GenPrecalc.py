@@ -21,7 +21,7 @@ def main():
             output[item.name] = {"invalid": True}
         else:
             output[item.name] = {"score": item.score,
-                                 "tech": [tech.name for tech in item.req_techs]}
+                                 "recipes": [tech.name for tech in item.best_recipes]}
         item_done_in = timeit.default_timer() - item_timer
         mean_time = (mean_time * done + item_done_in) / (done+1)
         done += 1
