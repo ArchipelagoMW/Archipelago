@@ -301,7 +301,7 @@ class Rac3Interface(GameInterface):
                 valid_weapons = []
                 for weapon_name in non_prog_weapon_data.keys():
                     if self.UnlockItem[weapon_name].status:
-                        level = self._read8(non_prog_weapon_data[weapon_name].LEVEL)
+                        level = self._read8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS)
                         if ((weapon_name != RAC3ITEM.RY3N0 and level < 5) or
                                 (weapon_name == RAC3ITEM.RY3N0 and level < 4) or
                                 (weapon_name == RAC3ITEM.RY3N0 and level < 5 and not self.ryno)):
