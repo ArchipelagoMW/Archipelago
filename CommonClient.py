@@ -15,6 +15,7 @@ import ModuleUpdate
 ModuleUpdate.update()
 
 import websockets
+import websockets.asyncio.client
 
 import Utils
 
@@ -476,7 +477,7 @@ class CommonContext:
             self.disconnected_intentionally = True
             if self.cancel_autoreconnect():
                 logger.info("Cancelled auto-reconnect.")
-        if self.server and not self.server.socket.closed:
+        if self.server:
             await self.server.socket.close()
         if self.server_task is not None:
             await self.server_task
@@ -485,7 +486,7 @@ class CommonContext:
 
     async def send_msgs(self, msgs: typing.List[typing.Any]) -> None:
         """ `msgs` JSON serializable """
-        if not self.server or not self.server.socket.open or self.server.socket.closed:
+        if not self.server:
             return
         await self.server.socket.send(encode(msgs))
 
@@ -619,7 +620,7 @@ class CommonContext:
         self.username = None
         self.password = None
         self.cancel_autoreconnect()
-        if self.server and not self.server.socket.closed:
+        if self.server:
             await self.server.socket.close()
         if self.server_task:
             await self.server_task
@@ -756,7 +757,7 @@ class CommonContext:
             self.tags.add("DeathLink")
         else:
             self.tags -= {"DeathLink"}
-        if old_tags != self.tags and self.server and not self.server.socket.closed:
+        if old_tags != self.tags and self.server:
             await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
 
     def gui_error(self, title: str, text: typing.Union[Exception, str]) -> typing.Optional["kvui.MessageBox"]:
@@ -870,7 +871,7 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
     logger.info(f'Connecting to Archipelago server at {address}')
     try:
         port = server_url.port or 38281  # raises ValueError if invalid
-        socket = await websockets.connect(address, port=port, ping_timeout=None, ping_interval=None,
+        socket = await websockets.asyncio.client.connect(address, port=port, ping_timeout=None, ping_interval=None,
                                           ssl=get_ssl_context() if address.startswith("wss://") else None,
                                           max_size=ctx.max_size)
         if ctx.ui is not None:
