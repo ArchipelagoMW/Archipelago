@@ -536,7 +536,7 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
     loc = LOCATION_FROM_AP_CODE[data.AP_CODE]
     for tag in data.TAGS:
         match tag:
-            case RAC3TAG.UNSTABLE:  # Skip all unstable locations
+            case RAC3TAG.NOT_IMPLEMENTED:  # Skip all locations not yet implemented
                 return True
             case RAC3TAG.TROPHY:
                 if not options.trophies.value:  # Skip trophy locations if trophies are disabled
