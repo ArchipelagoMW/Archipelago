@@ -1,3 +1,4 @@
+"""This module contains the logic implementation for RAC3"""
 from logging import DEBUG, getLogger
 from typing import Callable, TYPE_CHECKING
 
@@ -25,6 +26,7 @@ rac3_logger.setLevel(DEBUG)
 
 
 def all_locations(state: CollectionState, world: "RaC3World", tag: str, skip: str):
+    """check if all locations with this tag can be reached"""
     check: bool = True
     for loc in world.get_locations():
         if loc.name in location_groups[tag] and loc.name != skip:
@@ -33,6 +35,7 @@ def all_locations(state: CollectionState, world: "RaC3World", tag: str, skip: st
 
 
 def set_rules(world: "RaC3World"):
+    """Apply logic rules to each location"""
     region_rules_dict: dict[str, Callable] = {
 
         # Intro Florana
@@ -111,13 +114,16 @@ def set_rules(world: "RaC3World"):
         # RAC3VENDOR.FLORANA_N60
         # RAC3TBOLT.FLORANA_BELOW_VENDOR
         RAC3TROPHY.FLORANA_RATCHET:
-            lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
+            lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK,
+                                         RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),
         RAC3TBOLT.FLORANA_PATH_OF_DEATH:
             lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
         RAC3SKILLPOINT.FLORANA_PATH:
-            lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
+            lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK,
+                                         RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),
         RAC3LOCATION.FLORANA_DEFEAT_QWARK:
-            lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
+            lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK,
+                                         RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),
 
         # RAC3VENDOR.PHOENIX_SUCK
         # RAC3VENDOR.PHOENIX_INFECTOR
@@ -490,15 +496,15 @@ def set_rules(world: "RaC3World"):
                                              RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
         RAC3LOCATION.ZELDRIN_STARPORT_BOLT_GRABBER:
             lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player)
-                          and state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK,
-                                             RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
+                          and state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK, RAC3ITEM.CLANK,
+                                             RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),
         RAC3LOCATION.ZELDRIN_STARPORT_BOX_BREAKER:
             lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player)
-                          and state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK,
-                                             RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
+                          and state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK, RAC3ITEM.CLANK,
+                                             RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),
         RAC3LOCATION.ZELDRIN_STARPORT_SHIP:
-            lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK,
-                                         RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
+            lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK, RAC3ITEM.CLANK,
+                                         RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),
 
         RAC3SKILLPOINT.METROPOLIS_GOOD_YEAR:
             lambda state: state.has_any([RAC3ITEM.FLUX_RIFLE, RAC3ITEM.PROGRESSIVE_FLUX_RIFLE,
@@ -538,8 +544,8 @@ def set_rules(world: "RaC3World"):
             lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.HYPERSHOT], world.player),
         # RAC3LOCATION.CRASH_SITE_ESCAPE_POD
         RAC3LOCATION.CRASH_SITE_INFOBOT_ARIDIA:
-            lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK,
-                                         RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player)
+            lambda state: state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK, RAC3ITEM.CLANK,
+                                         RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.HYPERSHOT], world.player)
                           and state.has(RAC3ITEM.GRAV_BOOTS, world.player),
 
         # RAC3VENDOR.ARIDIA_QWACK_O_RAY
@@ -570,10 +576,12 @@ def set_rules(world: "RaC3World"):
         RAC3SKILLPOINT.HIDEOUT_DAN: lambda state: state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT], world.player),
         RAC3TROPHY.HIDEOUT_QWARK:
             lambda state: state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT], world.player) and
-                          state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
+                          state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK,
+                                         RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),
         RAC3LOCATION.HIDEOUT_QWARK:
             lambda state: state.has_all([RAC3ITEM.WARP_PAD, RAC3ITEM.HYPERSHOT], world.player) and
-                          state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
+                          state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.CLANK,
+                                         RAC3ITEM.PROGRESSIVE_PACK, RAC3ITEM.CHARGE_BOOTS], world.player),
 
         # RAC3TROPHY.KOROS_COURTNEY
         # RAC3TBOLT.KOROS_FENCE
