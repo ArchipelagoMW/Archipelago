@@ -74,11 +74,13 @@ class GameInterface:
             logger.warning(f'Connection to PCSX2 Emulator lost: {error}')
 
     def disconnect_from_game(self):
+        """Remove connection to PCSX Emulator"""
         self.pcsx2_interface.disconnect()
         self.current_game = None
         logger.info("Disconnected from PCSX2 Emulator")
 
     def verify_game_version(self) -> bool:
+        """Verify that the current game loaded in the PCSX connection has a valid game ID for Ratchet and Clank 3"""
         logger.debug('Start Game Verification')
         try:
             game_id = self.pcsx2_interface.get_game_id()
@@ -137,6 +139,7 @@ class GameInterface:
             return True
 
     def get_connection_state(self) -> bool:
+        """Safe connection test"""
         try:
             if self.pcsx2_interface.is_connected():
                 return self.verify_game_version()
