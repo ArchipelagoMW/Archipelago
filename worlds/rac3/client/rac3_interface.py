@@ -465,8 +465,7 @@ class Rac3Interface(GameInterface):
                 valid_weapons = []
                 for weapon_name, weapon_data in non_prog_weapon_data.items():
                     if self.UnlockItem[weapon_name].status:
-                        level = self._read8(weapon_data.LEVEL_ADDRESS) - weapon_data.ID + 1
-                        logger.info(f"Weapon check: {weapon_name}, level: {level}")
+                        level = weapon_upgrade_data[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL
                         if ((weapon_name != RAC3ITEM.RY3N0 and level < 5) or
                                 (weapon_name == RAC3ITEM.RY3N0 and level < 4) or
                                 (weapon_name == RAC3ITEM.RY3N0 and level < 5 and not self.ryno)):
@@ -530,7 +529,9 @@ class Rac3Interface(GameInterface):
     def weapon_level_up(self, weapon_name: str):
         """Level up a weapon from xp reward"""
         weapon_data = non_prog_weapon_data[weapon_name]
-        current_level = self._read8(weapon_data.LEVEL_ADDRESS) - weapon_data.ID + 1
+        current_id = self._read8(weapon_data.LEVEL_ADDRESS)
+        current_name = ITEM_NAME_FROM_ID[current_id]
+        current_level = weapon_upgrade_data[current_name].LEVEL
         if current_level < 5:
             target_level = current_level + 1
             target_id = UPGRADE_DICT[weapon_name][target_level - 1]
