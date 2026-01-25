@@ -375,7 +375,7 @@ class Context:
 
     # General networking
     async def send_msgs(self, endpoint: Endpoint, msgs: typing.Iterable[dict]) -> bool:
-        if not endpoint.socket or not endpoint.socket.open:
+        if not endpoint.socket:
             return False
         msg = self.dumper(msgs)
         try:
@@ -390,7 +390,7 @@ class Context:
             return True
 
     async def send_encoded_msgs(self, endpoint: Endpoint, msg: str) -> bool:
-        if not endpoint.socket or not endpoint.socket.open:
+        if not endpoint.socket:
             return False
         try:
             await endpoint.socket.send(msg)
@@ -406,7 +406,7 @@ class Context:
     async def broadcast_send_encoded_msgs(self, endpoints: typing.Iterable[Endpoint], msg: str) -> bool:
         sockets = []
         for endpoint in endpoints:
-            if endpoint.socket and endpoint.socket.open:
+            if endpoint.socket:
                 sockets.append(endpoint.socket)
         try:
             websockets.broadcast(sockets, msg)
