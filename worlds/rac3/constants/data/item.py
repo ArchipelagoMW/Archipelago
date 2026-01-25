@@ -126,8 +126,12 @@ class RAC3ITEMDATA:
 
     @staticmethod
     def construct_infobot(idx: int,
-                          ap_classification: ItemClassification):
-        return RAC3ITEMDATA(idx, ap_classification=ap_classification, tags=[RAC3ITEMTAG.INFOBOT])
+                          ap_classification: ItemClassification,
+                          tags: Optional[list[str]] = None):
+        all_tags: list[str] = [RAC3ITEMTAG.INFOBOT]
+        if tags is not None:
+            all_tags.extend(tags)
+        return RAC3ITEMDATA(idx, ap_classification=ap_classification, tags=all_tags)
 
     @staticmethod
     def construct_armor(idx: int,
@@ -430,7 +434,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.QWARKS_HIDEOUT: RAC3ITEMDATA.construct_infobot(0xF1, ItemClassification.progression),
     RAC3ITEM.KOROS: RAC3ITEMDATA.construct_infobot(0xF2, ItemClassification.progression),
     RAC3ITEM.COMMAND_CENTER: RAC3ITEMDATA.construct_infobot(0xF3, ItemClassification.progression),
-    RAC3ITEM.MUSEUM: RAC3ITEMDATA.construct_infobot(0xF4, ItemClassification.progression),
+    RAC3ITEM.MUSEUM: RAC3ITEMDATA.construct_infobot(0xF4, ItemClassification.progression, [RAC3ITEMTAG.UNUSED]),
     # Armor
     RAC3ITEM.PROGRESSIVE_ARMOR:
         RAC3ITEMDATA.construct_armor(0xF5, ItemClassification.progression, 0, [RAC3ITEMTAG.PROGRESSIVE]),
