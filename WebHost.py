@@ -5,6 +5,9 @@ import logging
 import typing
 
 import ModuleUpdate
+import os
+import zipfile
+import pathlib
 
 ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
 ModuleUpdate.update()

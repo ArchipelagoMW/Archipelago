@@ -26,7 +26,7 @@ class RacWeb(WebWorld):
             "Multiworld Setup Guide",
             "A guide to setting up Ratchet & Clank for Archipelago",
             "English",
-            "setup.md",
+            "setup_en.md",
             "setup/en",
             ["Panad"]
     )]

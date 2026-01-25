@@ -14,7 +14,7 @@ from .constants.versions import FULL_GOLD
 
 
 class PseudoregaliaWebWorld(WebWorld):
-    setup_en = Tutorial("name", "description", "English", "setup_en.md", "setup/en", ["TODO"])
+    setup_en = Tutorial("Pseudoregalia", "Setup guide for Pseudoregalia", "English", "setup_en.md", "setup/en", ["TODO"])
     tutorials = [setup_en]
     
 

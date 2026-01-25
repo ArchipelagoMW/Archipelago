@@ -16,7 +16,11 @@ jobs:
     name: Building custom .apworlds for Ashipelago
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        submodules: 'true'
+        token: '${{ github.token }}'
     - name: Set up Python 3.12.6
       uses: actions/setup-python@v5
       with:
@@ -50,9 +54,11 @@ jobs:
       run: |
         source venv/bin/activate
         export PYTHONPATH=$(pwd)
-        timeout 600 python Launcher.py "Build APWorlds" ${{steps.read_apworlds.outputs.world_list}}
-        FILE_COUNT=$(find "build/apworlds" -maxdepth 1 -mindepth 1 | wc -l)
-        echo "Built $FILE_COUNT .apworlds"
+        timeout 600 python Launcher.py "Build Custom APWorlds" ${{steps.read_apworlds.outputs.world_list}}
+        WORLD_COUNT=$(find "build/apworlds" -maxdepth 1 -mindepth 1 | wc -l)
+        echo "Built WORLD_COUNT .apworlds"
+        TRACKER_COUNT=$(find "build/pop_trackers" -maxdepth 1 -mindepth 1 | wc -l)
+        echo "Built TRACKER_COUNT pop tracker packs"
     - name: Add to Release
       if: startsWith(github.event.pull_request.title, 'Worlds/') == true
       uses: softprops/action-gh-release@v2.5.0
@@ -62,5 +68,6 @@ jobs:
         name: "Custom Worlds ${{ env.NOW }}"
         files: |
           build/apworlds/*
+          build/pop_trackers/*
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -4,7 +4,7 @@ import threading
 # Global variables to hold references to each label widget, the window instance, and the canvas
 board_squares = {}
 window = None  # This will hold the Tkinter window instance
-bingo_thread = None  # This will hold the Bingo board thread instance
+bingo_thread = None  # This will hold the apbingo board thread instance
 box_size = 150  # Set box size to be consistent and large
 window_size = 800  # Increase window size to fit the board
 board_size = 0
@@ -27,11 +27,11 @@ def create_bingo_board():
 
     # Create a new window
     window = tk.Tk()
-    window.title("Bingo Board")
+    window.title("apbingo Board")
     window.geometry(f"{window_size}x{window_size}")  # Set the window size
     window.configure(bg=bg_color)  # Set the window background color to the specified color
 
-    # Create a frame for the Bingo board
+    # Create a frame for the apbingo board
     frame = tk.Frame(window, bg=bg_color)  # Set frame background to match window
     frame.pack(expand=True, fill=tk.BOTH, padx=20, pady=20)  # Expand frame to fill the window
 
@@ -92,7 +92,7 @@ def highlight_square(square_name):
         print(f"Square '{square_name}' not found on the board.")
 
 
-# Function to run the Bingo board in a separate thread
+# Function to run the apbingo board in a separate thread
 def run_bingo_board(new_board_size, bg="white", sq_color="white", hl_color="green", txt_color="black"):
     global bingo_thread, board_size, bg_color, square_color, highlight_color, text_color
 

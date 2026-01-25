@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import ClassVar, Dict, List, Any
 
-from BaseClasses import Item, Location, ItemClassification, MultiWorld, Region, CollectionState
-from worlds.AutoWorld import World
+from BaseClasses import Item, Location, ItemClassification, MultiWorld, Region, CollectionState, Tutorial
+from worlds.AutoWorld import World, WebWorld
 from .Options import PharcryptionOptions
 
 ID_OFFSET = 400_400_000
@@ -24,6 +24,17 @@ class PharcryptionItemData:
     def increase_cost(self):
         self.cost += 1
 
+class PharcryptionWebWorld(WebWorld):
+    """Mindustry web page for Archipelago"""
+    theme = "stone"
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Pharcryption for Multiworld.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["EdricY"]
+    )]
 
 class PharcryptionWorld(World):
     """
@@ -31,6 +42,7 @@ class PharcryptionWorld(World):
     from a malevolent ransomware program.
     """
     game: ClassVar[str] = "Pharcryption"
+    web = PharcryptionWebWorld()
     data_version: ClassVar[int] = 0
     option_definitions = PharcryptionOptions
     item_name_to_id: ClassVar[Dict[str, int]] = {

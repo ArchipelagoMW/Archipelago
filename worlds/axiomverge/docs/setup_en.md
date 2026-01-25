@@ -1,13 +1,17 @@
-# Setup Guide for Axiom Verge: Archipelago
+# Axiom Verge Setup Guide
 
-## Required Software
+## APWorld Installation
 
-WIP
+* Place in custom_worlds folder in your Archipelago directory
 
-## Configuring your YAML file
+## Client Installation
 
-### What is a YAML file and why do I need one?
+Currently Windows only (though I'm told this works with Linux Proton):
 
-Your YAML file contains a set of configuration options which provide the generator with information about how it should
-generate your game. Each player of a multiworld will provide their own YAML file. This setup allows each player to enjoy
-an experience customized for their taste, and different players in the same multiworld can all have different options.
+* Ensure you're on the [earlyaccess] branch
+* Open steam and go to your games library
+* Right click Axiom Verge and click on Properties
+* Select Betas tab and enter the following beta access code 'secretworlds'
+* Unzip AxiomVergeAP.zip in your local AV folder (For Steam: Right click > Manage > Browse Local Files)
+* Run applyPatchFinal.bat
+* Launch the game and verify "Archipelago" is on the main menu

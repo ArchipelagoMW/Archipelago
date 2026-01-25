@@ -44,8 +44,8 @@ class MZMWeb(WebWorld):
         "Multiworld Setup Guide",
         "A guide to setting up Metroid: Zero Mission for Archipelago on your computer.",
         "English",
-        "multiworld_en.md",
-        "multiworld/en",
+        "setup_en.md",
+        "setup/en",
         ["N/A"]
     )
 

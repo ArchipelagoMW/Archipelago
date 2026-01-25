@@ -54,8 +54,8 @@ class FF12OpenWorldWebWorld(WebWorld):
         "Multiworld Setup Guide",
         "A guide to playing Final Fantasy 12 Open World multiworld.",
         "English",
-        "multiworld_en.md",
-        "multiworld/en",
+        "guide_en.md",
+        "guide/en",
         ["Bartz24"]
     )]
 

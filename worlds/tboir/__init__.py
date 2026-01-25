@@ -2,7 +2,7 @@ import json
 import pkgutil
 import random
 from typing import Any
-from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
+from BaseClasses import CollectionState, Item, ItemClassification, Location, Region, Tutorial
 from Options import Option
 from Utils import visualize_regions
 import settings
@@ -11,7 +11,8 @@ from worlds.generic.Rules import add_item_rule, add_rule, forbid_item
 from .locations import location_list
 from .items import item_list
 from .options import TboiOptions
-from worlds.AutoWorld import World
+from worlds.AutoWorld import World, WebWorld
+
 
 def launch_client():
     from . import client
@@ -37,6 +38,22 @@ class TboiSettings(settings.Group):
 
     game_folder: GameFolder = GameFolder("The Binding of Isaac Rebirth")
 
+class TboiWebWorld(WebWorld):
+    """
+    This class handles the web interface.
+
+    The web interface includes the setup guide and the options page for generating YAMLs.
+    """
+    tutorials = [Tutorial(
+        "The Binding of Isaac Setup Guide",
+        "A guide to setting up The Binding of Isaac for Archipelago on your computer.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["bcats"]
+    )]
+    theme = "ice"
+
 class TboiWorld(World):
     """
     Experience the modern classic, The Binding of Isaac, like you've never seen it before. 
@@ -48,6 +65,7 @@ class TboiWorld(World):
     nightmares!
     """
     game = "The Binding of Isaac Repentance"
+    web = TboiWebWorld()
     options_dataclass = TboiOptions
     options: TboiOptions
     topology_present = True
@@ -270,4 +288,3 @@ class TboiWorld(World):
     @staticmethod
     def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
         return slot_data
-    

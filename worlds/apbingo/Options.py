@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from Options import Toggle, Option, Range, Choice, ItemSet, OptionSet, PerGameCommonOptions, StartHints, TextChoice
 
 class RequiredBingos(Range):
-    """The number of Bingo's required to goal, min is 1, max is 22
+    """The number of apbingo's required to goal, min is 1, max is 22
     max per board size: 3x3 = 8, 4x4 = 10, 5x5 = 12, 6x6 = 14, 7x7 = 16, 8x8 = 18, 9x9 = 20, 10x10 = 22 """
     range_start = 1
     range_end = 22
@@ -22,7 +22,7 @@ class BingoBalancing(Range):
     range_start = 0
     range_end = 100
     default = 0
-    display_name = "Bingo Forced Balancing"
+    display_name = "apbingo Forced Balancing"
 
 class AutoHints(Toggle):
     """If true, automatically hint all board squares"""

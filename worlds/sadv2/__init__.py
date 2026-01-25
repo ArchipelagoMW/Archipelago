@@ -2,19 +2,32 @@ import settings
 import typing
 import logging
 
-from BaseClasses import ItemClassification, MultiWorld
+from BaseClasses import ItemClassification, MultiWorld, Tutorial
 from .Options import SADV2Options
 from .Items import SADV2Item, character_table, zone_table, emerald_table, event_table, item_table, filler_table
 from .Locations import SADV2Location, leaf_forest_locations, hot_crater_locations, music_plant_locations, \
                         ice_paradise_locations, sky_canyon_locations, techno_base_locations, egg_utopia_locations, \
                         xx_locations, event_locations, all_locations
 from .Regions import SADV2Region, create_regions, create_region, connect, create_locations
-from worlds.AutoWorld import World
+from worlds.AutoWorld import World, WebWorld
 from .Client import SonicAdvance2Client
 from . import Names
 
+class SADV2WebWorld(WebWorld):
+    """Mindustry web page for Archipelago"""
+    theme = "stone"
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Sonic Advance 2 for Multiworld.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["EdricY"]
+    )]
+
 class SADV2World(World):
     game = "Sonic Advance 2"
+    web = SADV2WebWorld()
     options_dataclass = SADV2Options
     options: SADV2Options
     topology_present = True

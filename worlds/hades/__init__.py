@@ -40,8 +40,8 @@ class HadesWeb(WebWorld):
         "A guide to setting up Hades for Archipelago. "
         "This guide covers single-player, multiworld, and related software.",
         "English",
-        "Hades.md",
-        "Hades/en",
+        "hades_en.md",
+        "hades/en",
         ["Naix"]
     )]
     options_presets = hades_option_presets

@@ -1,5 +1,5 @@
-from worlds.RAC1.data.Locations import VELDIN_HALFWAY_GOLD_BOLT
-from worlds.RAC1.test import RACTestBase
+from worlds.rac1.data.Locations import VELDIN_HALFWAY_GOLD_BOLT
+from worlds.rac1.test import RACTestBase
 
 
 class TestDrek(RACTestBase):

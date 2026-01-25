@@ -1303,7 +1303,7 @@ loc_name_to_id = {
     "Challenge Recovery: This Is No Time for Lazy!":                       1610,
     "Challenge Recovery: Heal Plz":                                        1611,
     "Challenge Recovery: I'll Just Help Myself":                           1612,
-    "Challenge Recovery: Badass Bingo":                                    1613,
+    "Challenge Recovery: Badass apbingo":                                    1613,
     "Challenge Recovery: Green Meanie":                                    1614,
     "Challenge Recovery: Death, Wind, and Fire":                           1615,
     "Challenge Recovery: I'm Back! Shocked?":                              1616,

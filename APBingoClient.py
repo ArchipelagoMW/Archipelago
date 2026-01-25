@@ -1,4 +1,4 @@
-from worlds.Bingo.Client import launch
+from worlds.apbingo.Client import launch
 import Utils
 import ModuleUpdate
 ModuleUpdate.update()

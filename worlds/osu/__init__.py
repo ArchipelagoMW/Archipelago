@@ -26,7 +26,7 @@ class OsuWebWorld(WebWorld):
     theme = "partyTime"
     tutorials = [
         Tutorial(
-            tutorial_name="WIP",
+            tutorial_name="Multiworld Setup Guide",
             description="A guide to playing osu!ap.",
             language="English",
             file_name="guide_en.md",

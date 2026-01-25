@@ -16,7 +16,7 @@ class YachtDiceWeb(WebWorld):
     tutorials = [
         Tutorial(
             "Multiworld Setup Guide",
-            "A guide to setting up Yacht Dice. This guide covers single-player, multiworld, and website.",
+            "A guide to setting up Watery Words Dice. This guide covers single-player, multiworld, and website.",
             "English",
             "setup_en.md",
             "setup/en",

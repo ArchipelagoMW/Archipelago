@@ -535,7 +535,7 @@ class TowerUniteGame(Game):
             # "Grand Quest",
             # "Triple Diamonds",
             # "Wheel of Money",
-            "Planet Bingo",
+            "Planet apbingo",
             "Video Poker",
             "Video Blackjack",
         ]

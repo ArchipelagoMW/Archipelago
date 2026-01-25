@@ -502,7 +502,7 @@ class SonicRidersZeroGravityGame(Game):
     @functools.cached_property
     def extreme_gear_yachts(self) -> List[str]:
         return [
-            "Bingo Star",
+            "apbingo Star",
             "Magic Broom",
             "Wind Catcher",
         ]

@@ -35,7 +35,7 @@ class BingoWebWorld(WebWorld):
     ]
 
 class BingoWorld(World):
-    """Randomized Bingo!"""
+    """Randomized apbingo!"""
 
     game = "APBingo"
     web = BingoWebWorld()
@@ -90,8 +90,8 @@ class BingoWorld(World):
             self.get_location(bingo).item_rule = lambda item: item.game != "APBingo"
 
         all_keys = self.get_available_items()
-        self.get_location("Bingo (ALL)").access_rule = special_rule(self, all_keys)
-        self.get_location("Bingo (ALL)").item_rule = lambda item: item.game != "APBingo"
+        self.get_location("apbingo (ALL)").access_rule = special_rule(self, all_keys)
+        self.get_location("apbingo (ALL)").item_rule = lambda item: item.game != "APBingo"
 
         # Don't allow incorrect values for required bingos
         self.required_bingos = self.options.required_bingos.value
@@ -154,27 +154,27 @@ class BingoWorld(World):
 
         suffix = 0  # Start with suffix 0
         while len(bingo_names) < required_locations:
-            # Generate horizontal Bingo names for the current suffix
+            # Generate horizontal apbingo names for the current suffix
             for row in range(ord('A'), ord('A') + self.board_size):
                 if len(bingo_names) < required_locations:  # Check before appending
-                    bingo_names.append(f"Bingo ({chr(row)}1-{chr(row)}{self.board_size})-{suffix}")
+                    bingo_names.append(f"apbingo ({chr(row)}1-{chr(row)}{self.board_size})-{suffix}")
 
-            # Generate vertical Bingo names for the current suffix
+            # Generate vertical apbingo names for the current suffix
             for col in range(1, self.board_size + 1):
                 if len(bingo_names) < required_locations:  # Check before appending
-                    bingo_names.append(f"Bingo (A{col}-{chr(ord('A') + self.board_size - 1)}{col})-{suffix}")
+                    bingo_names.append(f"apbingo (A{col}-{chr(ord('A') + self.board_size - 1)}{col})-{suffix}")
 
-            # Generate diagonal Bingo names for the current suffix
+            # Generate diagonal apbingo names for the current suffix
             if len(bingo_names) < required_locations:  # Check before appending
-                bingo_names.append(f"Bingo (A1-{chr(ord('A') + self.board_size - 1)}{self.board_size})-{suffix}")
+                bingo_names.append(f"apbingo (A1-{chr(ord('A') + self.board_size - 1)}{self.board_size})-{suffix}")
             if len(bingo_names) < required_locations:  # Check before appending
-                bingo_names.append(f"Bingo ({chr(ord('A') + self.board_size - 1)}1-A{self.board_size})-{suffix}")
+                bingo_names.append(f"apbingo ({chr(ord('A') + self.board_size - 1)}1-A{self.board_size})-{suffix}")
 
             suffix += 1  # Increment suffix for the next round
 
         # Include the ALL bingo if specified and we haven't filled the required locations
         if include_all:
-            bingo_names.append("Bingo (ALL)")
+            bingo_names.append("apbingo (ALL)")
 
         return bingo_names
 

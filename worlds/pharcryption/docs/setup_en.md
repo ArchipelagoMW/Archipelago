@@ -2,7 +2,7 @@
 
 ### How to play:
 
-TBA
+Head over to the [Pharcryption Login Page](https://pharcryption.darkshare.site.nfoservers.com/)
 
 
 ## Hosting a MultiWorld game

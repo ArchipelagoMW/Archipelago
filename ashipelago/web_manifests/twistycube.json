@@ -1,0 +1,7 @@
+{
+  "game": "Twisty Cube",
+  "server_version": "0.0.2",
+  "discord_channel": "https://discord.com/channels/731205301247803413/1420821472057757716",
+  "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/twistycube.apworld",
+  "web_client": "https://cube-ap.netlify.app/"
+}

@@ -1,0 +1,7 @@
+{
+  "game": "Jigsaw",
+  "server_version": "0.9.1",
+  "discord_channel": "https://discord.com/channels/731205301247803413/1409148531637489775",
+  "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/jigsaw.apworld",
+  "web_client": "https://jigsaw-ap.netlify.app/"
+}

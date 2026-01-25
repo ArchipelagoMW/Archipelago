@@ -13,7 +13,7 @@ def special_rule(world, all_keys) -> Callable[[CollectionState], bool]:
 
 def can_goal(state, player, required_bingos, board_size) -> bool:
 
-    # Generate all possible Bingo keys for the board
+    # Generate all possible apbingo keys for the board
     possible_keys = [f"{chr(row)}{col}" for row in range(ord('A'), ord('A') + board_size) for col in range(1, board_size + 1)]
 
     possible_bingos = []
@@ -68,16 +68,16 @@ def extract_bingo_spaces(location):
 
     spaces = []
 
-    # Generate spaces for horizontal or vertical Bingo
-    if start_row == end_row:  # Horizontal Bingo
+    # Generate spaces for horizontal or vertical apbingo
+    if start_row == end_row:  # Horizontal apbingo
         col_range = range(start_col, end_col + 1) if start_col < end_col else range(start_col, end_col - 1, -1)
         for col in col_range:
             spaces.append(f"{start_row}{col}")
-    elif start_col == end_col:  # Vertical Bingo
+    elif start_col == end_col:  # Vertical apbingo
         row_range = range(ord(start_row), ord(end_row) + 1) if ord(start_row) < ord(end_row) else range(ord(start_row), ord(end_row) - 1, -1)
         for row in row_range:
             spaces.append(f"{chr(row)}{start_col}")
-    else:  # Diagonal Bingo
+    else:  # Diagonal apbingo
         row_range = range(ord(start_row), ord(end_row) + 1) if ord(start_row) < ord(end_row) else range(ord(start_row), ord(end_row) - 1, -1)
         col_range = range(start_col, end_col + 1) if start_col < end_col else range(start_col, end_col - 1, -1)
         for row, col in zip(row_range, col_range):

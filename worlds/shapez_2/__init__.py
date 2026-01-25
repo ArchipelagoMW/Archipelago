@@ -1,6 +1,6 @@
 from typing import List, Mapping, Any
 
-from BaseClasses import MultiWorld, Item, Region
+from BaseClasses import MultiWorld, Item, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .data.strings import SPZ
 from .items import Shapez2Item, item_table, filler_items, delivery_unlocks
@@ -12,6 +12,14 @@ from .regions import get_regions
 class Shapez2Web(WebWorld):
     rich_text_options_doc = True
     theme = "partyTime"
+    tutorials = [Tutorial(
+        "Shapez 2 Setup Guide",
+        "A guide to setting up Shapez 2 for Archipelago on your computer.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["bcats"]
+    )]
 
 
 class Shapez2World(World):

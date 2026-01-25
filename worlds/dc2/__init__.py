@@ -29,7 +29,7 @@ class DarkCloud2Web(WebWorld):
 
 class DarkCloud2World(World):
     """
-    Dark Cloud 2 is a game.
+    Experience an epic action/RPG adventure that relies on your innovation as much as exploration and fighting reflexes. In Dark Cloud 2, the sequel to Dark Cloud, you must fight your way through an array of unexplored lands, rebuild worlds with the enhanced Georama and tinker with the new Invention system to completely customize your adventure. Battle through monster-ridden dungeons with two different characters, each with multiple attack forms, special abilities and upgradeable weaponry. Rebuild the present world as well as the future.
     """
 
     game: str = "Dark Cloud 2"

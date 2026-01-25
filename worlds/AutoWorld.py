@@ -226,6 +226,18 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
 class WebWorld(metaclass=WebWorldRegister):
     """Webhost integration"""
 
+    # Ashipelago customization
+    server_version : str
+    """version of the ap world installed on ashipelago"""
+    discord_channel: Optional[str]
+    """link to the discord channel for the world"""
+    pop_tracker: Optional[str]
+    """link to the pop tracker for the world"""
+    ap_world: Optional[str]
+    """link to the ap world download"""
+    web_client: Optional[str]
+    """link to a web client for games that are web based"""
+
     options_page: Union[bool, str] = True
     """display a settings page. Can be a link to a specific page or external tool."""
 
@@ -250,6 +262,7 @@ class WebWorld(metaclass=WebWorldRegister):
 
     rich_text_options_doc = False
     """Whether the WebHost should render Options' docstrings as rich text.
+
 
     If this is True, Options' docstrings are interpreted as reStructuredText_,
     the standard Python markup format. In the WebHost, they're rendered to HTML

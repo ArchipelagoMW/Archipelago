@@ -1,7 +1,7 @@
 from typing import Dict
 from dataclasses import dataclass
 
-from BaseClasses import Item, ItemClassification, Region
+from BaseClasses import Item, ItemClassification, Region, Tutorial
 from Options import OptionList, OptionSet, PerGameCommonOptions, Toggle, Range, OptionError
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule
@@ -35,7 +35,14 @@ class ShahrazadOptions(PerGameCommonOptions):
 
 
 class ShahrazadWeb(WebWorld):
-    tutorials = []
+    tutorials = [Tutorial(
+        "Shahrazad Setup Guide",
+        "A guide to setting up Shahrazad for Archipelago on your computer.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["bcats"]
+    )]
 
 
 class ShahrazadItem(Item):

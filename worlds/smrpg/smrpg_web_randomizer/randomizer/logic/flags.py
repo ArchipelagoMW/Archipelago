@@ -1181,8 +1181,8 @@ class AsyncTourneyPreset(Preset):
     flags = 'Ksb R7k Cspjl -nfc Tc4m $ M2 Sc4 Edfsa Bmc Qsba X2 Nm -fakeout D2s W -showequips'
 
 class BingoPreset(Preset):
-    name = 'Standard Bingo Flags'
-    description = 'Flagset for SMRPG Rando Bingo'
+    name = 'Standard apbingo Flags'
+    description = 'Flagset for SMRPG Rando apbingo'
     flags = 'Ksb R7k Cspjl -nfc Tc4km M2 Sc4 Edfsa Bmc Qsba X3 Nm -fakeout D2s W -showequips'
 
 

@@ -1,0 +1,8 @@
+{
+  "game": "Digimon World",
+  "server_version": "0.3.9",
+  "discord_channel": "https://discord.com/channels/731205301247803413/1224418923861118977",
+  "pop_tracker": "https://github.com/ashiryn/Ashipelago/releases/latest/download/dw1_pack.zip",
+  "ap_world": "https://github.com/ashiryn/Ashipelago/releases/latest/download/dw1.apworld",
+  "files": "https://github.com/ashiryn/Ashipelago/releases/latest/download/dw1_additional_files.zip"
+}

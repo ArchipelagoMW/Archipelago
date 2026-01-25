@@ -1,34 +1,41 @@
-# The Legend of Zelda (NES) Multiworld Setup Guide
+# Super Mario RPG setup guide
 
 ## Required Software
 
-- The Zelda1Client
-    - Bundled with Archipelago: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-- The BizHawk emulator. Versions 2.3.1 and higher are supported.
-    - [BizHawk at TASVideos](https://tasvideos.org/BizHawk)
-- Your legally acquired US v1.0 PRG0 ROM file, probably named `Legend of Zelda, The (U) (PRG0) [!].nes`
-
-## Optional Software
-
-- [Map Tracker](https://github.com/Br00ty/tloz_brooty/releases/latest)
-    - Used alongside [Poptracker](https://github.com/black-sliver/PopTracker) to keep track of what items/checks you've gotten. Uses auto-tracking by connecting to the Archipelago server. 
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
+- [SNI](https://github.com/alttpo/sni/releases). This is automatically included with your Archipelago installation above.
+- SNI is not compatible with (Q)Usb2Snes.
+- Hardware or software capable of loading and playing SNES ROM files, including:
+    - An emulator capable of connecting to SNI
+      ([snes9x-nwa](https://github.com/Skarsnik/snes9x-emunwa/releases), [snes9x-rr](https://github.com/gocha/snes9x-rr/releases),
+      [BSNES-plus](https://github.com/black-sliver/bsnes-plus),
+      [BizHawk](http://tasvideos.org/BizHawk.html), or
+      [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer)
+    - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware. **note:
+      modded SNES minis are currently not supported by SNI. Some users have claimed success with QUsb2Snes for this system,
+      but it is not supported.**
+- Your legally obtained Super Mario RPG ROM file, probably named `Super Mario RPG - Legend of the Seven Stars (USA).sfc`
 
 ## Installation Procedures
 
-1. Download and install the latest version of Archipelago.
-    - On Windows, download Setup.Archipelago.<HighestVersion\>.exe and run it.
-2. Assign EmuHawk version 2.3.1 or higher as your default program for launching `.nes` files.
-    - Extract your BizHawk folder to your Desktop, or somewhere you will remember. Below are optional additional steps
-       for loading ROMs more conveniently.
-        1. Right-click on a ROM file and select **Open with...**
-        2. Check the box next to **Always use this app to open .nes files**.
-        3. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**.
-        4. Browse for `EmuHawk.exe` located inside your BizHawk folder (from step 1) and click **Open**.
-3. (EmuHawk version ≤ 2.8) Go to Config > Customize. Switch to the Advanced tab, then switch the Lua Core from "NLua+KopiLua" to
-  "Lua+LuaInterface". Then restart EmuHawk. This is required for the Lua script to function correctly.
-  **NOTE: Even if "Lua+LuaInterface" is already selected, toggle between the two options and reselect it. Fresh installs** 
-  **of newer versions of EmuHawk have a tendency to show "Lua+LuaInterface" as the default selected option but still load** 
-  **"NLua+KopiLua" until this step is done.**
+### Windows Setup
+
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer
+   file is located in the assets section at the bottom of the version information.**
+2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file.
+   This is your Super Mario RPG ROM file. This only needs to be done once.
+3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
+   files.
+1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
+2. Right-click on a ROM file and select **Open with...**
+3. Check the box next to **Always use this app to open .sfc files**
+4. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**
+5. Browse for your emulator's `.exe` file and click **Open**. This file should be located inside the folder you
+   extracted in step one.
+
+### Macintosh Setup
+
+- We need volunteers to help fill this section! Please contact **Farrak Kilhn** on Discord if you want to help.
 
 ## Create a Config (.yaml) File
 
@@ -39,8 +46,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legend%20of%20Zelda/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them.
 
 ### Verifying your config file
 
@@ -49,12 +56,11 @@ validator page: [YAML Validation page](/check)
 
 ## Generating a Single-Player Game
 
-1. Navigate to the Player Settings page, configure your options, and click the "Generate Game" button.
-    - Player Settings page: [The Legend of Zelda Player Settings Page](/games/The%20Legend%20of%20Zelda/player-settings)
+1. Navigate to the Player Options page, configure your options, and click the "Generate Game" button.
 2. You will be presented with a "Seed Info" page.
 3. Click the "Create New Room" link.
 4. You will be presented with a server page, from which you can download your patch file.
-5. Double-click on your patch file, and the Zelda 1 Client will launch automatically, create your ROM from the
+5. Double-click on your patch file, and the Super Mario RPG Client will launch automatically, create your ROM from the
    patch file, and open your emulator for you.
 6. Since this is a single-player game, you will no longer need the client, so feel free to close it.
 
@@ -64,53 +70,106 @@ validator page: [YAML Validation page](/check)
 
 When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that is done,
 the host will provide you with either a link to download your patch file, or with a zip file containing everyone's patch
-files. Your patch file should have a `.aptloz` extension.
+files. Your patch file should have a `.apsm` extension.
 
 Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically launch the
 client, and will also create your ROM in the same place as your patch file.
 
+### Connect to the client
 
-## Running the Client Program and Connecting to the Server
+#### With an emulator
 
-Once the Archipelago server has been hosted:
+When the client launched automatically, SNI should have also automatically launched in the background. If this is its
+first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
 
-1. Navigate to your Archipelago install folder and run `ArchipelagoZelda1Client.exe`.
-2. Notice the `/connect command` on the server hosting page. (It should look like `/connect archipelago.gg:*****`
-   where ***** are numbers)
-3. Type the connect command into the client OR add the port to the pre-populated address on the top bar (it should
-   already say `archipelago.gg`) and click `connect`.
+#### snes9x-nwa
 
-### Running Your Game and Connecting to the Client Program
+1. Click on the Network Menu and check **Enable Emu Network Control**
+2. Load your ROM file if it hasn't already been loaded.
 
-1. Open EmuHawk 2.3.1 or higher and load your ROM OR click your ROM file if it is already associated with the
-   extension `*.nes`.
-2. Navigate to where you installed Archipelago, then to `data/lua`, and drag+drop the `connector_tloz.lua` script onto
-   the main EmuHawk window.
-    1. You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to
-       `connector_tloz.lua` with the file picker.
-    2. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
-       close your emulator entirely, restart it and re-run these steps.
-    3. If it says `Must use a version of BizHawk 2.3.1 or higher`, double-check your BizHawk version by clicking **
-       Help** -> **About**.
+##### snes9x-rr
 
-## Play the game
+1. Load your ROM file if it hasn't already been loaded.
+2. Click on the File menu and hover on **Lua Scripting**
+3. Click on **New Lua Script Window...**
+4. In the new window, click **Browse...**
+5. Select the connector lua file included with your client
+- Look in the Archipelago folder for `/SNI/lua/Connector.lua`.
+6. If you see an error while loading the script that states `socket.dll missing` or similar, navigate to the folder of
+   the lua you are using in your file explorer and copy the `socket.dll` to the base folder of your snes9x install.
 
-When the client shows both NES and server are connected, you are good to go. You can check the connection status of the
-NES at any time by running `/nes`.
+#### BSNES-Plus
 
-### Other Client Commands
+1. Load your ROM file if it hasn't already been loaded.
+2. The emulator should automatically connect while SNI is running.
 
-All other commands may be found on the [Archipelago Server and Client Commands Guide.](/tutorial/Archipelago/commands/en)
-.
 
-## Known Issues
+##### BizHawk
 
-- Triforce Fragments and Heart Containers may be purchased multiple times. It is up to you if you wish to take advantage
-of this; logic will not account for or require purchasing any slot more than once. Remote items, no matter what they
-are, will always only be sent once.
-- Obtaining a remote item will move the location of any existing item in that room. Should this make an item 
-inaccessible, simply exit and re-enter the room. This can be used to obtain the Ocean Heart Container item without the
-stepladder; logic does not account for this.
-- Whether you've purchased from a shop is tracked via Archipelago between sessions: if you revisit a single player game,
-none of your shop pruchase statuses will be remembered. If you want them to be, connect to the client and server like 
-you would in a multiplayer game.
+1. Ensure you have the BSNES core loaded. This is done with the main menubar, under:
+- (≤ 2.8) `Config` 〉 `Cores` 〉 `SNES` 〉 `BSNES`
+- (≥ 2.9) `Config` 〉 `Preferred Cores` 〉 `SNES` 〉 `BSNESv115+`
+2. Load your ROM file if it hasn't already been loaded.
+   If you changed your core preference after loading the ROM, don't forget to reload it (default hotkey: Ctrl+R).
+3. Drag+drop the `Connector.lua` file included with your client onto the main EmuHawk window.
+- Look in the Archipelago folder for `/SNI/lua/Connector.lua`.
+- You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to `Connector.lua`
+  with the file picker.
+
+##### RetroArch 1.10.1 or newer
+
+You only have to do these steps once. Note, RetroArch 1.9.x will not work as it is older than 1.10.1.
+
+1. Enter the RetroArch main menu screen.
+2. Go to Settings --> User Interface. Set "Show Advanced Settings" to ON.
+3. Go to Settings --> Network. Set "Network Commands" to ON. (It is found below Request Device 16.) Leave the default
+   Network Command Port at 55355. \
+   ![Screenshot of Network Commands setting](../../generic/docs/retroarch-network-commands-en.png)
+4. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and select "Nintendo - SNES / SFC (bsnes-mercury
+   Performance)".
+
+When loading a ROM, be sure to select a **bsnes-mercury** core. These are the only cores that allow external tools to
+read ROM data.
+
+#### With hardware
+
+This guide assumes you have downloaded the correct firmware for your device. If you have not done so already, please do
+this now. SD2SNES and FXPak Pro users may download the appropriate firmware on the SD2SNES releases page. SD2SNES
+releases page: [SD2SNES Releases Page](https://github.com/RedGuyyyy/sd2snes/releases)
+
+Other hardware may find helpful information on the usb2snes platforms
+page: [usb2snes Supported Platforms Page](http://usb2snes.com/#supported-platforms)
+
+1. Close your emulator, which may have auto-launched.
+2. Power on your device and load the ROM.
+
+### Connect to the Archipelago Server
+
+The patch file which launched your client should have automatically connected you to the AP Server. There are a few
+reasons this may not happen however, including if the game is hosted on the website but was generated elsewhere. If the
+client window shows "Server Status: Not Connected", simply ask the host for the address of the server, and copy/paste it
+into the "Server" input field then press enter.
+
+The client will attempt to reconnect to the new server address, and should momentarily show "Server Status: Connected".
+
+### Play the game
+
+When the client shows both SNES Device and Server as connected, you're ready to begin playing. Congratulations on
+successfully joining a multiworld game!
+
+## Hosting a MultiWorld game
+
+The recommended way to host a game is to use our hosting service. The process is relatively simple:
+
+1. Collect config files from your players.
+2. Create a zip file containing your players' config files.
+3. Upload that zip file to the Generate page above.
+- Generate page: [WebHost Seed Generation Page](/generate)
+4. Wait a moment while the seed is generated.
+5. When the seed is generated, you will be redirected to a "Seed Info" page.
+6. Click "Create New Room". This will take you to the server page. Provide the link to this page to your players, so
+   they may download their patch files from there.
+7. Note that a link to a MultiWorld Tracker is at the top of the room page. The tracker shows the progress of all
+   players in the game. Any observers may also be given the link to this page.
+8. Once all players have joined, you may begin playing.
+~~~~

@@ -6,6 +6,6 @@ class BingoRegionData(NamedTuple):
 
 
 region_data_table: Dict[str, BingoRegionData] = {
-    "Menu": BingoRegionData(["Bingo Board"]),
-    "Bingo Board": BingoRegionData(),
+    "Menu": BingoRegionData(["apbingo Board"]),
+    "apbingo Board": BingoRegionData(),
 }

@@ -46,16 +46,17 @@ class FE8WebWorld(WebWorld):
     """
 
     theme = "stone"
-    setup_en = Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to playing FE8 with Archipelago",
-        "English",
-        "setup_en.md",
-        "setup/en",
-        ["CT075"],
-    )
 
-    tutorials = []
+    tutorials = [
+        Tutorial(
+            "Multiworld Setup Guide",
+            "A guide to playing FE8 with Archipelago",
+            "English",
+            "setup_en.md",
+            "setup/en",
+            ["CT075"],
+        )
+    ]
 
 
 class FE8Settings(settings.Group):

@@ -1,8 +1,8 @@
-# shapez
+# shapez 2
 
 ## What is this game?
 
-shapez is an automation game about cutting, rotating, stacking, and painting shapes, that you extract from randomly
+shapez 2 is an automation game about cutting, rotating, stacking, and painting shapes, that you extract from randomly
 generated patches on an infinite canvas, and sending them to the hub to complete levels. The "tutorial", where you
 unlock a new building or game mechanic (almost) each level, lasts until level 26, where you unlock freeplay with 
 infinitely more levels, that require a new, randomly generated shape. Alongside the levels, you can unlock upgrades,

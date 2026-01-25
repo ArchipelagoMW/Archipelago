@@ -6,6 +6,7 @@ from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable, Tuple
 
 from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path
+from worlds.spelunky2.Items import item_code
 
 
 class Type(Enum):
@@ -348,9 +349,6 @@ if not is_frozen():
             if not worldtype:
                 logging.error(f"Requested APWorld \"{worldname}\" does not exist.")
                 continue
-            # Ashipelago customization
-            if "custom_worlds" not in worldtype.__file__:
-                continue
             file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
             world_directory = os.path.join("worlds", file_name)
             if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
@@ -382,8 +380,56 @@ if not is_frozen():
                     if not relative_path.endswith("archipelago.json"):
                         zf.write(path, relative_path)
                 zf.writestr(apworld.manifest_path, json.dumps(manifest))
-        open_folder(apworlds_folder)
 
+        package_pop_trackers()
+
+
+    def package_pop_trackers():
+        import os
+        import zipfile
+        pop_tracker_directory = os.path.join("ashipelago", "pop_trackers")
+        pop_tracker_folders = [item for item in os.listdir(pop_tracker_directory) if os.path.isdir(os.path.join(pop_tracker_directory, item))]
+        pop_tracker_folder = os.path.join("build", "pop_trackers")
+        os.makedirs(pop_tracker_folder, exist_ok=True)
+
+        for world in pop_tracker_folders:
+            zip_path = os.path.join(pop_tracker_folder, world + "_pack.zip")
+            root_folder = None
+            source_folders = ["src",
+                              "donkey_kong_country_3_randomizer_porygone",
+                              "Dragon Warrior",
+                              "TheMessengerTrackPack",
+                              "sonic_adventure_2_battle_randomizer_porygone",
+                              "pack",
+                              "data",
+                              "super_mario_world_randomizer_porygone"]
+            for source in source_folders:
+                world_directory = os.path.join(pop_tracker_directory, world, source)
+                if pathlib.Path(world_directory).is_dir():
+                    root_folder = source
+                    break
+
+            if root_folder is None:
+                logging.error(f"No valid pop tracker source folder found, skipping {world}'s pop tracker")
+                continue
+
+            with (zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED,
+                                 compresslevel=9) as zf):
+                for path in pathlib.Path(world_directory).rglob("*"):
+                    relative_path = os.path.join(*path.parts[path.parts.index(root_folder) + 1:])
+                    exclusions = ["__MACOSX",
+                                  ".DS_STORE",
+                                  "__pycache__",
+                                  ".gitignore",
+                                  ".github",
+                                  "build.sh",
+                                  "buildfunctions.sh",
+                                  ".vscode",
+                                  ".idea"]
+                    if any(sub_string in relative_path for sub_string in exclusions):
+                        continue
+
+                    zf.write(path, relative_path)
 
     components.append(Component("Build Custom APWorlds", func=_build_custom_apworlds, cli=True,
                                 description="Build only Custom APWorlds from loose-file custom_world folders."))

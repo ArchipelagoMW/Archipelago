@@ -1,6 +1,6 @@
 from typing import ClassVar
 from worlds.AutoWorld import WebWorld, World
-from BaseClasses import ItemClassification
+from BaseClasses import ItemClassification, Tutorial
 
 from .constants import AVArea, START_OPTION_MAP
 from .creature_data import creature_data
@@ -34,7 +34,16 @@ def map_page_index(data) -> int:
 
 class AxiomVergeWebWorld(WebWorld):
     rich_text_options_doc = True
-
+    tutorials = [
+        Tutorial(
+            "Multiworld Setup Guide",
+            "A guide to setting up APBingo.",
+            "English",
+            "setup_en.md",
+            "setup/en",
+            ["N/A"],
+        )
+    ]
 
 class AxiomVergeWorld(World):
     """

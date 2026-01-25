@@ -22,7 +22,7 @@ class AP_SudokuWorld(World):
     """
     Play a little Sudoku while you're in BK mode to maybe get some useful hints
     """
-    game = "Sudoku"
+    game = "APSudoku"
     web = AP_SudokuWebWorld()
 
     item_name_to_id: Dict[str, int] = {}

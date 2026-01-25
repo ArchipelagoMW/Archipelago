@@ -17,8 +17,8 @@ class Borderlands2WebWorld(WebWorld):
         "Multiworld Setup Guide",
         "A guide to setting up Borderlands 2 for Multiworld.",
         "English",
-        "setup_en.md",
-        "setup/en",
+        "guide_en.md",
+        "guide/en",
         ["EdricY"]
     )]
 

@@ -26,8 +26,8 @@ class KHBBSWeb(WebWorld):
             "A guide to setting up the Kingdom Hearts BBS Randomizer software on your computer. This guide covers single-player, "
             "multiworld, and related software.",
             "English",
-            "kh1_en.md",
-            "kh1/en",
+            "setup_en.md",
+            "setup/en",
             ["Gicu"]
     )]
     option_groups = khbbs_option_groups

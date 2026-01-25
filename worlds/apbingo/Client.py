@@ -31,7 +31,7 @@ class BingoClientCommandProcessor(ClientCommandProcessor):
 
 
 class BingoContext(CommonContext):
-    """Bingo Game Context"""
+    """apbingo Game Context"""
 
     command_processor = BingoClientCommandProcessor
 
@@ -151,22 +151,22 @@ class BingoContext(CommonContext):
         # Check rows for bingo
         for row in rows:
             if all(f"{row}{col}" in acquired_set for col in columns):
-                achieved_bingos.append(f"Bingo ({row}1-{row}{self.board_size})")
+                achieved_bingos.append(f"apbingo ({row}1-{row}{self.board_size})")
 
             # Check columns for bingo
         for col in columns:
             if all(f"{row}{col}" in acquired_set for row in rows):
-                achieved_bingos.append(f"Bingo (A{col}-{rows[-1]}{col})")
+                achieved_bingos.append(f"apbingo (A{col}-{rows[-1]}{col})")
 
             # Check diagonals for bingo
         if all(f"{rows[i]}{columns[i]}" in acquired_set for i in range(self.board_size)):
-            achieved_bingos.append(f"Bingo (A1-{rows[-1]}{self.board_size})")
+            achieved_bingos.append(f"apbingo (A1-{rows[-1]}{self.board_size})")
         if all(f"{rows[i]}{columns[self.board_size - 1 - i]}" in acquired_set for i in range(self.board_size)):
-            achieved_bingos.append(f"Bingo ({rows[-1]}1-A{self.board_size})")
+            achieved_bingos.append(f"apbingo ({rows[-1]}1-A{self.board_size})")
 
         # Calculate the maximum number of possible bingos for the current board size
         if len(achieved_bingos) == 2 * self.board_size + 2:
-            self.found_checks.append(self.location_name_to_ap_id["Bingo (ALL)"])
+            self.found_checks.append(self.location_name_to_ap_id["apbingo (ALL)"])
 
         # If goal no# of bingo's achieved, victory!
         if len(achieved_bingos) >= int(self.required_bingo):
