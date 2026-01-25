@@ -4,7 +4,7 @@ from worlds.rac3.constants.options import RAC3OPTION
 
 class SewerLimitation(Range):
     """
-    Determines the upper limit of the number of Sewer Crystal locations in the multiworld between 1 and 99.
+    Determines the upper limit of the Sewer Crystal locations in the multiworld between 1 and 99.
     This option has no effect when sewer_crystals are disabled.
     Example: If set to 40 then you only need to collect up to 40 sewer crystals. Any more won't count as checks.
     The checks will appear in a way the player specified it in sewer_crystals.

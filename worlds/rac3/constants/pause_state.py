@@ -1,4 +1,4 @@
-"""This module defines the possible data that can be read from memory with respect to pause states"""
+"""This module defines the possible pause states that can be read from memory"""
 
 
 class RAC3PAUSESTATE:

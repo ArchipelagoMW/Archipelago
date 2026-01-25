@@ -35,7 +35,7 @@ City) these are collected into a location group called  `Unstable`. If you gener
 is in the **excluded locations** section (it should be there by default along with some ones).
 Due to how problematic this has become, the locations in the `Unstable` group have straight up been skipped during generation to prevent issues until a solution has been found.
 
-## Ok, but how do I know which locations are getting excluded with each option?
+## OK, but how do I know which locations are getting excluded with each option?
 
 Go to the [Locations](https://github.com/Taoshix/Archipelago-RaC3/blob/staging/worlds/rac3/constants/data/location.py#L1254) file and search for the following tags with CTRL+F
 

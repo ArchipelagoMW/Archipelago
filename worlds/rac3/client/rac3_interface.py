@@ -1,4 +1,4 @@
-"""This module provides an interface with RAC3 to control the game"""
+"""This module provides an RAC3 interface to control the game"""
 
 import time
 from dataclasses import dataclass
@@ -43,7 +43,7 @@ class Rac3Interface(GameInterface):
 
     @dataclass
     class UnlockData:
-        """Data structure for tracking if items should be unlocked and if they are in the process of being unlocked"""
+        """Data structure for tracking if items should be unlocked and if they are now being unlocked"""
         status: int
         unlock_delay: int
 
