@@ -57,8 +57,8 @@ def map_page_index(data: str) -> int:
 
 
 tracker_world: dict[str, Any] = {
-    "map_page_maps": "maps/maps.json",
-    "map_page_locations": "locations/locations.json",
+    "map_page_maps": "tracker/maps.json",
+    "map_page_locations": "tracker/locations.json",
     "map_page_setting_key": r'rac3_current_planet_{player}_{team}',
     "map_page_index": map_page_index,
     "poptracker_name_mapping": UT_MAPPING,

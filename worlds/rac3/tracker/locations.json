@@ -1,8 +1,6 @@
 [
   {
     "name": "0",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "1",
@@ -1671,8 +1669,6 @@
   },
   {
     "name": "1",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -1726,8 +1722,6 @@
   },
   {
     "name": "2",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -1833,8 +1827,6 @@
   },
   {
     "name": "3",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -2124,8 +2116,6 @@
   },
   {
     "name": "4",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -2275,8 +2265,6 @@
   },
   {
     "name": "7",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -2598,8 +2586,6 @@
   },
   {
     "name": "8",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -3190,8 +3176,6 @@
   },
   {
     "name": "Aquatos Crystals ",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "Sewer Crystal",
@@ -3937,8 +3921,6 @@
   },
   {
     "name": "Aquatos Crystal Grav",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "Sewer Crystal",
@@ -4552,8 +4534,6 @@
   },
   {
     "name": "9",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -4687,8 +4667,6 @@
   },
   {
     "name": "5",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -4794,8 +4772,6 @@
   },
   {
     "name": "11",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -4881,8 +4857,6 @@
   },
   {
     "name": "12",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -4948,8 +4922,6 @@
   },
   {
     "name": "13",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -5072,8 +5044,6 @@
   },
   {
     "name": "21",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -5095,8 +5065,6 @@
   },
   {
     "name": "10",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -5170,8 +5138,6 @@
   },
   {
     "name": "16",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -5325,8 +5291,6 @@
   },
   {
     "name": "17",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -5444,8 +5408,6 @@
   },
   {
     "name": "18",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -5567,8 +5529,6 @@
   },
   {
     "name": "19",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -5654,8 +5614,6 @@
   },
   {
     "name": "14",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
@@ -5741,8 +5699,6 @@
   },
   {
     "name": "22",
-    "chest_unopened_img": "images/Question.png",
-    "chest_opened_img": "images/Q_Force.png",
     "children": [
       {
         "name": "0",
