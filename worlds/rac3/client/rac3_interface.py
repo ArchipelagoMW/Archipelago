@@ -99,7 +99,7 @@ class Rac3Interface(GameInterface):
     clank_disabled: bool = False
     clank_disabled_trap: bool = False
     unfreeze_packs: bool = False
-    vidcomic_2_fix: bool = False
+    vidcomic_2_fix: int = 0
 
     def __init__(self):
         super().__init__()  # GameInterfaceの初期化
@@ -823,9 +823,9 @@ class Rac3Interface(GameInterface):
             # Bring qwark back to life until Ratchet has met Sasha on the bridge
             if RAC3LOCATION.PHOENIX_MEET_SASHA not in self.checked_locations:
                 self._write8(RAC3STATUS.ESCAPED_LEVIATHAN, 0)
-        if self.planet == RAC3REGION.ANNIHILATION_NATION and not self.vidcomic_2_fix:
+        if self.planet == RAC3REGION.ANNIHILATION_NATION and self.vidcomic_2_fix < 30:
             if self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.NATION_HEAT_STREET].AP_CODE):
-                self.vidcomic_2_fix = True
+                self.vidcomic_2_fix += 1
                 self._write8(RAC3STATUS.HEAT_STREET_FIX, 1)
 
     ##################
@@ -1028,16 +1028,15 @@ class Rac3Interface(GameInterface):
             addr = vidcomic_data[name].UNLOCK_ADDRESS
             if index == 0:
                 continue
-            if index > prog_comic.status:
-                self._write8(addr, 0)  # Disable Vidcomics not unlocked yet
-            elif index <= prog_comic.status:
-                unlock_delay_count = 1
-                if index == 2:
-                    unlock_delay_count = 30  # WA for Annihilation Nation Proceeding
+
+            unlock_delay_count = 30 if index == 2 else 1  # extra delay for Annihilation Nation Proceeding
+            if comic.unlock_delay < unlock_delay_count:
                 comic.unlock_delay += 1
-                if comic.unlock_delay > unlock_delay_count:
-                    self._write8(addr, 1)
-                    comic.unlock_delay = 0
+                continue
+            comic.unlock_delay = 0
+
+            value = 0 if index > prog_comic.status else 1
+            self._write8(addr, value)
 
     def armor_cycler(self):
         """Cycle through all armors and update their state"""
