@@ -1,12 +1,14 @@
 """This module contains functions related to the game client"""
+from asyncio import sleep
 from time import time
+from traceback import format_exc
 from typing import TYPE_CHECKING
 
 from CommonClient import logger
 from NetUtils import ClientStatus
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.texthelper import get_sent_item_message
-from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE
+from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.input import RAC3INPUT
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
@@ -21,9 +23,155 @@ if TYPE_CHECKING:
     from worlds.rac3.client.client import Rac3Context as Context
 
 
+async def pcsx2_sync_task(ctx: 'Context'):
+    """Connects to PCSX2 and loops through update functions until the connection is closed."""
+    logger.info(f"Starting {RAC3OPTION.GAME_TITLE_FULL} Connector")
+    connected_to_game: bool = False
+    connection_retry_attempts: int = 0
+    while not ctx.exit_event.is_set():
+        try:
+            connected_to_server = (ctx.server is not None) and (ctx.slot is not None)
+            if connected_to_server and not ctx.is_connected_to_server:
+                logger.info("Connected to server")
+                ctx.is_connected_to_server = connected_to_server
+                if ctx.slot_data.get(RAC3OPTION.VERSION, "0.0.0") < RAC3OPTION.VERSION_NUMBER:
+                    await ctx.disconnect()
+                    logger.warning(
+                        f"Client is v{RAC3OPTION.VERSION_NUMBER}, please downgrade to v"
+                        f"{ctx.slot_data[RAC3OPTION.VERSION]}")
+                    await sleep(10)
+                    continue
+                if ctx.slot_data[RAC3OPTION.VERSION] > RAC3OPTION.VERSION_NUMBER:
+                    await ctx.disconnect()
+                    logger.warning(
+                        f"Client is v{RAC3OPTION.VERSION_NUMBER}, please upgrade to v"
+                        f"{ctx.slot_data[RAC3OPTION.VERSION]}")
+                    await sleep(10)
+                    continue
+                if connected_to_game:
+                    ctx.game_interface.init()
+                else:
+                    logger.info("Waiting for game connection...")
+
+            connected_to_game = ctx.game_interface.get_connection_state()
+            if connected_to_game and not ctx.is_connected_to_game:
+                logger.info(f"Connected to {RAC3OPTION.GAME_TITLE_FULL}")
+                ctx.last_pine_message = None
+                ctx.is_connected_to_game = connected_to_game
+                if connected_to_server:
+                    ctx.game_interface.init()
+                else:
+                    logger.info("Waiting for server connection...")
+
+            if not connected_to_game and not ctx.game_interface.is_connecting:
+                if ctx.is_connected_to_game:
+                    ctx.game_interface.disconnect_from_game()
+                    logger.info("Connection to game lost")
+                elif ctx.last_pine_message is None:
+                    message = "Not connected to the PCSX2 instance"
+                    logger.info(message)
+                    ctx.last_pine_message = message
+                ctx.game_interface.connect_to_game()
+                if not ctx.game_interface.get_connection_state():
+                    if connection_retry_attempts < 3:
+                        connection_retry_attempts += 1
+
+                    retry_wait = connection_retry_attempts * 10
+                    logger.warning(
+                        f'Could not connect to RaC3! Will retry connection in {retry_wait} seconds...\nPlease check '
+                        f'your PINE settings both global and game specific, and restart PCSX2 if you changed them.')
+                    await sleep(retry_wait)
+                else:
+                    connection_retry_attempts = 0
+
+            if not connected_to_server:
+                if ctx.server:
+                    ctx.last_server_message = None
+                elif ctx.last_server_message is None:
+                    message = "Waiting for player to connect to server"
+                    logger.info(message)
+                    ctx.last_server_message = message
+
+            if connected_to_game and connected_to_server:
+                await _handle_game_ready(ctx)
+
+        except ConnectionError:
+            logger.info(f"ConnectionError")
+            ctx.game_interface.disconnect_from_game()
+        except Exception as e:
+            logger.info(f"ExceptionError")
+            if isinstance(e, RuntimeError):
+                logger.error(str(e))
+            else:
+                logger.error(format_exc())
+            # await sleep(3)
+
+        await sleep(0.5)
+    logger.info(f"{RAC3OPTION.GAME_TITLE_FULL} Client Shutdown")
+
+
+async def _handle_game_ready(ctx: 'Context') -> None:
+    # Quite a lot of stuff ended up in this function, even though it might
+    # have fit better in init(). It just didn't work when I put it there,
+    # probably because of when the game loads stuff.
+
+    if ctx.slot_data is not None:
+        # Check if exit to main menu
+        menu = ctx.main_menu
+        ctx.main_menu = ctx.game_interface.check_main_menu()
+
+        if ctx.main_menu:
+            if menu:
+                ctx.game_interface.main_menu = True
+            if ctx.last_game_message is None:
+                message = "Currently on Main Menu, please load a file..."
+                logger.info(message)
+                ctx.last_game_message = message
+            await sleep(5)
+
+        if menu is True and ctx.main_menu is False:
+            await ctx.send_msgs([ClientMessage.status_update(ClientStatus.CLIENT_PLAYING)])
+            logger.info("Starting game...")
+            ctx.game_interface.reset_file()
+            logger.info("Old state removed!")
+            logger.info("Checking for items...")
+            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
+            logger.info(f"Items Received: {len(ctx.items_received)}")
+            items_to_process = ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, len(ctx.items_received))
+            counter = 0
+            for count, item in enumerate(ctx.items_received):
+                counter += 1
+                logger.debug(f"Processing item {count}: {ctx.item_names.lookup_in_slot(item.item, item.player)}")
+                if count > items_to_process:
+                    logger.debug(f"Handle Later")
+                    continue
+                ctx.game_interface.important_items(item.item, ctx.player_names[ctx.slot], item.location)
+            ctx.processed_item_count = min(counter, items_to_process)
+            await ctx.send_msgs([ClientMessage.set_processed(ctx.processed_item_count)])
+            logger.info(f"Items Processed: {ctx.processed_item_count}")
+            logger.info("Checking locations...")
+            counter = 0
+            for loc in ctx.checked_locations:
+                logger.debug(f"Collecting location: {ctx.location_names.lookup_in_slot(loc, ctx.slot)}")
+                ctx.game_interface.collect_location(ctx.location_names.lookup_in_slot(loc, ctx.slot))
+                counter += 1
+            logger.info(f"Locations collected: {counter}")
+            ctx.game_interface.fix_health()
+            ctx.game_interface.reset_death_count()
+            logger.info("Checking cosmetics...")
+            ctx.game_interface.add_cosmetics()
+            logger.info("Load the latest autosave or enter the Armor Vendor to apply cosmetics")
+            logger.info("Game READY!")
+
+        if not ctx.main_menu:
+            await update(ctx)
+            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
+
+
 ##################################################
 # Only change point: Change filename/Class name  #
 ##################################################
+
 
 # common functions
 async def update(ctx: 'Context') -> None:
@@ -49,31 +197,25 @@ async def update(ctx: 'Context') -> None:
     # logger.info(f"Update is called")
 
 
-async def init(ctx: 'Context') -> None:
-    """Called when the player connects to the AP server"""
-    ctx.game_interface.init()
-
-
-async def handle_planet_changed(ctx: 'Context') -> None:
-    """Checks if the player is going to a different planet"""
+async def handle_intro_skip(ctx: 'Context') -> None:
+    """Checks if the intro skip option is enabled, then skips veldin and sets required story/mission flags"""
     if ctx.slot_data is None:
         return
-    last_planet = ctx.current_planet
-    ctx.current_planet, _map = ctx.game_interface.map_switch()
-    if last_planet is not ctx.current_planet:
-
-        if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
-            ctx.game_interface.tyhrranosis_fix()
-
-        ctx.game_interface.softlock_warning()
-
-        await ctx.send_msgs([ClientMessage.set_map(ctx.slot, ctx.team, _map)])
+    if (ctx.slot_data.get(RAC3OPTION.INTRO_SKIP, False)
+            and ctx.current_planet == RAC3REGION.VELDIN and not ctx.game_interface.homewarping):
+        locations = []
+        for ap_code in [ap_code for ap_code in ctx.missing_locations if
+                        RAC3_LOCATION_DATA_TABLE[ctx.location_names.lookup_in_slot(ap_code, ctx.slot)].REGION
+                        == RAC3REGION.VELDIN]:
+            ctx.game_interface.collect_location(ctx.location_names.lookup_in_slot(ap_code, ctx.slot)[ap_code])
+            ctx.locations_checked.update([ap_code])
+            locations.append(ap_code)
+        ctx.locations_checked.update(await ctx.check_locations(locations))
+        ctx.game_interface.homewarp()
 
 
 async def handle_received_items(ctx: 'Context') -> None:
-    """
-    共通的なアイテム受信処理。
-    """
+    """Process items received from the AP server"""
     if ctx.slot_data is None:
         return
 
@@ -91,9 +233,7 @@ async def handle_received_items(ctx: 'Context') -> None:
 
 
 async def handle_checked_locations(ctx: 'Context') -> None:
-    """
-    共通的なロケーションチェック処理。
-    """
+    """Check for new locations collected, send these to the AP server"""
     if ctx.slot_data is None:
         return
 
@@ -144,6 +284,33 @@ async def handle_deathlink(ctx: 'Context') -> None:
             logger.debug(f'Sent Death, queue: {ctx.queued_deaths}')
 
 
+async def handle_check_goal(ctx: 'Context') -> None:
+    """Checks if the goal is completed"""
+    if ctx.slot_data is None:
+        return
+
+    victory_code = ctx.game_interface.get_victory_code()
+    if victory_code in ctx.checked_locations:
+        ctx.finished_game = True
+        await ctx.send_msgs([ClientMessage.status_update(ClientStatus.CLIENT_GOAL)])
+
+
+async def handle_planet_changed(ctx: 'Context') -> None:
+    """Checks if the player is changing planet"""
+    if ctx.slot_data is None:
+        return
+    last_planet = ctx.current_planet
+    ctx.current_planet, _map = ctx.game_interface.map_switch()
+    if last_planet is not ctx.current_planet:
+
+        if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
+            ctx.game_interface.tyhrranosis_fix()
+
+        ctx.game_interface.softlock_warning()
+
+        await ctx.send_msgs([ClientMessage.set_map(ctx.slot, ctx.team, _map)])
+
+
 async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load: bool = False):
     """Check if the player should respawn"""
     if ctx.game_interface.is_reloading:
@@ -180,36 +347,9 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
     return
 
 
-async def handle_intro_skip(ctx: 'Context') -> None:
-    """Checks if the intro skip option is enabled, then skips veldin and sets required story/mission flags"""
-    if ctx.slot_data is None:
-        return
-    if (ctx.slot_data.get(RAC3OPTION.INTRO_SKIP, False)
-            and ctx.current_planet == RAC3REGION.VELDIN and not ctx.game_interface.homewarping):
-        locations = []
-        for ap_code in [ap_code for ap_code in ctx.missing_locations if
-                        RAC3_LOCATION_DATA_TABLE[LOCATION_FROM_AP_CODE[ap_code]].REGION == RAC3REGION.VELDIN]:
-            ctx.game_interface.collect_location(LOCATION_FROM_AP_CODE[ap_code])
-            ctx.locations_checked.update([ap_code])
-            locations.append(ap_code)
-        ctx.locations_checked.update(await ctx.check_locations(locations))
-        ctx.game_interface.homewarp()
-
-
 async def handle_sequence_break(ctx: 'Context') -> None:
     """Undoes the flags for infobot locations when sequence breaking if you haven't checked the corresponding location
     yet"""
     if ctx.slot_data is None:
         return
     ctx.game_interface.sequence_break()
-
-
-async def handle_check_goal(ctx: 'Context') -> None:
-    """Checks if the goal is completed"""
-    if ctx.slot_data is None:
-        return
-
-    victory_code = ctx.game_interface.get_victory_code()
-    if victory_code in ctx.checked_locations:
-        ctx.finished_game = True
-        await ctx.send_msgs([ClientMessage.status_update(ClientStatus.CLIENT_GOAL)])
