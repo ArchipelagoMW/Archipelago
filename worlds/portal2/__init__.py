@@ -154,11 +154,8 @@ class Portal2World(World):
     # Overridden methods called by Main.py in execution order
 
     def generate_early(self):
-        self.maps_in_use = set(map_complete_table.keys())
-        # Cutscene sanity option
-        if self.options.cutscenelevels:
-            self.maps_in_use.update(cutscene_completion_table.keys())
-
+        self.multiworld.early_items[self.player][portal_gun_2] = 1
+        
         # Universal Tracker Support
         re_gen_passthrough = getattr(self.multiworld, "re_gen_passthrough", {})
         if re_gen_passthrough and self.game in re_gen_passthrough:
@@ -166,9 +163,14 @@ class Portal2World(World):
 
             if "chapter_dict" in slot_data:
                 self.chapter_maps_dict = slot_data.get("chapter_dict", [])
-            return
+                print(self.chapter_maps_dict)
+                self.chapter_maps_dict = {f"Chapter {key}":value for key, value in self.chapter_maps_dict.items()}
+                return
         
-        self.multiworld.early_items[self.player][portal_gun_2] = 1
+        self.maps_in_use = set(map_complete_table.keys())
+        # Cutscene levels option
+        if self.options.cutscenelevels:
+            self.maps_in_use.update(cutscene_completion_table.keys())
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
