@@ -59,7 +59,7 @@ class AHITContext(CommonContext):
 
     async def send_msgs_proxy(self, msgs: Iterable[dict]) -> bool:
         """ `msgs` JSON serializable """
-        if not self.endpoint or not self.endpoint.socket.open or self.endpoint.socket.closed:
+        if not self.endpoint:
             return False
 
         if DEBUG:
@@ -72,16 +72,16 @@ class AHITContext(CommonContext):
         await super().disconnect(allow_autoreconnect)
 
     async def disconnect_proxy(self):
-        if self.endpoint and not self.endpoint.socket.closed:
+        if self.endpoint:
             await self.endpoint.socket.close()
         if self.proxy_task is not None:
             await self.proxy_task
 
     def is_connected(self) -> bool:
-        return self.server and self.server.socket.open
+        return self.server and self.server.socket.state != websockets.protocol.State.OPEN
 
     def is_proxy_connected(self) -> bool:
-        return self.endpoint and self.endpoint.socket.open
+        return self.endpoint and self.endpoint.socket.state != websockets.protocol.State.OPEN
 
     def on_print_json(self, args: dict):
         text = self.gamejsontotext(deepcopy(args["data"]))
