@@ -207,7 +207,7 @@ async def handle_intro_skip(ctx: 'Context') -> None:
         for ap_code in [ap_code for ap_code in ctx.missing_locations if
                         RAC3_LOCATION_DATA_TABLE[ctx.location_names.lookup_in_slot(ap_code, ctx.slot)].REGION
                         == RAC3REGION.VELDIN]:
-            ctx.game_interface.collect_location(ctx.location_names.lookup_in_slot(ap_code, ctx.slot)[ap_code])
+            ctx.game_interface.collect_location(ctx.location_names.lookup_in_slot(ap_code, ctx.slot))
             ctx.locations_checked.update([ap_code])
             locations.append(ap_code)
         ctx.locations_checked.update(await ctx.check_locations(locations))
