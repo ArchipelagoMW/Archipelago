@@ -93,6 +93,7 @@ class Wargroove2World(World):
     ai_port_costs: typing.Dict[int, float] = {}
     fill_slot_data_event: threading.Event = threading.Event()
     stage_assert_generate_called: bool = False
+    filler_item_counter: int = 0
 
     item_name_to_id = {name: data.code for name, data in item_table.items() if data.code is not None}
     location_name_to_id = {name: code for name, code in location_table.items() if code is not None}
@@ -180,9 +181,6 @@ class Wargroove2World(World):
 
         for _ in range(5):
             pool.append(Wargroove2Item("Commander Defense Boost", self.player))
-
-        for _ in range(15):
-            pool.append(Wargroove2Item("Income Boost", self.player))
 
         # Matching number of unfilled locations with filler items
         total_locations = 0
@@ -376,7 +374,12 @@ class Wargroove2World(World):
         return slot_data
 
     def get_filler_item_name(self) -> str:
-        return "Groove Boost"
+        filler_item_name: str = "Groove Boost"
+        if (self.filler_item_counter % 3) == 0:
+            filler_item_name = "Income Boost"
+
+        self.filler_item_counter += 1
+        return filler_item_name
 
     def get_total_locations_in_level(self, level: Wargroove2Level) -> int:
         total_locations = 0
