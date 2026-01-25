@@ -977,7 +977,7 @@ async def on_client_joined(ctx: Context, client: Client):
                               "If your client supports it, "
                               "you may have additional local commands you can list with /help.",
                       {"type": "Tutorial"})
-    if not any(isinstance(extension, PerMessageDeflate) for extension in client.socket.extensions):
+    if not any(isinstance(extension, PerMessageDeflate) for extension in client.socket.protocol.extensions):
         ctx.notify_client(client, "Warning: your client does not support compressed websocket connections! "
                                   "It may stop working in the future. If you are a player, please report this to the "
                                   "client's developer.")
@@ -2246,7 +2246,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
     def _cmd_exit(self) -> bool:
         """Shutdown the server"""
         try:
-            self.ctx.server.ws_server.close()
+            self.ctx.server.server.close()
         finally:
             self.ctx.exit_event.set()
         return True
@@ -2640,7 +2640,7 @@ async def auto_shutdown(ctx, to_cancel=None):
         await asyncio.wait_for(ctx.exit_event.wait(), ctx.auto_shutdown)
 
     def inactivity_shutdown():
-        ctx.server.ws_server.close()
+        ctx.server.server.close()
         ctx.exit_event.set()
         if to_cancel:
             for task in to_cancel:
