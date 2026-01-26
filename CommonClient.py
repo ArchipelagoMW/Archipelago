@@ -15,7 +15,7 @@ import ModuleUpdate
 ModuleUpdate.update()
 
 import websockets
-from websockets.asyncio.client import connect as websocket_connect
+from websockets.asyncio.client import connect as websockets_connect
 
 import Utils
 
