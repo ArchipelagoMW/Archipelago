@@ -562,7 +562,7 @@ async def snes_write(ctx: SNIContext, write_list: typing.List[typing.Tuple[int, 
         await ctx.snes_request_lock.acquire()
 
         if ctx.snes_state != SNESState.SNES_ATTACHED or ctx.snes_socket is None or \
-                not ctx.snes_socket.state != websockets.protocol.State.OPEN:
+                not ctx.snes_socket.state == websockets.protocol.State.OPEN:
             return False
 
         PutAddress_Request: SNESRequest = {"Opcode": "PutAddress", "Operands": [], 'Space': 'SNES'}
