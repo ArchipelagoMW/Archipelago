@@ -5,7 +5,7 @@ import multiprocessing
 import warnings
 
 
-if sys.platform in ("win32", "darwin") and sys.version_info < (3, 11, 9):
+if sys.platform in ("win32", "darwin") and not (3, 11, 9) <= sys.version_info < (3, 14, 0):
     # Official micro version updates. This should match the number in docs/running from source.md.
     raise RuntimeError(f"Incompatible Python Version found: {sys.version_info}. "
                        "Official 3.11.9 through 3.13.x is supported.")
