@@ -1240,8 +1240,10 @@ class Rac3Interface(GameInterface):
         if self.planet != RAC3REGION.QWARKS_HIDEOUT:
             # reset PDA vendor when leaving Qwarks Hideout
             return 0
-        table_start = RAC3STATUS.HIDEOUT_MOBY_TABLE_START
         target_moby_id = RAC3STATUS.PDA_VENDOR_MOBY_ID
+        if self.pda_vendor and self._read16(self.pda_vendor + 0xB2) == target_moby_id:
+            return self.pda_vendor
+        table_start = RAC3STATUS.HIDEOUT_MOBY_TABLE_START
         moby_offset = 0
         current_id = 0
         for traversal in range(1, 10001):
