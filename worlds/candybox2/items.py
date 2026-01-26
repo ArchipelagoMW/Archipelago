@@ -355,6 +355,23 @@ items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
 
 filler_items: list[str] = [CandyBox2ItemName.CANDY, CandyBox2ItemName.TWENTY_CANDIES]
 
+item_groups = {
+    "Chocolate Bars": {
+        CandyBox2ItemName.CHOCOLATE_BAR.value,
+        CandyBox2ItemName.THREE_CHOCOLATE_BARS.value,
+        CandyBox2ItemName.FOUR_CHOCOLATE_BARS.value
+    },
+    "Lollipops": {
+        CandyBox2ItemName.LOLLIPOP.value,
+        CandyBox2ItemName.LOLLIPOP.value,
+    },
+    "Candies": {
+        CandyBox2ItemName.CANDY.value,
+        CandyBox2ItemName.TWENTY_CANDIES.value,
+        CandyBox2ItemName.ONE_HUNDRED_CANDIES.value,
+        CandyBox2ItemName.FIVE_HUNDRED_CANDIES.value,
+    }
+}
 
 def weapon_item_count(world: "CandyBox2World", weapon: int):
     if world.starting_weapon == weapon:
