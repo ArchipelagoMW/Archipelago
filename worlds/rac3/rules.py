@@ -694,11 +694,11 @@ def set_rules(world: "RaC3World"):
         RAC3NANOTECH.LEVEL_93: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
         RAC3NANOTECH.LEVEL_94: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
         RAC3NANOTECH.LEVEL_95: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
-        RAC3NANOTECH.LEVEL_96: lambda state: state.has_from_list(infobot_data.keys(), world.player, 20),
-        RAC3NANOTECH.LEVEL_97: lambda state: state.has_from_list(infobot_data.keys(), world.player, 20),
-        RAC3NANOTECH.LEVEL_98: lambda state: state.has_from_list(infobot_data.keys(), world.player, 20),
-        RAC3NANOTECH.LEVEL_99: lambda state: state.has_from_list(infobot_data.keys(), world.player, 20),
-        RAC3NANOTECH.LEVEL_100: lambda state: state.has_from_list(infobot_data.keys(), world.player, 20),
+        RAC3NANOTECH.LEVEL_96: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
+        RAC3NANOTECH.LEVEL_97: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
+        RAC3NANOTECH.LEVEL_98: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
+        RAC3NANOTECH.LEVEL_99: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
+        RAC3NANOTECH.LEVEL_100: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
     }
     for region in world.multiworld.get_regions(world.player):
         for entrance in region.entrances:
