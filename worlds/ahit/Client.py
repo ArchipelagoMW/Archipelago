@@ -78,10 +78,10 @@ class AHITContext(CommonContext):
             await self.proxy_task
 
     def is_connected(self) -> bool:
-        return self.server and self.server.socket.state != websockets.protocol.State.OPEN
+        return self.server and self.server.socket.state == websockets.protocol.State.OPEN
 
     def is_proxy_connected(self) -> bool:
-        return self.endpoint and self.endpoint.socket.state != websockets.protocol.State.OPEN
+        return self.endpoint and self.endpoint.socket.state == websockets.protocol.State.OPEN
 
     def on_print_json(self, args: dict):
         text = self.gamejsontotext(deepcopy(args["data"]))
