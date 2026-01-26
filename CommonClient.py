@@ -15,7 +15,7 @@ import ModuleUpdate
 ModuleUpdate.update()
 
 import websockets
-import websockets.asyncio.client
+from websockets.asyncio.client import connect as websocket_connect
 
 import Utils
 
@@ -871,7 +871,7 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
     logger.info(f'Connecting to Archipelago server at {address}')
     try:
         port = server_url.port or 38281  # raises ValueError if invalid
-        socket = await websockets.asyncio.client.connect(address, port=port, ping_timeout=None, ping_interval=None,
+        socket = await websockets_connect(address, port=port, ping_timeout=None, ping_interval=None,
                                           ssl=get_ssl_context() if address.startswith("wss://") else None,
                                           max_size=ctx.max_size)
         if ctx.ui is not None:

@@ -28,7 +28,6 @@ if __name__ == "__main__":
     Utils.init_logging("SNIClient", exception_logger="Client")
 
 import colorama
-# from websockets.client import connect as websockets_connect, WebSocketClientProtocol
 import websockets
 from websockets.asyncio.client import connect as websockets_connect
 from websockets.asyncio.client import ClientConnection as WebSocketClientProtocol
