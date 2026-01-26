@@ -14,7 +14,7 @@ class RaC3Web(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Bread"]
+        ["Taoshi", "Myth197", "AmondoVagyok", "Yuxia228"]
     )]
     bug_report_page = "https://github.com/Taoshix/Archipelago-RaC3/issues"
     rich_text_options_doc = True
