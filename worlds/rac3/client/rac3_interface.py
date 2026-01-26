@@ -11,7 +11,7 @@ from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
 from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_data, infobot_data, ITEM_FROM_AP_CODE,
                                              ITEM_NAME_FROM_ID, non_prog_weapon_data, PROG_TO_NAME_DICT,
-                                             RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data, weapon_upgrade_data)
+                                             RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data)
 from worlds.rac3.constants.data.location import (LOCATION_FROM_AP_CODE, LOCATION_TO_INFOBOT_FLAG,
                                                  RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA,
                                                  REGION_TO_INFOBOT_LOCATION)
@@ -465,7 +465,7 @@ class Rac3Interface(GameInterface):
                 valid_weapons = []
                 for weapon_name, weapon_data in non_prog_weapon_data.items():
                     if self.UnlockItem[weapon_name].status:
-                        level = weapon_upgrade_data[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL
+                        level = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[self._read8(weapon_data.LEVEL_ADDRESS)]].LEVEL
                         if ((weapon_name != RAC3ITEM.RY3N0 and level < 5) or
                                 (weapon_name == RAC3ITEM.RY3N0 and level < 4) or
                                 (weapon_name == RAC3ITEM.RY3N0 and level < 5 and not self.ryno)):
@@ -531,12 +531,12 @@ class Rac3Interface(GameInterface):
         weapon_data = non_prog_weapon_data[weapon_name]
         current_id = self._read8(weapon_data.LEVEL_ADDRESS)
         current_name = ITEM_NAME_FROM_ID[current_id]
-        current_level = weapon_upgrade_data[current_name].LEVEL
+        current_level = RAC3_ITEM_DATA_TABLE[current_name].LEVEL
         if current_level < 5:
             target_level = current_level + 1
             target_id = UPGRADE_DICT[weapon_name][target_level - 1]
             target_name = ITEM_NAME_FROM_ID[target_id]
-            target_xp = weapon_upgrade_data[target_name].XP_THRESHOLD
+            target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
             logger.debug(f'level up {weapon_name} to {target_name}, target level: {current_level}, '
                          f'target id: {target_id}, target xp:{target_xp}')
             self._write32(weapon_data.XP_ADDRESS, target_xp)
