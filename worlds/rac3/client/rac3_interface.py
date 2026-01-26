@@ -270,7 +270,7 @@ class Rac3Interface(GameInterface):
         # self.UnlockItem[RAC3ITEM.STARSHIP_PHOENIX].status = 1
         # self.UnlockItem[RAC3ITEM.MUSEUM].status = 1
         self.timers.clear()
-
+        self.checked_locations.clear()
         self.gadget_cycler()
         self.planet_cycler()
         self.weapon_cycler()
