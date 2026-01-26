@@ -55,17 +55,47 @@ class Rac3Interface(GameInterface):
         def __repr__(self):
             return f'{{ status: {self.status}, unlock_delay: {self.unlock_delay} }}'
 
+    @dataclass
+    class Options:
+        """Data structure for storing options"""
+        start_inventory_from_pool: dict[str, int]
+        starting_weapons: dict[str, int]
+        bolt_and_xp_multiplier: int
+        enable_progressive_weapons: int
+        armor_upgrade: int
+        skill_points: int
+        trophies: int
+        titanium_bolts: int
+        nanotech_milestones: int
+        exclude_locations: set[str]
+        deathlink: int
+        ship_nose: int
+        ship_wings: int
+        ship_skin: int
+        skin: int
+        traps_enabled: int
+        trap_weight: dict[str, int]
+        rangers: int
+        arena: int
+        vidcomics: int
+        vr_challenges: int
+        sewer_crystals: int
+        sewer_limitation: int
+        nanotech_limitation: int
+        weapon_vendors: int
+        filler_weight: dict[str, int]
+        one_hp_challenge: int
+        intro_skip: int
+        holostar_skip: int
+        clank_options: int
+
     UnlockItem: dict[str, UnlockData] = None
-    boltAndXPMultiplier: int = None
+    options = Options
     boltAndXPMultiplierValue: int = None
     self_respawning: bool = False
     reloading_handled: bool = False
     is_reloading: int = 0
-    ship: int = 0
-    ship_skin: int = 0
-    skin: int = 0
     timers: dict[str, float] = {}
-    weaponLevelLockFlag: bool = None
     planet: str = RAC3REGION.GALAXY
     player_type: str = RAC3PLAYERTYPE.RATCHET
     vehicle: int = 0
@@ -166,12 +196,37 @@ class Rac3Interface(GameInterface):
     def proc_option(self, slot_data: dict[str, Any]):
         """Process slot option data received when connecting to the server"""
         logger.debug(f'{slot_data}')
-        self.boltAndXPMultiplier = slot_data[RAC3OPTION.BOLT_AND_XP_MULTIPLIER]
-        self.weaponLevelLockFlag = slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]
-        self.ship = slot_data[RAC3OPTION.SHIP_NOSE] + slot_data[RAC3OPTION.SHIP_WINGS]
-        self.ship_skin = slot_data[RAC3OPTION.SHIP_SKIN]
-        self.skin = slot_data[RAC3OPTION.SKIN]
         self.one_hp_challenge = slot_data[RAC3OPTION.ONE_HP_CHALLENGE]
+        self.options.start_inventory_from_pool = slot_data[RAC3OPTION.START_INVENTORY_FROM_POOL]
+        self.options.starting_weapons = slot_data[RAC3OPTION.STARTING_WEAPONS]
+        self.options.bolt_and_xp_multiplier = slot_data[RAC3OPTION.BOLT_AND_XP_MULTIPLIER]
+        self.options.enable_progressive_weapons = slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]
+        self.options.armor_upgrade = slot_data[RAC3OPTION.ARMOR_UPGRADE]
+        self.options.skill_points = slot_data[RAC3OPTION.SKILL_POINTS]
+        self.options.trophies = slot_data[RAC3OPTION.TROPHIES]
+        self.options.titanium_bolts = slot_data[RAC3OPTION.TITANIUM_BOLTS]
+        self.options.nanotech_milestones = slot_data[RAC3OPTION.NANOTECH_MILESTONES]
+        self.options.exclude_locations = slot_data[RAC3OPTION.EXCLUDE]
+        self.options.deathlink = slot_data[RAC3OPTION.DEATHLINK]
+        self.options.ship_nose = slot_data[RAC3OPTION.SHIP_NOSE]
+        self.options.ship_wings = slot_data[RAC3OPTION.SHIP_WINGS]
+        self.options.ship_skin = slot_data[RAC3OPTION.SHIP_SKIN]
+        self.options.skin = slot_data[RAC3OPTION.SKIN]
+        self.options.traps_enabled = slot_data[RAC3OPTION.ENABLE_TRAPS]
+        self.options.trap_weight = slot_data[RAC3OPTION.TRAP_WEIGHT]
+        self.options.rangers = slot_data[RAC3OPTION.RANGERS]
+        self.options.arena = slot_data[RAC3OPTION.ARENA]
+        self.options.vidcomics = slot_data[RAC3OPTION.VIDCOMICS]
+        self.options.vr_challenges = slot_data[RAC3OPTION.VR_CHALLENGES]
+        self.options.sewer_crystals = slot_data[RAC3OPTION.SEWER_CRYSTALS]
+        self.options.sewer_limitation = slot_data[RAC3OPTION.SEWER_LIMITATION]
+        self.options.nanotech_limitation = slot_data[RAC3OPTION.NANOTECH_LIMITATION]
+        self.options.weapon_vendors = slot_data[RAC3OPTION.WEAPON_VENDORS]
+        self.options.filler_weight = slot_data[RAC3OPTION.FILLER_WEIGHT]
+        self.options.one_hp_challenge = slot_data[RAC3OPTION.ONE_HP_CHALLENGE]
+        self.options.intro_skip = slot_data[RAC3OPTION.INTRO_SKIP]
+        self.options.holostar_skip = slot_data[RAC3OPTION.HOLOSTAR_SKIP]
+        self.options.clank_options = slot_data[RAC3OPTION.CLANK_OPTIONS]
 
     ########################################
     # Called on Game and Server Connection #
@@ -186,7 +241,7 @@ class Rac3Interface(GameInterface):
 
         # Proc options
         # Bolt and XPMultiplier
-        self.boltAndXPMultiplierValue = int(self.boltAndXPMultiplier)
+        self.boltAndXPMultiplierValue = int(self.options.bolt_and_xp_multiplier)
         # EnableWeaponLevelAsItem: if enabled, EXP disabler is running.
 
     def check_main_menu(self):
@@ -275,10 +330,10 @@ class Rac3Interface(GameInterface):
 
     def add_cosmetics(self):
         """Apply the generated cosmetics to the current game"""
-        self._write8(RAC3STATUS.SHIP_CONFIG, self.ship)
-        self._write8(RAC3STATUS.SHIP_SKIN, self.ship_skin)
-        self._write8(RAC3STATUS.PLAYER_SKIN, self.skin)
-        self._write8(RAC3STATUS.PLAYER_SKIN_2, self.skin)
+        self._write8(RAC3STATUS.SHIP_CONFIG, self.options.ship_nose + self.options.ship_wings)
+        self._write8(RAC3STATUS.SHIP_SKIN, self.options.ship_skin)
+        self._write8(RAC3STATUS.PLAYER_SKIN, self.options.skin)
+        self._write8(RAC3STATUS.PLAYER_SKIN_2, self.options.skin)
 
     #############################
     # Start of Main Update Loop #
@@ -828,6 +883,9 @@ class Rac3Interface(GameInterface):
                 self.vidcomic_2_fix += 1
                 self._write8(RAC3STATUS.HEAT_STREET_FIX, 1)
 
+        if self.options.holostar_skip:
+            self._write8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.HOLOSTAR_STUDIOS_CLANK].ID, 1)
+
     ##################
     # End of Main Loop #
     ##################
@@ -841,7 +899,7 @@ class Rac3Interface(GameInterface):
         self.vidcomic_cycler()
         self.armor_cycler()
         self.timer_cycler()
-        if self.weaponLevelLockFlag:
+        if self.options.enable_progressive_weapons:
             self.weapon_exp_cycler()
         self.verify_quick_select_and_last_used()
         self.clank_cycler()

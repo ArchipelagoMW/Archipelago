@@ -212,6 +212,7 @@ class RaC3World(World):
             RAC3OPTION.FILLER_WEIGHT: self.options.filler_weight.value,
             RAC3OPTION.ONE_HP_CHALLENGE: self.options.one_hp_challenge.value,
             RAC3OPTION.INTRO_SKIP: self.options.intro_skip.value,
+            RAC3OPTION.HOLOSTAR_SKIP: self.options.holostar_skip.value,
             RAC3OPTION.CLANK_OPTIONS: self.options.clank_options.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }

@@ -1,4 +1,8 @@
+"""This module defines constants for RAC3 options"""
+
+
 class RAC3OPTION:
+    """String constants for RAC3 options"""
     OPTIONS = "Options"
     GAME_TITLE = "Rac3"
     GAME_TITLE_FULL = "Ratchet & Clank 3"
@@ -34,4 +38,5 @@ class RAC3OPTION:
     FILLER_WEIGHT = "Filler Weight"
     ONE_HP_CHALLENGE = "One HP Challenge"
     INTRO_SKIP = "Intro Skip"
+    HOLOSTAR_SKIP = "Holostar Skip"
     CLANK_OPTIONS = "Clank Pack Options"
