@@ -101,7 +101,7 @@ class RAC3ITEMDATA:
         if tags is not None:
             all_tags.extend(tags)
         amount: int = 32 * xp
-        return RAC3ITEMDATA(idx, power=power, ammo=ammo, xp=amount, level=idx - base,
+        return RAC3ITEMDATA(idx, power=power, ammo=ammo, xp=amount, level=idx - base + 1,
                             level_address=base + RAC3STATUS.LEVEL_TABLE, ap_classification=ItemClassification.useful,
                             tags=all_tags)
 
