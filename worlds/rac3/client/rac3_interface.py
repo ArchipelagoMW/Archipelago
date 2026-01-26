@@ -592,10 +592,13 @@ class Rac3Interface(GameInterface):
             target_id = UPGRADE_DICT[weapon_name][target_level - 1]
             target_name = ITEM_NAME_FROM_ID[target_id]
             target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
+            target_ammo = RAC3_ITEM_DATA_TABLE[target_name].AMMO
             logger.debug(f'level up {weapon_name} to {target_name}, target level: {current_level}, '
                          f'target id: {target_id}, target xp:{target_xp}')
             self._write32(weapon_data.XP_ADDRESS, target_xp)
             self._write8(weapon_data.LEVEL_ADDRESS, target_id)
+            if target_ammo:
+                self._write32(weapon_data.AMMO_ADDRESS, target_ammo)
 
     def update_equip(self, name: str):
         """Equip the most recently collected weapon/gadget, update recent uses"""
