@@ -245,96 +245,100 @@ class Wargroove2World(World):
 
     @classmethod
     def stage_generate_output(cls, multiworld: MultiWorld, output_directory):
-        player_to_sphere: dict[int, typing.List[typing.Tuple[int, str]]] = {}
-        sphere_number = 0
-        highest_wg2_sphere = 0
-        for sphere in multiworld.get_spheres():
-            for location in sphere:
-                if location.game == "Wargroove 2":
-                    assert isinstance(location, Wargroove2Location)
-                    if (location.game == "Wargroove 2" and location.name.endswith("Victory") and
-                            location.name != "Humble Beginnings Rebirth: Victory"):
-                        if location.player in player_to_sphere:
-                            player_to_sphere[location.player].append((sphere_number, location.parent_region.name))
-                        else:
-                            player_to_sphere[location.player] = [(sphere_number, location.parent_region.name)]
-                        highest_wg2_sphere = sphere_number
-            sphere_number += 1
-        for world in multiworld.get_game_worlds("Wargroove 2"):
-            assert isinstance(world, Wargroove2World)
-            world.player_barracks_costs = calculate_production_costs(
-                                       world.options.player_barracks_early_sphere.value / 100.0,
-                                       world.options.player_barracks_late_sphere.value / 100.0,
-                                       world.options.player_barracks_early_distance.value / 100.0,
-                                       world.options.player_barracks_late_distance.value / 100.0,
-                                       world.options.player_barracks_random_low_cost.value / 100.0,
-                                       world.options.player_barracks_random_high_cost.value / 100.0,
-                                       highest_wg2_sphere, world.random_barracks_cost_values,
-                                       player_to_sphere, world)
-            world.player_tower_costs = calculate_production_costs(
-                                       world.options.player_tower_early_sphere.value / 100.0,
-                                       world.options.player_tower_late_sphere.value / 100.0,
-                                       world.options.player_tower_early_distance.value / 100.0,
-                                       world.options.player_tower_late_distance.value / 100.0,
-                                       world.options.player_tower_random_low_cost.value / 100.0,
-                                       world.options.player_tower_random_high_cost.value / 100.0,
-                                       highest_wg2_sphere, world.random_tower_cost_values,
-                                       player_to_sphere, world)
-            world.player_hideout_costs = calculate_production_costs(
-                                       world.options.player_hideout_early_sphere.value / 100.0,
-                                       world.options.player_hideout_late_sphere.value / 100.0,
-                                       world.options.player_hideout_early_distance.value / 100.0,
-                                       world.options.player_hideout_late_distance.value / 100.0,
-                                       world.options.player_hideout_random_low_cost.value / 100.0,
-                                       world.options.player_hideout_random_high_cost.value / 100.0,
-                                       highest_wg2_sphere, world.random_hideout_cost_values,
-                                       player_to_sphere, world)
-            world.player_port_costs = calculate_production_costs(
-                                       world.options.player_port_early_sphere.value / 100.0,
-                                       world.options.player_port_late_sphere.value / 100.0,
-                                       world.options.player_port_early_distance.value / 100.0,
-                                       world.options.player_port_late_distance.value / 100.0,
-                                       world.options.player_port_random_low_cost.value / 100.0,
-                                       world.options.player_port_random_high_cost.value / 100.0,
-                                       highest_wg2_sphere, world.random_port_cost_values,
-                                       player_to_sphere, world)
-            world.ai_barracks_costs = calculate_production_costs(
-                                       world.options.ai_barracks_early_sphere.value / 100.0,
-                                       world.options.ai_barracks_late_sphere.value / 100.0,
-                                       world.options.ai_barracks_early_distance.value / 100.0,
-                                       world.options.ai_barracks_late_distance.value / 100.0,
-                                       world.options.ai_barracks_random_low_cost.value / 100.0,
-                                       world.options.ai_barracks_random_high_cost.value / 100.0,
-                                       highest_wg2_sphere, world.ai_random_barracks_cost_values,
-                                       player_to_sphere, world)
-            world.ai_tower_costs = calculate_production_costs(
-                                       world.options.ai_tower_early_sphere.value / 100.0,
-                                       world.options.ai_tower_late_sphere.value / 100.0,
-                                       world.options.ai_tower_early_distance.value / 100.0,
-                                       world.options.ai_tower_late_distance.value / 100.0,
-                                       world.options.ai_tower_random_low_cost.value / 100.0,
-                                       world.options.ai_tower_random_high_cost.value / 100.0,
-                                       highest_wg2_sphere, world.ai_random_tower_cost_values,
-                                       player_to_sphere, world)
-            world.ai_hideout_costs = calculate_production_costs(
-                                       world.options.ai_hideout_early_sphere.value / 100.0,
-                                       world.options.ai_hideout_late_sphere.value / 100.0,
-                                       world.options.ai_hideout_early_distance.value / 100.0,
-                                       world.options.ai_hideout_late_distance.value / 100.0,
-                                       world.options.ai_hideout_random_low_cost.value / 100.0,
-                                       world.options.ai_hideout_random_high_cost.value / 100.0,
-                                       highest_wg2_sphere, world.ai_random_hideout_cost_values,
-                                       player_to_sphere, world)
-            world.ai_port_costs = calculate_production_costs(
-                                       world.options.ai_port_early_sphere.value / 100.0,
-                                       world.options.ai_port_late_sphere.value / 100.0,
-                                       world.options.ai_port_early_distance.value / 100.0,
-                                       world.options.ai_port_late_distance.value / 100.0,
-                                       world.options.ai_port_random_low_cost.value / 100.0,
-                                       world.options.ai_port_random_high_cost.value / 100.0,
-                                       highest_wg2_sphere, world.ai_random_port_cost_values,
-                                       player_to_sphere, world)
-            world.fill_slot_data_event.set()
+        wargroove2_worlds = multiworld.get_game_worlds("Wargroove 2")
+        try:
+            player_to_sphere: dict[int, typing.List[typing.Tuple[int, str]]] = {}
+            sphere_number = 0
+            highest_wg2_sphere = 0
+            for sphere in multiworld.get_spheres():
+                for location in sphere:
+                    if location.game == "Wargroove 2":
+                        assert isinstance(location, Wargroove2Location)
+                        if (location.game == "Wargroove 2" and location.name.endswith("Victory") and
+                                location.name != "Humble Beginnings Rebirth: Victory"):
+                            if location.player in player_to_sphere:
+                                player_to_sphere[location.player].append((sphere_number, location.parent_region.name))
+                            else:
+                                player_to_sphere[location.player] = [(sphere_number, location.parent_region.name)]
+                            highest_wg2_sphere = sphere_number
+                sphere_number += 1
+            for world in wargroove2_worlds:
+                assert isinstance(world, Wargroove2World)
+                world.player_barracks_costs = calculate_production_costs(
+                                           world.options.player_barracks_early_sphere.value / 100.0,
+                                           world.options.player_barracks_late_sphere.value / 100.0,
+                                           world.options.player_barracks_early_distance.value / 100.0,
+                                           world.options.player_barracks_late_distance.value / 100.0,
+                                           world.options.player_barracks_random_low_cost.value / 100.0,
+                                           world.options.player_barracks_random_high_cost.value / 100.0,
+                                           highest_wg2_sphere, world.random_barracks_cost_values,
+                                           player_to_sphere, world)
+                world.player_tower_costs = calculate_production_costs(
+                                           world.options.player_tower_early_sphere.value / 100.0,
+                                           world.options.player_tower_late_sphere.value / 100.0,
+                                           world.options.player_tower_early_distance.value / 100.0,
+                                           world.options.player_tower_late_distance.value / 100.0,
+                                           world.options.player_tower_random_low_cost.value / 100.0,
+                                           world.options.player_tower_random_high_cost.value / 100.0,
+                                           highest_wg2_sphere, world.random_tower_cost_values,
+                                           player_to_sphere, world)
+                world.player_hideout_costs = calculate_production_costs(
+                                           world.options.player_hideout_early_sphere.value / 100.0,
+                                           world.options.player_hideout_late_sphere.value / 100.0,
+                                           world.options.player_hideout_early_distance.value / 100.0,
+                                           world.options.player_hideout_late_distance.value / 100.0,
+                                           world.options.player_hideout_random_low_cost.value / 100.0,
+                                           world.options.player_hideout_random_high_cost.value / 100.0,
+                                           highest_wg2_sphere, world.random_hideout_cost_values,
+                                           player_to_sphere, world)
+                world.player_port_costs = calculate_production_costs(
+                                           world.options.player_port_early_sphere.value / 100.0,
+                                           world.options.player_port_late_sphere.value / 100.0,
+                                           world.options.player_port_early_distance.value / 100.0,
+                                           world.options.player_port_late_distance.value / 100.0,
+                                           world.options.player_port_random_low_cost.value / 100.0,
+                                           world.options.player_port_random_high_cost.value / 100.0,
+                                           highest_wg2_sphere, world.random_port_cost_values,
+                                           player_to_sphere, world)
+                world.ai_barracks_costs = calculate_production_costs(
+                                           world.options.ai_barracks_early_sphere.value / 100.0,
+                                           world.options.ai_barracks_late_sphere.value / 100.0,
+                                           world.options.ai_barracks_early_distance.value / 100.0,
+                                           world.options.ai_barracks_late_distance.value / 100.0,
+                                           world.options.ai_barracks_random_low_cost.value / 100.0,
+                                           world.options.ai_barracks_random_high_cost.value / 100.0,
+                                           highest_wg2_sphere, world.ai_random_barracks_cost_values,
+                                           player_to_sphere, world)
+                world.ai_tower_costs = calculate_production_costs(
+                                           world.options.ai_tower_early_sphere.value / 100.0,
+                                           world.options.ai_tower_late_sphere.value / 100.0,
+                                           world.options.ai_tower_early_distance.value / 100.0,
+                                           world.options.ai_tower_late_distance.value / 100.0,
+                                           world.options.ai_tower_random_low_cost.value / 100.0,
+                                           world.options.ai_tower_random_high_cost.value / 100.0,
+                                           highest_wg2_sphere, world.ai_random_tower_cost_values,
+                                           player_to_sphere, world)
+                world.ai_hideout_costs = calculate_production_costs(
+                                           world.options.ai_hideout_early_sphere.value / 100.0,
+                                           world.options.ai_hideout_late_sphere.value / 100.0,
+                                           world.options.ai_hideout_early_distance.value / 100.0,
+                                           world.options.ai_hideout_late_distance.value / 100.0,
+                                           world.options.ai_hideout_random_low_cost.value / 100.0,
+                                           world.options.ai_hideout_random_high_cost.value / 100.0,
+                                           highest_wg2_sphere, world.ai_random_hideout_cost_values,
+                                           player_to_sphere, world)
+                world.ai_port_costs = calculate_production_costs(
+                                           world.options.ai_port_early_sphere.value / 100.0,
+                                           world.options.ai_port_late_sphere.value / 100.0,
+                                           world.options.ai_port_early_distance.value / 100.0,
+                                           world.options.ai_port_late_distance.value / 100.0,
+                                           world.options.ai_port_random_low_cost.value / 100.0,
+                                           world.options.ai_port_random_high_cost.value / 100.0,
+                                           highest_wg2_sphere, world.ai_random_port_cost_values,
+                                           player_to_sphere, world)
+        finally:
+            for world in wargroove2_worlds:
+                world.fill_slot_data_event.set()
 
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         if self.stage_assert_generate_called:
