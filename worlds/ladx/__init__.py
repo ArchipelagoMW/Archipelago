@@ -4,8 +4,10 @@ import os
 import typing
 import logging
 import re
+import struct
 
 import settings
+import Utils
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
@@ -50,6 +52,17 @@ class LinksAwakeningSettings(settings.Group):
         description = "LADX ROM File"
         md5s = [LADXProcedurePatch.hash]
 
+        @classmethod
+        def validate(cls, path: str) -> None:
+            try:
+                super().validate(path)
+            except ValueError:
+                Utils.messagebox(
+                    "Error",
+                    "Provided rom does not match hash for English 1.0/revision-0 of Link's Awakening DX",
+                    True)
+                raise
+
     class RomStart(str):
         """
         Set this to false to never autostart a rom (such as after patching)
@@ -71,6 +84,24 @@ class LinksAwakeningSettings(settings.Group):
         Only .bin or .bdiff files
         The same directory will be checked for a matching text modification file
         """
+        def browse(self, filetypes=None, **kwargs):
+            filetypes = [("Binary / Patch files", [".bin", ".bdiff"])]
+            return super().browse(filetypes=filetypes, **kwargs)
+
+        @classmethod
+        def validate(cls, path: str) -> None:
+            with open(path, "rb", buffering=0) as f:
+                header, size = struct.unpack("<II", f.read()[:8])
+                if path.endswith('.bin') and header == 0xDEADBEEF and size < 1024:
+                    # detect extended spritesheets from upstream ladxr
+                    Utils.messagebox(
+                        "Error",
+                        "Extended sprite sheets are not supported. Try again with a different gfxmod file, "
+                        "or provide no file to continue without modifying graphics.",
+                        True)
+                    raise ValueError("Provided gfxmod file is an extended sheet, which is not supported")
+
+
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: typing.Union[RomStart, bool] = True
@@ -149,7 +180,17 @@ class LinksAwakeningWorld(World):
     }
 
     def convert_ap_options_to_ladxr_logic(self):
-        self.ladxr_settings = LADXRSettings(dataclasses.asdict(self.options))
+        # store a dict of ladxr settings as a middle step so that we can also create a
+        # ladxr settings object on the other side of the patch
+        options_dict = dataclasses.asdict(self.options)
+        self.ladxr_settings_dict = {}
+        for option in options_dict.values():
+            if not hasattr(option, 'to_ladxr_option'):
+                continue
+            name, value = option.to_ladxr_option(options_dict)
+            if name:
+                self.ladxr_settings_dict[name] = value
+        self.ladxr_settings = LADXRSettings(self.ladxr_settings_dict)
 
         self.ladxr_settings.validate()
         world_setup = LADXRWorldSetup()
@@ -472,36 +513,36 @@ class LinksAwakeningWorld(World):
         return "TRADING_ITEM_LETTER"
 
     def generate_output(self, output_directory: str):
-        # copy items back to locations
+        self.rom_item_placements = []
         for r in self.multiworld.get_regions(self.player):
             for loc in r.locations:
                 if isinstance(loc, LinksAwakeningLocation):
                     assert(loc.item)
-                        
+                    spot = {}
                     # If we're a links awakening item, just use the item
                     if isinstance(loc.item, LinksAwakeningItem):
-                        loc.ladxr_item.item = loc.item.item_data.ladxr_id
+                        spot["item"] = loc.item.item_data.ladxr_id
 
                     # If the item name contains "sword", use a sword icon, etc
                     # Otherwise, use a cute letter as the icon
                     elif self.options.foreign_item_icons == 'guess_by_name':
-                        loc.ladxr_item.item = self.guess_icon_for_other_world(loc.item)
-                        loc.ladxr_item.setCustomItemName(loc.item.name)
+                        spot["item"] = self.guess_icon_for_other_world(loc.item)
 
                     else:
                         if loc.item.advancement:
-                            loc.ladxr_item.item = 'PIECE_OF_POWER'
+                            spot["item"] = 'PIECE_OF_POWER'
                         else:
-                            loc.ladxr_item.item = 'GUARDIAN_ACORN'
-                        loc.ladxr_item.custom_item_name = loc.item.name
+                            spot["item"] = 'GUARDIAN_ACORN'
+
+                    spot["custom_item_name"] = loc.item.name
 
                     if loc.item:
-                        loc.ladxr_item.item_owner = loc.item.player
+                        spot["item_owner"] = loc.item.player
                     else:
-                        loc.ladxr_item.item_owner = self.player
+                        spot["item_owner"] = self.player
 
-                    # Kind of kludge, make it possible for the location to differentiate between local and remote items
-                    loc.ladxr_item.location_owner = self.player
+                    spot["name_id"] = loc.ladxr_item.nameId
+                    self.rom_item_placements.append(spot)
 
         
         patch = LADXProcedurePatch(player=self.player, player_name=self.player_name)
@@ -539,7 +580,9 @@ class LinksAwakeningWorld(World):
         return self.random.choices(self.filler_choices, self.filler_weights)[0]
 
     def fill_slot_data(self):
-        slot_data = {}
+        slot_data = {
+            "world_version": self.world_version.as_simple_string()
+        }
 
         if not self.multiworld.is_race:
             # all of these option are NOT used by the LADX- or Text-Client.
@@ -569,7 +612,7 @@ class LinksAwakeningWorld(World):
             ]
 
             # use the default behaviour to grab options
-            slot_data = self.options.as_dict(*slot_options)
+            slot_data.update(self.options.as_dict(*slot_options))
 
             # for options which should not get the internal int value but the display name use the extra handling
             slot_data.update({

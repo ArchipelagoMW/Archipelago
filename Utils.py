@@ -22,6 +22,7 @@ from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
+from pathspec import PathSpec, GitIgnoreSpec
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
@@ -48,7 +49,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.5"
+__version__ = "0.6.7"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -314,12 +315,8 @@ def get_public_ipv6() -> str:
     return ip
 
 
-OptionsType = Settings  # TODO: remove when removing get_options
-
-
 def get_options() -> Settings:
-    # TODO: switch to Utils.deprecate after 0.4.4
-    warnings.warn("Utils.get_options() is deprecated. Use the settings API instead.", DeprecationWarning)
+    deprecate("Utils.get_options() is deprecated. Use the settings API instead.")
     return get_settings()
 
 
@@ -389,6 +386,14 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
                 json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
+
+
+def read_apignore(filename: str | pathlib.Path) -> PathSpec | None:
+    try:
+        with open(filename) as ignore_file:
+            return GitIgnoreSpec.from_lines(ignore_file)
+    except FileNotFoundError:
+        return None
 
 
 def get_default_adjuster_settings(game_name: str) -> Namespace:
@@ -755,6 +760,11 @@ def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args:
     res.put(open_filename(*args))
 
 
+def _mp_save_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+    if is_kivy_running():
+        raise RuntimeError("kivy should not be running in multiprocess")
+    res.put(save_filename(*args))
+    
 def _run_for_stdout(*args: str):
     env = os.environ
     if "LD_LIBRARY_PATH" in env:
@@ -803,6 +813,51 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         root.withdraw()
         return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
                                                   initialfile=suggest or None)
+
+
+def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
+        -> typing.Optional[str]:
+    logging.info(f"Opening file save dialog for {title}.")
+
+    def run(*args: str):
+        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
+
+    if is_linux:
+        # prefer native dialog
+        from shutil import which
+        kdialog = which("kdialog")
+        if kdialog:
+            k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
+            return run(kdialog, f"--title={title}", "--getsavefilename", suggest or ".", k_filters)
+        zenity = which("zenity")
+        if zenity:
+            z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
+            selection = (f"--filename={suggest}",) if suggest else ()
+            return run(zenity, f"--title={title}", "--file-selection", "--save", *z_filters, *selection)
+
+    # fall back to tk
+    try:
+        import tkinter
+        import tkinter.filedialog
+    except Exception as e:
+        logging.error('Could not load tkinter, which is likely not installed. '
+                      f'This attempt was made because save_filename was used for "{title}".')
+        raise e
+    else:
+        if is_macos and is_kivy_running():
+            # on macOS, mixing kivy and tk does not work, so spawn a new process
+            # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
+            from multiprocessing import Process, Queue
+            res: "Queue[typing.Optional[str]]" = Queue()
+            Process(target=_mp_save_filename, args=(res, title, filetypes, suggest)).start()
+            return res.get()
+        try:
+            root = tkinter.Tk()
+        except tkinter.TclError:
+            return None  # GUI not available. None is the same as a user clicking "cancel"
+        root.withdraw()
+        return tkinter.filedialog.asksaveasfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
+                                                    initialfile=suggest or None)
 
 
 def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
@@ -1176,3 +1231,35 @@ class DaemonThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):
             t.start()
             self._threads.add(t)
             # NOTE: don't add to _threads_queues so we don't block on shutdown
+
+
+def get_full_typename(t: type) -> str:
+    """Returns the full qualified name of a type, including its module (if not builtins)."""
+    module = t.__module__
+    if module and module != "builtins":
+        return f"{module}.{t.__qualname__}"
+    return t.__qualname__
+
+
+def get_all_causes(ex: Exception) -> str:
+    """Return a string describing the recursive causes of this exception.
+
+    :param ex: The exception to be described.
+    :return A multiline string starting with the initial exception on the first line and each resulting exception
+            on subsequent lines with progressive indentation.
+
+            For example:
+
+            ```
+            Exception: Invalid value 'bad'.
+             Which caused: Options.OptionError: Error generating option
+              Which caused: ValueError: File bad.yaml is invalid.
+            ```
+    """
+    cause = ex
+    causes = [f"{get_full_typename(type(ex))}: {ex}"]
+    while cause := cause.__cause__:
+        causes.append(f"{get_full_typename(type(cause))}: {cause}")
+    top = causes[-1]
+    others = "".join(f"\n{' ' * (i + 1)}Which caused: {c}" for i, c in enumerate(reversed(causes[:-1])))
+    return f"{top}{others}"
