@@ -14,10 +14,12 @@ class PSORamData(NamedTuple):
     :param ram_addr: address in memory to be written to / read from
     :param bit_position: what position in ram_addr to start operations from
     :param ram_byte_size: how far the memory space extends for this object
+    :param byte_data: byte data to use when creating this item from scratch
     """
     ram_addr: int | None = None
     bit_position: int | None = None
     ram_byte_size: int | None = None
+    byte_data: bytes | None = None
 #    pointer_offset: int | None = None
 #    item_count: int | None = None
 

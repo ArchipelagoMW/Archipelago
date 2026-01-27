@@ -23,3 +23,52 @@ class Item:
     MINES_PILLAR = "Pillar (Mines 2)"
 
     VICTORY = "Victory"
+
+    # Sabers
+    SABER = "Saber"
+    BRAND = "Brand"
+    BUSTER = "Buster"
+
+    # Swords
+    SWORD = "Sword"
+    GIGUSH = "Gigush"
+
+    # Daggers
+    DAGGER = "Dagger"
+    KNIFE = "Knife"
+    BLADE = "Blade"
+
+    # Partisans
+    PARTISAN = "Partisan"
+    HALBERT = "Halbert"
+
+    # Slicers
+    SLICER = "Slicer"
+
+    # Handguns
+    HANDGUN = "Handgun"
+    AUTOGUN = "Autogun"
+    LOCKGUN = "Lockgun"
+
+    # Rifles
+    RIFLE = "Rifle"
+    SNIPER = "Sniper"
+
+    # Mechguns
+    MECHGUN = "Mechgun"
+    ASSAULT = "Assault"
+
+    # Shots
+    SHOT = "Shot"
+
+    # Canes
+    CANE = "Cane"
+    STICK = "Stick"
+
+    # Rods
+    ROD = "Rod"
+    POLE = "Pole"
+
+    # Wands
+    WAND = "Wand"
+    STAFF = "Staff"

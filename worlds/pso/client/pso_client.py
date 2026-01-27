@@ -6,9 +6,12 @@ import traceback
 from typing import TYPE_CHECKING, Any
 from copy import deepcopy
 
+from attr import attributes
+
 import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
+from worlds.pso import PSOWorld
 from worlds.pso.locations import LOCATION_TABLE
 from worlds.pso.patcher.pso_patcher import PSO_PLAYER_NAME_BYTE_LENGTH
 
@@ -30,8 +33,12 @@ CURRENT_HEALTH_ADDRESS = 0x80DA65CC
 # Use it to track the index of the last item the game knows it has received for the player
 LAST_RECEIVED_ITEM_ADDRESS = 0x80C5CBA0
 
-EMPTY_BANK_SLOT: bytes = b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00'
-LAST_BANK_SLOT = 0x80FDA878
+BANK_EMPTY_SLOT: bytes = b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xff\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00'
+BANK_FIRST_SLOT = 0x80FD95D0
+BANK_LAST_SLOT = 0x80FDA878
+BANK_ITEM_COUNT = 0x80FD95CB
+
+ATTRIBUTE_BYTES = [b'\x01', b'\x02', b'\x03', b'\x04']
 
 # The memory address to check to see if the player is currently in game
 # Technically, this is the memory address for a Mothmant, which is loaded
@@ -190,6 +197,12 @@ def check_ingame() -> bool:
     """
     return read_short(IS_INGAME_ADDRESS) != 0
 
+def check_in_bank() -> bool:
+    """
+    Returns True if the player is currently interacting with the bank, which can prevent receiving items
+    """
+    return
+
 
 def check_ruins_door(ctx: PSOContext) -> None:
     """
@@ -234,31 +247,32 @@ def write_to_bank(ctx: PSOContext, item_name: str) -> bool:
     :param item_name: the name of the item being given
     :return: whether the item was written successfully (as far as we know)
     """
-    bank_slot_bytes = dolphin_memory_engine.read_bytes(LAST_BANK_SLOT, 0x18)
-    logger.critical(f"Saber is {dolphin_memory_engine.read_bytes(0x80FD95D0, 18)}")
-    logger.critical(f"Or potentially is {dolphin_memory_engine.read_bytes(0x80FD95D0, 0x18)}")
-    logger.critical(f"Second empty slot is {dolphin_memory_engine.read_bytes(0x80FD95E8, 18)}")
-    logger.critical(f"Or potentially is {dolphin_memory_engine.read_bytes(0x80FD95E8, 0x18)}")
+    # bank_slot_bytes = dolphin_memory_engine.read_bytes(BANK_LAST_SLOT, 0x18)
+    # logger.critical(f"Saber is {dolphin_memory_engine.read_bytes(0x80FD95D0, 18)}")
+    # logger.critical(f"Or potentially is {dolphin_memory_engine.read_bytes(0x80FD95D0, 0x18)}")
+    # logger.critical(f"Second empty slot is {dolphin_memory_engine.read_bytes(0x80FD95E8, 18)}")
+    # logger.critical(f"Or potentially is {dolphin_memory_engine.read_bytes(0x80FD95E8, 0x18)}")
 
     # Check to make sure all the bytes are zero in the last slot, to ensure it's empty
     # There might be a better way to do this
     # for byte in bank_slot_bytes:
     #     if byte not in (0, 255):
     #         logger.error(f"Byte was {byte}")
-    if bank_slot_bytes != EMPTY_BANK_SLOT:
-        # TODO: Have another option for handling the case where the bank is full
-        logger.error(f"Attempted to write {item_name} to bank, but the bank is full. Item is presumably lost. {bank_slot_bytes}")
-        return True
+    # if bank_slot_bytes != BANK_EMPTY_SLOT:
+    #     # TODO: Have another option for handling the case where the bank is full
+    #     logger.error(f"Attempted to write {item_name} to bank, but the bank is full. Current bytes: {bank_slot_bytes}")
+    #     return True
 
-    # 00 94 00 00 00 00 00 FF
-    # SABER_BYTES = [0,0, 9,4, 0,0, 0,0, 0,0, 0,0, 0,0, 0xF, 0xF]
-    # SABER_BYTES = 0x00940000000000FF
     SABER_BYTES = b'\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01'
+    LAVIS_BYTES = b'\x00\x01\x00\x00\x00\x00\x01\x14\x03\x28\x05\x46\x00\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01'
+    #               item    tier    tekker  Attr    ""      ""
+    #                   type    grind    ???     Amount ""      ""
+    #3E 4C CC CD
 
     pso_item = ITEM_TABLE[item_name]
 
-    # item_bytes = SABER_BYTES.to_bytes(18, byteorder="big")
-    item_bytes = SABER_BYTES
+    # Make an empty container to put our bytes into
+    item_bytes = b''
 
     if pso_item.type == PSOItemType.WEAPON:
         # Item slots in the bank are 18 bytes long, and 24 bytes away from the next item
@@ -266,10 +280,50 @@ def write_to_bank(ctx: PSOContext, item_name: str) -> bool:
         # for _ in range(len(item_bytes), 18):
         #     item_bytes.append(0)
 
-        # dolphin_memory_engine.write_bytes(LAST_BANK_SLOT, item_bytes)
-        dolphin_memory_engine.write_bytes(0x80FD95D0, item_bytes)
+        # dolphin_memory_engine.write_bytes(BANK_LAST_SLOT, item_bytes)
+        # dolphin_memory_engine.write_bytes(0x80FD95D0, item_bytes)
+        # Retrieve the current number of items in the player's bank
+        bank_current_count = dolphin_memory_engine.read_byte(BANK_ITEM_COUNT)
+
+        if bank_current_count >= 200:
+            logger.error(f"Attempted to write {item_name} to the bank, but the bank is full.")
+            return False
+
+        # TODO: Extract this to a Make Bytes function
+        # Weapons start with \x00 so we add that first
+        item_bytes += b'\x00'
+        item_bytes += pso_item.ram_data.byte_data
+        item_bytes += int.to_bytes(pso_item.max_grind, byteorder='big')
+        # No Tekker or present for now
+        item_bytes += b'\x00\x00'
+        logger.info(f"Bytes: {item_bytes}")
+        # Pick 2 random attributes and then Hit and set them to 90%, because why not
+        # TODO: Figure out how to get random items in the client
+        # attributes = ctx. .random.choices(ATTRIBUTE_BYTES, k=2)
+        attributes = [int.to_bytes(int.from_bytes(pso_item.ram_data.byte_data[1:], byteorder='big') + 1, byteorder='big'),
+                      int.to_bytes(int.from_bytes(pso_item.ram_data.byte_data[1:], byteorder='big') + 2, byteorder='big')]
+        if attributes[1:] == b'\x05':
+            attributes.insert(0, b'\x01')
+        else:
+            attributes.append(b'\x05')
+        for attribute in attributes:
+            item_bytes += attribute
+            item_bytes += int.to_bytes(70, byteorder='big')
+            logger.info(f"Bytes: {item_bytes}")
+
+        # Throw the rest of the bytes on that we need
+        item_bytes += b'\x00\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x01'
+
+        # Every bank is 24 bytes (0x18) apart
+        # Get the relevant memory space based on the number of items we have to skip over
+        next_open_slot = BANK_FIRST_SLOT + (0x18 * bank_current_count)
+        dolphin_memory_engine.write_bytes(next_open_slot, item_bytes)
+
+        # Increment the bank counter
+        dolphin_memory_engine.write_byte(BANK_ITEM_COUNT, bank_current_count + 1 )
 
         logger.info(f"Wrote {item_name} to bank")
+        logger.info(f"Bytes: {item_bytes}")
         return True
 
     # If we somehow don't handle all our cases properly, we should know that
