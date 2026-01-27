@@ -270,7 +270,8 @@ if not is_frozen():
 
         import argparse
         parser = argparse.ArgumentParser("Build script for APWorlds")
-        parser.add_argument("--output_directory", type=str, default=[os.path.join("build", "apworlds")], nargs=1, required=False, help="specify a directory in which to output the apworlds.")
+        parser.add_argument("--output-directory", type=str, default=os.path.join("build", "apworlds"), required=False,
+                            help="specify a directory in which to output the apworlds.")
         parser.add_argument("worlds", type=str, default=(), nargs="*", help="Names of APWorlds to build.")
         args = parser.parse_args(launch_args)
 
@@ -284,7 +285,7 @@ if not is_frozen():
         if not global_apignores:
             raise RuntimeError("Could not read global apignore file for build component")
 
-        apworlds_folder = args.output_directory[0]
+        apworlds_folder = args.output_directory
         os.makedirs(apworlds_folder, exist_ok=True)
         for worldname, worldtype in games:
             if not worldtype:
