@@ -6,7 +6,7 @@ import string
 import typing
 
 from BaseClasses import Item, Tutorial, ItemClassification, MultiWorld
-from Options import NumericOption, OptionSet
+from Options import NumericOption, OptionSet, OptionError
 from .Items import item_table, faction_table, Wargroove2Item
 from .Levels import Wargroove2Level, low_victory_checks_levels, high_victory_checks_levels, first_level, \
     final_levels, region_names, FINAL_LEVEL_1, \
@@ -103,6 +103,35 @@ class Wargroove2World(World):
         main_level_slots = LEVEL_COUNT - early_level_slots
         final_level_no_ocean_slots = 1
 
+        total_progressive_items = 32
+        total_defense_boost_items = 5
+        total_item_count = total_progressive_items + total_defense_boost_items
+
+        # Selecting a random starting faction and add faction items to the total item count
+        factions = [faction for faction in faction_table.keys() if faction != "Starter"]
+        if self.options.commander_choice == "random_starting_faction":
+            starting_faction = Wargroove2Item(self.random.choice(factions) + ' Commanders', self.player)
+            self.multiworld.push_precollected(starting_faction)
+            total_item_count += len(factions) - 1
+        elif self.options.commander_choice == "unlockable_factions":
+            total_item_count += len(factions)
+
+        assumed_side_objective_count = 1
+        locations_per_victory = self.options.victory_locations.value
+        locations_per_side_objective = self.options.objective_locations.value
+        starting_level_victory_count = self.options.victory_locations.value
+        starting_level_objective_count = self.options.objective_locations.value * 2
+        early_main_level_count = min(len(self.options.custom_early_level_playlist.value) +
+                                     len(self.options.custom_main_level_playlist.value), LEVEL_COUNT)
+        total_location_slots = ((early_main_level_count * locations_per_victory) +
+                                (early_main_level_count * locations_per_side_objective * assumed_side_objective_count) +
+                                starting_level_victory_count + starting_level_objective_count)
+        if total_location_slots < total_item_count:
+            raise OptionError(f"Wargroove 2 does not have enough levels to fit items into for player {self.player}. "
+                            f"Either enable more levels or "
+                            f"increase the amount of locations per victory or side objective. "
+                            f"{total_location_slots} Estimated locations < {total_item_count} total items")
+
         self.random_barracks_cost_values = [self.random.randrange(0, 100)
                                             for _ in range(LEVEL_COUNT + FINAL_LEVEL_COUNT)]
         self.random_tower_cost_values = [self.random.randrange(0, 100)
@@ -160,11 +189,6 @@ class Wargroove2World(World):
         random.shuffle(non_north_levels)
         self.final_levels = final_levels_no_ocean[0:final_level_no_ocean_slots] + non_north_levels
 
-        # Selecting a random starting faction
-        if self.options.commander_choice == "random_starting_faction":
-            factions = [faction for faction in faction_table.keys() if faction != "Starter"]
-            starting_faction = Wargroove2Item(self.random.choice(factions) + ' Commanders', self.player)
-            self.multiworld.push_precollected(starting_faction)
 
     def create_items(self) -> None:
         # Fill out our pool with our items from the item table
