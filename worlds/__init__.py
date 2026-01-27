@@ -1,7 +1,6 @@
 import importlib
 import importlib.abc
 import importlib.machinery
-import importlib.util
 import logging
 import os
 import sys
@@ -24,14 +23,14 @@ try:
 except OSError:  # can't access/write?
     user_folder = None
 
-__all__ = {
+__all__ = [
     "network_data_package",
     "AutoWorldRegister",
     "world_sources",
     "local_folder",
     "user_folder",
     "failed_world_loads",
-}
+]
 
 
 failed_world_loads: List[str] = []
