@@ -437,6 +437,8 @@ def set_rules(world: World):
     mines_temple_locked_locations = [
         LocationName.mines_wall_puzzle_half,
         LocationName.mines_torch_restricted_cultist_reliquary,
+        LocationName.mountain_torch_pillaged_cultist_storeroom,
+        LocationName.mountain_underpass_wall_portal
     ]
     for loc_name in mines_temple_locked_locations:
         try:
@@ -473,7 +475,7 @@ def set_rules(world: World):
         LocationName.cultist_torch_infinity_chasm,
         LocationName.cultist_compound_wall_elevator,
         LocationName.cultist_compound_item_pickup_garnet_aegis,
-        LocationName.cultist_compound_item_pickup_minor_sol_shard_12
+        LocationName.cultist_compound_item_pickup_major_sol_shard_12
     ]
     for loc_name in cultist_minor_cell_locked_locations:
         try:
