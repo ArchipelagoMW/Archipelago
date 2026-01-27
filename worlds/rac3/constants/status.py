@@ -92,3 +92,5 @@ class RAC3STATUS:
     HOLOSTAR_CLANK_FIX = 0x00142713  # Same address as Holostar: Return to your ship, needed for Clank fix
     ESCAPED_LEVIATHAN = 0x00142700
     HEAT_STREET_FIX = 0x001D5551  # same as vidcomic 2
+    ZELDRIN_START_LEVIATHAN = 0x001BBCEA
+    ZELDRIN_END_LEVIATHAN = 0x001BBCEB
