@@ -106,7 +106,7 @@ class Portal2Context(CommonContext):
         if finished_map:
             self.menu.complete_map(finished_map)
         # Write the menu to that file
-        with open(menu_file, "w") as f:
+        with open(menu_file, "w", encoding='utf-8') as f:
             f.write(str(self.menu))
 
     def refresh_menu(self):

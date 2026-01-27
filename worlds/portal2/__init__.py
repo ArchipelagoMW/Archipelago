@@ -23,7 +23,7 @@ class Portal2Settings(settings.Group):
 
     is_windows = sys.platform == "win32"
     is_linux = sys.platform == "linux"
-    extras_path = "C:\\Program Files (x86)\\Steam\\steamapps\\sourcemods\\Portal2Archipelago\\scripts\\extras.txt" if is_windows else \
+    extras_path = "C:/Program Files (x86)/Steam/steamapps/sourcemods/Portal2Archipelago/scripts/extras.txt" if is_windows else \
                     "$HOME/.local/share/Steam/steamapps/sourcemods/Portal2Archipelago/scripts/extras.txt" if is_linux else "" # May may be user specific so cannot auto select
     menu_file: Portal2ExtrasFilePath = Portal2ExtrasFilePath(extras_path)
 
