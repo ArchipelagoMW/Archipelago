@@ -1,8 +1,12 @@
+import logging
 from dataclasses import dataclass
 
-from Options import Choice, Range, Toggle, ItemDict, PerGameCommonOptions, StartInventoryPool
+from schema import And, Optional, Or, Schema, Use
+
+from Options import Choice, Range, Toggle, ItemDict, PerGameCommonOptions, StartInventoryPool, OptionDict
 
 from . import default_itempool_option
+from .Locations import FightLogicRegions
 
 
 class SoraEXP(Range):
@@ -331,6 +335,26 @@ class SummonLevelLocationToggle(Toggle):
     default = False
 
 
+class FightLogicOverrides(OptionDict):
+    """Override fights for specific Fight Logic
+     Easy: Overrides the Fight Logic option with Easy for that specific fight,
+     Normal: Overrides the Fight Logic option with Normal for that specific fight,
+     Hard: Overrides the Fight Logic option with Hard for that specific fight,
+     None: Overrides removes logic for that fight. Not recommended if you don't know what you are doing
+
+     RegionName: difficulty
+     """
+    display_name = "Fight Logic Overrides"
+    #default = {fightName: None for fightName in FightLogicRegions}
+
+    schema = Schema(
+            {
+                Optional(fight): And(str, lambda n: n.lower() in {"default", "easy", "normal", "hard", "none"},
+                        error=f"valid fight keys: {FightLogicRegions} valid values: default, easy, normal, hard, none") for fight in FightLogicRegions
+            }
+    )
+
+
 # shamelessly stolen from the messanger
 @dataclass
 class KingdomHearts2Options(PerGameCommonOptions):
@@ -370,3 +394,4 @@ class KingdomHearts2Options(PerGameCommonOptions):
     AtlanticaToggle: AtlanticaToggle
     CorSkipToggle: CorSkipToggle
     CustomItemPoolQuantity: CustomItemPoolQuantity
+    FightLogicOverrides: FightLogicOverrides
