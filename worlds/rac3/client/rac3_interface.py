@@ -885,6 +885,8 @@ class Rac3Interface(GameInterface):
             if self.is_location_checked(RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.NATION_HEAT_STREET].AP_CODE):
                 self.vidcomic_2_fix += 1
                 self._write8(RAC3STATUS.HEAT_STREET_FIX, 1)
+        if self.planet != RAC3REGION.ZELDRIN_STARPORT and not self._read8(RAC3STATUS.ZELDRIN_END_LEVIATHAN):
+            self._write8(RAC3STATUS.ZELDRIN_START_LEVIATHAN, 0)
 
         if self.options.holostar_skip:
             self._write8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[RAC3REGION.HOLOSTAR_STUDIOS_CLANK].ID, 1)
