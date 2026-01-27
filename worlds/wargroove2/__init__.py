@@ -220,8 +220,8 @@ class Wargroove2World(World):
 
         self.multiworld.itempool += pool
 
-        victory = Wargroove2Item("Wargroove 2 Victory", self.player)
         for i in range(0, 4):
+            victory = Wargroove2Item("Wargroove 2 Victory", self.player)
             final_level = self.final_levels[i]
             self.get_location(final_level.victory_location).place_locked_item(victory)
         # Placing victory event at final location
