@@ -1,4 +1,4 @@
-from typing import List, TYPE_CHECKING, Callable
+from typing import List, TYPE_CHECKING, Callable, Dict
 
 from BaseClasses import Region, Entrance
 from .Locations import location_table, Wargroove2Location
@@ -16,6 +16,7 @@ region_names: List[str] = ["North 1", "East 1", "South 1", "West 1",
                            "East 3A", "East 3B", "East 3C",
                            "South 3A", "South 3B", "South 3C",
                            "West 3A", "West 3B", "West 3C"]
+
 FINAL_LEVEL_1 = "Northern Finale"
 FINAL_LEVEL_2 = "Eastern Finale"
 FINAL_LEVEL_3 = "Southern Finale"
@@ -24,6 +25,11 @@ FINAL_LEVEL_4 = "Western Finale"
 LEVEL_COUNT = 28
 FINAL_LEVEL_COUNT = 4
 
+final_region_names = [FINAL_LEVEL_1, FINAL_LEVEL_2, FINAL_LEVEL_3, FINAL_LEVEL_4]
+
+region_names_to_distance: Dict[str, int] = {region_name: region_distance
+                                            for region_distance, region_name in
+                                            enumerate(region_names + final_region_names)}
 
 def set_region_exit_rules(region: Region, world: "Wargroove2World",
                           victory_location_name: str, is_event_level: bool) -> None:
