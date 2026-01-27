@@ -17,7 +17,7 @@
 
 ### OpenKH
 
-- Extract the OpenKH files to a directory of your choosing.
+- Extract the OpenKH files to a directory within the same drive you have the game installed.
 - Open `OpenKh.Tools.ModsManager.exe` within the OpenKH folder.
 - When prompted for game edition, choose PC Release, select which platform you're using (EGS or Steam), navigate to your `Kingdom Hearts I.5 + II.5` installation folder in the path box and click `Next`.
 - When prompted, install Panacea, then click `Next`.
@@ -40,8 +40,8 @@
 - Open `OpenKh.Tools.ModsManager.exe` and ensure that the dropdown in the top right is set to `Kingdom Hearts 1`
 - Click the green plus, choose `Select and install Mod Archive or Lua Script`, and direct the prompt to your new mod zip.
 - You should now see a mod on your list called `KH1 Randomizer Seed XYZ` where XYZ is your seed hex value.
-- Ensure this mod is checked, then, if you want to play right away, click `Mod Loader` at the top.
-- Click `Build and Run`.  Your modded game should now open.
+- Ensure this mod is checked `[x]`.
+- click `Mod Loader` at the top, then click `Build and Run`.  Your modded game should now open.
 
 ## Connecting to your multiworld via the KH1 Client
 
@@ -121,3 +121,8 @@ This is likely due to the mod not being applied properly. First, reinstall both 
 ### Why did the game send checks that I had not collected?
 
 The client caches your inventory and does not clear the cache when switching slots. The game also does something similar, even if backed out to the title screen. Therefore, it's highly encouraged, whenever switching slots or connecting to a different server, to always fully close both the game and the client first.
+
+### Why is my seed missing important world progression items?
+
+This is likely related to the Stacking World Items setting. When it is off, each world will have unique items that allow progression at some point in the world. When it is on, that item is replaced with a second world item.
+Even when Stacking World Items is off, if Halloween Town Key Item Bundle is on then only the Forget-me-not is to be collected.
