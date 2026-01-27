@@ -4,7 +4,7 @@ from worlds.rac3.constants.options import RAC3OPTION
 
 class Deathlink(Choice):
     """
-    Any players with "Death Link" who die in their game will \n
+    Any players with "Death Link" who die in their game will
     cause all other players with this option enabled to also die
     """
     display_name = RAC3OPTION.DEATHLINK
