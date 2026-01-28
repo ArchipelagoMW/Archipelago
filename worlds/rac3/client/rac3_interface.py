@@ -123,6 +123,7 @@ class Rac3Interface(GameInterface):
     one_hp_challenge: dict[str, int] = None
     pda_vendor: int = 0
     last_in_vehicle_time: float = 0.0
+    last_in_ship_transition_time: float = 0.0
     nanotech_exp: int = 0
     homewarping: bool = False
     checked_locations: set[str] = set()
@@ -377,6 +378,8 @@ class Rac3Interface(GameInterface):
                                                  + planet_data.PLANET_SPECIAL_OFFSET
                                                  ) if planet_data.PLANET_SPECIAL_OFFSET is not None else None
             self.pause_state = bool(self.pause_state_value)
+            if self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE:
+                self.last_in_ship_transition_time = time.time()
         else:
             # Unknown planet, assume paused to be safe
             self.pause_menu = True
@@ -955,14 +958,12 @@ class Rac3Interface(GameInterface):
     def should_cycle_gadgets(self) -> bool:
         """Check if it's safe to cycle gadgets
         used to ensure gadgets can respawn without the cycler interfering"""
+        current_time = time.time()
         if (self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE
                 or self.is_reloading
                 or self.self_respawning
                 or bool(self._read8(RAC3STATUS.HIDE_WEAPON))
-                # for some reason during the initial planet load, pause state and action are all 0s and are therefore
-                # useless but this timer is set to 1 during that time, so we use that to know when the initial load is
-                # happening
-                or self._read16(RAC3STATUS.FALL_TIMER) == 1):
+                or current_time - self.last_in_ship_transition_time < 1.5):
             return False
         return True
 
