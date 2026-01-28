@@ -29,7 +29,7 @@
 
 - Extract the Kingdom Hearts 1FM Randomizer Software files in a directory of your choosing.
 
-## Obtaining and using the seed zip
+## Obtaining and using the patch
 
 - [Generate an Archipelago game](https://archipelago.gg/generate) using the KH1 yaml generated from the KH1 [options page](https://archipelago.gg/games/Kingdom%20Hearts/player-options). 
 - When you generate a game you will see a download link for a KH1 .zip patch on the room page.
