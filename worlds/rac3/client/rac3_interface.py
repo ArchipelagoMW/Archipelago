@@ -100,6 +100,7 @@ class Rac3Interface(GameInterface):
     player_type: str = RAC3PLAYERTYPE.RATCHET
     vehicle: int = 0
     action: int = 0  # Todo: Player Action
+    action_2: int = 0
     prev_action: int = 0
     pause_menu: bool = False
     pause_state: bool = False
@@ -346,6 +347,7 @@ class Rac3Interface(GameInterface):
         self.player_type = PLAYER_TYPE_TO_NAME[self._read8(RAC3STATUS.PLAYER_TYPE)]
         self.vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER)
         self.action = self._read8(RAC3STATUS.ACTION)
+        self.action_2 = self._read8(RAC3STATUS.ACTION_2)
         self.prev_action = self._read8(RAC3STATUS.PREV_ACTION)
         self.inputs = RAC3INPUT(self._read16(RAC3STATUS.READ_INPUT))
         self.health = self._read8(RAC3STATUS.HEALTH)
@@ -965,7 +967,7 @@ class Rac3Interface(GameInterface):
         if (self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE
                 or self.is_reloading
                 or self.self_respawning
-                or bool(self._read8(RAC3STATUS.HIDE_WEAPON))
+                or self.action_2 == 0x09
                 or current_time - self.last_in_ship_transition_time < 1):
             return False
         return True

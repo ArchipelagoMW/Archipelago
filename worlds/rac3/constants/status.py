@@ -5,6 +5,7 @@ class RAC3STATUS:
     """Constant addresses for in game memory values"""
     APCODE = 51000000
     ACTION = 0x001A71A4
+    ACTION_2 = 0x001A71AC
     PREV_ACTION = 0x001A71B0
     SECOND_PREV_ACTION = 0x001A71BC
     LEVEL_TABLE = 0x001425C0
