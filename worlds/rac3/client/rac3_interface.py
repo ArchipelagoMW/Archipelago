@@ -124,7 +124,6 @@ class Rac3Interface(GameInterface):
     one_hp_challenge: dict[str, int] = None
     pda_vendor: int = 0
     last_in_vehicle_time: float = 0.0
-    last_in_ship_transition_time: float = 0.0
     nanotech_exp: int = 0
     homewarping: bool = False
     checked_locations: set[str] = set()
@@ -132,6 +131,7 @@ class Rac3Interface(GameInterface):
     clank_disabled_trap: bool = False
     unfreeze_packs: bool = False
     vidcomic_2_fix: int = 0
+    player_actionable: int = 0x8000
 
     def __init__(self):
         super().__init__()  # GameInterfaceの初期化
@@ -357,11 +357,11 @@ class Rac3Interface(GameInterface):
         self.message_display = bool(self._read_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER)))
         self.nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
         self.clank_disabled = bool(self._read8(RAC3STATUS.NO_CLANK))
+        self.player_actionable = self._read16(RAC3STATUS.PLAYER_ACTIONABLE)
         self.pda_vendor = self.find_pda_vendor()
         self.vehicle_check()
         self.pause_check()
         self.check_latches()
-        self.transition_check()
 
     def vehicle_check(self):
         """
@@ -804,10 +804,6 @@ class Rac3Interface(GameInterface):
                                 " stuck, hold L2 + R2 + L1 + R1 + SELECT to warp back to the phoenix")
             case RAC3REGION.PHOENIX_ASSAULT:
                 logger.info("If you want to travel to the regular phoenix, hold L2 + R2 + L1 + R1 + SELECT")
-    
-    def transition_check(self):
-        if self._read16(RAC3STATUS.TRANSITIONING) == 0x8000:
-            self.last_in_ship_transition_time = time.time()
 
     ##################
     # Player Respawn #
@@ -963,12 +959,10 @@ class Rac3Interface(GameInterface):
     def should_cycle_gadgets(self) -> bool:
         """Check if it's safe to cycle gadgets
         used to ensure gadgets can respawn without the cycler interfering"""
-        current_time = time.time()
-        if (self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE
+        if ((self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE and self.player_actionable == 0x8000)
                 or self.is_reloading
                 or self.self_respawning
-                or self.action_2 == 0x09
-                or current_time - self.last_in_ship_transition_time < 1):
+                or self.action_2 == 0x09):
             return False
         return True
 
