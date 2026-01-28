@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from ..Items import *
 from ..ItemNames import motion_blur_trap, fizzle_portal_trap, butter_fingers_trap
 
@@ -72,3 +73,52 @@ def handle_trap(trap_name: str) -> str:
         return "script CubeConfettiTrap()\n"
     elif trap_name == slippery_floor_trap:
         return "script SlipperyFloorTrap()\n"
+    
+
+maps_with_potatos = ["sp_a3_speed_ramp",
+                     "sp_a3_speed_flings",
+                     "sp_a3_portal_intro",
+                     "sp_a3_end",
+                     "sp_a4_intro",
+                     "sp_a4_tb_intro",
+                     "sp_a4_tb_trust_drop",
+                     "sp_a4_tb_wall_button",
+                     "sp_a4_tb_polarity",
+                     "sp_a4_tb_catch",
+                     "sp_a4_stop_the_box",
+                     "sp_a4_laser_catapult",
+                     "sp_a4_laser_platform",
+                     "sp_a4_speed_tb_catch",
+                     "sp_a4_jump_polarity",
+                     "sp_a4_finale1",
+                     "sp_a4_finale2",
+                     "sp_a4_finale3",
+                     "sp_a4_finale4"]
+
+def handle_map_start(map_code: str, items_missing: list[str]) -> list[str]:
+    commands: list[str] = []
+    
+    if map_code in maps_with_potatos:
+        commands.append("script RemovePotatosFromGun()\n")
+    
+    for mc in map_specific_commands:
+        if map_code == mc.map_code and mc.condition_items in items_missing:
+            commands += mc.commands
+        
+    return commands
+
+
+@dataclass
+class MapCommand:
+    map_code: str
+    condition_item: str
+    commands: list[str]
+    
+map_specific_commands: list[MapCommand] = [
+    MapCommand("sp_a3_transition01", potatos, ["script RemovePotatOS()\n"]),
+    MapCommand("sp_a4_finale4", potatos, ["script BlockWheatleyFight()\n"]),
+    MapCommand("sp_a2_laser_stairs", reflection_cube, ['script ppmod.addscript([Vector(-352, -288, -32), 1, "trigger_once"], "OnStartTouch", "DeleteEntity(\"models/props/reflection_cube.mdl\")", 0.5, 1)\n',
+                                                         'script ppmod.addscript("prop_button", "OnPressed", "DeleteEntity(\"models/props/reflection_cube.mdl\")", 0.5)\n']),
+    MapCommand("sp_a2_laser_relays", reflection_cube, ['script ppmod.get("laser_cube_spawner").Destroy()\n']),
+    MapCommand("sp_a1_intro1", weighted_cube, ['script DeleteEntity("entity_box_maker_rm1")\n'])
+]

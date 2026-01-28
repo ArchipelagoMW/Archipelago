@@ -74,7 +74,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 6: Repulsion Intro Completion": Portal2LocationData("sp_a3_jump_intro", LocationType.MAP_COMPLETION, [portal_gun_2, paint, old_button, old_floor_button, antique_cube]),
     "Chapter 6: Bomb Flings Completion": Portal2LocationData("sp_a3_bomb_flings", LocationType.MAP_COMPLETION, [portal_gun_2, old_button, paint]),
     "Chapter 6: Crazy Box Completion": Portal2LocationData("sp_a3_crazy_box", LocationType.MAP_COMPLETION, [portal_gun_2, old_button, paint, antique_cube, old_floor_button]),
-    "Chapter 6: PotatOS Completion": Portal2LocationData("sp_a3_transition01", LocationType.MAP_COMPLETION, [portal_gun_2]),
+    "Chapter 6: PotatOS Completion": Portal2LocationData("sp_a3_transition01", LocationType.MAP_COMPLETION, [portal_gun_2, potatos]),
     # Chapter 7
     "Chapter 7: Propulsion Intro Completion": Portal2LocationData("sp_a3_speed_ramp", LocationType.MAP_COMPLETION, [portal_gun_2, paint, antique_cube, old_floor_button, old_button]),
     "Chapter 7: Propulsion Flings Completion": Portal2LocationData("sp_a3_speed_flings", LocationType.MAP_COMPLETION, [portal_gun_2, paint, antique_cube, old_floor_button]),
@@ -96,7 +96,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 9: Finale 1 Completion": Portal2LocationData("sp_a4_finale1", LocationType.MAP_COMPLETION, [portal_gun_2, faith_plate, funnel, paint]),
     "Chapter 9: Finale 2 Completion": Portal2LocationData("sp_a4_finale2", LocationType.MAP_COMPLETION, [portal_gun_2, funnel, paint, floor_button]),
     "Chapter 9: Finale 3 Completion": Portal2LocationData("sp_a4_finale3", LocationType.MAP_COMPLETION, [portal_gun_2, paint, funnel]),
-    "Chapter 9: Finale 4 Completion": Portal2LocationData("sp_a4_finale4", LocationType.MAP_COMPLETION, [portal_gun_2, paint, adventure_core, space_core, fact_core]),
+    "Chapter 9: Finale 4 Completion": Portal2LocationData("sp_a4_finale4", LocationType.MAP_COMPLETION, [portal_gun_2, potatos, paint, adventure_core, space_core, fact_core]),
 }
 
 # Optional Checks

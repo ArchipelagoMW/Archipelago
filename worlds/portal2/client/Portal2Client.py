@@ -9,7 +9,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
 from NetUtils import ClientStatus, JSONMessagePart, NetworkItem
 from Utils import async_start, init_logging
 
-from ..mod_helpers.ItemHandling import handle_item, handle_trap
+from ..mod_helpers.ItemHandling import handle_item, handle_map_start, handle_trap
 from ..mod_helpers.MapMenu import Menu
 from ..Locations import location_names_to_map_codes, map_codes_to_location_names, all_locations_table
 from .. import Portal2World
@@ -206,10 +206,11 @@ class Portal2Context(CommonContext):
 
     async def handle_message(self, message: str):
         if message.startswith("map_name:"):
-            logger.info(f"Map Joined {message.split(':', 1)[1]}")
+            map_name = message.split(':', 1)[1]
             # append the whole command string
             command_string = self.create_level_begin_command()
             self.command_queue.append(command_string)
+            self.command_queue += handle_map_start(map_name, self.item_list)
 
         # For map complete checks
         elif message.startswith("map_complete:"):
