@@ -35,8 +35,8 @@ class Portal2Item(Item):
 game_item_table: dict[str, Portal2ItemData] = {
     # Portal Guns
     portal_gun_2: Portal2ItemData("weapon_portalgun", "CanFirePortal2", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression | ItemClassification.useful),
-    #potatos: Portal2ItemData("weapon_portalgun", "potato", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression), # Currently no logic set for this in game or in generation
-
+    potatos: Portal2ItemData("weapon_portalgun", "potato", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression),
+    
     # Cubes (GetModelName())
     weighted_cube: Portal2ItemData("prop_weighted_cube", "models/props/metal_box.mdl", ItemTag.DELETE | ItemTag.CUBE, ItemClassification.progression),
     reflection_cube: Portal2ItemData("prop_weighted_cube", "models/props/reflection_cube.mdl", ItemTag.DELETE | ItemTag.CUBE, ItemClassification.progression),

@@ -102,7 +102,7 @@ def handle_map_start(map_code: str, items_missing: list[str]) -> list[str]:
         commands.append("script RemovePotatosFromGun()\n")
     
     for mc in map_specific_commands:
-        if map_code == mc.map_code and mc.condition_items in items_missing:
+        if map_code == mc.map_code and mc.condition_item in items_missing:
             commands += mc.commands
         
     return commands
