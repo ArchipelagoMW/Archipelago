@@ -541,8 +541,8 @@ OAMData:
         rom.banks[0x38][0x1400+n*0x20:0x1410+n*0x20] = utils.createTileData(gfx_high)
         rom.banks[0x38][0x1410+n*0x20:0x1420+n*0x20] = utils.createTileData(gfx_low)
 
-def addBootsControls(rom, boots_controls: int):
-    if boots_controls == BootsControls.option_vanilla:
+def addBootsControls(rom, bootscontrols):
+    if bootscontrols == 'vanilla':
         return
     consts = {
           "INVENTORY_PEGASUS_BOOTS": 0x8,
@@ -560,25 +560,25 @@ def addBootsControls(rom, boots_controls: int):
 
     BOOTS_START_ADDR = 0x11E8
     condition = {
-        BootsControls.option_bracelet: """
+        'bracelet': """
         ld   a, [hl]
         ; Check if we are using the bracelet
         cp   INVENTORY_POWER_BRACELET
         jr   z, .yesBoots
         """,
-        BootsControls.option_press_a: """
+        'pressa': """
         ; Check if we are using the A slot
         cp  J_A
         jr  z, .yesBoots
         ld   a, [hl]
         """,
-        BootsControls.option_press_b: """
+        'pressb': """
         ; Check if we are using the B slot
         cp  J_B
         jr  z, .yesBoots
         ld   a, [hl]
         """
-    }[boots_controls]
+    }[bootscontrols]
     
     # The new code fits exactly within Nintendo's poorly space optimzied code while having more features
     boots_code = assembler.ASM("""

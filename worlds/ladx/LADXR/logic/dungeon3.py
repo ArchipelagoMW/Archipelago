@@ -33,7 +33,7 @@ class Dungeon3:
         Location(dungeon=3).add(DroppedKey(0x14D)).connect(area_right, r.attack_hookshot_powder)  # key after the stairs.
 
         dungeon3_nightmare_key_chest = Location(dungeon=3).add(DungeonChest(0x147)).connect(area_right, AND(BOMB, FEATHER, PEGASUS_BOOTS))  # nightmare key chest
-        dungeon3_post_dodongo_chest = Location(dungeon=3).add(DungeonChest(0x146)).connect(area_right, AND(r.attack_hookshot_powder, r.miniboss_requirements[world_setup.miniboss_mapping[2]]))  # boots after the miniboss
+        dungeon3_post_dodongo_chest = Location(dungeon=3).add(DungeonChest(0x146)).connect(area_right, AND(r.attack_hookshot_powder, r.miniboss_requirements[world_setup.miniboss_mapping['2']]))  # boots after the miniboss
         compass_chest = Location(dungeon=3).add(DungeonChest(0x142)).connect(area_right, OR(SWORD, BOMB, AND(SHIELD, r.attack_hookshot_powder))) # bomb only activates with sword, bomb or shield
         dungeon3_3_bombite_room = Location(dungeon=3).add(DroppedKey(0x141)).connect(compass_chest, BOMB) # 3 bombite room
         Location(dungeon=3).add(DroppedKey(0x148)).connect(area_right, r.attack_no_boomerang) # 2 zol 2 owl drop key

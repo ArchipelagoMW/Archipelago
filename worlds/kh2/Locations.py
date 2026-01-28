@@ -982,7 +982,6 @@ popups_set = {
     LocationName.BaileySecretAnsemReport7,
     LocationName.BaseballCharm,
     LocationName.AnsemsStudyMasterForm,
-    LocationName.AnsemsStudySkillRecipe,
     LocationName.AnsemsStudySleepingLion,
     LocationName.FFFightsCureElement,
     LocationName.ThousandHeartlessSecretAnsemReport1,

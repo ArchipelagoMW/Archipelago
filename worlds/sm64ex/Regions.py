@@ -100,6 +100,7 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
     if options.enable_coin_stars:
         create_locs(regWhomp, "WF: 100 Coins")
 
+    regJRBDoor = create_region("Jolly Roger Bay Door", player, world)
     regJRB = create_region("Jolly Roger Bay", player, world)
     create_locs(regJRB, "JRB: Plunder in the Sunken Ship", "JRB: Can the Eel Come Out to Play?", "JRB: Treasure of the Ocean Cave",
                         "JRB: Blast to the Stone Pillar", "JRB: Through the Jet Stream", "JRB: Bob-omb Buddy")

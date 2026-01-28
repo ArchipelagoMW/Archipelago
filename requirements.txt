@@ -13,5 +13,9 @@ cymem>=2.0.13
 orjson>=3.11.4
 typing_extensions>=4.15.0
 pyshortcuts>=1.9.6
+pathspec>=0.12.1
 kivymd @ git+https://github.com/kivymd/KivyMD@5ff9d0d
 kivymd>=2.0.1.dev0
+
+# Legacy world dependencies that custom worlds rely on
+Pymem>=1.13.0
