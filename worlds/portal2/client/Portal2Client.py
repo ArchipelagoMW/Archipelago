@@ -211,15 +211,22 @@ class Portal2Context(CommonContext):
             command_string = self.create_level_begin_command()
             self.command_queue.append(command_string)
 
+        # For map complete checks
         elif message.startswith("map_complete:"):
             done_map = message.split(':', 1)[1]
             if done_map == self.goal_map_code:
                 await self.handle_goal_completion()
-            logger.info("Check made: " + done_map)
+            
             map_id = self.map_code_to_location_id(done_map)
             if map_id:
                 await self.check_locations([map_id])
                 self.update_menu(map_id)
+        
+        # For all other checks
+        elif message.startswith("item_collected:"):
+            item_collected = message.split(":", 1)[1]
+            check_id = all_locations_table[item_collected].id
+            await self.check_locations([check_id])
         
         elif message.startswith("send_deathlink"):
             if self.death_link_active and time.time() - self.last_death_link > 10:
