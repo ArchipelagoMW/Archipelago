@@ -4,14 +4,23 @@ from worlds.generic.Rules import add_rule, set_rule
 
 # Helper functions
 def can_light_fire(state, player):
+    """
+    Checks if the player has any item capable of lighting a fire/torch.
+    """
     return state.has(ItemName.flaming_torch_x1, player) or \
            state.has(ItemName.flaming_torch_x2, player) or \
            state.has(ItemName.fire_talisman, player)
 
 def can_blow_up_wall(state, player):
+    """
+    Checks if the player has explosives or the Mine Entrance Lift Key (which implies access to explosives).
+    """
     return state.has(ItemName.dynamite_x1, player) or state.has(ItemName.mine_entrance_lift_key, player)
 
 def set_rules(world: World):
+    """
+    Sets the logic rules for all locations in the world.
+    """
     player = world.player
     
     # Victory condition: Defeat Zenith and interact with world light spark
@@ -25,6 +34,7 @@ def set_rules(world: World):
         pass
 
     # Fishing Rules
+    # Fishing locations require the Fishing Rod
     fish_locations = [
         LocationName.forest_fish_upstream,
         LocationName.mountain_underpass_fish_oceanic,
@@ -73,6 +83,7 @@ def set_rules(world: World):
             pass
 
     # Furnace Rule and Gate Key Pickup
+    # Requires lighting the furnace
     yard_fire_items = [
         LocationName.prison_yard_misc_furnace,
         LocationName.prison_yard_item_pickup_gate_key,
@@ -85,6 +96,7 @@ def set_rules(world: World):
             pass
 
     # Gate Key Rule
+    # Unlocks the gate to the Forest
     gate_locked_items = [
         LocationName.prison_yard_torch_prisoner_intake,
         LocationName.prison_yard_torch_stables,
@@ -119,6 +131,7 @@ def set_rules(world: World):
             pass
         
     # Apex Horn Rule
+    # Requires Blizzard Talisman to blow into the horn
     try:
         set_rule(world.multiworld.get_location(LocationName.apex_blow_horn, player), lambda state: state.has(ItemName.blizzard_talisman, player))
     except KeyError:
@@ -411,7 +424,7 @@ def set_rules(world: World):
     # Mines 1F Map requires Minecart Wheel
     try:
         set_rule(world.multiworld.get_location(LocationName.mines_item_pickup_map_1, player),
-                     lambda state: state.has(ItemName.minecart_wheel, player))
+                 lambda state: state.has(ItemName.minecart_wheel, player))
     except KeyError:
         pass
 
@@ -494,13 +507,6 @@ def set_rules(world: World):
     try:
         set_rule(world.multiworld.get_location(LocationName.cultist_tamper_armament, player),
                  lambda state: state.has(ItemName.sol_forge_lab_key, player) and state.has(ItemName.minor_cell_key, player))
-    except KeyError:
-        pass
-
-    # Cultist Amalgamate Defeated Rule
-    try:
-        set_rule(world.multiworld.get_location(LocationName.cultist_compound_item_pickup_sol_forge_lab_key , player),
-                 lambda state: state.has(ItemName.central_cell_key, player) and state.has(ItemName.minor_cell_key, player))
     except KeyError:
         pass
 
@@ -621,7 +627,8 @@ def set_rules(world: World):
     # Apex Unknown Light Spark
     try:
         set_rule(world.multiworld.get_location(LocationName.apex_spark_unknown, player),
-                 lambda state: state.has(ItemName.data_disc_r, player) and
+                 lambda state: state.has(ItemName.apex_gatekeeper_defeated_event, player) and
+                               state.has(ItemName.data_disc_r, player) and
                                state.has(ItemName.data_disc_g, player) and
                                state.has(ItemName.data_disc_b, player))
     except KeyError:
@@ -679,6 +686,7 @@ def set_rules(world: World):
         LocationName.apex_item_pickup_minor_sol_shard_33,
         LocationName.apex_item_pickup_brass_knuckles_plus,
         LocationName.apex_torch_sparring_hall,
+        LocationName.apex_item_pickup_guard_captains_key,
     ]
 
     for loc_name in restricted_access_locked_locations:

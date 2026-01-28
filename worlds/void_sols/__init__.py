@@ -1,4 +1,4 @@
-from BaseClasses import Tutorial, ItemClassification
+from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
 
 from .Options import VoidSolsOptions
@@ -46,7 +46,18 @@ class VoidSolsWorld(World):
         set_rules(self)
 
     def create_items(self):
+        """
+        Creates the item pool for the world.
+        Handles:
+        - Starting weapon selection and pre-collection.
+        - Manual placement of the Victory item.
+        - Manual placement of the East Wing Key to ensure it appears in the accessible part of Supermax Prison.
+        - Creation of Boss Event items.
+        - Filling the rest of the item pool with items from item_data_table.
+        - Filling remaining locations with junk (Sols).
+        """
         # Handle Starting Weapon
+        # The player can choose a specific starting weapon or have it randomized.
         starting_weapon_option = self.options.starting_weapon.value
         
         weapon_map = {
@@ -79,7 +90,9 @@ class VoidSolsWorld(World):
             self.create_item(ItemName.victory))
 
         # Place East Wing Key manually in Supermax Prison West
-        # It can be any of the locations in Supermax Prison West that is not hidden by the codebearer puzzle rules
+        # The East Wing Key is required to access Supermax Prison East from West.
+        # To prevent softlocks, we must ensure it is placed in the West section,
+        # which is the entry point from the Forest.
         east_wing_key_candidates = [
             LocationName.supermax_prison_spark_cell,
             LocationName.supermax_prison_torch_north_wing_office,
@@ -155,6 +168,8 @@ class VoidSolsWorld(World):
         total_locations = len(unfilled_locations)
         needed_fillers = total_locations - len(itempool)
         
+        # Fill remaining locations with Sols (currency)
+        # We use a weighted distribution to make smaller currency drops more common.
         sols_items = [
             ItemName.sols_1,
             ItemName.sols_25,

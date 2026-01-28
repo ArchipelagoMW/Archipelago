@@ -2,9 +2,15 @@
 from .Names import ItemName
 
 class VoidSolsItem(Item):
+    """
+    Class representing an item in Void Sols.
+    """
     game: str = "Void Sols"
 
 class ItemData:
+    """
+    Data class for defining item properties.
+    """
     def __init__(self, code, classification, quantity=1):
         self.code = code
         self.classification = classification

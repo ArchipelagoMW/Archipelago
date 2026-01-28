@@ -504,6 +504,9 @@ all_locations = {
 
 
 def setup_locations(world):
+    """
+    Returns a dictionary of locations that should be active in the world based on options.
+    """
     location_table = {}
 
     location_table.update(bosses_table)

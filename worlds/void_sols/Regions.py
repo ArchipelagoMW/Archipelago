@@ -9,6 +9,9 @@ from worlds.AutoWorld import World
 
 
 def create_regions(world: World, active_locations):
+    """
+    Creates all regions for the game and assigns locations to them.
+    """
     multiworld: MultiWorld = world.multiworld
     player: int = world.player
 
@@ -132,6 +135,9 @@ def create_regions(world: World, active_locations):
 
 
 def connect_regions(world: World):
+    """
+    Connects regions together with entrances and rules.
+    """
     multiworld: MultiWorld = world.multiworld
     player: int = world.player
 
@@ -144,7 +150,7 @@ def connect_regions(world: World):
     # Forest -> Village (Open, no locks)
     connect(world, "Forest", "Village")
     
-    # Village -> Prison Portal Room (One way)
+    # Village -> Prison Portal Room
     connect(world, "Village", "Prison Portal Room")
 
     # Village -> Village Undercroft Forgotten Reliquary (Locked by Greater Void Worm Defeated)
