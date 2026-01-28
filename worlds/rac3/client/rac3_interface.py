@@ -959,7 +959,8 @@ class Rac3Interface(GameInterface):
     def should_cycle_gadgets(self) -> bool:
         """Check if it's safe to cycle gadgets
         used to ensure gadgets can respawn without the cycler interfering"""
-        if ((self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE and self.player_actionable == 0x8000)
+        if ((self.player_actionable == 0x8000 and self.pause_state_value in [RAC3PAUSESTATE.PLANET_CHANGE,
+                                                                             RAC3PAUSESTATE.UNPAUSED])
                 or self.is_reloading
                 or self.self_respawning
                 or self.action_2 == 0x09):
