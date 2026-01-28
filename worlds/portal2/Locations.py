@@ -106,6 +106,8 @@ cutscene_completion_table: dict[str, Portal2LocationData] = {
     "Chapter 6: Long Fall Completion": Portal2LocationData("sp_a3_00", LocationType.CUTSCENE_COMPLETION),
 }
 
+
+# Not implemented
 story_achievements_table: dict[str, Portal2LocationData] = {
     "Achievement: Wake Up Call": Portal2LocationData("sp_a1_intro1", LocationType.STORY_ACHIEVEMENT),
     "Achievement: You Monster": Portal2LocationData("sp_a1_wakeup", LocationType.STORY_ACHIEVEMENT),
@@ -122,6 +124,7 @@ story_achievements_table: dict[str, Portal2LocationData] = {
     "Achievement: Drop Box": Portal2LocationData(None, LocationType.STORY_ACHIEVEMENT),
 }
 
+# Not implemented
 wheatly_monitor_table: dict[str, Portal2LocationData] = {
     "Wheatley Monitor 1": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
     "Wheatley Monitor 2": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
@@ -137,8 +140,19 @@ wheatly_monitor_table: dict[str, Portal2LocationData] = {
     "Wheatley Monitor 12": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
 }
 
-item_location_table: dict[str, Portal2LocationData] = {}
+item_maps_to_item_location : dict[str, str] = {
+    "sp_a1_intro3": portal_gun_1, 
+    "sp_a2_intro": portal_gun_2, 
+    "sp_a3_transition01": potatos
+}
 
+item_location_table: dict[str, Portal2LocationData] = {
+    portal_gun_1: Portal2LocationData("sp_a1_intro3", LocationType.ITEM),
+    portal_gun_2: Portal2LocationData("sp_a2_intro", LocationType.ITEM),
+    potatos: Portal2LocationData("sp_a3_transition01", LocationType.ITEM, [portal_gun_2]),
+}
+
+# Not implementd
 achievements_table: dict[str, Portal2LocationData] = {}
 
 all_locations_table: dict[str, Portal2LocationData] = map_complete_table.copy()
@@ -148,8 +162,8 @@ location_names_to_map_codes: dict[str, str] = {name: value.map_name for
                                                name, value in all_locations_table.items()}
 map_codes_to_location_names: dict[str, str] = {value: key for key, value in location_names_to_map_codes.items()}
 
-all_locations_table.update(story_achievements_table)
-all_locations_table.update(wheatly_monitor_table)
+# all_locations_table.update(story_achievements_table)
+# all_locations_table.update(wheatly_monitor_table)
 all_locations_table.update(item_location_table)
-all_locations_table.update(achievements_table)
+# all_locations_table.update(achievements_table)
 

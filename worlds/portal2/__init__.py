@@ -3,18 +3,20 @@ import sys
 
 from BaseClasses import ItemClassification, MultiWorld, Region, Tutorial
 from Options import PerGameCommonOptions
+import Utils
 import settings
+from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule
 from .Options import CutsceneLevels, Portal2Options, portal2_option_groups, portal2_option_presets
 from .Items import Portal2Item, game_item_table, item_table, junk_items, trap_items
-from .Locations import Portal2Location, map_complete_table, cutscene_completion_table, all_locations_table
-from worlds.AutoWorld import WebWorld, World
+from .Locations import *
 from entrance_rando import *
 from .ItemNames import portal_gun_2
 
 from . import Components as components
 
 randomize_maps = True
+debug_mode = False
 
 class Portal2Settings(settings.Group):
     class Portal2ExtrasFilePath(settings.UserFilePath):
@@ -120,6 +122,13 @@ class Portal2World(World):
         pick_maps(len(map_pool))
 
         return chapter_maps
+    
+    def create_in_level_check(self, name: str, requirements: list[str], entrance_region: Region):
+        item_region = Region(f"{name} End", self.player, self.multiworld)
+        self.multiworld.regions.append(item_region)
+        item_region.add_locations({name: self.location_name_to_id[name]}, Portal2Location)
+        self.location_count += 1
+        entrance_region.connect(item_region, f"Get {name}", lambda state, _item_reqs=requirements: state.has_all(_item_reqs, self.player))
 
     def create_connected_maps(self, chapter_number: int, map_location_names: list[str] = None):
         chapter_name = f"Chapter {chapter_number}"
@@ -142,6 +151,14 @@ class Portal2World(World):
             item_reqs = all_locations_table[map_name].required_items
             region_start.connect(region_end, f"Beat {name}", lambda state, _item_reqs=item_reqs: state.has_all(_item_reqs, self.player))
 
+            # Additional locations
+            # Portal guns
+            map_code = location_names_to_map_codes[map_name]
+            if map_code in item_maps_to_item_location:
+                item_check_name = item_maps_to_item_location[map_code]
+                item_check_reqs = item_location_table[item_check_name].required_items
+                self.create_in_level_check(item_check_name, item_check_reqs, region_start)
+            
             if last_region:
                 last_region.connect(region_start)
             else:
@@ -163,7 +180,6 @@ class Portal2World(World):
 
             if "chapter_dict" in slot_data:
                 self.chapter_maps_dict = slot_data.get("chapter_dict", [])
-                print(self.chapter_maps_dict)
                 self.chapter_maps_dict = {f"Chapter {key}":value for key, value in self.chapter_maps_dict.items()}
                 return
         
@@ -181,7 +197,6 @@ class Portal2World(World):
         # Add chapters to those regions
         for i in range(1,9):
             if randomize_maps:
-                # chapter_region = self.create_disjointed_maps_for_er(i)
                 chapter_region, last_region = self.create_connected_maps(i, self.chapter_maps_dict[f"Chapter {i}"])
             else:
                 chapter_region, last_region = self.create_connected_maps(i)
@@ -236,6 +251,11 @@ class Portal2World(World):
                       lambda item: item.name not in game_item_table or item.player != self.player)
     
     def fill_slot_data(self):
+        if debug_mode:
+            state = self.multiworld.get_all_state(False)
+            state.update_reachable_regions(self.player)
+            Utils.visualize_regions(self.multiworld.get_region("Menu", self.player), f"output/map_Player{self.player}.puml", show_entrance_names=True, regions_to_highlight=state.reachable_regions[self.player])
+        
         # Return the chapter map orders e.g. {chapter1: ['sp_a1_intro2', 'sp_a1_intro5', ...], chapter2: [...], ...}
         # This is for generating and updating the Extras menu (level select screen) in portal 2 at the start and when checks are made
         excluded_option_names = [CutsceneLevels]
