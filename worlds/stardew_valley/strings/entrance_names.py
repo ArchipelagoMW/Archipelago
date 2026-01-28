@@ -1,3 +1,6 @@
+from typing import final
+
+
 def dig_to_mines_floor(floor: int) -> str:
     return f"Dig to The Mines - Floor {floor}"
 
@@ -14,6 +17,7 @@ def move_to_woods_depth(depth: int) -> str:
     return f"Enter Deep Woods Depth {depth}"
 
 
+@final
 class Entrance:
     to_stardew_valley = "To Stardew Valley"
     to_farmhouse = "To Farmhouse"
@@ -194,6 +198,7 @@ class Entrance:
     feed_trash_bear = "Feed Trash Bear"
 
 
+@final
 class LogicEntrance:
     talk_to_mines_dwarf = "Talk to Mines Dwarf"
 
@@ -279,6 +284,7 @@ class LogicEntrance:
 # Skull Cavern Elevator
 
 
+@final
 class DeepWoodsEntrance:
     secret_woods_to_deep_woods = "Woods to Deep Woods"
     use_woods_obelisk = "Use Woods Obelisk"
@@ -296,40 +302,49 @@ class DeepWoodsEntrance:
     deep_woods_depth_100 = move_to_woods_depth(100)
 
 
+@final
 class EugeneEntrance:
     forest_to_garden = "Forest to Eugene's Garden"
     garden_to_bedroom = "Eugene's Garden to Eugene's Bedroom"
 
 
+@final
 class MagicEntrance:
     store_to_altar = "Pierre's General Store to Magic Altar"
 
 
+@final
 class JasperEntrance:
     museum_to_bedroom = "Museum to Jasper's Bedroom"
 
 
+@final
 class AlecEntrance:
     forest_to_petshop = "Forest to Alec's Pet Shop"
     petshop_to_bedroom = "Alec's Pet Shop to Alec's Bedroom"
 
 
+@final
 class YobaEntrance:
     secret_woods_to_clearing = "Woods to Yoba's Clearing"
 
 
+@final
 class JunaEntrance:
     forest_to_juna_cave = "Forest to Juna's Cave"
 
 
+@final
 class AyeishaEntrance:
     bus_stop_to_mail_van = "Bus Stop to Ayeisha's Mail Van"
 
 
+@final
 class RileyEntrance:
     town_to_riley = "Town to Riley's House"
 
 
+@final
 class SVEEntrance:
     backwoods_to_grove = "Backwoods to Enchanted Grove"
     grove_to_outpost_warp = "Enchanted Grove to Grove Outpost Warp"
@@ -401,14 +416,17 @@ class SVEEntrance:
     highlands_to_pond = "Highlands to Highlands Pond"
 
 
+@final
 class AlectoEntrance:
     witch_hut_to_witch_attic = "Witch's Hut to Witch's Attic"
 
 
+@final
 class LaceyEntrance:
     forest_to_hat_house = "Forest to Mouse House"
 
 
+@final
 class BoardingHouseEntrance:
     bus_stop_to_boarding_house_plateau = "Bus Stop to Boarding House Outside"
     boarding_house_plateau_to_boarding_house_first = "Boarding House Outside to Boarding House - First Floor"

@@ -1,6 +1,8 @@
 from collections.abc import Iterable
+from typing import final
 
 
+@final
 class ModNames:
     vanilla = None
     deepwoods = "DeepWoods"
