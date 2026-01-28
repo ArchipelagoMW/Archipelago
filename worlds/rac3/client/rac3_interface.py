@@ -359,6 +359,7 @@ class Rac3Interface(GameInterface):
         self.vehicle_check()
         self.pause_check()
         self.check_latches()
+        self.transition_check()
 
     def vehicle_check(self):
         """
@@ -378,8 +379,6 @@ class Rac3Interface(GameInterface):
                                                  + planet_data.PLANET_SPECIAL_OFFSET
                                                  ) if planet_data.PLANET_SPECIAL_OFFSET is not None else None
             self.pause_state = bool(self.pause_state_value)
-            if self.pause_state_value == RAC3PAUSESTATE.PLANET_CHANGE:
-                self.last_in_ship_transition_time = time.time()
         else:
             # Unknown planet, assume paused to be safe
             self.pause_menu = True
@@ -803,6 +802,10 @@ class Rac3Interface(GameInterface):
                                 " stuck, hold L2 + R2 + L1 + R1 + SELECT to warp back to the phoenix")
             case RAC3REGION.PHOENIX_ASSAULT:
                 logger.info("If you want to travel to the regular phoenix, hold L2 + R2 + L1 + R1 + SELECT")
+    
+    def transition_check(self):
+        if self._read16(RAC3STATUS.TRANSITIONING) == 0x8000:
+            self.last_in_ship_transition_time = time.time()
 
     ##################
     # Player Respawn #
@@ -963,7 +966,7 @@ class Rac3Interface(GameInterface):
                 or self.is_reloading
                 or self.self_respawning
                 or bool(self._read8(RAC3STATUS.HIDE_WEAPON))
-                or current_time - self.last_in_ship_transition_time < 1.5):
+                or current_time - self.last_in_ship_transition_time < 1):
             return False
         return True
 
