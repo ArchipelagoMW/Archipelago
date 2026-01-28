@@ -8,7 +8,11 @@
 ## Installation Procedures
 
 1. Download and install [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest).
-2. Install the Void Sols Archipelago Mod. (Consult the mod's specific instructions for installation).
+2. Navigate to Void Sols in your Steam library.
+3. Right click on Void Sols and select "Properties..."
+4. Select "Game Versions & Betas."
+5. Select the "archipelago-stable" branch and update the game.
+6. Launch the game and verify you see the Archipelago marker on the title screen.
 
 ## Create a Config (.yaml) File
 
@@ -29,10 +33,10 @@ validator page: [YAML Validation page](/check)
 
 ## Joining a MultiWorld Game
 
-1. Launch Void Sols.
-2. Open the Archipelago connection menu in-game.
-3. Enter the server address, port, and your slot name.
-4. Connect and start playing.
+1. Connect to Archipelago.
+2. Launch Void Sols and verify you see the Archipelago logo on the main menu.
+3. For new games, press "Play" and then "New Game". Enter the server address, port, your slot name, and optional password. Fields are case-sensitive.
+4. For returning games, simply click on your save file to connect and play with saved info. If any information changes, use the three vertical dots context menu on the save to edit the data.
 
 ## Hosting a MultiWorld game
 
