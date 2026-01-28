@@ -21,8 +21,10 @@ The following are required in order to play Ratchet and Clank 3 in Archipelago
 
 - Enable PINE in PCSX2
     - In PCSX2, Under Tools, **Check** Show Advanced Settings
-    - In PCSX2, System -> Settings -> Advanced tab -> PINE Settings,
+    - In PCSX2, System → Settings → Advanced tab → PINE Settings,
       **Check** Enable and ensure Slot is set to 28011
+
+Make sure you restart PCSX2 afterwards.
 
 ## Configuring your YAML file
 
@@ -40,12 +42,9 @@ the [Ratchet and Clank 3 Options Page](/games/Ratchet%20and%20Clank%203/player-o
 ### Connect to the MultiServer
 
 1. Launch PCSX2, boot your copy of RaC3
-    - Start a new file, watch/skip the intro cutscene and pause the game when you load in on Veldin
 
 2. Launch Ratchet and Clank 3 client in the Archipelago Launcher
     - Under address input your archipelago connection address (ie: archipelago.gg:51780)
-
-
-    - PCSX2 must be open before the RaC3 client is opened, or it will give an error
+    - Start a new file, watch/skip the intro cutscene and reload the file to apply cosmetics
     - Items will begin being sent to the player before they are in their save file if the client is connected first
 

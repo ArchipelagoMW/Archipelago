@@ -202,6 +202,7 @@ class RAC3ITEM:
     ADAMANTINE = "Adamantine armor"
     AEGIS = "Aegis Mark V armor"
     INFERNOX = "Infernox armor"
+    CLANK = "Clank pack"
 
     PROGRESSIVE_SHOCK_BLASTER = "Progressive Shock Blaster"
     PROGRESSIVE_NITRO_LAUNCHER = "Progressive Nitro Launcher"
@@ -225,6 +226,7 @@ class RAC3ITEM:
     PROGRESSIVE_PLASMA_COIL = "Progressive Plasma Coil"
     PROGRESSIVE_VIDCOMIC = "Progressive VidComic"
     PROGRESSIVE_ARMOR = "Progressive Armor"
+    PROGRESSIVE_PACK = "Progressive Pack"
 
     VELDIN = "Infobot: Veldin"
     FLORANA = "Infobot: Florana"
@@ -257,10 +259,14 @@ class RAC3ITEM:
     MIRROR_TRAP = "Mirror Trap"
     OHKO_TRAP = "1-Hit KO Trap"
     LOCK_TRAP = "Item Lock Trap"
-    WRENCH_TRAP = "Wrench Trap"
+    WRENCH_ONLY_TRAP = "Wrench Only Trap"
     PANCAKE_TRAP = "Pancake Trap"
     LAVA_TRAP = "Lava Trap"
     NO_AMMO_TRAP = "No Ammo Trap"
+    BLACK_SCREEN_TRAP = "Black Screen Trap"
+    NO_CLANK_TRAP = "No Clank Trap"
+    INVISIBLE_TRAP = "Invisible Trap"
+    DISARM_TRAP = "Disarm Trap"
 
     QUICK_SELECT_0 = "Quick Select 0"
     QUICK_SELECT_1 = "Quick Select 1"

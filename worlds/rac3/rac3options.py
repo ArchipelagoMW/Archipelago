@@ -1,15 +1,21 @@
+"""This module contains the RAC3 Option class, containing all adjustable YAML options"""
 from dataclasses import dataclass
 
-from Options import OptionGroup, StartInventoryPool
+from Options import Accessibility, OptionGroup, ProgressionBalancing, StartInventoryPool
 from worlds.AutoWorld import PerGameCommonOptions
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.options.arena_options import Arena
+from worlds.rac3.options.armor_upgrade_options import ArmorUpgrade
+from worlds.rac3.options.clank_options import ClankOptions
 from worlds.rac3.options.deathlink_options import Deathlink
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
-from worlds.rac3.options.extra_armor_options import ExtraArmorUpgrade
+from worlds.rac3.options.filler_weight_options import FillerWeight
+from worlds.rac3.options.holostar_skip import HolostarSkip
+from worlds.rac3.options.intro_skip import IntroSkip
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
 from worlds.rac3.options.nanotech_limitation_options import NanotechLimitation
 from worlds.rac3.options.nanotech_options import NanotechMilestones
+from worlds.rac3.options.one_hp_options import OneHpChallenge
 from worlds.rac3.options.prog_weapons_options import EnableProgressiveWeapons
 from worlds.rac3.options.rangers_options import Rangers
 from worlds.rac3.options.ratchet_skins_options import RatchetSkin
@@ -26,11 +32,13 @@ from worlds.rac3.options.traps_options import EnableTraps
 from worlds.rac3.options.trophies_options import Trophies
 from worlds.rac3.options.vidcomics_options import VidComics
 from worlds.rac3.options.vr_challenges_options import VRChallenges
+from worlds.rac3.options.weapon_vendors_options import WeaponVendors
 
 
 def create_option_groups() -> list[OptionGroup]:
+    """Return the list of option groups for this world"""
     option_group_list: list[OptionGroup] = []
-    for name, options in rac3_option_groups.items():
+    for name, options in rac3_option_groups:
         option_group_list.append(OptionGroup(name=name, options=options))
 
     return option_group_list
@@ -38,14 +46,17 @@ def create_option_groups() -> list[OptionGroup]:
 
 @dataclass
 class RaC3Options(PerGameCommonOptions):
+    """YAML Options for RAC3"""
     deathlink: Deathlink
     start_inventory_from_pool: StartInventoryPool
     starting_weapons: StartingWeapons
     bolt_and_xp_multiplier: BoltAndXPMultiplier
     enable_progressive_weapons: EnableProgressiveWeapons
-    extra_armor_upgrade: ExtraArmorUpgrade
+    armor_upgrade: ArmorUpgrade
+    filler_weight: FillerWeight
     traps_enabled: EnableTraps
     trap_weight: TrapWeight
+    weapon_vendors: WeaponVendors
     skill_points: SkillPoints
     trophies: Trophies
     titanium_bolts: TitaniumBolts
@@ -62,15 +73,57 @@ class RaC3Options(PerGameCommonOptions):
     ship_wings: ShipWings
     ship_skin: ShipSkin
     skin: RatchetSkin
+    one_hp_challenge: OneHpChallenge
+    intro_skip: IntroSkip
+    holostar_skip: HolostarSkip
+    clank_options: ClankOptions
 
 
-rac3_option_groups: dict[str, list] = {
-    "Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
-                     ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps,
-                     TrapWeight, Rangers, Arena, VidComics, VRChallenges, SewerCrystals, SewerLimitation, NanotechLimitation],
-    "Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
-    "Generic Options": [Deathlink, RAC3ExcludeLocations],
-}
+rac3_option_groups = [
+    OptionGroup("Generic Options", [
+        ProgressionBalancing,
+        Accessibility,
+        Deathlink,
+    ]),
+    OptionGroup("RAC3 Game Options", [
+        IntroSkip,
+        HolostarSkip,
+        BoltAndXPMultiplier,
+        OneHpChallenge,
+    ]),
+    OptionGroup("RAC3 Item Options", [
+        StartingWeapons,
+        EnableProgressiveWeapons,
+        ArmorUpgrade,
+        ClankOptions,
+        EnableTraps,
+        TrapWeight,
+        FillerWeight,
+    ]),
+    OptionGroup("RAC3 Location Options", [
+        WeaponVendors,
+        SkillPoints,
+        Trophies,
+        TitaniumBolts,
+        Rangers,
+        VidComics,
+        VRChallenges,
+        Arena,
+        SewerCrystals,
+        SewerLimitation,
+        NanotechMilestones,
+        NanotechLimitation,
+    ]),
+    OptionGroup("RAC3 Cosmetic Options", [
+        ShipNose,
+        ShipWings,
+        ShipSkin,
+        RatchetSkin,
+    ]),
+    OptionGroup("Item & Location Options", [
+        RAC3ExcludeLocations,
+    ]),
+]
 
 slot_data_options: list[str] = [
     RAC3OPTION.DEATHLINK,
@@ -78,7 +131,7 @@ slot_data_options: list[str] = [
     RAC3OPTION.STARTING_WEAPONS,
     RAC3OPTION.BOLT_AND_XP_MULTIPLIER,
     RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS,
-    RAC3OPTION.EXTRA_ARMOR_UPGRADE,
+    RAC3OPTION.ARMOR_UPGRADE,
     RAC3OPTION.SKILL_POINTS,
     RAC3OPTION.TROPHIES,
     RAC3OPTION.TITANIUM_BOLTS,
@@ -97,4 +150,9 @@ slot_data_options: list[str] = [
     RAC3OPTION.VR_CHALLENGES,
     RAC3OPTION.SEWER_CRYSTALS,
     RAC3OPTION.SEWER_LIMITATION,
+    RAC3OPTION.WEAPON_VENDORS,
+    RAC3OPTION.FILLER_WEIGHT,
+    RAC3OPTION.ONE_HP_CHALLENGE,
+    RAC3OPTION.INTRO_SKIP,
+    RAC3OPTION.CLANK_OPTIONS,
 ]

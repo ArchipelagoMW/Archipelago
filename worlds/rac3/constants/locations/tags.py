@@ -13,4 +13,6 @@ class RAC3TAG:
     WEAPONS = "Weapons"
     GADGETS = "Gadgets"
     INFOBOT = "Infobot"
+    ONE_HP_UNSTABLE = "One HP Challenge Unstable"
     VR = "VR"
+    NOT_IMPLEMENTED = "Not Implemented"

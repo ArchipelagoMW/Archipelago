@@ -1,12 +1,13 @@
 from Options import ItemDict
-from worlds.rac3 import RAC3OPTION
 from worlds.rac3.constants.data.item import default_starting_weapons
+from worlds.rac3.constants.options import RAC3OPTION
 
 
 class StartingWeapons(ItemDict):
     """
-    Determines which weapons you will be starting the game with, provide a count of the weapons you want to be picked
-    between, 2 are selected to be placed on Veldin.
+    Determines which weapons you will be starting the game with,
+    provide a count of the weapons you want to be picked between,
+    two are selected to be placed on Veldin.
     """
     display_name = RAC3OPTION.STARTING_WEAPONS
     min = 0

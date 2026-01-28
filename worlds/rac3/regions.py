@@ -2,21 +2,25 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Location, Region
 from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
-from worlds.rac3.constants.items import RAC3ITEM
+from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.nanotech import RAC3NANOTECH
 from worlds.rac3.constants.locations.sewers import RAC3SEWER
 from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.tags import RAC3TAG
+from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
+from worlds.rac3.constants.locations.trophies import RAC3TROPHY
 from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.player_type import RAC3PLAYERTYPE
 from worlds.rac3.constants.region import RAC3REGION
 from worlds.rac3.rac3options import RaC3Options
 
 if TYPE_CHECKING:
-    from worlds.rac3 import RaC3World
+    from worlds.rac3.world import RaC3World
 
 
 class GameLocation(Location):
     game = RAC3OPTION.GAME_TITLE_FULL
+
 
 every_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_11,
@@ -110,8 +114,6 @@ every_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_99,
     RAC3NANOTECH.LEVEL_100,
 ]
-
-# Making an array with every 5 nanotech
 every_5_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_15,
     RAC3NANOTECH.LEVEL_20,
@@ -132,8 +134,6 @@ every_5_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_95,
     RAC3NANOTECH.LEVEL_100,
 ]
-
-# Making an array with every 10 nanotech
 every_10_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_20,
     RAC3NANOTECH.LEVEL_30,
@@ -145,8 +145,6 @@ every_10_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_90,
     RAC3NANOTECH.LEVEL_100,
 ]
-
-# Making an array with every 20 nanotech
 every_20_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_20,
     RAC3NANOTECH.LEVEL_40,
@@ -255,9 +253,10 @@ every_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_97,
     RAC3SEWER.TRADE_98,
     RAC3SEWER.TRADE_99,
+    RAC3SEWER.TRADE_100,
+    RAC3SEWER.TRADE_101,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
-
 every_5_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_5,
     RAC3SEWER.TRADE_10,
@@ -278,10 +277,9 @@ every_5_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_85,
     RAC3SEWER.TRADE_90,
     RAC3SEWER.TRADE_95,
-    RAC3SEWER.TRADE_99,
+    RAC3SEWER.TRADE_100,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
-
 every_10_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_10,
     RAC3SEWER.TRADE_20,
@@ -292,80 +290,167 @@ every_10_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_70,
     RAC3SEWER.TRADE_80,
     RAC3SEWER.TRADE_90,
-    RAC3SEWER.TRADE_99,
+    RAC3SEWER.TRADE_100,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
-
 every_20_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_20,
     RAC3SEWER.TRADE_40,
     RAC3SEWER.TRADE_60,
     RAC3SEWER.TRADE_80,
-    RAC3SEWER.TRADE_99,
+    RAC3SEWER.TRADE_100,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
+
+annihilation_nation_1: list[str] = [
+    RAC3TBOLT.NATION_CLIFF,
+    RAC3SKILLPOINT.NATION_CAMERA,
+    RAC3SKILLPOINT.NATION_FLEE,
+    RAC3LOCATION.NATION_TYHRRA_GUISE,
+    RAC3LOCATION.NATION_GRAND_PRIZE_BOUT,
+    RAC3LOCATION.NATION_THE_TERRIBLE_TWO,
+    RAC3LOCATION.NATION_ROBOT_RAMPAGE,
+    RAC3LOCATION.NATION_TWO_MINUTE_WARNING,
+    RAC3LOCATION.NATION_90_SECONDS,
+    RAC3LOCATION.NATION_ONSLAUGHT,
+    RAC3LOCATION.NATION_WHIP_IT_GOOD,
+    RAC3LOCATION.NATION_HYDRA_N_SEEK,
+    RAC3LOCATION.NATION_CHAMPIONSHIP_BOUT,
+    RAC3LOCATION.NATION_HEAT_STREET,
+    RAC3LOCATION.NATION_CRISPY_CRITTER,
+    RAC3LOCATION.NATION_PYRO_PLAYGROUND,
+    RAC3LOCATION.NATION_SUICIDE_RUN,
+]
+annihilation_nation_2: list[str] = [
+    RAC3TBOLT.NATION_CLIFF,
+    RAC3SKILLPOINT.NATION_CAMERA,
+    RAC3SKILLPOINT.NATION_FLEE,
+    # These 3 are doable on the second part of the challenges as well
+    RAC3SKILLPOINT.NATION_BASH,
+    RAC3LOCATION.NATION_MEET_COURTNEY,
+    RAC3LOCATION.NATION_INFOBOT_HOLOSTAR,
+    RAC3LOCATION.NATION_NINJA_CHALLENGE,
+    RAC3LOCATION.NATION_COUNTING_DUCKS,
+    RAC3LOCATION.NATION_CYCLING_WEAPONS,
+    RAC3LOCATION.NATION_ONE_HIT_WONDER,
+    RAC3LOCATION.NATION_TIME_TO_SUCK,
+    RAC3LOCATION.NATION_NAPTIME,
+    RAC3LOCATION.NATION_MORE_CYCLING_WEAPONS,
+    RAC3LOCATION.NATION_DODGE_THE_TWINS,
+    RAC3LOCATION.NATION_CHOP_CHOP,
+    RAC3LOCATION.NATION_SLEEP_INDUCER,
+    RAC3LOCATION.NATION_THE_OTHER_WHITE_MEAT,
+    RAC3LOCATION.NATION_CHAMPIONSHIP_BOUT_II,
+    RAC3LOCATION.NATION_QWARKTASTIC_BATTLE,
+    RAC3LOCATION.NATION_BBQ_BOULEVARD,
+    RAC3LOCATION.NATION_MAZE_OF_BLAZE,
+    RAC3TBOLT.NATION_PLATFORM,
+    RAC3LOCATION.NATION_CREMATION_STATION,
+    RAC3LOCATION.NATION_THE_ANNIHILATOR,
+]
+
+extra_ranger: list[str] = [
+    RAC3LOCATION.TYHRRANOSIS_RANGERS_1,
+    RAC3LOCATION.TYHRRANOSIS_RANGERS_2,
+    RAC3LOCATION.TYHRRANOSIS_RANGERS_3,
+    RAC3LOCATION.TYHRRANOSIS_RANGERS_4,
+    RAC3TBOLT.METROPOLIS_RANGERS,
+    RAC3LOCATION.METROPOLIS_RANGERS_1,
+    RAC3LOCATION.METROPOLIS_RANGERS_2,
+    RAC3LOCATION.METROPOLIS_RANGERS_3,
+    RAC3LOCATION.METROPOLIS_RANGERS_4,
+    RAC3LOCATION.METROPOLIS_RANGERS_5,
+    RAC3LOCATION.METROPOLIS_MAP_O_MATIC,
+]
+
+veldin_weapons: list[str] = [
+    RAC3LOCATION.VELDIN_FIRST_RANGER,
+    RAC3LOCATION.VELDIN_SECOND_RANGER,
+]
+
+simple_skillpoints: list[str] = [
+    RAC3SKILLPOINT.ARIDIA_HANG_TIME,
+    RAC3SKILLPOINT.PHOENIX_VR_TRAINING,
+    RAC3SKILLPOINT.PHOENIX_ARMOR,
+    RAC3SKILLPOINT.PHOENIX_MONKEY,
+    RAC3SKILLPOINT.MARCADIA_REFLECT,
+    RAC3SKILLPOINT.DAXX_BUGS,
+    RAC3SKILLPOINT.NATION_CAMERA,
+    RAC3SKILLPOINT.AQUATOS_SUNKEN,
+    RAC3SKILLPOINT.TYHRRANOSIS_SHARPSHOOTER,
+    RAC3SKILLPOINT.GEMINI_BELT,
+    RAC3SKILLPOINT.BLACKWATER_BASH,
+    RAC3SKILLPOINT.KOROS_BREAK,
+    RAC3SKILLPOINT.METROPOLIS_GOOD_YEAR,
+    RAC3SKILLPOINT.CRASH_SITE_SUCK,
+    RAC3SKILLPOINT.CRASH_SITE_AIM_HIGH,
+    RAC3SKILLPOINT.ARIDIA_ZAP,
+    RAC3SKILLPOINT.HIDEOUT_DAN,
+    RAC3SKILLPOINT.COMMAND_CENTER_GERMS,
+]
+
 
 def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
     menu = create_region(world, RAC3REGION.MENU)
     veldin = create_region_and_connect(world, RAC3REGION.VELDIN, f"{RAC3REGION.MENU} -> {RAC3REGION.VELDIN}", menu)
-    florana = create_region(world, RAC3REGION.FLORANA)
-    veldin.connect(florana, f"{RAC3REGION.VELDIN} -> {RAC3REGION.FLORANA}",
-                   rule=lambda state: state.has(RAC3ITEM.FLORANA, world.player))
-    starship_phoenix = create_region(world, RAC3REGION.STARSHIP_PHOENIX)
-    florana.connect(starship_phoenix, f"{RAC3REGION.FLORANA} -> {RAC3REGION.STARSHIP_PHOENIX}",
-                    rule=lambda state: state.has(RAC3ITEM.STARSHIP_PHOENIX, world.player))
-    starship_phoenix.connect(florana, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.FLORANA}", )
+    if world.options.intro_skip.value:
+        starship_phoenix = create_region_and_connect(world, RAC3REGION.STARSHIP_PHOENIX,
+                                                     f"{RAC3REGION.MENU} -> {RAC3REGION.STARSHIP_PHOENIX}", menu)
+        create_region_and_connect(world, RAC3REGION.FLORANA,
+                                  f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.FLORANA}", starship_phoenix)
+    else:
+        florana = create_region_and_connect(world, RAC3REGION.FLORANA,
+                                            f"{RAC3REGION.VELDIN} -> {RAC3REGION.FLORANA}", veldin)
+        starship_phoenix = create_region_and_connect(world, RAC3REGION.STARSHIP_PHOENIX,
+                                                     f"{RAC3REGION.FLORANA} -> {RAC3REGION.STARSHIP_PHOENIX}", florana)
 
     # ----- Regions within the game -----#
-    marcadia = create_region(world, RAC3REGION.MARCADIA)
-    annihilation_nation = create_region(world, RAC3REGION.ANNIHILATION_NATION)
-    aquatos = create_region(world, RAC3REGION.AQUATOS)
-    tyhrranosis = create_region(world, RAC3REGION.TYHRRANOSIS)
-    daxx = create_region(world, RAC3REGION.DAXX)
-    obani_gemini = create_region(world, RAC3REGION.OBANI_GEMINI)
-    blackwater_city = create_region(world, RAC3REGION.BLACKWATER_CITY)
-    holostar_studios = create_region(world, RAC3REGION.HOLOSTAR_STUDIOS)
-    obani_draco = create_region(world, RAC3REGION.OBANI_DRACO)
-    zeldrin_starport = create_region(world, RAC3REGION.ZELDRIN_STARPORT)
-    metropolis_first_half = create_region(world, RAC3REGION.METROPOLIS)
-    crash_site = create_region(world, RAC3REGION.CRASH_SITE)
-    aridia = create_region(world, RAC3REGION.ARIDIA)
-    qwarks_hideout = create_region(world, RAC3REGION.QWARKS_HIDEOUT)
-    koros = create_region(world, RAC3REGION.KOROS)
-    command_center = create_region(world, RAC3REGION.COMMAND_CENTER)  # Victory Location
+    create_region_and_connect(world, RAC3REGION.MARCADIA,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.MARCADIA}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.ANNIHILATION_NATION,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ANNIHILATION_NATION}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.AQUATOS,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.AQUATOS}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.TYHRRANOSIS,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.TYHRRANOSIS}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.DAXX,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.DAXX}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.OBANI_GEMINI,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.OBANI_GEMINI}", starship_phoenix)
+    blackwater_city = create_region_and_connect(
+        world, RAC3REGION.BLACKWATER_CITY,
+        f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.BLACKWATER_CITY}", starship_phoenix)
+    holostar_studios = create_region_and_connect(
+        world, RAC3REGION.HOLOSTAR_STUDIOS,
+        f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.HOLOSTAR_STUDIOS}", starship_phoenix)
+    skidd_cutscene = create_region(world, RAC3REGION.SKIDD_CUTSCENE)
+    blackwater_city.connect(skidd_cutscene, f"{RAC3REGION.BLACKWATER_CITY} -> {RAC3REGION.SKIDD_CUTSCENE}")
+    holostar_studios.connect(skidd_cutscene, f"{RAC3REGION.HOLOSTAR_STUDIOS} -> {RAC3REGION.SKIDD_CUTSCENE}")
+    create_region_and_connect(world, RAC3REGION.OBANI_DRACO,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.OBANI_DRACO}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.ZELDRIN_STARPORT,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ZELDRIN_STARPORT}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.METROPOLIS,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.METROPOLIS}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.CRASH_SITE,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.CRASH_SITE}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.ARIDIA,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ARIDIA}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.QWARKS_HIDEOUT,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.QWARKS_HIDEOUT}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.KOROS,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.KOROS}", starship_phoenix)
+    create_region_and_connect(world, RAC3REGION.COMMAND_CENTER,
+                              f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.COMMAND_CENTER}", starship_phoenix)
+
+    # Victory Location
 
     # ----- Connecting everything to Starship Phoenix -----#
-    starship_phoenix.connect(marcadia, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.MARCADIA}")
-    starship_phoenix.connect(annihilation_nation, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ANNIHILATION_NATION}")
-    starship_phoenix.connect(aquatos, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.AQUATOS}")
-    starship_phoenix.connect(tyhrranosis, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.TYHRRANOSIS}")
-    starship_phoenix.connect(daxx, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.DAXX}")
-    starship_phoenix.connect(obani_gemini, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.OBANI_GEMINI}")
-    starship_phoenix.connect(blackwater_city, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.BLACKWATER_CITY}")
-    starship_phoenix.connect(holostar_studios, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.HOLOSTAR_STUDIOS}")
-    starship_phoenix.connect(obani_draco, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.OBANI_DRACO}")
-    starship_phoenix.connect(zeldrin_starport, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ZELDRIN_STARPORT}")
-    starship_phoenix.connect(metropolis_first_half, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.METROPOLIS}")
-    starship_phoenix.connect(crash_site, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.CRASH_SITE}")
-    starship_phoenix.connect(aridia, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.ARIDIA}")
-    starship_phoenix.connect(qwarks_hideout, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.QWARKS_HIDEOUT}")
-    starship_phoenix.connect(koros, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.KOROS}")
-    starship_phoenix.connect(command_center, f"{RAC3REGION.STARSHIP_PHOENIX} -> {RAC3REGION.COMMAND_CENTER}")
-
-    # ----- Split planet connections for gadget reasons -----#
-
-    # This cutscene requires beating Holostar and Blackwater in any order:
-    skidd_cutscene = create_region(world, RAC3REGION.SKIDD_CUTSCENE)
-    holostar_studios.connect(skidd_cutscene,
-                             rule=lambda state: state.can_reach(RAC3REGION.BLACKWATER_CITY, player=world.player))
-    blackwater_city.connect(skidd_cutscene,
-                            rule=lambda state: state.can_reach(RAC3REGION.HOLOSTAR_STUDIOS, player=world.player))
 
     # ----- Dummy regions for weapon upgrade organization -----#
 
-    nanotech_levels = create_region(world, RAC3REGION.NANOTECH)
-    menu.connect(nanotech_levels)
+    create_region_and_connect(world, RAC3REGION.NANOTECH, f"{RAC3REGION.MENU} -> {RAC3REGION.NANOTECH}", menu)
 
     # shock_blaster_upgrades = create_region(world, f"{RAC3ITEM.SHOCK_BLASTER} Upgrades")
     # menu.connect(shock_blaster_upgrades, rule=lambda state: state.has(RAC3ITEM.SHOCK_BLASTER, world.player)),
@@ -448,9 +533,10 @@ def create_region_and_connect(world: "RaC3World", name: str, entrance_name: str,
 
 def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> bool:
     """Return False if the location should be skipped based on options."""
+    loc = LOCATION_FROM_AP_CODE[data.AP_CODE]
     for tag in data.TAGS:
         match tag:
-            case RAC3TAG.UNSTABLE:  # Skip all unstable locations
+            case RAC3TAG.NOT_IMPLEMENTED:  # Skip all locations not yet implemented
                 return True
             case RAC3TAG.TROPHY:
                 if not options.trophies.value:  # Skip trophy locations if trophies are disabled
@@ -458,33 +544,42 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
             case RAC3TAG.LONG_TROPHY:
                 if options.trophies.value < 2:  # Skip long term trophies if not set to every trophy
                     return True
+                elif (options.skill_points.value < 2 and options.sewer_limitation < 100 and loc ==
+                      RAC3TROPHY.PHOENIX_SKILL_MASTER):
+                    return True
             case RAC3TAG.SKILLPOINT:
-                if not options.skill_points.value:  # Skip skill point locations if not set to every skill point
-                    return True
-            case RAC3TAG.HARD_SKILLPOINT:
-                if options.skill_points.value == 1:  # Skip skill points not in the simple list
-                    return True
+                if options.skill_points.value == 0:
+                    return True  # Skips skill points when disabled
+                elif options.skill_points.value == 1 and loc not in simple_skillpoints:
+                    return True  # Skips harder skill points
             case RAC3TAG.T_BOLT:
                 if options.titanium_bolts.value == 0:
                     return True  # Skip titanium bolt locations if titanium bolt option is disabled
             case RAC3TAG.NANOTECH:
-                nanotech = LOCATION_FROM_AP_CODE[data.AP_CODE]
-                if nanotech in every_nanotech[options.nanotech_limitation.value - 10::]:
+                if loc in every_nanotech[options.nanotech_limitation.value - 10::]:
                     return True  # Place nanotech milestone amount specified in nanotech_limitation
                 if options.nanotech_milestones.value == 0:
                     return True  # Skip nanotech milestone locations if nanotech milestones option is disabled
-                elif options.nanotech_milestones.value == 1 and nanotech not in every_20_nanotech:
+                elif options.nanotech_milestones.value == 1 and loc not in every_20_nanotech:
                     return True  # Skips nanotech milestones that are not in every 20
-                elif options.nanotech_milestones.value == 2 and nanotech not in every_10_nanotech:
+                elif options.nanotech_milestones.value == 2 and loc not in every_10_nanotech:
                     return True  # Skips nanotech milestones that are not in every 10
-                elif options.nanotech_milestones.value == 3 and nanotech not in every_5_nanotech:
+                elif options.nanotech_milestones.value == 3 and loc not in every_5_nanotech:
                     return True  # Skips nanotech milestones that are not in every 5
             case RAC3TAG.RANGERS:
                 if options.rangers.value == 0:
-                    return True  # Skips ranger missions locations if rangers option is disabled
+                    return True  # Skips ranger missions locations if rangers option is none
+                elif options.rangers.value == 1 and loc in extra_ranger:
+                    return True  # Skips optional ranger missions locations if set to story_missions
+                elif options.rangers.value == 2 and loc not in extra_ranger:
+                    return True  # Skips story ranger missions locations if set to optional_missions
             case RAC3TAG.ARENA:
                 if options.arena.value == 0:
-                    return True  # Skips arena challenges locations if arena option is disabled
+                    return True  # Skips arena challenges locations if arena option is none
+                elif options.arena.value == 1 and loc not in annihilation_nation_1:
+                    return True  # Skips AN2 challenge locations if arena option is set to first_only
+                elif options.arena.value == 2 and loc not in annihilation_nation_2:
+                    return True  # Skips AN1 challenge locations if arena option is set to second_only
             case RAC3TAG.VIDCOMIC:
                 if options.vidcomics.value == 0:
                     return True  # Skips vidcomic locations if vidcomics option is disabled
@@ -492,16 +587,21 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if options.vr_challenges.value == 0:
                     return True  # Skips vr challenges locations if vr_challenges option is disabled
             case RAC3TAG.SEWER:
-                crystal = LOCATION_FROM_AP_CODE[data.AP_CODE]
-                if crystal in every_sewer_crystals[options.sewer_limitation.value::]:
+                if loc in every_sewer_crystals[options.sewer_limitation.value::]:
                     return True  # Place sewer crystal amount specified in sewer_limitations
                 elif options.sewer_crystals.value == 0:
                     return True  # Skip sewer crystal locations if sewer crystals option is disabled
-                elif options.sewer_crystals.value == 1 and crystal not in every_20_sewer_crystals:
+                elif options.sewer_crystals.value == 1 and loc not in every_20_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 20
-                elif options.sewer_crystals.value == 2 and crystal not in every_10_sewer_crystals:
+                elif options.sewer_crystals.value == 2 and loc not in every_10_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 10
-                elif options.sewer_crystals.value == 3 and crystal not in every_5_sewer_crystals:
+                elif options.sewer_crystals.value == 3 and loc not in every_5_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 5
+            case RAC3TAG.WEAPONS:
+                if options.weapon_vendors.value == 0 and loc not in veldin_weapons:
+                    return True  # Skips every weapon vendor checks except the Veldin ones
             # Add more conditions here if needed in the future
+            case RAC3TAG.ONE_HP_UNSTABLE:
+                if options.one_hp_challenge.value[RAC3PLAYERTYPE.RATCHET]:
+                    return True  # Skip all unstable locations in One HP Challenge
     return False

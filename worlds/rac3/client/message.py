@@ -1,7 +1,7 @@
 from typing import Optional
 
 from NetUtils import ClientStatus
-from worlds.rac3 import RAC3OPTION
+from worlds.rac3.constants.options import RAC3OPTION
 
 
 class ClientMessage:
