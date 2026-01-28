@@ -349,7 +349,7 @@ class ServerLabel(HoverBehavior, MDTooltip, MDBoxLayout):
             ctx = self.ctx
             text = f"Connected to: {ctx.server_address}."
             if ctx.slot is not None:
-                text += f"\nYou are Slot Number {ctx.slot} in Team Number {ctx.team}, " \
+                text += f"\nYou are Slot Number {ctx.slot} in Team Number {ctx.team + 1}, " \
                         f"named {ctx.player_names[ctx.slot]}."
                 if ctx.items_received:
                     text += f"\nYou have received {len(ctx.items_received)} items. " \
