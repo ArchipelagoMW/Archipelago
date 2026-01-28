@@ -33,10 +33,9 @@ validator page: [YAML Validation page](/check)
 
 ## Joining a MultiWorld Game
 
-1. Connect to Archipelago.
-2. Launch Void Sols and verify you see the Archipelago logo on the main menu.
-3. For new games, press "Play" and then "New Game". Enter the server address, port, your slot name, and optional password. Fields are case-sensitive.
-4. For returning games, simply click on your save file to connect and play with saved info. If any information changes, use the three vertical dots context menu on the save to edit the data.
+1. Launch Void Sols and verify you see the Archipelago logo on the main menu.
+2. For new games, press "Play" and then "New Game". Enter the server address, port, your slot name, and optional password. Fields are case-sensitive.
+3. For returning games, simply click on your save file to connect and play with saved info. If any information changes, use the three vertical dots context menu on the save to edit the data.
 
 ## Hosting a MultiWorld game
 
