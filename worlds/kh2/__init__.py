@@ -14,7 +14,6 @@ from .Options import KingdomHearts2Options
 from .Regions import create_regions, connect_regions
 from .Rules import *
 from .Subclasses import KH2Item
-from .Client.WorldLocations import bounty_name_to_address
 from itertools import chain
 
 
@@ -119,7 +118,6 @@ class KH2World(World):
                 "CorSkipToggle"
         )
         slot_data.update({
-            "BountyBosses":           self.slot_data_bounties,
             "PoptrackerVersionCheck": 4.3,
             "SoraAbilities":      self.sora_ability_dict,
             "DonaldAbilities":         self.donald_ability_dict,
@@ -266,7 +264,6 @@ class KH2World(World):
                 else:
                     random_boss = self.random.choice(self.random_super_boss_list)
                 self.plando_locations[random_boss] = ItemName.Bounty
-                self.slot_data_bounties.append(bounty_name_to_address[random_boss])
                 self.random_super_boss_list.remove(random_boss)
                 self.total_locations -= 1
 

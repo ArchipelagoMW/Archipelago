@@ -891,35 +891,6 @@ DeathLinkPair = {
     (18,14, 101): "Data Luxord",
 }
 
-bounty_name_to_address = {
-     "(Post BC2: Ballroom) Data Xaldin":                                        (0x1D34, 7),
-     "(Post AG2: Peddler's Shop) Data Lexaeus":                                 (0x370C, 1),
-     "(Post TR:Hall of the Cornerstone) Data Marluxia":                         (0x370C, 3),
-     "(Post OC2: Cave of the Dead Inner Chamber) Data Zexion":                  (0x370C, 2),
-     "(Post SP2: Central Computer Core) Data Larxene":                          (0x370C, 4),
-     "(Post HT2: Yuletide Hill) Data Vexen":                                    (0x370C, 0),
-     "(Post HB2: Restoration Site) Data Demyx":                                 (0x1D26, 5),
-     "(Post TT3: Betwixt and Between) Data Axel":                               (0x1CEB, 4),
-     "(Post TWTNW3: The Altar of Naught) Data Xemnas":                          (0x1EDA, 2),
-     "(Post LoD2: Summit) Data Xigbar":                                         (0x1ED9, 7),
-     "(Post PL2: Peak) Data Saix":                                              (0x1EDA, 0),
-     "(Post PR2: Treasure Heap) Data Luxord":                                   (0x1EDA, 1),
-     "(Post STT: Mansion Pod Room) Data Roxas":                                 (0x1ED9, 6),
-     "Valor level 7":                                                           (0x32F6, 7),
-     "Wisdom level 7":                                                          (0x332E, 7),
-     "Limit level 7":                                                           (0x3366, 7),
-     "Master level 7":                                                          (0x339E, 7),
-     "Final level 7":                                                           (0x33D6, 7),
-     "Summon level 7":                                                          (0x3526, 7),
-     "(AT) Musical Orichalcum+":                                                (0x1DF4, 1),
-     "Sephiroth Fenrir":                                                        (0x1D1F, 7),
-     "(Post TR:Hall of the Cornerstone) Lingering Will Proof of Connection":    (0x370C, 6),
-     "(100Acre) Starry Hill Orichalcum+":                                       (0x1DB5, 5),
-     "Transport to Remembrance":                                                (0x370D, 0),
-     "Orichalcum+ Goddess of Fate Cup":                                         (0x1D58, 4),
-     "Hades Cup Trophy Paradox Cups":                                           (0x1D5A, 1),
-}
-
 all_world_locations = {
     **TWTNW_Checks,
     **TT_Checks,
