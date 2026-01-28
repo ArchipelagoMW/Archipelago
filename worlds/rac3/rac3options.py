@@ -10,8 +10,8 @@ from worlds.rac3.options.clank_options import ClankOptions
 from worlds.rac3.options.deathlink_options import Deathlink
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
 from worlds.rac3.options.filler_weight_options import FillerWeight
-from worlds.rac3.options.holostar_skip import HolostarSkip
-from worlds.rac3.options.intro_skip import IntroSkip
+from worlds.rac3.options.holostar_skip_options import HolostarSkip
+from worlds.rac3.options.intro_skip_options import IntroSkip
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
 from worlds.rac3.options.nanotech_limitation_options import NanotechLimitation
 from worlds.rac3.options.nanotech_options import NanotechMilestones
