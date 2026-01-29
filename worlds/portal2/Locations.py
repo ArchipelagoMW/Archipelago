@@ -130,9 +130,9 @@ wheatley_monitor_table: dict[str, Portal2LocationData] = {
     "Wheatley Monitor 2": Portal2LocationData("sp_a4_tb_trust_drop", LocationType.WHEATLY_MONITOR, [portal_gun_2, button, funnel, frankenturret]),
     "Wheatley Monitor 3": Portal2LocationData("sp_a4_tb_wall_button", LocationType.WHEATLY_MONITOR, [portal_gun_2]),
     "Wheatley Monitor 4": Portal2LocationData("sp_a4_tb_polarity", LocationType.WHEATLY_MONITOR, [turrets]),
-    "Wheatley Monitor 5": Portal2LocationData("sp_a4_tb_catch monitor1", LocationType.WHEATLY_MONITOR, [portal_gun_2, frankenturret, funnel, faith_plate, button]),
-    "Wheatley Monitor 6": Portal2LocationData("sp_a4_tb_catch monitor2", LocationType.WHEATLY_MONITOR, [portal_gun_2, frankenturret, funnel, faith_plate, button]),
-    "Wheatley Monitor 7": Portal2LocationData("sp_a4_stop_the_box", LocationType.WHEATLY_MONITOR),
+    "Wheatley Monitor 5": Portal2LocationData("sp_a4_tb_catch", LocationType.WHEATLY_MONITOR, [portal_gun_2, frankenturret, funnel, faith_plate, button]), #monitor1
+    "Wheatley Monitor 6": Portal2LocationData("sp_a4_tb_catch", LocationType.WHEATLY_MONITOR, [portal_gun_2, frankenturret, funnel, faith_plate, button]), #monitor2
+    "Wheatley Monitor 7": Portal2LocationData("sp_a4_stop_the_box", LocationType.WHEATLY_MONITOR, [faith_plate]),
     "Wheatley Monitor 8": Portal2LocationData("sp_a4_laser_catapult", LocationType.WHEATLY_MONITOR, [portal_gun_2, frankenturret, faith_plate, funnel, reflection_cube, laser, laser_catcher]),
     "Wheatley Monitor 9": Portal2LocationData("sp_a4_laser_platform", LocationType.WHEATLY_MONITOR, [portal_gun_2, laser, laser_catcher, reflection_cube, button]),
     "Wheatley Monitor 10": Portal2LocationData("sp_a4_speed_tb_catch", LocationType.WHEATLY_MONITOR, [portal_gun_2]),
@@ -142,7 +142,7 @@ wheatley_monitor_table: dict[str, Portal2LocationData] = {
 
 wheatley_maps_to_monitor_names: dict[str, list[str]] = {}
 for key, value in wheatley_monitor_table.items():
-    map_name = value.map_name.split(" ")[0]
+    map_name = value.map_name
     if map_name not in wheatley_maps_to_monitor_names:
         wheatley_maps_to_monitor_names[map_name] = [key]
     else:
