@@ -17,6 +17,7 @@ from worlds.rac3.constants.data.location import (LOCATION_FROM_AP_CODE, LOCATION
                                                  REGION_TO_INFOBOT_LOCATION)
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
+from worlds.rac3.constants.data.vendorslot import RAC3ARMORVENDORSLOTDATA, RAC3WEAPONVENDORSLOTDATA
 from worlds.rac3.constants.deaths import CLANK_DEATH_FROM_ACTION, DEATH_FROM_ACTION
 from worlds.rac3.constants.input import RAC3INPUT
 from worlds.rac3.constants.instruction import RAC3INSTRUCTION
@@ -35,7 +36,8 @@ from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYP
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
                                           SHIP_SLOTS)
 from worlds.rac3.constants.status import RAC3STATUS
-from worlds.rac3.constants.vendors.vendor import RAC3VENDOR
+from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
+from worlds.rac3.constants.vendors.vendor import RAC3ARMORVENDOR, RAC3VENDOR, RAC3WEAPONVENDOR
 
 
 class Rac3Interface(GameInterface):
@@ -918,6 +920,7 @@ class Rac3Interface(GameInterface):
         self.health_cycler()
         self.pda_vendor_cycler()
         self.notification_cycler()
+        self.vendor_cycler()
 
     def vendor_example_function(self):
         """An example function to demonstrate reading the ID of the item highlighted with the cursor"""
@@ -928,41 +931,170 @@ class Rac3Interface(GameInterface):
     def print_all_vendor_items(self):
         """Print all items sold by the current planet's vendor to the log, including all relevant properties"""
         num_slots = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
-        for slot in range(num_slots):
-            base_addr = RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, RAC3VENDOR.ITEM_ID_OFFSET)
-            item_id = self._read32(base_addr + RAC3VENDOR.ITEM_ID_OFFSET)
-            item_name = ITEM_NAME_FROM_ID.get(item_id, f'Unknown Item ID {item_id}')
-            item_price = self._read8(base_addr + RAC3VENDOR.ITEM_COST_OFFSET)
-            ammo_text = self._read8(base_addr + RAC3VENDOR.ITEM_AMMO_TEXT_OFFSET)
-            item_class = self._read16(base_addr + RAC3VENDOR.ITEM_CLASS_OFFSET)
-            item_mega = self._read8(base_addr + RAC3VENDOR.ITEM_MEGA_OFFSET)
-            item_all_ammo = self._read8(base_addr + RAC3VENDOR.ITEM_ALL_AMMO_OFFSET)
-            item_memcard = self._read8(base_addr + RAC3VENDOR.ITEM_MEMCARD_OFFSET)
-            logger.info(
-                f'Vendor Slot {slot}: '
-                f'Item Name: {item_name}, '
-                f'Free?: {bool(item_price)}, '
-                f'Ammo Text: {bool(ammo_text)}, '
-                f'Class: {hex(item_class)}, '
-                f'Mega: {bool(item_mega)}, '
-                f'All Ammo: {bool(item_all_ammo)}, '
-                f'Memcard: {bool(item_memcard)}'
-            )
+        vendor_type = RAC3VENDORTYPE(self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
+        match vendor_type:
+            case RAC3VENDORTYPE.WEAPON:
+                for slot in range(num_slots):
+                    base_addr = RAC3WEAPONVENDOR.get_vendor_item_property_address(self.planet, slot, RAC3WEAPONVENDOR.ITEM_ID_OFFSET)
+                    item_id = self._read32(base_addr + RAC3WEAPONVENDOR.ITEM_ID_OFFSET)
+                    item_name = ITEM_NAME_FROM_ID.get(item_id, f'Unknown Item ID {item_id}')
+                    item_price = self._read8(base_addr + RAC3WEAPONVENDOR.ITEM_COST_OFFSET)
+                    ammo_text = self._read8(base_addr + RAC3WEAPONVENDOR.ITEM_AMMO_TEXT_OFFSET)
+                    item_class = self._read16(base_addr + RAC3WEAPONVENDOR.ITEM_CLASS_OFFSET)
+                    item_mega = self._read8(base_addr + RAC3WEAPONVENDOR.ITEM_MEGA_OFFSET)
+                    item_all_ammo = self._read8(base_addr + RAC3WEAPONVENDOR.ITEM_ALL_AMMO_OFFSET)
+                    item_memcard = self._read8(base_addr + RAC3WEAPONVENDOR.ITEM_MEMCARD_OFFSET)
+                    logger.info(
+                        f'Vendor Slot {slot}: '
+                        f'Item Name: {item_name}, '
+                        f'Free?: {bool(item_price)}, '
+                        f'Ammo Text: {bool(ammo_text)}, '
+                        f'Class: {hex(item_class)}, '
+                        f'Mega: {bool(item_mega)}, '
+                        f'All Ammo: {bool(item_all_ammo)}, '
+                        f'Memcard: {bool(item_memcard)}'
+                    )
+            case RAC3VENDORTYPE.ARMOR:
+                for slot in range(num_slots):
+                    base_addr = RAC3ARMORVENDOR.get_vendor_item_property_address(self.planet, slot, RAC3ARMORVENDOR.ITEM_ICON_OFFSET)
+                    item_icon = self._read16(base_addr + RAC3ARMORVENDOR.ITEM_ICON_OFFSET)
+                    item_cost = self._read32(base_addr + RAC3ARMORVENDOR.ITEM_COST_OFFSET)
+                    item_level = self._read8(base_addr + RAC3ARMORVENDOR.ITEM_LEVEL_OFFSET)
+                    logger.info(
+                        f'Vendor Slot {slot}: '
+                        f'Icon: {hex(item_icon)}, '
+                        f'Cost: {item_cost}, '
+                        f'Level: {item_level}'
+                    )
     
     def add_vendor_slot(self, item_id):
         """Add an item to the current planet's vendor inventory"""
         num_slots = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
         base_addr = RAC3VENDOR.get_vendor_item_property_address(self.planet, num_slots, RAC3VENDOR.ITEM_ID_OFFSET)
         self._write32(base_addr + RAC3VENDOR.ITEM_ID_OFFSET, item_id)
-        self._write8(base_addr + RAC3VENDOR.ITEM_COST_OFFSET, 0)  # Free item
-        self._write8(base_addr + RAC3VENDOR.ITEM_AMMO_TEXT_OFFSET, 0)  # No ammo text
-        self._write16(base_addr + RAC3VENDOR.ITEM_CLASS_OFFSET, 0)  # Default class
-        self._write8(base_addr + RAC3VENDOR.ITEM_MEGA_OFFSET, 0)  # Not mega
-        self._write8(base_addr + RAC3VENDOR.ITEM_ALL_AMMO_OFFSET, 0)  # Not all ammo
-        self._write8(base_addr + RAC3VENDOR.ITEM_MEMCARD_OFFSET, 0)  # Not memcard
+        self._write8(base_addr + RAC3VENDOR.ITEM_COST_OFFSET, 0)
+        self._write8(base_addr + RAC3VENDOR.ITEM_AMMO_TEXT_OFFSET, 0)
+        self._write16(base_addr + RAC3VENDOR.ITEM_CLASS_OFFSET, 0)
+        self._write8(base_addr + RAC3VENDOR.ITEM_MEGA_OFFSET, 0)
+        self._write8(base_addr + RAC3VENDOR.ITEM_ALL_AMMO_OFFSET, 0)
+        self._write8(base_addr + RAC3VENDOR.ITEM_MEMCARD_OFFSET, 0)
         self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET), num_slots + 1)
         item_name = ITEM_NAME_FROM_ID.get(item_id, f'Unknown Item ID {item_id}')
         logger.info(f'Added item {item_name} (ID {item_id}) to vendor on planet {self.planet}')
+
+    def get_vendor_inventory(self, vendor_type: RAC3VENDORTYPE = None) -> list[RAC3WEAPONVENDORSLOTDATA]:
+        """Return a list of vendor slot data objects representing the current planet's vendor inventory"""
+        inventory = []
+        num_slots = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
+        match vendor_type:
+            case RAC3VENDORTYPE.WEAPON:
+                for slot in range(num_slots):
+                    base_addr = RAC3WEAPONVENDOR.get_vendor_item_property_address(self.planet, slot, RAC3WEAPONVENDOR.ITEM_ID_OFFSET)
+                    item_id = self._read32(base_addr + RAC3WEAPONVENDOR.ITEM_ID_OFFSET)
+                    is_free = self._read8(base_addr + RAC3WEAPONVENDOR.ITEM_COST_OFFSET)
+                    ammo_text = self._read8(base_addr + RAC3WEAPONVENDOR.ITEM_AMMO_TEXT_OFFSET)
+                    item_class = self._read16(base_addr + RAC3WEAPONVENDOR.ITEM_CLASS_OFFSET)
+                    item_mega = self._read8(base_addr + RAC3WEAPONVENDOR.ITEM_MEGA_OFFSET)
+                    item_all_ammo = self._read8(base_addr + RAC3WEAPONVENDOR.ITEM_ALL_AMMO_OFFSET)
+                    item_memcard = self._read8(base_addr + RAC3WEAPONVENDOR.ITEM_MEMCARD_OFFSET)
+                    slot_data = RAC3WEAPONVENDORSLOTDATA(
+                        item_id=item_id,
+                        is_free=is_free,
+                        ammo_text=ammo_text,
+                        item_class=item_class,
+                        item_mega=item_mega,
+                        item_all_ammo=item_all_ammo,
+                        item_memcard=item_memcard
+                    )
+                    inventory.append(slot_data)
+            case RAC3VENDORTYPE.ARMOR:
+                for slot in range(num_slots):
+                    base_addr = RAC3ARMORVENDOR.get_vendor_item_property_address(self.planet, slot, RAC3ARMORVENDOR.ITEM_ICON_OFFSET)
+                    item_icon = self._read16(base_addr + RAC3ARMORVENDOR.ITEM_ICON_OFFSET)
+                    item_cost = self._read32(base_addr + RAC3ARMORVENDOR.ITEM_COST_OFFSET)
+                    item_level = self._read8(base_addr + RAC3ARMORVENDOR.ITEM_LEVEL_OFFSET)
+                    slot_data = RAC3ARMORVENDORSLOTDATA(
+                        item_icon=item_icon,
+                        item_cost=item_cost,
+                        item_level=item_level
+                    )
+                    inventory.append(slot_data)
+            case _:
+                logger.debug(f'get_vendor_inventory does not support vendor type {vendor_type} yet')
+        return inventory
+
+    def write_vendor_inventory(self, vendor_type, inventory):
+        """Write a list of vendor slot data objects to the current planet's vendor inventory"""
+        self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET), len(inventory))
+        match vendor_type:
+            case RAC3VENDORTYPE.WEAPON:
+                for slot, slot_data in enumerate(inventory):
+                    base_addr = RAC3WEAPONVENDOR.get_vendor_item_property_address(self.planet, slot, RAC3WEAPONVENDOR.ITEM_ID_OFFSET)
+                    self._write32(base_addr + RAC3WEAPONVENDOR.ITEM_ID_OFFSET, slot_data.item_id)
+                    self._write8(base_addr + RAC3WEAPONVENDOR.ITEM_COST_OFFSET, slot_data.is_free)
+                    self._write8(base_addr + RAC3WEAPONVENDOR.ITEM_AMMO_TEXT_OFFSET, slot_data.ammo_text)
+                    self._write16(base_addr + RAC3WEAPONVENDOR.ITEM_CLASS_OFFSET, slot_data.item_class)
+                    self._write8(base_addr + RAC3WEAPONVENDOR.ITEM_MEGA_OFFSET, slot_data.item_mega)
+                    self._write8(base_addr + RAC3WEAPONVENDOR.ITEM_ALL_AMMO_OFFSET, slot_data.item_all_ammo)
+                    self._write8(base_addr + RAC3WEAPONVENDOR.ITEM_MEMCARD_OFFSET, slot_data.item_memcard)
+                logger.debug(f'Wrote {len(inventory)} items to weapon vendor on planet {self.planet}')
+            case RAC3VENDORTYPE.ARMOR:
+                for slot, slot_data in enumerate(inventory):
+                    base_addr = RAC3ARMORVENDOR.get_vendor_item_property_address(self.planet, slot, RAC3ARMORVENDOR.ITEM_ICON_OFFSET)
+                    self._write16(base_addr + RAC3ARMORVENDOR.ITEM_ICON_OFFSET, slot_data.item_icon)
+                    self._write32(base_addr + RAC3ARMORVENDOR.ITEM_COST_OFFSET, slot_data.item_cost)
+                    self._write8(base_addr + RAC3ARMORVENDOR.ITEM_LEVEL_OFFSET, slot_data.item_level)
+                logger.debug(f'Wrote {len(inventory)} items to armor vendor on planet {self.planet}')
+
+    def vendor_cycler(self):
+        """Read current vendor inventory and replace all items after the all ammo item with all items in the game"""
+        if self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET)) == 0:
+            return
+        if self.pause_state_value != RAC3PAUSESTATE.VENDOR:
+            return
+
+        all_weapons = non_prog_weapon_data.keys()
+
+        vendor_type = RAC3VENDORTYPE(self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
+        current_inventory = self.get_vendor_inventory(vendor_type)
+        new_inventory = []
+        match vendor_type:
+            case RAC3VENDORTYPE.WEAPON:
+                for slot, slot_data in enumerate(current_inventory):
+                    new_inventory.append(slot_data)
+                    all_ammo_value = self._read8(
+                        RAC3WEAPONVENDOR.get_vendor_item_property_address(self.planet, slot, RAC3WEAPONVENDOR.ITEM_ALL_AMMO_OFFSET)
+                    )
+                    if all_ammo_value:
+                        break
+
+                for item in all_weapons:
+                    item_id = RAC3_ITEM_DATA_TABLE[item].ID
+                    new_slot_data = RAC3WEAPONVENDORSLOTDATA(
+                        item_id=item_id,
+                        is_free=0,
+                        ammo_text=0,
+                        item_class=0,
+                        item_mega=0,
+                        item_all_ammo=0,
+                        item_memcard=0
+                    )
+                    new_inventory.append(new_slot_data)
+            case RAC3VENDORTYPE.ARMOR:
+                for armor in armor_data.values():
+                    new_slot_data = RAC3ARMORVENDORSLOTDATA(
+                        item_icon=0xEA92 + armor.ID - 0xF5,
+                        item_cost=694201337,
+                        item_level=armor.ID - 0xF5
+                    )
+                    new_inventory.append(new_slot_data)
+            case _:
+                logger.debug(f'Vendor cycler does not support vendor type {vendor_type} yet')
+        
+        if not new_inventory:
+            logger.debug('Vendor cycler found no new inventory to write')
+            return
+        self.write_vendor_inventory(vendor_type, new_inventory)
 
     def cutscene_gadget_fix(self):
         """Temporarily removing a gadget when grabbing it during a cutscene to make sure the location check address
