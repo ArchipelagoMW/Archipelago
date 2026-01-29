@@ -1089,14 +1089,18 @@ class Rac3Interface(GameInterface):
         match vendor_type:
             case RAC3VENDORTYPE.WEAPON:
                 current_inventory = self.get_weapon_vendor_inventory()
-                for slot, slot_data in enumerate(current_inventory):
-                    new_inventory.append(slot_data)
-                    all_ammo_value = self._read8(
-                        RAC3WEAPONVENDOR.get_vendor_item_property_address(
-                            self.planet, slot, RAC3WEAPONVENDOR.ITEM_ALL_AMMO_OFFSET)
-                    )
-                    if all_ammo_value:
-                        break
+                is_slimcognito = (self.planet == RAC3REGION.AQUATOS 
+                                  and bool(self._read8(RAC3WEAPONVENDOR.get_vendor_property_address(
+                                      self.planet, RAC3WEAPONVENDOR.VENDOR_WEAPON_TYPE_OFFSET))))
+                if not is_slimcognito:
+                    for slot, slot_data in enumerate(current_inventory):
+                        new_inventory.append(slot_data)
+                        all_ammo_value = self._read8(
+                            RAC3WEAPONVENDOR.get_vendor_item_property_address(
+                                self.planet, slot, RAC3WEAPONVENDOR.ITEM_ALL_AMMO_OFFSET)
+                        )
+                        if all_ammo_value:
+                            break
 
                 for item in self.weapon_vendor_items:
                     item_id = RAC3_ITEM_DATA_TABLE[item].ID
