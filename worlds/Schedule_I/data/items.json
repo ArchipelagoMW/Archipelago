@@ -604,11 +604,6 @@
         "tags": ["Northtown", "Dealer", "Default"],
         "modern_id": 216
     },
-    "Albert Hoover Unlocked": {
-        "classification": ["PROGRESSION", "USEFUL"],
-        "tags": ["Northtown", "Supplier", "Default"],
-        "modern_id": 217
-    },
     "Shirley Watts Unlocked": {
         "classification": ["PROGRESSION", "USEFUL"],
         "tags": ["Westville", "Supplier"],

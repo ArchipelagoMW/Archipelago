@@ -145,6 +145,3 @@ def create_all_items(world: Schedule1World, data) -> None:
         world.push_precollected(starting_sam_thompson)
         starting_mick_lubbin = world.create_item("Mick Lubbin Unlocked")
         world.push_precollected(starting_mick_lubbin)
-    if world.options.randomize_suppliers:
-        starting_albert_hoover = world.create_item("Albert Hoover Unlocked")
-        world.push_precollected(starting_albert_hoover)
