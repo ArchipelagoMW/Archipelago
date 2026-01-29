@@ -1,4 +1,4 @@
-class RAC3VENDOR:
+class RAC3VENDORLOCATION:
     FLORANA_WHIP = "Florana: Received Plasma Whip"
     FLORANA_N60 = "Florana: Received N60 Storm"
     PHOENIX_SUCK = "Phoenix: Received Suck Cannon"

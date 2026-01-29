@@ -13,7 +13,7 @@ from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
 from worlds.rac3.constants.locations.trophies import RAC3TROPHY
-from worlds.rac3.constants.locations.vendors import RAC3VENDOR
+from worlds.rac3.constants.locations.vendors import RAC3VENDORLOCATION
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 from worlds.rac3.locations import location_groups
@@ -128,9 +128,9 @@ def set_rules(world: "RaC3World"):
         # RAC3VENDOR.PHOENIX_SUCK
         # RAC3VENDOR.PHOENIX_INFECTOR
         # RAC3VENDOR.PHOENIX_MAGNA_ARMOR
-        RAC3VENDOR.PHOENIX_ADAMANTINE: lambda state: state.can_reach_region(RAC3REGION.AQUATOS, world.player),
-        RAC3VENDOR.PHOENIX_AEGIS_ARMOR: lambda state: state.can_reach_region(RAC3REGION.ZELDRIN_STARPORT, world.player),
-        RAC3VENDOR.PHOENIX_INFERNOX: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
+        RAC3VENDORLOCATION.PHOENIX_ADAMANTINE: lambda state: state.can_reach_region(RAC3REGION.AQUATOS, world.player),
+        RAC3VENDORLOCATION.PHOENIX_AEGIS_ARMOR: lambda state: state.can_reach_region(RAC3REGION.ZELDRIN_STARPORT, world.player),
+        RAC3VENDORLOCATION.PHOENIX_INFERNOX: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
         RAC3SKILLPOINT.PHOENIX_ARMOR: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
         # RAC3LOCATION.PHOENIX_MEET_SASHA
         RAC3SKILLPOINT.PHOENIX_MONKEY: lambda state: state.has(RAC3ITEM.TYHRRA_GUISE, world.player),
@@ -318,10 +318,10 @@ def set_rules(world: "RaC3World"):
         RAC3TBOLT.AQUATOS_GATE: lambda state: state.has(RAC3ITEM.HACKER, world.player),
         # RAC3VENDOR.AQUATOS_MINI_TURRET
         # RAC3VENDOR.AQUATOS_LAVA_GUN
-        RAC3VENDOR.AQUATOS_SHIELD_CHARGER:
+        RAC3VENDORLOCATION.AQUATOS_SHIELD_CHARGER:
             lambda state: state.can_reach_region(RAC3REGION.COMMAND_CENTER, world.player),
-        RAC3VENDOR.AQUATOS_BOUNCER: lambda state: state.can_reach_region(RAC3REGION.QWARKS_HIDEOUT, world.player),
-        RAC3VENDOR.AQUATOS_PLASMA_COIL: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
+        RAC3VENDORLOCATION.AQUATOS_BOUNCER: lambda state: state.can_reach_region(RAC3REGION.QWARKS_HIDEOUT, world.player),
+        RAC3VENDORLOCATION.AQUATOS_PLASMA_COIL: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
         # RAC3LOCATION.AQUATOS_BASE
         RAC3TBOLT.SEWER_PIPE: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
         RAC3TBOLT.SEWER_SWING: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.GRAV_BOOTS], world.player),
@@ -430,7 +430,7 @@ def set_rules(world: "RaC3World"):
             lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
 
         # RAC3VENDOR.TYHRRANOSIS_ANNIHILATOR
-        RAC3VENDOR.TYHRRANOSIS_SHIELD_GLOVE:
+        RAC3VENDORLOCATION.TYHRRANOSIS_SHIELD_GLOVE:
             lambda state: state.can_reach_location(RAC3LOCATION.TYHRRANOSIS_BOSS, world.player),
         RAC3SKILLPOINT.TYHRRANOSIS_SHARPSHOOTER:
             lambda state: state.has_any([RAC3ITEM.FLUX_RIFLE, RAC3ITEM.PROGRESSIVE_FLUX_RIFLE], world.player),
