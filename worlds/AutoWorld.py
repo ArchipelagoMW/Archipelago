@@ -512,18 +512,15 @@ class World(metaclass=AutoWorldRegister):
 
         return group
 
-    # decent place to implement progressive items, in most cases can stay as-is
-    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
+    def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> str:
         """
-        Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
-        Collect None to skip item.
+        Collect an item name into state.
+        Decent place to implement progressive items, i.e. convert "Progressive Sword" into "Fighter's Sword"
         :param state: CollectionState to collect into
         :param item: Item to decide on if it should be collected into state
         :param remove: indicate if this is meant to remove from state instead of adding.
         """
-        if item.advancement:
-            return item.name
-        return None
+        return item.name
 
     def get_pre_fill_items(self) -> List["Item"]:
         """
@@ -535,19 +532,21 @@ class World(metaclass=AutoWorldRegister):
     # these two methods can be extended for pseudo-items on state
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         """Called when an item is collected in to state. Useful for things such as progressive items or currency."""
+
+        assert item.advancement, "Collect should no longer be called with non-advancements."
+
         name = self.collect_item(state, item)
-        if name:
-            state.add_item(name, self.player)
-            return True
-        return False
+        state.add_item(name, self.player)
+        return True  # Backwards compatibility, this used to denote whether a progression item was picked up
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         """Called when an item is removed from to state. Useful for things such as progressive items or currency."""
+
+        assert item.advancement, "Remove should no longer be called with non-advancements."
+
         name = self.collect_item(state, item, True)
-        if name:
-            state.remove_item(name, self.player)
-            return True
-        return False
+        state.remove_item(name, self.player)
+        return True  # Backwards compatibility, this used to denote whether a progression item was removed
 
     # following methods should not need to be overridden.
     def create_filler(self) -> "Item":
