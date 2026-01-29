@@ -82,17 +82,18 @@ class SlipperyFloorTrapWeight(BaseTrapWeight):
 #     """
 #     display_name = "StoryAchievementSanity"
 
-# class MonitorSanity(Toggle):
-#     """
-#     Determines whether breaking Wheatly monitors send location checks
-#     """
-#     display_name = "MonitorSanity"
+class WheatleyMonitors(Toggle):
+    """
+    Determines whether breaking Wheatly monitors will send location checks
+    """
+    display_name = "Wheatley Monitors"
 
 portal2_option_groups = [
     OptionGroup("Location Options", [
         OpenWorld,
+        EarlyPlayabilityPercentage,
         CutsceneLevels,
-        EarlyPlayabilityPercentage
+        WheatleyMonitors,
     ]),
     OptionGroup("Trap Options", [
         TrapFillPercentage,
@@ -120,7 +121,7 @@ class Portal2Options(PerGameCommonOptions):
     cutscenelevels: CutsceneLevels
     early_playability_percentage: EarlyPlayabilityPercentage
     # storyachievementsanity: StoryAchievementSanity
-    # monitorsanity: MonitorSanity
+    wheatleymonitors: WheatleyMonitors
 
     trap_fill_percentage: TrapFillPercentage
     motion_blur_trap_weight: MotionBlurTrapWeight

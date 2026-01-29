@@ -158,6 +158,12 @@ class Portal2World(World):
                 item_check_name = item_maps_to_item_location[map_code]
                 item_check_reqs = item_location_table[item_check_name].required_items
                 self.create_in_level_check(item_check_name, item_check_reqs, region_start)
+            # Wheatley monitors
+            if self.options.wheatleymonitors and map_code in wheatley_maps_to_monitor_names:
+                monitors = wheatley_maps_to_monitor_names[map_code]
+                for monitor in monitors:
+                    requirements = wheatley_monitor_table[monitor].required_items
+                    self.create_in_level_check(monitor, requirements, region_start)
             
             if last_region:
                 last_region.connect(region_start)
