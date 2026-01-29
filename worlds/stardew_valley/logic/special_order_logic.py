@@ -82,8 +82,8 @@ class SpecialOrderLogic(BaseLogic):
                                                    self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
                 SpecialOrder.qis_hungry_challenge: self.logic.ability.can_mine_perfectly_in_the_skull_cavern(),
                 SpecialOrder.qis_cuisine: self.logic.cooking.can_cook() & self.logic.shipping.can_use_shipping_bin &
-                                          ((self.logic.money.can_spend_at(Region.saloon, 205000) & self.logic.cooking.can_cook(Beverage.triple_shot_espresso)) |
-                                           (self.logic.money.can_spend_at(Region.pierre_store, 170000) & self.logic.cooking.can_cook(Meal.bread))),
+                                          (self.logic.money.can_spend_at(Region.saloon, 205000) & self.logic.cooking.can_cook(Beverage.triple_shot_espresso)) &
+                                           (self.logic.money.can_spend_at(Region.pierre_store, 170000) & self.logic.cooking.can_cook(Meal.bread)),
                 SpecialOrder.qis_kindness: self.logic.gifts.can_give_loved_gifts_to_everyone(),
                 SpecialOrder.extended_family: self.logic.ability.can_fish_perfectly() & self.logic.has(Fish.angler) & self.logic.has(Fish.glacierfish) &
                                               self.logic.has(Fish.crimsonfish) & self.logic.has(Fish.mutant_carp) & self.logic.has(Fish.legend),
