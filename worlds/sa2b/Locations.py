@@ -1583,7 +1583,7 @@ itembox_location_table = {
     LocationName.final_chase_itembox_8: 0xFF16FD,
 
     LocationName.cannon_core_itembox_8: 0xFF16FE,
-    
+
     LocationName.city_escape_itembox_9: 0xFF1700,
     LocationName.green_forest_itembox_9: 0xFF1704,
     LocationName.pumpkin_hill_itembox_9: 0xFF1705,
@@ -4027,7 +4027,7 @@ def setup_locations(world: World, player: int, mission_map: typing.Dict[int, int
         elif world.options.kart_race_checks == 1:
             location_table.update({**kart_race_mini_location_table})
 
-        if world.options.goal.value in [0, 2, 4, 5, 6, 8]:
+        if world.options.goal.value in [0, 2, 4, 5, 6, 8, 9]:
             location_table.update({**final_boss_location_table})
         elif world.options.goal.value in [7]:
             location_table.update({**chaos_chao_location_table})
