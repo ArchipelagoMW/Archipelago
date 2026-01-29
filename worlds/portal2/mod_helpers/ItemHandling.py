@@ -120,5 +120,9 @@ map_specific_commands: list[MapCommand] = [
     MapCommand("sp_a2_laser_stairs", reflection_cube, ['script ppmod.addscript([Vector(-352, -288, -32), 1, "trigger_once"], "OnStartTouch", "DeleteEntity(\"models/props/reflection_cube.mdl\")", 0.5, 1)\n',
                                                          'script ppmod.addscript("prop_button", "OnPressed", "DeleteEntity(\"models/props/reflection_cube.mdl\")", 0.5)\n']),
     MapCommand("sp_a2_laser_relays", reflection_cube, ['script ppmod.get("laser_cube_spawner").Destroy()\n']),
-    MapCommand("sp_a1_intro1", weighted_cube, ['script DeleteEntity("entity_box_maker_rm1")\n'])
+    MapCommand("sp_a1_intro1", weighted_cube, ['script DeleteEntity("entity_box_maker_rm1")\n']),
+    # Turret physics disable (sometimes cannot be at start of level due to spawning times)
+    MapCommand("sp_a2_turret_intro", turrets, [f'script DisableEntityPhysics("npc_portal_turret_floor")']),
+    MapCommand("sp_a2_bts2", turrets, ['script ppmod.addscript([Vector(1514, -3898, 64), 1, "trigger_once"], "OnStartTouch", "DisableEntityPhysics(\"npc_portal_turret_floor\")", 3, 1)\n']),
+    MapCommand("sp_a4_finale2", turrets, ['script ppmod.addscript([Vector(11835, 11776, 8543), 1, "trigger_once"], "OnStartTouch", "DisableEntityPhysics(\"npc_portal_turret_floor\")", 2.5, 1)\n']),
 ]
