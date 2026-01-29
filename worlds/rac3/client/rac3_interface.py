@@ -1140,7 +1140,7 @@ class Rac3Interface(GameInterface):
         already_sold = set()
         for name, location in RAC3_LOCATION_DATA_TABLE.items():
             # Special case: NG+ RY3N0 only if enough planets unlocked
-            if name == RAC3VENDORLOCATION.NGPLUS_RY3N0 and self.ship_slot_limit < 10:
+            if name == RAC3VENDORLOCATION.NGPLUS_RY3N0 and self.ship_slot_limit >= 10:
                 item = WEAPON_VENDOR_LOCATION_TO_ITEM.get(name)
                 if item is not None:
                     if name in self.checked_locations:
