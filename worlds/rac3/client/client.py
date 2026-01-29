@@ -95,11 +95,11 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             if self.ctx.slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]:
-                self.output(f"Weapon EXP item not compatible with Progressive Weapons")
+                self.output("Weapon EXP item not compatible with Progressive Weapons")
             else:
                 self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.WEAPON_XP].AP_CODE,
                                                       self.ctx.player_names[self.ctx.slot], "Test Command", 0)
-                self.output(f"Weapon EXP Received")
+                self.output("Weapon EXP Received")
 
     def _cmd_bolt_test(self):
         """Give bolts for testing purposes."""
@@ -108,7 +108,7 @@ class CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.BOLTS].AP_CODE,
                                                   self.ctx.player_names[self.ctx.slot], "Test Command", 0)
-            self.output(f"Bolts Received")
+            self.output("Bolts Received")
 
     def _cmd_rac3_info(self):
         """Dump Rac3 info for debugging purposes."""
@@ -123,7 +123,7 @@ class CommandProcessor(ClientCommandProcessor):
             return
         if isinstance(self.ctx, Rac3Context):
             update(self.ctx)
-            self.output(f"Update cycle complete")
+            self.output("Update cycle complete")
 
     def _cmd_deathlink(self):
         """Toggles Death Link on and off."""
@@ -135,7 +135,7 @@ class CommandProcessor(ClientCommandProcessor):
                 async_start(self.ctx.update_death_link(self.ctx.death_link))
                 self.output(f'Death Link set to {self.ctx.death_link}')
             else:
-                self.output(f"Death Link not found in slot_data. Please report this")
+                self.output("Death Link not found in slot_data. Please report this")
 
     def _cmd_respawn(self):
         """Teleports Ratchet back to the ship. If used in an unusual place, forces a respawn instead.
@@ -151,7 +151,7 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify():
             return
         if isinstance(self.ctx, Rac3Context):
-            self.output(f'Attempting to homewarp to the Phoenix...')
+            self.output('Attempting to homewarp to the Phoenix...')
             create_task(handle_respawn(self.ctx, force_load=True))
 
     def _cmd_ryno(self):
@@ -161,9 +161,9 @@ class CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.ryno = not self.ctx.game_interface.ryno
             if self.ctx.game_interface.ryno:
-                self.output(f'RYNO max upgrade is Lv4')
+                self.output('RYNO max upgrade is Lv4')
             else:
-                self.output(f'RYNO max upgrade is Lv5')
+                self.output('RYNO max upgrade is Lv5')
 
     def _cmd_messagebox(self, *args):
         """Displays a message box in-game with the specified message."""
@@ -173,7 +173,7 @@ class CommandProcessor(ClientCommandProcessor):
             message = " ".join(args)
             self.ctx.game_interface.notification_queue.append((message[:225:], RAC3BOXTHEME.DEFAULT))
             if len(message) > 225:
-                self.output(f'Message longer than 225 characters, truncated to fit in message box.')
+                self.output('Message longer than 225 characters, truncated to fit in message box.')
             self.output(f'Message box displayed with message: {message[:225:]}')
 
     def _cmd_one_hp(self, *args):
@@ -191,7 +191,7 @@ class CommandProcessor(ClientCommandProcessor):
                 self.output(f'One HP Challenge for {char_name} set to {new_state}')
             else:
                 self.output(f'Invalid character name. Valid options are: {", ".join(ONE_HP_CHALLENGE_CHARACTERS)}')
-    
+
     def _cmd_print_vendor(self):
         """Print all items sold by the current planet's vendor to the log."""
         if not self.verify():
@@ -212,7 +212,7 @@ class CommandProcessor(ClientCommandProcessor):
             except ValueError:
                 self.output("Invalid item ID. Please provide a valid integer.")
                 return
-            self.ctx.game_interface.add_vendor_slot(item_id)
+            self.ctx.game_interface.add_weapon_vendor_slot(item_id)
 
 
 class Rac3Context(CommonContext):
