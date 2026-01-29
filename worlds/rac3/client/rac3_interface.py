@@ -35,6 +35,7 @@ from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYP
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
                                           SHIP_SLOTS)
 from worlds.rac3.constants.status import RAC3STATUS
+from worlds.rac3.constants.vendors.vendor import RAC3VENDOR
 
 
 class Rac3Interface(GameInterface):
@@ -917,6 +918,12 @@ class Rac3Interface(GameInterface):
         self.health_cycler()
         self.pda_vendor_cycler()
         self.notification_cycler()
+
+    def vendor_example_function(self):
+        """An example function to demonstrate reading the ID of the item highlighted with the cursor"""
+        current_slot = self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
+        current_slot_id = self._read32(
+            RAC3VENDOR.get_vendor_item_property_address(self.planet, current_slot, RAC3VENDOR.ITEM_ID_OFFSET))
 
     def cutscene_gadget_fix(self):
         """Temporarily removing a gadget when grabbing it during a cutscene to make sure the location check address

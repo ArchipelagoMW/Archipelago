@@ -1,4 +1,8 @@
+"""This module provides a class with all the string constants used for Weapon Vendor names."""
+
+
 class RAC3VENDORLOCATION:
+    """Constant strings for each Weapon Vendor location name."""
     FLORANA_WHIP = "Florana: Received Plasma Whip"
     FLORANA_N60 = "Florana: Received N60 Storm"
     PHOENIX_SUCK = "Phoenix: Received Suck Cannon"

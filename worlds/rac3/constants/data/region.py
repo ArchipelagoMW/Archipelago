@@ -3,8 +3,9 @@ from dataclasses import dataclass
 from typing import Optional
 
 from worlds.rac3.constants.data.position import RAC3POSITIONDATA
-from worlds.rac3.constants.region import (PLANET_CHECKPOINT, PLANET_LOAD_OFFSET, PLANET_SPECIAL_OFFSET,
-                                          PLANET_MENU_OFFSET, PLANET_NAME_FROM_ID, PLANET_VENDOR_OFFSET, RAC3REGION, RESPAWN_COORDS_OFFSET)
+from worlds.rac3.constants.region import (PLANET_CHECKPOINT, PLANET_LOAD_OFFSET, PLANET_MENU_OFFSET,
+                                          PLANET_NAME_FROM_ID, PLANET_SPECIAL_OFFSET, PLANET_VENDOR_OFFSET, RAC3REGION,
+                                          RESPAWN_COORDS_OFFSET)
 from worlds.rac3.constants.status import RAC3STATUS
 
 

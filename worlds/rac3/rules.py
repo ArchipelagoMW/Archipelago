@@ -129,7 +129,8 @@ def set_rules(world: "RaC3World"):
         # RAC3VENDOR.PHOENIX_INFECTOR
         # RAC3VENDOR.PHOENIX_MAGNA_ARMOR
         RAC3VENDORLOCATION.PHOENIX_ADAMANTINE: lambda state: state.can_reach_region(RAC3REGION.AQUATOS, world.player),
-        RAC3VENDORLOCATION.PHOENIX_AEGIS_ARMOR: lambda state: state.can_reach_region(RAC3REGION.ZELDRIN_STARPORT, world.player),
+        RAC3VENDORLOCATION.PHOENIX_AEGIS_ARMOR:
+            lambda state: state.can_reach_region(RAC3REGION.ZELDRIN_STARPORT, world.player),
         RAC3VENDORLOCATION.PHOENIX_INFERNOX: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
         RAC3SKILLPOINT.PHOENIX_ARMOR: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
         # RAC3LOCATION.PHOENIX_MEET_SASHA
@@ -320,7 +321,8 @@ def set_rules(world: "RaC3World"):
         # RAC3VENDOR.AQUATOS_LAVA_GUN
         RAC3VENDORLOCATION.AQUATOS_SHIELD_CHARGER:
             lambda state: state.can_reach_region(RAC3REGION.COMMAND_CENTER, world.player),
-        RAC3VENDORLOCATION.AQUATOS_BOUNCER: lambda state: state.can_reach_region(RAC3REGION.QWARKS_HIDEOUT, world.player),
+        RAC3VENDORLOCATION.AQUATOS_BOUNCER:
+            lambda state: state.can_reach_region(RAC3REGION.QWARKS_HIDEOUT, world.player),
         RAC3VENDORLOCATION.AQUATOS_PLASMA_COIL: lambda state: state.can_reach_region(RAC3REGION.KOROS, world.player),
         # RAC3LOCATION.AQUATOS_BASE
         RAC3TBOLT.SEWER_PIPE: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
