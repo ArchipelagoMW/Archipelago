@@ -452,6 +452,10 @@ def create_regions(world: "RaC3World"):
 
     create_region_and_connect(world, RAC3REGION.NANOTECH, f"{RAC3REGION.MENU} -> {RAC3REGION.NANOTECH}", menu)
 
+    # New Game Plus
+
+    create_region_and_connect(world, RAC3REGION.NGPLUS, f"{RAC3REGION.MENU} -> {RAC3REGION.NGPLUS}", menu)
+
     # shock_blaster_upgrades = create_region(world, f"{RAC3ITEM.SHOCK_BLASTER} Upgrades")
     # menu.connect(shock_blaster_upgrades, rule=lambda state: state.has(RAC3ITEM.SHOCK_BLASTER, world.player)),
     #

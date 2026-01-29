@@ -9,6 +9,7 @@ class RAC3REGION:
     """Constant strings for each game region/planet"""
     MENU = "Menu"
     GALAXY = "Galaxy"
+    NGPLUS = "New Game Plus"
     VELDIN = "Veldin"
     FLORANA = "Florana"
     STARSHIP_PHOENIX = "Starship Phoenix"
