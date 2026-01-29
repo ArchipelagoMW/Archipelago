@@ -25,7 +25,7 @@ from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.tags import RAC3TAG
-from worlds.rac3.constants.locations.vendors import WEAPON_VENDOR_LOCATION_TO_ITEM, WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION
+from worlds.rac3.constants.locations.vendors import RAC3VENDORLOCATION, WEAPON_VENDOR_LOCATION_TO_ITEM, WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION
 from worlds.rac3.constants.messages.box_format import THEME_ID_TO_THEME_COLORS
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.messagebox import RAC3MESSAGEBOX
@@ -1092,6 +1092,7 @@ class Rac3Interface(GameInterface):
                 is_slimcognito = (self.planet == RAC3REGION.AQUATOS 
                                   and bool(self._read8(RAC3WEAPONVENDOR.get_vendor_property_address(
                                       self.planet, RAC3WEAPONVENDOR.VENDOR_WEAPON_TYPE_OFFSET))))
+                # Slim Cognito does not have a max ammo item, so we just replace the entire inventory
                 if not is_slimcognito:
                     for slot, slot_data in enumerate(current_inventory):
                         new_inventory.append(slot_data)
@@ -1138,13 +1139,24 @@ class Rac3Interface(GameInterface):
         items_to_sell = []
         already_sold = set()
         for name, location in RAC3_LOCATION_DATA_TABLE.items():
-            if RAC3TAG.WEAPONS in location.TAGS and WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION.get(name, None) in self.visited_planets:
-                item = WEAPON_VENDOR_LOCATION_TO_ITEM.get(name, None)
-                if name in self.checked_locations:
-                    if item is not None:
+            # Special case: NG+ RY3N0 only if enough planets unlocked
+            if name == RAC3VENDORLOCATION.NGPLUS_RY3N0 and self.ship_slot_limit < 10:
+                item = WEAPON_VENDOR_LOCATION_TO_ITEM.get(name)
+                if item is not None:
+                    if name in self.checked_locations:
                         already_sold.add(item)
-                else:
-                    if item is not None and item not in already_sold:
+                    elif item not in already_sold:
+                        items_to_sell.append(item)
+                        already_sold.add(item)
+                continue
+
+            # General case: weapons in visited regions
+            if RAC3TAG.WEAPONS in location.TAGS and WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION.get(name) in self.visited_planets:
+                item = WEAPON_VENDOR_LOCATION_TO_ITEM.get(name)
+                if item is not None:
+                    if name in self.checked_locations:
+                        already_sold.add(item)
+                    elif item not in already_sold:
                         items_to_sell.append(item)
                         already_sold.add(item)
         return items_to_sell
