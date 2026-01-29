@@ -1080,6 +1080,8 @@ class Rac3Interface(GameInterface):
             return
         if self.planet not in PLANET_VENDOR_OFFSET.keys():
             return
+        if not self.options.weapon_vendors:
+            return
 
         vendor_type = RAC3VENDORTYPE(
             self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
