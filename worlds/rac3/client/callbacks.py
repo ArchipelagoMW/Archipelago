@@ -102,10 +102,10 @@ async def pcsx2_sync_task(ctx: 'Context'):
                 await _handle_game_ready(ctx)
 
         except ConnectionError:
-            logger.info(f"ConnectionError")
+            logger.info("ConnectionError")
             ctx.game_interface.disconnect_from_game()
         except Exception as e:
-            logger.info(f"ExceptionError")
+            logger.info("ExceptionError")
             if isinstance(e, RuntimeError):
                 logger.error(str(e))
             else:
@@ -149,7 +149,7 @@ async def _handle_game_ready(ctx: 'Context') -> None:
                 counter += 1
                 logger.debug(f"Processing item {count}: {ctx.item_names.lookup_in_slot(item.item, item.player)}")
                 if count > items_to_process:
-                    logger.debug(f"Handle Later")
+                    logger.debug("Handle Later")
                     continue
                 ctx.game_interface.important_items(item.item, ctx.player_names[ctx.slot], item.location)
             ctx.processed_item_count = min(counter, items_to_process)
@@ -279,7 +279,7 @@ async def handle_deathlink(ctx: 'Context') -> None:
                         (f'{RAC3TEXTFORMATSTRING.WHITE}Deathlink Received from {RAC3TEXTFORMATSTRING.GREEN}'
                          f'{ctx.last_deathlink_sender}{RAC3TEXTFORMATSTRING.WHITE}:\\n{ctx.last_deathlink_msg}',
                          RAC3BOXTHEME.DEATHLINK))
-                    logger.debug(f'Deaths processed')
+                    logger.debug('Deaths processed')
                     ctx.queued_deaths = 0
                     ctx.last_death_link = time()
         else:
@@ -325,9 +325,9 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
                                                             0x3F, 0x40, 0x4D, 0x51, 0x52, 0x59, 0x5B, 0x5C, 0x61,
                                                             0x62, 0x75, 0x76, 0x7C, 0x80, 0x9A, 0x9B, 0x9D, 0xA3}:
         if force_load:
-            logger.error(f'Player cannot homewarp right now')
+            logger.error('Player cannot homewarp right now')
         elif force_respawn:
-            logger.error(f'Player cannot respawn right now')
+            logger.error('Player cannot respawn right now')
         return  # Todo: Action states
     planet_data = RAC3_REGION_DATA_TABLE[ctx.game_interface.planet]
     if planet_data.ID > 55:
@@ -339,9 +339,9 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
             return
         if ctx.game_interface.check_intro():
             if force_load:
-                logger.error(f'Player cannot homewarp right now')
+                logger.error('Player cannot homewarp right now')
             elif force_respawn:
-                logger.error(f'Player cannot respawn right now')
+                logger.error('Player cannot respawn right now')
             return
         if ctx.game_interface.check_inputs(RAC3INPUT.RELOAD, True) or force_load:
             ctx.game_interface.unpause_game()

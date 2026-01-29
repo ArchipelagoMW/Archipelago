@@ -16,10 +16,13 @@ class RAC3VENDOR:
     def get_vendor_property_address(planet, vendor_prop):
         """Provides the vendor property address for reading data"""
         return RAC3STATUS.VENDOR_BASE + PLANET_VENDOR_OFFSET[planet] + vendor_prop
-    
+
     @classmethod
     def get_vendor_item_property_address(cls, planet: str, slot: int, item_prop_offset: int):
-        """Provides the item property address for reading vendor item data, using the correct slot size for the vendor type."""
+        """
+        Provides the item property address for reading vendor item data,
+        using the correct slot size for the vendor type.
+        """
         return cls.get_vendor_property_address(planet, 0) + (slot * cls.SLOT_SIZE) + item_prop_offset
 
 
@@ -36,6 +39,7 @@ class RAC3WEAPONVENDOR(RAC3VENDOR):
     ITEM_MEGA_OFFSET: int = 0x11  # 1 Byte, 0 = Normal, 1 = Mega
     ITEM_ALL_AMMO_OFFSET: int = 0x12  # 1 Byte, 0 = Normal, 1 = All Ammo
     ITEM_MEMCARD_OFFSET: int = 0x13  # 1 Byte, 0 = Normal, 1 = Memory Card Check
+
 
 class RAC3ARMORVENDOR(RAC3VENDOR):
     """Struct for Armor Vendor data, with armor-specific slot size and offsets"""
