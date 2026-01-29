@@ -426,8 +426,13 @@ class OptionsCreator(ThemedApp):
 
         valid_keys = sorted(option.valid_keys)
         if option.verify_item_name:
+            if option.convert_name_groups:
+                valid_keys += list(world.item_name_groups.keys())
             valid_keys += list(world.item_name_to_id.keys())
+
         if option.verify_location_name:
+            if option.convert_name_groups:
+                valid_keys += list(world.location_name_groups.keys())
             valid_keys += list(world.location_name_to_id.keys())
 
         if not issubclass(option, OptionCounter):
