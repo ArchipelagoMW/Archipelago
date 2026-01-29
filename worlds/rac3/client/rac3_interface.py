@@ -25,6 +25,7 @@ from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.tags import RAC3TAG
+from worlds.rac3.constants.locations.vendors import WEAPON_VENDOR_LOCATION_TO_ITEM
 from worlds.rac3.constants.messages.box_format import THEME_ID_TO_THEME_COLORS
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.messagebox import RAC3MESSAGEBOX
@@ -33,7 +34,7 @@ from worlds.rac3.constants.messages.text_strings import RAC3TEXTFORMATSTRING
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.pause_state import RAC3PAUSESTATE
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
-from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
+from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, PLANET_VENDOR_OFFSET, RAC3REGION, RESPAWN_COORDS_OFFSET,
                                           SHIP_SLOTS)
 from worlds.rac3.constants.status import RAC3STATUS
 from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
@@ -1077,6 +1078,8 @@ class Rac3Interface(GameInterface):
             return
         if self.pause_state_value != RAC3PAUSESTATE.VENDOR:
             return
+        if self.planet not in PLANET_VENDOR_OFFSET.keys():
+            return
 
         vendor_type = RAC3VENDORTYPE(
             self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
@@ -1094,7 +1097,7 @@ class Rac3Interface(GameInterface):
                     if all_ammo_value:
                         break
 
-                for item in non_prog_weapon_data.keys():
+                for item in self.determine_weapon_vendor_items():
                     item_id = RAC3_ITEM_DATA_TABLE[item].ID
                     new_slot_data = RAC3WEAPONVENDORSLOTDATA(
                         item_id=item_id,
@@ -1119,6 +1122,31 @@ class Rac3Interface(GameInterface):
                 self.write_armor_vendor_inventory(new_inventory)    
             case _:
                 logger.debug(f'Vendor cycler does not support vendor type {vendor_type} yet')
+
+    def determine_weapon_vendor_items(self):
+        """Determine which items should be sold by the weapon vendor on the current planet."""
+        items_to_sell = []
+        already_sold = set()
+        visited_planets = self.get_visited_planets()
+        for name, location in RAC3_LOCATION_DATA_TABLE.items():
+            if RAC3TAG.WEAPONS in location.TAGS and location.REGION in visited_planets:
+                item = WEAPON_VENDOR_LOCATION_TO_ITEM.get(name, None)
+                if name in self.checked_locations:
+                    if item is not None:
+                        already_sold.add(item)
+                else:
+                    if item is not None and item not in already_sold:
+                        items_to_sell.append(item)
+                        already_sold.add(item)
+        return items_to_sell
+
+    def get_visited_planets(self) -> set:
+        """Returns a set of all planets the player has visited"""
+        visited_planets = set()
+        for region in RAC3_REGION_DATA_TABLE.keys():
+            if self._read8(RAC3STATUS.VISITED_BASE + RAC3_REGION_DATA_TABLE[region].ID):
+                visited_planets.add(region)
+        return visited_planets
 
     def cutscene_gadget_fix(self):
         """Temporarily removing a gadget when grabbing it during a cutscene to make sure the location check address
@@ -1233,6 +1261,13 @@ class Rac3Interface(GameInterface):
 
     def weapon_cycler(self):
         """Interval update function: Check unlock/lock status of weapons"""
+        # If in vendor, lock all non-progressive weapons to allow second unlock address to work properly
+        if self.pause_state_value == RAC3PAUSESTATE.VENDOR:
+            for name in non_prog_weapon_data.keys():
+                addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
+                self._write8(addr, 0)
+            return
+
         for name in non_prog_weapon_data.keys():
             addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
             if self.UnlockItem[name].status:
