@@ -98,7 +98,7 @@ maps_with_potatos = ["sp_a3_speed_ramp",
 def handle_map_start(map_code: str, items_missing: list[str]) -> list[str]:
     commands: list[str] = []
     
-    if map_code in maps_with_potatos:
+    if map_code in maps_with_potatos and potatos in items_missing:
         commands.append("script RemovePotatosFromGun()\n")
     
     for mc in map_specific_commands:
