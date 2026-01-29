@@ -209,7 +209,7 @@ class Celeste64World(World):
             if region_name in cassette_entrance_regions:
                 cassette_entrance_index = cassette_entrance_regions.index(region_name)
                 mapped_cassette_name = cassette_regions[self.cassette_map[cassette_entrance_index]]
-                self.get_region(region_name).connect(self.get_region(mapped_cassette_name), lambda state: state.has(ItemName.cassettes))
+                self.get_region(region_name).connect(self.get_region(mapped_cassette_name), None, lambda state: state.has(ItemName.cassette, self.player))
 
         # Have to do this here because of other games using State in a way that's bad
         from .Rules import set_rules
