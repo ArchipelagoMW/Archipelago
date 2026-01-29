@@ -25,7 +25,7 @@ from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.tags import RAC3TAG
-from worlds.rac3.constants.locations.vendors import WEAPON_VENDOR_LOCATION_TO_ITEM
+from worlds.rac3.constants.locations.vendors import WEAPON_VENDOR_LOCATION_TO_ITEM, WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION
 from worlds.rac3.constants.messages.box_format import THEME_ID_TO_THEME_COLORS
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.messages.messagebox import RAC3MESSAGEBOX
@@ -1074,13 +1074,10 @@ class Rac3Interface(GameInterface):
 
     def vendor_cycler(self):
         """Read current vendor inventory and replace all items after the all ammo item with all items in the game"""
-        if self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET)) == 0:
-            return
-        if self.pause_state_value != RAC3PAUSESTATE.VENDOR:
-            return
-        if self.planet not in PLANET_VENDOR_OFFSET.keys():
-            return
-        if not self.options.weapon_vendors:
+        if (self.pause_state_value != RAC3PAUSESTATE.VENDOR 
+           or self.planet not in PLANET_VENDOR_OFFSET.keys()
+           or not self.options.weapon_vendors
+           or self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET)) == 0):
             return
 
         vendor_type = RAC3VENDORTYPE(
@@ -1131,7 +1128,7 @@ class Rac3Interface(GameInterface):
         already_sold = set()
         visited_planets = self.get_visited_planets()
         for name, location in RAC3_LOCATION_DATA_TABLE.items():
-            if RAC3TAG.WEAPONS in location.TAGS and location.REGION in visited_planets:
+            if RAC3TAG.WEAPONS in location.TAGS and WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[name] in visited_planets:
                 item = WEAPON_VENDOR_LOCATION_TO_ITEM.get(name, None)
                 if name in self.checked_locations:
                     if item is not None:
@@ -1265,9 +1262,11 @@ class Rac3Interface(GameInterface):
         """Interval update function: Check unlock/lock status of weapons"""
         # If in vendor, lock all non-progressive weapons to allow second unlock address to work properly
         if self.pause_state_value == RAC3PAUSESTATE.VENDOR:
+            weapons_to_remove = self.determine_weapon_vendor_items()
             for name in non_prog_weapon_data.keys():
-                addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
-                self._write8(addr, 0)
+                if name in weapons_to_remove:
+                    addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
+                    self._write8(addr, 0)
             return
 
         for name in non_prog_weapon_data.keys():
