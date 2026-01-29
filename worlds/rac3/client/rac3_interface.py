@@ -1129,7 +1129,7 @@ class Rac3Interface(GameInterface):
         items_to_sell = []
         already_sold = set()
         for name, location in RAC3_LOCATION_DATA_TABLE.items():
-            if RAC3TAG.WEAPONS in location.TAGS and WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[name] in self.visited_planets:
+            if RAC3TAG.WEAPONS in location.TAGS and WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION.get(name, None) in self.visited_planets:
                 item = WEAPON_VENDOR_LOCATION_TO_ITEM.get(name, None)
                 if name in self.checked_locations:
                     if item is not None:
