@@ -199,21 +199,6 @@ class CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.print_all_vendor_items()
 
-    # def _cmd_vendor_add(self, *args):
-    #     """Add an item to the current planet's vendor by item ID."""
-    #     if not self.verify():
-    #         return
-    #     if isinstance(self.ctx, Rac3Context):
-    #         if len(args) != 1:
-    #             self.output("Usage: vendor_add <item_id>")
-    #             return
-    #         try:
-    #             item_id = int(args[0], 0)
-    #         except ValueError:
-    #             self.output("Invalid item ID. Please provide a valid integer.")
-    #             return
-    #         self.ctx.game_interface.add_weapon_vendor_slot(item_id)
-
 
 class Rac3Context(CommonContext):
     """Class for handling server connection with the game client"""

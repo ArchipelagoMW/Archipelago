@@ -28,7 +28,7 @@ class RAC3VENDORLOCATION:
     OBANI_GEMINI_DISC = "Obani Gemini: Received Disc Blade Gun"
     HOLOSTAR_RIFT_INDUCER = "Holostar: Received Rift Inducer"
     ARIDIA_QWACK_O_RAY = "Aridia: Received Qwack-O-Ray"
-    NGPLUS_RY3N0 = "Received RY3N0"
+    NGPLUS_RY3N0 = "New Game Plus: Received RY3N0"
 
 WEAPON_VENDOR_LOCATION_TO_ITEM = {
     RAC3VENDORLOCATION.FLORANA_WHIP: RAC3ITEM.PLASMA_WHIP,
