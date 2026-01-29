@@ -924,6 +924,45 @@ class Rac3Interface(GameInterface):
         current_slot = self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
         current_slot_id = self._read32(
             RAC3VENDOR.get_vendor_item_property_address(self.planet, current_slot, RAC3VENDOR.ITEM_ID_OFFSET))
+    
+    def print_all_vendor_items(self):
+        """Print all items sold by the current planet's vendor to the log, including all relevant properties"""
+        num_slots = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
+        for slot in range(num_slots):
+            base_addr = RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, RAC3VENDOR.ITEM_ID_OFFSET)
+            item_id = self._read32(base_addr + RAC3VENDOR.ITEM_ID_OFFSET)
+            item_name = ITEM_NAME_FROM_ID.get(item_id, f'Unknown Item ID {item_id}')
+            item_price = self._read8(base_addr + RAC3VENDOR.ITEM_COST_OFFSET)
+            ammo_text = self._read8(base_addr + RAC3VENDOR.ITEM_AMMO_TEXT_OFFSET)
+            item_class = self._read16(base_addr + RAC3VENDOR.ITEM_CLASS_OFFSET)
+            item_mega = self._read8(base_addr + RAC3VENDOR.ITEM_MEGA_OFFSET)
+            item_all_ammo = self._read8(base_addr + RAC3VENDOR.ITEM_ALL_AMMO_OFFSET)
+            item_memcard = self._read8(base_addr + RAC3VENDOR.ITEM_MEMCARD_OFFSET)
+            logger.info(
+                f'Vendor Slot {slot}: '
+                f'Item Name: {item_name}, '
+                f'Free?: {bool(item_price)}, '
+                f'Ammo Text: {bool(ammo_text)}, '
+                f'Class: {hex(item_class)}, '
+                f'Mega: {bool(item_mega)}, '
+                f'All Ammo: {bool(item_all_ammo)}, '
+                f'Memcard: {bool(item_memcard)}'
+            )
+    
+    def add_vendor_slot(self, item_id):
+        """Add an item to the current planet's vendor inventory"""
+        num_slots = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
+        base_addr = RAC3VENDOR.get_vendor_item_property_address(self.planet, num_slots, RAC3VENDOR.ITEM_ID_OFFSET)
+        self._write32(base_addr + RAC3VENDOR.ITEM_ID_OFFSET, item_id)
+        self._write8(base_addr + RAC3VENDOR.ITEM_COST_OFFSET, 0)  # Free item
+        self._write8(base_addr + RAC3VENDOR.ITEM_AMMO_TEXT_OFFSET, 0)  # No ammo text
+        self._write16(base_addr + RAC3VENDOR.ITEM_CLASS_OFFSET, 0)  # Default class
+        self._write8(base_addr + RAC3VENDOR.ITEM_MEGA_OFFSET, 0)  # Not mega
+        self._write8(base_addr + RAC3VENDOR.ITEM_ALL_AMMO_OFFSET, 0)  # Not all ammo
+        self._write8(base_addr + RAC3VENDOR.ITEM_MEMCARD_OFFSET, 0)  # Not memcard
+        self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET), num_slots + 1)
+        item_name = ITEM_NAME_FROM_ID.get(item_id, f'Unknown Item ID {item_id}')
+        logger.info(f'Added item {item_name} (ID {item_id}) to vendor on planet {self.planet}')
 
     def cutscene_gadget_fix(self):
         """Temporarily removing a gadget when grabbing it during a cutscene to make sure the location check address
