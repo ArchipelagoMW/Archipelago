@@ -4,7 +4,7 @@ from typing import Optional
 
 from worlds.rac3.constants.data.position import RAC3POSITIONDATA
 from worlds.rac3.constants.region import (PLANET_CHECKPOINT, PLANET_LOAD_OFFSET, PLANET_SPECIAL_OFFSET,
-                                          PLANET_MENU_OFFSET, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET)
+                                          PLANET_MENU_OFFSET, PLANET_NAME_FROM_ID, PLANET_VENDOR_OFFSET, RAC3REGION, RESPAWN_COORDS_OFFSET)
 from worlds.rac3.constants.status import RAC3STATUS
 
 
@@ -18,6 +18,7 @@ class RAC3REGIONDATA:
     PLANET_TO_LOAD: Optional[int] = None
     PLANET_SPECIAL_OFFSET: Optional[int] = None
     RESPAWN_COORDS_ADDRESS: Optional[int] = None
+    VENDOR_OFFSET: Optional[int] = None
 
     def __init__(self,
                  idx: Optional[int] = None,
@@ -26,7 +27,8 @@ class RAC3REGIONDATA:
                  pause_address: Optional[int] = None,
                  planet_to_load_address: Optional[int] = None,
                  planet_special_offset: Optional[int] = None,
-                 respawn_coords_address: Optional[int] = None):
+                 respawn_coords_address: Optional[int] = None,
+                 vendor_offset: Optional[int] = None):
         self.ID: Optional[int] = idx
         self.SLOT_ADDRESS: Optional[int] = slot
         self.CHECKPOINT: Optional[RAC3POSITIONDATA] = checkpoint
@@ -34,6 +36,7 @@ class RAC3REGIONDATA:
         self.PLANET_TO_LOAD: Optional[int] = planet_to_load_address
         self.PLANET_SPECIAL_OFFSET: Optional[int] = planet_special_offset
         self.RESPAWN_COORDS_ADDRESS: Optional[int] = respawn_coords_address
+        self.VENDOR_OFFSET: Optional[int] = vendor_offset
 
     @staticmethod
     def construct_slot(slot: int):
@@ -55,6 +58,9 @@ class RAC3REGIONDATA:
         respawn_coords_address = RESPAWN_COORDS_OFFSET.get(name, None)
         if respawn_coords_address is not None:  # Not all planets should have respawn coords changed
             respawn_coords_address += RAC3STATUS.RESPAWN_BASE
+        vendor_offset = PLANET_VENDOR_OFFSET.get(name, None)
+        if vendor_offset is not None:
+            vendor_offset += RAC3STATUS.VENDOR_BASE
         return RAC3REGIONDATA(idx, checkpoint=checkpoint, pause_address=pause, planet_to_load_address=load,
                               planet_special_offset=offset, respawn_coords_address=respawn_coords_address)
 
