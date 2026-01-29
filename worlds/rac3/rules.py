@@ -611,6 +611,8 @@ def set_rules(world: "RaC3World"):
                           and state.has_any([RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK,
                                              RAC3ITEM.CLANK, RAC3ITEM.PROGRESSIVE_PACK], world.player),
 
+        RAC3VENDORLOCATION.NGPLUS_RY3N0: lambda state: state.has_from_list(infobot_data.keys(), world.player, 10),
+
         RAC3NANOTECH.LEVEL_11: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
         RAC3NANOTECH.LEVEL_12: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
         RAC3NANOTECH.LEVEL_13: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
