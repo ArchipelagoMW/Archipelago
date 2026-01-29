@@ -1123,6 +1123,11 @@ class Rac3Interface(GameInterface):
                 self.write_armor_vendor_inventory(new_inventory)    
             case _:
                 logger.debug(f'Vendor cycler does not support vendor type {vendor_type} yet')
+        cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
+        if len(new_inventory) == 0:
+            self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET), 0)
+        elif cursor_pos >= len(new_inventory):
+            self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET), len(new_inventory) - 1)
 
     def determine_weapon_vendor_items(self):
         """Determine which items should be sold by the weapon vendor on the current planet."""
