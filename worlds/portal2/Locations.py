@@ -125,32 +125,30 @@ story_achievements_table: dict[str, Portal2LocationData] = {
 }
 
 # Not implemented
-wheatly_monitor_table: dict[str, Portal2LocationData] = {
-    "Wheatley Monitor 1": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 2": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 3": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 4": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 5": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 6": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 7": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 8": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 9": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 10": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 11": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
-    "Wheatley Monitor 12": Portal2LocationData("", LocationType.WHEATLY_MONITOR),
+wheatley_monitor_table: dict[str, Portal2LocationData] = {
+    "Wheatley Monitor 1": Portal2LocationData("sp_a4_tb_intro", LocationType.WHEATLY_MONITOR),
+    "Wheatley Monitor 2": Portal2LocationData("sp_a4_tb_trust_drop", LocationType.WHEATLY_MONITOR),
+    "Wheatley Monitor 3": Portal2LocationData("sp_a4_tb_wall_button", LocationType.WHEATLY_MONITOR),
+    "Wheatley Monitor 4": Portal2LocationData("sp_a4_tb_polarity", LocationType.WHEATLY_MONITOR),
+    "Wheatley Monitor 5": Portal2LocationData("sp_a4_tb_catch monitor1", LocationType.WHEATLY_MONITOR),
+    "Wheatley Monitor 6": Portal2LocationData("sp_a4_tb_catch monitor2", LocationType.WHEATLY_MONITOR), # Can only have one per map atm so this one is excluded
+    "Wheatley Monitor 7": Portal2LocationData("sp_a4_stop_the_box", LocationType.WHEATLY_MONITOR),
+    "Wheatley Monitor 8": Portal2LocationData("sp_a4_laser_catapult", LocationType.WHEATLY_MONITOR),
+    "Wheatley Monitor 9": Portal2LocationData("sp_a4_laser_platform", LocationType.WHEATLY_MONITOR),
+    "Wheatley Monitor 10": Portal2LocationData("sp_a4_speed_tb_catch", LocationType.WHEATLY_MONITOR, [portal_gun_2]),
+    "Wheatley Monitor 11": Portal2LocationData("sp_a4_jump_polarity", LocationType.WHEATLY_MONITOR, [portal_gun_2, paint, funnel, turrets, floor_button, button]),
+    "Wheatley Monitor 12": Portal2LocationData("sp_a4_finale3", LocationType.WHEATLY_MONITOR),
 }
 
-item_maps_to_item_location : dict[str, str] = {
-    "sp_a1_intro3": portal_gun_1, 
-    "sp_a2_intro": portal_gun_2, 
-    "sp_a3_transition01": potatos
-}
+wheatley_maps_to_monitor_names: dict[str, str] = {value.map_name:key for key, value in wheatley_monitor_table}
 
 item_location_table: dict[str, Portal2LocationData] = {
     portal_gun_1: Portal2LocationData("sp_a1_intro3", LocationType.ITEM),
     portal_gun_2: Portal2LocationData("sp_a2_intro", LocationType.ITEM),
     potatos: Portal2LocationData("sp_a3_transition01", LocationType.ITEM, [portal_gun_2]),
 }
+
+item_maps_to_item_location : dict[str, str] = {value.map_name:key for key, value in item_location_table}
 
 # Not implementd
 achievements_table: dict[str, Portal2LocationData] = {}
@@ -163,7 +161,7 @@ location_names_to_map_codes: dict[str, str] = {name: value.map_name for
 map_codes_to_location_names: dict[str, str] = {value: key for key, value in location_names_to_map_codes.items()}
 
 # all_locations_table.update(story_achievements_table)
-# all_locations_table.update(wheatly_monitor_table)
+all_locations_table.update(wheatley_monitor_table)
 all_locations_table.update(item_location_table)
 # all_locations_table.update(achievements_table)
 
