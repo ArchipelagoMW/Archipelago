@@ -31,7 +31,7 @@ SVE_GINGER_ISLAND_PACK = ModNames.sve + "+" + ginger_island_content_pack.name
 class SVEContentPack(ContentPack):
 
     def fish_hook(self, content: StardewContent):
-        if ginger_island_content_pack.name not in content.registered_packs:
+        if content.is_disabled(ginger_island_content_pack):
             content.fishes.pop(fish_data.baby_lunaloo.name)
             content.fishes.pop(fish_data.clownfish.name)
             content.fishes.pop(fish_data.lunaloo.name)
@@ -48,7 +48,7 @@ class SVEContentPack(ContentPack):
             content.fishes.pop(fish_data.torpedo_trout.name)
 
     def villager_hook(self, content: StardewContent):
-        if ginger_island_content_pack.name not in content.registered_packs:
+        if content.is_disabled(ginger_island_content_pack):
             # Remove Lance if Ginger Island is not in content since he is first encountered in Volcano Forge
             content.villagers.pop(villagers_data.lance.name)
 
@@ -59,7 +59,7 @@ class SVEContentPack(ContentPack):
         content.untag_item(SVESeed.stalk, tag=ItemTag.CROPSANITY_SEED)
         content.untag_item(SVESeed.void, tag=ItemTag.CROPSANITY_SEED)
         content.untag_item(SVESeed.ancient_fern, tag=ItemTag.CROPSANITY_SEED)
-        if ginger_island_content_pack.name not in content.registered_packs:
+        if content.is_disabled(ginger_island_content_pack):
             # Remove Highlands seeds as these are behind Lance existing.
             content.game_items.pop(SVESeed.void)
             content.game_items.pop(SVEVegetable.void_root)
@@ -87,9 +87,8 @@ register_mod_content_pack(SVEContentPack(
         ModEdible.lightning_elixir: (ShopSource(money_price=12000, shop_region=SVERegion.galmoran_outpost),),
         ModEdible.barbarian_elixir: (ShopSource(money_price=22000, shop_region=SVERegion.galmoran_outpost),),
         ModEdible.gravity_elixir: (ShopSource(money_price=4000, shop_region=SVERegion.galmoran_outpost),),
-        SVEMeal.grampleton_orange_chicken: (ShopSource(money_price=650,
-                                                       shop_region=Region.saloon,
-                                                       other_requirements=(RelationshipRequirement(ModNPC.sophia, 6),)),),
+        SVEMeal.grampleton_orange_chicken: (
+            ShopSource(money_price=650, shop_region=Region.saloon, other_requirements=(RelationshipRequirement(ModNPC.sophia, 6),)),),
         ModEdible.hero_elixir: (ShopSource(money_price=8000, shop_region=SVERegion.isaac_shop),),
         ModEdible.aegis_elixir: (ShopSource(money_price=28000, shop_region=SVERegion.galmoran_outpost),),
         SVEBeverage.sports_drink: (ShopSource(money_price=750, shop_region=Region.hospital),),
@@ -126,8 +125,8 @@ register_mod_content_pack(SVEContentPack(
 
         ModLoot.green_mushroom: (ForagingSource(regions=(SVERegion.highlands_pond,), seasons=Season.not_winter),),
         ModLoot.ornate_treasure_chest: (ForagingSource(regions=(SVERegion.highlands_outside,),
-                                                       other_requirements=(CombatRequirement(Performance.galaxy),
-                                                                           ToolRequirement(Tool.axe, ToolMaterial.iron))),),
+                                                       other_requirements=(
+                                                           CombatRequirement(Performance.galaxy), ToolRequirement(Tool.axe, ToolMaterial.iron))),),
         ModLoot.swirl_stone: (ForagingSource(regions=(SVERegion.crimson_badlands,), other_requirements=(CombatRequirement(Performance.galaxy),)),),
         ModLoot.void_soul: (ForagingSource(regions=(SVERegion.crimson_badlands,), other_requirements=(CombatRequirement(Performance.good),)),),
         SVEForage.winter_star_rose: (ForagingSource(regions=(SVERegion.summit,), seasons=(Season.winter,)),),
@@ -147,9 +146,8 @@ register_mod_content_pack(SVEContentPack(
         SVEForage.thistle: (ForagingSource(regions=(SVERegion.summit,)),),
         ModLoot.void_pebble: (ForagingSource(regions=(SVERegion.crimson_badlands,), other_requirements=(CombatRequirement(Performance.great),)),),
         ModLoot.void_shard: (ForagingSource(regions=(SVERegion.crimson_badlands,),
-                                            other_requirements=(CombatRequirement(Performance.galaxy),
-                                                                SkillRequirement(Skill.combat, 10),
-                                                                YearRequirement(3),)),),
+                                            other_requirements=(
+                                                CombatRequirement(Performance.galaxy), SkillRequirement(Skill.combat, 10), YearRequirement(3),)),),
         SVEWaterItem.dulse_seaweed: (ForagingSource(regions=(Region.beach,), other_requirements=(FishingRequirement(Region.beach),)),),
 
         # Fable Reef
