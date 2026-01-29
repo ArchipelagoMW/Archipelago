@@ -40,7 +40,7 @@ class ProgressiveItemDefinition(ItemDefinition):
 
 @dataclass(frozen=True)
 class DoorItemDefinition(ItemDefinition):
-    panel_id_hexes: List[str]
+    panel_entity_ids: List[int]
 
 
 @dataclass(frozen=True)

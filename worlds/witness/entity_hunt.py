@@ -10,49 +10,49 @@ if TYPE_CHECKING:
     from .player_logic import WitnessPlayerLogic
 
 DISALLOWED_ENTITIES_FOR_PANEL_HUNT = {
-    "0x03629",  # Tutorial Gate Open, which is the panel that is locked by panel hunt
-    "0x03505",  # Tutorial Gate Close (same thing)
-    "0x3352F",  # Gate EP (same thing)
-    "0x09F7F",  # Mountaintop Box Short. This is reserved for panel_hunt_postgame.
-    "0x00CDB",  # Challenge Reallocating
-    "0x0051F",  # Challenge Reallocating
-    "0x00524",  # Challenge Reallocating
-    "0x00CD4",  # Challenge Reallocating
-    "0x00CB9",  # Challenge May Be Unsolvable
-    "0x00CA1",  # Challenge May Be Unsolvable
-    "0x00C80",  # Challenge May Be Unsolvable
-    "0x00C68",  # Challenge May Be Unsolvable
-    "0x00C59",  # Challenge May Be Unsolvable
-    "0x00C22",  # Challenge May Be Unsolvable
-    "0x0A3A8",  # Reset PP
-    "0x0A3B9",  # Reset PP
-    "0x0A3BB",  # Reset PP
-    "0x0A3AD",  # Reset PP
+    0x03629,  # Tutorial Gate Open, which is the panel that is locked by panel hunt
+    0x03505,  # Tutorial Gate Close (same thing)
+    0x3352F,  # Gate EP (same thing)
+    0x09F7F,  # Mountaintop Box Short. This is reserved for panel_hunt_postgame.
+    0x00CDB,  # Challenge Reallocating
+    0x0051F,  # Challenge Reallocating
+    0x00524,  # Challenge Reallocating
+    0x00CD4,  # Challenge Reallocating
+    0x00CB9,  # Challenge May Be Unsolvable
+    0x00CA1,  # Challenge May Be Unsolvable
+    0x00C80,  # Challenge May Be Unsolvable
+    0x00C68,  # Challenge May Be Unsolvable
+    0x00C59,  # Challenge May Be Unsolvable
+    0x00C22,  # Challenge May Be Unsolvable
+    0x0A3A8,  # Reset PP
+    0x0A3B9,  # Reset PP
+    0x0A3BB,  # Reset PP
+    0x0A3AD,  # Reset PP
 }
 
 ALL_HUNTABLE_PANELS = [
-    entity_hex
-    for entity_hex, entity_obj in static_witness_logic.ENTITIES_BY_HEX.items()
-    if entity_obj["entityType"] == "Panel" and entity_hex not in DISALLOWED_ENTITIES_FOR_PANEL_HUNT
+    entity_id
+    for entity_id, entity_obj in static_witness_logic.ENTITIES_BY_ID.items()
+    if entity_obj.entity_type == "Panel" and entity_id not in DISALLOWED_ENTITIES_FOR_PANEL_HUNT
 ]
 
 
 class EntityHuntPicker:
     def __init__(self, player_logic: "WitnessPlayerLogic", world: "WitnessWorld",
-                 pre_picked_entities: Set[str]) -> None:
+                 pre_picked_entities: Set[int]) -> None:
         self.player_logic = player_logic
         self.player_options = world.options
         self.player_name = world.player_name
         self.random = world.random
 
         self.PRE_PICKED_HUNT_ENTITIES = pre_picked_entities.copy()
-        self.HUNT_ENTITIES: Set[str] = set()
+        self.HUNT_ENTITIES: Set[int] = set()
 
         self._add_plandoed_hunt_panels_to_pre_picked()
 
         self.ALL_ELIGIBLE_ENTITIES, self.ELIGIBLE_ENTITIES_PER_AREA = self._get_eligible_panels()
 
-    def pick_panel_hunt_panels(self, total_amount: int) -> Set[str]:
+    def pick_panel_hunt_panels(self, total_amount: int) -> Set[int]:
         """
         The process of picking all hunt entities is:
 
@@ -71,13 +71,13 @@ class EntityHuntPicker:
 
         return self.HUNT_ENTITIES
 
-    def _entity_is_eligible(self, panel_hex: str, plando: bool = False) -> bool:
+    def _entity_is_eligible(self, panel_id: int, plando: bool = False) -> bool:
         """
         Determine whether an entity is eligible for entity hunt based on player options.
         """
-        panel_obj = static_witness_logic.ENTITIES_BY_HEX[panel_hex]
+        panel_obj = static_witness_logic.ENTITIES_BY_ID[panel_id]
 
-        if not self.player_logic.solvability_guaranteed(panel_hex) or panel_hex in self.player_logic.EXCLUDED_ENTITIES:
+        if not self.player_logic.solvability_guaranteed(panel_id) or panel_id in self.player_logic.EXCLUDED_ENTITIES:
             if plando:
                 warning(f"Panel {panel_obj['checkName']} is disabled / excluded and thus not eligible for panel hunt.")
             return False
@@ -87,7 +87,7 @@ class EntityHuntPicker:
             # However, I don't think they should be hunt panels in this case.
             self.player_options.disable_non_randomized_puzzles
             and not self.player_options.shuffle_discarded_panels
-            and panel_obj["locationType"] == "Discard"
+            and panel_obj.location_type == "Discard"
         )
 
     def _add_plandoed_hunt_panels_to_pre_picked(self) -> None:
@@ -101,12 +101,12 @@ class EntityHuntPicker:
         self.random.shuffle(panels_to_plando)
 
         for location_name in panels_to_plando:
-            entity_hex = static_witness_logic.ENTITIES_BY_NAME[location_name]["entity_hex"]
+            entity_id = static_witness_logic.ENTITIES_BY_NAME[location_name].entity_id
 
-            if entity_hex in self.PRE_PICKED_HUNT_ENTITIES:
+            if entity_id in self.PRE_PICKED_HUNT_ENTITIES:
                 continue
 
-            if self._entity_is_eligible(entity_hex, plando=True):
+            if self._entity_is_eligible(entity_id, plando=True):
                 if len(self.PRE_PICKED_HUNT_ENTITIES) == self.player_options.panel_hunt_total:
                     warning(
                         f"Panel {location_name} could not be plandoed as a hunt panel for {self.player_name}'s world, "
@@ -114,9 +114,9 @@ class EntityHuntPicker:
                     )
                     continue
 
-                self.PRE_PICKED_HUNT_ENTITIES.add(entity_hex)
+                self.PRE_PICKED_HUNT_ENTITIES.add(entity_id)
 
-    def _get_eligible_panels(self) -> Tuple[List[str], Dict[str, Set[str]]]:
+    def _get_eligible_panels(self) -> Tuple[List[int], Dict[str, Set[int]]]:
         """
         There are some entities that are not allowed for panel hunt for various technical of gameplay reasons.
         Make a list of all the ones that *are* eligible, plus a lookup of eligible panels per area.
@@ -129,7 +129,7 @@ class EntityHuntPicker:
 
         eligible_panels_by_area = defaultdict(set)
         for eligible_panel in all_eligible_panels:
-            associated_area = static_witness_logic.ENTITIES_BY_HEX[eligible_panel]["area"].name
+            associated_area = static_witness_logic.ENTITIES_BY_ID[eligible_panel].area.name
             eligible_panels_by_area[associated_area].add(eligible_panel)
 
         return all_eligible_panels, eligible_panels_by_area
@@ -145,7 +145,7 @@ class EntityHuntPicker:
 
         return contributing_percentage_per_area
 
-    def _get_next_random_batch(self, amount: int, same_area_discouragement: float) -> List[str]:
+    def _get_next_random_batch(self, amount: int, same_area_discouragement: float) -> List[int]:
         """
         Pick the next batch of hunt entities.
         Areas that already have a lot of hunt entities in them will be discouraged from getting more.
@@ -216,22 +216,22 @@ class EntityHuntPicker:
         """
 
         replacements = {
-            "0x18488": "0x00609",  # Replace Swamp Sliding Bridge Underwater -> Swamp Sliding Bridge Above Water
-            "0x03676": "0x03678",  # Replace Quarry Upper Ramp Control -> Lower Ramp Control
-            "0x03675": "0x03679",  # Replace Quarry Upper Lift Control -> Lower Lift Control
+            0x18488: 0x00609,  # Replace Swamp Sliding Bridge Underwater -> Swamp Sliding Bridge Above Water
+            0x03676: 0x03678,  # Replace Quarry Upper Ramp Control -> Lower Ramp Control
+            0x03675: 0x03679,  # Replace Quarry Upper Lift Control -> Lower Lift Control
 
-            "0x03702": "0x15ADD",  # Jungle Vault Box -> Jungle Vault Panel
-            "0x03542": "0x002A6",  # Mountainside Vault Box -> Mountainside Vault Panel
-            "0x03481": "0x033D4",  # Tutorial Vault Box -> Tutorial Vault Panel
-            "0x0339E": "0x0CC7B",  # Desert Vault Box -> Desert Vault Panel
-            "0x03535": "0x00AFB",  # Shipwreck Vault Box -> Shipwreck Vault Panel
+            0x03702: 0x15ADD,  # Jungle Vault Box -> Jungle Vault Panel
+            0x03542: 0x002A6,  # Mountainside Vault Box -> Mountainside Vault Panel
+            0x03481: 0x033D4,  # Tutorial Vault Box -> Tutorial Vault Panel
+            0x0339E: 0x0CC7B,  # Desert Vault Box -> Desert Vault Panel
+            0x03535: 0x00AFB,  # Shipwreck Vault Box -> Shipwreck Vault Panel
         }
 
         if self.player_options.shuffle_doors < 2:
             replacements.update(
                 {
-                    "0x334DC": "0x334DB",  # In door shuffle, the Shadows Timer Panels are disconnected
-                    "0x17CBC": "0x2700B",  # In door shuffle, the Laser Timer Panels are disconnected
+                    0x334DC: 0x334DB,  # In door shuffle, the Shadows Timer Panels are disconnected
+                    0x17CBC: 0x2700B,  # In door shuffle, the Laser Timer Panels are disconnected
                 }
             )
 
