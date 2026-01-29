@@ -363,6 +363,8 @@ class Rac3Interface(GameInterface):
         self.clank_disabled = bool(self._read8(RAC3STATUS.NO_CLANK))
         self.player_actionable = self._read16(RAC3STATUS.PLAYER_ACTIONABLE)
         self.pda_vendor = self.find_pda_vendor()
+        self.visited_planets = self.get_visited_planets()
+        self.weapon_vendor_items = self.determine_weapon_vendor_items()
         self.vehicle_check()
         self.pause_check()
         self.check_latches()
@@ -1096,7 +1098,7 @@ class Rac3Interface(GameInterface):
                     if all_ammo_value:
                         break
 
-                for item in self.determine_weapon_vendor_items():
+                for item in self.weapon_vendor_items:
                     item_id = RAC3_ITEM_DATA_TABLE[item].ID
                     new_slot_data = RAC3WEAPONVENDORSLOTDATA(
                         item_id=item_id,
@@ -1126,9 +1128,8 @@ class Rac3Interface(GameInterface):
         """Determine which items should be sold by the weapon vendor on the current planet."""
         items_to_sell = []
         already_sold = set()
-        visited_planets = self.get_visited_planets()
         for name, location in RAC3_LOCATION_DATA_TABLE.items():
-            if RAC3TAG.WEAPONS in location.TAGS and WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[name] in visited_planets:
+            if RAC3TAG.WEAPONS in location.TAGS and WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION[name] in self.visited_planets:
                 item = WEAPON_VENDOR_LOCATION_TO_ITEM.get(name, None)
                 if name in self.checked_locations:
                     if item is not None:
@@ -1262,7 +1263,7 @@ class Rac3Interface(GameInterface):
         """Interval update function: Check unlock/lock status of weapons"""
         # If in vendor, lock all non-progressive weapons to allow second unlock address to work properly
         if self.pause_state_value == RAC3PAUSESTATE.VENDOR:
-            weapons_to_remove = self.determine_weapon_vendor_items()
+            weapons_to_remove = self.weapon_vendor_items
             for name in non_prog_weapon_data.keys():
                 if name in weapons_to_remove:
                     addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
