@@ -11,14 +11,15 @@ class RAC3VENDOR:
     MODEL_UPDATE_OFFSET: int = -0xB0
     SLOT_COUNT_OFFSET: int = 0x600
     VENDOR_TYPE_OFFSET: int = -0xF0
+    SLOT_SIZE: int = 0
 
     @staticmethod
-    def get_vendor_property_address(planet, vendor_prop):
+    def get_vendor_property_address(planet: str, vendor_prop: int) -> int:
         """Provides the vendor property address for reading data"""
         return RAC3STATUS.VENDOR_BASE + PLANET_VENDOR_OFFSET[planet] + vendor_prop
 
     @classmethod
-    def get_vendor_item_property_address(cls, planet: str, slot: int, item_prop_offset: int):
+    def get_vendor_item_property_address(cls, planet: str, slot: int, item_prop_offset: int) -> int:
         """
         Provides the item property address for reading vendor item data,
         using the correct slot size for the vendor type.
@@ -31,20 +32,29 @@ class RAC3WEAPONVENDOR(RAC3VENDOR):
     VENDOR_WEAPON_TYPE_OFFSET: int = 0x604  # 0 = Normal, 1 = Slim Cognito
     SLOT_SIZE: int = 0x14
 
-    ITEM_ID_OFFSET: int = 0x00  # 4 Bytes
-    ITEM_AMMO_TEXT_OFFSET: int = 0x04
-    # 1 Byte, 0 = No Text + Not Shifted, 1 = Ammo Text + Shifted Up, 2 = No Text + Shifted Up
-    ITEM_CLASS_OFFSET: int = 0x0C  # 2 Byte, Items = 0x0CDB
-    ITEM_COST_OFFSET: int = 0x10  # 1 Byte, 0 = Normal price, 1 = Free
-    ITEM_MEGA_OFFSET: int = 0x11  # 1 Byte, 0 = Normal, 1 = Mega
-    ITEM_ALL_AMMO_OFFSET: int = 0x12  # 1 Byte, 0 = Normal, 1 = All Ammo
-    ITEM_MEMCARD_OFFSET: int = 0x13  # 1 Byte, 0 = Normal, 1 = Memory Card Check
+    ITEM_ID_OFFSET: int = 0x00
+    ITEM_ID_SIZE: int = 4  # Bytes
+    ITEM_AMMO_TEXT_OFFSET: int = 0x04  # 0 = No Text + Not Shifted, 1 = Ammo Text + Shifted Up, 2 = No Text + Shifted Up
+    ITEM_AMMO_TEXT_SIZE: int = 1
+    ITEM_CLASS_OFFSET: int = 0x0C  # Items = 0x0CDB
+    ITEM_CLASS_SIZE: int = 2
+    ITEM_COST_OFFSET: int = 0x10  # 0 = Normal price, 1 = Free
+    ITEM_COST_SIZE: int = 1
+    ITEM_MEGA_OFFSET: int = 0x11  # 0 = Normal, 1 = Mega
+    ITEM_MEGA_SIZE: int = 1
+    ITEM_ALL_AMMO_OFFSET: int = 0x12  # 0 = Normal, 1 = All Ammo
+    ITEM_ALL_AMMO_SIZE: int = 1
+    ITEM_MEMCARD_OFFSET: int = 0x13  # 0 = Normal, 1 = Memory Card Check
+    ITEM_MEMCARD_SIZE: int = 1
 
 
 class RAC3ARMORVENDOR(RAC3VENDOR):
     """Struct for Armor Vendor data, with armor-specific slot size and offsets"""
     SLOT_SIZE: int = 0x10
 
-    ITEM_ICON_OFFSET: int = 0x00  # 4 Bytes
-    ITEM_COST_OFFSET: int = 0x04  # 4 Bytes
-    ITEM_LEVEL_OFFSET: int = 0x08  # 4 Bytes
+    ITEM_ICON_OFFSET: int = 0x00
+    ITEM_ICON_SIZE: int = 2
+    ITEM_COST_OFFSET: int = 0x04
+    ITEM_COST_SIZE: int = 4
+    ITEM_LEVEL_OFFSET: int = 0x08
+    ITEM_LEVEL_SIZE: int = 1
