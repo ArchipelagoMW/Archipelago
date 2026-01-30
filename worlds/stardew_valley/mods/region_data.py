@@ -1,6 +1,6 @@
 from ..content.mods.sve import SVE_GINGER_ISLAND_PACK
 from ..regions.model import (ConnectionData, MergeFlag, ModRegionsData,
-                             RandomizationFlag, RegionData)
+                             RandomizationFlag, RegionData, GroupFlag)
 from ..strings.entrance_names import (AlecEntrance, AlectoEntrance,
                                       AyeishaEntrance, BoardingHouseEntrance,
                                       DeepWoodsEntrance, Entrance,
@@ -70,7 +70,7 @@ eugene_entrances = [
     ConnectionData(
         EugeneEntrance.forest_to_garden,
         EugeneRegion.eugene_garden,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(EugeneEntrance.garden_to_bedroom, EugeneRegion.eugene_bedroom, flag=RandomizationFlag.BUILDINGS),
 ]
@@ -102,7 +102,7 @@ alec_entrances = [
     ConnectionData(
         AlecEntrance.forest_to_petshop,
         AlecRegion.pet_store,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(AlecEntrance.petshop_to_bedroom, AlecRegion.alec_bedroom, flag=RandomizationFlag.BUILDINGS),
 ]
@@ -125,7 +125,7 @@ juna_entrances = [
     ConnectionData(
         JunaEntrance.forest_to_juna_cave,
         JunaRegion.juna_cave,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.OUT_TO_IN,
     )
 ]
 
@@ -138,7 +138,7 @@ ayeisha_entrances = [
     ConnectionData(
         AyeishaEntrance.bus_stop_to_mail_van,
         AyeishaRegion.mail_van,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.OUT_TO_IN,
     )
 ]
 
@@ -151,7 +151,7 @@ riley_entrances = [
     ConnectionData(
         RileyEntrance.town_to_riley,
         RileyRegion.riley_house,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.OUT_TO_IN,
     )
 ]
 
@@ -235,7 +235,7 @@ sve_main_land_connections = [
     ConnectionData(
         SVEEntrance.town_to_jenkins,
         SVERegion.jenkins_residence,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(SVEEntrance.jenkins_to_cellar, SVERegion.jenkins_cellar, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.forest_to_bmv, SVERegion.blue_moon_vineyard),
@@ -248,7 +248,7 @@ sve_main_land_connections = [
     ConnectionData(
         SVEEntrance.grandpa_shed_to_interior,
         SVERegion.grandpas_shed_interior,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_IN,
     ),
     ConnectionData(
         SVEEntrance.grandpa_interior_to_upstairs, SVERegion.grandpas_shed_upstairs, flag=RandomizationFlag.BUILDINGS
@@ -257,14 +257,14 @@ sve_main_land_connections = [
     ConnectionData(
         SVEEntrance.bmv_to_sophia,
         SVERegion.sophias_house,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(SVEEntrance.summit_to_highlands, SVERegion.highlands_outside),
     ConnectionData(SVEEntrance.guild_to_interior, Region.adventurer_guild, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(
         SVEEntrance.backwoods_to_grove,
         SVERegion.enchanted_grove,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(SVEEntrance.grove_to_outpost_warp, SVERegion.grove_outpost_warp),
     ConnectionData(SVEEntrance.outpost_warp_to_outpost, SVERegion.galmoran_outpost, flag=RandomizationFlag.BUILDINGS),
@@ -286,7 +286,7 @@ sve_main_land_connections = [
     ConnectionData(SVEEntrance.badlands_entrance_to_badlands, SVERegion.crimson_badlands, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.badlands_to_cave, SVERegion.badlands_cave, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(
-        SVEEntrance.guild_to_mines, Region.mines, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR
+        SVEEntrance.guild_to_mines, Region.mines, flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.OUT_TO_IN
     ),
     ConnectionData(SVEEntrance.mountain_to_guild_summit, SVERegion.guild_summit),
     ConnectionData(SVEEntrance.forest_to_west, SVERegion.forest_west),
@@ -373,13 +373,13 @@ boarding_house_regions = [
 boarding_house_entrances = [
     ConnectionData(BoardingHouseEntrance.bus_stop_to_boarding_house_plateau, BoardingHouseRegion.boarding_house_plateau),
     ConnectionData(BoardingHouseEntrance.boarding_house_plateau_to_boarding_house_first, BoardingHouseRegion.boarding_house_first,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR),
+                   flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.OUT_TO_IN),
     ConnectionData(BoardingHouseEntrance.boarding_house_first_to_boarding_house_second, BoardingHouseRegion.boarding_house_second,
                    flag=RandomizationFlag.BUILDINGS),
     ConnectionData(BoardingHouseEntrance.boarding_house_plateau_to_buffalo_ranch, BoardingHouseRegion.buffalo_ranch,
-                   flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR),
+                   flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN),
     ConnectionData(BoardingHouseEntrance.boarding_house_plateau_to_abandoned_mines_entrance, BoardingHouseRegion.abandoned_mines_entrance,
-                   flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR),
+                   flag=RandomizationFlag.NON_PROGRESSION, group=GroupFlag.OUT_TO_IN),
     ConnectionData(BoardingHouseEntrance.abandoned_mines_entrance_to_the_lost_valley, BoardingHouseRegion.lost_valley_minecart,
                    flag=RandomizationFlag.BUILDINGS),
     ConnectionData(BoardingHouseEntrance.abandoned_mines_entrance_to_abandoned_mines_1a, BoardingHouseRegion.abandoned_mines_1a,
@@ -506,39 +506,39 @@ ginger_island_connections = [
         Entrance.use_farm_obelisk,
         Region.farm,
         flag=RandomizationFlag.TRANSITION
-        | RandomizationFlag.TO_OUTDOOR
         | RandomizationFlag.ENDGAME
-        | RandomizationFlag.IS_ONE_WAY,
+        | RandomizationFlag.IS_ONE_WAY
+           , group=GroupFlag.OUT_TO_OUT
     ),
     ConnectionData(
         Entrance.mountain_to_leo_treehouse,
         Region.leo_treehouse,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.leo_treehouse_to_mountain,
         Region.mountain,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.fish_shop_to_boat_tunnel,
         Region.boat_tunnel,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_IN,
     ),
     ConnectionData(
         Entrance.boat_tunnel_to_fish_shop,
         Region.fish_shop,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_IN,
     ),
     ConnectionData(
         Entrance.boat_to_ginger_island,
         Region.island_south,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.TRANSITION, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.boat_from_ginger_island,
         Region.boat_tunnel,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.TRANSITION, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(Entrance.enter_dangerous_skull_cavern, Region.dangerous_skull_cavern),
     ConnectionData(Entrance.dig_to_dangerous_mines_20, Region.dangerous_mines_20),
@@ -547,159 +547,159 @@ ginger_island_connections = [
     ConnectionData(
         Entrance.island_south_to_west,
         Region.island_west,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD, group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_west_to_south,
         Region.island_south,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD, group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_south_to_north,
         Region.island_north,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD, group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_north_to_south,
         Region.island_south,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD, group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_south_to_east,
         Region.island_east,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD, group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_east_to_south,
         Region.island_south,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD, group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_south_to_southeast,
         Region.island_south_east,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD, group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_southeast_to_south,
         Region.island_south,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD, group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(Entrance.use_island_resort, Region.island_resort),
     ConnectionData(
         Entrance.island_west_to_island_farmhouse,
         Region.island_farmhouse,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.island_farmhouse_to_island_west,
         Region.island_west,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_west_to_gourmand_cave,
         Region.gourmand_frog_cave,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.gourmand_cave_to_island_west,
         Region.island_west,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_west_to_crystals_cave,
         Region.colored_crystals_cave,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.crystals_cave_to_island_west,
         Region.island_west,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_west_to_shipwreck,
         Region.shipwreck,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.shipwreck_to_island_west,
         Region.island_west,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_west_to_qi_walnut_room,
         Region.qi_walnut_room,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.qi_walnut_room_to_island_west,
         Region.island_west,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
-        Entrance.island_east_to_leo_hut, Region.leo_hut, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.island_east_to_leo_hut, Region.leo_hut, flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN
     ),
     ConnectionData(
         Entrance.leo_hut_to_island_east,
         Region.island_east,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_east_to_island_shrine,
         Region.island_shrine,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.island_shrine_to_island_east,
         Region.island_east,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_southeast_to_pirate_cove,
         Region.pirate_cove,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.pirate_cove_to_island_southeast,
         Region.island_south_east,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_north_to_field_office,
         Region.field_office,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.field_office_to_island_north,
         Region.island_north,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(Entrance.island_north_to_dig_site, Region.dig_site),
     ConnectionData(Entrance.dig_site_to_island_north, Region.island_north),
     ConnectionData(
         Entrance.dig_site_to_professor_snail_cave,
         Region.professor_snail_cave,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.professor_snail_cave_to_dig_site,
         Region.dig_site,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
-        Entrance.island_north_to_volcano, Region.volcano, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.island_north_to_volcano, Region.volcano, flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN
     ),
     ConnectionData(
         Entrance.volcano_to_island_north,
         Region.island_north,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.volcano_to_secret_beach,
         Region.volcano_secret_beach,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS, group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
-        Entrance.secret_beach_to_volcano, Region.volcano, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.secret_beach_to_volcano, Region.volcano, flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN
     ),
     ConnectionData(Entrance.talk_to_island_trader, Region.island_trader),
     ConnectionData(Entrance.climb_to_volcano_5, Region.volcano_floor_5),
