@@ -52,7 +52,6 @@ def create_regular_locations(world: Schedule1World, data) -> None:
         # Skip supplier locations if randomize_suppliers is enabled
         if world.options.randomize_suppliers and "Supplier" in loc_data.tags:
             continue
-        
         locations_by_region[loc_data.region].append(loc_name)
     
     # Add all locations to their respective regions

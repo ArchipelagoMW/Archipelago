@@ -301,13 +301,13 @@
     },
     "We Need To Cook|2": {
         "connections": {
-            "Unfavorable Agreements": {"randomize_level_unlocks": {"has_all" :["Chemistry Station Unlock", 
+            "Unfavourable Agreements": {"randomize_level_unlocks": {"has_all" :["Chemistry Station Unlock", 
                                                                                 "Lab Oven Unlock",
                                                                                 "Acid Unlock",
                                                                                 "Phosphorus Unlock"]}}
         }
     },
-    "Unfavorable Agreements": {
+    "Unfavourable Agreements": {
         "connections": {
             "Finishing the Job": {"randomize_customers": {"has_from_list": {
             "Charles Rowland Unlocked": 5,

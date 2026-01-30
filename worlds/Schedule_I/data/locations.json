@@ -801,8 +801,8 @@
         "tags": ["Mission", "Permanent"],
         "modern_id": 117
     },
-    "Unfavorable Agreements|Read the message from the unknown contact": {
-        "region": "Unfavorable Agreements",
+    "Unfavourable Agreements|Read the message from the unknown contact": {
+        "region": "Unfavourable Agreements",
         "requirements": {"randomize_customers": {"has_from_list": {
             "Charles Rowland Unlocked": 5,
             "Dean Webster Unlocked": 5,
@@ -817,8 +817,8 @@
         "tags": ["Mission", "Permanent", "Customers Unlocked Required"],
         "modern_id": 118
     },
-    "Unfavorable Agreements|Meet the stranger at the parking lot next to Taco Ticklers": {
-        "region": "Unfavorable Agreements",
+    "Unfavourable Agreements|Meet the stranger at the parking lot next to Taco Ticklers": {
+        "region": "Unfavourable Agreements",
         "requirements": {"randomize_customers": {"has_from_list": {
             "Charles Rowland Unlocked": 5,
             "Dean Webster Unlocked": 5,
@@ -1042,211 +1042,211 @@
     "Westville cartel influence 1": {
         "region": "Westville",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 149
     },
     "Westville cartel influence 2": {
         "region": "Westville",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 150
     },
     "Westville cartel influence 3": {
         "region": "Westville",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 151
     },
     "Westville cartel influence 4": {
         "region": "Westville",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 152
     },
     "Westville cartel influence 5": {
         "region": "Westville",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 153
     },
     "Westville cartel influence 6": {
         "region": "Westville",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 154
     },
     "Westville cartel influence 7": {
         "region": "Westville",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 155
     },
     "Downtown cartel influence 1": {
         "region": "Downtown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 156
     },
     "Downtown cartel influence 2": {
         "region": "Downtown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 157
     },
     "Downtown cartel influence 3": {
         "region": "Downtown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 158
     },
     "Downtown cartel influence 4": {
         "region": "Downtown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 159
     },
     "Downtown cartel influence 5": {
         "region": "Downtown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 160
     },
     "Downtown cartel influence 6": {
         "region": "Downtown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 161
     },
     "Downtown cartel influence 7": {
         "region": "Downtown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 162
     },
     "Docks cartel influence 1": {
         "region": "Docks",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 163
     },
     "Docks cartel influence 2": {
         "region": "Docks",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 164
     },
     "Docks cartel influence 3": {
         "region": "Docks",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 165
     },
     "Docks cartel influence 4": {
         "region": "Docks",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 166
     },
     "Docks cartel influence 5": {
         "region": "Docks",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 167
     },
     "Docks cartel influence 6": {
         "region": "Docks",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 168
     },
     "Docks cartel influence 7": {
         "region": "Docks",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 169
     },
     "Suburbia cartel influence 1": {
         "region": "Suburbia",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 170
     },
     "Suburbia cartel influence 2": {
         "region": "Suburbia",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 171
     },
     "Suburbia cartel influence 3": {
         "region": "Suburbia",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 172
     },
     "Suburbia cartel influence 4": {
         "region": "Suburbia",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 173
     },
     "Suburbia cartel influence 5": {
         "region": "Suburbia",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 174
     },
     "Suburbia cartel influence 6": {
         "region": "Suburbia",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 175
     },
     "Suburbia cartel influence 7": {
         "region": "Suburbia",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 176
     },
     "Uptown cartel influence 1": {
         "region": "Uptown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 177
     },
     "Uptown cartel influence 2": {
         "region": "Uptown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 178
     },
     "Uptown cartel influence 3": {
         "region": "Uptown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 179
     },
     "Uptown cartel influence 4": {
         "region": "Uptown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 180
     },
     "Uptown cartel influence 5": {
         "region": "Uptown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 181
     },
     "Uptown cartel influence 6": {
         "region": "Uptown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 182
     },
     "Uptown cartel influence 7": {
         "region": "Uptown",
         "requirements": true,
-        "tags": [],
+        "tags": ["Cartel Influence"],
         "modern_id": 183
     },
     "Realtor Purchase, Barn": {
