@@ -1,9 +1,9 @@
 from typing import NamedTuple
 
-# from .bells import bell_location_table
+from .bells import bell_location_table
 from .breakables import breakable_location_table
 from .constants import base_id
-# from .fuses import fuse_location_table
+from .fuses import fuse_location_table
 from .grass import grass_location_table
 
 
@@ -329,8 +329,8 @@ standard_location_name_to_id: dict[str, int] = {name: base_id + index for index,
 all_locations = location_table.copy()
 all_locations.update(grass_location_table)
 all_locations.update(breakable_location_table)
-# all_locations.update(fuse_location_table)
-# all_locations.update(bell_location_table)
+all_locations.update(fuse_location_table)
+all_locations.update(bell_location_table)
 
 location_name_groups: dict[str, set[str]] = {}
 for loc_name, loc_data in location_table.items():

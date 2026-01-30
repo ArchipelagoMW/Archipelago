@@ -50,8 +50,8 @@ class AbilityShuffling(DefaultOnToggle):
 
 class Lanternless(Toggle):
     """
-    Choose whether you require the Lantern for dark areas.
-    When enabled, the Lantern is marked as Useful instead of Progression.
+    When enabled, you may be required to navigate dark areas without the Lantern.
+    The Lantern is marked as Useful instead of Progression.
     """
     internal_name = "lanternless"
     display_name = "Lanternless"
@@ -59,8 +59,8 @@ class Lanternless(Toggle):
 
 class Maskless(Toggle):
     """
-    Choose whether you require the Scavenger's Mask for Lower Quarry.
-    When enabled, the Scavenger's Mask is marked as Useful instead of Progression.
+    When enabled, you may be required to traverse Lower Quarry without the Scavenger's Mask.
+    The Scavenger's Mask is marked as Useful instead of Progression.
     """
     internal_name = "maskless"
     display_name = "Maskless"
@@ -196,6 +196,24 @@ class ShuffleLadders(Toggle):
     """
     internal_name = "shuffle_ladders"
     display_name = "Shuffle Ladders"
+
+
+class ShuffleFuses(Toggle):
+    """
+    Praying at a fuse will reward a check instead of turning on the power.
+    The power from each fuse gets turned into an item that must be found in order to restore power for that part of the path.
+    """
+    internal_name = "shuffle_fuses"
+    display_name = "Shuffle Fuses"
+
+
+class ShuffleBells(Toggle):
+    """
+    The East and West bells are shuffled into the item pool and must be found in order to unlock the Sealed Temple.
+    Ringing the bells will instead now reward a check.
+    """
+    internal_name = "shuffle_bells"
+    display_name = "Shuffle Bells"
 
 
 class GrassRandomizer(Toggle):
@@ -357,8 +375,8 @@ class TunicOptions(PerGameCommonOptions):
     hexagon_quest_ability_type: HexagonQuestAbilityUnlockType
 
     shuffle_ladders: ShuffleLadders
-    # shuffle_fuses: ShuffleFuses
-    # shuffle_bells: ShuffleBells
+    shuffle_fuses: ShuffleFuses
+    shuffle_bells: ShuffleBells
     grass_randomizer: GrassRandomizer
     breakable_shuffle: BreakableShuffle
     local_fill: LocalFill
