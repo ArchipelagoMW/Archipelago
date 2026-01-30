@@ -917,12 +917,6 @@ async def server(websocket: "ServerConnection", path: str = "/", ctx: Context = 
 
 
 async def on_client_connected(ctx: Context, client: Client):
-    players = []
-    for team, clients in ctx.clients.items():
-        for slot, connected_clients in clients.items():
-            if connected_clients:
-                name = ctx.player_names[team, slot]
-                players.append(NetworkPlayer(team, slot, ctx.name_aliases.get((team, slot), name), name))
     games = {ctx.games[x] for x in range(1, len(ctx.games) + 1)}
     games.add("Archipelago")
     await ctx.send_msgs(client, [{
@@ -1370,7 +1364,10 @@ class CommandProcessor(metaclass=CommandMeta):
                         argname += "=" + parameter.default
                 argtext += argname
                 argtext += " "
-            doctext = '\n    '.join(inspect.getdoc(method).split('\n'))
+            method_doc = inspect.getdoc(method)
+            if method_doc is None:
+                method_doc = "(missing help text)"
+            doctext = "\n    ".join(method_doc.split("\n"))
             s += f"{self.marker}{command} {argtext}\n    {doctext}\n"
         return s
 
