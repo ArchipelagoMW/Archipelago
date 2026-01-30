@@ -23,7 +23,7 @@
 - The names of the mod/APWorld developers and contributors have been added to the in-game credits
 
 ### Quality of Life:
-- The list of visted levels per slot is stored on the server, and the PopTracker pack now reads this list and by default only displays levels that you have visited
+- The list of visited levels per slot is stored on the server, and the PopTracker pack now reads this list and by default only displays levels that you have visited
 - More Trap names are handled for TrapLink
 
 ### Bug Fixes:
