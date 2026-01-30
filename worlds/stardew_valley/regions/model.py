@@ -40,19 +40,39 @@ class RandomizationFlag(IntFlag):
     ENDGAME = 0b01 << 6
     MASTERY_CAVE = 0b10 << 6
 
-    TO_INDOOR = 0b01 << 8
-    TO_OUTDOOR = 0b10 << 8
-
     FARMHOUSE = 0b1 << 10
 
     IS_ONE_WAY = 0b1 << 11
 
-    ALWAYS_ACCEPT = TO_INDOOR | TO_OUTDOOR | IS_ONE_WAY
+    ALWAYS_ACCEPT = IS_ONE_WAY
     SET_PELICAN_TOWN = PELICAN_TOWN | ALWAYS_ACCEPT
     SET_NON_PROGRESSION = SET_PELICAN_TOWN | NON_PROGRESSION
     SET_BUILDINGS = SET_NON_PROGRESSION | BUILDINGS
     SET_OVERWORLD = SET_BUILDINGS | OVERWORLD
     SET_EVERYTHING = SET_OVERWORLD | TRANSITION
+
+
+class GroupFlag(IntFlag):
+    TO_ANY = 0b0
+
+    UP = 0b0001
+    DOWN = 0b0010
+    LEFT = 0b0100
+    RIGHT = 0b1000
+    DOOR = UP # doors/ladders etc.
+
+    ANY = UP | DOWN | LEFT | RIGHT
+
+    FROM_INDOOR = 0b01 << 4
+    FROM_OUTDOOR = 0b10 << 4
+
+    TO_INDOOR = 0b01 << 6
+    TO_OUTDOOR = 0b10 << 6
+
+    IN_TO_OUT = FROM_INDOOR | TO_OUTDOOR
+    IN_TO_IN = FROM_INDOOR | TO_INDOOR
+    OUT_TO_OUT = FROM_OUTDOOR | TO_OUTDOOR
+    OUT_TO_IN = FROM_OUTDOOR | TO_INDOOR
 
 
 @dataclass(frozen=True)
@@ -85,6 +105,7 @@ class ConnectionData:
     name: str
     destination: str
     flag: RandomizationFlag = RandomizationFlag.NOT_RANDOMIZED
+    group: GroupFlag = GroupFlag.TO_ANY
 
     @property
     def reverse(self) -> str | None:

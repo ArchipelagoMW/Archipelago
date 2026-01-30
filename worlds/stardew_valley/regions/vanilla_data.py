@@ -1,9 +1,10 @@
 from collections.abc import Mapping
 from types import MappingProxyType
 
-from .model import ConnectionData, RandomizationFlag, RegionData
-from ..strings.entrance_names import LogicEntrance, Entrance
-from ..strings.region_names import LogicRegion, Region as RegionName
+from ..strings.entrance_names import Entrance, LogicEntrance
+from ..strings.region_names import LogicRegion
+from ..strings.region_names import Region as RegionName
+from .model import ConnectionData, GroupFlag, RandomizationFlag, RegionData
 
 vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.menu, (Entrance.to_stardew_valley,)),
@@ -432,58 +433,88 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(Entrance.to_stardew_valley, RegionName.stardew_valley),
     ConnectionData(Entrance.to_farmhouse, RegionName.farm_house),
     ConnectionData(
-        Entrance.farmhouse_to_farm, RegionName.farm, flag=RandomizationFlag.FARMHOUSE | RandomizationFlag.TO_OUTDOOR
+        Entrance.farmhouse_to_farm,
+        RegionName.farm,
+        flag=RandomizationFlag.FARMHOUSE,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.farm_to_farmhouse,
         RegionName.farm_house,
-        flag=RandomizationFlag.FARMHOUSE | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.FARMHOUSE,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.downstairs_to_cellar, RegionName.cellar, flag=RandomizationFlag.FARMHOUSE | RandomizationFlag.TO_INDOOR
+        Entrance.downstairs_to_cellar,
+        RegionName.cellar,
+        flag=RandomizationFlag.FARMHOUSE,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.cellar_to_downstairs,
         RegionName.farm_house,
-        flag=RandomizationFlag.FARMHOUSE | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.FARMHOUSE,
+        group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.farm_to_backwoods,
         RegionName.backwoods,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.UP,
     ),
     ConnectionData(
-        Entrance.backwoods_to_farm, RegionName.farm, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.backwoods_to_farm,
+        RegionName.farm,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.farm_to_bus_stop, RegionName.bus_stop, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.farm_to_bus_stop,
+        RegionName.bus_stop,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.RIGHT,
     ),
     ConnectionData(
-        Entrance.bus_stop_to_farm, RegionName.farm, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.bus_stop_to_farm,
+        RegionName.farm,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.LEFT,
     ),
     ConnectionData(
-        Entrance.farm_to_forest, RegionName.forest, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.farm_to_forest,
+        RegionName.forest,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.forest_to_farm, RegionName.farm, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.forest_to_farm,
+        RegionName.farm,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.farm_to_farmcave,
         RegionName.farm_cave,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.farmcave_to_farm,
         RegionName.farm,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.enter_greenhouse,
         RegionName.greenhouse,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.TRANSITION,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.leave_greenhouse, RegionName.farm, flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_INDOOR
+        Entrance.leave_greenhouse,
+        RegionName.farm,
+        flag=RandomizationFlag.TRANSITION,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(Entrance.enter_coop, RegionName.coop),
     ConnectionData(Entrance.enter_barn, RegionName.barn),
@@ -492,264 +523,331 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(
         Entrance.use_desert_obelisk,
         RegionName.desert,
-        flag=RandomizationFlag.TRANSITION
-        | RandomizationFlag.TO_OUTDOOR
-        | RandomizationFlag.ENDGAME
-        | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.use_earth_obelisk,
         RegionName.mountain,
-        flag=RandomizationFlag.TRANSITION
-        | RandomizationFlag.TO_OUTDOOR
-        | RandomizationFlag.ENDGAME
-        | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.use_water_obelisk,
         RegionName.beach,
-        flag=RandomizationFlag.TRANSITION
-        | RandomizationFlag.TO_OUTDOOR
-        | RandomizationFlag.ENDGAME
-        | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.ENDGAME | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_bus_stop_to_mines,
         RegionName.mines,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_INDOOR | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.minecart_bus_stop_to_quarry,
         RegionName.quarry,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_bus_stop_to_town,
         RegionName.town,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_mines_to_bus_stop,
         RegionName.bus_stop,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_mines_to_quarry,
         RegionName.quarry,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_mines_to_town,
         RegionName.town,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_quarry_to_bus_stop,
         RegionName.bus_stop,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_quarry_to_mines,
         RegionName.mines,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_INDOOR | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.minecart_quarry_to_town,
         RegionName.town,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_town_to_bus_stop,
         RegionName.bus_stop,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_town_to_mines,
         RegionName.mines,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_INDOOR | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.minecart_town_to_quarry,
         RegionName.quarry,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.backwoods_to_mountain,
         RegionName.mountain,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.RIGHT,
     ),
     ConnectionData(
         Entrance.mountain_to_backwoods,
         RegionName.backwoods,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.LEFT,
     ),
     ConnectionData(
-        Entrance.bus_stop_to_town, RegionName.town, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.bus_stop_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.RIGHT,
     ),
     ConnectionData(
-        Entrance.town_to_bus_stop, RegionName.bus_stop, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.town_to_bus_stop,
+        RegionName.bus_stop,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.LEFT,
     ),
     ConnectionData(
         Entrance.bus_stop_to_tunnel_entrance,
         RegionName.tunnel_entrance,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.LEFT,
     ),
     ConnectionData(
         Entrance.tunnel_entrance_to_bus_stop,
         RegionName.bus_stop,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.RIGHT,
     ),
     ConnectionData(
         Entrance.tunnel_entrance_to_bus_tunnel,
         RegionName.bus_tunnel,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.LEFT,
     ),
     ConnectionData(
         Entrance.bus_tunnel_to_tunnel_entrance,
         RegionName.tunnel_entrance,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.RIGHT,
     ),
     ConnectionData(
-        Entrance.take_bus_to_desert, RegionName.desert, flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR
+        Entrance.take_bus_to_desert, RegionName.desert, flag=RandomizationFlag.TRANSITION, group=GroupFlag.OUT_TO_OUT
     ),
     ConnectionData(
         Entrance.take_bus_from_desert,
         RegionName.bus_stop,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.TRANSITION,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
-        Entrance.forest_to_town, RegionName.town, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.forest_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.RIGHT,
     ),
     ConnectionData(
-        Entrance.town_to_forest, RegionName.forest, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.town_to_forest,
+        RegionName.forest,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.LEFT,
     ),
     ConnectionData(
         Entrance.forest_to_wizard_tower,
         RegionName.wizard_tower,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.wizard_tower_to_forest,
         RegionName.forest,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.enter_wizard_basement,
         RegionName.wizard_basement,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.leave_wizard_basement,
         RegionName.wizard_tower,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.forest_to_marnie_ranch,
         RegionName.ranch,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.marnie_ranch_to_forest,
         RegionName.forest,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.forest_to_leah_cottage,
         RegionName.leah_house,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.leah_cottage_to_forest,
         RegionName.forest,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.enter_secret_woods,
         RegionName.secret_woods,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.LEFT,
     ),
     ConnectionData(
-        Entrance.leave_secret_woods, RegionName.forest, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.leave_secret_woods,
+        RegionName.forest,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.RIGHT,
     ),
     ConnectionData(
-        Entrance.forest_to_sewer, RegionName.sewer, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.forest_to_sewer,
+        RegionName.sewer,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.sewer_to_forest, RegionName.forest, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR
+        Entrance.sewer_to_forest,
+        RegionName.forest,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     # We remove the bit for masteries, because the mastery cave is to be excluded from the randomization if masteries are not shuffled.
     ConnectionData(
         Entrance.forest_to_mastery_cave,
         RegionName.mastery_cave,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR | RandomizationFlag.MASTERY_CAVE,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.MASTERY_CAVE,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.mastery_cave_to_forest,
         RegionName.forest,
-        flag=(RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR) ^ RandomizationFlag.MASTERY_CAVE,
+        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.MASTERY_CAVE,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(LogicEntrance.feed_trash_bear, RegionName.trash_bear),
     ConnectionData(
-        Entrance.town_to_sewer, RegionName.sewer, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.town_to_sewer,
+        RegionName.sewer,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.sewer_to_town, RegionName.town, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR
+        Entrance.sewer_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.enter_mutant_bug_lair,
         RegionName.mutant_bug_lair,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
-        Entrance.leave_mutant_bug_lair, RegionName.sewer, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.leave_mutant_bug_lair,
+        RegionName.sewer,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.mountain_to_railroad,
         RegionName.railroad,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.railroad_to_mountain,
         RegionName.mountain,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.mountain_to_tent, RegionName.tent, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR
+        Entrance.mountain_to_tent,
+        RegionName.tent,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.tent_to_mountain,
         RegionName.mountain,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.mountain_to_carpenter_shop,
         RegionName.carpenter,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.carpenter_shop_to_mountain,
         RegionName.mountain,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.mountain_to_maru_room,
         RegionName.maru_room,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.maru_room_to_mountain,
         RegionName.mountain,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.enter_sebastian_room,
         RegionName.sebastian_room,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.leave_sebastian_room,
         RegionName.carpenter,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(Entrance.carpenter_shop_to_maru_room, RegionName.maru_room),
     ConnectionData(Entrance.maru_room_to_carpenter_shop, RegionName.carpenter),
@@ -758,12 +856,14 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(
         Entrance.mountain_to_adventurer_guild,
         RegionName.adventurer_guild,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.adventurer_guild_to_mountain,
         RegionName.outside_adventure_guild,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(Entrance.adventurer_guild_to_bedroom, RegionName.adventurer_guild_bedroom),
     ConnectionData(Entrance.enter_quarry, RegionName.quarry),
@@ -771,29 +871,39 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(
         Entrance.enter_quarry_mine_entrance,
         RegionName.quarry_mine_entrance,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.leave_quarry_mine_entrance,
         RegionName.quarry,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(Entrance.enter_quarry_mine, RegionName.quarry_mine),
     ConnectionData(
-        Entrance.mountain_to_town, RegionName.town, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.mountain_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.town_to_mountain, RegionName.mountain, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.town_to_mountain,
+        RegionName.mountain,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.town_to_community_center,
         RegionName.community_center,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.community_center_to_town,
         RegionName.town,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(Entrance.access_crafts_room, RegionName.crafts_room),
     ConnectionData(Entrance.access_pantry, RegionName.pantry),
@@ -804,50 +914,74 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(
         Entrance.town_to_hospital,
         RegionName.hospital,
-        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.hospital_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+        Entrance.hospital_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.enter_harvey_room,
         RegionName.harvey_room,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
-        Entrance.leave_harvey_room, RegionName.hospital, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.leave_harvey_room,
+        RegionName.hospital,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.town_to_pierre_general_store,
         RegionName.pierre_store,
-        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.pierre_general_store_to_town,
         RegionName.town,
-        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.enter_sunroom, RegionName.sunroom, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.enter_sunroom,
+        RegionName.sunroom,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.leave_sunroom, RegionName.pierre_store, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.leave_sunroom,
+        RegionName.pierre_store,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.town_to_clint_blacksmith,
         RegionName.blacksmith,
-        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.clint_blacksmith_to_town,
         RegionName.town,
-        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.town_to_saloon, RegionName.saloon, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR
+        Entrance.town_to_saloon,
+        RegionName.saloon,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.saloon_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+        Entrance.saloon_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(Entrance.play_journey_of_the_prairie_king, RegionName.jotpk_world_1),
     ConnectionData(Entrance.reach_jotpk_world_2, RegionName.jotpk_world_2),
@@ -859,107 +993,153 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(
         Entrance.town_to_sam_house,
         RegionName.sam_house,
-        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.sam_house_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+        Entrance.sam_house_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.town_to_haley_house,
         RegionName.haley_house,
-        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.haley_house_to_town,
         RegionName.town,
-        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.town_to_mayor_manor,
         RegionName.mayor_house,
-        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.mayor_manor_to_town,
         RegionName.town,
-        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(Entrance.enter_lewis_bedroom, RegionName.lewis_bedroom),
     ConnectionData(Entrance.leave_lewis_bedroom, RegionName.mayor_house),
     ConnectionData(
         Entrance.enter_shorts_maze,
         RegionName.purple_shorts_maze,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.leave_shorts_maze,
         RegionName.lewis_bedroom,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.town_to_alex_house,
         RegionName.alex_house,
-        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.alex_house_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+        Entrance.alex_house_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.town_to_trailer, RegionName.trailer, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR
+        Entrance.town_to_trailer,
+        RegionName.trailer,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.trailer_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+        Entrance.trailer_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.town_to_museum, RegionName.museum, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR
+        Entrance.town_to_museum,
+        RegionName.museum,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.museum_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+        Entrance.museum_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.town_to_jojamart,
         RegionName.jojamart,
-        flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.jojamart_to_town, RegionName.town, flag=RandomizationFlag.PELICAN_TOWN | RandomizationFlag.TO_OUTDOOR
+        Entrance.jojamart_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.PELICAN_TOWN,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(LogicEntrance.purchase_movie_ticket, RegionName.movie_ticket_stand),
     ConnectionData(Entrance.enter_abandoned_jojamart, RegionName.abandoned_jojamart),
     ConnectionData(Entrance.enter_movie_theater, RegionName.movie_theater),
     ConnectionData(
-        Entrance.town_to_beach, RegionName.beach, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.town_to_beach,
+        RegionName.beach,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.beach_to_town, RegionName.town, flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR
+        Entrance.beach_to_town,
+        RegionName.town,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.enter_elliott_house,
         RegionName.elliott_house,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.leave_elliott_house, RegionName.beach, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR
+        Entrance.leave_elliott_house,
+        RegionName.beach,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.beach_to_willy_fish_shop,
         RegionName.fish_shop,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.willy_fish_shop_to_beach,
         RegionName.beach,
-        flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.NON_PROGRESSION,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(Entrance.enter_tide_pools, RegionName.tide_pools),
     ConnectionData(Entrance.leave_tide_pools, RegionName.beach),
     ConnectionData(
-        Entrance.mountain_to_the_mines, RegionName.mines, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.mountain_to_the_mines,
+        RegionName.mines,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.the_mines_to_mountain,
         RegionName.outside_adventure_guild,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(Entrance.dig_to_mines_floor_5, RegionName.mines_floor_5),
     ConnectionData(Entrance.dig_to_mines_floor_10, RegionName.mines_floor_10),
@@ -988,24 +1168,38 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(
         Entrance.enter_skull_cavern_entrance,
         RegionName.skull_cavern_entrance,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.leave_skull_cavern_entrance,
         RegionName.desert,
-        RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.enter_oasis, RegionName.oasis, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.enter_oasis,
+        RegionName.oasis,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
-        Entrance.leave_oasis, RegionName.desert, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR
+        Entrance.leave_oasis,
+        RegionName.desert,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
-        Entrance.enter_casino, RegionName.casino, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.enter_casino,
+        RegionName.casino,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
-        Entrance.leave_casino, RegionName.oasis, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.leave_casino,
+        RegionName.oasis,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(Entrance.enter_skull_cavern, RegionName.skull_cavern),
     ConnectionData(Entrance.mine_in_skull_cavern, RegionName.skull_cavern_mining),
@@ -1020,124 +1214,160 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(
         Entrance.enter_witch_warp_cave,
         RegionName.witch_warp_cave,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.leave_witch_warp_cave,
         RegionName.railroad,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.enter_witch_swamp,
         RegionName.witch_swamp,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.UP,
     ),
-    ConnectionData(Entrance.leave_witch_swamp, RegionName.witch_warp_cave, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR),
     ConnectionData(
-        Entrance.enter_witch_hut, RegionName.witch_hut, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR
+        Entrance.leave_witch_swamp,
+        RegionName.witch_warp_cave,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOWN,
     ),
-    ConnectionData(Entrance.leave_witch_hut, RegionName.witch_swamp, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR),
+    ConnectionData(
+        Entrance.enter_witch_hut,
+        RegionName.witch_hut,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
+    ),
+    ConnectionData(
+        Entrance.leave_witch_hut,
+        RegionName.witch_swamp,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
+    ),
     ConnectionData(
         Entrance.witch_warp_to_wizard_basement,
         RegionName.wizard_basement,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN,
     ),
     ConnectionData(
         Entrance.wizard_basement_to_witch_warp,
         RegionName.witch_hut,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN,
     ),
     ConnectionData(
         Entrance.enter_bathhouse_entrance,
         RegionName.bathhouse_entrance,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.OUT_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.leave_bathhouse_entrance,
         RegionName.railroad,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_OUTDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.enter_mens_locker_room,
         RegionName.mens_locker_room,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.leave_mens_locker_room,
         RegionName.bathhouse_entrance,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.enter_womens_locker_room,
         RegionName.womens_locker_room,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOOR,
     ),
     ConnectionData(
         Entrance.leave_womens_locker_room,
         RegionName.bathhouse_entrance,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.mens_lockers_to_public_bath,
         RegionName.public_bath,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.public_bath_to_mens_lockers,
         RegionName.mens_locker_room,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.womens_lockers_to_public_bath,
         RegionName.public_bath,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.public_bath_to_womens_lockers,
         RegionName.womens_locker_room,
-        flag=RandomizationFlag.BUILDINGS | RandomizationFlag.TO_INDOOR,
+        flag=RandomizationFlag.BUILDINGS,
+        group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.town_tidepools_shortcut,
         RegionName.tide_pools,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.tidepools_town_shortcut,
         RegionName.town,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.UP,
     ),
     ConnectionData(
         Entrance.forest_beach_shortcut,
         RegionName.beach,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.RIGHT,
     ),
     ConnectionData(
         Entrance.beach_forest_shortcut,
         RegionName.forest,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.LEFT,
     ),
     ConnectionData(
         Entrance.mountain_jojamart_shortcut,
         RegionName.town,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.jojamart_mountain_shortcut,
         RegionName.outside_adventure_guild,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.UP,
     ),
     ConnectionData(Entrance.tunnel_backwoods_shortcut, RegionName.backwoods),
     ConnectionData(Entrance.backwoods_tunnel_shortcut, RegionName.tunnel_entrance),
     ConnectionData(
         Entrance.mountain_town_shortcut,
         RegionName.town,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.town_mountain_shortcut,
         RegionName.mountain,
-        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.TO_OUTDOOR | RandomizationFlag.ENDGAME,
+        flag=RandomizationFlag.OVERWORLD | RandomizationFlag.ENDGAME,
+        group=GroupFlag.OUT_TO_OUT | GroupFlag.UP,
     ),
     ConnectionData(Entrance.mountain_lake_to_outside_adventure_guild_shortcut, RegionName.outside_adventure_guild),
     ConnectionData(Entrance.outside_adventure_guild_to_mountain_lake_shortcut, RegionName.mountain),
