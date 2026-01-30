@@ -196,6 +196,8 @@ async def update(ctx: 'Context') -> None:
     await handle_planet_changed(ctx)
     # Check player respawn
     await handle_respawn(ctx)
+    # Check the vendor
+    await handle_vendors(ctx)
     # Check sequence breaks
     await handle_sequence_break(ctx)
     ctx.game_interface.late_update()
@@ -351,6 +353,13 @@ async def handle_respawn(ctx: 'Context', force_respawn: bool = False, force_load
         ctx.game_interface.homewarp()
         return
     return
+
+
+async def handle_vendors(ctx: 'Context') -> None:
+    """Read current vendor inventory and replace all items after the all ammo item with all items in the game"""
+    if ctx.slot_data is None:
+        return
+    ctx.game_interface.vendor_update()
 
 
 async def handle_sequence_break(ctx: 'Context') -> None:
