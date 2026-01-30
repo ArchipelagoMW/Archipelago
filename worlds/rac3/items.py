@@ -162,8 +162,7 @@ def starting_weapons(world: "RaC3World") -> list[str]:
 
 def starting_planets(world: "RaC3World") -> list[str]:
     planet_list: list[str] = [infobot for infobot in infobot_data.keys() if infobot not in world.preplaced_items]
-    if RAC3ITEM.MUSEUM in planet_list:
-        planet_list.remove(RAC3ITEM.MUSEUM)
+    planet_list = remove_dead_starting_planets(world, planet_list)
     if len(planet_list) > 1:  # [Phoenix], [Florana], or [Other]
         world.random.shuffle(planet_list)
         if world.options.intro_skip.value:
@@ -190,3 +189,31 @@ def starting_planets(world: "RaC3World") -> list[str]:
             else:
                 planet_list = planet_list[:2]  # [Other, Other]
     return planet_list
+
+def remove_dead_starting_planets(world: "RaC3World", current_planet_list: list[str]) -> list[str]:
+    """Removes any starting planets that are unreachable from Veldin"""
+    if RAC3ITEM.MUSEUM in current_planet_list:
+        current_planet_list.remove(RAC3ITEM.MUSEUM)
+    if RAC3ITEM.OBANI_DRACO in current_planet_list:
+        current_planet_list.remove(RAC3ITEM.OBANI_DRACO)
+    if RAC3ITEM.OBANI_GEMINI in current_planet_list:
+        current_planet_list.remove(RAC3ITEM.OBANI_GEMINI)
+    if RAC3ITEM.QWARKS_HIDEOUT in current_planet_list:
+        current_planet_list.remove(RAC3ITEM.QWARKS_HIDEOUT)
+    if RAC3ITEM.COMMAND_CENTER in current_planet_list:
+        current_planet_list.remove(RAC3ITEM.COMMAND_CENTER)
+    if RAC3ITEM.HOLOSTAR_STUDIOS in current_planet_list:
+        current_planet_list.remove(RAC3ITEM.HOLOSTAR_STUDIOS)
+
+    # If Rangers are disabled, Aridia and Blackwater City are unreachable
+    if world.options.rangers.value == 0:
+        to_remove = {RAC3ITEM.ARIDIA, RAC3ITEM.BLACKWATER_CITY}
+        current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
+
+    # If no Arena challenges are locations or only the second half is,
+    # Annihilation Nation is unreachable from the start
+    if world.options.arena.value == 0 or world.options.arena.value == 2:
+        to_remove = {RAC3ITEM.ANNIHILATION_NATION}
+        current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
+
+    return current_planet_list
