@@ -9,7 +9,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
 from NetUtils import ClientStatus, JSONMessagePart, NetworkItem
 from Utils import async_start, init_logging
 
-from ..mod_helpers.ItemHandling import handle_item, handle_map_start, handle_trap
+from ..mod_helpers.ItemHandling import add_ratman_commands, handle_item, handle_map_start, handle_trap
 from ..mod_helpers.MapMenu import Menu
 from ..Locations import location_names_to_map_codes, map_codes_to_location_names, wheatley_maps_to_monitor_names, all_locations_table
 from .. import Portal2World
@@ -223,7 +223,7 @@ class Portal2Context(CommonContext):
                 await self.check_locations([map_id])
                 self.update_menu(map_id)
         
-        # For all other checks
+        # All other checks
         elif message.startswith("item_collected:"):
             item_collected = message.split(":", 1)[1]
             check_id = all_locations_table[item_collected].id
@@ -244,6 +244,13 @@ class Portal2Context(CommonContext):
             check_id = all_locations_table[check_name].id
             await self.check_locations([check_id])
         
+        # Custom buttons e.g. ratman dens
+        elif message.startswith("button_check:"):
+            check_name = message.split(":", 1)[1]
+            check_id = all_locations_table[check_name].id
+            await self.check_locations([check_id])
+        
+        # Deathlink
         elif message.startswith("send_deathlink"):
             if self.death_link_active and time.time() - self.last_death_link > 10:
                 await self.send_death()
@@ -305,6 +312,10 @@ class Portal2Context(CommonContext):
         
         if "open_world" in slot_data:
             self.menu.is_open_world = slot_data["open_world"]
+            
+        if "ratman_dens" in slot_data:
+            if slot_data["ratman_dens"]:
+                add_ratman_commands()
 
     def on_package(self, cmd, args):
         def update_item_list():
