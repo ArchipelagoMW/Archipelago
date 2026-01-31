@@ -158,8 +158,9 @@ class RandomizeCartelInfluence(DefaultOnToggle):
 class CartelInfluenceItemsPerRegion(Range):
     """
     Number of cartel influence Items to include in the item pool per region.
-    Each check is worth 100 cartel influence.
+    Each item is worth 100 cartel influence.
     7 needed to unlock region, recommend to add extra of each region.
+    Westville has 5 less checks and 5 less cartel influence items
     This option is only relevant if Randomize Cartel Influence is enabled.
     """
     range_start = 7

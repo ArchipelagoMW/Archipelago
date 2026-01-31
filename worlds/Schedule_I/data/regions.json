@@ -26,7 +26,7 @@
         "connections": {"Westville": {"randomize_level_unlocks" : {"has": "Westville Region Unlock"}}}
     },
     "Westville": {
-        "connections": {"Downtown": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Westville": 7}}}}
+        "connections": {"Downtown": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Westville": 2}}}}
     },
     "Downtown": {
         "connections": {"Docks": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Downtown": 7}}}}

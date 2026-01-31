@@ -199,7 +199,7 @@
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 41
     },
-    "High Quality Pseudo Unlock": {
+    "High-Quality Pseudo Unlock": {
         "classification": ["USEFUL"],
         "tags": ["Level Up Reward"],
         "modern_id": 42
@@ -214,7 +214,7 @@
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 45
     },
-    "M1911 Ammo Unlock": {
+    "M1911 Magazine ": {
         "classification": ["USEFUL"],
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 46
@@ -1004,7 +1004,7 @@
         "tags": ["Weapon Filler"],
         "modern_id": 211
     },
-    "Pump Shotgun Ammo": {
+    "Shotgun Shell": {
         "classification": ["FILLER"],
         "tags": ["Weapon Filler"],
         "modern_id": 212

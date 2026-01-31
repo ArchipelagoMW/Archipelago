@@ -263,7 +263,7 @@
         "tags": ["Mission", "Permanent"],
         "modern_id": 44
     },
-    "On the Grind| Offer a free sample to a potential customer": {
+    "On the Grind|Offer a free sample to a potential customer": {
         "region": "On the Grind|2",
         "requirements": true,
         "tags": ["Mission", "Permanent"],
@@ -642,21 +642,21 @@
     "Vibin' on the 'Cybin|Purchase a grain bag from Fungal Phil": {
         "region": "Overworld",
         "requirements": {"randomize_customers" : {"has_any" : [["Elizabeth Homley Unlocked", "Kevin Oakley Unlocked"]]},
-                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 7}}},
+                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 2}}},
         "tags": ["Mission", "Permanent"],
         "modern_id": 94
     },
     "Vibin' on the 'Cybin|Purchase a spore syringe from Fungal Phil": {
         "region": "Overworld",
         "requirements": {"randomize_customers" : {"has_any" : [["Elizabeth Homley Unlocked", "Kevin Oakley Unlocked"]]},
-                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 7}}},
+                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 2}}},
         "tags": ["Mission", "Permanent"],
         "modern_id": 95
     },
     "Vibin' on the 'Cybin|Purchase a mushroom spawn station from Oscar": {
         "region": "Overworld",
         "requirements": {"randomize_customers" : {"has_any" : [["Elizabeth Homley Unlocked", "Kevin Oakley Unlocked"]]},
-                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 7}},
+                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 2}},
                          "randomize_level_unlocks" : {"has" : "Warehouse Access"}},
         "tags": ["Mission", "Permanent"],
         "modern_id": 96
@@ -664,7 +664,7 @@
     "Vibin' on the 'Cybin|Use the mushroom spawn station to inocculate a grain bag": {
         "region": "Overworld",
         "requirements": {"randomize_customers" : {"has_any" : [["Elizabeth Homley Unlocked", "Kevin Oakley Unlocked"]]},
-                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 7}},
+                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 2}},
                          "randomize_level_unlocks" : {"has" : "Warehouse Access"}},
         "tags": ["Mission", "Permanent"],
         "modern_id": 97
@@ -672,7 +672,7 @@
     "Vibin' on the 'Cybin|Purchase a mushroom bed from Oscar": {
         "region": "Overworld",
         "requirements": {"randomize_customers" : {"has_any" : [["Elizabeth Homley Unlocked", "Kevin Oakley Unlocked"]]},
-                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 7}},
+                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 2}},
                          "randomize_level_unlocks" : {"has" : "Warehouse Access"}},
         "tags": ["Mission", "Permanent"],
         "modern_id": 98
@@ -680,7 +680,7 @@
     "Vibin' on the 'Cybin|Purchase mushroom substrate from Fungal Phil": {
         "region": "Overworld",
         "requirements": {"randomize_customers" : {"has_any" : [["Elizabeth Homley Unlocked", "Kevin Oakley Unlocked"]]},
-                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 7}},
+                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 2}},
                          "randomize_level_unlocks" : {"has" : "Warehouse Access"}},
         "tags": ["Mission", "Permanent"],
         "modern_id": 99
@@ -688,7 +688,7 @@
     "Vibin' on the 'Cybin|Mix the shroom spawn into a mushroom bed": {
         "region": "Overworld",
         "requirements": {"randomize_customers" : {"has_any" : [["Elizabeth Homley Unlocked", "Kevin Oakley Unlocked"]]},
-                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 7}},
+                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 2}},
                          "randomize_level_unlocks" : {"has" : "Warehouse Access"}},
         "tags": ["Mission", "Permanent"],
         "modern_id": 100
@@ -696,7 +696,7 @@
     "Vibin' on the 'Cybin|Purchase an AC unit from a hardware store": {
         "region": "Overworld",
         "requirements": {"randomize_customers" : {"has_any" : [["Elizabeth Homley Unlocked", "Kevin Oakley Unlocked"]]},
-                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 7}},
+                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 2}},
                          "randomize_level_unlocks" : {"has" : "Warehouse Access"}},
         "tags": ["Mission", "Permanent"],
         "modern_id": 101
@@ -704,7 +704,7 @@
     "Vibin' on the 'Cybin|Use the AC unit to cool the mushroom bed": {
         "region": "Overworld",
         "requirements": {"randomize_customers" : {"has_any" : [["Elizabeth Homley Unlocked", "Kevin Oakley Unlocked"]]},
-                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 7}},
+                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 2}},
                          "randomize_level_unlocks" : {"has" : "Warehouse Access"}},
         "tags": ["Mission", "Permanent"],
         "modern_id": 102
@@ -712,7 +712,7 @@
     "Vibin' on the 'Cybin|Harvest the shrooms once fully grown": {
         "region": "Overworld",
         "requirements": {"randomize_customers" : {"has_any" : [["Elizabeth Homley Unlocked", "Kevin Oakley Unlocked"]]},
-                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 7}},
+                         "randomize_cartel_influence" : {"has_all_counts" : {"Cartel Influence, Westville": 2}},
                          "randomize_level_unlocks" : {"has" : "Warehouse Access"}},
         "tags": ["Mission", "Permanent"],
         "modern_id": 103
@@ -1050,36 +1050,6 @@
         "requirements": true,
         "tags": ["Cartel Influence"],
         "modern_id": 150
-    },
-    "Westville cartel influence 3": {
-        "region": "Westville",
-        "requirements": true,
-        "tags": ["Cartel Influence"],
-        "modern_id": 151
-    },
-    "Westville cartel influence 4": {
-        "region": "Westville",
-        "requirements": true,
-        "tags": ["Cartel Influence"],
-        "modern_id": 152
-    },
-    "Westville cartel influence 5": {
-        "region": "Westville",
-        "requirements": true,
-        "tags": ["Cartel Influence"],
-        "modern_id": 153
-    },
-    "Westville cartel influence 6": {
-        "region": "Westville",
-        "requirements": true,
-        "tags": ["Cartel Influence"],
-        "modern_id": 154
-    },
-    "Westville cartel influence 7": {
-        "region": "Westville",
-        "requirements": true,
-        "tags": ["Cartel Influence"],
-        "modern_id": 155
     },
     "Downtown cartel influence 1": {
         "region": "Downtown",

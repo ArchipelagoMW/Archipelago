@@ -92,7 +92,11 @@ def create_all_items(world: Schedule1World, data) -> None:
     if world.options.randomize_cartel_influence:
         for _ in range(world.options.cartel_influence_items_per_region):
             itempool += [world.create_item(item.name) for item in data.items.values() 
-                        if "Cartel Influence" in item.tags]
+                        if "Cartel Influence" in item.tags and "Westville" not in item.tags]
+        # Westville starts at 500 less cartel influence. Will have 5 less cartel items as well to declutter 
+        for _ in range(world.options.cartel_influence_items_per_region - 5):
+            itempool += [world.create_item(item.name) for item in data.items.values() 
+                        if "Cartel Influence" in item.tags and "Westville" in item.tags]
 
     if world.options.randomize_business_properties:
         itempool += [world.create_item(item.name) for item in data.items.values() 
