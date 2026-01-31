@@ -273,24 +273,30 @@ class OptionsCreator(ThemedApp):
     def show_result_snack(text: str):
         MDSnackbar(MDSnackbarText(text=text), y=dp(24), pos_hint={"center_x": 0.5}, size_hint_x=0.5).open()
 
+    def on_export_result(self, text: str | None) -> None:
+        self.container.disabled = False
+        if text is not None:
+            Clock.schedule_once(lambda _: self.show_result_snack(text), 0)
+
     def export_options_background(self, options: dict[str, typing.Any]):
         try:
             file_name = Utils.save_filename("Export Options File As...", [("YAML", [".yaml"])],
                                             Utils.get_file_safe_name(f"{self.name_input.text}.yaml"))
         except Exception:
-            Clock.schedule_once(lambda _: self.show_result_snack("Could not open dialog. Already open?"), 0)
+            self.on_export_result("Could not open dialog. Already open?")
             raise
 
         if not file_name:
-            return  # No file selected. No need to show a message for this.
+            self.on_export_result(None)  # No file selected. No need to show a message for this.
+            return
 
         try:
             with open(file_name, 'w') as f:
                 f.write(Utils.dump(options, sort_keys=False))
                 f.close()
-                Clock.schedule_once(lambda _: self.show_result_snack("File saved successfully."), 0)
+                self.on_export_result("File saved successfully.")
         except Exception:
-            Clock.schedule_once(lambda _: self.show_result_snack("Could not save file."), 0)
+            self.on_export_result("Could not save file.")
             raise
 
     def export_options(self, button: Widget):
@@ -303,6 +309,7 @@ class OptionsCreator(ThemedApp):
                 self.current_game: {k: check_random(v) for k, v in self.options.items()}
             }
             threading.Thread(target=self.export_options_background, args=(options,), daemon=True).start()
+            self.container.disabled = True
         elif not self.name_input.text:
             self.show_result_snack("Name must not be empty.")
         elif not self.current_game:
