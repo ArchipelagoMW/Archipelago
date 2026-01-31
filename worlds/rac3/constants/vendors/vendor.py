@@ -2,6 +2,7 @@
 
 from worlds.rac3.constants.region import PLANET_VENDOR_OFFSET
 from worlds.rac3.constants.status import RAC3STATUS
+from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
 
 
 class RAC3VENDOR:
@@ -13,18 +14,23 @@ class RAC3VENDOR:
     VENDOR_TYPE_OFFSET: int = -0xF0
     SLOT_SIZE: int = 0
 
+    VENDORTYPE_TO_SLOT_SIZE: dict[int, int] = {
+        RAC3VENDORTYPE.WEAPON: 0x14,
+        RAC3VENDORTYPE.ARMOR: 0x10,
+    }
+
     @staticmethod
     def get_vendor_property_address(planet: str, vendor_prop: int) -> int:
         """Provides the vendor property address for reading data"""
         return RAC3STATUS.VENDOR_BASE + PLANET_VENDOR_OFFSET[planet] + vendor_prop
 
-    @classmethod
-    def get_vendor_item_property_address(cls, planet: str, slot: int, item_prop_offset: int) -> int:
+    @staticmethod
+    def get_vendor_item_property_address(planet: str, slot: int, item_prop_offset: int, slot_size: int) -> int:
         """
         Provides the item property address for reading vendor item data,
         using the correct slot size for the vendor type.
         """
-        return cls.get_vendor_property_address(planet, 0) + (slot * cls.SLOT_SIZE) + item_prop_offset
+        return RAC3VENDOR.get_vendor_property_address(planet, 0) + (slot * slot_size) + item_prop_offset
 
 
 class RAC3WEAPONVENDOR(RAC3VENDOR):
