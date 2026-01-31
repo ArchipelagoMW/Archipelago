@@ -451,7 +451,8 @@ def set_rules(world: World):
         LocationName.mines_wall_puzzle_half,
         LocationName.mines_torch_restricted_cultist_reliquary,
         LocationName.mountain_torch_pillaged_cultist_storeroom,
-        LocationName.mountain_underpass_wall_portal
+        LocationName.mountain_underpass_wall_portal,
+        LocationName.cultist_misc_puzzle1
     ]
     for loc_name in mines_temple_locked_locations:
         try:
@@ -580,6 +581,8 @@ def set_rules(world: World):
         LocationName.mountain_item_pickup_mushroom,
         LocationName.mines_item_pickup_mushroom,
         LocationName.swamp_item_pickup_mushroom,
+        LocationName.mountain_underpass_item_pickup_mushroom,
+        LocationName.cultist_misc_puzzle2
     ]
 
     for loc_name in mushroom_access_locations:
@@ -590,10 +593,13 @@ def set_rules(world: World):
 
     # Breakable Wall Rules
     # Factory Dual Handaxes and Cracked Wall Outside Factory require blowing up the wall
+    # Northern part of the Apex Outskirts requires blowing up a wall to get in
     breakable_wall_locations = [
         LocationName.factory_item_pickup_dual_handaxes,
         LocationName.factory_wall_cracked_outside,
         LocationName.mines_wall_cracked_entrance,
+        LocationName.apex_outskirts_item_pickup_golden_clover,
+        LocationName.apex_torch_northern_slums
     ]
 
     for loc_name in breakable_wall_locations:

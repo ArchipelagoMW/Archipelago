@@ -191,7 +191,8 @@ def connect_regions(world: World):
     connect(world, "Mountain Underpass", "Mountain")
 
     # Mountain Underpass -> Cultist Compound
-    connect(world, "Mountain Underpass", "Cultist Compound")
+    connect(world, "Mountain Underpass", "Cultist Compound",
+            lambda state: state.has(ItemName.temple_of_the_deep_key, player))
 
     # Forest -> Supermax Prison (Locked by Greater Void Worm Defeated)
     # Require East Wing Key to enter to prevent softlock (one-way entrance)
