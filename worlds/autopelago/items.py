@@ -165,6 +165,11 @@ def score_item_by_auras(item: str, enabled_auras: set[Aura]) -> int:
         if aura in enabled_auras:
             tmp *= ENABLED_AURA_SCORE_MULTIPLIER
         score += tmp
+    if item in item_name_to_rat_count:
+        # if it adds any rats, then it's automatically at least considered "useful". ideally, it
+        # ought to be "progression", but there was some reason why I didn't make it like that in the
+        # first versions, so keep it that way for now (airbreather 2026-01-03).
+        score += 99 * ENABLED_AURA_SCORE_MULTIPLIER
     return score
 
 
