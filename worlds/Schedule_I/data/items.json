@@ -209,7 +209,7 @@
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 43
     },
-    "M1911 Pistol Unlock": {
+    "M1911 Unlock": {
         "classification": ["USEFUL"],
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 45
@@ -224,7 +224,7 @@
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 47
     },
-    "Pump Shotgun Ammo Unlock": {
+    "Shotgun Shell Unlock": {
         "classification": ["USEFUL"],
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 48
@@ -724,7 +724,7 @@
         "tags": ["Bad Filler"],
         "modern_id": 153
     },
-    "Baggies": {
+    "Baggie": {
         "classification": ["FILLER"],
         "tags": ["Bad Filler"],
         "modern_id": 154
@@ -989,7 +989,7 @@
         "tags": ["Weapon Filler"],
         "modern_id": 208
     },
-    "M1911 Pistol": {
+    "M1911": {
         "classification": ["FILLER"],
         "tags": ["Weapon Filler"],
         "modern_id": 209
