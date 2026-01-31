@@ -956,65 +956,32 @@ class Rac3Interface(GameInterface):
 
     def read_vendor_prop(self, prop: RAC3VENDORSLOTDATA.Property, slot: int, vendor_type: RAC3VENDORTYPE) -> int:
         """Reads the value of a vendor slot property"""
-        match vendor_type:
-            case RAC3VENDORTYPE.WEAPON:
-                match prop.size:
-                    case 1:
-                        return self._read8(RAC3WEAPONVENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset))
-                    case 2:
-                        return self._read16(RAC3WEAPONVENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset))
-                    case 4:
-                        return self._read32(RAC3WEAPONVENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset))
-                    case _:
-                        raise ValueError(f"Invalid property size: {prop.size} Bytes")
-            case RAC3VENDORTYPE.ARMOR:
-                match prop.size:
-                    case 1:
-                        return self._read8(RAC3ARMORVENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset))
-                    case 2:
-                        return self._read16(RAC3ARMORVENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset))
-                    case 4:
-                        return self._read32(RAC3ARMORVENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset))
-                    case _:
-                        raise ValueError(f"Invalid property size: {prop.size} Bytes")
+        match prop.size:
+            case 1:
+                return self._read8(RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset, RAC3VENDOR.VENDORTYPE_TO_SLOT_SIZE[vendor_type]))
+            case 2:
+                return self._read16(RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset, RAC3VENDOR.VENDORTYPE_TO_SLOT_SIZE[vendor_type]))
+            case 4:
+                return self._read32(RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset, RAC3VENDOR.VENDORTYPE_TO_SLOT_SIZE[vendor_type]))
             case _:
-                logger.warning(f'Reading vendor type {vendor_type.name} has not been implemented yet')
-                return 0
+                raise ValueError(f"Invalid property size: {prop.size} Bytes")
 
     def write_vendor_inventory(self, inventory: list[RAC3VENDORSLOTDATA], vendor_type: RAC3VENDORTYPE):
         """Write a list of vendor slot data objects to the current planet's vendor inventory"""
         self._write32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET), len(inventory))
-        match vendor_type:
-            case RAC3VENDORTYPE.WEAPON:
-                for slot, slot_data in enumerate(inventory):
-                    for prop in slot_data.get_data():
-                        match prop.size:
-                            case 1:
-                                self._write8(RAC3WEAPONVENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset),
-                                            prop.value)
-                            case 2:
-                                self._write16(RAC3WEAPONVENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset),
-                                            prop.value)
-                            case 4:
-                                self._write32(RAC3WEAPONVENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset),
-                                            prop.value)
-                logger.debug(f'Wrote {len(inventory)} items to {vendor_type.name} vendor on planet {self.planet}')
-            case RAC3VENDORTYPE.ARMOR:
-                for slot, slot_data in enumerate(inventory):
-                    for prop in slot_data.get_data():
-                        match prop.size:
-                            case 1:
-                                self._write8(RAC3ARMORVENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset),
-                                            prop.value)
-                            case 2:
-                                self._write16(RAC3ARMORVENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset),
-                                            prop.value)
-                            case 4:
-                                self._write32(RAC3ARMORVENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset),
-                                            prop.value)
-                logger.debug(f'Wrote {len(inventory)} items to {vendor_type.name} vendor on planet {self.planet}')
-            case _:
-                logger.debug(f'Writing vendor type {vendor_type.name} has not been implemented yet')
+        for slot, slot_data in enumerate(inventory):
+            for prop in slot_data.get_data():
+                match prop.size:
+                    case 1:
+                        self._write8(RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset, RAC3VENDOR.VENDORTYPE_TO_SLOT_SIZE[vendor_type]),
+                                    prop.value)
+                    case 2:
+                        self._write16(RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset, RAC3VENDOR.VENDORTYPE_TO_SLOT_SIZE[vendor_type]),
+                                    prop.value)
+                    case 4:
+                        self._write32(RAC3VENDOR.get_vendor_item_property_address(self.planet, slot, prop.offset, RAC3VENDOR.VENDORTYPE_TO_SLOT_SIZE[vendor_type]),
+                                    prop.value)
+        logger.debug(f'Wrote {len(inventory)} items to {vendor_type.name} vendor on planet {self.planet}')
 
     ##################
     # Sequence Break #
