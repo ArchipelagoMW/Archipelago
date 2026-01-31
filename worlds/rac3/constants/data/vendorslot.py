@@ -29,7 +29,7 @@ class RAC3VENDORSLOTDATA:
             self.size = size
             self.offset = offset
 
-        def read(self):
+        def read_property(self):
             """format the value correctly for printing"""
             match self.read:
                 case 0:
@@ -57,18 +57,18 @@ class RAC3WEAPONVENDORSLOTDATA(RAC3VENDORSLOTDATA):
 
     def __init__(self, values_list: list[int] = None):
         values = [0, 0, 0x0CDB, 0, 0, 0, 0] if values_list is None else values_list
-        self.item_id = self.Property('ID', values[0], RAC3WEAPONVENDOR.ITEM_ID_SIZE, RAC3WEAPONVENDOR.ITEM_ID_OFFSET)
-        self.ammo_text = self.Property('Ammo text?', values[1], RAC3WEAPONVENDOR.ITEM_AMMO_TEXT_SIZE,
+        self.item_id = self.Property('ID', values[0], 2, RAC3WEAPONVENDOR.ITEM_ID_SIZE, RAC3WEAPONVENDOR.ITEM_ID_OFFSET)
+        self.ammo_text = self.Property('Ammo text?', values[1], 1, RAC3WEAPONVENDOR.ITEM_AMMO_TEXT_SIZE,
                                        RAC3WEAPONVENDOR.ITEM_AMMO_TEXT_OFFSET)
-        self.item_class = self.Property('Class', values[2], RAC3WEAPONVENDOR.ITEM_CLASS_SIZE,
+        self.item_class = self.Property('Class', values[2], 2, RAC3WEAPONVENDOR.ITEM_CLASS_SIZE,
                                         RAC3WEAPONVENDOR.ITEM_CLASS_OFFSET)
-        self.free = self.Property('Free?', values[3], RAC3WEAPONVENDOR.ITEM_COST_SIZE,
+        self.free = self.Property('Free?', values[3], 1, RAC3WEAPONVENDOR.ITEM_COST_SIZE,
                                   RAC3WEAPONVENDOR.ITEM_COST_OFFSET)
-        self.mega = self.Property('Mega?', values[4], RAC3WEAPONVENDOR.ITEM_MEGA_SIZE,
+        self.mega = self.Property('Mega?', values[4], 1, RAC3WEAPONVENDOR.ITEM_MEGA_SIZE,
                                   RAC3WEAPONVENDOR.ITEM_MEGA_OFFSET)
-        self.all_ammo = self.Property('All Ammo?', values[5], RAC3WEAPONVENDOR.ITEM_ALL_AMMO_SIZE,
+        self.all_ammo = self.Property('All Ammo?', values[5], 1, RAC3WEAPONVENDOR.ITEM_ALL_AMMO_SIZE,
                                       RAC3WEAPONVENDOR.ITEM_ALL_AMMO_OFFSET)
-        self.memcard = self.Property('Memory Card?', values[6], RAC3WEAPONVENDOR.ITEM_MEMCARD_SIZE,
+        self.memcard = self.Property('Memory Card?', values[6], 1, RAC3WEAPONVENDOR.ITEM_MEMCARD_SIZE,
                                      RAC3WEAPONVENDOR.ITEM_MEMCARD_OFFSET)
 
     def get_data(self) -> list[RAC3VENDORSLOTDATA.Property]:
@@ -85,9 +85,9 @@ class RAC3ARMORVENDORSLOTDATA(RAC3VENDORSLOTDATA):
 
     def __init__(self, values_list: list[int] = None):
         values = [0, 0, 0] if values_list is None else values_list
-        self.icon = self.Property('Icon', values[0], RAC3ARMORVENDOR.ITEM_ICON_SIZE, RAC3ARMORVENDOR.ITEM_ICON_OFFSET)
-        self.cost = self.Property('Cost', values[1], RAC3ARMORVENDOR.ITEM_COST_SIZE, RAC3ARMORVENDOR.ITEM_COST_OFFSET)
-        self.level = self.Property('Level', values[2], RAC3ARMORVENDOR.ITEM_LEVEL_SIZE,
+        self.icon = self.Property('Icon', values[0], 2, RAC3ARMORVENDOR.ITEM_ICON_SIZE, RAC3ARMORVENDOR.ITEM_ICON_OFFSET)
+        self.cost = self.Property('Cost', values[1], 0, RAC3ARMORVENDOR.ITEM_COST_SIZE, RAC3ARMORVENDOR.ITEM_COST_OFFSET)
+        self.level = self.Property('Level', values[2], 0, RAC3ARMORVENDOR.ITEM_LEVEL_SIZE,
                                    RAC3ARMORVENDOR.ITEM_LEVEL_OFFSET)
 
     def get_data(self) -> list[RAC3VENDORSLOTDATA.Property]:
