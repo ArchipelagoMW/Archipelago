@@ -1142,7 +1142,10 @@ class SC2Logic:
         return levels >= target
 
     def basic_kerrigan(self, state: CollectionState, story_tech_available=True) -> bool:
-        if story_tech_available and self.grant_story_tech == GrantStoryTech.option_grant:
+        if story_tech_available and (
+            self.grant_story_tech == GrantStoryTech.option_grant
+            or not self.kerrigan_unit_available
+        ):
             return True
         # One active ability that can be used to defeat enemies directly
         if not state.has_any(
@@ -1166,13 +1169,12 @@ class SC2Logic:
         return False
 
     def two_kerrigan_actives(self, state: CollectionState, story_tech_available=True) -> bool:
-        if story_tech_available and self.grant_story_tech == GrantStoryTech.option_grant:
+        if story_tech_available and (
+            self.grant_story_tech == GrantStoryTech.option_grant
+            or not self.kerrigan_unit_available
+        ):
             return True
-        count = 0
-        for i in range(7):
-            if state.has_any(kerrigan_logic_active_abilities, self.player):
-                count += 1
-        return count >= 2
+        return state.count_from_list(item_groups.kerrigan_logic_active_abilities, self.player) >= 2
 
     # Global Protoss
     def protoss_power_rating(self, state: CollectionState) -> int:
@@ -2365,6 +2367,7 @@ class SC2Logic:
             # Note(mm): This check isn't necessary as self.kerrigan_levels cover it,
             # and it's not fully desirable in future when we support non-grant story tech + kerriganless.
             # or not self.kerrigan_presence
+            or not self.kerrigan_unit_available
             or state.has_any((
                 # Cases tested by Snarky
                 item_names.KERRIGAN_KINETIC_BLAST,
@@ -2403,22 +2406,23 @@ class SC2Logic:
     def supreme_requirement(self, state: CollectionState) -> bool:
         return (
             self.grant_story_tech == GrantStoryTech.option_grant
-            or not self.kerrigan_unit_available or (self.grant_story_tech == GrantStoryTech.option_allow_substitutes
-                    and state.has_any((
-                        item_names.KERRIGAN_LEAPING_STRIKE,
-                        item_names.OVERLORD_VENTRAL_SACS,
-                        item_names.YGGDRASIL,
-                        item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT,
-                        item_names.NYDUS_WORM,
-                        item_names.BULLFROG,
-                    ), self.player)
-                    and state.has_any((
-                        item_names.KERRIGAN_MEND,
-                        item_names.SWARM_QUEEN,
-                        item_names.INFESTED_MEDICS,
-                    ), self.player)
-                    and self.kerrigan_levels(state, 35)
-                )
+            or not self.kerrigan_unit_available
+            or (self.grant_story_tech == GrantStoryTech.option_allow_substitutes
+                and state.has_any((
+                    item_names.KERRIGAN_LEAPING_STRIKE,
+                    item_names.OVERLORD_VENTRAL_SACS,
+                    item_names.YGGDRASIL,
+                    item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT,
+                    item_names.NYDUS_WORM,
+                    item_names.BULLFROG,
+                ), self.player)
+                and state.has_any((
+                    item_names.KERRIGAN_MEND,
+                    item_names.SWARM_QUEEN,
+                    item_names.INFESTED_MEDICS,
+                ), self.player)
+                and self.kerrigan_levels(state, 35)
+            )
             or (state.has_all((item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_MEND), self.player) and self.kerrigan_levels(state, 35))
         )
 
@@ -2506,15 +2510,12 @@ class SC2Logic:
                 self.grant_story_tech == GrantStoryTech.option_grant
                 or not self.kerrigan_unit_available
                 or (
-                    state.has_any(
-                        (
-                            item_names.KERRIGAN_KINETIC_BLAST,
-                            item_names.KERRIGAN_SPAWN_BANELINGS,
-                            item_names.KERRIGAN_LEAPING_STRIKE,
-                            item_names.KERRIGAN_SPAWN_LEVIATHAN,
-                        ),
-                        self.player,
-                    )
+                    state.has_any((
+                        item_names.KERRIGAN_KINETIC_BLAST,
+                        item_names.KERRIGAN_SPAWN_BANELINGS,
+                        item_names.KERRIGAN_LEAPING_STRIKE,
+                        item_names.KERRIGAN_SPAWN_LEVIATHAN,
+                    ), self.player)
                     and self.basic_kerrigan(state)
                 )
             )
