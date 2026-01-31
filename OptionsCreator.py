@@ -5,7 +5,8 @@ if __name__ == "__main__":
 
 
 from kvui import (ThemedApp, ScrollBox, MainLayout, ContainerLayout, dp, Widget, MDBoxLayout, TooltipLabel, MDLabel,
-                  ToggleButton, MarkupDropdown, ResizableTextField, Clock)
+                  ToggleButton, MarkupDropdown, ResizableTextField)
+from kivy.clock import Clock
 from kivy.uix.behaviors.button import ButtonBehavior
 from kivymd.uix.behaviors import RotateBehavior
 from kivymd.uix.anchorlayout import MDAnchorLayout
@@ -270,7 +271,7 @@ class OptionsCreator(ThemedApp):
         super().__init__()
 
     @staticmethod
-    def show_result_snack(text: str):
+    def show_result_snack(text: str) -> None:
         MDSnackbar(MDSnackbarText(text=text), y=dp(24), pos_hint={"center_x": 0.5}, size_hint_x=0.5).open()
 
     def on_export_result(self, text: str | None) -> None:
@@ -278,7 +279,7 @@ class OptionsCreator(ThemedApp):
         if text is not None:
             Clock.schedule_once(lambda _: self.show_result_snack(text), 0)
 
-    def export_options_background(self, options: dict[str, typing.Any]):
+    def export_options_background(self, options: dict[str, typing.Any]) -> None:
         try:
             file_name = Utils.save_filename("Export Options File As...", [("YAML", [".yaml"])],
                                             Utils.get_file_safe_name(f"{self.name_input.text}.yaml"))
@@ -299,7 +300,7 @@ class OptionsCreator(ThemedApp):
             self.on_export_result("Could not save file.")
             raise
 
-    def export_options(self, button: Widget):
+    def export_options(self, button: Widget) -> None:
         if 0 < len(self.name_input.text) < 17 and self.current_game:
             import threading
             options = {
