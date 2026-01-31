@@ -4,7 +4,7 @@ from math import ceil
 from BaseClasses import CollectionState, Item, MultiWorld, Tutorial, Region
 from Options import OptionError
 from worlds.AutoWorld import LogicMixin, World, WebWorld
-from .items import item_table, PaintItem, item_data_table, traps, deathlink_traps
+from .items import item_table, PaintItem, item_data_table, traps
 from .locations import location_table, PaintLocation, location_data_table
 from .options import PaintOptions
 
@@ -40,6 +40,7 @@ class PaintWorld(World):
     final_width: int
     final_height: int
     per_pixel_logic_percent: float
+    allowed_traps: list[str] = []
 
     def generate_early(self) -> None:
         if self.options.canvas_width_increment < 50 and self.options.canvas_height_increment < 50 and \
@@ -61,12 +62,10 @@ class PaintWorld(World):
         self.per_pixel_logic_percent = self.options.logic_percent.value / (self.final_width * self.final_height)
 
     def get_filler_item_name(self) -> str:
-        if self.random.randint(0, 99) >= self.options.trap_count:
+        if self.random.randint(0, 99) >= self.options.trap_count or len(self.allowed_traps) == 0:
             return "Additional Palette Color"
-        elif self.options.death_link:
-            return self.random.choice(deathlink_traps)
         else:
-            return self.random.choice(traps)
+            return self.random.choice(self.allowed_traps)
 
     def create_item(self, name: str) -> PaintItem:
         item = PaintItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
@@ -94,13 +93,11 @@ class PaintWorld(World):
             raise OptionError(f"{self.player_name}'s Paint world has too few locations for its required items. "
                               "Consider adding more locations by raising logic percent or adding fractional checks. "
                               "Alternatively, increasing the canvas size increment will require fewer items.")
-        while len(items_to_create) < (to_fill - pre_filled) * (self.options.trap_count / 100) + pre_filled:
-            if self.options.death_link:
-                items_to_create += [self.random.choice(deathlink_traps)]
-            else:
-                items_to_create += [self.random.choice(traps)]
+        if self.options.death_link:
+            self.options.trap_blacklist.value.update(["Undo Trap", "Clear Image Trap"])
+        self.allowed_traps = [trap for trap in traps if trap not in self.options.trap_blacklist]
         while len(items_to_create) < to_fill:
-            items_to_create += ["Additional Palette Color"]
+            items_to_create += [self.get_filler_item_name()]
         self.multiworld.itempool += [self.create_item(item) for item in items_to_create]
 
     def create_regions(self) -> None:
@@ -117,7 +114,7 @@ class PaintWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return dict(self.options.as_dict("logic_percent", "goal_percent", "death_link", "canvas_width_increment",
-                                         "canvas_height_increment"),
+                                         "canvas_height_increment", "trap_blacklist", "trap_link"),
                     final_width=self.final_width, final_height=self.final_height,
                     version=self.world_version.as_simple_string())
 

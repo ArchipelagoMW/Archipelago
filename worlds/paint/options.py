@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Range, PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Visibility
+from Options import OptionSet, Range, PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Visibility
 
 
 class LogicPercent(Range):
@@ -125,10 +125,26 @@ class TrapCount(Range):
     default = 0
 
 
+class TrapBlacklist(OptionSet):
+    """These types of traps will not be generated into the item pool nor received from Trap Link.
+    Possible traps are "Undo Trap", "Clear Image Trap", "Invert Colors Trap", "Flip Horizontal Trap",
+    "Flip Vertical Trap", "Help Trap", "Zoom In Trap", "Zoom Out Trap", "Tool Swap Trap"."""
+    display_name = "Trap Blacklist"
+    valid_keys = [
+        "Undo Trap", "Clear Image Trap", "Invert Colors Trap", "Flip Horizontal Trap", "Flip Vertical Trap",
+        "Help Trap", "Zoom In Trap", "Zoom Out Trap", "Tool Swap Trap"
+    ]
+
+
+class TrapLink(Toggle):
+    """Received traps will be simultaneously sent to other players with trap link on. This also works in reverse."""
+    display_name = "Trap Link"
+
+
 class DeathLink(Toggle):
     """If on, using the Undo or Clear Image functions will send a death to all other players with death link on.
     Receiving a death will clear the image and reset the history.
-    This option also prevents Undo and Clear Image traps from being generated in the item pool."""
+    This option also adds Undo and Clear Image traps to the trap blacklist."""
     display_name = "Death Link"
 
 
@@ -145,5 +161,7 @@ class PaintOptions(PerGameCommonOptions):
     goal_image: GoalImage
     starting_tool: StartingTool
     trap_count: TrapCount
+    trap_blacklist: TrapBlacklist
+    trap_link: TrapLink
     death_link: DeathLink
     start_inventory_from_pool: StartInventoryPool
