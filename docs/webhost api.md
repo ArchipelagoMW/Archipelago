@@ -385,8 +385,8 @@ Will provide a dict of static tracker data with the following keys:
   - This hash can then be sent to the datapackage API to receive the appropriate datapackage as necessary
 - The number of checks found vs. total checks available per player (`player_locations_total`)
   - Same logic as the multitracker template: found = len(player_checks_done.locations) / total = player_locations_total.total_locations (all available checks).
-- The game each player is playing (`player_game`)
-  - Provided as a list of objects with `team`, `player`, and `game`.
+- The static slot info for each player (`player_game`)
+  - Provided as a list of objects with `team`, `player` (slot number), `player_name` (slot name), and `game`.
 
 Example:
 ```json
@@ -433,11 +433,13 @@ Example:
     {
       "team": 0,
       "player": 1,
+      "player_name": "PlayerX",
       "game": "Archipelago"
     },
     {
       "team": 0,
       "player": 2,
+      "player_name": "PlayerY",
       "game": "The Messenger"
     }
   ]

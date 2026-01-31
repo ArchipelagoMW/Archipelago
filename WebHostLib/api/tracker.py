@@ -233,7 +233,7 @@ def static_tracker_data(tracker: UUID) -> dict[str, Any]:
         "groups": groups,
         "datapackage": tracker_data._multidata["datapackage"],
         "player_locations_total": player_locations_total,
-        "players": players_info,
+        "player_game": players_info,
     }
 
 
