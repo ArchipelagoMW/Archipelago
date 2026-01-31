@@ -65,7 +65,7 @@ After getting the source code, it is strongly recommended to create a
 [venv](https://docs.python.org/3/tutorial/venv.html) (Virtual Environment)
 by hand or using an IDE, such as PyCharm, because Archipelago requires specific versions of Python packages.
 
-Run `python ModuleUpdater.py` in the project root to install packages, run `python Launcher.py` to run the Launcher.
+Run `python ModuleUpdate.py` in the project root to install packages, run `python Launcher.py` to run the Launcher.
 
 ### Building
 
