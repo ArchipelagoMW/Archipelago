@@ -126,3 +126,17 @@ map_specific_commands: list[MapCommand] = [
     MapCommand("sp_a2_bts2", turrets, ['script ppmod.addscript([Vector(1514, -3898, 64), 1, "trigger_once"], "OnStartTouch", "DisableEntityPhysics(\"npc_portal_turret_floor\")", 3, 1)\n']),
     MapCommand("sp_a4_finale2", turrets, ['script ppmod.addscript([Vector(11835, 11776, 8543), 1, "trigger_once"], "OnStartTouch", "DisableEntityPhysics(\"npc_portal_turret_floor\")", 2.5, 1)\n']),
 ]
+
+# Option based commands
+ratman_den_commands: list[MapCommand] = [
+    MapCommand("sp_a1_intro3", None, ['script CreateAPButton("Ratman Den 1", Vector(847, -703, 320-65), Vector(0,-90,0), 0.8)\n']),
+    MapCommand("sp_a2_dual_lasers", None, ['script CreateAPButton("Ratman Den 2", Vector(438, -636, 827-65), Vector(0,135,0), 0.8)\n']),
+    MapCommand("sp_a2_trust_fling", None, ['script CreateAPButton("Ratman Den 3", Vector(2045, 82, 254-65), Vector(0,-135,0), 0.8)\n']),
+    MapCommand("sp_a2_bridge_intro", None, ['script CreateAPButton("Ratman Den 4", Vector(612, -618, 64-65), Vector(0,-135,0), 0.8)\n']),
+    MapCommand("sp_a2_bridge_the_gap", None, ['script CreateAPButton("Ratman Den 5", Vector(-128, -270, 1756-65), Vector(0,90,0), 0.8)\n']),
+    MapCommand("sp_a2_laser_vs_turret", None, ['script CreateAPButton("Ratman Den 6", Vector(850, -720, 222-65), Vector(0,180,0), 0.8)\n']),
+    MapCommand("sp_a2_pull_the_rug", None, ['script CreateAPButton("Ratman Den 7", Vector(63, -1158, 550-65), Vector(0,45,0), 0.8)\n'])
+]
+
+def add_ratman_commands():
+    map_specific_commands += ratman_den_commands

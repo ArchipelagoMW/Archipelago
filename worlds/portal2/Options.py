@@ -87,6 +87,12 @@ class WheatleyMonitors(Toggle):
     Determines whether breaking Wheatly monitors will send location checks
     """
     display_name = "Wheatley Monitors"
+    
+class RatmanDens(Toggle):
+    """
+    Determines whether locating Ratman Dens will send location checks
+    """
+    display_name = "Ratman Dens"
 
 portal2_option_groups = [
     OptionGroup("Location Options", [
@@ -94,6 +100,7 @@ portal2_option_groups = [
         EarlyPlayabilityPercentage,
         CutsceneLevels,
         WheatleyMonitors,
+        RatmanDens,
     ]),
     OptionGroup("Trap Options", [
         TrapFillPercentage,
@@ -118,10 +125,11 @@ class Portal2Options(PerGameCommonOptions):
     death_link: DeathLink
 
     open_world: OpenWorld
-    cutscenelevels: CutsceneLevels
+    cutscene_levels: CutsceneLevels
     early_playability_percentage: EarlyPlayabilityPercentage
     # storyachievementsanity: StoryAchievementSanity
-    wheatleymonitors: WheatleyMonitors
+    wheatley_monitors: WheatleyMonitors
+    ratman_dens: RatmanDens
 
     trap_fill_percentage: TrapFillPercentage
     motion_blur_trap_weight: MotionBlurTrapWeight

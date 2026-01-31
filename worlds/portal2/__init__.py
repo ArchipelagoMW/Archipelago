@@ -159,11 +159,16 @@ class Portal2World(World):
                 item_check_reqs = item_location_table[item_check_name].required_items
                 self.create_in_level_check(item_check_name, item_check_reqs, region_start)
             # Wheatley monitors
-            if self.options.wheatleymonitors and map_code in wheatley_maps_to_monitor_names:
+            if self.options.wheatley_monitors and map_code in wheatley_maps_to_monitor_names:
                 monitors = wheatley_maps_to_monitor_names[map_code]
                 for monitor in monitors:
                     requirements = wheatley_monitor_table[monitor].required_items
                     self.create_in_level_check(monitor, requirements, region_start)
+            # Ratman Dens
+            if self.options.ratman_dens and map_code in ratman_map_to_ratman_den:
+                den = ratman_map_to_ratman_den[map_code]
+                requirements = ratman_den_locations_table[den].required_items
+                self.create_in_level_check(den, requirements, region_start)
             
             if last_region:
                 last_region.connect(region_start)
@@ -191,7 +196,7 @@ class Portal2World(World):
         
         self.maps_in_use = set(map_complete_table.keys())
         # Cutscene levels option
-        if self.options.cutscenelevels:
+        if self.options.cutscene_levels:
             self.maps_in_use.update(cutscene_completion_table.keys())
 
     def create_regions(self) -> None:

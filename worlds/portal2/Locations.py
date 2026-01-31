@@ -12,6 +12,7 @@ class LocationType(Flag):
     ITEM = auto()
     ACHIEVEMENT = auto()
     WHEATLY_MONITOR = auto()
+    OTHER = auto()
 
 class Portal2LocationData:
     def __init__(self, map_name: str = None, location_type: LocationType = None, required_items: list[str] = []):
@@ -124,7 +125,9 @@ story_achievements_table: dict[str, Portal2LocationData] = {
     "Achievement: Drop Box": Portal2LocationData(None, LocationType.STORY_ACHIEVEMENT),
 }
 
-# Not implemented
+# Not implementd
+achievements_table: dict[str, Portal2LocationData] = {}
+
 wheatley_monitor_table: dict[str, Portal2LocationData] = {
     "Wheatley Monitor 1": Portal2LocationData("sp_a4_tb_intro", LocationType.WHEATLY_MONITOR, [portal_gun_2, funnel, frankenturret]),
     "Wheatley Monitor 2": Portal2LocationData("sp_a4_tb_trust_drop", LocationType.WHEATLY_MONITOR, [portal_gun_2, button, funnel, frankenturret]),
@@ -156,8 +159,17 @@ item_location_table: dict[str, Portal2LocationData] = {
 
 item_maps_to_item_location : dict[str, str] = {value.map_name:key for key, value in item_location_table.items()}
 
-# Not implementd
-achievements_table: dict[str, Portal2LocationData] = {}
+ratman_den_locations_table: dict[str, Portal2LocationData] = {
+    "Ratman Den 1": Portal2LocationData("sp_a1_intro3", LocationType.OTHER),
+    "Ratman Den 2": Portal2LocationData("sp_a2_dual_lasers", LocationType.OTHER),
+    "Ratman Den 3": Portal2LocationData("sp_a2_trust_fling", LocationType.OTHER, [portal_gun_2, faith_plate]),
+    "Ratman Den 4": Portal2LocationData("sp_a2_bridge_intro", LocationType.OTHER),
+    "Ratman Den 5": Portal2LocationData("sp_a2_bridge_the_gap", LocationType.OTHER, [portal_gun_2]),
+    "Ratman Den 6": Portal2LocationData("sp_a2_laser_vs_turret", LocationType.OTHER, [portal_gun_2, laser, floor_button, reflection_cube]),
+    "Ratman Den 7": Portal2LocationData("sp_a2_pull_the_rug", LocationType.OTHER, [portal_gun_2, bridge])
+}
+
+ratman_map_to_ratman_den: dict[str, str] = {value.map_name: key for key, value in ratman_den_locations_table.items()}
 
 all_locations_table: dict[str, Portal2LocationData] = map_complete_table.copy()
 all_locations_table.update(cutscene_completion_table)
@@ -169,5 +181,6 @@ map_codes_to_location_names: dict[str, str] = {value: key for key, value in loca
 # all_locations_table.update(story_achievements_table)
 all_locations_table.update(wheatley_monitor_table)
 all_locations_table.update(item_location_table)
+all_locations_table.update(ratman_den_locations_table)
 # all_locations_table.update(achievements_table)
 
