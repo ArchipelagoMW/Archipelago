@@ -274,8 +274,13 @@ class OptionsCreator(ThemedApp):
         MDSnackbar(MDSnackbarText(text=text), y=dp(24), pos_hint={"center_x": 0.5}, size_hint_x=0.5).open()
 
     def export_options_background(self, options: dict[str, typing.Any]):
-        file_name = Utils.save_filename("Export Options File As...", [("YAML", [".yaml"])],
-                                        Utils.get_file_safe_name(f"{self.name_input.text}.yaml"))
+        try:
+            file_name = Utils.save_filename("Export Options File As...", [("YAML", [".yaml"])],
+                                            Utils.get_file_safe_name(f"{self.name_input.text}.yaml"))
+        except Exception:
+            Clock.schedule_once(lambda _: self.show_result_snack("Could not open dialog. Already open?"), 0)
+            raise
+
         if not file_name:
             return  # No file selected. No need to show a message for this.
 
