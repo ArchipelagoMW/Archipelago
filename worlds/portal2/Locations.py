@@ -160,7 +160,7 @@ item_location_table: dict[str, Portal2LocationData] = {
 item_maps_to_item_location : dict[str, str] = {value.map_name:key for key, value in item_location_table.items()}
 
 ratman_den_locations_table: dict[str, Portal2LocationData] = {
-    "Ratman Den 1": Portal2LocationData("sp_a1_intro3", LocationType.OTHER),
+    "Ratman Den 1": Portal2LocationData("sp_a1_intro4", LocationType.OTHER, [weighted_cube, floor_button]),
     "Ratman Den 2": Portal2LocationData("sp_a2_dual_lasers", LocationType.OTHER),
     "Ratman Den 3": Portal2LocationData("sp_a2_trust_fling", LocationType.OTHER, [portal_gun_2, faith_plate]),
     "Ratman Den 4": Portal2LocationData("sp_a2_bridge_intro", LocationType.OTHER),

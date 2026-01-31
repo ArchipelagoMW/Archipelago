@@ -102,7 +102,7 @@ def handle_map_start(map_code: str, items_missing: list[str]) -> list[str]:
         commands.append("script RemovePotatosFromGun()\n")
     
     for mc in map_specific_commands:
-        if map_code == mc.map_code and mc.condition_item in items_missing:
+        if map_code == mc.map_code and (mc.condition_item == None or mc.condition_item in items_missing):
             commands += mc.commands
         
     return commands
@@ -129,7 +129,7 @@ map_specific_commands: list[MapCommand] = [
 
 # Option based commands
 ratman_den_commands: list[MapCommand] = [
-    MapCommand("sp_a1_intro3", None, ['script CreateAPButton("Ratman Den 1", Vector(847, -703, 320-65), Vector(0,-90,0), 0.8)\n']),
+    MapCommand("sp_a1_intro4", None, ['script CreateAPButton("Ratman Den 1", Vector(847, -703, 320-65), Vector(0,-90,0), 0.8)\n']),
     MapCommand("sp_a2_dual_lasers", None, ['script CreateAPButton("Ratman Den 2", Vector(438, -636, 827-65), Vector(0,135,0), 0.8)\n']),
     MapCommand("sp_a2_trust_fling", None, ['script CreateAPButton("Ratman Den 3", Vector(2045, 82, 254-65), Vector(0,-135,0), 0.8)\n']),
     MapCommand("sp_a2_bridge_intro", None, ['script CreateAPButton("Ratman Den 4", Vector(612, -618, 64-65), Vector(0,-135,0), 0.8)\n']),
@@ -139,4 +139,5 @@ ratman_den_commands: list[MapCommand] = [
 ]
 
 def add_ratman_commands():
+    global map_specific_commands
     map_specific_commands += ratman_den_commands
