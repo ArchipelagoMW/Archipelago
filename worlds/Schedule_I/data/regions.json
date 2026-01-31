@@ -275,7 +275,7 @@
     },
     "Mixing Mania": {
         "connections": {
-            "Making the Rounds": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]]}}
+            "Making the Rounds": {"randomize_level_unlocks" : {"has": "Mixing Station Unlock"}}
         }
     },
     "Making the Rounds": {

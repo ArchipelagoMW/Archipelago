@@ -84,7 +84,7 @@
         "tags": ["Gas Mart", "Level Up Reward"],
         "modern_id": 18
     },
-    "Packaging Station Mk II Unlock": {
+    "Packaging Station Mk2 Unlock": {
         "classification": ["PROGRESSION_SKIP_BALANCING", "USEFUL"],
         "tags": ["Hardware Store", "Level Up Reward"],
         "modern_id": 19
@@ -119,7 +119,7 @@
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 25
     },
-    "Mixing Station Mk II Unlock": {
+    "Mixing Station Mk2 Unlock": {
         "classification": ["PROGRESSION", "USEFUL"],
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 26
@@ -744,7 +744,7 @@
         "tags": ["Bad Filler"],
         "modern_id": 157
     },
-    "Metal square Table": {
+    "Metal Square Table": {
         "classification": ["FILLER"],
         "tags": ["Bad Filler"],
         "modern_id": 158
@@ -774,7 +774,7 @@
         "tags": ["Bad Filler"],
         "modern_id": 163
     },
-    "Plastic table": {
+    "Plastic Table": {
         "classification": ["FILLER"],
         "tags": ["Bad Filler"],
         "modern_id": 164
@@ -839,7 +839,7 @@
         "tags": ["Basic Filler"],
         "modern_id": 176
     },
-    "soil Pourer": {
+    "Soil Pourer": {
         "classification": ["FILLER"],
         "tags": ["Basic Filler"],
         "modern_id": 177
@@ -849,17 +849,17 @@
         "tags": ["Basic Filler"],
         "modern_id": 178
     },
-    "Plastic pot": {
+    "Plastic Pot": {
         "classification": ["FILLER"],
         "tags": ["Basic Filler"],
         "modern_id": 179
     },
-    "Moisture-preservative pot": {
+    "Moisture-Preserving Pot": {
         "classification": ["FILLER"],
         "tags": ["Basic Filler"],
         "modern_id": 180
     },
-    "Air pot": {
+    "Air Pot": {
         "classification": ["FILLER"],
         "tags": ["Basic Filler"],
         "modern_id": 181
@@ -894,7 +894,7 @@
         "tags": ["Better Filler"],
         "modern_id": 187
     },
-    "Packaging Station Mk II": {
+    "Packaging Station Mk2": {
         "classification": ["FILLER"],
         "tags": ["Amazing Filler"],
         "modern_id": 188
@@ -904,7 +904,7 @@
         "tags": ["Amazing Filler"],
         "modern_id": 189
     },
-    "Mixing Station Mk II": {
+    "Mixing Station Mk2": {
         "classification": ["FILLER"],
         "tags": ["Amazing Filler"],
         "modern_id": 190
@@ -919,7 +919,7 @@
         "tags": ["Amazing Filler"],
         "modern_id": 193
     },
-    "High Quality Pseudo": {
+    "High-Quality Pseudo": {
         "classification": ["FILLER"],
         "tags": ["Amazing Filler"],
         "modern_id": 194
@@ -969,7 +969,7 @@
         "tags": ["Progression Skip Filler"],
         "modern_id": 203
     },
-    "Lab oven": {
+    "Lab Oven": {
         "classification": ["FILLER"],
         "tags": ["Progression Skip Filler"],
         "modern_id": 204

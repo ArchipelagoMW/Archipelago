@@ -427,49 +427,49 @@
     },
     "Mixing Mania|Purchase a mixing station from the hardware store": {
         "region": "Mixing Mania",
-        "requirements": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]]}},
+        "requirements": {"randomize_level_unlocks" : {"has": "Mixing Station Unlock"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 61
     },
     "Mixing Mania|Place the mixing station": {
         "region": "Mixing Mania",
-        "requirements": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]]}},
+        "requirements": {"randomize_level_unlocks" : {"has": "Mixing Station Unlock"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 62
     },
     "Mixing Mania|Go to Gas-Mart": {
         "region": "Mixing Mania",
-        "requirements": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]]}},
+        "requirements": {"randomize_level_unlocks" : {"has": "Mixing Station Unlock"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 63
     },
     "Mixing Mania|Purchase at least one mixing ingredient": {
         "region": "Mixing Mania",
-        "requirements": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]]}},
+        "requirements": {"randomize_level_unlocks" : {"has": "Mixing Station Unlock"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 64
     },
     "Mixing Mania|Start a new mix at the mixing station": {
         "region": "Mixing Mania",
-        "requirements": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]]}},
+        "requirements": {"randomize_level_unlocks" : {"has": "Mixing Station Unlock"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 65
     },
     "Mixing Mania|Wait for the mix to complete": {
         "region": "Mixing Mania",
-        "requirements": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]]}},
+        "requirements": {"randomize_level_unlocks" : {"has": "Mixing Station Unlock"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 66
     },
     "Mixing Mania|Collect the new product": {
         "region": "Mixing Mania",
-        "requirements": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]]}},
+        "requirements": {"randomize_level_unlocks" : {"has": "Mixing Station Unlock"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 67
     },
     "Mixing Mania|Mix a strain worth at least $60": {
         "region": "Mixing Mania",
-        "requirements": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]]}},
+        "requirements": {"randomize_level_unlocks" : {"has": "Mixing Station Unlock"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 69
     },
