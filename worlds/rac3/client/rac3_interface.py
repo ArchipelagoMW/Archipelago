@@ -38,7 +38,7 @@ from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_
                                           RESPAWN_COORDS_OFFSET, SHIP_SLOTS)
 from worlds.rac3.constants.status import RAC3STATUS
 from worlds.rac3.constants.vendors.type import RAC3VENDORTYPE
-from worlds.rac3.constants.vendors.vendor import RAC3ARMORVENDOR, RAC3VENDOR, RAC3WEAPONVENDOR
+from worlds.rac3.constants.vendors.vendor import RAC3VENDOR, RAC3WEAPONVENDOR
 
 
 class Rac3Interface(GameInterface):
@@ -904,8 +904,7 @@ class Rac3Interface(GameInterface):
             return
         vendor_size = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.SLOT_COUNT_OFFSET))
         if (self.pause_state_value != RAC3PAUSESTATE.VENDOR
-                or not self.options.weapon_vendors
-                or not vendor_size):
+                or not self.options.weapon_vendors):
             return
 
         vendor_type = RAC3VENDORTYPE(
