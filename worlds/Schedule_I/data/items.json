@@ -189,7 +189,7 @@
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 39
     },
-    "Revolver Ammo Unlock": {
+    "Revolver Cylinder Unlock": {
         "classification": ["USEFUL"],
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 40
@@ -984,7 +984,7 @@
         "tags": ["Weapon Filler"],
         "modern_id": 207
     },
-    "Revolver Ammo": {
+    "Revolver Cylinder": {
         "classification": ["FILLER"],
         "tags": ["Weapon Filler"],
         "modern_id": 208
@@ -994,7 +994,7 @@
         "tags": ["Weapon Filler"],
         "modern_id": 209
     },
-    "M1911 Ammo": {
+    "M1911 Magazine": {
         "classification": ["FILLER"],
         "tags": ["Weapon Filler"],
         "modern_id": 210
