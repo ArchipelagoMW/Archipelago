@@ -488,7 +488,14 @@ class World(metaclass=AutoWorldRegister):
         raise NotImplementedError
 
     def get_filler_item_name(self) -> str:
-        """Called when the item pool needs to be filled with additional items to match location count."""
+        """
+        Called when the item pool needs to be filled with additional items to match location count.
+
+        Any returned item name must be for a "repeatable" item, i.e. one that it's okay to generate arbitrarily many of.
+        For most worlds this will be one or more of your filler items, but the classification of these items
+        does not need to be ItemClassification.filler.
+        The item name returned can be for a trap, useful, and/or progression item as long as it's repeatable.
+        """
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
         return self.random.choice(tuple(self.item_name_to_id.keys()))
 
