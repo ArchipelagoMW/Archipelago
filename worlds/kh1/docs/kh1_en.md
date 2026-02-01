@@ -105,7 +105,7 @@ You need at least one magic spell before you can use summons.
 
 Make sure you are using the KH1 Client and not the Text Client. You will need to open the client via the Archipelago Launcher.
 If the correct client is being used, try reinstalling both Panacea and Lua Backend via the Setup Wizard under Settings.
-Uncommonly, the folder `KH1FM` failed to generate within `%LocalAppData%`, and need to be manually created. Alternately, the contents within `%LocalAppData%/KH1FM/` may need to be deleted.
+Uncommonly, the folder `KH1FM` failed to generate within `%LocalAppData%`, and needs to be manually created. Alternately, the contents within `%LocalAppData%/KH1FM/` may need to be deleted.
 
 ### Why am I sending and/or receiving the wrong items?
 
