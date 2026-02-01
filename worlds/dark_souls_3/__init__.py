@@ -6,6 +6,7 @@ from logging import warning
 from typing import cast, Any, Callable, Dict, Set, List, Optional, TextIO, Union
 
 from BaseClasses import CollectionState, MultiWorld, Region, Location, LocationProgressType, Entrance, Tutorial, ItemClassification
+from Fill import swap_location_item
 
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import CollectionRule, ItemRule, add_rule, add_item_rule
@@ -1484,8 +1485,7 @@ class DarkSouls3World(World):
                     # Give offworld regions the last (best) items within a given sphere
                     for location in onworld + offworld:
                         new_item = ds3_world._pop_item(location, converted_item_order)
-                        location.item = new_item
-                        new_item.location = location
+                        swap_location_item(new_item.location, location)
 
             if ds3_world.options.smooth_upgrade_items:
                 base_names = {
