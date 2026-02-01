@@ -13,7 +13,7 @@
 ## Setting up the required software
 
 - Before beginning, ensure that KH1 has been launched to the title screen at least once before.
-- Verify game files, clean files are needed for the modding process to work.
+- Verify game files via Steam/Epic; clean files are needed for the modding process to work.
 
 ### OpenKH
 
