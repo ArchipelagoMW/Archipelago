@@ -46,12 +46,16 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
     SlotType, LocationStore, MultiData, Hint, HintStatus
 from BaseClasses import ItemClassification
 
-
 min_client_version = Version(0, 5, 0)
 colorama.just_fix_windows_console()
 
 no_version = Version(0, 0, 0)
 assert isinstance(no_version, tuple)  # assert immutable
+
+DATA_STORAGE_MAX_INT_EXPONENT = 128
+DATA_STORAGE_MAX_INT_BITS = 128
+DATA_STORAGE_MAX_LIST_LEN = 1 * 1024 * 1024
+DATA_STORAGE_MAX_STRING_LEN = 1 * 1024 * 1024
 
 server_per_message_deflate_factory = ServerPerMessageDeflateFactory(
     server_max_window_bits=11,
@@ -64,6 +68,49 @@ def operator_mod(lhs, rhs):
         raise ValueError("Can't modulo a string")
 
     return lhs % rhs
+
+def binop_isinstance(lhs: typing.Any, lhs_type: type, rhs: typing.Any, rhs_type: type):
+    return isinstance(lhs, lhs_type) and isinstance(rhs, rhs_type)
+
+def operator_add(lhs, rhs):
+    match (lhs, rhs):
+        case (str(), str()) if len(lhs) + len(rhs) > DATA_STORAGE_MAX_STRING_LEN:
+            raise Exception(f"Result of string multiplication exceeds limit of {DATA_STORAGE_MAX_STRING_LEN} bytes")
+        case (list(), list()) if len(lhs) + len(rhs) > DATA_STORAGE_MAX_LIST_LEN:
+            raise Exception(f"Result of list addition exceeds limit of {DATA_STORAGE_MAX_LIST_LEN} elements")
+        case _:
+            return lhs + rhs
+
+def operator_mul(lhs, rhs):
+    match (lhs, rhs):
+        case (str(), int()) if len(lhs) * rhs > DATA_STORAGE_MAX_STRING_LEN:
+            raise Exception(f"Result of string multiplication exceeds limit of {DATA_STORAGE_MAX_STRING_LEN} bytes")
+        case (int(), str()) if lhs * len(rhs) > DATA_STORAGE_MAX_STRING_LEN:
+            raise Exception(f"Result of string multiplication exceeds limit of {DATA_STORAGE_MAX_STRING_LEN} bytes")
+        case (list(), int()) if len(lhs) * rhs > DATA_STORAGE_MAX_LIST_LEN:
+            raise Exception(f"Result of list multiplication exceeds limit of {DATA_STORAGE_MAX_LIST_LEN} elements")
+        case (int(), list()) if lhs * len(rhs) > DATA_STORAGE_MAX_LIST_LEN:
+            raise Exception(f"Result of list multiplication exceeds limit of {DATA_STORAGE_MAX_LIST_LEN} elements")
+        case _:
+            return lhs * rhs
+
+def operator_pow(base, exp):
+    match (base, exp):
+        case (int(), int()) if abs(base) > 1 and exp > 1:
+            if exp > DATA_STORAGE_MAX_INT_EXPONENT:
+                raise ValueError(f"Int exponent exceeds {DATA_STORAGE_MAX_INT_EXPONENT}")
+            
+            value = base
+
+            for _ in range(exp - 1):
+                value *= base
+
+                if value.bit_length() > DATA_STORAGE_MAX_INT_BITS:
+                    raise Exception(f"Result of pow exceeds limit of {DATA_STORAGE_MAX_INT_BITS} bits")
+            
+            return value
+        case _:
+            return base ** exp
 
 def remove_from_list(container, value):
     try:
@@ -111,9 +158,9 @@ modify_functions = {
     "replace": lambda old, new: new,
     "default": lambda old, new: old,
     # numeric:
-    "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
-    "mul": operator.mul,
-    "pow": operator.pow,
+    "add": operator_add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
+    "mul": operator_mul,
+    "pow": operator_pow,
     "mod": operator_mod,
     "floor": lambda value, _: math.floor(value),
     "ceil": lambda value, _: math.ceil(value),
@@ -2178,7 +2225,10 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             args["slot"] = client.slot
             for operation in args["operations"]:
                 func = modify_functions[operation["operation"]]
-                value = func(value, operation["value"])
+                tmp_value = func(value, operation["value"])
+                if isinstance(tmp_value, int) and tmp_value.bit_length() > DATA_STORAGE_MAX_INT_BITS:
+                    raise Exception(f"Result of operation exceeds limit of {DATA_STORAGE_MAX_INT_BITS} bits")
+                value = tmp_value
             ctx.stored_data[args["key"]] = args["value"] = value
             targets = set(ctx.stored_data_notification_clients[args["key"]])
             if args.get("want_reply", False):
