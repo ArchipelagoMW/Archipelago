@@ -618,18 +618,15 @@ async def run_game(ctx: JakAndDaxterContext):
             elif Utils.is_linux:
                 terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('konsole') or which('xterm')
 
-                # TODO - There is a bug unique to Konsole running from AppImage builds of AP. It tries to load AP's
-                #  shipped OpenSSL library, but the Compiler requires the system's OpenSSL library. Not reproducible
-                #  with tarball builds or by running xterm. AP core may write a subprocess wrapper in the future
-                #  that could handle this, but until then we will need a hack for Konsole.
-                if terminal == "konsole" and "LD_LIBRARY_PATH" in os.environ:
-                    env = os.environ.copy()
+                # Don't allow the terminal application to attempt loading system libraries, this can cause OpenSSL
+                # errors when launching the REPL due to version mismatches between system vs shipped libraries.
+                env = os.environ
+                if "LD_LIBRARY_PATH" in env:
+                    env = env.copy()
                     del env["LD_LIBRARY_PATH"]
+
+                if terminal:
                     goalc_process = subprocess.Popen([terminal, '-e', shlex.join(goalc_args)], env=env)
-
-                elif terminal is not None:
-                    goalc_process = subprocess.Popen([terminal, '-e', shlex.join(goalc_args)])
-
                 else:
                     msg = (f"Your Linux installation does not have a supported terminal application.\n"
                            f"We support the following options:\n"
