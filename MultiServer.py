@@ -107,7 +107,7 @@ def operator_pow(base, exp):
 
                 if value.bit_length() > DATA_STORAGE_MAX_INT_BITS:
                     raise Exception(f"Result of pow exceeds limit of {DATA_STORAGE_MAX_INT_BITS} bits")
-            
+
             return value
         case _:
             return base ** exp
