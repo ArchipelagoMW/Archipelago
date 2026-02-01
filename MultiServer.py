@@ -105,7 +105,7 @@ def operator_pow(base, exp):
             return base ** exp
 
 def operator_lshift(lhs, rhs):
-    if math.ceil(math.log2(base) + exp) > DATA_STORAGE_MAX_INT_BITS:
+    if math.ceil(math.log2(lhs) + rhs) > DATA_STORAGE_MAX_INT_BITS:
         raise Exception(f"Result of lshift exceeds limit of {DATA_STORAGE_MAX_INT_BITS} bits")
     
     return lhs << rhs
