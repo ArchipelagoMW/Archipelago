@@ -985,6 +985,25 @@ class Rac3Interface(GameInterface):
                                     prop.value)
         logger.debug(f'Wrote {len(inventory)} items to {vendor_type.name} vendor on planet {self.planet}')
 
+    def hovering_over_max_ammo(self) -> bool:
+        """Check if the player is currently hovering over the max ammo item in a weapon vendor"""
+        if (self.pause_state_value == RAC3PAUSESTATE.VENDOR
+                and self.options.weapon_vendors
+                and self.planet in PLANET_VENDOR_OFFSET.keys()):
+            vendor_type = RAC3VENDORTYPE(
+                self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
+            if vendor_type != RAC3VENDORTYPE.WEAPON:
+                return False
+            cursor_pos = self._read32(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.CURSOR_OFFSET))
+            for slot in range(cursor_pos + 1):
+                slot_data = self.read_vendor_slot_data(vendor_type, slot)
+                if slot_data.all_ammo.value:
+                    if slot == cursor_pos:
+                        return True
+                    else:
+                        return False
+        return False
+
     ##################
     # Sequence Break #
     ##################
@@ -1152,7 +1171,7 @@ class Rac3Interface(GameInterface):
     def weapon_cycler(self):
         """Interval update function: Check unlock/lock status of weapons"""
         # If in vendor, lock all non-progressive weapons to allow second unlock address to work properly
-        if self.pause_state_value == RAC3PAUSESTATE.VENDOR:
+        if self.pause_state_value == RAC3PAUSESTATE.VENDOR and not self.hovering_over_max_ammo():
             weapons_to_remove = self.weapon_vendor_items
             for name in non_prog_weapon_data.keys():
                 if name in weapons_to_remove:
