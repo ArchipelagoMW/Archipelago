@@ -1456,7 +1456,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         self.client = client
 
     def __call__(self, raw: str) -> typing.Optional[bool]:
-        if not raw.startswith("!admin"):
+        if not (raw.startswith("!admin") or raw.startswith("!lock ")):
             self.ctx.broadcast_text_all(self.ctx.get_aliased_name(self.client.team, self.client.slot) + ': ' + raw,
                                         {"type": "Chat", "team": self.client.team, "slot": self.client.slot, "message": raw})
         return super(ClientMessageProcessor, self).__call__(raw)
@@ -1523,6 +1523,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
 
         return self.ctx.commandprocessor(command)
 
+    @mark_raw
     def _cmd_lock(self, identifier: str = "") -> bool:
         """Lock the current slot, disallowing connections from a new device/without a specified password.
         If passed an ID, then this will be set as the password, which must be specified when connecting.
@@ -1530,6 +1531,14 @@ class ClientMessageProcessor(CommonCommandProcessor):
         if not self.ctx.player_locking:
             self.output("Player locking has been disabled on this server.")
             return False
+
+        # Print out hidden password text if set
+        if identifier:
+            output = f"!lock {('*' * random.randint(4, 16))}"
+            self.ctx.broadcast_text_all(
+                f"{self.ctx.get_aliased_name(self.client.team, self.client.slot)}: {output}",
+                {"type": "Chat", "team": self.client.team, "slot": self.client.slot, "message": output}
+            )
 
         lock_slot(self.ctx, self.client.team, self.client.slot, identifier)
         return True
