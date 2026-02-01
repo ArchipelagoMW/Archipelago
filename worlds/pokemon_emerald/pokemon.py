@@ -279,7 +279,9 @@ def randomize_wild_encounters(world: "PokemonEmeraldWorld") -> None:
     }
 
     already_placed = set()
-    num_placeable_species = NUM_REAL_SPECIES - len(world.blacklisted_wilds)
+    num_placeable_species = NUM_REAL_SPECIES
+    if not world.options.dexsanity:
+        num_placeable_species -= len(world.blacklisted_wilds)
 
     priority_species = [data.constants["SPECIES_WAILORD"], data.constants["SPECIES_RELICANTH"]]
 
