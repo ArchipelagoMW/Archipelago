@@ -2,7 +2,7 @@
 
 ## What are the changes from the vanilla game?
 
-You can read about the changes [here](https://github.com/Taoshix/Archipelago-RaC3/blob/main/worlds/rac3/docs/en_Ratchet_and_Clank_3.md)
+You can read about the changes [here](https://github.com/Taoshix/Archipelago-RaC3/blob/staging/worlds/rac3/docs/en_Ratchet_and_Clank_3.md)
 
 ## I have my client connected, but I can't send out/receive checks, what can I do?
 
