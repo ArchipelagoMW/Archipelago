@@ -65,6 +65,7 @@ Output Logs/
 /datapackage
 /datapackage_export.json
 /custom_worlds
+/data/sprites
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -114,6 +115,8 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+fuzz.py
+fuzz_output/
 
 
 # Flask stuff:
