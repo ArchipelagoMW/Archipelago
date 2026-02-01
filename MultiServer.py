@@ -59,6 +59,11 @@ server_per_message_deflate_factory = ServerPerMessageDeflateFactory(
     compress_settings={"memLevel": 4},
 )
 
+def operator_mod(lhs, rhs):
+    if isinstance(lhs, str):
+        raise ValueError("Can't modulo a string")
+
+    return lhs % rhs
 
 def remove_from_list(container, value):
     try:
@@ -109,7 +114,7 @@ modify_functions = {
     "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
     "mul": operator.mul,
     "pow": operator.pow,
-    "mod": operator.mod,
+    "mod": operator_mod,
     "floor": lambda value, _: math.floor(value),
     "ceil": lambda value, _: math.ceil(value),
     "max": max,
