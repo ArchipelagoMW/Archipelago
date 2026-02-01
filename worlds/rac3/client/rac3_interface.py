@@ -24,7 +24,7 @@ from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.tags import RAC3TAG
-from worlds.rac3.constants.locations.vendors import (WEAPON_VENDOR_LOCATION_TO_ITEM,
+from worlds.rac3.constants.locations.vendors import (MEGACORP_WEAPONS, WEAPON_VENDOR_LOCATION_TO_ITEM,
                                                      WEAPON_VENDOR_LOCATION_TO_UNLOCK_REGION)
 from worlds.rac3.constants.messages.box_format import THEME_ID_TO_THEME_COLORS
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
@@ -920,14 +920,20 @@ class Rac3Interface(GameInterface):
                                   and bool(self._read8(RAC3WEAPONVENDOR.get_vendor_property_address(
                             self.planet, RAC3WEAPONVENDOR.VENDOR_WEAPON_TYPE_OFFSET))))
                 # Slim Cognito does not have a max ammo item, so we just replace the entire inventory
-                if not is_slimcognito:
+                if is_slimcognito:
+                    # Only show megacorp weapons
+                    filtered_items = [item for item in self.weapon_vendor_items if item in MEGACORP_WEAPONS]
+                    new_inventory.extend(
+                        [RAC3WEAPONVENDORSLOTDATA([RAC3_ITEM_DATA_TABLE[item].ID, 0, 0x0CDB, 0, 0, 0, 0]) for item in filtered_items])
+                else:
+                    # Only show gadgetron weapons, keep current inventory up to all_ammo
                     for slot_data in current_inventory:
                         new_inventory.append(slot_data)
                         if slot_data.all_ammo.value:
                             break
-                new_inventory.extend(
-                    [RAC3WEAPONVENDORSLOTDATA([RAC3_ITEM_DATA_TABLE[item].ID, 0, 0x0CDB, 0, 0, 0, 0]) for item in
-                     self.weapon_vendor_items])
+                    filtered_items = [item for item in self.weapon_vendor_items if item not in MEGACORP_WEAPONS]
+                    new_inventory.extend(
+                        [RAC3WEAPONVENDORSLOTDATA([RAC3_ITEM_DATA_TABLE[item].ID, 0, 0x0CDB, 0, 0, 0, 0]) for item in filtered_items])
             case RAC3VENDORTYPE.ARMOR:
                 new_inventory = [RAC3ARMORVENDORSLOTDATA([0xEA92 + armor.ID - 0xF5, 694201337, armor.ID - 0xF5]) for
                                  armor in armor_data.values()]
