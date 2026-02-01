@@ -220,7 +220,7 @@ class RandomizeEnemiesOption(DefaultOnToggle):
 class SimpleEarlyBossesOption(DefaultOnToggle):
     """Avoid replacing Iudex Gundyr and Vordt with difficult bosses.
 
-    This limits these boss fights to bosses that are known to scale gracefully to low-level fights.
+    This limits these fights to bosses that are known to scale gracefully for low-level fights.
     This doesn't necessarily mean that those bosses will be from the early game, just that they're
     not too difficult when scaled down.
 
