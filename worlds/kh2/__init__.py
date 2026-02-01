@@ -78,7 +78,6 @@ class KH2World(World):
         # random_super_boss_list List[str]
         # has to be in __init__ or else other players affect each other's bounties
         self.random_super_boss_list = list()
-        self.slot_data_bounties = list()
         self.growth_list = list()
         # lists of KH2Item
         self.keyblade_ability_pool = list()
