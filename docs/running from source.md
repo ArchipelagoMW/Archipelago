@@ -74,9 +74,9 @@ one it was built on. Beware that currently only the oldest Ubuntu LTS available 
 This means the easiest way to generate a build is by running the `Build` action from GitHub actions instead of building
 locally. If you still want to, e.g. for local testing, you can by running
 
-`python setup.py build_exe` to generate a binary distribution of Archipelago in `dist/`, or \
-`python setup.py bdist_appimage` to generate an AppImage. You need to put an `appimagetool` into the directory you run
-the command from, rename it to `appimagetool` and make it executable.
+`python setup.py build_exe` to generate a binary distribution of Archipelago in `build/`. Or to generate an AppImage
+first generate the binary distribution and then run `python setup.py bdist_appimage` to populate `dist/`. You need to
+put an `appimagetool` into the directory you run the command from, rename it to `appimagetool` and make it executable.
 
 
 ## Optional: A Link to the Past Enemizer
