@@ -29,10 +29,10 @@ you don't have it, don't purchase weapons or Armor in the current versions.
 
 ## X check is in logic, but when I go there I don't receive it, why?
 
-Currently, there are some checks that doesn't work with sequence breaking (Example Obani Gemini: Infobot: Blackwater
-City) these are collected into a location group called  `Unstable`. If you generate the .yaml for yourself make sure it
-is in the **excluded locations** section (it should be there by default along with some ones).
-Due to how problematic this has become, the locations in the `Unstable` group have straight up been skipped during generation to prevent issues until a solution has been found.
+Currently, there are some checks that doesn't work with sequence breaking (For example most of the Phoenix checks) 
+these are collected into a location group called  `Unstable`. If you generate the .yaml for yourself make sure it
+is in the **excluded locations** section (it should be there by default). This will make the unstable locations have
+only filler/trap items.
 
 ## OK, but how do I know which locations are getting excluded with each option?
 
