@@ -112,6 +112,19 @@ def operator_pow(base, exp):
         case _:
             return base ** exp
 
+def operator_lshift(lhs, rhs):
+    if lhs.bit_length() > DATA_STORAGE_MAX_INT_BITS or rhs.bit_length() > DATA_STORAGE_MAX_INT_BITS:
+        raise Exception(f"Result of lshift exceeds limit of {DATA_STORAGE_MAX_INT_BITS} bits")
+
+    for _ in range(rhs):
+        lhs <<= rhs
+
+        if lhs.bit_length() > DATA_STORAGE_MAX_INT_BITS:
+            raise Exception(f"Result of lshift exceeds limit of {DATA_STORAGE_MAX_INT_BITS} bits")
+    
+    return lhs
+
+
 def remove_from_list(container, value):
     try:
         container.remove(value)
@@ -170,7 +183,7 @@ modify_functions = {
     "xor": operator.xor,
     "or": operator.or_,
     "and": operator.and_,
-    "left_shift": operator.lshift,
+    "left_shift": operator_lshift,
     "right_shift": operator.rshift,
     # lists/dicts:
     "remove": remove_from_list,
