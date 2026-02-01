@@ -1524,12 +1524,20 @@ class DarkSouls3World(World):
         items: List[DarkSouls3Item]
     ) -> DarkSouls3Item:
         """Returns the next item in items that can be assigned to location."""
+        best_unsuitable = -1
         for i, item in enumerate(items):
             if location.can_fill(self.multiworld.state, item, False):
-                return items.pop(i)
+                if item.location.can_fill(self.multiworld.state, location.item, False):
+                    # Both locations accept their new items.
+                    return items.pop(i)
+                else:
+                    if best_unsuitable == -1:
+                        # Only the first location accepts the new item, but this is a better choice than neither
+                        # location accepting their new item.
+                        best_unsuitable = i
 
         # If we can't find a suitable item, give up and assign an unsuitable one.
-        return items.pop(0)
+        return items.pop(best_unsuitable if best_unsuitable != -1 else 0)
 
     def _get_our_locations(self) -> List[DarkSouls3Location]:
         return cast(List[DarkSouls3Location], self.multiworld.get_locations(self.player))
