@@ -29,13 +29,15 @@
         "connections": {"Downtown": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Westville": 2}}}}
     },
     "Downtown": {
-        "connections": {"Docks": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Downtown": 7}}}}
+        "connections": {"Docks": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Downtown": 7}},
+                                  "randomize_level_unlocks" : {"has": "Fertilizer Unlock"}}}
     },
     "Docks": {
         "connections": {"Suburbia": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Docks": 7}}}}
     },
     "Suburbia": {
-        "connections": {"Uptown": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Suburbia": 7}}}}
+        "connections": {"Uptown": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Suburbia": 7}},
+                                  "randomize_level_unlocks" : {"has": "Drying Rack Unlock"}}}
     },
     "Uptown": {
         "connections": {}

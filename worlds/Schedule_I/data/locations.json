@@ -1500,78 +1500,90 @@
     },
     "Successful Sample: Anna Chesterfield": {
         "region": "Docks",
-        "requirements": {"randomize_customers" : {"has_any" : [["Anna Chesterfield Unlocked", "Lisa Gardener Unlocked", "Cranky Frank Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Anna Chesterfield Unlocked", "Lisa Gardener Unlocked", "Cranky Frank Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Fertilizer Unlock"}},
         "tags": ["Customer"],
         "modern_id": 340
     },
     "Successful Sample: Billy Kramer": {
         "region": "Docks",
         "requirements": {"randomize_customers" : {"has_any" : [["Billy Kramer Unlocked", "Mac Cooper Unlocked", "Sherman Giles Unlocked"]]},
-                         "randomize_dealers" : {"has" : "Jane Lucero Recruited"}},
+                         "randomize_dealers" : {"has" : "Jane Lucero Recruited"},
+                         "randomize_level_unlocks": {"has" : "Fertilizer Unlock"}},
         "tags": ["Customer"],
         "modern_id": 341
     },
     "Successful Sample: Cranky Frank": {
         "region": "Docks",
-        "requirements": {"randomize_customers" : {"has_any" : [["Cranky Frank Unlocked", "Anna Chesterfield Unlocked", "Genghis Barn Unlocked", "Marco Barone Unlocked", "Melissa Wood Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Cranky Frank Unlocked", "Anna Chesterfield Unlocked", "Genghis Barn Unlocked", "Marco Barone Unlocked", "Melissa Wood Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Fertilizer Unlock"}},
         "tags": ["Customer"],
         "modern_id": 342
     },
     "Successful Sample: Genghis Barn": {
         "region": "Docks",
-        "requirements": {"randomize_customers" : {"has_any" : [["Genghis Barn Unlocked", "Cranky Frank Unlocked", "Javier Pérez Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Genghis Barn Unlocked", "Cranky Frank Unlocked", "Javier Pérez Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Fertilizer Unlock"}},
         "tags": ["Customer"],
         "modern_id": 343
     },
     "Successful Sample: Javier Pérez": {
         "region": "Docks",
         "requirements": {"randomize_customers" : {"has_any" : [["Javier Pérez Unlocked", "Genghis Barn Unlocked", "Marco Barone Unlocked", "Lisa Gardener Unlocked"]]},
-                         "randomize_suppliers" : {"has" : "Salvador Moreno Unlocked"}},
+                         "randomize_suppliers" : {"has" : "Salvador Moreno Unlocked"},
+                         "randomize_level_unlocks": {"has" : "Fertilizer Unlock"}},
         "tags": ["Customer"],
         "modern_id": 344
     },
     "Befriend Supplier: Salvador Moreno": {
         "region": "Docks",
         "requirements": {"randomize_customers" : {"has_any" : [["Javier Pérez Unlocked", "Kelly Reynolds Unlocked", "Mac Cooper Unlocked"]]},
-                         "randomize_suppliers" : {"has" : "Salvador Moreno Unlocked"}},
+                         "randomize_suppliers" : {"has" : "Salvador Moreno Unlocked"},
+                         "randomize_level_unlocks": {"has" : "Fertilizer Unlock"}},
         "tags": ["Supplier"],
         "modern_id": 402
     },
     "Successful Sample: Kelly Reynolds": {
         "region": "Docks",
-        "requirements": {"randomize_customers" : {"has_any" : [["Kelly Reynolds Unlocked", "Lisa Gardener Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Kelly Reynolds Unlocked", "Lisa Gardener Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Fertilizer Unlock"}},
         "tags": ["Customer"],
         "modern_id": 345
     },
     "Successful Sample: Lisa Gardener": {
         "region": "Docks",
-        "requirements": {"randomize_customers" : {"has_any" : [["Lisa Gardener Unlocked", "Anna Chesterfield Unlocked", "Javier Pérez Unlocked", "Kelly Reynolds Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Lisa Gardener Unlocked", "Anna Chesterfield Unlocked", "Javier Pérez Unlocked", "Kelly Reynolds Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Fertilizer Unlock"}},
         "tags": ["Customer"],
         "modern_id": 346
     },
     "Successful Sample: Mac Cooper": {
         "region": "Docks",
         "requirements": {"randomize_customers" : {"has_any" : [["Mac Cooper Unlocked", "Billy Kramer Unlocked", "Marco Barone Unlocked"]]},
-                         "randomize_suppliers" : {"has" : "Salvador Moreno Unlocked"}},
+                         "randomize_suppliers" : {"has" : "Salvador Moreno Unlocked"},
+                         "randomize_level_unlocks": {"has" : "Fertilizer Unlock"}},
         "tags": ["Customer"],
         "modern_id": 347
     },
     "Successful Sample: Marco Barone": {
         "region": "Docks",
-        "requirements": {"randomize_customers" : {"has_any" : [["Marco Barone Unlocked", "Cranky Frank Unlocked", "Javier Pérez Unlocked", "Mac Cooper Unlocked", "Sherman Giles Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Marco Barone Unlocked", "Cranky Frank Unlocked", "Javier Pérez Unlocked", "Mac Cooper Unlocked", "Sherman Giles Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Fertilizer Unlock"}},
         "tags": ["Customer"],
         "modern_id": 348
     },
     "Successful Sample: Melissa Wood": {
         "region": "Docks",
         "requirements": {"randomize_customers" : {"has_any" : [["Melissa Wood Unlocked", "Cranky Frank Unlocked", "Sherman Giles Unlocked"]]},
-                         "randomize_dealers" : {"has" : "Jane Lucero Recruited"}},
+                         "randomize_dealers" : {"has" : "Jane Lucero Recruited"},
+                         "randomize_level_unlocks": {"has" : "Fertilizer Unlock"}},
         "tags": ["Customer"],
         "modern_id": 349
     },
     "Successful Sample: Sherman Giles": {
         "region": "Docks",
-        "requirements": {"randomize_customers" : {"has_any" : [["Sherman Giles Unlocked", "Billy Kramer Unlocked", "Marco Barone Unlocked", "Melissa Wood Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Sherman Giles Unlocked", "Billy Kramer Unlocked", "Marco Barone Unlocked", "Melissa Wood Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Fertilizer Unlock"}},
         "tags": ["Customer"],
         "modern_id": 350
     },
@@ -1640,63 +1652,73 @@
     },
     "Successful Sample: Fiona Hancock": {
         "region": "Uptown",
-        "requirements": {"randomize_customers" : {"has_any" : [["Fiona Hancock Unlocked", "Walter Cussler Unlocked", "Lily Turner Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Fiona Hancock Unlocked", "Walter Cussler Unlocked", "Lily Turner Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Drying Rack Unlock"}},
         "tags": ["Customer"],
         "modern_id": 361
     },
     "Successful Sample: Herbert Bleuball": {
         "region": "Uptown",
-        "requirements": {"randomize_customers" : {"has_any" : [["Herbert Bleuball Unlocked", "Pearl Moore Unlocked", "Tobias Wentworth Unlocked", "Jen Heard Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Herbert Bleuball Unlocked", "Pearl Moore Unlocked", "Tobias Wentworth Unlocked", "Jen Heard Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Drying Rack Unlock"}},
         "tags": ["Customer"],
         "modern_id": 362
     },
     "Successful Sample: Irene Meadows": {
         "region": "Uptown",
-        "requirements": {"randomize_customers" : {"has_any" : [["Irene Meadows Unlocked", "Ray Hoffman Unlocked", "Michael Boog Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Irene Meadows Unlocked", "Ray Hoffman Unlocked", "Michael Boog Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Drying Rack Unlock"}},
         "tags": ["Customer"],
         "modern_id": 363
     },
     "Successful Sample: Jen Heard": {
         "region": "Uptown",
-        "requirements": {"randomize_customers" : {"has_any" : [["Jen Heard Unlocked", "Herbert Bleuball Unlocked", "Walter Cussler Unlocked", "Ray Hoffman Unlocked", "Lily Turner Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Jen Heard Unlocked", "Herbert Bleuball Unlocked", "Walter Cussler Unlocked", "Ray Hoffman Unlocked", "Lily Turner Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Drying Rack Unlock"}},
         "tags": ["Customer"],
         "modern_id": 364
     },
     "Successful Sample: Lily Turner": {
         "region": "Uptown",
-        "requirements": {"randomize_customers" : {"has_any" : [["Lily Turner Unlocked", "Fiona Hancock Unlocked", "Jen Heard Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Lily Turner Unlocked", "Fiona Hancock Unlocked", "Jen Heard Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Drying Rack Unlock"}},
         "tags": ["Customer"],
         "modern_id": 365
     },
     "Successful Sample: Michael Boog": {
         "region": "Uptown",
         "requirements": {"randomize_customers" : {"has_any" : [["Michael Boog Unlocked", "Irene Meadows Unlocked", "Tobias Wentworth Unlocked"]]},
-                         "randomize_dealers" : {"has" : "Leo Rivers Recruited"}},
+                         "randomize_dealers" : {"has" : "Leo Rivers Recruited"},
+                         "randomize_level_unlocks": {"has" : "Drying Rack Unlock"}},
         "tags": ["Customer"],
         "modern_id": 366
     },
     "Successful Sample: Pearl Moore": {
         "region": "Uptown",
-        "requirements": {"randomize_customers" : {"has_any" : [["Pearl Moore Unlocked", "Herbert Bleuball Unlocked", "Tobias Wentworth Unlocked", "Walter Cussler Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Pearl Moore Unlocked", "Herbert Bleuball Unlocked", "Tobias Wentworth Unlocked", "Walter Cussler Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Drying Rack Unlock"}},
         "tags": ["Customer"],
         "modern_id": 367
     },
     "Successful Sample: Ray Hoffman": {
         "region": "Uptown",
         "requirements": {"randomize_customers" : {"has_any" : [["Ray Hoffman Unlocked", "Irene Meadows Unlocked", "Jen Heard Unlocked"]]},
-                         "randomize_dealers" : {"has" : "Leo Rivers Recruited"}},
+                         "randomize_dealers" : {"has" : "Leo Rivers Recruited"},
+                         "randomize_level_unlocks": {"has" : "Drying Rack Unlock"}},
         "tags": ["Customer"],
         "modern_id": 368
     },
     "Successful Sample: Tobias Wentworth": {
         "region": "Uptown",
-        "requirements": {"randomize_customers" : {"has_any" : [["Tobias Wentworth Unlocked", "Herbert Bleuball Unlocked", "Pearl Moore Unlocked", "Michael Boog Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Tobias Wentworth Unlocked", "Herbert Bleuball Unlocked", "Pearl Moore Unlocked", "Michael Boog Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Drying Rack Unlock"}},
         "tags": ["Customer"],
         "modern_id": 369
     },
     "Successful Sample: Walter Cussler": {
         "region": "Uptown",
-        "requirements": {"randomize_customers" : {"has_any" : [["Walter Cussler Unlocked", "Fiona Hancock Unlocked", "Jen Heard Unlocked", "Pearl Moore Unlocked"]]}},
+        "requirements": {"randomize_customers" : {"has_any" : [["Walter Cussler Unlocked", "Fiona Hancock Unlocked", "Jen Heard Unlocked", "Pearl Moore Unlocked"]]},
+                         "randomize_level_unlocks": {"has" : "Drying Rack Unlock"}},
         "tags": [""],
         "modern_id": 370
     },

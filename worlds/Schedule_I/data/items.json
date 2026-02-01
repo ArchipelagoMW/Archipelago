@@ -14,13 +14,13 @@
         "tags": ["Hardware Store", "Level Up Reward"],
         "modern_id": 3
     },
-    "Long-Life Soil Unlock": {
+    "Long Life Soil Unlock": {
         "classification": ["USEFUL"],
         "tags": ["Hardware Store", "Level Up Reward"],
         "modern_id": 4
     },
     "Fertilizer Unlock": {
-        "classification": ["USEFUL"],
+        "classification": ["PROGRESSION", "USEFUL"],
         "tags": ["Hardware Store", "Level Up Reward"],
         "modern_id": 5
     },
@@ -64,7 +64,7 @@
         "tags": ["Gas Mart", "Level Up Reward"],
         "modern_id": 14
     },
-    "Extra Long-Life Soil Unlock": {
+    "Extra Long Life Soil Unlock": {
         "classification": ["USEFUL"],
         "tags": ["Hardware Store", "Level Up Reward"],
         "modern_id": 15
@@ -739,7 +739,7 @@
         "tags": ["Bad Filler"],
         "modern_id": 156
     },
-    "Wooden Square Table": {
+    "Wood Square Table": {
         "classification": ["FILLER"],
         "tags": ["Bad Filler"],
         "modern_id": 157
@@ -844,7 +844,7 @@
         "tags": ["Basic Filler"],
         "modern_id": 177
     },
-    "Extra Long-Life Soil": {
+    "Extra Long Life Soil": {
         "classification": ["FILLER"],
         "tags": ["Basic Filler"],
         "modern_id": 178
@@ -854,7 +854,7 @@
         "tags": ["Basic Filler"],
         "modern_id": 179
     },
-    "Moisture-Preserving Pot": {
+    "Moisture Preserving Pot": {
         "classification": ["FILLER"],
         "tags": ["Basic Filler"],
         "modern_id": 180
@@ -874,7 +874,7 @@
         "tags": ["Better Filler"],
         "modern_id": 183
     },
-    "Long-Life Soil": {
+    "Long Life Soil": {
         "classification": ["FILLER"],
         "tags": ["Better Filler"],
         "modern_id": 184
