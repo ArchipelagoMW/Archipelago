@@ -41,7 +41,7 @@
 - Click the green plus, choose `Select and install Mod Archive or Lua Script`, and direct the prompt to your new mod zip.
 - You should now see a mod on your list called `KH1 Randomizer Seed XYZ` where XYZ is your seed hex value.
 - Ensure this mod is checked `[x]`.
-- click `Mod Loader` at the top, then click `Build and Run`.  Your modded game should now open.
+- Click `Mod Loader` at the top, then click `Build and Run`.  Your modded game should now open.
 
 ## Connecting to your multiworld via the KH1 Client
 
