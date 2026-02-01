@@ -97,7 +97,7 @@ def operator_mul(lhs, rhs):
 def operator_pow(base, exp):
     match (base, exp):
         case (int(), int()) if abs(base) > 1 and exp > 1:
-            if math.ceil(math.log2(base) * exp) > DATA_STORAGE_MAX_INT_BITS:
+            if math.ceil(math.log2(abs(base)) * exp) > DATA_STORAGE_MAX_INT_BITS:
                 raise Exception(f"Result of pow exceeds limit of {DATA_STORAGE_MAX_INT_BITS} bits")
 
             return base ** exp
