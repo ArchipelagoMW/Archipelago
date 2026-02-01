@@ -1,7 +1,4 @@
 # reports
-from worlds.kh2.Names.LocationName import KnightsShield
-
-
 SecretAnsemsReport1  = "Secret Ansem's Report 1"
 SecretAnsemsReport2  = "Secret Ansem's Report 2"
 SecretAnsemsReport3  = "Secret Ansem's Report 3"
