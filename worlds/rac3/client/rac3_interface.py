@@ -907,6 +907,9 @@ class Rac3Interface(GameInterface):
                 or not self.options.weapon_vendors):
             return
 
+        is_pda_vendor = self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.IS_PDA_OFFSET))
+        if is_pda_vendor:
+            return
         vendor_type = RAC3VENDORTYPE(
             self._read8(RAC3VENDOR.get_vendor_property_address(self.planet, RAC3VENDOR.VENDOR_TYPE_OFFSET)))
         current_inventory = [self.read_vendor_slot_data(vendor_type, slot) for slot in range(vendor_size)]
