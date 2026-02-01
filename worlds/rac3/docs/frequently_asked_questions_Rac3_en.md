@@ -26,11 +26,6 @@ Updating Universal Tracker appears to solve this problem for those reporting thi
 Until you don't have a weapon it's vendor slot will be active, because the game tries to put it back to the shop because
 you don't have it, don't purchase weapons or Armor in the current versions.
 
-## When I receive a weapon/gadget it sends out multiple checks, why is it happening?
-
-Currently, weapon vendors and some gadget checks are being sent out when you receive them as items. This is because we currently don't know how to properly distinguish between items received from Archipelago or obtained in the vanilla game. The best action to
-take to mitigate the effect of this is to put **Gadgets** and **Weapons** into the exclusion list, this makes them always contain filler items (e.g.
-jackpot mode, bolts).
 
 ## X check is in logic, but when I go there I don't receive it, why?
 
