@@ -116,11 +116,14 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
         for player in players:
             if tracker_data.get_slot_info(player).type == SlotType.group:
                 continue
+            items = [
+                (item, -2, 0, 0) for item in tracker_data.get_player_starting_inventory(player)
+                ] + tracker_data.get_player_received_items(team, player)
             player_data.append({
                 "team": team,
                 "player": player,
                 "alias": tracker_data.get_player_alias(team, player),
-                "items": tracker_data.get_player_received_items(team, player),
+                "items": items,
                 "checked_locations": sorted(tracker_data.get_player_checked_locations(team, player)),
                 "hints": hints[team, player],
                 "activity_time": get_time(activity_timers, (team, player)),
