@@ -256,121 +256,50 @@ can either be viewed while on a room tracker page, or from the [room's endpoint]
 <a name=tracker></a>
 Will provide a dict of tracker data with the following keys:
 
-- Each player's current alias (`aliases`)
-  - Will return the name if there is none
-- A list of items each player has received as a NetworkItem (`player_items_received`)
-- A list of checks done by each player as a list of the location id's (`player_checks_done`)
 - The total number of checks done by all players (`total_checks_done`)
-- Hints that players have used or received (`hints`)
-- The time of last activity of each player in RFC 1123 format (`activity_timers`)
-- The time of last active connection of each player in RFC 1123 format (`connection_timers`)
-- The current client status of each player (`player_status`)
+- A per player object (`player_data`) with the following keys:
+  - The player's current alias (`alias`)
+    - Will return the name if there is none
+  - A list of items the player has received as a NetworkItem (`items`)
+  - A list of checks done by the player as a list of the location id's (`checked_locations`)
+  - Hints that player has used or received (`hints`)
+  - The time of last activity of the player in RFC 1123 format (`activity_time`)
+  - The time of last active connection of the player in RFC 1123 format (`connection_timers`)
+  - The current client status of the player (`status`)
+  - The slot number of that player (`player`)
+  - The team number of that player (`team`)
 
 Example:
 ```json
 {
-  "aliases": [
-    {
-      "team": 0,
-      "player": 1,
-      "alias": "Incompetence"
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "alias": "Slot_Name_2"
-    }
-  ],
-  "player_items_received": [
-    {
-      "team": 0,
-      "player": 1,
-      "items": [
-        [1, 1, 1, 0],
-        [2, 2, 2, 1]
-      ]
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "items": [
-        [1, 1, 1, 2],
-        [2, 2, 2, 0]
-      ]
-    }
-  ],
-  "player_checks_done": [
-    {
-      "team": 0,
-      "player": 1,
-      "locations": [
-        1,
-        2
-      ]
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "locations": [
-        1,
-        2
-      ]
-    }
-  ],
   "total_checks_done": [
     {
       "team": 0,
       "checks_done": 4
     }
   ],
-  "hints": [
+  "player_data": [
     {
-      "team": 0,
+      "activity_time": null,
+      "alias": null,
+      "checked_locations": [],
+      "connection_time": null,
+      "hints": [],
+      "items": [],
+      "status": 30,
       "player": 1,
-      "hints": [
-        [1, 2, 4, 6, 0, "", 4, 0]
-      ]
+      "team": 0
     },
     {
-      "team": 0,
+      "activity_time": null,
+      "alias": null,
+      "checked_locations": [],
+      "connection_time": null,
+      "hints": [],
+      "items": [],
+      "status": 0,
       "player": 2,
-      "hints": []
-    }
-  ],
-  "activity_timers": [
-    {
-      "team": 0,
-      "player": 1,
-      "time": "Fri, 18 Apr 2025 20:35:45 GMT"
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "time": "Fri, 18 Apr 2025 20:42:46 GMT"
-    }
-  ],
-  "connection_timers": [
-    {
-      "team": 0,
-      "player": 1,
-      "time": "Fri, 18 Apr 2025 20:38:25 GMT"
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "time": "Fri, 18 Apr 2025 21:03:00 GMT"
-    }
-  ],
-  "player_status": [
-    {
-      "team": 0,
-      "player": 1,
-      "status": 0
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "status": 0
+      "team": 0
     }
   ]
 }
@@ -383,10 +312,14 @@ Will provide a dict of static tracker data with the following keys:
 - item_link groups and their players (`groups`)
 - The datapackage hash for each game (`datapackage`)
   - This hash can then be sent to the datapackage API to receive the appropriate datapackage as necessary
-- The number of checks found vs. total checks available per player (`player_locations_total`)
-  - Same logic as the multitracker template: found = len(player_checks_done.locations) / total = player_locations_total.total_locations (all available checks).
-- The game each player is playing (`player_game`)
-  - Provided as a list of objects with `team`, `player`, and `game`.
+- A per player object (`player_data`) with the following keys:
+  - The game name for that player (`game`)
+  - The number of checks found vs. total checks available per player (`locations_count`)
+    - Same logic as the multitracker template: found = len(player_checks_done.locations) / total = player_locations_total.total_locations (all available checks).
+  - The list of all location ids known for that player (`locations`)
+  - The slot name of that player (`name`)
+  - The slot number of that player (`player`)
+  - The team number of that player (`team`)
 
 Example:
 ```json
@@ -417,28 +350,22 @@ Example:
       "checksum": "6991cbcda7316b65bcb072667f3ee4c4cae71c0b"
     }
   },
-  "player_locations_total": [
+  "player_data": [
     {
+      "game": "Archipelago",
+      "location_count": 0,
+      "locations": [],
+      "name": "Foo",
       "player": 1,
-      "team" : 0,
-      "total_locations": 10
+      "team": 0
     },
     {
+      "game": "The Messenger",
+      "location_count": 106,
+      "locations": [11390976, 11390977, 11390978, 11390979, 11390980, 11390981],
+      "name": "Bar",
       "player": 2,
-      "team" : 0,
-      "total_locations": 20
-    }
-  ],
-  "player_game": [
-    {
-      "team": 0,
-      "player": 1,
-      "game": "Archipelago"
-    },
-    {
-      "team": 0,
-      "player": 2,
-      "game": "The Messenger"
+      "team": 0
     }
   ]
 }

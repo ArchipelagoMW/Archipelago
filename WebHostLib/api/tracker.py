@@ -114,6 +114,8 @@ def tracker_data(tracker: UUID) -> dict[str, Any]:
     player_data: list[TrackerPlayerData] = []
     for team, player in all_players.items():
         for player in players:
+            if tracker_data.get_slot_info(player).type == SlotType.group:
+                continue
             player_data.append({
                 "team": team,
                 "player": player,
@@ -180,8 +182,10 @@ def static_tracker_data(tracker: UUID) -> dict[str, Any]:
         break
 
     player_data: list[StaticPlayerData] = []
-    for team, players in all_players.items():
+    for team, players in tracker_data.get_all_slots().items():
         for player in players:
+            if tracker_data.get_slot_info(player).type == SlotType.group:
+                continue
             locations = tracker_data.get_player_locations(player).keys()
             player_data.append({
                 "team": team,
