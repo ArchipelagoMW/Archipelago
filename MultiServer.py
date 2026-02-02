@@ -52,16 +52,17 @@ colorama.just_fix_windows_console()
 no_version = Version(0, 0, 0)
 assert isinstance(no_version, tuple)  # assert immutable
 
-DATA_STORAGE_MAX_INT_EXPONENT = 128
-DATA_STORAGE_MAX_INT_BITS = 128
-DATA_STORAGE_MAX_LIST_LEN = 1 * 1024 * 1024
-DATA_STORAGE_MAX_STRING_LEN = 1 * 1024 * 1024
-
 server_per_message_deflate_factory = ServerPerMessageDeflateFactory(
     server_max_window_bits=11,
     client_max_window_bits=11,
     compress_settings={"memLevel": 4},
 )
+
+class ServerLimits:
+    max_int_exponent: int = 128
+    max_int_bits: int = 128
+    max_list_len: int = 1 * 1024 * 1024
+    max_string_len: int = 1 * 1024 * 1024
 
 def operator_mod(lhs, rhs):
     if isinstance(lhs, str):
@@ -72,46 +73,46 @@ def operator_mod(lhs, rhs):
 def binop_isinstance(lhs: typing.Any, lhs_type: type, rhs: typing.Any, rhs_type: type):
     return isinstance(lhs, lhs_type) and isinstance(rhs, rhs_type)
 
-def operator_add(lhs, rhs):
+def operator_add(ctx: Context, lhs, rhs):
     match (lhs, rhs):
-        case (str(), str()) if len(lhs) + len(rhs) > DATA_STORAGE_MAX_STRING_LEN:
-            raise Exception(f"Result of string multiplication exceeds limit of {DATA_STORAGE_MAX_STRING_LEN} bytes")
-        case (list(), list()) if len(lhs) + len(rhs) > DATA_STORAGE_MAX_LIST_LEN:
-            raise Exception(f"Result of list addition exceeds limit of {DATA_STORAGE_MAX_LIST_LEN} elements")
+        case (str(), str()) if len(lhs) + len(rhs) > ctx.limits.max_string_len:
+            raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits.max_string_len} bytes")
+        case (list(), list()) if len(lhs) + len(rhs) > ctx.limits.max_list_len:
+            raise Exception(f"Result of list addition exceeds `max_list_len` limit of {ctx.limits.max_list_len} elements")
         case _:
             return lhs + rhs
 
-def operator_mul(lhs, rhs):
+def operator_mul(ctx: Context, lhs, rhs):
     match (lhs, rhs):
-        case (str(), int()) if len(lhs) * rhs > DATA_STORAGE_MAX_STRING_LEN:
-            raise Exception(f"Result of string multiplication exceeds limit of {DATA_STORAGE_MAX_STRING_LEN} bytes")
-        case (int(), str()) if lhs * len(rhs) > DATA_STORAGE_MAX_STRING_LEN:
-            raise Exception(f"Result of string multiplication exceeds limit of {DATA_STORAGE_MAX_STRING_LEN} bytes")
-        case (list(), int()) if len(lhs) * rhs > DATA_STORAGE_MAX_LIST_LEN:
-            raise Exception(f"Result of list multiplication exceeds limit of {DATA_STORAGE_MAX_LIST_LEN} elements")
-        case (int(), list()) if lhs * len(rhs) > DATA_STORAGE_MAX_LIST_LEN:
-            raise Exception(f"Result of list multiplication exceeds limit of {DATA_STORAGE_MAX_LIST_LEN} elements")
+        case (str(), int()) if len(lhs) * rhs > ctx.limits.max_string_len:
+            raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits.max_string_len} bytes")
+        case (int(), str()) if lhs * len(rhs) > ctx.limits.max_string_len:
+            raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits.max_string_len} bytes")
+        case (list(), int()) if len(lhs) * rhs > ctx.limits.max_list_len:
+            raise Exception(f"Result of list multiplication exceeds `max_list_len` limit of {ctx.limits.max_list_len} elements")
+        case (int(), list()) if lhs * len(rhs) > ctx.limits.max_list_len:
+            raise Exception(f"Result of list multiplication exceeds `max_list_len` limit of {ctx.limits.max_list_len} elements")
         case _:
             return lhs * rhs
 
-def operator_pow(base, exp):
+def operator_pow(ctx: Context, base, exp):
     match (base, exp):
         case (int(), int()) if abs(base) > 1 and exp > 1:
-            if math.ceil(math.log2(abs(base)) * exp) > DATA_STORAGE_MAX_INT_BITS:
-                raise Exception(f"Result of pow exceeds limit of {DATA_STORAGE_MAX_INT_BITS} bits")
+            if math.ceil(math.log2(abs(base)) * exp) > ctx.limits.max_int_bits:
+                raise Exception(f"Result of pow exceeds `max_int_bits` limit of {ctx.limits.max_int_bits} bits")
 
             return base ** exp
         case _:
             return base ** exp
 
-def operator_lshift(lhs, rhs):
-    if math.ceil(math.log2(lhs) + rhs) > DATA_STORAGE_MAX_INT_BITS:
-        raise Exception(f"Result of lshift exceeds limit of {DATA_STORAGE_MAX_INT_BITS} bits")
+def operator_lshift(ctx: Context, lhs, rhs):
+    if math.ceil(math.log2(lhs) + rhs) > ctx.limits.max_int_bits:
+        raise Exception(f"Result of lshift exceeds `max_int_bits` limit of {ctx.limits.max_int_bits} bits")
     
     return lhs << rhs
 
 
-def remove_from_list(container, value):
+def remove_from_list(ctx: Context, container, value):
     try:
         container.remove(value)
     except ValueError:
@@ -119,7 +120,7 @@ def remove_from_list(container, value):
     return container
 
 
-def pop_from_container(container, value):
+def pop_from_container(ctx: Context, container, value):
     try:
         container.pop(value)
     except ValueError:
@@ -127,7 +128,7 @@ def pop_from_container(container, value):
     return container
 
 
-def update_container_unique(container, entries):
+def update_container_unique(ctx: Context, container, entries):
     if isinstance(container, list):
         existing_container_as_set = set(container)
         container.extend([entry for entry in entries if entry not in existing_container_as_set])
@@ -154,23 +155,23 @@ def queue_gc():
 # functions callable on storable data on the server by clients
 modify_functions = {
     # generic:
-    "replace": lambda old, new: new,
-    "default": lambda old, new: old,
+    "replace": lambda ctx, old, new: new,
+    "default": lambda ctx, old, new: old,
     # numeric:
     "add": operator_add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
     "mul": operator_mul,
     "pow": operator_pow,
     "mod": operator_mod,
-    "floor": lambda value, _: math.floor(value),
-    "ceil": lambda value, _: math.ceil(value),
-    "max": max,
-    "min": min,
+    "floor": lambda ctx, value, _: math.floor(value),
+    "ceil": lambda ctx, value, _: math.ceil(value),
+    "max": lambda ctx, a, b: max(a, b),
+    "min": lambda ctx, a, b: min(a, b),
     # bitwise:
-    "xor": operator.xor,
-    "or": operator.or_,
-    "and": operator.and_,
+    "xor": lambda ctx, a, b: operator.xor(a, b),
+    "or": lambda ctx, a, b: operator.or_(a, b),
+    "and": lambda ctx, a, b: operator.and_(a, b),
     "left_shift": operator_lshift,
-    "right_shift": operator.rshift,
+    "right_shift": lambda ctx, a, b: operator.rshift(a, b),
     # lists/dicts:
     "remove": remove_from_list,
     "pop": pop_from_container,
@@ -294,6 +295,7 @@ class Context:
     non_hintable_names: typing.Dict[str, typing.AbstractSet[str]]
     spheres: typing.List[typing.Dict[int, typing.Set[int]]]
     """ each sphere is { player: { location_id, ... } } """
+    limits: ServerLimits
     logger: logging.Logger
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
@@ -359,6 +361,7 @@ class Context:
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
         self.read_data = {}
         self.spheres = []
+        self.limits = ServerLimits()
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
@@ -2225,8 +2228,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for operation in args["operations"]:
                 func = modify_functions[operation["operation"]]
                 tmp_value = func(value, operation["value"])
-                if isinstance(tmp_value, int) and tmp_value.bit_length() > DATA_STORAGE_MAX_INT_BITS:
-                    raise Exception(f"Result of operation exceeds limit of {DATA_STORAGE_MAX_INT_BITS} bits")
+                if isinstance(tmp_value, int) and tmp_value.bit_length() > ctx.limits.max_int_bits:
+                    raise Exception(f"Result of operation exceeds `max_int_bits` limit of {ctx.limits.max_int_bits} bits")
                 value = tmp_value
             ctx.stored_data[args["key"]] = args["value"] = value
             targets = set(ctx.stored_data_notification_clients[args["key"]])
