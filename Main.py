@@ -9,6 +9,7 @@ from typing import Any
 import zipfile
 import zlib
 
+from rule_builder.cached_world import CachedRuleBuilderWorld
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
 from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, flood_items, \
@@ -116,6 +117,12 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
     logger.info('Calculating Access Rules.')
     AutoWorld.call_all(multiworld, "set_rules")
+
+    # Convenience for CachedRuleBuilderWorld users: Ensure that caching setup function is called
+    # Can be removed once dependency system is improved
+    for player, world in multiworld.worlds.items():
+        if isinstance(world, CachedRuleBuilderWorld):
+            AutoWorld.call_single(multiworld, "register_dependencies", player)
 
     for player in multiworld.player_ids:
         exclusion_rules(multiworld, player, multiworld.worlds[player].options.exclude_locations.value)
