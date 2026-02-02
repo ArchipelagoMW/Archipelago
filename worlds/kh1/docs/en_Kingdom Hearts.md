@@ -39,7 +39,7 @@ When the player receives an item, your client will display a message displaying 
 
 ## What do I do if I encounter a bug with the game?
 
-Please reach out to Gicu#7034 on Discord.
+Please reach out to ssjgicu on Discord, or visit the #kingdom-hearts-1 channel on the Archipelago Discord server.
 
 ## Credits
 This is a collaborative effort from several individuals in the Kingdom Hearts community, but most of all, denhonator.
