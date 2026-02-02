@@ -5,7 +5,6 @@ import asyncio
 import collections
 import contextlib
 import copy
-import dataclasses
 import datetime
 import functools
 import hashlib
@@ -59,29 +58,11 @@ server_per_message_deflate_factory = ServerPerMessageDeflateFactory(
     compress_settings={"memLevel": 4},
 )
 
-@dataclasses.dataclass(slots=True)
-class ServerLimits:
-    max_int_exponent: int = 128
-    max_int_bits: int = 128
-    max_list_len: int = 1 * 1024 * 1024
-    max_string_len: int = 1 * 1024 * 1024
-
-    def has_key(self, key: str) -> bool:
-        return key in self.__slots__
-
-    def get(self, key: str) -> int:
-        if not self.has_key(key):
-            raise KeyError
-
-        return getattr(self, key)
-
-    def set(self, key: str, value: int):
-        if self.has_key(key):
-            setattr(self, key, value)
-    
-    def items(self):
-        for key in self.__slots__:
-            yield key, getattr(self, key)
+ServerLimits = typing.TypedDict('ServerLimits', {
+    'max_int_bits': int,
+    'max_list_len': int,
+    'max_string_len': int,
+})
 
 def operator_mod(lhs, rhs):
     if isinstance(lhs, str):
@@ -94,39 +75,39 @@ def binop_isinstance(lhs: typing.Any, lhs_type: type, rhs: typing.Any, rhs_type:
 
 def operator_add(ctx: Context, lhs, rhs):
     match (lhs, rhs):
-        case (str(), str()) if len(lhs) + len(rhs) > ctx.limits.max_string_len:
-            raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits.max_string_len} bytes")
-        case (list(), list()) if len(lhs) + len(rhs) > ctx.limits.max_list_len:
-            raise Exception(f"Result of list addition exceeds `max_list_len` limit of {ctx.limits.max_list_len} elements")
+        case (str(), str()) if len(lhs) + len(rhs) > ctx.limits['max_string_len']:
+            raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits['max_string_len']} characters")
+        case (list(), list()) if len(lhs) + len(rhs) > ctx.limits['max_list_len']:
+            raise Exception(f"Result of list addition exceeds `max_list_len` limit of {ctx.limits['max_list_len']} elements")
         case _:
             return lhs + rhs
 
 def operator_mul(ctx: Context, lhs, rhs):
     match (lhs, rhs):
-        case (str(), int()) if len(lhs) * rhs > ctx.limits.max_string_len:
-            raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits.max_string_len} bytes")
-        case (int(), str()) if lhs * len(rhs) > ctx.limits.max_string_len:
-            raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits.max_string_len} bytes")
-        case (list(), int()) if len(lhs) * rhs > ctx.limits.max_list_len:
-            raise Exception(f"Result of list multiplication exceeds `max_list_len` limit of {ctx.limits.max_list_len} elements")
-        case (int(), list()) if lhs * len(rhs) > ctx.limits.max_list_len:
-            raise Exception(f"Result of list multiplication exceeds `max_list_len` limit of {ctx.limits.max_list_len} elements")
+        case (str(), int()) if len(lhs) * rhs > ctx.limits['max_string_len']:
+            raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits['max_string_len']} characters")
+        case (int(), str()) if lhs * len(rhs) > ctx.limits['max_string_len']:
+            raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits['max_string_len']} characters")
+        case (list(), int()) if len(lhs) * rhs > ctx.limits['max_list_len']:
+            raise Exception(f"Result of list multiplication exceeds `max_list_len` limit of {ctx.limits['max_list_len']} elements")
+        case (int(), list()) if lhs * len(rhs) > ctx.limits['max_list_len']:
+            raise Exception(f"Result of list multiplication exceeds `max_list_len` limit of {ctx.limits['max_list_len']} elements")
         case _:
             return lhs * rhs
 
 def operator_pow(ctx: Context, base, exp):
     match (base, exp):
         case (int(), int()) if abs(base) > 1 and exp > 1:
-            if math.ceil(math.log2(abs(base)) * exp) > ctx.limits.max_int_bits:
-                raise Exception(f"Result of pow exceeds `max_int_bits` limit of {ctx.limits.max_int_bits} bits")
+            if math.ceil(math.log2(abs(base)) * exp) > ctx.limits['max_int_bits']:
+                raise Exception(f"Result of pow exceeds `max_int_bits` limit of {ctx.limits['max_int_bits']} bits")
 
             return base ** exp
         case _:
             return base ** exp
 
 def operator_lshift(ctx: Context, lhs, rhs):
-    if math.ceil(math.log2(lhs) + rhs) > ctx.limits.max_int_bits:
-        raise Exception(f"Result of lshift exceeds `max_int_bits` limit of {ctx.limits.max_int_bits} bits")
+    if math.ceil(math.log2(lhs) + rhs) > ctx.limits['max_int_bits']:
+        raise Exception(f"Result of lshift exceeds `max_int_bits` limit of {ctx.limits['max_int_bits']} bits")
     
     return lhs << rhs
 
@@ -315,13 +296,18 @@ class Context:
     spheres: typing.List[typing.Dict[int, typing.Set[int]]]
     """ each sphere is { player: { location_id, ... } } """
     limits: ServerLimits
-    limit_commands_enabled: bool = True
+    disable_limit_commands: bool
     logger: logging.Logger
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
                  countdown_mode: str = "auto", remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, 
-                 compatibility: int = 2, log_network: bool = False, logger: logging.Logger = logging.getLogger()):
+                 compatibility: int = 2, log_network: bool = False, logger: logging.Logger = logging.getLogger(),
+                 disable_limit_commands: bool = False,
+                 limit_max_int_bits: int = 128,
+                 limit_max_list_len: int = 1 * 1024 * 1024,
+                 limit_max_string_len: int = 1 * 1024 * 1024,
+                ):
         self.logger = logger
         super(Context, self).__init__()
         self.slot_info = {}
@@ -381,7 +367,12 @@ class Context:
         self.stored_data_notification_clients = collections.defaultdict(weakref.WeakSet)
         self.read_data = {}
         self.spheres = []
-        self.limits = ServerLimits()
+        self.limits = {
+            'max_int_bits': limit_max_int_bits,
+            'max_list_len': limit_max_list_len,
+            'max_string_len': limit_max_string_len,
+        }
+        self.disable_limit_commands = disable_limit_commands
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
@@ -2248,8 +2239,8 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             for operation in args["operations"]:
                 func = modify_functions[operation["operation"]]
                 tmp_value = func(value, operation["value"])
-                if isinstance(tmp_value, int) and tmp_value.bit_length() > ctx.limits.max_int_bits:
-                    raise Exception(f"Result of operation exceeds `max_int_bits` limit of {ctx.limits.max_int_bits} bits")
+                if isinstance(tmp_value, int) and tmp_value.bit_length() > ctx.limits['max_int_bits']:
+                    raise Exception(f"Result of operation exceeds `max_int_bits` limit of {ctx.limits['max_int_bits']} bits")
                 value = tmp_value
             ctx.stored_data[args["key"]] = args["value"] = value
             targets = set(ctx.stored_data_notification_clients[args["key"]])
@@ -2623,7 +2614,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_limits(self):
         """List all server limits and their values."""
-        if not self.ctx.limit_commands_enabled:
+        if self.ctx.disable_limit_commands:
             self.output("Limit commands are disabled.")
             return
 
@@ -2632,11 +2623,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     def _cmd_set_limit(self, key: str, value: str):
         """Set a single server limit."""
-        if not self.ctx.limit_commands_enabled:
+        if self.ctx.disable_limit_commands:
             self.output("Limit commands are disabled.")
             return
 
-        if not self.ctx.limits.has_key(key):
+        if not key in self.ctx.limits:
             self.output(f"Invalid limit `{key}`");
             return
 
@@ -2646,16 +2637,16 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(f"Limit value `{value}` is not a valid integer")
             return
 
-        self.ctx.limits.set(key, value_int)
+        self.ctx.limits[key] = value_int
         self.output(f"Set limit `{key} = {value_int}`")
 
     def _cmd_raise_limit(self, key: str, value: str):
         """Raise a single server limit by a given amount."""
-        if not self.ctx.limit_commands_enabled:
+        if self.ctx.disable_limit_commands:
             self.output("Limit commands are disabled.")
             return
         
-        if not self.ctx.limits.has_key(key):
+        if not key in self.ctx.limits:
             self.output(f"Invalid limit `{key}`");
             return
 
@@ -2665,9 +2656,9 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(f"Limit value `{value}` is not a valid integer")
             return
 
-        old_limit = self.ctx.limits.get(key)
+        old_limit = self.ctx.limits[key]
         new_limit = old_limit + value_int
-        self.ctx.limits.set(key, new_limit)
+        self.ctx.limits[key] = new_limit
         self.output(f"Raised limit `{key}` by `{value_int}`: `{old_limit}` -> `{new_limit}`")
 
 async def console(ctx: Context):
@@ -2756,6 +2747,14 @@ def parse_args() -> argparse.Namespace:
     #0 -> recommended for tournaments to force a level playing field, only allow an exact version match
     """)
     parser.add_argument('--log_network', default=defaults["log_network"], action="store_true")
+    parser.add_argument('--disable_limit_commands', default=defaults["disable_limit_commands"], action="store_true")
+    parser.add_argument('--limit_max_int_bits', default=defaults["limit_max_int_bits"], type=int,
+        help="limit allowed number of integer bits per data storage value")
+    parser.add_argument('--limit_max_list_len', default=defaults["limit_max_list_len"], type=int,
+        help="limit allowed number of elements per data storage value")
+    parser.add_argument('--limit_max_string_len', default=defaults["limit_max_string_len"], type=int,
+        help="limit allowed number of string characters per data storage value")
+
     args = parser.parse_args()
     return args
 
@@ -2802,7 +2801,12 @@ async def main(args: argparse.Namespace):
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.release_mode, args.collect_mode,
                   args.countdown_mode, args.remaining_mode,
-                  args.auto_shutdown, args.compatibility, args.log_network)
+                  args.auto_shutdown, args.compatibility, args.log_network,
+                  disable_limit_commands = args.disable_limit_commands,
+                  limit_max_int_bits = args.limit_max_int_bits,
+                  limit_max_list_len = args.limit_max_list_len,
+                  limit_max_string_len = args.limit_max_string_len,
+                 )
     data_filename = args.multidata
 
     if not data_filename:
