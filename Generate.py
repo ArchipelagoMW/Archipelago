@@ -242,9 +242,9 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                 # Use the cached settings object if it exists, otherwise roll settings within the try-catch
                 # Invariant: settings_cache[path] and weights_cache[path] have the same length
                 cached = settings_cache[path]
-                settingsObject: argparse.Namespace = (cached[doc_index] if cached else roll_settings(yaml, args.plando))
+                settings_object: argparse.Namespace = (cached[doc_index] if cached else roll_settings(yaml, args.plando))
 
-                for k, v in vars(settingsObject).items():
+                for k, v in vars(settings_object).items():
                     if v is not None:
                         try:
                             getattr(args, k)[player] = v
