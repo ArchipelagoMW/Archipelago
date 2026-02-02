@@ -5,6 +5,7 @@ import asyncio
 import collections
 import contextlib
 import copy
+import dataclasses
 import datetime
 import functools
 import hashlib
@@ -58,11 +59,29 @@ server_per_message_deflate_factory = ServerPerMessageDeflateFactory(
     compress_settings={"memLevel": 4},
 )
 
+@dataclasses.dataclass(slots=True)
 class ServerLimits:
     max_int_exponent: int = 128
     max_int_bits: int = 128
     max_list_len: int = 1 * 1024 * 1024
     max_string_len: int = 1 * 1024 * 1024
+
+    def has_key(self, key: str) -> bool:
+        return key in self.__slots__
+
+    def get(self, key: str) -> int:
+        if not self.has_key(key):
+            raise KeyError
+
+        return getattr(self, key)
+
+    def set(self, key: str, value: int):
+        if self.has_key(key):
+            setattr(self, key, value)
+    
+    def items(self):
+        for key in self.__slots__:
+            yield key, getattr(self, key)
 
 def operator_mod(lhs, rhs):
     if isinstance(lhs, str):
@@ -296,6 +315,7 @@ class Context:
     spheres: typing.List[typing.Dict[int, typing.Set[int]]]
     """ each sphere is { player: { location_id, ... } } """
     limits: ServerLimits
+    limit_commands_enabled: bool = True
     logger: logging.Logger
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
@@ -2601,6 +2621,54 @@ class ServerCommandProcessor(CommonCommandProcessor):
                         f"approximately totaling {Utils.format_SI_prefix(total, power=1024)}B")
         self.output("\n".join(texts))
 
+    def _cmd_limits(self):
+        """List all server limits and their values."""
+        if not self.ctx.limit_commands_enabled:
+            self.output("Limit commands are disabled.")
+            return
+
+        items = [f"{key} = {value}" for key, value in self.ctx.limits.items()]
+        self.output("\n".join(items))
+
+    def _cmd_set_limit(self, key: str, value: str):
+        """Set a single server limit."""
+        if not self.ctx.limit_commands_enabled:
+            self.output("Limit commands are disabled.")
+            return
+
+        if not self.ctx.limits.has_key(key):
+            self.output(f"Invalid limit `{key}`");
+            return
+
+        try:
+            value_int = int(value)
+        except:
+            self.output(f"Limit value `{value}` is not a valid integer")
+            return
+
+        self.ctx.limits.set(key, value_int)
+        self.output(f"Set limit `{key} = {value_int}`")
+
+    def _cmd_raise_limit(self, key: str, value: str):
+        """Raise a single server limit by a given amount."""
+        if not self.ctx.limit_commands_enabled:
+            self.output("Limit commands are disabled.")
+            return
+        
+        if not self.ctx.limits.has_key(key):
+            self.output(f"Invalid limit `{key}`");
+            return
+
+        try:
+            value_int = int(value)
+        except:
+            self.output(f"Limit value `{value}` is not a valid integer")
+            return
+
+        old_limit = self.ctx.limits.get(key)
+        new_limit = old_limit + value_int
+        self.ctx.limits.set(key, new_limit)
+        self.output(f"Raised limit `{key}` by `{value_int}`: `{old_limit}` -> `{new_limit}`")
 
 async def console(ctx: Context):
     import sys
