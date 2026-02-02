@@ -1,0 +1,8515 @@
+{
+	"death_logic_excluded_locations": [ "Entryway (MAP01) - Armor" ],
+	"filler_item_weight": 
+	{
+		"Armor": 39,
+		"Berserk": 11,
+		"Invulnerability": 10,
+		"Mega Armor": 23,
+		"Megasphere": 7,
+		"Partial invisibility": 18,
+		"Supercharge": 26
+	},
+	"item_name_groups": 
+	{
+		"Ammos": 
+		[
+			"Box of bullets",
+			"Box of rockets",
+			"Box of shotgun shells",
+			"Energy cell pack"
+		],
+		"Capacity upgrades": 
+		[
+			"Backpack",
+			"Bullet capacity",
+			"Energy cell capacity",
+			"Rocket capacity",
+			"Shell capacity"
+		],
+		"Computer area maps": 
+		[
+			"Barrels o' Fun (MAP23) - Computer area map",
+			"Bloodfalls (MAP25) - Computer area map",
+			"Circle of Death (MAP11) - Computer area map",
+			"Dead Simple (MAP07) - Computer area map",
+			"Downtown (MAP13) - Computer area map",
+			"Entryway (MAP01) - Computer area map",
+			"Gotcha! (MAP20) - Computer area map",
+			"Grosse (MAP32) - Computer area map",
+			"Icon of Sin (MAP30) - Computer area map",
+			"Industrial Zone (MAP15) - Computer area map",
+			"Monster Condo (MAP27) - Computer area map",
+			"Nirvana (MAP21) - Computer area map",
+			"Refueling Base (MAP10) - Computer area map",
+			"Suburbs (MAP16) - Computer area map",
+			"Tenements (MAP17) - Computer area map",
+			"The Abandoned Mines (MAP26) - Computer area map",
+			"The Catacombs (MAP22) - Computer area map",
+			"The Chasm (MAP24) - Computer area map",
+			"The Citadel (MAP19) - Computer area map",
+			"The Courtyard (MAP18) - Computer area map",
+			"The Crusher (MAP06) - Computer area map",
+			"The Factory (MAP12) - Computer area map",
+			"The Focus (MAP04) - Computer area map",
+			"The Gantlet (MAP03) - Computer area map",
+			"The Inmost Dens (MAP14) - Computer area map",
+			"The Living End (MAP29) - Computer area map",
+			"The Pit (MAP09) - Computer area map",
+			"The Spirit World (MAP28) - Computer area map",
+			"The Waste Tunnels (MAP05) - Computer area map",
+			"Tricks and Traps (MAP08) - Computer area map",
+			"Underhalls (MAP02) - Computer area map",
+			"Wolfenstein (MAP31) - Computer area map"
+		],
+		"Junk": 
+		[
+			"Box of bullets",
+			"Box of rockets",
+			"Box of shotgun shells",
+			"Energy cell pack",
+			"Medikit"
+		],
+		"Keys": 
+		[
+			"Barrels o' Fun (MAP23) - Yellow skull key",
+			"Bloodfalls (MAP25) - Blue skull key",
+			"Circle of Death (MAP11) - Blue keycard",
+			"Circle of Death (MAP11) - Red keycard",
+			"Downtown (MAP13) - Blue keycard",
+			"Downtown (MAP13) - Red keycard",
+			"Downtown (MAP13) - Yellow keycard",
+			"Industrial Zone (MAP15) - Blue keycard",
+			"Industrial Zone (MAP15) - Red keycard",
+			"Industrial Zone (MAP15) - Yellow keycard",
+			"Monster Condo (MAP27) - Blue skull key",
+			"Monster Condo (MAP27) - Red skull key",
+			"Monster Condo (MAP27) - Yellow skull key",
+			"Nirvana (MAP21) - Blue skull key",
+			"Nirvana (MAP21) - Red skull key",
+			"Nirvana (MAP21) - Yellow skull key",
+			"Refueling Base (MAP10) - Blue keycard",
+			"Refueling Base (MAP10) - Yellow keycard",
+			"Suburbs (MAP16) - Blue skull key",
+			"Suburbs (MAP16) - Red skull key",
+			"Tenements (MAP17) - Blue keycard",
+			"Tenements (MAP17) - Red keycard",
+			"Tenements (MAP17) - Yellow skull key",
+			"The Abandoned Mines (MAP26) - Blue keycard",
+			"The Abandoned Mines (MAP26) - Red keycard",
+			"The Abandoned Mines (MAP26) - Yellow keycard",
+			"The Catacombs (MAP22) - Blue skull key",
+			"The Catacombs (MAP22) - Red skull key",
+			"The Chasm (MAP24) - Blue keycard",
+			"The Chasm (MAP24) - Red keycard",
+			"The Citadel (MAP19) - Blue skull key",
+			"The Citadel (MAP19) - Red skull key",
+			"The Citadel (MAP19) - Yellow skull key",
+			"The Courtyard (MAP18) - Blue skull key",
+			"The Courtyard (MAP18) - Yellow skull key",
+			"The Crusher (MAP06) - Blue keycard",
+			"The Crusher (MAP06) - Red keycard",
+			"The Crusher (MAP06) - Yellow keycard",
+			"The Factory (MAP12) - Blue keycard",
+			"The Factory (MAP12) - Yellow keycard",
+			"The Focus (MAP04) - Blue keycard",
+			"The Focus (MAP04) - Red keycard",
+			"The Focus (MAP04) - Yellow keycard",
+			"The Gantlet (MAP03) - Blue keycard",
+			"The Gantlet (MAP03) - Red keycard",
+			"The Inmost Dens (MAP14) - Blue skull key",
+			"The Inmost Dens (MAP14) - Red skull key",
+			"The Pit (MAP09) - Blue keycard",
+			"The Pit (MAP09) - Yellow keycard",
+			"The Spirit World (MAP28) - Red skull key",
+			"The Spirit World (MAP28) - Yellow skull key",
+			"The Waste Tunnels (MAP05) - Blue keycard",
+			"The Waste Tunnels (MAP05) - Red keycard",
+			"The Waste Tunnels (MAP05) - Yellow keycard",
+			"Tricks and Traps (MAP08) - Red skull key",
+			"Tricks and Traps (MAP08) - Yellow skull key",
+			"Underhalls (MAP02) - Blue keycard",
+			"Underhalls (MAP02) - Red keycard"
+		],
+		"Levels": 
+		[
+			"Barrels o' Fun (MAP23)",
+			"Bloodfalls (MAP25)",
+			"Circle of Death (MAP11)",
+			"Dead Simple (MAP07)",
+			"Downtown (MAP13)",
+			"Entryway (MAP01)",
+			"Gotcha! (MAP20)",
+			"Grosse (MAP32)",
+			"Icon of Sin (MAP30)",
+			"Industrial Zone (MAP15)",
+			"Monster Condo (MAP27)",
+			"Nirvana (MAP21)",
+			"Refueling Base (MAP10)",
+			"Suburbs (MAP16)",
+			"Tenements (MAP17)",
+			"The Abandoned Mines (MAP26)",
+			"The Catacombs (MAP22)",
+			"The Chasm (MAP24)",
+			"The Citadel (MAP19)",
+			"The Courtyard (MAP18)",
+			"The Crusher (MAP06)",
+			"The Factory (MAP12)",
+			"The Focus (MAP04)",
+			"The Gantlet (MAP03)",
+			"The Inmost Dens (MAP14)",
+			"The Living End (MAP29)",
+			"The Pit (MAP09)",
+			"The Spirit World (MAP28)",
+			"The Waste Tunnels (MAP05)",
+			"Tricks and Traps (MAP08)",
+			"Underhalls (MAP02)",
+			"Wolfenstein (MAP31)"
+		],
+		"MAP01": [ "Entryway (MAP01)" ],
+		"MAP01 Map": [ "Entryway (MAP01) - Computer area map" ],
+		"MAP02": [ "Underhalls (MAP02)" ],
+		"MAP02 Blue": [ "Underhalls (MAP02) - Blue keycard" ],
+		"MAP02 Keys": 
+		[
+			"Underhalls (MAP02) - Blue keycard",
+			"Underhalls (MAP02) - Red keycard"
+		],
+		"MAP02 Map": [ "Underhalls (MAP02) - Computer area map" ],
+		"MAP02 Red": [ "Underhalls (MAP02) - Red keycard" ],
+		"MAP03": [ "The Gantlet (MAP03)" ],
+		"MAP03 Blue": [ "The Gantlet (MAP03) - Blue keycard" ],
+		"MAP03 Keys": 
+		[
+			"The Gantlet (MAP03) - Blue keycard",
+			"The Gantlet (MAP03) - Red keycard"
+		],
+		"MAP03 Map": [ "The Gantlet (MAP03) - Computer area map" ],
+		"MAP03 Red": [ "The Gantlet (MAP03) - Red keycard" ],
+		"MAP04": [ "The Focus (MAP04)" ],
+		"MAP04 Blue": [ "The Focus (MAP04) - Blue keycard" ],
+		"MAP04 Keys": 
+		[
+			"The Focus (MAP04) - Blue keycard",
+			"The Focus (MAP04) - Red keycard",
+			"The Focus (MAP04) - Yellow keycard"
+		],
+		"MAP04 Map": [ "The Focus (MAP04) - Computer area map" ],
+		"MAP04 Red": [ "The Focus (MAP04) - Red keycard" ],
+		"MAP04 Yellow": [ "The Focus (MAP04) - Yellow keycard" ],
+		"MAP05": [ "The Waste Tunnels (MAP05)" ],
+		"MAP05 Blue": [ "The Waste Tunnels (MAP05) - Blue keycard" ],
+		"MAP05 Keys": 
+		[
+			"The Waste Tunnels (MAP05) - Blue keycard",
+			"The Waste Tunnels (MAP05) - Red keycard",
+			"The Waste Tunnels (MAP05) - Yellow keycard"
+		],
+		"MAP05 Map": [ "The Waste Tunnels (MAP05) - Computer area map" ],
+		"MAP05 Red": [ "The Waste Tunnels (MAP05) - Red keycard" ],
+		"MAP05 Yellow": [ "The Waste Tunnels (MAP05) - Yellow keycard" ],
+		"MAP06": [ "The Crusher (MAP06)" ],
+		"MAP06 Blue": [ "The Crusher (MAP06) - Blue keycard" ],
+		"MAP06 Keys": 
+		[
+			"The Crusher (MAP06) - Blue keycard",
+			"The Crusher (MAP06) - Red keycard",
+			"The Crusher (MAP06) - Yellow keycard"
+		],
+		"MAP06 Map": [ "The Crusher (MAP06) - Computer area map" ],
+		"MAP06 Red": [ "The Crusher (MAP06) - Red keycard" ],
+		"MAP06 Yellow": [ "The Crusher (MAP06) - Yellow keycard" ],
+		"MAP07": [ "Dead Simple (MAP07)" ],
+		"MAP07 Map": [ "Dead Simple (MAP07) - Computer area map" ],
+		"MAP08": [ "Tricks and Traps (MAP08)" ],
+		"MAP08 Keys": 
+		[
+			"Tricks and Traps (MAP08) - Red skull key",
+			"Tricks and Traps (MAP08) - Yellow skull key"
+		],
+		"MAP08 Map": [ "Tricks and Traps (MAP08) - Computer area map" ],
+		"MAP08 Red": [ "Tricks and Traps (MAP08) - Red skull key" ],
+		"MAP08 Yellow": [ "Tricks and Traps (MAP08) - Yellow skull key" ],
+		"MAP09": [ "The Pit (MAP09)" ],
+		"MAP09 Blue": [ "The Pit (MAP09) - Blue keycard" ],
+		"MAP09 Keys": [ "The Pit (MAP09) - Blue keycard", "The Pit (MAP09) - Yellow keycard" ],
+		"MAP09 Map": [ "The Pit (MAP09) - Computer area map" ],
+		"MAP09 Yellow": [ "The Pit (MAP09) - Yellow keycard" ],
+		"MAP10": [ "Refueling Base (MAP10)" ],
+		"MAP10 Blue": [ "Refueling Base (MAP10) - Blue keycard" ],
+		"MAP10 Keys": 
+		[
+			"Refueling Base (MAP10) - Blue keycard",
+			"Refueling Base (MAP10) - Yellow keycard"
+		],
+		"MAP10 Map": [ "Refueling Base (MAP10) - Computer area map" ],
+		"MAP10 Yellow": [ "Refueling Base (MAP10) - Yellow keycard" ],
+		"MAP11": [ "Circle of Death (MAP11)" ],
+		"MAP11 Blue": [ "Circle of Death (MAP11) - Blue keycard" ],
+		"MAP11 Keys": 
+		[
+			"Circle of Death (MAP11) - Blue keycard",
+			"Circle of Death (MAP11) - Red keycard"
+		],
+		"MAP11 Map": [ "Circle of Death (MAP11) - Computer area map" ],
+		"MAP11 Red": [ "Circle of Death (MAP11) - Red keycard" ],
+		"MAP12": [ "The Factory (MAP12)" ],
+		"MAP12 Blue": [ "The Factory (MAP12) - Blue keycard" ],
+		"MAP12 Keys": 
+		[
+			"The Factory (MAP12) - Blue keycard",
+			"The Factory (MAP12) - Yellow keycard"
+		],
+		"MAP12 Map": [ "The Factory (MAP12) - Computer area map" ],
+		"MAP12 Yellow": [ "The Factory (MAP12) - Yellow keycard" ],
+		"MAP13": [ "Downtown (MAP13)" ],
+		"MAP13 Blue": [ "Downtown (MAP13) - Blue keycard" ],
+		"MAP13 Keys": 
+		[
+			"Downtown (MAP13) - Blue keycard",
+			"Downtown (MAP13) - Red keycard",
+			"Downtown (MAP13) - Yellow keycard"
+		],
+		"MAP13 Map": [ "Downtown (MAP13) - Computer area map" ],
+		"MAP13 Red": [ "Downtown (MAP13) - Red keycard" ],
+		"MAP13 Yellow": [ "Downtown (MAP13) - Yellow keycard" ],
+		"MAP14": [ "The Inmost Dens (MAP14)" ],
+		"MAP14 Blue": [ "The Inmost Dens (MAP14) - Blue skull key" ],
+		"MAP14 Keys": 
+		[
+			"The Inmost Dens (MAP14) - Blue skull key",
+			"The Inmost Dens (MAP14) - Red skull key"
+		],
+		"MAP14 Map": [ "The Inmost Dens (MAP14) - Computer area map" ],
+		"MAP14 Red": [ "The Inmost Dens (MAP14) - Red skull key" ],
+		"MAP15": [ "Industrial Zone (MAP15)" ],
+		"MAP15 Blue": [ "Industrial Zone (MAP15) - Blue keycard" ],
+		"MAP15 Keys": 
+		[
+			"Industrial Zone (MAP15) - Blue keycard",
+			"Industrial Zone (MAP15) - Red keycard",
+			"Industrial Zone (MAP15) - Yellow keycard"
+		],
+		"MAP15 Map": [ "Industrial Zone (MAP15) - Computer area map" ],
+		"MAP15 Red": [ "Industrial Zone (MAP15) - Red keycard" ],
+		"MAP15 Yellow": [ "Industrial Zone (MAP15) - Yellow keycard" ],
+		"MAP16": [ "Suburbs (MAP16)" ],
+		"MAP16 Blue": [ "Suburbs (MAP16) - Blue skull key" ],
+		"MAP16 Keys": [ "Suburbs (MAP16) - Blue skull key", "Suburbs (MAP16) - Red skull key" ],
+		"MAP16 Map": [ "Suburbs (MAP16) - Computer area map" ],
+		"MAP16 Red": [ "Suburbs (MAP16) - Red skull key" ],
+		"MAP17": [ "Tenements (MAP17)" ],
+		"MAP17 Blue": [ "Tenements (MAP17) - Blue keycard" ],
+		"MAP17 Keys": 
+		[
+			"Tenements (MAP17) - Blue keycard",
+			"Tenements (MAP17) - Red keycard",
+			"Tenements (MAP17) - Yellow skull key"
+		],
+		"MAP17 Map": [ "Tenements (MAP17) - Computer area map" ],
+		"MAP17 Red": [ "Tenements (MAP17) - Red keycard" ],
+		"MAP17 Yellow": [ "Tenements (MAP17) - Yellow skull key" ],
+		"MAP18": [ "The Courtyard (MAP18)" ],
+		"MAP18 Blue": [ "The Courtyard (MAP18) - Blue skull key" ],
+		"MAP18 Keys": 
+		[
+			"The Courtyard (MAP18) - Blue skull key",
+			"The Courtyard (MAP18) - Yellow skull key"
+		],
+		"MAP18 Map": [ "The Courtyard (MAP18) - Computer area map" ],
+		"MAP18 Yellow": [ "The Courtyard (MAP18) - Yellow skull key" ],
+		"MAP19": [ "The Citadel (MAP19)" ],
+		"MAP19 Blue": [ "The Citadel (MAP19) - Blue skull key" ],
+		"MAP19 Keys": 
+		[
+			"The Citadel (MAP19) - Blue skull key",
+			"The Citadel (MAP19) - Red skull key",
+			"The Citadel (MAP19) - Yellow skull key"
+		],
+		"MAP19 Map": [ "The Citadel (MAP19) - Computer area map" ],
+		"MAP19 Red": [ "The Citadel (MAP19) - Red skull key" ],
+		"MAP19 Yellow": [ "The Citadel (MAP19) - Yellow skull key" ],
+		"MAP20": [ "Gotcha! (MAP20)" ],
+		"MAP20 Map": [ "Gotcha! (MAP20) - Computer area map" ],
+		"MAP21": [ "Nirvana (MAP21)" ],
+		"MAP21 Blue": [ "Nirvana (MAP21) - Blue skull key" ],
+		"MAP21 Keys": 
+		[
+			"Nirvana (MAP21) - Blue skull key",
+			"Nirvana (MAP21) - Red skull key",
+			"Nirvana (MAP21) - Yellow skull key"
+		],
+		"MAP21 Map": [ "Nirvana (MAP21) - Computer area map" ],
+		"MAP21 Red": [ "Nirvana (MAP21) - Red skull key" ],
+		"MAP21 Yellow": [ "Nirvana (MAP21) - Yellow skull key" ],
+		"MAP22": [ "The Catacombs (MAP22)" ],
+		"MAP22 Blue": [ "The Catacombs (MAP22) - Blue skull key" ],
+		"MAP22 Keys": 
+		[
+			"The Catacombs (MAP22) - Blue skull key",
+			"The Catacombs (MAP22) - Red skull key"
+		],
+		"MAP22 Map": [ "The Catacombs (MAP22) - Computer area map" ],
+		"MAP22 Red": [ "The Catacombs (MAP22) - Red skull key" ],
+		"MAP23": [ "Barrels o' Fun (MAP23)" ],
+		"MAP23 Keys": [ "Barrels o' Fun (MAP23) - Yellow skull key" ],
+		"MAP23 Map": [ "Barrels o' Fun (MAP23) - Computer area map" ],
+		"MAP23 Yellow": [ "Barrels o' Fun (MAP23) - Yellow skull key" ],
+		"MAP24": [ "The Chasm (MAP24)" ],
+		"MAP24 Blue": [ "The Chasm (MAP24) - Blue keycard" ],
+		"MAP24 Keys": [ "The Chasm (MAP24) - Blue keycard", "The Chasm (MAP24) - Red keycard" ],
+		"MAP24 Map": [ "The Chasm (MAP24) - Computer area map" ],
+		"MAP24 Red": [ "The Chasm (MAP24) - Red keycard" ],
+		"MAP25": [ "Bloodfalls (MAP25)" ],
+		"MAP25 Blue": [ "Bloodfalls (MAP25) - Blue skull key" ],
+		"MAP25 Keys": [ "Bloodfalls (MAP25) - Blue skull key" ],
+		"MAP25 Map": [ "Bloodfalls (MAP25) - Computer area map" ],
+		"MAP26": [ "The Abandoned Mines (MAP26)" ],
+		"MAP26 Blue": [ "The Abandoned Mines (MAP26) - Blue keycard" ],
+		"MAP26 Keys": 
+		[
+			"The Abandoned Mines (MAP26) - Blue keycard",
+			"The Abandoned Mines (MAP26) - Red keycard",
+			"The Abandoned Mines (MAP26) - Yellow keycard"
+		],
+		"MAP26 Map": [ "The Abandoned Mines (MAP26) - Computer area map" ],
+		"MAP26 Red": [ "The Abandoned Mines (MAP26) - Red keycard" ],
+		"MAP26 Yellow": [ "The Abandoned Mines (MAP26) - Yellow keycard" ],
+		"MAP27": [ "Monster Condo (MAP27)" ],
+		"MAP27 Blue": [ "Monster Condo (MAP27) - Blue skull key" ],
+		"MAP27 Keys": 
+		[
+			"Monster Condo (MAP27) - Blue skull key",
+			"Monster Condo (MAP27) - Red skull key",
+			"Monster Condo (MAP27) - Yellow skull key"
+		],
+		"MAP27 Map": [ "Monster Condo (MAP27) - Computer area map" ],
+		"MAP27 Red": [ "Monster Condo (MAP27) - Red skull key" ],
+		"MAP27 Yellow": [ "Monster Condo (MAP27) - Yellow skull key" ],
+		"MAP28": [ "The Spirit World (MAP28)" ],
+		"MAP28 Keys": 
+		[
+			"The Spirit World (MAP28) - Red skull key",
+			"The Spirit World (MAP28) - Yellow skull key"
+		],
+		"MAP28 Map": [ "The Spirit World (MAP28) - Computer area map" ],
+		"MAP28 Red": [ "The Spirit World (MAP28) - Red skull key" ],
+		"MAP28 Yellow": [ "The Spirit World (MAP28) - Yellow skull key" ],
+		"MAP29": [ "The Living End (MAP29)" ],
+		"MAP29 Map": [ "The Living End (MAP29) - Computer area map" ],
+		"MAP30": [ "Icon of Sin (MAP30)" ],
+		"MAP30 Map": [ "Icon of Sin (MAP30) - Computer area map" ],
+		"MAP31": [ "Wolfenstein (MAP31)" ],
+		"MAP31 Map": [ "Wolfenstein (MAP31) - Computer area map" ],
+		"MAP32": [ "Grosse (MAP32)" ],
+		"MAP32 Map": [ "Grosse (MAP32) - Computer area map" ],
+		"Powerups": 
+		[
+			"Armor",
+			"Berserk",
+			"Invulnerability",
+			"Light amplification visor",
+			"Mega Armor",
+			"Megasphere",
+			"Partial invisibility",
+			"Radiation shielding suit",
+			"Supercharge"
+		],
+		"Weapons": 
+		[
+			"BFG9000",
+			"Chaingun",
+			"Chainsaw",
+			"Plasma gun",
+			"Rocket launcher",
+			"Shotgun",
+			"Super Shotgun"
+		]
+	},
+	"item_table": 
+	{
+		"10100000": 
+		{
+			"_name": "Entryway (MAP01)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 1, 1 ]
+		},
+		"10102026": 
+		{
+			"_name": "Entryway (MAP01) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 1, 1 ]
+		},
+		"10199999": 
+		{
+			"_name": "Entryway (MAP01) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 1, 1 ]
+		},
+		"10200000": 
+		{
+			"_name": "Underhalls (MAP02)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 1, 2 ]
+		},
+		"10200005": 
+		{
+			"_name": "Underhalls (MAP02) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 1, 2 ]
+		},
+		"10200013": 
+		{
+			"_name": "Underhalls (MAP02) - Red keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 13,
+			"exmx": [ 1, 2 ]
+		},
+		"10202026": 
+		{
+			"_name": "Underhalls (MAP02) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 1, 2 ]
+		},
+		"10299999": 
+		{
+			"_name": "Underhalls (MAP02) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 1, 2 ]
+		},
+		"10300000": 
+		{
+			"_name": "The Gantlet (MAP03)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 1, 3 ]
+		},
+		"10300005": 
+		{
+			"_name": "The Gantlet (MAP03) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 1, 3 ]
+		},
+		"10300013": 
+		{
+			"_name": "The Gantlet (MAP03) - Red keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 13,
+			"exmx": [ 1, 3 ]
+		},
+		"10302026": 
+		{
+			"_name": "The Gantlet (MAP03) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 1, 3 ]
+		},
+		"10399999": 
+		{
+			"_name": "The Gantlet (MAP03) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 1, 3 ]
+		},
+		"10400000": 
+		{
+			"_name": "The Focus (MAP04)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 1, 4 ]
+		},
+		"10400005": 
+		{
+			"_name": "The Focus (MAP04) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 1, 4 ]
+		},
+		"10400006": 
+		{
+			"_name": "The Focus (MAP04) - Yellow keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 6,
+			"exmx": [ 1, 4 ]
+		},
+		"10400013": 
+		{
+			"_name": "The Focus (MAP04) - Red keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 13,
+			"exmx": [ 1, 4 ]
+		},
+		"10402026": 
+		{
+			"_name": "The Focus (MAP04) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 1, 4 ]
+		},
+		"10499999": 
+		{
+			"_name": "The Focus (MAP04) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 1, 4 ]
+		},
+		"10500000": 
+		{
+			"_name": "The Waste Tunnels (MAP05)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 1, 5 ]
+		},
+		"10500005": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 1, 5 ]
+		},
+		"10500006": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Yellow keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 6,
+			"exmx": [ 1, 5 ]
+		},
+		"10500013": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Red keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 13,
+			"exmx": [ 1, 5 ]
+		},
+		"10502026": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 1, 5 ]
+		},
+		"10599999": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 1, 5 ]
+		},
+		"10600000": 
+		{
+			"_name": "The Crusher (MAP06)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 1, 6 ]
+		},
+		"10600005": 
+		{
+			"_name": "The Crusher (MAP06) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 1, 6 ]
+		},
+		"10600006": 
+		{
+			"_name": "The Crusher (MAP06) - Yellow keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 6,
+			"exmx": [ 1, 6 ]
+		},
+		"10600013": 
+		{
+			"_name": "The Crusher (MAP06) - Red keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 13,
+			"exmx": [ 1, 6 ]
+		},
+		"10602026": 
+		{
+			"_name": "The Crusher (MAP06) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 1, 6 ]
+		},
+		"10699999": 
+		{
+			"_name": "The Crusher (MAP06) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 1, 6 ]
+		},
+		"10700000": 
+		{
+			"_name": "Dead Simple (MAP07)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 1, 7 ]
+		},
+		"10702026": 
+		{
+			"_name": "Dead Simple (MAP07) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 1, 7 ]
+		},
+		"10799999": 
+		{
+			"_name": "Dead Simple (MAP07) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 1, 7 ]
+		},
+		"10800000": 
+		{
+			"_name": "Tricks and Traps (MAP08)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 1, 8 ]
+		},
+		"10800038": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Red skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 38,
+			"exmx": [ 1, 8 ]
+		},
+		"10800039": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Yellow skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 39,
+			"exmx": [ 1, 8 ]
+		},
+		"10802026": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 1, 8 ]
+		},
+		"10899999": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 1, 8 ]
+		},
+		"10900000": 
+		{
+			"_name": "The Pit (MAP09)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 1, 9 ]
+		},
+		"10900005": 
+		{
+			"_name": "The Pit (MAP09) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 1, 9 ]
+		},
+		"10900006": 
+		{
+			"_name": "The Pit (MAP09) - Yellow keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 6,
+			"exmx": [ 1, 9 ]
+		},
+		"10902026": 
+		{
+			"_name": "The Pit (MAP09) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 1, 9 ]
+		},
+		"10999999": 
+		{
+			"_name": "The Pit (MAP09) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 1, 9 ]
+		},
+		"11000000": 
+		{
+			"_name": "Refueling Base (MAP10)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 1, 10 ]
+		},
+		"11000005": 
+		{
+			"_name": "Refueling Base (MAP10) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 1, 10 ]
+		},
+		"11000006": 
+		{
+			"_name": "Refueling Base (MAP10) - Yellow keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 6,
+			"exmx": [ 1, 10 ]
+		},
+		"11002026": 
+		{
+			"_name": "Refueling Base (MAP10) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 1, 10 ]
+		},
+		"11099999": 
+		{
+			"_name": "Refueling Base (MAP10) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 1, 10 ]
+		},
+		"11100000": 
+		{
+			"_name": "Circle of Death (MAP11)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 1, 11 ]
+		},
+		"11100005": 
+		{
+			"_name": "Circle of Death (MAP11) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 1, 11 ]
+		},
+		"11100013": 
+		{
+			"_name": "Circle of Death (MAP11) - Red keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 13,
+			"exmx": [ 1, 11 ]
+		},
+		"11102026": 
+		{
+			"_name": "Circle of Death (MAP11) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 1, 11 ]
+		},
+		"11199999": 
+		{
+			"_name": "Circle of Death (MAP11) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 1, 11 ]
+		},
+		"17": 
+		{
+			"_name": "Energy cell pack",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 17
+		},
+		"2001": 
+		{
+			"_name": "Shotgun",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 2001
+		},
+		"2002": 
+		{
+			"_name": "Chaingun",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 2002
+		},
+		"2003": 
+		{
+			"_name": "Rocket launcher",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 2003
+		},
+		"2004": 
+		{
+			"_name": "Plasma gun",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 2004
+		},
+		"2005": 
+		{
+			"_name": "Chainsaw",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 2005
+		},
+		"2006": 
+		{
+			"_name": "BFG9000",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 2006
+		},
+		"20100000": 
+		{
+			"_name": "The Factory (MAP12)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 2, 1 ]
+		},
+		"20100005": 
+		{
+			"_name": "The Factory (MAP12) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 2, 1 ]
+		},
+		"20100006": 
+		{
+			"_name": "The Factory (MAP12) - Yellow keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 6,
+			"exmx": [ 2, 1 ]
+		},
+		"20102026": 
+		{
+			"_name": "The Factory (MAP12) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 2, 1 ]
+		},
+		"2012": 
+		{
+			"_name": "Medikit",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2012
+		},
+		"2013": 
+		{
+			"_name": "Supercharge",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2013
+		},
+		"2018": 
+		{
+			"_name": "Armor",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2018
+		},
+		"2019": 
+		{
+			"_name": "Mega Armor",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2019
+		},
+		"20199999": 
+		{
+			"_name": "The Factory (MAP12) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 2, 1 ]
+		},
+		"20200000": 
+		{
+			"_name": "Downtown (MAP13)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 2, 2 ]
+		},
+		"20200005": 
+		{
+			"_name": "Downtown (MAP13) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 2, 2 ]
+		},
+		"20200006": 
+		{
+			"_name": "Downtown (MAP13) - Yellow keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 6,
+			"exmx": [ 2, 2 ]
+		},
+		"20200013": 
+		{
+			"_name": "Downtown (MAP13) - Red keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 13,
+			"exmx": [ 2, 2 ]
+		},
+		"20202026": 
+		{
+			"_name": "Downtown (MAP13) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 2, 2 ]
+		},
+		"2022": 
+		{
+			"_name": "Invulnerability",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2022
+		},
+		"2023": 
+		{
+			"_name": "Berserk",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2023
+		},
+		"2024": 
+		{
+			"_name": "Partial invisibility",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2024
+		},
+		"2025": 
+		{
+			"_name": "Radiation shielding suit",
+			"classification": 0,
+			"doom_type": 2025
+		},
+		"20299999": 
+		{
+			"_name": "Downtown (MAP13) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 2, 2 ]
+		},
+		"20300000": 
+		{
+			"_name": "The Inmost Dens (MAP14)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 2, 3 ]
+		},
+		"20300038": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Red skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 38,
+			"exmx": [ 2, 3 ]
+		},
+		"20300040": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Blue skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 40,
+			"exmx": [ 2, 3 ]
+		},
+		"20302026": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 2, 3 ]
+		},
+		"20399999": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 2, 3 ]
+		},
+		"20400000": 
+		{
+			"_name": "Industrial Zone (MAP15)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 2, 4 ]
+		},
+		"20400005": 
+		{
+			"_name": "Industrial Zone (MAP15) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 2, 4 ]
+		},
+		"20400006": 
+		{
+			"_name": "Industrial Zone (MAP15) - Yellow keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 6,
+			"exmx": [ 2, 4 ]
+		},
+		"20400013": 
+		{
+			"_name": "Industrial Zone (MAP15) - Red keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 13,
+			"exmx": [ 2, 4 ]
+		},
+		"20402026": 
+		{
+			"_name": "Industrial Zone (MAP15) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 2, 4 ]
+		},
+		"2045": 
+		{
+			"_name": "Light amplification visor",
+			"classification": 0,
+			"doom_type": 2045
+		},
+		"2046": 
+		{
+			"_name": "Box of rockets",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2046
+		},
+		"2048": 
+		{
+			"_name": "Box of bullets",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2048
+		},
+		"2049": 
+		{
+			"_name": "Box of shotgun shells",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2049
+		},
+		"20499999": 
+		{
+			"_name": "Industrial Zone (MAP15) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 2, 4 ]
+		},
+		"20500000": 
+		{
+			"_name": "Suburbs (MAP16)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 2, 5 ]
+		},
+		"20500038": 
+		{
+			"_name": "Suburbs (MAP16) - Red skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 38,
+			"exmx": [ 2, 5 ]
+		},
+		"20500040": 
+		{
+			"_name": "Suburbs (MAP16) - Blue skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 40,
+			"exmx": [ 2, 5 ]
+		},
+		"20502026": 
+		{
+			"_name": "Suburbs (MAP16) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 2, 5 ]
+		},
+		"20599999": 
+		{
+			"_name": "Suburbs (MAP16) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 2, 5 ]
+		},
+		"20600000": 
+		{
+			"_name": "Tenements (MAP17)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 2, 6 ]
+		},
+		"20600005": 
+		{
+			"_name": "Tenements (MAP17) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 2, 6 ]
+		},
+		"20600013": 
+		{
+			"_name": "Tenements (MAP17) - Red keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 13,
+			"exmx": [ 2, 6 ]
+		},
+		"20600039": 
+		{
+			"_name": "Tenements (MAP17) - Yellow skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 39,
+			"exmx": [ 2, 6 ]
+		},
+		"20602026": 
+		{
+			"_name": "Tenements (MAP17) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 2, 6 ]
+		},
+		"20699999": 
+		{
+			"_name": "Tenements (MAP17) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 2, 6 ]
+		},
+		"20700000": 
+		{
+			"_name": "The Courtyard (MAP18)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 2, 7 ]
+		},
+		"20700039": 
+		{
+			"_name": "The Courtyard (MAP18) - Yellow skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 39,
+			"exmx": [ 2, 7 ]
+		},
+		"20700040": 
+		{
+			"_name": "The Courtyard (MAP18) - Blue skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 40,
+			"exmx": [ 2, 7 ]
+		},
+		"20702026": 
+		{
+			"_name": "The Courtyard (MAP18) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 2, 7 ]
+		},
+		"20799999": 
+		{
+			"_name": "The Courtyard (MAP18) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 2, 7 ]
+		},
+		"20800000": 
+		{
+			"_name": "The Citadel (MAP19)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 2, 8 ]
+		},
+		"20800038": 
+		{
+			"_name": "The Citadel (MAP19) - Red skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 38,
+			"exmx": [ 2, 8 ]
+		},
+		"20800039": 
+		{
+			"_name": "The Citadel (MAP19) - Yellow skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 39,
+			"exmx": [ 2, 8 ]
+		},
+		"20800040": 
+		{
+			"_name": "The Citadel (MAP19) - Blue skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 40,
+			"exmx": [ 2, 8 ]
+		},
+		"20802026": 
+		{
+			"_name": "The Citadel (MAP19) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 2, 8 ]
+		},
+		"20899999": 
+		{
+			"_name": "The Citadel (MAP19) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 2, 8 ]
+		},
+		"20900000": 
+		{
+			"_name": "Gotcha! (MAP20)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 2, 9 ]
+		},
+		"20902026": 
+		{
+			"_name": "Gotcha! (MAP20) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 2, 9 ]
+		},
+		"20999999": 
+		{
+			"_name": "Gotcha! (MAP20) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 2, 9 ]
+		},
+		"30100000": 
+		{
+			"_name": "Nirvana (MAP21)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 3, 1 ]
+		},
+		"30100038": 
+		{
+			"_name": "Nirvana (MAP21) - Red skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 38,
+			"exmx": [ 3, 1 ]
+		},
+		"30100039": 
+		{
+			"_name": "Nirvana (MAP21) - Yellow skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 39,
+			"exmx": [ 3, 1 ]
+		},
+		"30100040": 
+		{
+			"_name": "Nirvana (MAP21) - Blue skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 40,
+			"exmx": [ 3, 1 ]
+		},
+		"30102026": 
+		{
+			"_name": "Nirvana (MAP21) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 3, 1 ]
+		},
+		"30199999": 
+		{
+			"_name": "Nirvana (MAP21) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 3, 1 ]
+		},
+		"30200000": 
+		{
+			"_name": "The Catacombs (MAP22)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 3, 2 ]
+		},
+		"30200038": 
+		{
+			"_name": "The Catacombs (MAP22) - Red skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 38,
+			"exmx": [ 3, 2 ]
+		},
+		"30200040": 
+		{
+			"_name": "The Catacombs (MAP22) - Blue skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 40,
+			"exmx": [ 3, 2 ]
+		},
+		"30202026": 
+		{
+			"_name": "The Catacombs (MAP22) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 3, 2 ]
+		},
+		"30299999": 
+		{
+			"_name": "The Catacombs (MAP22) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 3, 2 ]
+		},
+		"30300000": 
+		{
+			"_name": "Barrels o' Fun (MAP23)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 3, 3 ]
+		},
+		"30300039": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Yellow skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 39,
+			"exmx": [ 3, 3 ]
+		},
+		"30302026": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 3, 3 ]
+		},
+		"30399999": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 3, 3 ]
+		},
+		"30400000": 
+		{
+			"_name": "The Chasm (MAP24)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 3, 4 ]
+		},
+		"30400005": 
+		{
+			"_name": "The Chasm (MAP24) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 3, 4 ]
+		},
+		"30400013": 
+		{
+			"_name": "The Chasm (MAP24) - Red keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 13,
+			"exmx": [ 3, 4 ]
+		},
+		"30402026": 
+		{
+			"_name": "The Chasm (MAP24) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 3, 4 ]
+		},
+		"30499999": 
+		{
+			"_name": "The Chasm (MAP24) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 3, 4 ]
+		},
+		"30500000": 
+		{
+			"_name": "Bloodfalls (MAP25)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 3, 5 ]
+		},
+		"30500040": 
+		{
+			"_name": "Bloodfalls (MAP25) - Blue skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 40,
+			"exmx": [ 3, 5 ]
+		},
+		"30502026": 
+		{
+			"_name": "Bloodfalls (MAP25) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 3, 5 ]
+		},
+		"30599999": 
+		{
+			"_name": "Bloodfalls (MAP25) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 3, 5 ]
+		},
+		"30600000": 
+		{
+			"_name": "The Abandoned Mines (MAP26)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 3, 6 ]
+		},
+		"30600005": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Blue keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 5,
+			"exmx": [ 3, 6 ]
+		},
+		"30600006": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Yellow keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 6,
+			"exmx": [ 3, 6 ]
+		},
+		"30600013": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Red keycard",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 13,
+			"exmx": [ 3, 6 ]
+		},
+		"30602026": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 3, 6 ]
+		},
+		"30699999": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 3, 6 ]
+		},
+		"30700000": 
+		{
+			"_name": "Monster Condo (MAP27)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 3, 7 ]
+		},
+		"30700038": 
+		{
+			"_name": "Monster Condo (MAP27) - Red skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 38,
+			"exmx": [ 3, 7 ]
+		},
+		"30700039": 
+		{
+			"_name": "Monster Condo (MAP27) - Yellow skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 39,
+			"exmx": [ 3, 7 ]
+		},
+		"30700040": 
+		{
+			"_name": "Monster Condo (MAP27) - Blue skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 40,
+			"exmx": [ 3, 7 ]
+		},
+		"30702026": 
+		{
+			"_name": "Monster Condo (MAP27) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 3, 7 ]
+		},
+		"30799999": 
+		{
+			"_name": "Monster Condo (MAP27) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 3, 7 ]
+		},
+		"30800000": 
+		{
+			"_name": "The Spirit World (MAP28)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 3, 8 ]
+		},
+		"30800038": 
+		{
+			"_name": "The Spirit World (MAP28) - Red skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 38,
+			"exmx": [ 3, 8 ]
+		},
+		"30800039": 
+		{
+			"_name": "The Spirit World (MAP28) - Yellow skull key",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 39,
+			"exmx": [ 3, 8 ]
+		},
+		"30802026": 
+		{
+			"_name": "The Spirit World (MAP28) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 3, 8 ]
+		},
+		"30899999": 
+		{
+			"_name": "The Spirit World (MAP28) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 3, 8 ]
+		},
+		"30900000": 
+		{
+			"_name": "The Living End (MAP29)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 3, 9 ]
+		},
+		"30902026": 
+		{
+			"_name": "The Living End (MAP29) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 3, 9 ]
+		},
+		"30999999": 
+		{
+			"_name": "The Living End (MAP29) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 3, 9 ]
+		},
+		"31000000": 
+		{
+			"_name": "Icon of Sin (MAP30)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 3, 10 ]
+		},
+		"31002026": 
+		{
+			"_name": "Icon of Sin (MAP30) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 3, 10 ]
+		},
+		"31099999": 
+		{
+			"_name": "Icon of Sin (MAP30) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 3, 10 ]
+		},
+		"40100000": 
+		{
+			"_name": "Wolfenstein (MAP31)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 4, 1 ]
+		},
+		"40102026": 
+		{
+			"_name": "Wolfenstein (MAP31) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 4, 1 ]
+		},
+		"40199999": 
+		{
+			"_name": "Wolfenstein (MAP31) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 4, 1 ]
+		},
+		"40200000": 
+		{
+			"_name": "Grosse (MAP32)",
+			"classification": 3,
+			"count": 1,
+			"doom_type": -1,
+			"exmx": [ 4, 2 ]
+		},
+		"40202026": 
+		{
+			"_name": "Grosse (MAP32) - Computer area map",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 2026,
+			"exmx": [ 4, 2 ]
+		},
+		"40299999": 
+		{
+			"_name": "Grosse (MAP32) - Complete",
+			"classification": 1,
+			"doom_type": -2,
+			"exmx": [ 4, 2 ]
+		},
+		"65001": 
+		{
+			"_name": "Bullet capacity",
+			"classification": 2,
+			"doom_type": 65001
+		},
+		"65002": 
+		{
+			"_name": "Shell capacity",
+			"classification": 2,
+			"doom_type": 65002
+		},
+		"65003": 
+		{
+			"_name": "Energy cell capacity",
+			"classification": 2,
+			"doom_type": 65003
+		},
+		"65004": 
+		{
+			"_name": "Rocket capacity",
+			"classification": 2,
+			"doom_type": 65004
+		},
+		"8": 
+		{
+			"_name": "Backpack",
+			"classification": 2,
+			"count": 1,
+			"doom_type": 8
+		},
+		"82": 
+		{
+			"_name": "Super Shotgun",
+			"classification": 1,
+			"count": 1,
+			"doom_type": 82
+		},
+		"83": 
+		{
+			"_name": "Megasphere",
+			"classification": 0,
+			"count": 1,
+			"doom_type": 83
+		}
+	},
+	"location_name_groups": 
+	{
+		"Barrels o' Fun (MAP23)": 
+		[
+			"Barrels o' Fun (MAP23) - Exit",
+			"Barrels o' Fun (MAP23) - Shotgun",
+			"Barrels o' Fun (MAP23) - Berserk",
+			"Barrels o' Fun (MAP23) - Backpack",
+			"Barrels o' Fun (MAP23) - Computer area map",
+			"Barrels o' Fun (MAP23) - Armor",
+			"Barrels o' Fun (MAP23) - Rocket launcher",
+			"Barrels o' Fun (MAP23) - Megasphere",
+			"Barrels o' Fun (MAP23) - Supercharge",
+			"Barrels o' Fun (MAP23) - Backpack 2",
+			"Barrels o' Fun (MAP23) - Yellow skull key",
+			"Barrels o' Fun (MAP23) - BFG9000"
+		],
+		"Bloodfalls (MAP25)": 
+		[
+			"Bloodfalls (MAP25) - Exit",
+			"Bloodfalls (MAP25) - Super Shotgun",
+			"Bloodfalls (MAP25) - Partial invisibility",
+			"Bloodfalls (MAP25) - Megasphere",
+			"Bloodfalls (MAP25) - BFG9000",
+			"Bloodfalls (MAP25) - Mega Armor",
+			"Bloodfalls (MAP25) - Armor",
+			"Bloodfalls (MAP25) - Blue skull key",
+			"Bloodfalls (MAP25) - Chaingun",
+			"Bloodfalls (MAP25) - Plasma gun",
+			"Bloodfalls (MAP25) - BFG9000 2",
+			"Bloodfalls (MAP25) - Rocket launcher"
+		],
+		"Circle of Death (MAP11)": 
+		[
+			"Circle of Death (MAP11) - Exit",
+			"Circle of Death (MAP11) - Red keycard",
+			"Circle of Death (MAP11) - Chaingun",
+			"Circle of Death (MAP11) - Supercharge",
+			"Circle of Death (MAP11) - Plasma gun",
+			"Circle of Death (MAP11) - Blue keycard",
+			"Circle of Death (MAP11) - Armor",
+			"Circle of Death (MAP11) - Shotgun",
+			"Circle of Death (MAP11) - Mega Armor",
+			"Circle of Death (MAP11) - Partial invisibility",
+			"Circle of Death (MAP11) - Invulnerability",
+			"Circle of Death (MAP11) - Rocket launcher",
+			"Circle of Death (MAP11) - Backpack",
+			"Circle of Death (MAP11) - Supercharge 2",
+			"Circle of Death (MAP11) - BFG9000"
+		],
+		"Dead Simple (MAP07)": 
+		[
+			"Dead Simple (MAP07) - Exit",
+			"Dead Simple (MAP07) - Megasphere",
+			"Dead Simple (MAP07) - Rocket launcher",
+			"Dead Simple (MAP07) - Partial invisibility",
+			"Dead Simple (MAP07) - Super Shotgun",
+			"Dead Simple (MAP07) - Chaingun",
+			"Dead Simple (MAP07) - Plasma gun",
+			"Dead Simple (MAP07) - Backpack",
+			"Dead Simple (MAP07) - Berserk",
+			"Dead Simple (MAP07) - Partial invisibility 2",
+			"Dead Simple (MAP07) - Partial invisibility 3",
+			"Dead Simple (MAP07) - Partial invisibility 4"
+		],
+		"Downtown (MAP13)": 
+		[
+			"Downtown (MAP13) - Exit",
+			"Downtown (MAP13) - Rocket launcher",
+			"Downtown (MAP13) - Shotgun",
+			"Downtown (MAP13) - Supercharge",
+			"Downtown (MAP13) - Berserk",
+			"Downtown (MAP13) - Mega Armor",
+			"Downtown (MAP13) - Chaingun",
+			"Downtown (MAP13) - Blue keycard",
+			"Downtown (MAP13) - Yellow keycard",
+			"Downtown (MAP13) - Berserk 2",
+			"Downtown (MAP13) - Plasma gun",
+			"Downtown (MAP13) - Partial invisibility",
+			"Downtown (MAP13) - Backpack",
+			"Downtown (MAP13) - Chainsaw",
+			"Downtown (MAP13) - BFG9000",
+			"Downtown (MAP13) - Invulnerability",
+			"Downtown (MAP13) - Invulnerability 2",
+			"Downtown (MAP13) - Partial invisibility 2",
+			"Downtown (MAP13) - Partial invisibility 3",
+			"Downtown (MAP13) - Red keycard",
+			"Downtown (MAP13) - Berserk 3",
+			"Downtown (MAP13) - Computer area map"
+		],
+		"Entryway (MAP01)": 
+		[
+			"Entryway (MAP01) - Exit",
+			"Entryway (MAP01) - Armor",
+			"Entryway (MAP01) - Shotgun",
+			"Entryway (MAP01) - Rocket launcher",
+			"Entryway (MAP01) - Chainsaw"
+		],
+		"Gotcha! (MAP20)": 
+		[
+			"Gotcha! (MAP20) - Exit",
+			"Gotcha! (MAP20) - Mega Armor",
+			"Gotcha! (MAP20) - Rocket launcher",
+			"Gotcha! (MAP20) - Supercharge",
+			"Gotcha! (MAP20) - Armor",
+			"Gotcha! (MAP20) - Megasphere",
+			"Gotcha! (MAP20) - Armor 2",
+			"Gotcha! (MAP20) - Super Shotgun",
+			"Gotcha! (MAP20) - Plasma gun",
+			"Gotcha! (MAP20) - Mega Armor 2",
+			"Gotcha! (MAP20) - Berserk",
+			"Gotcha! (MAP20) - Supercharge 2",
+			"Gotcha! (MAP20) - Supercharge 3",
+			"Gotcha! (MAP20) - BFG9000",
+			"Gotcha! (MAP20) - Supercharge 4"
+		],
+		"Grosse (MAP32)": 
+		[
+			"Grosse (MAP32) - Exit",
+			"Grosse (MAP32) - Plasma gun",
+			"Grosse (MAP32) - Rocket launcher",
+			"Grosse (MAP32) - Invulnerability",
+			"Grosse (MAP32) - Super Shotgun",
+			"Grosse (MAP32) - BFG9000",
+			"Grosse (MAP32) - Megasphere",
+			"Grosse (MAP32) - Chaingun",
+			"Grosse (MAP32) - Chaingun 2",
+			"Grosse (MAP32) - Chaingun 3",
+			"Grosse (MAP32) - Berserk"
+		],
+		"Icon of Sin (MAP30)": 
+		[
+			"Icon of Sin (MAP30) - Exit",
+			"Icon of Sin (MAP30) - Supercharge",
+			"Icon of Sin (MAP30) - Supercharge 2",
+			"Icon of Sin (MAP30) - Supercharge 3",
+			"Icon of Sin (MAP30) - Invulnerability",
+			"Icon of Sin (MAP30) - Invulnerability 2",
+			"Icon of Sin (MAP30) - Invulnerability 3",
+			"Icon of Sin (MAP30) - Invulnerability 4",
+			"Icon of Sin (MAP30) - BFG9000",
+			"Icon of Sin (MAP30) - Chaingun",
+			"Icon of Sin (MAP30) - Chainsaw",
+			"Icon of Sin (MAP30) - Plasma gun",
+			"Icon of Sin (MAP30) - Rocket launcher",
+			"Icon of Sin (MAP30) - Shotgun",
+			"Icon of Sin (MAP30) - Super Shotgun",
+			"Icon of Sin (MAP30) - Backpack",
+			"Icon of Sin (MAP30) - Megasphere",
+			"Icon of Sin (MAP30) - Megasphere 2",
+			"Icon of Sin (MAP30) - Berserk"
+		],
+		"Industrial Zone (MAP15)": 
+		[
+			"Industrial Zone (MAP15) - Exit",
+			"Industrial Zone (MAP15) - Berserk",
+			"Industrial Zone (MAP15) - Rocket launcher",
+			"Industrial Zone (MAP15) - Shotgun",
+			"Industrial Zone (MAP15) - Partial invisibility",
+			"Industrial Zone (MAP15) - Backpack",
+			"Industrial Zone (MAP15) - BFG9000",
+			"Industrial Zone (MAP15) - Supercharge",
+			"Industrial Zone (MAP15) - Mega Armor",
+			"Industrial Zone (MAP15) - Armor",
+			"Industrial Zone (MAP15) - Yellow keycard",
+			"Industrial Zone (MAP15) - Chaingun",
+			"Industrial Zone (MAP15) - Plasma gun",
+			"Industrial Zone (MAP15) - Partial invisibility 2",
+			"Industrial Zone (MAP15) - Computer area map",
+			"Industrial Zone (MAP15) - Invulnerability",
+			"Industrial Zone (MAP15) - Red keycard",
+			"Industrial Zone (MAP15) - Backpack 2",
+			"Industrial Zone (MAP15) - Chainsaw",
+			"Industrial Zone (MAP15) - Megasphere",
+			"Industrial Zone (MAP15) - Berserk 2",
+			"Industrial Zone (MAP15) - Blue keycard",
+			"Industrial Zone (MAP15) - Mega Armor 2"
+		],
+		"Monster Condo (MAP27)": 
+		[
+			"Monster Condo (MAP27) - Exit",
+			"Monster Condo (MAP27) - Rocket launcher",
+			"Monster Condo (MAP27) - Partial invisibility",
+			"Monster Condo (MAP27) - Plasma gun",
+			"Monster Condo (MAP27) - Invulnerability",
+			"Monster Condo (MAP27) - Armor",
+			"Monster Condo (MAP27) - Backpack",
+			"Monster Condo (MAP27) - Invulnerability 2",
+			"Monster Condo (MAP27) - Partial invisibility 2",
+			"Monster Condo (MAP27) - Supercharge",
+			"Monster Condo (MAP27) - Armor 2",
+			"Monster Condo (MAP27) - Chaingun",
+			"Monster Condo (MAP27) - BFG9000",
+			"Monster Condo (MAP27) - Backpack 2",
+			"Monster Condo (MAP27) - Backpack 3",
+			"Monster Condo (MAP27) - Backpack 4",
+			"Monster Condo (MAP27) - Yellow skull key",
+			"Monster Condo (MAP27) - Red skull key",
+			"Monster Condo (MAP27) - Supercharge 2",
+			"Monster Condo (MAP27) - Blue skull key",
+			"Monster Condo (MAP27) - Supercharge 3",
+			"Monster Condo (MAP27) - Computer area map",
+			"Monster Condo (MAP27) - Berserk",
+			"Monster Condo (MAP27) - Supercharge 4",
+			"Monster Condo (MAP27) - Supercharge 5",
+			"Monster Condo (MAP27) - Computer area map 2",
+			"Monster Condo (MAP27) - Berserk 2",
+			"Monster Condo (MAP27) - Partial invisibility 3",
+			"Monster Condo (MAP27) - Invulnerability 3",
+			"Monster Condo (MAP27) - Chainsaw",
+			"Monster Condo (MAP27) - Super Shotgun"
+		],
+		"Nirvana (MAP21)": 
+		[
+			"Nirvana (MAP21) - Exit",
+			"Nirvana (MAP21) - Super Shotgun",
+			"Nirvana (MAP21) - Rocket launcher",
+			"Nirvana (MAP21) - Yellow skull key",
+			"Nirvana (MAP21) - Backpack",
+			"Nirvana (MAP21) - Megasphere",
+			"Nirvana (MAP21) - Invulnerability",
+			"Nirvana (MAP21) - Blue skull key",
+			"Nirvana (MAP21) - Red skull key"
+		],
+		"Refueling Base (MAP10)": 
+		[
+			"Refueling Base (MAP10) - Exit",
+			"Refueling Base (MAP10) - BFG9000",
+			"Refueling Base (MAP10) - Supercharge",
+			"Refueling Base (MAP10) - Plasma gun",
+			"Refueling Base (MAP10) - Blue keycard",
+			"Refueling Base (MAP10) - Shotgun",
+			"Refueling Base (MAP10) - Chaingun",
+			"Refueling Base (MAP10) - Armor",
+			"Refueling Base (MAP10) - Rocket launcher",
+			"Refueling Base (MAP10) - Supercharge 2",
+			"Refueling Base (MAP10) - Backpack",
+			"Refueling Base (MAP10) - Berserk",
+			"Refueling Base (MAP10) - Mega Armor",
+			"Refueling Base (MAP10) - Invulnerability",
+			"Refueling Base (MAP10) - Invulnerability 2",
+			"Refueling Base (MAP10) - Armor 2",
+			"Refueling Base (MAP10) - Berserk 2",
+			"Refueling Base (MAP10) - Partial invisibility",
+			"Refueling Base (MAP10) - Chainsaw",
+			"Refueling Base (MAP10) - Yellow keycard",
+			"Refueling Base (MAP10) - Megasphere"
+		],
+		"Suburbs (MAP16)": 
+		[
+			"Suburbs (MAP16) - Exit",
+			"Suburbs (MAP16) - Megasphere",
+			"Suburbs (MAP16) - Super Shotgun",
+			"Suburbs (MAP16) - Chaingun",
+			"Suburbs (MAP16) - Backpack",
+			"Suburbs (MAP16) - Rocket launcher",
+			"Suburbs (MAP16) - Berserk",
+			"Suburbs (MAP16) - Plasma gun",
+			"Suburbs (MAP16) - Plasma gun 2",
+			"Suburbs (MAP16) - Plasma gun 3",
+			"Suburbs (MAP16) - Plasma gun 4",
+			"Suburbs (MAP16) - BFG9000",
+			"Suburbs (MAP16) - Shotgun",
+			"Suburbs (MAP16) - Supercharge",
+			"Suburbs (MAP16) - Blue skull key",
+			"Suburbs (MAP16) - Invulnerability",
+			"Suburbs (MAP16) - Partial invisibility",
+			"Suburbs (MAP16) - Red skull key"
+		],
+		"Tenements (MAP17)": 
+		[
+			"Tenements (MAP17) - Exit",
+			"Tenements (MAP17) - Armor",
+			"Tenements (MAP17) - Supercharge",
+			"Tenements (MAP17) - Shotgun",
+			"Tenements (MAP17) - Red keycard",
+			"Tenements (MAP17) - Blue keycard",
+			"Tenements (MAP17) - Supercharge 2",
+			"Tenements (MAP17) - Yellow skull key",
+			"Tenements (MAP17) - Rocket launcher",
+			"Tenements (MAP17) - Partial invisibility",
+			"Tenements (MAP17) - Chaingun",
+			"Tenements (MAP17) - BFG9000",
+			"Tenements (MAP17) - Plasma gun",
+			"Tenements (MAP17) - Mega Armor",
+			"Tenements (MAP17) - Armor 2",
+			"Tenements (MAP17) - Berserk",
+			"Tenements (MAP17) - Backpack",
+			"Tenements (MAP17) - Megasphere"
+		],
+		"The Abandoned Mines (MAP26)": 
+		[
+			"The Abandoned Mines (MAP26) - Exit",
+			"The Abandoned Mines (MAP26) - Blue keycard",
+			"The Abandoned Mines (MAP26) - Super Shotgun",
+			"The Abandoned Mines (MAP26) - Rocket launcher",
+			"The Abandoned Mines (MAP26) - Mega Armor",
+			"The Abandoned Mines (MAP26) - Plasma gun",
+			"The Abandoned Mines (MAP26) - Supercharge",
+			"The Abandoned Mines (MAP26) - Chaingun",
+			"The Abandoned Mines (MAP26) - Partial invisibility",
+			"The Abandoned Mines (MAP26) - Armor",
+			"The Abandoned Mines (MAP26) - Red keycard",
+			"The Abandoned Mines (MAP26) - Yellow keycard",
+			"The Abandoned Mines (MAP26) - Backpack"
+		],
+		"The Catacombs (MAP22)": 
+		[
+			"The Catacombs (MAP22) - Exit",
+			"The Catacombs (MAP22) - Rocket launcher",
+			"The Catacombs (MAP22) - Blue skull key",
+			"The Catacombs (MAP22) - Red skull key",
+			"The Catacombs (MAP22) - Shotgun",
+			"The Catacombs (MAP22) - Berserk",
+			"The Catacombs (MAP22) - Plasma gun",
+			"The Catacombs (MAP22) - Supercharge",
+			"The Catacombs (MAP22) - Armor"
+		],
+		"The Chasm (MAP24)": 
+		[
+			"The Chasm (MAP24) - Exit",
+			"The Chasm (MAP24) - Plasma gun",
+			"The Chasm (MAP24) - Shotgun",
+			"The Chasm (MAP24) - Invulnerability",
+			"The Chasm (MAP24) - Rocket launcher",
+			"The Chasm (MAP24) - Blue keycard",
+			"The Chasm (MAP24) - Backpack",
+			"The Chasm (MAP24) - Berserk",
+			"The Chasm (MAP24) - Berserk 2",
+			"The Chasm (MAP24) - Armor",
+			"The Chasm (MAP24) - Red keycard",
+			"The Chasm (MAP24) - BFG9000",
+			"The Chasm (MAP24) - Super Shotgun",
+			"The Chasm (MAP24) - Megasphere",
+			"The Chasm (MAP24) - Megasphere 2"
+		],
+		"The Citadel (MAP19)": 
+		[
+			"The Citadel (MAP19) - Exit",
+			"The Citadel (MAP19) - Armor",
+			"The Citadel (MAP19) - Chaingun",
+			"The Citadel (MAP19) - Berserk",
+			"The Citadel (MAP19) - Mega Armor",
+			"The Citadel (MAP19) - Supercharge",
+			"The Citadel (MAP19) - Armor 2",
+			"The Citadel (MAP19) - Backpack",
+			"The Citadel (MAP19) - Invulnerability",
+			"The Citadel (MAP19) - Blue skull key",
+			"The Citadel (MAP19) - Partial invisibility",
+			"The Citadel (MAP19) - Red skull key",
+			"The Citadel (MAP19) - Yellow skull key",
+			"The Citadel (MAP19) - Computer area map",
+			"The Citadel (MAP19) - Rocket launcher",
+			"The Citadel (MAP19) - Super Shotgun"
+		],
+		"The Courtyard (MAP18)": 
+		[
+			"The Courtyard (MAP18) - Exit",
+			"The Courtyard (MAP18) - Shotgun",
+			"The Courtyard (MAP18) - Plasma gun",
+			"The Courtyard (MAP18) - Armor",
+			"The Courtyard (MAP18) - Berserk",
+			"The Courtyard (MAP18) - Chaingun",
+			"The Courtyard (MAP18) - Rocket launcher",
+			"The Courtyard (MAP18) - Partial invisibility",
+			"The Courtyard (MAP18) - Partial invisibility 2",
+			"The Courtyard (MAP18) - Backpack",
+			"The Courtyard (MAP18) - Supercharge",
+			"The Courtyard (MAP18) - Invulnerability",
+			"The Courtyard (MAP18) - Invulnerability 2",
+			"The Courtyard (MAP18) - Yellow skull key",
+			"The Courtyard (MAP18) - Blue skull key",
+			"The Courtyard (MAP18) - BFG9000",
+			"The Courtyard (MAP18) - Computer area map",
+			"The Courtyard (MAP18) - Super Shotgun"
+		],
+		"The Crusher (MAP06)": 
+		[
+			"The Crusher (MAP06) - Exit",
+			"The Crusher (MAP06) - Red keycard",
+			"The Crusher (MAP06) - Yellow keycard",
+			"The Crusher (MAP06) - Blue keycard",
+			"The Crusher (MAP06) - Supercharge",
+			"The Crusher (MAP06) - Plasma gun",
+			"The Crusher (MAP06) - Blue keycard 2",
+			"The Crusher (MAP06) - Blue keycard 3",
+			"The Crusher (MAP06) - Megasphere",
+			"The Crusher (MAP06) - Armor",
+			"The Crusher (MAP06) - Super Shotgun",
+			"The Crusher (MAP06) - Mega Armor",
+			"The Crusher (MAP06) - Rocket launcher",
+			"The Crusher (MAP06) - Backpack",
+			"The Crusher (MAP06) - Megasphere 2"
+		],
+		"The Factory (MAP12)": 
+		[
+			"The Factory (MAP12) - Exit",
+			"The Factory (MAP12) - Shotgun",
+			"The Factory (MAP12) - Berserk",
+			"The Factory (MAP12) - Chaingun",
+			"The Factory (MAP12) - Supercharge",
+			"The Factory (MAP12) - Blue keycard",
+			"The Factory (MAP12) - Armor",
+			"The Factory (MAP12) - Backpack",
+			"The Factory (MAP12) - Supercharge 2",
+			"The Factory (MAP12) - Armor 2",
+			"The Factory (MAP12) - Partial invisibility",
+			"The Factory (MAP12) - Berserk 2",
+			"The Factory (MAP12) - Yellow keycard",
+			"The Factory (MAP12) - BFG9000",
+			"The Factory (MAP12) - Berserk 3",
+			"The Factory (MAP12) - Super Shotgun"
+		],
+		"The Focus (MAP04)": 
+		[
+			"The Focus (MAP04) - Exit",
+			"The Focus (MAP04) - Super Shotgun",
+			"The Focus (MAP04) - Blue keycard",
+			"The Focus (MAP04) - Red keycard",
+			"The Focus (MAP04) - Yellow keycard"
+		],
+		"The Gantlet (MAP03)": 
+		[
+			"The Gantlet (MAP03) - Exit",
+			"The Gantlet (MAP03) - Mega Armor",
+			"The Gantlet (MAP03) - Shotgun",
+			"The Gantlet (MAP03) - Blue keycard",
+			"The Gantlet (MAP03) - Rocket launcher",
+			"The Gantlet (MAP03) - Partial invisibility",
+			"The Gantlet (MAP03) - Supercharge",
+			"The Gantlet (MAP03) - Mega Armor 2",
+			"The Gantlet (MAP03) - Red keycard",
+			"The Gantlet (MAP03) - Chaingun",
+			"The Gantlet (MAP03) - Backpack"
+		],
+		"The Inmost Dens (MAP14)": 
+		[
+			"The Inmost Dens (MAP14) - Exit",
+			"The Inmost Dens (MAP14) - Shotgun",
+			"The Inmost Dens (MAP14) - Supercharge",
+			"The Inmost Dens (MAP14) - Mega Armor",
+			"The Inmost Dens (MAP14) - Berserk",
+			"The Inmost Dens (MAP14) - Chaingun",
+			"The Inmost Dens (MAP14) - Plasma gun",
+			"The Inmost Dens (MAP14) - Red skull key",
+			"The Inmost Dens (MAP14) - Rocket launcher",
+			"The Inmost Dens (MAP14) - Blue skull key",
+			"The Inmost Dens (MAP14) - Partial invisibility"
+		],
+		"The Living End (MAP29)": 
+		[
+			"The Living End (MAP29) - Exit",
+			"The Living End (MAP29) - Chaingun",
+			"The Living End (MAP29) - Plasma gun",
+			"The Living End (MAP29) - Backpack",
+			"The Living End (MAP29) - Super Shotgun",
+			"The Living End (MAP29) - Mega Armor",
+			"The Living End (MAP29) - Armor",
+			"The Living End (MAP29) - Backpack 2",
+			"The Living End (MAP29) - Supercharge",
+			"The Living End (MAP29) - Berserk",
+			"The Living End (MAP29) - Berserk 2"
+		],
+		"The Pit (MAP09)": 
+		[
+			"The Pit (MAP09) - Exit",
+			"The Pit (MAP09) - Berserk",
+			"The Pit (MAP09) - Shotgun",
+			"The Pit (MAP09) - Mega Armor",
+			"The Pit (MAP09) - Supercharge",
+			"The Pit (MAP09) - Berserk 2",
+			"The Pit (MAP09) - Rocket launcher",
+			"The Pit (MAP09) - BFG9000",
+			"The Pit (MAP09) - Blue keycard",
+			"The Pit (MAP09) - Yellow keycard",
+			"The Pit (MAP09) - Backpack",
+			"The Pit (MAP09) - Computer area map",
+			"The Pit (MAP09) - Supercharge 2",
+			"The Pit (MAP09) - Mega Armor 2",
+			"The Pit (MAP09) - Berserk 3",
+			"The Pit (MAP09) - Armor"
+		],
+		"The Spirit World (MAP28)": 
+		[
+			"The Spirit World (MAP28) - Exit",
+			"The Spirit World (MAP28) - Armor",
+			"The Spirit World (MAP28) - Chainsaw",
+			"The Spirit World (MAP28) - Invulnerability",
+			"The Spirit World (MAP28) - Yellow skull key",
+			"The Spirit World (MAP28) - Supercharge",
+			"The Spirit World (MAP28) - Chaingun",
+			"The Spirit World (MAP28) - Rocket launcher",
+			"The Spirit World (MAP28) - Backpack",
+			"The Spirit World (MAP28) - Backpack 2",
+			"The Spirit World (MAP28) - Backpack 3",
+			"The Spirit World (MAP28) - Backpack 4",
+			"The Spirit World (MAP28) - Berserk",
+			"The Spirit World (MAP28) - Plasma gun",
+			"The Spirit World (MAP28) - Invulnerability 2",
+			"The Spirit World (MAP28) - Invulnerability 3",
+			"The Spirit World (MAP28) - BFG9000",
+			"The Spirit World (MAP28) - Megasphere",
+			"The Spirit World (MAP28) - Megasphere 2",
+			"The Spirit World (MAP28) - Invulnerability 4",
+			"The Spirit World (MAP28) - Invulnerability 5",
+			"The Spirit World (MAP28) - Super Shotgun",
+			"The Spirit World (MAP28) - Red skull key"
+		],
+		"The Waste Tunnels (MAP05)": 
+		[
+			"The Waste Tunnels (MAP05) - Exit",
+			"The Waste Tunnels (MAP05) - Rocket launcher",
+			"The Waste Tunnels (MAP05) - Super Shotgun",
+			"The Waste Tunnels (MAP05) - Blue keycard",
+			"The Waste Tunnels (MAP05) - Plasma gun",
+			"The Waste Tunnels (MAP05) - Red keycard",
+			"The Waste Tunnels (MAP05) - Supercharge",
+			"The Waste Tunnels (MAP05) - Mega Armor",
+			"The Waste Tunnels (MAP05) - Yellow keycard",
+			"The Waste Tunnels (MAP05) - Armor",
+			"The Waste Tunnels (MAP05) - Supercharge 2",
+			"The Waste Tunnels (MAP05) - Shotgun",
+			"The Waste Tunnels (MAP05) - Berserk"
+		],
+		"Tricks and Traps (MAP08)": 
+		[
+			"Tricks and Traps (MAP08) - Exit",
+			"Tricks and Traps (MAP08) - Plasma gun",
+			"Tricks and Traps (MAP08) - Rocket launcher",
+			"Tricks and Traps (MAP08) - Armor",
+			"Tricks and Traps (MAP08) - Chaingun",
+			"Tricks and Traps (MAP08) - Shotgun",
+			"Tricks and Traps (MAP08) - Supercharge",
+			"Tricks and Traps (MAP08) - Invulnerability",
+			"Tricks and Traps (MAP08) - Invulnerability 2",
+			"Tricks and Traps (MAP08) - Yellow skull key",
+			"Tricks and Traps (MAP08) - Backpack",
+			"Tricks and Traps (MAP08) - Backpack 2",
+			"Tricks and Traps (MAP08) - Invulnerability 3",
+			"Tricks and Traps (MAP08) - Invulnerability 4",
+			"Tricks and Traps (MAP08) - BFG9000",
+			"Tricks and Traps (MAP08) - Supercharge 2",
+			"Tricks and Traps (MAP08) - Backpack 3",
+			"Tricks and Traps (MAP08) - Backpack 4",
+			"Tricks and Traps (MAP08) - Chainsaw",
+			"Tricks and Traps (MAP08) - Red skull key",
+			"Tricks and Traps (MAP08) - Invulnerability 5",
+			"Tricks and Traps (MAP08) - Armor 2",
+			"Tricks and Traps (MAP08) - Backpack 5",
+			"Tricks and Traps (MAP08) - Partial invisibility"
+		],
+		"Underhalls (MAP02)": 
+		[
+			"Underhalls (MAP02) - Exit",
+			"Underhalls (MAP02) - Red keycard",
+			"Underhalls (MAP02) - Blue keycard",
+			"Underhalls (MAP02) - Mega Armor",
+			"Underhalls (MAP02) - Super Shotgun"
+		],
+		"Wolfenstein (MAP31)": 
+		[
+			"Wolfenstein (MAP31) - Exit",
+			"Wolfenstein (MAP31) - Rocket launcher",
+			"Wolfenstein (MAP31) - Shotgun",
+			"Wolfenstein (MAP31) - Berserk",
+			"Wolfenstein (MAP31) - Supercharge",
+			"Wolfenstein (MAP31) - Chaingun",
+			"Wolfenstein (MAP31) - Super Shotgun",
+			"Wolfenstein (MAP31) - Partial invisibility",
+			"Wolfenstein (MAP31) - Megasphere",
+			"Wolfenstein (MAP31) - Backpack",
+			"Wolfenstein (MAP31) - Backpack 2",
+			"Wolfenstein (MAP31) - Backpack 3",
+			"Wolfenstein (MAP31) - Backpack 4",
+			"Wolfenstein (MAP31) - BFG9000",
+			"Wolfenstein (MAP31) - Plasma gun"
+		]
+	},
+	"location_table": 
+	{
+		"101000": 
+		{
+			"_name": "Entryway (MAP01) - Exit",
+			"doom_type": -2,
+			"exmx": [ 1, 1 ],
+			"region": "Entryway (MAP01) @ Main"
+		},
+		"101001": 
+		{
+			"_name": "Entryway (MAP01) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 1, 1 ],
+			"region": "Entryway (MAP01) @ Main"
+		},
+		"101002": 
+		{
+			"_name": "Entryway (MAP01) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 1, 1 ],
+			"region": "Entryway (MAP01) @ Main"
+		},
+		"101003": 
+		{
+			"_name": "Entryway (MAP01) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 1, 1 ],
+			"region": "Entryway (MAP01) @ Main"
+		},
+		"101004": 
+		{
+			"_name": "Entryway (MAP01) - Chainsaw",
+			"doom_type": 2005,
+			"exmx": [ 1, 1 ],
+			"region": "Entryway (MAP01) @ Main"
+		},
+		"102000": 
+		{
+			"_name": "Underhalls (MAP02) - Exit",
+			"doom_type": -2,
+			"exmx": [ 1, 2 ],
+			"region": "Underhalls (MAP02) @ Blue"
+		},
+		"102001": 
+		{
+			"_name": "Underhalls (MAP02) - Red keycard",
+			"doom_type": 13,
+			"exmx": [ 1, 2 ],
+			"region": "Underhalls (MAP02) @ Main"
+		},
+		"102002": 
+		{
+			"_name": "Underhalls (MAP02) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 1, 2 ],
+			"region": "Underhalls (MAP02) @ Red"
+		},
+		"102003": 
+		{
+			"_name": "Underhalls (MAP02) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 1, 2 ],
+			"region": "Underhalls (MAP02) @ Main"
+		},
+		"102004": 
+		{
+			"_name": "Underhalls (MAP02) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 1, 2 ],
+			"region": "Underhalls (MAP02) @ Main"
+		},
+		"103000": 
+		{
+			"_name": "The Gantlet (MAP03) - Exit",
+			"doom_type": -2,
+			"exmx": [ 1, 3 ],
+			"region": "The Gantlet (MAP03) @ Red"
+		},
+		"103001": 
+		{
+			"_name": "The Gantlet (MAP03) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 1, 3 ],
+			"region": "The Gantlet (MAP03) @ Main"
+		},
+		"103002": 
+		{
+			"_name": "The Gantlet (MAP03) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 1, 3 ],
+			"region": "The Gantlet (MAP03) @ Main"
+		},
+		"103003": 
+		{
+			"_name": "The Gantlet (MAP03) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 1, 3 ],
+			"region": "The Gantlet (MAP03) @ Main"
+		},
+		"103004": 
+		{
+			"_name": "The Gantlet (MAP03) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 1, 3 ],
+			"region": "The Gantlet (MAP03) @ Main"
+		},
+		"103005": 
+		{
+			"_name": "The Gantlet (MAP03) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 1, 3 ],
+			"region": "The Gantlet (MAP03) @ Main"
+		},
+		"103006": 
+		{
+			"_name": "The Gantlet (MAP03) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 1, 3 ],
+			"region": "The Gantlet (MAP03) @ Main"
+		},
+		"103007": 
+		{
+			"_name": "The Gantlet (MAP03) - Mega Armor 2",
+			"doom_type": 2019,
+			"exmx": [ 1, 3 ],
+			"region": "The Gantlet (MAP03) @ Main"
+		},
+		"103008": 
+		{
+			"_name": "The Gantlet (MAP03) - Red keycard",
+			"doom_type": 13,
+			"exmx": [ 1, 3 ],
+			"region": "The Gantlet (MAP03) @ Blue"
+		},
+		"103009": 
+		{
+			"_name": "The Gantlet (MAP03) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 1, 3 ],
+			"region": "The Gantlet (MAP03) @ Main"
+		},
+		"103010": 
+		{
+			"_name": "The Gantlet (MAP03) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 1, 3 ],
+			"region": "The Gantlet (MAP03) @ Blue"
+		},
+		"104000": 
+		{
+			"_name": "The Focus (MAP04) - Exit",
+			"doom_type": -2,
+			"exmx": [ 1, 4 ],
+			"region": "The Focus (MAP04) @ Yellow"
+		},
+		"104001": 
+		{
+			"_name": "The Focus (MAP04) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 1, 4 ],
+			"region": "The Focus (MAP04) @ Main"
+		},
+		"104002": 
+		{
+			"_name": "The Focus (MAP04) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 1, 4 ],
+			"region": "The Focus (MAP04) @ Main"
+		},
+		"104003": 
+		{
+			"_name": "The Focus (MAP04) - Red keycard",
+			"doom_type": 13,
+			"exmx": [ 1, 4 ],
+			"region": "The Focus (MAP04) @ Blue"
+		},
+		"104004": 
+		{
+			"_name": "The Focus (MAP04) - Yellow keycard",
+			"doom_type": 6,
+			"exmx": [ 1, 4 ],
+			"region": "The Focus (MAP04) @ Red"
+		},
+		"105000": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Exit",
+			"doom_type": -2,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Yellow"
+		},
+		"105001": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Main"
+		},
+		"105002": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Start"
+		},
+		"105003": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Red"
+		},
+		"105004": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Main"
+		},
+		"105005": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Red keycard",
+			"doom_type": 13,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Main"
+		},
+		"105006": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Main"
+		},
+		"105007": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Main"
+		},
+		"105008": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Yellow keycard",
+			"doom_type": 6,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Blue"
+		},
+		"105009": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Main"
+		},
+		"105010": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Supercharge 2",
+			"doom_type": 2013,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Main"
+		},
+		"105011": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Start"
+		},
+		"105012": 
+		{
+			"_name": "The Waste Tunnels (MAP05) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 1, 5 ],
+			"region": "The Waste Tunnels (MAP05) @ Main"
+		},
+		"106000": 
+		{
+			"_name": "The Crusher (MAP06) - Exit",
+			"doom_type": -2,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Yellow"
+		},
+		"106001": 
+		{
+			"_name": "The Crusher (MAP06) - Red keycard",
+			"doom_type": 13,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Blue"
+		},
+		"106002": 
+		{
+			"_name": "The Crusher (MAP06) - Yellow keycard",
+			"doom_type": 6,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Red"
+		},
+		"106003": 
+		{
+			"_name": "The Crusher (MAP06) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Main"
+		},
+		"106004": 
+		{
+			"_name": "The Crusher (MAP06) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Main"
+		},
+		"106005": 
+		{
+			"_name": "The Crusher (MAP06) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Main"
+		},
+		"106006": 
+		{
+			"_name": "The Crusher (MAP06) - Blue keycard 2",
+			"doom_type": 5,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Main"
+		},
+		"106007": 
+		{
+			"_name": "The Crusher (MAP06) - Blue keycard 3",
+			"doom_type": 5,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Main"
+		},
+		"106008": 
+		{
+			"_name": "The Crusher (MAP06) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Main"
+		},
+		"106009": 
+		{
+			"_name": "The Crusher (MAP06) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Main"
+		},
+		"106010": 
+		{
+			"_name": "The Crusher (MAP06) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Blue"
+		},
+		"106011": 
+		{
+			"_name": "The Crusher (MAP06) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Blue"
+		},
+		"106012": 
+		{
+			"_name": "The Crusher (MAP06) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Blue"
+		},
+		"106013": 
+		{
+			"_name": "The Crusher (MAP06) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Blue"
+		},
+		"106014": 
+		{
+			"_name": "The Crusher (MAP06) - Megasphere 2",
+			"doom_type": 83,
+			"exmx": [ 1, 6 ],
+			"region": "The Crusher (MAP06) @ Blue"
+		},
+		"107000": 
+		{
+			"_name": "Dead Simple (MAP07) - Exit",
+			"doom_type": -2,
+			"exmx": [ 1, 7 ],
+			"region": "Dead Simple (MAP07) @ Main"
+		},
+		"107001": 
+		{
+			"_name": "Dead Simple (MAP07) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 1, 7 ],
+			"region": "Dead Simple (MAP07) @ Main"
+		},
+		"107002": 
+		{
+			"_name": "Dead Simple (MAP07) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 1, 7 ],
+			"region": "Dead Simple (MAP07) @ Main"
+		},
+		"107003": 
+		{
+			"_name": "Dead Simple (MAP07) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 1, 7 ],
+			"region": "Dead Simple (MAP07) @ Main"
+		},
+		"107004": 
+		{
+			"_name": "Dead Simple (MAP07) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 1, 7 ],
+			"region": "Dead Simple (MAP07) @ Start"
+		},
+		"107005": 
+		{
+			"_name": "Dead Simple (MAP07) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 1, 7 ],
+			"region": "Dead Simple (MAP07) @ Main"
+		},
+		"107006": 
+		{
+			"_name": "Dead Simple (MAP07) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 1, 7 ],
+			"region": "Dead Simple (MAP07) @ Main"
+		},
+		"107007": 
+		{
+			"_name": "Dead Simple (MAP07) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 1, 7 ],
+			"region": "Dead Simple (MAP07) @ Start"
+		},
+		"107008": 
+		{
+			"_name": "Dead Simple (MAP07) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 1, 7 ],
+			"region": "Dead Simple (MAP07) @ Main"
+		},
+		"107012": 
+		{
+			"_name": "Dead Simple (MAP07) - Partial invisibility 2",
+			"doom_type": 2024,
+			"exmx": [ 1, 7 ],
+			"region": "Dead Simple (MAP07) @ Main"
+		},
+		"107014": 
+		{
+			"_name": "Dead Simple (MAP07) - Partial invisibility 3",
+			"doom_type": 2024,
+			"exmx": [ 1, 7 ],
+			"region": "Dead Simple (MAP07) @ Main"
+		},
+		"107015": 
+		{
+			"_name": "Dead Simple (MAP07) - Partial invisibility 4",
+			"doom_type": 2024,
+			"exmx": [ 1, 7 ],
+			"region": "Dead Simple (MAP07) @ Main"
+		},
+		"108000": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Exit",
+			"doom_type": -2,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Red"
+		},
+		"108001": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108002": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108003": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108004": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108005": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108006": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108007": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108008": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Invulnerability 2",
+			"doom_type": 2022,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108009": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Yellow skull key",
+			"doom_type": 39,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108010": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108011": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Backpack 2",
+			"doom_type": 8,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108012": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Invulnerability 3",
+			"doom_type": 2022,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108013": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Invulnerability 4",
+			"doom_type": 2022,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108014": 
+		{
+			"_name": "Tricks and Traps (MAP08) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108015": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Supercharge 2",
+			"doom_type": 2013,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108016": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Backpack 3",
+			"doom_type": 8,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108017": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Backpack 4",
+			"doom_type": 8,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108018": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Chainsaw",
+			"doom_type": 2005,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108019": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Red skull key",
+			"doom_type": 38,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Yellow"
+		},
+		"108020": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Invulnerability 5",
+			"doom_type": 2022,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Yellow"
+		},
+		"108021": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Armor 2",
+			"doom_type": 2018,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108022": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Backpack 5",
+			"doom_type": 8,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"108023": 
+		{
+			"_name": "Tricks and Traps (MAP08) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 1, 8 ],
+			"region": "Tricks and Traps (MAP08) @ Main"
+		},
+		"109000": 
+		{
+			"_name": "The Pit (MAP09) - Exit",
+			"doom_type": -2,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Yellow"
+		},
+		"109001": 
+		{
+			"_name": "The Pit (MAP09) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Main"
+		},
+		"109002": 
+		{
+			"_name": "The Pit (MAP09) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Main"
+		},
+		"109003": 
+		{
+			"_name": "The Pit (MAP09) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Start"
+		},
+		"109004": 
+		{
+			"_name": "The Pit (MAP09) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Main"
+		},
+		"109005": 
+		{
+			"_name": "The Pit (MAP09) - Berserk 2",
+			"doom_type": 2023,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Main"
+		},
+		"109006": 
+		{
+			"_name": "The Pit (MAP09) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Main"
+		},
+		"109007": 
+		{
+			"_name": "The Pit (MAP09) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Main"
+		},
+		"109008": 
+		{
+			"_name": "The Pit (MAP09) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Main"
+		},
+		"109009": 
+		{
+			"_name": "The Pit (MAP09) - Yellow keycard",
+			"doom_type": 6,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Blue"
+		},
+		"109010": 
+		{
+			"_name": "The Pit (MAP09) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Blue"
+		},
+		"109011": 
+		{
+			"_name": "The Pit (MAP09) - Computer area map",
+			"doom_type": 2026,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Blue"
+		},
+		"109012": 
+		{
+			"_name": "The Pit (MAP09) - Supercharge 2",
+			"doom_type": 2013,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Blue"
+		},
+		"109013": 
+		{
+			"_name": "The Pit (MAP09) - Mega Armor 2",
+			"doom_type": 2019,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Blue"
+		},
+		"109014": 
+		{
+			"_name": "The Pit (MAP09) - Berserk 3",
+			"doom_type": 2023,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Blue"
+		},
+		"109015": 
+		{
+			"_name": "The Pit (MAP09) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 1, 9 ],
+			"region": "The Pit (MAP09) @ Main"
+		},
+		"110000": 
+		{
+			"_name": "Refueling Base (MAP10) - Exit",
+			"doom_type": -2,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Yellow Blue"
+		},
+		"110001": 
+		{
+			"_name": "Refueling Base (MAP10) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110002": 
+		{
+			"_name": "Refueling Base (MAP10) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110003": 
+		{
+			"_name": "Refueling Base (MAP10) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110004": 
+		{
+			"_name": "Refueling Base (MAP10) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110005": 
+		{
+			"_name": "Refueling Base (MAP10) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Start"
+		},
+		"110006": 
+		{
+			"_name": "Refueling Base (MAP10) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110007": 
+		{
+			"_name": "Refueling Base (MAP10) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110008": 
+		{
+			"_name": "Refueling Base (MAP10) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110009": 
+		{
+			"_name": "Refueling Base (MAP10) - Supercharge 2",
+			"doom_type": 2013,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110010": 
+		{
+			"_name": "Refueling Base (MAP10) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110011": 
+		{
+			"_name": "Refueling Base (MAP10) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110012": 
+		{
+			"_name": "Refueling Base (MAP10) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110013": 
+		{
+			"_name": "Refueling Base (MAP10) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110014": 
+		{
+			"_name": "Refueling Base (MAP10) - Invulnerability 2",
+			"doom_type": 2022,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110015": 
+		{
+			"_name": "Refueling Base (MAP10) - Armor 2",
+			"doom_type": 2018,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110016": 
+		{
+			"_name": "Refueling Base (MAP10) - Berserk 2",
+			"doom_type": 2023,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110017": 
+		{
+			"_name": "Refueling Base (MAP10) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110018": 
+		{
+			"_name": "Refueling Base (MAP10) - Chainsaw",
+			"doom_type": 2005,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110019": 
+		{
+			"_name": "Refueling Base (MAP10) - Yellow keycard",
+			"doom_type": 6,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"110020": 
+		{
+			"_name": "Refueling Base (MAP10) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 1, 10 ],
+			"region": "Refueling Base (MAP10) @ Main"
+		},
+		"111000": 
+		{
+			"_name": "Circle of Death (MAP11) - Exit",
+			"doom_type": -2,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Ending"
+		},
+		"111001": 
+		{
+			"_name": "Circle of Death (MAP11) - Red keycard",
+			"doom_type": 13,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Main"
+		},
+		"111002": 
+		{
+			"_name": "Circle of Death (MAP11) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Main"
+		},
+		"111003": 
+		{
+			"_name": "Circle of Death (MAP11) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Main"
+		},
+		"111004": 
+		{
+			"_name": "Circle of Death (MAP11) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Main"
+		},
+		"111005": 
+		{
+			"_name": "Circle of Death (MAP11) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Main"
+		},
+		"111006": 
+		{
+			"_name": "Circle of Death (MAP11) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Main"
+		},
+		"111007": 
+		{
+			"_name": "Circle of Death (MAP11) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Main"
+		},
+		"111008": 
+		{
+			"_name": "Circle of Death (MAP11) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Blue"
+		},
+		"111009": 
+		{
+			"_name": "Circle of Death (MAP11) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Main"
+		},
+		"111010": 
+		{
+			"_name": "Circle of Death (MAP11) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Red"
+		},
+		"111011": 
+		{
+			"_name": "Circle of Death (MAP11) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Red"
+		},
+		"111012": 
+		{
+			"_name": "Circle of Death (MAP11) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Ending"
+		},
+		"111013": 
+		{
+			"_name": "Circle of Death (MAP11) - Supercharge 2",
+			"doom_type": 2013,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Ending"
+		},
+		"111014": 
+		{
+			"_name": "Circle of Death (MAP11) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 1, 11 ],
+			"region": "Circle of Death (MAP11) @ Ending"
+		},
+		"201000": 
+		{
+			"_name": "The Factory (MAP12) - Exit",
+			"doom_type": -2,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Yellow"
+		},
+		"201001": 
+		{
+			"_name": "The Factory (MAP12) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Outdoors"
+		},
+		"201002": 
+		{
+			"_name": "The Factory (MAP12) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Main"
+		},
+		"201003": 
+		{
+			"_name": "The Factory (MAP12) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Main"
+		},
+		"201004": 
+		{
+			"_name": "The Factory (MAP12) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Indoors"
+		},
+		"201005": 
+		{
+			"_name": "The Factory (MAP12) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Indoors"
+		},
+		"201006": 
+		{
+			"_name": "The Factory (MAP12) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Blue"
+		},
+		"201007": 
+		{
+			"_name": "The Factory (MAP12) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Blue"
+		},
+		"201008": 
+		{
+			"_name": "The Factory (MAP12) - Supercharge 2",
+			"doom_type": 2013,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Indoors"
+		},
+		"201009": 
+		{
+			"_name": "The Factory (MAP12) - Armor 2",
+			"doom_type": 2018,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Outdoors"
+		},
+		"201010": 
+		{
+			"_name": "The Factory (MAP12) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Outdoors"
+		},
+		"201011": 
+		{
+			"_name": "The Factory (MAP12) - Berserk 2",
+			"doom_type": 2023,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Indoors"
+		},
+		"201012": 
+		{
+			"_name": "The Factory (MAP12) - Yellow keycard",
+			"doom_type": 6,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Indoors"
+		},
+		"201013": 
+		{
+			"_name": "The Factory (MAP12) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Blue"
+		},
+		"201014": 
+		{
+			"_name": "The Factory (MAP12) - Berserk 3",
+			"doom_type": 2023,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Main"
+		},
+		"201015": 
+		{
+			"_name": "The Factory (MAP12) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 2, 1 ],
+			"region": "The Factory (MAP12) @ Indoors"
+		},
+		"202000": 
+		{
+			"_name": "Downtown (MAP13) - Exit",
+			"doom_type": -2,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Yellow"
+		},
+		"202001": 
+		{
+			"_name": "Downtown (MAP13) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202002": 
+		{
+			"_name": "Downtown (MAP13) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202003": 
+		{
+			"_name": "Downtown (MAP13) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202004": 
+		{
+			"_name": "Downtown (MAP13) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202005": 
+		{
+			"_name": "Downtown (MAP13) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202006": 
+		{
+			"_name": "Downtown (MAP13) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202007": 
+		{
+			"_name": "Downtown (MAP13) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202008": 
+		{
+			"_name": "Downtown (MAP13) - Yellow keycard",
+			"doom_type": 6,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Red"
+		},
+		"202009": 
+		{
+			"_name": "Downtown (MAP13) - Berserk 2",
+			"doom_type": 2023,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Red"
+		},
+		"202010": 
+		{
+			"_name": "Downtown (MAP13) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202011": 
+		{
+			"_name": "Downtown (MAP13) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202012": 
+		{
+			"_name": "Downtown (MAP13) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202013": 
+		{
+			"_name": "Downtown (MAP13) - Chainsaw",
+			"doom_type": 2005,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Blue"
+		},
+		"202014": 
+		{
+			"_name": "Downtown (MAP13) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202015": 
+		{
+			"_name": "Downtown (MAP13) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Blue"
+		},
+		"202016": 
+		{
+			"_name": "Downtown (MAP13) - Invulnerability 2",
+			"doom_type": 2022,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202017": 
+		{
+			"_name": "Downtown (MAP13) - Partial invisibility 2",
+			"doom_type": 2024,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202018": 
+		{
+			"_name": "Downtown (MAP13) - Partial invisibility 3",
+			"doom_type": 2024,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"202019": 
+		{
+			"_name": "Downtown (MAP13) - Red keycard",
+			"doom_type": 13,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Blue"
+		},
+		"202020": 
+		{
+			"_name": "Downtown (MAP13) - Berserk 3",
+			"doom_type": 2023,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Yellow"
+		},
+		"202021": 
+		{
+			"_name": "Downtown (MAP13) - Computer area map",
+			"doom_type": 2026,
+			"exmx": [ 2, 2 ],
+			"region": "Downtown (MAP13) @ Main"
+		},
+		"203000": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Exit",
+			"doom_type": -2,
+			"exmx": [ 2, 3 ],
+			"region": "The Inmost Dens (MAP14) @ Blue"
+		},
+		"203001": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 2, 3 ],
+			"region": "The Inmost Dens (MAP14) @ Main"
+		},
+		"203002": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 2, 3 ],
+			"region": "The Inmost Dens (MAP14) @ Main"
+		},
+		"203003": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 2, 3 ],
+			"region": "The Inmost Dens (MAP14) @ Main"
+		},
+		"203004": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 2, 3 ],
+			"region": "The Inmost Dens (MAP14) @ Main"
+		},
+		"203005": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 2, 3 ],
+			"region": "The Inmost Dens (MAP14) @ Main"
+		},
+		"203006": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 2, 3 ],
+			"region": "The Inmost Dens (MAP14) @ Main"
+		},
+		"203007": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Red skull key",
+			"doom_type": 38,
+			"exmx": [ 2, 3 ],
+			"region": "The Inmost Dens (MAP14) @ Main"
+		},
+		"203008": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 2, 3 ],
+			"region": "The Inmost Dens (MAP14) @ Main"
+		},
+		"203009": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Blue skull key",
+			"doom_type": 40,
+			"exmx": [ 2, 3 ],
+			"region": "The Inmost Dens (MAP14) @ Red South"
+		},
+		"203010": 
+		{
+			"_name": "The Inmost Dens (MAP14) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 2, 3 ],
+			"region": "The Inmost Dens (MAP14) @ Red South"
+		},
+		"204000": 
+		{
+			"_name": "Industrial Zone (MAP15) - Exit",
+			"doom_type": -2,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Blue"
+		},
+		"204001": 
+		{
+			"_name": "Industrial Zone (MAP15) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Main"
+		},
+		"204002": 
+		{
+			"_name": "Industrial Zone (MAP15) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Main"
+		},
+		"204003": 
+		{
+			"_name": "Industrial Zone (MAP15) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Main"
+		},
+		"204004": 
+		{
+			"_name": "Industrial Zone (MAP15) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Red"
+		},
+		"204005": 
+		{
+			"_name": "Industrial Zone (MAP15) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Red"
+		},
+		"204006": 
+		{
+			"_name": "Industrial Zone (MAP15) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Red"
+		},
+		"204007": 
+		{
+			"_name": "Industrial Zone (MAP15) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Red"
+		},
+		"204008": 
+		{
+			"_name": "Industrial Zone (MAP15) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Red"
+		},
+		"204009": 
+		{
+			"_name": "Industrial Zone (MAP15) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Red"
+		},
+		"204010": 
+		{
+			"_name": "Industrial Zone (MAP15) - Yellow keycard",
+			"doom_type": 6,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Red"
+		},
+		"204011": 
+		{
+			"_name": "Industrial Zone (MAP15) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Main"
+		},
+		"204012": 
+		{
+			"_name": "Industrial Zone (MAP15) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Yellow West"
+		},
+		"204013": 
+		{
+			"_name": "Industrial Zone (MAP15) - Partial invisibility 2",
+			"doom_type": 2024,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Yellow West"
+		},
+		"204014": 
+		{
+			"_name": "Industrial Zone (MAP15) - Computer area map",
+			"doom_type": 2026,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Yellow West"
+		},
+		"204015": 
+		{
+			"_name": "Industrial Zone (MAP15) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Red"
+		},
+		"204016": 
+		{
+			"_name": "Industrial Zone (MAP15) - Red keycard",
+			"doom_type": 13,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Main"
+		},
+		"204017": 
+		{
+			"_name": "Industrial Zone (MAP15) - Backpack 2",
+			"doom_type": 8,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Yellow West"
+		},
+		"204018": 
+		{
+			"_name": "Industrial Zone (MAP15) - Chainsaw",
+			"doom_type": 2005,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Yellow East"
+		},
+		"204019": 
+		{
+			"_name": "Industrial Zone (MAP15) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Yellow East"
+		},
+		"204020": 
+		{
+			"_name": "Industrial Zone (MAP15) - Berserk 2",
+			"doom_type": 2023,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Yellow East"
+		},
+		"204021": 
+		{
+			"_name": "Industrial Zone (MAP15) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Yellow West"
+		},
+		"204022": 
+		{
+			"_name": "Industrial Zone (MAP15) - Mega Armor 2",
+			"doom_type": 2019,
+			"exmx": [ 2, 4 ],
+			"region": "Industrial Zone (MAP15) @ Main"
+		},
+		"205000": 
+		{
+			"_name": "Suburbs (MAP16) - Exit",
+			"doom_type": -2,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Red"
+		},
+		"205001": 
+		{
+			"_name": "Suburbs (MAP16) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Main"
+		},
+		"205002": 
+		{
+			"_name": "Suburbs (MAP16) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Main"
+		},
+		"205003": 
+		{
+			"_name": "Suburbs (MAP16) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Main"
+		},
+		"205004": 
+		{
+			"_name": "Suburbs (MAP16) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Main"
+		},
+		"205005": 
+		{
+			"_name": "Suburbs (MAP16) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Main"
+		},
+		"205006": 
+		{
+			"_name": "Suburbs (MAP16) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Main"
+		},
+		"205007": 
+		{
+			"_name": "Suburbs (MAP16) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Blue"
+		},
+		"205008": 
+		{
+			"_name": "Suburbs (MAP16) - Plasma gun 2",
+			"doom_type": 2004,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Blue"
+		},
+		"205009": 
+		{
+			"_name": "Suburbs (MAP16) - Plasma gun 3",
+			"doom_type": 2004,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Blue"
+		},
+		"205010": 
+		{
+			"_name": "Suburbs (MAP16) - Plasma gun 4",
+			"doom_type": 2004,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Blue"
+		},
+		"205011": 
+		{
+			"_name": "Suburbs (MAP16) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Main"
+		},
+		"205012": 
+		{
+			"_name": "Suburbs (MAP16) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Main"
+		},
+		"205013": 
+		{
+			"_name": "Suburbs (MAP16) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Main"
+		},
+		"205014": 
+		{
+			"_name": "Suburbs (MAP16) - Blue skull key",
+			"doom_type": 40,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Main"
+		},
+		"205015": 
+		{
+			"_name": "Suburbs (MAP16) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Main"
+		},
+		"205016": 
+		{
+			"_name": "Suburbs (MAP16) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Main"
+		},
+		"205017": 
+		{
+			"_name": "Suburbs (MAP16) - Red skull key",
+			"doom_type": 38,
+			"exmx": [ 2, 5 ],
+			"region": "Suburbs (MAP16) @ Blue"
+		},
+		"206000": 
+		{
+			"_name": "Tenements (MAP17) - Exit",
+			"doom_type": -2,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Yellow"
+		},
+		"206001": 
+		{
+			"_name": "Tenements (MAP17) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Red"
+		},
+		"206002": 
+		{
+			"_name": "Tenements (MAP17) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Yellow"
+		},
+		"206003": 
+		{
+			"_name": "Tenements (MAP17) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Main"
+		},
+		"206004": 
+		{
+			"_name": "Tenements (MAP17) - Red keycard",
+			"doom_type": 13,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Main"
+		},
+		"206005": 
+		{
+			"_name": "Tenements (MAP17) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Red"
+		},
+		"206006": 
+		{
+			"_name": "Tenements (MAP17) - Supercharge 2",
+			"doom_type": 2013,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Blue"
+		},
+		"206007": 
+		{
+			"_name": "Tenements (MAP17) - Yellow skull key",
+			"doom_type": 39,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Blue"
+		},
+		"206008": 
+		{
+			"_name": "Tenements (MAP17) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Blue"
+		},
+		"206009": 
+		{
+			"_name": "Tenements (MAP17) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Blue"
+		},
+		"206010": 
+		{
+			"_name": "Tenements (MAP17) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Red"
+		},
+		"206011": 
+		{
+			"_name": "Tenements (MAP17) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Yellow"
+		},
+		"206012": 
+		{
+			"_name": "Tenements (MAP17) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Yellow"
+		},
+		"206013": 
+		{
+			"_name": "Tenements (MAP17) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Red"
+		},
+		"206014": 
+		{
+			"_name": "Tenements (MAP17) - Armor 2",
+			"doom_type": 2018,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Red"
+		},
+		"206015": 
+		{
+			"_name": "Tenements (MAP17) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Red"
+		},
+		"206016": 
+		{
+			"_name": "Tenements (MAP17) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Blue"
+		},
+		"206017": 
+		{
+			"_name": "Tenements (MAP17) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 2, 6 ],
+			"region": "Tenements (MAP17) @ Yellow"
+		},
+		"207000": 
+		{
+			"_name": "The Courtyard (MAP18) - Exit",
+			"doom_type": -2,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Blue"
+		},
+		"207001": 
+		{
+			"_name": "The Courtyard (MAP18) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207002": 
+		{
+			"_name": "The Courtyard (MAP18) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207003": 
+		{
+			"_name": "The Courtyard (MAP18) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207004": 
+		{
+			"_name": "The Courtyard (MAP18) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207005": 
+		{
+			"_name": "The Courtyard (MAP18) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207006": 
+		{
+			"_name": "The Courtyard (MAP18) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207007": 
+		{
+			"_name": "The Courtyard (MAP18) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207008": 
+		{
+			"_name": "The Courtyard (MAP18) - Partial invisibility 2",
+			"doom_type": 2024,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207009": 
+		{
+			"_name": "The Courtyard (MAP18) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207010": 
+		{
+			"_name": "The Courtyard (MAP18) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207011": 
+		{
+			"_name": "The Courtyard (MAP18) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207012": 
+		{
+			"_name": "The Courtyard (MAP18) - Invulnerability 2",
+			"doom_type": 2022,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207013": 
+		{
+			"_name": "The Courtyard (MAP18) - Yellow skull key",
+			"doom_type": 39,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207014": 
+		{
+			"_name": "The Courtyard (MAP18) - Blue skull key",
+			"doom_type": 40,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Yellow"
+		},
+		"207015": 
+		{
+			"_name": "The Courtyard (MAP18) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207016": 
+		{
+			"_name": "The Courtyard (MAP18) - Computer area map",
+			"doom_type": 2026,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"207017": 
+		{
+			"_name": "The Courtyard (MAP18) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 2, 7 ],
+			"region": "The Courtyard (MAP18) @ Main"
+		},
+		"208000": 
+		{
+			"_name": "The Citadel (MAP19) - Exit",
+			"doom_type": -2,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Red"
+		},
+		"208001": 
+		{
+			"_name": "The Citadel (MAP19) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208002": 
+		{
+			"_name": "The Citadel (MAP19) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208003": 
+		{
+			"_name": "The Citadel (MAP19) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208004": 
+		{
+			"_name": "The Citadel (MAP19) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208005": 
+		{
+			"_name": "The Citadel (MAP19) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208006": 
+		{
+			"_name": "The Citadel (MAP19) - Armor 2",
+			"doom_type": 2018,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208007": 
+		{
+			"_name": "The Citadel (MAP19) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208008": 
+		{
+			"_name": "The Citadel (MAP19) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208009": 
+		{
+			"_name": "The Citadel (MAP19) - Blue skull key",
+			"doom_type": 40,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208010": 
+		{
+			"_name": "The Citadel (MAP19) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208011": 
+		{
+			"_name": "The Citadel (MAP19) - Red skull key",
+			"doom_type": 38,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208012": 
+		{
+			"_name": "The Citadel (MAP19) - Yellow skull key",
+			"doom_type": 39,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208013": 
+		{
+			"_name": "The Citadel (MAP19) - Computer area map",
+			"doom_type": 2026,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208014": 
+		{
+			"_name": "The Citadel (MAP19) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"208015": 
+		{
+			"_name": "The Citadel (MAP19) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 2, 8 ],
+			"region": "The Citadel (MAP19) @ Main"
+		},
+		"209000": 
+		{
+			"_name": "Gotcha! (MAP20) - Exit",
+			"doom_type": -2,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209001": 
+		{
+			"_name": "Gotcha! (MAP20) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209002": 
+		{
+			"_name": "Gotcha! (MAP20) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209003": 
+		{
+			"_name": "Gotcha! (MAP20) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209004": 
+		{
+			"_name": "Gotcha! (MAP20) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209005": 
+		{
+			"_name": "Gotcha! (MAP20) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209006": 
+		{
+			"_name": "Gotcha! (MAP20) - Armor 2",
+			"doom_type": 2018,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209007": 
+		{
+			"_name": "Gotcha! (MAP20) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209008": 
+		{
+			"_name": "Gotcha! (MAP20) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209009": 
+		{
+			"_name": "Gotcha! (MAP20) - Mega Armor 2",
+			"doom_type": 2019,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209010": 
+		{
+			"_name": "Gotcha! (MAP20) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209011": 
+		{
+			"_name": "Gotcha! (MAP20) - Supercharge 2",
+			"doom_type": 2013,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209012": 
+		{
+			"_name": "Gotcha! (MAP20) - Supercharge 3",
+			"doom_type": 2013,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209013": 
+		{
+			"_name": "Gotcha! (MAP20) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"209014": 
+		{
+			"_name": "Gotcha! (MAP20) - Supercharge 4",
+			"doom_type": 2013,
+			"exmx": [ 2, 9 ],
+			"region": "Gotcha! (MAP20) @ Main"
+		},
+		"301000": 
+		{
+			"_name": "Nirvana (MAP21) - Exit",
+			"doom_type": -2,
+			"exmx": [ 3, 1 ],
+			"region": "Nirvana (MAP21) @ Magenta"
+		},
+		"301001": 
+		{
+			"_name": "Nirvana (MAP21) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 3, 1 ],
+			"region": "Nirvana (MAP21) @ Start"
+		},
+		"301002": 
+		{
+			"_name": "Nirvana (MAP21) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 3, 1 ],
+			"region": "Nirvana (MAP21) @ Main"
+		},
+		"301003": 
+		{
+			"_name": "Nirvana (MAP21) - Yellow skull key",
+			"doom_type": 39,
+			"exmx": [ 3, 1 ],
+			"region": "Nirvana (MAP21) @ Main"
+		},
+		"301004": 
+		{
+			"_name": "Nirvana (MAP21) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 3, 1 ],
+			"region": "Nirvana (MAP21) @ Main"
+		},
+		"301005": 
+		{
+			"_name": "Nirvana (MAP21) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 3, 1 ],
+			"region": "Nirvana (MAP21) @ Main"
+		},
+		"301006": 
+		{
+			"_name": "Nirvana (MAP21) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 3, 1 ],
+			"region": "Nirvana (MAP21) @ Yellow"
+		},
+		"301007": 
+		{
+			"_name": "Nirvana (MAP21) - Blue skull key",
+			"doom_type": 40,
+			"exmx": [ 3, 1 ],
+			"region": "Nirvana (MAP21) @ Yellow"
+		},
+		"301008": 
+		{
+			"_name": "Nirvana (MAP21) - Red skull key",
+			"doom_type": 38,
+			"exmx": [ 3, 1 ],
+			"region": "Nirvana (MAP21) @ Yellow"
+		},
+		"302000": 
+		{
+			"_name": "The Catacombs (MAP22) - Exit",
+			"doom_type": -2,
+			"exmx": [ 3, 2 ],
+			"region": "The Catacombs (MAP22) @ Red"
+		},
+		"302001": 
+		{
+			"_name": "The Catacombs (MAP22) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 3, 2 ],
+			"region": "The Catacombs (MAP22) @ Main"
+		},
+		"302002": 
+		{
+			"_name": "The Catacombs (MAP22) - Blue skull key",
+			"doom_type": 40,
+			"exmx": [ 3, 2 ],
+			"region": "The Catacombs (MAP22) @ Main"
+		},
+		"302003": 
+		{
+			"_name": "The Catacombs (MAP22) - Red skull key",
+			"doom_type": 38,
+			"exmx": [ 3, 2 ],
+			"region": "The Catacombs (MAP22) @ Blue"
+		},
+		"302004": 
+		{
+			"_name": "The Catacombs (MAP22) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 3, 2 ],
+			"region": "The Catacombs (MAP22) @ Early"
+		},
+		"302005": 
+		{
+			"_name": "The Catacombs (MAP22) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 3, 2 ],
+			"region": "The Catacombs (MAP22) @ Main"
+		},
+		"302006": 
+		{
+			"_name": "The Catacombs (MAP22) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 3, 2 ],
+			"region": "The Catacombs (MAP22) @ Early"
+		},
+		"302007": 
+		{
+			"_name": "The Catacombs (MAP22) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 3, 2 ],
+			"region": "The Catacombs (MAP22) @ Early"
+		},
+		"302008": 
+		{
+			"_name": "The Catacombs (MAP22) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 3, 2 ],
+			"region": "The Catacombs (MAP22) @ Early"
+		},
+		"303000": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Exit",
+			"doom_type": -2,
+			"exmx": [ 3, 3 ],
+			"region": "Barrels o' Fun (MAP23) @ Yellow"
+		},
+		"303001": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 3, 3 ],
+			"region": "Barrels o' Fun (MAP23) @ Main"
+		},
+		"303002": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 3, 3 ],
+			"region": "Barrels o' Fun (MAP23) @ Main"
+		},
+		"303003": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 3, 3 ],
+			"region": "Barrels o' Fun (MAP23) @ Main"
+		},
+		"303004": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Computer area map",
+			"doom_type": 2026,
+			"exmx": [ 3, 3 ],
+			"region": "Barrels o' Fun (MAP23) @ Main"
+		},
+		"303005": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 3, 3 ],
+			"region": "Barrels o' Fun (MAP23) @ Main"
+		},
+		"303006": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 3, 3 ],
+			"region": "Barrels o' Fun (MAP23) @ Main"
+		},
+		"303007": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 3, 3 ],
+			"region": "Barrels o' Fun (MAP23) @ Main"
+		},
+		"303008": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 3, 3 ],
+			"region": "Barrels o' Fun (MAP23) @ Main"
+		},
+		"303009": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Backpack 2",
+			"doom_type": 8,
+			"exmx": [ 3, 3 ],
+			"region": "Barrels o' Fun (MAP23) @ Main"
+		},
+		"303010": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - Yellow skull key",
+			"doom_type": 39,
+			"exmx": [ 3, 3 ],
+			"region": "Barrels o' Fun (MAP23) @ Main"
+		},
+		"303011": 
+		{
+			"_name": "Barrels o' Fun (MAP23) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 3, 3 ],
+			"region": "Barrels o' Fun (MAP23) @ Main"
+		},
+		"304000": 
+		{
+			"_name": "The Chasm (MAP24) - Exit",
+			"doom_type": -2,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Red"
+		},
+		"304001": 
+		{
+			"_name": "The Chasm (MAP24) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Blue"
+		},
+		"304002": 
+		{
+			"_name": "The Chasm (MAP24) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Main"
+		},
+		"304003": 
+		{
+			"_name": "The Chasm (MAP24) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Blue"
+		},
+		"304004": 
+		{
+			"_name": "The Chasm (MAP24) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Main"
+		},
+		"304005": 
+		{
+			"_name": "The Chasm (MAP24) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Main"
+		},
+		"304006": 
+		{
+			"_name": "The Chasm (MAP24) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Blue"
+		},
+		"304007": 
+		{
+			"_name": "The Chasm (MAP24) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Main"
+		},
+		"304008": 
+		{
+			"_name": "The Chasm (MAP24) - Berserk 2",
+			"doom_type": 2023,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Blue"
+		},
+		"304009": 
+		{
+			"_name": "The Chasm (MAP24) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Blue"
+		},
+		"304010": 
+		{
+			"_name": "The Chasm (MAP24) - Red keycard",
+			"doom_type": 13,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Blue"
+		},
+		"304011": 
+		{
+			"_name": "The Chasm (MAP24) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Main"
+		},
+		"304012": 
+		{
+			"_name": "The Chasm (MAP24) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Main"
+		},
+		"304013": 
+		{
+			"_name": "The Chasm (MAP24) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Blue"
+		},
+		"304014": 
+		{
+			"_name": "The Chasm (MAP24) - Megasphere 2",
+			"doom_type": 83,
+			"exmx": [ 3, 4 ],
+			"region": "The Chasm (MAP24) @ Main"
+		},
+		"305000": 
+		{
+			"_name": "Bloodfalls (MAP25) - Exit",
+			"doom_type": -2,
+			"exmx": [ 3, 5 ],
+			"region": "Bloodfalls (MAP25) @ Blue"
+		},
+		"305001": 
+		{
+			"_name": "Bloodfalls (MAP25) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 3, 5 ],
+			"region": "Bloodfalls (MAP25) @ Start"
+		},
+		"305002": 
+		{
+			"_name": "Bloodfalls (MAP25) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 3, 5 ],
+			"region": "Bloodfalls (MAP25) @ Blue"
+		},
+		"305003": 
+		{
+			"_name": "Bloodfalls (MAP25) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 3, 5 ],
+			"region": "Bloodfalls (MAP25) @ Main"
+		},
+		"305004": 
+		{
+			"_name": "Bloodfalls (MAP25) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 3, 5 ],
+			"region": "Bloodfalls (MAP25) @ Blue"
+		},
+		"305005": 
+		{
+			"_name": "Bloodfalls (MAP25) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 3, 5 ],
+			"region": "Bloodfalls (MAP25) @ Main"
+		},
+		"305006": 
+		{
+			"_name": "Bloodfalls (MAP25) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 3, 5 ],
+			"region": "Bloodfalls (MAP25) @ Main"
+		},
+		"305007": 
+		{
+			"_name": "Bloodfalls (MAP25) - Blue skull key",
+			"doom_type": 40,
+			"exmx": [ 3, 5 ],
+			"region": "Bloodfalls (MAP25) @ Main"
+		},
+		"305008": 
+		{
+			"_name": "Bloodfalls (MAP25) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 3, 5 ],
+			"region": "Bloodfalls (MAP25) @ Main"
+		},
+		"305009": 
+		{
+			"_name": "Bloodfalls (MAP25) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 3, 5 ],
+			"region": "Bloodfalls (MAP25) @ Main"
+		},
+		"305010": 
+		{
+			"_name": "Bloodfalls (MAP25) - BFG9000 2",
+			"doom_type": 2006,
+			"exmx": [ 3, 5 ],
+			"region": "Bloodfalls (MAP25) @ Main"
+		},
+		"305011": 
+		{
+			"_name": "Bloodfalls (MAP25) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 3, 5 ],
+			"region": "Bloodfalls (MAP25) @ Main"
+		},
+		"306000": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Exit",
+			"doom_type": -2,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Yellow"
+		},
+		"306001": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Blue keycard",
+			"doom_type": 5,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Red"
+		},
+		"306002": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Main"
+		},
+		"306003": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Main"
+		},
+		"306004": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Red"
+		},
+		"306005": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Main"
+		},
+		"306006": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Red"
+		},
+		"306007": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Main"
+		},
+		"306008": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Main"
+		},
+		"306009": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Main"
+		},
+		"306010": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Red keycard",
+			"doom_type": 13,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Main"
+		},
+		"306011": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Yellow keycard",
+			"doom_type": 6,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Blue"
+		},
+		"306012": 
+		{
+			"_name": "The Abandoned Mines (MAP26) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 3, 6 ],
+			"region": "The Abandoned Mines (MAP26) @ Main"
+		},
+		"307000": 
+		{
+			"_name": "Monster Condo (MAP27) - Exit",
+			"doom_type": -2,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Red"
+		},
+		"307001": 
+		{
+			"_name": "Monster Condo (MAP27) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307002": 
+		{
+			"_name": "Monster Condo (MAP27) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307003": 
+		{
+			"_name": "Monster Condo (MAP27) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307004": 
+		{
+			"_name": "Monster Condo (MAP27) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307005": 
+		{
+			"_name": "Monster Condo (MAP27) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307006": 
+		{
+			"_name": "Monster Condo (MAP27) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307007": 
+		{
+			"_name": "Monster Condo (MAP27) - Invulnerability 2",
+			"doom_type": 2022,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307008": 
+		{
+			"_name": "Monster Condo (MAP27) - Partial invisibility 2",
+			"doom_type": 2024,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307009": 
+		{
+			"_name": "Monster Condo (MAP27) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307010": 
+		{
+			"_name": "Monster Condo (MAP27) - Armor 2",
+			"doom_type": 2018,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307011": 
+		{
+			"_name": "Monster Condo (MAP27) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307012": 
+		{
+			"_name": "Monster Condo (MAP27) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307013": 
+		{
+			"_name": "Monster Condo (MAP27) - Backpack 2",
+			"doom_type": 8,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307014": 
+		{
+			"_name": "Monster Condo (MAP27) - Backpack 3",
+			"doom_type": 8,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307015": 
+		{
+			"_name": "Monster Condo (MAP27) - Backpack 4",
+			"doom_type": 8,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307016": 
+		{
+			"_name": "Monster Condo (MAP27) - Yellow skull key",
+			"doom_type": 39,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307017": 
+		{
+			"_name": "Monster Condo (MAP27) - Red skull key",
+			"doom_type": 38,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Blue"
+		},
+		"307018": 
+		{
+			"_name": "Monster Condo (MAP27) - Supercharge 2",
+			"doom_type": 2013,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Blue"
+		},
+		"307019": 
+		{
+			"_name": "Monster Condo (MAP27) - Blue skull key",
+			"doom_type": 40,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Yellow"
+		},
+		"307020": 
+		{
+			"_name": "Monster Condo (MAP27) - Supercharge 3",
+			"doom_type": 2013,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Yellow"
+		},
+		"307021": 
+		{
+			"_name": "Monster Condo (MAP27) - Computer area map",
+			"doom_type": 2026,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Yellow"
+		},
+		"307022": 
+		{
+			"_name": "Monster Condo (MAP27) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Yellow"
+		},
+		"307023": 
+		{
+			"_name": "Monster Condo (MAP27) - Supercharge 4",
+			"doom_type": 2013,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Yellow"
+		},
+		"307024": 
+		{
+			"_name": "Monster Condo (MAP27) - Supercharge 5",
+			"doom_type": 2013,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Yellow"
+		},
+		"307025": 
+		{
+			"_name": "Monster Condo (MAP27) - Computer area map 2",
+			"doom_type": 2026,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Yellow"
+		},
+		"307026": 
+		{
+			"_name": "Monster Condo (MAP27) - Berserk 2",
+			"doom_type": 2023,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Yellow"
+		},
+		"307027": 
+		{
+			"_name": "Monster Condo (MAP27) - Partial invisibility 3",
+			"doom_type": 2024,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Yellow"
+		},
+		"307028": 
+		{
+			"_name": "Monster Condo (MAP27) - Invulnerability 3",
+			"doom_type": 2022,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Yellow"
+		},
+		"307029": 
+		{
+			"_name": "Monster Condo (MAP27) - Chainsaw",
+			"doom_type": 2005,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"307030": 
+		{
+			"_name": "Monster Condo (MAP27) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 3, 7 ],
+			"region": "Monster Condo (MAP27) @ Main"
+		},
+		"308000": 
+		{
+			"_name": "The Spirit World (MAP28) - Exit",
+			"doom_type": -2,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Red"
+		},
+		"308001": 
+		{
+			"_name": "The Spirit World (MAP28) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308002": 
+		{
+			"_name": "The Spirit World (MAP28) - Chainsaw",
+			"doom_type": 2005,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308003": 
+		{
+			"_name": "The Spirit World (MAP28) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308004": 
+		{
+			"_name": "The Spirit World (MAP28) - Yellow skull key",
+			"doom_type": 39,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308005": 
+		{
+			"_name": "The Spirit World (MAP28) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308006": 
+		{
+			"_name": "The Spirit World (MAP28) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308007": 
+		{
+			"_name": "The Spirit World (MAP28) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308008": 
+		{
+			"_name": "The Spirit World (MAP28) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308009": 
+		{
+			"_name": "The Spirit World (MAP28) - Backpack 2",
+			"doom_type": 8,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308010": 
+		{
+			"_name": "The Spirit World (MAP28) - Backpack 3",
+			"doom_type": 8,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308011": 
+		{
+			"_name": "The Spirit World (MAP28) - Backpack 4",
+			"doom_type": 8,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308012": 
+		{
+			"_name": "The Spirit World (MAP28) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308013": 
+		{
+			"_name": "The Spirit World (MAP28) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308014": 
+		{
+			"_name": "The Spirit World (MAP28) - Invulnerability 2",
+			"doom_type": 2022,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308015": 
+		{
+			"_name": "The Spirit World (MAP28) - Invulnerability 3",
+			"doom_type": 2022,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308016": 
+		{
+			"_name": "The Spirit World (MAP28) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308017": 
+		{
+			"_name": "The Spirit World (MAP28) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308018": 
+		{
+			"_name": "The Spirit World (MAP28) - Megasphere 2",
+			"doom_type": 83,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308019": 
+		{
+			"_name": "The Spirit World (MAP28) - Invulnerability 4",
+			"doom_type": 2022,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308020": 
+		{
+			"_name": "The Spirit World (MAP28) - Invulnerability 5",
+			"doom_type": 2022,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308021": 
+		{
+			"_name": "The Spirit World (MAP28) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Main"
+		},
+		"308022": 
+		{
+			"_name": "The Spirit World (MAP28) - Red skull key",
+			"doom_type": 38,
+			"exmx": [ 3, 8 ],
+			"region": "The Spirit World (MAP28) @ Yellow"
+		},
+		"309000": 
+		{
+			"_name": "The Living End (MAP29) - Exit",
+			"doom_type": -2,
+			"exmx": [ 3, 9 ],
+			"region": "The Living End (MAP29) @ Main"
+		},
+		"309001": 
+		{
+			"_name": "The Living End (MAP29) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 3, 9 ],
+			"region": "The Living End (MAP29) @ Main"
+		},
+		"309002": 
+		{
+			"_name": "The Living End (MAP29) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 3, 9 ],
+			"region": "The Living End (MAP29) @ Main"
+		},
+		"309003": 
+		{
+			"_name": "The Living End (MAP29) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 3, 9 ],
+			"region": "The Living End (MAP29) @ Main"
+		},
+		"309004": 
+		{
+			"_name": "The Living End (MAP29) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 3, 9 ],
+			"region": "The Living End (MAP29) @ Main"
+		},
+		"309005": 
+		{
+			"_name": "The Living End (MAP29) - Mega Armor",
+			"doom_type": 2019,
+			"exmx": [ 3, 9 ],
+			"region": "The Living End (MAP29) @ Main"
+		},
+		"309006": 
+		{
+			"_name": "The Living End (MAP29) - Armor",
+			"doom_type": 2018,
+			"exmx": [ 3, 9 ],
+			"region": "The Living End (MAP29) @ Main"
+		},
+		"309007": 
+		{
+			"_name": "The Living End (MAP29) - Backpack 2",
+			"doom_type": 8,
+			"exmx": [ 3, 9 ],
+			"region": "The Living End (MAP29) @ Main"
+		},
+		"309008": 
+		{
+			"_name": "The Living End (MAP29) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 3, 9 ],
+			"region": "The Living End (MAP29) @ Main"
+		},
+		"309009": 
+		{
+			"_name": "The Living End (MAP29) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 3, 9 ],
+			"region": "The Living End (MAP29) @ Main"
+		},
+		"309010": 
+		{
+			"_name": "The Living End (MAP29) - Berserk 2",
+			"doom_type": 2023,
+			"exmx": [ 3, 9 ],
+			"region": "The Living End (MAP29) @ Main"
+		},
+		"310000": 
+		{
+			"_name": "Icon of Sin (MAP30) - Exit",
+			"doom_type": -2,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Main"
+		},
+		"310001": 
+		{
+			"_name": "Icon of Sin (MAP30) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Main"
+		},
+		"310002": 
+		{
+			"_name": "Icon of Sin (MAP30) - Supercharge 2",
+			"doom_type": 2013,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Main"
+		},
+		"310003": 
+		{
+			"_name": "Icon of Sin (MAP30) - Supercharge 3",
+			"doom_type": 2013,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Main"
+		},
+		"310004": 
+		{
+			"_name": "Icon of Sin (MAP30) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Main"
+		},
+		"310005": 
+		{
+			"_name": "Icon of Sin (MAP30) - Invulnerability 2",
+			"doom_type": 2022,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Main"
+		},
+		"310006": 
+		{
+			"_name": "Icon of Sin (MAP30) - Invulnerability 3",
+			"doom_type": 2022,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Main"
+		},
+		"310007": 
+		{
+			"_name": "Icon of Sin (MAP30) - Invulnerability 4",
+			"doom_type": 2022,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Main"
+		},
+		"310008": 
+		{
+			"_name": "Icon of Sin (MAP30) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Start"
+		},
+		"310009": 
+		{
+			"_name": "Icon of Sin (MAP30) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Start"
+		},
+		"310010": 
+		{
+			"_name": "Icon of Sin (MAP30) - Chainsaw",
+			"doom_type": 2005,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Start"
+		},
+		"310011": 
+		{
+			"_name": "Icon of Sin (MAP30) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Start"
+		},
+		"310012": 
+		{
+			"_name": "Icon of Sin (MAP30) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Start"
+		},
+		"310013": 
+		{
+			"_name": "Icon of Sin (MAP30) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Start"
+		},
+		"310014": 
+		{
+			"_name": "Icon of Sin (MAP30) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Start"
+		},
+		"310015": 
+		{
+			"_name": "Icon of Sin (MAP30) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Start"
+		},
+		"310016": 
+		{
+			"_name": "Icon of Sin (MAP30) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Start"
+		},
+		"310017": 
+		{
+			"_name": "Icon of Sin (MAP30) - Megasphere 2",
+			"doom_type": 83,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Main"
+		},
+		"310018": 
+		{
+			"_name": "Icon of Sin (MAP30) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 3, 10 ],
+			"region": "Icon of Sin (MAP30) @ Main"
+		},
+		"401000": 
+		{
+			"_name": "Wolfenstein (MAP31) - Exit",
+			"doom_type": -2,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401001": 
+		{
+			"_name": "Wolfenstein (MAP31) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401002": 
+		{
+			"_name": "Wolfenstein (MAP31) - Shotgun",
+			"doom_type": 2001,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401003": 
+		{
+			"_name": "Wolfenstein (MAP31) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401004": 
+		{
+			"_name": "Wolfenstein (MAP31) - Supercharge",
+			"doom_type": 2013,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401005": 
+		{
+			"_name": "Wolfenstein (MAP31) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401006": 
+		{
+			"_name": "Wolfenstein (MAP31) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401007": 
+		{
+			"_name": "Wolfenstein (MAP31) - Partial invisibility",
+			"doom_type": 2024,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401008": 
+		{
+			"_name": "Wolfenstein (MAP31) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401009": 
+		{
+			"_name": "Wolfenstein (MAP31) - Backpack",
+			"doom_type": 8,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401010": 
+		{
+			"_name": "Wolfenstein (MAP31) - Backpack 2",
+			"doom_type": 8,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401011": 
+		{
+			"_name": "Wolfenstein (MAP31) - Backpack 3",
+			"doom_type": 8,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401012": 
+		{
+			"_name": "Wolfenstein (MAP31) - Backpack 4",
+			"doom_type": 8,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401013": 
+		{
+			"_name": "Wolfenstein (MAP31) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"401014": 
+		{
+			"_name": "Wolfenstein (MAP31) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 4, 1 ],
+			"region": "Wolfenstein (MAP31) @ Main"
+		},
+		"402000": 
+		{
+			"_name": "Grosse (MAP32) - Exit",
+			"doom_type": -2,
+			"exmx": [ 4, 2 ],
+			"region": "Grosse (MAP32) @ Main"
+		},
+		"402001": 
+		{
+			"_name": "Grosse (MAP32) - Plasma gun",
+			"doom_type": 2004,
+			"exmx": [ 4, 2 ],
+			"region": "Grosse (MAP32) @ Main"
+		},
+		"402002": 
+		{
+			"_name": "Grosse (MAP32) - Rocket launcher",
+			"doom_type": 2003,
+			"exmx": [ 4, 2 ],
+			"region": "Grosse (MAP32) @ Start"
+		},
+		"402003": 
+		{
+			"_name": "Grosse (MAP32) - Invulnerability",
+			"doom_type": 2022,
+			"exmx": [ 4, 2 ],
+			"region": "Grosse (MAP32) @ Main"
+		},
+		"402004": 
+		{
+			"_name": "Grosse (MAP32) - Super Shotgun",
+			"doom_type": 82,
+			"exmx": [ 4, 2 ],
+			"region": "Grosse (MAP32) @ Main"
+		},
+		"402005": 
+		{
+			"_name": "Grosse (MAP32) - BFG9000",
+			"doom_type": 2006,
+			"exmx": [ 4, 2 ],
+			"region": "Grosse (MAP32) @ Main"
+		},
+		"402006": 
+		{
+			"_name": "Grosse (MAP32) - Megasphere",
+			"doom_type": 83,
+			"exmx": [ 4, 2 ],
+			"region": "Grosse (MAP32) @ Main"
+		},
+		"402007": 
+		{
+			"_name": "Grosse (MAP32) - Chaingun",
+			"doom_type": 2002,
+			"exmx": [ 4, 2 ],
+			"region": "Grosse (MAP32) @ Main"
+		},
+		"402008": 
+		{
+			"_name": "Grosse (MAP32) - Chaingun 2",
+			"doom_type": 2002,
+			"exmx": [ 4, 2 ],
+			"region": "Grosse (MAP32) @ Main"
+		},
+		"402009": 
+		{
+			"_name": "Grosse (MAP32) - Chaingun 3",
+			"doom_type": 2002,
+			"exmx": [ 4, 2 ],
+			"region": "Grosse (MAP32) @ Main"
+		},
+		"402010": 
+		{
+			"_name": "Grosse (MAP32) - Berserk",
+			"doom_type": 2023,
+			"exmx": [ 4, 2 ],
+			"region": "Grosse (MAP32) @ Start"
+		}
+	},
+	"regions": 
+	[
+		{
+			"_name": "Hub",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Entryway (MAP01)",
+					"rules": 
+					[
+						{
+							"and": [ "Entryway (MAP01)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Underhalls (MAP02)",
+					"rules": 
+					[
+						{
+							"and": [ "Underhalls (MAP02)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Gantlet (MAP03)",
+					"rules": 
+					[
+						{
+							"and": [ "The Gantlet (MAP03)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Focus (MAP04)",
+					"rules": 
+					[
+						{
+							"and": [ "The Focus (MAP04)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Waste Tunnels (MAP05)",
+					"rules": 
+					[
+						{
+							"and": [ "The Waste Tunnels (MAP05)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Crusher (MAP06)",
+					"rules": 
+					[
+						{
+							"and": [ "The Crusher (MAP06)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Dead Simple (MAP07)",
+					"rules": 
+					[
+						{
+							"and": [ "Dead Simple (MAP07)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Tricks and Traps (MAP08)",
+					"rules": 
+					[
+						{
+							"and": [ "Tricks and Traps (MAP08)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Pit (MAP09)",
+					"rules": 
+					[
+						{
+							"and": [ "The Pit (MAP09)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Refueling Base (MAP10)",
+					"rules": 
+					[
+						{
+							"and": [ "Refueling Base (MAP10)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Circle of Death (MAP11)",
+					"rules": 
+					[
+						{
+							"and": [ "Circle of Death (MAP11)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Factory (MAP12)",
+					"rules": 
+					[
+						{
+							"and": [ "The Factory (MAP12)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Downtown (MAP13)",
+					"rules": 
+					[
+						{
+							"and": [ "Downtown (MAP13)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Inmost Dens (MAP14)",
+					"rules": 
+					[
+						{
+							"and": [ "The Inmost Dens (MAP14)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Industrial Zone (MAP15)",
+					"rules": 
+					[
+						{
+							"and": [ "Industrial Zone (MAP15)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Suburbs (MAP16)",
+					"rules": 
+					[
+						{
+							"and": [ "Suburbs (MAP16)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Tenements (MAP17)",
+					"rules": 
+					[
+						{
+							"and": [ "Tenements (MAP17)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Courtyard (MAP18)",
+					"rules": 
+					[
+						{
+							"and": [ "The Courtyard (MAP18)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Citadel (MAP19)",
+					"rules": 
+					[
+						{
+							"and": [ "The Citadel (MAP19)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Gotcha! (MAP20)",
+					"rules": 
+					[
+						{
+							"and": [ "Gotcha! (MAP20)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Nirvana (MAP21)",
+					"rules": 
+					[
+						{
+							"and": [ "Nirvana (MAP21)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Catacombs (MAP22)",
+					"rules": 
+					[
+						{
+							"and": [ "The Catacombs (MAP22)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Barrels o' Fun (MAP23)",
+					"rules": 
+					[
+						{
+							"and": [ "Barrels o' Fun (MAP23)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Chasm (MAP24)",
+					"rules": 
+					[
+						{
+							"and": [ "The Chasm (MAP24)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Bloodfalls (MAP25)",
+					"rules": 
+					[
+						{
+							"and": [ "Bloodfalls (MAP25)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Abandoned Mines (MAP26)",
+					"rules": 
+					[
+						{
+							"and": [ "The Abandoned Mines (MAP26)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Monster Condo (MAP27)",
+					"rules": 
+					[
+						{
+							"and": [ "Monster Condo (MAP27)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Spirit World (MAP28)",
+					"rules": 
+					[
+						{
+							"and": [ "The Spirit World (MAP28)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Living End (MAP29)",
+					"rules": 
+					[
+						{
+							"and": [ "The Living End (MAP29)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Icon of Sin (MAP30)",
+					"rules": 
+					[
+						{
+							"and": [ "Icon of Sin (MAP30)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Wolfenstein (MAP31)",
+					"rules": 
+					[
+						{
+							"and": [ "Wolfenstein (MAP31)" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Grosse (MAP32)",
+					"rules": 
+					[
+						{
+							"and": [ "Grosse (MAP32)" ]
+						}
+					]
+				}
+			]
+		},
+		{
+			"_name": "Hub @ Entrance to Entryway (MAP01)",
+			"connections": 
+			[
+				{
+					"_target": "Entryway (MAP01) @ Main"
+				}
+			],
+			"exmx": [ 1, 1 ]
+		},
+		{
+			"_name": "Entryway (MAP01) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Entryway (MAP01)"
+				}
+			],
+			"exmx": [ 1, 1 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Underhalls (MAP02)",
+			"connections": 
+			[
+				{
+					"_target": "Underhalls (MAP02) @ Main"
+				}
+			],
+			"exmx": [ 1, 2 ]
+		},
+		{
+			"_name": "Underhalls (MAP02) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Underhalls (MAP02)"
+				},
+				{
+					"_target": "Underhalls (MAP02) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "Underhalls (MAP02) - Red keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "Underhalls (MAP02) @ Guideless Glide",
+					"requires": [ "trick_extreme" ]
+				}
+			],
+			"exmx": [ 1, 2 ]
+		},
+		{
+			"_name": "Underhalls (MAP02) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "Underhalls (MAP02) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "Underhalls (MAP02) - Blue keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 2 ]
+		},
+		{
+			"_name": "Underhalls (MAP02) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "Underhalls (MAP02) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "Underhalls (MAP02) - Blue keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "Underhalls (MAP02) @ Main"
+				}
+			],
+			"exmx": [ 1, 2 ]
+		},
+		{
+			"_name": "Underhalls (MAP02) @ Guideless Glide",
+			"connections": 
+			[
+				{
+					"_target": "Underhalls (MAP02) @ Red"
+				}
+			],
+			"exmx": [ 1, 2 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Gantlet (MAP03)",
+			"connections": 
+			[
+				{
+					"_target": "The Gantlet (MAP03) @ Main",
+					"rules": 
+					[
+						{
+							"or": [ "Shotgun", "Chaingun", "Super Shotgun" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 3 ]
+		},
+		{
+			"_name": "The Gantlet (MAP03) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to The Gantlet (MAP03)"
+				},
+				{
+					"_target": "The Gantlet (MAP03) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Gantlet (MAP03) - Blue keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Gantlet (MAP03) @ Window Jump",
+					"requires": [ "trick_pro" ]
+				}
+			],
+			"exmx": [ 1, 3 ]
+		},
+		{
+			"_name": "The Gantlet (MAP03) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "The Gantlet (MAP03) @ Main"
+				},
+				{
+					"_target": "The Gantlet (MAP03) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Gantlet (MAP03) - Red keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 3 ]
+		},
+		{
+			"_name": "The Gantlet (MAP03) @ Red",
+			"connections": [],
+			"exmx": [ 1, 3 ]
+		},
+		{
+			"_name": "The Gantlet (MAP03) @ Window Jump",
+			"connections": 
+			[
+				{
+					"_target": "The Gantlet (MAP03) @ Blue"
+				}
+			],
+			"exmx": [ 1, 3 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Focus (MAP04)",
+			"connections": 
+			[
+				{
+					"_target": "The Focus (MAP04) @ Main",
+					"rules": 
+					[
+						{
+							"or": [ "Shotgun", "Chaingun", "Super Shotgun" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 4 ]
+		},
+		{
+			"_name": "The Focus (MAP04) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to The Focus (MAP04)"
+				},
+				{
+					"_target": "The Focus (MAP04) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Focus (MAP04) - Red keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Focus (MAP04) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Focus (MAP04) - Blue keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 4 ]
+		},
+		{
+			"_name": "The Focus (MAP04) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "The Focus (MAP04) @ Main"
+				}
+			],
+			"exmx": [ 1, 4 ]
+		},
+		{
+			"_name": "The Focus (MAP04) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "The Focus (MAP04) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Focus (MAP04) - Yellow keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 4 ]
+		},
+		{
+			"_name": "The Focus (MAP04) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "The Focus (MAP04) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "The Focus (MAP04) - Yellow keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Focus (MAP04) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "The Focus (MAP04) - Red keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 4 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Waste Tunnels (MAP05)",
+			"connections": 
+			[
+				{
+					"_target": "The Waste Tunnels (MAP05) @ Start"
+				}
+			],
+			"exmx": [ 1, 5 ]
+		},
+		{
+			"_name": "The Waste Tunnels (MAP05) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "The Waste Tunnels (MAP05) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Waste Tunnels (MAP05) - Red keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Waste Tunnels (MAP05) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Waste Tunnels (MAP05) - Blue keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Waste Tunnels (MAP05) @ Start"
+				}
+			],
+			"exmx": [ 1, 5 ]
+		},
+		{
+			"_name": "The Waste Tunnels (MAP05) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "The Waste Tunnels (MAP05) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "The Waste Tunnels (MAP05) - Yellow keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Waste Tunnels (MAP05) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "The Waste Tunnels (MAP05) - Blue keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 5 ]
+		},
+		{
+			"_name": "The Waste Tunnels (MAP05) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "The Waste Tunnels (MAP05) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Waste Tunnels (MAP05) - Yellow keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 5 ]
+		},
+		{
+			"_name": "The Waste Tunnels (MAP05) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "The Waste Tunnels (MAP05) @ Main"
+				}
+			],
+			"exmx": [ 1, 5 ]
+		},
+		{
+			"_name": "The Waste Tunnels (MAP05) @ Start",
+			"connections": 
+			[
+				{
+					"_target": "The Waste Tunnels (MAP05) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Super Shotgun" ],
+							"or": [ "Chaingun", "Plasma gun" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Waste Tunnels (MAP05)"
+				}
+			],
+			"exmx": [ 1, 5 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Crusher (MAP06)",
+			"connections": 
+			[
+				{
+					"_target": "The Crusher (MAP06) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun" ],
+							"or": [ "Plasma gun", "Chaingun" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 6 ]
+		},
+		{
+			"_name": "The Crusher (MAP06) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to The Crusher (MAP06)"
+				},
+				{
+					"_target": "The Crusher (MAP06) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Crusher (MAP06) - Blue keycard", "Super Shotgun" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 6 ]
+		},
+		{
+			"_name": "The Crusher (MAP06) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "The Crusher (MAP06) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Crusher (MAP06) - Red keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Crusher (MAP06) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "The Crusher (MAP06) - Blue keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 6 ]
+		},
+		{
+			"_name": "The Crusher (MAP06) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "The Crusher (MAP06) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Crusher (MAP06) - Yellow keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 6 ]
+		},
+		{
+			"_name": "The Crusher (MAP06) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "The Crusher (MAP06) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "The Crusher (MAP06) - Yellow keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Crusher (MAP06) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Crusher (MAP06) - Red keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Crusher (MAP06) @ Main"
+				}
+			],
+			"exmx": [ 1, 6 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Dead Simple (MAP07)",
+			"connections": 
+			[
+				{
+					"_target": "Dead Simple (MAP07) @ Start"
+				}
+			],
+			"exmx": [ 1, 7 ]
+		},
+		{
+			"_name": "Dead Simple (MAP07) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Dead Simple (MAP07) @ Start"
+				}
+			],
+			"exmx": [ 1, 7 ]
+		},
+		{
+			"_name": "Dead Simple (MAP07) @ Start",
+			"connections": 
+			[
+				{
+					"_target": "Dead Simple (MAP07) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "BFG9000", "Plasma gun", "Rocket launcher" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Dead Simple (MAP07)"
+				}
+			],
+			"exmx": [ 1, 7 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Tricks and Traps (MAP08)",
+			"connections": 
+			[
+				{
+					"_target": "Tricks and Traps (MAP08) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "Rocket launcher", "Plasma gun", "BFG9000" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 8 ]
+		},
+		{
+			"_name": "Tricks and Traps (MAP08) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Tricks and Traps (MAP08)"
+				},
+				{
+					"_target": "Tricks and Traps (MAP08) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "Tricks and Traps (MAP08) - Red skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "Tricks and Traps (MAP08) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "Tricks and Traps (MAP08) - Yellow skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 8 ]
+		},
+		{
+			"_name": "Tricks and Traps (MAP08) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "Tricks and Traps (MAP08) @ Main"
+				}
+			],
+			"exmx": [ 1, 8 ]
+		},
+		{
+			"_name": "Tricks and Traps (MAP08) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "Tricks and Traps (MAP08) @ Main"
+				}
+			],
+			"exmx": [ 1, 8 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Pit (MAP09)",
+			"connections": 
+			[
+				{
+					"_target": "The Pit (MAP09) @ Start"
+				}
+			],
+			"exmx": [ 1, 9 ]
+		},
+		{
+			"_name": "The Pit (MAP09) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "The Pit (MAP09) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "The Pit (MAP09) - Yellow keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Pit (MAP09) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Pit (MAP09) - Blue keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Pit (MAP09) @ Start"
+				}
+			],
+			"exmx": [ 1, 9 ]
+		},
+		{
+			"_name": "The Pit (MAP09) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "The Pit (MAP09) @ Main"
+				}
+			],
+			"exmx": [ 1, 9 ]
+		},
+		{
+			"_name": "The Pit (MAP09) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "The Pit (MAP09) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "The Pit (MAP09) - Yellow keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 9 ]
+		},
+		{
+			"_name": "The Pit (MAP09) @ Start",
+			"connections": 
+			[
+				{
+					"_target": "The Pit (MAP09) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "BFG9000", "Plasma gun", "Rocket launcher" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Pit (MAP09)"
+				}
+			],
+			"exmx": [ 1, 9 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Refueling Base (MAP10)",
+			"connections": 
+			[
+				{
+					"_target": "Refueling Base (MAP10) @ Start"
+				}
+			],
+			"exmx": [ 1, 10 ]
+		},
+		{
+			"_name": "Refueling Base (MAP10) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Refueling Base (MAP10) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "Refueling Base (MAP10) - Yellow keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "Refueling Base (MAP10) @ Start"
+				}
+			],
+			"exmx": [ 1, 10 ]
+		},
+		{
+			"_name": "Refueling Base (MAP10) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "Refueling Base (MAP10) @ Main"
+				},
+				{
+					"_target": "Refueling Base (MAP10) @ Yellow Blue",
+					"rules": 
+					[
+						{
+							"and": [ "Refueling Base (MAP10) - Blue keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 10 ]
+		},
+		{
+			"_name": "Refueling Base (MAP10) @ Yellow Blue",
+			"connections": 
+			[
+				{
+					"_target": "Refueling Base (MAP10) @ Yellow"
+				}
+			],
+			"exmx": [ 1, 10 ]
+		},
+		{
+			"_name": "Refueling Base (MAP10) @ Start",
+			"connections": 
+			[
+				{
+					"_target": "Refueling Base (MAP10) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "BFG9000", "Plasma gun", "Rocket launcher" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to Refueling Base (MAP10)"
+				}
+			],
+			"exmx": [ 1, 10 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Circle of Death (MAP11)",
+			"connections": 
+			[
+				{
+					"_target": "Circle of Death (MAP11) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "Rocket launcher", "Plasma gun", "BFG9000" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 1, 11 ]
+		},
+		{
+			"_name": "Circle of Death (MAP11) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Circle of Death (MAP11)"
+				},
+				{
+					"_target": "Circle of Death (MAP11) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "Circle of Death (MAP11) - Blue keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "Circle of Death (MAP11) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "Circle of Death (MAP11) - Red keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "Circle of Death (MAP11) @ Ending",
+					"requires": [ "trick_pro" ]
+				}
+			],
+			"exmx": [ 1, 11 ]
+		},
+		{
+			"_name": "Circle of Death (MAP11) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "Circle of Death (MAP11) @ Main"
+				}
+			],
+			"exmx": [ 1, 11 ]
+		},
+		{
+			"_name": "Circle of Death (MAP11) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "Circle of Death (MAP11) @ Main"
+				},
+				{
+					"_target": "Circle of Death (MAP11) @ Ending"
+				}
+			],
+			"exmx": [ 1, 11 ]
+		},
+		{
+			"_name": "Circle of Death (MAP11) @ Ending",
+			"connections": 
+			[
+				{
+					"_target": "Circle of Death (MAP11) @ Main"
+				}
+			],
+			"exmx": [ 1, 11 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Factory (MAP12)",
+			"connections": 
+			[
+				{
+					"_target": "The Factory (MAP12) @ Outdoors"
+				}
+			],
+			"exmx": [ 2, 1 ]
+		},
+		{
+			"_name": "The Factory (MAP12) @ Indoors",
+			"connections": 
+			[
+				{
+					"_target": "The Factory (MAP12) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "The Factory (MAP12) - Yellow keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Factory (MAP12) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Factory (MAP12) - Blue keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Factory (MAP12) @ Main"
+				}
+			],
+			"exmx": [ 2, 1 ]
+		},
+		{
+			"_name": "The Factory (MAP12) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "The Factory (MAP12) @ Indoors"
+				}
+			],
+			"exmx": [ 2, 1 ]
+		},
+		{
+			"_name": "The Factory (MAP12) @ Yellow",
+			"connections": [],
+			"exmx": [ 2, 1 ]
+		},
+		{
+			"_name": "The Factory (MAP12) @ Outdoors",
+			"connections": 
+			[
+				{
+					"_target": "The Factory (MAP12) @ Main",
+					"rules": 
+					[
+						{
+							"or": [ "Super Shotgun", "Plasma gun" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Factory (MAP12)"
+				}
+			],
+			"exmx": [ 2, 1 ]
+		},
+		{
+			"_name": "The Factory (MAP12) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "The Factory (MAP12) @ Indoors",
+					"rules": 
+					[
+						{
+							"and": [ "Super Shotgun", "Chaingun" ],
+							"or": [ "BFG9000", "Plasma gun" ]
+						}
+					]
+				},
+				{
+					"_target": "The Factory (MAP12) @ Outdoors"
+				}
+			],
+			"exmx": [ 2, 1 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Downtown (MAP13)",
+			"connections": 
+			[
+				{
+					"_target": "Downtown (MAP13) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "Rocket launcher", "Plasma gun", "BFG9000" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 2 ]
+		},
+		{
+			"_name": "Downtown (MAP13) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Downtown (MAP13)"
+				},
+				{
+					"_target": "Downtown (MAP13) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "Downtown (MAP13) - Yellow keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "Downtown (MAP13) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "Downtown (MAP13) - Red keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "Downtown (MAP13) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "Downtown (MAP13) - Blue keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 2 ]
+		},
+		{
+			"_name": "Downtown (MAP13) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "Downtown (MAP13) @ Main"
+				}
+			],
+			"exmx": [ 2, 2 ]
+		},
+		{
+			"_name": "Downtown (MAP13) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "Downtown (MAP13) @ Main"
+				}
+			],
+			"exmx": [ 2, 2 ]
+		},
+		{
+			"_name": "Downtown (MAP13) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "Downtown (MAP13) @ Main"
+				}
+			],
+			"exmx": [ 2, 2 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Inmost Dens (MAP14)",
+			"connections": 
+			[
+				{
+					"_target": "The Inmost Dens (MAP14) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "Rocket launcher", "Plasma gun", "BFG9000" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 3 ]
+		},
+		{
+			"_name": "The Inmost Dens (MAP14) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to The Inmost Dens (MAP14)"
+				},
+				{
+					"_target": "The Inmost Dens (MAP14) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Inmost Dens (MAP14) - Red skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "The Inmost Dens (MAP14) @ Red East",
+					"requires": [ "trick_pro" ]
+				},
+				{
+					"_target": "The Inmost Dens (MAP14) @ Red South",
+					"requires": [ "deathlogic", "trick_pro" ]
+				}
+			],
+			"exmx": [ 2, 3 ]
+		},
+		{
+			"_name": "The Inmost Dens (MAP14) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "The Inmost Dens (MAP14) @ Main"
+				},
+				{
+					"_target": "The Inmost Dens (MAP14) @ Red East",
+					"rules": 
+					[
+						{
+							"and": [ "The Inmost Dens (MAP14) - Blue skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 3 ]
+		},
+		{
+			"_name": "The Inmost Dens (MAP14) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "The Inmost Dens (MAP14) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "The Inmost Dens (MAP14) - Red skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "The Inmost Dens (MAP14) @ Red South"
+				},
+				{
+					"_target": "The Inmost Dens (MAP14) @ Red East"
+				}
+			],
+			"exmx": [ 2, 3 ]
+		},
+		{
+			"_name": "The Inmost Dens (MAP14) @ Red East",
+			"connections": 
+			[
+				{
+					"_target": "The Inmost Dens (MAP14) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Inmost Dens (MAP14) - Blue skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "The Inmost Dens (MAP14) @ Main"
+				}
+			],
+			"exmx": [ 2, 3 ]
+		},
+		{
+			"_name": "The Inmost Dens (MAP14) @ Red South",
+			"connections": 
+			[
+				{
+					"_target": "The Inmost Dens (MAP14) @ Main"
+				}
+			],
+			"exmx": [ 2, 3 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Industrial Zone (MAP15)",
+			"connections": 
+			[
+				{
+					"_target": "Industrial Zone (MAP15) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "Rocket launcher", "Plasma gun", "BFG9000" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 4 ]
+		},
+		{
+			"_name": "Industrial Zone (MAP15) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Industrial Zone (MAP15)"
+				},
+				{
+					"_target": "Industrial Zone (MAP15) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "Industrial Zone (MAP15) - Red keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "Industrial Zone (MAP15) @ Thru Lava",
+					"requires": [ "trick_basic" ]
+				}
+			],
+			"exmx": [ 2, 4 ]
+		},
+		{
+			"_name": "Industrial Zone (MAP15) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "Industrial Zone (MAP15) @ Yellow East",
+					"rules": 
+					[
+						{
+							"and": [ "Industrial Zone (MAP15) - Blue keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 4 ]
+		},
+		{
+			"_name": "Industrial Zone (MAP15) @ Yellow East",
+			"connections": 
+			[
+				{
+					"_target": "Industrial Zone (MAP15) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "Industrial Zone (MAP15) - Blue keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "Industrial Zone (MAP15) @ Red"
+				}
+			],
+			"exmx": [ 2, 4 ]
+		},
+		{
+			"_name": "Industrial Zone (MAP15) @ Yellow West",
+			"connections": 
+			[
+				{
+					"_target": "Industrial Zone (MAP15) @ Red"
+				}
+			],
+			"exmx": [ 2, 4 ]
+		},
+		{
+			"_name": "Industrial Zone (MAP15) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "Industrial Zone (MAP15) @ Main"
+				},
+				{
+					"_target": "Industrial Zone (MAP15) @ Yellow East",
+					"rules": 
+					[
+						{
+							"and": [ "Industrial Zone (MAP15) - Yellow keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "Industrial Zone (MAP15) @ Yellow West",
+					"rules": 
+					[
+						{
+							"and": [ "Industrial Zone (MAP15) - Yellow keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 4 ]
+		},
+		{
+			"_name": "Industrial Zone (MAP15) @ Thru Lava",
+			"connections": 
+			[
+				{
+					"_target": "Industrial Zone (MAP15) @ Red"
+				}
+			],
+			"exmx": [ 2, 4 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Suburbs (MAP16)",
+			"connections": 
+			[
+				{
+					"_target": "Suburbs (MAP16) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "Rocket launcher", "Plasma gun", "BFG9000" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 5 ]
+		},
+		{
+			"_name": "Suburbs (MAP16) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Suburbs (MAP16)"
+				},
+				{
+					"_target": "Suburbs (MAP16) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "Suburbs (MAP16) - Red skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "Suburbs (MAP16) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "Suburbs (MAP16) - Blue skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "Suburbs (MAP16) @ Guided Glide (Easy)",
+					"requires": [ "trick_pro" ]
+				}
+			],
+			"exmx": [ 2, 5 ]
+		},
+		{
+			"_name": "Suburbs (MAP16) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "Suburbs (MAP16) @ Main"
+				}
+			],
+			"exmx": [ 2, 5 ]
+		},
+		{
+			"_name": "Suburbs (MAP16) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "Suburbs (MAP16) @ Main"
+				}
+			],
+			"exmx": [ 2, 5 ]
+		},
+		{
+			"_name": "Suburbs (MAP16) @ Guided Glide (Easy)",
+			"connections": 
+			[
+				{
+					"_target": "Suburbs (MAP16) @ Red"
+				}
+			],
+			"exmx": [ 2, 5 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Tenements (MAP17)",
+			"connections": 
+			[
+				{
+					"_target": "Tenements (MAP17) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "Rocket launcher", "Plasma gun", "BFG9000" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 6 ]
+		},
+		{
+			"_name": "Tenements (MAP17) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Tenements (MAP17)"
+				},
+				{
+					"_target": "Tenements (MAP17) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "Tenements (MAP17) - Red keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 6 ]
+		},
+		{
+			"_name": "Tenements (MAP17) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "Tenements (MAP17) @ Red"
+				}
+			],
+			"exmx": [ 2, 6 ]
+		},
+		{
+			"_name": "Tenements (MAP17) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "Tenements (MAP17) @ Red"
+				},
+				{
+					"_target": "Tenements (MAP17) @ Blue"
+				}
+			],
+			"exmx": [ 2, 6 ]
+		},
+		{
+			"_name": "Tenements (MAP17) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "Tenements (MAP17) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "Tenements (MAP17) - Yellow skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "Tenements (MAP17) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "Tenements (MAP17) - Blue keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "Tenements (MAP17) @ Main"
+				}
+			],
+			"exmx": [ 2, 6 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Courtyard (MAP18)",
+			"connections": 
+			[
+				{
+					"_target": "The Courtyard (MAP18) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "Rocket launcher", "Plasma gun", "BFG9000" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 7 ]
+		},
+		{
+			"_name": "The Courtyard (MAP18) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to The Courtyard (MAP18)"
+				},
+				{
+					"_target": "The Courtyard (MAP18) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "The Courtyard (MAP18) - Yellow skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "The Courtyard (MAP18) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Courtyard (MAP18) - Blue skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 7 ]
+		},
+		{
+			"_name": "The Courtyard (MAP18) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "The Courtyard (MAP18) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "The Courtyard (MAP18) - Blue skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 7 ]
+		},
+		{
+			"_name": "The Courtyard (MAP18) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "The Courtyard (MAP18) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "The Courtyard (MAP18) - Yellow skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 7 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Citadel (MAP19)",
+			"connections": 
+			[
+				{
+					"_target": "The Citadel (MAP19) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "Rocket launcher", "Plasma gun", "BFG9000" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 8 ]
+		},
+		{
+			"_name": "The Citadel (MAP19) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to The Citadel (MAP19)"
+				},
+				{
+					"_target": "The Citadel (MAP19) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Citadel (MAP19) - Red skull key" ],
+							"or": 
+							[
+								"The Citadel (MAP19) - Blue skull key",
+								"The Citadel (MAP19) - Yellow skull key"
+							]
+						}
+					]
+				},
+				{
+					"_target": "The Citadel (MAP19) @ Guideless Glide",
+					"requires": [ "trick_extreme" ]
+				}
+			],
+			"exmx": [ 2, 8 ]
+		},
+		{
+			"_name": "The Citadel (MAP19) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "The Citadel (MAP19) @ Main"
+				}
+			],
+			"exmx": [ 2, 8 ]
+		},
+		{
+			"_name": "The Citadel (MAP19) @ Guideless Glide",
+			"connections": 
+			[
+				{
+					"_target": "The Citadel (MAP19) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Citadel (MAP19) - Red skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 8 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Gotcha! (MAP20)",
+			"connections": 
+			[
+				{
+					"_target": "Gotcha! (MAP20) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "Rocket launcher", "Plasma gun", "BFG9000" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 2, 9 ]
+		},
+		{
+			"_name": "Gotcha! (MAP20) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Gotcha! (MAP20)"
+				}
+			],
+			"exmx": [ 2, 9 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Nirvana (MAP21)",
+			"connections": 
+			[
+				{
+					"_target": "Nirvana (MAP21) @ Start"
+				}
+			],
+			"exmx": [ 3, 1 ]
+		},
+		{
+			"_name": "Nirvana (MAP21) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Nirvana (MAP21) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "Super Shotgun", "Chaingun", "Nirvana (MAP21) - Yellow skull key" ],
+							"or": [ "Plasma gun", "BFG9000" ]
+						}
+					]
+				},
+				{
+					"_target": "Nirvana (MAP21) @ Yellow Glide",
+					"requires": [ "trick_extreme" ]
+				}
+			],
+			"exmx": [ 3, 1 ]
+		},
+		{
+			"_name": "Nirvana (MAP21) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "Nirvana (MAP21) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Nirvana (MAP21) - Yellow skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "Nirvana (MAP21) @ Magenta",
+					"rules": 
+					[
+						{
+							"and": [ "Nirvana (MAP21) - Red skull key", "Nirvana (MAP21) - Blue skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "Nirvana (MAP21) @ Ignore Blue",
+					"requires": [ "trick_basic" ]
+				},
+				{
+					"_target": "Nirvana (MAP21) @ Red Glide+Blast",
+					"requires": [ "trick_extreme" ]
+				}
+			],
+			"exmx": [ 3, 1 ]
+		},
+		{
+			"_name": "Nirvana (MAP21) @ Magenta",
+			"connections": 
+			[
+				{
+					"_target": "Nirvana (MAP21) @ Yellow"
+				}
+			],
+			"exmx": [ 3, 1 ]
+		},
+		{
+			"_name": "Nirvana (MAP21) @ Start",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Nirvana (MAP21)"
+				},
+				{
+					"_target": "Nirvana (MAP21) @ Main",
+					"rules": 
+					[
+						{
+							"or": [ "Super Shotgun", "Plasma gun" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 1 ]
+		},
+		{
+			"_name": "Nirvana (MAP21) @ Ignore Blue",
+			"connections": 
+			[
+				{
+					"_target": "Nirvana (MAP21) @ Magenta",
+					"rules": 
+					[
+						{
+							"and": [ "Nirvana (MAP21) - Red skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 1 ]
+		},
+		{
+			"_name": "Nirvana (MAP21) @ Yellow Glide",
+			"connections": 
+			[
+				{
+					"_target": "Nirvana (MAP21) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "Chaingun", "Super Shotgun" ],
+							"or": [ "Plasma gun", "BFG9000" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 1 ]
+		},
+		{
+			"_name": "Nirvana (MAP21) @ Red Glide+Blast",
+			"connections": 
+			[
+				{
+					"_target": "Nirvana (MAP21) @ Magenta",
+					"rules": 
+					[
+						{
+							"and": [ "Rocket launcher" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 1 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Catacombs (MAP22)",
+			"connections": 
+			[
+				{
+					"_target": "The Catacombs (MAP22) @ Early",
+					"rules": 
+					[
+						{
+							"or": [ "Shotgun", "Super Shotgun", "Plasma gun" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 2 ]
+		},
+		{
+			"_name": "The Catacombs (MAP22) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "The Catacombs (MAP22) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Catacombs (MAP22) - Blue skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "The Catacombs (MAP22) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Catacombs (MAP22) - Red skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "The Catacombs (MAP22) @ Early"
+				},
+				{
+					"_target": "The Catacombs (MAP22) @ Squeeze Glide",
+					"requires": [ "trick_extreme" ]
+				}
+			],
+			"exmx": [ 3, 2 ]
+		},
+		{
+			"_name": "The Catacombs (MAP22) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "The Catacombs (MAP22) @ Main"
+				}
+			],
+			"exmx": [ 3, 2 ]
+		},
+		{
+			"_name": "The Catacombs (MAP22) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "The Catacombs (MAP22) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "The Catacombs (MAP22) - Red skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 2 ]
+		},
+		{
+			"_name": "The Catacombs (MAP22) @ Early",
+			"connections": 
+			[
+				{
+					"_target": "The Catacombs (MAP22) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "BFG9000", "Plasma gun", "Rocket launcher" ]
+						}
+					]
+				},
+				{
+					"_target": "Hub @ Entrance to The Catacombs (MAP22)"
+				}
+			],
+			"exmx": [ 3, 2 ]
+		},
+		{
+			"_name": "The Catacombs (MAP22) @ Squeeze Glide",
+			"connections": 
+			[
+				{
+					"_target": "The Catacombs (MAP22) @ Blue"
+				}
+			],
+			"exmx": [ 3, 2 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Barrels o' Fun (MAP23)",
+			"connections": 
+			[
+				{
+					"_target": "Barrels o' Fun (MAP23) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "Rocket launcher", "Plasma gun", "BFG9000" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 3 ]
+		},
+		{
+			"_name": "Barrels o' Fun (MAP23) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Barrels o' Fun (MAP23)"
+				},
+				{
+					"_target": "Barrels o' Fun (MAP23) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "Barrels o' Fun (MAP23) - Yellow skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 3 ]
+		},
+		{
+			"_name": "Barrels o' Fun (MAP23) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "Barrels o' Fun (MAP23) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Barrels o' Fun (MAP23) - Yellow skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 3 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Chasm (MAP24)",
+			"connections": 
+			[
+				{
+					"_target": "The Chasm (MAP24) @ Main",
+					"rules": 
+					[
+						{
+							"and": 
+							[
+								"Shotgun",
+								"Chaingun",
+								"Rocket launcher",
+								"Plasma gun",
+								"BFG9000",
+								"Super Shotgun"
+							]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 4 ]
+		},
+		{
+			"_name": "The Chasm (MAP24) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to The Chasm (MAP24)"
+				},
+				{
+					"_target": "The Chasm (MAP24) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Chasm (MAP24) - Blue keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Chasm (MAP24) @ Thru Nukage",
+					"requires": [ "trick_basic" ]
+				}
+			],
+			"exmx": [ 3, 4 ]
+		},
+		{
+			"_name": "The Chasm (MAP24) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "The Chasm (MAP24) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Chasm (MAP24) - Red keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 4 ]
+		},
+		{
+			"_name": "The Chasm (MAP24) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "The Chasm (MAP24) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Chasm (MAP24) - Red keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Chasm (MAP24) @ Main"
+				}
+			],
+			"exmx": [ 3, 4 ]
+		},
+		{
+			"_name": "The Chasm (MAP24) @ Thru Nukage",
+			"connections": 
+			[
+				{
+					"_target": "The Chasm (MAP24) @ Blue"
+				}
+			],
+			"exmx": [ 3, 4 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Bloodfalls (MAP25)",
+			"connections": 
+			[
+				{
+					"_target": "Bloodfalls (MAP25) @ Start"
+				}
+			],
+			"exmx": [ 3, 5 ]
+		},
+		{
+			"_name": "Bloodfalls (MAP25) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Bloodfalls (MAP25) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "Bloodfalls (MAP25) - Blue skull key" ],
+							"or": [ "Rocket launcher", "Plasma gun", "BFG9000" ]
+						}
+					]
+				},
+				{
+					"_target": "Bloodfalls (MAP25) @ Start"
+				}
+			],
+			"exmx": [ 3, 5 ]
+		},
+		{
+			"_name": "Bloodfalls (MAP25) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "Bloodfalls (MAP25) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Bloodfalls (MAP25) - Blue skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 5 ]
+		},
+		{
+			"_name": "Bloodfalls (MAP25) @ Start",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Bloodfalls (MAP25)"
+				},
+				{
+					"_target": "Bloodfalls (MAP25) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Super Shotgun", "Chaingun", "Shotgun" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 5 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Abandoned Mines (MAP26)",
+			"connections": 
+			[
+				{
+					"_target": "The Abandoned Mines (MAP26) @ Main",
+					"rules": 
+					[
+						{
+							"and": 
+							[
+								"Shotgun",
+								"Chaingun",
+								"Rocket launcher",
+								"BFG9000",
+								"Plasma gun",
+								"Super Shotgun"
+							]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 6 ]
+		},
+		{
+			"_name": "The Abandoned Mines (MAP26) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to The Abandoned Mines (MAP26)"
+				},
+				{
+					"_target": "The Abandoned Mines (MAP26) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "The Abandoned Mines (MAP26) - Yellow keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Abandoned Mines (MAP26) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Abandoned Mines (MAP26) - Red keycard" ]
+						}
+					]
+				},
+				{
+					"_target": "The Abandoned Mines (MAP26) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "The Abandoned Mines (MAP26) - Blue keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 6 ]
+		},
+		{
+			"_name": "The Abandoned Mines (MAP26) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "The Abandoned Mines (MAP26) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "The Abandoned Mines (MAP26) - Blue keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 6 ]
+		},
+		{
+			"_name": "The Abandoned Mines (MAP26) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "The Abandoned Mines (MAP26) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "The Abandoned Mines (MAP26) - Yellow keycard" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 6 ]
+		},
+		{
+			"_name": "The Abandoned Mines (MAP26) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "The Abandoned Mines (MAP26) @ Main"
+				}
+			],
+			"exmx": [ 3, 6 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Monster Condo (MAP27)",
+			"connections": 
+			[
+				{
+					"_target": "Monster Condo (MAP27) @ Main",
+					"rules": 
+					[
+						{
+							"and": 
+							[
+								"Shotgun",
+								"Chaingun",
+								"Rocket launcher",
+								"Plasma gun",
+								"BFG9000",
+								"Super Shotgun"
+							]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 7 ]
+		},
+		{
+			"_name": "Monster Condo (MAP27) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Monster Condo (MAP27)"
+				},
+				{
+					"_target": "Monster Condo (MAP27) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "Monster Condo (MAP27) - Yellow skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "Monster Condo (MAP27) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "Monster Condo (MAP27) - Red skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "Monster Condo (MAP27) @ Blue",
+					"rules": 
+					[
+						{
+							"and": [ "Monster Condo (MAP27) - Blue skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 7 ]
+		},
+		{
+			"_name": "Monster Condo (MAP27) @ Blue",
+			"connections": 
+			[
+				{
+					"_target": "Monster Condo (MAP27) @ Main"
+				}
+			],
+			"exmx": [ 3, 7 ]
+		},
+		{
+			"_name": "Monster Condo (MAP27) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "Monster Condo (MAP27) @ Main"
+				}
+			],
+			"exmx": [ 3, 7 ]
+		},
+		{
+			"_name": "Monster Condo (MAP27) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "Monster Condo (MAP27) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Monster Condo (MAP27) - Red skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 7 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Spirit World (MAP28)",
+			"connections": 
+			[
+				{
+					"_target": "The Spirit World (MAP28) @ Main",
+					"rules": 
+					[
+						{
+							"and": 
+							[
+								"Shotgun",
+								"Rocket launcher",
+								"Chaingun",
+								"Plasma gun",
+								"BFG9000",
+								"Super Shotgun"
+							]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 8 ]
+		},
+		{
+			"_name": "The Spirit World (MAP28) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to The Spirit World (MAP28)"
+				},
+				{
+					"_target": "The Spirit World (MAP28) @ Yellow",
+					"rules": 
+					[
+						{
+							"and": [ "The Spirit World (MAP28) - Yellow skull key" ]
+						}
+					]
+				},
+				{
+					"_target": "The Spirit World (MAP28) @ Red",
+					"rules": 
+					[
+						{
+							"and": [ "The Spirit World (MAP28) - Red skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 8 ]
+		},
+		{
+			"_name": "The Spirit World (MAP28) @ Yellow",
+			"connections": 
+			[
+				{
+					"_target": "The Spirit World (MAP28) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "The Spirit World (MAP28) - Yellow skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 8 ]
+		},
+		{
+			"_name": "The Spirit World (MAP28) @ Red",
+			"connections": 
+			[
+				{
+					"_target": "The Spirit World (MAP28) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "The Spirit World (MAP28) - Red skull key" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 8 ]
+		},
+		{
+			"_name": "Hub @ Entrance to The Living End (MAP29)",
+			"connections": 
+			[
+				{
+					"_target": "The Living End (MAP29) @ Main",
+					"rules": 
+					[
+						{
+							"and": 
+							[
+								"Shotgun",
+								"Chaingun",
+								"Rocket launcher",
+								"Plasma gun",
+								"BFG9000",
+								"Super Shotgun"
+							]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 9 ]
+		},
+		{
+			"_name": "The Living End (MAP29) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to The Living End (MAP29)"
+				}
+			],
+			"exmx": [ 3, 9 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Icon of Sin (MAP30)",
+			"connections": 
+			[
+				{
+					"_target": "Icon of Sin (MAP30) @ Start"
+				}
+			],
+			"exmx": [ 3, 10 ]
+		},
+		{
+			"_name": "Icon of Sin (MAP30) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Icon of Sin (MAP30) @ Start"
+				}
+			],
+			"exmx": [ 3, 10 ]
+		},
+		{
+			"_name": "Icon of Sin (MAP30) @ Start",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Icon of Sin (MAP30)"
+				},
+				{
+					"_target": "Icon of Sin (MAP30) @ Main",
+					"rules": 
+					[
+						{
+							"and": 
+							[
+								"Shotgun",
+								"Rocket launcher",
+								"Plasma gun",
+								"Chaingun",
+								"BFG9000",
+								"Super Shotgun"
+							]
+						}
+					]
+				}
+			],
+			"exmx": [ 3, 10 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Wolfenstein (MAP31)",
+			"connections": 
+			[
+				{
+					"_target": "Wolfenstein (MAP31) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Chaingun" ],
+							"or": [ "Shotgun", "Super Shotgun" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 4, 1 ]
+		},
+		{
+			"_name": "Wolfenstein (MAP31) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Wolfenstein (MAP31)"
+				}
+			],
+			"exmx": [ 4, 1 ]
+		},
+		{
+			"_name": "Hub @ Entrance to Grosse (MAP32)",
+			"connections": 
+			[
+				{
+					"_target": "Grosse (MAP32) @ Start"
+				}
+			],
+			"exmx": [ 4, 2 ]
+		},
+		{
+			"_name": "Grosse (MAP32) @ Main",
+			"connections": 
+			[
+				{
+					"_target": "Grosse (MAP32) @ Start"
+				}
+			],
+			"exmx": [ 4, 2 ]
+		},
+		{
+			"_name": "Grosse (MAP32) @ Start",
+			"connections": 
+			[
+				{
+					"_target": "Hub @ Entrance to Grosse (MAP32)"
+				},
+				{
+					"_target": "Grosse (MAP32) @ Main",
+					"rules": 
+					[
+						{
+							"and": [ "Shotgun", "Chaingun", "Super Shotgun" ],
+							"or": [ "BFG9000", "Plasma gun", "Rocket launcher" ]
+						}
+					]
+				}
+			],
+			"exmx": [ 4, 2 ]
+		}
+	],
+	"starting_levels_by_episode": 
+	{
+		"1": "Entryway (MAP01)",
+		"2": "The Factory (MAP12)",
+		"3": "Nirvana (MAP21)"
+	}
+}
