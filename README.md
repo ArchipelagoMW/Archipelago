@@ -3,7 +3,7 @@
 ## Required Software
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
-- [The Schedule I apworld](https://github.com/NewSoupVi/Archipelago/releases),
+- [The Schedule I apworld](https://github.com/MacH8s/Narcopelago/releases/latest),
 - [Thunderstore Mod Manager](https://www.overwolf.com/app/thunderstore-thunderstore_mod_manager)
 - [Narcopelago Mod](https://thunderstore.io/c/schedule-i/p/Narcopelago/Narcopelago/)
 
