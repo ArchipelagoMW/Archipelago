@@ -26,6 +26,12 @@ if TYPE_CHECKING:
 async def pcsx2_sync_task(ctx: 'Context'):
     """Connects to PCSX2 and loops through update functions until the connection is closed."""
     logger.info(f"Starting {RAC3OPTION.GAME_TITLE_FULL} Connector")
+    version_dots = RAC3OPTION.VERSION_NUMBER.count(".")
+    if version_dots >= 3:
+        logger.warning("\nYou are using a development build of the RaC3 Archipelago Randomizer!\n"
+                        "There may be bugs present that have not been tested fully.\n"
+                        "These builds are meant for testing and bug reporting purposes "
+                        "and should not be used for normal play!\n")
     connected_to_game: bool = False
     connection_retry_attempts: int = 0
     while not ctx.exit_event.is_set():
