@@ -667,6 +667,9 @@ class TunicWorld(World):
     def stage_extend_hint_information(cls, multiworld: MultiWorld, hint_data: dict[int, dict[int, str]]) -> None:
         tunic_er_worlds: list[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
                                              if world.options.entrance_rando]
+        if not tunic_er_worlds:
+            return
+
         hint_data.update({world.player: {} for world in tunic_er_worlds})
         all_state = multiworld.get_all_state()
         paths = all_state.path
