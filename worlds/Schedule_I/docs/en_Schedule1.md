@@ -1,4 +1,4 @@
-# Schedule 1
+# Schedule I
 
 ## Where is the options page?
 

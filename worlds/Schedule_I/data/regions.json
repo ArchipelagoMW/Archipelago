@@ -170,10 +170,10 @@
         "connections": {
             "Gearing Up|2": true,
             "Packin'": true,
-            "Keepin it Fresh": true
+            "Keeping it Fresh": true
         }
     },
-    "Keepin it Fresh": {
+    "Keeping it Fresh": {
         "connections": {
             
         }
@@ -287,10 +287,10 @@
     },
     "Needin' the Green": {
         "connections": {
-            "Wretched Hive of Scum and Villany": true
+            "Wretched Hive of Scum and Villainy": true
         }
     },
-    "Wretched Hive of Scum and Villany": {
+    "Wretched Hive of Scum and Villainy": {
         "connections": {
             "We Need To Cook|1": {"randomize_level_unlocks": {"has": "Warehouse Access"}}
         }

@@ -185,26 +185,26 @@
         "tags": ["Mission", "Permanent"],
         "modern_id": 31
     },
-    "Keepin it Fresh|Place the soil bag and seed vial in the motel room trash can": {
-        "region": "Keepin it Fresh",
+    "Keeping it Fresh|Place the soil bag and seed vial in the motel room trash can": {
+        "region": "Keeping it Fresh",
         "requirements": true,
         "tags": ["Mission", "Permanent"],
         "modern_id": 32
     },
-    "Keepin it Fresh|Buy a trash bag from the hardware store": {
-        "region": "Keepin it Fresh",
+    "Keeping it Fresh|Buy a trash bag from the hardware store": {
+        "region": "Keeping it Fresh",
         "requirements": true,
         "tags": ["Mission", "Permanent"],
         "modern_id": 33
     },
-    "Keepin it Fresh|Bag the contents of the trash can": {
-        "region": "Keepin it Fresh",
+    "Keeping it Fresh|Bag the contents of the trash can": {
+        "region": "Keeping it Fresh",
         "requirements": true,
         "tags": ["Mission", "Permanent"],
         "modern_id": 34
     },
-    "Keepin it Fresh|Dispose of the trash bag": {
-        "region": "Keepin it Fresh",
+    "Keeping it Fresh|Dispose of the trash bag": {
+        "region": "Keeping it Fresh",
         "requirements": true,
         "tags": ["Mission", "Permanent"],
         "modern_id": 35
@@ -293,7 +293,7 @@
         "tags": ["Mission", "Permanent"],
         "modern_id": 49
     },
-    "Moving Up|Unlock 10 customers": {
+    "Moving Up|Unlock 10 customers (10/10)": {
         "region": "Moving Up",
         "requirements": {"randomize_customers": {"has_from_list": 
             {"Austin Steiner Unlocked": 10,
@@ -491,38 +491,38 @@
         "tags": ["Mission", "Permanent"],
         "modern_id": 72
     },
-    "Needin' the Green|Earn $10,000 ($0 / $10,000)": {
+    "Needin' the Green|Earn $10,000 ($10,000 / $10,000)": {
         "region": "Needin' the Green",
         "requirements": true,
         "tags": ["Mission", "Permanent"],
         "modern_id": 73
     },
-    "Wretched Hive of Scum and Villany|Talk to Uncle Nelson at a payphone": {
-        "region": "Wretched Hive of Scum and Villany",
+    "Wretched Hive of Scum and Villainy|Talk to Uncle Nelson at a payphone": {
+        "region": "Wretched Hive of Scum and Villainy",
         "requirements": true,
         "tags": ["Mission", "Permanent"],
         "modern_id": 74
     },
-    "Wretched Hive of Scum and Villany|Gain access to the warehouse": {
-        "region": "Wretched Hive of Scum and Villany",
+    "Wretched Hive of Scum and Villainy|Gain access to the warehouse": {
+        "region": "Wretched Hive of Scum and Villainy",
         "requirements": {"randomize_level_unlocks": {"has": "Warehouse Access"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 75
     },
-    "Wretched Hive of Scum and Villany|Talk to the merchant": {
-        "region": "Wretched Hive of Scum and Villany",
+    "Wretched Hive of Scum and Villainy|Talk to the merchant": {
+        "region": "Wretched Hive of Scum and Villainy",
         "requirements": {"randomize_level_unlocks": {"has": "Warehouse Access"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 76
     },
-    "Wretched Hive of Scum and Villany|Talk to the arms dealer": {
-        "region": "Wretched Hive of Scum and Villany",
+    "Wretched Hive of Scum and Villainy|Talk to the arms dealer": {
+        "region": "Wretched Hive of Scum and Villainy",
         "requirements": {"randomize_level_unlocks": {"has": "Warehouse Access"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 77
     },
-    "Wretched Hive of Scum and Villany|Talk to the fixer": {
-        "region": "Wretched Hive of Scum and Villany",
+    "Wretched Hive of Scum and Villainy|Talk to the fixer": {
+        "region": "Wretched Hive of Scum and Villainy",
         "requirements": {"randomize_level_unlocks": {"has": "Warehouse Access"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 78
@@ -717,19 +717,19 @@
         "tags": ["Mission", "Permanent"],
         "modern_id": 103
     },
-    "Clearners|Use the management clipboard to assign the cleaner to a locker": {
+    "Cleaners|Use the management clipboard to assign the cleaner to a locker": {
         "region": "Overworld",
         "requirements": {"randomize_level_unlocks" : {"has" : "Warehouse Access"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 104
     },
-    "Clearners|Assign a trash can to the cleaner": {
+    "Cleaners|Assign a trash can to the cleaner": {
         "region": "Overworld",
         "requirements": {"randomize_level_unlocks" : {"has" : "Warehouse Access"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 105
     },
-    "Clearners|Place cash in the cleaner's locker": {
+    "Cleaners|Place cash in the cleaner's locker": {
         "region": "Overworld",
         "requirements": {"randomize_level_unlocks" : {"has" : "Warehouse Access"}},
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
@@ -915,7 +915,7 @@
         "tags": ["Mission", "Permanent", "Level Up Reward Required"],
         "modern_id": 128
     },
-    "Finishing the Job| Wait for the bomb to detonate": {
+    "Finishing the Job|Wait for the bomb to detonate": {
         "region": "Finishing the Job",
         "requirements": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Suburbia" : 7}},
                         "randomize_customers": {"has_any": [["Mac Cooper Unlocked", "Javier Pérez Unlocked"]],
