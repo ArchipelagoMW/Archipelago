@@ -279,33 +279,29 @@ class Entrance:
 
     forest_beach_shortcut = "Forest Shortcut to Beach Shortcut"
     beach_forest_shortcut = "Beach Shortcut to Forest Shortcut"
-    mountain_jojamart_shortcut = "Mountain Shortcut to Jojamart Shortcut"
-    jojamart_mountain_shortcut = "Jojamart Shortcut to Mountain Shortcut"
-    mountain_town_shortcut = "Mountain Shortcut to Town Shortcut"
-    town_mountain_shortcut = "Town Shortcut to Mountain Shortcut"
-    town_tidepools_shortcut = "Town Shortcut to Tide Pools Shortcut"
-    tidepools_town_shortcut = "Tide Pools Shortcut to Town Shortcut"
+    mountain_jojamart_shortcut = "Mountain Shortcut near Quarry Bridge to Town Shortcut through Cave"
+    jojamart_mountain_shortcut = "Town Shortcut through Cave to Mountain Shortcut near Quarry Bridge"
+    mountain_town_shortcut = "Mountain Shortcut at Fence to Town Shortcut at Fence"
+    town_mountain_shortcut = "Town Shortcut at Fence to Mountain Shortcut at Fence"
+    town_tidepools_shortcut = "Town Shortcut below Museum to Tide Pools Shortcut"
+    tidepools_town_shortcut = "Tide Pools Shortcut to Town Shortcut below Museum"
     tunnel_backwoods_shortcut = "Tunnel Shortcut to Backwoods Shortcut"
     backwoods_tunnel_shortcut = "Backwoods Shortcut to Tunnel Shortcut"
-    mountain_lake_to_outside_adventure_guild_shortcut = (
-        "Mountain Lake Shortcut to Outside Adventure Guild Shortcut"
-    )
-    outside_adventure_guild_to_mountain_lake_shortcut = (
-        "Outside Adventure Guild Shortcut to Mountain Lake Shortcut"
-    )
+    mountain_lake_to_outside_adventure_guild_shortcut = "Mountain Lake Shortcut to Outside Adventure Guild Shortcut"
+    outside_adventure_guild_to_mountain_lake_shortcut = "Outside Adventure Guild Shortcut to Mountain Lake Shortcut"
 
-    minecart_bus_stop_to_mines = "Minecart Bus Stop to Mines"
-    minecart_bus_stop_to_quarry = "Minecart Bus Stop to Quarry"
-    minecart_bus_stop_to_town = "Minecart Bus Stop to Town"
-    minecart_mines_to_bus_stop = "Minecart Mines to Bus Stop"
-    minecart_mines_to_quarry = "Minecart Mines to Quarry"
-    minecart_mines_to_town = "Minecart Mines to Town"
-    minecart_quarry_to_bus_stop = "Minecart Quarry to Bus Stop"
-    minecart_quarry_to_mines = "Minecart Quarry to Mines"
-    minecart_quarry_to_town = "Minecart Quarry to Town"
-    minecart_town_to_bus_stop = "Minecart Town to Bus Stop"
-    minecart_town_to_quarry = "Minecart Town to Quarry"
-    minecart_town_to_mines = "Minecart Town to Mines"
+    minecart_bus_stop_to_mines = "Minecart Bus Stop to Minecart Mines"
+    minecart_bus_stop_to_quarry = "Minecart Bus Stop to Minecart Quarry"
+    minecart_bus_stop_to_town = "Minecart Bus Stop to Minecart Town"
+    minecart_mines_to_bus_stop = "Minecart Mines to Minecart Bus Stop"
+    minecart_mines_to_quarry = "Minecart Mines to Minecart Quarry"
+    minecart_mines_to_town = "Minecart Mines to Minecart Town"
+    minecart_quarry_to_bus_stop = "Minecart Quarry to Minecart Bus Stop"
+    minecart_quarry_to_mines = "Minecart Quarry to Minecart Mines"
+    minecart_quarry_to_town = "Minecart Quarry to Minecart Town"
+    minecart_town_to_bus_stop = "Minecart Town to Minecart Bus Stop"
+    minecart_town_to_quarry = "Minecart Town to Minecart Quarry"
+    minecart_town_to_mines = "Minecart Town to Minecart Mines"
 
 
 @final
