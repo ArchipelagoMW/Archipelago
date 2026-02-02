@@ -525,8 +525,14 @@ if "Factorio" in network_data_package["games"]:
             location_id_to_name=tracker_data.location_id_to_name,
             inventories=inventories,
         )
+    
+    def render_Factorio_tracker(tracker_data: TrackerData, team: int, player: int):
+
+        return render_template(
+        )
 
     _multiworld_trackers["Factorio"] = render_Factorio_multiworld_tracker
+    _player_trackers["Factorio"] = render_Factorio_tracker
 
 if "A Link to the Past" in network_data_package["games"]:
     # Mapping from non-progressive item to progressive name and max level.
