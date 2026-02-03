@@ -420,17 +420,18 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-chat$", msg):
                     factorio_server_logger.debug(msg)
                     ctx.toggle_bridge_chat_out()
-                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Obscurity gives hint for:$", msg):
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Obscurity gives hint for", msg):
                     factorio_server_logger.debug(msg)
-                    tech_name = re.sub(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Obscurity gives hint for:$","", msg)
+                    #factorio_server_logger.info(f"Caught this message out in the blue {msg}") #They get caught :D
+                    tech_name = re.sub(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Obscurity gives hint for","", msg)
                     #Please help!!!
                     #I have the internal factorio name for a tech and it now needs to sent a hint out.
-                    #tech_name = "-AP-123456-"
+                    #tech_name = "ap-123456-"
                     #can also be junk data
                     #tech_name = "elevated-rails"
                     tech_split = tech_name.split("-")
                     if len(tech_split) == 2:
-                        if tech_split[0] == "AP":
+                        if tech_split[0] == "ap":
                             location_id = int(tech_split[1])
                             #this should now only have te location id of the check. So 123456.....
                             ctx.send_msgs([{"cmd": "CreateHints", "locations": [location_id], "player": ctx.slot}])

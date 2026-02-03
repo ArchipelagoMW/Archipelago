@@ -20,7 +20,7 @@ local function send_hint(technology)
         storage.hinted_techs[technology.name] = true
 
         -- send a hint to the archipelago server here.
-        log("Obscurity gives hint for:" .. technology.name) -- notifies client
+        log("Obscurity gives hint for " .. technology.name) -- notifies client
 
     end
 end
@@ -62,12 +62,9 @@ local function depth_check(force, in_layer)
 
     local to_check = table.deepcopy(in_depth)
     local depth_measure = settings.global["archipelago-tech-depth-obscurity"].value
-    game.print("depth_measure before loop: " .. depth_measure)
     local first_round = true
     while depth_measure > 0 do
-        game.print("depth_measure before math in loop: " .. depth_measure)
         depth_measure = depth_measure - 1
-        game.print("depth_measure after math in loop: " .. depth_measure)
         local new_revealed = {}
         if first_round then
             new_revealed = second_pass
@@ -87,7 +84,6 @@ local function depth_check(force, in_layer)
                     new_revealed[tech.name] = true
                 end
             end
-            in_depth[name] = true
         end
 
         local nothing_new = true
@@ -99,7 +95,11 @@ local function depth_check(force, in_layer)
             break -- nothing new found. So no need to continue the search.
         end
 
-        to_check = new_revealed --set the next layer of techs at the ready.
+        --set the next layer of techs at the ready. And mark all other techs for reveal.
+        for name, _ in pairs(new_revealed) do
+            to_check[name] = true
+            in_depth[name] = true
+        end
     end
 
     return in_depth
@@ -164,15 +164,16 @@ local function update_trigger_tech_tree(force, technology)
     local triggers = storage.forces[force.name].triggers
 
     local to_check = {}
+
     if technology == false then
-        for _, technology in pairs(technologies) do
-            if technologies.researched then
-                for _, recipe in pairs(technology.unlocks) do
-                    if recipe.result then
-                        to_check[recipe.result] = recipe.result
-                    end
-                    for name, result in pairs(recipe.results) do
-                        to_check[name] = name
+        for _, tech in pairs(technologies) do
+            if tech.researched then
+                for _, effect in pairs(tech.prototype.effects) do
+                    if effect.type == "unlock-recipe" then
+                        local recipe = prototypes.recipe[effect.recipe]
+                        for _, item_data in pairs(recipe.products) do
+                            to_check[item_data.name] = item_data.name
+                        end
                     end
                 end
             end
@@ -180,9 +181,9 @@ local function update_trigger_tech_tree(force, technology)
     else
         for _, effect in pairs(technology.prototype.effects) do
             if effect.type == "unlock-recipe" then
-                local recipe = prototypes.recipe
-                for name, result in pairs(recipe.products) do
-                    to_check[name] = name
+                local recipe = prototypes.recipe[effect.recipe]
+                for _, item_data in pairs(recipe.products) do
+                    to_check[item_data.name] = item_data.name
                 end
             end
         end
@@ -312,6 +313,30 @@ local function on_init()
     for _, force in pairs(game.forces) do
         setup_storage(force)
         update_trigger_tech_tree(force, false)
+        
+        local to_check = {}
+        for _, recipe in pairs(prototypes.recipe) do
+            if recipe.enabled then
+                for _, item_data in pairs(recipe.products) do
+                    to_check[item_data.name] = item_data.name
+                end
+            end
+        end
+        local hidden_trigger_tech = storage.forces[force.name].hidden_trigger_tech
+        local triggers = storage.forces[force.name].triggers
+        for _, name in pairs(to_check) do
+            if triggers[name] then 
+                if triggers[name].unlocked_triggered == false then
+                    triggers[name].unlocked_triggered = true
+                    for _, tech_name in pairs(triggers[to_check].technologies) do
+                        send_hint(force.technologies[tech_name].hidden)
+                        hidden_trigger_tech[tech_name] = false
+                        force.technologies[tech_name].hidden = false
+                        force.technologies[tech_name].disabled = false
+                    end
+                end
+            end
+        end
     end
 end
 
