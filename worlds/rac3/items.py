@@ -162,8 +162,7 @@ def starting_weapons(world: "RaC3World") -> list[str]:
 
 def starting_planets(world: "RaC3World") -> list[str]:
     planet_list: list[str] = [infobot for infobot in infobot_data.keys() if infobot not in world.preplaced_items]
-    if RAC3ITEM.MUSEUM in planet_list:
-        planet_list.remove(RAC3ITEM.MUSEUM)
+    planet_list = remove_dead_starting_planets(world, planet_list)
     if len(planet_list) > 1:  # [Phoenix], [Florana], or [Other]
         world.random.shuffle(planet_list)
         if world.options.intro_skip.value:
@@ -190,3 +189,33 @@ def starting_planets(world: "RaC3World") -> list[str]:
             else:
                 planet_list = planet_list[:2]  # [Other, Other]
     return planet_list
+
+# TODO: Rework this function during logic overhaul
+def remove_dead_starting_planets(world: "RaC3World", current_planet_list: list[str]) -> list[str]:
+    """Removes any starting planets that are unreachable from Veldin"""
+    # Remove unreachable planets in a single loop
+    unreachable = [
+        RAC3ITEM.MUSEUM,
+        RAC3ITEM.OBANI_DRACO,
+        RAC3ITEM.OBANI_GEMINI,
+        RAC3ITEM.QWARKS_HIDEOUT,
+        RAC3ITEM.COMMAND_CENTER,
+        RAC3ITEM.HOLOSTAR_STUDIOS
+    ]
+    current_planet_list = [planet for planet in current_planet_list if planet not in unreachable]
+
+    # If Rangers are disabled, Aridia and Blackwater City are unreachable
+    if world.options.rangers.value == 0:
+        to_remove = {RAC3ITEM.BLACKWATER_CITY}
+        if world.options.weapon_vendors.value == 0:
+            to_remove.add(RAC3ITEM.ARIDIA)
+            
+        current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
+
+    # If no Arena challenges are locations or only the second half is,
+    # Annihilation Nation is unreachable from the start
+    if (world.options.arena.value == 0 or world.options.arena.value == 2) and world.options.weapon_vendors.value == 0:
+        to_remove = {RAC3ITEM.ANNIHILATION_NATION}
+        current_planet_list = [planet for planet in current_planet_list if planet not in to_remove]
+
+    return current_planet_list

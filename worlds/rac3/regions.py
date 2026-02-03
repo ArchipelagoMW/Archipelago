@@ -602,6 +602,6 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                     return True  # Skips every weapon vendor checks except the Veldin ones
             # Add more conditions here if needed in the future
             case RAC3TAG.ONE_HP_UNSTABLE:
-                if options.one_hp_challenge.value[RAC3PLAYERTYPE.RATCHET]:
+                if options.one_hp_challenge.value.get(RAC3PLAYERTYPE.RATCHET, False):
                     return True  # Skip all unstable locations in One HP Challenge
     return False
