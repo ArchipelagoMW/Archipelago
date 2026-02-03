@@ -98,7 +98,7 @@
         <div class="text-choice-wrapper">
             <select id="{{ option_name }}" name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
             {% if option.default not in option.options.values()  %}
-                <option value="{{ option.default }}" selected="true">Custom ({{ option.default }})</option>
+                <option value="{{ option.default }}" selected>Default ({{ option.default }})</option>
             {% endif %}
             {% for id, name in option.name_lookup.items()|sort %}
                 {% if name != "random" %}
