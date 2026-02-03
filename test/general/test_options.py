@@ -23,19 +23,19 @@ class TestOptions(unittest.TestCase):
                     with self.subTest(game=gamename, option=option_key):
                         if issubclass(option, TextChoice):
                             self.assertTrue(option.default in option.name_lookup,
-                                f"Default value {option.default} for TextChoice option"
-                                f" {option.__name__} in {gamename} is not valid!"
+                                f"Default value {option.default} for TextChoice option {option.__name__} in"
+                                f" {gamename} does not resolve to a listed value!"
                             )
-                        if issubclass(option, Range):
-                            range_raised = False
-                            try:
-                                option.from_any(option.default)
-                            except Exception:
-                                range_raised = True
-                            self.assertFalse(range_raised,
-                                f"Default value {option.default} for Range option"
-                                f" {option.__name__} in {gamename} is not valid!"
-                            )
+                        # Standard "can default generate" test
+                        err_raised = False
+                        try:
+                            option.from_any(option.default)
+                        except Exception:
+                            err_raised = True
+                        self.assertFalse(err_raised,
+                            f"Default value {option.default} for option {option.__name__} in {gamename}"
+                             f" is not valid!"
+                        )
 
     def test_options_are_not_set_by_world(self):
         """Test that options attribute is not already set"""
