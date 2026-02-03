@@ -5127,7 +5127,7 @@ all_locations: dict[str, LevelLocation] = {
     "4a_d-07_strawberry": LevelLocation("4a_d-07_strawberry", "Golden Ridge A - Room d-07 Strawberry", "4a_d-07_west", LocationType.strawberry, [[ItemName.blue_boosters, ], ]),
     "4a_d-09_strawberry": LevelLocation("4a_d-09_strawberry", "Golden Ridge A - Room d-09 Strawberry", "4a_d-09_west", LocationType.strawberry, [[ItemName.blue_boosters, ], ]),
     "4a_d-10_clear": LevelLocation("4a_d-10_clear", "Golden Ridge A - Level Clear", "4a_d-10_goal", LocationType.level_clear, []),
-    "4a_d-10_golden": LevelLocation("4a_d-10_golden", "Golden Ridge A - Golden Strawberry", "4a_d-10_goal", LocationType.golden_strawberry, [[ItemName.blue_clouds, ItemName.pink_clouds, ItemName.blue_boosters, ItemName.move_blocks, ItemName.dash_refills, ItemName.springs, ItemName.coins, ], ]),
+    "4a_d-10_golden": LevelLocation("4a_d-10_golden", "Golden Ridge A - Golden Strawberry", "4a_d-10_goal", LocationType.golden_strawberry, [[ItemName.blue_clouds, ItemName.pink_clouds, ItemName.blue_boosters, ItemName.move_blocks, ItemName.moving_platforms, ItemName.dash_refills, ItemName.springs, ItemName.coins, ], ]),
 
     "4b_b-02_binoculars": LevelLocation("4b_b-02_binoculars", "Golden Ridge B - Room b-02 Binoculars", "4b_b-02_bottom", LocationType.binoculars, []),
     "4b_c-03_binoculars": LevelLocation("4b_c-03_binoculars", "Golden Ridge B - Room c-03 Binoculars", "4b_c-03_bottom", LocationType.binoculars, []),

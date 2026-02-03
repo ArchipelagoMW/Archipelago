@@ -14326,7 +14326,7 @@
                                     "name": "golden",
                                     "display_name": "Golden Strawberry",
                                     "type": "golden_strawberry",
-                                    "rule": [ [ "blue_clouds", "pink_clouds", "blue_boosters", "move_blocks", "dash_refills", "springs", "coins" ] ]
+                                    "rule": [ [ "blue_clouds", "pink_clouds", "blue_boosters", "move_blocks", "moving_platforms", "dash_refills", "springs", "coins" ] ]
                                 }
                             ]
                         }
