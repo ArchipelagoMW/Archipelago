@@ -64,14 +64,11 @@ ServerLimits = typing.TypedDict('ServerLimits', {
     'max_string_len': int,
 })
 
-def operator_mod(lhs, rhs):
-    if isinstance(lhs, str):
+def operator_mod(ctx: Context, lhs, rhs):
+    if ctx.disable_string_modulo and isinstance(lhs, str):
         raise ValueError("Can't modulo a string")
 
     return lhs % rhs
-
-def binop_isinstance(lhs: typing.Any, lhs_type: type, rhs: typing.Any, rhs_type: type):
-    return isinstance(lhs, lhs_type) and isinstance(rhs, rhs_type)
 
 def operator_add(ctx: Context, lhs, rhs):
     match (lhs, rhs):
@@ -297,6 +294,7 @@ class Context:
     """ each sphere is { player: { location_id, ... } } """
     limits: ServerLimits
     disable_limit_commands: bool
+    disable_string_modulo: bool
     logger: logging.Logger
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
@@ -373,6 +371,7 @@ class Context:
             'max_string_len': limit_max_string_len,
         }
         self.disable_limit_commands = disable_limit_commands
+        self.disable_string_modulo = True
 
         # init empty to satisfy linter, I suppose
         self.gamespackage = {}
@@ -2660,6 +2659,18 @@ class ServerCommandProcessor(CommonCommandProcessor):
         new_limit = old_limit + value_int
         self.ctx.limits[key] = new_limit
         self.output(f"Raised limit `{key}` by `{value_int}`: `{old_limit}` -> `{new_limit}`")
+    
+    def _cmd_toggle_string_modulo(self):
+        """Toggle modulo operations on strings on/off"""
+        if self.ctx.disable_limit_commands:
+            self.output("Limit commands are disabled.")
+            return
+
+        self.ctx.disable_string_modulo = not self.ctx.disable_string_modulo
+
+        status = "disabled" if self.ctx.disable_string_modulo else "enabled"
+        self.output(f"Modulo operations on strings are now {status}.")
+
 
 async def console(ctx: Context):
     import sys
