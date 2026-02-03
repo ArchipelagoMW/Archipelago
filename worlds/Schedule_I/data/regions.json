@@ -131,6 +131,11 @@
     },
     "Rank Hustler III": {
     "connections": {
+        "Rank Bagman I": true
+    }
+    },
+    "Rank Bagman I": {
+    "connections": {
         "Rank Bagman V": true
     }
     },

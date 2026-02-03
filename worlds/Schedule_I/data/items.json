@@ -214,7 +214,7 @@
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 45
     },
-    "M1911 Magazine ": {
+    "M1911 Magazine Unlock": {
         "classification": ["USEFUL"],
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 46
@@ -228,6 +228,26 @@
         "classification": ["USEFUL"],
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 48
+    },
+    "Small Storage Closet Unlock": {
+        "classification": ["USEFUL"],
+        "tags": ["Hardware Store", "Level Up Reward"],
+        "modern_id": 225
+    },
+    "Medium Storage Closet Unlock": {
+        "classification": ["USEFUL"],
+        "tags": ["Hardware Store", "Level Up Reward"],
+        "modern_id": 226
+    },
+    "Large Storage Closet Unlock": {
+        "classification": ["USEFUL"],
+        "tags": ["Hardware Store", "Level Up Reward"],
+        "modern_id": 227
+    },
+    "Huge Storage Closet Unlock": {
+        "classification": ["USEFUL"],
+        "tags": ["Hardware Store", "Level Up Reward"],
+        "modern_id": 228
     },
     "Barn": {
         "classification": ["PROGRESSION_SKIP_BALANCING"],
@@ -981,48 +1001,68 @@
     },
     "Revolver": {
         "classification": ["FILLER"],
-        "tags": ["Weapon Filler"],
+        "tags": ["Amazing Filler"],
         "modern_id": 207
     },
     "Revolver Cylinder": {
         "classification": ["FILLER"],
-        "tags": ["Weapon Filler"],
+        "tags": ["Basic Filler"],
         "modern_id": 208
     },
     "M1911": {
         "classification": ["FILLER"],
-        "tags": ["Weapon Filler"],
+        "tags": ["Amazing Filler"],
         "modern_id": 209
     },
     "M1911 Magazine": {
         "classification": ["FILLER"],
-        "tags": ["Weapon Filler"],
+        "tags": ["Basic Filler"],
         "modern_id": 210
     },
     "Pump Shotgun": {
         "classification": ["FILLER"],
-        "tags": ["Weapon Filler"],
+        "tags": ["Amazing Filler"],
         "modern_id": 211
     },
     "Shotgun Shell": {
         "classification": ["FILLER"],
-        "tags": ["Weapon Filler"],
+        "tags": ["Basic Filler"],
         "modern_id": 212
     },
     "Machete": {
         "classification": ["FILLER"],
-        "tags": ["Weapon Filler"],
+        "tags": ["Bad Filler"],
         "modern_id": 213
     },
     "Frying Pan": {
         "classification": ["FILLER"],
-        "tags": ["Weapon Filler"],
+        "tags": ["Bad Filler"],
         "modern_id": 214
     },
     "Baseball Bat": {
         "classification": ["FILLER"],
-        "tags": ["Weapon Filler"],
+        "tags": ["Bad Filler"],
         "modern_id": 215
+    },
+    "Small Storage Closet": {
+        "classification": ["FILLER"],
+        "tags": ["Better Filler"],
+        "modern_id": 221
+    },
+    "Medium Storage Closet": {
+        "classification": ["FILLER"],
+        "tags": ["Better Filler"],
+        "modern_id": 222
+    },
+    "Large Storage Closet": {
+        "classification": ["FILLER"],
+        "tags": ["Amazing Filler"],
+        "modern_id": 223
+    },
+    "Huge Storage Closet": {
+        "classification": ["FILLER"],
+        "tags": ["Amazing Filler"],
+        "modern_id": 224
     },
     "Cartel Influence, Westville": {
         "classification": ["PROGRESSION_SKIP_BALANCING"],
