@@ -527,7 +527,7 @@ class WitnessPlayerLogic:
             if chal_lasers > 7:
                 postgame_adjustments.append([
                     "Requirement Changes:",
-                    "0xFFF00 - 11 Lasers - True",
+                    "0xFFF00 - 11 Lasers + Redirect - True",
                 ])
 
         if disable_challenge_lasers:
@@ -640,7 +640,7 @@ class WitnessPlayerLogic:
         if chal_lasers <= 7 or mnt_lasers > 7:
             adjustment_linesets_in_order.append([
                 "Requirement Changes:",
-                "0xFFF00 - 11 Lasers - True",
+                "0xFFF00 - 11 Lasers + Redirect - True",
             ])
 
         if world.options.disable_non_randomized_puzzles:
