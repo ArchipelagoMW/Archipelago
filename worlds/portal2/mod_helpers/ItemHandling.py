@@ -47,6 +47,7 @@ def handle_item(item_name: str) -> list[str]:
         
     if DISABLE_PICKUP in item_tags:
         return_commands.append(f'script DisableEntityPickup("{ent_name}")')
+        return_commands.append(f'script AttachHologramToEntity("{ent_name}", null, 0.66, 20, 2)')
     
     if ItemTag.ALTER in item_tags:
         if item_name == "Fizzler": # Also removed as it would lock down most of the game, could be a trap though
@@ -122,7 +123,7 @@ map_specific_commands: list[MapCommand] = [
     MapCommand("sp_a2_laser_relays", reflection_cube, ['script ppmod.get("laser_cube_spawner").Destroy()\n']),
     MapCommand("sp_a1_intro1", weighted_cube, ['script DeleteEntity("entity_box_maker_rm1")\n']),
     # Turret physics disable (sometimes cannot be at start of level due to spawning times)
-    MapCommand("sp_a2_turret_intro", turrets, [f'script DisableEntityPhysics("npc_portal_turret_floor")']),
+    MapCommand("sp_a2_turret_intro", turrets, [f'script DisableEntityPhysics("npc_portal_turret_floor")\n']),
     MapCommand("sp_a2_bts2", turrets, ['script ppmod.addscript([Vector(1514, -3898, 64), 1, "trigger_once"], "OnStartTouch", "DisableEntityPhysics(\"npc_portal_turret_floor\")", 3, 1)\n']),
     MapCommand("sp_a4_finale2", turrets, ['script ppmod.addscript([Vector(11835, 11776, 8543), 1, "trigger_once"], "OnStartTouch", "DisableEntityPhysics(\"npc_portal_turret_floor\")", 2.5, 1)\n']),
 ]
