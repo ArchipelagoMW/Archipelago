@@ -1,4 +1,5 @@
 """This module contains the World class for Ratchet and Clank 3"""
+from logging import DEBUG, getLogger
 from typing import Any, ClassVar, TYPE_CHECKING
 
 from BaseClasses import CollectionState, Item, MultiWorld
@@ -18,6 +19,9 @@ from worlds.rac3.rules import set_rules
 from worlds.rac3.universal_tracker import setup_options_from_slot_data, tracker_world
 from worlds.rac3.web_world import RaC3Web
 
+
+rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)
+rac3_logger.setLevel(DEBUG)
 
 class RaC3World(World):
     f"""
@@ -52,6 +56,13 @@ class RaC3World(World):
         super().__init__(multiworld, player)
 
     def generate_early(self):
+        # count number of . in the version number to determine if dev build
+        version_dots = RAC3OPTION.VERSION_NUMBER.count(".")
+        if version_dots >= 3:
+            rac3_logger.warning("\nYou are using a development build of the RaC3 Archipelago Randomizer!\n"
+                                "There may be bugs present that have not been tested fully.\n"
+                                "These builds are meant for testing and bug reporting purposes "
+                                "and should not be used for normal play!\n")
         # implement .yaml-less Universal Tracker support
         setup_options_from_slot_data(self)
         create_regions(self)
