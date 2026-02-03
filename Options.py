@@ -419,7 +419,7 @@ class Toggle(NumericOption):
             return cls(random.choice(list(cls.name_lookup)))
         elif text.lower() in {"off", "0", "false", "none", "null", "no", "disabled"}:
             return cls(0)
-        elif text.lower() in {"on", "1", "true", "yes","enabled"}:
+        elif text.lower() in {"on", "1", "true", "yes", "enabled"}:
             return cls(1)
         else:
             raise OptionError(f"Option {cls.__name__} does not support a value of {text}")
