@@ -1270,9 +1270,11 @@ class Rac3Interface(GameInterface):
                         and self.planet == RAC3REGION.ANNIHILATION_NATION
                         and not self.pause_state):
                     # Patch out sleeping gas health reduction to prevent death
-                    self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000)  # addiu v0,v0,0x0
+                    if self._read32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE) == 0x2442FFFF:
+                        self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000)  # addiu v0,v0,0x0
                     # Patch out health refill to prevent auto losing One Hit Wonder challenge
-                    self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0x00000000)  # nop
+                    if self._read32(RAC3INSTRUCTION.NATION_HEALTH_REFILL) == 0xAC652850:
+                        self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0x00000000)  # nop
 
         # Vehicle one HP challenge is independent of player_type
         if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
@@ -1290,8 +1292,10 @@ class Rac3Interface(GameInterface):
                 and self.planet == RAC3REGION.ANNIHILATION_NATION
                 and not self.pause_state):
             # Restore sleeping gas health reduction if one HP challenge is not active for Ratchet
-            self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x2442FFFF)  # addiu v0,v0,-0x1
-            self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0xAC652850)  # sw a1,0x2850(v1)
+            if self._read32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE) == 0x24420000:
+                self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x2442FFFF)  # addiu v0,v0,-0x1
+            if self._read32(RAC3INSTRUCTION.NATION_HEALTH_REFILL) == 0x00000000:
+                self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0xAC652850)  # sw a1,0x2850(v1)
 
         # If loading from the main menu we delay fixing the current health until the load is complete
         if self.main_menu:
