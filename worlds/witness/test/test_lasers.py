@@ -218,7 +218,7 @@ class TestDoorsRequiredToWinElevator(WitnessTestBase):
             self.assert_can_beat_with_minimally(exact_requirement)
 
 
-class LongBoxNeedsAllLasers(WitnessTestBase):
+class LongBoxNeedsAllLasersWhenBoxIsRotated(WitnessTestBase):
     options = {
         "puzzle_randomization": "sigma_expert",
         "shuffle_symbols": True,
@@ -242,6 +242,6 @@ class LongBoxNeedsAllLasers(WitnessTestBase):
 
     run_default_tests = False
 
-    def test_victory_needs_all_lasers(self):
+    def test_long_box_needs_all_lasers_when_box_is_rotated(self):
         long_box_location = self.world.get_location("Mountaintop Box Long Solved")
         self.assert_dependency_on_event_item(long_box_location, "+1 Laser (Redirected)")
