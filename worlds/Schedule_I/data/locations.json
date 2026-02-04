@@ -1,5 +1,5 @@
 {
-    "Welcome to Hyland Point|Open your phone (press Tab) and read your messages": {
+    "Welcome to Hyland Point|Open your phone and read your messages": {
         "region": "Welcome to Hyland Point",
         "requirements": true,
         "tags": ["Mission", "Permanent"],
@@ -233,7 +233,7 @@
         "tags": ["Mission", "Permanent"],
         "modern_id": 39
     },
-    "On the Grind|Complete 3 deals (0/3)": {
+    "On the Grind|Complete 3 deals": {
         "region": "On the Grind|1",
         "requirements": true,
         "tags": ["Mission", "Permanent"],
@@ -293,7 +293,7 @@
         "tags": ["Mission", "Permanent"],
         "modern_id": 49
     },
-    "Moving Up|Unlock 10 customers (10/10)": {
+    "Moving Up|Unlock 10 customers": {
         "region": "Moving Up",
         "requirements": {"randomize_customers": {"has_from_list": 
             {"Austin Steiner Unlocked": 10,
@@ -491,7 +491,7 @@
         "tags": ["Mission", "Permanent"],
         "modern_id": 72
     },
-    "Needin' the Green|Earn $10,000 ($10,000 / $10,000)": {
+    "Needin' the Green|Earn $10,000": {
         "region": "Needin' the Green",
         "requirements": true,
         "tags": ["Mission", "Permanent"],
@@ -533,7 +533,7 @@
         "tags": ["Mission", "Permanent"],
         "modern_id": 79
     },
-    "We Need To Cook|Unlock the pseudo supplier in Westville (see contacts app for more info)": {
+    "We Need To Cook|Unlock the pseudo supplier in Westville": {
         "region": "We Need To Cook|1",
         "requirements": {"randomize_customers" : {"has_any" : [["Meg Cooley Unlocked", "Jerry Montero Unlocked"]]},
                         "randomize_suppliers": {"has": "Shirley Watts Unlocked"}},

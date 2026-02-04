@@ -214,7 +214,7 @@
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 45
     },
-    "M1911 Magazine Unlock": {
+    "M1911 Mag Unlock": {
         "classification": ["USEFUL"],
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 46
@@ -939,7 +939,7 @@
         "tags": ["Amazing Filler"],
         "modern_id": 193
     },
-    "High-Quality Pseudo": {
+    "High Quality Pseudo": {
         "classification": ["FILLER"],
         "tags": ["Amazing Filler"],
         "modern_id": 194
@@ -1014,7 +1014,7 @@
         "tags": ["Amazing Filler"],
         "modern_id": 209
     },
-    "M1911 Magazine": {
+    "M1911 Mag": {
         "classification": ["FILLER"],
         "tags": ["Basic Filler"],
         "modern_id": 210
