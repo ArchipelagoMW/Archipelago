@@ -1,7 +1,7 @@
 import unittest
 
 from BaseClasses import PlandoOptions
-from Options import Choice, TextChoice, Range, NamedRange, ItemLinks, PlandoConnections, PlandoItems, PlandoTexts
+from Options import Choice, TextChoice, ItemLinks, PlandoConnections, PlandoItems, PlandoTexts
 from Utils import restricted_dumps
 from worlds.AutoWorld import AutoWorldRegister
 
