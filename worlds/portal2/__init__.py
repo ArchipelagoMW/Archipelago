@@ -104,9 +104,6 @@ class Portal2World(World):
 
         map_pool: list[str] = []
         used_maps: list[str] = []
-        
-        # Remove maps that have been put in the Remove Locations option
-        self.maps_in_use -= set(self.options.remove_locations)
 
         possible_maps = [name for name in sorted(self.maps_in_use) if not name.startswith("Chapter 9")]
         
@@ -201,6 +198,9 @@ class Portal2World(World):
         # Cutscene levels option
         if self.options.cutscene_levels:
             self.maps_in_use.update(cutscene_completion_table.keys())
+        
+        # Remove maps that have been put in the Remove Locations option
+        self.maps_in_use -= set(self.options.remove_locations)
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
