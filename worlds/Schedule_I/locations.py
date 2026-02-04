@@ -15,7 +15,20 @@ def load_locations_data(data):
     """Load location data from JSON and populate LOCATION_NAME_TO_ID."""
     global LOCATION_NAME_TO_ID
     LOCATION_NAME_TO_ID = {name: loc.modern_id for name, loc in data.locations.items()}
-
+    # must include all locations, even those not created based on options
+    drug_types = [
+    ("Weed", 195),
+    ("Meth", 210),
+    ("Shrooms", 225),
+    ("Cocaine", 240),
+    ]
+    for drug_name, start_id in drug_types:
+        for i in range(1, 16):
+            LOCATION_NAME_TO_ID[f"{drug_name} Recipe Check, {i}"] = start_id + (i - 1)
+    
+    start_id = 600  # Starting ID for Cash for Trash locations
+    for i in range(1, 51):
+        LOCATION_NAME_TO_ID[f"Cash for Trash {i}, Collect {i * 10} pieces of trash"] = start_id + (i - 1)
 # Each Location instance must correctly report the "game" it belongs to.
 # To make this simple, it is common practice to subclass the basic Location class and override the "game" field.
 class Schedule1Location(Location):
@@ -71,16 +84,15 @@ def create_regular_locations(world: Schedule1World, data) -> None:
         # Drug types with their regions and starting IDs in LOCATION_NAME_TO_ID
         # These magic numbers correspond to reserved IDs for recipe checks
         drug_types = [
-            ("Weed Recipe", 195, weed_recipe_region),
-            ("Meth Recipe", 210, meth_recipe_region),
-            ("Shrooms Recipe", 225, shrooms_recipe_region),
-            ("Cocaine Recipe", 240, cocaine_recipe_region),
+            ("Weed", weed_recipe_region),
+            ("Meth", meth_recipe_region),
+            ("Shrooms", shrooms_recipe_region),
+            ("Cocaine", cocaine_recipe_region),
         ]
         # Add needed recipe locations to location name to id
-        for drug_name, start_id, region in drug_types:
+        for drug_name, region in drug_types:
             recipe_locations = []
             for i in range(1, world.options.recipe_checks + 1):
-                LOCATION_NAME_TO_ID[f"{drug_name} Recipe Check, {i}"] = start_id + (i - 1)
                 recipe_locations.append(f"{drug_name} Recipe Check, {i}")
         
             recipe_locations_dict = get_location_names_with_ids(recipe_locations)
@@ -91,10 +103,8 @@ def create_regular_locations(world: Schedule1World, data) -> None:
     cash_for_trash_count = world.options.cash_for_trash
     if cash_for_trash_count > 0:
         overworld = world.get_region("Overworld")
-        start_id = 600  # Starting ID for Cash for Trash locations
         cash_for_trash_locations = []
         for i in range(1, cash_for_trash_count + 1):
-            LOCATION_NAME_TO_ID[f"Cash for Trash {i}, Collect {i * 10} pieces of trash"] = start_id + (i - 1)
             cash_for_trash_locations.append(f"Cash for Trash {i}, Collect {i * 10} pieces of trash")
         cash_for_trash_locations_dict = get_location_names_with_ids(cash_for_trash_locations)
         overworld.add_locations(cash_for_trash_locations_dict, Schedule1Location)
