@@ -14,7 +14,7 @@ Se han añadido otras características para mayor comodidad, como Turbo a travé
 
 Los enemigos y jefes pueden ser aleatorios y sus estadísticas pueden escalarse para parecerse más a las del juego original.
 
-También se pueden aleatorizar otros aspectos del juego, como la música, los sonidos, los fondos de batalla, los colores de Mario y Luigi, etc.
+También se pueden randomizar otros aspectos del juego, como la música, los sonidos, los fondos de batalla, los colores de Mario y Luigi, etc.
 
 ## ¿Cuál es el objetivo de Mario & Luigi: Superstar Saga randomizer?
 
