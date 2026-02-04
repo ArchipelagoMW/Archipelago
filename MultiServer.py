@@ -903,9 +903,11 @@ def lock_slot(ctx: Context, team: int, slot: int, identifier: str = "") -> set[s
         password = False
 
     if not ids:
-        if ctx.player_locks.get((team, slot)):
-            msgs = [{"cmd": "PrintJSON", "data": [{"text": "No connected clients have a non-empty uuid set, "
-                                                   f"so locks have not been changed. Current IDs: {', '.join(ids)}"}]}]
+        cur_locks = ctx.player_locks.get((team, slot))
+
+        if cur_locks:
+            msgs = [{"cmd": "PrintJSON", "data": [{"text": "No connected clients have a non-empty uuid set, so locks "
+                                                   f"have not been changed. Current IDs: {', '.join(cur_locks)}"}]}]
         else:
             msgs = [{"cmd": "PrintJSON", "data": [{"text": "No connected clients have a non-empty uuid set, "
                                                    "so slot has not been locked."}]}]
@@ -2333,8 +2335,15 @@ class ServerCommandProcessor(CommonCommandProcessor):
             team, slot, _ = player
             ids = lock_slot(self.ctx, team, slot, identifier)
 
-            self.output(f"Locked slot {player_name} with values: {', '.join(ids)}")
-            return True
+            if ids:
+                self.output(f"Locked slot {player_name} with values: {', '.join(ids)}")
+                return True
+            elif self.ctx.clients[team][slot]:
+                self.output("No clients have non-empty uuid, locks unchanged")
+                return False
+            else:
+                self.output("No clients connected to slot, locks unchanged")
+                return False
 
         self.output(f"Could not find player {player_name} to lock.")
         return False
