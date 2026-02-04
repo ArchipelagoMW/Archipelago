@@ -167,7 +167,7 @@ class JakAndDaxterMemoryReader:
     initiated_connect: bool = False
 
     # The memory reader just needs the game running.
-    gk_process: OpenProcess = None
+    gk_process: OpenProcess | None = None
 
     location_outbox: list[int] = []
     outbox_index: int = 0
