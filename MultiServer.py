@@ -902,6 +902,17 @@ def lock_slot(ctx: Context, team: int, slot: int, identifier: str = "") -> set[s
         ids = {client.uuid for client in ctx.clients[team][slot] if client.uuid}
         password = False
 
+    if not ids:
+        if ctx.player_locks.get((team, slot)):
+            msgs = [{"cmd": "PrintJSON", "data": [{"text": "No connected clients have a non-empty uuid set, "
+                                                   f"so locks have not been changed. Current IDs: {', '.join(ids)}"}]}]
+        else:
+            msgs = [{"cmd": "PrintJSON", "data": [{"text": "No connected clients have a non-empty uuid set, "
+                                                   "so slot has not been locked."}]}]
+
+        ctx.broadcast(ctx.clients[team][slot], msgs)
+        return ids
+
     ctx.player_locks[team, slot] = ids
     for client in ctx.clients[team][slot]:
         msgs = [{"cmd": "PrintJSON", "data": [{"text": f"Slot locked. Join IDs: {', '.join(ids)}"}]}]
