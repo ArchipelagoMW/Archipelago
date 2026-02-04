@@ -303,7 +303,7 @@ class JakAndDaxterMemoryReader:
                 self.connected = False
 
         else:
-            self.log_error(logger, f"Unknown operating system: {sys.platform}!")
+            self.log_error(logger, f"Unsupported operating system: {sys.platform}!")
             self.connected = False
 
     async def verify_memory_version(self):
