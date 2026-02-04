@@ -70,7 +70,7 @@ class Portal2World(World):
     location_count = 0
     item_count= 0
 
-    maps_in_use: set[str] = set()
+    maps_in_use: list[str] = []
     chapter_maps_dict = {}
     
     for key, value in item_table.items():
@@ -137,7 +137,10 @@ class Portal2World(World):
 
         # Get all map locations for that chapter
         if not map_location_names:
-            map_location_names = [name for name in all_locations_table.keys() if name.startswith(chapter_name)]
+            map_location_names = [name for name in self.maps_in_use if name.startswith(chapter_name)]
+            # Add them to chapter maps for menu gen and UT
+            self.chapter_maps_dict[chapter_name] = map_location_names
+            
         map_prefix = [name.removesuffix(" Completion") for name in map_location_names]
 
         last_region: Region = None
@@ -170,11 +173,12 @@ class Portal2World(World):
                 requirements = ratman_den_locations_table[den].required_items
                 self.create_in_level_check(den, requirements, region_start)
             
-            if last_region:
-                last_region.connect(region_start)
-            else:
+            # Connect to chapter region if there was no previous level or if open world
+            if self.options.open_world or not last_region:
                 chapter_region.connect(region_start)
-
+            else:
+                last_region.connect(region_start)
+                
             last_region = region_end
 
         return chapter_region, last_region
@@ -194,27 +198,28 @@ class Portal2World(World):
                 self.chapter_maps_dict = {f"Chapter {key}":value for key, value in self.chapter_maps_dict.items()}
                 return
         
-        self.maps_in_use = set(map_complete_table.keys())
+        self.maps_in_use = list(map_complete_table.keys())
         # Cutscene levels option
         if self.options.cutscene_levels:
             self.maps_in_use.update(cutscene_completion_table.keys())
         
         # Remove maps that have been put in the Remove Locations option
-        self.maps_in_use -= set(self.options.remove_locations)
+        for location in self.options.remove_locations:
+            self.maps_in_use.remove(location)
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
 
-        if not self.chapter_maps_dict:
+        if not (self.chapter_maps_dict or self.options.open_world):
             self.chapter_maps_dict = self.create_randomized_maps()
         # Add chapters to those regions
         for i in range(1,9):
-            if randomize_maps:
-                chapter_region, last_region = self.create_connected_maps(i, self.chapter_maps_dict[f"Chapter {i}"])
-            else:
+            if self.options.open_world:
                 chapter_region, last_region = self.create_connected_maps(i)
-
+            else:
+                chapter_region, last_region = self.create_connected_maps(i, self.chapter_maps_dict[f"Chapter {i}"])
+            
             menu_region.connect(chapter_region, f"Chapter {i} Entrance")
         
 
@@ -222,9 +227,12 @@ class Portal2World(World):
         self.chapter_maps_dict["Chapter 9"] = [name for name in all_locations_table.keys() if name.startswith("Chapter 9")]
         chapter_9_region, last_region = self.create_connected_maps(9)
         all_chapter_9_requirements = set()
-        for name, value in all_locations_table.items():
-            if name.startswith("Chapter 9"):
-                all_chapter_9_requirements.update(value.required_items)
+        # Don't add requirements to the chapter start if open world
+        if not self.options.open_world:
+            for name, value in all_locations_table.items():
+                if name.startswith("Chapter 9"):
+                    all_chapter_9_requirements.update(value.required_items)
+        
         menu_region.connect(chapter_9_region, f"Chapter 9 Entrance", rule=lambda state: state.has_all(all_chapter_9_requirements, self.player))
 
         # Add Goal Region and Event
