@@ -27,9 +27,7 @@ LuaBool = Or(bool, And(int, lambda n: n in (0, 1)))
 
 
 class MaxSciencePack(Choice):
-    """Maximum level of science pack required to complete the game.
-    This also affects the relative cost of silo and satellite recipes if they are randomized.
-    That is the only thing in which the Utility Science Pack and Space Science Pack settings differ."""
+    """Maximum level of science pack required to complete the game."""
     display_name = "Maximum Required Science Pack"
     option_automation_science_pack = 0
     option_logistic_science_pack = 1
@@ -37,12 +35,10 @@ class MaxSciencePack(Choice):
     option_chemical_science_pack = 3
     option_production_science_pack = 4
     option_utility_science_pack = 5
-    option_space_science_pack = 6
-    default = 6
+    default = 5
 
     def get_allowed_packs(self):
-        return {option.replace("_", "-") for option, value in self.options.items() if value <= self.value} - \
-               {"space-science-pack"}  # with rocket launch being the goal, post-launch techs don't make sense
+        return {option.replace("_", "-") for option, value in self.options.items() if value <= self.value}
 
     @classmethod
     def get_ordered_science_packs(cls):
@@ -247,6 +243,30 @@ class Progressive(Choice):
 
     def want_progressives(self, random):
         return random.choice([True, False]) if self.value == self.option_grouped_random else bool(self.value)
+
+
+class RecipeIngredientsPool(Choice):
+    """When randomizing ingredients, from which science pack pool ingredients are picked.
+    This affects the rocket part, silo and satellite recipes."""
+    display_name = "Randomized Recipe Ingredients Pool"
+    option_automation_science_pack = 0
+    option_logistic_science_pack = 1
+    option_military_science_pack = 2
+    option_chemical_science_pack = 3
+    option_production_science_pack = 4
+    option_utility_science_pack = 5
+    option_space_science_pack = 6
+    default = 6
+
+    def get_allowed_packs(self):
+        return {option.replace("_", "-") for option, value in self.options.items() if value <= self.value}
+
+    @classmethod
+    def get_ordered_science_packs(cls):
+        return [option.replace("_", "-") for option, value in sorted(cls.options.items(), key=lambda pair: pair[1])]
+
+    def get_max_pack(self):
+        return self.get_ordered_science_packs()[self.value].replace("_", "-")
 
 
 class RecipeIngredientsOffset(Range):
@@ -517,6 +537,7 @@ class FactorioOptions(PerGameCommonOptions):
     free_sample_whitelist: FactorioFreeSampleWhitelist
     recipe_time: RecipeTime
     recipe_ingredients_offset: RecipeIngredientsOffset
+    recipe_ingredients_pool: RecipeIngredientsPool
     imported_blueprints: ImportedBlueprint
     world_gen: FactorioWorldGen
     progressive: Progressive
@@ -544,6 +565,7 @@ option_groups: list[OptionGroup] = [
             RocketPart,
             Satellite,
             RecipeIngredientsOffset,
+            RecipeIngredientsPool,
             RecipeTime,
         ]
     ),
