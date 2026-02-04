@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, OptionGroup, Range, Toggle, DeathLink, PerGameCommonOptions
+from Options import Choice, LocationSet, OptionGroup, Range, Toggle, DeathLink, PerGameCommonOptions
 from .ItemNames import *
 
 class OpenWorld(Toggle):
@@ -9,13 +9,7 @@ class OpenWorld(Toggle):
     If true all maps are accessible from the start. This makes it easier to play but does break intended level progression logic
     """
     display_name = "Open World"
-
-class CutsceneLevels(Toggle):
-    """
-    Determines whether cutscene maps are added to the map pool
-    """
-    display_name = "Cutscene Levels"
-
+    
 class EarlyPlayabilityPercentage(Range):
     """
     What percentage of starting maps are in the first round of map selection
@@ -25,7 +19,21 @@ class EarlyPlayabilityPercentage(Range):
     display_name = "Early Playability Percentage"
     range_start = 60
     range_end = 100
-    default = 75
+    default = 75  
+    
+class RemoveLocations(LocationSet):
+    """
+    Which maps will be removed entirly from the map pool.
+    Different from Excluded Locations as Removed Locations will not be playable
+    during the game. Excluded Locations are still in the map pool.
+    """
+    display_name = "Removed Locations"
+
+class CutsceneLevels(Toggle):
+    """
+    Determines whether cutscene maps are added to the map pool
+    """
+    display_name = "Cutscene Levels"
 
 class TrapFillPercentage(Range):
     """
@@ -98,6 +106,7 @@ portal2_option_groups = [
     OptionGroup("Location Options", [
         OpenWorld,
         EarlyPlayabilityPercentage,
+        RemoveLocations,
         CutsceneLevels,
         WheatleyMonitors,
         RatmanDens,
@@ -126,6 +135,7 @@ class Portal2Options(PerGameCommonOptions):
 
     open_world: OpenWorld
     cutscene_levels: CutsceneLevels
+    remove_locations: RemoveLocations
     early_playability_percentage: EarlyPlayabilityPercentage
     # storyachievementsanity: StoryAchievementSanity
     wheatley_monitors: WheatleyMonitors

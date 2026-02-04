@@ -104,6 +104,9 @@ class Portal2World(World):
 
         map_pool: list[str] = []
         used_maps: list[str] = []
+        
+        # Remove maps that have been put in the Remove Locations option
+        self.maps_in_use -= set(self.options.remove_locations)
 
         possible_maps = [name for name in sorted(self.maps_in_use) if not name.startswith("Chapter 9")]
         
