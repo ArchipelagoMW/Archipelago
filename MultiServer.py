@@ -81,6 +81,8 @@ def operator_add(ctx: Context, lhs, rhs):
 
 def operator_mul(ctx: Context, lhs, rhs):
     match (lhs, rhs):
+        case (int(), int()) if lhs != 0 and rhs != 0 and math.log2(abs(lhs)) + math.log2(abs(rhs)) > ctx.limits['max_int_bits']:
+            raise Exception(f"Result of int multiplication exceeds `max_int_bits` limit of {ctx.limits['max_int_bits']} bits")
         case (str(), int()) if len(lhs) * rhs > ctx.limits['max_string_len']:
             raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits['max_string_len']} characters")
         case (int(), str()) if lhs * len(rhs) > ctx.limits['max_string_len']:
