@@ -543,7 +543,7 @@ class id1CommonWorld(World, metaclass=AutoLoadJsonData):  # noqa: N801
     # -------------------------------------------------------------------------
     # Default overrides for World class methods
     def get_filler_item_name(self) -> str:
-        return self.random.choice(list(self.item_name_groups["Junk"]))
+        return self.random.choice(sorted(self.item_name_groups["Junk"]))
 
     def fill_slot_data(self) -> dict[str, typing.Any]:
         # Fill in options guaranteed to exist.
