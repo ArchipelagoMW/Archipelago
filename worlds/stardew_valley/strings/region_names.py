@@ -41,6 +41,7 @@ class Region:
     witch_hut = "Witch's Hut"
     island_south = "Island South"
     island_resort = "Island Resort"
+    island_south_ridge = "Island South Ridge"
     island_south_east = "Island Southeast"
     pirate_cove = "Pirate Cove"
     island_east = "Island East"

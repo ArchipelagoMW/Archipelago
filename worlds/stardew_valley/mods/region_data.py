@@ -615,8 +615,10 @@ ginger_island_regions = [
             Entrance.parrot_express_volcano_to_dig_site,
             Entrance.parrot_express_volcano_to_jungle,
             Entrance.parrot_express_volcano_to_docks,
+            Entrance.island_north_to_island_south_ridge,
         ),
     ),
+    RegionData(Region.island_south_ridge, (Entrance.island_south_ridge_to_island_north,)),
     RegionData(
         Region.volcano,
         (Entrance.volcano_to_island_north, Entrance.climb_to_volcano_5, Entrance.volcano_to_secret_beach),
@@ -842,6 +844,18 @@ ginger_island_connections = [
         Region.dig_site,
         flag=RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_OUT,
+    ),
+    ConnectionData(
+        Entrance.island_north_to_island_south_ridge,
+        Region.island_south_ridge,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT,
+    ),
+    ConnectionData(
+        Entrance.island_south_ridge_to_island_north,
+        Region.island_north,
+        flag=RandomizationFlag.OVERWORLD,
+        group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.island_north_to_volcano, Region.volcano, flag=RandomizationFlag.BUILDINGS, group=GroupFlag.OUT_TO_IN

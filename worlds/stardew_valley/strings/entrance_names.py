@@ -251,6 +251,8 @@ class Entrance:
     island_north_to_field_office = "Island North to Field Office"
     field_office_to_island_north = "Field Office to Island North"
     island_north_to_dig_site = "Island North to Dig Site"
+    island_north_to_island_south_ridge = "Island North to Island South Ridge"
+    island_south_ridge_to_island_north = "Island South Ridge to Island North"
     dig_site_to_island_north = "Dig Site to Island North"
     dig_site_to_professor_snail_cave = "Dig Site to Professor Snail Cave"
     professor_snail_cave_to_dig_site = "Professor Snail Cave to Dig Site"
