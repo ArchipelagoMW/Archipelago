@@ -316,6 +316,14 @@ class Portal2Context(CommonContext):
         if "ratman_dens" in slot_data:
             if slot_data["ratman_dens"]:
                 add_ratman_commands()
+                
+        if "portal_gun_upgrade_inplace" in slot_data:
+            # Don't remove the portal gun upgrade after pickup
+            pass
+        
+        if "potatos_inplace" in slot_data:
+            # Don't disable potatos in transition01
+            pass
 
     def on_package(self, cmd, args):
         def update_item_list():
