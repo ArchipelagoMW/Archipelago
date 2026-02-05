@@ -1267,8 +1267,7 @@ class Rac3Interface(GameInterface):
                     self._write8(RAC3STATUS.HEALTH, 1)
                     self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
                 if (character == RAC3PLAYERTYPE.RATCHET
-                        and self.planet == RAC3REGION.ANNIHILATION_NATION
-                        and not self.pause_state):
+                        and self.planet == RAC3REGION.ANNIHILATION_NATION):
                     # Patch out sleeping gas health reduction to prevent death
                     if self._read32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE) == 0x2442FFFF:
                         self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000)  # addiu v0,v0,0x0
@@ -1289,8 +1288,7 @@ class Rac3Interface(GameInterface):
                 self._write_float(health_addr, target_health)
 
         if (not self.one_hp_challenge.get(character, False)
-                and self.planet == RAC3REGION.ANNIHILATION_NATION
-                and not self.pause_state):
+                and self.planet == RAC3REGION.ANNIHILATION_NATION):
             # Restore sleeping gas health reduction if one HP challenge is not active for Ratchet
             if self._read32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE) == 0x24420000:
                 self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x2442FFFF)  # addiu v0,v0,-0x1
