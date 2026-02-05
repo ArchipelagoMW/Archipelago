@@ -4,6 +4,7 @@ from ..data.game_item import ItemTag
 from ..stardew_rule import StardewRule
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
+from ..strings.building_names import Building
 from ..strings.crop_names import Vegetable, Fruit
 from ..strings.fish_names import Fish, all_fish
 from ..strings.flower_names import all_flowers
@@ -23,7 +24,7 @@ class ArtisanLogic(BaseLogic):
         # TODO remove this one too once fish are converted to sources
         self.registry.artisan_good_rules.update({ArtisanGood.specific_smoked_fish(fish): self.can_smoke(fish) for fish in all_fish})
         self.registry.artisan_good_rules.update({ArtisanGood.specific_bait(fish): self.can_bait(fish) for fish in all_fish})
-        self.registry.artisan_good_rules.update({AnimalProduct.specific_roe(fish): self.can_smoke(fish) for fish in all_fish})
+        self.registry.artisan_good_rules.update({AnimalProduct.specific_roe(fish): self.can_get_roe(fish) for fish in all_fish})
         self.registry.artisan_good_rules.update({ArtisanGood.specific_aged_roe(fish): self.can_preserves_jar(AnimalProduct.specific_roe(fish)) for fish in all_fish})
         self.registry.artisan_good_rules.update({ArtisanGood.specific_honey(flower): self.can_get_honey(flower) for flower in all_flowers})
 
@@ -76,6 +77,10 @@ class ArtisanLogic(BaseLogic):
 
     def can_smoke(self, item: str) -> StardewRule:
         machine_rule = self.logic.has(Machine.fish_smoker)
+        return machine_rule & self.logic.has(item)
+
+    def can_get_roe(self, item: str) -> StardewRule:
+        machine_rule = self.logic.building.has_building(Building.fish_pond)
         return machine_rule & self.logic.has(item)
 
     def can_bait(self, item: str) -> StardewRule:
