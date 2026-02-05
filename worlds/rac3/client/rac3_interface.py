@@ -1277,6 +1277,8 @@ class Rac3Interface(GameInterface):
                     # Patch out nanotech level up healing to prevent losing One Hit Wonder challenge
                     if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING) == 0x00621821:
                         self._write32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING, 0x00000000)  # nop
+                    if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING) == 0xACA22850:
+                        self._write32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING, 0x00000000)  # nop
 
         # Vehicle one HP challenge is independent of player_type
         if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
@@ -1299,6 +1301,8 @@ class Rac3Interface(GameInterface):
                 self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0xAC652850)  # sw a1,0x2850(v1)
             if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING) == 0x00000000:
                 self._write32(RAC3INSTRUCTION.NATION_LEVELUP_HEALING, 0x00621821)  # addu v1,v1,v0
+            if self._read32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING) == 0x00000000:
+                self._write32(RAC3INSTRUCTION.NATION_LEVELUP_MILESTONE_HEALING, 0xACA22850)  # sw a2,0x2850(v1)
 
         # If loading from the main menu we delay fixing the current health until the load is complete
         if self.main_menu:
