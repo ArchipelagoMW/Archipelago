@@ -74,11 +74,11 @@ class MLSSClient(BizHawkClient):
         from CommonClient import logger
         try:
             if ctx.server_seed_name is None:
-                return
+                raise bizhawk.ConnectorError("Seed name not received from server.")
             if not self.seed_verify:
-                seed = await bizhawk.read(ctx.bizhawk_ctx, [(0xDF00A0, len(ctx.seed_name), "ROM")])
+                seed = await bizhawk.read(ctx.bizhawk_ctx, [(0xDF00A0, len(ctx.server_seed_name), "ROM")])
                 seed = seed[0].decode("UTF-8")
-                if seed not in ctx.seed_name:
+                if seed not in ctx.server_seed_name:
                     logger.info(
                         "ERROR: The ROM you loaded is for a different game of AP. "
                         "Please make sure the host has sent you the correct patch file, "
