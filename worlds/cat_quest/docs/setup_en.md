@@ -8,6 +8,7 @@
 - BepInEx from: [GitHub](https://github.com/BepInEx/BepInEx/releases)
 - Cat Quest Randomizer from: [GitHub](https://github.com/Nikkilites/CatQuest-Randomizer/releases)
 - Cat Quest World from: [GitHub](https://github.com/Nikkilites/Archipelago-CatQuest/releases)
+- (Optional) Cat Quest PopTracker from: [GitHub](https://github.com/Apheayenne/Cat_Quest_Poptracker/releases)
 
 ## Installation
 
