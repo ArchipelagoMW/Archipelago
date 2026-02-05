@@ -1,54 +1,82 @@
-from BaseClasses import ItemClassification
-from typing import TypedDict, List
+from __future__ import annotations
 
-class Item(TypedDict):
-    name: str
-    id: int
-    inGameId: str
-    count: int
-    classification: ItemClassification
+from typing import TYPE_CHECKING
 
-base_id = 123000
+from BaseClasses import Item, ItemClassification
 
-items: List[Item] = [
-    # Royal Arts
-    {"name": "Royal Art of Water Walking", "id": base_id + 1, "inGameId": "art.water", "count": 1, "classification": ItemClassification.progression},
-    {"name": "Royal Art of Flight", "id": base_id + 2, "inGameId": "art.flight", "count": 1, "classification": ItemClassification.progression},
+from .itemData import fillers, royal_arts, skills, prog_skills, prog_skill_uprades, prog_magic_levels, misc
+if TYPE_CHECKING:
+    from .world import CatQuestWorld
 
-    # Skills
-    {"name": "Flamepurr", "id": base_id + 3, "inGameId": "skill.flamepurr", "count": 1, "classification": ItemClassification.progression},
-    {"name": "Healing Paw", "id": base_id + 4, "inGameId": "skill.healing_paw", "count": 1, "classification": ItemClassification.useful},
-    {"name": "Lightnyan", "id": base_id + 5, "inGameId": "skill.lightnyan", "count": 1, "classification": ItemClassification.progression},
-    {"name": "Cattrap", "id": base_id + 6, "inGameId": "skill.cattrap", "count": 1, "classification": ItemClassification.progression},
-    {"name": "Purrserk", "id": base_id + 7, "inGameId": "skill.purrserk", "count": 1, "classification": ItemClassification.useful},
-    {"name": "Astropaw", "id": base_id + 8, "inGameId": "skill.astropaw", "count": 1, "classification": ItemClassification.progression},
-    {"name": "Freezepaw", "id": base_id + 9, "inGameId": "skill.freezepaw", "count": 1, "classification": ItemClassification.progression},
+ALL_ITEMS: list[Item] = fillers + royal_arts + skills + prog_skills + prog_skill_uprades + prog_magic_levels + misc
+
+def create_item_name_to_id() -> dict[str, int]:
+    item_id_dict = {}
+    current_id = 1
+
+    for item in ALL_ITEMS:
+        item_id_dict[item["name"]] = current_id
+        current_id += 1
+
+    return item_id_dict
+
+ITEM_NAME_TO_ID = create_item_name_to_id()
+
+ITEM_ID_TO_NAME = {v: k for k, v in ITEM_NAME_TO_ID.items()}
+
+
+def create_item_classification() -> dict[str, ItemClassification]:
+    item_classification_dict = {}
+
+    for item in ALL_ITEMS:
+        item_classification_dict[item["name"]] = item["classification"]
+   
+    return item_classification_dict
+
+DEFAULT_ITEM_CLASSIFICATIONS = create_item_classification()
+
+
+class CatQuestItem(Item):
+    game = "Cat Quest"
+
+
+def get_random_filler_item_name(world: CatQuestWorld) -> str:
+    return ITEM_ID_TO_NAME.get(world.random.randint(1, len(fillers)))
+
+def create_item_with_correct_classification(world: CatQuestWorld, name: str) -> CatQuestItem:
+    return CatQuestItem(name, DEFAULT_ITEM_CLASSIFICATIONS[name], ITEM_NAME_TO_ID[name], world.player)
+
+def create_all_items(world: CatQuestWorld) -> None:
+    itempool = []
+
+    required_items: list[Item] = royal_arts + misc + skills
+
+    for item in required_items:
+        itempool.append(world.create_item(item["name"]))
     
-    # Golden Key
-    {"name": "Golden Key", "id": base_id + 10, "inGameId": "key.golden", "count": 1, "classification": ItemClassification.useful},
+    # if world.options.skill_upgrade == "progressive_skills":
+    #    for skill in prog_skills:
+    #        for i in range(10):
+    #            itempool.append(world.create_item(skill["name"]))
+    #else:
+    #    for skill in skills:
+    #        itempool.append(world.create_item(skill["name"]))
 
-    # Gold
-    {"name": "50 Gold", "id": base_id + 11, "inGameId": "gold.50", "count": 1, "classification": ItemClassification.filler},
-    {"name": "500 Gold", "id": base_id + 12, "inGameId": "gold.500", "count": 3, "classification": ItemClassification.filler},
-    {"name": "750 Gold", "id": base_id + 13, "inGameId": "gold.750", "count": 5, "classification": ItemClassification.filler},
-    {"name": "1000 Gold", "id": base_id + 14, "inGameId": "gold.1000", "count": 7, "classification": ItemClassification.filler},
-    {"name": "5000 Gold", "id": base_id + 15, "inGameId": "gold.5000", "count": 2, "classification": ItemClassification.filler},
-    {"name": "10K Gold", "id": base_id + 16, "inGameId": "gold.10000", "count": 1, "classification": ItemClassification.filler},
+    #    if world.options.skill_upgrade == "upgrades":
+    #        for upgrade in prog_skill_uprades:
+    #            for i in range(9):
+    #                itempool.append(world.create_item(upgrade["name"]))
+    #    if world.options.skill_upgrade == "magic_levels":
+    #        for level in prog_magic_levels:
+    #            for i in range(9):
+    #                itempool.append(world.create_item(level["name"]))
 
-    # Exp
-    {"name": "500 Exp", "id": base_id + 17, "inGameId": "exp.500", "count": 0, "classification": ItemClassification.filler},
-    {"name": "1000 Exp", "id": base_id + 18, "inGameId": "exp.1000", "count": 0, "classification": ItemClassification.filler},
-    {"name": "5000 Exp", "id": base_id + 19, "inGameId": "exp.5000", "count": 5, "classification": ItemClassification.filler},
-    {"name": "7500 Exp", "id": base_id + 20, "inGameId": "exp.7500", "count": 5, "classification": ItemClassification.filler},
-    {"name": "10K Exp", "id": base_id + 21, "inGameId": "exp.10000", "count": 4, "classification": ItemClassification.filler},
-    {"name": "20K Exp", "id": base_id + 22, "inGameId": "exp.20000", "count": 4, "classification": ItemClassification.filler},
-    {"name": "50K Exp", "id": base_id + 23, "inGameId": "exp.50000", "count": 2, "classification": ItemClassification.filler},
-    {"name": "100K Exp", "id": base_id + 24, "inGameId": "exp.100000", "count": 1, "classification": ItemClassification.filler},
-]
+    number_of_items = len(itempool)
+    number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
 
-filler_items: List[Item] = [
-    # Balancing filler
-    {"name": "500 Gold", "id": base_id + 12, "inGameId": "gold.500", "count": 0, "classification": ItemClassification.filler},
-    {"name": "500 Exp", "id": base_id + 17, "inGameId": "exp.500", "count": 0, "classification": ItemClassification.filler},
-    {"name": "1000 Exp", "id": base_id + 18, "inGameId": "exp.1000", "count": 0, "classification": ItemClassification.filler},
-]
+    needed_number_of_filler_items = number_of_unfilled_locations - number_of_items
+
+    itempool += [world.create_filler() for _ in range(needed_number_of_filler_items)]
+
+    world.multiworld.itempool += itempool
+    

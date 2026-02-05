@@ -1,23 +1,46 @@
-from worlds.generic.Rules import add_rule
+from __future__ import annotations
 
-def create_rules(self, locations):
-    multiworld = self.multiworld
-    player = self.player
+from typing import TYPE_CHECKING
 
-    for loc in locations:
+from BaseClasses import CollectionState
+from worlds.generic.Rules import add_rule, set_rule
+from .locationData import questLocations
+
+if TYPE_CHECKING:
+    from .world import CatQuestWorld
+
+
+def set_all_rules(world: CatQuestWorld) -> None:
+    set_all_location_rules(world)
+    set_completion_condition(world)
+
+def set_all_location_rules(world: CatQuestWorld) -> None:
+    for loc in questLocations:
         if loc["art"] == "water":
-            add_rule(multiworld.get_location(loc["name"], player),
-            lambda state: state.has("Royal Art of Water Walking", player))
+            add_rule(world.get_location(loc["name"]),
+            lambda state: state.has("Royal Art of Water Walking", world.player))
         elif loc["art"] == "flight":
-            add_rule(multiworld.get_location(loc["name"], player),
-            lambda state: state.has("Royal Art of Flight", player))
+            add_rule(world.get_location(loc["name"]),
+            lambda state: state.has("Royal Art of Flight", world.player))
         elif loc["art"] == "both":
-            add_rule(multiworld.get_location(loc["name"], player),
-            lambda state: state.has("Royal Art of Flight", player) and state.has("Royal Art of Water Walking", player))
+            add_rule(world.get_location(loc["name"]),
+            lambda state: state.has_all(("Royal Art of Flight", "Royal Art of Water Walking"), world.player))
         elif loc["art"] == "either":
-            add_rule(multiworld.get_location(loc["name"], player),
-            lambda state: state.has("Royal Art of Flight", player) or state.has("Royal Art of Water Walking", player))
+            add_rule(world.get_location(loc["name"]),
+            lambda state: state.has_any(("Royal Art of Flight", "Royal Art of Water Walking"), world.player))
         
         if loc["hasFist"]:
-            add_rule(multiworld.get_location(loc["name"], player),
-            lambda state: state.has("Flamepurr", player, 1) or state.has("Lightnyan", player, 1) or state.has("Freezepaw", player, 1) or state.has("Cattrap", player, 1) or state.has("Astropaw", player, 1))
+            add_rule(world.get_location(loc["name"]),
+            lambda state: state.has_any(("Flamepurr", "Lightnyan", "Freezepaw", "Cattrap", "Astropaw"), world.player))
+
+        #if world.options.include_temples:
+        #for loc in templeLocations:
+        #   if loc["art"] == "either":
+        #    add_rule(world.get_location(loc["name"]),
+        #    lambda state: state.has_any("Royal Art of Flight", "Royal Art of Water Walking", world.player))
+
+def set_completion_condition(world: CatQuestWorld) -> None:
+    world.multiworld.completion_condition[world.player] = lambda state: (
+        state.has_all(("Royal Art of Water Walking", "Royal Art of Flight"), world.player) and 
+        state.has_any(("Flamepurr", "Lightnyan", "Freezepaw", "Cattrap", "Astropaw"), world.player)
+    )
