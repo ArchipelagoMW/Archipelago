@@ -447,13 +447,13 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(
         Entrance.downstairs_to_cellar,
         RegionName.cellar,
-        flag=RandomizationFlag.FARMHOUSE,
+        flag=RandomizationFlag.FARMHOUSE | RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_IN | GroupFlag.DOWN,
     ),
     ConnectionData(
         Entrance.cellar_to_downstairs,
         RegionName.farm_house,
-        flag=RandomizationFlag.FARMHOUSE,
+        flag=RandomizationFlag.FARMHOUSE | RandomizationFlag.BUILDINGS,
         group=GroupFlag.IN_TO_IN | GroupFlag.UP,
     ),
     ConnectionData(
