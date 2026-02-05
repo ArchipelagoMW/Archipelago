@@ -179,7 +179,7 @@ class Portal2World(World):
                 self.create_in_level_check(den, requirements, region_start)
             
             # Connect to chapter region if there was no previous level or if open world
-            if self.options.open_world or not last_region:
+            if self.options.game_mode == 2 or not last_region:
                 chapter_region.connect(region_start)
             else:
                 last_region.connect(region_start)
@@ -216,11 +216,11 @@ class Portal2World(World):
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
 
-        if not (self.chapter_maps_dict or self.options.open_world):
+        if not (self.chapter_maps_dict or self.options.game_mode == 2):
             self.chapter_maps_dict = self.create_randomized_maps()
         # Add chapters to those regions
         for i in range(1,9):
-            if self.options.open_world:
+            if self.options.game_mode == 2:
                 chapter_region, last_region = self.create_connected_maps(i)
             else:
                 chapter_region, last_region = self.create_connected_maps(i, self.chapter_maps_dict[f"Chapter {i}"])
@@ -233,7 +233,7 @@ class Portal2World(World):
         chapter_9_region, last_region = self.create_connected_maps(9)
         all_chapter_9_requirements = set()
         # Don't add requirements to the chapter start if open world
-        if not self.options.open_world:
+        if not self.options.game_mode == 2:
             for name, value in all_locations_table.items():
                 if name.startswith("Chapter 9"):
                     all_chapter_9_requirements.update(value.required_items)

@@ -7,19 +7,13 @@ class GameMode(Choice):
     What map generation and logic options are set:
     normal -> Each chapter is randomised with it's own maps
     chaotic -> Any map can be in any chapter
+    open_world -> maps appear in the correct order in the game and are all playable from the start
     """
     display_name = "Game Mode"
     option_normal = 0
     option_chaotic = 1
+    option_open_world = 2
     default = 0
-
-class OpenWorld(Toggle):
-    """
-    If all maps are accessible from the start.
-    Default is false, only 1 map from each chapter is accessible and maps are unlocked through completing previous ones.
-    If true all maps are accessible from the start. This makes it easier to play but does break intended level progression logic
-    """
-    display_name = "Open World"
     
 class EarlyPlayabilityPercentage(Range):
     """
@@ -116,7 +110,6 @@ class RatmanDens(Toggle):
 portal2_option_groups = [
     OptionGroup("Location Options", [
         GameMode,
-        OpenWorld,
         EarlyPlayabilityPercentage,
         RemoveLocations,
         CutsceneLevels,
@@ -146,7 +139,6 @@ class Portal2Options(PerGameCommonOptions):
     death_link: DeathLink
 
     game_mode: GameMode
-    open_world: OpenWorld
     cutscene_levels: CutsceneLevels
     remove_locations: RemoveLocations
     early_playability_percentage: EarlyPlayabilityPercentage
