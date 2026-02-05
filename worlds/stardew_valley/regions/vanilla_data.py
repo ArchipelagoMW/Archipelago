@@ -541,73 +541,64 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(
         Entrance.minecart_bus_stop_to_mines,
         RegionName.mines,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION,
         group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
         Entrance.minecart_bus_stop_to_quarry,
         RegionName.quarry,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION,
         group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_bus_stop_to_town,
         RegionName.town,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION,
         group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_mines_to_bus_stop,
         RegionName.bus_stop,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION,
         group=GroupFlag.IN_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_mines_to_quarry,
         RegionName.quarry,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION,
         group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
-        Entrance.minecart_mines_to_town,
-        RegionName.town,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
-        group=GroupFlag.OUT_TO_OUT,
+        Entrance.minecart_mines_to_town, RegionName.town, flag=RandomizationFlag.TRANSITION, group=GroupFlag.OUT_TO_OUT
     ),
     ConnectionData(
         Entrance.minecart_quarry_to_bus_stop,
         RegionName.bus_stop,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION,
         group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
         Entrance.minecart_quarry_to_mines,
         RegionName.mines,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION,
         group=GroupFlag.OUT_TO_IN,
     ),
     ConnectionData(
-        Entrance.minecart_quarry_to_town,
-        RegionName.town,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
-        group=GroupFlag.OUT_TO_OUT,
+        Entrance.minecart_quarry_to_town, RegionName.town, flag=RandomizationFlag.TRANSITION, group=GroupFlag.OUT_TO_OUT
     ),
     ConnectionData(
         Entrance.minecart_town_to_bus_stop,
         RegionName.bus_stop,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION,
         group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
-        Entrance.minecart_town_to_mines,
-        RegionName.mines,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
-        group=GroupFlag.OUT_TO_IN,
+        Entrance.minecart_town_to_mines, RegionName.mines, flag=RandomizationFlag.TRANSITION, group=GroupFlag.OUT_TO_IN
     ),
     ConnectionData(
         Entrance.minecart_town_to_quarry,
         RegionName.quarry,
-        flag=RandomizationFlag.TRANSITION | RandomizationFlag.IS_ONE_WAY,
+        flag=RandomizationFlag.TRANSITION,
         group=GroupFlag.OUT_TO_OUT,
     ),
     ConnectionData(
