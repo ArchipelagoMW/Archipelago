@@ -98,8 +98,13 @@ class Portal2World(World):
             for _ in range(number):
                 map_choice = map_pool.pop(0)
                 used_maps.append(map_choice)
-                chapter_maps[map_choice.split(":")[0]].append(map_choice)
-        
+                
+                if self.options.game_mode == 1:
+                    random_chapter = self.random.randint(1, 8)
+                    chapter_maps[f"Chapter {random_chapter}"].append(map_choice)
+                else:
+                    chapter_maps[map_choice.split(":")[0]].append(map_choice)
+
         chapter_maps: dict[str, list[str]] = {f"Chapter {i}": [] for i in range(1,9)}
 
         map_pool: list[str] = []

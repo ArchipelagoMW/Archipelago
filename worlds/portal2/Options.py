@@ -2,6 +2,17 @@ from dataclasses import dataclass
 from Options import Choice, LocationSet, OptionGroup, Range, Toggle, DeathLink, PerGameCommonOptions
 from .ItemNames import *
 
+class GameMode(Choice):
+    """
+    What map generation and logic options are set:
+    normal -> Each chapter is randomised with it's own maps
+    chaotic -> Any map can be in any chapter
+    """
+    display_name = "Game Mode"
+    option_normal = 0
+    option_chaotic = 1
+    default = 0
+
 class OpenWorld(Toggle):
     """
     If all maps are accessible from the start.
@@ -104,6 +115,7 @@ class RatmanDens(Toggle):
 
 portal2_option_groups = [
     OptionGroup("Location Options", [
+        GameMode,
         OpenWorld,
         EarlyPlayabilityPercentage,
         RemoveLocations,
@@ -133,6 +145,7 @@ portal2_option_presets = {
 class Portal2Options(PerGameCommonOptions):
     death_link: DeathLink
 
+    game_mode: GameMode
     open_world: OpenWorld
     cutscene_levels: CutsceneLevels
     remove_locations: RemoveLocations
