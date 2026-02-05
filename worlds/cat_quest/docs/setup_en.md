@@ -21,7 +21,7 @@
 
 ## Connecting
 
-When you open your game, you should see the archipawlago menu screen and the randomizer version. 
+When you open your game, you should see the archipawlago menu screen and the randomizer version.
 
 Depending on how much you've played the game beforehand, the menu may look different.
 
@@ -30,3 +30,9 @@ Depending on how much you've played the game beforehand, the menu may look diffe
 - if you do not have save data, click 'New Game', play the game until it saves for the first time, return to the menu and click 'New Game' again. Do as above.
 
 You can continue your saved game by clicking Continue like in vanilla Cat Quest. This will automatically connect you to the slot you last played on.
+
+## Help Checklist!
+
+- Make sure installed the correct version of BepInEx (x86, version 5.4.20 or newer. not x64 and not version 6.0.0+. Also make sure you installed the version that matches your OS)
+- Make sure the contents of the mod zip file are put directly in the root cat quest folder, not wrapped in a folder by the name of the downloaded Zip file.
+- Make sure your game is in English.
