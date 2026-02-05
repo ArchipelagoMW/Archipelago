@@ -210,7 +210,6 @@ La versión japonesa no debería tener problemas para mostrarlos.
 
 Esto ocurre en versiones anteriores cuando se carga un archivo existente que ya había recibido un elemento de ese Toad.
 Para resolver esto, sal y comienza desde un archivo `NEW`. El servidor restaurará automáticamente tu progreso.
-Alternativamente, actualizando tu compilación evitará este problema en el futuro.
 
 ### ¿Qué ocurre si pierdo la conexión?
 
