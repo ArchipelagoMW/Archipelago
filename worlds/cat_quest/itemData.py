@@ -58,7 +58,6 @@ fillers: List[Item] = [
     {"name": "750 Gold", "inGameId": "gold.750", "classification": ItemClassification.filler},
     {"name": "1000 Gold", "inGameId": "gold.1000", "classification": ItemClassification.filler},
     {"name": "5000 Gold", "inGameId": "gold.5000", "classification": ItemClassification.filler},
-    {"name": "10K Gold", "inGameId": "gold.10000", "classification": ItemClassification.filler},
 
     # Exp
     {"name": "500 Exp", "inGameId": "exp.500", "classification": ItemClassification.filler},
@@ -67,6 +66,4 @@ fillers: List[Item] = [
     {"name": "7500 Exp", "inGameId": "exp.7500", "classification": ItemClassification.filler},
     {"name": "10K Exp", "inGameId": "exp.10000", "classification": ItemClassification.filler},
     {"name": "20K Exp", "inGameId": "exp.20000", "classification": ItemClassification.filler},
-    {"name": "50K Exp", "inGameId": "exp.50000", "classification": ItemClassification.filler},
-    {"name": "100K Exp", "inGameId": "exp.100000", "classification": ItemClassification.filler},
 ]
