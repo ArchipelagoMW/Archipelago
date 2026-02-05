@@ -12,7 +12,7 @@ logger = logging.getLogger("Client")
 
 BANK_EXCHANGE_RATE = 20000000000
 
-overworld_music = [v.track for k, v in overworld_music_data.items()]
+overworld_music = [music_data.track for music_data in overworld_music_data.values()]
 
 class MarioLand2Client(BizHawkClient):
     system = ("GB", "SGB")
