@@ -24,14 +24,14 @@ def set_all_location_rules(world: CatQuestWorld) -> None:
             lambda state: state.has("Royal Art of Flight", world.player))
         elif loc["art"] == "both":
             add_rule(world.get_location(loc["name"]),
-            lambda state: state.has_all("Royal Art of Flight", "Royal Art of Water Walking", world.player))
+            lambda state: state.has_all(("Royal Art of Flight", "Royal Art of Water Walking"), world.player))
         elif loc["art"] == "either":
             add_rule(world.get_location(loc["name"]),
-            lambda state: state.has_any("Royal Art of Flight", "Royal Art of Water Walking", world.player))
+            lambda state: state.has_any(("Royal Art of Flight", "Royal Art of Water Walking"), world.player))
         
         if loc["hasFist"]:
             add_rule(world.get_location(loc["name"]),
-            lambda state: state.has_any("Flamepurr", "Lightnyan", "Freezepaw", "Cattrap", "Astropaw", world.player))
+            lambda state: state.has_any(("Flamepurr", "Lightnyan", "Freezepaw", "Cattrap", "Astropaw"), world.player))
 
         #if world.options.include_temples:
         #for loc in templeLocations:

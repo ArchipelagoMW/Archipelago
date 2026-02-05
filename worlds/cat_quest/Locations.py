@@ -35,7 +35,7 @@ def create_regular_locations(world: CatQuestWorld) -> None:
 
     for loc in questLocations:
         Felingard.locations.append(
-            CatQuestLocation(world.player, loc.name, LOCATION_NAME_TO_ID[loc.name], Felingard)
+            CatQuestLocation(world.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], Felingard)
     )
 
     #if world.options.include_temples:
