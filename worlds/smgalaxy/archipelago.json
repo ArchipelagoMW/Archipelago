@@ -1,0 +1,6 @@
+{
+    "game": "Super Mario Galaxy",
+    "authors": ["squidy", "Demorck", "Bonk", "Blubber_Yoshi", "BootsinSoots", "SomeJakeGuy"],
+    "minimum_ap_version": "0.6.6",
+    "world_version": "0.0.1"
+}
