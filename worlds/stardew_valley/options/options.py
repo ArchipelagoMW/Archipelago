@@ -917,7 +917,7 @@ class TrapDistribution(OptionCounter):
 class CustomLogic(OptionSet):
     """Enable various customizations to the logic of the generator.
     Some flags are inherently incompatible with each other, the harder flag takes priority.
-    Some of these toggles can, if the player is not careful, force them to reset the day.
+    Some of these toggles can, if the player is not careful, force them to reset days.
     Easy Fishing: +2 Required fishing levels
     Hard Fishing: -2 Required fishing levels
     Extreme Fishing: -4 Required fishing levels
