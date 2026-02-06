@@ -34,15 +34,20 @@ def handle_item(item_name: str) -> list[str]:
         return_commands.append(f'script DeleteEntity("{model}")')
     
     if DELETE_ENTITY in item_tags:
-        return_commands.append(f'script DeleteEntity("{ent_name}")')
+        if ent_name == button or ent_name == old_button:
+            return_commands.append(f'script AddButtonFrame("{ent_name}")')
+        elif ent_name == floor_button or ent_name == old_floor_button:
+            return_commands.append(f'script AddFloorButtonFrame("{ent_name}")')
+        else:
+            return_commands.append(f'script DeleteEntity("{ent_name}")')
     
     if ItemTag.GEL in item_tags:
         return_commands.append("removeallpaint")
     
     if ItemTag.WEAPON in item_tags:
-        if item_name == "Portal Gun": # Removed Item for improved randomized levels (too many levels rely on this)
+        if item_name == portal_gun_1: # Removed Item for improved randomized levels (too many levels rely on this)
             return_commands.append(f'script DisablePortalGun(true, false)')
-        if item_name == "Upgraded Portal Gun":
+        if item_name == portal_gun_2:
             return_commands.append(f'script DisablePortalGun(false, true)')
         
     if DISABLE_PICKUP in item_tags:
