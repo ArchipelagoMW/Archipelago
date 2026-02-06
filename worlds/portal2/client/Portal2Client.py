@@ -9,7 +9,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
 from NetUtils import ClientStatus, JSONMessagePart, NetworkItem
 from Utils import async_start, init_logging
 
-from ..mod_helpers.ItemHandling import add_ratman_commands, handle_item, handle_map_start, handle_trap
+from ..mod_helpers.ItemHandling import add_ratman_commands, handle_item, handle_map_start, handle_trap, portal_gun_upgrade_not_inplace, potatos_not_inplace
 from ..mod_helpers.MapMenu import Menu
 from ..Locations import location_names_to_map_codes, map_codes_to_location_names, wheatley_maps_to_monitor_names, all_locations_table
 from .. import Portal2World
@@ -316,14 +316,14 @@ class Portal2Context(CommonContext):
         if "ratman_dens" in slot_data:
             if slot_data["ratman_dens"]:
                 add_ratman_commands()
-                
-        if "portal_gun_upgrade_inplace" in slot_data:
-            # Don't remove the portal gun upgrade after pickup
-            pass
         
-        if "potatos_inplace" in slot_data:
-            # Don't disable potatos in transition01
-            pass
+        # Don't remove the portal gun upgrade after pickup
+        if "portal_gun_upgrade_inplace" not in slot_data:
+            portal_gun_upgrade_not_inplace()
+            
+        # Don't disable potatos in PotatOS level
+        if "potatos_inplace" not in slot_data:
+            potatos_not_inplace()
 
     def on_package(self, cmd, args):
         def update_item_list():

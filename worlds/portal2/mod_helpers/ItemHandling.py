@@ -116,7 +116,6 @@ class MapCommand:
     commands: list[str]
     
 map_specific_commands: list[MapCommand] = [
-    MapCommand("sp_a3_transition01", potatos, ["script RemovePotatOS()\n"]),
     MapCommand("sp_a4_finale4", potatos, ["script BlockWheatleyFight()\n"]),
     MapCommand("sp_a2_laser_stairs", reflection_cube, ['script ppmod.addscript([Vector(-352, -288, -32), 1, "trigger_once"], "OnStartTouch", "DeleteEntity(\"models/props/reflection_cube.mdl\")", 0.5, 1)\n',
                                                          'script ppmod.addscript("prop_button", "OnPressed", "DeleteEntity(\"models/props/reflection_cube.mdl\")", 0.5)\n']),
@@ -127,6 +126,14 @@ map_specific_commands: list[MapCommand] = [
     MapCommand("sp_a2_bts2", turrets, ['script ppmod.addscript([Vector(1514, -3898, 64), 1, "trigger_once"], "OnStartTouch", "DisableEntityPhysics(\"npc_portal_turret_floor\")", 3, 1)\n']),
     MapCommand("sp_a4_finale2", turrets, ['script ppmod.addscript([Vector(11835, 11776, 8543), 1, "trigger_once"], "OnStartTouch", "DisableEntityPhysics(\"npc_portal_turret_floor\")", 2.5, 1)\n']),
 ]
+
+def potatos_not_inplace():
+    global map_specific_commands
+    map_specific_commands.append(MapCommand("sp_a3_transition01", potatos, ["script RemovePotatOS()\n"]))
+    
+def portal_gun_upgrade_not_inplace():
+    global map_specific_commands
+    map_specific_commands.append(MapCommand("sp_a2_intro", portal_gun_2, ["scrupt InciniratorDisablePortalGun()\n"]))
 
 # Option based commands
 ratman_den_commands: list[MapCommand] = [
