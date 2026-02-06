@@ -1,11 +1,9 @@
-from sqlite3 import connect
-
-from ..AutoWorld import LogicMixin
+from . import SMGWorld
 from ..generic.Rules import add_rule
 from .regions import connect_regions
-from .Options import EnablePurpleCoinStars
+
 # main stage logic
-def set_rules(world, player: int, self):
+def set_rules(world: SMGWorld, player: int):
     connect_regions(world, player, "Menu", "Good Egg", lambda state: True)
     connect_regions(world, player, "Menu", "Bosses", lambda state: True)
     connect_regions(world, player, "Menu", "Hungry Lumas", lambda state: True)
@@ -31,59 +29,59 @@ def set_rules(world, player: int, self):
     connect_regions(world, player, "Menu", "Purple Coins", lambda state: True)
     
     # special stages logic
-    add_rule(world.get_location("LDL: Surfing 101", player), lambda state: state.has("Power Star", player, 5))
-    add_rule(world.get_location("FS: Painting the Planet Yellow", player), lambda state: state.has("Power Star", player, 7))
-    add_rule(world.get_location("RG: Rolling in the Clouds", player), lambda state: state.has("Power Star", player, 11) and state.has("Progressive Grand Star", player))
-    add_rule(world.get_location("HS: Shrinking Satellite", player), lambda state: state.has ("Power Star", player, 18) and state.has("Progressive Grand Star", player))
-    add_rule(world.get_location("BUB: Through the Poison Swamp", player), lambda state: state.has ("Power Star", player, 19) and state.has("Progressive Grand Star", player, 2))
-    add_rule(world.get_location("BB: The Secret of Buoy Base", player), lambda state: state.has ("Power Star", player, 30) and state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player))
-    add_rule(world.get_location("BB: The Floating Fortress", player), lambda state: state.has ("Power Star", player, 30) and state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player))
-    add_rule(world.get_location("BF: Kingfin's Fearsome Waters", player), lambda state: state.has("Power Star", player, 55) and state.has("Progressive Grand Star", player, 2))
-    add_rule(world.get_location("MS: Watch Your Step", player), lambda state: state.has("Power Star", player, 50) and state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player, 2))
-    add_rule(world.get_location("DDR: Giant Eel Breakout", player), lambda state: state.has("Progressive Grand Star", player, 2))
-    add_rule(world.get_location("RGT: Gizmos, Gears, and Gadgets", player), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player) and state.has("Green Star", player, 3))
-    add_rule(world.get_location("LDT: The Galaxy's Greatest Wave", player), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player) and state.has("Progressive Grand Star", player, 2) and state.has("Green Star", player, 3))
-    add_rule(world.get_location("BBT: The Electric Labyrinth", player), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player) and state.has("Progressive Grand Star", player, 2) and state.has("Green Star", player, 3))
-    add_rule(world.get_location("SS: Rocky Road", player), lambda state: state.has("Power Star", player, 7))
-    add_rule(world.get_location("SP: A Very Sticky Situation", player), lambda state: state.has("Progressive Grand Star", player) and state.has("Power Star", player, 9))
-    add_rule(world.get_location("BM: Bigmouth's Gold Bait", player), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Power Star", player, 29))
-    add_rule(world.get_location("Sandy Spiral: Choosing a Favorite Snack", player), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Power Star", player, 36) and state.has("Progressive Grand Star", player, 2))
-    add_rule(world.get_location("Bone's Boneyard: Racing the Spooky Speedster", player), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player, 2))
-    add_rule(world.get_location("SC: Star Bunnies in the Snow", player), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Power Star", player, 52))
+    add_rule(world.get_location("LDL: Surfing 101"), lambda state: state.has("Power Star", player, 5))
+    add_rule(world.get_location("FS: Painting the Planet Yellow"), lambda state: state.has("Power Star", player, 7))
+    add_rule(world.get_location("RG: Rolling in the Clouds"), lambda state: state.has("Power Star", player, 11) and state.has("Progressive Grand Star"))
+    add_rule(world.get_location("HS: Shrinking Satellite"), lambda state: state.has ("Power Star", player, 18) and state.has("Progressive Grand Star", player))
+    add_rule(world.get_location("BUB: Through the Poison Swamp"), lambda state: state.has ("Power Star", player, 19) and state.has("Progressive Grand Star", player, 2))
+    add_rule(world.get_location("BB: The Secret of Buoy Base"), lambda state: state.has ("Power Star", player, 30) and state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player))
+    add_rule(world.get_location("BB: The Floating Fortress"), lambda state: state.has ("Power Star", player, 30) and state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player))
+    add_rule(world.get_location("BF: Kingfin's Fearsome Waters"), lambda state: state.has("Power Star", player, 55) and state.has("Progressive Grand Star", player, 2))
+    add_rule(world.get_location("MS: Watch Your Step"), lambda state: state.has("Power Star", player, 50) and state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player, 2))
+    add_rule(world.get_location("DDR: Giant Eel Breakout"), lambda state: state.has("Progressive Grand Star", player, 2))
+    add_rule(world.get_location("RGT: Gizmos, Gears, and Gadgets"), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player) and state.has("Green Star", player, 3))
+    add_rule(world.get_location("LDT: The Galaxy's Greatest Wave"), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player) and state.has("Progressive Grand Star", player, 2) and state.has("Green Star", player, 3))
+    add_rule(world.get_location("BBT: The Electric Labyrinth"), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player) and state.has("Progressive Grand Star", player, 2) and state.has("Green Star", player, 3))
+    add_rule(world.get_location("SS: Rocky Road"), lambda state: state.has("Power Star", player, 7))
+    add_rule(world.get_location("SP: A Very Sticky Situation"), lambda state: state.has("Progressive Grand Star", player) and state.has("Power Star", player, 9))
+    add_rule(world.get_location("BM: Bigmouth's Gold Bait"), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Power Star", player, 29))
+    add_rule(world.get_location("Sandy Spiral: Choosing a Favorite Snack"), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Power Star", player, 36) and state.has("Progressive Grand Star", player, 2))
+    add_rule(world.get_location("Bone's Boneyard: Racing the Spooky Speedster"), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Progressive Grand Star", player, 2))
+    add_rule(world.get_location("SC: Star Bunnies in the Snow"), lambda state: state.has("Progressive Grand Star", player, 2) and state.has("Power Star", player, 52))
     # comet logic
-    add_rule(world.get_location("GE: Dino Piranha Speed Run", player), lambda state: state.has("Power Star", player, 13))
-    add_rule(world.get_location("HH: Honeyhive Cosmic Mario Race", player), lambda state: state.has("Power Star", player, 13))
-    add_rule(world.get_location("SJ: Pull Star Path Speed Run", player), lambda state: state.has("Power Star", player, 13))
-    add_rule(world.get_location("BR: Topmanic's Dardevil Run", player), lambda state: state.has("Power Star", player, 13))
-    add_rule(world.get_location("BB: Fast Foes on the Cyclone Stone", player), lambda state: state.has("Power Star", player, 13))
+    add_rule(world.get_location("GE: Dino Piranha Speed Run"), lambda state: state.has("Power Star", player, 13))
+    add_rule(world.get_location("HH: Honeyhive Cosmic Mario Race"), lambda state: state.has("Power Star", player, 13))
+    add_rule(world.get_location("SJ: Pull Star Path Speed Run"), lambda state: state.has("Power Star", player, 13))
+    add_rule(world.get_location("BR: Topmanic's Dardevil Run"), lambda state: state.has("Power Star", player, 13))
+    add_rule(world.get_location("BB: Fast Foes on the Cyclone Stone"), lambda state: state.has("Power Star", player, 13))
     # boss stage logic 
-    add_rule(world.get_location("BJ: Megaleg's Moon", player), lambda state: state.has("Power Star", player, 8))
-    add_rule(world.get_location("B: The Firery Stronghold", player), lambda state: state.has("Power Star", player, 15) and state.has("Progressive Grand Star", player))
-    add_rule(world.get_location("BJ: Sinking the Airships", player), lambda state: state.has("Power Star", player, 23) and state.has("Progressive Grand Star", player, 2))
-    add_rule(world.get_location("BJ: King Kaliente's Spicy Return", player), lambda state: state.has("Power Star", player, 45) and state.has("Progressive Grand Star", player, 2))
-    add_rule(world.get_location("B:  Darkness on the Horizon", player), lambda state: state.has("Power Star", player, 33) and state.has("Progressive Grand Star", player, 2))
-    add_rule(world.get_location("B: Bowser's Galaxy Reactor", player), lambda state: state.has("Power Star", player, world.Stars_to_finish[self.player].value) and state.has("Progressive Grand Star", player, 2))
+    add_rule(world.get_location("BJ: Megaleg's Moon"), lambda state: state.has("Power Star", player, 8))
+    add_rule(world.get_location("B: The Firery Stronghold"), lambda state: state.has("Power Star", player, 15) and state.has("Progressive Grand Star", player))
+    add_rule(world.get_location("BJ: Sinking the Airships"), lambda state: state.has("Power Star", player, 23) and state.has("Progressive Grand Star", player, 2))
+    add_rule(world.get_location("BJ: King Kaliente's Spicy Return"), lambda state: state.has("Power Star", player, 45) and state.has("Progressive Grand Star", player, 2))
+    add_rule(world.get_location("B:  Darkness on the Horizon"), lambda state: state.has("Power Star", player, 33) and state.has("Progressive Grand Star", player, 2))
+    add_rule(world.get_location("B: Bowser's Galaxy Reactor"), lambda state: state.has("Power Star", player, world.options.stars_to_finish.value) and state.has("Progressive Grand Star", player, 2))
     
     
     # purple coin star logic
-    if self.multiworld.enable_purple_coin_stars[self.player] == EnablePurpleCoinStars.option_all:
-        add_rule(world.get_location("DN: Battlestation's Purple Coins", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("MM: Red-Hot Purple Coins", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("TT: Luigi's Purple Coins", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("DD: Plunder the Purple Coins", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("GL: Purple Coins in the Woods", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("FF: Purple Coins on the Summit", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("SS: Purple Coins by the Seaside", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("GG: Purple Coins on the Puzzle Cube", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("G: Purple Coins in the Bone Pen", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("DDune: Purple Coin in the Desert", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("BR: Purple Coins on the Battlerock", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("GE: Purple Coin Omelet", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("HH: The Honeyhive's Purple Coins", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("SJ: Purple Coin Spacewalk", player), lambda state: state.has("Peach", player))
-        add_rule(world.get_location("GG: Gateway's Purple coins", player), lambda state: state.has("Peach", player))
-    elif self.multiworld.enable_purple_coin_stars[self.player] == EnablePurpleCoinStars.option_main_game_only:
-          add_rule(world.get_location("GG: Gateway's Purple coins", player), lambda state: state.has("Grand Star Engine", player))
+    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
+        add_rule(world.get_location("DN: Battlestation's Purple Coins"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("MM: Red-Hot Purple Coins"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("TT: Luigi's Purple Coins"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("DD: Plunder the Purple Coins"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("GL: Purple Coins in the Woods"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("FF: Purple Coins on the Summit"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("SS: Purple Coins by the Seaside"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("GG: Purple Coins on the Puzzle Cube"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("G: Purple Coins in the Bone Pen"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("DDune: Purple Coin in the Desert"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("BR: Purple Coins on the Battlerock"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("GE: Purple Coin Omelet"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("HH: The Honeyhive's Purple Coins"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("SJ: Purple Coin Spacewalk"), lambda state: state.has("Peach", player))
+        add_rule(world.get_location("GG: Gateway's Purple coins"), lambda state: state.has("Peach", player))
+    elif world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_main_game_only:
+          add_rule(world.get_location("GG: Gateway's Purple coins"), lambda state: state.has("Grand Star Engine", player))
     else:
         return
     world.completion_condition[player] = lambda state: state.has("Peach", player)

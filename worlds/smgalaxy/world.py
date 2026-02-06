@@ -1,14 +1,15 @@
 import string
-from typing import Optional
-from . import items, locations, regions, Rules, web_world
+from typing import Optional, ClassVar
 from BaseClasses import Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World
 
+from . import items, locations, regions, Rules, web_world, Options
+
 class SMGWorld(World):
     """
-    Super Mario Galaxy allows you to explore the cosomos with rosalinna in the comet obserbatory. 
-    Mario must collect Power Stars and Grand Stars to power the obserbatory so it can go to the 
-    center of the universe in order to save peach.
+    Super Mario Galaxy allows you to explore the cosmos with Rosalina in the Comet Observatory.
+    Mario must collect Power Stars and Grand Stars to power the observatory so it can go to the
+    center of the universe in order to save Princess Peach from Bowser's clutches.
     """
 
     game = "Super Mario Galaxy"
@@ -17,33 +18,28 @@ class SMGWorld(World):
     web = web_world.SMGWebWorld()
     
     #option definitions
-    options_dataclass = smg_options.SMGOptions
-    options: smg_options.SMGOptions
+    options_dataclass = Options.SMGOptions
+    options: Options.SMGOptions
 
-    item_name_to_id = item_table
-    location_name_to_id = location_table
+    item_name_to_id = ClassVar[items.ITEM_NAME_TO_ID]
+    location_name_to_id = locations.location_table
 
-    data_version = 0
-    required_client_version = (0, 4, 0)
-    
-    option_definitions = galaxy_options
+    required_client_version = (0, 6, 6)
+
     hint_blacklist = {"B: Bowser's Galaxy Reactor", "Peach"}
 
+    def __init__(self, *args, **kwargs):
+        super(SMGWorld, self).__init__(*args, **kwargs)
+        self.origin_region_name: str = "Ship"
+
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self)
+        regions.create_regions(self, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self)
+        Rules.set_rules(self, self.player)
     
     def create_item(self, name: str) -> Item:
-        item_id = item_table[name]
-        if name == "Power Star":
-            classification = ItemClassification.progression_skip_balancing
-        elif name == "Nothing":
-            classification = ItemClassification.filler
-        else:
-            classification = ItemClassification.progression
-        item = SMGItem(name, classification, item_id, self.player)
+        item = items.SMGItem(name, self.player, items.item_table[name])
         
         return item
     
@@ -54,10 +50,10 @@ class SMGWorld(World):
         self.multiworld.get_location("B: Bowser's Galaxy Reactor", self.player).place_locked_item(self.create_item("Peach"))
         
         # check to see what setting enable purple coin stars is on to see how many stars to create 
-        if self.multiworld.enable_purple_coin_stars[self.player] == EnablePurpleCoinStars.option_main_game_only:
+        if self.options.enable_purple_coin_stars == self.options.enable_purple_coin_stars.option_main_game_only:
            self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,99)]
         
-        elif self.multiworld.enable_purple_coin_stars[self.player] == EnablePurpleCoinStars.option_all:
+        elif self.options.enable_purple_coin_stars == self.options.enable_purple_coin_stars.option_all:
              self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,127)]
 
         else:
@@ -65,7 +61,7 @@ class SMGWorld(World):
          
         # creates the grand stars in each players itempool
 
-        if self.multiworld.enable_purple_coin_stars[self.player] == EnablePurpleCoinStars.option_none:
+        if self.options.enable_purple_coin_stars == self.options.enable_purple_coin_stars.option_none:
            self.multiworld.get_location("TT: Luigi's Purple Coins", self.player).place_locked_item(self.create_item("Nothing"))
            self.multiworld.get_location("DN: Battlestation's Purple Coins", self.player).place_locked_item(self.create_item("Nothing"))
            self.multiworld.get_location("MM: Red-Hot Purple Coins", self.player).place_locked_item(self.create_item("Nothing"))
@@ -81,7 +77,7 @@ class SMGWorld(World):
            self.multiworld.get_location("DDune: Purple Coin in the Desert", self.player).place_locked_item(self.create_item("Nothing"))
            self.multiworld.get_location("HH: The Honeyhive's Purple Coins", self.player).place_locked_item(self.create_item("Nothing")) 
            self.multiworld.get_location("GG: Gateway's Purple coins", self.player).place_locked_item(self.create_item("Nothing"))
-        elif self.multiworld.enable_purple_coin_stars[self.player] == EnablePurpleCoinStars.option_all:
+        elif self.options.enable_purple_coin_stars == self.options.enable_purple_coin_stars.option_all:
              return
         else:
              self.multiworld.get_location("TT: Luigi's Purple Coins", self.player).place_locked_item(self.create_item("Nothing"))
