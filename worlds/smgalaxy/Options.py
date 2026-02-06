@@ -18,7 +18,7 @@ class StarstoFinish(Range):
     default = 60
  
 # this defines all the options.
-galaxy_options = {
+smg_options = {
     "enable_purple_coin_stars": EnablePurpleCoinStars,
     "Stars_to_finish": StarstoFinish,
 }
