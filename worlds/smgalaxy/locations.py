@@ -17,8 +17,10 @@ class SMGLocation(Location):
         self.address = location_table[name]
 
 class SMGLocationData(NamedTuple):
-    category: str
-    code: Optional[int] = None
+    category: str # type of randomization option table and group []
+    region: str
+    code: Optional[int]  # used to create ap_id, None for events
+    other_variable: int = -1  #
 
 # good egg galaxy
 

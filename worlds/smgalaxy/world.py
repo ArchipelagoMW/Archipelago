@@ -1,6 +1,5 @@
-import string
-from typing import Optional, ClassVar
-from BaseClasses import Item, Tutorial, ItemClassification
+from typing import ClassVar
+from BaseClasses import Item
 from worlds.AutoWorld import World
 
 from . import items, locations, regions, Rules, web_world, Options

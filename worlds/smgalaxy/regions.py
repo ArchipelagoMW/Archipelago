@@ -1,5 +1,5 @@
 
-from BaseClasses import Region, Location, Entrance, MultiWorld
+from BaseClasses import Region, Entrance
 
 from . import SMGWorld
 from .Options import SMGOptions
