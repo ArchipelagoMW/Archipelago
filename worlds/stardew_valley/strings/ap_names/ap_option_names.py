@@ -90,3 +90,7 @@ class CustomLogicOptionName:
     deep_mining = "Deep Mining"
     very_deep_mining = "Very Deep Mining"
     ignore_birthdays = "Ignore Birthdays"
+    easy_money = "Easy Money"
+    hard_money = "Hard Money"
+    extreme_money = "Extreme Money"
+    nightmare_money = "Nightmare Money"

@@ -927,6 +927,11 @@ class CustomLogic(OptionSet):
     Extreme Combat: -2 required weapon and -4 required combat levels
     Deep Mining: x2 Mine depth expectations
     Very Deep Mining: x4 Mine depth expectations
+    Ignore Birthdays: Villager birthdays are not considered in logic
+    Easy Money: x0.25 to earnings expectations
+    Hard Money: x2 to earnings expectations
+    Extreme Money: x8 to earnings expectations
+    Nightmare Money: x20 to earnings expectations
     """
     internal_name = "custom_logic"
     display_name = "Custom Logic"
@@ -936,6 +941,7 @@ class CustomLogic(OptionSet):
         CustomLogicOptionName.hard_combat, CustomLogicOptionName.extreme_combat,
         CustomLogicOptionName.deep_mining, CustomLogicOptionName.very_deep_mining,
         CustomLogicOptionName.ignore_birthdays,
+        CustomLogicOptionName.easy_money, CustomLogicOptionName.hard_money, CustomLogicOptionName.extreme_money, CustomLogicOptionName.nightmare_money,
     })
     preset_none = frozenset()
     preset_all = valid_keys
