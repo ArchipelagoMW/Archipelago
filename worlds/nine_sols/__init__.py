@@ -58,11 +58,6 @@ class NineSolsWorld(World):
     game = "Nine Sols"
     web = NineSolsWebWorld()
 
-    # this is how we tell the Universal Tracker we want to use re_gen_passthrough
-    @staticmethod
-    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
-        return slot_data
-
     # Universal Tracker configuration
     ut_can_gen_without_yaml = True
     glitches_item_name = "UT Glitch Logic"
