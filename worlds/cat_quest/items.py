@@ -49,27 +49,27 @@ def create_item_with_correct_classification(world: CatQuestWorld, name: str) -> 
 def create_all_items(world: CatQuestWorld) -> None:
     itempool = []
 
-    required_items: list[Item] = royal_arts + misc + skills
+    required_items: list[Item] = royal_arts + misc
 
     for item in required_items:
         itempool.append(world.create_item(item["name"]))
     
-    # if world.options.skill_upgrade == "progressive_skills":
-    #    for skill in prog_skills:
-    #        for i in range(10):
-    #            itempool.append(world.create_item(skill["name"]))
-    #else:
-    #    for skill in skills:
-    #        itempool.append(world.create_item(skill["name"]))
-
-    #    if world.options.skill_upgrade == "upgrades":
-    #        for upgrade in prog_skill_uprades:
-    #            for i in range(9):
-    #                itempool.append(world.create_item(upgrade["name"]))
-    #    if world.options.skill_upgrade == "magic_levels":
-    #        for level in prog_magic_levels:
-    #            for i in range(9):
-    #                itempool.append(world.create_item(level["name"]))
+    if world.options.skill_upgrade == "progressive_skills":
+        for skill in prog_skills:
+            for i in range(10):
+                itempool.append(world.create_item(skill["name"]))
+    else:
+        for skill in skills:
+            itempool.append(world.create_item(skill["name"]))
+            
+        if world.options.skill_upgrade == "upgrades":
+            for upgrade in prog_skill_uprades:
+                for i in range(9):
+                    itempool.append(world.create_item(upgrade["name"]))
+        if world.options.skill_upgrade == "magic_levels":
+            for level in prog_magic_levels:
+                for i in range(9):
+                    itempool.append(world.create_item(level["name"]))
 
     number_of_items = len(itempool)
     number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))

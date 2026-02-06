@@ -40,6 +40,6 @@ class CatQuestWorld(World):
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         return self.options.as_dict(
-            "goal"#, "include_temples"
+            "goal", "include_temples", "skill_upgrade"
         )
     
