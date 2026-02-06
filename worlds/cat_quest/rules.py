@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
-from .locationData import questLocations
+from .locationData import questLocations, templeLocations
 
 if TYPE_CHECKING:
     from .world import CatQuestWorld
@@ -33,11 +33,11 @@ def set_all_location_rules(world: CatQuestWorld) -> None:
             add_rule(world.get_location(loc["name"]),
             lambda state: state.has_any(("Flamepurr", "Lightnyan", "Freezepaw", "Cattrap", "Astropaw"), world.player))
 
-        #if world.options.include_temples:
-        #for loc in templeLocations:
-        #   if loc["art"] == "either":
-        #    add_rule(world.get_location(loc["name"]),
-        #    lambda state: state.has_any("Royal Art of Flight", "Royal Art of Water Walking", world.player))
+        if world.options.include_temples:
+            for loc in templeLocations:
+                if loc["art"] == "either":
+                    add_rule(world.get_location(loc["name"]),
+                    lambda state: state.has_any(("Royal Art of Flight", "Royal Art of Water Walking"), world.player))
 
 def set_completion_condition(world: CatQuestWorld) -> None:
     world.multiworld.completion_condition[world.player] = lambda state: (

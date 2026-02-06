@@ -22,9 +22,13 @@ class Goal(Choice):
 #    option_upgrades = 2
 #    option_magic_levels = 3
 #    default = 2
+class IncludeTemples(Toggle):
+    """Choose if visiting temples will be included"""
+    display_name = "Include Temples"
 
 @dataclass
 class CatQuestOptions(PerGameCommonOptions):
     goal: Goal
     #skill_upgrade: SkillUpgrade
+    include_temples: IncludeTemples
     

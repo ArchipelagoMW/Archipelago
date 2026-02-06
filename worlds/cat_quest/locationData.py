@@ -8,57 +8,57 @@ class Location(TypedDict):
     progress_type: LocationProgressType
     hasFist: bool
 
-#templeLocations: List[Location] = [
-#    {
-#        "inGameId": "flamepurr",
-#        "name": "Visited Arcane Temple of Flamepurr",
-#        "art": "none",
-#        "progress_type": LocationProgressType.DEFAULT,
-#        "hasFist": False
-#    },
-#    {
-#        "inGameId": "healing_paw",
-#        "name": "Visited Arcane Temple of Healing Paw",
-#        "art": "none",
-#        "progress_type": LocationProgressType.DEFAULT,
-#        "hasFist": False
-#    },
-#    {
-#        "inGameId": "lightnyan",
-#        "name": "Visited Arcane Temple of Lightnyan",
-#        "art": "none",
-#        "progress_type": LocationProgressType.DEFAULT,
-#        "hasFist": False
-#    },
-#    {
-#        "inGameId": "cattrap",
-#        "name": "Visited Arcane Temple of Cattrap",
-#        "art": "none",
-#        "progress_type": LocationProgressType.DEFAULT,
-#        "hasFist": False
-#    },
-#    {
-#        "inGameId": "purrserk",
-#        "name": "Visited Arcane Temple of Purrserk",
-#        "art": "either",
-#        "progress_type": LocationProgressType.DEFAULT,
-#        "hasFist": False
-#    },
-#    {
-#        "inGameId": "astropaw",
-#        "name": "Visited Arcane Temple of Astropaw",
-#        "art": "either",
-#        "progress_type": LocationProgressType.DEFAULT,
-#        "hasFist": False
-#    },
-#    {
-#        "inGameId": "freezepaw",
-#        "name": "Visited Arcane Temple of Freezepaw",
-#        "art": "none",
-#        "progress_type": LocationProgressType.DEFAULT,
-#        "hasFist": False
-#    }
-#]
+templeLocations: List[Location] = [
+    {
+        "inGameId": "flamepurr",
+        "name": "Visited Arcane Temple of Flamepurr",
+        "art": "none",
+        "progress_type": LocationProgressType.DEFAULT,
+        "hasFist": False
+    },
+    {
+        "inGameId": "healing_paw",
+        "name": "Visited Arcane Temple of Healing Paw",
+        "art": "none",
+        "progress_type": LocationProgressType.DEFAULT,
+        "hasFist": False
+    },
+    {
+        "inGameId": "lightnyan",
+        "name": "Visited Arcane Temple of Lightnyan",
+        "art": "none",
+        "progress_type": LocationProgressType.DEFAULT,
+        "hasFist": False
+    },
+    {
+        "inGameId": "cattrap",
+        "name": "Visited Arcane Temple of Cattrap",
+        "art": "none",
+        "progress_type": LocationProgressType.DEFAULT,
+        "hasFist": False
+    },
+    {
+        "inGameId": "purrserk",
+        "name": "Visited Arcane Temple of Purrserk",
+        "art": "either",
+        "progress_type": LocationProgressType.DEFAULT,
+        "hasFist": False
+    },
+    {
+        "inGameId": "astropaw",
+        "name": "Visited Arcane Temple of Astropaw",
+        "art": "either",
+        "progress_type": LocationProgressType.DEFAULT,
+        "hasFist": False
+    },
+    {
+        "inGameId": "freezepaw",
+        "name": "Visited Arcane Temple of Freezepaw",
+        "art": "none",
+        "progress_type": LocationProgressType.DEFAULT,
+        "hasFist": False
+    }
+]
 
 questLocations: List[Location] = [
     # Main Quests
