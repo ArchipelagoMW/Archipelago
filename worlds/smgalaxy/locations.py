@@ -1,6 +1,7 @@
 from typing import Callable, Dict, NamedTuple, Optional
 
-from BaseClasses import Location, MultiWorld
+from BaseClasses import Location, Region
+
 
 def purplecoinstar(multiworld, player):
     return multiworld.enable_purple_coin_stars[player].value < 2
@@ -10,6 +11,10 @@ def maingameonly(multiworld, player):
 
 class SMGLocation(Location):
     game: str = "Super Mario Galaxy"
+
+    def __init__(self, player: int, name: str, parent: Region):
+        super(SMGLocation, self).__init__(player, name, address=location_table[name], parent=parent)
+        self.address = location_table[name]
 
 class SMGLocationData(NamedTuple):
     category: str
