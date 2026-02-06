@@ -917,14 +917,24 @@ class TrapDistribution(OptionCounter):
 class CustomLogic(OptionSet):
     """Enable various customizations to the logic of the generator.
     Some flags are inherently incompatible with each other, the harder flag takes priority.
-    Easy Fishing: +2 Required fishing levels for fish
-    Hard Fishing: -2 Required fishing levels for fish
-    Extreme Fishing: -4 Required fishing levels for fish
+    Some of these toggles can, if the player is not careful, force them to reset the day.
+    Easy Fishing: +2 Required fishing levels
+    Hard Fishing: -2 Required fishing levels
+    Extreme Fishing: -4 Required fishing levels
+    Hard Mining: -1 required pickaxes and -2 required mining levels
+    Extreme Mining: -2 required pickaxes and -4 required mining levels
+    Hard Combat: -1 required weapon and -2 required combat levels
+    Extreme Combat: -2 required weapon and -4 required combat levels
+    Deep Mining: x2 Mine depth expectations
+    Very Deep Mining: x4 Mine depth expectations
     """
     internal_name = "custom_logic"
     display_name = "Custom Logic"
     valid_keys = frozenset({
         CustomLogicOptionName.easy_fishing, CustomLogicOptionName.hard_fishing, CustomLogicOptionName.extreme_fishing,
+        CustomLogicOptionName.hard_mining, CustomLogicOptionName.extreme_mining,
+        CustomLogicOptionName.hard_combat, CustomLogicOptionName.extreme_combat,
+        CustomLogicOptionName.deep_mining, CustomLogicOptionName.very_deep_mining,
     })
     preset_none = frozenset()
     preset_all = valid_keys

@@ -62,8 +62,7 @@ class FishingLogic(BaseLogic):
             required_levels = 0
         return self.logic.fishing.can_fish_at(region) & self.logic.skill.has_level(Skill.fishing, required_levels)
 
-    @cache_self1
-    def can_fish(self, difficulty: int = 0) -> StardewRule:
+    def can_fish(self, difficulty: int = 0, minimum_level: int = 0) -> StardewRule:
         skill_required = int((difficulty / 10) - 1)
         if difficulty <= 40:
             skill_required = 0
@@ -75,7 +74,7 @@ class FishingLogic(BaseLogic):
         elif CustomLogicOptionName.easy_fishing in self.options.custom_logic:
             skill_required += 2
 
-        skill_required = min(10, max(0, skill_required))
+        skill_required = min(10, max(minimum_level, skill_required))
 
         skill_rule = self.logic.skill.has_level(Skill.fishing, skill_required)
         # Training rod only works with fish < 50. Fiberglass does not help you to catch higher difficulty fish, so it's skipped in logic.
@@ -98,7 +97,7 @@ class FishingLogic(BaseLogic):
         if fish.difficulty == -1:
             difficulty_rule = self.logic.fishing.can_crab_pot
         else:
-            difficulty_rule = self.logic.fishing.can_fish(120 if fish.legendary else fish.difficulty)
+            difficulty_rule = self.logic.fishing.can_fish(120 if fish.legendary else fish.difficulty, fish.minimum_level)
 
         if fish.name == SVEFish.kittyfish:
             item_rule = self.logic.received(SVEQuestItem.kittyfish_spell)

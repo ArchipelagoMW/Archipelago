@@ -23,11 +23,14 @@ class StardewSettings(Group):
     class AllowHatsanityNearOrPostPerfection(Bool):
         """Allow players to pick the option 'Hatsanity: Near Perfection OR Post Perfection'. If disallowed, it will be replaced with 'Difficult'"""
 
+    class AllowCustomLogic(Bool):
+        """Allow players to toggle on Custom logic flags. If disallowed, it will be disabled"""
+
     class AllowJojapocalypse(Bool):
         """Allow players to enable Jojapocalypse. If disallowed, it will be disabled"""
 
-    class AllowSVE(Bool):
-        """Allow players to include the mod 'Stardew Valley Expanded'. If disallowed, it will be removed from the mods"""
+    # class AllowSVE(Bool):
+    #     """Allow players to include the mod 'Stardew Valley Expanded'. If disallowed, it will be removed from the mods"""
 
     allow_allsanity: Union[AllowAllsanityGoal, bool] = True
     allow_perfection: Union[AllowPerfectionGoal, bool] = True
@@ -35,5 +38,6 @@ class StardewSettings(Group):
     allow_chaos_er: Union[AllowChaosER, bool] = False
     allow_shipsanity_everything: Union[AllowShipsanityEverything, bool] = True
     allow_hatsanity_perfection: Union[AllowHatsanityNearOrPostPerfection, bool] = True
+    allow_custom_logic: Union[AllowCustomLogic, bool] = True
     allow_jojapocalypse: Union[AllowJojapocalypse, bool] = False
-    allow_sve: Union[AllowSVE, bool] = True
+    # allow_sve: Union[AllowSVE, bool] = True

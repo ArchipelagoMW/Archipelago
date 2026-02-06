@@ -52,6 +52,10 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
             world_options.hatsanity.value.add(HatsanityOptionName.difficult)
             message = f"Hatsanity Near or Post Perfection {message_template} Hatsanity setting reduced."
             logger.warning(message)
+    if not settings.allow_custom_logic:
+        world_options.custom_logic.value = options.CustomLogic.preset_none
+        message = f"Custom Logic {message_template} All flags toggled off."
+        logger.warning(message)
     if not settings.allow_jojapocalypse and world_options.jojapocalypse >= options.Jojapocalypse.option_allowed:
         world_options.jojapocalypse.value = options.Jojapocalypse.option_disabled
         message = f"Jojapocalypse {message_template} Disabled."

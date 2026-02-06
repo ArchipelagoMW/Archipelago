@@ -80,6 +80,12 @@ class AllowedFillerOptionName:
 
 
 class CustomLogicOptionName:
-    easy_fishing = "Hard Fishing"
+    easy_fishing = "Easy Fishing"
     hard_fishing = "Hard Fishing"
     extreme_fishing = "Extreme Fishing"
+    hard_mining = "Hard Mining"
+    extreme_mining = "Extreme Mining"
+    hard_combat = "Hard Combat"
+    extreme_combat = "Extreme Combat"
+    deep_mining = "Deep Mining"
+    very_deep_mining = "Very Deep Mining"
