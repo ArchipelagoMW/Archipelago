@@ -5,17 +5,18 @@ from typing import TYPE_CHECKING
 from BaseClasses import Location
 
 from . import items
-from .locationData import questLocations
+from .locationData import questLocations, templeLocations
 
 if TYPE_CHECKING:
     from .world import CatQuestWorld
 
+ALL_LOCATIONS: list[Location] = questLocations + templeLocations
 
 def create_location_name_to_id() -> dict[str, int]:
     location_id_dict = {}
     current_id = 1
 
-    for location in questLocations:
+    for location in ALL_LOCATIONS:
         location_id_dict[location["name"]] = current_id
         current_id += 1
     
@@ -38,8 +39,8 @@ def create_regular_locations(world: CatQuestWorld) -> None:
             CatQuestLocation(world.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], Felingard)
     )
 
-    #if world.options.include_temples:
-        #for loc in templeLocations:
-          #  Felingard.locations.append(
-         #       CatQuestLocation(world.player, loc.name, LOCATION_NAME_TO_ID[loc.name], Felingard)
-        #)
+    if world.options.include_temples:
+        for loc in templeLocations:
+            Felingard.locations.append(
+                CatQuestLocation(world.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], Felingard)
+        )
