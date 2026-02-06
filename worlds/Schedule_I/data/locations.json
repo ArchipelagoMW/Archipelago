@@ -245,18 +245,6 @@
         "tags": ["Mission", "Permanent"],
         "modern_id": 41
     },
-    "On the Grind|Open the contacts app": {
-        "region": "On the Grind|2",
-        "requirements": true,
-        "tags": ["Mission", "Permanent"],
-        "modern_id": 42
-    },
-    "On the Grind|Select a friend of an unlocked in app": {
-        "region": "On the Grind|2",
-        "requirements": true,
-        "tags": ["Mission", "Permanent"],
-        "modern_id": 43
-    },
     "On the Grind|Open the map app to see your potential customers": {
         "region": "On the Grind|2",
         "requirements": true,

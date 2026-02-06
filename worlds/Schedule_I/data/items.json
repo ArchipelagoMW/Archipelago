@@ -14,8 +14,8 @@
         "tags": ["Hardware Store", "Level Up Reward"],
         "modern_id": 3
     },
-    "Long Life Soil Unlock": {
-        "classification": ["USEFUL"],
+    "Long-Life Soil Unlock": {
+        "classification": ["PROGRESSION"],
         "tags": ["Hardware Store", "Level Up Reward"],
         "modern_id": 4
     },
@@ -24,7 +24,7 @@
         "tags": ["Hardware Store", "Level Up Reward"],
         "modern_id": 5
     },
-    "Sour Diesel Unlock": {
+    "Sour Diesel Seed Unlock": {
         "classification": ["USEFUL"],
         "tags": ["Level Up Reward"],
         "modern_id": 6
@@ -54,7 +54,7 @@
         "tags": ["Hardware Store", "Level Up Reward"],
         "modern_id": 12
     },
-    "Green Crack Unlock": {
+    "Green Crack Seed Unlock": {
         "classification": ["USEFUL"],
         "tags": ["Level Up Reward"],
         "modern_id": 13
@@ -64,8 +64,8 @@
         "tags": ["Gas Mart", "Level Up Reward"],
         "modern_id": 14
     },
-    "Extra Long Life Soil Unlock": {
-        "classification": ["USEFUL"],
+    "Extra Long-Life Soil Unlock": {
+        "classification": ["PROGRESSION"],
         "tags": ["Hardware Store", "Level Up Reward"],
         "modern_id": 15
     },
@@ -74,7 +74,7 @@
         "tags": ["Gas Mart", "Level Up Reward"],
         "modern_id": 16
     },
-    "Grandaddy Purple Unlock": {
+    "Granddaddy Purple Seed Unlock": {
         "classification": ["USEFUL"],
         "tags": ["Level Up Reward"],
         "modern_id": 17
@@ -84,7 +84,7 @@
         "tags": ["Gas Mart", "Level Up Reward"],
         "modern_id": 18
     },
-    "Packaging Station Mk2 Unlock": {
+    "Packaging Station Mk II Unlock": {
         "classification": ["PROGRESSION_SKIP_BALANCING", "USEFUL"],
         "tags": ["Hardware Store", "Level Up Reward"],
         "modern_id": 19
@@ -129,7 +129,7 @@
         "tags": ["Gas Mart", "Level Up Reward"],
         "modern_id": 27
     },
-    "Mega Beans Unlock": {
+    "Mega Bean Unlock": {
         "classification": ["USEFUL"],
         "tags": ["Gas Mart", "Level Up Reward"],
         "modern_id": 28
@@ -145,7 +145,7 @@
         "modern_id": 30
     },
     "Full Spectrum Grow Light Unlock": {
-        "classification": ["USEFUL"],
+        "classification": ["PROGRESSION"],
         "tags": ["Warehouse", "Level Up Reward"],
         "modern_id": 31
     },
@@ -248,6 +248,26 @@
         "classification": ["USEFUL"],
         "tags": ["Hardware Store", "Level Up Reward"],
         "modern_id": 228
+    },
+    "Suspension Rack Unlock": {
+        "classification": ["PROGRESSION"],
+        "tags": ["Warehouse", "Level Up Reward"],
+        "modern_id": 229
+    },
+    "Moisture-Preserving Pot Unlock": {
+        "classification": ["PROGRESSION"],
+        "tags": ["Warehouse", "Level Up Reward"],
+        "modern_id": 230
+    },
+    "Plastic Pot Unlock": {
+        "classification": ["USEFUL"],
+        "tags": ["Warehouse", "Level Up Reward"],
+        "modern_id": 231
+    },
+    "LED Grow Light Unlock": {
+        "classification": ["USEFUL"],
+        "tags": ["Warehouse", "Level Up Reward"],
+        "modern_id": 232
     },
     "Barn": {
         "classification": ["PROGRESSION_SKIP_BALANCING"],
@@ -961,42 +981,42 @@
     },
     "Acid": {
         "classification": ["FILLER"],
-        "tags": ["Progression Skip Filler"],
+        "tags": ["Amazing Filler"],
         "modern_id": 198
     },
     "Phosphorus": {
         "classification": ["FILLER"],
-        "tags": ["Progression Skip Filler"],
+        "tags": ["Amazing Filler"],
         "modern_id": 199
     },
     "Chemistry Station": {
         "classification": ["FILLER"],
-        "tags": ["Progression Skip Filler"],
+        "tags": ["Amazing Filler"],
         "modern_id": 200
     },
     "Mushroom Spawn Station": {
         "classification": ["FILLER"],
-        "tags": ["Progression Skip Filler"],
+        "tags": ["Amazing Filler"],
         "modern_id": 201
     },
     "Mushroom Bed": {
         "classification": ["FILLER"],
-        "tags": ["Progression Skip Filler"],
+        "tags": ["Amazing Filler"],
         "modern_id": 202
     },
     "Drying Rack": {
         "classification": ["FILLER"],
-        "tags": ["Progression Skip Filler"],
+        "tags": ["Amazing Filler"],
         "modern_id": 203
     },
     "Lab Oven": {
         "classification": ["FILLER"],
-        "tags": ["Progression Skip Filler"],
+        "tags": ["Amazing Filler"],
         "modern_id": 204
     },
     "Cauldron": {
         "classification": ["FILLER"],
-        "tags": ["Progression Skip Filler"],
+        "tags": ["Amazing Filler"],
         "modern_id": 205
     },
     "Revolver": {
@@ -1063,6 +1083,11 @@
         "classification": ["FILLER"],
         "tags": ["Amazing Filler"],
         "modern_id": 224
+    },
+    "Full Spectrum Grow Light": {
+        "classification": ["FILLER"],
+        "tags": ["Amazing Filler"],
+        "modern_id": 234
     },
     "Cartel Influence, Westville": {
         "classification": ["PROGRESSION_SKIP_BALANCING"],

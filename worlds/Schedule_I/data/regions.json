@@ -3,30 +3,31 @@
         "connections": {
             "Welcome to Hyland Point": true,
             "Rank Street Rat III": true,
+            "Northtown" : true,
             "Weed Recipe Checks": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]]}},
             "Meth Recipe Checks": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]],
-                                                        "has_all" : ["Acid Unlock",
-                                                                    "Phosphorus Unlock",
-                                                                    "Chemistry Station Unlock",
-                                                                    "Lab Oven Unlock",
-                                                                    "Warehouse Access"]},
-                                "randomize_suppliers" : {"has": "Shirley Watts Unlocked"},
-                                "randomize_customers" : {"has_any" : [["Meg Cooley Unlocked", "Jerry Montero Unlocked"]]}},
-            "Shrooms Recipe Checks": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]]},
-                                "randomize_suppliers" : {"has": "Fungal Phil Unlocked"},
-                                "randomize_customers" : {"has_any" : [["Meg Cooley Unlocked", "Jerry Montero Unlocked"]]}},
+                                        "has_all" : ["Acid Unlock",
+                                                    "Phosphorus Unlock",
+                                                    "Chemistry Station Unlock",
+                                                    "Lab Oven Unlock",
+                                                    "Warehouse Access"]},
+                                    "randomize_suppliers" : {"has": "Shirley Watts Unlocked"},
+                                    "randomize_customers" : {"has_any" : [["Meg Cooley Unlocked", "Jerry Montero Unlocked"]]}},
+            "Shrooms Recipe Checks": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]],
+                                                                   "has" : "Warehouse Access"},
+                "randomize_suppliers" : {"has": "Fungal Phil Unlocked"},
+                "randomize_customers" : {"has_any" : [["Meg Cooley Unlocked", "Jerry Montero Unlocked"]]}},
             "Cocaine Recipe Checks": {"randomize_level_unlocks" : {"has_any": [["Mixing Station Mk II Unlock",  "Mixing Station Unlock"]],
                                                                   "has_all" : ["Cauldron Unlock", "Lab Oven Unlock", "Gasoline Unlock"]},
-                                    "randomize_suppliers" : {"has": "Salvador Moreno Unlocked"},
-                                    "randomize_customers" : {"has_any" : [["Mac Cooper Unlocked", "Javier Pérez Unlocked"]]}},
-            "Northtown" : true
+                "randomize_suppliers" : {"has": "Salvador Moreno Unlocked"},
+                "randomize_customers" : {"has_any" : [["Mac Cooper Unlocked", "Javier Pérez Unlocked"]]}}
         }
     },
     "Northtown": {
         "connections": {"Westville": {"randomize_level_unlocks" : {"has": "Westville Region Unlock"}}}
     },
     "Westville": {
-        "connections": {"Downtown": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Westville": 2}}}}
+        "connections": {}
     },
     "Downtown": {
         "connections": {"Docks": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Downtown": 7}},
@@ -317,16 +318,17 @@
     "Unfavourable Agreements": {
         "connections": {
             "Finishing the Job": {"randomize_customers": {"has_from_list": {
-            "Charles Rowland Unlocked": 5,
-            "Dean Webster Unlocked": 5,
-            "Doris Lubbin Unlocked": 5,
-            "George Greene Unlocked": 5,
-            "Jerry Montero Unlocked": 5,
-            "Joyce Ball Unlocked": 5,
-            "Kim Delaney Unlocked": 5,
-            "Meg Cooley Unlocked": 5,
-            "Trent Sherman Unlocked": 5,
-            "Keith Wagner Unlocked": 5}}}
+                "Charles Rowland Unlocked": 5,
+                "Dean Webster Unlocked": 5,
+                "Doris Lubbin Unlocked": 5,
+                "George Greene Unlocked": 5,
+                "Jerry Montero Unlocked": 5,
+                "Joyce Ball Unlocked": 5,
+                "Kim Delaney Unlocked": 5,
+                "Meg Cooley Unlocked": 5,
+                "Trent Sherman Unlocked": 5,
+                "Keith Wagner Unlocked": 5}}},
+            "Downtown": {"randomize_cartel_influence" : {"has_all_counts": {"Cartel Influence, Westville": 2}}}
         }
     },
     "Finishing the Job": {
