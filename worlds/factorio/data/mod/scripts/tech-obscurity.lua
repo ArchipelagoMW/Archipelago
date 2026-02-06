@@ -12,16 +12,22 @@
 --      hints will only be send once. Unless an achipelago command demands the whole list.
 
 --to do:
+--fix bug; if you get a tech. The base 5 technologies get revealed even if you do not have crafted a red science pack.
 --hints inbound: AP side
---hints outbound:  AP side
 
-local function send_hint(technology)
-    if storage.hinted_techs[technology.name] == false then
-        storage.hinted_techs[technology.name] = true
+local function send_hint(technologies)
+    --technologies => tech_name = true
+    local reveal_string = ""
+    for tech_name, _ in pairs(technologies) do
+        if storage.hinted_techs[tech_name] == false then
+            storage.hinted_techs[tech_name] = true
+            reveal_string = reveal_string .. " " .. tech_name
+            -- send a hint to the archipelago server here.
 
-        -- send a hint to the archipelago server here.
-        log("Obscurity gives hint for " .. technology.name) -- notifies client
-
+        end
+    end
+    if reveal_string ~= "" then 
+        log("Obscurity gives hint for" .. reveal_string) -- notifies client
     end
 end
 
@@ -30,10 +36,8 @@ local function receive_hint(tech_name)
     for name, tech in pairs(prototypes.technology) do
         if name == tech_name then
             for name, force in pairs(game.forces) do
-                game.print(serpent.line(force.technologies[tech_name]))
-                if prototypes.technology[tech_name].hidden == false then
+                if prototypes.technology[tech_name].hidden == false and force.technologies[tech_name].enabled == false then
                     force.technologies[tech_name].visible_when_disabled = true
-                    force.technologies[tech_name].enabled = false
                 end
             end
         end
@@ -55,7 +59,7 @@ local function depth_check(force, in_layer)
             prerequisite = false
             break
         end
-        if prerequisite and tech.prototype.research_trigger == nil then
+        if prerequisite and tech.prototype.research_trigger == nil and in_layer[tech.name] then
             second_pass[tech.name] = true
         end
     end
@@ -148,8 +152,8 @@ local function update_science_tech_tree(force)
         to_reveal = depth_check(force, to_reveal)
     end
 
+    send_hint(to_reveal)
     for name, _ in pairs(to_reveal) do
-        send_hint(technologies[name])
         technologies[name].enabled = true
         technologies[name].visible_when_disabled = false
     end
@@ -192,10 +196,10 @@ local function update_trigger_tech_tree(force, technology)
         if triggers[name] then 
             if triggers[name].unlocked_triggered == false then
                 triggers[name].unlocked_triggered = true
-                for _, tech_name in pairs(triggers[to_check].technologies) do
+                for _, tech_name in pairs(triggers[name].technologies) do
                     hidden_trigger_tech[tech_name] = false
-                    force.technologies[tech_name].hidden = false
-                    force.technologies[tech_name].disabled = false
+                    force.technologies[tech_name].enabled = false
+                    force.technologies[tech_name].visible_when_disabled = false
                 end
             end
         end
@@ -238,7 +242,7 @@ local function setup_storage(force)
                 
                 local trigger_name
                 if tech.prototype.research_trigger.type == "craft-item" then
-                    trigger_name = tech.prototype.research_trigger.item
+                    trigger_name = tech.prototype.research_trigger.item.name
                 else
                     trigger_name = tech.prototype.research_trigger.fluid
                 end
@@ -316,7 +320,7 @@ local function on_init()
         
         local to_check = {}
         for _, recipe in pairs(prototypes.recipe) do
-            if recipe.enabled then
+            if recipe.enabled and recipe.category ~= "recycling" then
                 for _, item_data in pairs(recipe.products) do
                     to_check[item_data.name] = item_data.name
                 end
@@ -324,19 +328,21 @@ local function on_init()
         end
         local hidden_trigger_tech = storage.forces[force.name].hidden_trigger_tech
         local triggers = storage.forces[force.name].triggers
+        local reveal = {}
         for _, name in pairs(to_check) do
             if triggers[name] then 
                 if triggers[name].unlocked_triggered == false then
                     triggers[name].unlocked_triggered = true
-                    for _, tech_name in pairs(triggers[to_check].technologies) do
-                        send_hint(force.technologies[tech_name].hidden)
+                    for _, tech_name in pairs(triggers[name].technologies) do
+                        reveal[tech_name] = true
                         hidden_trigger_tech[tech_name] = false
-                        force.technologies[tech_name].hidden = false
-                        force.technologies[tech_name].disabled = false
+                        force.technologies[tech_name].visible_when_disabled = false
+                        force.technologies[tech_name].enabled = true
                     end
                 end
             end
         end
+        send_hint(reveal)
     end
 end
 

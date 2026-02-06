@@ -76,6 +76,10 @@ class FactorioCommandProcessor(ClientCommandProcessor):
             self.output("RCON Client successfully reconnected.")
             return True
         return False
+    
+    def _cmd_resend_hints(self):
+        """Make all hints resend to the achipelago server."""
+        self.ctx.resend_hints_out()
 
 
 class FactorioContext(CommonContext):
@@ -178,16 +182,37 @@ class FactorioContext(CommonContext):
         super(FactorioContext, self).on_deathlink(data)
 
     def on_package(self, cmd: str, args: dict):
+        logger.info(f"got a {cmd} with: {args}")
         if cmd in {"Connected", "RoomUpdate"}:
             # catch up sync anything that is already cleared.
             if "checked_locations" in args and args["checked_locations"]:
                 self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
-            if cmd == "Connected" and self.energy_link_increment:
-                async_start(self.send_msgs([{
-                    "cmd": "SetNotify", "keys": [self.energylink_key]
-                }]))
-        elif cmd == "SetReply":
+            if cmd == "Connected":
+                notifications = [f"_read_hints_{self.team}_{self.slot}"]
+                #if self.energy_link_increment:
+                #    notifications.append(self.energylink_key)
+                #if len(notifications) >= 1:
+                #    async_start(self.send_msgs([{
+                #        "cmd": "SetNotify", "keys": notifications
+                #    }]))
+                #self.resend_hints_out()
+                #async_start(self.send_msgs([{"cmd": "Get", "keys": [f"_read_hints_{self.team}_{self.slot}"]}]))
+
+                
+            #if cmd == "Connected":
+            #    outgoing_commands = [{"cmd": "Get", "keys": [f"_read_hints_{self.team}_{self.slot}"]}]
+            #    notifications = [f"_read_hints_{self.team}_{self.slot}"]
+            #    if self.energy_link_increment:
+            #        notifications.append(self.energylink_key)
+            #    if len(notifications) >= 1:
+            #        outgoing_commands.append({
+            #            "cmd": "SetNotify", "keys": notifications
+            #        })
+            #    self.resend_hints_out()
+            #    async_start(self.send_msgs(outgoing_commands))
+        elif cmd in {"SetReply", "Retrieved"}:
+            logger.info(f"got a SetReply with: {args["key"]}")
             if args["key"].startswith("EnergyLink"):
                 if self.energy_link_increment and args.get("last_deplete", -1) == self.last_deplete:
                     # it's our deplete request
@@ -197,6 +222,11 @@ class FactorioContext(CommonContext):
                         logger.debug(f"EnergyLink: Received {gained_text}. "
                                      f"{format_SI_prefix(args['value'])}J remaining.")
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
+            if args["key"] == f"_read_hints_{self.team}_{self.slot}":
+                for hint in args["value"]:
+                    self.rcon_client.send_command(f'/ap-receive-hint ap-{hint["location"]}-')
+
+
 
     def on_user_say(self, text: str) -> typing.Optional[str]:
         # Mirror chat sent from the UI to the Factorio server.
@@ -245,6 +275,32 @@ class FactorioContext(CommonContext):
             announcement = "Chat is no longer bridged to Archipelago."
         logger.info(announcement)
         self.print_to_game(announcement)
+
+    def send_hint_out(self, tech_names: str):
+        #tech_names = "ap-123456- ap-234567- oil-gathering"
+        #tech_names can contain junk techs not meant for AP (like oil-gathering)
+        logger.info(f"hint processing: {tech_names}")
+        self.print_to_game(f"hint processing: {tech_names}")
+        techs_to_hint = []
+        for tech_name in tech_names.split(" "):
+            tech_split = tech_name.split("-")
+            if len(tech_split) == 3:
+                if tech_split[0] == "ap" and tech_split[2] == "":
+                    location_id = int(tech_split[1])
+                    #this should now only have te location id of the check. So 123456.....
+                    techs_to_hint.append(location_id)
+            
+        logger.info(f"Sending hints for: {techs_to_hint}") #This will be a list of all locations
+        self.print_to_game(f"Sending hints for: {techs_to_hint}")
+        if len(techs_to_hint) != 0:
+            async_start(self.send_msgs([{"cmd": "CreateHints", "locations": techs_to_hint}]))
+
+                
+    def resend_hints_out(self):
+        logger.info("Resending all hints that factorio has collected.")
+        self.print_to_game("Resending all hints that factorio has collected.")
+        self.rcon_client.send_command("/ap-resend-all-hints")
+
 
     def run_gui(self):
         from kvui import GameManager
@@ -335,16 +391,6 @@ async def game_watcher(ctx: FactorioContext):
                                     bridge_logger.warning("RCON Client has unexpectedly lost connection. Please issue /rcon_reconnect.")
                                 else:
                                     logger.debug(f"EnergyLink: Sent {format_SI_prefix(value)}J")
-                    if ctx.location_info != data["send-hints"]:
-                        bridge_logger.debug(
-                            f"New Hints: "
-                            f"{[ctx.location_info.lookup_in_game(rid) for rid in data["send-hints"] - ctx.location_info]}")
-                        for hint in ctx.location_info:
-                            if  not hint.location in data["send-hints"]:
-                                ctx.rcon_client.send_command(
-                                    f"/ap-receive-hint -AP-{hint.location}-")
-                                data["send-hints"].append(hint.location)
-                        
 
 
             await asyncio.sleep(0.1)
@@ -423,18 +469,8 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Obscurity gives hint for", msg):
                     factorio_server_logger.debug(msg)
                     #factorio_server_logger.info(f"Caught this message out in the blue {msg}") #They get caught :D
-                    tech_name = re.sub(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Obscurity gives hint for","", msg)
-                    #Please help!!!
-                    #I have the internal factorio name for a tech and it now needs to sent a hint out.
-                    #tech_name = "ap-123456-"
-                    #can also be junk data
-                    #tech_name = "elevated-rails"
-                    tech_split = tech_name.split("-")
-                    if len(tech_split) == 2:
-                        if tech_split[0] == "ap":
-                            location_id = int(tech_split[1])
-                            #this should now only have te location id of the check. So 123456.....
-                            ctx.send_msgs([{"cmd": "CreateHints", "locations": [location_id], "player": ctx.slot}])
+                    tech_names = re.sub(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Obscurity gives hint for","", msg)
+                    ctx.send_hint_out(tech_names)
                 else:
                     factorio_server_logger.info(msg)
                     match = re.match(r"^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d \[CHAT\] ([^:]+): (.*)$", msg)
