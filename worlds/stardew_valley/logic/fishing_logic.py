@@ -6,6 +6,7 @@ from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data import fish_data
 from ..data.fish_data import FishItem
 from ..stardew_rule import StardewRule, True_
+from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.craftable_names import Fishing
 from ..strings.fish_names import SVEFish
@@ -63,9 +64,18 @@ class FishingLogic(BaseLogic):
 
     @cache_self1
     def can_fish(self, difficulty: int = 0) -> StardewRule:
-        skill_required = min(10, max(0, int((difficulty / 10) - 1)))
+        skill_required = int((difficulty / 10) - 1)
         if difficulty <= 40:
             skill_required = 0
+
+        if CustomLogicOptionName.extreme_fishing in self.options.custom_logic:
+            skill_required -= 4
+        elif CustomLogicOptionName.hard_fishing in self.options.custom_logic:
+            skill_required -= 2
+        elif CustomLogicOptionName.easy_fishing in self.options.custom_logic:
+            skill_required += 2
+
+        skill_required = min(10, max(0, skill_required))
 
         skill_rule = self.logic.skill.has_level(Skill.fishing, skill_required)
         # Training rod only works with fish < 50. Fiberglass does not help you to catch higher difficulty fish, so it's skipped in logic.

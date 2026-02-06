@@ -77,3 +77,9 @@ class AllowedFillerOptionName:
     hats = "Hats"
     decorations = "Decorations"
     rings = "Rings"
+
+
+class CustomLogicOptionName:
+    easy_fishing = "Hard Fishing"
+    hard_fishing = "Hard Fishing"
+    extreme_fishing = "Extreme Fishing"

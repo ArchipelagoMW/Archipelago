@@ -8,7 +8,7 @@ from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonO
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
 from ..mods.mod_data import ModNames, invalid_mod_combinations
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName, ChefsanityOptionName, \
-    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName
+    StartWithoutOptionName, HatsanityOptionName, AllowedFillerOptionName, CustomLogicOptionName
 from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
 from ..strings.trap_names import all_traps
 
@@ -914,6 +914,23 @@ class TrapDistribution(OptionCounter):
     }
 
 
+class CustomLogic(OptionSet):
+    """Enable various customizations to the logic of the generator.
+    Some flags are inherently incompatible with each other, the harder flag takes priority.
+    Easy Fishing: +2 Required fishing levels for fish
+    Hard Fishing: -2 Required fishing levels for fish
+    Extreme Fishing: -4 Required fishing levels for fish
+    """
+    internal_name = "custom_logic"
+    display_name = "Custom Logic"
+    valid_keys = frozenset({
+        CustomLogicOptionName.easy_fishing, CustomLogicOptionName.hard_fishing, CustomLogicOptionName.extreme_fishing,
+    })
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = frozenset(preset_none)
+
+
 class MultipleDaySleepEnabled(Toggle):
     """Enable the ability to sleep automatically for multiple days straight?"""
     internal_name = "multiple_day_sleep_enabled"
@@ -1186,6 +1203,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     enabled_filler_buffs: EnabledFillerBuffs
     trap_difficulty: TrapDifficulty
     trap_distribution: TrapDistribution
+    custom_logic: CustomLogic
     multiple_day_sleep_enabled: MultipleDaySleepEnabled
     multiple_day_sleep_cost: MultipleDaySleepCost
     gifting: Gifting
