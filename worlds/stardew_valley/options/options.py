@@ -935,6 +935,7 @@ class CustomLogic(OptionSet):
         CustomLogicOptionName.hard_mining, CustomLogicOptionName.extreme_mining,
         CustomLogicOptionName.hard_combat, CustomLogicOptionName.extreme_combat,
         CustomLogicOptionName.deep_mining, CustomLogicOptionName.very_deep_mining,
+        CustomLogicOptionName.ignore_birthdays,
     })
     preset_none = frozenset()
     preset_all = valid_keys

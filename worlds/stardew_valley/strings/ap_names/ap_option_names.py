@@ -89,3 +89,4 @@ class CustomLogicOptionName:
     extreme_combat = "Extreme Combat"
     deep_mining = "Deep Mining"
     very_deep_mining = "Very Deep Mining"
+    ignore_birthdays = "Ignore Birthdays"
