@@ -146,7 +146,6 @@ apex_east_wing_key = "Apex East Wing Key"
 corroded_key = "Corroded Key"
 guard_captains_key = "Guard Captain's Key"
 
-potion_mixing_unlocked = "Potion Mixing Unlocked"
 metamorphic_alloy = "Metamorphic Alloy"
 sol_alembic = "Sol Alembic"
 potions_increased = "Potions Increased"

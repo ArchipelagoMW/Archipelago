@@ -485,7 +485,6 @@ misc_table = {
     LocationName.iron_pineapple_breaking_item_3: 2013,
     LocationName.iron_pineapple_breaking_item_4: 2014,
     LocationName.iron_pineapple_breaking_item_5: 2015,
-    LocationName.misc_potion_mixing_unlocked: 2016,
 }
 
 all_locations = {

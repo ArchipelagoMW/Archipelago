@@ -228,8 +228,7 @@ def set_rules(world: World):
     # Alchemist Release Rewards
     # These are available when the Alchemist is released and moves to the Village
     alchemist_release_rewards = [
-        LocationName.misc_potion_mixing_unlocked,
-        LocationName.village_item_pickup_essence_hero,
+        LocationName.village_item_pickup_essence_hero
     ]
 
     for loc in alchemist_release_rewards:
@@ -252,7 +251,6 @@ def set_rules(world: World):
             set_rule(location,
                      lambda state, c=count: state.has(ItemName.forest_bridge_key, player) and
                                    state.has(ItemName.alchemist_cage_key, player) and
-                                   state.has(ItemName.potion_mixing_unlocked, player) and
                                    state.has(ItemName.sol_alembic, player, c))
             # Item Restriction: Cannot be Sol Alembic
             location.item_rule = lambda item: item.name != ItemName.sol_alembic

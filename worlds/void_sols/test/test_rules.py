@@ -250,8 +250,7 @@ class TestRules(VoidSolsTestBase):
         """Test Alchemist Upgrades require Sol Alembics"""
         base_items = [
             ItemName.prison_warden_defeated_event, ItemName.gate_key,
-            ItemName.forest_bridge_key, ItemName.alchemist_cage_key,
-            ItemName.potion_mixing_unlocked
+            ItemName.forest_bridge_key, ItemName.alchemist_cage_key
         ]
         # Upgrade 1 requires 1 Alembic
         self.assertAccessDependency([LocationName.village_alchemist_upgrade_1], 

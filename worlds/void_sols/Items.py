@@ -175,7 +175,6 @@ item_data_table = {
     ItemName.guard_captains_key: ItemData(828, ItemClassification.progression),
 
     # Misc
-    ItemName.potion_mixing_unlocked: ItemData(900, ItemClassification.progression),
     ItemName.metamorphic_alloy: ItemData(901, ItemClassification.progression, quantity=6),
     ItemName.sol_alembic: ItemData(902, ItemClassification.progression, quantity=5),
     ItemName.potions_increased: ItemData(903, ItemClassification.useful, quantity=6),

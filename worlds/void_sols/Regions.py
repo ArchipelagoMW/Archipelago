@@ -94,7 +94,7 @@ def create_regions(world: World, active_locations):
             locations_by_region["Mines Floor 4"].append(location_name)
 
         # -- CULTIST AREA --
-        elif location_name.startswith(LocationName.CULTIST_PREFIX) or location_name.startswith(LocationName.CULTIST_COMPOUND_PREFIX):
+        elif location_name.startswith(LocationName.CULTIST_COMPOUND_PREFIX):
             locations_by_region["Cultist Compound"].append(location_name)
 
         # -- SUPERMAX AREA --
