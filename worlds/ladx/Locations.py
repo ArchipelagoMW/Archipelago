@@ -110,15 +110,6 @@ class LinksAwakeningLocation(Location):
         add_item_rule(self, filter_item)
 
 
-def has_free_weapon(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Sword", player) or state.has("Magic Rod", player) or state.has("Boomerang", player) or state.has("Hookshot", player)
-
-
-# If the player has access to farm enough rupees to afford a game, we assume that they can keep beating the game
-def can_farm_rupees(state: CollectionState, player: int) -> bool:
-    return has_free_weapon(state, player) and (state.has("Can Play Trendy Game", player=player) or state.has("RAFT", player=player))
-
-
 class LinksAwakeningRegion(Region):
     dungeon_index = None
     ladxr_region = None
@@ -154,9 +145,7 @@ class GameStateAdapater:
     def get(self, item, default):
         # Don't allow any money usage if you can't get back wasted rupees
         if item == "RUPEES":
-            if can_farm_rupees(self.state, self.player):
-                return self.state.prog_items[self.player]["RUPEES"]
-            return 0
+            return self.state.prog_items[self.player]["RUPEES"]
         elif item.endswith("_USED"):
             return 0
         else:

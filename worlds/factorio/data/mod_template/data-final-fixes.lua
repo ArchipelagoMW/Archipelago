@@ -63,22 +63,6 @@ template_tech.upgrade = false
 template_tech.effects = {}
 template_tech.prerequisites = {}
 
-{%- if max_science_pack < 6 %}
-    technologies["space-science-pack"].effects = {}
-    {%- if max_science_pack == 0 %}
-        table.insert (technologies["automation"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 1 %}
-        table.insert (technologies["logistic-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 2 %}
-        table.insert (technologies["military-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 3 %}
-        table.insert (technologies["chemical-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 4 %}
-        table.insert (technologies["production-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 5 %}
-        table.insert (technologies["utility-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {% endif %}
-{% endif %}
 {%- if silo == 2 %}
     data.raw["recipe"]["rocket-silo"].enabled = true
 {% endif %}
@@ -169,9 +153,16 @@ technologies["{{ original_tech_name }}"].hidden_in_factoriopedia = true
 {#- the tech researched by the local player #}
 new_tree_copy = table.deepcopy(template_tech)
 new_tree_copy.name = "ap-{{ location.address }}-"{# use AP ID #}
+{% if location.crafted_item is not none %}
+new_tree_copy.research_trigger = {
+    type = "{{ 'craft-fluid' if location.crafted_item in liquids else 'craft-item' }}",
+    {{ 'fluid' if location.crafted_item in liquids else 'item' }} = {{ variable_to_lua(location.crafted_item) }}
+}
+new_tree_copy.unit = nil
+{% else %}
 new_tree_copy.unit.count = {{ location.count }}
 new_tree_copy.unit.ingredients = {{ variable_to_lua(location.factorio_ingredients) }}
-
+{% endif %}
 {%- if location.revealed and item.name in base_tech_table -%}
 {#- copy Factorio Technology Icon #}
 copy_factorio_icon(new_tree_copy, "{{ item.name }}")

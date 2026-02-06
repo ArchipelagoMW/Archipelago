@@ -1,9 +1,11 @@
-from typing import Dict, List, NamedTuple, Tuple, Optional
-from enum import IntEnum
 from collections import defaultdict
+from enum import IntEnum
+from typing import NamedTuple
+
 from BaseClasses import CollectionState
-from .rules import has_sword, has_melee
 from worlds.AutoWorld import LogicMixin
+
+from .logic_helpers import has_sword, has_melee
 
 
 # the vanilla stats you are expected to have to get through an area, based on where they are in vanilla
@@ -16,12 +18,13 @@ class AreaStats(NamedTuple):
     sp_level: int
     mp_level: int
     potion_count: int
-    equipment: List[str] = []
+    equipment: list[str] = []
     is_boss: bool = False
 
 
 # the vanilla upgrades/equipment you would have
-area_data: Dict[str, AreaStats] = {
+area_data: dict[str, AreaStats] = {
+    # The upgrade page is right by the Well entrance. Upper Overworld by the chest in the top right might need something
     "Overworld": AreaStats(1, 1, 1, 1, 1, 1, 0, ["Stick"]),
     "East Forest": AreaStats(1, 1, 1, 1, 1, 1, 0, ["Sword"]),
     "Before Well": AreaStats(1, 1, 1, 1, 1, 1, 3, ["Sword", "Shield"]),
@@ -51,9 +54,9 @@ area_data: Dict[str, AreaStats] = {
 
 # these are used for caching which areas can currently be reached in state
 # Gauntlet does not have exclusively higher stat requirements, so it will be checked separately
-boss_areas: List[str] = [name for name, data in area_data.items() if data.is_boss and name != "Gauntlet"]
+boss_areas: list[str] = [name for name, data in area_data.items() if data.is_boss and name != "Gauntlet"]
 # Swamp does not have exclusively higher stat requirements, so it will be checked separately
-non_boss_areas: List[str] = [name for name, data in area_data.items() if not data.is_boss and name != "Swamp"]
+non_boss_areas: list[str] = [name for name, data in area_data.items() if not data.is_boss and name != "Swamp"]
 
 
 class CombatState(IntEnum):
@@ -113,7 +116,7 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
     return met_combat_reqs
 
 
-def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_data: Optional[AreaStats] = None) -> bool:
+def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_data: AreaStats | None = None) -> bool:
     data = alt_data or area_data[area_name]
     extra_att_needed = 0
     extra_def_needed = 0
@@ -140,24 +143,14 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
                 # need sword for bosses
                 if data.is_boss:
                     return False
-                equipment.remove("Sword")
-                if has_magic:
-                    if "Magic" not in equipment:
-                        equipment.append("Magic")
-                    # +4 mp pretty much makes up for the lack of sword, at least in Quarry
-                    extra_mp_needed += 4
-                    if stick_bool:
-                        # stick is a backup plan, and doesn't scale well, so let's require a little less
-                        equipment.append("Stick")
-                        extra_att_needed -= 2
-                    else:
-                        extra_mp_needed += 2
-                        extra_att_needed -= 32
-                elif stick_bool:
+                if stick_bool:
+                    equipment.remove("Sword")
                     equipment.append("Stick")
                     # may revise this later based on feedback
                     extra_att_needed += 3
                     extra_def_needed += 2
+                    # this is for when it changes over to the magic-only state if it needs to later
+                    extra_mp_needed += 4
                 else:
                     return False
 
@@ -204,7 +197,7 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
                 equip_list.append("Magic")
             more_modified_stats = AreaStats(modified_stats.att_level - 32, modified_stats.def_level,
                                             modified_stats.potion_level, modified_stats.hp_level,
-                                            modified_stats.sp_level, modified_stats.mp_level + 4,
+                                            modified_stats.sp_level, modified_stats.mp_level + 2,
                                             modified_stats.potion_count, equip_list, data.is_boss)
             if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
@@ -222,7 +215,7 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
     player_att, att_offerings = get_att_level(state, player)
 
     # if you have 2 more attack than needed, we can forego needing mp
-    if data.mp_level > 1:
+    if data.mp_level > 1 and "Magic" in data.equipment:
         if player_att < data.att_level + 2:
             player_mp, mp_offerings = get_mp_level(state, player)
             if player_mp < data.mp_level:
@@ -312,7 +305,7 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
 
 
 # returns a tuple of your max attack level, the number of attack offerings
-def get_att_level(state: CollectionState, player: int) -> Tuple[int, int]:
+def get_att_level(state: CollectionState, player: int) -> tuple[int, int]:
     att_offerings = state.count("ATT Offering", player)
     att_upgrades = state.count("Hero Relic - ATT", player)
     sword_level = state.count("Sword Upgrade", player)
@@ -324,44 +317,44 @@ def get_att_level(state: CollectionState, player: int) -> Tuple[int, int]:
 
 
 # returns a tuple of your max defense level, the number of defense offerings
-def get_def_level(state: CollectionState, player: int) -> Tuple[int, int]:
+def get_def_level(state: CollectionState, player: int) -> tuple[int, int]:
     def_offerings = state.count("DEF Offering", player)
     # defense falls off, can just cap it at 8 for simplicity
     return (min(8, 1 + def_offerings
-                + state.count_from_list({"Hero Relic - DEF", "Secret Legend", "Phonomath"}, player))
+                + state.count_from_list(("Hero Relic - DEF", "Secret Legend", "Phonomath"), player))
             + (2 if state.has("Shield", player) else 0)
             + (2 if state.has("Hero's Laurels", player) else 0),
             def_offerings)
 
 
 # returns a tuple of your max potion level, the number of potion offerings
-def get_potion_level(state: CollectionState, player: int) -> Tuple[int, int]:
+def get_potion_level(state: CollectionState, player: int) -> tuple[int, int]:
     potion_offerings = min(2, state.count("Potion Offering", player))
     # your third potion upgrade (from offerings) costs 1,000 money, reasonable to assume you won't do that
     return (1 + potion_offerings
-            + state.count_from_list({"Hero Relic - POTION", "Just Some Pals", "Spring Falls", "Back To Work"}, player),
+            + state.count_from_list(("Hero Relic - POTION", "Just Some Pals", "Spring Falls", "Back To Work"), player),
             potion_offerings)
 
 
 # returns a tuple of your max hp level, the number of hp offerings
-def get_hp_level(state: CollectionState, player: int) -> Tuple[int, int]:
+def get_hp_level(state: CollectionState, player: int) -> tuple[int, int]:
     hp_offerings = state.count("HP Offering", player)
     return 1 + hp_offerings + state.count("Hero Relic - HP", player), hp_offerings
 
 
 # returns a tuple of your max sp level, the number of sp offerings
-def get_sp_level(state: CollectionState, player: int) -> Tuple[int, int]:
+def get_sp_level(state: CollectionState, player: int) -> tuple[int, int]:
     sp_offerings = state.count("SP Offering", player)
     return (1 + sp_offerings
-            + state.count_from_list({"Hero Relic - SP", "Mr Mayor", "Power Up",
-                                     "Regal Weasel", "Forever Friend"}, player),
+            + state.count_from_list(("Hero Relic - SP", "Mr Mayor", "Power Up",
+                                     "Regal Weasel", "Forever Friend"), player),
             sp_offerings)
 
 
-def get_mp_level(state: CollectionState, player: int) -> Tuple[int, int]:
+def get_mp_level(state: CollectionState, player: int) -> tuple[int, int]:
     mp_offerings = state.count("MP Offering", player)
     return (1 + mp_offerings
-            + state.count_from_list({"Hero Relic - MP", "Sacred Geometry", "Vintage", "Dusty"}, player),
+            + state.count_from_list(("Hero Relic - MP", "Sacred Geometry", "Vintage", "Dusty"), player),
             mp_offerings)
 
 
@@ -435,9 +428,9 @@ def calc_def_sp_cost(def_upgrades: int, sp_upgrades: int) -> int:
 
 
 class TunicState(LogicMixin):
-    tunic_need_to_reset_combat_from_collect: Dict[int, bool]
-    tunic_need_to_reset_combat_from_remove: Dict[int, bool]
-    tunic_area_combat_state: Dict[int, Dict[str, int]]
+    tunic_need_to_reset_combat_from_collect: dict[int, bool]
+    tunic_need_to_reset_combat_from_remove: dict[int, bool]
+    tunic_area_combat_state: dict[int, dict[str, int]]
 
     def init_mixin(self, _):
         # the per-player need to reset the combat state when collecting a combat item

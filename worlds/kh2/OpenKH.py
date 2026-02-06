@@ -5,14 +5,17 @@ import os
 import Utils
 import zipfile
 
+from datetime import datetime, UTC
+
 from .Items import item_dictionary_table
 from .Locations import all_locations, SoraLevels, exclusion_table
 from .XPValues import lvlStats, formExp, soraExp
-from worlds.Files import APContainer
+from worlds.Files import APPlayerContainer
 
 
-class KH2Container(APContainer):
+class KH2Container(APPlayerContainer):
     game: str = 'Kingdom Hearts 2'
+    patch_file_ending = ".zip"
 
     def __init__(self, patch_data: dict, base_path: str, output_directory: str,
         player=None, player_name: str = "", server: str = ""):
@@ -75,7 +78,8 @@ def patch_kh2(self, output_directory):
         if self.options.LevelDepth == "level_99_sanity":
             levelsetting.extend(exclusion_table["Level99Sanity"])
 
-    mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
+    curr_timestamp = datetime.strftime(datetime.now(UTC), "%d%b%Y-%H%M%S")
+    mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}-{curr_timestamp}"
     all_valid_locations = {location for location, data in all_locations.items()}
 
     for location in self.multiworld.get_filled_locations(self.player):
@@ -368,6 +372,37 @@ def patch_kh2(self, output_directory):
                     }
                 ]
             },
+            {
+                'name':   'msg/us/he.bar',
+                'multi':  [
+                    {
+                        'name': 'msg/fr/he.bar'
+                    },
+                    {
+                        'name': 'msg/gr/he.bar'
+                    },
+                    {
+                        'name': 'msg/it/he.bar'
+                    },
+                    {
+                        'name': 'msg/sp/he.bar'
+                    }
+        ],
+                'method': 'binarc',
+                'source': [
+                    {
+                        'name':   'he',
+                        'type':   'list',
+                        'method': 'kh2msg',
+                        'source': [
+                            {
+                                'name':     'he.yml',
+                                'language': 'en'
+                            }
+                        ]
+                    }
+                ]
+            },
         ],
         'title':  'Randomizer Seed'
     }
@@ -411,9 +446,39 @@ def patch_kh2(self, output_directory):
             'en': f"Your Level Depth is {self.options.LevelDepth.current_option_name}"
         }
     ]
+    self.fight_and_form_text = [
+        {
+            'id': 15121,  # poster name
+            'en': f"Game Options"
+        },
+        {
+            'id': 15122,
+            'en': f"Fight Logic is {self.options.FightLogic.current_option_name}\n"
+                  f"Auto Form Logic is {self.options.AutoFormLogic.current_option_name}\n"
+                  f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}"
+        }
+
+    ]
+    self.cups_text = [
+        {
+            'id': 4043,
+            'en': f"CupsToggle: {self.options.Cups.current_option_name}"
+        },
+        {
+            'id': 4044,
+            'en': f"CupsToggle: {self.options.Cups.current_option_name}"
+        },
+        {
+            'id': 4045,
+            'en': f"CupsToggle: {self.options.Cups.current_option_name}"
+        },
+    ]
+
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
-    self.mod_yml["title"] = f"Randomizer Seed {mod_name}"
+    self.mod_yml["title"] = f"Archipelago Seed - {self.multiworld.get_file_safe_player_name(self.player)}"
+    self.mod_yml["originalAuthor"] = "JaredWeakStrike"
+    self.mod_yml["description"] = f"Seed {self.multiworld.seed_name} was generated for {self.multiworld.get_file_safe_player_name(self.player)} - Player {self.player} at {curr_timestamp} UTC. Have fun! \nCredit to delilahisdidi for the icons!"
 
     openkhmod = {
         "TrsrList.yml": yaml.dump(self.formattedTrsr, line_break="\n"),
@@ -423,8 +488,47 @@ def patch_kh2(self, output_directory):
         "FmlvList.yml": yaml.dump(self.formattedFmlv, line_break="\n"),
         "mod.yml":      yaml.dump(self.mod_yml, line_break="\n"),
         "po.yml":       yaml.dump(self.pooh_text, line_break="\n"),
-        "sys.yml":      yaml.dump(self.level_depth_text, line_break="\n"),
+        "sys.yml":      yaml.dump(self.level_depth_text + self.fight_and_form_text, line_break="\n"),
+        "he.yml":       yaml.dump(self.cups_text, line_break="\n")
     }
+
+    ## I think I overlooked a really easy way to find the data folder,
+    ## but it has to determine if it's a local client generating,
+    ## if it's a server generating, if it's a build, or on the complete
+    ## offchance that it's a custom world.
+
+    iconbytes = bytes()
+    previewbytes = bytes()
+    # local build/server generating
+    apworldloc = os.path.join("worlds","kh2","data")
+    if os.path.exists(apworldloc):
+        try:
+            with open(os.path.join(apworldloc, "khapicon.png"),'rb') as icon, \
+                 open(os.path.join(apworldloc, "preview.png"),'rb') as preview:
+                iconbytes = icon.read()
+                previewbytes = preview.read()
+            openkhmod["icon.png"] = iconbytes
+            openkhmod["preview.png"] = previewbytes
+        except IOError as openerror:
+            logging.warning(openerror)
+
+    # client install generating
+    apworldloc = os.path.join("lib","worlds")
+    if not os.path.isfile(Utils.user_path(apworldloc, 'kh2.apworld')): 
+        apworldloc = os.path.join("custom_worlds", "")
+    if os.path.exists(os.path.join(apworldloc,"kh2.apworld")):
+        try: 
+            with zipfile.ZipFile(Utils.user_path(os.path.join(
+                                 apworldloc, 'kh2.apworld')), 'r') as apworld_archive:
+                # zipfile requires the forward slash
+                with apworld_archive.open('kh2/data/khapicon.png', 'r') as icon, \
+                     apworld_archive.open('kh2/data/preview.png', 'r') as preview:
+                    iconbytes = icon.read()
+                    previewbytes = preview.read()
+                openkhmod["icon.png"] = iconbytes
+                openkhmod["preview.png"] = previewbytes
+        except IOError as openerror:
+            logging.warning(openerror)
 
     mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,
             self.multiworld.get_file_safe_player_name(self.player))

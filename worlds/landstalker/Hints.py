@@ -131,7 +131,7 @@ def generate_random_hints(world: "LandstalkerWorld"):
     hint_texts = list(set(hint_texts))
     random.shuffle(hint_texts)
 
-    hint_count = world.options.hint_count.value
+    hint_count = min(world.options.hint_count.value, len(hint_texts))
     del hint_texts[hint_count:]
 
     hint_source_names = [source["description"] for source in HINT_SOURCES_JSON if
