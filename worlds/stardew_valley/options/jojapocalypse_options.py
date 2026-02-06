@@ -32,9 +32,9 @@ class JojaEndPrice(Range):
     """
     internal_name = "joja_end_price"
     display_name = "Jojapocalypse End Price"
-    default = 50000
+    default = 10000
     range_start = 0
-    range_end = 10_000_000
+    range_end = 100_000
 
 
 class JojaPricingPattern(Choice):

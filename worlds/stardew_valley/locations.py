@@ -80,6 +80,7 @@ class LocationTags(enum.Enum):
     FESTIVAL = enum.auto()
     FESTIVAL_HARD = enum.auto()
     DESERT_FESTIVAL_CHEF = enum.auto()
+    DESERT_FESTIVAL_CHEF_MEAL = enum.auto()
     SPECIAL_ORDER_BOARD = enum.auto()
     SPECIAL_ORDER_QI = enum.auto()
     REQUIRES_QI_ORDERS = enum.auto()
@@ -356,10 +357,12 @@ def extend_hard_festival_locations(randomized_locations: List[LocationData], opt
 
 
 def extend_desert_festival_chef_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
-    festival_chef_locations = locations_by_tag[LocationTags.DESERT_FESTIVAL_CHEF]
-    number_to_add = 5 if options.festival_locations == FestivalLocations.option_easy else 10
-    locations_to_add = random.sample(festival_chef_locations, number_to_add)
-    randomized_locations.extend(locations_to_add)
+    if options.festival_locations == FestivalLocations.option_easy:
+        randomized_locations.append(location_table["Desert Chef"])
+    elif options.festival_locations == FestivalLocations.option_hard:
+        festival_chef_locations = locations_by_tag[LocationTags.DESERT_FESTIVAL_CHEF]
+        location_to_add = random.choice(festival_chef_locations)
+        randomized_locations.append(location_to_add)
 
 
 def extend_special_order_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
