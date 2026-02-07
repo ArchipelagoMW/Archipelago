@@ -358,8 +358,12 @@ class TestFilteredResolution(RuleBuilderTestCase):
             And(Has("A"), And(Has("B"), options=[OptionFilter(ToggleOption, 1)])),
         ),
         (
-            (Has("A") | Has("B")) << [OptionFilter(ToggleOption, 1)],
+            (Has("A") | Has("B")) & [OptionFilter(ToggleOption, 1)],
             Filtered(Or(Has("A"), Has("B")), options=[OptionFilter(ToggleOption, 1)]),
+        ),
+        (
+            (Has("A") | Has("B")) | OptionFilter(ToggleOption, 1),
+            Or(Or(Has("A"), Has("B")), True_(options=[OptionFilter(ToggleOption, 1)])),
         ),
     )
 )

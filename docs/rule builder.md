@@ -120,12 +120,13 @@ rule = (
 )
 ```
 
-You can also use the "shovel" operator `<<` as shorthand:
+You can also use the & and | operators to apply options to rules:
 
 ```python
 common_rule = Has("A")
 easy_filter = [OptionFilter(Difficulty, Difficulty.option_easy)]
-common_rule_only_on_easy = common_rule << easy_filter
+common_rule_only_on_easy = common_rule & easy_filter
+common_rule_skipped_on_easy = common_rule | easy_filter
 ```
 
 ## Enabling caching
