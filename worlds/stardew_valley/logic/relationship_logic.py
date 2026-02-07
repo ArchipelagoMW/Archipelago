@@ -183,9 +183,7 @@ class RelationshipLogic(BaseLogic):
                 rules.append(self.logic.relationship.has_hearts(npc, previous_heart))
 
         if CustomLogicOptionName.ignore_birthdays not in self.options.custom_logic:
-            if hearts > 2 or hearts > heart_size:
-                rules.append(self.logic.season.has(villager.birthday))
-
+            rules.append(self.logic.season.has(villager.birthday))
             if villager.birthday == Generic.any:
                 rules.append(self.logic.season.has_all() | self.logic.time.has_year_three)  # push logic back for any birthday-less villager
 
