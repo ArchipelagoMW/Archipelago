@@ -754,7 +754,11 @@ class TestSerialization(RuleBuilderTestCase):
         ),
         Or(
             HasAll("i7", "i8"),
-            HasAllCounts({"i9": 1, "i10": 5}, options=[OptionFilter(ToggleOption, 1, operator="ne")]),
+            HasAllCounts(
+                {"i9": 1, "i10": 5},
+                options=[OptionFilter(ToggleOption, 1, operator="ne")],
+                filtered_resolution=True,
+            ),
             CanReachRegion("r1"),
             HasGroup("g1"),
         ),
@@ -774,6 +778,7 @@ class TestSerialization(RuleBuilderTestCase):
     rule_dict: ClassVar[dict[str, Any]] = {
         "rule": "And",
         "options": [],
+        "filtered_resolution": False,
         "children": [
             {
                 "rule": "Or",
@@ -784,20 +789,24 @@ class TestSerialization(RuleBuilderTestCase):
                         "operator": "eq",
                     },
                 ],
+                "filtered_resolution": False,
                 "children": [
                     {
                         "rule": "Has",
                         "options": [],
+                        "filtered_resolution": False,
                         "args": {"item_name": "i1", "count": 4},
                     },
                     {
                         "rule": "HasFromList",
                         "options": [],
+                        "filtered_resolution": False,
                         "args": {"item_names": ("i2", "i3", "i4"), "count": 2},
                     },
                     {
                         "rule": "HasAnyCount",
                         "options": [],
+                        "filtered_resolution": False,
                         "args": {"item_counts": {"i5": 2, "i6": 3}},
                     },
                 ],
@@ -805,10 +814,12 @@ class TestSerialization(RuleBuilderTestCase):
             {
                 "rule": "Or",
                 "options": [],
+                "filtered_resolution": False,
                 "children": [
                     {
                         "rule": "HasAll",
                         "options": [],
+                        "filtered_resolution": False,
                         "args": {"item_names": ("i7", "i8")},
                     },
                     {
@@ -820,16 +831,19 @@ class TestSerialization(RuleBuilderTestCase):
                                 "operator": "ne",
                             },
                         ],
+                        "filtered_resolution": True,
                         "args": {"item_counts": {"i9": 1, "i10": 5}},
                     },
                     {
                         "rule": "CanReachRegion",
                         "options": [],
+                        "filtered_resolution": False,
                         "args": {"region_name": "r1"},
                     },
                     {
                         "rule": "HasGroup",
                         "options": [],
+                        "filtered_resolution": False,
                         "args": {"item_name_group": "g1", "count": 1},
                     },
                 ],
@@ -848,20 +862,24 @@ class TestSerialization(RuleBuilderTestCase):
                         "operator": "ge",
                     },
                 ],
+                "filtered_resolution": False,
                 "children": [
                     {
                         "rule": "HasAny",
                         "options": [],
+                        "filtered_resolution": False,
                         "args": {"item_names": ("i11", "i12")},
                     },
                     {
                         "rule": "CanReachLocation",
                         "options": [],
+                        "filtered_resolution": False,
                         "args": {"location_name": "l1", "parent_region_name": "r2", "skip_indirect_connection": False},
                     },
                     {
                         "rule": "HasFromListUnique",
                         "options": [],
+                        "filtered_resolution": False,
                         "args": {"item_names": ("i13", "i14"), "count": 1},
                     },
                 ],
@@ -869,11 +887,13 @@ class TestSerialization(RuleBuilderTestCase):
             {
                 "rule": "CanReachEntrance",
                 "options": [],
+                "filtered_resolution": False,
                 "args": {"entrance_name": "e1", "parent_region_name": ""},
             },
             {
                 "rule": "HasGroupUnique",
                 "options": [],
+                "filtered_resolution": False,
                 "args": {"item_name_group": "g2", "count": 5},
             },
         ],

@@ -109,11 +109,14 @@ class Rule(Generic[TWorld]):
     def to_dict(self) -> dict[str, Any]:
         """Returns a JSON compatible dict representation of this rule"""
         args = {
-            field.name: getattr(self, field.name, None) for field in dataclasses.fields(self) if field.name != "options"
+            field.name: getattr(self, field.name, None)
+            for field in dataclasses.fields(self)
+            if field.name not in ("options", "filtered_resolution")
         }
         return {
             "rule": self.__class__.__qualname__,
             "options": [o.to_dict() for o in self.options],
+            "filtered_resolution": self.filtered_resolution,
             "args": args,
         }
 
@@ -121,7 +124,7 @@ class Rule(Generic[TWorld]):
     def from_dict(cls, data: Mapping[str, Any], world_cls: "type[World]") -> Self:
         """Returns a new instance of this rule from a serialized dict representation"""
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
-        return cls(**data.get("args", {}), options=options)
+        return cls(**data.get("args", {}), options=options, filtered_resolution=data.get("filtered_resolution", False))
 
     def __and__(self, other: "Rule[Any] | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
         """Combines two rules or a rule and an option filter into an And rule"""
