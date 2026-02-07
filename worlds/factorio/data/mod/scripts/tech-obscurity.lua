@@ -12,13 +12,15 @@
 --      hints will only be send once. Unless an achipelago command demands the whole list.
 
 --to do:
---fix bug; if you get a tech. The base 5 technologies get revealed even if you do not have crafted a red science pack.
 --hints inbound: AP side
 
-local function send_hint(technologies)
+local function send_hint(technologies, force)
     --technologies => tech_name = true
     local reveal_string = ""
     for tech_name, _ in pairs(technologies) do
+        if force.technologies[tech_name].researched == true then
+            storage.hinted_techs[tech_name] = true
+        end
         if storage.hinted_techs[tech_name] == false then
             storage.hinted_techs[tech_name] = true
             reveal_string = reveal_string .. " " .. tech_name
@@ -152,7 +154,7 @@ local function update_science_tech_tree(force)
         to_reveal = depth_check(force, to_reveal)
     end
 
-    send_hint(to_reveal)
+    send_hint(to_reveal, force)
     for name, _ in pairs(to_reveal) do
         technologies[name].enabled = true
         technologies[name].visible_when_disabled = false
@@ -170,6 +172,13 @@ local function update_trigger_tech_tree(force, technology)
     local to_check = {}
 
     if technology == false then
+        for _, recipe in pairs(prototypes.recipe) do
+            if recipe.enabled and recipe.category ~= "recycling" then
+                for _, item_data in pairs(recipe.products) do
+                    to_check[item_data.name] = item_data.name
+                end
+            end
+        end
         for _, tech in pairs(technologies) do
             if tech.researched then
                 for _, effect in pairs(tech.prototype.effects) do
@@ -192,18 +201,21 @@ local function update_trigger_tech_tree(force, technology)
             end
         end
     end
+    local reveal = {}
     for _, name in pairs(to_check) do
         if triggers[name] then 
-            if triggers[name].unlocked_triggered == false then
+            if triggers[name].unlocked_triggered == false or technology == false then
                 triggers[name].unlocked_triggered = true
                 for _, tech_name in pairs(triggers[name].technologies) do
+                    reveal[tech_name] = true
                     hidden_trigger_tech[tech_name] = false
-                    force.technologies[tech_name].enabled = false
-                    force.technologies[tech_name].visible_when_disabled = false
+                    technologies[tech_name].visible_when_disabled = false
+                    technologies[tech_name].enabled = true
                 end
             end
         end
     end
+    send_hint(reveal, force)
 end
 
 local function setup_storage(force)
@@ -288,8 +300,7 @@ local function on_tick(event)
         local science_check = game.tick % science_total --check one science pack per tick.
         local science_packs_num = storage.forces[force_name].science_packs_num
         if science_packs_num[science_check+1].crafted == false then
-            if get_item_count(science_packs_num[science_check+1].name, force) > 0 then --if this science_pack is made then update the three
-                -- fix this (steal fomr milestones.)
+            if get_item_count(science_packs_num[science_check+1].name, force) > 0 then --if this science_pack is made then update the tree
                 game.print("you crafted a: "..science_packs_num[science_check+1].name)
                 science_packs_num[science_check+1].crafted = true --ensure one update per pack extra crafted
                 storage.forces[force_name].science_packs_name[science_packs_num[science_check+1].name].crafted  = true
@@ -307,6 +318,7 @@ end
 
 local function on_force_created(event)
     setup_storage(event.force)
+    log(event.force.name .. "Has been made/called")
 end
 
 local function on_init()
@@ -317,32 +329,6 @@ local function on_init()
     for _, force in pairs(game.forces) do
         setup_storage(force)
         update_trigger_tech_tree(force, false)
-        
-        local to_check = {}
-        for _, recipe in pairs(prototypes.recipe) do
-            if recipe.enabled and recipe.category ~= "recycling" then
-                for _, item_data in pairs(recipe.products) do
-                    to_check[item_data.name] = item_data.name
-                end
-            end
-        end
-        local hidden_trigger_tech = storage.forces[force.name].hidden_trigger_tech
-        local triggers = storage.forces[force.name].triggers
-        local reveal = {}
-        for _, name in pairs(to_check) do
-            if triggers[name] then 
-                if triggers[name].unlocked_triggered == false then
-                    triggers[name].unlocked_triggered = true
-                    for _, tech_name in pairs(triggers[name].technologies) do
-                        reveal[tech_name] = true
-                        hidden_trigger_tech[tech_name] = false
-                        force.technologies[tech_name].visible_when_disabled = false
-                        force.technologies[tech_name].enabled = true
-                    end
-                end
-            end
-        end
-        send_hint(reveal)
     end
 end
 
@@ -355,13 +341,6 @@ events = {
     [defines.events.on_research_finished] = on_research_finished,
     [defines.events.on_force_created] = on_force_created,
 }
-
-for name, loc_fun in pairs(events) do
-    script.on_event(name, loc_fun)
-end
-
-script.on_init(on_init)
-script.on_configuration_changed(on_configuration_changed)
 
 commands.add_command("ap-receive-hint", "Used by the Archipelago client to manage the tech tree hints", function(call)
 
@@ -376,7 +355,6 @@ end)
 
 commands.add_command("ap-resend-all-hints", "Used by the Archipelago client to manage the tech tree hints", function(call)
     --sends all hints again, the order will be base factorio sorting.
-
     storage.hinted_techs = {} --will ensure hints are only send once.
     for name, tech in pairs(prototypes.technology) do
         storage.hinted_techs[name] = tech.hidden

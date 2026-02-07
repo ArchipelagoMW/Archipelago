@@ -182,51 +182,48 @@ class FactorioContext(CommonContext):
         super(FactorioContext, self).on_deathlink(data)
 
     def on_package(self, cmd: str, args: dict):
-        logger.info(f"got a {cmd} with: {args}")
         if cmd in {"Connected", "RoomUpdate"}:
             # catch up sync anything that is already cleared.
             if "checked_locations" in args and args["checked_locations"]:
                 self.rcon_client.send_commands({item_name: f'/ap-get-technology ap-{item_name}-\t-1' for
                                                 item_name in args["checked_locations"]})
-            if cmd == "Connected":
-                notifications = [f"_read_hints_{self.team}_{self.slot}"]
-                #if self.energy_link_increment:
-                #    notifications.append(self.energylink_key)
-                #if len(notifications) >= 1:
-                #    async_start(self.send_msgs([{
-                #        "cmd": "SetNotify", "keys": notifications
-                #    }]))
-                #self.resend_hints_out()
-                #async_start(self.send_msgs([{"cmd": "Get", "keys": [f"_read_hints_{self.team}_{self.slot}"]}]))
-
                 
-            #if cmd == "Connected":
-            #    outgoing_commands = [{"cmd": "Get", "keys": [f"_read_hints_{self.team}_{self.slot}"]}]
-            #    notifications = [f"_read_hints_{self.team}_{self.slot}"]
-            #    if self.energy_link_increment:
-            #        notifications.append(self.energylink_key)
-            #    if len(notifications) >= 1:
-            #        outgoing_commands.append({
-            #            "cmd": "SetNotify", "keys": notifications
-            #        })
-            #    self.resend_hints_out()
-            #    async_start(self.send_msgs(outgoing_commands))
-        elif cmd in {"SetReply", "Retrieved"}:
-            logger.info(f"got a SetReply with: {args["key"]}")
-            if args["key"].startswith("EnergyLink"):
+            if cmd == "Connected":
+                #outgoing_commands = [{"cmd": "Get", "keys": [f"_read_hints_{self.team}_{self.slot}"]}]
+                self.set_notify(f"_read_hints_{self.team}_{self.slot}")
+                if self.energy_link_increment:
+                    self.set_notify(self.energylink_key)
+
+                self.resend_hints_out()
+                #async_start(self.send_msgs(outgoing_commands))
+
+        elif cmd == "Retrieved":
+            #self.stored_data.update(args["keys"])
+            if f"_read_hints_{self.team}_{self.slot}" in args["keys"]:
+                self.update_hints()
+
+        elif cmd == "SetReply":
+            #self.stored_data[args["key"]] = args["value"]
+            if f"_read_hints_{self.team}_{self.slot}" == args["key"]:
+                self.update_hints()
+            elif args["key"].startswith("EnergyLink"):
                 if self.energy_link_increment and args.get("last_deplete", -1) == self.last_deplete:
                     # it's our deplete request
                     gained = int(args["original_value"] - args["value"])
                     gained_text = format_SI_prefix(gained) + "J"
                     if gained:
                         logger.debug(f"EnergyLink: Received {gained_text}. "
-                                     f"{format_SI_prefix(args['value'])}J remaining.")
+                                     f"{format_SI_prefix(value)}J remaining.")
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
-            if args["key"] == f"_read_hints_{self.team}_{self.slot}":
-                for hint in args["value"]:
-                    self.rcon_client.send_command(f'/ap-receive-hint ap-{hint["location"]}-')
-
-
+    
+    def update_hints(self):
+        commands = {}
+        index = 0
+        for position in range(len(self.stored_data[f"_read_hints_{self.team}_{self.slot}"])):
+            self.rcon_client.send_command( f'/ap-receive-hint ap-{self.stored_data[f"_read_hints_{self.team}_{self.slot}"][position]["location"]}-')
+            index +=1
+        if commands:
+            self.rcon_client.send_commands(commands)
 
     def on_user_say(self, text: str) -> typing.Optional[str]:
         # Mirror chat sent from the UI to the Factorio server.
@@ -279,8 +276,6 @@ class FactorioContext(CommonContext):
     def send_hint_out(self, tech_names: str):
         #tech_names = "ap-123456- ap-234567- oil-gathering"
         #tech_names can contain junk techs not meant for AP (like oil-gathering)
-        logger.info(f"hint processing: {tech_names}")
-        self.print_to_game(f"hint processing: {tech_names}")
         techs_to_hint = []
         for tech_name in tech_names.split(" "):
             tech_split = tech_name.split("-")
@@ -289,10 +284,8 @@ class FactorioContext(CommonContext):
                     location_id = int(tech_split[1])
                     #this should now only have te location id of the check. So 123456.....
                     techs_to_hint.append(location_id)
-            
-        logger.info(f"Sending hints for: {techs_to_hint}") #This will be a list of all locations
-        self.print_to_game(f"Sending hints for: {techs_to_hint}")
-        if len(techs_to_hint) != 0:
+        
+        if len(techs_to_hint) > 0:
             async_start(self.send_msgs([{"cmd": "CreateHints", "locations": techs_to_hint}]))
 
                 
@@ -468,7 +461,6 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     ctx.toggle_bridge_chat_out()
                 elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Obscurity gives hint for", msg):
                     factorio_server_logger.debug(msg)
-                    #factorio_server_logger.info(f"Caught this message out in the blue {msg}") #They get caught :D
                     tech_names = re.sub(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Obscurity gives hint for","", msg)
                     ctx.send_hint_out(tech_names)
                 else:
