@@ -21,7 +21,7 @@ class SMGWorld(World):
     options: Options.SMGOptions
 
     item_name_to_id = ClassVar[items.ITEM_NAME_TO_ID]
-    location_name_to_id = locations.location_table
+    location_name_to_id = ClassVar[locations.LOCATION_NAME_TO_ID]
 
     required_client_version = (0, 6, 6)
 
@@ -46,7 +46,7 @@ class SMGWorld(World):
         # creates the green stars in each players itempool
         self.multiworld.itempool += [self.create_item("Green Star") for i in range(0,3)]
         self.multiworld.itempool += [self.create_item("Progressive Grand Star") for i in range(0,5)]       
-        self.multiworld.get_location("B: Bowser's Galaxy Reactor", self.player).place_locked_item(self.create_item("Peach"))
+        self.multiworld.get_location("B: The Fate of the Universe", self.player).place_locked_item(self.create_item("Peach"))
         
         # check to see what setting enable purple coin stars is on to see how many stars to create 
         if self.options.enable_purple_coin_stars == self.options.enable_purple_coin_stars.option_main_game_only:
