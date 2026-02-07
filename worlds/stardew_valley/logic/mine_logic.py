@@ -53,18 +53,22 @@ class MineLogic(BaseLogic):
             combat_tier -= 2
         elif CustomLogicOptionName.hard_combat in self.options.custom_logic:
             combat_tier -= 1
+        elif CustomLogicOptionName.easy_combat in self.options.custom_logic:
+            combat_tier += 1
         combat_tier = max(0, combat_tier)
 
         if CustomLogicOptionName.extreme_mining in self.options.custom_logic:
             mine_tier -= 2
         elif CustomLogicOptionName.hard_mining in self.options.custom_logic:
             mine_tier -= 1
+        elif CustomLogicOptionName.easy_mining in self.options.custom_logic:
+            mine_tier += 1
         mine_tier = max(0, mine_tier)
 
         weapon_rule = self.logic.mine.get_weapon_rule_for_floor_tier(combat_tier)
         rules.append(weapon_rule)
 
-        tool_rule = self.logic.tool.can_mine_using(ToolMaterial.tiers[mine_tier + 1])
+        tool_rule = self.logic.tool.can_mine_using(ToolMaterial.tiers[min(5, mine_tier + 1)])
         rules.append(tool_rule)
 
         # No alternative for vanilla because we assume that you will grind the levels in the mines.
@@ -98,6 +102,9 @@ class MineLogic(BaseLogic):
         elif CustomLogicOptionName.hard_combat in self.options.custom_logic:
             weapon_rule = self.logic.combat.has_good_weapon
             combat_tier -= 1
+        elif CustomLogicOptionName.easy_combat in self.options.custom_logic:
+            weapon_rule = self.logic.combat.has_galaxy_weapon
+            combat_tier += 1
         else:
             weapon_rule = self.logic.combat.has_great_weapon
         combat_tier = max(0, combat_tier)
@@ -106,6 +113,8 @@ class MineLogic(BaseLogic):
             mining_tier -= 2
         elif CustomLogicOptionName.hard_mining in self.options.custom_logic:
             mining_tier -= 1
+        elif CustomLogicOptionName.easy_mining in self.options.custom_logic:
+            mining_tier += 1
         tool_tier = mining_tier + 2
         tool_tier = min(4, max(0, tool_tier))
         mining_tier = max(0, mining_tier)

@@ -921,8 +921,10 @@ class CustomLogic(OptionSet):
     Easy Fishing: +2 Required fishing levels
     Hard Fishing: -2 Required fishing levels
     Extreme Fishing: -4 Required fishing levels
+    Easy Mining: +1 required pickaxes and +2 required mining levels
     Hard Mining: -1 required pickaxes and -2 required mining levels
     Extreme Mining: -2 required pickaxes and -4 required mining levels
+    Easy Combat: +1 required weapon and +2 required combat levels
     Hard Combat: -1 required weapon and -2 required combat levels
     Extreme Combat: -2 required weapon and -4 required combat levels
     Deep Mining: x2 Mine depth expectations
@@ -937,8 +939,8 @@ class CustomLogic(OptionSet):
     display_name = "Custom Logic"
     valid_keys = frozenset({
         CustomLogicOptionName.easy_fishing, CustomLogicOptionName.hard_fishing, CustomLogicOptionName.extreme_fishing,
-        CustomLogicOptionName.hard_mining, CustomLogicOptionName.extreme_mining,
-        CustomLogicOptionName.hard_combat, CustomLogicOptionName.extreme_combat,
+        CustomLogicOptionName.easy_mining, CustomLogicOptionName.hard_mining, CustomLogicOptionName.extreme_mining,
+        CustomLogicOptionName.easy_combat, CustomLogicOptionName.hard_combat, CustomLogicOptionName.extreme_combat,
         CustomLogicOptionName.deep_mining, CustomLogicOptionName.very_deep_mining,
         CustomLogicOptionName.ignore_birthdays,
         CustomLogicOptionName.easy_money, CustomLogicOptionName.hard_money, CustomLogicOptionName.extreme_money, CustomLogicOptionName.nightmare_money,
