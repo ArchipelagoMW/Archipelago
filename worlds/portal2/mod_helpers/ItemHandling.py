@@ -34,9 +34,9 @@ def handle_item(item_name: str) -> list[str]:
         return_commands.append(f'script DeleteEntity("{model}")')
     
     if DELETE_ENTITY in item_tags:
-        if ent_name == button or ent_name == old_button:
+        if item_name == button or item_name == old_button:
             return_commands.append(f'script AddButtonFrame("{ent_name}")')
-        elif ent_name == floor_button or ent_name == old_floor_button:
+        elif item_name == floor_button or item_name == old_floor_button:
             return_commands.append(f'script AddFloorButtonFrame("{ent_name}")')
         else:
             return_commands.append(f'script DeleteEntity("{ent_name}")')
