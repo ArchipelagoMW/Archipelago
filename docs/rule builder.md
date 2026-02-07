@@ -140,8 +140,6 @@ class MyWorld(CachedRuleBuilderWorld):
 
 If your world's logic is very simple and you don't have many nested rules, the caching system may have more overhead cost than time it saves. You'll have to benchmark your own world to see if it should be enabled or not.
 
-If you enable caching and your rules use `CanReachLocation`, `CanReachEntrance` or a custom rule that depends on locations or entrances, you must call `self.register_dependencies()` after all of your locations and entrances exist to setup the caching system.
-
 ### Item name mapping
 
 If you have multiple real items that map to a single logic item, add a `item_mapping` class dict to your world that maps actual item names to real item names so the cache system knows what to invalidate.
@@ -451,7 +449,7 @@ These are properties and helpers that are available to you in your world.
 #### Methods
 
 - `rule_from_dict(data)`: Create a rule instance from a deserialized dict representation
-- `register_dependencies()`: Register all rules that depend on location or entrance access with the inherited dependencies
+- `register_rule_builder_dependencies()`: Register all rules that depend on location or entrance access with the inherited dependencies, gets called automatically after set_rules
 - `set_rule(spot: Location | Entrance, rule: Rule)`: Resolve a rule, register its dependencies, and set it on the given location or entrance
 - `set_completion_rule(rule: Rule)`: Sets the completion condition for this world
 - `create_entrance(from_region: Region, to_region: Region, rule: Rule | None, name: str | None = None, force_creation: bool = False)`: Attempt to create an entrance from `from_region` to `to_region`, skipping creation if `rule` is defined and evaluates to `False_()` unless force_creation is `True`

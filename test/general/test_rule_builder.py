@@ -399,7 +399,7 @@ class TestCaching(CachedRuleBuilderTestCase):
         for i in range(1, LOC_COUNT + 1):
             self.multiworld.itempool.append(world.create_item(f"Item {i}"))
 
-        world.register_dependencies()
+        world.register_rule_builder_dependencies()
 
     def test_item_cache_busting(self) -> None:
         location = self.world.get_location("Location 4")

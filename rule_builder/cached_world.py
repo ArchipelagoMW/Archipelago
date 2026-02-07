@@ -50,7 +50,7 @@ class CachedRuleBuilderWorld(World):
         for entrance_name, rule_ids in resolved_rule.entrance_dependencies().items():
             self.rule_entrance_dependencies[entrance_name] |= rule_ids
 
-    def register_dependencies(self) -> None:
+    def register_rule_builder_dependencies(self) -> None:
         """Register all rules that depend on locations or entrances with their dependencies"""
         for location_name, rule_ids in self.rule_location_dependencies.items():
             try:

@@ -178,7 +178,8 @@ def _timed_call(method: Callable[..., Any], *args: Any,
 
 
 def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
-    method = getattr(multiworld.worlds[player], method_name)
+    world = multiworld.worlds[player]
+    method = getattr(world, method_name)
     try:
         ret = _timed_call(method, *args, multiworld=multiworld, player=player)
     except Exception as e:
@@ -189,6 +190,10 @@ def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: 
             logging.error(message)
         raise e
     else:
+        # Convenience for CachedRuleBuilderWorld users: Ensure that caching setup function is called
+        # Can be removed once dependency system is improved
+        if method_name == "set_rules" and hasattr(world, "register_rule_builder_dependencies"):
+            call_single(multiworld, "register_rule_builder_dependencies", player)
         return ret
 
 
