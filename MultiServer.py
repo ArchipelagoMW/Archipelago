@@ -16,6 +16,7 @@ import operator
 import pickle
 import random
 import shlex
+import sys
 import threading
 import time
 import typing
@@ -58,10 +59,41 @@ server_per_message_deflate_factory = ServerPerMessageDeflateFactory(
     compress_settings={"memLevel": 4},
 )
 
+class Limit:
+    name: str
+    value: int
+    unit: str
+
+    def __init__(self, name: str, value: int, unit: str):
+        self.name = name
+        self.value = value
+        self.unit = unit
+
+    def is_exceeded(self, value: int | float) -> bool:
+        return value > self.value
+
+    def check(self, value: int | float):
+        if self.is_exceeded(value):
+            raise LimitExceeded(self)
+
+        return value
+
+
+class LimitExceeded(Exception):
+    limit: Limit
+    message: str
+
+    def __init__(self, limit: Limit):
+        self.limit = limit
+        self.message = f"Value exceeds `{limit.name}` limit of {limit.value} {limit.unit}"
+
+        super().__init__(self.message)
+
+
 ServerLimits = typing.TypedDict('ServerLimits', {
-    'max_int_bits': int,
-    'max_list_len': int,
-    'max_string_len': int,
+    'max_int_bits': Limit,
+    'max_list_len': Limit,
+    'max_string_len': Limit,
 })
 
 def operator_mod(ctx: Context, lhs, rhs):
@@ -72,42 +104,42 @@ def operator_mod(ctx: Context, lhs, rhs):
 
 def operator_add(ctx: Context, lhs, rhs):
     match (lhs, rhs):
-        case (str(), str()) if len(lhs) + len(rhs) > ctx.limits['max_string_len']:
-            raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits['max_string_len']} characters")
-        case (list(), list()) if len(lhs) + len(rhs) > ctx.limits['max_list_len']:
-            raise Exception(f"Result of list addition exceeds `max_list_len` limit of {ctx.limits['max_list_len']} elements")
-        case _:
-            return lhs + rhs
+        case (str(), str()):
+            ctx.limits['max_string_len'].check(len(lhs) + len(rhs))
+        case (list(), list()):
+            ctx.limits['max_list_len'].check(len(lhs) + len(rhs))
 
-def operator_mul(ctx: Context, lhs, rhs):
+    return lhs + rhs
+
+def operator_mul(ctx: Context, lhs: typing.Any, rhs: typing.Any):
     match (lhs, rhs):
-        case (int(), int()) if lhs != 0 and rhs != 0 and math.log2(abs(lhs)) + math.log2(abs(rhs)) > ctx.limits['max_int_bits']:
-            raise Exception(f"Result of int multiplication exceeds `max_int_bits` limit of {ctx.limits['max_int_bits']} bits")
-        case (str(), int()) if len(lhs) * rhs > ctx.limits['max_string_len']:
-            raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits['max_string_len']} characters")
-        case (int(), str()) if lhs * len(rhs) > ctx.limits['max_string_len']:
-            raise Exception(f"Result of string multiplication exceeds `max_string_len` limit of {ctx.limits['max_string_len']} characters")
-        case (list(), int()) if len(lhs) * rhs > ctx.limits['max_list_len']:
-            raise Exception(f"Result of list multiplication exceeds `max_list_len` limit of {ctx.limits['max_list_len']} elements")
-        case (int(), list()) if lhs * len(rhs) > ctx.limits['max_list_len']:
-            raise Exception(f"Result of list multiplication exceeds `max_list_len` limit of {ctx.limits['max_list_len']} elements")
-        case _:
-            return lhs * rhs
+        case (int(lhs), int(rhs)) if lhs != 0 and rhs != 0:
+            num_bits = math.log2(abs(lhs)) + math.log2(abs(rhs))
+            ctx.limits['max_int_bits'].check(num_bits)
+        case (str(lhs), int(rhs)):
+            ctx.limits['max_string_len'].check(len(lhs) * rhs)
+        case (int(lhs), str(rhs)):
+            ctx.limits['max_string_len'].check(lhs * len(rhs))
+        case (list(lhs), int(rhs)):
+            ctx.limits['max_list_len'].check(len(lhs) * rhs)
+        case (int(lhs), list(rhs)):
+            ctx.limits['max_list_len'].check(lhs * len(rhs))
+
+    return lhs * rhs
 
 def operator_pow(ctx: Context, base, exp):
     match (base, exp):
         case (int(), int()) if abs(base) > 1 and exp > 1:
-            if math.ceil(math.log2(abs(base)) * exp) > ctx.limits['max_int_bits']:
-                raise Exception(f"Result of pow exceeds `max_int_bits` limit of {ctx.limits['max_int_bits']} bits")
+            num_bits = math.ceil(math.log2(abs(base)) * exp)
+            ctx.limits['max_int_bits'].check(num_bits)
 
-            return base ** exp
-        case _:
-            return base ** exp
+    return base ** exp
 
 def operator_lshift(ctx: Context, lhs, rhs):
-    if lhs != 0 and math.ceil(math.log2(abs(lhs)) + rhs) > ctx.limits['max_int_bits']:
-        raise Exception(f"Result of lshift exceeds `max_int_bits` limit of {ctx.limits['max_int_bits']} bits")
-    
+    if lhs != 0:
+        num_bits = math.ceil(math.log2(abs(lhs)) + rhs)
+        ctx.limits['max_int_bits'].check(num_bits)
+
     return lhs << rhs
 
 
@@ -368,9 +400,9 @@ class Context:
         self.read_data = {}
         self.spheres = []
         self.limits = {
-            'max_int_bits': limit_max_int_bits,
-            'max_list_len': limit_max_list_len,
-            'max_string_len': limit_max_string_len,
+            'max_int_bits': Limit("max_int_bits", limit_max_int_bits, "bits"),
+            'max_list_len': Limit("max_list_len", limit_max_list_len, "list elements"),
+            'max_string_len': Limit("max_string_len", limit_max_string_len, "string characters"),
         }
         self.disable_limit_commands = disable_limit_commands
         self.disable_string_modulo = True
@@ -404,8 +436,16 @@ class Context:
 
         for game_package in self.gamespackage.values():
             # remove groups from data sent to clients
-            del game_package["item_name_groups"]
-            del game_package["location_name_groups"]
+            try:
+                del game_package["item_name_groups"]
+                del game_package["location_name_groups"]
+            except:
+                # Key removal throws during test execution because
+                # game_package is a global reference and
+                # tests creating multiple `Context` instances,
+                # which attempt to remove already removed keys.
+                if "pytest" not in sys.modules:
+                    raise
 
     def _init_game_data(self):
         for game_name, game_package in self.gamespackage.items():
@@ -1905,6 +1945,14 @@ def get_slot_points(ctx: Context, team: int, slot: int) -> int:
     return (ctx.location_check_points * len(ctx.location_checks[team, slot]) -
             ctx.get_hint_cost(slot) * ctx.hints_used[team, slot])
 
+def compute_value(ctx: Context, operation: str, lhs: typing.Any, rhs: typing.Any) -> typing.Any:
+    func = modify_functions[operation]
+    value = func(ctx, lhs, rhs)
+
+    if isinstance(value, int):
+        ctx.limits['max_int_bits'].check(value.bit_length())
+
+    return value
 
 async def process_client_cmd(ctx: Context, client: Client, args: dict):
     try:
@@ -2238,11 +2286,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             args["original_value"] = copy.copy(value)
             args["slot"] = client.slot
             for operation in args["operations"]:
-                func = modify_functions[operation["operation"]]
-                tmp_value = func(ctx, value, operation["value"])
-                if isinstance(tmp_value, int) and tmp_value.bit_length() > ctx.limits['max_int_bits']:
-                    raise Exception(f"Result of operation exceeds `max_int_bits` limit of {ctx.limits['max_int_bits']} bits")
-                value = tmp_value
+                value = compute_value(ctx, operation["operation"], value, operation["value"])
             ctx.stored_data[args["key"]] = args["value"] = value
             targets = set(ctx.stored_data_notification_clients[args["key"]])
             if args.get("want_reply", False):
