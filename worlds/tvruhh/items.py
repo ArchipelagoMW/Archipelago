@@ -99,7 +99,7 @@ def get_items(world: TVRUHHWorld, whichlist: dict, min_id = -1, max_id = -1) -> 
 # 105 = blessing gifts (status: WIP)
 # 106 = burden gifts (status: WIP)
 # 107 = upgrade gifts (status: WIP)
-# 108 = dreamscapes (status: WIP)
+# 108 = dreamscapes (status: finished for init release)
 # 109 = events (status: WIP)
 # 110 = scenes (status: WIP)
 # 111 = music (status: finished for init release)
@@ -470,7 +470,43 @@ upgrade_gift_list = {
 }
 
 dreamscape_list = {
-
+    "Among the Petals": [108000, ItemClassification.filler],
+    "Above the Clouds": [108001, ItemClassification.filler],
+    "In My Dreams": [108002, ItemClassification.filler],
+    "Calm Reflection": [108003, ItemClassification.filler],
+    "Vitreous Ocean": [108004, ItemClassification.filler],
+    "Radiating Symmetry": [108005, ItemClassification.filler],
+    "Above My Home": [108006, ItemClassification.filler],
+    "Iiry Forest": [108007, ItemClassification.filler],
+    "Distant Towers": [108008, ItemClassification.filler],
+    "Hiding Place": [108009, ItemClassification.filler],
+    "Iiry Caverns": [108010, ItemClassification.filler],
+    "A Special Place": [108011, ItemClassification.filler],
+    "Hopeful Woods": [108012, ItemClassification.filler],
+    "Fall Breeze": [108013, ItemClassification.filler],
+    "Solitude": [108014, ItemClassification.filler],
+    "Behind the Waterfall": [108015, ItemClassification.filler],
+    "Excessive Warmth": [108016, ItemClassification.filler],
+    "Core of the Numb": [108017, ItemClassification.filler],
+    "Painted Peaks": [108018, ItemClassification.filler],
+    "Sunset Seascape": [108019, ItemClassification.filler],
+    "Midnight Mural": [108020, ItemClassification.filler],
+    "The Darkness": [108021, ItemClassification.filler],
+    "So Far Away": [108022, ItemClassification.filler],
+    "Monster's Home": [108023, ItemClassification.filler],
+    "Let There Be Sound": [108024, ItemClassification.filler],
+    "Cursed Canvas": [108025, ItemClassification.filler],
+    "True Panic": [108026, ItemClassification.filler],
+    "Gift From Beyond": [108027, ItemClassification.filler],
+    "The Garden's Blessing": [108028, ItemClassification.filler],
+    "The Heart of a Monster": [108029, ItemClassification.filler],
+    "Nowhere": [108030, ItemClassification.filler],
+    "Altered Nowhere": [108031, ItemClassification.filler],
+    "Altered Iteria": [108032, ItemClassification.filler],
+    "Altered Pit": [108033, ItemClassification.filler],
+    "Altered Dream": [108034, ItemClassification.filler],
+    "Altered Towers": [108035, ItemClassification.filler],
+    "Altered Sentaria": [108036, ItemClassification.filler],
 }
 
 event_list = {
