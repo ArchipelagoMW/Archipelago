@@ -1,5 +1,26 @@
 from BaseClasses import Location
 
+_baseId = 3626000
+
+# Maps the course abbreviation to the course index (0-indexed)
+_courseNameIndexes = {
+ "BoB": 0,
+ "WF":  1,
+ "JRB": 2,
+ "CCM": 3,
+ "BBH": 4,
+ "HMC": 5,
+ "LLL": 6,
+ "SSL": 7,
+ "DDD": 8,
+ "SL":  9,
+ "WDW": 10,
+ "TTM": 11,
+ "THI": 12,
+ "TTC": 13,
+ "RR":  14
+}
+
 class SM64Location(Location):
     game: str = "Super Mario 64"
 
@@ -262,10 +283,27 @@ locSS_table = {
     "MIPS 2": 3626172
 }
 
+# Coin high scores
+_locCoinHi_base_id = 250
+_coinAmts = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+def coinHiName(course, coinAmt):
+    idx = _courseNameIndexes[course]
+    return '{:s}: Coin Hi Score {:d}'.format(course, coinAmt)
+
+def coinHiIdx(course, coinAmt):
+    return _baseId + _locCoinHi_base_id + (courseIdx * 10) + ((coinAmt//10)-1)
+    
+locCoinHi_table = {}
+for course, courseIdx in _courseNameIndexes.items():
+    for coinAmt in _coinAmts:
+        coinName = coinHiName(course, coinAmt)
+        coinIdx = coinHiIdx(course, coinAmt)
+        locCoinHi_table[coinName] = coinIdx
+
 # Correspond to 3626000 + course index * 7 + star index, then secret stars, then keys, then 100 Coin Stars
 location_table = {**locBoB_table,**locWhomp_table,**locJRB_table,**locCCM_table,**locBBH_table, \
                   **locHMC_table,**locLLL_table,**locSSL_table,**locDDD_table,**locSL_table, \
                   **locWDW_table,**locTTM_table,**locTHI_table,**locTTC_table,**locRR_table, \
                   **loc100Coin_table,**locPSS_table,**locSA_table,**locBitDW_table,**locTotWC_table, \
                   **locCotMC_table, **locVCutM_table, **locBitFS_table, **locWMotR_table, **locBitS_table, \
-                  **locSS_table}
+                  **locSS_table, **locCoinHi_table}

@@ -3,6 +3,7 @@ from typing import Callable, Union, Dict, Set
 from BaseClasses import MultiWorld
 from ..generic.Rules import add_rule, set_rule
 from .Locations import location_table
+from .Locations import coinHiName
 from .Options import SM64Options
 from .Regions import connect_regions, SM64Levels, sm64_level_to_paintings, sm64_paintings_to_level,\
 sm64_level_to_secrets, sm64_secrets_to_level, sm64_entrances_to_level, sm64_level_to_entrances
@@ -228,6 +229,19 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
         rf.assign_rule("TTC: 100 Coins", "GP")
         rf.assign_rule("THI: 100 Coins", "GP")
         rf.assign_rule("RR: 100 Coins", "GP & WK")
+    # Ensure reachability for 80, 90, and 100 max coin score locations
+    if options.enable_progress_max_coins:
+        rf.assign_max_coins_rule_default('BoB', "CANN & WC | CANNLESS & WC & TJ")
+        rf.assign_max_coins_rule_default('WF',  "GP | MOVELESS")
+        rf.assign_max_coins_rule_default('JRB', "GP & {JRB: Upper}")
+        rf.assign_max_coins_rule_default('HMC', "GP")
+        rf.assign_max_coins_rule_default('SSL', "{SSL: Upper Pyramid} | GP")
+        rf.assign_max_coins_rule_default('DDD', "GP & {{DDD: Pole-Jumping for Red Coins}}")
+        rf.assign_max_coins_rule_default('SL',  "VC | CAPLESS")
+        rf.assign_max_coins_rule_default('WDW', "GP | {WDW: Downtown}")
+        rf.assign_max_coins_rule_default('TTC', "GP")
+        rf.assign_max_coins_rule_default('THI', "GP")
+        rf.assign_max_coins_rule_default('RR',  "GP & WK")
     # Castle Stars
     add_rule(world.get_location("Toad (Basement)", player), lambda state: state.can_reach("Basement", 'Region', player) and state.has("Power Star", player, 12))
     add_rule(world.get_location("Toad (Second Floor)", player), lambda state: state.can_reach("Second Floor", 'Region', player) and state.has("Power Star", player, 25))
@@ -300,6 +314,13 @@ class RuleFactory:
                 f"Error generating rule for {target_name} using rule expression {rule_expr}: {exception}")
         if rule:
             set_rule(target, rule)
+
+    def assign_max_coins_rule_default(self, target_course: str, rule_expr: str):
+        # We assume that we can always achieve at least 70 coins without any moves or special conditions
+        # For coin counts 80, 90, and 100, we then use the rule expression given (which matches the 100-coin star ones)
+        for coinAmt in [80, 90, 100]:
+            locationName = coinHiName(target_course, coinAmt)
+            self.assign_rule(locationName, rule_expr)
 
     def build_rule(self, rule_expr: str, cannon_name: str = '', painting_lvl_name: str = None, star_num_req: int = None) -> Callable:
         # Star/painting requirements are outer and'd requirements, logically (painting? star? and (rule_expr))
