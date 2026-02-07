@@ -76,7 +76,7 @@ def create_all_items(world: TVRUHHWorld) -> None:
 
 
 # function responsible for all items
-def get_items(world: TVRUHHWorld, whichlist, min_id = -1, max_id = -1) -> list[Item]:
+def get_items(world: TVRUHHWorld, whichlist: dict, min_id = -1, max_id = -1) -> list[Item]:
     items: list[Item] = []
     for x in whichlist:
         if not min_id == -1:

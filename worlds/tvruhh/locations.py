@@ -63,7 +63,7 @@ def create_regular_locations(world: TVRUHHWorld) -> None:
 
 
 
-def load_location_list(parentlist,childlist,world,min_id = -1, max_id = -1) -> dict[str, int | None]:
+def load_location_list(parentlist: dict,childlist: dict,world,min_id = -1, max_id = -1) -> dict[str, int | None]:
     names = []
     for x in parentlist[childlist]:
         if not min_id == -1:
@@ -84,7 +84,7 @@ def load_location_list(parentlist,childlist,world,min_id = -1, max_id = -1) -> d
     locations = get_location_names_with_ids(names,parentlist[childlist])
     return locations
 
-def load_remaining_locations(whichlist,world,min_id = -1, max_id = -1) -> dict[str, int | None]:
+def load_remaining_locations(whichlist: dict,world: TVRUHHWorld,min_id = -1, max_id = -1) -> dict[str, int | None]:
     names = []
     for x in whichlist:
         if not whichlist[x] is dict:
@@ -112,10 +112,10 @@ def create_events(world: TVRUHHWorld) -> None:
 # First three numbers indicate what type location it is
 # Last four numbers is the count
 # 100 = dreams (status: currently being worked on)
-# 101 = grindy dreams (status: WIP)
-# 102 = extremely grindy dreams (status: WIP)
-# 103 = tedious dreams (status: WIP)
-# 104 = extremely tedious dreams (status: WIP)
+# 101 = grindy dreams (status: currently being worked on)
+# 102 = extremely grindy dreams (status: currently being worked on)
+# 103 = tedious dreams (status: currently being worked on)
+# 104 = extremely tedious dreams (status: currently being worked on)
 # 105 = story medals (status: WIP)
 # 106 = quickplay copper medals (status: WIP)
 # 107 = quickplay bronze medals (status: WIP)
@@ -158,6 +158,7 @@ def create_events(world: TVRUHHWorld) -> None:
 
 # every list is ordered in sublists that corrospont to the regions
 # many regions do not exist in some lists, because they are just tied to a specific gamemode (or something else)
+# anything that is not contained in a sublist will have location-based rules in rules.py
 
 dream_list = {
     "starting_dreams": {
