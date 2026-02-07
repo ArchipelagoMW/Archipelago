@@ -2676,7 +2676,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             return
 
         if not key in self.ctx.limits:
-            self.output(f"Invalid limit `{key}`");
+            self.output(f"Invalid limit `{key}`")
             return
 
         try:
@@ -2695,7 +2695,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             return
         
         if not key in self.ctx.limits:
-            self.output(f"Invalid limit `{key}`");
+            self.output(f"Invalid limit `{key}`")
             return
 
         try:

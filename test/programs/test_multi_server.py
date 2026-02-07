@@ -51,13 +51,13 @@ class TestDataStorageOperations(unittest.TestCase):
 
         op_mod: DataStorageOp = lambda lhs, rhs: compute_value(ctx, "mod", lhs, rhs)
 
-        self.assertRaises(ValueError, lambda: op_mod("%s", None));
-        self.assertRaises(ValueError, lambda: op_mod("%s", 0));
-        self.assertRaises(ValueError, lambda: op_mod("%s", 0.0));
-        self.assertRaises(ValueError, lambda: op_mod("%s", ""));
-        self.assertRaises(ValueError, lambda: op_mod("%s", []));
-        self.assertRaises(ValueError, lambda: op_mod("%s", {}));
-        self.assertRaises(ValueError, lambda: op_mod("%s", object()));
+        self.assertRaises(ValueError, lambda: op_mod("%s", None))
+        self.assertRaises(ValueError, lambda: op_mod("%s", 0))
+        self.assertRaises(ValueError, lambda: op_mod("%s", 0.0))
+        self.assertRaises(ValueError, lambda: op_mod("%s", ""))
+        self.assertRaises(ValueError, lambda: op_mod("%s", []))
+        self.assertRaises(ValueError, lambda: op_mod("%s", {}))
+        self.assertRaises(ValueError, lambda: op_mod("%s", object()))
 
     def test_add_int_int(self):
         ctx = Context("", 0, "", "", 0, 0, False)
