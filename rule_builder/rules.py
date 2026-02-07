@@ -85,6 +85,9 @@ class Rule(Generic[TWorld]):
     options: Iterable[OptionFilter] = dataclasses.field(default=(), kw_only=True)
     """An iterable of OptionFilters to restrict what options are required for this rule to be active"""
 
+    filtered_resolution: bool = dataclasses.field(default=False, kw_only=True)
+    """If this rule should default to True or False when filtered by its options"""
+
     game_name: ClassVar[str]
     """The name of the game this rule belongs to, default rules belong to 'Archipelago'"""
 
@@ -100,7 +103,7 @@ class Rule(Generic[TWorld]):
         """Resolve a rule with the given world"""
         for option_filter in self.options:
             if not option_filter.check(world.options):
-                return False_().resolve(world)
+                return True_().resolve(world) if self.filtered_resolution else False_().resolve(world)
         return self._instantiate(world)
 
     def to_dict(self) -> dict[str, Any]:

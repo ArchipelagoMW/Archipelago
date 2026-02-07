@@ -89,6 +89,8 @@ If you want a comparison that isn't equals, you can specify with the `operator` 
 - `le`: `<=`
 - `contains`: `in`
 
+By default rules that are excluded by their options will default to `False`. If you want to default to `True` instead, you can specify `filtered_resolution=True` on your rule.
+
 To check if the player can reach a switch, or if they've received the switch item if switches are randomized:
 
 ```python
@@ -98,15 +100,12 @@ rule = (
 )
 ```
 
-To add an extra logic requirement on the easiest difficulty:
+To add an extra logic requirement on the easiest difficulty which is ignored for other difficulties:
 
 ```python
 rule = (
     # ...the rest of the logic
-    & (
-        Has("QoL item", options=[OptionFilter(Difficulty, Difficulty.option_easy)])
-        | True_(options=[OptionFilter(Difficulty, Difficulty.option_medium, operator="ge")])
-    )
+    & Has("QoL item", options=[OptionFilter(Difficulty, Difficulty.option_easy)], filtered_resolution=True)
 )
 ```
 

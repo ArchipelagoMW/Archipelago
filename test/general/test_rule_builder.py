@@ -267,10 +267,8 @@ class TestSimplify(RuleBuilderTestCase):
 )
 class TestOptions(RuleBuilderTestCase):
     cases: ClassVar[tuple[type[Option[Any]], Any, Operator, Any, bool]]
-    multiworld: MultiWorld  # pyright: ignore[reportUninitializedInstanceVariable]
-    world: World  # pyright: ignore[reportUninitializedInstanceVariable]
 
-    def test_simplify(self) -> None:
+    def test_option_resolution(self) -> None:
         multiworld = setup_solo_multiworld(self.world_cls, steps=("generate_early",), seed=0)
         world = multiworld.worlds[1]
         option_cls, world_value, operator, filter_value, expected = self.cases
@@ -283,6 +281,31 @@ class TestOptions(RuleBuilderTestCase):
         option_filter = OptionFilter(option_cls, filter_value, operator)
         result = option_filter.check(world.options)
         self.assertEqual(result, expected, f"Expected {result} for option={option_filter} with value={world_value}")
+
+
+class TestFilteredResolution(RuleBuilderTestCase):
+    def test_filtered_resolution(self) -> None:
+        multiworld = setup_solo_multiworld(self.world_cls, steps=("generate_early",), seed=0)
+        world = multiworld.worlds[1]
+
+        rule_and_false = Has("A") & Has("B", options=[OptionFilter(ToggleOption, 1)], filtered_resolution=False)
+        rule_and_true = Has("A") & Has("B", options=[OptionFilter(ToggleOption, 1)], filtered_resolution=True)
+        rule_or_false = Has("A") | Has("B", options=[OptionFilter(ToggleOption, 1)], filtered_resolution=False)
+        rule_or_true = Has("A") | Has("B", options=[OptionFilter(ToggleOption, 1)], filtered_resolution=True)
+
+        # option fails check
+        world.options.toggle_option.value = 0  # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+        self.assertEqual(rule_and_false.resolve(world), False_.Resolved(player=1))
+        self.assertEqual(rule_and_true.resolve(world), Has.Resolved("A", player=1))
+        self.assertEqual(rule_or_false.resolve(world), Has.Resolved("A", player=1))
+        self.assertEqual(rule_or_true.resolve(world), True_.Resolved(player=1))
+
+        # option passes check
+        world.options.toggle_option.value = 1  # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+        self.assertEqual(rule_and_false.resolve(world), HasAll.Resolved(("A", "B"), player=1))
+        self.assertEqual(rule_and_true.resolve(world), HasAll.Resolved(("A", "B"), player=1))
+        self.assertEqual(rule_or_false.resolve(world), HasAny.Resolved(("A", "B"), player=1))
+        self.assertEqual(rule_or_true.resolve(world), HasAny.Resolved(("A", "B"), player=1))
 
 
 @classvar_matrix(
