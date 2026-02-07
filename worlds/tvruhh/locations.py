@@ -36,39 +36,40 @@ def create_regular_locations(world: TVRUHHWorld) -> None:
     quickplay_dreams = world.get_region("Unlocked Quickplay")
     
     #locations in start region
-    load_all_lists(world,"starting_dreams")
-    load_all_lists(world,"quickplay_start")
+    start_dreams.add_locations(load_all_lists(world,"starting_dreams"),TVRUHHLocation)
+    quickplay_dreams.add_locations(load_all_lists(world,"quickplay_start"),TVRUHHLocation)
 
 
-def load_all_lists(world: TVRUHHWorld, childlist: str = ""):
-    x = []
-    if childlist == "":
-        x.extend(load_remaining_locations(dream_list))
+def load_all_lists(world: TVRUHHWorld, chosenlist: str = "") -> dict[str, int | None]:
+    x = {}
+    print("TVRUHH: Loading list",chosenlist)
+    if chosenlist == "":
+        x.update(load_remaining_locations(dream_list,world))
         if world.options.grindy_dreams:
-            x.extend(load_remaining_locations(grindy_dream_list))
+            x.update(load_remaining_locations(grindy_dream_list,world))
         if world.options.extremely_grindy_dreams:
-            x.extend(load_remaining_locations(extremely_grindy_dream_list))
+            x.update(load_remaining_locations(extremely_grindy_dream_list,world))
         if world.options.tedious_dreams:
-            x.extend(load_remaining_locations(tedious_dream_list))
+            x.update(load_remaining_locations(tedious_dream_list,world))
         if world.options.extremely_tedious_dreams:
-            x.extend(load_remaining_locations(extremely_tedious_dream_list))
+            x.update(load_remaining_locations(extremely_tedious_dream_list,world))
     else:
-        x.extend(load_location_list(dream_list,childlist))
+        x.update(load_location_list(dream_list,chosenlist,world))
         if world.options.grindy_dreams:
-            x.extend(load_location_list(grindy_dream_list,childlist))
+            x.update(load_location_list(grindy_dream_list,chosenlist,world))
         if world.options.extremely_grindy_dreams:
-            x.extend(load_location_list(extremely_grindy_dream_list,childlist))
+            x.update(load_location_list(extremely_grindy_dream_list,chosenlist,world))
         if world.options.tedious_dreams:
-            x.extend(load_location_list(tedious_dream_list,childlist))
+            x.update(load_location_list(tedious_dream_list,chosenlist,world))
         if world.options.extremely_tedious_dreams:
-            x.extend(load_location_list(extremely_tedious_dream_list,childlist))
+            x.update(load_location_list(extremely_tedious_dream_list,chosenlist,world))
     
     return x
 
 
 
 
-def load_location_list(parentlist: dict,childlist: dict,world,min_id = -1, max_id = -1) -> dict[str, int | None]:
+def load_location_list(parentlist: dict,childlist: str,world,min_id = -1, max_id = -1) -> dict[str, int | None]:
     names = []
     for x in parentlist[childlist]:
         if not min_id == -1:
@@ -87,6 +88,8 @@ def load_location_list(parentlist: dict,childlist: dict,world,min_id = -1, max_i
                 names.append(x)
                 big_bad_list_of_all_locations_with_IDs.update({x: parentlist[childlist][x]})
     locations = get_location_names_with_ids(names,parentlist[childlist])
+    print(names)
+    print(big_bad_list_of_all_locations_with_IDs)
     return locations
 
 def load_remaining_locations(whichlist: dict,world: TVRUHHWorld,min_id = -1, max_id = -1) -> dict[str, int | None]:
@@ -217,7 +220,7 @@ dream_list = {
         "Dream: Shimmering Quick Gifts": 1000043,
         # Heart Trails
         "Dream: Her Heart: Karma Collector": 1000044,
-        "Dream: Her Heart: Light Gifts": 1000045,
+        "Dream: Her Heart: Light Gifts": 1000045
     },
     "post_50_monsters": {
         

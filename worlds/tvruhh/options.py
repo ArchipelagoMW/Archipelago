@@ -62,10 +62,10 @@ class ExtremelyTediousDreams(Toggle):
 
 @dataclass
 class TVRUHHOptions(PerGameCommonOptions):
-    #grindy_dreams: GrindyDreams
-    #tedious_dreams: TediousDreams
-    #extremely_grindy_dreams: ExtremelyGrindyDreams
-    #extremely_tedious_dreams: ExtremelyTediousDreams
+    grindy_dreams: GrindyDreams
+    tedious_dreams: TediousDreams
+    extremely_grindy_dreams: ExtremelyGrindyDreams
+    extremely_tedious_dreams: ExtremelyTediousDreams
     disabled_dreams: DisabledDreams
 
 
