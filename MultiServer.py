@@ -114,7 +114,7 @@ def operator_add(ctx: Context, lhs, rhs):
 def operator_mul(ctx: Context, lhs: typing.Any, rhs: typing.Any):
     match (lhs, rhs):
         case (int(lhs), int(rhs)) if lhs != 0 and rhs != 0:
-            num_bits = math.log2(abs(lhs)) + math.log2(abs(rhs))
+            num_bits = math.ceil(math.log2(abs(lhs)) + math.log2(abs(rhs)))
             ctx.limits['max_int_bits'].check(num_bits)
         case (str(lhs), int(rhs)):
             ctx.limits['max_string_len'].check(len(lhs) * rhs)
