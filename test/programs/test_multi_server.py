@@ -1,3 +1,4 @@
+import typing
 import unittest
 from MultiServer import Context, LimitExceeded, ServerCommandProcessor, compute_value
 
@@ -39,25 +40,28 @@ class TestResolvePlayerName(unittest.TestCase):
         assert p.resolve_player("abcd") == (1, 3, "abCD"), "case insensitive resolves when 1 match"
         assert not p.resolve_player("aB"), "partial name shouldn't resolve to player"
 
+DataStorageOp = typing.Callable[[typing.Any, typing.Any], typing.Any]
+
 class TestDataStorageOperations(unittest.TestCase):
+
     def test_modulo_string_any(self):
         ctx = Context("", 0, "", "", 0, 0, False)
 
         assert ctx.disable_string_modulo == True
 
-        op_mod = lambda rhs: compute_value(ctx, "mod", "%s", rhs)
+        op_mod: DataStorageOp = lambda lhs, rhs: compute_value(ctx, "mod", lhs, rhs)
 
-        self.assertRaises(ValueError, lambda: op_mod(None));
-        self.assertRaises(ValueError, lambda: op_mod(0));
-        self.assertRaises(ValueError, lambda: op_mod(0.0));
-        self.assertRaises(ValueError, lambda: op_mod(""));
-        self.assertRaises(ValueError, lambda: op_mod([]));
-        self.assertRaises(ValueError, lambda: op_mod({}));
-        self.assertRaises(ValueError, lambda: op_mod(object()));
+        self.assertRaises(ValueError, lambda: op_mod("%s", None));
+        self.assertRaises(ValueError, lambda: op_mod("%s", 0));
+        self.assertRaises(ValueError, lambda: op_mod("%s", 0.0));
+        self.assertRaises(ValueError, lambda: op_mod("%s", ""));
+        self.assertRaises(ValueError, lambda: op_mod("%s", []));
+        self.assertRaises(ValueError, lambda: op_mod("%s", {}));
+        self.assertRaises(ValueError, lambda: op_mod("%s", object()));
 
     def test_add_int_int(self):
         ctx = Context("", 0, "", "", 0, 0, False)
-        op_add = lambda lhs, rhs: compute_value(ctx, "add", lhs, rhs)
+        op_add: DataStorageOp = lambda lhs, rhs: compute_value(ctx, "add", lhs, rhs)
         max_int_bits = ctx.limits["max_int_bits"].value
         max_int = 2 ** max_int_bits - 1
         min_int = -max_int
@@ -75,7 +79,7 @@ class TestDataStorageOperations(unittest.TestCase):
 
     def test_add_str_str(self):
         ctx = Context("", 0, "", "", 0, 0, False)
-        op_add = lambda lhs, rhs: compute_value(ctx, "add", lhs, rhs)
+        op_add: DataStorageOp = lambda lhs, rhs: compute_value(ctx, "add", lhs, rhs)
         max_str_len = ctx.limits["max_string_len"].value
         max_str = "a" * max_str_len
 
@@ -91,7 +95,7 @@ class TestDataStorageOperations(unittest.TestCase):
 
     def test_add_list_list(self):
         ctx = Context("", 0, "", "", 0, 0, False)
-        op_add = lambda lhs, rhs: compute_value(ctx, "add", lhs, rhs)
+        op_add: DataStorageOp = lambda lhs, rhs: compute_value(ctx, "add", lhs, rhs)
         max_list_len = ctx.limits["max_list_len"].value
         max_list = ["a"] * max_list_len
 
@@ -107,7 +111,7 @@ class TestDataStorageOperations(unittest.TestCase):
 
     def test_mul_int_int(self):
         ctx = Context("", 0, "", "", 0, 0, False)
-        op_mul = lambda lhs, rhs: compute_value(ctx, "mul", lhs, rhs)
+        op_mul: DataStorageOp = lambda lhs, rhs: compute_value(ctx, "mul", lhs, rhs)
         max_int_bits = ctx.limits["max_int_bits"].value
         max_int = 2 ** max_int_bits - 1
         min_int = -max_int
@@ -159,7 +163,7 @@ class TestDataStorageOperations(unittest.TestCase):
 
     def test_mul_str_int(self):
         ctx = Context("", 0, "", "", 0, 0, False)
-        op_mul = lambda lhs, rhs: compute_value(ctx, "mul", lhs, rhs)
+        op_mul: DataStorageOp = lambda lhs, rhs: compute_value(ctx, "mul", lhs, rhs)
         max_str_len = ctx.limits["max_string_len"].value
         max_str = "a" * max_str_len
 
@@ -170,7 +174,7 @@ class TestDataStorageOperations(unittest.TestCase):
 
     def test_mul_int_str(self):
         ctx = Context("", 0, "", "", 0, 0, False)
-        op_mul = lambda lhs, rhs: compute_value(ctx, "mul", lhs, rhs)
+        op_mul: DataStorageOp = lambda lhs, rhs: compute_value(ctx, "mul", lhs, rhs)
         max_str_len = ctx.limits["max_string_len"].value
         max_str = "a" * max_str_len
 
@@ -181,7 +185,7 @@ class TestDataStorageOperations(unittest.TestCase):
 
     def test_mul_list_int(self):
         ctx = Context("", 0, "", "", 0, 0, False)
-        op_mul = lambda lhs, rhs: compute_value(ctx, "mul", lhs, rhs)
+        op_mul: DataStorageOp = lambda lhs, rhs: compute_value(ctx, "mul", lhs, rhs)
         max_list_len = ctx.limits["max_list_len"].value
         max_list = ["a"] * max_list_len
 
@@ -192,7 +196,7 @@ class TestDataStorageOperations(unittest.TestCase):
 
     def test_mul_int_list(self):
         ctx = Context("", 0, "", "", 0, 0, False)
-        op_mul = lambda lhs, rhs: compute_value(ctx, "mul", lhs, rhs)
+        op_mul: DataStorageOp = lambda lhs, rhs: compute_value(ctx, "mul", lhs, rhs)
         max_list_len = ctx.limits["max_list_len"].value
         max_list = ["a"] * max_list_len
 
@@ -203,7 +207,7 @@ class TestDataStorageOperations(unittest.TestCase):
 
     def test_pow_int_int(self):
         ctx = Context("", 0, "", "", 0, 0, False)
-        op_pow = lambda lhs, rhs: compute_value(ctx, "pow", lhs, rhs)
+        op_pow: DataStorageOp = lambda lhs, rhs: compute_value(ctx, "pow", lhs, rhs)
         max_int_bits = ctx.limits["max_int_bits"].value
         max_int = 2 ** max_int_bits - 1
         min_int = -max_int
@@ -238,10 +242,9 @@ class TestDataStorageOperations(unittest.TestCase):
 
     def test_lshift_int_int(self):
         ctx = Context("", 0, "", "", 0, 0, False)
-        op_lshift = lambda lhs, rhs: compute_value(ctx, "left_shift", lhs, rhs)
+        op_lshift: DataStorageOp = lambda lhs, rhs: compute_value(ctx, "left_shift", lhs, rhs)
         max_int_bits = ctx.limits["max_int_bits"].value
         max_int = 2 ** max_int_bits - 1
-        min_int = -max_int
 
         result = op_lshift(0, 0)
         assert result == 0
