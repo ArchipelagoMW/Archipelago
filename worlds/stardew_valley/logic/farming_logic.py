@@ -5,6 +5,8 @@ from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..stardew_rule import StardewRule
+from ..strings.ap_names.ap_option_names import CustomLogicOptionName
+from ..strings.craftable_names import Bomb
 from ..strings.fertilizer_names import Fertilizer
 from ..strings.region_names import Region, LogicRegion
 from ..strings.season_names import Season
@@ -27,8 +29,20 @@ class FarmingLogicMixin(BaseLogicMixin):
 class FarmingLogic(BaseLogic):
 
     @cached_property
-    def has_farming_tools(self) -> StardewRule:
-        return self.logic.tool.has_tool(Tool.hoe) & self.logic.tool.can_water()
+    def has_farming_tools_and_water(self) -> StardewRule:
+        if CustomLogicOptionName.rain_watering in self.options.custom_logic:
+            return self.has_hoeing_tool
+        return self.has_hoeing_tool & self.logic.tool.can_water()
+
+    @cached_property
+    def has_farming_and_watering_tools(self) -> StardewRule:
+        return self.has_hoeing_tool & self.logic.tool.can_water()
+
+    @cached_property
+    def has_hoeing_tool(self) -> StardewRule:
+        if CustomLogicOptionName.bomb_hoeing in self.options.custom_logic:
+            return self.logic.tool.has_tool(Tool.hoe) | self.logic.has_any(Bomb.cherry_bomb, Bomb.bomb, Bomb.mega_bomb)
+        return self.logic.tool.has_tool(Tool.hoe)
 
     def has_fertilizer(self, tier: int) -> StardewRule:
         assert 0 <= tier <= 3
@@ -46,7 +60,8 @@ class FarmingLogic(BaseLogic):
     @cache_self1
     def can_plant_and_grow_item(self, seasons: Union[str, Tuple[str]]) -> StardewRule:
         if seasons == ():  # indoor farming
-            return (self.logic.region.can_reach(Region.greenhouse) | self.logic.farming.has_island_farm()) & self.logic.farming.has_farming_tools
+            return (self.logic.region.can_reach(Region.greenhouse) & self.logic.farming.has_farming_and_watering_tools) |\
+                   (self.logic.farming.has_island_farm() & self.logic.farming.has_farming_tools_and_water)
 
         if isinstance(seasons, str):
             seasons = (seasons,)

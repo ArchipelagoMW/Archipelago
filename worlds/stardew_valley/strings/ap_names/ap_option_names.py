@@ -96,3 +96,5 @@ class CustomLogicOptionName:
     hard_money = "Hard Money"
     extreme_money = "Extreme Money"
     nightmare_money = "Nightmare Money"
+    bomb_hoeing = "Bomb Hoeing"
+    rain_watering = "Rain Watering"
