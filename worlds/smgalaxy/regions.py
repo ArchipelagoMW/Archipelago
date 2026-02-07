@@ -1,6 +1,7 @@
+from typing import NamedTuple, Optional
+from BaseClasses import Region, Entrance, MultiWorld
 
-from BaseClasses import Region, Entrance
-
+from .Constants.Names import region_names as regname
 from . import SMGWorld
 from .Options import SMGOptions
 from .locations import SMGLocation, location_table, locGE_table, locHH_table, \
@@ -11,7 +12,39 @@ from .locations import SMGLocation, location_table, locGE_table, locHH_table, \
                    locbosses_table, locHL_table, locspecialstages_table, \
                    locPC_table
 
+class SMGRegionData(NamedTuple):
+    type: str  # type of randomization for GER
+    entrance_regions: Optional[list[str]] # Regions with entrances to this one
+    exit_regions: Optional[list[str]] # Regions with entrances from this one
+    ger_exits: Optional[list[str]] # connected exit regions that can be swapped during Entrance Rando
+
+class SMGRegion(Region):
+    game: str = "Super Mario Galaxy"
+    region_data: SMGRegionData
+
+    def __init__(self, region_name: str, region_data: SMGRegionData, player: int, multiworld: MultiWorld):
+        super().__init__(region_name, player, multiworld)
+        self.region_data = region_data
+
+region_list: dict[str, SMGRegionData] = {
+    regname.SHIP: SMGRegionData("Hub", [],
+                                [regname.TERRACE, regname.LIBRARY, regname.KITCHEN, regname.GARDEN,
+                                 regname.ENGINE, regname.BEDROOM, regname.FOUNTAIN],
+                                []),
+    regname.TERRACE: SMGRegionData("Hub", [], [], []),
+    regname.FOUNTAIN: SMGRegionData("Hub", [], [], []),
+    regname.ENGINE: SMGRegionData("Hub", [], [], []),
+    regname.KITCHEN: SMGRegionData("Hub", [], [], []),
+    regname.BEDROOM: SMGRegionData("Hub",[], [], []),
+    regname.GARDEN: SMGRegionData("Hub", [], [], []),
+    regname.LIBRARY: SMGRegionData("Hub", [], [], []),
+
+}
+
+
 def create_regions(world: SMGWorld, player: int):
+    for region_name in region_list.keys():
+        world.multiworld.regions.append(SMGRegion(region_name, region_list[region_name], world.player, world.multiworld))
     #defines the special stages
     regspecialstages = Region("Ship", player, world.multiworld, "Ship")
     create_default_locs(regspecialstages, locspecialstages_table, player)
