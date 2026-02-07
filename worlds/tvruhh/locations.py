@@ -36,29 +36,34 @@ def create_regular_locations(world: TVRUHHWorld) -> None:
     quickplay_dreams = world.get_region("Unlocked Quickplay")
     
     #locations in start region
-    current_child_list = "starting_dreams"
-    start_dreams.add_locations(load_location_list(dream_list,current_child_list,world), TVRUHHLocation)
-    if world.options.grindy_dreams:
-        start_dreams.add_locations(load_location_list(grindy_dream_list,current_child_list,world), TVRUHHLocation)
-    if world.options.extremely_grindy_dreams:
-        start_dreams.add_locations(load_location_list(extremely_grindy_dream_list,current_child_list,world), TVRUHHLocation)
-    if world.options.tedious_dreams:
-        start_dreams.add_locations(load_location_list(tedious_dream_list,current_child_list,world), TVRUHHLocation)
-    if world.options.extremely_tedious_dreams:
-        start_dreams.add_locations(load_location_list(extremely_tedious_dream_list,current_child_list,world), TVRUHHLocation)
-    
-    current_child_list = "quickplay_start"
-    quickplay_dreams.add_locations(load_location_list(dream_list,current_child_list), TVRUHHLocation)
-    if world.options.grindy_dreams:
-        quickplay_dreams.add_locations(load_location_list(grindy_dream_list,current_child_list,world), TVRUHHLocation)
-    if world.options.extremely_grindy_dreams:
-        quickplay_dreams.add_locations(load_location_list(extremely_grindy_dream_list,current_child_list,world), TVRUHHLocation)
-    if world.options.tedious_dreams:
-        quickplay_dreams.add_locations(load_location_list(tedious_dream_list,current_child_list,world), TVRUHHLocation)
-    if world.options.extremely_tedious_dreams:
-        quickplay_dreams.add_locations(load_location_list(extremely_tedious_dream_list,current_child_list,world), TVRUHHLocation)
-    
+    load_all_lists(world,"starting_dreams")
+    load_all_lists(world,"quickplay_start")
 
+
+def load_all_lists(world: TVRUHHWorld, childlist: str = ""):
+    x = []
+    if childlist == "":
+        x.extend(load_remaining_locations(dream_list))
+        if world.options.grindy_dreams:
+            x.extend(load_remaining_locations(grindy_dream_list))
+        if world.options.extremely_grindy_dreams:
+            x.extend(load_remaining_locations(extremely_grindy_dream_list))
+        if world.options.tedious_dreams:
+            x.extend(load_remaining_locations(tedious_dream_list))
+        if world.options.extremely_tedious_dreams:
+            x.extend(load_remaining_locations(extremely_tedious_dream_list))
+    else:
+        x.extend(load_location_list(dream_list,childlist))
+        if world.options.grindy_dreams:
+            x.extend(load_location_list(grindy_dream_list,childlist))
+        if world.options.extremely_grindy_dreams:
+            x.extend(load_location_list(extremely_grindy_dream_list,childlist))
+        if world.options.tedious_dreams:
+            x.extend(load_location_list(tedious_dream_list,childlist))
+        if world.options.extremely_tedious_dreams:
+            x.extend(load_location_list(extremely_tedious_dream_list,childlist))
+    
+    return x
 
 
 
@@ -211,6 +216,8 @@ dream_list = {
         "Dream: Sparkling Bonus Pack": 1000042,
         "Dream: Shimmering Quick Gifts": 1000043,
         # Heart Trails
+        "Dream: Her Heart: Karma Collector": 1000044,
+        "Dream: Her Heart: Light Gifts": 1000045,
     },
     "post_50_monsters": {
         
