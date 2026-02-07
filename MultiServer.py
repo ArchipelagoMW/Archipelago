@@ -2239,7 +2239,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             args["slot"] = client.slot
             for operation in args["operations"]:
                 func = modify_functions[operation["operation"]]
-                tmp_value = func(value, operation["value"])
+                tmp_value = func(ctx, value, operation["value"])
                 if isinstance(tmp_value, int) and tmp_value.bit_length() > ctx.limits['max_int_bits']:
                     raise Exception(f"Result of operation exceeds `max_int_bits` limit of {ctx.limits['max_int_bits']} bits")
                 value = tmp_value
