@@ -2685,7 +2685,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(f"Limit value `{value}` is not a valid integer")
             return
 
-        self.ctx.limits[key] = value_int
+        self.ctx.limits[key].value = value_int
         self.output(f"Set limit `{key} = {value_int}`")
 
     def _cmd_raise_limit(self, key: str, value: str):
@@ -2704,9 +2704,9 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(f"Limit value `{value}` is not a valid integer")
             return
 
-        old_limit = self.ctx.limits[key]
+        old_limit = self.ctx.limits[key].value
         new_limit = old_limit + value_int
-        self.ctx.limits[key] = new_limit
+        self.ctx.limits[key].value = new_limit
         self.output(f"Raised limit `{key}` by `{value_int}`: `{old_limit}` -> `{new_limit}`")
     
     def _cmd_toggle_string_modulo(self):
