@@ -137,7 +137,7 @@ def operator_pow(ctx: Context, base, exp):
 
 def operator_lshift(ctx: Context, lhs, rhs):
     if lhs != 0:
-        num_bits = math.ceil(math.log2(abs(lhs)) + rhs)
+        num_bits = lhs.bit_length() + rhs
         ctx.limits['max_int_bits'].check(num_bits)
 
     return lhs << rhs
