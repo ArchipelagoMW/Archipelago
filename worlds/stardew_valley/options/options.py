@@ -918,6 +918,7 @@ class CustomLogic(OptionSet):
     """Enable various customizations to the logic of the generator.
     Some flags are inherently incompatible with each other, the harder flag takes priority.
     Some of these toggles can, if the player is not careful, force them to reset days.
+    Chair Skips: Chair skips are considered in-logic
     Easy Fishing: +2 Required fishing levels
     Hard Fishing: -2 Required fishing levels
     Extreme Fishing: -4 Required fishing levels
@@ -941,6 +942,7 @@ class CustomLogic(OptionSet):
     internal_name = "custom_logic"
     display_name = "Custom Logic"
     valid_keys = frozenset({
+        CustomLogicOptionName.chair_skips,
         CustomLogicOptionName.easy_fishing, CustomLogicOptionName.hard_fishing, CustomLogicOptionName.extreme_fishing,
         CustomLogicOptionName.easy_mining, CustomLogicOptionName.hard_mining, CustomLogicOptionName.extreme_mining,
         CustomLogicOptionName.easy_combat, CustomLogicOptionName.hard_combat, CustomLogicOptionName.extreme_combat,

@@ -249,7 +249,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.mountain_to_outside_adventure_guild, logic.received("Landslide Removed"))
     rule_collector.set_entrance_rule(Entrance.enter_quarry,
                                      (logic.received("Bridge Repair") | logic.mod.magic.can_blink()) & logic.tool.has_tool(Tool.pickaxe))
-    rule_collector.set_entrance_rule(Entrance.enter_secret_woods, logic.tool.has_tool(Tool.axe, ToolMaterial.iron) | (logic.mod.magic.can_blink()))
+    rule_collector.set_entrance_rule(Entrance.enter_secret_woods, logic.tool.has_tool(Tool.axe, ToolMaterial.iron) | logic.mod.magic.can_blink() | logic.ability.can_chair_skip())
     rule_collector.set_entrance_rule(Entrance.town_to_community_center, logic.received("Community Center Key"))
     rule_collector.set_entrance_rule(Entrance.forest_to_wizard_tower, logic.received("Wizard Invitation"))
     rule_collector.set_entrance_rule(Entrance.forest_to_sewer, logic.wallet.has_rusty_key())
@@ -486,7 +486,7 @@ def set_island_entrances_rules(logic: StardewLogic, rule_collector: StardewRuleC
         Entrance.island_south_to_north: logic.received("Island North Turtle"),
         Entrance.island_west_to_islandfarmhouse: logic.received("Island Farmhouse"),
         Entrance.island_west_to_gourmand_cave: logic.received("Island Farmhouse"),
-        Entrance.island_north_to_dig_site: dig_site_rule,
+        Entrance.island_north_to_dig_site: dig_site_rule | logic.ability.can_chair_skip(),
         Entrance.dig_site_to_professor_snail_cave: logic.received("Open Professor Snail Cave"),
         Entrance.talk_to_island_trader: logic.received("Island Trader"),
         Entrance.island_south_to_southeast: logic.received("Island Resort"),

@@ -28,7 +28,7 @@ class SourceLogic(BaseLogic):
 
         if self.content.features.cropsanity.is_included(item):
             unlock_rule = self.logic.received(item.name)
-            if CustomLogicOptionName.critical_free_samples:
+            if CustomLogicOptionName.critical_free_samples in self.options.custom_logic:
                 return unlock_rule
             rules.append(unlock_rule)
 

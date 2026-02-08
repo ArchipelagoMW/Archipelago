@@ -80,6 +80,7 @@ class AllowedFillerOptionName:
 
 
 class CustomLogicOptionName:
+    chair_skips = "Chair Skips"
     easy_fishing = "Easy Fishing"
     hard_fishing = "Hard Fishing"
     extreme_fishing = "Extreme Fishing"

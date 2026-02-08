@@ -1,6 +1,7 @@
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..options import FarmType
-from ..stardew_rule import StardewRule
+from ..stardew_rule import StardewRule, False_, True_
+from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill, ModSkill
 from ..strings.tool_names import ToolMaterial, Tool, FishingRod
@@ -50,3 +51,16 @@ class AbilityLogic(BaseLogic):
     def can_scythe_vines(self) -> StardewRule:
         can_reach_any_vine_region = self.logic.region.can_reach_any(Region.forest, Region.railroad)
         return self.logic.tool.has_scythe() & can_reach_any_vine_region & self.logic.season.has_any_not_winter()
+
+    def can_chair_skip(self) -> StardewRule:
+        if CustomLogicOptionName.chair_skips not in self.options.custom_logic:
+            return False_()
+
+        if CustomLogicOptionName.critical_free_samples in self.options.custom_logic:
+            if self.options.farm_type == FarmType.option_standard or \
+                    self.options.farm_type == FarmType.option_riverland or \
+                    self.options.farm_type == FarmType.option_forest or \
+                    self.options.farm_type == FarmType.option_beach:
+                return True_()
+
+        return self.logic.money.can_spend_at(Region.carpenter, 350)
