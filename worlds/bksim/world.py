@@ -46,3 +46,6 @@ class BKSimWorld(World):
 
     def get_region(self, region_name: str) -> Region:
         return self.multiworld.get_region(region_name, self.player)
+
+    def get_filler_item_name(self) -> str:
+        return str(ITEM.TOY)
