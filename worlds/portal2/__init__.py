@@ -15,7 +15,6 @@ from .ItemNames import portal_gun_2
 
 from . import Components as components
 
-randomize_maps = True
 debug_mode = False
 
 class Portal2Settings(settings.Group):
@@ -206,7 +205,7 @@ class Portal2World(World):
         self.maps_in_use = list(map_complete_table.keys())
         # Cutscene levels option
         if self.options.cutscene_levels:
-            self.maps_in_use.update(cutscene_completion_table.keys())
+            self.maps_in_use.append(cutscene_completion_table.keys())
         
         # Remove maps that have been put in the Remove Locations option
         for location in self.options.remove_locations:
