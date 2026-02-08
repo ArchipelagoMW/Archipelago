@@ -120,6 +120,55 @@ class RampingTechCosts(Toggle):
     on: Automation (red) ranges to ~500 packs and Logistics (green) from ~500 to 1000 Science Packs"""
     display_name = "Ramping Tech Costs"
 
+    
+class TechLayerObscurity(Toggle):
+    """Hides technologies based on what science packs you have crafted.
+    on: If you have crafted Automation (red) science. You can only view technologies that require Automation (red) science.
+    off: Even if you have crafted only Automation (red) science. You can still see technologies that require Utility (yellow) science.
+    If information is Full, then this will also hide the hints.
+    Works alone or in combination with Depth Obscurity."""
+    display_name = "Tech Layer Obscurity"
+    default = True
+    disabled = False
+    enabled = True
+
+
+class TechDepthObscurity(Range):
+    """Hides technologies based on what you have researched.
+    The value determens how far you can see.
+    Tech tree example:
+       B   |
+       |   |
+    A  C   |
+    |\\ |  \\/
+    D  E
+    |
+    F
+    Only A is researched.
+    0: disabled. This feature shuts of at 0.
+    1: You only see sciences that are one step away from what you have researched so far. In the example above. This will be B, D and E. (Note, E still needs C to be researched. But C is not yet visable.)
+    2: You will see techs that are two steps away from all the tech you have researched. In the example above this is all techs.
+    If information is Full, then this will also hide the hints.
+    Works alone or in combination with Layer Obscurity."""
+    display_name = "Tech Depth Obscurity"
+    default = 2
+    option_disabled = 0
+    disabled = 0
+    option_blind = 1
+    range_start = 0
+    range_end = 100
+
+
+class TechCraftObscurity(Toggle):
+    """Hides all trigger techechnologies based on if you have the recipe onlocked.
+    Note. It does not check if you have all the items before. If you get fluid handeling and thus a pump. This will not check if you can also make the engine for said pump.
+    On: It hides all trigger tech untill you have a recipe that will unlock the item.
+    Off: It does not hide the trigger techs.
+    If information is Full, then this will also hide the hints."""
+    display_name = "Tech Craft Obscurity"
+    default = True
+    disabled = False
+    enabled = True
 
 class Silo(Choice):
     """Ingredients to craft rocket silo or auto-place if set to spawn."""
@@ -498,6 +547,9 @@ class FactorioOptions(PerGameCommonOptions):
     tech_cost_distribution: TechCostDistribution
     tech_cost_mix: TechCostMix
     ramping_tech_costs: RampingTechCosts
+    tech_layer_obscurity: TechLayerObscurity
+    tech_depth_obscurity: TechDepthObscurity
+    tech_craft_obscurity: TechCraftObscurity
     silo: Silo
     satellite: Satellite
     free_samples: FreeSamples
@@ -539,6 +591,9 @@ option_groups: list[OptionGroup] = [
             TechCostMix,
             RampingTechCosts,
             TechTreeInformation,
+            TechLayerObscurity,
+            TechDepthObscurity,
+            TechCraftObscurity
         ]
     ),
     OptionGroup(
