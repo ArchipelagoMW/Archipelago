@@ -22,6 +22,7 @@ from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
+from pathspec import PathSpec, GitIgnoreSpec
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
@@ -48,7 +49,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.6"
+__version__ = "0.6.7"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -385,6 +386,14 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
                 json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
+
+
+def read_apignore(filename: str | pathlib.Path) -> PathSpec | None:
+    try:
+        with open(filename) as ignore_file:
+            return GitIgnoreSpec.from_lines(ignore_file)
+    except FileNotFoundError:
+        return None
 
 
 def get_default_adjuster_settings(game_name: str) -> Namespace:
@@ -802,16 +811,19 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         except tkinter.TclError:
             return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
-        return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
-                                                  initialfile=suggest or None)
+        try:
+            return tkinter.filedialog.askopenfilename(
+                title=title,
+                filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
+                initialfile=suggest or None,
+            )
+        finally:
+            root.destroy()
 
 
 def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     logging.info(f"Opening file save dialog for {title}.")
-
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
 
     if is_linux:
         # prefer native dialog
@@ -819,12 +831,12 @@ def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         kdialog = which("kdialog")
         if kdialog:
             k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-            return run(kdialog, f"--title={title}", "--getsavefilename", suggest or ".", k_filters)
+            return _run_for_stdout(kdialog, f"--title={title}", "--getsavefilename", suggest or ".", k_filters)
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
             selection = (f"--filename={suggest}",) if suggest else ()
-            return run(zenity, f"--title={title}", "--file-selection", "--save", *z_filters, *selection)
+            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", "--save", *z_filters, *selection)
 
     # fall back to tk
     try:
@@ -847,8 +859,14 @@ def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         except tkinter.TclError:
             return None  # GUI not available. None is the same as a user clicking "cancel"
         root.withdraw()
-        return tkinter.filedialog.asksaveasfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
-                                                    initialfile=suggest or None)
+        try:
+            return tkinter.filedialog.asksaveasfilename(
+                title=title,
+                filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
+                initialfile=suggest or None,
+            )
+        finally:
+            root.destroy()
 
 
 def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
