@@ -236,6 +236,12 @@
         { "item": "Mystic Nymph: Scout Mode" },
         { "anyOf": [ { "item": "Grapple" }, { "item": "Cloud Leap" } ] }
     ] },
+    // you may need to nymph hack the door from below, then fall through that door from above to reach the ULLE chest
+    { "from": "AFD - Lower Left Exit", "to": "AFD - Under Lower Left Exit", "requires": [
+        { "item": "Mystic Nymph: Scout Mode" }, // nymph hack the door from below
+        { "region": "AFD - Lower Level" } // this chest platform is plenty close to the hack point
+        // backtrack to Lower Left Exit, fall down, hold left, grab the rope, jump to ULLE platform; all itemless
+    ] },
     {
         "from": "AFD - Lower Left Exit", "to": "AFD - Climb to Root Node",
         "requires": [ { "anyOf": [{ "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" }] } ],
