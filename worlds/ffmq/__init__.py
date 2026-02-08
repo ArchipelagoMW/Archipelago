@@ -100,7 +100,11 @@ class FFMQWorld(World):
                 if hasattr(self.options, key):
                     getattr(self.options, key).value = value
                 elif key == "rooms":
-                    self.rooms = msgpack.unpackb(zlib.decompress(base64.b64decode(value)), raw=False)
+                    # Temporary handling of apworld generations without msgpack
+                    if type(value) is list:
+                        self.rooms = value
+                    else:
+                        self.rooms = msgpack.unpackb(zlib.decompress(base64.b64decode(value)), raw=False)
 
     @classmethod
     def stage_generate_early(cls, multiworld):
