@@ -148,7 +148,8 @@ class EVNWorld(World):
                         #associated_location = self.multiworld.get_location(target_name, self.player)
                         #associated_location = self.get_location(target_name)
                         associated_location = locations.ev_location_bank[target_id]
-                        new_id = associated_location.address
+                        #new_id = self.location_id_to_name[target_id].address if target_id in self.location_id_to_name else None
+                        new_id = associated_location["address"]
                         if (new_id is not None):
                             if (current_val is not None) and (current_val != ""):
                                 output_file_string += f'"b{new_id} {current_val}"\t'  # No logic needed for this one
@@ -187,8 +188,8 @@ class EVNWorld(World):
                     # We need to inject our special bit here as well, so the client can know when to unlock the ship.
                     target_id = items.type_offset["ship"] + ship
                     if target_id in items.ev_item_bank:
-                        associated_item = items.ev_item_bank[target_id]
-                        new_id = associated_item.code
+                        #associated_item = items.ev_item_bank[target_id]
+                        new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
                         if (new_id is not None):
                             if (current_val is not None) and (current_val != ""):
                                 output_file_string += f'"b{new_id} & ({current_val})"\t'  # !Logic needed for this one!
