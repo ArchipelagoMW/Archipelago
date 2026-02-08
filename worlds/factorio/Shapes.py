@@ -242,38 +242,17 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
             for choice in choices:
                 prerequisites[choice] = {source}
             current_choices.extendleft(choices)
-                        
+
     elif layout == TechTreeLayout.option_irregular:
         
         #Made by: CosmicWolf @brattycosmicwolf
         #I am going by `sort(key=_sorter)` and then branching the tech tree out. So no issues should arrise AFAIK with getting things stuck.
         #This is the same method also used by the other tech tree methods.
 
-        locations.sort(key=_sorter, reverse=True)
-        current_choices = locations[-5:] # remove the first 5 techs from my actions
-        locations = locations[:-5]
-        while locations: #Loop through all remaining techs
-            victim = locations.pop()
-            prerequisites[victim] = set()
-            rand_num = int(str(victim).split("-")[2]) #use the last number of the tech as random number. Not sure if it is random, but oh well.Expand commentComment on line R257ResolvedCode has comments. Press enter to view.
-            while True:
-                prerequisites[victim].add(current_choices[int(rand_num % len(current_choices))]) #Take one of the already processed techs as its prerequisite.
-
-                rand_num /= 2 # Make a new rand num.
-                if (rand_num % 1 != 0): #If it is a whole number continue on. If it is a fraction break.
-                    break #this gives 50% chance for each added prerequisite.
-
-            current_choices.append(victim)
-    elif layout == 100:
-
         minimum_dependencies = 1 #these can be propper options and/or settings.
-        maximum_dependencies = 10 + 1 #The +1 is to ensure all values are equally likely.    Long explanation; if I want a number [1,10] and I only rolled a float with [1,10] and thn round. The 1 would only be rolled if the roll is [1, 1.5>. Which is only half a number compared to the random range of 2; [1.5, 2,5>. Technically it is possible that because of rounding errors the highest value becomes this max+1. Chances of this happening are so low I am going to leave it as an easter egg.
-        even_distribution = True #these can be propper options and/or settings. Can/should be combined with the one below.
-        weighted_distribution = 10 #these can be propper options and/or settings.
-        
-        #Made by: CosmicWolf @brattycosmicwolf
-        #I am going by `sort(key=_sorter)` and then branching the tech tree out. So no issues should arrise AFAIK with getting things stuck.
-        #This is the same method also used by the other tech tree methods.
+        maximum_dependencies = 10 + 1 #The +1 is to ensure all values are equally likely.    Long explanation; if I want a number [1,10] and I only rolled a float with [1,10] and then round. The 1 would only be rolled if the roll is [1, 1.5>. Which is only half a number compared to the random range of 2; [1.5, 2,5>. Technically it is possible that because of rounding errors the highest value becomes this max+1. Chances of this happening are so low I am going to leave it as an easter egg.
+        even_distribution = False #these can be propper options and/or settings. Can/should be combined with the one below.
+        weighted_distribution = 1 #these can be propper options and/or settings.
 
         all_pre: Dict["FactorioScienceLocation", Set["FactorioScienceLocation"]] = {} #will be used to keep track of ALL previous dependencies. In order to ensure that A->B->C will not also get A->C. Since A is already required by B. Also the other way around A leading to both B and C and then preventing C from also getting B.
         
@@ -291,9 +270,9 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
             else:
                 rand_num = int( world.random.triangular(minimum_dependencies, maximum_dependencies, weighted_distribution))
 
-            while rand_num >=1:
+            while rand_num >=1 and len(current_choices) > 0:
                 rand_num -= 1
-                dependency = current_choices[world.random.randomint(0, len(current_choices))] #pick one of the already established techs.
+                dependency = current_choices[world.random.randint(0, len(current_choices)-1)] #pick one of the already established techs.
                 prerequisites[victim].add(dependency) #Take one of the already processed techs as its prerequisite.
 
                 all_pre[victim].add(dependency)
@@ -303,7 +282,7 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
                 for item in current_choices:
                     if item in all_pre[victim]: #remove choices if it already in the victims tree: A -> dependency -> Victim remove A from choices.
                         current_choices.remove(item)
-                    elif dependency = all_pre[item]: #remove a choice if the victim already has a pre of a dependency. dependency -> A and dependency -> victim. Remove A from the list of choices. 
+                    elif item in all_pre and dependency in all_pre[item]: #remove a choice if the victim already has a pre of a dependency. dependency -> A and dependency -> victim. Remove A from the list of choices. 
                         current_choices.remove(item)
 
             already_done.append(victim)
