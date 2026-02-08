@@ -1,6 +1,6 @@
 {
     "game": "The Void Rains Upon Her Heart",
     "minimum_ap_version": "0.6.6",
-    "world_version": "0.0.0",
+    "world_version": "0.1.0",
     "authors": ["NulvWorks","Konoko","commanderdot"]
 }
