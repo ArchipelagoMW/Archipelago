@@ -207,10 +207,10 @@ def create_all_items(world: EVNWorld) -> None:
 
     # copy might be expensive, but need to because we'll add duplicates due to filler later
     #itempool = ev_item_bank.values().__copy__()
-    #itempool = []
-    # for item_id in ev_item_bank:
-    #     if (item_id < 9900 or item_id >= 9906): # don't add credits to regular itempool, since they're just filler. We'll add them as needed in the filler section later.
-    #         itempool.append(ev_item_bank[item_id])
+    itempool = []
+    for item_id in ev_item_bank:
+        if ((item_id < 9900 or item_id >= 9906) and item_id != STRING_COMPLETE_BIT): # don't add credits to regular itempool, since they're just filler. We'll add them as needed in the filler section later.
+            itempool.append(ev_item_bank[item_id])
 
     # TESTING: Just add a few to match with our testing locations for now, and then we can expand the itempool later.
     # itempool = [
@@ -227,14 +227,14 @@ def create_all_items(world: EVNWorld) -> None:
     # for item in item_name_to_id.keys():
     #     logger.info(f"item_name_to_id key: {item}, value: {item_name_to_id[item]}")
 
-    itempool = [
-        world.create_item("Fed Patrol Boat215"),
-        world.create_item("Pirate Starbridge148"),
-        world.create_item("Rebel Dragon180"),
-        world.create_item("Vell-os Arrow382"),
-        world.create_item("Unrelenting374"),
-        world.create_item("Abomination384"),
-    ]
+    # itempool = [
+    #     world.create_item("Fed Patrol Boat215"),
+    #     world.create_item("Pirate Starbridge148"),
+    #     world.create_item("Rebel Dragon180"),
+    #     world.create_item("Vell-os Arrow382"),
+    #     world.create_item("Unrelenting374"),
+    #     world.create_item("Abomination384"),
+    # ]
 
     # Some items may only exist if the player enables certain options.
     # In our case, If the hammer option is enabled, the sixth item is the Hammer.

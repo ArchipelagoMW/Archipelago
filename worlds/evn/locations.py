@@ -25,25 +25,26 @@ GAME_NAME = "EV Nova"
 #   purchase items
 #   first explore of a sys
 #   _
-LOCATION_NAME_TO_ID = {
-    # Location IDs don't need to be sequential, as long as they're unique and greater than 0.
-    # "Example_Mission": 10,
-    # "Fed Mission 1": 11,
-    # "Fed Mission Final": 12,
-    "Delivery to Earth; Vellos1-128": 128,
-    "Visit Vell-os Homeworld; Vellos2-129": 129,
-    "Head to Sol;Tutorial 001-251": 251,
-    "Trade between Earth and Port Kane;Tutorial 002-630": 630, # Do *not* lock progression behind this mission
-    "United Shipping Intro;United Shipping1-504": 504,
-    "Un. Shipping Delivery;United Shipping1a-505": 505,
-    "Take Polaris Home;Rebel I22 LAST-354": 354,
-    "Take Llyrell to Korell; Vellos31 LAST-417": 417,
-    "Take Krane to Earth;Fed43 LAST-474": 474,
-    "A Parting Gift;Fed26 (forced) LAST-596": 596,
-    "Return to Heraan;Auroran 029 LAST-686": 686,
-    "Destroy McGowan;Pirate 011 LAST-712": 712,
-    "Return to Ar'Za Iusia;Polaris 46-887": 887,
-}
+# FOR TESTING
+# LOCATION_NAME_TO_ID = {
+#     # Location IDs don't need to be sequential, as long as they're unique and greater than 0.
+#     # "Example_Mission": 10,
+#     # "Fed Mission 1": 11,
+#     # "Fed Mission Final": 12,
+#     "Delivery to Earth; Vellos1-128": 128,
+#     "Visit Vell-os Homeworld; Vellos2-129": 129,
+#     "Head to Sol;Tutorial 001-251": 251,
+#     "Trade between Earth and Port Kane;Tutorial 002-630": 630, # Do *not* lock progression behind this mission
+#     "United Shipping Intro;United Shipping1-504": 504,
+#     "Un. Shipping Delivery;United Shipping1a-505": 505,
+#     "Take Polaris Home;Rebel I22 LAST-354": 354,
+#     "Take Llyrell to Korell; Vellos31 LAST-417": 417,
+#     "Take Krane to Earth;Fed43 LAST-474": 474,
+#     "A Parting Gift;Fed26 (forced) LAST-596": 596,
+#     "Return to Heraan;Auroran 029 LAST-686": 686,
+#     "Destroy McGowan;Pirate 011 LAST-712": 712,
+#     "Return to Ar'Za Iusia;Polaris 46-887": 887,
+# }
 
 # to add other checks, such as outfits, give them their own offset and range.
 loc_type_offset: Dict[str, int] = {
@@ -185,18 +186,34 @@ def create_regular_locations(world: EVNWorld) -> None:
     #         )
 
     # TODO: replace with looping through out mission bank
-    for loc_name in LOCATION_NAME_TO_ID.keys():
+    #for loc_name in LOCATION_NAME_TO_ID.keys():
+        # for evregion in world.get_regions():
+        #     if can_accept_location(evregion, loc_name):
+        #         evregion.add_locations(
+        #             get_location_names_with_ids(world, [loc_name])
+        #             , EVNLocation
+        #         )
+        #         break
+        # # If found above, then it should break out back to the top of this loop right?
+        # # So if we are here, we can assume that it is not a universe specific location and we can add it to universe.
+        # universe.add_locations(
+        #     get_location_names_with_ids(world, [loc_name])
+        #     , EVNLocation
+        # )
+
+
+    for key, loc in ev_location_bank.items():
         for evregion in world.get_regions():
-            if can_accept_location(evregion, loc_name):
+            if can_accept_location(evregion, loc.name):
                 evregion.add_locations(
-                    get_location_names_with_ids(world, [loc_name])
+                    get_location_names_with_ids(world, [loc.name])
                     , EVNLocation
                 )
                 break
         # If found above, then it should break out back to the top of this loop right?
         # So if we are here, we can assume that it is not a universe specific location and we can add it to universe.
         universe.add_locations(
-            get_location_names_with_ids(world, [loc_name])
+            get_location_names_with_ids(world, [loc.name])
             , EVNLocation
         )
 

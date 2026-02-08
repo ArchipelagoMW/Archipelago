@@ -24,6 +24,10 @@ REGION_KEYS = {
     "Universe" : [],
     "Fed String" : ["Fed"], # Fed story mission string
     "Vellos" : ["Vellos", "Vell-os"],
+    "Polaris" : ["Polaris"],
+    "Auroran" : ["Auroran"],
+    "Rebel" : ["Rebel"],
+    "Pirate" : ["Pirate"],
 }
 
 ### Region subclass helper functions ###
