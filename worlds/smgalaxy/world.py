@@ -45,7 +45,7 @@ class SMGWorld(World):
     def create_items(self):
         # creates the green stars in each players itempool
         self.multiworld.itempool += [self.create_item("Green Star") for i in range(0,3)]
-        self.multiworld.itempool += [self.create_item("Progressive Grand Star") for i in range(0,5)]       
+        self.multiworld.itempool += [self.create_item("Grand Star") for i in range(0,5)]
         self.multiworld.get_location("B: The Fate of the Universe", self.player).place_locked_item(self.create_item("Peach"))
         
         # check to see what setting enable purple coin stars is on to see how many stars to create 

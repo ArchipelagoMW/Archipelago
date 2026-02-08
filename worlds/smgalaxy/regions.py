@@ -1,22 +1,19 @@
-from typing import NamedTuple, Optional
+from typing import NamedTuple, Optional, Callable
 from BaseClasses import Region, Entrance, MultiWorld
 
 from .Constants.Names import region_names as regname
 from . import SMGWorld
 from .Options import SMGOptions
-from .locations import SMGLocation, location_table, locGE_table, locHH_table, \
-                   locSJ_table, locBR_table, locBB_table, \
-                   locGG_table, locFF_table, locDDune_table, locG_table, \
-                   locGL_table, locSS_table, locTT_table, \
-                   locDD_table, locDN_table, locMM_table, \
-                   locbosses_table, locHL_table, locspecialstages_table, \
-                   locPC_table
+from .locations import SMGLocation, locPC_table, base_stars_locations, SMGLocationData
+from ..generic.Rules import add_rule
+
 
 class SMGRegionData(NamedTuple):
     type: str  # type of randomization for GER
     entrance_regions: Optional[list[str]] # Regions with entrances to this one
     exit_regions: Optional[list[str]] # Regions with entrances from this one
     ger_exits: Optional[list[str]] # connected exit regions that can be swapped during Entrance Rando
+    default_access: Optional[dict[str, int]]
 
 class SMGRegion(Region):
     game: str = "Super Mario Galaxy"
@@ -27,157 +24,102 @@ class SMGRegion(Region):
         self.region_data = region_data
 
 region_list: dict[str, SMGRegionData] = {
-    regname.SHIP: SMGRegionData("Hub", [],
-                                [regname.TERRACE, regname.LIBRARY, regname.KITCHEN, regname.GARDEN,
-                                 regname.ENGINE, regname.BEDROOM, regname.FOUNTAIN],
-                                []),
-    regname.TERRACE: SMGRegionData("Hub", [], [], []),
-    regname.FOUNTAIN: SMGRegionData("Hub", [], [], []),
-    regname.ENGINE: SMGRegionData("Hub", [], [], []),
-    regname.KITCHEN: SMGRegionData("Hub", [], [], []),
-    regname.BEDROOM: SMGRegionData("Hub",[], [], []),
-    regname.GARDEN: SMGRegionData("Hub", [], [], []),
-    regname.LIBRARY: SMGRegionData("Hub", [], [], []),
-
+    regname.SHIP: SMGRegionData("Main", [],
+                                [],
+                                [regname.TERRACE, regname.LIBRARY, regname.KITCHEN, regname.GARDEN, regname.GATEWAY,
+                                 regname.ENGINE, regname.BEDROOM, regname.FOUNTAIN, regname.COTU, regname.SWEETSWEET,
+                                 regname.SLINGPOD, regname.DRIPDROP, regname.BIGMOUTH, regname.SANDSPIRAL,
+                                 regname.SNOWCAP, regname.BOOBONE, regname.ROLLINGGIZ, regname.BUBBLEBLAST,
+                                 regname.LOOPDEESWOOP, regname.FINALE], {}),
+    regname.TERRACE: SMGRegionData("Dome", [regname.SHIP], [],
+                                   [regname.GOODEGG, regname.HONEYHIVE, regname.LOOPDEELOOP, regname.FLIPSWITCH,
+                                    regname.BOWJR1],
+                                   {}),
+    regname.FOUNTAIN: SMGRegionData("Dome", [regname.SHIP], [],
+                                    [regname.SPACEJUNK, regname.ROLLINGGREEN, regname.BATTLEROCK, regname.HURRYSCUR,
+                                     regname.BOWSER1],
+                                    {"Grand Star": 1}),
+    regname.ENGINE: SMGRegionData("Dome", [regname.SHIP], [],
+                                  [regname.GOLDLEAF, regname.SEASLIDE, regname.TOYTIME, regname.BONEFIN,
+                                   regname.BOWJR3],
+                                    {"Grand Star": 4}),
+    regname.KITCHEN: SMGRegionData("Dome", [regname.SHIP], [],
+                                   [regname.BEACHBOWL, regname.BUBBLEBREEZE, regname.GHOSTLY, regname.BUOY,
+                                    regname.BOWJR2],
+                                    {"Grand Star": 2}),
+    regname.BEDROOM: SMGRegionData("Dome",[regname.SHIP], [],
+                                   [regname.GUSTY, regname.FREEZEFLAME, regname.DUSTY, regname.HONEYCLIMB,
+                                    regname.BOWSER2],
+                                    {"Grand Star": 3}),
+    regname.GARDEN: SMGRegionData("Dome", [regname.SHIP], [],
+                                  [regname.DEEPDARK, regname.DREADNOUGHT, regname.MATTER, regname.MELTY],
+                                    {"Grand Star": 5}),
+    regname.LIBRARY: SMGRegionData("Dome", [regname.SHIP], [], [], {}),
+    regname.COTU: SMGRegionData("Dome", [regname.SHIP], [], [regname.BOWSER3], {"Grand Star": 5, "Power Star": 60}),
+    regname.GATEWAY: SMGRegionData("Special", [regname.SHIP], [], [], {}),
+    regname.SWEETSWEET: SMGRegionData("Special", [regname.SHIP], [], [], {}),
+    regname.SLINGPOD: SMGRegionData("Special", [regname.SHIP], [], [], {}),
+    regname.DRIPDROP: SMGRegionData("Special", [regname.SHIP], [], [], {}),
+    regname.BIGMOUTH: SMGRegionData("Special", [regname.SHIP], [], [], {}),
+    regname.SANDSPIRAL: SMGRegionData("Special", [regname.SHIP], [], [], {}),
+    regname.SNOWCAP: SMGRegionData("Special", [regname.SHIP], [], [], {}),
+    regname.BOOBONE: SMGRegionData("Special", [regname.SHIP], [], [], {}),
+    regname.ROLLINGGIZ: SMGRegionData("Special", [regname.SHIP], [], [], {"Green Star": 1}),
+    regname.LOOPDEESWOOP: SMGRegionData("Special", [regname.SHIP], [], [], {"Green Star": 1}),
+    regname.BUBBLEBLAST: SMGRegionData("Special", [regname.SHIP], [], [], {"Green Star": 1}),
+    regname.FINALE: SMGRegionData("Special", [regname.SHIP], [], [], {}),
+    regname.BOWJR1: SMGRegionData("Boss", [regname.TERRACE], [], [], {}),
+    regname.BOWJR2: SMGRegionData("Boss", [regname.KITCHEN], [], [], {}),
+    regname.BOWJR3: SMGRegionData("Boss", [regname.ENGINE], [], [], {}),
+    regname.BOWSER1: SMGRegionData("Boss", [regname.FOUNTAIN], [], [], {}),
+    regname.BOWSER2: SMGRegionData("Boss", [regname.BEDROOM], [], [], {}),
+    regname.BOWSER3: SMGRegionData("Goal", [regname.COTU], [], [], {}),
+    regname.GOODEGG: SMGRegionData("Major", [regname.TERRACE], [], [], {}),
+    regname.HONEYHIVE: SMGRegionData("Major", [regname.TERRACE], [], [], {}),
+    regname.SPACEJUNK: SMGRegionData("Major", [regname.FOUNTAIN], [], [], {}),
+    regname.BATTLEROCK: SMGRegionData("Major", [regname.FOUNTAIN], [], [], {}),
+    regname.BEACHBOWL: SMGRegionData("Major", [regname.KITCHEN], [], [], {}),
+    regname.GHOSTLY: SMGRegionData("Major", [regname.KITCHEN], [], [], {}),
+    regname.GUSTY: SMGRegionData("Major", [regname.BEDROOM], [], [], {}),
+    regname.FREEZEFLAME: SMGRegionData("Major", [regname.BEDROOM], [], [], {}),
+    regname.DUSTY: SMGRegionData("Major", [regname.BEDROOM], [], [], {}),
+    regname.GOLDLEAF: SMGRegionData("Major", [regname.ENGINE], [], [], {}),
+    regname.SEASLIDE: SMGRegionData("Major", [regname.ENGINE], [], [], {}),
+    regname.TOYTIME: SMGRegionData("Major", [regname.ENGINE], [], [], {}),
+    regname.DEEPDARK: SMGRegionData("Major", [regname.GARDEN], [], [], {}),
+    regname.DREADNOUGHT: SMGRegionData("Major", [regname.GARDEN], [], [], {}),
+    regname.MELTY: SMGRegionData("Major", [regname.GARDEN], [], [], {}),
+    regname.LOOPDEELOOP: SMGRegionData("Minor", [regname.TERRACE], [], [], {}),
+    regname.FLIPSWITCH: SMGRegionData("Minor", [regname.TERRACE], [], [], {}),
+    regname.ROLLINGGREEN: SMGRegionData("Minor", [regname.FOUNTAIN], [], [], {}),
+    regname.HURRYSCUR: SMGRegionData("Minor", [regname.FOUNTAIN], [], [], {}),
+    regname.BUBBLEBREEZE: SMGRegionData("Minor", [regname.KITCHEN], [], [], {}),
+    regname.BUOY: SMGRegionData("Minor", [regname.KITCHEN], [], [], {}),
+    regname.HONEYCLIMB: SMGRegionData("Minor", [regname.BEDROOM], [], [], {}),
+    regname.BONEFIN: SMGRegionData("Minor", [regname.ENGINE], [], [], {}),
+    regname.MATTER: SMGRegionData("Minor", [regname.GARDEN], [], [], {}),
 }
 
 
 def create_regions(world: SMGWorld, player: int):
     for region_name in region_list.keys():
         world.multiworld.regions.append(SMGRegion(region_name, region_list[region_name], world.player, world.multiworld))
-    #defines the special stages
-    regspecialstages = Region("Ship", player, world.multiworld, "Ship")
-    create_default_locs(regspecialstages, locspecialstages_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_main_game_only:
-       regspecialstages.locations.append(SMGLocation(player, "GG: Gateway's Purple coins", regspecialstages))
-    world.multiworld.regions.append(regspecialstages)
-    # defines the hungry lumas region
-    regHL = create_region("Hungry Lumas", world)
-    create_default_locs(regHL, locHL_table, player)    
-    world.multiworld.regions.append(regHL)
 
-    regPC = create_region("Purple Coins", world)
-    create_default_locs(regPC, locPC_table, player)
-    world.multiworld.regions.append(regPC)
-    
-    # defines the bosses region
-    regbosses = create_region("Bosses", world)
-    create_default_locs(regbosses, locbosses_table, player)
-    world.multiworld.regions.append(regbosses)
-    # defines the good egg galaxy region
-    regGE = create_region("Good Egg", world)
-    create_default_locs(regGE, locGE_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regGE.locations.append(SMGLocation(player, "GE: Purple Coin Omelet",  regGE))
-    world.multiworld.regions.append(regGE)
-    # defines the honeyhive galaxey region
-    regHH = create_region("Honeyhive", world)
-    create_default_locs(regHH, locHH_table, player) 
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regHH.locations.append(SMGLocation(player, "HH: The Honeyhive's Purple Coins",  regHH))
-    world.multiworld.regions.append(regHH)
-    # defines the Space Junk galaxy region
-    regSJ = create_region("Space Junk", world)
-    create_default_locs(regSJ, locSJ_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regHH.locations.append(SMGLocation(player, "SJ: Purple Coin Spacewalk",  regSJ))
-    world.multiworld.regions.append(regSJ)
-    # defines the Battlerock galaxy
-    regBR = create_region("Battlerock", world)
-    create_default_locs(regBR, locBR_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regBR.locations.append(SMGLocation(player, "BR: Purple Coins on the Battlerock",  regBR))
-    world.multiworld.regions.append(regBR)
-    # defines the Beach Bowl galaxy
-    regBB = create_region("Beach Bowl", world)
-    create_default_locs(regBB, locBB_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regBB.locations.append(SMGLocation(player, "BB: Beachcombing for Purple Coins",  regBB))
-    world.multiworld.regions.append(regBB)
-    # define Ghostly galaxy
-    regG = create_region("Ghostly", world)
-    create_default_locs(regG, locG_table, player)   
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regG.locations.append(SMGLocation(player, "G: Purple Coins in the Bone Pen",  regG))
-    world.multiworld.regions.append(regG)
-    # defines the Gusty Gardens galaxy 
-    regGG = create_region("Gusty Gardens", world)
-    create_default_locs(regGG, locGG_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regGG.locations.append(SMGLocation(player, "GG: Purple Coins on the Puzzle Cube",  regGG))
-    world.multiworld.regions.append(regGG)
-    # defines Freezeflame galaxy
-    regFF = create_region("Freezeflame", world)
-    create_default_locs(regFF, locFF_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regGG.locations.append(SMGLocation(player, "FF: Purple Coins on the Summit",  regFF))
-    world.multiworld.regions.append(regFF)
-    # defines DustyDune Galaxy
-    regDDune = create_region("Dusty Dune", world)
-    create_default_locs(regDDune, locDDune_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regDDune.locations.append(SMGLocation(player, "DDune: Purple Coin in the Desert",  regDDune))
-    world.multiworld.regions.append(regDDune)
-    # defines golden leaf galaxy
-    regGL = create_region("Gold Leaf", world)
-    create_default_locs(regGL, locGL_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regGL.locations.append(SMGLocation(player, "GL: Purple Coins in the Woods",  regGL))
-    world.multiworld.regions.append(regGL)
-    # defines the Sea slide galaxy
-    regSS = create_region("Sea Slide", world)
-    create_default_locs(regSS, locSS_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regSS.locations.append(SMGLocation(player, "SS: Purple Coins by the Seaside", regSS))
-    world.multiworld.regions.append(regSS)
-    # defines toy time galaxy 
-    regTT = create_region("Toy Time", world)
-    create_default_locs(regTT, locTT_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regSS.locations.append(SMGLocation(player, "TT: Luigi's Purple Coins", regSS))
-    world.multiworld.regions.append(regTT)
-    # defines deep dark galaxy
-    regDD = create_region("Deep Dark", world)
-    create_default_locs(regDD, locDD_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regDD.locations.append(SMGLocation(player, "DD: Plunder the Purple Coins", regDD))
-    world.multiworld.regions.append(regDD)
-    # defines Dreadnaught galaxy
-    regDN = create_region("Dreadnaught", world)
-    create_default_locs(regDN, locDN_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regDN.locations.append(SMGLocation(player, "DN: Battlestation's Purple Coins", regDN))
-    world.multiworld.regions.append(regDN)
-    # defines Melty Molten galaxy
-    regMM = create_region("Melty Molten", world)
-    create_default_locs(regMM, locMM_table, player)
-    if world.options.enable_purple_coin_stars == world.options.enable_purple_coin_stars.option_all:
-        regMM.locations.append(SMGLocation(player, "MM: Red-Hot Purple Coins", regMM))
-    world.multiworld.regions.append(regMM)
-    
-    #defines the fountain
-    regFountain = create_region("Fountain", world)
-    world.multiworld.regions.append(regFountain)
-    #defines the kitchen
-    regKitchen = create_region("Kitchen", world)
-    world.multiworld.regions.append(regKitchen)
-    #defines the bedroom
-    regBedroom = create_region("Bedroom", world)
-    world.multiworld.regions.append(regBedroom)
-    #defines the Engine Room
-    regEngineRoom = create_region("Engine Room", world)
-    world.multiworld.regions.append(regEngineRoom)
-    #defines the garden
-    regGarden = create_region("Garden", world)
-    world.multiworld.regions.append(regGarden)
+    create_locations(base_stars_locations, world)
 
-def connect_regions(world: SMGWorld, player: int, source: str, target: str, rule=None):
+    if world.options.enable_purple_coin_stars.value == 0:
+        gateway_purple: dict[str, SMGLocationData] = {"GG: Gateway's Purple coins": locPC_table["GG: Gateway's Purple coins"]}
+        create_locations(gateway_purple, world)
+    elif world.options.enable_purple_coin_stars.value == 1:
+        create_locations(locPC_table, world)
+
+def connect_regions(world: SMGWorld, player: int, source: str, target: str, name: str, rule=None):
     sourceRegion = world.get_region(source)
     targetRegion = world.get_region(target)
 
-    connection = Entrance(player, '', sourceRegion)
+    connection = Entrance(player, name, sourceRegion)
     if rule:
-        connection.access_rule = rule
+        add_rule(connection, rule, "and")
 
     sourceRegion.exits.append(connection)
     connection.connect(targetRegion)
@@ -185,7 +127,14 @@ def connect_regions(world: SMGWorld, player: int, source: str, target: str, rule
 def create_region(name: str, world: SMGWorld) -> Region:
     return Region(name, world.player, world.multiworld, name)
 
-def create_default_locs(reg: Region, locs, player):
-    reg_names = [name for name, id in locs.items()]
-    reg.locations += [SMGLocation(player, loc_name, reg) for loc_name in locs]
+def create_locations(locs, world: SMGWorld):
+    for name, data in locs.items():
+        reg = world.get_region(data.region)
+        location = SMGLocation(world.player, name, reg)
+        if data.default_access:
+            for item, count in data.default_access:
+                rule = lambda state,i=item, c=count: state.has(i, world.player, count)
+                add_rule(location, rule, "and")
+
+        reg.locations += [location]
 
