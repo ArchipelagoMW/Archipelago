@@ -32,6 +32,7 @@ def set_all_entrance_rules(world: APQuestWorld) -> None:
     # First, let's handle the transition from the overworld to the bottom right room,
     # which requires slashing a bush with the Sword.
     # For this, we need a rule that says "player has a Sword".
+    # We can use a "Has"-type rule from the rule_builder module for this.
     can_destroy_bush = Has("Sword")
 
     # Now we can set our "can_destroy_bush" rule to the entrance which requires slashing a bush to clear the path.
