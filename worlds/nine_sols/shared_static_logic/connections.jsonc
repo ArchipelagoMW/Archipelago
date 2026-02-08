@@ -641,9 +641,10 @@
         "requires": [ { "anyOf": [
             { "item": "Grapple" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ],
-        "medium_requires": [ { "anyOf": [
-            { "item": "Trick - Bow Hover" }, { "item": "Charged Strike" } // or swift runner, once that's an item
-        ] } ]
+        "medium_requires": [] // just swift runner and single jump for now
+        // in the future with an SR item, this will be { "anyOf": [
+        //     { "item": "Trick - Bow Hover" }, { "item": "Charged Strike" }, { "item": "Swift Runner" }
+        // ] }
     }, // LS can't help
     {
         "from": "LYR - Root Node", "to": "LYR - Left Exit",
