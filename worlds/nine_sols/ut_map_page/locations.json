@@ -1203,7 +1203,7 @@
             },
             {
                 "name": "Roof Above Root Node", "sections": [{ "name": "Factory (GH): Roof Above Root Node" }],
-                "map_locations": [{ "map": "factory_great_hall", "x": 435, "y": 55 }]
+                "map_locations": [{ "map": "factory_great_hall", "x": 415, "y": 55 }]
             },
             {
                 "name": "Near Right Elevator", "sections": [{ "name": "Factory (GH): Near Right Elevator" }],
