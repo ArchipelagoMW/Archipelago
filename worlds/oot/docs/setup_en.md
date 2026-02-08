@@ -77,7 +77,7 @@ If the `.apz5` file type is not associated with the Archipelago client (often th
 3. If this is your first time patching, you will be prompted to locate your vanilla ROM.
 4. A patched `.z64` file will be created in the same place and with the same name as the patch file.
 5. On your first time opening a patch with BizHawk Client, you will also be asked to locate `EmuHawk.exe` in your
-BizHawk install.
+   BizHawk install.
 
 ### Connect to the Multiserver
 
