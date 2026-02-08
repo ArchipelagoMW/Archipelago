@@ -143,6 +143,9 @@ class Rule(Generic[TWorld]):
                 return And(self, *other.children, options=other.options)
         return And(self, other)
 
+    def __rand__(self, other: "Rule[Any] | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
+        return self.__and__(other)
+
     def __or__(self, other: "Rule[Any] | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
         """Combines two rules or a rule and an option filter into an Or rule"""
         if isinstance(other, OptionFilter):
@@ -159,6 +162,9 @@ class Rule(Generic[TWorld]):
             if isinstance(other, Or):
                 return Or(self, *other.children, options=self.options)
         return Or(self, other)
+
+    def __ror__(self, other: "Rule[Any] | Iterable[OptionFilter] | OptionFilter") -> "Rule[TWorld]":
+        return self.__or__(other)
 
     def __bool__(self) -> Never:
         """Safeguard to prevent devs from mistakenly doing `rule1 and rule2` and getting the wrong result"""

@@ -365,6 +365,14 @@ class TestFilteredResolution(RuleBuilderTestCase):
             (Has("A") | Has("B")) | OptionFilter(ToggleOption, 1),
             Or(Or(Has("A"), Has("B")), True_(options=[OptionFilter(ToggleOption, 1)])),
         ),
+        (
+            OptionFilter(ToggleOption, 1) & (Has("A") | Has("B")),
+            Filtered(Or(Has("A"), Has("B")), options=[OptionFilter(ToggleOption, 1)]),
+        ),
+        (
+            [OptionFilter(ToggleOption, 1)] | (Has("A") | Has("B")),
+            Or(Or(Has("A"), Has("B")), True_(options=[OptionFilter(ToggleOption, 1)])),
+        ),
     )
 )
 class TestComposition(unittest.TestCase):
