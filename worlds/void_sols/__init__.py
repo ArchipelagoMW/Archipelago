@@ -10,6 +10,7 @@ from .Names import ItemName, LocationName
 
 class VoidSolsWeb(WebWorld):
     theme = "party"
+    bug_report_page = "mailto:support@finitereflection.com"
     setup = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up Void Sols"
