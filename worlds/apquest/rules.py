@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from rule_builder.options import OptionFilter
 from rule_builder.rules import Has, HasAll, Rule
+
+from .options import HardMode
 
 if TYPE_CHECKING:
     from .world import APQuestWorld
@@ -95,16 +98,25 @@ def set_all_location_rules(world: APQuestWorld) -> None:
 
     # For the final boss, we also need to chain multiple conditions.
     # First of all, you always need a Sword and a Shield.
-    # Previously, we used the | and & operators to chain rules.
+    # So far, we used the | and & operators to chain "Has" rules.
     # Instead, we can also use HasAny for an or-chain of items, or HasAll for an and-chain of items.
-    can_defeat_final_boss: Rule = HasAll("Sword", "Shield")
+    has_sword_and_shield: Rule = HasAll("Sword", "Shield")
 
-    if world.options.hard_mode:
-        # In hard mode, the player also needs both Health Upgrades to survive long enough to defeat the boss.
-        # For this, we can use the optional "count" parameter for "Has".
-        # We'll also use some additional Python magic here and use the &= operator for brevity.
-        can_defeat_final_boss &= Has("Health Upgrade", count=2)
+    # In hard mode, the player also needs both Health Upgrades to survive long enough to defeat the boss.
+    # For this, we can use the optional "count" parameter for "Has".
+    has_both_health_upgrades = Has("Health Upgrade", count=2)
 
+    # Previously, we used an "if world.options.hard_mode" condition to check if we should apply the extra requirement.
+    # However, if you're comfortable with boolean logic, there is another way.
+    # OptionFilter is a rule which just resolves to True if the option has the specified value, or False otherwise.
+    hard_mode_is_off = OptionFilter(HardMode, False)
+
+    # Now we can combine our rule as follows.
+    can_defeat_final_boss = has_sword_and_shield & (hard_mode_is_off | has_both_health_upgrades)
+    # If you're not as comfortable with boolean logic, it might be somewhat confusing why this is correct.
+    # There is nothing wrong with using "if" conditions to check for options, if you find that easier to understand.
+
+    # Finally, we apply the rule to our "Final Boss Defeated" event location.
     final_boss = world.get_location("Final Boss Defeated")
     world.set_rule(final_boss, can_defeat_final_boss)
 
