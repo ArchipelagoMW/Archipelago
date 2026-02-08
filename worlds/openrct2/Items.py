@@ -44,6 +44,12 @@ def set_openRCT2_items(options: openRCT2Options, random: Random) -> tuple[list[s
         if "First Aid" not in openRCT2_items:
             openRCT2_items.append("First Aid")
 
+    if ("Log Flume" not in openRCT2_items): # Necessary to not break the Best Water Rides location
+        openRCT2_items.append("Log Flume")
+
+    if ("Merry Go Round" not in openRCT2_items): # Necessary to not break the Best Gentle Rides location
+        openRCT2_items.append("Merry Go Round")
+
     if options.monopoly_mode.value:
         for each in range(20):
             openRCT2_items.append("Land Discount")
@@ -77,9 +83,9 @@ def set_openRCT2_items(options: openRCT2Options, random: Random) -> tuple[list[s
         if rules[number] == unlockable:  # If it's enabled and can be disabled
             openRCT2_items.append(rule)  # Add an item to disable
 
-    # Adds some useful filler items. Ten is the absolute minimum to not break generation.
+    # Adds some useful filler items. 15 is the absolute minimum to not break generation.
     count = 0
-    while count < 10:
+    while count < 15:
         openRCT2_items.append(random.choice(item_info["useful_filler_items"]))
         count += 1
 

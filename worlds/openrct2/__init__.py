@@ -351,13 +351,13 @@ class OpenRCT2World(World):
             lambda state: state.has("Toilets", self.player, 1))
             #This is going to bite me in the butt when I discover a scenario that only has 1 water ride
             add_rule(self.multiworld.get_location("Best Water Rides in the Multiverse", self.player), 
-            lambda state: state.has_group("Water Rides", self.player, 2))
+            lambda state: state.has_group("Water Rides", self.player, 1))
             add_rule(self.multiworld.get_location("Best Custom Designed Rides in the Multiverse", self.player), 
             lambda state: state.has_group("Roller Coasters" or "Thrill Rides", self.player, 6))
             add_rule(self.multiworld.get_location("Most Dazzling Colors in the Multiverse", self.player), 
             lambda state: state.has_group("Tracked Rides", self.player, 5))
             add_rule(self.multiworld.get_location("Best Gentle Rides in the Multiverse", self.player), 
-            lambda state: state.has_group("Gentle Rides", self.player, 5))
+            lambda state: state.has_group("Gentle Rides", self.player, 1))
 
             for location in positive_awards_region.locations:
                 add_item_rule(location, lambda item: item.useful)
