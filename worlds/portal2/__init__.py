@@ -43,7 +43,7 @@ class Portal2WebWorld(WebWorld):
         language="English",
         file_name="setup_en.md",
         link="setup/en",
-        authors=["Dyroha"]
+        authors=["GlassToadstool"]
     )
 
     tutorials = [setup_en]
@@ -202,10 +202,10 @@ class Portal2World(World):
                 self.chapter_maps_dict = {f"Chapter {key}":value for key, value in self.chapter_maps_dict.items()}
                 return
         
-        self.maps_in_use = list(map_complete_table.keys())
+        self.maps_in_use = list(map_complete_table)
         # Cutscene levels option
         if self.options.cutscene_levels:
-            self.maps_in_use.append(cutscene_completion_table.keys())
+            self.maps_in_use += list(cutscene_completion_table)
         
         # Remove maps that have been put in the Remove Locations option
         for location in self.options.remove_locations:
