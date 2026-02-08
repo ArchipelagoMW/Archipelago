@@ -19953,7 +19953,7 @@
                                     "name": "golden",
                                     "display_name": "Golden Strawberry",
                                     "type": "golden_strawberry",
-                                    "rule": [ [ "red_boosters", "swap_blocks", "dash_switches", "Entrance Key", "Depths Key", "Search Key 1", "Search Key 2", "seekers", "coins", "theo_crystal" ] ]
+                                    "rule": [ [ "red_boosters", "swap_blocks", "dash_switches", "dash_refills", "Entrance Key", "Depths Key", "Search Key 1", "Search Key 2", "seekers", "coins", "theo_crystal" ] ]
                                 }
                             ]
                         }

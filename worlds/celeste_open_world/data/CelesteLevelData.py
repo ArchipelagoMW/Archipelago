@@ -5181,7 +5181,7 @@ all_locations: dict[str, LevelLocation] = {
     "5a_d-19_strawberry": LevelLocation("5a_d-19_strawberry", "Mirror Temple A - Room d-19 Strawberry", "5a_d-19_east", LocationType.strawberry, [["Mirror Temple A - Search Key 3", ], ]),
     "5a_e-06_strawberry": LevelLocation("5a_e-06_strawberry", "Mirror Temple A - Room e-06 Strawberry", "5a_e-06_east", LocationType.strawberry, [[ItemName.dash_switches, ], ]),
     "5a_e-11_clear": LevelLocation("5a_e-11_clear", "Mirror Temple A - Level Clear", "5a_e-11_goal", LocationType.level_clear, []),
-    "5a_e-11_golden": LevelLocation("5a_e-11_golden", "Mirror Temple A - Golden Strawberry", "5a_e-11_goal", LocationType.golden_strawberry, [[ItemName.red_boosters, ItemName.swap_blocks, ItemName.dash_switches, "Mirror Temple A - Entrance Key", "Mirror Temple A - Depths Key", "Mirror Temple A - Search Key 1", "Mirror Temple A - Search Key 2", ItemName.seekers, ItemName.coins, ItemName.theo_crystal, ], ]),
+    "5a_e-11_golden": LevelLocation("5a_e-11_golden", "Mirror Temple A - Golden Strawberry", "5a_e-11_goal", LocationType.golden_strawberry, [[ItemName.red_boosters, ItemName.swap_blocks, ItemName.dash_switches, ItemName.dash_refills, "Mirror Temple A - Entrance Key", "Mirror Temple A - Depths Key", "Mirror Temple A - Search Key 1", "Mirror Temple A - Search Key 2", ItemName.seekers, ItemName.coins, ItemName.theo_crystal, ], ]),
 
     "5b_b-02_key_1": LevelLocation("5b_b-02_key_1", "Mirror Temple B - Central Chamber Key 1", "5b_b-02_south-west", LocationType.key, []),
     "5b_b-02_key_2": LevelLocation("5b_b-02_key_2", "Mirror Temple B - Central Chamber Key 2", "5b_b-02_south-east", LocationType.key, []),
