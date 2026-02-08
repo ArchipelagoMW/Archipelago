@@ -808,6 +808,15 @@ class NamedRange(Range):
             return cls(cls.special_range_names[text])
         return super().from_text(text)
 
+    def __eq__(self, other):
+        if isinstance(other, str):
+            other = other.lower()
+            assert other in self.special_range_names, (
+                f"compared against an unknown string. {self} == {other}"
+            )
+            return self.value == self.special_range_names[other]
+        return super().__eq__(other)
+
 
 class FreezeValidKeys(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
