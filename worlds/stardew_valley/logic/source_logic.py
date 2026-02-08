@@ -11,6 +11,7 @@ from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, 
     HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
 from ..data.monster_data import MonsterSource
 from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource, HatMouseSource
+from ..strings.ap_names.ap_option_names import CustomLogicOptionName
 from ..strings.skill_names import Skill
 
 
@@ -26,7 +27,10 @@ class SourceLogic(BaseLogic):
         rules = []
 
         if self.content.features.cropsanity.is_included(item):
-            rules.append(self.logic.received(item.name))
+            unlock_rule = self.logic.received(item.name)
+            if CustomLogicOptionName.critical_free_samples:
+                return unlock_rule
+            rules.append(unlock_rule)
 
         rules.append(self.logic.source.has_access_to_any(item.sources))
         return self.logic.and_(*rules)

@@ -98,3 +98,4 @@ class CustomLogicOptionName:
     nightmare_money = "Nightmare Money"
     bomb_hoeing = "Bomb Hoeing"
     rain_watering = "Rain Watering"
+    critical_free_samples = "Critical Free Samples"
