@@ -24,7 +24,7 @@ Unless these are shared between multiple people, we expect the following from ea
 ## Authority
 
 For a Pull Request into a world to be merged, one of the world maintainers of that world has to approve it.  
-This applies to all Pull Requests, no matter how small, with the sole exception of patching security exploits.
+This applies to all Pull Requests, no matter how small, with the sole exception of patching security vulnerabilities.
 
 World maintainers can partially opt out of this,
 allowing core maintainers to merge pull requests which they deem critical and "obvious" enough.
