@@ -465,8 +465,8 @@
             [{ "item": "Cloud Leap" }, { "item": "Air Dash" }], // jump, dash, air jump can bypass grabbing the ledge
             [{ "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" }, { "item": "Ledge Grab" }] // TCK then CL requires the ledge
         ] } ],
-        "medium_requires": [{ "item": "Cloud Leap" }], // jump, T-dash, air jump
-        "ls_requires": [{ "item": "Trick - Bow Hover" }, { "item": "Ledge Grab" }] // LS vault
+        "medium_requires": [{ "item": "Cloud Leap" }] // jump, T-dash, air jump
+        // CL setup into bow hover into parry vault works, but is redundant with medium
     },
     { "from": "CTH - Lower Right Vents", "to": "CTH - Lower Exits", "requires": [] }, // one-way fall
     { "from": "CTH - Lower Exits", "to": "CTH - Lower Right Vents", "requires": [ { "anyOf": [
