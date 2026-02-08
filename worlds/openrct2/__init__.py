@@ -510,7 +510,13 @@ class OpenRCT2World(World):
                         total_customers = round(self.random.uniform(self.options.shop_minimum_total_customers.value, 
                         self.options.shop_maximum_total_customers.value))
                     if self.random.random() < difficulty_modifier:  # Determines if the prereq is a specific ride
-                        chosen_prereq = self.random.choice(possible_prereqs)
+                        if (self.options.preferred_intensity.value == "less_intense"):
+                            valid_selections = [p for p in possible_prereqs if p not in item_info["Roller Coasters"]]
+                        elif (self.options.preferred_intensity.value == "more_intense"):
+                            valid_selections = [p for p in possible_prereqs if p not in item_info["Gentle Rides"]]
+                        else:
+                            valid_selections = possible_prereqs
+                        chosen_prereq = self.random.choice(valid_selections)
                         set_openRCT2_rule("ride", chosen_prereq, number)
                         if chosen_prereq in item_info["Roller Coasters"] and chosen_prereq not in item_info[
                                 "stat_exempt_roller_coasters"]:
