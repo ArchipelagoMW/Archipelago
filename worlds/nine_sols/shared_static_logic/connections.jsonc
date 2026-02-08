@@ -378,7 +378,7 @@
         "ls_requires": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] // CL + LS vault
     }, // any% NMG speedrun uses T-dash (and bow and CS and grapple) here, but there's no enemy for rando to get qi
     { "from": "CC - Caves Lower Left", "to": "CC - Left Exit", "requires": [] },
-    { "from": "CC - Left Exit", "to": "CC - Caves Lower Left", "requires": [] }, // grapple
+    { "from": "CC - Left Exit", "to": "CC - Caves Lower Left", "requires": [ { "item": "Grapple" } ] },
 
     { "from": "CC - Left Exit", "to": "FGH - Right Exit", "requires": [] },
     { "from": "FGH - Right Exit", "to": "CC - Left Exit", "requires": [] },
