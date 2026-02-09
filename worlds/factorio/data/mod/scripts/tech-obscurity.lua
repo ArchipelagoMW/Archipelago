@@ -11,8 +11,9 @@
 --      if you are playing with two forces (for whatever reason) only one needs to know where the tech is for the hint to be send.
 --      hints will only be send once. Unless an achipelago command demands the whole list.
 
---to do:
--- hide outbound hints
+-- TODO:
+-- Blind hints that are out bound. The spam is way too high.
+-- fix the tech tree shape.
 
 local function send_hint(technologies, force)
     --technologies => tech_name = true
