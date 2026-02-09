@@ -5,7 +5,9 @@ from ..names import *
 
 class TestAccess(MM2TestBase):
     options = {
-        "consumables": "all"
+        "consumables": "all",
+        "yoku_jumps": False,
+        "enable_lasers": False,
     }
 
     def test_time_stopper(self) -> None:

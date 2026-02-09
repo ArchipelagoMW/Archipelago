@@ -119,16 +119,16 @@ class CanDefeatEnoughRBMs(Rule["MM2World"], game="Mega Man 2"):
             return False
 
 
-HasAnyItem = HasAny(names.item_1, names.item_2, names.item_3)
-HasI1OrI2 = HasAny(names.item_1, names.item_2)
-HasCrashBomber = Has(names.crash_bomber)
+HasAnyItem: Rule = HasAny(names.item_1, names.item_2, names.item_3)
+HasI1OrI2: Rule = HasAny(names.item_1, names.item_2)
+HasCrashBomber: Rule = Has(names.crash_bomber)
 
-STATIC_LOCATION_RULES = {
+STATIC_LOCATION_RULES: dict[str, Rule] = {
     names.wily_4: HasCrashBomber,
     names.wily_stage_4: HasCrashBomber,
 }
 
-STATIC_1UP_RULES = {
+STATIC_1UP_RULES: dict[str, Rule] = {
     # 1-Up/E-Tank
     names.flash_man_c2: HasAnyItem,
     names.quick_man_c1: HasAnyItem,
@@ -140,13 +140,13 @@ STATIC_1UP_RULES = {
     names.wily_3_c2: HasCrashBomber,
 }
 
-STATIC_ENERGY_RULES = {
+STATIC_ENERGY_RULES: dict[str, Rule] = {
     names.flash_man_c3: HasCrashBomber,
     names.flash_man_c4: HasCrashBomber,
     names.wily_3_c1: HasCrashBomber,
 }
 
-STATIC_ENTRANCE_RULES = {
+STATIC_ENTRANCE_RULES: dict[str, Rule] = {
     "To Quick Man Stage": Has(names.time_stopper) | [OptionFilter(EnableLasers, True)],
     "To Heat Man Stage": Has(names.item_2) | [OptionFilter(YokuJumps, True)],
 }
@@ -369,5 +369,6 @@ def set_rules(world: "MM2World") -> None:
         world.set_rule(world.get_location(location), location_rules[location])
 
     for name, region in mm2_regions.items():
-        static_rule = STATIC_ENTRANCE_RULES.get(name, True_())
-        world.set_rule(world.get_entrance(f"To {name}"), HasAll(*region.required_items) & static_rule)
+        region_name = f"To {name}"
+        static_rule = STATIC_ENTRANCE_RULES.get(region_name, True_())
+        world.set_rule(world.get_entrance(region_name), HasAll(*region.required_items) & static_rule)
