@@ -2,6 +2,8 @@ import dataclasses
 from math import ceil
 from typing import TYPE_CHECKING
 
+from typing_extensions import override
+
 from BaseClasses import CollectionState
 from NetUtils import JSONMessagePart
 from . import names
@@ -73,7 +75,7 @@ weapon_costs = {
 
 @dataclasses.dataclass
 class CanDefeatEnoughRBMs(Rule["MM2World"], game="Mega Man 2"):
-
+    @override
     def _instantiate(self, world: "MM2World") -> Rule.Resolved:
         return self.Resolved(tuple([(key, tuple(val)) for key, val in sorted(world.wily_5_weapons.items())]), world.options.wily_5_requirement.value,
                              player=world.player, caching_enabled=True)
@@ -82,11 +84,13 @@ class CanDefeatEnoughRBMs(Rule["MM2World"], game="Mega Man 2"):
         boss_requirements: tuple[tuple[int, tuple[int, ...]], ...]
         required: int
 
+        @override
         def item_dependencies(self) -> dict[str, set[int]]:
             return {
                 weapons_to_name[x]: {id(self)} for boss, weapons in self.boss_requirements for x in weapons
             }
 
+        @override
         def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
             explain_strs = self.explain_str(state).splitlines()
             messages: list[JSONMessagePart] = [{"type": "text", "text": explain_strs[0]}]
@@ -95,6 +99,7 @@ class CanDefeatEnoughRBMs(Rule["MM2World"], game="Mega Man 2"):
                 messages.append({"type": "color", "text": rbm, "color": color})
             return messages
 
+        @override
         def explain_str(self, state: CollectionState | None = None) -> str:
             explain_str = f"Required RBMs: {self.required}"
             for boss, reqs in self.boss_requirements:
@@ -104,6 +109,7 @@ class CanDefeatEnoughRBMs(Rule["MM2World"], game="Mega Man 2"):
                     explain_str += f"\n{robot_masters[boss][:-9]}: {verb}"
             return explain_str
 
+        @override
         def _evaluate(self, state: "CollectionState") -> bool:
             can_defeat = 0
             for boss, reqs in self.boss_requirements:
