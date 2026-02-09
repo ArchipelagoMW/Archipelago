@@ -23,8 +23,8 @@ template_env: Optional[jinja2.Environment] = None
 
 data_template: Optional[jinja2.Template] = None
 data_final_template: Optional[jinja2.Template] = None
-locale_template: Optional[jinja2.Template] = None
 control_template: Optional[jinja2.Template] = None
+#locale_template: Optional[jinja2.Template] = None
 settings_template: Optional[jinja2.Template] = None
 
 template_load_lock = threading.Lock()
@@ -95,6 +95,8 @@ def generate_mod(world: "Factorio", output_directory: str):
     random = world.random
 
     global data_final_template, locale_template, control_template, data_template, settings_template
+    global data_final_template, main_template, data_template, settings_template
+    #global locale_template
     with template_load_lock:
         if not data_final_template:
             def load_template(name: str):
@@ -107,8 +109,8 @@ def generate_mod(world: "Factorio", output_directory: str):
 
             data_template = template_env.get_template("data.lua")
             data_final_template = template_env.get_template("data-final-fixes.lua")
-            locale_template = template_env.get_template(r"locale/en/locale.cfg")
             control_template = template_env.get_template("control.lua")
+            #locale_template = template_env.get_template(r"locale/en/locale.cfg")
             settings_template = template_env.get_template("settings.lua")
     # get data for templates
     locations = [(location, location.item)
@@ -195,8 +197,8 @@ def generate_mod(world: "Factorio", output_directory: str):
                                       control_template.render(**template_data)))
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/settings.lua",
                                       settings_template.render(**template_data)))
-    mod.writing_tasks.append(lambda: (versioned_mod_name + "/locale/en/locale.cfg",
-                                      locale_template.render(**template_data)))
+    #mod.writing_tasks.append(lambda: (versioned_mod_name + "/locale/en/locale.cfg",
+    #                                  locale_template.render(**template_data)))
 
     info = base_info.copy()
     info["name"] = mod_name
