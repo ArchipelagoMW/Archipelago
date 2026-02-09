@@ -110,6 +110,7 @@ def get_items(world: TVRUHHWorld, whichlist: dict, min_id = -1, max_id = -1) -> 
 # 116 = endless upgrades (status: WIP)
 # 117 = event upgrades (status: WIP)
 # 118 = other items (status: unknown, has any misc. item)
+# 119 = default unlocks (status: WIP)
 
 monster_list = {
     # shambles
