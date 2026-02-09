@@ -179,7 +179,7 @@ location_groups: dict[str, set[str]] = {
     "Wily 2 Weapon Energy": {names.wily_2_c8, names.wily_2_c9, names.wily_2_c10, names.wily_2_c11, names.wily_2_c12,
                              names.wily_2_c13, names.wily_2_c14, names.wily_2_c15, names.wily_2_c16},
     **{name: {location for location, data in region.locations.items() if data.location_id}
-       for name, region in mm2_regions.items()}
+       for name, region in mm2_regions.items() if name != "Wily Stage 6"}
 }
 
 lookup_location_to_id: dict[str, int] = {location: idx for location, idx in location_table.items() if idx is not None}
