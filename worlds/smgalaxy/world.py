@@ -3,8 +3,9 @@ from BaseClasses import Item
 from Utils import visualize_regions
 from worlds.AutoWorld import World
 
-from . import items, locations, regions, Rules, web_world, Options
-from .items import SMGItem
+from . import items, regions, Rules, web_world, Options
+from .locations import LOCATION_NAME_TO_ID
+from .items import SMGItem, ITEM_NAME_TO_ID
 
 
 class SMGWorld(World):
@@ -23,8 +24,8 @@ class SMGWorld(World):
     options_dataclass = Options.SMGOptions
     options: Options.SMGOptions
 
-    item_name_to_id = ClassVar[items.ITEM_NAME_TO_ID]
-    location_name_to_id = ClassVar[locations.LOCATION_NAME_TO_ID]
+    item_name_to_id = ClassVar[ITEM_NAME_TO_ID]
+    location_name_to_id = ClassVar[LOCATION_NAME_TO_ID]
 
     required_client_version = (0, 6, 6)
 
@@ -49,7 +50,7 @@ class SMGWorld(World):
         return "Nothing"
     
     def create_items(self):
-        # creates the green stars in each players itempool
+        # creates the green stars in each player's itempool
         local_pool: list[SMGItem] = []
         local_pool += [self.create_item("Green Star") for i in range(0,3)]
         local_pool += [self.create_item("Grand Star") for i in range(0,7)]

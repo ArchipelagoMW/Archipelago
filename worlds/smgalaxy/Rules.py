@@ -1,10 +1,12 @@
-from . import SMGWorld
-from ..generic.Rules import add_rule
+from typing import TYPE_CHECKING
 from .regions import connect_regions, region_list
 from.Constants.Names import region_names as regname
 
+if TYPE_CHECKING:
+    from . import SMGWorld
+
 # main stage logic
-def set_rules(world: SMGWorld, player: int):
+def set_rules(world: "SMGWorld", player: int):
     # Dome 1
     connect_regions(world, player, regname.SHIP, regname.TERRACE, "Dome 1 Entry")
     connect_regions(world, player, regname.TERRACE, regname.GOODEGG, "Terrace Inner Orbit Galaxy")

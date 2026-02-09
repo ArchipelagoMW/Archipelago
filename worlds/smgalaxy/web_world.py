@@ -1,7 +1,7 @@
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld
 
-from .options import option_groups, option_presets
+#from .Options import option_groups, option_presets
 
 
 # For our game to display correctly on the website, we need to define a WebWorld subclass.
@@ -19,4 +19,4 @@ class SMGWebWorld(WebWorld):
         # This is mostly placeholder till someone writes the full guide
     )
     tutorials = [setup_en]
-    option_groups = option_groups
+    #option_groups = option_groups

@@ -1,12 +1,13 @@
-from typing import NamedTuple, Optional, Callable
+from typing import NamedTuple, Optional, Callable, TYPE_CHECKING
 from BaseClasses import Region, Entrance, MultiWorld
 
 from .Constants.Names import region_names as regname
-from . import SMGWorld
 from .Options import SMGOptions
 from .locations import SMGLocation, locPC_table, base_stars_locations, SMGLocationData
 from ..generic.Rules import add_rule
 
+if TYPE_CHECKING:
+    from . import SMGWorld
 
 class SMGRegionData(NamedTuple):
     type: str  # type of randomization for GER
@@ -101,7 +102,7 @@ region_list: dict[str, SMGRegionData] = {
 }
 
 
-def create_regions(world: SMGWorld, player: int):
+def create_regions(world: "SMGWorld"):
     for region_name in region_list.keys():
         world.multiworld.regions.append(SMGRegion(region_name, region_list[region_name], world.player, world.multiworld))
 
@@ -113,7 +114,7 @@ def create_regions(world: SMGWorld, player: int):
     elif world.options.enable_purple_coin_stars.value == 1:
         create_locations(locPC_table, world)
 
-def connect_regions(world: SMGWorld, player: int, source: str, target: str, name: str, rule=None):
+def connect_regions(world: "SMGWorld", player: int, source: str, target: str, name: str, rule=None):
     sourceRegion = world.get_region(source)
     targetRegion = world.get_region(target)
 
@@ -124,10 +125,10 @@ def connect_regions(world: SMGWorld, player: int, source: str, target: str, name
     sourceRegion.exits.append(connection)
     connection.connect(targetRegion)
 
-def create_region(name: str, world: SMGWorld) -> Region:
+def create_region(name: str, world: "SMGWorld") -> Region:
     return Region(name, world.player, world.multiworld, name)
 
-def create_locations(locs, world: SMGWorld):
+def create_locations(locs: dict[str, SMGLocationData], world: "SMGWorld"):
     for name, data in locs.items():
         reg = world.get_region(data.region)
         location = SMGLocation(world.player, name, reg)
