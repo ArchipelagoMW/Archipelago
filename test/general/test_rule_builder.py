@@ -36,6 +36,7 @@ from worlds.AutoWorld import AutoWorldRegister, World
 
 class CachedCollectionState(CollectionState):
     rule_builder_cache: dict[int, dict[int, bool]]  # pyright: ignore[reportUninitializedInstanceVariable]
+    rule_builder_deferred_item_dependency_updates: dict[int, set[str]]  # pyright: ignore[reportUninitializedInstanceVariable]
 
 
 class ToggleOption(Toggle):
@@ -437,50 +438,90 @@ class TestCaching(CachedRuleBuilderTestCase):
         world.register_rule_builder_dependencies()
 
     def test_item_cache_busting(self) -> None:
+        rule_builder_cache = self.state.rule_builder_cache[1]
         location = self.world.get_location("Location 4")
         self.state.collect(self.world.create_item("Item 1"))  # access to region 2
         self.state.collect(self.world.create_item("Item 2"))  # item directly needed
-        self.assertFalse(location.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_builder_cache[1][id(location.access_rule)])
 
-        self.state.collect(self.world.create_item("Item 3"))  # clears cache, item directly needed
-        self.assertNotIn(id(location.access_rule), self.state.rule_builder_cache[1])
+        self.assertNotIn(id(location.access_rule), rule_builder_cache)
+        self.assertFalse(location.can_reach(self.state))  # populates cache
+        self.assertIn(id(location.access_rule), rule_builder_cache)  # rule's result is cached
+        self.assertFalse(rule_builder_cache[id(location.access_rule)])  # cached result is False
+
+        deferred_updates = self.state.rule_builder_deferred_item_dependency_updates[1]
+        self.state.collect(self.world.create_item("Item 3"))  # item directly needed
+        self.assertIn("Item 3", deferred_updates)  # cache update is deferred until the rule is called
+
+        # cache is unchanged due to the deferred update
+        self.assertIn(id(location.access_rule), rule_builder_cache)  # rule result is still cached
+        self.assertFalse(rule_builder_cache[id(location.access_rule)])  # cached result is still False
+
+        # cache gets cleared and then updated during the can_reach
         self.assertTrue(location.can_reach(self.state))
-        self.assertTrue(self.state.rule_builder_cache[1][id(location.access_rule)])
-        self.state.collect(self.world.create_item("Item 3"))  # does not clear cache as rule is already true
-        self.assertTrue(self.state.rule_builder_cache[1][id(location.access_rule)])
+        self.assertIn(id(location.access_rule), rule_builder_cache)  # rule result is still cached
+        self.assertTrue(rule_builder_cache[id(location.access_rule)])  # cached result is now True
+
+        self.state.collect(self.world.create_item("Item 3"))
+        self.assertIn("Item 3", deferred_updates)  # cache update is deferred until the rule is called
+        # can_reach does not process deferred updates because the rule is already True
+        self.assertTrue(location.can_reach(self.state))
+        self.assertIn("Item 3", deferred_updates)
+        self.assertTrue(rule_builder_cache[id(location.access_rule)])  # cached result is still True
 
     def test_region_cache_busting(self) -> None:
+        rule_builder_cache = self.state.rule_builder_cache[1]
         location = self.world.get_location("Location 2")
         self.state.collect(self.world.create_item("Item 2"))  # item directly needed for location rule
+        self.assertNotIn(id(location.access_rule), rule_builder_cache)
         self.assertFalse(location.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_builder_cache[1][id(location.access_rule)])
+        self.assertIn(id(location.access_rule), rule_builder_cache)  # rule's result is cached
+        self.assertFalse(rule_builder_cache[id(location.access_rule)])  # cached result is False
 
-        self.state.collect(self.world.create_item("Item 1"))  # clears cache, item only needed for region 2 access
-        # cache gets cleared during the can_reach
+        deferred_updates = self.state.rule_builder_deferred_item_dependency_updates[1]
+        self.state.collect(self.world.create_item("Item 1"))  # item only needed for region 2 access
+        self.assertIn("Item 1", deferred_updates)  # cache update is deferred until the rule is called
+        self.assertFalse(rule_builder_cache[id(location.access_rule)])  # cache is still False due to deferred update
+        # cache gets cleared and then updated during the can_reach
         self.assertTrue(location.can_reach(self.state))
-        self.assertTrue(self.state.rule_builder_cache[1][id(location.access_rule)])
+        self.assertNotIn("Item 1", deferred_updates)
+        self.assertTrue(rule_builder_cache[id(location.access_rule)])
 
     def test_location_cache_busting(self) -> None:
+        rule_builder_cache = self.state.rule_builder_cache[1]
         location = self.world.get_location("Location 5")
         self.state.collect(self.world.create_item("Item 1"))  # access to region 2
         self.state.collect(self.world.create_item("Item 3"))  # access to region 3
+        self.assertNotIn(id(location.access_rule), rule_builder_cache)
         self.assertFalse(location.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_builder_cache[1][id(location.access_rule)])
+        self.assertIn(id(location.access_rule), rule_builder_cache)  # rule's result is cached
+        self.assertFalse(rule_builder_cache[id(location.access_rule)])  # cached result is False
 
-        self.state.collect(self.world.create_item("Item 2"))  # clears cache, item only needed for location 2 access
-        self.assertNotIn(id(location.access_rule), self.state.rule_builder_cache[1])
+        deferred_updates = self.state.rule_builder_deferred_item_dependency_updates[1]
+        self.state.collect(self.world.create_item("Item 2"))  # item only needed for location 2 access
+        self.assertIn("Item 2", deferred_updates)  # cache update is deferred until the rule is called
+        self.assertFalse(rule_builder_cache[id(location.access_rule)])  # cache is still False  due to deferred update
+        # cache gets cleared and then updated during the can_reach
         self.assertTrue(location.can_reach(self.state))
+        self.assertNotIn("Item 2", deferred_updates)
+        self.assertTrue(rule_builder_cache[id(location.access_rule)])
 
     def test_entrance_cache_busting(self) -> None:
+        rule_builder_cache = self.state.rule_builder_cache[1]
         location = self.world.get_location("Location 6")
         self.state.collect(self.world.create_item("Item 2"))  # item directly needed for location rule
+        self.assertNotIn(id(location.access_rule), rule_builder_cache)
         self.assertFalse(location.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_builder_cache[1][id(location.access_rule)])
+        self.assertIn(id(location.access_rule), rule_builder_cache)  # rule's result is cached
+        self.assertFalse(rule_builder_cache[id(location.access_rule)])  # cached result is False
 
-        self.state.collect(self.world.create_item("Item 1"))  # clears cache, item only needed for entrance access
-        self.assertNotIn(id(location.access_rule), self.state.rule_builder_cache[1])
+        deferred_updates = self.state.rule_builder_deferred_item_dependency_updates[1]
+        self.state.collect(self.world.create_item("Item 1"))  # item only needed for entrance access
+        self.assertIn("Item 1", deferred_updates)  # cache update is deferred until the rule is called
+        self.assertFalse(rule_builder_cache[id(location.access_rule)])  # cache is still False  due to deferred update
+        # cache gets cleared and then updated during the can_reach
         self.assertTrue(location.can_reach(self.state))
+        self.assertNotIn("Item 1", deferred_updates)
+        self.assertTrue(rule_builder_cache[id(location.access_rule)])
 
     def test_has_skips_cache(self) -> None:
         entrance = self.world.get_entrance("Region 1 -> Region 2")
