@@ -2501,6 +2501,63 @@ class ServerCommandProcessor(CommonCommandProcessor):
             self.output(response)
             return False
 
+    def _cmd_item_groups(self, player_name: str, *key: str) -> bool:
+        """
+        List all item group names for the specified player.
+
+        :param key: Which item group to filter to. Will log all groups if empty.
+        """
+        seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
+        if usable:
+            team, slot = self.ctx.player_name_lookup[seeked_player]
+            game = self.ctx.games[slot]
+            if game in self.ctx.item_name_groups:
+                groups = self.ctx.item_name_groups.get(game, {})
+                full_name = " ".join(key) if key else None
+                if full_name in groups:
+                    items = ", ".join(groups.get(full_name, {}))
+                    self.output(f"Item group {full_name} contains: {items}")
+                    return True
+                else:
+                    group_list = ", ".join(groups)
+                    self.output(f"Item groups for {player_name}: {group_list}")
+                    return True
+            else:
+                self.output("Can't find groups for unknown game.")
+                return False
+        else:
+            self.output(response)
+            return False
+
+
+    def _cmd_location_groups(self, player_name: str, *key: str) -> bool:
+        """
+        List all location group names for the specified player.
+
+        :param key: Which location group to filter to. Will log all groups if empty.
+        """
+        seeked_player, usable, response = get_intended_text(player_name, self.ctx.player_names.values())
+        if usable:
+            team, slot = self.ctx.player_name_lookup[seeked_player]
+            game = self.ctx.games[slot]
+            if game in self.ctx.location_name_groups:
+                groups = self.ctx.location_name_groups.get(game, {})
+                full_name = " ".join(key) if key else None
+                if full_name in groups:
+                    locations = ", ".join(groups.get(full_name, {}))
+                    self.output(f"Location group {full_name} contains: {locations}")
+                    return True
+                else:
+                    group_list = ", ".join(groups)
+                    self.output(f"Location groups for {player_name}: {group_list}")
+                    return True
+            else:
+                self.output("Can't find groups for unknown game.")
+                return False
+        else:
+            self.output(response)
+            return False
+
     def _cmd_option(self, option_name: str, option_value: str):
         """Set an option for the server."""
         value_type = self.ctx.simple_options.get(option_name, None)
