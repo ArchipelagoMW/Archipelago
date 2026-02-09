@@ -53,10 +53,10 @@ def set_rules(world: SMGWorld, player: int):
     connect_regions(world, player, regname.GARDEN, regname.MELTY, "Garden Outer Orbit Galaxy")
     #Remaining Ship Connections
     connect_regions(world, player, regname.SHIP, regname.LIBRARY, "Library Entrance")
-    connect_regions(world, player, regname.SHIP, regname.COTU, "Center Of the Universe Entry")
+    connect_regions(world, player, regname.SHIP, regname.COTU, "Center Of the Universe Entry",
+                    lambda state: state.has("Grand Star", player, 5) and state.has("Power Star", player, world.options.stars_to_finish))
     connect_regions(world, player, regname.COTU, regname.BOWSER3, "Galaxy's Center")
-    connect_regions(world, player, regname.SHIP, regname.ROLLINGGIZ, "Rolling Gizmo Launch Star",
-                    lambda state: state.has("Grand Star", player, 5) and state.has("Power Star", player, 60))
+    connect_regions(world, player, regname.SHIP, regname.ROLLINGGIZ, "Rolling Gizmo Launch Star")
     connect_regions(world, player, regname.SHIP, regname.SWEETSWEET, "Sweet Sweet Hungry Luma")
     connect_regions(world, player, regname.SHIP, regname.SLINGPOD, "Sling Pod Hungry Luma",
                     lambda state: state.has("Progressive Grand Star", player))
