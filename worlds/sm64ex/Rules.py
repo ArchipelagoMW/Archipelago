@@ -237,15 +237,15 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
         # WF can get to 90 without being able to ground pound
         rf.assign_rule("WF: Coin Hi Score 100", "GP | MOVELESS")
 
-        # JRB can only get to 38 without blue coins and visiting the ship
+        # JRB can only get to ~48 without blue coins and visiting the ship
         rf.assign_max_coins_rule("JRB", 40, 100, "GP & {JRB: Upper}")
 
         # CCM can reach 100 without any moves
 
         # BBH can reach 100 without any moves (through the carousel star)
 
-        # HMC can get to 58 without DJ or GP
-        rf.assign_max_coins_rule("HMC", 60, 100, "GP")
+        # HMC can get to 58 without (DJ/TJ/LG/WK) & GP
+        rf.assign_max_coins_rule("HMC", 60, 100, "WK/LG/BF/SF/TJ & GP | MOVELESS & WK & GP")
 
         # LLL can get 100 coins without any moves
 
@@ -259,7 +259,8 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
         rf.assign_max_coins_rule("SL", 90, 100,  "WK & VC | SF/BF/TJ & VC | WK & CAPLESS | SF/BF/TJ & CAPLESS")
 
         # WDW can get to 57 coins without blue coins or visiting downtown
-        rf.assign_max_coins_rule("WDW", 60, 100, "GP | {WDW: Downtown}")
+        # Getting downtown is basically equivalent of getting to the top, so this is a bit redundant
+        rf.assign_max_coins_rule("WDW", 60, 100, "GP & {WDW: Top} | GP & {WDW: Downtown}")
 
         # TTM can reach 16 without any moves
         # Beyond that, we need to be able to reach the top
