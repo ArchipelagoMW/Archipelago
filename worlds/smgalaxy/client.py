@@ -23,4 +23,4 @@ from worlds import network_data_package, AutoWorldRegister
 from CommonClient import CommonContext
 import os
 
-class GalaxyContext(CommonContext):
+# class GalaxyContext(CommonContext):

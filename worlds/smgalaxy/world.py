@@ -4,6 +4,7 @@ from Utils import visualize_regions
 from worlds.AutoWorld import World
 
 from . import items, regions, Rules, web_world, Options
+from .Constants.Names import region_names as regname
 from .locations import LOCATION_NAME_TO_ID
 from .items import SMGItem, ITEM_NAME_TO_ID
 
@@ -33,10 +34,10 @@ class SMGWorld(World):
 
     def __init__(self, *args, **kwargs):
         super(SMGWorld, self).__init__(*args, **kwargs)
-        self.origin_region_name: str = "Ship"
+        self.origin_region_name: str = regname.SHIP
 
     def create_regions(self):
-        regions.create_regions(self, self.player)
+        regions.create_regions(self)
 
     def set_rules(self):
         Rules.set_rules(self, self.player)

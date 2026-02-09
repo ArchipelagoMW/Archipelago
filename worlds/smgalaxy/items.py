@@ -30,4 +30,4 @@ item_table: dict[str, SMGItemData] = {
 }
 
 ITEM_NAME_TO_ID: dict[str, int] =  {
-    name: SMGItem.code for name, data in item_table.items() if data.code is not None}
+    name: data.code for name, data in item_table.items() if data.code is not None}
