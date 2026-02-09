@@ -496,9 +496,6 @@ class FactorioOptions(PerGameCommonOptions):
     tech_cost_distribution: TechCostDistribution
     tech_cost_mix: TechCostMix
     ramping_tech_costs: RampingTechCosts
-    tech_layer_obscurity: TechLayerObscurity
-    tech_depth_obscurity: TechDepthObscurity
-    tech_craft_obscurity: TechCraftObscurity
     silo: Silo
     satellite: Satellite
     free_samples: FreeSamples
@@ -539,7 +536,7 @@ option_groups: list[OptionGroup] = [
             TechCostDistribution,
             TechCostMix,
             RampingTechCosts,
-            TechTreeInformation
+            TechTreeInformation,
         ]
     ),
     OptionGroup(
