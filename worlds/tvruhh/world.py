@@ -44,4 +44,4 @@ class TVRUHHWorld(World):
         return items.get_random_filler_item_name(self)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        pass #TODO: make sure this sends relevant option information when loading the world for the first time (like starting character selection) 
+        pass #TODO: make sure this sends relevant option information when loading the world for the first time (like amount of bonus gifts) 

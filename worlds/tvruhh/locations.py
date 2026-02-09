@@ -163,6 +163,7 @@ def create_events(world: TVRUHHWorld) -> None:
 # 141 = altstory upgrades (status: WIP)
 # 142 = endless upgrades (status: WIP)
 # 143 = event upgrades (status: WIP)
+# 144 = other locations (status: unknown, has any misc. location)
 
 # every list is ordered in sublists that corrospont to the regions
 # many regions do not exist in some lists, because they are just tied to a specific gamemode (or something else)
@@ -265,4 +266,10 @@ extremely_tedious_dream_list = {
     "quickplay_start": {
         
     }
+}
+
+other_locations_list = {
+    "Bonus Gift (Filler)" : 1440000, # may be repeated
+    "Bonus Gift (Useful)" : 1441000, # may be repeated
+    "Bonus Gift (Progression)" : 1442000 # may be repeated
 }

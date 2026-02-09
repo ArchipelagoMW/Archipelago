@@ -4,6 +4,32 @@ from Options import Choice, OptionGroup, PerGameCommonOptions, Range, Toggle, Op
 
 
 
+
+class BonusGiftLocations(Range):
+    """Amount of extra Archipelago Bonus Gifts.
+    
+    The amount of gifts always equals: 
+    Number of overflow items in itempool (when compared with locations) +
+    Bonus gift locations (this option)
+
+    Bonus Gifts are unlocked quite early on in this game."""
+
+    range_start = 0
+    range_end = 1000
+    default = 50
+
+class BonusGiftChance(Range):
+    """How often Archipelago Bonus Gifts replace other bonus gifts.
+
+    Archipelago Bonus Gifts will also act as any other bonus gift, regardless of setting.
+    This means you can disable this setting (by setting it to 0).
+
+    Keep in mind primairy healing is through Bonus Gifts."""
+
+    range_start = 0
+    range_end = 100
+    default = 45
+
 class DisabledDreams(OptionSet):
     """Disable any Dreams that you do not want to complete in the multiworld.
     
@@ -67,6 +93,8 @@ class TVRUHHOptions(PerGameCommonOptions):
     extremely_grindy_dreams: ExtremelyGrindyDreams
     extremely_tedious_dreams: ExtremelyTediousDreams
     disabled_dreams: DisabledDreams
+    bonus_gift_chance: BonusGiftChance
+    bonus_gift_amount: BonusGiftLocations
 
 
 
@@ -81,6 +109,11 @@ option_groups = [
             TediousDreams, 
             ExtremelyTediousDreams,
             DisabledDreams
+        ],
+        "Location Options",
+        [
+            BonusGiftLocations,
+            BonusGiftChance
         ]
     )
 ]
@@ -91,6 +124,8 @@ option_presets = {
         "extremely_grindy_dreams": False,
         "tedious_dreams": True,
         "extremely_tedious_dreams": False,
-        "disabled_dreams": []
+        "disabled_dreams": [],
+        "bonus_gift_chance": 40,
+        "bonus_gift_amount": 150
     }
 }

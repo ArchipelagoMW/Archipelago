@@ -60,6 +60,8 @@ def create_all_items(world: TVRUHHWorld) -> None:
     itempool.extend(get_items(world, bonus_gift_list))
     itempool.extend(get_items(world, quick_gift_list))
     #TODO: add other unlocks
+    itempool.extend(get_items(world, dreamscape_list))
+    itempool.extend(get_items(world, music_list))
     itempool.extend(get_items(world, other_items_list))
     
 
@@ -621,4 +623,8 @@ other_items_list = {
     "200 Absorbed Bullets Karma Unlock": [1180023, ItemClassification.useful],
     "Story Mode: Overleveling Unlock": [1180024, ItemClassification.progression],
     "Story Mode: Blessings and Burdens Unlock": [1180025, ItemClassification.progression]
+}
+
+default_items = {
+
 }
