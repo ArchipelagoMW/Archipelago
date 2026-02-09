@@ -170,7 +170,7 @@ new_tree_copy.unit = nil
 new_tree_copy.unit.count = {{ location.count }}
 new_tree_copy.unit.ingredients = {{ variable_to_lua(location.factorio_ingredients) }}
 {% endif %}
-{%- if location.revealed and item.name in base_tech_table -%}
+{%- if (location.revealed or tech_tree_information == 2) and item.name in base_tech_table -%}
 {#- copy Factorio Technology Icon #}
 copy_factorio_icon(new_tree_copy, "{{ item.name }}")
 {%- if item.name == "rocket-silo" and item.player == location.player %}
