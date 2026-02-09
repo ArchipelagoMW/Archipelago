@@ -417,10 +417,12 @@ class Toggle(NumericOption):
     def from_text(cls, text: str) -> Toggle:
         if text == "random":
             return cls(random.choice(list(cls.name_lookup)))
-        elif text.lower() in {"off", "0", "false", "none", "null", "no"}:
+        elif text.lower() in {"off", "0", "false", "none", "null", "no", "disabled"}:
             return cls(0)
-        else:
+        elif text.lower() in {"on", "1", "true", "yes", "enabled"}:
             return cls(1)
+        else:
+            raise OptionError(f"Option {cls.__name__} does not support a value of {text}")
 
     @classmethod
     def from_any(cls, data: typing.Any):
