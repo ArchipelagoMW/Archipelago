@@ -316,8 +316,13 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
     children: tuple[Rule[TWorld], ...]
     """The child rules this rule's logic is based on"""
 
-    def __init__(self, *children: Rule[TWorld], options: Iterable[OptionFilter] = ()) -> None:
-        super().__init__(options=options)
+    def __init__(
+        self,
+        *children: Rule[TWorld],
+        options: Iterable[OptionFilter] = (),
+        filtered_resolution: bool = False,
+    ) -> None:
+        super().__init__(options=options, filtered_resolution=filtered_resolution)
         self.children = children
 
     @override
@@ -749,8 +754,13 @@ class HasAll(Rule[TWorld], game="Archipelago"):
     item_names: tuple[str, ...]
     """A tuple of item names to check for"""
 
-    def __init__(self, *item_names: str, options: Iterable[OptionFilter] = ()) -> None:
-        super().__init__(options=options)
+    def __init__(
+        self,
+        *item_names: str,
+        options: Iterable[OptionFilter] = (),
+        filtered_resolution: bool = False,
+    ) -> None:
+        super().__init__(options=options, filtered_resolution=filtered_resolution)
         self.item_names = tuple(sorted(set(item_names)))
 
     @override
@@ -862,8 +872,13 @@ class HasAny(Rule[TWorld], game="Archipelago"):
     item_names: tuple[str, ...]
     """A tuple of item names to check for"""
 
-    def __init__(self, *item_names: str, options: Iterable[OptionFilter] = ()) -> None:
-        super().__init__(options=options)
+    def __init__(
+        self,
+        *item_names: str,
+        options: Iterable[OptionFilter] = (),
+        filtered_resolution: bool = False,
+    ) -> None:
+        super().__init__(options=options, filtered_resolution=filtered_resolution)
         self.item_names = tuple(sorted(set(item_names)))
 
     @override
@@ -1188,8 +1203,14 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
     count: int = 1
     """The number of items the player needs to have"""
 
-    def __init__(self, *item_names: str, count: int = 1, options: Iterable[OptionFilter] = ()) -> None:
-        super().__init__(options=options)
+    def __init__(
+        self,
+        *item_names: str,
+        count: int = 1,
+        options: Iterable[OptionFilter] = (),
+        filtered_resolution: bool = False,
+    ) -> None:
+        super().__init__(options=options, filtered_resolution=filtered_resolution)
         self.item_names = tuple(sorted(set(item_names)))
         self.count = count
 
@@ -1316,8 +1337,14 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
     count: int = 1
     """The number of items the player needs to have"""
 
-    def __init__(self, *item_names: str, count: int = 1, options: Iterable[OptionFilter] = ()) -> None:
-        super().__init__(options=options)
+    def __init__(
+        self,
+        *item_names: str,
+        count: int = 1,
+        options: Iterable[OptionFilter] = (),
+        filtered_resolution: bool = False,
+    ) -> None:
+        super().__init__(options=options, filtered_resolution=filtered_resolution)
         self.item_names = tuple(sorted(set(item_names)))
         self.count = count
 
