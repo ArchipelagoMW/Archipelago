@@ -1,15 +1,16 @@
+import dataclasses
 from math import ceil
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, Dict, List, override
+
+from BaseClasses import CollectionState
+from NetUtils import JSONMessagePart
 from . import names
-from .locations import heat_man_locations, air_man_locations, wood_man_locations, bubble_man_locations, \
-    quick_man_locations, flash_man_locations, metal_man_locations, crash_man_locations, wily_1_locations, \
-    wily_2_locations, wily_3_locations, wily_4_locations, wily_5_locations, wily_6_locations
-from .options import bosses, weapons_to_id, Consumables, RandomWeaknesses
-from worlds.generic.Rules import add_rule
+from .locations import get_boss_locations, mm2_regions
+from .options import bosses, weapons_to_id, Consumables, RandomWeaknesses, YokuJumps, EnableLasers
+from rule_builder.rules import HasAll, HasAny, Has, Rule, True_, OptionFilter
 
 if TYPE_CHECKING:
     from . import MM2World
-    from BaseClasses import CollectionState
 
 weapon_damage: Dict[int, List[int]] = {
     0: [2,  2,  1,   1,  2,   2,  1,   1,   1,  7,  1,  0,    1,   -1],  # Mega Buster
@@ -70,16 +71,85 @@ weapon_costs = {
 }
 
 
-def can_defeat_enough_rbms(state: "CollectionState", player: int,
-                           required: int, boss_requirements: Dict[int, List[int]]):
-    can_defeat = 0
-    for boss, reqs in boss_requirements.items():
-        if boss in robot_masters:
-            if state.has_all(map(lambda x: weapons_to_name[x], reqs), player):
-                can_defeat += 1
-                if can_defeat >= required:
-                    return True
-    return False
+@dataclasses.dataclass
+class CanDefeatEnoughRBMs(Rule["MM2World"], game="Mega Man 2"):
+    @override
+    def _instantiate(self, world: "MM2World") -> Rule.Resolved:
+        return self.Resolved(tuple([(key, tuple(val)) for key, val in sorted(world.wily_5_weapons.items())]), world.options.wily_5_requirement.value,
+                             player=world.player, caching_enabled=True)
+
+    class Resolved(Rule.Resolved):
+        boss_requirements: tuple[tuple[int, tuple[int, ...]], ...]
+        required: int
+
+        @override
+        def item_dependencies(self) -> dict[str, set[int]]:
+            return {
+                weapons_to_name[x]: {id(self)} for boss, weapons in self.boss_requirements for x in weapons
+            }
+
+        @override
+        def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
+            explain_strs = self.explain_str(state).splitlines()
+            messages: list[JSONMessagePart] = [{"type": "text", "text": explain_strs[0]}]
+            for rbm in explain_strs[1:]:
+                color = "salmon" if "Cannot" in rbm else "green"
+                messages.append({"type": "color", "text": rbm, "color": color})
+            return messages
+
+        @override
+        def explain_str(self, state: CollectionState | None = None) -> str:
+            explain_str = f"Required RBMs: {self.required}"
+            for boss, reqs in self.boss_requirements:
+                if boss in robot_masters:
+                    verb = "Can Defeat" if state.has_all(map(lambda x: weapons_to_name[x], reqs), self.player) \
+                        else "Cannot Defeat"
+                    explain_str += f"\n{robot_masters[boss][:-9]}: {verb}"
+            return explain_str
+
+        @override
+        def _evaluate(self, state: "CollectionState") -> bool:
+            can_defeat = 0
+            for boss, reqs in self.boss_requirements:
+                if boss in robot_masters:
+                    if state.has_all(map(lambda x: weapons_to_name[x], reqs), self.player):
+                        can_defeat += 1
+                        if can_defeat >= self.required:
+                            return True
+            return False
+
+
+HasAnyItem = HasAny(names.item_1, names.item_2, names.item_3)
+HasI1OrI2 = HasAny(names.item_1, names.item_2)
+HasCrashBomber = Has(names.crash_bomber)
+
+STATIC_LOCATION_RULES = {
+    names.wily_4: HasCrashBomber,
+    names.wily_stage_4: HasCrashBomber,
+}
+
+STATIC_1UP_RULES = {
+    # 1-Up/E-Tank
+    names.flash_man_c2: HasAnyItem,
+    names.quick_man_c1: HasAnyItem,
+    names.metal_man_c2: HasI1OrI2,
+    names.metal_man_c3: HasI1OrI2,
+    names.crash_man_c3: HasAnyItem,
+    names.wily_2_c5: HasCrashBomber,
+    names.wily_2_c6: HasCrashBomber,
+    names.wily_3_c2: HasCrashBomber,
+}
+
+STATIC_ENERGY_RULES = {
+    names.flash_man_c3: HasCrashBomber,
+    names.flash_man_c4: HasCrashBomber,
+    names.wily_3_c1: HasCrashBomber,
+}
+
+STATIC_ENTRANCE_RULES = {
+    "To Quick Man Stage": Has(names.time_stopper) | [OptionFilter(EnableLasers, True)],
+    "To Heat Man Stage": Has(names.item_2) | [OptionFilter(YokuJumps, True)],
+}
 
 
 def set_rules(world: "MM2World") -> None:
@@ -246,25 +316,27 @@ def set_rules(world: "MM2World") -> None:
 
         world.wily_5_weapons = {boss: sorted(used_weapons[boss]) for boss in used_weapons}
 
+    location_rules = {}
+
     for i, boss_locations in enumerate([
-        heat_man_locations,
-        air_man_locations,
-        wood_man_locations,
-        bubble_man_locations,
-        quick_man_locations,
-        flash_man_locations,
-        metal_man_locations,
-        crash_man_locations,
-        wily_1_locations,
-        wily_2_locations,
-        wily_3_locations,
-        wily_4_locations,
-        wily_5_locations,
-        wily_6_locations
+        get_boss_locations("Heat Man Stage"),
+        get_boss_locations("Air Man Stage"),
+        get_boss_locations("Wood Man Stage"),
+        get_boss_locations("Bubble Man Stage"),
+        get_boss_locations("Quick Man Stage"),
+        get_boss_locations("Flash Man Stage"),
+        get_boss_locations("Metal Man Stage"),
+        get_boss_locations("Crash Man Stage"),
+        get_boss_locations("Wily Stage 1"),
+        get_boss_locations("Wily Stage 2"),
+        get_boss_locations("Wily Stage 3"),
+        get_boss_locations("Wily Stage 4"),
+        get_boss_locations("Wily Stage 5"),
+        get_boss_locations("Wily Stage 6")
     ]):
         if world.weapon_damage[0][i] > 0:
             continue  # this can always be in logic
-        weapons = []
+        weapons: list[str] = []
         for weapon in range(1, 9):
             if world.weapon_damage[weapon][i] > 0:
                 if world.weapon_damage[weapon][i] < minimum_weakness_requirement[weapon]:
@@ -273,59 +345,29 @@ def set_rules(world: "MM2World") -> None:
         if not weapons:
             raise Exception(f"Attempted to have boss {i} with no weakness! Seed: {world.multiworld.seed}")
         for location in boss_locations:
+            static_rule = STATIC_LOCATION_RULES.get(location, True_())
             if i == 12:
-                add_rule(world.get_location(location),
-                         lambda state, weps=tuple(weapons): state.has_all(weps, world.player))
-                # TODO: when has_list gets added, check for a subset of possible weaknesses
+                location_rules[location] = HasAll(*weapons) & static_rule
             else:
-                add_rule(world.get_location(location),
-                         lambda state, weps=tuple(weapons): state.has_any(weps, world.player))
+                location_rules[location] = HasAny(*weapons) & static_rule
 
-    # Always require Crash Bomber for Boobeam Trap
-    add_rule(world.get_location(names.wily_4),
-             lambda state: state.has(names.crash_bomber, world.player))
-    add_rule(world.get_location(names.wily_stage_4),
-             lambda state: state.has(names.crash_bomber, world.player))
-
-    # Need to defeat x amount of robot masters for Wily 5
-    add_rule(world.get_location(names.wily_5),
-             lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_5_requirement.value,
-                                                  world.wily_5_weapons))
-    add_rule(world.get_location(names.wily_stage_5),
-             lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_5_requirement.value,
-                                                  world.wily_5_weapons))
-
-    if not world.options.yoku_jumps:
-        add_rule(world.get_entrance("To Heat Man Stage"),
-                 lambda state: state.has(names.item_2, world.player))
-
-    if not world.options.enable_lasers:
-        add_rule(world.get_entrance("To Quick Man Stage"),
-                 lambda state: state.has(names.time_stopper, world.player))
+    for location in STATIC_LOCATION_RULES:
+        if location not in location_rules:
+            location_rules[location] = STATIC_LOCATION_RULES[location]
 
     if world.options.consumables in (Consumables.option_1up_etank,
                                      Consumables.option_all):
-        add_rule(world.get_location(names.flash_man_c2),
-                 lambda state: state.has_any([names.item_1, names.item_2, names.item_3], world.player))
-        add_rule(world.get_location(names.quick_man_c1),
-                 lambda state: state.has_any([names.item_1, names.item_2, names.item_3], world.player))
-        add_rule(world.get_location(names.metal_man_c2),
-                 lambda state: state.has_any([names.item_1, names.item_2], world.player))
-        add_rule(world.get_location(names.metal_man_c3),
-                 lambda state: state.has_any([names.item_1, names.item_2], world.player))
-        add_rule(world.get_location(names.crash_man_c3),
-                 lambda state: state.has_any([names.item_1, names.item_2, names.item_3], world.player))
-        add_rule(world.get_location(names.wily_2_c5),
-                 lambda state: state.has(names.crash_bomber, world.player))
-        add_rule(world.get_location(names.wily_2_c6),
-                 lambda state: state.has(names.crash_bomber, world.player))
-        add_rule(world.get_location(names.wily_3_c2),
-                 lambda state: state.has(names.crash_bomber, world.player))
+        for location in STATIC_1UP_RULES:
+            location_rules[location] = STATIC_1UP_RULES[location]
+
     if world.options.consumables in (Consumables.option_weapon_health,
                                      Consumables.option_all):
-        add_rule(world.get_location(names.flash_man_c3),
-                 lambda state: state.has(names.crash_bomber, world.player))
-        add_rule(world.get_location(names.flash_man_c4),
-                 lambda state: state.has(names.crash_bomber, world.player))
-        add_rule(world.get_location(names.wily_3_c1),
-                 lambda state: state.has(names.crash_bomber, world.player))
+        for location in STATIC_ENERGY_RULES:
+            location_rules[location] = STATIC_ENERGY_RULES[location]
+
+    for location in location_rules:
+        world.set_rule(world.get_location(location), location_rules[location])
+
+    for name, region in mm2_regions.items():
+        static_rule = STATIC_ENTRANCE_RULES.get(name, True_())
+        world.set_rule(world.get_entrance(f"To {name}"), HasAll(*region.required_items) & static_rule)

@@ -1,5 +1,5 @@
 import pkgutil
-from typing import Optional, TYPE_CHECKING, Iterable, Dict, Sequence
+from typing import TYPE_CHECKING, Iterable, Sequence
 import hashlib
 import Utils
 import os
@@ -20,7 +20,7 @@ PROTEUSHASH = "b69fff40212b80c94f19e786d1efbf61"
 MM2NESHASH = "0527a0ee512f69e08b8db6dc97964632"
 MM2VCHASH = "0c78dfe8e90fb8f3eed022ff01126ad3"
 
-enemy_weakness_ptrs: Dict[int, int] = {
+enemy_weakness_ptrs: dict[int, int] = {
     0: 0x3E9A8,
     1: 0x3EA24,
     2: 0x3EA9C,
@@ -31,7 +31,7 @@ enemy_weakness_ptrs: Dict[int, int] = {
     7: 0x3ECF4,
 }
 
-enemy_addresses: Dict[str, int] = {
+enemy_addresses: dict[str, int] = {
     "Shrink": 0x00,
     "M-445": 0x04,
     "Claw": 0x08,
@@ -182,7 +182,7 @@ def patch_rom(world: "MM2World", patch: MM2ProcedurePatch) -> None:
 
     write_palette_shuffle(world, patch)
 
-    enemy_weaknesses: Dict[str, Dict[int, int]] = {}
+    enemy_weaknesses: dict[str, dict[int, int]] = {}
 
     if world.options.strict_weakness or world.options.random_weakness or world.options.plando_weakness:
         # we need to write boss weaknesses
@@ -373,7 +373,7 @@ def read_headerless_nes_rom(rom: bytes) -> bytes:
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:
-    base_rom_bytes: Optional[bytes] = getattr(get_base_rom_bytes, "base_rom_bytes", None)
+    base_rom_bytes: bytes | None = getattr(get_base_rom_bytes, "base_rom_bytes", None)
     if not base_rom_bytes:
         file_name = get_base_rom_path(file_name)
         base_rom_bytes = read_headerless_nes_rom(bytes(open(file_name, "rb").read()))
