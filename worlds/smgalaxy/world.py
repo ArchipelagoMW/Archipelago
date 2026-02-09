@@ -25,8 +25,8 @@ class SMGWorld(World):
     options_dataclass = Options.SMGOptions
     options: Options.SMGOptions
 
-    item_name_to_id = ClassVar[ITEM_NAME_TO_ID]
-    location_name_to_id = ClassVar[LOCATION_NAME_TO_ID]
+    item_name_to_id: ClassVar[dict[str, int]] = ITEM_NAME_TO_ID
+    location_name_to_id: ClassVar[dict[str, int]] = LOCATION_NAME_TO_ID
 
     required_client_version = (0, 6, 6)
 
