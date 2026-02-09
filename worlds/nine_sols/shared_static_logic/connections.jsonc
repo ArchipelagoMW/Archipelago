@@ -790,7 +790,9 @@
         { "item": "Grapple" },
         [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
     ] } ] },
-    { "from": "YC - Egg Cave & Left Exit", "to": "YC - Root Node", "requires": [] }, // one-way door
+    { "from": "YC - Egg Cave & Left Exit", "to": "YC - Root Node", "requires": [ // climbing to hack point above one-way door
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Wall Climb" }, { "item": "Ledge Grab" } ] }
+    ] },
 
     { "from": "YC - Egg Cave & Left Exit", "to": "TRC - Ground Floor & Exits", "requires": [] },
     { "from": "TRC - Ground Floor & Exits", "to": "YC - Egg Cave & Left Exit", "requires": [] },
