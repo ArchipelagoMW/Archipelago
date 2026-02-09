@@ -503,7 +503,7 @@ local function on_init()
 end
 
 -- hook into researches done
-local function on_research_finished(event)
+function on_research_finished(event)
     local technology = event.research
     if string.find(technology.force.name, "EE_TESTFORCE") == 1 then
         --Don't acknowledge AP research as an Editor Extensions test force

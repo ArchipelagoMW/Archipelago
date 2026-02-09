@@ -12,7 +12,7 @@
 --      hints will only be send once. Unless an achipelago command demands the whole list.
 
 --to do:
---hints inbound: AP side
+-- hide outbound hints
 
 local function send_hint(technologies, force)
     --technologies => tech_name = true
