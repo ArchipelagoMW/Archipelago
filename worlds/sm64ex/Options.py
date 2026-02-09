@@ -171,6 +171,7 @@ sm64_options_groups = [
         ProgressiveKeys,
         EnableCoinStars,
         EnableLockedPaintings,
+        EnableProgressiveMaxCoinChecks,
         StrictCapRequirements,
         StrictCannonRequirements,
     ]),
