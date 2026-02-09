@@ -3,7 +3,7 @@ import os
 import typing
 import textwrap
 
-from Utils import local_path, persistent_store, get_adjuster_settings, get_adjuster_settings_no_defaults, \
+from Utils import local_path, persistent_store, get_adjuster_settings, \
     data_to_bps_patch, open_image_secure, open_filename, open_directory
 from .adjuster_patcher import get_patch_from_sprite_pack, extract_palette_from_file, \
     validate_sprite_pack, get_pokemon_data, stringify_pokemon_data, destringify_pokemon_data, \
@@ -533,7 +533,7 @@ def run_kivy_gui() -> None:
             "ability2": True,
             "movePool": True
         }
-        changed_field_values = {k: False for k, _ in valid_field_values.items()}
+        changed_field_values = {k: False for k in valid_field_values.keys()}
 
         pokemon_rom_data: dict[str, int | list[dict[str, str | int]]] = {}
         pokemon_saved_data: dict[str, int | list[dict[str, str | int]]] | None = None
@@ -619,7 +619,7 @@ def run_kivy_gui() -> None:
                 if "dex" in list(temp_pokemon_data.keys()):
                     temp_pokemon_data["dex"] = (temp_pokemon_data["dex"] << 7) + (self.pokemon_rom_data["dex"] % 0x80)
                 different_pokemon_data = keep_different_pokemon_data(self.pokemon_rom_data, temp_pokemon_data)
-                is_different_from_rom = internal_field in list(different_pokemon_data.keys())
+                is_different_from_rom = internal_field in different_pokemon_data.keys()
                 if self.pokemon_saved_data and internal_field in list(self.pokemon_saved_data.keys()):
                     different_pokemon_data = keep_different_pokemon_data(self.pokemon_saved_data, temp_pokemon_data)
                     is_different_from_data = internal_field in list(different_pokemon_data.keys())

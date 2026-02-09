@@ -197,7 +197,7 @@ def add_palette(_key: str, _object_name: str, _palette_name: str, _sprite_name: 
         add_resource(True, palette_key, data_addresses, _path, data_objects, not data_extended)
 
 
-def add_resource(_is_palette: str, _key: str, _data_addresses: int | list[int], _path: str,
+def add_resource(_is_palette: bool, _key: str, _data_addresses: int | list[int], _path: str,
                  _data_objects: bytearray | list[bytearray] = bytearray(), _replace_address=True):
     # Adds a resource (sprite or palette) to the patch and replaces its given pointers
     if _replace_address:

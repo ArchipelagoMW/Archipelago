@@ -1309,12 +1309,12 @@ def data_to_bps_patch(data: dict[str, int | dict[str, int | bytes]]):
 
 def open_image_secure(path: str):
     """Used to open PNG files using Pillow with extra security checks instead of PIL.Image.open"""
-    with open(path, 'rb') as image_file:
+    with open(path, "rb") as image_file:
         image_data = image_file.read(8)
-        if image_data != b'\x89PNG\x0d\x0a\x1a\x0a':
-            raise Exception('The given image is not a valid PNG file!')
+        if image_data != b"\x89PNG\x0d\x0a\x1a\x0a":
+            raise Exception("The given image is not a valid PNG file!")
     from PIL.Image import open as PIL_open
-    return PIL_open(path, formats=['PNG'])
+    return PIL_open(path, formats=["PNG"])
 
 
 class DaemonThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):
