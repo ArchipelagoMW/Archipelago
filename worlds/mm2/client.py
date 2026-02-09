@@ -311,7 +311,7 @@ class MegaMan2Client(BizHawkClient):
             weapons_unlocked, items_unlocked, items_received, \
             completed_stages, consumable_checks, \
             e_tanks, lives, wep_energy, health, difficulty, death_link_status, \
-            energy_link_packet, last_wily = await read(ctx.bizhawk_ctx, [
+            energy_link_packet, current_last_wily = await read(ctx.bizhawk_ctx, [
                 (MM2_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
                 (MM2_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
                 (MM2_ITEMS_ACQUIRED, 1, "RAM"),
@@ -354,18 +354,18 @@ class MegaMan2Client(BizHawkClient):
             elif health[0] != 0x00 and not death_link_status[0]:
                 self.sending_death_link = False
 
-        if self.last_wily != last_wily[0]:
+        if self.last_wily != current_last_wily[0]:
             if self.last_wily is None:
                 # revalidate last wily from data storage
                 await ctx.send_msgs([{"cmd": "Set", "key": f"MM2_LAST_WILY_{ctx.team}_{ctx.slot}", "operations": [
                     {"operation": "default", "value": 8}
                 ]}])
                 await ctx.send_msgs([{"cmd": "Get", "keys": [f"MM2_LAST_WILY_{ctx.team}_{ctx.slot}"]}])
-            elif last_wily[0] == 0:
+            elif current_last_wily[0] == 0:
                 writes.append((MM2_LAST_WILY, self.last_wily.to_bytes(1, "little"), "RAM"))
             else:
                 # correct our setting
-                self.last_wily = int.from_bytes(last_wily, "little")
+                self.last_wily = int.from_bytes(current_last_wily, "little")
                 await ctx.send_msgs([{"cmd": "Set", "key": f"MM2_LAST_WILY_{ctx.team}_{ctx.slot}", "operations": [
                     {"operation": "replace", "value": self.last_wily}
                 ]}])
