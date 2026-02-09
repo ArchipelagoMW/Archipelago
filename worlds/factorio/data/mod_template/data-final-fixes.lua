@@ -154,11 +154,11 @@ technologies["{{ original_tech_name }}"].hidden_in_factoriopedia = true
 new_tree_copy = table.deepcopy(template_tech)
 new_tree_copy.name = "ap-{{ location.address }}-"{# use AP ID #}
 {%- if (location.revealed or tech_tree_information == 2) -%}
-new_tree_copy.localised_name = {"technology-name.ap-technology-full", {{ player_names[item.player] }}, {{ item.name }}, {{ location.name }}}
-new_tree_copy.localised_description  = {"technology-description.ap-technology-full", {{ item.name }}, {{ player_names[item.player] }}, {% if item.advancement %}{"ap-technology-item-advancement"}{% elif item.useful %}{"ap-technology-item-useful"}{% elif item.trap %}{"ap-technology-item-trap"}{% else %}""{% endif %}}
+new_tree_copy.localised_name = {"technology-name.ap-technology-full", "{{ player_names[item.player] }}", "{{ item.name }}", "{{ location.name }}"}
+new_tree_copy.localised_description  = {"technology-description.ap-technology-full", "{{ item.name }}", "{{ player_names[item.player] }}", {% if item.advancement %}{"technology-description.ap-technology-item-advancement"}{% elif item.useful %}{"technology-description.ap-technology-item-useful"}{% elif item.trap %}{"technology-description.ap-technology-item-trap"}{% else %}""{% endif %}}
 {%- else  %}
-new_tree_copy.localised_name = {"technology-name.ap-technology-hidden", {{location.name}}}
-new_tree_copy.localised_description  = {"technology-description.ap-technology-hidden", {% if tech_tree_information == 1 and item.advancement %}{"ap-technology-item-advancement"}{% else %}""{% endif %}}
+new_tree_copy.localised_name = {"technology-name.ap-technology-hidden", "{{location.name}}"}
+new_tree_copy.localised_description  = {"technology-description.ap-technology-hidden", {% if tech_tree_information == 1 and item.advancement %}{"technology-description.ap-technology-item-advancement"}{% else %}""{% endif %}}
 {% endif -%}
 {% if location.crafted_item is not none %}
 new_tree_copy.research_trigger = {

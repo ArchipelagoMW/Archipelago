@@ -19,7 +19,7 @@ end
 data:extend({
     {
         type = "bool-setting",
-        name = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}",
+        name = "archipelago-death-link",
         setting_type = "runtime-global",
         {% if death_link %}
             default_value = true

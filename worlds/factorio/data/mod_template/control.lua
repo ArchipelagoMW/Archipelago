@@ -10,7 +10,7 @@ FREE_SAMPLE_BLACKLIST = {{ dict_to_lua(free_sample_blacklist) }}
 TRAP_EVO_FACTOR = {{ evolution_trap_increase }} / 100
 MAX_SCIENCE_PACK = {{ max_science_pack }}
 GOAL = {{ goal }}
-ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link-{{ slot_player }}-{{ seed_name }}"
+ARCHIPELAGO_DEATH_LINK_SETTING = "archipelago-death-link"
 ENERGY_INCREMENT = {{ energy_link * 10000000 }}
 ENERGY_LINK_EFFICIENCY = 0.75
 
