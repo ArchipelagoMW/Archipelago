@@ -2,12 +2,12 @@
 SHIP = "Comet Observatory"
 
 # Hub Regions
-TERRACE = "Terrace"
-FOUNTAIN = "Fountain"
-GARDEN = "Garden"
-ENGINE = "Engine Room"
-BEDROOM = "Bedroom"
-KITCHEN = "Kitchen"
+TERRACE = "Dome 1"
+FOUNTAIN = "Dome 2"
+GARDEN = "Dome 6"
+ENGINE = "Dome 5"
+BEDROOM = "Dome 4"
+KITCHEN = "Dome 3"
 LIBRARY = "Library"
 COTU = "Center of the Universe"
 
