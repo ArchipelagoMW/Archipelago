@@ -37,10 +37,8 @@ except ModuleNotFoundError:
 
 sprite_pack_data: dict[str, int | list[dict[str, int | bytes]]] = {}
 resource_address_to_insert_to = 0x00
-current_rom: bytearray = None
 rom_version = "Emerald"
 rom_is_ap = False
-data_addresses: dict[str, int] = None
 
 ##################
 # Main Functions #
@@ -247,7 +245,7 @@ def add_raw_resource(_is_palette: bool, _key: str, _data_address: int, _path: st
 
 
 def add_pokemon_data(_pokemon_name: str, _data_path="",
-                     _forced_data: dict[str, int | list[dict[str, str | int]]] = None):
+                     _forced_data: dict[str, int | list[dict[str, str | int]]] | None = None):
     # Adds a given pokemon data and move pool to the patch
     if _forced_data is not None:
         new_pokemon_data = _forced_data
@@ -492,7 +490,7 @@ def extract_complex_sprite(_overworld_struct_address: int, _sprite_key: str, _ob
     return final_image, extra_sprite_name
 
 
-def extract_complex_sprite_data(_data_address: int, _length: int, _data_id_info: dict[str, int] = None):
+def extract_complex_sprite_data(_data_address: int, _length: int, _data_id_info: dict[str, int] | None = None):
     result = bytearray()
     data_last_id = 0
     while True:
@@ -1465,16 +1463,6 @@ def are_move_pools_equal(_move_pool_1: list[dict[str, str | int]], _move_pool_2:
 # FR/LG Extension #
 ###################
 
-FOLDER_OBJECT_INFOS: list[dict[str, str | list[str] | dict[str, list[str]]]] = None
-INTERNAL_ID_TO_OBJECT_ADDRESS: dict[str, tuple[str, int, bool]] = None
-OVERWORLD_SPRITE_ADDRESSES: dict[str, list[int]] = None
-POINTER_REFERENCES: dict[str, list[tuple[str, int]]] = None
-VALID_OVERWORLD_SPRITE_SIZES: list[dict[str, int | str]] = None
-SPRITES_REQUIREMENTS: dict[str, dict[str, bool | int | list[int]]] = None
-SPRITES_REQUIREMENTS_EXCEPTIONS: dict[str, dict[str, dict[str, bool | int | list[int]]]] = None
-OVERWORLD_PALETTE_IDS: dict[str, int] = None
-DATA_ADDRESSES_INFO: dict[str, int | dict[str, int]] = None
-
 
 def load_constants(_rom_version=rom_version):
     # Loads all constants depending on the version of the Pokemon ROM
@@ -1639,7 +1627,7 @@ def is_overworld_sprite(_sprite_key: str):
     return not _sprite_key.startswith("pokemon_") and "battle" not in _sprite_key
 
 
-def handle_address_collection(_rom: bytearray, _rom_version: str, _forced_is_ap: bool = None):
+def handle_address_collection(_rom: bytearray, _rom_version: str, _forced_is_ap: bool | None = None):
     # Picks and stores the right address collection for the given ROM
     global rom_version
     rom_version = _rom_version

@@ -2,6 +2,7 @@ import argparse
 import logging
 import os
 import typing
+import textwrap
 
 from Utils import local_path, persistent_store, get_adjuster_settings, get_adjuster_settings_no_defaults, \
     data_to_bps_patch, open_image_secure, open_filename, open_directory
@@ -239,7 +240,7 @@ def run_kivy_gui() -> None:
             self.entry.bind(text=self.update_patch)
             hide_widget(self.is_ap_checkbox)
 
-        def select_patch(self, _forced_patch: str = None):
+        def select_patch(self, _forced_patch: str | None = None):
             # Run when we ask for the user to select a ROM or patch file,
             # or when the ROM or patch file needs to be reloaded
             if _forced_patch is not None:
@@ -338,7 +339,7 @@ def run_kivy_gui() -> None:
         def reload_pack(self):
             self.update_sprite_pack(self, self.entry.text)
 
-        def select_sprite_pack(self, _forced_sprite_pack: str = None):
+        def select_sprite_pack(self, _forced_sprite_pack: str | None = None):
             # Run when we ask for the user to select a sprite pack,
             # or when the sprite pack needs to be reloaded
             if _forced_sprite_pack is not None:
@@ -443,7 +444,7 @@ def run_kivy_gui() -> None:
         def extract_all_sprites(self):
             # Run when the Extract All button is pressed
             # Extract all the sprites from all Pokemons and Trainers into the given folder
-            base_folder_path: str = None
+            base_folder_path: str | None = None
             if app.top_frame.sprite_pack_frame.is_sprite_pack_valid:
                 base_folder_path = opts.sprite_pack
             output_folder = open_directory("Select a folder to extract all sprites to.", base_folder_path)
@@ -535,8 +536,8 @@ def run_kivy_gui() -> None:
         }
         changed_field_values = {k: False for k, _ in valid_field_values.items()}
 
-        pokemon_rom_data: dict[str, int | list[dict[str, str | int]]] = None
-        pokemon_saved_data: dict[str, int | list[dict[str, str | int]]] = None
+        pokemon_rom_data: dict[str, int | list[dict[str, str | int]]] = {}
+        pokemon_saved_data: dict[str, int | list[dict[str, str | int]]] | None = None
 
         def late_init(self):
             self.md_bg_color = app.theme_cls.backgroundColor
@@ -976,7 +977,7 @@ def run_kivy_gui() -> None:
         sprite_preview: SpritePreviewFrame = ObjectProperty()
         bottom_frame: BottomFrame = ObjectProperty()
 
-        ap_rom: bytearray = None
+        ap_rom: bytearray | None = None
         adjuster_extensions = [".gba", *EMERALD_PATCH_EXTENSIONS.split("/"), *FR_LG_PATCH_EXTENSIONS.split("/")]
 
         def late_init(self):
@@ -1024,7 +1025,7 @@ def run_kivy_gui() -> None:
                                          "Cannot build the AP ROM: a patch file or a patched ROM is required!")
                 return
 
-            rom_data: bytearray = None
+            rom_data: bytearray | None = None
             if os.path.splitext(_patch)[-1] == ".gba":
                 # Load up the ROM directly
                 with open(_patch, "rb") as stream:
@@ -1115,9 +1116,9 @@ def run_kivy_gui() -> None:
 
             # Uncomment to enable the kivy live editor console
             # Press Ctrl-E (with numlock/capslock) disabled to open
-            from kivy.core.window import Window
-            from kivy.modules import console
-            console.create_console(Window, self.container)
+            #from kivy.core.window import Window
+            #from kivy.modules import console
+            #console.create_console(Window, self.container)
 
             return self.container
 
@@ -1130,8 +1131,6 @@ def run_kivy_gui() -> None:
     def show_widget(_wid: Widget, id: int = 0):
         if hasattr(_wid, "saved_parent") and _wid.parent != _wid.saved_parent:
             _wid.saved_parent.add_widget(_wid, index=id)
-
-    app: AdjusterRootLayout = None
 
     opts.patch = ""
     opts.sprite_pack = ""

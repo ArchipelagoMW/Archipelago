@@ -389,12 +389,10 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
 
 
 def get_default_adjuster_settings(game_name: str) -> Namespace:
-    import LttPAdjuster, worlds._pokemon_gen3_adjuster.adjuster as PokemonGen3Adjuster
+    import LttPAdjuster
     adjuster_settings = Namespace()
     if game_name == LttPAdjuster.GAME_ALTTP:
         return LttPAdjuster.get_argparser().parse_known_args(args=[])[0]
-    elif game_name == PokemonGen3Adjuster.GAME_GEN3_ADJUSTER:
-        return PokemonGen3Adjuster.get_argparser().parse_known_args(args=[])[0]
 
     return adjuster_settings
 
