@@ -1,9 +1,10 @@
 from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
-from typing import NamedTuple, Optional
+from typing import NamedTuple, Optional, Dict, Set
+
 
 class SMGItemData(NamedTuple):
-    type: str
+    type: list[str]
     code: Optional[int]
     classification: IC
     other_variable: Optional[int] = None
@@ -21,13 +22,22 @@ class SMGItem(Item):
 
 
 item_table: dict[str, SMGItemData] = {
-  "Power Star": SMGItemData("Power Star", 170000004, IC.progression_deprioritized_skip_balancing),# rom address  0x007ACCA0F2FF8760 don't remeber how i found this or if it's acurate so could use double check.
-  "Grand Star": SMGItemData("Grand Star", 170000005, IC.progression),
-  "Green Star": SMGItemData("Green Star", 170000006, IC.progression),
-  "Nothing": SMGItemData("Nothing Item", 170000007, IC.filler),
-  "Progressive Comets": SMGItemData("Comet", 170000008, IC.progression),
-  "Peach": SMGItemData("Victory", None, IC.progression)
+  "Power Star": SMGItemData(["Power Star"], 170000004, IC.progression_deprioritized_skip_balancing),# rom address  0x007ACCA0F2FF8760 don't remeber how i found this or if it's acurate so could use double check.
+  "Grand Star": SMGItemData(["Grand Star", "Power Star"], 170000005, IC.progression),
+  "Green Star": SMGItemData(["Green Star", "Power Star"], 170000006, IC.progression),
+  "Nothing": SMGItemData(["Nothing Item"], 170000007, IC.filler),
+  "Progressive Comets": SMGItemData(["Comet"], 170000008, IC.progression),
+  "Peach": SMGItemData(["Victory"], None, IC.progression)
 }
 
 ITEM_NAME_TO_ID: dict[str, int] =  {
     name: data.code for name, data in item_table.items() if data.code is not None}
+
+def get_item_names_per_category() -> Dict[str, Set[str]]:
+    categories: Dict[str, Set[str]] = {}
+
+    for name, data in item_table.items():
+        for category in data.type:
+            categories.setdefault(category, set()).add(name)
+
+    return categories

@@ -44,15 +44,19 @@ class StarstoFinish(Range):
     range_end = 95
     default = 60
 
-class Dome1Access(OptionCounter):
+class Dome1Offsets(OptionCounter):
     """
-    Set the star requirements for each galaxy in the Dome 1, which is the Terrace in vanilla. These are based on each
-    orbit in the dome, in case levels are shuffled. Inner Orbit is excluded, to ensure you have at least one world to start.
+    Set the star requirements for each galaxy in the Dome 1, which is the Terrace in vanilla.
+    Each number corresponds to how many more stars are needed than the last orbit,
+    and willed be capped if it goes above 10
+
+    These are based on each orbit in the dome, in case levels are shuffled. Inner Orbit is excluded, to ensure you have
+    at least one world to start.
     """
     display_name = "Dome 1 Access"
     internal_name = "dome_one_counts"
     min = 0
-    max = 20
+    max = 10
     valid_keys = ["Second Orbit", "Third Orbit", "Fourth Orbit", "Outer Orbit"]
     default = {
         "Second Orbit": 0,
@@ -62,10 +66,13 @@ class Dome1Access(OptionCounter):
     }
 
 
-class Dome2Access(OptionCounter):
+class Dome2Offsets(OptionCounter):
     """
-    Set the star requirements for each galaxy in the Dome 2, which is the Fountain in vanilla. These are based on each
-    orbit in the dome, in case levels are shuffled.
+    Set the star requirements for each galaxy in the Dome 2, which is the Fountain in vanilla.
+    Each number corresponds to how many more stars are needed than the last orbit,
+    and willed be capped if it goes above 20
+
+    These are based on each orbit in the dome, in case levels are shuffled.
     """
     display_name = "Dome 2 Access"
     internal_name = "dome_two_counts"
@@ -80,10 +87,13 @@ class Dome2Access(OptionCounter):
         "Final Orbit": 0
     }
 
-class Dome3Access(OptionCounter):
+class Dome3Offsets(OptionCounter):
     """
-    Set the star requirements for each galaxy in the Dome 3, which is the Kitchen in vanilla. These are based on each
-    orbit in the dome, in case levels are shuffled.
+    Set the star requirements for each galaxy in the Dome 3, which is the Kitchen in vanilla.
+    Each number corresponds to how many more stars are needed than the last orbit,
+    and willed be capped if it goes above 20
+
+    These are based on each orbit in the dome, in case levels are shuffled.
     """
     display_name = "Dome 3 Access"
     internal_name = "dome_three_counts"
@@ -98,10 +108,13 @@ class Dome3Access(OptionCounter):
         "Final Orbit": 0
     }
 
-class Dome4Access(OptionCounter):
+class Dome4Offsets(OptionCounter):
     """
-    Set the star requirements for each galaxy in the Dome 4, which is the Bedroom in vanilla. These are based on each
-    orbit in the dome, in case levels are shuffled.
+    Set the star requirements for each galaxy in the Dome 4, which is the Bedroom in vanilla.
+    Each number corresponds to how many more stars are needed than the last orbit,
+    and willed be capped if it goes above 20
+
+    These are based on each orbit in the dome, in case levels are shuffled.
     """
     display_name = "Dome 4 Access"
     internal_name = "dome_four_counts"
@@ -116,10 +129,13 @@ class Dome4Access(OptionCounter):
         "Final Orbit": 0
     }
 
-class Dome5Access(OptionCounter):
+class Dome5Offsets(OptionCounter):
     """
-    Set the star requirements for each galaxy in the Dome 5, which is the Engine Room in vanilla. These are based on each
-    orbit in the dome, in case levels are shuffled.
+    Set the star requirements for each galaxy in the Dome 5, which is the Engine Room in vanilla.
+    Each number corresponds to how many more stars are needed than the last orbit,
+    and willed be capped if it goes above 20
+
+    These are based on each orbit in the dome, in case levels are shuffled.
     """
     display_name = "Dome 5 Access"
     internal_name = "dome_five_counts"
@@ -134,10 +150,13 @@ class Dome5Access(OptionCounter):
         "Final Orbit": 0
     }
 
-class Dome6Access(OptionCounter):
+class Dome6Offsets(OptionCounter):
     """
-    Set the star requirements for each galaxy in the Dome 6, which is the Garden in vanilla. These are based on each
-    orbit in the dome, in case levels are shuffled.
+    Set the star requirements for each galaxy in the Dome 6, which is the Garden in vanilla.
+    Each number corresponds to how many more stars are needed than the last orbit,
+    and willed be capped if it goes above 20, for
+
+    These are based on each orbit in the dome, in case levels are shuffled.
     """
     display_name = "Dome 6 Access"
     internal_name = "dome_six_counts"
@@ -156,12 +175,12 @@ class Dome6Access(OptionCounter):
 class SMGOptions(PerGameCommonOptions):
     enable_purple_coin_stars: EnablePurpleCoinStars
     stars_to_finish: StarstoFinish
-    # dome_one_counts: Dome1Access
-    # dome_two_counts: Dome2Access
-    # dome_three_counts: Dome3Access
-    # dome_four_counts: Dome4Access
-    # dome_five_counts: Dome5Access
-    # dome_six_counts: Dome6Access
+    # dome_one_counts: Dome1Offsets
+    # dome_two_counts: Dome2Offsets
+    # dome_three_counts: Dome3Offsets
+    # dome_four_counts: Dome4Offsets
+    # dome_five_counts: Dome5Offsets
+    # dome_six_counts: Dome6Offsets
     #dome_shuffle: ShuffleDomes Enable when Ready
     #galaxy_shuffle: GalaxyShuffle Enable when Ready
 

@@ -6,7 +6,7 @@ from worlds.AutoWorld import World
 from . import items, regions, Rules, web_world, Options
 from .Constants.Names import region_names as regname
 from .locations import LOCATION_NAME_TO_ID
-from .items import SMGItem, ITEM_NAME_TO_ID
+from .items import SMGItem, ITEM_NAME_TO_ID, get_item_names_per_category
 
 
 class SMGWorld(World):
@@ -28,6 +28,7 @@ class SMGWorld(World):
     item_name_to_id: ClassVar[dict[str, int]] = ITEM_NAME_TO_ID
     location_name_to_id: ClassVar[dict[str, int]] = LOCATION_NAME_TO_ID
 
+    item_name_groups = get_item_names_per_category()
     required_client_version = (0, 6, 6)
 
     hint_blacklist = {"B: Bowser's Galaxy Reactor", "Peach"}

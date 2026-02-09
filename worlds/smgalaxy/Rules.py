@@ -5,6 +5,8 @@ from.Constants.Names import region_names as regname
 if TYPE_CHECKING:
     from . import SMGWorld
 
+# Cap the incoming offsets to the maximum of that area.
+
 # main stage logic
 def set_rules(world: "SMGWorld", player: int):
     # Dome 1
@@ -56,7 +58,7 @@ def set_rules(world: "SMGWorld", player: int):
     #Remaining Ship Connections
     connect_regions(world, player, regname.SHIP, regname.LIBRARY, "Library Entrance")
     connect_regions(world, player, regname.SHIP, regname.COTU, "Center Of the Universe Entry",
-                    lambda state: state.has("Grand Star", player, 5) and state.has("Power Star", player, world.options.stars_to_finish.value))
+                    lambda state: state.has("Grand Star", player, 5) and state.has_group("Power Star", player, world.options.stars_to_finish.value))
     connect_regions(world, player, regname.COTU, regname.BOWSER3, "Galaxy's Center")
     connect_regions(world, player, regname.SHIP, regname.SWEETSWEET, "Sweet Sweet Hungry Luma")
     connect_regions(world, player, regname.SHIP, regname.SLINGPOD, "Sling Pod Hungry Luma",
