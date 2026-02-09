@@ -41,7 +41,7 @@ class StarstoFinish(Range):
     display_name = "Stars to finish"
     internal_name = "stars_to_finish"
     range_start = 25
-    range_end = 97
+    range_end = 95
     default = 60
 
 class Dome1Access(OptionCounter):

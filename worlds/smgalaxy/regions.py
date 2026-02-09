@@ -68,7 +68,7 @@ region_list: dict[str, SMGRegionData] = {
     regname.ROLLINGGIZ: SMGRegionData("Special", [regname.SHIP], [], [], {"Green Star": 1}),
     regname.LOOPDEESWOOP: SMGRegionData("Special", [regname.SHIP], [], [], {"Green Star": 1}),
     regname.BUBBLEBLAST: SMGRegionData("Special", [regname.SHIP], [], [], {"Green Star": 1}),
-    regname.FINALE: SMGRegionData("Special", [regname.SHIP], [], [], {}),
+    #regname.FINALE: SMGRegionData("Special", [regname.SHIP], [], [], {}),
     regname.BOWJR1: SMGRegionData("Boss", [regname.TERRACE], [], [], {}),
     regname.BOWJR2: SMGRegionData("Boss", [regname.KITCHEN], [], [], {}),
     regname.BOWJR3: SMGRegionData("Boss", [regname.ENGINE], [], [], {}),

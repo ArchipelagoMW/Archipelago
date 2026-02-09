@@ -62,7 +62,7 @@ class SMGWorld(World):
            local_pool += [self.create_item("Power Star") for i in range(0,95)]
         
         elif self.options.enable_purple_coin_stars == self.options.enable_purple_coin_stars.option_all:
-             local_pool += [self.create_item("Power Star") for i in range(0,120)]
+             local_pool += [self.create_item("Power Star") for i in range(0,110)]
 
         else:
              local_pool += [self.create_item("Power Star") for i in range(0,94)]
@@ -78,5 +78,5 @@ class SMGWorld(World):
 
         self.multiworld.itempool += local_pool
 
-    def post_fill(self) -> None:
+    def pre_fill(self) -> None:
         visualize_regions(self.get_region(self.origin_region_name), "SMG_region_graph",show_entrance_names=True)
