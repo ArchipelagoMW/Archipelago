@@ -417,10 +417,12 @@ class Toggle(NumericOption):
     def from_text(cls, text: str) -> Toggle:
         if text == "random":
             return cls(random.choice(list(cls.name_lookup)))
-        elif text.lower() in {"off", "0", "false", "none", "null", "no"}:
+        elif text.lower() in {"off", "0", "false", "none", "null", "no", "disabled"}:
             return cls(0)
-        else:
+        elif text.lower() in {"on", "1", "true", "yes", "enabled"}:
             return cls(1)
+        else:
+            raise OptionError(f"Option {cls.__name__} does not support a value of {text}")
 
     @classmethod
     def from_any(cls, data: typing.Any):
@@ -523,9 +525,9 @@ class Choice(NumericOption):
 
 class TextChoice(Choice):
     """Allows custom string input and offers choices. Choices will resolve to int and text will resolve to string"""
-    value: typing.Union[str, int]
+    value: str | int
 
-    def __init__(self, value: typing.Union[str, int]):
+    def __init__(self, value: str | int):
         assert isinstance(value, str) or isinstance(value, int), \
             f"'{value}' is not a valid option for '{self.__class__.__name__}'"
         self.value = value
@@ -546,7 +548,7 @@ class TextChoice(Choice):
         return cls(text)
 
     @classmethod
-    def get_option_name(cls, value: T) -> str:
+    def get_option_name(cls, value: str | int) -> str:
         if isinstance(value, str):
             return value
         return super().get_option_name(value)
@@ -891,7 +893,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
     def __iter__(self) -> typing.Iterator[typing.Any]:
         return self.value.__iter__()
 
-    
+
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
     default = {}
     supports_weighting = False
@@ -906,7 +908,8 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
-    def get_option_name(self, value):
+    @classmethod
+    def get_option_name(cls, value):
         return ", ".join(f"{key}: {v}" for key, v in value.items())
 
     def __getitem__(self, item: str) -> typing.Any:
@@ -986,7 +989,8 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
             return cls(data)
         return cls.from_text(str(data))
 
-    def get_option_name(self, value):
+    @classmethod
+    def get_option_name(cls, value):
         return ", ".join(map(str, value))
 
     def __contains__(self, item):
@@ -1011,7 +1015,8 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
             return cls(data)
         return cls.from_text(str(data))
 
-    def get_option_name(self, value):
+    @classmethod
+    def get_option_name(cls, value):
         return ", ".join(sorted(value))
 
     def __contains__(self, item):
@@ -1656,7 +1661,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
     def __len__(self) -> int:
         return len(self.value)
 
-        
+
 class Removed(FreeText):
     """This Option has been Removed."""
     rich_text_doc = True

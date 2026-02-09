@@ -22,7 +22,7 @@ class Dungeon7:
         # Most of the dungeon can be accessed at this point.
         if options.owlstatues == "both" or options.owlstatues == "dungeon":
             bottomleft_owl = Location(dungeon=7).add(OwlStatue(0x21C)).connect(bottomleftF2_area, AND(BOMB, STONE_BEAK7))
-        nightmare_key = Location(dungeon=7).add(DungeonChest(0x224)).connect(bottomleftF2_area, r.miniboss_requirements[world_setup.miniboss_mapping[6]]) # nightmare key after the miniboss
+        nightmare_key = Location(dungeon=7).add(DungeonChest(0x224)).connect(bottomleftF2_area, r.miniboss_requirements[world_setup.miniboss_mapping['6']]) # nightmare key after the miniboss
         mirror_shield_chest = Location(dungeon=7).add(DungeonChest(0x21A)).connect(bottomleftF2_area, r.hit_switch)  # mirror shield chest, need to be able to hit a switch to reach or
         bottomleftF2_area.connect(mirror_shield_chest, AND(KEY7, FOUND(KEY7, 3)), one_way = True) # reach mirror shield chest from hinox area by opening keyblock
         toprightF1_chest = Location(dungeon=7).add(DungeonChest(0x204)).connect(bottomleftF2_area, r.hit_switch)  # chest on the F1 right ledge. Added attack_hookshot since switch needs to be hit to get back up

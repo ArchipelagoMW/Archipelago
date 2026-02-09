@@ -20,7 +20,7 @@ game contributions:
   It is recommended that automated github actions are turned on in your fork to have github run unit tests after
   pushing.
   You can turn them on here:  
-  ![Github actions example](./img/github-actions-example.png)
+  ![Github actions example](/docs/img/github-actions-example.png)
 
 * **When reviewing PRs, please leave a message about what was done.**
   We don't have full test coverage, so manual testing can help.
