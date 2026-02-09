@@ -1,2 +1,0 @@
-python-bps-continued>=7
-pillow>=10.2.0

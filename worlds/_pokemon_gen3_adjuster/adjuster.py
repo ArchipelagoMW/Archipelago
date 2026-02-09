@@ -1,7 +1,6 @@
 import logging
 import os
 import typing
-import textwrap
 
 from Utils import local_path, persistent_store, get_adjuster_settings, \
     data_to_bps_patch, open_image_secure, open_filename, open_directory
