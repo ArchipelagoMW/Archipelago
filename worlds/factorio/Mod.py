@@ -94,8 +94,7 @@ def generate_mod(world: "Factorio", output_directory: str):
     multiworld = world.multiworld
     random = world.random
 
-    global data_final_template, locale_template, control_template, data_template, settings_template
-    global data_final_template, main_template, data_template, settings_template
+    global data_final_template, control_template, data_template, settings_template
     #global locale_template
     with template_load_lock:
         if not data_final_template:
