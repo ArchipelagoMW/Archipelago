@@ -100,6 +100,7 @@ class EVNWorld(World):
         mod_files = {
             #f"test.txt": "Hello World!",    # Placeholder file content. TODO: Replace with actual mod files. Can utilize helper functions to export the items into useful data strings.
             "zzzapdata.txt": f"{self.prep_plugins_output()}", # The "zzz_" prefix is to ensure this file is last in the load order, so that all our data is loaded after any potential mod changes to the missions table.
+            "aplocids.txt": f"{self.prep_emittable_loc_ids()}", # this is just a qol filter to keep EVN client from sending bit IDs the server doesn't care about.
         }
         mod = EVNContainer(
             mod_files,
@@ -109,6 +110,12 @@ class EVNWorld(World):
             self.multiworld.get_file_safe_player_name(self.player),
         )
         mod.write()
+
+    def prep_emittable_loc_ids(self) -> str:
+        ret_str = ""
+        for loc_id in locations.ev_location_bank.keys():
+            ret_str += f"{loc_id}\r\n"
+        return ret_str
 
     def prep_plugins_output(self) -> str:
         """
