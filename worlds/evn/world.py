@@ -12,7 +12,7 @@ from . import items, locations, regions, rules, web_world
 # from . import web_world
 from . import options as evn_options  # rename due to a name conflict with World.options
 
-from .rezdata import misns, ships
+from .rezdata import misns, ships, outfits
 
 GAME_NAME = "EV Nova"
 
@@ -224,9 +224,54 @@ class EVNWorld(World):
                     else:
                         logger.info(f"Warning: availability location {target_id} for ship {temp_ship['name']} not found in ev_item_bank. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the ship table and location creation code to debug this issue.")
                         output_file_string += default_val
+                elif (column == "buy_random" and self.options.always_avail_shops):
+                    output_file_string += f'100\t' # considering altering hire chance too
+                elif (column == "tech_level" and self.options.ignore_tech):
+                    output_file_string += f'1\t'
                 else:
                     output_file_string += default_val
             output_file_string += "\r\n"
+
+        # Outfits
+        if (self.options.include_outfits):
+            output_file_string += "\r\n"
+            for column in outfits.outf_columns.keys():
+                output_file_string += f'"{outfits.outf_columns[column]}"\t'
+            output_file_string += "\r\n"
+            # then, the outf data
+            for outf in outfits.outf_table.keys():
+                temp_outf = outfits.outf_table[outf]
+                for column in outfits.outf_columns.keys():
+                    current_val = temp_outf[column]
+                    default_val = current_val + "\t"
+                    col_anno = outfits.OutfDict.__annotations__[column]
+                    if col_anno == str:
+                        default_val = f'"{current_val}"\t'
+
+                    if column == "availability":
+                        # We need to inject our special bit here as well, so the client can know when to unlock the outf.
+                        target_id = items.type_offset["outf"] + outf
+                        if target_id in items.ev_item_bank:
+                            #associated_item = items.ev_item_bank[target_id]
+                            new_id = items.ev_item_bank[target_id]["code"] if "code" in items.ev_item_bank[target_id] else None
+                            if (new_id is not None):
+                                if (current_val is not None) and (current_val != ""):
+                                    output_file_string += f'"b{new_id} & ({current_val})"\t'  # !Logic needed for this one!
+                                else:
+                                    output_file_string += f'"b{new_id}"\t'
+                            else:
+                                logger.info(f"Warning: availability location {target_id} for outf {temp_outf['name']} for player {self.player} does not have a valid address. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
+                                output_file_string += default_val
+                        else:
+                            logger.info(f"Warning: availability location {target_id} for outf {temp_outf['name']} not found in ev_item_bank. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the outf table and location creation code to debug this issue.")
+                            output_file_string += default_val
+                    elif (column == "buy_random" and self.options.always_avail_shops):
+                        output_file_string += f'100\t'
+                    elif (column == "tech_level" and self.options.ignore_tech):
+                        output_file_string += f'1\t'
+                    else:
+                        output_file_string += default_val
+                output_file_string += "\r\n"
 
         logger.info(f"output file string prepared: {output_file_string[:1000]}...") # Log the first 1000 characters of the output for debugging purposes. Be careful with this if the output can be very large, as it may cause performance issues or clutter the logs.
 

@@ -39,7 +39,6 @@ class ShuffleSystems(Toggle):
 class IncludeOutfits(DefaultOnToggle):
     """
     Outfits will also need to be found and unlocked in order to purchase. Does not affect outfits ships come with naturally, but you may not be able to buy more ammo.
-    (Not Implemented)
     """
     display_name = "Include Outfits in shuffle"
 
@@ -50,6 +49,17 @@ class OutfitChecks(Toggle):
     """
     display_name = "Include Outfits as Checks"
 
+class AlwaysAvailableShops(Toggle):
+    """
+    When on, ships and outf will always show up in shops (if unlocked)
+    """
+    display_name = "Shops Always Stock"
+
+class IgnoreTechReq(Toggle):
+    """
+    When on, tech level requirements are ignored. Any unlocked ships / outf will be available at any spob with shipyard / outfitters.
+    """
+    display_name = "Ignore Tech Requirements"
 
 
 # class Hammer(Toggle):
@@ -153,6 +163,8 @@ class EVNOptions(PerGameCommonOptions):
     include_outfits: IncludeOutfits
     outfit_checks: OutfitChecks
     chosen_string: ChosenString
+    always_avail_shops: AlwaysAvailableShops
+    ignore_tech: IgnoreTechReq
 
 
 # # If we want to group our options by similar type, we can do so as well. This looks nice on the website.

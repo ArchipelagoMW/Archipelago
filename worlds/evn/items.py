@@ -7,7 +7,7 @@ from flask_caching import logger
 from BaseClasses import Item, ItemClassification
 from . import rules
 
-from .rezdata import ships
+from .rezdata import ships, outfits
 
 if TYPE_CHECKING:
     from .world import EVNWorld
@@ -34,9 +34,11 @@ CREDIT_IDS = {
 #     "Fed Patrol Boat": 142,
 # }
 
+# maxes are noted but not yet enforced or in the data
 type_offset: Dict[str, int] = {
     "Credits": 9900, # Special case! These won't actually be set - the client will check for these ids and make its own adjustment.
-    "ship": 1550,   # 1550 - 1999 will be ships. We have 450 ships, so this should be safe.
+    "ship": 1550,   # 1550 - 1999 will be ships. We have 288/450 ships, so this should be safe.
+    "outf": 3100,   # 3100 - 3500 for outfs. We have 242/400 outf, should be good
 }
 
 #EVNItemData = TypedDict("EVNItemData", {"name": str, "classification": ItemClassification, "code": int})
@@ -44,6 +46,7 @@ class EVNItemData(TypedDict, total=False):
     name: str
     classification: ItemClassification
     code: int
+    origin: str | None
 
 # Each Item instance must correctly report the "game" it belongs to.
 # To make this simple, it is common practice to subclass the basic Item class and override the "game" field.
@@ -79,6 +82,18 @@ def get_items() -> Dict[int, EVNItemData]:
             name=temp_ship["name"].strip() + temp_ship["id"], # adding ID to name to ensure uniqueness. We could also add the subname if we wanted, but ID is probably safer.
             classification=ItemClassification.progression,
             code=item_id,
+            origin="ship"
+        )
+
+    # outf
+    for outf in outfits.outf_table.keys():
+        temp_outf = outfits.outf_table[outf]
+        item_id = type_offset["outf"] + (int)(temp_outf["id"]) # Probably a safer way to test this? Fails if not int somehow probably.
+        ret_bank[item_id] = EVNItemData(
+            name=temp_outf["name"].strip() + temp_outf["id"], # adding ID to name to ensure uniqueness. We could also add the subname if we wanted, but ID is probably safer.
+            classification=ItemClassification.progression | ItemClassification.useful, # or useful?
+            code=item_id,
+            origin="outf"
         )
 
     logger.info(f"data bank size: {len(ret_bank)}")
@@ -145,7 +160,8 @@ def create_all_items(world: EVNWorld) -> None:
     itempool = []
     for item_id in ev_item_bank:
         if ((item_id < 9900 or item_id >= 9906) and item_id != STRING_COMPLETE_BIT): # don't add credits to regular itempool, since they're just filler. We'll add them as needed in the filler section later.
-            #itempool.append(ev_item_bank[item_id])
+            if (not world.options.include_outfits and ev_item_bank[item_id]["origin"] == "outf"):
+                continue
             itempool.append(create_item_with_correct_classification(world, ev_item_bank[item_id]["name"]))
 
     
