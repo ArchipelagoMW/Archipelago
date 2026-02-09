@@ -220,4 +220,4 @@ location_table = { **locGE_table, **locHH_table,
 }
 
 LOCATION_NAME_TO_ID: dict[str, int] =  {
-    name: SMGLocationData.code for name, data in location_table.items() if data.code is not None}
+    name: data.code for name, data in location_table.items() if data.code is not None}
