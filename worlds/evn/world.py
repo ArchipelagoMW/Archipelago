@@ -85,11 +85,12 @@ class EVNWorld(World):
     # There may be data that the game client will need to modify the behavior of the game.
     # This is what slot_data exists for. Upon every client connection, the slot's slot_data is sent to the client.
     # slot_data is just a dictionary using basic types, that will be converted to json when sent to the client.
+    # NOTE: not currently making use of this in any way really on the client.
     def fill_slot_data(self) -> Mapping[str, Any]:
         # If you need access to the player's chosen options on the client side, there is a helper for that.
         return self.options.as_dict(
-            "shuffle_systems"
-        )
+            "shuffle_systems" 
+        ) # otherwise, I'll need to finish adding the options / details.
     
     # This function is called to generate the output mod file for the player.
     # Will present as a download link for the player on the website once generation is complete.
@@ -124,6 +125,19 @@ class EVNWorld(World):
         output_file_string = ""
 
         # Missions
+
+        # We've added the option for story string choice, so let's enforce that in the plugin by making the other strings not startable.
+        block_missions = {
+            evn_options.ChosenString.option_vellos: 128, #"Delivery to Earth; Vellos1"
+            evn_options.ChosenString.option_fed: 428, #"Federation Resupply;Fed1"
+            #evn_options.ChosenString.option_rebel: 3, #rebels can ONLY come from other lines, so don't I guess
+            evn_options.ChosenString.option_pirate: 693, #"Pick Up Cargo From Sol;Pirate 001"
+            evn_options.ChosenString.option_auroran: 653, #Take Supplies to Dominance
+            evn_options.ChosenString.option_polaris: 150, #Transport Mu'Randa
+        }
+
+        block_missions[self.options.chosen_string.value] = 0 #so we won't block the one that was chosen.
+
         # first, the column headers
         for column in misns.misn_columns.keys():
             output_file_string += f'"{misns.misn_columns[column]}"\t'
@@ -169,6 +183,8 @@ class EVNWorld(World):
                         #logger.info(f"Warning: on_success location {target_name} for mission {temp_mission['name']} not found in location_name_to_id. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the mission table and location creation code to debug this issue.")
                         logger.info(f"Warning: on_success location id {target_id} for mission {temp_mission['name']} not found in location_id_to_name. This likely means the location was not created properly, and any item placements depending on this location will fail. Check the mission table and location creation code to debug this issue.")
                         output_file_string += default_val
+                elif column == "available_bits" and mission in block_missions.values():
+                    output_file_string += f'"b{locations.loc_type_offset['misn-block']} & ({current_val})"\t'   #we know it is a bit string, and we know these ones have bits, so don't need to protect as much
                 else:
                     output_file_string += default_val
             output_file_string += "\r\n"

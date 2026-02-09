@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
 
+from .options import ChosenString
+
 import re
 
 if TYPE_CHECKING:
@@ -22,7 +24,7 @@ if TYPE_CHECKING:
 # TODO: Add the other regions
 REGION_KEYS = {
     "Universe" : [],
-    "Fed String" : ["Fed"], # Fed story mission string
+    "Fed" : ["Fed"], # Fed story mission string
     "Vellos" : ["Vellos", "Vell-os"],
     "Polaris" : ["Polaris"],
     "Auroran" : ["Auroran"],
@@ -106,9 +108,30 @@ def connect_regions(world: EVNWorld) -> None:
     universe = world.get_region("Universe")
     # fed_string = world.get_region("Fed String")
 
-    # universe.connect(fed_string, "Universe to Fed String")
-    for evregion in REGION_KEYS.keys():
-        if evregion != "Universe":
+    # # universe.connect(fed_string, "Universe to Fed String")
+    # for evregion in REGION_KEYS.keys():
+    #     if evregion != "Universe":
+    #         universe.connect(world.get_region(evregion), f"Universe to {evregion}")
+
+    evregion = "Vellos"
+    # Default is vellos
+    match world.options.chosen_string.value:
+        case ChosenString.option_fed:
+            evregion = "Fed"
+            universe.connect(world.get_region(evregion), f"Universe to {evregion}")
+        case ChosenString.option_rebel:
+            evregion = "Rebel"
+            universe.connect(world.get_region(evregion), f"Universe to {evregion}")
+        case ChosenString.option_pirate:
+            evregion = "Pirate"
+            universe.connect(world.get_region(evregion), f"Universe to {evregion}")
+        case ChosenString.option_auroran:
+            evregion = "Auroran"
+            universe.connect(world.get_region(evregion), f"Universe to {evregion}")
+        case ChosenString.option_polaris:
+            evregion = "Polaris"
+            universe.connect(world.get_region(evregion), f"Universe to {evregion}")
+        case _:
             universe.connect(world.get_region(evregion), f"Universe to {evregion}")
 
     # Okay, now we can get connecting. For this, we need to create Entrances.

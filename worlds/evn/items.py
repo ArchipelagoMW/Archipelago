@@ -164,9 +164,11 @@ def create_all_items(world: EVNWorld) -> None:
     #needed_number_of_filler_items = number_of_unfilled_locations - number_of_items
     # There's probably a more elegant way to do this, but we also need to subtract the number of completion locations, since those will be filled with event items instead of regular items.
     # basically, they aren't created *until* we start filling locations over in rules... so we have to account for them here.
-    needed_number_of_filler_items = number_of_unfilled_locations - number_of_items - len(rules.COMPLETION_LOCATIONS) # also need to subtract the number of completion locations, since those will be filled with event items instead of regular items.
+    #needed_number_of_filler_items = number_of_unfilled_locations - number_of_items - len(rules.COMPLETION_LOCATIONS) # also need to subtract the number of completion locations, since those will be filled with event items instead of regular items.
+    # NOTE: removing 1 for the single completion location we have now that options forces story string choice.
+    needed_number_of_filler_items = number_of_unfilled_locations - number_of_items - 1
     logger.info(f"number of filler items needed: {needed_number_of_filler_items}")
-    logger.info(f"number of completion locations: {len(rules.COMPLETION_LOCATIONS)}")
+    #logger.info(f"number of completion locations: {len(rules.COMPLETION_LOCATIONS)}")
 
     # Finally, we create that many filler items and add them to the itempool.
     # To create our filler, we could just use world.create_item("Confetti Cannon").

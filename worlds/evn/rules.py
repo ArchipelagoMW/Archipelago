@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 
+from .options import ChosenString
+
 if TYPE_CHECKING:
     from .world import EVNWorld
 
@@ -71,14 +73,31 @@ def set_all_entrance_rules(world: EVNWorld) -> None:
 def set_all_location_rules(world: EVNWorld) -> None:
     # NOTE: I'll have to care for missions that can't be repeated. Ex: the first tutorial mission - if you say "no" to accepting it, you can't get it later.
     
-    # Let's see if event names have to be unique...
-    for loc_completion_name in COMPLETION_LOCATIONS.keys():
-        #world.multiworld.get_location(loc_completion_name, world.player).place_locked_item(world.create_event("Victory"))
-        world.multiworld.get_location(loc_completion_name, world.player).place_locked_item(world.create_item("Victory"))
+    # # Let's see if event names have to be unique...
+    # for loc_completion_name in COMPLETION_LOCATIONS.keys():
+    #     #world.multiworld.get_location(loc_completion_name, world.player).place_locked_item(world.create_event("Victory"))
+    #     world.multiworld.get_location(loc_completion_name, world.player).place_locked_item(world.create_item("Victory"))
         
                 # if loc_name in COMPLETION_LOCATIONS:
                 #     evregion.add_event(loc_name, "Victory", location_type=EVNLocation, item_type=items.EVNItem)
-                    
+    
+    # Default is vellos
+    match world.options.chosen_string.value:
+        case ChosenString.option_fed:
+            world.multiworld.get_location("Take Krane to Earth;Fed43 LAST-474", world.player).place_locked_item(world.create_item("Victory"))
+            # forced fed. Not sure how to handle that yet.
+            #world.multiworld.get_location("A Parting Gift;Fed26 (forced) LAST-596", world.player).place_locked_item(world.create_item("Victory"))
+        case ChosenString.option_rebel:
+            world.multiworld.get_location("Take Polaris Home;Rebel I22 LAST-354", world.player).place_locked_item(world.create_item("Victory"))
+        case ChosenString.option_pirate:
+            world.multiworld.get_location("Destroy McGowan;Pirate 011 LAST-712", world.player).place_locked_item(world.create_item("Victory"))
+        case ChosenString.option_auroran:
+            world.multiworld.get_location("Return to Heraan;Auroran 029 LAST-686", world.player).place_locked_item(world.create_item("Victory"))
+        case ChosenString.option_polaris:
+            world.multiworld.get_location("Return to Ar'Za Iusia;Polaris 46-887", world.player).place_locked_item(world.create_item("Victory"))
+        case _:
+            # default case - vellos
+            world.multiworld.get_location("Take Llyrell to Korell; Vellos31 LAST-417", world.player).place_locked_item(world.create_item("Victory"))
 
     # Location rules work no differently from Entrance rules.
     # Most of our locations are chests that can simply be opened by walking up to them.

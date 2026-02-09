@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, OptionGroup, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DefaultOnToggle, OptionGroup, PerGameCommonOptions, Range, Toggle
 
 # In this file, we define the options the player can pick.
 # The most common types of options are Toggle, Range and Choice.
@@ -32,9 +32,24 @@ from Options import Choice, OptionGroup, PerGameCommonOptions, Range, Toggle
 class ShuffleSystems(Toggle):
     """
     Shuffle the locations of all explorable systems in the universe.
+    (Not Implemented)
     """
-
     display_name = "Shuffle Systems"
+
+class IncludeOutfits(DefaultOnToggle):
+    """
+    Outfits will also need to be found and unlocked in order to purchase. Does not affect outfits ships come with naturally, but you may not be able to buy more ammo.
+    (Not Implemented)
+    """
+    display_name = "Include Outfits in shuffle"
+
+class OutfitChecks(Toggle):
+    """
+    Will add Outfits that are purely checks. Purchasing them will unlock items for players.
+    (Not Implemented)
+    """
+    display_name = "Include Outfits as Checks"
+
 
 
 # class Hammer(Toggle):
@@ -110,12 +125,34 @@ class ShuffleSystems(Toggle):
 #     # For example, we could make it so "player_sprite: kitty" resolves to "player_sprite: cat" like this:
 #     alias_kitty = option_cat
 
+class ChosenString(Choice):
+    """
+    Pick which major story string the player will follow. Other story strings will be disabled.
+    NOTE: Rebels - only line 1 is implemented! Also, can only get to it through bounty hunters. Not recommended at this time.
+    NOTE2: Beware Wild Geese - branches not yet handled (ex: choose pirate, end up in auroran)
+
+    default: vellos
+    """
+    display_name = "Major Story String"
+
+    option_vellos = 0
+    option_fed = 1
+    option_rebel = 2
+    option_pirate = 3
+    option_auroran = 4
+    option_polaris = 5
+
+    default = option_vellos
+
 
 # We must now define a dataclass inheriting from PerGameCommonOptions that we put all our options in.
 # This is in the format "option_name_in_snake_case: OptionClassName".
 @dataclass
 class EVNOptions(PerGameCommonOptions):
     shuffle_systems: ShuffleSystems
+    include_outfits: IncludeOutfits
+    outfit_checks: OutfitChecks
+    chosen_string: ChosenString
 
 
 # # If we want to group our options by similar type, we can do so as well. This looks nice on the website.

@@ -49,6 +49,7 @@ GAME_NAME = "EV Nova"
 # to add other checks, such as outfits, give them their own offset and range.
 loc_type_offset: Dict[str, int] = {
     "misn": 2000,   # 2000 - 2999 will be missions. We have 1000 misns, so this should be safe.
+    "misn-block": 9955,
 }
 
 class EVNLocationData(TypedDict, total=False): 
