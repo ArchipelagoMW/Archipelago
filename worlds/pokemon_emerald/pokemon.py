@@ -494,7 +494,7 @@ def randomize_learnsets(world: "PokemonEmeraldWorld") -> None:
 
         species.learnset = new_learnset
 
-        
+
 def randomize_starters(world: "PokemonEmeraldWorld") -> None:
     if world.options.starters == RandomizeStarters.option_vanilla:
         return
@@ -674,7 +674,7 @@ def randomize_misc_pokemon(world: "PokemonEmeraldWorld") -> None:
                 ]
             if should_match_bst:
                 candidates = filter_species_by_nearby_bst(candidates, sum(original_species.base_stats))
-            
+
             player_filtered_candidates = [
                 species
                 for species in candidates
