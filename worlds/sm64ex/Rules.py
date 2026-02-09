@@ -280,10 +280,12 @@ def set_rules(world, options: SM64Options, player: int, area_connections: dict, 
         # Finally, need to be able to get to the top of the clock to get to 100
         rf.assign_max_coins_rule("TTC", 70, 100, "{TTC: Top} & GP")
 
-        # RR can get to 26 without any moves, the maze has a good portion of coins, including the blues which need wall kicks and ground pound
+        # RR can get to 26 without any moves, the maze has a good portion of coins,
+        #   including the blues which need wall kicks and ground pound
         rf.assign_max_coins_rule("RR", 30, 70, "{RR: Maze} & WK & GP")
         # RR can get the rest if we can get to both the cruiser and the lower portion
-        rf.assign_max_coins_rule("RR", 80, 100, "WK & GP & {RR: Maze} & {RR: Cruiser} & {{RR: Swingin' in the Breeze}} & {{RR: Tricky Triangles!}}")
+        rf.assign_max_coins_rule("RR", 80, 100,
+                    "WK & GP & {RR: Maze} & {RR: Cruiser} & {{RR: Swingin' in the Breeze}} & {{RR: Tricky Triangles!}}")
     # Castle Stars
     add_rule(world.get_location("Toad (Basement)", player), lambda state: state.can_reach("Basement", 'Region', player) and state.has("Power Star", player, 12))
     add_rule(world.get_location("Toad (Second Floor)", player), lambda state: state.can_reach("Second Floor", 'Region', player) and state.has("Power Star", player, 25))

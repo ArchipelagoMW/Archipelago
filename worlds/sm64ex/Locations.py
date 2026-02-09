@@ -288,11 +288,11 @@ _locCoinHi_base_id = 250
 _coinAmts = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 def coinHiName(course, coinAmt):
     idx = _courseNameIndexes[course]
-    return '{:s}: Coin Hi Score {:d}'.format(course, coinAmt)
+    return "{:s}: Coin Hi Score {:d}".format(course, coinAmt)
 
 def coinHiIdx(course, coinAmt):
     return _baseId + _locCoinHi_base_id + (courseIdx * 10) + ((coinAmt//10)-1)
-    
+
 locCoinHi_table = {}
 for course, courseIdx in _courseNameIndexes.items():
     for coinAmt in _coinAmts:
