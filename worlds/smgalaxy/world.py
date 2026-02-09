@@ -1,5 +1,6 @@
 from typing import ClassVar
 from BaseClasses import Item
+from Utils import visualize_regions
 from worlds.AutoWorld import World
 
 from . import items, locations, regions, Rules, web_world, Options
@@ -74,3 +75,6 @@ class SMGWorld(World):
             local_pool.append(self.create_item(self.get_filler_item_name()))
 
         self.multiworld.itempool += local_pool
+
+    def post_fill(self) -> None:
+        visualize_regions(self.get_region(self.origin_region_name), "SMG_region_graph",show_entrance_names=True)
