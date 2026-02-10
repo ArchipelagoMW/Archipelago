@@ -20,7 +20,7 @@ class Goal(Choice):
 
 class SkillUpgrade(Choice):
     """Choose how skills will be upgraded.
-    Coins: You upgrade skills in-game using coins.
+    Coins: You upgrade skills in-game using coins. (The vanilla way)
     Progressive Skills: Each spell is added to the itempool 10 times.
     Upgrades: Each spell is added to the itempool once, allowing usage of that spell. Additionally, 9 upgrades for each spell are added to the itempool, that will be applied once the skill is aquired.
     Magic Levels: Each spell is added to the itempool once, allowing usage of that spell. Additionally, 9 magic levels are added to the itempool, that will upgrade all acquired spells.
@@ -43,7 +43,7 @@ class IncludeMonuments(Toggle):
     default = True
 
 class IncludeEXPQuestRewards(Toggle):
-    """Choose if you want to receive EXP as quest rewards. (Expect to grind if you choose not to)"""
+    """Choose if you want to receive EXP as quest rewards. (Beware, not including this option can cause heavy grind with some options)"""
     display_name = "Include EXP Quest Rewards"
     default = True
 
