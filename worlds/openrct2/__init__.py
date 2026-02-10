@@ -4,7 +4,7 @@ from Utils import local_path
 from random import choice as random_message #I know this looks wrong, but it's only used to randomly select a message for the launcher!
 
 import worlds.LauncherComponents as LauncherComponents
-from BaseClasses import ItemClassification, Region, Location, Tutorial
+from BaseClasses import ItemClassification, Region, Location, Tutorial, LocationProgressType
 from worlds.generic.Rules import add_rule, add_item_rule
 
 from .Constants import base_id, apworld_version
@@ -313,6 +313,7 @@ class OpenRCT2World(World):
             #Alrighty future Colby, you've gotta ensure every location in the region only has traps. I couldn't figure it out before bed. HAVE FUN!
             for location in negative_awards_region.locations:
                 add_item_rule(location, lambda item: item.trap)
+                location.progress_type = LocationProgressType.EXCLUDED # Can't have those pesky progression traps here.
             #Connect the award region to the unlock shop
             s.connect(negative_awards_region)
         if self.options.awards == 0 or self.options.awards == 1: #positive awards
@@ -360,7 +361,8 @@ class OpenRCT2World(World):
             lambda state: state.has_group("Gentle Rides", self.player, 1))
 
             for location in positive_awards_region.locations:
-                add_item_rule(location, lambda item: item.useful)
+                add_item_rule(location, lambda item: item.filler)
+                location.progress_type = LocationProgressType.EXCLUDED
             #Connect the award region to the unlock shop
             s.connect(positive_awards_region)
     def create_items(self) -> None:
