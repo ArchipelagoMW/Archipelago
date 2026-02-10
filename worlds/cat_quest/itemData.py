@@ -53,14 +53,12 @@ misc: List[Item] = [
 
 fillers: List[Item] = [
     # Gold
-    {"name": "50 Gold", "inGameId": "gold.50", "classification": ItemClassification.filler},
     {"name": "500 Gold", "inGameId": "gold.500", "classification": ItemClassification.filler},
     {"name": "750 Gold", "inGameId": "gold.750", "classification": ItemClassification.filler},
     {"name": "1000 Gold", "inGameId": "gold.1000", "classification": ItemClassification.filler},
     {"name": "5000 Gold", "inGameId": "gold.5000", "classification": ItemClassification.filler},
 
     # Exp
-    {"name": "500 Exp", "inGameId": "exp.500", "classification": ItemClassification.filler},
     {"name": "1000 Exp", "inGameId": "exp.1000", "classification": ItemClassification.filler},
     {"name": "5000 Exp", "inGameId": "exp.5000", "classification": ItemClassification.filler},
     {"name": "7500 Exp", "inGameId": "exp.7500", "classification": ItemClassification.filler},
