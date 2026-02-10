@@ -31,7 +31,6 @@ PLAYER_COLOR = 0xFD30E
 SOUND_ADDRESS = 0xAE740
 SOUND_START = 0xEEFC
 PLAYER_KILL = 0xFD300
-PLAYER_ACTIVE = 0xFD36E
 BOSS_GOAL = 0x45D34
 BOSS_GOAL_BACKUP = 0x45D3C
 LOCATIONS_BASE_ADDRESS = 0x64A68
@@ -287,13 +286,13 @@ class GauntletLegendsContext(CommonContext):
                 item_data = items_by_id.get(item_id, ItemData())
                 is_chest = "Chest" in loc.name or ("Barrel" in loc.name and "Barrel of Gold" not in loc.name)
 
-                # Skip obelisk locations (ROM handles separately with continue)
+                # Check obelisk locations
                 if "Obelisk" in loc.name:
                     if "Obelisk" in item_data.item_name and item_player == self.slot:
                         self.obelisk_locations.append(loc.id)
                         self.obelisks.append(scouted_item)
-                    # else: obelisk location becomes item, handled below as item_location
-                    continue
+                        continue
+                    # Non-obelisk item at obelisk location — fall through to item categorization
 
                 # Check spawner (ROM: item[1] == player and item[0] in SPAWNER_TRAP_IDS)
                 if item_player == self.slot and item_id in spawner_trap_ids:
@@ -353,8 +352,8 @@ class GauntletLegendsContext(CommonContext):
         if not self.scouted:
             await self.scout_locations(self)
 
-        active = await self._read_ram_int(PLAYER_ACTIVE, 1)
-        if active == 0:
+        active = await self._read_ram_int(PLAYER_KILL, 1)
+        if active != 4:
             return []
 
         if len(self.queued_traps) > 0:
@@ -390,8 +389,8 @@ class GauntletLegendsContext(CommonContext):
         item_section = await self._read_ram(self.item_address, len(self.item_locations) * 0x18)
         for i, loc_id in enumerate(self.item_locations):
             offset = i * 0x18
-            active, state = item_section[offset + 0x2], item_section[offset + 0x3]
-            if state < 0x7F and active == 1 and state == 0:
+            active_byte, state = item_section[offset + 0x2], item_section[offset + 0x3]
+            if state < 0x7F and active_byte == 1 and state == 0:
                 acquired.append(loc_id)
 
         obelisk = await self._read_ram_int(MOD_OBELISK_QUANTITY, 1)
@@ -403,8 +402,8 @@ class GauntletLegendsContext(CommonContext):
         chest_section = await self._read_ram(self.chest_address, len(self.chest_locations) * 0x18)
         for i, loc_id in enumerate(self.chest_locations):
             offset = i * 0x18
-            active, state = chest_section[offset + 0x2], chest_section[offset + 0x3]
-            if state < 0x7F and active == 1 and state != 1:
+            active_byte, state = chest_section[offset + 0x2], chest_section[offset + 0x3]
+            if state < 0x7F and active_byte == 1 and state != 1:
                 acquired.append(loc_id)
 
         # Check spawner locations - these are added after vanilla spawners
@@ -414,8 +413,8 @@ class GauntletLegendsContext(CommonContext):
             spawner_section = await self._read_ram(spawner_start, len(self.spawner_locations) * 0x1C)
             for i, loc_id in enumerate(self.spawner_locations):
                 offset = i * 0x1C
-                active, state, hit = spawner_section[offset + 0x2], spawner_section[offset + 0x3], spawner_section[offset + 0x1A]
-                if active == 1 and hit == 1:
+                active_byte, state, hit = spawner_section[offset + 0x2], spawner_section[offset + 0x3], spawner_section[offset + 0x1A]
+                if active_byte == 1 and hit == 1:
                     acquired.append(loc_id)
 
         await self.update_stage()
