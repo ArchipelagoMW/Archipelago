@@ -5,12 +5,12 @@ from typing import TYPE_CHECKING
 from BaseClasses import Location
 
 from . import items
-from .locationData import questLocations, templeLocations
+from .locationData import questLocations, templeLocations, monumentLocations
 
 if TYPE_CHECKING:
     from .world import CatQuestWorld
 
-ALL_LOCATIONS: list[Location] = questLocations + templeLocations
+ALL_LOCATIONS: list[Location] = questLocations + templeLocations + monumentLocations
 
 def create_location_name_to_id() -> dict[str, int]:
     location_id_dict = {}
@@ -41,8 +41,8 @@ def create_regular_locations(world: CatQuestWorld) -> None:
     if world.options.include_temples:
         included_locations.extend(templeLocations)
     
-    #if world.options.include_monuments:
-    #    included_locations.extend(monumentLocations)
+    if world.options.include_monuments:
+        included_locations.extend(monumentLocations)
 
     for loc in included_locations:
         Felingard.locations.append(

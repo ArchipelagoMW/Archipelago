@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from worlds.generic.Rules import add_rule
-from .locationData import questLocations, templeLocations #, monumentLocations
+from .locationData import questLocations, templeLocations, monumentLocations
 from .itemData import prog_skill_uprades, prog_skills
 
 if TYPE_CHECKING:
@@ -22,8 +22,8 @@ def set_all_location_rules(world: CatQuestWorld) -> None:
     if world.options.include_temples:
         included_locations.extend(templeLocations)
     
-    #if world.options.include_monuments:
-    #    included_locations.extend(monumentLocations)
+    if world.options.include_monuments:
+        included_locations.extend(monumentLocations)
 
     for loc in included_locations:
         if loc["art"] == "water":
