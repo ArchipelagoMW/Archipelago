@@ -244,6 +244,8 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
             current_choices.extendleft(choices)
 
     elif layout == TechTreeLayout.option_irregular:
+
+        #print("starting the tech tree layout")
         
         #Made by: CosmicWolf @brattycosmicwolf
         #I am going by `sort(key=_sorter)` and then branching the tech tree out. So no issues should arrise AFAIK with getting things stuck.
@@ -270,14 +272,23 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
                 rand_num = int( world.random.uniform(minimum_dependencies, maximum_dependencies))
             else:
                 rand_num = int( world.random.triangular(minimum_dependencies, maximum_dependencies, weighted_distribution))
+            #print(f"starting the process with: {victim}")
+            #print(f"This will get {rand_num} dependencies.")
 
             while rand_num >=1 and len(current_choices) > 0:
+                print(f"for dependecy {rand_num} the following happens:")
                 rand_num -= 1
                 dependency = current_choices[world.random.randint(0, len(current_choices)-1)] #pick one of the already established techs.
                 prerequisites[victim].add(dependency) #Take one of the already processed techs as its prerequisite.
+                #print(f"selected dependency: {dependency}")
+                #print(f"from current_choices: {current_choices}")
 
                 all_pre[victim].add(dependency)
-                all_pre[victim].add(item for item in all_pre[victim])
+                if dependency in all_pre:
+                    for item in all_pre[dependency]:
+                        all_pre[victim].add(item)
+                
+                #print(f"all current prequesites: {all_pre[victim]}")
 
                 current_choices.remove(dependency)
                 for item in current_choices:
@@ -288,6 +299,10 @@ def get_shapes(world: "Factorio") -> Dict["FactorioScienceLocation", Set["Factor
 
             already_done.append(victim)
         del all_pre
+
+        #print("almost the end of the tech tree layout")
+        #print(prerequisites)
+        #print("end of the tech tree layout")
     else:
         raise NotImplementedError(f"Layout {layout} is not implemented.")
 
