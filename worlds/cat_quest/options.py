@@ -37,6 +37,15 @@ class IncludeTemples(Toggle):
     display_name = "Include Temples"
     default = True
 
+class IncludeMonuments(Toggle):
+    """Choose if visiting monuments will be included"""
+    display_name = "Include Monuments"
+    default = True
+
+class IncludeEXPQuestRewards(Toggle):
+    """Choose if you want to receive EXP as quest rewards. (Expect to grind if you choose not to)"""
+    display_name = "Include EXP Quest Rewards"
+    default = True
 
 
 @dataclass
@@ -44,4 +53,6 @@ class CatQuestOptions(PerGameCommonOptions):
     goal: Goal
     skill_upgrade: SkillUpgrade
     include_temples: IncludeTemples
+    include_quest_reward_exp: IncludeEXPQuestRewards
+    include_quest_reward_coins: IncludeCoinQuestRewards
     
