@@ -13,6 +13,7 @@ if you pick one up and then decide to do something else, add research notes here
 - number of silo-parts in silo prototype
 - products are defined in launch items with `rocket_launch_products`
 - `send_to_orbit_mode` on item might define automatability
+- remove force space-science-pack
 
 # Irregular tree shape
 - pull request by CosmicWolf

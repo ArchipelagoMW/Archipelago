@@ -2,6 +2,10 @@ import json
 import timeit
 import datetime
 
+from worlds.factorio_bobs.RecipeEngine import RecipeEngine
+
+RecipeEngine.invalidate_cache = True
+
 from worlds.factorio_bobs.packDevUtils import get_modpack
 
 
@@ -21,7 +25,7 @@ def main():
             output[item.name] = {"invalid": True}
         else:
             output[item.name] = {"score": item.score,
-                                 "recipes": [tech.name for tech in item.best_recipes]}
+                                 "recipes": [recipe.name for recipe in item.best_recipes]}
         item_done_in = timeit.default_timer() - item_timer
         mean_time = (mean_time * done + item_done_in) / (done+1)
         done += 1

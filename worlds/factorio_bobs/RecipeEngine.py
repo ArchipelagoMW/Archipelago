@@ -31,6 +31,8 @@ class RecipeEngineType:
         return f"{type(self).__name__}(name={self.name}, ctx={self.ctx.name})"
 
 class RecipeEngine:
+    invalidate_cache = False
+
     def __init__(self, modpack: "FactorioModpack"):
         self.modpack = modpack
         self.name = self.modpack.packName
@@ -66,18 +68,21 @@ class RecipeEngine:
         for item_name in non_randomizable_items:
             self.get_game_item(item_name).is_valid_pool = False
 
+        if RecipeEngine.invalidate_cache:
+            return
+
         try:
             with self.modpack.open_file("Cache/precalc.json") as file:
                 raw_logic_pre_compute = json.load(file)
             for name, data in raw_logic_pre_compute.items():
                 item = self.get_game_item(name)
+                item.has_calculated_raw = True
                 if "invalid" in data:
                     if item.name not in {"space-science-pack"}:
                         item.set_invalid()
                     continue
-                item.best_recipes = data["recipes"]
+                item.best_recipes = {self.recipes[name] for name in data["recipes"]}
                 item.score = data["score"]
-                item.has_calculated_raw = True
         except FileNotFoundError:
             pass
 
@@ -435,9 +440,11 @@ class GameItem(RecipeEngineType):
 
         status, score, best_recipes, waste_recipes, waste = self.ctx.run_pulp_solver(self)
         if status != pulp.LpStatusOptimal:
-            self.ctx.modpack.logger.warn(f"{self}: is uncraftable with status {status}\n"
-                                     f"removing {self}")
-            self.set_invalid()
+            if self.name not in {"space-science-pack"}:
+                self.ctx.modpack.logger.warn(f"{self}: is uncraftable with status {status}\n"
+                                         f"removing {self}")
+                self.set_invalid()
+            return
         self.score = score
         self.best_recipes = best_recipes
         # self.req_techs = {tech for recipe in self.best_recipes for tech in recipe.catalysts if isinstance(tech, TechCatalyst)}
