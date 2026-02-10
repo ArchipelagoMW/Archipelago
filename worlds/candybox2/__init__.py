@@ -11,7 +11,7 @@ from worlds.AutoWorld import WebWorld, World
 
 from .component import setup_candy_box_2_component
 from .expected_client_version import EXPECTED_CLIENT_VERSION
-from .items import CandyBox2Item, CandyBox2ItemName, candy_box_2_base_id, filler_items, items
+from .items import CandyBox2Item, CandyBox2ItemName, candy_box_2_base_id, filler_items, items, item_groups
 from .locations import CandyBox2LocationName, location_descriptions, locations
 from .options import CandyBox2Options, candy_box_2_options_groups
 from .regions import can_reach_room, connect_entrances, create_regions
@@ -44,6 +44,7 @@ class CandyBox2World(World):
     base_id = 1
     location_name_to_id = {name.value: location.id for name, location in locations.items()}
     item_name_to_id = {name.value: data.code for name, data in items.items() if data.code is not None}
+    item_name_groups = item_groups
     options_dataclass = CandyBox2Options
     options: CandyBox2Options
     topology_present = True
