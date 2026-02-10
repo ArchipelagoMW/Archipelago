@@ -204,9 +204,6 @@ def connect_regions(world: World):
     # Supermax Prison West -> Supermax Prison East (Locked by East Wing Key)
     connect(world, "Supermax Prison West", "Supermax Prison East", lambda state: state.has(ItemName.east_wing_key, player))
 
-    # Supermax Prison East -> Forest (Exit)
-    connect(world, "Supermax Prison East", "Forest")
-    
     connect(world, "Village", "Factory", lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
     connect(world, "Factory", "Swamp")
 

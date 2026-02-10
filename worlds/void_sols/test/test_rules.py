@@ -1,5 +1,6 @@
 ﻿from worlds.void_sols.test.bases import VoidSolsTestBase
 from worlds.void_sols.Names import ItemName, LocationName
+from BaseClasses import CollectionState
 
 class TestRules(VoidSolsTestBase):
     
@@ -111,26 +112,47 @@ class TestRules(VoidSolsTestBase):
         location = LocationName.apex_outskirts_item_pickup_golden_clover
         
         # Access to Forest
-        forest_access = [ItemName.prison_warden_defeated_event, ItemName.gate_key]
+        forest_access = [ItemName.prison_key, ItemName.prison_warden_defeated_event, ItemName.gate_key]
         
         # Access to Mines (for Mine Entrance Lift Key path)
         mines_access = forest_access + [ItemName.mine_entrance_lift_key]
         
+        # Golden Clover requires blowing up a wall.
+        # Access to the region can be gained via Apex Outskirts Key, but that doesn't give wall breaking ability.
+        
         self.assertAccessDependency([location], [
-            forest_access + [ItemName.apex_outskirts_key],
-            forest_access + [ItemName.dynamite_x1],
+            forest_access + [ItemName.apex_outskirts_key, ItemName.dynamite_x1],
+            mines_access 
+        ], only_check_listed=True)
+        
+        # Also check Apex Torch Northern Slums which also requires blowing up a wall
+        location2 = LocationName.apex_torch_northern_slums
+        self.assertAccessDependency([location2], [
+            forest_access + [ItemName.apex_outskirts_key, ItemName.dynamite_x1],
             mines_access 
         ], only_check_listed=True)
 
-    def test_east_wing_key_access(self) -> None:
-        """Test locations requiring East Wing Key"""
+    def test_supermax_east_access(self) -> None:
+        """Test locations in Supermax Prison East which require the East Wing Key"""
         locations = [
             LocationName.supermax_prison_item_pickup_relic_dousing,
             LocationName.supermax_prison_item_pickup_stale_bread,
             LocationName.supermax_prison_item_pickup_major_sol_shard_13,
+            LocationName.supermax_prison_item_pickup_major_sol_shard_14,
+            LocationName.supermax_prison_item_pickup_metamorphic_alloy,
+            LocationName.supermax_prison_item_pickup_major_sol_shard_15,
+            LocationName.supermax_prison_item_pickup_map_b,
+            LocationName.supermax_prison_item_pickup_map_c,
+            LocationName.supermax_prison_wall_security_corridor,
+            LocationName.supermax_prison_torch_torture_chamber,
+            LocationName.supermax_prison_torch_east_wing_office,
+            LocationName.supermax_prison_torch_security_corridor,
+            LocationName.supermax_prison_torch_north_storage_room,
+            LocationName.supermax_prison_torch_prison_rear_entrance,
+            LocationName.supermax_prison_torch_improvised_camp,
             LocationName.supermax_prison_infernal_warden_defeated,
         ]
-        # Supermax Prison West requires Greater Void Worm Event + Forest Access
+        # Supermax Prison East requires Greater Void Worm Event + Forest Access + East Wing Key
         base_items = [
             ItemName.prison_warden_defeated_event, ItemName.gate_key,
             ItemName.greater_void_worm_defeated_event
@@ -217,20 +239,18 @@ class TestRules(VoidSolsTestBase):
         self.assertAccessDependency(locations, items, only_check_listed=True)
 
     def test_supermax_prison_access(self) -> None:
-        """Test that Supermax Prison West requires East Wing Key and has an exit"""
+        """Test that Supermax Prison West requires Greater Void Worm and East Wing Key opens East"""
         locations = [LocationName.supermax_prison_item_pickup_map_a]
         
-        # Should require East Wing Key + Greater Void Worm
-        base_items = [ItemName.prison_warden_defeated_event, ItemName.gate_key, ItemName.greater_void_worm_defeated_event]
-        items = [base_items + [ItemName.east_wing_key]]
+        # Should require Greater Void Worm (No East Wing Key)
+        base_items = [ItemName.prison_key, ItemName.prison_warden_defeated_event, ItemName.gate_key, ItemName.greater_void_worm_defeated_event]
+        items = [base_items]
         self.assertAccessDependency(locations, items, only_check_listed=True)
         
-        # Verify region access directly
-        self.collect_all_but([ItemName.east_wing_key])
-        self.assertFalse(self.can_reach_region("Supermax Prison West"))
-        self.collect_by_name([ItemName.east_wing_key])
-        self.assertTrue(self.can_reach_region("Supermax Prison West"))
-        self.assertTrue(self.can_reach_region("Supermax Prison East"))
+        # Verify region access dependency
+        locations_east = [LocationName.supermax_prison_item_pickup_relic_dousing]
+        items_east = [base_items + [ItemName.east_wing_key]]
+        self.assertAccessDependency(locations_east, items_east, only_check_listed=True)
 
     def test_iron_pineapple_access(self) -> None:
         """Test locations that require Iron Pineapple"""
@@ -277,21 +297,15 @@ class TestRules(VoidSolsTestBase):
         locations = [
             LocationName.village_misc_hall_of_heroes_restored,
             LocationName.village_torch_forgotten_reliquary,
+            LocationName.village_relics_improved_1,
+            LocationName.village_relics_improved_2,
+            LocationName.village_relics_improved_3,
+            LocationName.village_relics_improved_4,
+            LocationName.village_relics_improved_5,
         ]
         # Village Access
-        base_items = [ItemName.prison_warden_defeated_event, ItemName.gate_key, ItemName.prison_key]
-        
-        # Check Village access generally
-        self.collect_by_name(base_items)
-        self.assertTrue(self.can_reach_region("Village"))
-        self.assertTrue(self.can_reach_location(LocationName.village_item_pickup_map))
-
-        # Re-initialize state to be sure
-        self.remove(self.get_item_by_name(ItemName.greater_void_worm_defeated_event))
-
-        for loc in locations:
-             self.assertFalse(self.can_reach_location(loc), f"{loc} should not be reachable without Worm Defeated")
-        
-        self.collect_by_name([ItemName.greater_void_worm_defeated_event])
-        for loc in locations:
-             self.assertTrue(self.can_reach_location(loc), f"{loc} should be reachable with Worm Defeated. Region: {self.multiworld.get_location(loc, self.player).parent_region}")
+        # The forgotten reliquary is in the village, but it is not accessible until you get all the way through the mines and defeat the worm.
+        # So having access to the village doesn't mean anything for this test case.
+        base_items = [ItemName.prison_warden_defeated_event, ItemName.gate_key]
+        items = [base_items + [ItemName.greater_void_worm_defeated_event]]
+        self.assertAccessDependency(locations, items, only_check_listed=True)

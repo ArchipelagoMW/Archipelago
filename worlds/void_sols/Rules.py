@@ -398,7 +398,7 @@ def set_rules(world: World):
     try:
         # Rule: Can reach the physical boss location (Access to Apex Outskirts)
         set_rule(world.multiworld.get_location(LocationName.apex_gatekeeper_defeated_event, player),
-                 lambda state: True)
+                 lambda state: state.has(ItemName.apex_outskirts_key, player) or can_blow_up_wall(state, player))
     except KeyError:
         pass
 
