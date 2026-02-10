@@ -59,7 +59,6 @@ class RecipeEngine:
         self.__register_recipes()
         self.__link_technologies()
         self.__load_settings()
-        self.__link_recipes()
         self.__remove_bad_items()
 
         goal_items = {"rocket-part", "satellite", "rocket-silo"}
@@ -132,15 +131,15 @@ class RecipeEngine:
 
         for resource_name, resource_data in raw_resources.items():
             if "required_fluid" in resource_data:
-                self.recipes[f"resource_{resource_name}"] = GameRecipe(self, resource_name, DefinitionSource.EXTRACTED, resource_data["category"],
-                                                                       {resource_data["required_fluid"]: resource_data["fluid_amount"]},
-                                                                       resource_data["products"], resource_data["mining_time"])
+                GameRecipe(self, resource_name, DefinitionSource.EXTRACTED, resource_data["category"],
+                           {resource_data["required_fluid"]: resource_data["fluid_amount"]},
+                           resource_data["products"], resource_data["mining_time"])
                 if resource_data["category"] == "basic-solid":
                     self.fluid_mining.add(self.recipes[f"resource_{resource_name}"])
             else:
-                self.recipes[f"resource_{resource_name}"] = GameRecipe(self, resource_name, DefinitionSource.EXTRACTED, resource_data["category"],
-                                                                       {},
-                                                                       resource_data["products"], resource_data["mining_time"])
+                GameRecipe(self, resource_name, DefinitionSource.EXTRACTED, resource_data["category"],
+                           {},
+                           resource_data["products"], resource_data["mining_time"])
         del raw_resources
 
         with self.modpack.open_file("Extractor/recipes.json") as file:
@@ -151,9 +150,8 @@ class RecipeEngine:
             if recipe_data["category"] not in self.categories: # No way to craft skip recipe
                 self.modpack.logger.debug(f"Recipe {recipe_name} has invalid category {recipe_data['category']}.")
                 continue
-            self.recipes[recipe_name] = GameRecipe(self, recipe_name, DefinitionSource.EXTRACTED, recipe_data["category"],
-                                                   recipe_data["ingredients"], recipe_data["products"],
-                                                   recipe_data["energy"])
+            GameRecipe(self, recipe_name, DefinitionSource.EXTRACTED, recipe_data["category"],
+                       recipe_data["ingredients"], recipe_data["products"], recipe_data["energy"])
         del raw_recipes
 
         with self.modpack.open_file("Extractor/generators.json") as file:
@@ -163,10 +161,8 @@ class RecipeEngine:
             self.categories[f"generator_{item.name}"] = Category(self, f"generator_{item.name}",
                                                                  DefinitionSource.EXTRACTED)
             self.categories[f"generator_{item.name}"].machines.add(item)
-            self.recipes[f"generator_{item.name}"] = GameRecipe(self, f"generator_{item.name}",
-                                                                DefinitionSource.EXTRACTED, f"generator_{item.name}",
-                                                                {}, {product: 1},
-                                                                GENERATOR_ENERGY)
+            GameRecipe(self, f"generator_{item.name}", DefinitionSource.EXTRACTED,
+                       f"generator_{item.name}",{}, {product: 1}, GENERATOR_ENERGY)
         del raw_generators
 
         if "offshore-pump" in self.categories:
@@ -178,8 +174,8 @@ class RecipeEngine:
                     fluids.add(special["fluid"])
             del raw_tiles
             for fluid in fluids:
-                self.recipes[f"pump_{fluid}"] = GameRecipe(self, f"pump_{fluid}", DefinitionSource.EXTRACTED, "offshore-pump",
-                                                           {}, {fluid: 1}, GENERATOR_ENERGY)
+                GameRecipe(self, f"pump_{fluid}", DefinitionSource.EXTRACTED,
+                           "offshore-pump",{}, {fluid: 1}, GENERATOR_ENERGY)
 
         try:
             with self.modpack.open_file("customRecipes.json") as file:
@@ -191,8 +187,8 @@ class RecipeEngine:
             # TODO add optional crafting_machine_tints
             # TODO add group for AP recipes
             # TODO add support for custom techs for recipes
-            self.recipes[recipe_name] = GameRecipe(self, recipe_name, DefinitionSource.CUSTOM, recipe_data["category"],
-                                                   recipe_data["ingredients"], recipe_data["products"], recipe_data["energy"])
+            GameRecipe(self, recipe_name, DefinitionSource.CUSTOM, recipe_data["category"],
+                       recipe_data["ingredients"], recipe_data["products"], recipe_data["energy"])
 
     def __link_technologies(self):
         for technology in self.modpack.base_technology_table.values():
@@ -227,9 +223,6 @@ class RecipeEngine:
             for ingredient in raw_settings["excluded_first_pool"]:
                 self.get_game_item(ingredient, DefinitionSource.CUSTOM).is_valid_first_pool = False
 
-    def __link_recipes(self):
-        for recipe in self.recipes.values():
-            recipe.link()
 
     def __remove_bad_items(self):
         for name, item in self.game_items.copy().items():
@@ -515,11 +508,19 @@ class GameRecipe(RecipeEngineType):
                 del self.products[ingredient]
                 self.ingredients[ingredient] = -new_amount
 
-    def link(self) -> None:
-        for ingredient in self.ingredients:
-            ingredient.used_in.add(self)
-        for product in self.products:
-            product.crafted_by.add(self)
+        if self.source == DefinitionSource.WORLD:
+            for ingredient in self.ingredients:
+                if ingredient.source == DefinitionSource.WORLD:
+                    ingredient.used_in.add(self)
+            for product in self.products:
+                if product.source == DefinitionSource.WORLD:
+                    product.crafted_by.add(self)
+        elif self.is_valid: # link
+            ctx.recipes[self.name] = self
+            for ingredient in self.ingredients:
+                ingredient.used_in.add(self)
+            for product in self.products:
+                product.crafted_by.add(self)
 
     def set_invalid(self):
         self.is_valid = False
