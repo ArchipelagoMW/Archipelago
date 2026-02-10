@@ -4,11 +4,18 @@ from Options import Choice, PerGameCommonOptions, Toggle
 
 class Goal(Choice):
     """Choose the end goal.
-    Main Quest: Complete the main quest"""
+    Main Quest: Complete the main quest
+    Questsanity: Complete all quests in the game
+    Max Level: Reach level 99
+    Max Level and Main Quest: Complete the main quest and reach level 99
+    Spellmastery: Get all spells to max level
+    """
     display_name = "Goal"
     option_main_quest = 0
-    #option_all_quests = 1
-    #option_spellmeowstery = 2
+    option_questsanity = 1
+    option_max_level = 2
+    option_max_level_and_main_quest = 3
+    option_spellmastery = 4
     default = 0
 
 class SkillUpgrade(Choice):
@@ -23,11 +30,14 @@ class SkillUpgrade(Choice):
     option_progressive_skills = 1
     option_upgrades = 2
     option_magic_levels = 3
-    default = 2
+    default = 3
 
 class IncludeTemples(Toggle):
     """Choose if visiting temples will be included"""
     display_name = "Include Temples"
+    default = True
+
+
 
 @dataclass
 class CatQuestOptions(PerGameCommonOptions):

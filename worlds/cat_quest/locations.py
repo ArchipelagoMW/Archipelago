@@ -34,13 +34,15 @@ def create_all_locations(world: CatQuestWorld) -> dict[int, str]:
 def create_regular_locations(world: CatQuestWorld) -> None:
     Felingard = world.get_region("Felingard")
 
-    for loc in questLocations:
-        Felingard.locations.append(
-            CatQuestLocation(world.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], Felingard)
-    )
+    included_locations = []
+
+    included_locations.extend(questLocations)
 
     if world.options.include_temples:
-        for loc in templeLocations:
-            Felingard.locations.append(
-                CatQuestLocation(world.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], Felingard)
+        included_locations.extend(templeLocations)
+    
+
+    for loc in included_locations:
+        Felingard.locations.append(
+            CatQuestLocation(world.player, loc["name"], LOCATION_NAME_TO_ID[loc["name"]], Felingard)
         )
