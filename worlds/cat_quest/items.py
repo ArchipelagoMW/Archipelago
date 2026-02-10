@@ -44,7 +44,18 @@ def get_random_filler_item_name(world: CatQuestWorld) -> str:
     return ITEM_ID_TO_NAME.get(world.random.randint(1, len(fillers)))
 
 def create_item_with_correct_classification(world: CatQuestWorld, name: str) -> CatQuestItem:
-    return CatQuestItem(name, DEFAULT_ITEM_CLASSIFICATIONS[name], ITEM_NAME_TO_ID[name], world.player)
+    classification = DEFAULT_ITEM_CLASSIFICATIONS[name]
+
+    skill_related_item_names = {
+        item["name"]
+        for item in (skills + prog_skills + prog_skill_uprades + prog_magic_levels)
+    }
+
+    if world.options.goal == "spellmastery":
+        if name in skill_related_item_names:
+            classification = ItemClassification.progression
+
+    return CatQuestItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
 
 def create_all_items(world: CatQuestWorld) -> None:
     itempool = []
