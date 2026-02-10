@@ -45,7 +45,7 @@ def create_regular_locations(world: TVRUHHWorld) -> None:
 
 def create_extra_locations(world: TVRUHHWorld, amount: int) -> None:
     bonus_locations = world.get_region("Start")
-    bonus_locations.add_locations(get_location_names_with_ids(load_extra_locations(amount),extra_location_list))
+    bonus_locations.add_locations(get_location_names_with_ids(load_extra_locations(amount),big_bad_list_of_all_locations_with_IDs))
 
 
 def load_all_lists(world: TVRUHHWorld, chosenlist: str = "") -> dict[str, int | None]:

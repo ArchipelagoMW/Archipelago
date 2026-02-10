@@ -61,14 +61,14 @@ def create_all_items(world: TVRUHHWorld) -> None:
     itempool: list[Item] = []
     offset: int = 0
 
-    # itempool.extend(get_items(world, monster_list))
-    # itempool.extend(get_items(world, power_gift_list))
-    # itempool.extend(get_items(world, bonus_gift_list))
-    # itempool.extend(get_items(world, quick_gift_list))
+    itempool.extend(get_items(world, monster_list))
+    itempool.extend(get_items(world, power_gift_list))
+    itempool.extend(get_items(world, bonus_gift_list))
+    itempool.extend(get_items(world, quick_gift_list))
     #TODO: add other unlocks
     itempool.extend(get_items(world, dreamscape_list))
-    # itempool.extend(get_items(world, music_list))
-    # itempool.extend(get_items(world, other_items_list))
+    itempool.extend(get_items(world, music_list))
+    itempool.extend(get_items(world, other_items_list))
     
 
     #filling remaining empty locations
