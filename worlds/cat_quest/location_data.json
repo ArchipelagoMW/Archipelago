@@ -316,31 +316,91 @@
     "id": "resolution_A"
   },
   {
-    "name": "Visited Arcane Temple of Flamepurr",
+    "name": "The Catpital Temple (Flamepurr)",
     "id": "flamepurr"
   },
   {
-    "name": "Visited Arcane Temple of Healing Paw",
+    "name": "Bermewda's Triangle Temple (Healing Paw)",
     "id": "healing_paw"
   },
   {
-    "name": "Visited Arcane Temple of Lightnyan",
+    "name": "East Pawt Temple (Lightnyan)",
     "id": "lightnyan"
   },
   {
-    "name": "Visited Arcane Temple of Cattrap",
+    "name": "Windmew City Temple (Cattrap)",
     "id": "cattrap"
   },
   {
-    "name": "Visited Arcane Temple of Purrserk",
+    "name": "South Pawt Temple (Purrserk)",
     "id": "purrserk"
   },
   {
-    "name": "Visited Arcane Temple of Astropaw",
+    "name": "Death Isle Temple (Astropaw)",
     "id": "astropaw"
   },
   {
-    "name": "Visited Arcane Temple of Freezepaw",
+    "name": "Felingard Lake Temple (Freezepaw)",
     "id": "freezepaw"
+  },
+  {
+    "name": "Monument by The Catpital",
+    "id": "MonumentTrigger_Catpital"
+  },
+  {
+    "name": "Monument in Puss Plains",
+    "id": "MonumentTrigger_PussPlains"
+  },
+  {
+    "name": "Monument below The Furbidden Fields",
+    "id": "MonumentTrigger_TwinPeaks"
+  },
+  {
+    "name": "Monument at South Point",
+    "id": "MonumentTrigger_SouthPoint"
+  },
+  {
+    "name": "Monument along East Pawt River",
+    "id": "MonumentTrigger_EastPawt"
+  },
+  {
+    "name": "Monument by Hilly Hills Coast",
+    "id": "MonumentTrigger_HillyHills_01"
+  },
+  {
+    "name": "Monument by The Unknown Head",
+    "id": "MonumentTrigger_HillyHills_02"
+  },
+  {
+    "name": "Monument above Mountain Pass",
+    "id": "MonumentTrigger_MountainPass"
+  },
+  {
+    "name": "Monument by Windmew Lake",
+    "id": "MonumentTrigger_Windmew"
+  },
+  {
+    "name": "Monument at North Point",
+    "id": "MonumentTrigger_NorthPoint"
+  },
+  {
+    "name": "Monument by Winters Edge",
+    "id": "MonumentTrigger_Purrning"
+  },
+  {
+    "name": "Monument on Old Master's Island",
+    "id": "MonumentTrigger_OldMaster"
+  },
+  {
+    "name": "Monument on Key Island",
+    "id": "MonumentTrigger_KeyIsland"
+  },
+  {
+    "name": "Monument on Monster Isle",
+    "id": "MonumentTrigger_MonsterIsle"
+  },
+  {
+    "name": "Monument on Death Isle",
+    "id": "MonumentTrigger_DeathIsle"
   }
 ]
