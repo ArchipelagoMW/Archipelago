@@ -1068,9 +1068,18 @@ def freeze_support() -> None:
 _extend_freeze_support()
 
 
-def visualize_regions(root_region: Region, file_name: str, *,
-                      show_entrance_names: bool = False, show_locations: bool = True, show_other_regions: bool = True,
-                      linetype_ortho: bool = True, regions_to_highlight: set[Region] | None = None) -> None:
+def visualize_regions(
+        root_region: Region,
+        file_name: str,
+        *,
+        show_entrance_names: bool = False,
+        show_locations: bool = True,
+        show_other_regions: bool = True,
+        linetype_ortho: bool = True,
+        regions_to_highlight: set[Region] | None = None,
+        entrance_highlighting: dict[int, int] | None = None,
+        detail_other_regions: bool = False,
+        auto_assign_colors: bool = False) -> None:
     """Visualize the layout of a world as a PlantUML diagram.
 
     :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
@@ -1087,6 +1096,13 @@ def visualize_regions(root_region: Region, file_name: str, *,
     :param show_other_regions: (default True) If enabled, regions that can't be reached by traversing exits are shown.
     :param linetype_ortho: (default True) If enabled, orthogonal straight line parts will be used; otherwise polylines.
     :param regions_to_highlight: Regions that will be highlighted in green if they are reachable.
+    :param entrance_highlighting: a mapping from your world's entrance randomization groups to RGB values, used to color
+            your entrances
+    :param detail_other_regions: (default False) If enabled, will fully visualize regions that aren't reachable
+            from root_region.
+    :param auto_assign_colors: (default False) If enabled, will automatically assign random colors to entrances of the
+            same randomization group. Uses entrance_highlighting first, and only picks random colors for entrance groups
+            not found in the passed-in map
 
     Example usage in World code:
     from Utils import visualize_regions
@@ -1112,6 +1128,34 @@ def visualize_regions(root_region: Region, file_name: str, *,
     regions: typing.Deque[Region] = deque((root_region,))
     multiworld: MultiWorld = root_region.multiworld
 
+    colors_used: set[int] = set()
+    if entrance_highlighting:
+        for color in entrance_highlighting.values():
+            # filter the colors to their most-significant bits to avoid too similar colors
+            colors_used.add(color & 0xF0F0F0)
+    else:
+        # assign an empty dict to not crash later
+        # the parameter is optional for ease of use when you don't care about colors
+        entrance_highlighting = {}
+
+    def select_color(group: int) -> int:
+        # specifically spacing color indexes by three different prime numbers (3, 5, 7) for the RGB components to avoid
+        # obvious cyclical color patterns
+        COLOR_INDEX_SPACING: int = 0x357
+        new_color_index: int = (group * COLOR_INDEX_SPACING) % 0x1000
+        new_color = ((new_color_index & 0xF00) << 12) + \
+                    ((new_color_index & 0xF0) << 8) + \
+                    ((new_color_index & 0xF) << 4)
+        while new_color in colors_used:
+            # while this is technically unbounded, expected collisions are low. There are 4095 possible colors
+            # and worlds are unlikely to get to anywhere close to that many entrance groups
+            # intentionally not using multiworld.random to not affect output when debugging with this tool
+            new_color_index += COLOR_INDEX_SPACING
+            new_color = ((new_color_index & 0xF00) << 12) + \
+                        ((new_color_index & 0xF0) << 8) + \
+                        ((new_color_index & 0xF) << 4)
+        return new_color
+
     def fmt(obj: Union[Entrance, Item, Location, Region]) -> str:
         name = obj.name
         if isinstance(obj, Item):
@@ -1131,18 +1175,28 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
     def visualize_exits(region: Region) -> None:
         for exit_ in region.exits:
+            color_code: str = ""
+            if exit_.randomization_group in entrance_highlighting:
+                color_code = f" #{entrance_highlighting[exit_.randomization_group]:0>6X}"
             if exit_.connected_region:
                 if show_entrance_names:
-                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"")
+                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"{color_code}")
                 else:
                     try:
-                        uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"")
-                        uml.append(f"\"{fmt(exit_.connected_region)}\" <--> \"{fmt(region)}\"")
+                        uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"{color_code}")
+                        uml.append(f"\"{fmt(exit_.connected_region)}\" <--> \"{fmt(region)}\"{color_code}")
                     except ValueError:
-                        uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\"")
+                        uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\"{color_code}")
             else:
-                uml.append(f"circle \"unconnected exit:\\n{fmt(exit_)}\"")
-                uml.append(f"\"{fmt(region)}\" --> \"unconnected exit:\\n{fmt(exit_)}\"")
+                uml.append(f"circle \"unconnected exit:\\n{fmt(exit_)}\" {color_code}")
+                uml.append(f"\"{fmt(region)}\" --> \"unconnected exit:\\n{fmt(exit_)}\"{color_code}")
+        for entrance in region.entrances:
+            color_code: str = ""
+            if entrance.randomization_group in entrance_highlighting:
+                color_code = f" #{entrance_highlighting[entrance.randomization_group]:0>6X}"
+            if not entrance.parent_region:
+                uml.append(f"circle \"unconnected entrance:\\n{fmt(entrance)}\"{color_code}")
+                uml.append(f"\"unconnected entrance:\\n{fmt(entrance)}\" --> \"{fmt(region)}\"{color_code}")
 
     def visualize_locations(region: Region) -> None:
         any_lock = any(location.locked for location in region.locations)
@@ -1163,8 +1217,26 @@ def visualize_regions(root_region: Region, file_name: str, *,
         if other_regions := [region for region in multiworld.get_regions(root_region.player) if region not in seen]:
             uml.append("package \"other regions\" <<Cloud>> {")
             for region in other_regions:
-                uml.append(f"class \"{fmt(region)}\"")
+                if detail_other_regions:
+                    visualize_region(region)
+                else:
+                    uml.append(f"class \"{fmt(region)}\"")
             uml.append("}")
+
+    if auto_assign_colors:
+        all_entrances: list[Entrance] = []
+        for region in multiworld.get_regions(root_region.player):
+            all_entrances.extend(region.entrances)
+            all_entrances.extend(region.exits)
+        all_groups: list[int] = sorted(set([entrance.randomization_group for entrance in all_entrances]))
+        for group in all_groups:
+            if group not in entrance_highlighting:
+                if len(colors_used) >= 0x1000:
+                    # on the off chance someone makes 4096 different entrance groups, don't cycle forever
+                    break
+                new_color: int = select_color(group)
+                entrance_highlighting[group] = new_color
+                colors_used.add(new_color)
 
     uml.append("@startuml")
     uml.append("hide circle")
@@ -1176,7 +1248,7 @@ def visualize_regions(root_region: Region, file_name: str, *,
             seen.add(current_region)
             visualize_region(current_region)
             regions.extend(exit_.connected_region for exit_ in current_region.exits if exit_.connected_region)
-    if show_other_regions:
+    if show_other_regions or detail_other_regions:
         visualize_other_regions()
     uml.append("@enduml")
 
