@@ -27,8 +27,9 @@ class VoidSolsWorld(World):
     """ Void Sols is a top-down, 2D, minimalist souls-like RPG."""
 
     game = "Void Sols"
+    web = VoidSolsWeb()
 
-    options = VoidSolsOptions
+    options: VoidSolsOptions
     options_dataclass = VoidSolsOptions
     
     item_name_to_id = all_items
