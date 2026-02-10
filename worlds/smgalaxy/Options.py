@@ -154,7 +154,7 @@ class Dome6Offsets(OptionCounter):
     """
     Set the star requirements for each galaxy in the Dome 6, which is the Garden in vanilla.
     Each number corresponds to how many more stars are needed than the last orbit,
-    and willed be capped if it goes above 20, for
+    and willed be capped if it goes above 20
 
     These are based on each orbit in the dome, in case levels are shuffled.
     """

@@ -1,4 +1,4 @@
-from typing import Callable, Dict, NamedTuple, Optional
+from typing import Callable, Dict, NamedTuple, Optional, Set
 from BaseClasses import Location, Region
 
 from.Constants.Names import region_names as regname
@@ -221,3 +221,12 @@ location_table = { **locGE_table, **locHH_table,
 
 LOCATION_NAME_TO_ID: dict[str, int] =  {
     name: data.code for name, data in location_table.items() if data.code is not None}
+
+def get_location_names_per_category() -> Dict[str, Set[str]]:
+    categories: Dict[str, Set[str]] = {}
+
+    for name, data in location_table.items():
+        for category in data.location_groups:
+            categories.setdefault(category, set()).add(name)
+
+    return categories
