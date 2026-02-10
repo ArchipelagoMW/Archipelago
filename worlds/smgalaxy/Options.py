@@ -45,11 +45,14 @@ class EnablePurpleCoinStars(Choice):
 
 # this allows players to pick their own star count to finish the game. 
 class StarstoFinish(Range):
-    """This will set the number of stars required to reach the center of the universe."""
+    """
+    This will set the number of stars required to reach the center of the universe.
+    This will be capped at 104 stars if extra locations are not enabled in a single world multiworld.
+    """
     display_name = "Stars to finish"
     internal_name = "stars_to_finish"
     range_start = 25
-    range_end = 95
+    range_end = 119
     default = 60
 
 class Dome1Offsets(OptionCounter):
